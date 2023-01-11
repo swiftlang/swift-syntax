@@ -543,6 +543,6 @@ public extension TokenSyntax {
   
   /// The `open` contextual token
   static var open: TokenSyntax {
-    return .contextualKeyword("open").withTrailingTrivia(.space)
+    return .contextualKeyword(.open).withTrailingTrivia(.space)
   }
 }

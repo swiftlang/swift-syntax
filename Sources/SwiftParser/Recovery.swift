@@ -52,16 +52,11 @@ extension Parser.Lookahead {
   /// `lookahead.tokensConsumed` as unexpected.
   mutating func canRecoverTo(
     _ kinds: [RawTokenKind],
-    contextualKeywords: [SyntaxText] = [],
     recoveryPrecedence: TokenPrecedence? = nil
   ) -> RecoveryConsumptionHandle? {
     let initialTokensConsumed = self.tokensConsumed
 
-    var precedences = kinds.map(TokenPrecedence.init)
-    if !contextualKeywords.isEmpty {
-      precedences += [TokenPrecedence(.identifier), TokenPrecedence(.contextualKeyword)]
-    }
-    let recoveryPrecedence = recoveryPrecedence ?? precedences.min()!
+    let recoveryPrecedence = recoveryPrecedence ?? kinds.map(TokenPrecedence.init).min()!
 
     while !self.at(.eof) {
       if !recoveryPrecedence.shouldSkipOverNewlines,
@@ -69,16 +64,16 @@ extension Parser.Lookahead {
       {
         break
       }
-      if self.at(any: kinds, contextualKeywords: contextualKeywords) {
+      if self.at(any: kinds) {
         return RecoveryConsumptionHandle(
           unexpectedTokens: self.tokensConsumed - initialTokensConsumed,
           tokenConsumptionHandle: TokenConsumptionHandle(
-            tokenKind: self.currentToken.tokenKind,
-            remappedKind: self.at(any: [], contextualKeywords: contextualKeywords) ? .contextualKeyword : nil
+            tokenKind: self.currentToken.rawTokenKind,
+            remappedKind: nil
           )
         )
       }
-      let currentTokenPrecedence = TokenPrecedence(self.currentToken.tokenKind)
+      let currentTokenPrecedence = TokenPrecedence(self.currentToken.rawTokenKind)
       if currentTokenPrecedence >= recoveryPrecedence {
         break
       }
@@ -114,7 +109,8 @@ extension Parser.Lookahead {
           return TokenPrecedence($0.rawTokenKind)
         }
       }).min()!
-    while !self.at(.eof) {
+    var loopProgress = LoopProgressCondition()
+    while !self.at(.eof) && loopProgress.evaluate(self.currentToken) {
       if !recoveryPrecedence.shouldSkipOverNewlines,
         self.currentToken.isAtStartOfLine
       {
@@ -129,7 +125,7 @@ extension Parser.Lookahead {
           )
         )
       }
-      let currentTokenPrecedence = TokenPrecedence(self.currentToken.tokenKind)
+      let currentTokenPrecedence = TokenPrecedence(self.currentToken.rawTokenKind)
       if currentTokenPrecedence >= recoveryPrecedence {
         break
       }

@@ -233,7 +233,7 @@ public enum TokenKind: Hashable {
   
   case dollarIdentifier(String)
   
-  case contextualKeyword(String)
+  case contextualKeyword(Keyword)
   
   case rawStringDelimiter(String)
   
@@ -636,8 +636,8 @@ public enum TokenKind: Hashable {
       return text
     case .dollarIdentifier(let text): 
       return text
-    case .contextualKeyword(let text): 
-      return text
+    case .contextualKeyword(let assoc): 
+      return String(syntaxText: assoc.defaultText)
     case .rawStringDelimiter(let text): 
       return text
     case .stringSegment(let text): 
@@ -645,6 +645,227 @@ public enum TokenKind: Hashable {
     case .yield: 
       return #"yield"#
     case .eof: 
+      return ""
+    }
+  }
+  
+  /// If this token kind always has the same syntax text, that syntax text, otherwise `nil`.
+  @_spi(RawSyntax) 
+  public var defaultText: SyntaxText? {
+    switch self {
+    case .associatedtypeKeyword: 
+      return #"associatedtype"#
+    case .classKeyword: 
+      return #"class"#
+    case .deinitKeyword: 
+      return #"deinit"#
+    case .enumKeyword: 
+      return #"enum"#
+    case .extensionKeyword: 
+      return #"extension"#
+    case .funcKeyword: 
+      return #"func"#
+    case .importKeyword: 
+      return #"import"#
+    case .initKeyword: 
+      return #"init"#
+    case .inoutKeyword: 
+      return #"inout"#
+    case .letKeyword: 
+      return #"let"#
+    case .operatorKeyword: 
+      return #"operator"#
+    case .precedencegroupKeyword: 
+      return #"precedencegroup"#
+    case .protocolKeyword: 
+      return #"protocol"#
+    case .structKeyword: 
+      return #"struct"#
+    case .subscriptKeyword: 
+      return #"subscript"#
+    case .typealiasKeyword: 
+      return #"typealias"#
+    case .varKeyword: 
+      return #"var"#
+    case .fileprivateKeyword: 
+      return #"fileprivate"#
+    case .internalKeyword: 
+      return #"internal"#
+    case .privateKeyword: 
+      return #"private"#
+    case .publicKeyword: 
+      return #"public"#
+    case .staticKeyword: 
+      return #"static"#
+    case .deferKeyword: 
+      return #"defer"#
+    case .ifKeyword: 
+      return #"if"#
+    case .guardKeyword: 
+      return #"guard"#
+    case .doKeyword: 
+      return #"do"#
+    case .repeatKeyword: 
+      return #"repeat"#
+    case .elseKeyword: 
+      return #"else"#
+    case .forKeyword: 
+      return #"for"#
+    case .inKeyword: 
+      return #"in"#
+    case .whileKeyword: 
+      return #"while"#
+    case .returnKeyword: 
+      return #"return"#
+    case .breakKeyword: 
+      return #"break"#
+    case .continueKeyword: 
+      return #"continue"#
+    case .fallthroughKeyword: 
+      return #"fallthrough"#
+    case .switchKeyword: 
+      return #"switch"#
+    case .caseKeyword: 
+      return #"case"#
+    case .defaultKeyword: 
+      return #"default"#
+    case .whereKeyword: 
+      return #"where"#
+    case .catchKeyword: 
+      return #"catch"#
+    case .throwKeyword: 
+      return #"throw"#
+    case .asKeyword: 
+      return #"as"#
+    case .anyKeyword: 
+      return #"Any"#
+    case .falseKeyword: 
+      return #"false"#
+    case .isKeyword: 
+      return #"is"#
+    case .nilKeyword: 
+      return #"nil"#
+    case .rethrowsKeyword: 
+      return #"rethrows"#
+    case .superKeyword: 
+      return #"super"#
+    case .selfKeyword: 
+      return #"self"#
+    case .capitalSelfKeyword: 
+      return #"Self"#
+    case .trueKeyword: 
+      return #"true"#
+    case .tryKeyword: 
+      return #"try"#
+    case .throwsKeyword: 
+      return #"throws"#
+    case .wildcardKeyword: 
+      return #"_"#
+    case .leftParen: 
+      return #"("#
+    case .rightParen: 
+      return #")"#
+    case .leftBrace: 
+      return #"{"#
+    case .rightBrace: 
+      return #"}"#
+    case .leftSquareBracket: 
+      return #"["#
+    case .rightSquareBracket: 
+      return #"]"#
+    case .leftAngle: 
+      return #"<"#
+    case .rightAngle: 
+      return #">"#
+    case .period: 
+      return #"."#
+    case .comma: 
+      return #","#
+    case .ellipsis: 
+      return #"..."#
+    case .colon: 
+      return #":"#
+    case .semicolon: 
+      return #";"#
+    case .equal: 
+      return #"="#
+    case .atSign: 
+      return #"@"#
+    case .pound: 
+      return #"#"#
+    case .prefixAmpersand: 
+      return #"&"#
+    case .arrow: 
+      return #"->"#
+    case .backtick: 
+      return #"`"#
+    case .backslash: 
+      return #"\"#
+    case .exclamationMark: 
+      return #"!"#
+    case .postfixQuestionMark: 
+      return #"?"#
+    case .infixQuestionMark: 
+      return #"?"#
+    case .stringQuote: 
+      return #"""#
+    case .singleQuote: 
+      return #"'"#
+    case .multilineStringQuote: 
+      return #"""""#
+    case .poundKeyPathKeyword: 
+      return #"#keyPath"#
+    case .poundLineKeyword: 
+      return #"#line"#
+    case .poundSelectorKeyword: 
+      return #"#selector"#
+    case .poundFileKeyword: 
+      return #"#file"#
+    case .poundFileIDKeyword: 
+      return #"#fileID"#
+    case .poundFilePathKeyword: 
+      return #"#filePath"#
+    case .poundColumnKeyword: 
+      return #"#column"#
+    case .poundFunctionKeyword: 
+      return #"#function"#
+    case .poundDsohandleKeyword: 
+      return #"#dsohandle"#
+    case .poundAssertKeyword: 
+      return #"#assert"#
+    case .poundSourceLocationKeyword: 
+      return #"#sourceLocation"#
+    case .poundWarningKeyword: 
+      return #"#warning"#
+    case .poundErrorKeyword: 
+      return #"#error"#
+    case .poundIfKeyword: 
+      return #"#if"#
+    case .poundElseKeyword: 
+      return #"#else"#
+    case .poundElseifKeyword: 
+      return #"#elseif"#
+    case .poundEndifKeyword: 
+      return #"#endif"#
+    case .poundAvailableKeyword: 
+      return #"#available"#
+    case .poundUnavailableKeyword: 
+      return #"#unavailable"#
+    case .poundFileLiteralKeyword: 
+      return #"#fileLiteral"#
+    case .poundImageLiteralKeyword: 
+      return #"#imageLiteral"#
+    case .poundColorLiteralKeyword: 
+      return #"#colorLiteral"#
+    case .poundHasSymbolKeyword: 
+      return #"#_hasSymbol"#
+    case .contextualKeyword(let assoc): 
+      return assoc.defaultText
+    case .yield: 
+      return #"yield"#
+    case .eof: 
+      return ""
+    default: 
       return ""
     }
   }
@@ -1144,249 +1365,6 @@ public enum TokenKind: Hashable {
       return false
     }
   }
-  
-  public var sourceLength: SourceLength {
-    switch self {
-    case .eof: 
-      return .zero
-    case .associatedtypeKeyword: 
-      return SourceLength(utf8Length: 14)
-    case .classKeyword: 
-      return SourceLength(utf8Length: 5)
-    case .deinitKeyword: 
-      return SourceLength(utf8Length: 6)
-    case .enumKeyword: 
-      return SourceLength(utf8Length: 4)
-    case .extensionKeyword: 
-      return SourceLength(utf8Length: 9)
-    case .funcKeyword: 
-      return SourceLength(utf8Length: 4)
-    case .importKeyword: 
-      return SourceLength(utf8Length: 6)
-    case .initKeyword: 
-      return SourceLength(utf8Length: 4)
-    case .inoutKeyword: 
-      return SourceLength(utf8Length: 5)
-    case .letKeyword: 
-      return SourceLength(utf8Length: 3)
-    case .operatorKeyword: 
-      return SourceLength(utf8Length: 8)
-    case .precedencegroupKeyword: 
-      return SourceLength(utf8Length: 15)
-    case .protocolKeyword: 
-      return SourceLength(utf8Length: 8)
-    case .structKeyword: 
-      return SourceLength(utf8Length: 6)
-    case .subscriptKeyword: 
-      return SourceLength(utf8Length: 9)
-    case .typealiasKeyword: 
-      return SourceLength(utf8Length: 9)
-    case .varKeyword: 
-      return SourceLength(utf8Length: 3)
-    case .fileprivateKeyword: 
-      return SourceLength(utf8Length: 11)
-    case .internalKeyword: 
-      return SourceLength(utf8Length: 8)
-    case .privateKeyword: 
-      return SourceLength(utf8Length: 7)
-    case .publicKeyword: 
-      return SourceLength(utf8Length: 6)
-    case .staticKeyword: 
-      return SourceLength(utf8Length: 6)
-    case .deferKeyword: 
-      return SourceLength(utf8Length: 5)
-    case .ifKeyword: 
-      return SourceLength(utf8Length: 2)
-    case .guardKeyword: 
-      return SourceLength(utf8Length: 5)
-    case .doKeyword: 
-      return SourceLength(utf8Length: 2)
-    case .repeatKeyword: 
-      return SourceLength(utf8Length: 6)
-    case .elseKeyword: 
-      return SourceLength(utf8Length: 4)
-    case .forKeyword: 
-      return SourceLength(utf8Length: 3)
-    case .inKeyword: 
-      return SourceLength(utf8Length: 2)
-    case .whileKeyword: 
-      return SourceLength(utf8Length: 5)
-    case .returnKeyword: 
-      return SourceLength(utf8Length: 6)
-    case .breakKeyword: 
-      return SourceLength(utf8Length: 5)
-    case .continueKeyword: 
-      return SourceLength(utf8Length: 8)
-    case .fallthroughKeyword: 
-      return SourceLength(utf8Length: 11)
-    case .switchKeyword: 
-      return SourceLength(utf8Length: 6)
-    case .caseKeyword: 
-      return SourceLength(utf8Length: 4)
-    case .defaultKeyword: 
-      return SourceLength(utf8Length: 7)
-    case .whereKeyword: 
-      return SourceLength(utf8Length: 5)
-    case .catchKeyword: 
-      return SourceLength(utf8Length: 5)
-    case .throwKeyword: 
-      return SourceLength(utf8Length: 5)
-    case .asKeyword: 
-      return SourceLength(utf8Length: 2)
-    case .anyKeyword: 
-      return SourceLength(utf8Length: 3)
-    case .falseKeyword: 
-      return SourceLength(utf8Length: 5)
-    case .isKeyword: 
-      return SourceLength(utf8Length: 2)
-    case .nilKeyword: 
-      return SourceLength(utf8Length: 3)
-    case .rethrowsKeyword: 
-      return SourceLength(utf8Length: 8)
-    case .superKeyword: 
-      return SourceLength(utf8Length: 5)
-    case .selfKeyword: 
-      return SourceLength(utf8Length: 4)
-    case .capitalSelfKeyword: 
-      return SourceLength(utf8Length: 4)
-    case .trueKeyword: 
-      return SourceLength(utf8Length: 4)
-    case .tryKeyword: 
-      return SourceLength(utf8Length: 3)
-    case .throwsKeyword: 
-      return SourceLength(utf8Length: 6)
-    case .wildcardKeyword: 
-      return SourceLength(utf8Length: 1)
-    case .leftParen: 
-      return SourceLength(utf8Length: 1)
-    case .rightParen: 
-      return SourceLength(utf8Length: 1)
-    case .leftBrace: 
-      return SourceLength(utf8Length: 1)
-    case .rightBrace: 
-      return SourceLength(utf8Length: 1)
-    case .leftSquareBracket: 
-      return SourceLength(utf8Length: 1)
-    case .rightSquareBracket: 
-      return SourceLength(utf8Length: 1)
-    case .leftAngle: 
-      return SourceLength(utf8Length: 1)
-    case .rightAngle: 
-      return SourceLength(utf8Length: 1)
-    case .period: 
-      return SourceLength(utf8Length: 1)
-    case .comma: 
-      return SourceLength(utf8Length: 1)
-    case .ellipsis: 
-      return SourceLength(utf8Length: 3)
-    case .colon: 
-      return SourceLength(utf8Length: 1)
-    case .semicolon: 
-      return SourceLength(utf8Length: 1)
-    case .equal: 
-      return SourceLength(utf8Length: 1)
-    case .atSign: 
-      return SourceLength(utf8Length: 1)
-    case .pound: 
-      return SourceLength(utf8Length: 1)
-    case .prefixAmpersand: 
-      return SourceLength(utf8Length: 1)
-    case .arrow: 
-      return SourceLength(utf8Length: 2)
-    case .backtick: 
-      return SourceLength(utf8Length: 1)
-    case .backslash: 
-      return SourceLength(utf8Length: 1)
-    case .exclamationMark: 
-      return SourceLength(utf8Length: 1)
-    case .postfixQuestionMark: 
-      return SourceLength(utf8Length: 1)
-    case .infixQuestionMark: 
-      return SourceLength(utf8Length: 1)
-    case .stringQuote: 
-      return SourceLength(utf8Length: 1)
-    case .singleQuote: 
-      return SourceLength(utf8Length: 1)
-    case .multilineStringQuote: 
-      return SourceLength(utf8Length: 3)
-    case .poundKeyPathKeyword: 
-      return SourceLength(utf8Length: 8)
-    case .poundLineKeyword: 
-      return SourceLength(utf8Length: 5)
-    case .poundSelectorKeyword: 
-      return SourceLength(utf8Length: 9)
-    case .poundFileKeyword: 
-      return SourceLength(utf8Length: 5)
-    case .poundFileIDKeyword: 
-      return SourceLength(utf8Length: 7)
-    case .poundFilePathKeyword: 
-      return SourceLength(utf8Length: 9)
-    case .poundColumnKeyword: 
-      return SourceLength(utf8Length: 7)
-    case .poundFunctionKeyword: 
-      return SourceLength(utf8Length: 9)
-    case .poundDsohandleKeyword: 
-      return SourceLength(utf8Length: 10)
-    case .poundAssertKeyword: 
-      return SourceLength(utf8Length: 7)
-    case .poundSourceLocationKeyword: 
-      return SourceLength(utf8Length: 15)
-    case .poundWarningKeyword: 
-      return SourceLength(utf8Length: 8)
-    case .poundErrorKeyword: 
-      return SourceLength(utf8Length: 6)
-    case .poundIfKeyword: 
-      return SourceLength(utf8Length: 3)
-    case .poundElseKeyword: 
-      return SourceLength(utf8Length: 5)
-    case .poundElseifKeyword: 
-      return SourceLength(utf8Length: 7)
-    case .poundEndifKeyword: 
-      return SourceLength(utf8Length: 6)
-    case .poundAvailableKeyword: 
-      return SourceLength(utf8Length: 10)
-    case .poundUnavailableKeyword: 
-      return SourceLength(utf8Length: 12)
-    case .poundFileLiteralKeyword: 
-      return SourceLength(utf8Length: 12)
-    case .poundImageLiteralKeyword: 
-      return SourceLength(utf8Length: 13)
-    case .poundColorLiteralKeyword: 
-      return SourceLength(utf8Length: 13)
-    case .poundHasSymbolKeyword: 
-      return SourceLength(utf8Length: 11)
-    case .integerLiteral(let text): 
-      return SourceLength(of: text)
-    case .floatingLiteral(let text): 
-      return SourceLength(of: text)
-    case .stringLiteral(let text): 
-      return SourceLength(of: text)
-    case .regexLiteral(let text): 
-      return SourceLength(of: text)
-    case .unknown(let text): 
-      return SourceLength(of: text)
-    case .identifier(let text): 
-      return SourceLength(of: text)
-    case .unspacedBinaryOperator(let text): 
-      return SourceLength(of: text)
-    case .spacedBinaryOperator(let text): 
-      return SourceLength(of: text)
-    case .postfixOperator(let text): 
-      return SourceLength(of: text)
-    case .prefixOperator(let text): 
-      return SourceLength(of: text)
-    case .dollarIdentifier(let text): 
-      return SourceLength(of: text)
-    case .contextualKeyword(let text): 
-      return SourceLength(of: text)
-    case .rawStringDelimiter(let text): 
-      return SourceLength(of: text)
-    case .stringSegment(let text): 
-      return SourceLength(of: text)
-    case .yield: 
-      return SourceLength(utf8Length: 5)
-    }
-  }
 }
 
 extension TokenKind: Equatable {
@@ -1869,7 +1847,7 @@ public enum RawTokenKind: Equatable, Hashable {
   
   case dollarIdentifier
   
-  case contextualKeyword
+  case contextualKeyword(Keyword)
   
   case rawStringDelimiter
   
@@ -2088,6 +2066,8 @@ public enum RawTokenKind: Equatable, Hashable {
       return #"#colorLiteral"#
     case .poundHasSymbolKeyword: 
       return #"#_hasSymbol"#
+    case .contextualKeyword(let assoc): 
+      return assoc.defaultText
     case .yield: 
       return #"yield"#
     default: 
@@ -3410,8 +3390,9 @@ extension TokenKind {
       return .prefixOperator(text)
     case .dollarIdentifier: 
       return .dollarIdentifier(text)
-    case .contextualKeyword: 
-      return .contextualKeyword(text)
+    case .contextualKeyword(let assoc): 
+      assert(text.isEmpty || String(syntaxText: assoc.defaultText) == text)
+      return .contextualKeyword(assoc)
     case .rawStringDelimiter: 
       return .rawStringDelimiter(text)
     case .stringSegment: 
@@ -3657,8 +3638,8 @@ extension TokenKind {
       return (.prefixOperator, str)
     case .dollarIdentifier(let str): 
       return (.dollarIdentifier, str)
-    case .contextualKeyword(let str): 
-      return (.contextualKeyword, str)
+    case .contextualKeyword(let assoc): 
+      return (.contextualKeyword(assoc), String(syntaxText: assoc.defaultText))
     case .rawStringDelimiter(let str): 
       return (.rawStringDelimiter, str)
     case .stringSegment(let str): 

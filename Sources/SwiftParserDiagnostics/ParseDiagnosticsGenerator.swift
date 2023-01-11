@@ -256,7 +256,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     }
     exchangeTokens(
       unexpected: node.unexpectedAfterArrowToken,
-      unexpectedTokenCondition: { $0.tokenKind == .contextualKeyword("async") || $0.tokenKind == .throwsKeyword },
+      unexpectedTokenCondition: { $0.tokenKind == .contextualKeyword(.async) || $0.tokenKind == .throwsKeyword },
       correctTokens: [node.asyncKeyword, node.throwsToken],
       message: { EffectsSpecifierAfterArrow(effectsSpecifiersAfterArrow: $0) },
       moveFixIt: { MoveTokensInFrontOfFixIt(movedTokens: $0, inFrontOf: .arrow) }

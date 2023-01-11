@@ -37,7 +37,7 @@ public protocol DeclGroupSyntax: SyntaxProtocol {
   
   var members: MemberDeclBlockSyntax { get }
   
-  func withMembers(_ newChild: MemberDeclBlockSyntax?) -> Self
+  func withMembers(_ newChild: MemberDeclBlockSyntax) -> Self
 }
 
 public extension SyntaxProtocol {
@@ -61,11 +61,11 @@ public extension SyntaxProtocol {
 public protocol BracedSyntax: SyntaxProtocol {
   var leftBrace: TokenSyntax { get }
   
-  func withLeftBrace(_ newChild: TokenSyntax?) -> Self
+  func withLeftBrace(_ newChild: TokenSyntax) -> Self
   
   var rightBrace: TokenSyntax { get }
   
-  func withRightBrace(_ newChild: TokenSyntax?) -> Self
+  func withRightBrace(_ newChild: TokenSyntax) -> Self
 }
 
 public extension SyntaxProtocol {
@@ -89,7 +89,7 @@ public extension SyntaxProtocol {
 public protocol IdentifiedDeclSyntax: SyntaxProtocol {
   var identifier: TokenSyntax { get }
   
-  func withIdentifier(_ newChild: TokenSyntax?) -> Self
+  func withIdentifier(_ newChild: TokenSyntax) -> Self
 }
 
 public extension SyntaxProtocol {
@@ -113,7 +113,7 @@ public extension SyntaxProtocol {
 public protocol WithCodeBlockSyntax: SyntaxProtocol {
   var body: CodeBlockSyntax { get }
   
-  func withBody(_ newChild: CodeBlockSyntax?) -> Self
+  func withBody(_ newChild: CodeBlockSyntax) -> Self
 }
 
 public extension SyntaxProtocol {
@@ -137,11 +137,11 @@ public extension SyntaxProtocol {
 public protocol ParenthesizedSyntax: SyntaxProtocol {
   var leftParen: TokenSyntax { get }
   
-  func withLeftParen(_ newChild: TokenSyntax?) -> Self
+  func withLeftParen(_ newChild: TokenSyntax) -> Self
   
   var rightParen: TokenSyntax { get }
   
-  func withRightParen(_ newChild: TokenSyntax?) -> Self
+  func withRightParen(_ newChild: TokenSyntax) -> Self
 }
 
 public extension SyntaxProtocol {
@@ -189,7 +189,7 @@ public extension SyntaxProtocol {
 public protocol WithStatementsSyntax: SyntaxProtocol {
   var statements: CodeBlockItemListSyntax { get }
   
-  func withStatements(_ newChild: CodeBlockItemListSyntax?) -> Self
+  func withStatements(_ newChild: CodeBlockItemListSyntax) -> Self
 }
 
 public extension SyntaxProtocol {

@@ -23,6 +23,7 @@ public class TokenSpec {
   public let isKeyword: Bool
   public let requiresLeadingSpace: Bool
   public let requiresTrailingSpace: Bool
+  public let associatedValueClass: String?
 
   public var swiftKind: String {
     let name = lowercaseFirstWord(name: self.name)
@@ -43,7 +44,8 @@ public class TokenSpec {
     classification: String = "None",
     isKeyword: Bool = false,
     requiresLeadingSpace: Bool = false,
-    requiresTrailingSpace: Bool = false
+    requiresTrailingSpace: Bool = false,
+    associatedValueClass: String? = nil
   ) {
     self.name = name
     self.kind = kind
@@ -58,6 +60,7 @@ public class TokenSpec {
     self.isKeyword = isKeyword
     self.requiresLeadingSpace = requiresLeadingSpace
     self.requiresTrailingSpace = requiresTrailingSpace
+    self.associatedValueClass = associatedValueClass
   }
 }
 
@@ -315,7 +318,7 @@ public let SYNTAX_TOKENS: [TokenSpec] = [
   MiscSpec(name: "PostfixOperator", kind: "oper_postfix", nameForDiagnostics: "postfix operator", classification: "OperatorIdentifier"),
   MiscSpec(name: "PrefixOperator", kind: "oper_prefix", nameForDiagnostics: "prefix operator", classification: "OperatorIdentifier"),
   MiscSpec(name: "DollarIdentifier", kind: "dollarident", nameForDiagnostics: "dollar identifier", classification: "DollarIdentifier"),
-  MiscSpec(name: "ContextualKeyword", kind: "contextual_keyword", nameForDiagnostics: "keyword", classification: "Keyword"),
+  MiscSpec(name: "ContextualKeyword", kind: "contextual_keyword", nameForDiagnostics: "keyword", classification: "Keyword", associatedValueClass: "Keyword"),
   MiscSpec(name: "RawStringDelimiter", kind: "raw_string_delimiter", nameForDiagnostics: "raw string delimiter"),
   MiscSpec(name: "StringSegment", kind: "string_segment", nameForDiagnostics: "string segment", classification: "StringLiteral"),
   MiscSpec(name: "Yield", kind: "kw_yield", nameForDiagnostics: "yield", text: "yield"),

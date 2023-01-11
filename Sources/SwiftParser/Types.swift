@@ -134,7 +134,7 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseSimpleOrCompositionType() -> RawTypeSyntax {
     // 'each' is a contextual keyword for a pack reference.
-    if let each = consume(ifAny: [], contextualKeywords: ["each"]) {
+    if let each = consume(if: .contextualKeyword(.each)) {
       let packType = parseSimpleType()
       return RawTypeSyntax(
         RawPackReferenceTypeSyntax(
@@ -145,7 +145,7 @@ extension Parser {
       )
     }
 
-    let someOrAny = self.consume(ifAny: [], contextualKeywords: ["some", "any"])
+    let someOrAny = self.consume(ifAny: [.contextualKeyword(.some), .contextualKeyword(.any)])
 
     var base = self.parseSimpleType()
     guard self.atContextualPunctuator("&") else {
@@ -232,7 +232,7 @@ extension Parser {
     stopAtFirstPeriod: Bool = false
   ) -> RawTypeSyntax {
     var base: RawTypeSyntax
-    switch self.currentToken.tokenKind {
+    switch self.currentToken.rawTokenKind {
     case .capitalSelfKeyword,
       .anyKeyword,
       .identifier:
@@ -264,8 +264,8 @@ extension Parser {
             )
           )
           break
-        } else if self.atContextualKeyword("Type") || self.atContextualKeyword("Protocol") {
-          let typeOrProtocol = self.consumeAnyToken(remapping: .contextualKeyword)
+        } else if self.at(.contextualKeyword(.Type)) || self.at(.contextualKeyword(.Protocol)) {
+          let typeOrProtocol = self.consume(if: .contextualKeyword(.Type)) ?? self.consume(if: .contextualKeyword(.Protocol))!
           base = RawTypeSyntax(
             RawMetatypeTypeSyntax(
               baseType: base,
@@ -509,7 +509,7 @@ extension Parser {
             second = nil
             unexpectedBeforeColon = nil
             colon = parsedColon
-          } else if self.currentToken.canBeArgumentLabel(allowDollarIdentifier: true) && self.peek().tokenKind == .colon {
+          } else if self.currentToken.canBeArgumentLabel(allowDollarIdentifier: true) && self.peek().rawTokenKind == .colon {
             (unexpectedBeforeSecond, second) = self.parseArgumentLabel()
             (unexpectedBeforeColon, colon) = self.expect(.colon)
           } else {
@@ -662,7 +662,7 @@ extension Parser.Lookahead {
   mutating func skipTypeAttributeList() {
     var specifierProgress = LoopProgressCondition()
     // TODO: Can we model isolated/_const so that they're specified in both canParse* and parse*?
-    while self.at(anyIn: TypeSpecifier.self) != nil || self.atContextualKeyword("isolated") || self.atContextualKeyword("_const"),
+    while self.at(anyIn: TypeSpecifier.self) != nil || self.at(.contextualKeyword(.isolated)) || self.at(.contextualKeyword(._const)),
       specifierProgress.evaluate(currentToken)
     {
       self.consumeAnyToken()
@@ -704,7 +704,7 @@ extension Parser.Lookahead {
   }
 
   mutating func canParseSimpleOrCompositionType() -> Bool {
-    if self.atContextualKeyword("some") || self.atContextualKeyword("any") || self.atContextualKeyword("each") {
+    if self.at(.contextualKeyword(.some)) || self.at(.contextualKeyword(.any)) || self.at(.contextualKeyword(.each)) {
       self.consumeAnyToken()
     }
 
@@ -724,7 +724,7 @@ extension Parser.Lookahead {
   }
 
   mutating func canParseSimpleType() -> Bool {
-    switch self.currentToken.tokenKind {
+    switch self.currentToken.rawTokenKind {
     case .anyKeyword:
       self.consumeAnyToken()
     case .capitalSelfKeyword, .identifier:
@@ -761,7 +761,7 @@ extension Parser.Lookahead {
     while loopCondition.evaluate(currentToken) {
       if self.at(.period) {
         self.consumeAnyToken()
-        if self.atContextualKeyword("Type") || self.atContextualKeyword("Protocol") {
+        if self.at(.contextualKeyword(.Type)) || self.at(.contextualKeyword(.Protocol)) {
           self.consumeAnyToken()
           continue
         }
@@ -847,7 +847,7 @@ extension Parser.Lookahead {
     }
 
     if self.at(anyIn: EffectsSpecifier.self) != nil {
-      if self.peek().tokenKind == .arrow {
+      if self.peek().rawTokenKind == .arrow {
         return true
       }
 
@@ -934,7 +934,7 @@ extension Parser {
       specifier = missingToken(misplacedSpecifier.tokenKind, text: misplacedSpecifier.tokenText)
     }
     var extraneousSpecifiers: [RawTokenSyntax] = []
-    while let extraSpecifier = self.consume(ifAny: [.inoutKeyword], contextualKeywords: ["__shared", "__owned", "isolated", "_const"]) {
+    while let extraSpecifier = self.consume(ifAny: [.inoutKeyword, .contextualKeyword(.__shared), .contextualKeyword(.__owned), .contextualKeyword(.isolated), .contextualKeyword(._const)]) {
       if specifier == nil {
         specifier = extraSpecifier
       } else {
@@ -962,7 +962,7 @@ extension Parser {
 
   @_spi(RawSyntax)
   public mutating func parseTypeAttribute() -> RawAttributeListSyntax.Element {
-    guard let typeAttr = Parser.TypeAttribute(rawValue: self.peek().tokenText) else {
+    guard let typeAttr = Parser.TypeAttribute(lexeme: self.peek()) else {
       return .customAttribute(self.parseCustomAttribute())
     }
 
@@ -1051,14 +1051,14 @@ extension Parser {
 
 extension Lexer.Lexeme {
   var isBinaryOperator: Bool {
-    return self.tokenKind == .spacedBinaryOperator
-      || self.tokenKind == .unspacedBinaryOperator
+    return self.rawTokenKind == .spacedBinaryOperator
+      || self.rawTokenKind == .unspacedBinaryOperator
   }
 
   var isAnyOperator: Bool {
     return self.isBinaryOperator
-      || self.tokenKind == .postfixOperator
-      || self.tokenKind == .prefixOperator
+      || self.rawTokenKind == .postfixOperator
+      || self.rawTokenKind == .prefixOperator
   }
 
   var isEllipsis: Bool {
@@ -1066,7 +1066,7 @@ extension Lexer.Lexeme {
   }
 
   var isGenericTypeDisambiguatingToken: Bool {
-    switch self.tokenKind {
+    switch self.rawTokenKind {
     case .rightParen,
       .rightSquareBracket,
       .leftBrace,

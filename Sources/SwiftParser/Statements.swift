@@ -632,7 +632,7 @@ extension Parser {
     let (unexpectedBeforeForKeyword, forKeyword) = self.eat(forHandle)
     let tryKeyword = self.consume(if: .tryKeyword)
 
-    let awaitKeyword = self.consumeIfContextualKeyword("await")
+    let awaitKeyword = self.consume(if: .contextualKeyword(.await))
 
     // Parse the pattern.  This is either 'case <refutable pattern>' or just a
     // normal pattern.
@@ -1265,9 +1265,9 @@ extension Parser.Lookahead {
       // is a pack expansion expression.
       // FIXME: 'repeat' followed by '{' could be a pack expansion
       // with a closure pattern.
-      return self.peek().tokenKind == .leftBrace
+      return self.peek().rawTokenKind == .leftBrace
     case .yieldAsIdentifier?:
-      switch self.peek().tokenKind {
+      switch self.peek().rawTokenKind {
       case .prefixAmpersand:
         // "yield &" always denotes a yield statement.
         return true
@@ -1298,7 +1298,7 @@ extension Parser.Lookahead {
     var loopProgress = LoopProgressCondition()
     var hasAttribute = false
     while lookahead.at(.atSign) && loopProgress.evaluate(lookahead.currentToken) {
-      guard lookahead.peek().tokenKind == .identifier else {
+      guard lookahead.peek().rawTokenKind == .identifier else {
         return false
       }
 

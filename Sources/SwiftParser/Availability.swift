@@ -78,7 +78,7 @@ extension Parser {
     return RawAvailabilitySpecListSyntax(elements: elements, arena: self.arena)
   }
 
-  enum AvailabilityArgumentKind: SyntaxText, ContextualKeywords {
+  enum AvailabilityArgumentKind: RawTokenKindSubset {
     case message
     case renamed
     case introduced
@@ -86,6 +86,31 @@ extension Parser {
     case obsoleted
     case unavailable
     case noasync
+
+    init?(lexeme: Lexer.Lexeme) {
+      switch lexeme {
+      case RawTokenKindMatch(.message): self = .message
+      case RawTokenKindMatch(.renamed): self = .renamed
+      case RawTokenKindMatch(.introduced): self = .introduced
+      case RawTokenKindMatch(.deprecated): self = .deprecated
+      case RawTokenKindMatch(.obsoleted): self = .obsoleted
+      case RawTokenKindMatch(.unavailable): self = .unavailable
+      case RawTokenKindMatch(.noasync): self = .noasync
+      default: return nil
+      }
+    }
+
+    var rawTokenKind: RawTokenKind {
+      switch self {
+      case .message: return .contextualKeyword(.message)
+      case .renamed: return .contextualKeyword(.renamed)
+      case .introduced: return .contextualKeyword(.introduced)
+      case .deprecated: return .contextualKeyword(.deprecated)
+      case .obsoleted: return .contextualKeyword(.obsoleted)
+      case .unavailable: return .contextualKeyword(.unavailable)
+      case .noasync: return .contextualKeyword(.noasync)
+      }
+    }
   }
 
   mutating func parseExtendedAvailabilitySpecList() -> RawAvailabilitySpecListSyntax {
@@ -196,7 +221,7 @@ extension Parser {
     }
 
     if self.at(any: [.identifier, .wildcardKeyword]) {
-      if self.atContextualKeyword("swift") || self.atContextualKeyword("_PackageDescription") {
+      if self.at(.contextualKeyword(.swift)) || self.at(.contextualKeyword(._PackageDescription)) {
         return .availabilityVersionRestriction(self.parsePlatformAgnosticVersionConstraintSpec())
       }
     }
@@ -231,7 +256,7 @@ extension Parser {
   ///     platform-name → tvOS
   mutating func parsePlatformVersionConstraintSpec() -> RawAvailabilityVersionRestrictionSyntax {
     // Register the platform name as a keyword token.
-    let plaform = self.consumeAnyToken(remapping: .contextualKeyword)
+    let plaform = self.consumeAnyToken()
     let version = self.parseVersionTuple()
     return RawAvailabilityVersionRestrictionSyntax(
       platform: plaform,

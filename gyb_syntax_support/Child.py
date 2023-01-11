@@ -130,6 +130,9 @@ class Child(object):
       if self.token.text:
         return f" = .{self.token.swift_kind()}Token()"
       if self.text_choices and len(self.text_choices) == 1:
-        return f" = .{self.token.swift_kind()}(\"{self.text_choices[0]}\")"
+        if self.token.associated_value_class:
+          return f" = .{self.token.swift_kind()}(.{self.text_choices[0]})"
+        else:
+          return f" = .{self.token.swift_kind()}(\"{self.text_choices[0]}\")"
 
       return ""

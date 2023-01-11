@@ -239,9 +239,9 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `item` replaced.
   /// - param newChild: The new `item` to replace the node's
   ///                   current `item`, if present.
-  public func withItem(_ newChild: Item?) -> CodeBlockItemSyntax {
+  public func withItem(_ newChild: Item) -> CodeBlockItemSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missing, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return CodeBlockItemSyntax(newData)
   }
@@ -485,9 +485,9 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `leftBrace` replaced.
   /// - param newChild: The new `leftBrace` to replace the node's
   ///                   current `leftBrace`, if present.
-  public func withLeftBrace(_ newChild: TokenSyntax?) -> CodeBlockSyntax {
+  public func withLeftBrace(_ newChild: TokenSyntax) -> CodeBlockSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftBrace, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return CodeBlockSyntax(newData)
   }
@@ -545,9 +545,9 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `statements` replaced.
   /// - param newChild: The new `statements` to replace the node's
   ///                   current `statements`, if present.
-  public func withStatements(_ newChild: CodeBlockItemListSyntax?) -> CodeBlockSyntax {
+  public func withStatements(_ newChild: CodeBlockItemListSyntax) -> CodeBlockSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.codeBlockItemList, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return CodeBlockSyntax(newData)
   }
@@ -586,9 +586,9 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `rightBrace` replaced.
   /// - param newChild: The new `rightBrace` to replace the node's
   ///                   current `rightBrace`, if present.
-  public func withRightBrace(_ newChild: TokenSyntax?) -> CodeBlockSyntax {
+  public func withRightBrace(_ newChild: TokenSyntax) -> CodeBlockSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightBrace, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return CodeBlockSyntax(newData)
   }
@@ -741,9 +741,9 @@ public struct DeclNameArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `name` replaced.
   /// - param newChild: The new `name` to replace the node's
   ///                   current `name`, if present.
-  public func withName(_ newChild: TokenSyntax?) -> DeclNameArgumentSyntax {
+  public func withName(_ newChild: TokenSyntax) -> DeclNameArgumentSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.unknown(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return DeclNameArgumentSyntax(newData)
   }
@@ -782,9 +782,9 @@ public struct DeclNameArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `colon` replaced.
   /// - param newChild: The new `colon` to replace the node's
   ///                   current `colon`, if present.
-  public func withColon(_ newChild: TokenSyntax?) -> DeclNameArgumentSyntax {
+  public func withColon(_ newChild: TokenSyntax) -> DeclNameArgumentSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return DeclNameArgumentSyntax(newData)
   }
@@ -933,9 +933,9 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `leftParen` replaced.
   /// - param newChild: The new `leftParen` to replace the node's
   ///                   current `leftParen`, if present.
-  public func withLeftParen(_ newChild: TokenSyntax?) -> DeclNameArgumentsSyntax {
+  public func withLeftParen(_ newChild: TokenSyntax) -> DeclNameArgumentsSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return DeclNameArgumentsSyntax(newData)
   }
@@ -993,9 +993,9 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `arguments` replaced.
   /// - param newChild: The new `arguments` to replace the node's
   ///                   current `arguments`, if present.
-  public func withArguments(_ newChild: DeclNameArgumentListSyntax?) -> DeclNameArgumentsSyntax {
+  public func withArguments(_ newChild: DeclNameArgumentListSyntax) -> DeclNameArgumentsSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.declNameArgumentList, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return DeclNameArgumentsSyntax(newData)
   }
@@ -1034,9 +1034,9 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `rightParen` replaced.
   /// - param newChild: The new `rightParen` to replace the node's
   ///                   current `rightParen`, if present.
-  public func withRightParen(_ newChild: TokenSyntax?) -> DeclNameArgumentsSyntax {
+  public func withRightParen(_ newChild: TokenSyntax) -> DeclNameArgumentsSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return DeclNameArgumentsSyntax(newData)
   }
@@ -1281,9 +1281,9 @@ public struct TupleExprElementSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `expression` replaced.
   /// - param newChild: The new `expression` to replace the node's
   ///                   current `expression`, if present.
-  public func withExpression(_ newChild: ExprSyntax?) -> TupleExprElementSyntax {
+  public func withExpression(_ newChild: ExprSyntax) -> TupleExprElementSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return TupleExprElementSyntax(newData)
   }
@@ -1486,9 +1486,9 @@ public struct ArrayElementSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `expression` replaced.
   /// - param newChild: The new `expression` to replace the node's
   ///                   current `expression`, if present.
-  public func withExpression(_ newChild: ExprSyntax?) -> ArrayElementSyntax {
+  public func withExpression(_ newChild: ExprSyntax) -> ArrayElementSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return ArrayElementSyntax(newData)
   }
@@ -1683,9 +1683,9 @@ public struct DictionaryElementSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `keyExpression` replaced.
   /// - param newChild: The new `keyExpression` to replace the node's
   ///                   current `keyExpression`, if present.
-  public func withKeyExpression(_ newChild: ExprSyntax?) -> DictionaryElementSyntax {
+  public func withKeyExpression(_ newChild: ExprSyntax) -> DictionaryElementSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return DictionaryElementSyntax(newData)
   }
@@ -1724,9 +1724,9 @@ public struct DictionaryElementSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `colon` replaced.
   /// - param newChild: The new `colon` to replace the node's
   ///                   current `colon`, if present.
-  public func withColon(_ newChild: TokenSyntax?) -> DictionaryElementSyntax {
+  public func withColon(_ newChild: TokenSyntax) -> DictionaryElementSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return DictionaryElementSyntax(newData)
   }
@@ -1765,9 +1765,9 @@ public struct DictionaryElementSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `valueExpression` replaced.
   /// - param newChild: The new `valueExpression` to replace the node's
   ///                   current `valueExpression`, if present.
-  public func withValueExpression(_ newChild: ExprSyntax?) -> DictionaryElementSyntax {
+  public func withValueExpression(_ newChild: ExprSyntax) -> DictionaryElementSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return DictionaryElementSyntax(newData)
   }
@@ -2127,9 +2127,9 @@ public struct ClosureCaptureItemSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `expression` replaced.
   /// - param newChild: The new `expression` to replace the node's
   ///                   current `expression`, if present.
-  public func withExpression(_ newChild: ExprSyntax?) -> ClosureCaptureItemSyntax {
+  public func withExpression(_ newChild: ExprSyntax) -> ClosureCaptureItemSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 7, with: raw, arena: arena)
     return ClosureCaptureItemSyntax(newData)
   }
@@ -2344,9 +2344,9 @@ public struct ClosureCaptureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `leftSquare` replaced.
   /// - param newChild: The new `leftSquare` to replace the node's
   ///                   current `leftSquare`, if present.
-  public func withLeftSquare(_ newChild: TokenSyntax?) -> ClosureCaptureSignatureSyntax {
+  public func withLeftSquare(_ newChild: TokenSyntax) -> ClosureCaptureSignatureSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftSquareBracket, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return ClosureCaptureSignatureSyntax(newData)
   }
@@ -2446,9 +2446,9 @@ public struct ClosureCaptureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `rightSquare` replaced.
   /// - param newChild: The new `rightSquare` to replace the node's
   ///                   current `rightSquare`, if present.
-  public func withRightSquare(_ newChild: TokenSyntax?) -> ClosureCaptureSignatureSyntax {
+  public func withRightSquare(_ newChild: TokenSyntax) -> ClosureCaptureSignatureSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightSquareBracket, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return ClosureCaptureSignatureSyntax(newData)
   }
@@ -2601,9 +2601,9 @@ public struct ClosureParamSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `name` replaced.
   /// - param newChild: The new `name` to replace the node's
   ///                   current `name`, if present.
-  public func withName(_ newChild: TokenSyntax?) -> ClosureParamSyntax {
+  public func withName(_ newChild: TokenSyntax) -> ClosureParamSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return ClosureParamSyntax(newData)
   }
@@ -3117,9 +3117,9 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `inTok` replaced.
   /// - param newChild: The new `inTok` to replace the node's
   ///                   current `inTok`, if present.
-  public func withInTok(_ newChild: TokenSyntax?) -> ClosureSignatureSyntax {
+  public func withInTok(_ newChild: TokenSyntax) -> ClosureSignatureSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.inKeyword, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 13, with: raw, arena: arena)
     return ClosureSignatureSyntax(newData)
   }
@@ -3308,9 +3308,9 @@ public struct MultipleTrailingClosureElementSyntax: SyntaxProtocol, SyntaxHashab
   /// Returns a copy of the receiver with its `label` replaced.
   /// - param newChild: The new `label` to replace the node's
   ///                   current `label`, if present.
-  public func withLabel(_ newChild: TokenSyntax?) -> MultipleTrailingClosureElementSyntax {
+  public func withLabel(_ newChild: TokenSyntax) -> MultipleTrailingClosureElementSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return MultipleTrailingClosureElementSyntax(newData)
   }
@@ -3349,9 +3349,9 @@ public struct MultipleTrailingClosureElementSyntax: SyntaxProtocol, SyntaxHashab
   /// Returns a copy of the receiver with its `colon` replaced.
   /// - param newChild: The new `colon` to replace the node's
   ///                   current `colon`, if present.
-  public func withColon(_ newChild: TokenSyntax?) -> MultipleTrailingClosureElementSyntax {
+  public func withColon(_ newChild: TokenSyntax) -> MultipleTrailingClosureElementSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return MultipleTrailingClosureElementSyntax(newData)
   }
@@ -3390,9 +3390,9 @@ public struct MultipleTrailingClosureElementSyntax: SyntaxProtocol, SyntaxHashab
   /// Returns a copy of the receiver with its `closure` replaced.
   /// - param newChild: The new `closure` to replace the node's
   ///                   current `closure`, if present.
-  public func withClosure(_ newChild: ClosureExprSyntax?) -> MultipleTrailingClosureElementSyntax {
+  public func withClosure(_ newChild: ClosureExprSyntax) -> MultipleTrailingClosureElementSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.closureExpr, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return MultipleTrailingClosureElementSyntax(newData)
   }
@@ -3541,9 +3541,9 @@ public struct StringSegmentSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `content` replaced.
   /// - param newChild: The new `content` to replace the node's
   ///                   current `content`, if present.
-  public func withContent(_ newChild: TokenSyntax?) -> StringSegmentSyntax {
+  public func withContent(_ newChild: TokenSyntax) -> StringSegmentSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.stringSegment(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return StringSegmentSyntax(newData)
   }
@@ -3692,9 +3692,9 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `backslash` replaced.
   /// - param newChild: The new `backslash` to replace the node's
   ///                   current `backslash`, if present.
-  public func withBackslash(_ newChild: TokenSyntax?) -> ExpressionSegmentSyntax {
+  public func withBackslash(_ newChild: TokenSyntax) -> ExpressionSegmentSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.backslash, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return ExpressionSegmentSyntax(newData)
   }
@@ -3775,9 +3775,9 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `leftParen` replaced.
   /// - param newChild: The new `leftParen` to replace the node's
   ///                   current `leftParen`, if present.
-  public func withLeftParen(_ newChild: TokenSyntax?) -> ExpressionSegmentSyntax {
+  public func withLeftParen(_ newChild: TokenSyntax) -> ExpressionSegmentSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return ExpressionSegmentSyntax(newData)
   }
@@ -3835,9 +3835,9 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `expressions` replaced.
   /// - param newChild: The new `expressions` to replace the node's
   ///                   current `expressions`, if present.
-  public func withExpressions(_ newChild: TupleExprElementListSyntax?) -> ExpressionSegmentSyntax {
+  public func withExpressions(_ newChild: TupleExprElementListSyntax) -> ExpressionSegmentSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.tupleExprElementList, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 7, with: raw, arena: arena)
     return ExpressionSegmentSyntax(newData)
   }
@@ -3876,9 +3876,9 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `rightParen` replaced.
   /// - param newChild: The new `rightParen` to replace the node's
   ///                   current `rightParen`, if present.
-  public func withRightParen(_ newChild: TokenSyntax?) -> ExpressionSegmentSyntax {
+  public func withRightParen(_ newChild: TokenSyntax) -> ExpressionSegmentSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 9, with: raw, arena: arena)
     return ExpressionSegmentSyntax(newData)
   }
@@ -4135,9 +4135,9 @@ public struct KeyPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `component` replaced.
   /// - param newChild: The new `component` to replace the node's
   ///                   current `component`, if present.
-  public func withComponent(_ newChild: Component?) -> KeyPathComponentSyntax {
+  public func withComponent(_ newChild: Component) -> KeyPathComponentSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missing, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return KeyPathComponentSyntax(newData)
   }
@@ -4286,9 +4286,9 @@ public struct KeyPathPropertyComponentSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `identifier` replaced.
   /// - param newChild: The new `identifier` to replace the node's
   ///                   current `identifier`, if present.
-  public func withIdentifier(_ newChild: TokenSyntax?) -> KeyPathPropertyComponentSyntax {
+  public func withIdentifier(_ newChild: TokenSyntax) -> KeyPathPropertyComponentSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return KeyPathPropertyComponentSyntax(newData)
   }
@@ -4529,9 +4529,9 @@ public struct KeyPathSubscriptComponentSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `leftBracket` replaced.
   /// - param newChild: The new `leftBracket` to replace the node's
   ///                   current `leftBracket`, if present.
-  public func withLeftBracket(_ newChild: TokenSyntax?) -> KeyPathSubscriptComponentSyntax {
+  public func withLeftBracket(_ newChild: TokenSyntax) -> KeyPathSubscriptComponentSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftSquareBracket, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return KeyPathSubscriptComponentSyntax(newData)
   }
@@ -4589,9 +4589,9 @@ public struct KeyPathSubscriptComponentSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `argumentList` replaced.
   /// - param newChild: The new `argumentList` to replace the node's
   ///                   current `argumentList`, if present.
-  public func withArgumentList(_ newChild: TupleExprElementListSyntax?) -> KeyPathSubscriptComponentSyntax {
+  public func withArgumentList(_ newChild: TupleExprElementListSyntax) -> KeyPathSubscriptComponentSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.tupleExprElementList, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return KeyPathSubscriptComponentSyntax(newData)
   }
@@ -4630,9 +4630,9 @@ public struct KeyPathSubscriptComponentSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `rightBracket` replaced.
   /// - param newChild: The new `rightBracket` to replace the node's
   ///                   current `rightBracket`, if present.
-  public func withRightBracket(_ newChild: TokenSyntax?) -> KeyPathSubscriptComponentSyntax {
+  public func withRightBracket(_ newChild: TokenSyntax) -> KeyPathSubscriptComponentSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightSquareBracket, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return KeyPathSubscriptComponentSyntax(newData)
   }
@@ -4781,9 +4781,9 @@ public struct KeyPathOptionalComponentSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `questionOrExclamationMark` replaced.
   /// - param newChild: The new `questionOrExclamationMark` to replace the node's
   ///                   current `questionOrExclamationMark`, if present.
-  public func withQuestionOrExclamationMark(_ newChild: TokenSyntax?) -> KeyPathOptionalComponentSyntax {
+  public func withQuestionOrExclamationMark(_ newChild: TokenSyntax) -> KeyPathOptionalComponentSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.postfixQuestionMark, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return KeyPathOptionalComponentSyntax(newData)
   }
@@ -4920,9 +4920,9 @@ public struct YieldExprListElementSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `expression` replaced.
   /// - param newChild: The new `expression` to replace the node's
   ///                   current `expression`, if present.
-  public func withExpression(_ newChild: ExprSyntax?) -> YieldExprListElementSyntax {
+  public func withExpression(_ newChild: ExprSyntax) -> YieldExprListElementSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return YieldExprListElementSyntax(newData)
   }
@@ -5109,9 +5109,9 @@ public struct TypeInitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `equal` replaced.
   /// - param newChild: The new `equal` to replace the node's
   ///                   current `equal`, if present.
-  public func withEqual(_ newChild: TokenSyntax?) -> TypeInitializerClauseSyntax {
+  public func withEqual(_ newChild: TokenSyntax) -> TypeInitializerClauseSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.equal, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return TypeInitializerClauseSyntax(newData)
   }
@@ -5150,9 +5150,9 @@ public struct TypeInitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `value` replaced.
   /// - param newChild: The new `value` to replace the node's
   ///                   current `value`, if present.
-  public func withValue(_ newChild: TypeSyntax?) -> TypeInitializerClauseSyntax {
+  public func withValue(_ newChild: TypeSyntax) -> TypeInitializerClauseSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return TypeInitializerClauseSyntax(newData)
   }
@@ -5301,9 +5301,9 @@ public struct ParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `leftParen` replaced.
   /// - param newChild: The new `leftParen` to replace the node's
   ///                   current `leftParen`, if present.
-  public func withLeftParen(_ newChild: TokenSyntax?) -> ParameterClauseSyntax {
+  public func withLeftParen(_ newChild: TokenSyntax) -> ParameterClauseSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return ParameterClauseSyntax(newData)
   }
@@ -5361,9 +5361,9 @@ public struct ParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `parameterList` replaced.
   /// - param newChild: The new `parameterList` to replace the node's
   ///                   current `parameterList`, if present.
-  public func withParameterList(_ newChild: FunctionParameterListSyntax?) -> ParameterClauseSyntax {
+  public func withParameterList(_ newChild: FunctionParameterListSyntax) -> ParameterClauseSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.functionParameterList, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return ParameterClauseSyntax(newData)
   }
@@ -5402,9 +5402,9 @@ public struct ParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `rightParen` replaced.
   /// - param newChild: The new `rightParen` to replace the node's
   ///                   current `rightParen`, if present.
-  public func withRightParen(_ newChild: TokenSyntax?) -> ParameterClauseSyntax {
+  public func withRightParen(_ newChild: TokenSyntax) -> ParameterClauseSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return ParameterClauseSyntax(newData)
   }
@@ -5557,9 +5557,9 @@ public struct ReturnClauseSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `arrow` replaced.
   /// - param newChild: The new `arrow` to replace the node's
   ///                   current `arrow`, if present.
-  public func withArrow(_ newChild: TokenSyntax?) -> ReturnClauseSyntax {
+  public func withArrow(_ newChild: TokenSyntax) -> ReturnClauseSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.arrow, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return ReturnClauseSyntax(newData)
   }
@@ -5598,9 +5598,9 @@ public struct ReturnClauseSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `returnType` replaced.
   /// - param newChild: The new `returnType` to replace the node's
   ///                   current `returnType`, if present.
-  public func withReturnType(_ newChild: TypeSyntax?) -> ReturnClauseSyntax {
+  public func withReturnType(_ newChild: TypeSyntax) -> ReturnClauseSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return ReturnClauseSyntax(newData)
   }
@@ -5753,9 +5753,9 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `input` replaced.
   /// - param newChild: The new `input` to replace the node's
   ///                   current `input`, if present.
-  public func withInput(_ newChild: ParameterClauseSyntax?) -> FunctionSignatureSyntax {
+  public func withInput(_ newChild: ParameterClauseSyntax) -> FunctionSignatureSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.parameterClause, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return FunctionSignatureSyntax(newData)
   }
@@ -6146,9 +6146,9 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `poundKeyword` replaced.
   /// - param newChild: The new `poundKeyword` to replace the node's
   ///                   current `poundKeyword`, if present.
-  public func withPoundKeyword(_ newChild: TokenSyntax?) -> IfConfigClauseSyntax {
+  public func withPoundKeyword(_ newChild: TokenSyntax) -> IfConfigClauseSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.poundIfKeyword, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return IfConfigClauseSyntax(newData)
   }
@@ -6405,9 +6405,9 @@ public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `fileArgLabel` replaced.
   /// - param newChild: The new `fileArgLabel` to replace the node's
   ///                   current `fileArgLabel`, if present.
-  public func withFileArgLabel(_ newChild: TokenSyntax?) -> PoundSourceLocationArgsSyntax {
+  public func withFileArgLabel(_ newChild: TokenSyntax) -> PoundSourceLocationArgsSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return PoundSourceLocationArgsSyntax(newData)
   }
@@ -6446,9 +6446,9 @@ public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `fileArgColon` replaced.
   /// - param newChild: The new `fileArgColon` to replace the node's
   ///                   current `fileArgColon`, if present.
-  public func withFileArgColon(_ newChild: TokenSyntax?) -> PoundSourceLocationArgsSyntax {
+  public func withFileArgColon(_ newChild: TokenSyntax) -> PoundSourceLocationArgsSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return PoundSourceLocationArgsSyntax(newData)
   }
@@ -6487,9 +6487,9 @@ public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `fileName` replaced.
   /// - param newChild: The new `fileName` to replace the node's
   ///                   current `fileName`, if present.
-  public func withFileName(_ newChild: TokenSyntax?) -> PoundSourceLocationArgsSyntax {
+  public func withFileName(_ newChild: TokenSyntax) -> PoundSourceLocationArgsSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.stringLiteral(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return PoundSourceLocationArgsSyntax(newData)
   }
@@ -6528,9 +6528,9 @@ public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `comma` replaced.
   /// - param newChild: The new `comma` to replace the node's
   ///                   current `comma`, if present.
-  public func withComma(_ newChild: TokenSyntax?) -> PoundSourceLocationArgsSyntax {
+  public func withComma(_ newChild: TokenSyntax) -> PoundSourceLocationArgsSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.comma, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 7, with: raw, arena: arena)
     return PoundSourceLocationArgsSyntax(newData)
   }
@@ -6569,9 +6569,9 @@ public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `lineArgLabel` replaced.
   /// - param newChild: The new `lineArgLabel` to replace the node's
   ///                   current `lineArgLabel`, if present.
-  public func withLineArgLabel(_ newChild: TokenSyntax?) -> PoundSourceLocationArgsSyntax {
+  public func withLineArgLabel(_ newChild: TokenSyntax) -> PoundSourceLocationArgsSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 9, with: raw, arena: arena)
     return PoundSourceLocationArgsSyntax(newData)
   }
@@ -6610,9 +6610,9 @@ public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `lineArgColon` replaced.
   /// - param newChild: The new `lineArgColon` to replace the node's
   ///                   current `lineArgColon`, if present.
-  public func withLineArgColon(_ newChild: TokenSyntax?) -> PoundSourceLocationArgsSyntax {
+  public func withLineArgColon(_ newChild: TokenSyntax) -> PoundSourceLocationArgsSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 11, with: raw, arena: arena)
     return PoundSourceLocationArgsSyntax(newData)
   }
@@ -6651,9 +6651,9 @@ public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `lineNumber` replaced.
   /// - param newChild: The new `lineNumber` to replace the node's
   ///                   current `lineNumber`, if present.
-  public func withLineNumber(_ newChild: TokenSyntax?) -> PoundSourceLocationArgsSyntax {
+  public func withLineNumber(_ newChild: TokenSyntax) -> PoundSourceLocationArgsSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.integerLiteral(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 13, with: raw, arena: arena)
     return PoundSourceLocationArgsSyntax(newData)
   }
@@ -6842,9 +6842,9 @@ public struct DeclModifierDetailSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `leftParen` replaced.
   /// - param newChild: The new `leftParen` to replace the node's
   ///                   current `leftParen`, if present.
-  public func withLeftParen(_ newChild: TokenSyntax?) -> DeclModifierDetailSyntax {
+  public func withLeftParen(_ newChild: TokenSyntax) -> DeclModifierDetailSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return DeclModifierDetailSyntax(newData)
   }
@@ -6883,9 +6883,9 @@ public struct DeclModifierDetailSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `detail` replaced.
   /// - param newChild: The new `detail` to replace the node's
   ///                   current `detail`, if present.
-  public func withDetail(_ newChild: TokenSyntax?) -> DeclModifierDetailSyntax {
+  public func withDetail(_ newChild: TokenSyntax) -> DeclModifierDetailSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return DeclModifierDetailSyntax(newData)
   }
@@ -6924,9 +6924,9 @@ public struct DeclModifierDetailSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `rightParen` replaced.
   /// - param newChild: The new `rightParen` to replace the node's
   ///                   current `rightParen`, if present.
-  public func withRightParen(_ newChild: TokenSyntax?) -> DeclModifierDetailSyntax {
+  public func withRightParen(_ newChild: TokenSyntax) -> DeclModifierDetailSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return DeclModifierDetailSyntax(newData)
   }
@@ -7079,9 +7079,9 @@ public struct DeclModifierSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `name` replaced.
   /// - param newChild: The new `name` to replace the node's
   ///                   current `name`, if present.
-  public func withName(_ newChild: TokenSyntax?) -> DeclModifierSyntax {
+  public func withName(_ newChild: TokenSyntax) -> DeclModifierSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.unknown(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return DeclModifierSyntax(newData)
   }
@@ -7268,9 +7268,9 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `typeName` replaced.
   /// - param newChild: The new `typeName` to replace the node's
   ///                   current `typeName`, if present.
-  public func withTypeName(_ newChild: TypeSyntax?) -> InheritedTypeSyntax {
+  public func withTypeName(_ newChild: TypeSyntax) -> InheritedTypeSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return InheritedTypeSyntax(newData)
   }
@@ -7457,9 +7457,9 @@ public struct TypeInheritanceClauseSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `colon` replaced.
   /// - param newChild: The new `colon` to replace the node's
   ///                   current `colon`, if present.
-  public func withColon(_ newChild: TokenSyntax?) -> TypeInheritanceClauseSyntax {
+  public func withColon(_ newChild: TokenSyntax) -> TypeInheritanceClauseSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return TypeInheritanceClauseSyntax(newData)
   }
@@ -7517,9 +7517,9 @@ public struct TypeInheritanceClauseSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `inheritedTypeCollection` replaced.
   /// - param newChild: The new `inheritedTypeCollection` to replace the node's
   ///                   current `inheritedTypeCollection`, if present.
-  public func withInheritedTypeCollection(_ newChild: InheritedTypeListSyntax?) -> TypeInheritanceClauseSyntax {
+  public func withInheritedTypeCollection(_ newChild: InheritedTypeListSyntax) -> TypeInheritanceClauseSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.inheritedTypeList, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return TypeInheritanceClauseSyntax(newData)
   }
@@ -7668,9 +7668,9 @@ public struct MemberDeclBlockSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `leftBrace` replaced.
   /// - param newChild: The new `leftBrace` to replace the node's
   ///                   current `leftBrace`, if present.
-  public func withLeftBrace(_ newChild: TokenSyntax?) -> MemberDeclBlockSyntax {
+  public func withLeftBrace(_ newChild: TokenSyntax) -> MemberDeclBlockSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftBrace, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return MemberDeclBlockSyntax(newData)
   }
@@ -7728,9 +7728,9 @@ public struct MemberDeclBlockSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `members` replaced.
   /// - param newChild: The new `members` to replace the node's
   ///                   current `members`, if present.
-  public func withMembers(_ newChild: MemberDeclListSyntax?) -> MemberDeclBlockSyntax {
+  public func withMembers(_ newChild: MemberDeclListSyntax) -> MemberDeclBlockSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.memberDeclList, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return MemberDeclBlockSyntax(newData)
   }
@@ -7769,9 +7769,9 @@ public struct MemberDeclBlockSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `rightBrace` replaced.
   /// - param newChild: The new `rightBrace` to replace the node's
   ///                   current `rightBrace`, if present.
-  public func withRightBrace(_ newChild: TokenSyntax?) -> MemberDeclBlockSyntax {
+  public func withRightBrace(_ newChild: TokenSyntax) -> MemberDeclBlockSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightBrace, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return MemberDeclBlockSyntax(newData)
   }
@@ -7929,9 +7929,9 @@ public struct MemberDeclListItemSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `decl` replaced.
   /// - param newChild: The new `decl` to replace the node's
   ///                   current `decl`, if present.
-  public func withDecl(_ newChild: DeclSyntax?) -> MemberDeclListItemSyntax {
+  public func withDecl(_ newChild: DeclSyntax) -> MemberDeclListItemSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingDecl, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return MemberDeclListItemSyntax(newData)
   }
@@ -8138,9 +8138,9 @@ public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `statements` replaced.
   /// - param newChild: The new `statements` to replace the node's
   ///                   current `statements`, if present.
-  public func withStatements(_ newChild: CodeBlockItemListSyntax?) -> SourceFileSyntax {
+  public func withStatements(_ newChild: CodeBlockItemListSyntax) -> SourceFileSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.codeBlockItemList, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return SourceFileSyntax(newData)
   }
@@ -8179,9 +8179,9 @@ public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `eofToken` replaced.
   /// - param newChild: The new `eofToken` to replace the node's
   ///                   current `eofToken`, if present.
-  public func withEOFToken(_ newChild: TokenSyntax?) -> SourceFileSyntax {
+  public func withEOFToken(_ newChild: TokenSyntax) -> SourceFileSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.unknown(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return SourceFileSyntax(newData)
   }
@@ -8326,9 +8326,9 @@ public struct InitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `equal` replaced.
   /// - param newChild: The new `equal` to replace the node's
   ///                   current `equal`, if present.
-  public func withEqual(_ newChild: TokenSyntax?) -> InitializerClauseSyntax {
+  public func withEqual(_ newChild: TokenSyntax) -> InitializerClauseSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.equal, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return InitializerClauseSyntax(newData)
   }
@@ -8367,9 +8367,9 @@ public struct InitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `value` replaced.
   /// - param newChild: The new `value` to replace the node's
   ///                   current `value`, if present.
-  public func withValue(_ newChild: ExprSyntax?) -> InitializerClauseSyntax {
+  public func withValue(_ newChild: ExprSyntax) -> InitializerClauseSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return InitializerClauseSyntax(newData)
   }
@@ -9178,9 +9178,9 @@ public struct AccessPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `name` replaced.
   /// - param newChild: The new `name` to replace the node's
   ///                   current `name`, if present.
-  public func withName(_ newChild: TokenSyntax?) -> AccessPathComponentSyntax {
+  public func withName(_ newChild: TokenSyntax) -> AccessPathComponentSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return AccessPathComponentSyntax(newData)
   }
@@ -9371,9 +9371,9 @@ public struct AccessorParameterSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `leftParen` replaced.
   /// - param newChild: The new `leftParen` to replace the node's
   ///                   current `leftParen`, if present.
-  public func withLeftParen(_ newChild: TokenSyntax?) -> AccessorParameterSyntax {
+  public func withLeftParen(_ newChild: TokenSyntax) -> AccessorParameterSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return AccessorParameterSyntax(newData)
   }
@@ -9412,9 +9412,9 @@ public struct AccessorParameterSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `name` replaced.
   /// - param newChild: The new `name` to replace the node's
   ///                   current `name`, if present.
-  public func withName(_ newChild: TokenSyntax?) -> AccessorParameterSyntax {
+  public func withName(_ newChild: TokenSyntax) -> AccessorParameterSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return AccessorParameterSyntax(newData)
   }
@@ -9453,9 +9453,9 @@ public struct AccessorParameterSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `rightParen` replaced.
   /// - param newChild: The new `rightParen` to replace the node's
   ///                   current `rightParen`, if present.
-  public func withRightParen(_ newChild: TokenSyntax?) -> AccessorParameterSyntax {
+  public func withRightParen(_ newChild: TokenSyntax) -> AccessorParameterSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return AccessorParameterSyntax(newData)
   }
@@ -9612,9 +9612,9 @@ public struct AccessorBlockSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `leftBrace` replaced.
   /// - param newChild: The new `leftBrace` to replace the node's
   ///                   current `leftBrace`, if present.
-  public func withLeftBrace(_ newChild: TokenSyntax?) -> AccessorBlockSyntax {
+  public func withLeftBrace(_ newChild: TokenSyntax) -> AccessorBlockSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftBrace, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return AccessorBlockSyntax(newData)
   }
@@ -9672,9 +9672,9 @@ public struct AccessorBlockSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `accessors` replaced.
   /// - param newChild: The new `accessors` to replace the node's
   ///                   current `accessors`, if present.
-  public func withAccessors(_ newChild: AccessorListSyntax?) -> AccessorBlockSyntax {
+  public func withAccessors(_ newChild: AccessorListSyntax) -> AccessorBlockSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.accessorList, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return AccessorBlockSyntax(newData)
   }
@@ -9713,9 +9713,9 @@ public struct AccessorBlockSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `rightBrace` replaced.
   /// - param newChild: The new `rightBrace` to replace the node's
   ///                   current `rightBrace`, if present.
-  public func withRightBrace(_ newChild: TokenSyntax?) -> AccessorBlockSyntax {
+  public func withRightBrace(_ newChild: TokenSyntax) -> AccessorBlockSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightBrace, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return AccessorBlockSyntax(newData)
   }
@@ -9916,9 +9916,9 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `pattern` replaced.
   /// - param newChild: The new `pattern` to replace the node's
   ///                   current `pattern`, if present.
-  public func withPattern(_ newChild: PatternSyntax?) -> PatternBindingSyntax {
+  public func withPattern(_ newChild: PatternSyntax) -> PatternBindingSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingPattern, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return PatternBindingSyntax(newData)
   }
@@ -10268,9 +10268,9 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `identifier` replaced.
   /// - param newChild: The new `identifier` to replace the node's
   ///                   current `identifier`, if present.
-  public func withIdentifier(_ newChild: TokenSyntax?) -> EnumCaseElementSyntax {
+  public func withIdentifier(_ newChild: TokenSyntax) -> EnumCaseElementSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return EnumCaseElementSyntax(newData)
   }
@@ -10565,9 +10565,9 @@ public struct DesignatedTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `leadingComma` replaced.
   /// - param newChild: The new `leadingComma` to replace the node's
   ///                   current `leadingComma`, if present.
-  public func withLeadingComma(_ newChild: TokenSyntax?) -> DesignatedTypeElementSyntax {
+  public func withLeadingComma(_ newChild: TokenSyntax) -> DesignatedTypeElementSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.comma, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return DesignatedTypeElementSyntax(newData)
   }
@@ -10606,9 +10606,9 @@ public struct DesignatedTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `name` replaced.
   /// - param newChild: The new `name` to replace the node's
   ///                   current `name`, if present.
-  public func withName(_ newChild: TokenSyntax?) -> DesignatedTypeElementSyntax {
+  public func withName(_ newChild: TokenSyntax) -> DesignatedTypeElementSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return DesignatedTypeElementSyntax(newData)
   }
@@ -10760,9 +10760,9 @@ public struct OperatorPrecedenceAndTypesSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `colon` replaced.
   /// - param newChild: The new `colon` to replace the node's
   ///                   current `colon`, if present.
-  public func withColon(_ newChild: TokenSyntax?) -> OperatorPrecedenceAndTypesSyntax {
+  public func withColon(_ newChild: TokenSyntax) -> OperatorPrecedenceAndTypesSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return OperatorPrecedenceAndTypesSyntax(newData)
   }
@@ -10804,9 +10804,9 @@ public struct OperatorPrecedenceAndTypesSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `precedenceGroup` replaced.
   /// - param newChild: The new `precedenceGroup` to replace the node's
   ///                   current `precedenceGroup`, if present.
-  public func withPrecedenceGroup(_ newChild: TokenSyntax?) -> OperatorPrecedenceAndTypesSyntax {
+  public func withPrecedenceGroup(_ newChild: TokenSyntax) -> OperatorPrecedenceAndTypesSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return OperatorPrecedenceAndTypesSyntax(newData)
   }
@@ -10867,9 +10867,9 @@ public struct OperatorPrecedenceAndTypesSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `designatedTypes` replaced.
   /// - param newChild: The new `designatedTypes` to replace the node's
   ///                   current `designatedTypes`, if present.
-  public func withDesignatedTypes(_ newChild: DesignatedTypeListSyntax?) -> OperatorPrecedenceAndTypesSyntax {
+  public func withDesignatedTypes(_ newChild: DesignatedTypeListSyntax) -> OperatorPrecedenceAndTypesSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.designatedTypeList, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return OperatorPrecedenceAndTypesSyntax(newData)
   }
@@ -11033,9 +11033,9 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `higherThanOrLowerThan` replaced.
   /// - param newChild: The new `higherThanOrLowerThan` to replace the node's
   ///                   current `higherThanOrLowerThan`, if present.
-  public func withHigherThanOrLowerThan(_ newChild: TokenSyntax?) -> PrecedenceGroupRelationSyntax {
+  public func withHigherThanOrLowerThan(_ newChild: TokenSyntax) -> PrecedenceGroupRelationSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return PrecedenceGroupRelationSyntax(newData)
   }
@@ -11074,9 +11074,9 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `colon` replaced.
   /// - param newChild: The new `colon` to replace the node's
   ///                   current `colon`, if present.
-  public func withColon(_ newChild: TokenSyntax?) -> PrecedenceGroupRelationSyntax {
+  public func withColon(_ newChild: TokenSyntax) -> PrecedenceGroupRelationSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return PrecedenceGroupRelationSyntax(newData)
   }
@@ -11138,9 +11138,9 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `otherNames` replaced.
   /// - param newChild: The new `otherNames` to replace the node's
   ///                   current `otherNames`, if present.
-  public func withOtherNames(_ newChild: PrecedenceGroupNameListSyntax?) -> PrecedenceGroupRelationSyntax {
+  public func withOtherNames(_ newChild: PrecedenceGroupNameListSyntax) -> PrecedenceGroupRelationSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.precedenceGroupNameList, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return PrecedenceGroupRelationSyntax(newData)
   }
@@ -11293,9 +11293,9 @@ public struct PrecedenceGroupNameElementSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `name` replaced.
   /// - param newChild: The new `name` to replace the node's
   ///                   current `name`, if present.
-  public func withName(_ newChild: TokenSyntax?) -> PrecedenceGroupNameElementSyntax {
+  public func withName(_ newChild: TokenSyntax) -> PrecedenceGroupNameElementSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return PrecedenceGroupNameElementSyntax(newData)
   }
@@ -11490,9 +11490,9 @@ public struct PrecedenceGroupAssignmentSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `assignmentKeyword` replaced.
   /// - param newChild: The new `assignmentKeyword` to replace the node's
   ///                   current `assignmentKeyword`, if present.
-  public func withAssignmentKeyword(_ newChild: TokenSyntax?) -> PrecedenceGroupAssignmentSyntax {
+  public func withAssignmentKeyword(_ newChild: TokenSyntax) -> PrecedenceGroupAssignmentSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return PrecedenceGroupAssignmentSyntax(newData)
   }
@@ -11531,9 +11531,9 @@ public struct PrecedenceGroupAssignmentSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `colon` replaced.
   /// - param newChild: The new `colon` to replace the node's
   ///                   current `colon`, if present.
-  public func withColon(_ newChild: TokenSyntax?) -> PrecedenceGroupAssignmentSyntax {
+  public func withColon(_ newChild: TokenSyntax) -> PrecedenceGroupAssignmentSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return PrecedenceGroupAssignmentSyntax(newData)
   }
@@ -11579,9 +11579,9 @@ public struct PrecedenceGroupAssignmentSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `flag` replaced.
   /// - param newChild: The new `flag` to replace the node's
   ///                   current `flag`, if present.
-  public func withFlag(_ newChild: TokenSyntax?) -> PrecedenceGroupAssignmentSyntax {
+  public func withFlag(_ newChild: TokenSyntax) -> PrecedenceGroupAssignmentSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.trueKeyword, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return PrecedenceGroupAssignmentSyntax(newData)
   }
@@ -11742,9 +11742,9 @@ public struct PrecedenceGroupAssociativitySyntax: SyntaxProtocol, SyntaxHashable
   /// Returns a copy of the receiver with its `associativityKeyword` replaced.
   /// - param newChild: The new `associativityKeyword` to replace the node's
   ///                   current `associativityKeyword`, if present.
-  public func withAssociativityKeyword(_ newChild: TokenSyntax?) -> PrecedenceGroupAssociativitySyntax {
+  public func withAssociativityKeyword(_ newChild: TokenSyntax) -> PrecedenceGroupAssociativitySyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return PrecedenceGroupAssociativitySyntax(newData)
   }
@@ -11783,9 +11783,9 @@ public struct PrecedenceGroupAssociativitySyntax: SyntaxProtocol, SyntaxHashable
   /// Returns a copy of the receiver with its `colon` replaced.
   /// - param newChild: The new `colon` to replace the node's
   ///                   current `colon`, if present.
-  public func withColon(_ newChild: TokenSyntax?) -> PrecedenceGroupAssociativitySyntax {
+  public func withColon(_ newChild: TokenSyntax) -> PrecedenceGroupAssociativitySyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return PrecedenceGroupAssociativitySyntax(newData)
   }
@@ -11830,9 +11830,9 @@ public struct PrecedenceGroupAssociativitySyntax: SyntaxProtocol, SyntaxHashable
   /// Returns a copy of the receiver with its `value` replaced.
   /// - param newChild: The new `value` to replace the node's
   ///                   current `value`, if present.
-  public func withValue(_ newChild: TokenSyntax?) -> PrecedenceGroupAssociativitySyntax {
+  public func withValue(_ newChild: TokenSyntax) -> PrecedenceGroupAssociativitySyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return PrecedenceGroupAssociativitySyntax(newData)
   }
@@ -12001,9 +12001,9 @@ public struct CustomAttributeSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `atSignToken` replaced.
   /// - param newChild: The new `atSignToken` to replace the node's
   ///                   current `atSignToken`, if present.
-  public func withAtSignToken(_ newChild: TokenSyntax?) -> CustomAttributeSyntax {
+  public func withAtSignToken(_ newChild: TokenSyntax) -> CustomAttributeSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.atSign, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return CustomAttributeSyntax(newData)
   }
@@ -12043,9 +12043,9 @@ public struct CustomAttributeSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `attributeName` replaced.
   /// - param newChild: The new `attributeName` to replace the node's
   ///                   current `attributeName`, if present.
-  public func withAttributeName(_ newChild: TypeSyntax?) -> CustomAttributeSyntax {
+  public func withAttributeName(_ newChild: TypeSyntax) -> CustomAttributeSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return CustomAttributeSyntax(newData)
   }
@@ -12535,9 +12535,9 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `atSignToken` replaced.
   /// - param newChild: The new `atSignToken` to replace the node's
   ///                   current `atSignToken`, if present.
-  public func withAtSignToken(_ newChild: TokenSyntax?) -> AttributeSyntax {
+  public func withAtSignToken(_ newChild: TokenSyntax) -> AttributeSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.atSign, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return AttributeSyntax(newData)
   }
@@ -12577,9 +12577,9 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `attributeName` replaced.
   /// - param newChild: The new `attributeName` to replace the node's
   ///                   current `attributeName`, if present.
-  public func withAttributeName(_ newChild: TokenSyntax?) -> AttributeSyntax {
+  public func withAttributeName(_ newChild: TokenSyntax) -> AttributeSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.unknown(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return AttributeSyntax(newData)
   }
@@ -12966,9 +12966,9 @@ public struct AvailabilityEntrySyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `label` replaced.
   /// - param newChild: The new `label` to replace the node's
   ///                   current `label`, if present.
-  public func withLabel(_ newChild: TokenSyntax?) -> AvailabilityEntrySyntax {
+  public func withLabel(_ newChild: TokenSyntax) -> AvailabilityEntrySyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return AvailabilityEntrySyntax(newData)
   }
@@ -13008,9 +13008,9 @@ public struct AvailabilityEntrySyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `colon` replaced.
   /// - param newChild: The new `colon` to replace the node's
   ///                   current `colon`, if present.
-  public func withColon(_ newChild: TokenSyntax?) -> AvailabilityEntrySyntax {
+  public func withColon(_ newChild: TokenSyntax) -> AvailabilityEntrySyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return AvailabilityEntrySyntax(newData)
   }
@@ -13068,9 +13068,9 @@ public struct AvailabilityEntrySyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `availabilityList` replaced.
   /// - param newChild: The new `availabilityList` to replace the node's
   ///                   current `availabilityList`, if present.
-  public func withAvailabilityList(_ newChild: AvailabilitySpecListSyntax?) -> AvailabilityEntrySyntax {
+  public func withAvailabilityList(_ newChild: AvailabilitySpecListSyntax) -> AvailabilityEntrySyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.availabilitySpecList, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return AvailabilityEntrySyntax(newData)
   }
@@ -13109,9 +13109,9 @@ public struct AvailabilityEntrySyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `semicolon` replaced.
   /// - param newChild: The new `semicolon` to replace the node's
   ///                   current `semicolon`, if present.
-  public func withSemicolon(_ newChild: TokenSyntax?) -> AvailabilityEntrySyntax {
+  public func withSemicolon(_ newChild: TokenSyntax) -> AvailabilityEntrySyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.semicolon, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 7, with: raw, arena: arena)
     return AvailabilityEntrySyntax(newData)
   }
@@ -13285,9 +13285,9 @@ public struct LabeledSpecializeEntrySyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `label` replaced.
   /// - param newChild: The new `label` to replace the node's
   ///                   current `label`, if present.
-  public func withLabel(_ newChild: TokenSyntax?) -> LabeledSpecializeEntrySyntax {
+  public func withLabel(_ newChild: TokenSyntax) -> LabeledSpecializeEntrySyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return LabeledSpecializeEntrySyntax(newData)
   }
@@ -13327,9 +13327,9 @@ public struct LabeledSpecializeEntrySyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `colon` replaced.
   /// - param newChild: The new `colon` to replace the node's
   ///                   current `colon`, if present.
-  public func withColon(_ newChild: TokenSyntax?) -> LabeledSpecializeEntrySyntax {
+  public func withColon(_ newChild: TokenSyntax) -> LabeledSpecializeEntrySyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return LabeledSpecializeEntrySyntax(newData)
   }
@@ -13369,9 +13369,9 @@ public struct LabeledSpecializeEntrySyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `value` replaced.
   /// - param newChild: The new `value` to replace the node's
   ///                   current `value`, if present.
-  public func withValue(_ newChild: TokenSyntax?) -> LabeledSpecializeEntrySyntax {
+  public func withValue(_ newChild: TokenSyntax) -> LabeledSpecializeEntrySyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.unknown(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return LabeledSpecializeEntrySyntax(newData)
   }
@@ -13591,9 +13591,9 @@ public struct TargetFunctionEntrySyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `label` replaced.
   /// - param newChild: The new `label` to replace the node's
   ///                   current `label`, if present.
-  public func withLabel(_ newChild: TokenSyntax?) -> TargetFunctionEntrySyntax {
+  public func withLabel(_ newChild: TokenSyntax) -> TargetFunctionEntrySyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return TargetFunctionEntrySyntax(newData)
   }
@@ -13633,9 +13633,9 @@ public struct TargetFunctionEntrySyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `colon` replaced.
   /// - param newChild: The new `colon` to replace the node's
   ///                   current `colon`, if present.
-  public func withColon(_ newChild: TokenSyntax?) -> TargetFunctionEntrySyntax {
+  public func withColon(_ newChild: TokenSyntax) -> TargetFunctionEntrySyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return TargetFunctionEntrySyntax(newData)
   }
@@ -13675,9 +13675,9 @@ public struct TargetFunctionEntrySyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `declname` replaced.
   /// - param newChild: The new `declname` to replace the node's
   ///                   current `declname`, if present.
-  public func withDeclname(_ newChild: DeclNameSyntax?) -> TargetFunctionEntrySyntax {
+  public func withDeclname(_ newChild: DeclNameSyntax) -> TargetFunctionEntrySyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.declName, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return TargetFunctionEntrySyntax(newData)
   }
@@ -13929,9 +13929,9 @@ public struct NamedAttributeStringArgumentSyntax: SyntaxProtocol, SyntaxHashable
   /// Returns a copy of the receiver with its `nameTok` replaced.
   /// - param newChild: The new `nameTok` to replace the node's
   ///                   current `nameTok`, if present.
-  public func withNameTok(_ newChild: TokenSyntax?) -> NamedAttributeStringArgumentSyntax {
+  public func withNameTok(_ newChild: TokenSyntax) -> NamedAttributeStringArgumentSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.unknown(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return NamedAttributeStringArgumentSyntax(newData)
   }
@@ -13971,9 +13971,9 @@ public struct NamedAttributeStringArgumentSyntax: SyntaxProtocol, SyntaxHashable
   /// Returns a copy of the receiver with its `colon` replaced.
   /// - param newChild: The new `colon` to replace the node's
   ///                   current `colon`, if present.
-  public func withColon(_ newChild: TokenSyntax?) -> NamedAttributeStringArgumentSyntax {
+  public func withColon(_ newChild: TokenSyntax) -> NamedAttributeStringArgumentSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return NamedAttributeStringArgumentSyntax(newData)
   }
@@ -14012,9 +14012,9 @@ public struct NamedAttributeStringArgumentSyntax: SyntaxProtocol, SyntaxHashable
   /// Returns a copy of the receiver with its `stringOrDeclname` replaced.
   /// - param newChild: The new `stringOrDeclname` to replace the node's
   ///                   current `stringOrDeclname`, if present.
-  public func withStringOrDeclname(_ newChild: StringOrDeclname?) -> NamedAttributeStringArgumentSyntax {
+  public func withStringOrDeclname(_ newChild: StringOrDeclname) -> NamedAttributeStringArgumentSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missing, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return NamedAttributeStringArgumentSyntax(newData)
   }
@@ -14170,9 +14170,9 @@ public struct DeclNameSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `declBaseName` replaced.
   /// - param newChild: The new `declBaseName` to replace the node's
   ///                   current `declBaseName`, if present.
-  public func withDeclBaseName(_ newChild: TokenSyntax?) -> DeclNameSyntax {
+  public func withDeclBaseName(_ newChild: TokenSyntax) -> DeclNameSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return DeclNameSyntax(newData)
   }
@@ -14379,9 +14379,9 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
   /// Returns a copy of the receiver with its `type` replaced.
   /// - param newChild: The new `type` to replace the node's
   ///                   current `type`, if present.
-  public func withType(_ newChild: TypeSyntax?) -> ImplementsAttributeArgumentsSyntax {
+  public func withType(_ newChild: TypeSyntax) -> ImplementsAttributeArgumentsSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return ImplementsAttributeArgumentsSyntax(newData)
   }
@@ -14423,9 +14423,9 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
   /// Returns a copy of the receiver with its `comma` replaced.
   /// - param newChild: The new `comma` to replace the node's
   ///                   current `comma`, if present.
-  public func withComma(_ newChild: TokenSyntax?) -> ImplementsAttributeArgumentsSyntax {
+  public func withComma(_ newChild: TokenSyntax) -> ImplementsAttributeArgumentsSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.comma, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return ImplementsAttributeArgumentsSyntax(newData)
   }
@@ -14467,9 +14467,9 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
   /// Returns a copy of the receiver with its `declBaseName` replaced.
   /// - param newChild: The new `declBaseName` to replace the node's
   ///                   current `declBaseName`, if present.
-  public func withDeclBaseName(_ newChild: TokenSyntax?) -> ImplementsAttributeArgumentsSyntax {
+  public func withDeclBaseName(_ newChild: TokenSyntax) -> ImplementsAttributeArgumentsSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.unknown(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return ImplementsAttributeArgumentsSyntax(newData)
   }
@@ -15277,9 +15277,9 @@ public struct DifferentiabilityParamsClauseSyntax: SyntaxProtocol, SyntaxHashabl
   /// Returns a copy of the receiver with its `wrtLabel` replaced.
   /// - param newChild: The new `wrtLabel` to replace the node's
   ///                   current `wrtLabel`, if present.
-  public func withWrtLabel(_ newChild: TokenSyntax?) -> DifferentiabilityParamsClauseSyntax {
+  public func withWrtLabel(_ newChild: TokenSyntax) -> DifferentiabilityParamsClauseSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return DifferentiabilityParamsClauseSyntax(newData)
   }
@@ -15321,9 +15321,9 @@ public struct DifferentiabilityParamsClauseSyntax: SyntaxProtocol, SyntaxHashabl
   /// Returns a copy of the receiver with its `colon` replaced.
   /// - param newChild: The new `colon` to replace the node's
   ///                   current `colon`, if present.
-  public func withColon(_ newChild: TokenSyntax?) -> DifferentiabilityParamsClauseSyntax {
+  public func withColon(_ newChild: TokenSyntax) -> DifferentiabilityParamsClauseSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return DifferentiabilityParamsClauseSyntax(newData)
   }
@@ -15362,9 +15362,9 @@ public struct DifferentiabilityParamsClauseSyntax: SyntaxProtocol, SyntaxHashabl
   /// Returns a copy of the receiver with its `parameters` replaced.
   /// - param newChild: The new `parameters` to replace the node's
   ///                   current `parameters`, if present.
-  public func withParameters(_ newChild: Parameters?) -> DifferentiabilityParamsClauseSyntax {
+  public func withParameters(_ newChild: Parameters) -> DifferentiabilityParamsClauseSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missing, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return DifferentiabilityParamsClauseSyntax(newData)
   }
@@ -15522,9 +15522,9 @@ public struct DifferentiabilityParamsSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `leftParen` replaced.
   /// - param newChild: The new `leftParen` to replace the node's
   ///                   current `leftParen`, if present.
-  public func withLeftParen(_ newChild: TokenSyntax?) -> DifferentiabilityParamsSyntax {
+  public func withLeftParen(_ newChild: TokenSyntax) -> DifferentiabilityParamsSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return DifferentiabilityParamsSyntax(newData)
   }
@@ -15583,9 +15583,9 @@ public struct DifferentiabilityParamsSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `diffParams` replaced.
   /// - param newChild: The new `diffParams` to replace the node's
   ///                   current `diffParams`, if present.
-  public func withDiffParams(_ newChild: DifferentiabilityParamListSyntax?) -> DifferentiabilityParamsSyntax {
+  public func withDiffParams(_ newChild: DifferentiabilityParamListSyntax) -> DifferentiabilityParamsSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.differentiabilityParamList, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return DifferentiabilityParamsSyntax(newData)
   }
@@ -15624,9 +15624,9 @@ public struct DifferentiabilityParamsSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `rightParen` replaced.
   /// - param newChild: The new `rightParen` to replace the node's
   ///                   current `rightParen`, if present.
-  public func withRightParen(_ newChild: TokenSyntax?) -> DifferentiabilityParamsSyntax {
+  public func withRightParen(_ newChild: TokenSyntax) -> DifferentiabilityParamsSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return DifferentiabilityParamsSyntax(newData)
   }
@@ -15783,9 +15783,9 @@ public struct DifferentiabilityParamSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `parameter` replaced.
   /// - param newChild: The new `parameter` to replace the node's
   ///                   current `parameter`, if present.
-  public func withParameter(_ newChild: TokenSyntax?) -> DifferentiabilityParamSyntax {
+  public func withParameter(_ newChild: TokenSyntax) -> DifferentiabilityParamSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.selfKeyword, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return DifferentiabilityParamSyntax(newData)
   }
@@ -15998,9 +15998,9 @@ public struct DerivativeRegistrationAttributeArgumentsSyntax: SyntaxProtocol, Sy
   /// Returns a copy of the receiver with its `ofLabel` replaced.
   /// - param newChild: The new `ofLabel` to replace the node's
   ///                   current `ofLabel`, if present.
-  public func withOfLabel(_ newChild: TokenSyntax?) -> DerivativeRegistrationAttributeArgumentsSyntax {
+  public func withOfLabel(_ newChild: TokenSyntax) -> DerivativeRegistrationAttributeArgumentsSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return DerivativeRegistrationAttributeArgumentsSyntax(newData)
   }
@@ -16043,9 +16043,9 @@ public struct DerivativeRegistrationAttributeArgumentsSyntax: SyntaxProtocol, Sy
   /// Returns a copy of the receiver with its `colon` replaced.
   /// - param newChild: The new `colon` to replace the node's
   ///                   current `colon`, if present.
-  public func withColon(_ newChild: TokenSyntax?) -> DerivativeRegistrationAttributeArgumentsSyntax {
+  public func withColon(_ newChild: TokenSyntax) -> DerivativeRegistrationAttributeArgumentsSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return DerivativeRegistrationAttributeArgumentsSyntax(newData)
   }
@@ -16085,9 +16085,9 @@ public struct DerivativeRegistrationAttributeArgumentsSyntax: SyntaxProtocol, Sy
   /// Returns a copy of the receiver with its `originalDeclName` replaced.
   /// - param newChild: The new `originalDeclName` to replace the node's
   ///                   current `originalDeclName`, if present.
-  public func withOriginalDeclName(_ newChild: QualifiedDeclNameSyntax?) -> DerivativeRegistrationAttributeArgumentsSyntax {
+  public func withOriginalDeclName(_ newChild: QualifiedDeclNameSyntax) -> DerivativeRegistrationAttributeArgumentsSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.qualifiedDeclName, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return DerivativeRegistrationAttributeArgumentsSyntax(newData)
   }
@@ -16585,9 +16585,9 @@ public struct QualifiedDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `name` replaced.
   /// - param newChild: The new `name` to replace the node's
   ///                   current `name`, if present.
-  public func withName(_ newChild: TokenSyntax?) -> QualifiedDeclNameSyntax {
+  public func withName(_ newChild: TokenSyntax) -> QualifiedDeclNameSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return QualifiedDeclNameSyntax(newData)
   }
@@ -16802,9 +16802,9 @@ public struct BackDeployAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashable 
   /// Returns a copy of the receiver with its `beforeLabel` replaced.
   /// - param newChild: The new `beforeLabel` to replace the node's
   ///                   current `beforeLabel`, if present.
-  public func withBeforeLabel(_ newChild: TokenSyntax?) -> BackDeployAttributeSpecListSyntax {
+  public func withBeforeLabel(_ newChild: TokenSyntax) -> BackDeployAttributeSpecListSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return BackDeployAttributeSpecListSyntax(newData)
   }
@@ -16846,9 +16846,9 @@ public struct BackDeployAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashable 
   /// Returns a copy of the receiver with its `colon` replaced.
   /// - param newChild: The new `colon` to replace the node's
   ///                   current `colon`, if present.
-  public func withColon(_ newChild: TokenSyntax?) -> BackDeployAttributeSpecListSyntax {
+  public func withColon(_ newChild: TokenSyntax) -> BackDeployAttributeSpecListSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return BackDeployAttributeSpecListSyntax(newData)
   }
@@ -16910,9 +16910,9 @@ public struct BackDeployAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashable 
   /// Returns a copy of the receiver with its `versionList` replaced.
   /// - param newChild: The new `versionList` to replace the node's
   ///                   current `versionList`, if present.
-  public func withVersionList(_ newChild: BackDeployVersionListSyntax?) -> BackDeployAttributeSpecListSyntax {
+  public func withVersionList(_ newChild: BackDeployVersionListSyntax) -> BackDeployAttributeSpecListSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.backDeployVersionList, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return BackDeployAttributeSpecListSyntax(newData)
   }
@@ -17069,9 +17069,9 @@ public struct BackDeployVersionArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `availabilityVersionRestriction` replaced.
   /// - param newChild: The new `availabilityVersionRestriction` to replace the node's
   ///                   current `availabilityVersionRestriction`, if present.
-  public func withAvailabilityVersionRestriction(_ newChild: AvailabilityVersionRestrictionSyntax?) -> BackDeployVersionArgumentSyntax {
+  public func withAvailabilityVersionRestriction(_ newChild: AvailabilityVersionRestrictionSyntax) -> BackDeployVersionArgumentSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.availabilityVersionRestriction, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return BackDeployVersionArgumentSyntax(newData)
   }
@@ -17270,9 +17270,9 @@ public struct OpaqueReturnTypeOfAttributeArgumentsSyntax: SyntaxProtocol, Syntax
   /// Returns a copy of the receiver with its `mangledName` replaced.
   /// - param newChild: The new `mangledName` to replace the node's
   ///                   current `mangledName`, if present.
-  public func withMangledName(_ newChild: TokenSyntax?) -> OpaqueReturnTypeOfAttributeArgumentsSyntax {
+  public func withMangledName(_ newChild: TokenSyntax) -> OpaqueReturnTypeOfAttributeArgumentsSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.stringLiteral(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return OpaqueReturnTypeOfAttributeArgumentsSyntax(newData)
   }
@@ -17311,9 +17311,9 @@ public struct OpaqueReturnTypeOfAttributeArgumentsSyntax: SyntaxProtocol, Syntax
   /// Returns a copy of the receiver with its `comma` replaced.
   /// - param newChild: The new `comma` to replace the node's
   ///                   current `comma`, if present.
-  public func withComma(_ newChild: TokenSyntax?) -> OpaqueReturnTypeOfAttributeArgumentsSyntax {
+  public func withComma(_ newChild: TokenSyntax) -> OpaqueReturnTypeOfAttributeArgumentsSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.comma, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return OpaqueReturnTypeOfAttributeArgumentsSyntax(newData)
   }
@@ -17353,9 +17353,9 @@ public struct OpaqueReturnTypeOfAttributeArgumentsSyntax: SyntaxProtocol, Syntax
   /// Returns a copy of the receiver with its `ordinal` replaced.
   /// - param newChild: The new `ordinal` to replace the node's
   ///                   current `ordinal`, if present.
-  public func withOrdinal(_ newChild: TokenSyntax?) -> OpaqueReturnTypeOfAttributeArgumentsSyntax {
+  public func withOrdinal(_ newChild: TokenSyntax) -> OpaqueReturnTypeOfAttributeArgumentsSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.integerLiteral(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return OpaqueReturnTypeOfAttributeArgumentsSyntax(newData)
   }
@@ -17524,9 +17524,9 @@ public struct ConventionAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
   /// Returns a copy of the receiver with its `conventionLabel` replaced.
   /// - param newChild: The new `conventionLabel` to replace the node's
   ///                   current `conventionLabel`, if present.
-  public func withConventionLabel(_ newChild: TokenSyntax?) -> ConventionAttributeArgumentsSyntax {
+  public func withConventionLabel(_ newChild: TokenSyntax) -> ConventionAttributeArgumentsSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return ConventionAttributeArgumentsSyntax(newData)
   }
@@ -17870,9 +17870,9 @@ public struct ConventionWitnessMethodAttributeArgumentsSyntax: SyntaxProtocol, S
   /// Returns a copy of the receiver with its `witnessMethodLabel` replaced.
   /// - param newChild: The new `witnessMethodLabel` to replace the node's
   ///                   current `witnessMethodLabel`, if present.
-  public func withWitnessMethodLabel(_ newChild: TokenSyntax?) -> ConventionWitnessMethodAttributeArgumentsSyntax {
+  public func withWitnessMethodLabel(_ newChild: TokenSyntax) -> ConventionWitnessMethodAttributeArgumentsSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return ConventionWitnessMethodAttributeArgumentsSyntax(newData)
   }
@@ -17911,9 +17911,9 @@ public struct ConventionWitnessMethodAttributeArgumentsSyntax: SyntaxProtocol, S
   /// Returns a copy of the receiver with its `colon` replaced.
   /// - param newChild: The new `colon` to replace the node's
   ///                   current `colon`, if present.
-  public func withColon(_ newChild: TokenSyntax?) -> ConventionWitnessMethodAttributeArgumentsSyntax {
+  public func withColon(_ newChild: TokenSyntax) -> ConventionWitnessMethodAttributeArgumentsSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return ConventionWitnessMethodAttributeArgumentsSyntax(newData)
   }
@@ -17952,9 +17952,9 @@ public struct ConventionWitnessMethodAttributeArgumentsSyntax: SyntaxProtocol, S
   /// Returns a copy of the receiver with its `protocolName` replaced.
   /// - param newChild: The new `protocolName` to replace the node's
   ///                   current `protocolName`, if present.
-  public func withProtocolName(_ newChild: TokenSyntax?) -> ConventionWitnessMethodAttributeArgumentsSyntax {
+  public func withProtocolName(_ newChild: TokenSyntax) -> ConventionWitnessMethodAttributeArgumentsSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return ConventionWitnessMethodAttributeArgumentsSyntax(newData)
   }
@@ -18107,9 +18107,9 @@ public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `whereKeyword` replaced.
   /// - param newChild: The new `whereKeyword` to replace the node's
   ///                   current `whereKeyword`, if present.
-  public func withWhereKeyword(_ newChild: TokenSyntax?) -> WhereClauseSyntax {
+  public func withWhereKeyword(_ newChild: TokenSyntax) -> WhereClauseSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.whereKeyword, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return WhereClauseSyntax(newData)
   }
@@ -18148,9 +18148,9 @@ public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `guardResult` replaced.
   /// - param newChild: The new `guardResult` to replace the node's
   ///                   current `guardResult`, if present.
-  public func withGuardResult(_ newChild: ExprSyntax?) -> WhereClauseSyntax {
+  public func withGuardResult(_ newChild: ExprSyntax) -> WhereClauseSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return WhereClauseSyntax(newData)
   }
@@ -18299,9 +18299,9 @@ public struct YieldListSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `leftParen` replaced.
   /// - param newChild: The new `leftParen` to replace the node's
   ///                   current `leftParen`, if present.
-  public func withLeftParen(_ newChild: TokenSyntax?) -> YieldListSyntax {
+  public func withLeftParen(_ newChild: TokenSyntax) -> YieldListSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return YieldListSyntax(newData)
   }
@@ -18359,9 +18359,9 @@ public struct YieldListSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `elementList` replaced.
   /// - param newChild: The new `elementList` to replace the node's
   ///                   current `elementList`, if present.
-  public func withElementList(_ newChild: YieldExprListSyntax?) -> YieldListSyntax {
+  public func withElementList(_ newChild: YieldExprListSyntax) -> YieldListSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.yieldExprList, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return YieldListSyntax(newData)
   }
@@ -18400,9 +18400,9 @@ public struct YieldListSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `rightParen` replaced.
   /// - param newChild: The new `rightParen` to replace the node's
   ///                   current `rightParen`, if present.
-  public func withRightParen(_ newChild: TokenSyntax?) -> YieldListSyntax {
+  public func withRightParen(_ newChild: TokenSyntax) -> YieldListSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return YieldListSyntax(newData)
   }
@@ -18631,9 +18631,9 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `condition` replaced.
   /// - param newChild: The new `condition` to replace the node's
   ///                   current `condition`, if present.
-  public func withCondition(_ newChild: Condition?) -> ConditionElementSyntax {
+  public func withCondition(_ newChild: Condition) -> ConditionElementSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missing, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return ConditionElementSyntax(newData)
   }
@@ -18828,9 +18828,9 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `poundAvailableKeyword` replaced.
   /// - param newChild: The new `poundAvailableKeyword` to replace the node's
   ///                   current `poundAvailableKeyword`, if present.
-  public func withPoundAvailableKeyword(_ newChild: TokenSyntax?) -> AvailabilityConditionSyntax {
+  public func withPoundAvailableKeyword(_ newChild: TokenSyntax) -> AvailabilityConditionSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.poundAvailableKeyword, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return AvailabilityConditionSyntax(newData)
   }
@@ -18869,9 +18869,9 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `leftParen` replaced.
   /// - param newChild: The new `leftParen` to replace the node's
   ///                   current `leftParen`, if present.
-  public func withLeftParen(_ newChild: TokenSyntax?) -> AvailabilityConditionSyntax {
+  public func withLeftParen(_ newChild: TokenSyntax) -> AvailabilityConditionSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return AvailabilityConditionSyntax(newData)
   }
@@ -18929,9 +18929,9 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `availabilitySpec` replaced.
   /// - param newChild: The new `availabilitySpec` to replace the node's
   ///                   current `availabilitySpec`, if present.
-  public func withAvailabilitySpec(_ newChild: AvailabilitySpecListSyntax?) -> AvailabilityConditionSyntax {
+  public func withAvailabilitySpec(_ newChild: AvailabilitySpecListSyntax) -> AvailabilityConditionSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.availabilitySpecList, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return AvailabilityConditionSyntax(newData)
   }
@@ -18970,9 +18970,9 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `rightParen` replaced.
   /// - param newChild: The new `rightParen` to replace the node's
   ///                   current `rightParen`, if present.
-  public func withRightParen(_ newChild: TokenSyntax?) -> AvailabilityConditionSyntax {
+  public func withRightParen(_ newChild: TokenSyntax) -> AvailabilityConditionSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 7, with: raw, arena: arena)
     return AvailabilityConditionSyntax(newData)
   }
@@ -19141,9 +19141,9 @@ public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `caseKeyword` replaced.
   /// - param newChild: The new `caseKeyword` to replace the node's
   ///                   current `caseKeyword`, if present.
-  public func withCaseKeyword(_ newChild: TokenSyntax?) -> MatchingPatternConditionSyntax {
+  public func withCaseKeyword(_ newChild: TokenSyntax) -> MatchingPatternConditionSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.caseKeyword, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return MatchingPatternConditionSyntax(newData)
   }
@@ -19182,9 +19182,9 @@ public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `pattern` replaced.
   /// - param newChild: The new `pattern` to replace the node's
   ///                   current `pattern`, if present.
-  public func withPattern(_ newChild: PatternSyntax?) -> MatchingPatternConditionSyntax {
+  public func withPattern(_ newChild: PatternSyntax) -> MatchingPatternConditionSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingPattern, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return MatchingPatternConditionSyntax(newData)
   }
@@ -19265,9 +19265,9 @@ public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `initializer` replaced.
   /// - param newChild: The new `initializer` to replace the node's
   ///                   current `initializer`, if present.
-  public func withInitializer(_ newChild: InitializerClauseSyntax?) -> MatchingPatternConditionSyntax {
+  public func withInitializer(_ newChild: InitializerClauseSyntax) -> MatchingPatternConditionSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.initializerClause, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 7, with: raw, arena: arena)
     return MatchingPatternConditionSyntax(newData)
   }
@@ -19436,9 +19436,9 @@ public struct OptionalBindingConditionSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `letOrVarKeyword` replaced.
   /// - param newChild: The new `letOrVarKeyword` to replace the node's
   ///                   current `letOrVarKeyword`, if present.
-  public func withLetOrVarKeyword(_ newChild: TokenSyntax?) -> OptionalBindingConditionSyntax {
+  public func withLetOrVarKeyword(_ newChild: TokenSyntax) -> OptionalBindingConditionSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.letKeyword, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return OptionalBindingConditionSyntax(newData)
   }
@@ -19477,9 +19477,9 @@ public struct OptionalBindingConditionSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `pattern` replaced.
   /// - param newChild: The new `pattern` to replace the node's
   ///                   current `pattern`, if present.
-  public func withPattern(_ newChild: PatternSyntax?) -> OptionalBindingConditionSyntax {
+  public func withPattern(_ newChild: PatternSyntax) -> OptionalBindingConditionSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingPattern, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return OptionalBindingConditionSyntax(newData)
   }
@@ -19732,9 +19732,9 @@ public struct UnavailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `poundUnavailableKeyword` replaced.
   /// - param newChild: The new `poundUnavailableKeyword` to replace the node's
   ///                   current `poundUnavailableKeyword`, if present.
-  public func withPoundUnavailableKeyword(_ newChild: TokenSyntax?) -> UnavailabilityConditionSyntax {
+  public func withPoundUnavailableKeyword(_ newChild: TokenSyntax) -> UnavailabilityConditionSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.poundUnavailableKeyword, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return UnavailabilityConditionSyntax(newData)
   }
@@ -19773,9 +19773,9 @@ public struct UnavailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `leftParen` replaced.
   /// - param newChild: The new `leftParen` to replace the node's
   ///                   current `leftParen`, if present.
-  public func withLeftParen(_ newChild: TokenSyntax?) -> UnavailabilityConditionSyntax {
+  public func withLeftParen(_ newChild: TokenSyntax) -> UnavailabilityConditionSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return UnavailabilityConditionSyntax(newData)
   }
@@ -19833,9 +19833,9 @@ public struct UnavailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `availabilitySpec` replaced.
   /// - param newChild: The new `availabilitySpec` to replace the node's
   ///                   current `availabilitySpec`, if present.
-  public func withAvailabilitySpec(_ newChild: AvailabilitySpecListSyntax?) -> UnavailabilityConditionSyntax {
+  public func withAvailabilitySpec(_ newChild: AvailabilitySpecListSyntax) -> UnavailabilityConditionSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.availabilitySpecList, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return UnavailabilityConditionSyntax(newData)
   }
@@ -19874,9 +19874,9 @@ public struct UnavailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `rightParen` replaced.
   /// - param newChild: The new `rightParen` to replace the node's
   ///                   current `rightParen`, if present.
-  public func withRightParen(_ newChild: TokenSyntax?) -> UnavailabilityConditionSyntax {
+  public func withRightParen(_ newChild: TokenSyntax) -> UnavailabilityConditionSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 7, with: raw, arena: arena)
     return UnavailabilityConditionSyntax(newData)
   }
@@ -20045,9 +20045,9 @@ public struct HasSymbolConditionSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `hasSymbolKeyword` replaced.
   /// - param newChild: The new `hasSymbolKeyword` to replace the node's
   ///                   current `hasSymbolKeyword`, if present.
-  public func withHasSymbolKeyword(_ newChild: TokenSyntax?) -> HasSymbolConditionSyntax {
+  public func withHasSymbolKeyword(_ newChild: TokenSyntax) -> HasSymbolConditionSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.unknown(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return HasSymbolConditionSyntax(newData)
   }
@@ -20086,9 +20086,9 @@ public struct HasSymbolConditionSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `leftParen` replaced.
   /// - param newChild: The new `leftParen` to replace the node's
   ///                   current `leftParen`, if present.
-  public func withLeftParen(_ newChild: TokenSyntax?) -> HasSymbolConditionSyntax {
+  public func withLeftParen(_ newChild: TokenSyntax) -> HasSymbolConditionSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return HasSymbolConditionSyntax(newData)
   }
@@ -20127,9 +20127,9 @@ public struct HasSymbolConditionSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `expression` replaced.
   /// - param newChild: The new `expression` to replace the node's
   ///                   current `expression`, if present.
-  public func withExpression(_ newChild: ExprSyntax?) -> HasSymbolConditionSyntax {
+  public func withExpression(_ newChild: ExprSyntax) -> HasSymbolConditionSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return HasSymbolConditionSyntax(newData)
   }
@@ -20168,9 +20168,9 @@ public struct HasSymbolConditionSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `rightParen` replaced.
   /// - param newChild: The new `rightParen` to replace the node's
   ///                   current `rightParen`, if present.
-  public func withRightParen(_ newChild: TokenSyntax?) -> HasSymbolConditionSyntax {
+  public func withRightParen(_ newChild: TokenSyntax) -> HasSymbolConditionSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 7, with: raw, arena: arena)
     return HasSymbolConditionSyntax(newData)
   }
@@ -20413,9 +20413,9 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `label` replaced.
   /// - param newChild: The new `label` to replace the node's
   ///                   current `label`, if present.
-  public func withLabel(_ newChild: Label?) -> SwitchCaseSyntax {
+  public func withLabel(_ newChild: Label) -> SwitchCaseSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missing, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return SwitchCaseSyntax(newData)
   }
@@ -20473,9 +20473,9 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `statements` replaced.
   /// - param newChild: The new `statements` to replace the node's
   ///                   current `statements`, if present.
-  public func withStatements(_ newChild: CodeBlockItemListSyntax?) -> SwitchCaseSyntax {
+  public func withStatements(_ newChild: CodeBlockItemListSyntax) -> SwitchCaseSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.codeBlockItemList, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return SwitchCaseSyntax(newData)
   }
@@ -20628,9 +20628,9 @@ public struct SwitchDefaultLabelSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `defaultKeyword` replaced.
   /// - param newChild: The new `defaultKeyword` to replace the node's
   ///                   current `defaultKeyword`, if present.
-  public func withDefaultKeyword(_ newChild: TokenSyntax?) -> SwitchDefaultLabelSyntax {
+  public func withDefaultKeyword(_ newChild: TokenSyntax) -> SwitchDefaultLabelSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.defaultKeyword, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return SwitchDefaultLabelSyntax(newData)
   }
@@ -20669,9 +20669,9 @@ public struct SwitchDefaultLabelSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `colon` replaced.
   /// - param newChild: The new `colon` to replace the node's
   ///                   current `colon`, if present.
-  public func withColon(_ newChild: TokenSyntax?) -> SwitchDefaultLabelSyntax {
+  public func withColon(_ newChild: TokenSyntax) -> SwitchDefaultLabelSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return SwitchDefaultLabelSyntax(newData)
   }
@@ -20820,9 +20820,9 @@ public struct CaseItemSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `pattern` replaced.
   /// - param newChild: The new `pattern` to replace the node's
   ///                   current `pattern`, if present.
-  public func withPattern(_ newChild: PatternSyntax?) -> CaseItemSyntax {
+  public func withPattern(_ newChild: PatternSyntax) -> CaseItemSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingPattern, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return CaseItemSyntax(newData)
   }
@@ -21341,9 +21341,9 @@ public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `caseKeyword` replaced.
   /// - param newChild: The new `caseKeyword` to replace the node's
   ///                   current `caseKeyword`, if present.
-  public func withCaseKeyword(_ newChild: TokenSyntax?) -> SwitchCaseLabelSyntax {
+  public func withCaseKeyword(_ newChild: TokenSyntax) -> SwitchCaseLabelSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.caseKeyword, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return SwitchCaseLabelSyntax(newData)
   }
@@ -21401,9 +21401,9 @@ public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `caseItems` replaced.
   /// - param newChild: The new `caseItems` to replace the node's
   ///                   current `caseItems`, if present.
-  public func withCaseItems(_ newChild: CaseItemListSyntax?) -> SwitchCaseLabelSyntax {
+  public func withCaseItems(_ newChild: CaseItemListSyntax) -> SwitchCaseLabelSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.caseItemList, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return SwitchCaseLabelSyntax(newData)
   }
@@ -21442,9 +21442,9 @@ public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `colon` replaced.
   /// - param newChild: The new `colon` to replace the node's
   ///                   current `colon`, if present.
-  public func withColon(_ newChild: TokenSyntax?) -> SwitchCaseLabelSyntax {
+  public func withColon(_ newChild: TokenSyntax) -> SwitchCaseLabelSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return SwitchCaseLabelSyntax(newData)
   }
@@ -21601,9 +21601,9 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `catchKeyword` replaced.
   /// - param newChild: The new `catchKeyword` to replace the node's
   ///                   current `catchKeyword`, if present.
-  public func withCatchKeyword(_ newChild: TokenSyntax?) -> CatchClauseSyntax {
+  public func withCatchKeyword(_ newChild: TokenSyntax) -> CatchClauseSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.catchKeyword, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return CatchClauseSyntax(newData)
   }
@@ -21703,9 +21703,9 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `body` replaced.
   /// - param newChild: The new `body` to replace the node's
   ///                   current `body`, if present.
-  public func withBody(_ newChild: CodeBlockSyntax?) -> CatchClauseSyntax {
+  public func withBody(_ newChild: CodeBlockSyntax) -> CatchClauseSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.codeBlock, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return CatchClauseSyntax(newData)
   }
@@ -21858,9 +21858,9 @@ public struct GenericWhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `whereKeyword` replaced.
   /// - param newChild: The new `whereKeyword` to replace the node's
   ///                   current `whereKeyword`, if present.
-  public func withWhereKeyword(_ newChild: TokenSyntax?) -> GenericWhereClauseSyntax {
+  public func withWhereKeyword(_ newChild: TokenSyntax) -> GenericWhereClauseSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.whereKeyword, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return GenericWhereClauseSyntax(newData)
   }
@@ -21918,9 +21918,9 @@ public struct GenericWhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `requirementList` replaced.
   /// - param newChild: The new `requirementList` to replace the node's
   ///                   current `requirementList`, if present.
-  public func withRequirementList(_ newChild: GenericRequirementListSyntax?) -> GenericWhereClauseSyntax {
+  public func withRequirementList(_ newChild: GenericRequirementListSyntax) -> GenericWhereClauseSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.genericRequirementList, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return GenericWhereClauseSyntax(newData)
   }
@@ -22111,9 +22111,9 @@ public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `body` replaced.
   /// - param newChild: The new `body` to replace the node's
   ///                   current `body`, if present.
-  public func withBody(_ newChild: Body?) -> GenericRequirementSyntax {
+  public func withBody(_ newChild: Body) -> GenericRequirementSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missing, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return GenericRequirementSyntax(newData)
   }
@@ -22304,9 +22304,9 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `leftTypeIdentifier` replaced.
   /// - param newChild: The new `leftTypeIdentifier` to replace the node's
   ///                   current `leftTypeIdentifier`, if present.
-  public func withLeftTypeIdentifier(_ newChild: TypeSyntax?) -> SameTypeRequirementSyntax {
+  public func withLeftTypeIdentifier(_ newChild: TypeSyntax) -> SameTypeRequirementSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return SameTypeRequirementSyntax(newData)
   }
@@ -22345,9 +22345,9 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `equalityToken` replaced.
   /// - param newChild: The new `equalityToken` to replace the node's
   ///                   current `equalityToken`, if present.
-  public func withEqualityToken(_ newChild: TokenSyntax?) -> SameTypeRequirementSyntax {
+  public func withEqualityToken(_ newChild: TokenSyntax) -> SameTypeRequirementSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.spacedBinaryOperator(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return SameTypeRequirementSyntax(newData)
   }
@@ -22386,9 +22386,9 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `rightTypeIdentifier` replaced.
   /// - param newChild: The new `rightTypeIdentifier` to replace the node's
   ///                   current `rightTypeIdentifier`, if present.
-  public func withRightTypeIdentifier(_ newChild: TypeSyntax?) -> SameTypeRequirementSyntax {
+  public func withRightTypeIdentifier(_ newChild: TypeSyntax) -> SameTypeRequirementSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return SameTypeRequirementSyntax(newData)
   }
@@ -22565,9 +22565,9 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `typeIdentifier` replaced.
   /// - param newChild: The new `typeIdentifier` to replace the node's
   ///                   current `typeIdentifier`, if present.
-  public func withTypeIdentifier(_ newChild: TypeSyntax?) -> LayoutRequirementSyntax {
+  public func withTypeIdentifier(_ newChild: TypeSyntax) -> LayoutRequirementSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return LayoutRequirementSyntax(newData)
   }
@@ -22606,9 +22606,9 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `colon` replaced.
   /// - param newChild: The new `colon` to replace the node's
   ///                   current `colon`, if present.
-  public func withColon(_ newChild: TokenSyntax?) -> LayoutRequirementSyntax {
+  public func withColon(_ newChild: TokenSyntax) -> LayoutRequirementSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return LayoutRequirementSyntax(newData)
   }
@@ -22647,9 +22647,9 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `layoutConstraint` replaced.
   /// - param newChild: The new `layoutConstraint` to replace the node's
   ///                   current `layoutConstraint`, if present.
-  public func withLayoutConstraint(_ newChild: TokenSyntax?) -> LayoutRequirementSyntax {
+  public func withLayoutConstraint(_ newChild: TokenSyntax) -> LayoutRequirementSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return LayoutRequirementSyntax(newData)
   }
@@ -23175,9 +23175,9 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `name` replaced.
   /// - param newChild: The new `name` to replace the node's
   ///                   current `name`, if present.
-  public func withName(_ newChild: TokenSyntax?) -> GenericParameterSyntax {
+  public func withName(_ newChild: TokenSyntax) -> GenericParameterSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return GenericParameterSyntax(newData)
   }
@@ -23522,9 +23522,9 @@ public struct PrimaryAssociatedTypeSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `name` replaced.
   /// - param newChild: The new `name` to replace the node's
   ///                   current `name`, if present.
-  public func withName(_ newChild: TokenSyntax?) -> PrimaryAssociatedTypeSyntax {
+  public func withName(_ newChild: TokenSyntax) -> PrimaryAssociatedTypeSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return PrimaryAssociatedTypeSyntax(newData)
   }
@@ -23719,9 +23719,9 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `leftAngleBracket` replaced.
   /// - param newChild: The new `leftAngleBracket` to replace the node's
   ///                   current `leftAngleBracket`, if present.
-  public func withLeftAngleBracket(_ newChild: TokenSyntax?) -> GenericParameterClauseSyntax {
+  public func withLeftAngleBracket(_ newChild: TokenSyntax) -> GenericParameterClauseSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftAngle, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return GenericParameterClauseSyntax(newData)
   }
@@ -23779,9 +23779,9 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `genericParameterList` replaced.
   /// - param newChild: The new `genericParameterList` to replace the node's
   ///                   current `genericParameterList`, if present.
-  public func withGenericParameterList(_ newChild: GenericParameterListSyntax?) -> GenericParameterClauseSyntax {
+  public func withGenericParameterList(_ newChild: GenericParameterListSyntax) -> GenericParameterClauseSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.genericParameterList, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return GenericParameterClauseSyntax(newData)
   }
@@ -23862,9 +23862,9 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `rightAngleBracket` replaced.
   /// - param newChild: The new `rightAngleBracket` to replace the node's
   ///                   current `rightAngleBracket`, if present.
-  public func withRightAngleBracket(_ newChild: TokenSyntax?) -> GenericParameterClauseSyntax {
+  public func withRightAngleBracket(_ newChild: TokenSyntax) -> GenericParameterClauseSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightAngle, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 7, with: raw, arena: arena)
     return GenericParameterClauseSyntax(newData)
   }
@@ -24029,9 +24029,9 @@ public struct ConformanceRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `leftTypeIdentifier` replaced.
   /// - param newChild: The new `leftTypeIdentifier` to replace the node's
   ///                   current `leftTypeIdentifier`, if present.
-  public func withLeftTypeIdentifier(_ newChild: TypeSyntax?) -> ConformanceRequirementSyntax {
+  public func withLeftTypeIdentifier(_ newChild: TypeSyntax) -> ConformanceRequirementSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return ConformanceRequirementSyntax(newData)
   }
@@ -24070,9 +24070,9 @@ public struct ConformanceRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `colon` replaced.
   /// - param newChild: The new `colon` to replace the node's
   ///                   current `colon`, if present.
-  public func withColon(_ newChild: TokenSyntax?) -> ConformanceRequirementSyntax {
+  public func withColon(_ newChild: TokenSyntax) -> ConformanceRequirementSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return ConformanceRequirementSyntax(newData)
   }
@@ -24111,9 +24111,9 @@ public struct ConformanceRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `rightTypeIdentifier` replaced.
   /// - param newChild: The new `rightTypeIdentifier` to replace the node's
   ///                   current `rightTypeIdentifier`, if present.
-  public func withRightTypeIdentifier(_ newChild: TypeSyntax?) -> ConformanceRequirementSyntax {
+  public func withRightTypeIdentifier(_ newChild: TypeSyntax) -> ConformanceRequirementSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return ConformanceRequirementSyntax(newData)
   }
@@ -24270,9 +24270,9 @@ public struct PrimaryAssociatedTypeClauseSyntax: SyntaxProtocol, SyntaxHashable 
   /// Returns a copy of the receiver with its `leftAngleBracket` replaced.
   /// - param newChild: The new `leftAngleBracket` to replace the node's
   ///                   current `leftAngleBracket`, if present.
-  public func withLeftAngleBracket(_ newChild: TokenSyntax?) -> PrimaryAssociatedTypeClauseSyntax {
+  public func withLeftAngleBracket(_ newChild: TokenSyntax) -> PrimaryAssociatedTypeClauseSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftAngle, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return PrimaryAssociatedTypeClauseSyntax(newData)
   }
@@ -24330,9 +24330,9 @@ public struct PrimaryAssociatedTypeClauseSyntax: SyntaxProtocol, SyntaxHashable 
   /// Returns a copy of the receiver with its `primaryAssociatedTypeList` replaced.
   /// - param newChild: The new `primaryAssociatedTypeList` to replace the node's
   ///                   current `primaryAssociatedTypeList`, if present.
-  public func withPrimaryAssociatedTypeList(_ newChild: PrimaryAssociatedTypeListSyntax?) -> PrimaryAssociatedTypeClauseSyntax {
+  public func withPrimaryAssociatedTypeList(_ newChild: PrimaryAssociatedTypeListSyntax) -> PrimaryAssociatedTypeClauseSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.primaryAssociatedTypeList, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return PrimaryAssociatedTypeClauseSyntax(newData)
   }
@@ -24371,9 +24371,9 @@ public struct PrimaryAssociatedTypeClauseSyntax: SyntaxProtocol, SyntaxHashable 
   /// Returns a copy of the receiver with its `rightAngleBracket` replaced.
   /// - param newChild: The new `rightAngleBracket` to replace the node's
   ///                   current `rightAngleBracket`, if present.
-  public func withRightAngleBracket(_ newChild: TokenSyntax?) -> PrimaryAssociatedTypeClauseSyntax {
+  public func withRightAngleBracket(_ newChild: TokenSyntax) -> PrimaryAssociatedTypeClauseSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightAngle, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return PrimaryAssociatedTypeClauseSyntax(newData)
   }
@@ -24526,9 +24526,9 @@ public struct CompositionTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `type` replaced.
   /// - param newChild: The new `type` to replace the node's
   ///                   current `type`, if present.
-  public func withType(_ newChild: TypeSyntax?) -> CompositionTypeElementSyntax {
+  public func withType(_ newChild: TypeSyntax) -> CompositionTypeElementSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return CompositionTypeElementSyntax(newData)
   }
@@ -24907,9 +24907,9 @@ public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `type` replaced.
   /// - param newChild: The new `type` to replace the node's
   ///                   current `type`, if present.
-  public func withType(_ newChild: TypeSyntax?) -> TupleTypeElementSyntax {
+  public func withType(_ newChild: TypeSyntax) -> TupleTypeElementSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 9, with: raw, arena: arena)
     return TupleTypeElementSyntax(newData)
   }
@@ -25228,9 +25228,9 @@ public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `argumentType` replaced.
   /// - param newChild: The new `argumentType` to replace the node's
   ///                   current `argumentType`, if present.
-  public func withArgumentType(_ newChild: TypeSyntax?) -> GenericArgumentSyntax {
+  public func withArgumentType(_ newChild: TypeSyntax) -> GenericArgumentSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return GenericArgumentSyntax(newData)
   }
@@ -25421,9 +25421,9 @@ public struct GenericArgumentClauseSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `leftAngleBracket` replaced.
   /// - param newChild: The new `leftAngleBracket` to replace the node's
   ///                   current `leftAngleBracket`, if present.
-  public func withLeftAngleBracket(_ newChild: TokenSyntax?) -> GenericArgumentClauseSyntax {
+  public func withLeftAngleBracket(_ newChild: TokenSyntax) -> GenericArgumentClauseSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftAngle, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return GenericArgumentClauseSyntax(newData)
   }
@@ -25481,9 +25481,9 @@ public struct GenericArgumentClauseSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `arguments` replaced.
   /// - param newChild: The new `arguments` to replace the node's
   ///                   current `arguments`, if present.
-  public func withArguments(_ newChild: GenericArgumentListSyntax?) -> GenericArgumentClauseSyntax {
+  public func withArguments(_ newChild: GenericArgumentListSyntax) -> GenericArgumentClauseSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.genericArgumentList, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return GenericArgumentClauseSyntax(newData)
   }
@@ -25522,9 +25522,9 @@ public struct GenericArgumentClauseSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `rightAngleBracket` replaced.
   /// - param newChild: The new `rightAngleBracket` to replace the node's
   ///                   current `rightAngleBracket`, if present.
-  public func withRightAngleBracket(_ newChild: TokenSyntax?) -> GenericArgumentClauseSyntax {
+  public func withRightAngleBracket(_ newChild: TokenSyntax) -> GenericArgumentClauseSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightAngle, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return GenericArgumentClauseSyntax(newData)
   }
@@ -25677,9 +25677,9 @@ public struct TypeAnnotationSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `colon` replaced.
   /// - param newChild: The new `colon` to replace the node's
   ///                   current `colon`, if present.
-  public func withColon(_ newChild: TokenSyntax?) -> TypeAnnotationSyntax {
+  public func withColon(_ newChild: TokenSyntax) -> TypeAnnotationSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return TypeAnnotationSyntax(newData)
   }
@@ -25718,9 +25718,9 @@ public struct TypeAnnotationSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `type` replaced.
   /// - param newChild: The new `type` to replace the node's
   ///                   current `type`, if present.
-  public func withType(_ newChild: TypeSyntax?) -> TypeAnnotationSyntax {
+  public func withType(_ newChild: TypeSyntax) -> TypeAnnotationSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return TypeAnnotationSyntax(newData)
   }
@@ -25957,9 +25957,9 @@ public struct TuplePatternElementSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `pattern` replaced.
   /// - param newChild: The new `pattern` to replace the node's
   ///                   current `pattern`, if present.
-  public func withPattern(_ newChild: PatternSyntax?) -> TuplePatternElementSyntax {
+  public func withPattern(_ newChild: PatternSyntax) -> TuplePatternElementSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingPattern, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return TuplePatternElementSyntax(newData)
   }
@@ -26223,9 +26223,9 @@ public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `entry` replaced.
   /// - param newChild: The new `entry` to replace the node's
   ///                   current `entry`, if present.
-  public func withEntry(_ newChild: Entry?) -> AvailabilityArgumentSyntax {
+  public func withEntry(_ newChild: Entry) -> AvailabilityArgumentSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missing, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return AvailabilityArgumentSyntax(newData)
   }
@@ -26461,9 +26461,9 @@ public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable 
   /// Returns a copy of the receiver with its `label` replaced.
   /// - param newChild: The new `label` to replace the node's
   ///                   current `label`, if present.
-  public func withLabel(_ newChild: TokenSyntax?) -> AvailabilityLabeledArgumentSyntax {
+  public func withLabel(_ newChild: TokenSyntax) -> AvailabilityLabeledArgumentSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return AvailabilityLabeledArgumentSyntax(newData)
   }
@@ -26503,9 +26503,9 @@ public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable 
   /// Returns a copy of the receiver with its `colon` replaced.
   /// - param newChild: The new `colon` to replace the node's
   ///                   current `colon`, if present.
-  public func withColon(_ newChild: TokenSyntax?) -> AvailabilityLabeledArgumentSyntax {
+  public func withColon(_ newChild: TokenSyntax) -> AvailabilityLabeledArgumentSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return AvailabilityLabeledArgumentSyntax(newData)
   }
@@ -26545,9 +26545,9 @@ public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable 
   /// Returns a copy of the receiver with its `value` replaced.
   /// - param newChild: The new `value` to replace the node's
   ///                   current `value`, if present.
-  public func withValue(_ newChild: Value?) -> AvailabilityLabeledArgumentSyntax {
+  public func withValue(_ newChild: Value) -> AvailabilityLabeledArgumentSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missing, arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return AvailabilityLabeledArgumentSyntax(newData)
   }
@@ -26709,9 +26709,9 @@ public struct AvailabilityVersionRestrictionSyntax: SyntaxProtocol, SyntaxHashab
   /// Returns a copy of the receiver with its `platform` replaced.
   /// - param newChild: The new `platform` to replace the node's
   ///                   current `platform`, if present.
-  public func withPlatform(_ newChild: TokenSyntax?) -> AvailabilityVersionRestrictionSyntax {
+  public func withPlatform(_ newChild: TokenSyntax) -> AvailabilityVersionRestrictionSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return AvailabilityVersionRestrictionSyntax(newData)
   }
@@ -26913,9 +26913,9 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `majorMinor` replaced.
   /// - param newChild: The new `majorMinor` to replace the node's
   ///                   current `majorMinor`, if present.
-  public func withMajorMinor(_ newChild: TokenSyntax?) -> VersionTupleSyntax {
+  public func withMajorMinor(_ newChild: TokenSyntax) -> VersionTupleSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.integerLiteral(""), arena: arena)
+    let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return VersionTupleSyntax(newData)
   }

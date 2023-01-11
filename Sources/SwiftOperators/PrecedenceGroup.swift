@@ -43,6 +43,13 @@ public struct PrecedenceRelation {
   public enum Kind {
     case higherThan
     case lowerThan
+
+    var keyword: Keyword {
+      switch self {
+      case .higherThan: return .higherThan
+      case .lowerThan: return .lowerThan
+      }
+    }
   }
 
   /// The relationship to the other group.

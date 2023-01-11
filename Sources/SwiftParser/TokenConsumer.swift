@@ -61,13 +61,7 @@ extension TokenConsumer {
     _ kind: RawTokenKind,
     where condition: (Lexer.Lexeme) -> Bool = { _ in true }
   ) -> Bool {
-    return self.currentToken.tokenKind == kind && condition(self.currentToken)
-  }
-
-  /// Returns whether the current token is a contextual keyword with the given `name`.
-  @_spi(RawSyntax)
-  public func atContextualKeyword(_ name: SyntaxText) -> Bool {
-    return self.currentToken.isContextualKeyword(name)
+    return RawTokenKindMatch(kind) ~= self.currentToken && condition(self.currentToken)
   }
 
   /// Returns whether the current token is an operator with the given `name`.
@@ -81,25 +75,15 @@ extension TokenConsumer {
   /// additionally satisfies `condition`.
   ///
   /// - Parameter kinds: The kinds to test for.
-  /// - Parameter contextualKeywords: Contextual keywords that are also accepted.
   /// - Parameter condition: An additional condition that must be satisfied for
   ///                        this function to return `true`.
   /// - Returns: `true` if the current token's kind is in `kinds`.
   @_spi(RawSyntax)
   public func at(
     any kinds: [RawTokenKind],
-    contextualKeywords: [SyntaxText] = [],
     where condition: (Lexer.Lexeme) -> Bool = { _ in true }
   ) -> Bool {
-    if kinds.contains(self.currentToken.tokenKind) && condition(self.currentToken) {
-      return true
-    }
-    switch self.currentToken.tokenKind {
-    case .identifier, .contextualKeyword:
-      return contextualKeywords.contains(self.currentToken.tokenText) && condition(self.currentToken)
-    default:
-      return false
-    }
+    return kinds.contains(where: { RawTokenKindMatch($0) ~= self.currentToken }) && condition(self.currentToken)
   }
 
   /// Checks whether the parser is currently positioned at any token in `Subset`.
@@ -125,6 +109,10 @@ extension TokenConsumer {
     } else if let remappedKind = handle.remappedKind {
       assert(self.at(handle.tokenKind))
       return consumeAnyToken(remapping: remappedKind)
+    } else if case .contextualKeyword = handle.tokenKind {
+      // We support remapping identifiers to contextual keywords
+      assert(self.currentToken.rawTokenKind == .identifier || self.currentToken.rawTokenKind == handle.tokenKind)
+      return consumeAnyToken(remapping: handle.tokenKind)
     } else {
       assert(self.at(handle.tokenKind))
       return consumeAnyToken()
@@ -157,18 +145,12 @@ extension TokenConsumer {
     if self.at(kind, where: condition) {
       if let remapping = remapping {
         return self.consumeAnyToken(remapping: remapping)
+      } else if case .contextualKeyword = kind {
+        // We support remapping identifiers to contextual keywords
+        return self.consumeAnyToken(remapping: kind)
       } else {
         return self.consumeAnyToken()
       }
-    }
-    return nil
-  }
-
-  /// Consumes and returns the current token is a contextual keyword with the given `name`.
-  @_spi(RawSyntax)
-  public mutating func consumeIfContextualKeyword(_ name: SyntaxText) -> Token? {
-    if self.atContextualKeyword(name) {
-      return self.consumeAnyToken(remapping: .contextualKeyword)
     }
     return nil
   }
@@ -187,17 +169,15 @@ extension TokenConsumer {
   /// additionally satisfies `condition`.
   ///
   /// - Parameter kind: The kinds of token to consume.
-  /// - Parameter contextualKeywords: Contextual keywords that are also accepted.
   /// - Parameter condition: An additional condition that must be satisfied for
   ///                        the token to be consumed.
   /// - Returns: A token of the given kind if one was consumed, else `nil`.
   @_spi(RawSyntax)
   public mutating func consume(
     ifAny kinds: [RawTokenKind],
-    contextualKeywords: [SyntaxText] = [],
     where condition: (Lexer.Lexeme) -> Bool = { _ in true }
   ) -> Token? {
-    if self.at(any: kinds, contextualKeywords: contextualKeywords, where: condition) {
+    if self.at(any: kinds, where: condition) {
       return self.consumeAnyToken()
     }
     return nil
@@ -207,7 +187,7 @@ extension TokenConsumer {
   /// tokens and return them. Otherwise, return `nil`.
   @_spi(RawSyntax)
   public mutating func consume(if kind1: RawTokenKind, followedBy kind2: RawTokenKind) -> (Token, Token)? {
-    if self.at(kind1) && self.peek().tokenKind == kind2 {
+    if self.at(kind1) && self.peek().rawTokenKind == kind2 {
       return (consumeAnyToken(), consumeAnyToken())
     } else {
       return nil
@@ -260,21 +240,6 @@ extension TokenConsumer {
       return token
     } else {
       return missingToken(kind, text: nil)
-    }
-  }
-
-  /// If the current token is a contextual keyword with the given `name`,
-  /// consume it. Othwerise, synthesize a missing contextual keyword with that
-  /// `name`.
-  ///
-  /// This method does not try to eat unexpected until it finds the token of the specified `kind`.
-  /// In the parser, `expect` should be preferred.
-  @_spi(RawSyntax)
-  public mutating func expectContextualKeywordWithoutRecovery(_ name: SyntaxText) -> Token {
-    if let token = self.consumeIfContextualKeyword(name) {
-      return token
-    } else {
-      return missingToken(.contextualKeyword, text: name)
     }
   }
 }

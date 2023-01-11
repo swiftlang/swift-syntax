@@ -16,89 +16,141 @@
 
 @_spi(RawSyntax) import SwiftSyntax
 
-enum DeclarationModifier: SyntaxText, ContextualKeywords, RawTokenKindSubset {
-  case staticKeyword = "static"
+enum DeclarationModifier: RawTokenKindSubset {
+  case staticKeyword
   
-  case classKeyword = "class"
+  case classKeyword
   
-  case final = "final"
+  case final
   
-  case required = "required"
+  case required
   
-  case optional = "optional"
+  case optional
   
-  case lazy = "lazy"
+  case lazy
   
-  case dynamic = "dynamic"
+  case dynamic
   
-  case infix = "infix"
+  case infix
   
-  case prefix = "prefix"
+  case prefix
   
-  case postfix = "postfix"
+  case postfix
   
-  case __consuming = "__consuming"
+  case __consuming
   
-  case mutating = "mutating"
+  case mutating
   
-  case nonmutating = "nonmutating"
+  case nonmutating
   
-  case convenience = "convenience"
+  case convenience
   
-  case override = "override"
+  case override
   
-  case privateKeyword = "private"
+  case privateKeyword
   
-  case fileprivateKeyword = "fileprivate"
+  case fileprivateKeyword
   
-  case internalKeyword = "internal"
+  case internalKeyword
   
-  case publicKeyword = "public"
+  case publicKeyword
   
-  case package = "package"
+  case package
   
-  case open = "open"
+  case open
   
-  case __setter_access = "__setter_access"
+  case __setter_access
   
-  case weak = "weak"
+  case weak
   
-  case unowned = "unowned"
+  case unowned
   
-  case `rethrows` = "rethrows"
+  case `rethrows`
   
-  case indirect = "indirect"
+  case indirect
   
-  case isolated = "isolated"
+  case isolated
   
-  case async = "async"
+  case async
   
-  case reasync = "reasync"
+  case reasync
   
-  case nonisolated = "nonisolated"
+  case nonisolated
   
-  case distributed = "distributed"
+  case distributed
   
-  case _const = "_const"
+  case _const
   
-  case _local = "_local"
+  case _local
   
   init?(lexeme: Lexer.Lexeme) {
-    switch lexeme.tokenKind {
-    case .staticKeyword: 
+    switch lexeme {
+    case RawTokenKindMatch(.staticKeyword): 
       self = .staticKeyword
-    case .classKeyword: 
+    case RawTokenKindMatch(.classKeyword): 
       self = .classKeyword
-    case .privateKeyword: 
+    case RawTokenKindMatch(.final): 
+      self = .final
+    case RawTokenKindMatch(.required): 
+      self = .required
+    case RawTokenKindMatch(.optional): 
+      self = .optional
+    case RawTokenKindMatch(.lazy): 
+      self = .lazy
+    case RawTokenKindMatch(.dynamic): 
+      self = .dynamic
+    case RawTokenKindMatch(.infix): 
+      self = .infix
+    case RawTokenKindMatch(.prefix): 
+      self = .prefix
+    case RawTokenKindMatch(.postfix): 
+      self = .postfix
+    case RawTokenKindMatch(.__consuming): 
+      self = .__consuming
+    case RawTokenKindMatch(.mutating): 
+      self = .mutating
+    case RawTokenKindMatch(.nonmutating): 
+      self = .nonmutating
+    case RawTokenKindMatch(.convenience): 
+      self = .convenience
+    case RawTokenKindMatch(.override): 
+      self = .override
+    case RawTokenKindMatch(.privateKeyword): 
       self = .privateKeyword
-    case .fileprivateKeyword: 
+    case RawTokenKindMatch(.fileprivateKeyword): 
       self = .fileprivateKeyword
-    case .internalKeyword: 
+    case RawTokenKindMatch(.internalKeyword): 
       self = .internalKeyword
-    case .publicKeyword: 
+    case RawTokenKindMatch(.publicKeyword): 
       self = .publicKeyword
-    case .identifier: 
-      self.init(rawValue: lexeme.tokenText)
+    case RawTokenKindMatch(.package): 
+      self = .package
+    case RawTokenKindMatch(.open): 
+      self = .open
+    case RawTokenKindMatch(.__setter_access): 
+      self = .__setter_access
+    case RawTokenKindMatch(.weak): 
+      self = .weak
+    case RawTokenKindMatch(.unowned): 
+      self = .unowned
+    case RawTokenKindMatch(.`rethrows`): 
+      self = .`rethrows`
+    case RawTokenKindMatch(.indirect): 
+      self = .indirect
+    case RawTokenKindMatch(.isolated): 
+      self = .isolated
+    case RawTokenKindMatch(.async): 
+      self = .async
+    case RawTokenKindMatch(.reasync): 
+      self = .reasync
+    case RawTokenKindMatch(.nonisolated): 
+      self = .nonisolated
+    case RawTokenKindMatch(.distributed): 
+      self = .distributed
+    case RawTokenKindMatch(._const): 
+      self = ._const
+    case RawTokenKindMatch(._local): 
+      self = ._local
     default: 
       return nil
     }
@@ -111,31 +163,31 @@ enum DeclarationModifier: SyntaxText, ContextualKeywords, RawTokenKindSubset {
     case .classKeyword: 
       return .classKeyword
     case .final: 
-      return .identifier
+      return .contextualKeyword(.final)
     case .required: 
-      return .identifier
+      return .contextualKeyword(.required)
     case .optional: 
-      return .identifier
+      return .contextualKeyword(.optional)
     case .lazy: 
-      return .identifier
+      return .contextualKeyword(.lazy)
     case .dynamic: 
-      return .identifier
+      return .contextualKeyword(.dynamic)
     case .infix: 
-      return .identifier
+      return .contextualKeyword(.infix)
     case .prefix: 
-      return .identifier
+      return .contextualKeyword(.prefix)
     case .postfix: 
-      return .identifier
+      return .contextualKeyword(.postfix)
     case .__consuming: 
-      return .identifier
+      return .contextualKeyword(.__consuming)
     case .mutating: 
-      return .identifier
+      return .contextualKeyword(.mutating)
     case .nonmutating: 
-      return .identifier
+      return .contextualKeyword(.nonmutating)
     case .convenience: 
-      return .identifier
+      return .contextualKeyword(.convenience)
     case .override: 
-      return .identifier
+      return .contextualKeyword(.override)
     case .privateKeyword: 
       return .privateKeyword
     case .fileprivateKeyword: 
@@ -145,94 +197,33 @@ enum DeclarationModifier: SyntaxText, ContextualKeywords, RawTokenKindSubset {
     case .publicKeyword: 
       return .publicKeyword
     case .package: 
-      return .identifier
+      return .contextualKeyword(.package)
     case .open: 
-      return .identifier
+      return .contextualKeyword(.open)
     case .__setter_access: 
-      return .identifier
+      return .contextualKeyword(.__setter_access)
     case .weak: 
-      return .identifier
+      return .contextualKeyword(.weak)
     case .unowned: 
-      return .identifier
+      return .contextualKeyword(.unowned)
     case .`rethrows`: 
-      return .identifier
+      return .contextualKeyword(.`rethrows`)
     case .indirect: 
-      return .identifier
+      return .contextualKeyword(.indirect)
     case .isolated: 
-      return .identifier
+      return .contextualKeyword(.isolated)
     case .async: 
-      return .identifier
+      return .contextualKeyword(.async)
     case .reasync: 
-      return .identifier
+      return .contextualKeyword(.reasync)
     case .nonisolated: 
-      return .identifier
+      return .contextualKeyword(.nonisolated)
     case .distributed: 
-      return .identifier
+      return .contextualKeyword(.distributed)
     case ._const: 
-      return .identifier
+      return .contextualKeyword(._const)
     case ._local: 
-      return .identifier
-    }
-  }
-  
-  var contextualKeyword: SyntaxText? {
-    switch self {
-    case .final: 
-      return "final"
-    case .required: 
-      return "required"
-    case .optional: 
-      return "optional"
-    case .lazy: 
-      return "lazy"
-    case .dynamic: 
-      return "dynamic"
-    case .infix: 
-      return "infix"
-    case .prefix: 
-      return "prefix"
-    case .postfix: 
-      return "postfix"
-    case .__consuming: 
-      return "__consuming"
-    case .mutating: 
-      return "mutating"
-    case .nonmutating: 
-      return "nonmutating"
-    case .convenience: 
-      return "convenience"
-    case .override: 
-      return "override"
-    case .package: 
-      return "package"
-    case .open: 
-      return "open"
-    case .__setter_access: 
-      return "__setter_access"
-    case .weak: 
-      return "weak"
-    case .unowned: 
-      return "unowned"
-    case .`rethrows`: 
-      return "rethrows"
-    case .indirect: 
-      return "indirect"
-    case .isolated: 
-      return "isolated"
-    case .async: 
-      return "async"
-    case .reasync: 
-      return "reasync"
-    case .nonisolated: 
-      return "nonisolated"
-    case .distributed: 
-      return "distributed"
-    case ._const: 
-      return "_const"
-    case ._local: 
-      return "_local"
-    default: 
-      return nil
+      return .contextualKeyword(._local)
     }
   }
 }

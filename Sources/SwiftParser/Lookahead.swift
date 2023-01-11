@@ -266,7 +266,7 @@ extension Parser.Lookahead {
     }
 
     // If we don't have attributes, then it cannot be an accessor block.
-    if nextToken.tokenKind != .atSign {
+    if nextToken.rawTokenKind != .atSign {
       return false
     }
 
@@ -286,7 +286,7 @@ extension Parser.Lookahead {
     }
 
     // Check if we have 'didSet'/'willSet' after attributes.
-    return lookahead.at(any: [], contextualKeywords: ["didSet", "willSet"])
+    return lookahead.at(any: [.contextualKeyword(.didSet), .contextualKeyword(.willSet)])
   }
 }
 
@@ -316,7 +316,7 @@ extension Parser.Lookahead {
     case poundElseifKeyword
 
     init?(lexeme: Lexer.Lexeme) {
-      switch lexeme.tokenKind {
+      switch lexeme.rawTokenKind {
       case .leftParen: self = .leftParen
       case .leftBrace: self = .leftBrace
       case .leftSquareBracket: self = .leftSquareBracket

@@ -55,7 +55,7 @@ extension Parser {
       case varKeyword
 
       init?(lexeme: Lexer.Lexeme) {
-        switch lexeme.tokenKind {
+        switch lexeme.rawTokenKind {
         case .leftParen: self = .leftParen
         case .wildcardKeyword: self = .wildcardKeyword
         case .identifier: self = .identifier
@@ -131,7 +131,7 @@ extension Parser {
         )
       )
     case nil:
-      if self.currentToken.tokenKind.isKeyword, !self.currentToken.isAtStartOfLine {
+      if self.currentToken.rawTokenKind.isKeyword, !self.currentToken.isAtStartOfLine {
         // Recover if a keyword was used instead of an identifier
         let keyword = self.consumeAnyToken()
         return RawPatternSyntax(
@@ -296,7 +296,7 @@ extension Parser.Lookahead {
       case leftParen
 
       init?(lexeme: Lexer.Lexeme) {
-        switch lexeme.tokenKind {
+        switch lexeme.rawTokenKind {
         case .identifier: self = .identifier
         case .wildcardKeyword: self = .wildcardKeyword
         case .letKeyword: self = .letKeyword
@@ -366,14 +366,14 @@ extension Parser.Lookahead {
 
     // If the next token is ':', this is a name.
     let nextTok = self.peek()
-    if nextTok.tokenKind == .colon {
+    if nextTok.rawTokenKind == .colon {
       return true
     }
 
     // If the next token can be an argument label, we might have a name.
     if nextTok.canBeArgumentLabel(allowDollarIdentifier: true) {
       // If the first name wasn't "isolated", we're done.
-      if !self.atContextualKeyword("isolated") && !self.atContextualKeyword("some") && !self.atContextualKeyword("any") && !self.atContextualKeyword("each") && !self.at(.repeatKeyword) {
+      if !self.at(.contextualKeyword(.isolated)) && !self.at(.contextualKeyword(.some)) && !self.at(.contextualKeyword(.any)) && !self.at(.contextualKeyword(.each)) && !self.at(.repeatKeyword) {
         return true
       }
 
@@ -385,11 +385,11 @@ extension Parser.Lookahead {
           return true  // isolated :
         }
         self.consumeAnyToken()
-        return self.currentToken.canBeArgumentLabel(allowDollarIdentifier: true) && self.peek().tokenKind == .colon
+        return self.currentToken.canBeArgumentLabel(allowDollarIdentifier: true) && self.peek().rawTokenKind == .colon
       }
     }
 
-    if nextTok.tokenKind == .postfixQuestionMark || nextTok.tokenKind == .exclamationMark {
+    if nextTok.rawTokenKind == .postfixQuestionMark || nextTok.rawTokenKind == .exclamationMark {
       return false
     }
 

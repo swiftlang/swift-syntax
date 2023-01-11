@@ -182,7 +182,7 @@ let basicFormatFile = SourceFile {
             }
           }
         }
-        SwitchCase(#"case .contextualKeyword("async"):"#) {
+        SwitchCase("case .contextualKeyword(.async):") {
           ReturnStmt("return true")
         }
         SwitchCase("default:") {

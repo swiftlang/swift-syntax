@@ -1509,13 +1509,13 @@ extension TokenSyntax {
   }
   
   public static func contextualKeyword(
-    _ text: String, 
+    _ value: Keyword, 
     leadingTrivia: Trivia = [], 
     trailingTrivia: Trivia = [], 
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
-      .contextualKeyword(text), 
+      .contextualKeyword(value), 
       leadingTrivia: leadingTrivia, 
       trailingTrivia: trailingTrivia, 
       presence: presence

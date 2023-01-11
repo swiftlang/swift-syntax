@@ -24,7 +24,8 @@ public class SyntaxClassifierPerformanceTests: XCTestCase {
       .appendingPathComponent("MinimalCollections.swift.input")
   }
 
-  func testParsingPerformance() {
+  func testClassifierPerformance() throws {
+    try XCTSkipIf(ProcessInfo.processInfo.environment["SKIP_LONG_TESTS"] == "1")
     XCTAssertNoThrow(
       try {
         let parsed = try SyntaxParser.parse(inputFile)

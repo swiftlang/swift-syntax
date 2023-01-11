@@ -26,7 +26,9 @@ let tokenKindFile = SourceFileSyntax {
     for token in SYNTAX_TOKENS {
       // Tokens that don't have a set text have an associated value that
       // contains their text.
-      if token.text == nil {
+      if let associatedValueClass = token.associatedValueClass {
+        EnumCaseDeclSyntax("case \(raw: token.swiftKind)(\(raw: associatedValueClass))")
+      } else if token.text == nil {
         EnumCaseDeclSyntax("case \(raw: token.swiftKind)(String)")
       } else {
         EnumCaseDeclSyntax("case \(raw: token.swiftKind)")
@@ -60,8 +62,11 @@ let tokenKindFile = SourceFileSyntax {
     ) {
       SwitchStmtSyntax(expression: ExprSyntax("self")) {
         for token in SYNTAX_TOKENS {
-          
-          if let text = token.text {
+          if token.associatedValueClass != nil {
+            SwitchCaseSyntax("case .\(raw: token.swiftKind)(let assoc):") {
+              ReturnStmtSyntax("return String(syntaxText: assoc.defaultText)")
+            }
+          } else if let text = token.text {
             SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
               ReturnStmtSyntax("return #\"\(raw: text)\"#")
             }
@@ -73,6 +78,35 @@ let tokenKindFile = SourceFileSyntax {
         }
         
         SwitchCaseSyntax("case .eof:") {
+          ReturnStmtSyntax(#"return """#)
+        }
+      }
+    }
+
+    VariableDeclSyntax(
+      leadingTrivia: .docBlockComment("/// If this token kind always has the same syntax text, that syntax text, otherwise `nil`.") + .newlines(1),
+      attributes: [.attribute(AttributeSyntax(attributeName: .identifier("_spi(RawSyntax)")))],
+      modifiers: [DeclModifierSyntax(leadingTrivia: .newline, name: .public)],
+      name: IdentifierPatternSyntax("defaultText"),
+      type: TypeAnnotationSyntax(type: TypeSyntax("SyntaxText?"))
+    ) {
+      SwitchStmtSyntax(expression: ExprSyntax("self")) {
+        for token in SYNTAX_TOKENS {
+          if token.associatedValueClass != nil {
+            SwitchCaseSyntax("case .\(raw: token.swiftKind)(let assoc):") {
+              ReturnStmtSyntax("return assoc.defaultText")
+            }
+          } else if let text = token.text {
+            SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
+              ReturnStmtSyntax("return #\"\(raw: text)\"#")
+            }
+          }
+        }
+
+        SwitchCaseSyntax("case .eof:") {
+          ReturnStmtSyntax(#"return """#)
+        }
+        SwitchCaseSyntax("default:") {
           ReturnStmtSyntax(#"return """#)
         }
       }
@@ -137,30 +171,6 @@ let tokenKindFile = SourceFileSyntax {
         }
       }
     }
-    
-    VariableDeclSyntax(
-      modifiers: [DeclModifierSyntax(name: .public)],
-      name: IdentifierPatternSyntax("sourceLength"),
-      type: TypeAnnotationSyntax(type: TypeSyntax("SourceLength"))
-    ) {
-      SwitchStmtSyntax(expression: ExprSyntax("self")) {
-        SwitchCaseSyntax("case .eof:") {
-          ReturnStmtSyntax("return .zero")
-        }
-        
-        for token in SYNTAX_TOKENS {
-          if let text = token.text {
-            SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
-              ReturnStmtSyntax("return SourceLength(utf8Length: \(raw: text.count))")
-            }
-          } else {
-            SwitchCaseSyntax("case .\(raw: token.swiftKind)(let text):") {
-              ReturnStmtSyntax("return SourceLength(of: text)")
-            }
-          }
-        }
-      }
-    }
   }
   
   ExtensionDeclSyntax("extension TokenKind: Equatable") {
@@ -197,7 +207,11 @@ let tokenKindFile = SourceFileSyntax {
     EnumCaseDeclSyntax("case eof")
     
     for token in SYNTAX_TOKENS {
-      EnumCaseDeclSyntax("case \(raw: token.swiftKind)")
+      if let associatedValueClass = token.associatedValueClass {
+        EnumCaseDeclSyntax("case \(raw: token.swiftKind)(\(raw: associatedValueClass))")
+      } else {
+        EnumCaseDeclSyntax("case \(raw: token.swiftKind)")
+      }
     }
     
     VariableDeclSyntax(
@@ -212,7 +226,11 @@ let tokenKindFile = SourceFileSyntax {
         }
 
         for token in SYNTAX_TOKENS {
-          if let text = token.text {
+          if token.associatedValueClass != nil {
+            SwitchCaseSyntax("case .\(raw: token.swiftKind)(let assoc):") {
+              ReturnStmtSyntax("return assoc.defaultText")
+            }
+          } else if let text = token.text {
             SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
               ReturnStmtSyntax("return #\"\(raw: text)\"#")
             }
@@ -347,13 +365,20 @@ let tokenKindFile = SourceFileSyntax {
         SwitchCaseSyntax("case .eof:") {
           ReturnStmtSyntax("return .eof")
         }
-        
+
         for token in SYNTAX_TOKENS {
-          SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
-            if token.text != nil {
+          if token.associatedValueClass != nil {
+            SwitchCaseSyntax("case .\(raw: token.swiftKind)(let assoc):") {
+              FunctionCallExprSyntax("assert(text.isEmpty || String(syntaxText: assoc.defaultText) == text)")
+              ReturnStmtSyntax("return .\(raw: token.swiftKind)(assoc)")
+            }
+          } else if token.text != nil {
+            SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
               FunctionCallExprSyntax("assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)")
               ReturnStmtSyntax("return .\(raw: token.swiftKind)")
-            } else {
+            }
+          } else {
+            SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
               ReturnStmtSyntax("return .\(raw: token.swiftKind)(text)")
             }
           }
@@ -373,7 +398,11 @@ let tokenKindFile = SourceFileSyntax {
         }
         
         for token in SYNTAX_TOKENS {
-          if token.text != nil {
+          if token.associatedValueClass != nil {
+            SwitchCaseSyntax("case .\(raw: token.swiftKind)(let assoc):") {
+              ReturnStmtSyntax("return (.\(raw: token.swiftKind)(assoc), String(syntaxText: assoc.defaultText))")
+            }
+          } else if token.text != nil {
             SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
               ReturnStmtSyntax("return (.\(raw: token.swiftKind), nil)")
             }

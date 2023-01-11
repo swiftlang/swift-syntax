@@ -25,7 +25,7 @@ final class VariadicGenericsTests: XCTestCase {
         PackExpansionExprSyntax(
           repeatKeyword: .repeatKeyword(),
           patternExpr: PackElementExprSyntax(
-            eachKeyword: .contextualKeyword("each"),
+            eachKeyword: .contextualKeyword(.each),
             packRefExpr: IdentifierExprSyntax(
               identifier: .identifier("t")
             )
@@ -145,7 +145,7 @@ final class VariadicGenericsTests: XCTestCase {
       """,
       substructure: Syntax(
         PackElementExprSyntax(
-          eachKeyword: .contextualKeyword("each"),
+          eachKeyword: .contextualKeyword(.each),
           packRefExpr: IdentifierExprSyntax(
             identifier: .identifier("x")
           )
@@ -172,7 +172,7 @@ final class VariadicGenericsTests: XCTestCase {
                   elementList: .init([
                     TupleExprElementSyntax(
                       expression: PackElementExprSyntax(
-                        eachKeyword: .contextualKeyword("each"),
+                        eachKeyword: .contextualKeyword(.each),
                         packRefExpr: IdentifierExprSyntax(
                           identifier: .identifier("t")
                         )
@@ -199,7 +199,7 @@ final class VariadicGenericsTests: XCTestCase {
         PackExpansionExprSyntax(
           repeatKeyword: .repeatKeyword(),
           patternExpr: PackElementExprSyntax(
-            eachKeyword: .contextualKeyword("each"),
+            eachKeyword: .contextualKeyword(.each),
             packRefExpr: MemberAccessExprSyntax(
               base: ExprSyntax(
                 IdentifierExprSyntax(
@@ -237,7 +237,7 @@ final class VariadicGenericsTests: XCTestCase {
               ),
               ExprSyntax(
                 PackElementExprSyntax(
-                  eachKeyword: .contextualKeyword("each"),
+                  eachKeyword: .contextualKeyword(.each),
                   packRefExpr: IdentifierExprSyntax(
                     identifier: .identifier("t")
                   )

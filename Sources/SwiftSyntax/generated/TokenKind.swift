@@ -5,30 +5,6 @@
 public enum TokenKind: Hashable {
   case eof
   
-  case asKeyword
-  
-  case anyKeyword
-  
-  case falseKeyword
-  
-  case isKeyword
-  
-  case nilKeyword
-  
-  case rethrowsKeyword
-  
-  case superKeyword
-  
-  case selfKeyword
-  
-  case capitalSelfKeyword
-  
-  case trueKeyword
-  
-  case tryKeyword
-  
-  case throwsKeyword
-  
   case wildcardKeyword
   
   case leftParen
@@ -161,30 +137,6 @@ public enum TokenKind: Hashable {
   /// given string is not a keyword, this function returns `nil`.
   public init?(keyword: String) {
     switch keyword {
-    case "as": 
-      self = .asKeyword
-    case "Any": 
-      self = .anyKeyword
-    case "false": 
-      self = .falseKeyword
-    case "is": 
-      self = .isKeyword
-    case "nil": 
-      self = .nilKeyword
-    case "rethrows": 
-      self = .rethrowsKeyword
-    case "super": 
-      self = .superKeyword
-    case "self": 
-      self = .selfKeyword
-    case "Self": 
-      self = .capitalSelfKeyword
-    case "true": 
-      self = .trueKeyword
-    case "try": 
-      self = .tryKeyword
-    case "throws": 
-      self = .throwsKeyword
     case "_": 
       self = .wildcardKeyword
     case "#keyPath": 
@@ -242,30 +194,6 @@ public enum TokenKind: Hashable {
   @_spi(Testing) 
   public var text: String {
     switch self {
-    case .asKeyword: 
-      return #"as"#
-    case .anyKeyword: 
-      return #"Any"#
-    case .falseKeyword: 
-      return #"false"#
-    case .isKeyword: 
-      return #"is"#
-    case .nilKeyword: 
-      return #"nil"#
-    case .rethrowsKeyword: 
-      return #"rethrows"#
-    case .superKeyword: 
-      return #"super"#
-    case .selfKeyword: 
-      return #"self"#
-    case .capitalSelfKeyword: 
-      return #"Self"#
-    case .trueKeyword: 
-      return #"true"#
-    case .tryKeyword: 
-      return #"try"#
-    case .throwsKeyword: 
-      return #"throws"#
     case .wildcardKeyword: 
       return #"_"#
     case .leftParen: 
@@ -403,30 +331,6 @@ public enum TokenKind: Hashable {
   @_spi(RawSyntax) 
   public var defaultText: SyntaxText? {
     switch self {
-    case .asKeyword: 
-      return #"as"#
-    case .anyKeyword: 
-      return #"Any"#
-    case .falseKeyword: 
-      return #"false"#
-    case .isKeyword: 
-      return #"is"#
-    case .nilKeyword: 
-      return #"nil"#
-    case .rethrowsKeyword: 
-      return #"rethrows"#
-    case .superKeyword: 
-      return #"super"#
-    case .selfKeyword: 
-      return #"self"#
-    case .capitalSelfKeyword: 
-      return #"Self"#
-    case .trueKeyword: 
-      return #"true"#
-    case .tryKeyword: 
-      return #"try"#
-    case .throwsKeyword: 
-      return #"throws"#
     case .wildcardKeyword: 
       return #"_"#
     case .leftParen: 
@@ -547,30 +451,6 @@ public enum TokenKind: Hashable {
     switch self {
     case .eof: 
       return false
-    case .asKeyword: 
-      return true
-    case .anyKeyword: 
-      return true
-    case .falseKeyword: 
-      return true
-    case .isKeyword: 
-      return true
-    case .nilKeyword: 
-      return true
-    case .rethrowsKeyword: 
-      return true
-    case .superKeyword: 
-      return true
-    case .selfKeyword: 
-      return true
-    case .capitalSelfKeyword: 
-      return true
-    case .trueKeyword: 
-      return true
-    case .tryKeyword: 
-      return true
-    case .throwsKeyword: 
-      return true
     case .wildcardKeyword: 
       return true
     case .leftParen: 
@@ -711,30 +591,6 @@ public enum TokenKind: Hashable {
     switch self {
     case .eof: 
       return false
-    case .asKeyword: 
-      return false
-    case .anyKeyword: 
-      return false
-    case .falseKeyword: 
-      return false
-    case .isKeyword: 
-      return false
-    case .nilKeyword: 
-      return false
-    case .rethrowsKeyword: 
-      return false
-    case .superKeyword: 
-      return false
-    case .selfKeyword: 
-      return false
-    case .capitalSelfKeyword: 
-      return false
-    case .trueKeyword: 
-      return false
-    case .tryKeyword: 
-      return false
-    case .throwsKeyword: 
-      return false
     case .wildcardKeyword: 
       return false
     case .leftParen: 
@@ -871,30 +727,6 @@ extension TokenKind: Equatable {
   public static func == (lhs: TokenKind, rhs: TokenKind) -> Bool {
     switch (lhs, rhs) {
     case (.eof, .eof): 
-      return true
-    case (.asKeyword, .asKeyword): 
-      return true
-    case (.anyKeyword, .anyKeyword): 
-      return true
-    case (.falseKeyword, .falseKeyword): 
-      return true
-    case (.isKeyword, .isKeyword): 
-      return true
-    case (.nilKeyword, .nilKeyword): 
-      return true
-    case (.rethrowsKeyword, .rethrowsKeyword): 
-      return true
-    case (.superKeyword, .superKeyword): 
-      return true
-    case (.selfKeyword, .selfKeyword): 
-      return true
-    case (.capitalSelfKeyword, .capitalSelfKeyword): 
-      return true
-    case (.trueKeyword, .trueKeyword): 
-      return true
-    case (.tryKeyword, .tryKeyword): 
-      return true
-    case (.throwsKeyword, .throwsKeyword): 
       return true
     case (.wildcardKeyword, .wildcardKeyword): 
       return true
@@ -1035,30 +867,6 @@ extension TokenKind: Equatable {
 public enum RawTokenKind: Equatable, Hashable {
   case eof
   
-  case asKeyword
-  
-  case anyKeyword
-  
-  case falseKeyword
-  
-  case isKeyword
-  
-  case nilKeyword
-  
-  case rethrowsKeyword
-  
-  case superKeyword
-  
-  case selfKeyword
-  
-  case capitalSelfKeyword
-  
-  case trueKeyword
-  
-  case tryKeyword
-  
-  case throwsKeyword
-  
   case wildcardKeyword
   
   case leftParen
@@ -1192,30 +1000,6 @@ public enum RawTokenKind: Equatable, Hashable {
     switch self {
     case .eof: 
       return ""
-    case .asKeyword: 
-      return #"as"#
-    case .anyKeyword: 
-      return #"Any"#
-    case .falseKeyword: 
-      return #"false"#
-    case .isKeyword: 
-      return #"is"#
-    case .nilKeyword: 
-      return #"nil"#
-    case .rethrowsKeyword: 
-      return #"rethrows"#
-    case .superKeyword: 
-      return #"super"#
-    case .selfKeyword: 
-      return #"self"#
-    case .capitalSelfKeyword: 
-      return #"Self"#
-    case .trueKeyword: 
-      return #"true"#
-    case .tryKeyword: 
-      return #"try"#
-    case .throwsKeyword: 
-      return #"throws"#
     case .wildcardKeyword: 
       return #"_"#
     case .leftParen: 
@@ -1329,30 +1113,6 @@ public enum RawTokenKind: Equatable, Hashable {
     switch self {
     case .eof: 
       return "end of file"
-    case .asKeyword: 
-      return #"as"#
-    case .anyKeyword: 
-      return #"Any"#
-    case .falseKeyword: 
-      return #"false"#
-    case .isKeyword: 
-      return #"is"#
-    case .nilKeyword: 
-      return #"nil"#
-    case .rethrowsKeyword: 
-      return #"rethrows"#
-    case .superKeyword: 
-      return #"super"#
-    case .selfKeyword: 
-      return #"self"#
-    case .capitalSelfKeyword: 
-      return #"Self"#
-    case .trueKeyword: 
-      return #"true"#
-    case .tryKeyword: 
-      return #"try"#
-    case .throwsKeyword: 
-      return #"throws"#
     case .wildcardKeyword: 
       return #"_"#
     case .leftParen: 
@@ -1493,30 +1253,6 @@ public enum RawTokenKind: Equatable, Hashable {
     switch self {
     case .eof: 
       return false
-    case .asKeyword: 
-      return true
-    case .anyKeyword: 
-      return true
-    case .falseKeyword: 
-      return true
-    case .isKeyword: 
-      return true
-    case .nilKeyword: 
-      return true
-    case .rethrowsKeyword: 
-      return true
-    case .superKeyword: 
-      return true
-    case .selfKeyword: 
-      return true
-    case .capitalSelfKeyword: 
-      return true
-    case .trueKeyword: 
-      return true
-    case .tryKeyword: 
-      return true
-    case .throwsKeyword: 
-      return true
     case .wildcardKeyword: 
       return true
     case .leftParen: 
@@ -1656,30 +1392,6 @@ public enum RawTokenKind: Equatable, Hashable {
   public var isPunctuation: Bool {
     switch self {
     case .eof: 
-      return false
-    case .asKeyword: 
-      return false
-    case .anyKeyword: 
-      return false
-    case .falseKeyword: 
-      return false
-    case .isKeyword: 
-      return false
-    case .nilKeyword: 
-      return false
-    case .rethrowsKeyword: 
-      return false
-    case .superKeyword: 
-      return false
-    case .selfKeyword: 
-      return false
-    case .capitalSelfKeyword: 
-      return false
-    case .trueKeyword: 
-      return false
-    case .tryKeyword: 
-      return false
-    case .throwsKeyword: 
       return false
     case .wildcardKeyword: 
       return false
@@ -1822,45 +1534,15 @@ public enum RawTokenKind: Equatable, Hashable {
       default: 
         return nil
       }
-    case 2: 
-      switch text {
-      case "as": 
-        self = .asKeyword
-      case "is": 
-        self = .isKeyword
-      default: 
-        return nil
-      }
     case 3: 
       switch text {
-      case "Any": 
-        self = .anyKeyword
-      case "nil": 
-        self = .nilKeyword
-      case "try": 
-        self = .tryKeyword
       case "#if": 
         self = .poundIfKeyword
       default: 
         return nil
       }
-    case 4: 
-      switch text {
-      case "self": 
-        self = .selfKeyword
-      case "Self": 
-        self = .capitalSelfKeyword
-      case "true": 
-        self = .trueKeyword
-      default: 
-        return nil
-      }
     case 5: 
       switch text {
-      case "false": 
-        self = .falseKeyword
-      case "super": 
-        self = .superKeyword
       case "#line": 
         self = .poundLineKeyword
       case "#file": 
@@ -1872,8 +1554,6 @@ public enum RawTokenKind: Equatable, Hashable {
       }
     case 6: 
       switch text {
-      case "throws": 
-        self = .throwsKeyword
       case "#error": 
         self = .poundErrorKeyword
       case "#endif": 
@@ -1896,8 +1576,6 @@ public enum RawTokenKind: Equatable, Hashable {
       }
     case 8: 
       switch text {
-      case "rethrows": 
-        self = .rethrowsKeyword
       case "#keyPath": 
         self = .poundKeyPathKeyword
       case "#warning": 
@@ -1970,42 +1648,6 @@ extension TokenKind {
     switch rawKind {
     case .eof: 
       return .eof
-    case .asKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .asKeyword
-    case .anyKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .anyKeyword
-    case .falseKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .falseKeyword
-    case .isKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .isKeyword
-    case .nilKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .nilKeyword
-    case .rethrowsKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .rethrowsKeyword
-    case .superKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .superKeyword
-    case .selfKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .selfKeyword
-    case .capitalSelfKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .capitalSelfKeyword
-    case .trueKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .trueKeyword
-    case .tryKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .tryKeyword
-    case .throwsKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .throwsKeyword
     case .wildcardKeyword: 
       assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
       return .wildcardKeyword
@@ -2196,30 +1838,6 @@ extension TokenKind {
     switch self {
     case .eof: 
       return (.eof, nil)
-    case .asKeyword: 
-      return (.asKeyword, nil)
-    case .anyKeyword: 
-      return (.anyKeyword, nil)
-    case .falseKeyword: 
-      return (.falseKeyword, nil)
-    case .isKeyword: 
-      return (.isKeyword, nil)
-    case .nilKeyword: 
-      return (.nilKeyword, nil)
-    case .rethrowsKeyword: 
-      return (.rethrowsKeyword, nil)
-    case .superKeyword: 
-      return (.superKeyword, nil)
-    case .selfKeyword: 
-      return (.selfKeyword, nil)
-    case .capitalSelfKeyword: 
-      return (.capitalSelfKeyword, nil)
-    case .trueKeyword: 
-      return (.trueKeyword, nil)
-    case .tryKeyword: 
-      return (.tryKeyword, nil)
-    case .throwsKeyword: 
-      return (.throwsKeyword, nil)
     case .wildcardKeyword: 
       return (.wildcardKeyword, nil)
     case .leftParen: 

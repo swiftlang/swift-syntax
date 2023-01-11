@@ -442,7 +442,7 @@ extension Parser {
         self = ._noMetadata
       case RawTokenKindMatch(.runtimeMetadata): 
         self = .runtimeMetadata
-      case RawTokenKindMatch(.rethrowsKeyword): 
+      case RawTokenKindMatch(.rethrows): 
         self = .atRethrows
       case RawTokenKindMatch(._spi_available): 
         self = ._spi_available

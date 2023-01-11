@@ -203,6 +203,10 @@ public enum Keyword: StaticString {
   
   case any
   
+  case `Any`
+  
+  case `as`
+  
   case assignment
   
   case `associatedtype`
@@ -275,6 +279,8 @@ public enum Keyword: StaticString {
   
   case `fallthrough`
   
+  case `false`
+  
   case `fileprivate`
   
   case final
@@ -327,6 +333,8 @@ public enum Keyword: StaticString {
   
   case introduced
   
+  case `is`
+  
   case isolated
   
   case kind
@@ -350,6 +358,8 @@ public enum Keyword: StaticString {
   case mutableAddressWithOwner
   
   case mutating
+  
+  case `nil`
   
   case noasync
   
@@ -427,6 +437,10 @@ public enum Keyword: StaticString {
   
   case safe
   
+  case `self`
+  
+  case `Self`
+  
   case Sendable
   
   case set
@@ -443,6 +457,8 @@ public enum Keyword: StaticString {
   
   case `subscript`
   
+  case `super`
+  
   case swift
   
   case `switch`
@@ -453,7 +469,13 @@ public enum Keyword: StaticString {
   
   case `throw`
   
+  case `throws`
+  
   case transpose
+  
+  case `true`
+  
+  case `try`
   
   case `Type`
   
@@ -503,12 +525,16 @@ public enum Keyword: StaticString {
     switch text.count {
     case 2: 
       switch text {
+      case "as": 
+        self = .`as`
       case "do": 
         self = .`do`
       case "if": 
         self = .`if`
       case "in": 
         self = .`in`
+      case "is": 
+        self = .`is`
       case "of": 
         self = .of
       default: 
@@ -518,16 +544,22 @@ public enum Keyword: StaticString {
       switch text {
       case "any": 
         self = .any
+      case "Any": 
+        self = .`Any`
       case "for": 
         self = .`for`
       case "get": 
         self = .get
       case "let": 
         self = .`let`
+      case "nil": 
+        self = .`nil`
       case "set": 
         self = .set
       case "spi": 
         self = .spi
+      case "try": 
+        self = .`try`
       case "var": 
         self = .`var`
       case "wrt": 
@@ -563,8 +595,14 @@ public enum Keyword: StaticString {
         self = .open
       case "safe": 
         self = .safe
+      case "self": 
+        self = .`self`
+      case "Self": 
+        self = .`Self`
       case "some": 
         self = .some
+      case "true": 
+        self = .`true`
       case "Type": 
         self = .`Type`
       case "weak": 
@@ -592,6 +630,8 @@ public enum Keyword: StaticString {
         self = .`class`
       case "defer": 
         self = .`defer`
+      case "false": 
+        self = .`false`
       case "final": 
         self = .final
       case "guard": 
@@ -602,6 +642,8 @@ public enum Keyword: StaticString {
         self = .`inout`
       case "macro": 
         self = .macro
+      case "super": 
+        self = .`super`
       case "swift": 
         self = .swift
       case "throw": 
@@ -651,6 +693,8 @@ public enum Keyword: StaticString {
         self = .`switch`
       case "target": 
         self = .target
+      case "throws": 
+        self = .`throws`
       case "unsafe": 
         self = .unsafe
       default: 
@@ -1134,6 +1178,10 @@ public enum Keyword: StaticString {
   /// This is true for keywords that used to be considered non-contextual.
   public var isLexerClassified: Bool {
     switch self {
+    case .`Any`: 
+      return true
+    case .`as`: 
+      return true
     case .`associatedtype`: 
       return true
     case .`break`: 
@@ -1162,6 +1210,8 @@ public enum Keyword: StaticString {
       return true
     case .`fallthrough`: 
       return true
+    case .`false`: 
+      return true
     case .`fileprivate`: 
       return true
     case .`for`: 
@@ -1182,7 +1232,11 @@ public enum Keyword: StaticString {
       return true
     case .`internal`: 
       return true
+    case .`is`: 
+      return true
     case .`let`: 
+      return true
+    case .`nil`: 
       return true
     case .`operator`: 
       return true
@@ -1200,15 +1254,27 @@ public enum Keyword: StaticString {
       return true
     case .`return`: 
       return true
+    case .`self`: 
+      return true
+    case .`Self`: 
+      return true
     case .`static`: 
       return true
     case .`struct`: 
       return true
     case .`subscript`: 
       return true
+    case .`super`: 
+      return true
     case .`switch`: 
       return true
     case .`throw`: 
+      return true
+    case .`throws`: 
+      return true
+    case .`true`: 
+      return true
+    case .`try`: 
       return true
     case .`typealias`: 
       return true

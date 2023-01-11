@@ -8,8 +8,7 @@ TYPE_NODES = [
              Child('Name', kind='Token', classification='TypeIdentifier',
                    token_choices=[
                        'IdentifierToken',
-                       'CapitalSelfToken',
-                       'AnyToken',
+                       'KeywordToken',
                    ]),
              Child('GenericArgumentClause', kind='GenericArgumentClause',
                    is_optional=True),
@@ -23,8 +22,7 @@ TYPE_NODES = [
              Child('Name', kind='Token',  name_for_diagnostics='name', classification='TypeIdentifier',
                    token_choices=[
                        'IdentifierToken',
-                       'CapitalSelfToken',
-                       'AnyToken',
+                       'KeywordToken',
                    ]),
              Child('GenericArgumentClause', kind='GenericArgumentClause',
                    is_optional=True),

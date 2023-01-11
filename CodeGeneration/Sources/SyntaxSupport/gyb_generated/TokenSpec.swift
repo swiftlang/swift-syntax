@@ -204,18 +204,6 @@ public class LiteralSpec: TokenSpec { }
 public class MiscSpec: TokenSpec { }
 
 public let SYNTAX_TOKENS: [TokenSpec] = [
-  ExprKeywordSpec(name: "As", text: "as", requiresTrailingSpace: true),
-  ExprKeywordSpec(name: "Any", text: "Any", requiresTrailingSpace: true),
-  ExprKeywordSpec(name: "False", text: "false"),
-  ExprKeywordSpec(name: "Is", text: "is", requiresTrailingSpace: true),
-  ExprKeywordSpec(name: "Nil", text: "nil"),
-  ExprKeywordSpec(name: "Rethrows", text: "rethrows", requiresTrailingSpace: true),
-  ExprKeywordSpec(name: "Super", text: "super"),
-  ExprKeywordSpec(name: "Self", text: "self"),
-  ExprKeywordSpec(name: "CapitalSelf", text: "Self"),
-  ExprKeywordSpec(name: "True", text: "true"),
-  ExprKeywordSpec(name: "Try", text: "try", requiresTrailingSpace: true),
-  ExprKeywordSpec(name: "Throws", text: "throws", requiresTrailingSpace: true),
   PatternKeywordSpec(name: "Wildcard", text: "_", requiresTrailingSpace: true),
   PunctuatorSpec(name: "LeftParen", kind: "l_paren", text: "("),
   PunctuatorSpec(name: "RightParen", kind: "r_paren", text: ")"),

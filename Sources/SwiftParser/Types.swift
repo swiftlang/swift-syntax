@@ -233,8 +233,8 @@ extension Parser {
   ) -> RawTypeSyntax {
     var base: RawTypeSyntax
     switch self.currentToken.rawTokenKind {
-    case .capitalSelfKeyword,
-      .anyKeyword,
+    case .keyword(.Self),
+      .keyword(.Any),
       .identifier:
       base = self.parseTypeIdentifier()
     case .leftParen:
@@ -357,7 +357,7 @@ extension Parser {
   ///
   ///     type-identifier → identifier generic-argument-clause?
   mutating func parseTypeIdentifier() -> RawTypeSyntax {
-    if self.at(.anyKeyword) {
+    if self.at(.keyword(.Any)) {
       return RawTypeSyntax(self.parseAnyType())
     }
 
@@ -379,7 +379,7 @@ extension Parser {
   ///     any-type → 'Any'
   @_spi(RawSyntax)
   public mutating func parseAnyType() -> RawSimpleTypeIdentifierSyntax {
-    let (unexpectedBeforeName, name) = self.expect(.anyKeyword)
+    let (unexpectedBeforeName, name) = self.expect(.keyword(.Any))
     return RawSimpleTypeIdentifierSyntax(
       unexpectedBeforeName,
       name: name,
@@ -725,9 +725,9 @@ extension Parser.Lookahead {
 
   mutating func canParseSimpleType() -> Bool {
     switch self.currentToken.rawTokenKind {
-    case .anyKeyword:
+    case .keyword(.Any):
       self.consumeAnyToken()
-    case .capitalSelfKeyword, .identifier:
+    case .keyword(.Self), .identifier:
       guard self.canParseTypeIdentifier() else {
         return false
       }
@@ -865,13 +865,13 @@ extension Parser.Lookahead {
   }
 
   mutating func canParseTypeIdentifier(allowKeyword: Bool = false) -> Bool {
-    if self.at(.anyKeyword) {
+    if self.at(.keyword(.Any)) {
       self.consumeAnyToken()
       return true
     }
 
     // Parse an identifier.
-    guard self.at(.identifier) || self.at(.capitalSelfKeyword) || (allowKeyword && self.currentToken.isLexerClassifiedKeyword) else {
+    guard self.at(.identifier) || self.at(.keyword(.Self)) || (allowKeyword && self.currentToken.isLexerClassifiedKeyword) else {
       return false
     }
     self.consumeAnyToken()

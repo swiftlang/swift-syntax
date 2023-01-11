@@ -21,8 +21,7 @@ public let TYPE_NODES: [Node] = [
                kind: "Token",
                tokenChoices: [
                  "Identifier",
-                 "CapitalSelf",
-                 "Any"
+                 "Keyword"
                ],
                classification: "TypeIdentifier"),
          Child(name: "GenericArgumentClause",
@@ -45,8 +44,7 @@ public let TYPE_NODES: [Node] = [
                kind: "Token",
                tokenChoices: [
                  "Identifier",
-                 "CapitalSelf",
-                 "Any"
+                 "Keyword"
                ],
                classification: "TypeIdentifier"),
          Child(name: "GenericArgumentClause",

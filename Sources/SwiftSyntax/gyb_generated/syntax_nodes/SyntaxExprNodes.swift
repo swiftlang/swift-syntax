@@ -270,7 +270,7 @@ public struct TryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public init<E: ExprSyntaxProtocol>(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeTryKeyword: UnexpectedNodesSyntax? = nil,
-    tryKeyword: TokenSyntax = .tryKeyword(),
+    tryKeyword: TokenSyntax = .keyword(.try),
     _ unexpectedBetweenTryKeywordAndQuestionOrExclamationMark: UnexpectedNodesSyntax? = nil,
     questionOrExclamationMark: TokenSyntax? = nil,
     _ unexpectedBetweenQuestionOrExclamationMarkAndExpression: UnexpectedNodesSyntax? = nil,
@@ -1265,7 +1265,7 @@ public struct SuperRefExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeSuperKeyword: UnexpectedNodesSyntax? = nil,
-    superKeyword: TokenSyntax = .superKeyword(),
+    superKeyword: TokenSyntax = .keyword(.super),
     _ unexpectedAfterSuperKeyword: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
   ) {
@@ -1400,7 +1400,7 @@ public struct NilLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeNilKeyword: UnexpectedNodesSyntax? = nil,
-    nilKeyword: TokenSyntax = .nilKeyword(),
+    nilKeyword: TokenSyntax = .keyword(.nil),
     _ unexpectedAfterNilKeyword: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
   ) {
@@ -5267,7 +5267,7 @@ public struct UnresolvedIsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeIsTok: UnexpectedNodesSyntax? = nil,
-    isTok: TokenSyntax = .isKeyword(),
+    isTok: TokenSyntax = .keyword(.is),
     _ unexpectedAfterIsTok: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
   ) {
@@ -5404,7 +5404,7 @@ public struct IsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     _ unexpectedBeforeExpression: UnexpectedNodesSyntax? = nil,
     expression: E,
     _ unexpectedBetweenExpressionAndIsTok: UnexpectedNodesSyntax? = nil,
-    isTok: TokenSyntax = .isKeyword(),
+    isTok: TokenSyntax = .keyword(.is),
     _ unexpectedBetweenIsTokAndTypeName: UnexpectedNodesSyntax? = nil,
     typeName: T,
     _ unexpectedAfterTypeName: UnexpectedNodesSyntax? = nil,
@@ -5643,7 +5643,7 @@ public struct UnresolvedAsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeAsTok: UnexpectedNodesSyntax? = nil,
-    asTok: TokenSyntax = .asKeyword(),
+    asTok: TokenSyntax = .keyword(.as),
     _ unexpectedBetweenAsTokAndQuestionOrExclamationMark: UnexpectedNodesSyntax? = nil,
     questionOrExclamationMark: TokenSyntax? = nil,
     _ unexpectedAfterQuestionOrExclamationMark: UnexpectedNodesSyntax? = nil,
@@ -5834,7 +5834,7 @@ public struct AsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     _ unexpectedBeforeExpression: UnexpectedNodesSyntax? = nil,
     expression: E,
     _ unexpectedBetweenExpressionAndAsTok: UnexpectedNodesSyntax? = nil,
-    asTok: TokenSyntax = .asKeyword(),
+    asTok: TokenSyntax = .keyword(.as),
     _ unexpectedBetweenAsTokAndQuestionOrExclamationMark: UnexpectedNodesSyntax? = nil,
     questionOrExclamationMark: TokenSyntax? = nil,
     _ unexpectedBetweenQuestionOrExclamationMarkAndTypeName: UnexpectedNodesSyntax? = nil,

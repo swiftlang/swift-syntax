@@ -184,20 +184,6 @@ class Misc(Token):
 
 
 SYNTAX_TOKENS = [
-    # Expression keywords
-    ExprKeyword('As', 'as'),
-    ExprKeyword('Any', 'Any'),
-    ExprKeyword('False', 'false', requires_trailing_space=False),
-    ExprKeyword('Is', 'is'),
-    ExprKeyword('Nil', 'nil', requires_trailing_space=False),
-    ExprKeyword('Rethrows', 'rethrows'),
-    ExprKeyword('Super', 'super', requires_trailing_space=False),
-    ExprKeyword('Self', 'self', requires_trailing_space=False),
-    ExprKeyword('CapitalSelf', 'Self', requires_trailing_space=False),
-    ExprKeyword('True', 'true', requires_trailing_space=False),
-    ExprKeyword('Try', 'try'),
-    ExprKeyword('Throws', 'throws'),
-
     # Pattern keywords
     PatternKeyword('Wildcard', '_'),
 

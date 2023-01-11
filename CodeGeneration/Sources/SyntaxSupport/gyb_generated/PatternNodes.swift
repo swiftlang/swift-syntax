@@ -31,9 +31,12 @@ public let PATTERN_NODES: [Node] = [
        kind: "Pattern",
        children: [
          Child(name: "IsKeyword",
-               kind: "IsToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "Is"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "is"
                ]),
          Child(name: "Type",
                kind: "Type")
@@ -46,8 +49,8 @@ public let PATTERN_NODES: [Node] = [
          Child(name: "Identifier",
                kind: "Token",
                tokenChoices: [
-                 "Self",
-                 "Identifier"
+                 "Identifier",
+                 "Keyword"
                ])
        ]),
 

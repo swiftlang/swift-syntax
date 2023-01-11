@@ -54,8 +54,8 @@ final class StatementTests: XCTestCase {
               condition: .init(
                 OptionalBindingConditionSyntax(
                   letOrVarKeyword: .keyword(.let),
-                  pattern: IdentifierPatternSyntax(identifier: .selfKeyword()),
-                  initializer: InitializerClauseSyntax(equal: .equalToken(), value: IdentifierExprSyntax(identifier: .selfKeyword()))
+                  pattern: IdentifierPatternSyntax(identifier: .keyword(.self)),
+                  initializer: InitializerClauseSyntax(equal: .equalToken(), value: IdentifierExprSyntax(identifier: .keyword(.self)))
                 )
               )
             )
@@ -381,7 +381,7 @@ final class StatementTests: XCTestCase {
             leftAngleBracket: .leftAngleToken(),
             arguments: GenericArgumentListSyntax([
               GenericArgumentSyntax(
-                argumentType: SimpleTypeIdentifierSyntax(name: .anyKeyword())
+                argumentType: SimpleTypeIdentifierSyntax(name: .keyword(.Any))
               )
             ]),
             rightAngleBracket: .rightAngleToken()
@@ -464,7 +464,7 @@ final class StatementTests: XCTestCase {
                   TupleExprElementSyntax(
                     label: .identifier("isUnique"),
                     colon: .colonToken(),
-                    expression: BooleanLiteralExprSyntax(booleanLiteral: .trueKeyword())
+                    expression: BooleanLiteralExprSyntax(booleanLiteral: .keyword(.true))
                   ),
                 ]),
                 rightBracket: .rightSquareBracketToken()

@@ -421,12 +421,12 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseThrowStatement(throwHandle: RecoveryConsumptionHandle) -> RawThrowStmtSyntax {
     let (unexpectedBeforeThrowKeyword, throwKeyword) = self.eat(throwHandle)
-    let hasMisplacedTry = unexpectedBeforeThrowKeyword?.containsToken(where: { $0.tokenKind == .tryKeyword }) ?? false
+    let hasMisplacedTry = unexpectedBeforeThrowKeyword?.containsToken(where: { $0.tokenKind == .keyword(.try) }) ?? false
     var expr = self.parseExpression()
     if hasMisplacedTry && !expr.is(RawTryExprSyntax.self) {
       expr = RawExprSyntax(
         RawTryExprSyntax(
-          tryKeyword: missingToken(.tryKeyword, text: nil),
+          tryKeyword: missingToken(.keyword(.try), text: nil),
           questionOrExclamationMark: nil,
           expression: expr,
           arena: self.arena
@@ -630,7 +630,7 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseForEachStatement(forHandle: RecoveryConsumptionHandle) -> RawForInStmtSyntax {
     let (unexpectedBeforeForKeyword, forKeyword) = self.eat(forHandle)
-    let tryKeyword = self.consume(if: .tryKeyword)
+    let tryKeyword = self.consume(if: .keyword(.try))
 
     let awaitKeyword = self.consume(if: .keyword(.await))
 
@@ -993,7 +993,7 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseReturnStatement(returnHandle: RecoveryConsumptionHandle) -> RawReturnStmtSyntax {
     let (unexpectedBeforeRet, ret) = self.eat(returnHandle)
-    let hasMisplacedTry = unexpectedBeforeRet?.containsToken(where: { $0.tokenKind == .tryKeyword }) ?? false
+    let hasMisplacedTry = unexpectedBeforeRet?.containsToken(where: { $0.tokenKind == .keyword(.try) }) ?? false
 
     // Handle the ambiguity between consuming the expression and allowing the
     // enclosing stmt-brace to get it by eagerly eating it unless the return is
@@ -1010,7 +1010,7 @@ extension Parser {
       if hasMisplacedTry && !parsedExpr.is(RawTryExprSyntax.self) {
         expr = RawExprSyntax(
           RawTryExprSyntax(
-            tryKeyword: missingToken(.tryKeyword, text: nil),
+            tryKeyword: missingToken(.keyword(.try), text: nil),
             questionOrExclamationMark: nil,
             expression: parsedExpr,
             arena: self.arena

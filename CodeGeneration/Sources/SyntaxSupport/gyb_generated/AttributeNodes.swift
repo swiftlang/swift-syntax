@@ -430,9 +430,9 @@ public let ATTRIBUTE_NODES: [Node] = [
          Child(name: "Parameter",
                kind: "Token",
                tokenChoices: [
-                 "Self",
                  "Identifier",
-                 "IntegerLiteral"
+                 "IntegerLiteral",
+                 "Keyword"
                ]),
          Child(name: "TrailingComma",
                kind: "CommaToken",

@@ -16,66 +16,6 @@
 import SwiftSyntax
 
 public extension TokenSyntax {
-  /// The `as` keyword
-  static var `as`: Token {
-    return .asKeyword()
-  }
-  
-  /// The `Any` keyword
-  static var `any`: Token {
-    return .anyKeyword()
-  }
-  
-  /// The `false` keyword
-  static var `false`: Token {
-    return .falseKeyword()
-  }
-  
-  /// The `is` keyword
-  static var `is`: Token {
-    return .isKeyword()
-  }
-  
-  /// The `nil` keyword
-  static var `nil`: Token {
-    return .nilKeyword()
-  }
-  
-  /// The `rethrows` keyword
-  static var `rethrows`: Token {
-    return .rethrowsKeyword()
-  }
-  
-  /// The `super` keyword
-  static var `super`: Token {
-    return .superKeyword()
-  }
-  
-  /// The `self` keyword
-  static var `self`: Token {
-    return .selfKeyword()
-  }
-  
-  /// The `Self` keyword
-  static var `capitalSelf`: Token {
-    return .capitalSelfKeyword()
-  }
-  
-  /// The `true` keyword
-  static var `true`: Token {
-    return .trueKeyword()
-  }
-  
-  /// The `try` keyword
-  static var `try`: Token {
-    return .tryKeyword()
-  }
-  
-  /// The `throws` keyword
-  static var `throws`: Token {
-    return .throwsKeyword()
-  }
-  
   /// The `_` keyword
   static var `wildcard`: Token {
     return .wildcardKeyword()

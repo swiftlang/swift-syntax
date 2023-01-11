@@ -79,12 +79,9 @@ DECL_NODES = [
              Child('Input', kind='ParameterClause'),
              Child('AsyncOrReasyncKeyword', kind='KeywordToken',
                    text_choices=['async', 'reasync'], is_optional=True),
-             Child('ThrowsOrRethrowsKeyword', kind='Token',
+             Child('ThrowsOrRethrowsKeyword', kind='KeywordToken',
                    is_optional=True,
-                   token_choices=[
-                       'ThrowsToken',
-                       'RethrowsToken',
-                   ]),
+                   text_choices=['throws', 'rethrows']),
              Child('Output', kind='ReturnClause', is_optional=True),
          ]),
 
@@ -571,12 +568,10 @@ DECL_NODES = [
              Child('Parameter', name_for_diagnostics='parameter', kind='AccessorParameter', is_optional=True),
              Child('AsyncKeyword', kind='KeywordToken',
                    text_choices=['async'], is_optional=True),
-             Child('ThrowsKeyword', kind='Token',
+             Child('ThrowsKeyword', kind='KeywordToken',
                    is_optional=True,
-                   token_choices=[
-                       'ThrowsToken',
-                       'RethrowsToken',
-                   ]),
+                   text_choices=['throws', 'rethrows']
+                   ),
              Child('Body', kind='CodeBlock', is_optional=True),
          ]),
 
@@ -871,11 +866,7 @@ DECL_NODES = [
              Child('AssignmentKeyword', kind='IdentifierToken',
                    text_choices=['assignment']),
              Child('Colon', kind='ColonToken'),
-             Child('Flag', kind='Token',
-                   token_choices=[
-                       'TrueToken',
-                       'FalseToken',
-                   ],
+             Child('Flag', kind='KeywordToken', text_choices=['true', 'false'],
                    description='''
                    When true, an operator in the corresponding precedence group
                    uses the same grouping rules during optional chaining as the

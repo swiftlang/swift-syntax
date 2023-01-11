@@ -163,11 +163,14 @@ public let DECL_NODES: [Node] = [
                  "reasync"
                ]),
          Child(name: "ThrowsOrRethrowsKeyword",
-               kind: "Token",
+               kind: "KeywordToken",
                isOptional: true,
                tokenChoices: [
-                 "Throws",
-                 "Rethrows"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "throws",
+                 "rethrows"
                ]),
          Child(name: "Output",
                kind: "ReturnClause",
@@ -1100,11 +1103,14 @@ public let DECL_NODES: [Node] = [
                  "async"
                ]),
          Child(name: "ThrowsKeyword",
-               kind: "Token",
+               kind: "KeywordToken",
                isOptional: true,
                tokenChoices: [
-                 "Throws",
-                 "Rethrows"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "throws",
+                 "rethrows"
                ]),
          Child(name: "Body",
                kind: "CodeBlock",
@@ -1538,11 +1544,14 @@ public let DECL_NODES: [Node] = [
                  "Colon"
                ]),
          Child(name: "Flag",
-               kind: "Token",
+               kind: "KeywordToken",
                description: "When true, an operator in the corresponding precedence groupuses the same grouping rules during optional chaining as theassignment operators from the standard library. Otherwise,operators in the precedence group follows the same optionalchaining rules as operators that don't perform assignment.",
                tokenChoices: [
-                 "True",
-                 "False"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "true",
+                 "false"
                ])
        ]),
 

@@ -160,8 +160,8 @@ let basicFormatFile = SourceFile {
 
       SwitchStmt("""
         switch (token.tokenKind, token.nextToken(viewMode: .sourceAccurate)?.tokenKind) {
-        case (.asKeyword, .exclamationMark), // Ensures there is not space in `as!`
-             (.asKeyword, .postfixQuestionMark), // Ensures there is not space in `as?`
+        case (.keyword(.as), .exclamationMark), // Ensures there is not space in `as!`
+             (.keyword(.as), .postfixQuestionMark), // Ensures there is not space in `as?`
              (.exclamationMark, .leftParen), // Ensures there is not space in `myOptionalClosure!()`
              (.exclamationMark, .period), // Ensures there is not space in `myOptionalBar!.foo()`
              (.keyword(.`init`), .leftParen), // Ensures there is not space in `init()`
@@ -169,8 +169,8 @@ let basicFormatFile = SourceFile {
              (.postfixQuestionMark, .leftParen), // Ensures there is not space in `init?()`
              (.postfixQuestionMark, .rightAngle), // Ensures there is not space in `ContiguousArray<RawSyntax?>`
              (.postfixQuestionMark, .rightParen), // Ensures there is not space in `myOptionalClosure?()`
-             (.tryKeyword, .exclamationMark), // Ensures there is not space in `try!`
-             (.tryKeyword, .postfixQuestionMark), // Ensures there is not space in `try?`
+             (.keyword(.try), .exclamationMark), // Ensures there is not space in `try!`
+             (.keyword(.try), .postfixQuestionMark), // Ensures there is not space in `try?`
              (.binaryOperator, .comma): // Ensures there is no space in @available(*, deprecated)
           return false
         default:

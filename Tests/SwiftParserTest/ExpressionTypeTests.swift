@@ -93,7 +93,7 @@ final class ExpressionTypeTests: XCTestCase {
     AssertParse(
       "G<1️⃣Any>.self",
       ExprSyntax.parse,
-      substructure: Syntax(SimpleTypeIdentifierSyntax(name: .anyKeyword())),
+      substructure: Syntax(SimpleTypeIdentifierSyntax(name: .keyword(.Any))),
       substructureAfterMarker: "1️⃣"
     )
 
@@ -101,7 +101,7 @@ final class ExpressionTypeTests: XCTestCase {
     AssertParse(
       "G<1️⃣Self>.self",
       ExprSyntax.parse,
-      substructure: Syntax(SimpleTypeIdentifierSyntax(name: .capitalSelfKeyword())),
+      substructure: Syntax(SimpleTypeIdentifierSyntax(name: .keyword(.Self))),
       substructureAfterMarker: "1️⃣"
     )
   }

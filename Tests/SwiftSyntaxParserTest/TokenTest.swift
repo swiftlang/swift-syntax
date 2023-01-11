@@ -63,27 +63,4 @@ public class TokenTests: XCTestCase {
     XCTAssertTrue(tok2.tokenKind == .multilineStringQuote)
     XCTAssertEqual(tok2.contentLength.utf8Length, 3)
   }
-
-  public func testKeywordRoundTripping() throws {
-    let someKeywords = [
-      TokenKind.asKeyword,
-      TokenKind.anyKeyword,
-      TokenKind.falseKeyword,
-      TokenKind.isKeyword,
-      TokenKind.nilKeyword,
-      TokenKind.rethrowsKeyword,
-      TokenKind.superKeyword,
-      TokenKind.selfKeyword,
-      TokenKind.capitalSelfKeyword,
-      TokenKind.trueKeyword,
-      TokenKind.tryKeyword,
-      TokenKind.throwsKeyword,
-      TokenKind.wildcardKeyword,
-    ]
-
-    for keyword in someKeywords {
-      let constructedKeyword = try XCTUnwrap(TokenKind(keyword: keyword.text))
-      XCTAssertEqual(keyword, constructedKeyword)
-    }
-  }
 }

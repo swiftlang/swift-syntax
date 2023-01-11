@@ -352,10 +352,10 @@ enum EffectsSpecifier: RawTokenKindSubset {
     case RawTokenKindMatch(.async): self = .asyncKeyword
     case RawTokenKindMatch(.await) where !lexeme.isAtStartOfLine: self = .awaitKeyword
     case RawTokenKindMatch(.reasync): self = .reasyncKeyword
-    case RawTokenKindMatch(.rethrowsKeyword): self = .rethrowsKeyword
+    case RawTokenKindMatch(.rethrows): self = .rethrowsKeyword
     case RawTokenKindMatch(.throw) where !lexeme.isAtStartOfLine: self = .throwKeyword
-    case RawTokenKindMatch(.throwsKeyword): self = .throwsKeyword
-    case RawTokenKindMatch(.tryKeyword) where !lexeme.isAtStartOfLine: self = .tryKeyword
+    case RawTokenKindMatch(.throws): self = .throwsKeyword
+    case RawTokenKindMatch(.try) where !lexeme.isAtStartOfLine: self = .tryKeyword
     default: return nil
     }
   }
@@ -365,10 +365,10 @@ enum EffectsSpecifier: RawTokenKindSubset {
     case .asyncKeyword: return .keyword(.async)
     case .awaitKeyword: return .keyword(.await)
     case .reasyncKeyword: return .keyword(.reasync)
-    case .rethrowsKeyword: return .rethrowsKeyword
+    case .rethrowsKeyword: return .keyword(.rethrows)
     case .throwKeyword: return .keyword(.throw)
-    case .throwsKeyword: return .throwsKeyword
-    case .tryKeyword: return .tryKeyword
+    case .throwsKeyword: return .keyword(.throws)
+    case .tryKeyword: return .keyword(.try)
     }
   }
 }
@@ -382,22 +382,22 @@ enum IdentifierTokens: RawTokenKindSubset {
 
   init?(lexeme: Lexer.Lexeme) {
     switch lexeme {
-    case RawTokenKindMatch(.anyKeyword): self = .anyKeyword
-    case RawTokenKindMatch(.capitalSelfKeyword): self = .capitalSelfKeyword
+    case RawTokenKindMatch(.Any): self = .anyKeyword
+    case RawTokenKindMatch(.Self): self = .capitalSelfKeyword
     case RawTokenKindMatch(.identifier): self = .identifier
     case RawTokenKindMatch(.`init`): self = .initKeyword
-    case RawTokenKindMatch(.selfKeyword): self = .selfKeyword
+    case RawTokenKindMatch(.self): self = .selfKeyword
     default: return nil
     }
   }
 
   var rawTokenKind: RawTokenKind {
     switch self {
-    case .anyKeyword: return .anyKeyword
-    case .capitalSelfKeyword: return .capitalSelfKeyword
+    case .anyKeyword: return .keyword(.Any)
+    case .capitalSelfKeyword: return .keyword(.Self)
     case .identifier: return .identifier
     case .initKeyword: return .keyword(.`init`)
-    case .selfKeyword: return .selfKeyword
+    case .selfKeyword: return .keyword(.self)
     }
   }
 }
@@ -410,23 +410,23 @@ enum IdentifierOrRethrowsTokens: RawTokenKindSubset {
   case rethrowsKeyword
 
   init?(lexeme: Lexer.Lexeme) {
-    switch lexeme.rawTokenKind {
-    case .anyKeyword: self = .anyKeyword
-    case .capitalSelfKeyword: self = .capitalSelfKeyword
-    case .identifier: self = .identifier
-    case .selfKeyword: self = .selfKeyword
-    case .rethrowsKeyword: self = .rethrowsKeyword
+    switch lexeme {
+    case RawTokenKindMatch(.Any): self = .anyKeyword
+    case RawTokenKindMatch(.Self): self = .capitalSelfKeyword
+    case RawTokenKindMatch(.identifier): self = .identifier
+    case RawTokenKindMatch(.self): self = .selfKeyword
+    case RawTokenKindMatch(.rethrows): self = .rethrowsKeyword
     default: return nil
     }
   }
 
   var rawTokenKind: RawTokenKind {
     switch self {
-    case .anyKeyword: return .anyKeyword
-    case .capitalSelfKeyword: return .capitalSelfKeyword
+    case .anyKeyword: return .keyword(.Any)
+    case .capitalSelfKeyword: return .keyword(.Self)
     case .identifier: return .identifier
-    case .selfKeyword: return .selfKeyword
-    case .rethrowsKeyword: return .rethrowsKeyword
+    case .selfKeyword: return .keyword(.self)
+    case .rethrowsKeyword: return .keyword(.rethrows)
     }
   }
 
@@ -604,10 +604,10 @@ enum AwaitTryMove: RawTokenKindSubset {
 
   init?(lexeme: Lexer.Lexeme) {
     switch lexeme {
-    case RawTokenKindMatch(.tryKeyword): self = .tryKeyword
     case RawTokenKindMatch(.await): self = .awaitKeyword
     case RawTokenKindMatch(._move): self = ._moveKeyword
     case RawTokenKindMatch(._borrow): self = ._borrowKeyword
+    case RawTokenKindMatch(.try): self = .tryKeyword
     default: return nil
     }
   }
@@ -617,7 +617,7 @@ enum AwaitTryMove: RawTokenKindSubset {
     case .awaitKeyword: return .keyword(.await)
     case ._moveKeyword: return .keyword(._move)
     case ._borrowKeyword: return .keyword(._borrow)
-    case .tryKeyword: return .tryKeyword
+    case .tryKeyword: return .keyword(.try)
     }
   }
 }
@@ -652,7 +652,7 @@ enum MatchingPatternStart: RawTokenKindSubset {
 
   init?(lexeme: Lexer.Lexeme) {
     switch lexeme {
-    case RawTokenKindMatch(.isKeyword): self = .isKeyword
+    case RawTokenKindMatch(.is): self = .isKeyword
     case RawTokenKindMatch(.let): self = .letKeyword
     case RawTokenKindMatch(.var): self = .varKeyword
     default: return nil
@@ -661,7 +661,7 @@ enum MatchingPatternStart: RawTokenKindSubset {
 
   var rawTokenKind: RawTokenKind {
     switch self {
-    case .isKeyword: return .isKeyword
+    case .isKeyword: return .keyword(.is)
     case .letKeyword: return .keyword(.let)
     case .varKeyword: return .keyword(.var)
     }
@@ -712,10 +712,10 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
 
   init?(lexeme: Lexer.Lexeme) {
     switch lexeme {
-    case RawTokenKindMatch(.anyKeyword): self = .anyKeyword
-    case RawTokenKindMatch(.capitalSelfKeyword): self = .capitalSelfKeyword
+    case RawTokenKindMatch(.Any): self = .anyKeyword
+    case RawTokenKindMatch(.Self): self = .capitalSelfKeyword
     case RawTokenKindMatch(.dollarIdentifier): self = .dollarIdentifier
-    case RawTokenKindMatch(.falseKeyword): self = .falseKeyword
+    case RawTokenKindMatch(.false): self = .falseKeyword
     case RawTokenKindMatch(.floatingLiteral): self = .floatingLiteral
     case RawTokenKindMatch(.identifier): self = .identifier
     case RawTokenKindMatch(.`init`): self = .initKeyword
@@ -723,14 +723,14 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
     case RawTokenKindMatch(.leftBrace): self = .leftBrace
     case RawTokenKindMatch(.leftParen): self = .leftParen
     case RawTokenKindMatch(.leftSquareBracket): self = .leftSquareBracket
-    case RawTokenKindMatch(.nilKeyword): self = .nilKeyword
+    case RawTokenKindMatch(.nil): self = .nilKeyword
     case RawTokenKindMatch(.period): self = .period
     case RawTokenKindMatch(.pound): self = .pound
     case RawTokenKindMatch(.regexLiteral): self = .regexLiteral
-    case RawTokenKindMatch(.selfKeyword): self = .selfKeyword
+    case RawTokenKindMatch(.self): self = .selfKeyword
     case RawTokenKindMatch(.stringLiteral): self = .stringLiteral
-    case RawTokenKindMatch(.superKeyword): self = .superKeyword
-    case RawTokenKindMatch(.trueKeyword): self = .trueKeyword
+    case RawTokenKindMatch(.super): self = .superKeyword
+    case RawTokenKindMatch(.true): self = .trueKeyword
     case RawTokenKindMatch(.wildcardKeyword): self = .wildcardKeyword
     default: return nil
     }
@@ -738,10 +738,10 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
 
   var rawTokenKind: SwiftSyntax.RawTokenKind {
     switch self {
-    case .anyKeyword: return .anyKeyword
-    case .capitalSelfKeyword: return .capitalSelfKeyword
+    case .anyKeyword: return .keyword(.Any)
+    case .capitalSelfKeyword: return .keyword(.Self)
     case .dollarIdentifier: return .dollarIdentifier
-    case .falseKeyword: return .falseKeyword
+    case .falseKeyword: return .keyword(.false)
     case .floatingLiteral: return .floatingLiteral
     case .identifier: return .identifier
     case .initKeyword: return .keyword(.`init`)
@@ -749,14 +749,14 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
     case .leftBrace: return .leftBrace
     case .leftParen: return .leftParen
     case .leftSquareBracket: return .leftSquareBracket
-    case .nilKeyword: return .nilKeyword
+    case .nilKeyword: return .keyword(.nil)
     case .period: return .period
     case .pound: return .pound
     case .regexLiteral: return .regexLiteral
-    case .selfKeyword: return .selfKeyword
+    case .selfKeyword: return .keyword(.self)
     case .stringLiteral: return .stringLiteral
-    case .superKeyword: return .superKeyword
-    case .trueKeyword: return .trueKeyword
+    case .superKeyword: return .keyword(.super)
+    case .trueKeyword: return .keyword(.true)
     case .wildcardKeyword: return .wildcardKeyword
     }
   }

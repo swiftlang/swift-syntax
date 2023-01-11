@@ -108,7 +108,7 @@ extension PrecedenceGroup {
                 leadingTrivia: [.newlines(1), .spaces(indentation)]
               ),
             colon: .colonToken(),
-            flag: .trueKeyword(leadingTrivia: .space)
+            flag: .keyword(.true, leadingTrivia: .space)
           )
         )
       )

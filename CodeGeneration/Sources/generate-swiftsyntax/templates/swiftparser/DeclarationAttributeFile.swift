@@ -38,7 +38,7 @@ let declarationAttributeFile = SourceFile {
               SequenceExpr("self = .\(raw: attribute.swiftName)")
             }
           }
-          SwitchCase("case RawTokenKindMatch(.rethrowsKeyword):") {
+          SwitchCase("case RawTokenKindMatch(.rethrows):") {
             SequenceExpr("self = .atRethrows")
           }
           SwitchCase("case RawTokenKindMatch(._spi_available):") {

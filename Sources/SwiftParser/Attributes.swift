@@ -348,10 +348,10 @@ extension Parser {
       case selfKeyword
 
       init?(lexeme: Lexer.Lexeme) {
-        switch lexeme.rawTokenKind {
-        case .identifier: self = .identifier
-        case .integerLiteral: self = .integerLiteral
-        case .selfKeyword: self = .selfKeyword
+        switch lexeme {
+        case RawTokenKindMatch(.identifier): self = .identifier
+        case RawTokenKindMatch(.integerLiteral): self = .integerLiteral
+        case RawTokenKindMatch(.self): self = .selfKeyword
         default: return nil
         }
       }
@@ -360,7 +360,7 @@ extension Parser {
         switch self {
         case .identifier: return .identifier
         case .integerLiteral: return .integerLiteral
-        case .selfKeyword: return .selfKeyword
+        case .selfKeyword: return .keyword(.self)
         }
       }
     }
@@ -678,7 +678,7 @@ extension Parser {
       case (.exported, let handle)?:
         let ident = self.eat(handle)
         let (unexpectedBeforeColon, colon) = self.expect(.colon)
-        let (unexpectedBeforeValue, value) = self.expectAny([.trueKeyword, .falseKeyword], default: .falseKeyword)
+        let (unexpectedBeforeValue, value) = self.expectAny([.keyword(.true), .keyword(.false)], default: .keyword(.false))
         let comma = self.consume(if: .comma)
         elements.append(
           .labeledSpecializeEntry(
@@ -1007,8 +1007,8 @@ extension Parser.Lookahead {
     switch lookahead.currentToken.rawTokenKind {
     case .arrow,
       .keyword(.throw),
-      .throwsKeyword,
-      .rethrowsKeyword,
+      .keyword(.throws),
+      .keyword(.rethrows),
       .rightParen,
       .rightBrace,
       .rightSquareBracket,

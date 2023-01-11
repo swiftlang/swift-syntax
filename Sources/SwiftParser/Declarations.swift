@@ -425,7 +425,7 @@ extension Parser {
         let unexpectedBeforeInherited: RawUnexpectedNodesSyntax?
         let inherited: RawTypeSyntax?
         if colon != nil {
-          if self.at(any: [.identifier, .keyword(.protocol), .anyKeyword]) {
+          if self.at(any: [.identifier, .keyword(.protocol), .keyword(.Any)]) {
             unexpectedBeforeInherited = nil
             inherited = self.parseType()
           } else if let classKeyword = self.consume(if: .keyword(.class)) {
@@ -1212,7 +1212,7 @@ extension Parser {
     let (unexpectedBeforeArrow, arrow) = self.expect(.arrow)
     var misplacedThrowsKeyword: RawTokenSyntax? = nil
     let unexpectedBeforeReturnType: RawUnexpectedNodesSyntax?
-    if let throwsKeyword = self.consume(ifAny: [.rethrowsKeyword, .throwsKeyword]) {
+    if let throwsKeyword = self.consume(ifAny: [.keyword(.rethrows), .keyword(.throws)]) {
       misplacedThrowsKeyword = throwsKeyword
       unexpectedBeforeReturnType = RawUnexpectedNodesSyntax(elements: [RawSyntax(throwsKeyword)], arena: self.arena)
     } else {
@@ -1317,7 +1317,7 @@ extension Parser {
       async = nil
     }
 
-    var throwsKeyword = self.consume(ifAny: [.throwsKeyword, .rethrowsKeyword])
+    var throwsKeyword = self.consume(ifAny: [.keyword(.throws), .keyword(.rethrows)])
 
     let output: RawReturnClauseSyntax?
     if self.at(.arrow) {
@@ -1436,7 +1436,7 @@ extension Parser {
     inMemberDeclList: Bool = false
   ) -> RawVariableDeclSyntax {
     let (unexpectedBeforeIntroducer, introducer) = self.eat(handle)
-    let hasTryBeforeIntroducer = unexpectedBeforeIntroducer?.containsToken(where: { $0.tokenKind == .tryKeyword }) ?? false
+    let hasTryBeforeIntroducer = unexpectedBeforeIntroducer?.containsToken(where: { $0.tokenKind == .keyword(.try) }) ?? false
 
     var elements = [RawPatternBindingSyntax]()
     do {
@@ -1453,7 +1453,7 @@ extension Parser {
           if hasTryBeforeIntroducer && !value.is(RawTryExprSyntax.self) {
             value = RawExprSyntax(
               RawTryExprSyntax(
-                tryKeyword: missingToken(.tryKeyword, text: nil),
+                tryKeyword: missingToken(.keyword(.try), text: nil),
                 questionOrExclamationMark: nil,
                 expression: value,
                 arena: self.arena
@@ -1591,12 +1591,12 @@ extension Parser {
     }
 
     // 'throws'/'rethrows'
-    if let throwsRethrows = self.consume(ifAny: [.throwsKeyword, .rethrowsKeyword]) {
+    if let throwsRethrows = self.consume(ifAny: [.keyword(.throws), .keyword(.rethrows)]) {
       return throwsRethrows
     }
 
     // diagnose 'throw'/'try'.
-    if let throwTry = self.consume(ifAny: [.keyword(.throw), .tryKeyword], where: { !$0.isAtStartOfLine }) {
+    if let throwTry = self.consume(ifAny: [.keyword(.throw), .keyword(.try)], where: { !$0.isAtStartOfLine }) {
       return throwTry
     }
 
@@ -2039,7 +2039,7 @@ extension Parser {
         case (.assignment, let handle)?:
           let assignmentKeyword = self.eat(handle)
           let (unexpectedBeforeColon, colon) = self.expect(.colon)
-          let (unexpectedBeforeFlag, flag) = self.expectAny([.trueKeyword, .falseKeyword], default: .trueKeyword)
+          let (unexpectedBeforeFlag, flag) = self.expectAny([.keyword(.true), .keyword(.false)], default: .keyword(.true))
           let unexpectedAfterFlag: RawUnexpectedNodesSyntax?
           if flag.isMissing, let unexpectedIdentifier = self.consume(if: .identifier, where: { !$0.isAtStartOfLine }) {
             unexpectedAfterFlag = RawUnexpectedNodesSyntax([unexpectedIdentifier], arena: self.arena)

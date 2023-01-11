@@ -106,7 +106,7 @@ public enum TokenPrecedence: Comparable {
       self = .unknownToken
     // MARK: Identifier like
     case  // Literals
-    .capitalSelfKeyword, .falseKeyword, .floatingLiteral, .integerLiteral, .nilKeyword, .regexLiteral, .selfKeyword, .stringLiteral, .superKeyword, .trueKeyword,
+    .keyword(.Self), .keyword(.false), .floatingLiteral, .integerLiteral, .keyword(.nil), .regexLiteral, .keyword(.self), .stringLiteral, .keyword(.super), .keyword(.true),
       // Pound literals
       .poundAvailableKeyword, .poundColorLiteralKeyword, .poundColumnKeyword, .poundDsohandleKeyword, .poundFileIDKeyword, .poundFileKeyword, .poundFileLiteralKeyword, .poundFilePathKeyword, .poundFunctionKeyword, .poundImageLiteralKeyword, .poundKeyPathKeyword, .poundLineKeyword, .poundSelectorKeyword, .poundSourceLocationKeyword, .poundUnavailableKeyword, .poundHasSymbolKeyword,
       // Identifiers
@@ -119,14 +119,14 @@ public enum TokenPrecedence: Comparable {
 
     // MARK: Expr keyword
     case  // Keywords
-    .asKeyword, .isKeyword, .tryKeyword,
+    .keyword(.as), .keyword(.is), .keyword(.try),
       // We don't know much about which contextual keyword it is, be conservative an allow considering it as unexpected.
       // Keywords in function types (we should be allowed to skip them inside parenthesis)
-      .rethrowsKeyword, .throwsKeyword,
+      .keyword(.rethrows), .keyword(.throws),
       // Operators can occur inside expressions
       .postfixOperator, .prefixOperator, .binaryOperator,
       // Consider 'any' and 'inout' like a prefix operator to a type and a type is expression-like.
-      .anyKeyword, .keyword(.inout),
+      .keyword(.Any), .keyword(.inout),
       // 'where' can only occur in the signature of declarations. Consider the signature expression-like.
       .keyword(.where),
       // 'in' occurs in closure input/output definitions and for loops. Consider both constructs expression-like.

@@ -241,11 +241,11 @@ extension Parser {
         case RawTokenKindMatch(.binaryOperator): self = .binaryOperator
         case RawTokenKindMatch(.infixQuestionMark): self = .infixQuestionMark
         case RawTokenKindMatch(.equal): self = .equal
-        case RawTokenKindMatch(.isKeyword): self = .isKeyword
-        case RawTokenKindMatch(.asKeyword): self = .asKeyword
+        case RawTokenKindMatch(.is): self = .isKeyword
+        case RawTokenKindMatch(.as): self = .asKeyword
         case RawTokenKindMatch(.async): self = .async
         case RawTokenKindMatch(.arrow): self = .arrow
-        case RawTokenKindMatch(.throwsKeyword): self = .throwsKeyword
+        case RawTokenKindMatch(.throws): self = .throwsKeyword
         default: return nil
         }
       }
@@ -255,11 +255,11 @@ extension Parser {
         case .binaryOperator: return .binaryOperator
         case .infixQuestionMark: return .infixQuestionMark
         case .equal: return .equal
-        case .isKeyword: return .isKeyword
-        case .asKeyword: return .asKeyword
+        case .isKeyword: return .keyword(.is)
+        case .asKeyword: return .keyword(.as)
         case .async: return .keyword(.async)
         case .arrow: return .arrow
-        case .throwsKeyword: return .throwsKeyword
+        case .throwsKeyword: return .keyword(.throws)
         }
       }
     }
@@ -339,7 +339,7 @@ extension Parser {
       return (RawExprSyntax(op), RawExprSyntax(rhs))
 
     case (.async, _)?:
-      if self.peek().rawTokenKind == .arrow || self.peek().rawTokenKind == .throwsKeyword {
+      if self.peek().rawTokenKind == .arrow || self.peek().rawTokenKind == .keyword(.throws) {
         fallthrough
       } else {
         return nil
@@ -347,7 +347,7 @@ extension Parser {
     case (.arrow, _)?, (.throwsKeyword, _)?:
       var asyncKeyword = self.consume(if: .keyword(.async))
 
-      var throwsKeyword = self.consume(if: .throwsKeyword)
+      var throwsKeyword = self.consume(if: .keyword(.throws))
 
       let (unexpectedBeforeArrow, arrow) = self.expect(.arrow)
 
@@ -362,10 +362,10 @@ extension Parser {
           asyncKeyword = missingToken(.keyword(.async), text: "async")
         }
       }
-      if let throwsAfterArrow = self.consume(if: .throwsKeyword) {
+      if let throwsAfterArrow = self.consume(if: .keyword(.throws)) {
         effectModifiersAfterArrow.append(throwsAfterArrow)
         if throwsKeyword == nil {
-          throwsKeyword = missingToken(.throwsKeyword, text: nil)
+          throwsKeyword = missingToken(.keyword(.throws), text: nil)
         }
       }
       let unexpectedAfterArrow =
@@ -600,7 +600,7 @@ extension Parser {
       // Handle "x.42" - a tuple index.
       name = index
       declNameArgs = nil
-    } else if let selfKeyword = self.consume(if: .selfKeyword) {
+    } else if let selfKeyword = self.consume(if: .keyword(.self)) {
       // Handle "x.self" expr.
       name = selfKeyword
       declNameArgs = nil
@@ -1869,7 +1869,7 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseSuperExpression() -> RawSuperRefExprSyntax {
     // Parse the 'super' reference.
-    let (unexpectedBeforeSuperKeyword, superKeyword) = self.expect(.superKeyword)
+    let (unexpectedBeforeSuperKeyword, superKeyword) = self.expect(.keyword(.super))
     return RawSuperRefExprSyntax(
       unexpectedBeforeSuperKeyword,
       superKeyword: superKeyword,
@@ -2343,7 +2343,7 @@ extension Parser {
           }
           specifiers.append(self.expectWithoutRecovery(.rightParen))
         }
-      } else if self.at(.identifier) || self.at(.selfKeyword) {
+      } else if self.at(.identifier) || self.at(.keyword(.self)) {
         let next = self.peek()
         // "x = 42", "x," and "x]" are all strong captures of x.
         guard
@@ -2563,8 +2563,8 @@ extension Parser.Lookahead {
     case .leftSquareBracket,
       .leftParen,
       .period,
-      .isKeyword,
-      .asKeyword,
+      .keyword(.is),
+      .keyword(.as),
       .postfixQuestionMark,
       .infixQuestionMark,
       .exclamationMark,
@@ -2682,8 +2682,8 @@ extension Parser.Lookahead {
     }
 
     if self.peek().rawTokenKind != .identifier,
-      self.peek().rawTokenKind != .capitalSelfKeyword,
-      self.peek().rawTokenKind != .selfKeyword,
+      self.peek().rawTokenKind != .keyword(.Self),
+      self.peek().rawTokenKind != .keyword(.self),
       !self.peek().rawTokenKind.isLexerClassifiedKeyword
     {
       return false

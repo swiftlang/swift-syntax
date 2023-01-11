@@ -119,7 +119,12 @@ private func createConvenienceInitializer(node: Node) -> InitializerDecl? {
       } else {
         produceExpr = Expr(FunctionCallExpr("\(tokenExpr)(\(raw: child.swiftName))"))
       }
-      normalParameters.append(FunctionParameter("\(child.swiftName): \(paramType)", for: .functionParameters))
+      normalParameters.append(FunctionParameter(
+        firstName: .identifier(child.swiftName),
+        colon: .colon,
+        type: paramType,
+        defaultArgument: child.defaultInitialization.map { InitializerClause(value: $0) }
+      ))
     } else {
       produceExpr = convertFromSyntaxProtocolToSyntaxType(child: child)
       normalParameters.append(FunctionParameter(

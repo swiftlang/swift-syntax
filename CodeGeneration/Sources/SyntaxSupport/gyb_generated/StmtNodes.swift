@@ -192,10 +192,7 @@ public let STMT_NODES: [Node] = [
                ]),
          Child(name: "TryKeyword",
                kind: "TryToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Try"
-               ]),
+               isOptional: true),
          Child(name: "AwaitKeyword",
                kind: "IdentifierToken",
                isOptional: true,

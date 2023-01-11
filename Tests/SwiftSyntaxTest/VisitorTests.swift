@@ -66,7 +66,7 @@ public class VisitorTests: XCTestCase {
       UnexpectedNodesSyntax([Syntax(TokenSyntax.identifier("starting")), Syntax(TokenSyntax.integerLiteral("unexpected"))]),
       returnKeyword: .keyword(.return, trailingTrivia: [.spaces(1)]),
       UnexpectedNodesSyntax([Syntax(TokenSyntax.identifier("middle"))]),
-      expression: ExprSyntax(NilLiteralExprSyntax(UnexpectedNodesSyntax([Syntax(TokenSyntax.identifier("end"))]), nilKeyword: TokenSyntax.nilKeyword(trailingTrivia: [])))
+      expression: ExprSyntax(NilLiteralExprSyntax(UnexpectedNodesSyntax([Syntax(TokenSyntax.identifier("end"))]), nilKeyword: TokenSyntax.keyword(.nil, trailingTrivia: [])))
     )
 
     // This is more real-world where the user wrote null instead of nil.
@@ -75,7 +75,7 @@ public class VisitorTests: XCTestCase {
       expression: ExprSyntax(
         NilLiteralExprSyntax(
           UnexpectedNodesSyntax([Syntax(TokenSyntax.identifier("null"))]),
-          nilKeyword: .nilKeyword(presence: .missing)
+          nilKeyword: .keyword(.nil, presence: .missing)
         )
       )
     )

@@ -82,7 +82,7 @@ public struct IsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public init<T: TypeSyntaxProtocol>(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeIsKeyword: UnexpectedNodesSyntax? = nil,
-    isKeyword: TokenSyntax = .isKeyword(),
+    isKeyword: TokenSyntax = .keyword(.is),
     _ unexpectedBetweenIsKeywordAndType: UnexpectedNodesSyntax? = nil,
     type: T,
     _ unexpectedAfterType: UnexpectedNodesSyntax? = nil,

@@ -64,7 +64,7 @@ extension Parser {
   mutating func parseDeclNameRef(_ flags: DeclNameOptions = []) -> (RawTokenSyntax, RawDeclNameArgumentsSyntax?) {
     // Consume the base name.
     let ident: RawTokenSyntax
-    if self.at(.identifier) || self.at(any: [.selfKeyword, .capitalSelfKeyword, .keyword(.`init`)]) {
+    if self.at(.identifier) || self.at(any: [.keyword(.self), .keyword(.Self), .keyword(.`init`)]) {
       ident = self.expectIdentifierWithoutRecovery()
     } else if flags.contains(.operators), let (_, _) = self.at(anyIn: Operator.self) {
       ident = self.consumeAnyToken(remapping: .binaryOperator)
@@ -168,7 +168,7 @@ extension Parser {
 
   @_spi(RawSyntax)
   public mutating func parseQualifiedTypeIdentifier() -> RawTypeSyntax {
-    if self.at(.anyKeyword) {
+    if self.at(.keyword(.Any)) {
       return RawTypeSyntax(self.parseAnyType())
     }
 

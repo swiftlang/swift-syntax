@@ -168,8 +168,8 @@ open class BasicFormat: SyntaxRewriter {
       return false
     }
     switch (token.tokenKind, token.nextToken(viewMode: .sourceAccurate)?.tokenKind) {
-    case (.asKeyword, .exclamationMark), // Ensures there is not space in `as!`
-     (.asKeyword, .postfixQuestionMark), // Ensures there is not space in `as?`
+    case (.keyword(.as), .exclamationMark), // Ensures there is not space in `as!`
+     (.keyword(.as), .postfixQuestionMark), // Ensures there is not space in `as?`
      (.exclamationMark, .leftParen), // Ensures there is not space in `myOptionalClosure!()`
      (.exclamationMark, .period), // Ensures there is not space in `myOptionalBar!.foo()`
      (.keyword(.`init`), .leftParen), // Ensures there is not space in `init()`
@@ -177,26 +177,14 @@ open class BasicFormat: SyntaxRewriter {
      (.postfixQuestionMark, .leftParen), // Ensures there is not space in `init?()`
      (.postfixQuestionMark, .rightAngle), // Ensures there is not space in `ContiguousArray<RawSyntax?>`
      (.postfixQuestionMark, .rightParen), // Ensures there is not space in `myOptionalClosure?()`
-     (.tryKeyword, .exclamationMark), // Ensures there is not space in `try!`
-     (.tryKeyword, .postfixQuestionMark), // Ensures there is not space in `try?`
+     (.keyword(.try), .exclamationMark), // Ensures there is not space in `try!`
+     (.keyword(.try), .postfixQuestionMark), // Ensures there is not space in `try?`
      (.binaryOperator, .comma): // Ensures there is no space in @available(*, deprecated)
       return false
     default: 
       break 
     }
     switch token.tokenKind {
-    case .asKeyword: 
-      return true
-    case .anyKeyword: 
-      return true
-    case .isKeyword: 
-      return true
-    case .rethrowsKeyword: 
-      return true
-    case .tryKeyword: 
-      return true
-    case .throwsKeyword: 
-      return true
     case .wildcardKeyword: 
       return true
     case .comma: 
@@ -259,6 +247,10 @@ open class BasicFormat: SyntaxRewriter {
       return true
     case .binaryOperator: 
       return true
+    case .keyword(.`Any`): 
+      return true
+    case .keyword(.`as`): 
+      return true
     case .keyword(.`associatedtype`): 
       return true
     case .keyword(.async): 
@@ -303,6 +295,8 @@ open class BasicFormat: SyntaxRewriter {
       return true
     case .keyword(.`internal`): 
       return true
+    case .keyword(.`is`): 
+      return true
     case .keyword(.`let`): 
       return true
     case .keyword(.`operator`): 
@@ -330,6 +324,10 @@ open class BasicFormat: SyntaxRewriter {
     case .keyword(.`switch`): 
       return true
     case .keyword(.`throw`): 
+      return true
+    case .keyword(.`throws`): 
+      return true
+    case .keyword(.`try`): 
       return true
     case .keyword(.`typealias`): 
       return true

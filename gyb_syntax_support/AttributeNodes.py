@@ -327,7 +327,7 @@ ATTRIBUTE_NODES = [
          ''',
          traits=['WithTrailingComma'],
          children=[
-             Child('Parameter', kind='Token', token_choices=['SelfToken', 'IdentifierToken', 'IntegerLiteralToken']),
+             Child('Parameter', kind='Token', token_choices=['IdentifierToken', 'IntegerLiteralToken', 'KeywordToken']),
              Child('TrailingComma', kind='CommaToken', is_optional=True),
          ]),
 

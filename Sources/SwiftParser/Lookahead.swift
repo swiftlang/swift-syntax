@@ -169,7 +169,7 @@ extension Parser.Lookahead {
         backtrack.skipSingle()
         // If we found '->', or 'throws' after paren, it's likely a parameter
         // of function type.
-        guard backtrack.at(any: [.arrow, .throwsKeyword, .rethrowsKeyword, .keyword(.throw)]) else {
+        guard backtrack.at(any: [.arrow, .keyword(.throws), .keyword(.rethrows), .keyword(.throw)]) else {
           self.skipSingle()
           return
         }

@@ -693,6 +693,8 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
   case nilKeyword
   case period
   case pound
+  case poundAvailableKeyword  // For recovery
+  case poundUnavailableKeyword  // For recovery
   case regexLiteral
   case selfKeyword
   case stringLiteral
@@ -716,6 +718,8 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
     case RawTokenKindMatch(.nil): self = .nilKeyword
     case RawTokenKindMatch(.period): self = .period
     case RawTokenKindMatch(.pound): self = .pound
+    case RawTokenKindMatch(.poundAvailableKeyword): self = .poundAvailableKeyword
+    case RawTokenKindMatch(.poundUnavailableKeyword): self = .poundUnavailableKeyword
     case RawTokenKindMatch(.regexLiteral): self = .regexLiteral
     case RawTokenKindMatch(.self): self = .selfKeyword
     case RawTokenKindMatch(.stringLiteral): self = .stringLiteral
@@ -742,6 +746,8 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
     case .nilKeyword: return .keyword(.nil)
     case .period: return .period
     case .pound: return .pound
+    case .poundAvailableKeyword: return .poundAvailableKeyword
+    case .poundUnavailableKeyword: return .poundUnavailableKeyword
     case .regexLiteral: return .regexLiteral
     case .selfKeyword: return .keyword(.self)
     case .stringLiteral: return .stringLiteral

@@ -5,44 +5,6 @@
 public enum TokenKind: Hashable {
   case eof
   
-  case deferKeyword
-  
-  case ifKeyword
-  
-  case guardKeyword
-  
-  case doKeyword
-  
-  case repeatKeyword
-  
-  case elseKeyword
-  
-  case forKeyword
-  
-  case inKeyword
-  
-  case whileKeyword
-  
-  case returnKeyword
-  
-  case breakKeyword
-  
-  case continueKeyword
-  
-  case fallthroughKeyword
-  
-  case switchKeyword
-  
-  case caseKeyword
-  
-  case defaultKeyword
-  
-  case whereKeyword
-  
-  case catchKeyword
-  
-  case throwKeyword
-  
   case asKeyword
   
   case anyKeyword
@@ -199,44 +161,6 @@ public enum TokenKind: Hashable {
   /// given string is not a keyword, this function returns `nil`.
   public init?(keyword: String) {
     switch keyword {
-    case "defer": 
-      self = .deferKeyword
-    case "if": 
-      self = .ifKeyword
-    case "guard": 
-      self = .guardKeyword
-    case "do": 
-      self = .doKeyword
-    case "repeat": 
-      self = .repeatKeyword
-    case "else": 
-      self = .elseKeyword
-    case "for": 
-      self = .forKeyword
-    case "in": 
-      self = .inKeyword
-    case "while": 
-      self = .whileKeyword
-    case "return": 
-      self = .returnKeyword
-    case "break": 
-      self = .breakKeyword
-    case "continue": 
-      self = .continueKeyword
-    case "fallthrough": 
-      self = .fallthroughKeyword
-    case "switch": 
-      self = .switchKeyword
-    case "case": 
-      self = .caseKeyword
-    case "default": 
-      self = .defaultKeyword
-    case "where": 
-      self = .whereKeyword
-    case "catch": 
-      self = .catchKeyword
-    case "throw": 
-      self = .throwKeyword
     case "as": 
       self = .asKeyword
     case "Any": 
@@ -318,44 +242,6 @@ public enum TokenKind: Hashable {
   @_spi(Testing) 
   public var text: String {
     switch self {
-    case .deferKeyword: 
-      return #"defer"#
-    case .ifKeyword: 
-      return #"if"#
-    case .guardKeyword: 
-      return #"guard"#
-    case .doKeyword: 
-      return #"do"#
-    case .repeatKeyword: 
-      return #"repeat"#
-    case .elseKeyword: 
-      return #"else"#
-    case .forKeyword: 
-      return #"for"#
-    case .inKeyword: 
-      return #"in"#
-    case .whileKeyword: 
-      return #"while"#
-    case .returnKeyword: 
-      return #"return"#
-    case .breakKeyword: 
-      return #"break"#
-    case .continueKeyword: 
-      return #"continue"#
-    case .fallthroughKeyword: 
-      return #"fallthrough"#
-    case .switchKeyword: 
-      return #"switch"#
-    case .caseKeyword: 
-      return #"case"#
-    case .defaultKeyword: 
-      return #"default"#
-    case .whereKeyword: 
-      return #"where"#
-    case .catchKeyword: 
-      return #"catch"#
-    case .throwKeyword: 
-      return #"throw"#
     case .asKeyword: 
       return #"as"#
     case .anyKeyword: 
@@ -517,44 +403,6 @@ public enum TokenKind: Hashable {
   @_spi(RawSyntax) 
   public var defaultText: SyntaxText? {
     switch self {
-    case .deferKeyword: 
-      return #"defer"#
-    case .ifKeyword: 
-      return #"if"#
-    case .guardKeyword: 
-      return #"guard"#
-    case .doKeyword: 
-      return #"do"#
-    case .repeatKeyword: 
-      return #"repeat"#
-    case .elseKeyword: 
-      return #"else"#
-    case .forKeyword: 
-      return #"for"#
-    case .inKeyword: 
-      return #"in"#
-    case .whileKeyword: 
-      return #"while"#
-    case .returnKeyword: 
-      return #"return"#
-    case .breakKeyword: 
-      return #"break"#
-    case .continueKeyword: 
-      return #"continue"#
-    case .fallthroughKeyword: 
-      return #"fallthrough"#
-    case .switchKeyword: 
-      return #"switch"#
-    case .caseKeyword: 
-      return #"case"#
-    case .defaultKeyword: 
-      return #"default"#
-    case .whereKeyword: 
-      return #"where"#
-    case .catchKeyword: 
-      return #"catch"#
-    case .throwKeyword: 
-      return #"throw"#
     case .asKeyword: 
       return #"as"#
     case .anyKeyword: 
@@ -699,44 +547,6 @@ public enum TokenKind: Hashable {
     switch self {
     case .eof: 
       return false
-    case .deferKeyword: 
-      return true
-    case .ifKeyword: 
-      return true
-    case .guardKeyword: 
-      return true
-    case .doKeyword: 
-      return true
-    case .repeatKeyword: 
-      return true
-    case .elseKeyword: 
-      return true
-    case .forKeyword: 
-      return true
-    case .inKeyword: 
-      return true
-    case .whileKeyword: 
-      return true
-    case .returnKeyword: 
-      return true
-    case .breakKeyword: 
-      return true
-    case .continueKeyword: 
-      return true
-    case .fallthroughKeyword: 
-      return true
-    case .switchKeyword: 
-      return true
-    case .caseKeyword: 
-      return true
-    case .defaultKeyword: 
-      return true
-    case .whereKeyword: 
-      return true
-    case .catchKeyword: 
-      return true
-    case .throwKeyword: 
-      return true
     case .asKeyword: 
       return true
     case .anyKeyword: 
@@ -901,44 +711,6 @@ public enum TokenKind: Hashable {
     switch self {
     case .eof: 
       return false
-    case .deferKeyword: 
-      return false
-    case .ifKeyword: 
-      return false
-    case .guardKeyword: 
-      return false
-    case .doKeyword: 
-      return false
-    case .repeatKeyword: 
-      return false
-    case .elseKeyword: 
-      return false
-    case .forKeyword: 
-      return false
-    case .inKeyword: 
-      return false
-    case .whileKeyword: 
-      return false
-    case .returnKeyword: 
-      return false
-    case .breakKeyword: 
-      return false
-    case .continueKeyword: 
-      return false
-    case .fallthroughKeyword: 
-      return false
-    case .switchKeyword: 
-      return false
-    case .caseKeyword: 
-      return false
-    case .defaultKeyword: 
-      return false
-    case .whereKeyword: 
-      return false
-    case .catchKeyword: 
-      return false
-    case .throwKeyword: 
-      return false
     case .asKeyword: 
       return false
     case .anyKeyword: 
@@ -1099,44 +871,6 @@ extension TokenKind: Equatable {
   public static func == (lhs: TokenKind, rhs: TokenKind) -> Bool {
     switch (lhs, rhs) {
     case (.eof, .eof): 
-      return true
-    case (.deferKeyword, .deferKeyword): 
-      return true
-    case (.ifKeyword, .ifKeyword): 
-      return true
-    case (.guardKeyword, .guardKeyword): 
-      return true
-    case (.doKeyword, .doKeyword): 
-      return true
-    case (.repeatKeyword, .repeatKeyword): 
-      return true
-    case (.elseKeyword, .elseKeyword): 
-      return true
-    case (.forKeyword, .forKeyword): 
-      return true
-    case (.inKeyword, .inKeyword): 
-      return true
-    case (.whileKeyword, .whileKeyword): 
-      return true
-    case (.returnKeyword, .returnKeyword): 
-      return true
-    case (.breakKeyword, .breakKeyword): 
-      return true
-    case (.continueKeyword, .continueKeyword): 
-      return true
-    case (.fallthroughKeyword, .fallthroughKeyword): 
-      return true
-    case (.switchKeyword, .switchKeyword): 
-      return true
-    case (.caseKeyword, .caseKeyword): 
-      return true
-    case (.defaultKeyword, .defaultKeyword): 
-      return true
-    case (.whereKeyword, .whereKeyword): 
-      return true
-    case (.catchKeyword, .catchKeyword): 
-      return true
-    case (.throwKeyword, .throwKeyword): 
       return true
     case (.asKeyword, .asKeyword): 
       return true
@@ -1301,44 +1035,6 @@ extension TokenKind: Equatable {
 public enum RawTokenKind: Equatable, Hashable {
   case eof
   
-  case deferKeyword
-  
-  case ifKeyword
-  
-  case guardKeyword
-  
-  case doKeyword
-  
-  case repeatKeyword
-  
-  case elseKeyword
-  
-  case forKeyword
-  
-  case inKeyword
-  
-  case whileKeyword
-  
-  case returnKeyword
-  
-  case breakKeyword
-  
-  case continueKeyword
-  
-  case fallthroughKeyword
-  
-  case switchKeyword
-  
-  case caseKeyword
-  
-  case defaultKeyword
-  
-  case whereKeyword
-  
-  case catchKeyword
-  
-  case throwKeyword
-  
   case asKeyword
   
   case anyKeyword
@@ -1496,44 +1192,6 @@ public enum RawTokenKind: Equatable, Hashable {
     switch self {
     case .eof: 
       return ""
-    case .deferKeyword: 
-      return #"defer"#
-    case .ifKeyword: 
-      return #"if"#
-    case .guardKeyword: 
-      return #"guard"#
-    case .doKeyword: 
-      return #"do"#
-    case .repeatKeyword: 
-      return #"repeat"#
-    case .elseKeyword: 
-      return #"else"#
-    case .forKeyword: 
-      return #"for"#
-    case .inKeyword: 
-      return #"in"#
-    case .whileKeyword: 
-      return #"while"#
-    case .returnKeyword: 
-      return #"return"#
-    case .breakKeyword: 
-      return #"break"#
-    case .continueKeyword: 
-      return #"continue"#
-    case .fallthroughKeyword: 
-      return #"fallthrough"#
-    case .switchKeyword: 
-      return #"switch"#
-    case .caseKeyword: 
-      return #"case"#
-    case .defaultKeyword: 
-      return #"default"#
-    case .whereKeyword: 
-      return #"where"#
-    case .catchKeyword: 
-      return #"catch"#
-    case .throwKeyword: 
-      return #"throw"#
     case .asKeyword: 
       return #"as"#
     case .anyKeyword: 
@@ -1671,44 +1329,6 @@ public enum RawTokenKind: Equatable, Hashable {
     switch self {
     case .eof: 
       return "end of file"
-    case .deferKeyword: 
-      return #"defer"#
-    case .ifKeyword: 
-      return #"if"#
-    case .guardKeyword: 
-      return #"guard"#
-    case .doKeyword: 
-      return #"do"#
-    case .repeatKeyword: 
-      return #"repeat"#
-    case .elseKeyword: 
-      return #"else"#
-    case .forKeyword: 
-      return #"for"#
-    case .inKeyword: 
-      return #"in"#
-    case .whileKeyword: 
-      return #"while"#
-    case .returnKeyword: 
-      return #"return"#
-    case .breakKeyword: 
-      return #"break"#
-    case .continueKeyword: 
-      return #"continue"#
-    case .fallthroughKeyword: 
-      return #"fallthrough"#
-    case .switchKeyword: 
-      return #"switch"#
-    case .caseKeyword: 
-      return #"case"#
-    case .defaultKeyword: 
-      return #"default"#
-    case .whereKeyword: 
-      return #"where"#
-    case .catchKeyword: 
-      return #"catch"#
-    case .throwKeyword: 
-      return #"throw"#
     case .asKeyword: 
       return #"as"#
     case .anyKeyword: 
@@ -1853,14 +1473,14 @@ public enum RawTokenKind: Equatable, Hashable {
       return #"prefix operator"#
     case .dollarIdentifier: 
       return #"dollar identifier"#
-    case .keyword: 
-      return #"keyword"#
     case .rawStringDelimiter: 
       return #"raw string delimiter"#
     case .stringSegment: 
       return #"string segment"#
     case .yield: 
       return #"yield"#
+    case .keyword(let keyword): 
+      return String(syntaxText: keyword.defaultText)
     }
   }
   
@@ -1873,44 +1493,6 @@ public enum RawTokenKind: Equatable, Hashable {
     switch self {
     case .eof: 
       return false
-    case .deferKeyword: 
-      return true
-    case .ifKeyword: 
-      return true
-    case .guardKeyword: 
-      return true
-    case .doKeyword: 
-      return true
-    case .repeatKeyword: 
-      return true
-    case .elseKeyword: 
-      return true
-    case .forKeyword: 
-      return true
-    case .inKeyword: 
-      return true
-    case .whileKeyword: 
-      return true
-    case .returnKeyword: 
-      return true
-    case .breakKeyword: 
-      return true
-    case .continueKeyword: 
-      return true
-    case .fallthroughKeyword: 
-      return true
-    case .switchKeyword: 
-      return true
-    case .caseKeyword: 
-      return true
-    case .defaultKeyword: 
-      return true
-    case .whereKeyword: 
-      return true
-    case .catchKeyword: 
-      return true
-    case .throwKeyword: 
-      return true
     case .asKeyword: 
       return true
     case .anyKeyword: 
@@ -2074,44 +1656,6 @@ public enum RawTokenKind: Equatable, Hashable {
   public var isPunctuation: Bool {
     switch self {
     case .eof: 
-      return false
-    case .deferKeyword: 
-      return false
-    case .ifKeyword: 
-      return false
-    case .guardKeyword: 
-      return false
-    case .doKeyword: 
-      return false
-    case .repeatKeyword: 
-      return false
-    case .elseKeyword: 
-      return false
-    case .forKeyword: 
-      return false
-    case .inKeyword: 
-      return false
-    case .whileKeyword: 
-      return false
-    case .returnKeyword: 
-      return false
-    case .breakKeyword: 
-      return false
-    case .continueKeyword: 
-      return false
-    case .fallthroughKeyword: 
-      return false
-    case .switchKeyword: 
-      return false
-    case .caseKeyword: 
-      return false
-    case .defaultKeyword: 
-      return false
-    case .whereKeyword: 
-      return false
-    case .catchKeyword: 
-      return false
-    case .throwKeyword: 
       return false
     case .asKeyword: 
       return false
@@ -2280,12 +1824,6 @@ public enum RawTokenKind: Equatable, Hashable {
       }
     case 2: 
       switch text {
-      case "if": 
-        self = .ifKeyword
-      case "do": 
-        self = .doKeyword
-      case "in": 
-        self = .inKeyword
       case "as": 
         self = .asKeyword
       case "is": 
@@ -2295,8 +1833,6 @@ public enum RawTokenKind: Equatable, Hashable {
       }
     case 3: 
       switch text {
-      case "for": 
-        self = .forKeyword
       case "Any": 
         self = .anyKeyword
       case "nil": 
@@ -2310,10 +1846,6 @@ public enum RawTokenKind: Equatable, Hashable {
       }
     case 4: 
       switch text {
-      case "else": 
-        self = .elseKeyword
-      case "case": 
-        self = .caseKeyword
       case "self": 
         self = .selfKeyword
       case "Self": 
@@ -2325,20 +1857,6 @@ public enum RawTokenKind: Equatable, Hashable {
       }
     case 5: 
       switch text {
-      case "defer": 
-        self = .deferKeyword
-      case "guard": 
-        self = .guardKeyword
-      case "while": 
-        self = .whileKeyword
-      case "break": 
-        self = .breakKeyword
-      case "where": 
-        self = .whereKeyword
-      case "catch": 
-        self = .catchKeyword
-      case "throw": 
-        self = .throwKeyword
       case "false": 
         self = .falseKeyword
       case "super": 
@@ -2354,12 +1872,6 @@ public enum RawTokenKind: Equatable, Hashable {
       }
     case 6: 
       switch text {
-      case "repeat": 
-        self = .repeatKeyword
-      case "return": 
-        self = .returnKeyword
-      case "switch": 
-        self = .switchKeyword
       case "throws": 
         self = .throwsKeyword
       case "#error": 
@@ -2371,8 +1883,6 @@ public enum RawTokenKind: Equatable, Hashable {
       }
     case 7: 
       switch text {
-      case "default": 
-        self = .defaultKeyword
       case "#fileID": 
         self = .poundFileIDKeyword
       case "#column": 
@@ -2386,8 +1896,6 @@ public enum RawTokenKind: Equatable, Hashable {
       }
     case 8: 
       switch text {
-      case "continue": 
-        self = .continueKeyword
       case "rethrows": 
         self = .rethrowsKeyword
       case "#keyPath": 
@@ -2419,8 +1927,6 @@ public enum RawTokenKind: Equatable, Hashable {
       }
     case 11: 
       switch text {
-      case "fallthrough": 
-        self = .fallthroughKeyword
       case "#_hasSymbol": 
         self = .poundHasSymbolKeyword
       default: 
@@ -2464,63 +1970,6 @@ extension TokenKind {
     switch rawKind {
     case .eof: 
       return .eof
-    case .deferKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .deferKeyword
-    case .ifKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .ifKeyword
-    case .guardKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .guardKeyword
-    case .doKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .doKeyword
-    case .repeatKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .repeatKeyword
-    case .elseKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .elseKeyword
-    case .forKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .forKeyword
-    case .inKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .inKeyword
-    case .whileKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .whileKeyword
-    case .returnKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .returnKeyword
-    case .breakKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .breakKeyword
-    case .continueKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .continueKeyword
-    case .fallthroughKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .fallthroughKeyword
-    case .switchKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .switchKeyword
-    case .caseKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .caseKeyword
-    case .defaultKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .defaultKeyword
-    case .whereKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .whereKeyword
-    case .catchKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .catchKeyword
-    case .throwKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .throwKeyword
     case .asKeyword: 
       assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
       return .asKeyword
@@ -2747,44 +2196,6 @@ extension TokenKind {
     switch self {
     case .eof: 
       return (.eof, nil)
-    case .deferKeyword: 
-      return (.deferKeyword, nil)
-    case .ifKeyword: 
-      return (.ifKeyword, nil)
-    case .guardKeyword: 
-      return (.guardKeyword, nil)
-    case .doKeyword: 
-      return (.doKeyword, nil)
-    case .repeatKeyword: 
-      return (.repeatKeyword, nil)
-    case .elseKeyword: 
-      return (.elseKeyword, nil)
-    case .forKeyword: 
-      return (.forKeyword, nil)
-    case .inKeyword: 
-      return (.inKeyword, nil)
-    case .whileKeyword: 
-      return (.whileKeyword, nil)
-    case .returnKeyword: 
-      return (.returnKeyword, nil)
-    case .breakKeyword: 
-      return (.breakKeyword, nil)
-    case .continueKeyword: 
-      return (.continueKeyword, nil)
-    case .fallthroughKeyword: 
-      return (.fallthroughKeyword, nil)
-    case .switchKeyword: 
-      return (.switchKeyword, nil)
-    case .caseKeyword: 
-      return (.caseKeyword, nil)
-    case .defaultKeyword: 
-      return (.defaultKeyword, nil)
-    case .whereKeyword: 
-      return (.whereKeyword, nil)
-    case .catchKeyword: 
-      return (.catchKeyword, nil)
-    case .throwKeyword: 
-      return (.throwKeyword, nil)
     case .asKeyword: 
       return (.asKeyword, nil)
     case .anyKeyword: 

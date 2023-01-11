@@ -115,20 +115,20 @@ enum CanBeStatementStart: RawTokenKindSubset {
 
   init?(lexeme: Lexer.Lexeme) {
     switch lexeme {
-    case RawTokenKindMatch(.breakKeyword): self = .breakKeyword
-    case RawTokenKindMatch(.continueKeyword): self = .continueKeyword
-    case RawTokenKindMatch(.deferKeyword): self = .deferKeyword
-    case RawTokenKindMatch(.doKeyword): self = .doKeyword
-    case RawTokenKindMatch(.fallthroughKeyword): self = .fallthroughKeyword
-    case RawTokenKindMatch(.forKeyword): self = .forKeyword
-    case RawTokenKindMatch(.guardKeyword): self = .guardKeyword
-    case RawTokenKindMatch(.ifKeyword): self = .ifKeyword
+    case RawTokenKindMatch(.break): self = .breakKeyword
+    case RawTokenKindMatch(.continue): self = .continueKeyword
+    case RawTokenKindMatch(.defer): self = .deferKeyword
+    case RawTokenKindMatch(.do): self = .doKeyword
+    case RawTokenKindMatch(.fallthrough): self = .fallthroughKeyword
+    case RawTokenKindMatch(.for): self = .forKeyword
+    case RawTokenKindMatch(.guard): self = .guardKeyword
+    case RawTokenKindMatch(.if): self = .ifKeyword
     case RawTokenKindMatch(.poundAssertKeyword): self = .poundAssertKeyword
-    case RawTokenKindMatch(.repeatKeyword): self = .repeatKeyword
-    case RawTokenKindMatch(.returnKeyword): self = .returnKeyword
-    case RawTokenKindMatch(.switchKeyword): self = .switchKeyword
-    case RawTokenKindMatch(.throwKeyword): self = .throwKeyword
-    case RawTokenKindMatch(.whileKeyword): self = .whileKeyword
+    case RawTokenKindMatch(.repeat): self = .repeatKeyword
+    case RawTokenKindMatch(.return): self = .returnKeyword
+    case RawTokenKindMatch(.switch): self = .switchKeyword
+    case RawTokenKindMatch(.throw): self = .throwKeyword
+    case RawTokenKindMatch(.while): self = .whileKeyword
     case RawTokenKindMatch(RawTokenKind.yield): self = .yield
     case RawTokenKindMatch(Keyword.yield): self = .yieldAsIdentifier
     default: return nil
@@ -137,20 +137,20 @@ enum CanBeStatementStart: RawTokenKindSubset {
 
   var rawTokenKind: RawTokenKind {
     switch self {
-    case .breakKeyword: return .breakKeyword
-    case .continueKeyword: return .continueKeyword
-    case .deferKeyword: return .deferKeyword
-    case .doKeyword: return .doKeyword
-    case .fallthroughKeyword: return .fallthroughKeyword
-    case .forKeyword: return .forKeyword
-    case .guardKeyword: return .guardKeyword
-    case .ifKeyword: return .ifKeyword
+    case .breakKeyword: return .keyword(.break)
+    case .continueKeyword: return .keyword(.continue)
+    case .deferKeyword: return .keyword(.defer)
+    case .doKeyword: return .keyword(.do)
+    case .fallthroughKeyword: return .keyword(.fallthrough)
+    case .forKeyword: return .keyword(.for)
+    case .guardKeyword: return .keyword(.guard)
+    case .ifKeyword: return .keyword(.if)
     case .poundAssertKeyword: return .poundAssertKeyword
-    case .repeatKeyword: return .repeatKeyword
-    case .returnKeyword: return .returnKeyword
-    case .switchKeyword: return .switchKeyword
-    case .throwKeyword: return .throwKeyword
-    case .whileKeyword: return .whileKeyword
+    case .repeatKeyword: return .keyword(.repeat)
+    case .returnKeyword: return .keyword(.return)
+    case .switchKeyword: return .keyword(.switch)
+    case .throwKeyword: return .keyword(.throw)
+    case .whileKeyword: return .keyword(.while)
     case .yield: return .yield
     case .yieldAsIdentifier: return .keyword(.yield)
     }
@@ -282,7 +282,7 @@ enum DeclarationStart: RawTokenKindSubset {
     case RawTokenKindMatch(.actor): self = .actorKeyword
     case RawTokenKindMatch(.macro): self = .macroKeyword
     case RawTokenKindMatch(.associatedtype): self = .associatedtypeKeyword
-    case RawTokenKindMatch(.caseKeyword): self = .caseKeyword
+    case RawTokenKindMatch(.case): self = .caseKeyword
     case RawTokenKindMatch(.class): self = .classKeyword
     case RawTokenKindMatch(.deinit): self = .deinitKeyword
     case RawTokenKindMatch(.enum): self = .enumKeyword
@@ -306,7 +306,7 @@ enum DeclarationStart: RawTokenKindSubset {
     switch self {
     case .actorKeyword: return .keyword(.actor)
     case .associatedtypeKeyword: return .keyword(.associatedtype)
-    case .caseKeyword: return .caseKeyword
+    case .caseKeyword: return .keyword(.case)
     case .classKeyword: return .keyword(.class)
     case .deinitKeyword: return .keyword(.deinit)
     case .enumKeyword: return .keyword(.enum)
@@ -353,7 +353,7 @@ enum EffectsSpecifier: RawTokenKindSubset {
     case RawTokenKindMatch(.await) where !lexeme.isAtStartOfLine: self = .awaitKeyword
     case RawTokenKindMatch(.reasync): self = .reasyncKeyword
     case RawTokenKindMatch(.rethrowsKeyword): self = .rethrowsKeyword
-    case RawTokenKindMatch(.throwKeyword) where !lexeme.isAtStartOfLine: self = .throwKeyword
+    case RawTokenKindMatch(.throw) where !lexeme.isAtStartOfLine: self = .throwKeyword
     case RawTokenKindMatch(.throwsKeyword): self = .throwsKeyword
     case RawTokenKindMatch(.tryKeyword) where !lexeme.isAtStartOfLine: self = .tryKeyword
     default: return nil
@@ -366,7 +366,7 @@ enum EffectsSpecifier: RawTokenKindSubset {
     case .awaitKeyword: return .keyword(.await)
     case .reasyncKeyword: return .keyword(.reasync)
     case .rethrowsKeyword: return .rethrowsKeyword
-    case .throwKeyword: return .throwKeyword
+    case .throwKeyword: return .keyword(.throw)
     case .throwsKeyword: return .throwsKeyword
     case .tryKeyword: return .tryKeyword
     }
@@ -547,17 +547,17 @@ enum SwitchCaseStart: RawTokenKindSubset {
   case defaultKeyword
 
   init?(lexeme: Lexer.Lexeme) {
-    switch lexeme.rawTokenKind {
-    case .caseKeyword: self = .caseKeyword
-    case .defaultKeyword: self = .defaultKeyword
+    switch lexeme {
+    case RawTokenKindMatch(.case): self = .caseKeyword
+    case RawTokenKindMatch(.default): self = .defaultKeyword
     default: return nil
     }
   }
 
   var rawTokenKind: RawTokenKind {
     switch self {
-    case .caseKeyword: return .caseKeyword
-    case .defaultKeyword: return .defaultKeyword
+    case .caseKeyword: return .keyword(.case)
+    case .defaultKeyword: return .keyword(.default)
     }
   }
 }

@@ -97,13 +97,13 @@ public extension IfStmt {
     self = "\(raw: signature) {}"
     self.body = CodeBlock(statements: bodyBuilder())
     self.elseBody = elseBuilder().map { .codeBlock(CodeBlock(statements: $0)) }
-    self.elseKeyword = elseBody != nil ? .elseKeyword() : nil
+    self.elseKeyword = elseBody != nil ? .keyword(.else) : nil
   }
 
   init(_ signature: String, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemList, elseIf: IfStmt) {
     self = "\(raw: signature) {}"
     self.body = CodeBlock(statements: bodyBuilder())
     self.elseBody = .ifStmt(elseIf)
-    self.elseKeyword = elseBody != nil ? .elseKeyword() : nil
+    self.elseKeyword = elseBody != nil ? .keyword(.else) : nil
   }
 }

@@ -210,9 +210,12 @@ public let TYPE_NODES: [Node] = [
        kind: "Type",
        children: [
          Child(name: "RepeatKeyword",
-               kind: "RepeatToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "Repeat"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "repeat"
                ]),
          Child(name: "PatternType",
                kind: "Type")
@@ -336,12 +339,15 @@ public let TYPE_NODES: [Node] = [
                  "async"
                ]),
          Child(name: "ThrowsOrRethrowsKeyword",
-               kind: "Token",
+               kind: "KeywordToken",
                isOptional: true,
                tokenChoices: [
-                 "Throws",
-                 "Rethrows",
-                 "Throw"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "throws",
+                 "rethrows",
+                 "throw"
                ]),
          Child(name: "Arrow",
                kind: "ArrowToken",

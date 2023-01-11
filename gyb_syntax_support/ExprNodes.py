@@ -125,7 +125,7 @@ EXPR_NODES = [
     # A pack expansion expr spelled with 'repeat'.
     Node('PackExpansionExpr', name_for_diagnostics=None, kind='Expr',
          children=[
-             Child('RepeatKeyword', kind='RepeatToken'),
+             Child('RepeatKeyword', kind='KeywordToken', text_choices=['repeat']),
              Child('PatternExpr', kind='Expr'),
          ]),
 
@@ -435,7 +435,7 @@ EXPR_NODES = [
                    text_choices=['async'], is_optional=True),
              Child('ThrowsTok', kind='ThrowsToken', is_optional=True),
              Child('Output', kind='ReturnClause', is_optional=True),
-             Child('InTok', kind='InToken'),
+             Child('InTok', kind='KeywordToken', text_choices=['in']),
          ]),
 
     Node('ClosureExpr', name_for_diagnostics='closure', kind='Expr',

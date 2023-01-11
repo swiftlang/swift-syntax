@@ -40,7 +40,7 @@ extension TokenConsumer {
     }
 
     // 'repeat' is the start of a pack expansion expression.
-    if (self.at(.repeatKeyword)) {
+    if (self.at(.keyword(.repeat))) {
       // FIXME: 'repeat' followed by '{' could still be a pack
       // expansion, but we need to do more lookahead to figure out
       // whether the '{' is the start of a closure expression or a
@@ -504,7 +504,7 @@ extension Parser {
     //    tryLexRegexLiteral(/*forUnappliedOperator*/ false)
 
     // 'repeat' is the start of a pack expansion expression.
-    if (self.at(.repeatKeyword)) {
+    if (self.at(.keyword(.repeat))) {
       return RawExprSyntax(
         parsePackExpansionExpr(flavor, pattern: pattern)
       )
@@ -2238,7 +2238,7 @@ extension Parser {
       }
       // We were promised a right square bracket, so we're going to get it.
       var unexpectedNodes = [RawSyntax]()
-      while !self.at(.eof) && !self.at(.rightSquareBracket) && !self.at(.inKeyword) {
+      while !self.at(.eof) && !self.at(.rightSquareBracket) && !self.at(.keyword(.in)) {
         unexpectedNodes.append(RawSyntax(self.consumeAnyToken()))
       }
       let (unexpectedBeforeRSquare, rsquare) = self.expect(.rightSquareBracket)
@@ -2259,7 +2259,7 @@ extension Parser {
     var asyncKeyword: RawTokenSyntax? = nil
     var throwsTok: RawTokenSyntax? = nil
     var output: RawReturnClauseSyntax? = nil
-    if !self.at(.inKeyword) {
+    if !self.at(.keyword(.in)) {
       if self.at(.leftParen) {
         // Parse the closure arguments.
         input = .input(self.parseParameterClause(for: .closure))
@@ -2310,7 +2310,7 @@ extension Parser {
     }
 
     // Parse the 'in'.
-    let (unexpectedBeforeInTok, inTok) = self.expect(.inKeyword)
+    let (unexpectedBeforeInTok, inTok) = self.expect(.keyword(.in))
     return RawClosureSignatureSyntax(
       attributes: attrs,
       capture: captures,
@@ -2484,7 +2484,7 @@ extension Parser.Lookahead {
     // But 'default:' is ambiguous with switch cases and we disallow it
     // (unless escaped) even outside of switches.
     if !self.currentToken.canBeArgumentLabel()
-      || self.at(.defaultKeyword)
+      || self.at(.keyword(.default))
       || self.peek().rawTokenKind != .colon
     {
       return false
@@ -2557,7 +2557,7 @@ extension Parser.Lookahead {
 
     switch backtrack.currentToken.rawTokenKind {
     case .leftBrace,
-      .whereKeyword,
+      .keyword(.where),
       .comma:
       return true
     case .leftSquareBracket,
@@ -2661,7 +2661,7 @@ extension Parser.Lookahead {
     }
 
     // Parse the 'in' at the end.
-    guard lookahead.at(.inKeyword) else {
+    guard lookahead.at(.keyword(.in)) else {
       return false
     }
     // Okay, we have a closure signature.

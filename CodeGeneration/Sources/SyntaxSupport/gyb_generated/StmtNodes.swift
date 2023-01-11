@@ -36,9 +36,12 @@ public let STMT_NODES: [Node] = [
        kind: "Stmt",
        children: [
          Child(name: "ContinueKeyword",
-               kind: "ContinueToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "Continue"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "continue"
                ]),
          Child(name: "Label",
                kind: "IdentifierToken",
@@ -56,9 +59,12 @@ public let STMT_NODES: [Node] = [
        ],
        children: [
          Child(name: "WhileKeyword",
-               kind: "WhileToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "While"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "while"
                ]),
          Child(name: "Conditions",
                kind: "ConditionElementList",
@@ -75,9 +81,12 @@ public let STMT_NODES: [Node] = [
        ],
        children: [
          Child(name: "DeferKeyword",
-               kind: "DeferToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "Defer"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "defer"
                ]),
          Child(name: "Body",
                kind: "CodeBlock")
@@ -99,16 +108,22 @@ public let STMT_NODES: [Node] = [
        ],
        children: [
          Child(name: "RepeatKeyword",
-               kind: "RepeatToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "Repeat"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "repeat"
                ]),
          Child(name: "Body",
                kind: "CodeBlock"),
          Child(name: "WhileKeyword",
-               kind: "WhileToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "While"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "while"
                ]),
          Child(name: "Condition",
                kind: "Expr")
@@ -122,17 +137,23 @@ public let STMT_NODES: [Node] = [
        ],
        children: [
          Child(name: "GuardKeyword",
-               kind: "GuardToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "Guard"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "guard"
                ]),
          Child(name: "Conditions",
                kind: "ConditionElementList",
                collectionElementName: "Condition"),
          Child(name: "ElseKeyword",
-               kind: "ElseToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "Else"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "else"
                ]),
          Child(name: "Body",
                kind: "CodeBlock")
@@ -143,9 +164,12 @@ public let STMT_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "WhereKeyword",
-               kind: "WhereToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "Where"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "where"
                ]),
          Child(name: "GuardResult",
                kind: "Expr")
@@ -159,9 +183,12 @@ public let STMT_NODES: [Node] = [
        ],
        children: [
          Child(name: "ForKeyword",
-               kind: "ForToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "For"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "for"
                ]),
          Child(name: "TryKeyword",
                kind: "TryToken",
@@ -181,19 +208,19 @@ public let STMT_NODES: [Node] = [
                classification: "Keyword"),
          Child(name: "CaseKeyword",
                kind: "CaseToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Case"
-               ]),
+               isOptional: true),
          Child(name: "Pattern",
                kind: "Pattern"),
          Child(name: "TypeAnnotation",
                kind: "TypeAnnotation",
                isOptional: true),
          Child(name: "InKeyword",
-               kind: "InToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "In"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "in"
                ]),
          Child(name: "SequenceExpr",
                kind: "Expr"),
@@ -212,9 +239,12 @@ public let STMT_NODES: [Node] = [
        ],
        children: [
          Child(name: "SwitchKeyword",
-               kind: "SwitchToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "Switch"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "switch"
                ]),
          Child(name: "Expression",
                kind: "Expr"),
@@ -247,9 +277,12 @@ public let STMT_NODES: [Node] = [
        ],
        children: [
          Child(name: "DoKeyword",
-               kind: "DoToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "Do"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "do"
                ]),
          Child(name: "Body",
                kind: "CodeBlock"),
@@ -264,9 +297,12 @@ public let STMT_NODES: [Node] = [
        kind: "Stmt",
        children: [
          Child(name: "ReturnKeyword",
-               kind: "ReturnToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "Return"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "return"
                ]),
          Child(name: "Expression",
                kind: "Expr",
@@ -316,9 +352,12 @@ public let STMT_NODES: [Node] = [
        kind: "Stmt",
        children: [
          Child(name: "FallthroughKeyword",
-               kind: "FallthroughToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "Fallthrough"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "fallthrough"
                ])
        ]),
 
@@ -327,9 +366,12 @@ public let STMT_NODES: [Node] = [
        kind: "Stmt",
        children: [
          Child(name: "BreakKeyword",
-               kind: "BreakToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "Break"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "break"
                ]),
          Child(name: "Label",
                kind: "IdentifierToken",
@@ -409,9 +451,12 @@ public let STMT_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "CaseKeyword",
-               kind: "CaseToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "Case"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "case"
                ]),
          Child(name: "Pattern",
                kind: "Pattern"),
@@ -499,9 +544,12 @@ public let STMT_NODES: [Node] = [
        kind: "Stmt",
        children: [
          Child(name: "ThrowKeyword",
-               kind: "ThrowToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "Throw"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "throw"
                ]),
          Child(name: "Expression",
                kind: "Expr")
@@ -515,9 +563,12 @@ public let STMT_NODES: [Node] = [
        ],
        children: [
          Child(name: "IfKeyword",
-               kind: "IfToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "If"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "if"
                ]),
          Child(name: "Conditions",
                kind: "ConditionElementList",
@@ -526,10 +577,7 @@ public let STMT_NODES: [Node] = [
                kind: "CodeBlock"),
          Child(name: "ElseKeyword",
                kind: "ElseToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Else"
-               ]),
+               isOptional: true),
          Child(name: "ElseBody",
                kind: "Syntax",
                isOptional: true,
@@ -571,9 +619,12 @@ public let STMT_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "DefaultKeyword",
-               kind: "DefaultToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "Default"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "default"
                ]),
          Child(name: "Colon",
                kind: "ColonToken",
@@ -628,9 +679,12 @@ public let STMT_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "CaseKeyword",
-               kind: "CaseToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "Case"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "case"
                ]),
          Child(name: "CaseItems",
                kind: "CaseItemList",
@@ -651,9 +705,12 @@ public let STMT_NODES: [Node] = [
        parserFunction: "parseCatchClause",
        children: [
          Child(name: "CatchKeyword",
-               kind: "CatchToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "Catch"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "catch"
                ]),
          Child(name: "CatchItems",
                kind: "CatchItemList",

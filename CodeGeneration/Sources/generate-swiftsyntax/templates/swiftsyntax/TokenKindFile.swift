@@ -256,10 +256,13 @@ let tokenKindFile = SourceFileSyntax {
           ReturnStmtSyntax(#"return "end of file""#)
         }
 
-        for token in SYNTAX_TOKENS {
+        for token in SYNTAX_TOKENS where token.swiftKind != "keyword" {
           SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
             ReturnStmtSyntax("return #\"\(raw: token.nameForDiagnostics)\"#")
           }
+        }
+        SwitchCaseSyntax("case .keyword(let keyword):") {
+          ReturnStmtSyntax("return String(syntaxText: keyword.defaultText)")
         }
       }
     }

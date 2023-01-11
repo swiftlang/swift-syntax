@@ -139,6 +139,11 @@ let basicFormatFile = SourceFile {
             }
           }
         }
+        for keyword in KEYWORDS where keyword.requiresLeadingSpace {
+          SwitchCase("case .keyword(.\(raw: keyword.escapedName)):") {
+            ReturnStmt("return true")
+          }
+        }
         SwitchCase("default:") {
           ReturnStmt("return false")
         }
@@ -181,13 +186,10 @@ let basicFormatFile = SourceFile {
             }
           }
         }
-        for keyword in KEYWORDS where keyword.isLexerClassified {
+        for keyword in KEYWORDS where keyword.requiresTrailingSpace {
           SwitchCase("case .keyword(.\(raw: keyword.escapedName)):") {
             ReturnStmt("return true")
           }
-        }
-        SwitchCase("case .keyword(.async):") {
-          ReturnStmt("return true")
         }
         SwitchCase("default:") {
           ReturnStmt("return false")

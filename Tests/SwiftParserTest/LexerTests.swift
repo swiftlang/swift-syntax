@@ -508,7 +508,7 @@ public class LexerTests: XCTestCase {
         LexemeSpec(.colon, text: ":", trailing: " "),
         LexemeSpec(.identifier, text: "Int", trailing: " "),
         LexemeSpec(.leftBrace, text: "{"),
-        LexemeSpec(.returnKeyword, leading: "\n  ", text: "return", trailing: " ", flags: [.isAtStartOfLine]),
+        LexemeSpec(.keyword(.return), leading: "\n  ", text: "return", trailing: " ", flags: [.isAtStartOfLine]),
         LexemeSpec(.integerLiteral, text: "0", trailing: " "),
         LexemeSpec(.binaryOperator, text: "/"),
         LexemeSpec(.identifier, leading: "\n         ", text: "x", flags: [.isAtStartOfLine]),

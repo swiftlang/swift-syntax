@@ -22,7 +22,7 @@ final class StatementTests: XCTestCase {
       """,
       substructure: Syntax(
         IfStmtSyntax(
-          ifKeyword: .ifKeyword(),
+          ifKeyword: .keyword(.if),
           conditions: ConditionElementListSyntax([
             ConditionElementSyntax(
               condition: .init(
@@ -48,7 +48,7 @@ final class StatementTests: XCTestCase {
       """,
       substructure: Syntax(
         IfStmtSyntax(
-          ifKeyword: .ifKeyword(),
+          ifKeyword: .keyword(.if),
           conditions: ConditionElementListSyntax([
             ConditionElementSyntax(
               condition: .init(
@@ -144,7 +144,7 @@ final class StatementTests: XCTestCase {
       { ExprSyntax.parse(from: &$0) },
       substructure: Syntax(
         ReturnStmtSyntax(
-          returnKeyword: .returnKeyword(),
+          returnKeyword: .keyword(.return),
           expression: IntegerLiteralExprSyntax(digits: .integerLiteral("0"))
         )
       ),

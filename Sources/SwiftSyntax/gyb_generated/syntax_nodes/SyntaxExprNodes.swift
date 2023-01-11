@@ -1805,7 +1805,7 @@ public struct PackExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public init<P: ExprSyntaxProtocol>(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeRepeatKeyword: UnexpectedNodesSyntax? = nil,
-    repeatKeyword: TokenSyntax = .repeatKeyword(),
+    repeatKeyword: TokenSyntax = .keyword(.repeat),
     _ unexpectedBetweenRepeatKeywordAndPatternExpr: UnexpectedNodesSyntax? = nil,
     patternExpr: P,
     _ unexpectedAfterPatternExpr: UnexpectedNodesSyntax? = nil,

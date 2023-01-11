@@ -184,28 +184,6 @@ class Misc(Token):
 
 
 SYNTAX_TOKENS = [
-    # Statement keywords
-    StmtKeyword('Defer', 'defer'),
-    StmtKeyword('If', 'if'),
-    StmtKeyword('Guard', 'guard'),
-    StmtKeyword('Do', 'do', requires_trailing_space=False),
-    StmtKeyword('Repeat', 'repeat'),
-    StmtKeyword('Else', 'else'),
-    StmtKeyword('For', 'for'),
-    StmtKeyword('In', 'in', requires_leading_space=True),
-    StmtKeyword('While', 'while'),
-    StmtKeyword('Return', 'return'),
-    StmtKeyword('Break', 'break'),
-    StmtKeyword('Continue', 'continue'),
-    StmtKeyword('Fallthrough', 'fallthrough'),
-    StmtKeyword('Switch', 'switch'),
-    StmtKeyword('Case', 'case'),
-    StmtKeyword('Default', 'default', requires_trailing_space=False),
-    StmtKeyword('Where', 'where', requires_leading_space=True),
-    StmtKeyword('Catch', 'catch', requires_leading_space=True,
-                requires_trailing_space=False),
-    StmtKeyword('Throw', 'throw'),
-
     # Expression keywords
     ExprKeyword('As', 'as'),
     ExprKeyword('Any', 'Any'),

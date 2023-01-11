@@ -8300,7 +8300,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
     modifiers: ModifierListSyntax? = nil,
     _ unexpectedBetweenModifiersAndCaseKeyword: UnexpectedNodesSyntax? = nil,
-    caseKeyword: TokenSyntax = .caseKeyword(),
+    caseKeyword: TokenSyntax = .keyword(.case),
     _ unexpectedBetweenCaseKeywordAndElements: UnexpectedNodesSyntax? = nil,
     elements: EnumCaseElementListSyntax,
     _ unexpectedAfterElements: UnexpectedNodesSyntax? = nil,

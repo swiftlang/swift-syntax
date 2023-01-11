@@ -667,7 +667,7 @@ DECL_NODES = [
                    description='''
                    The declaration modifiers applied to the case declaration.
                    '''),
-             Child('CaseKeyword', kind='CaseToken',
+             Child('CaseKeyword', kind='KeywordToken', text_choices=['case'],
                    description='The `case` keyword for this case.'),
              Child('Elements', kind='EnumCaseElementList',
                    collection_element_name='Element', name_for_diagnostics='elements',

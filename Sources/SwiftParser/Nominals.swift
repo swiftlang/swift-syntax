@@ -188,7 +188,7 @@ extension Parser {
 
     // Parse a 'where' clause if present.
     let whereClause: RawGenericWhereClauseSyntax?
-    if self.at(.whereKeyword) {
+    if self.at(.keyword(.where)) {
       whereClause = self.parseGenericWhereClause()
     } else {
       whereClause = nil

@@ -1263,10 +1263,13 @@ public let DECL_NODES: [Node] = [
                isOptional: true,
                collectionElementName: "Modifier"),
          Child(name: "CaseKeyword",
-               kind: "CaseToken",
+               kind: "KeywordToken",
                description: "The `case` keyword for this case.",
                tokenChoices: [
-                 "Case"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "case"
                ]),
          Child(name: "Elements",
                kind: "EnumCaseElementList",

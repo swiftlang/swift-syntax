@@ -138,7 +138,7 @@ extension Parser.Lookahead {
 extension Parser.Lookahead {
   mutating func skipTypeAttribute() {
     // These are keywords that we accept as attribute names.
-    guard self.at(.identifier) || self.at(any: [.inKeyword, .keyword(.inout)]) else {
+    guard self.at(.identifier) || self.at(any: [.keyword(.in), .keyword(.inout)]) else {
       return
     }
 
@@ -169,7 +169,7 @@ extension Parser.Lookahead {
         backtrack.skipSingle()
         // If we found '->', or 'throws' after paren, it's likely a parameter
         // of function type.
-        guard backtrack.at(any: [.arrow, .throwsKeyword, .rethrowsKeyword, .throwKeyword]) else {
+        guard backtrack.at(any: [.arrow, .throwsKeyword, .rethrowsKeyword, .keyword(.throw)]) else {
           self.skipSingle()
           return
         }

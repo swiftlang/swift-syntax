@@ -223,9 +223,12 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "RepeatKeyword",
-               kind: "RepeatToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "Repeat"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "repeat"
                ]),
          Child(name: "PatternExpr",
                kind: "Expr")
@@ -762,9 +765,12 @@ public let EXPR_NODES: [Node] = [
                kind: "ReturnClause",
                isOptional: true),
          Child(name: "InTok",
-               kind: "InToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "In"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "in"
                ])
        ]),
 

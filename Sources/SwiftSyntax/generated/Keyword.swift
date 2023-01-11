@@ -219,11 +219,23 @@ public enum Keyword: StaticString {
   
   case await
   
+  case `break`
+  
+  case `case`
+  
+  case `catch`
+  
   case `class`
+  
+  case `continue`
   
   case convenience
   
   case convention
+  
+  case `default`
+  
+  case `defer`
   
   case `deinit`
   
@@ -239,6 +251,8 @@ public enum Keyword: StaticString {
   
   case distributed
   
+  case `do`
+  
   case dynamic
   
   case dynamicCallable
@@ -246,6 +260,8 @@ public enum Keyword: StaticString {
   case dynamicMemberLookup
   
   case each
+  
+  case `else`
   
   case `enum`
   
@@ -257,9 +273,13 @@ public enum Keyword: StaticString {
   
   case `extension`
   
+  case `fallthrough`
+  
   case `fileprivate`
   
   case final
+  
+  case `for`
   
   case frozen
   
@@ -270,6 +290,8 @@ public enum Keyword: StaticString {
   case GKInspectable
   
   case globalActor
+  
+  case `guard`
   
   case higherThan
   
@@ -283,7 +305,11 @@ public enum Keyword: StaticString {
   
   case IBSegueAction
   
+  case `if`
+  
   case `import`
+  
+  case `in`
   
   case indirect
   
@@ -383,6 +409,8 @@ public enum Keyword: StaticString {
   
   case renamed
   
+  case `repeat`
+  
   case required
   
   case requires_stored_property_inits
@@ -390,6 +418,8 @@ public enum Keyword: StaticString {
   case resultBuilder
   
   case `rethrows`
+  
+  case `return`
   
   case reverse
   
@@ -415,9 +445,13 @@ public enum Keyword: StaticString {
   
   case swift
   
+  case `switch`
+  
   case target
   
   case testable
+  
+  case `throw`
   
   case transpose
   
@@ -453,6 +487,10 @@ public enum Keyword: StaticString {
   
   case weak
   
+  case `where`
+  
+  case `while`
+  
   case willSet
   
   case witness_method
@@ -465,6 +503,12 @@ public enum Keyword: StaticString {
     switch text.count {
     case 2: 
       switch text {
+      case "do": 
+        self = .`do`
+      case "if": 
+        self = .`if`
+      case "in": 
+        self = .`in`
       case "of": 
         self = .of
       default: 
@@ -474,6 +518,8 @@ public enum Keyword: StaticString {
       switch text {
       case "any": 
         self = .any
+      case "for": 
+        self = .`for`
       case "get": 
         self = .get
       case "let": 
@@ -493,8 +539,12 @@ public enum Keyword: StaticString {
       switch text {
       case "_spi": 
         self = ._spi
+      case "case": 
+        self = .`case`
       case "each": 
         self = .each
+      case "else": 
+        self = .`else`
       case "enum": 
         self = .`enum`
       case "func": 
@@ -534,10 +584,18 @@ public enum Keyword: StaticString {
         self = .async
       case "await": 
         self = .await
+      case "break": 
+        self = .`break`
+      case "catch": 
+        self = .`catch`
       case "class": 
         self = .`class`
+      case "defer": 
+        self = .`defer`
       case "final": 
         self = .final
+      case "guard": 
+        self = .`guard`
       case "infix": 
         self = .infix
       case "inout": 
@@ -546,6 +604,12 @@ public enum Keyword: StaticString {
         self = .macro
       case "swift": 
         self = .swift
+      case "throw": 
+        self = .`throw`
+      case "where": 
+        self = .`where`
+      case "while": 
+        self = .`while`
       case "yield": 
         self = .yield
       default: 
@@ -575,10 +639,16 @@ public enum Keyword: StaticString {
         self = .prefix
       case "public": 
         self = .`public`
+      case "repeat": 
+        self = .`repeat`
+      case "return": 
+        self = .`return`
       case "static": 
         self = .`static`
       case "struct": 
         self = .`struct`
+      case "switch": 
+        self = .`switch`
       case "target": 
         self = .target
       case "unsafe": 
@@ -604,6 +674,8 @@ public enum Keyword: StaticString {
         self = ._marker
       case "_modify": 
         self = ._modify
+      case "default": 
+        self = .`default`
       case "dynamic": 
         self = .dynamic
       case "message": 
@@ -647,6 +719,8 @@ public enum Keyword: StaticString {
         self = ._spiOnly
       case "_Trivial": 
         self = ._Trivial
+      case "continue": 
+        self = .`continue`
       case "escaping": 
         self = .escaping
       case "exported": 
@@ -772,6 +846,8 @@ public enum Keyword: StaticString {
         self = .distributed
       case "exclusivity": 
         self = .exclusivity
+      case "fallthrough": 
+        self = .`fallthrough`
       case "fileprivate": 
         self = .`fileprivate`
       case "globalActor": 
@@ -1060,19 +1136,45 @@ public enum Keyword: StaticString {
     switch self {
     case .`associatedtype`: 
       return true
+    case .`break`: 
+      return true
+    case .`case`: 
+      return true
+    case .`catch`: 
+      return true
     case .`class`: 
       return true
+    case .`continue`: 
+      return true
+    case .`default`: 
+      return true
+    case .`defer`: 
+      return true
     case .`deinit`: 
+      return true
+    case .`do`: 
+      return true
+    case .`else`: 
       return true
     case .`enum`: 
       return true
     case .`extension`: 
       return true
+    case .`fallthrough`: 
+      return true
     case .`fileprivate`: 
+      return true
+    case .`for`: 
       return true
     case .`func`: 
       return true
+    case .`guard`: 
+      return true
+    case .`if`: 
+      return true
     case .`import`: 
+      return true
+    case .`in`: 
       return true
     case .`init`: 
       return true
@@ -1092,7 +1194,11 @@ public enum Keyword: StaticString {
       return true
     case .`public`: 
       return true
+    case .`repeat`: 
+      return true
     case .`rethrows`: 
+      return true
+    case .`return`: 
       return true
     case .`static`: 
       return true
@@ -1100,9 +1206,17 @@ public enum Keyword: StaticString {
       return true
     case .`subscript`: 
       return true
+    case .`switch`: 
+      return true
+    case .`throw`: 
+      return true
     case .`typealias`: 
       return true
     case .`var`: 
+      return true
+    case .`where`: 
+      return true
+    case .`while`: 
       return true
     default: 
       return false

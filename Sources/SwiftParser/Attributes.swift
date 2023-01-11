@@ -276,7 +276,7 @@ extension Parser {
     }
 
     let whereClause: RawGenericWhereClauseSyntax?
-    if self.at(.whereKeyword) {
+    if self.at(.keyword(.where)) {
       whereClause = self.parseGenericWhereClause()
     } else {
       whereClause = nil
@@ -614,7 +614,7 @@ extension Parser {
     var elements = [RawSpecializeAttributeSpecListSyntax.Element]()
     // Parse optional "exported" and "kind" labeled parameters.
     var loopProgress = LoopProgressCondition()
-    while !self.at(any: [.eof, .rightParen, .whereKeyword]) && loopProgress.evaluate(currentToken) {
+    while !self.at(any: [.eof, .rightParen, .keyword(.where)]) && loopProgress.evaluate(currentToken) {
       switch self.at(anyIn: SpecializeParameter.self) {
       case (.target, let handle)?:
         let ident = self.eat(handle)
@@ -749,7 +749,7 @@ extension Parser {
     }
 
     // Parse the where clause.
-    if self.at(.whereKeyword) {
+    if self.at(.keyword(.where)) {
       let whereClause = self.parseGenericWhereClause()
       elements.append(.genericWhereClause(whereClause))
     }
@@ -796,7 +796,7 @@ extension Parser {
     let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
     let (unexpectedBeforeDynamicReplacementToken, dynamicReplacementToken) = self.expect(.keyword(._dynamicReplacement))
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-    let (unexpectedBeforeLabel, label) = self.expect(.forKeyword, remapping: .identifier)
+    let (unexpectedBeforeLabel, label) = self.expect(.keyword(.for), remapping: .identifier)
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
     let base: RawTokenSyntax
     let args: RawDeclNameArgumentsSyntax?
@@ -1006,7 +1006,7 @@ extension Parser.Lookahead {
     // what follows the attribute.
     switch lookahead.currentToken.rawTokenKind {
     case .arrow,
-      .throwKeyword,
+      .keyword(.throw),
       .throwsKeyword,
       .rethrowsKeyword,
       .rightParen,

@@ -353,7 +353,7 @@ extension Parser {
     }
 
     let whereClause: RawGenericWhereClauseSyntax?
-    if self.at(.whereKeyword) {
+    if self.at(.keyword(.where)) {
       whereClause = self.parseGenericWhereClause()
     } else {
       whereClause = nil
@@ -463,7 +463,7 @@ extension Parser {
     }
 
     let whereClause: RawGenericWhereClauseSyntax?
-    if self.at(.whereKeyword) {
+    if self.at(.keyword(.where)) {
       whereClause = self.parseGenericWhereClause()
     } else {
       whereClause = nil
@@ -543,7 +543,7 @@ extension Parser {
 
   @_spi(RawSyntax)
   public mutating func parseGenericWhereClause() -> RawGenericWhereClauseSyntax {
-    let (unexpectedBeforeWhereKeyword, whereKeyword) = self.expect(.whereKeyword)
+    let (unexpectedBeforeWhereKeyword, whereKeyword) = self.expect(.keyword(.where))
 
     var elements = [RawGenericRequirementSyntax]()
     do {
@@ -918,7 +918,7 @@ extension Parser {
 
     // Parse a 'where' clause if present.
     let whereClause: RawGenericWhereClauseSyntax?
-    if self.at(.whereKeyword) {
+    if self.at(.keyword(.where)) {
       whereClause = self.parseGenericWhereClause()
     } else {
       whereClause = nil
@@ -981,7 +981,7 @@ extension Parser {
     let signature = self.parseFunctionSignature()
 
     let whereClause: RawGenericWhereClauseSyntax?
-    if self.at(.whereKeyword) {
+    if self.at(.keyword(.where)) {
       whereClause = self.parseGenericWhereClause()
     } else {
       whereClause = nil
@@ -1282,7 +1282,7 @@ extension Parser {
     let signature = self.parseFunctionSignature()
 
     let generics: RawGenericWhereClauseSyntax?
-    if self.at(.whereKeyword) {
+    if self.at(.keyword(.where)) {
       generics = self.parseGenericWhereClause()
     } else {
       generics = nil
@@ -1378,7 +1378,7 @@ extension Parser {
 
     // Parse a 'where' clause if present.
     let genericWhereClause: RawGenericWhereClauseSyntax?
-    if self.at(.whereKeyword) {
+    if self.at(.keyword(.where)) {
       genericWhereClause = self.parseGenericWhereClause()
     } else {
       genericWhereClause = nil
@@ -1596,7 +1596,7 @@ extension Parser {
     }
 
     // diagnose 'throw'/'try'.
-    if let throwTry = self.consume(ifAny: [.throwKeyword, .tryKeyword], where: { !$0.isAtStartOfLine }) {
+    if let throwTry = self.consume(ifAny: [.keyword(.throw), .tryKeyword], where: { !$0.isAtStartOfLine }) {
       return throwTry
     }
 
@@ -1809,7 +1809,7 @@ extension Parser {
 
     // Parse a 'where' clause if present.
     let genericWhereClause: RawGenericWhereClauseSyntax?
-    if self.at(.whereKeyword) {
+    if self.at(.keyword(.where)) {
       genericWhereClause = self.parseGenericWhereClause()
     } else {
       genericWhereClause = nil
@@ -2226,7 +2226,7 @@ extension Parser {
 
     // Parse a 'where' clause if present.
     let whereClause: RawGenericWhereClauseSyntax?
-    if self.at(.whereKeyword) {
+    if self.at(.keyword(.where)) {
       whereClause = self.parseGenericWhereClause()
     } else {
       whereClause = nil

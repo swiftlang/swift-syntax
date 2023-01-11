@@ -23,7 +23,7 @@ final class VariadicGenericsTests: XCTestCase {
       """,
       substructure: Syntax(
         PackExpansionExprSyntax(
-          repeatKeyword: .repeatKeyword(),
+          repeatKeyword: .keyword(.repeat),
           patternExpr: PackElementExprSyntax(
             eachKeyword: .keyword(.each),
             packRefExpr: IdentifierExprSyntax(
@@ -164,7 +164,7 @@ final class VariadicGenericsTests: XCTestCase {
       """,
       substructure: Syntax(
         PackExpansionExprSyntax(
-          repeatKeyword: .repeatKeyword(),
+          repeatKeyword: .keyword(.repeat),
           patternExpr: FunctionCallExprSyntax(
             callee: MemberAccessExprSyntax(
               base: ExprSyntax(
@@ -197,7 +197,7 @@ final class VariadicGenericsTests: XCTestCase {
       """,
       substructure: Syntax(
         PackExpansionExprSyntax(
-          repeatKeyword: .repeatKeyword(),
+          repeatKeyword: .keyword(.repeat),
           patternExpr: PackElementExprSyntax(
             eachKeyword: .keyword(.each),
             packRefExpr: MemberAccessExprSyntax(
@@ -222,7 +222,7 @@ final class VariadicGenericsTests: XCTestCase {
       """,
       substructure: Syntax(
         PackExpansionExprSyntax(
-          repeatKeyword: .repeatKeyword(),
+          repeatKeyword: .keyword(.repeat),
           patternExpr: SequenceExprSyntax(
             elements: .init([
               ExprSyntax(

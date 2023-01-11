@@ -2248,7 +2248,7 @@ public struct PackExpansionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public init<P: TypeSyntaxProtocol>(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeRepeatKeyword: UnexpectedNodesSyntax? = nil,
-    repeatKeyword: TokenSyntax = .repeatKeyword(),
+    repeatKeyword: TokenSyntax = .keyword(.repeat),
     _ unexpectedBetweenRepeatKeywordAndPatternType: UnexpectedNodesSyntax? = nil,
     patternType: P,
     _ unexpectedAfterPatternType: UnexpectedNodesSyntax? = nil,

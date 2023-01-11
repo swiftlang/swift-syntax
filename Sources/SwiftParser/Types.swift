@@ -26,7 +26,7 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseType(misplacedSpecifiers: [RawTokenSyntax] = []) -> RawTypeSyntax {
     // Parse pack expansion 'repeat T'.
-    if let repeatKeyword = self.consume(if: .repeatKeyword) {
+    if let repeatKeyword = self.consume(if: .keyword(.repeat)) {
       let type = self.parseTypeScalar(misplacedSpecifiers: misplacedSpecifiers)
       return RawTypeSyntax(
         RawPackExpansionTypeSyntax(
@@ -677,7 +677,7 @@ extension Parser.Lookahead {
 
   mutating func canParseTypeScalar() -> Bool {
     // 'repeat' starts a pack expansion type
-    self.consume(if: .repeatKeyword)
+    self.consume(if: .keyword(.repeat))
 
     self.skipTypeAttributeList()
 
@@ -751,7 +751,7 @@ extension Parser.Lookahead {
       }
     case .wildcardKeyword:
       self.consumeAnyToken()
-    case .repeatKeyword:
+    case .keyword(.repeat):
       return true
     default:
       return false

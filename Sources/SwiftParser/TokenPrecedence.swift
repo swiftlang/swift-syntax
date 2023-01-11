@@ -128,9 +128,9 @@ public enum TokenPrecedence: Comparable {
       // Consider 'any' and 'inout' like a prefix operator to a type and a type is expression-like.
       .anyKeyword, .keyword(.inout),
       // 'where' can only occur in the signature of declarations. Consider the signature expression-like.
-      .whereKeyword,
+      .keyword(.where),
       // 'in' occurs in closure input/output definitions and for loops. Consider both constructs expression-like.
-      .inKeyword:
+      .keyword(.in):
       self = .exprKeyword
 
     // MARK: Weak bracketet
@@ -155,11 +155,11 @@ public enum TokenPrecedence: Comparable {
 
     // MARK: Statement keyword punctuator
     case  // Control-flow constructs
-    .deferKeyword, .doKeyword, .forKeyword, .guardKeyword, .ifKeyword, .repeatKeyword, .switchKeyword, .whileKeyword,
+    .keyword(.defer), .keyword(.do), .keyword(.for), .keyword(.guard), .keyword(.if), .keyword(.repeat), .keyword(.switch), .keyword(.while),
       // Secondary parts of control-flow constructs
-      .caseKeyword, .catchKeyword, .defaultKeyword, .elseKeyword,
+      .keyword(.case), .keyword(.catch), .keyword(.default), .keyword(.else),
       // Return-like statements
-      .breakKeyword, .continueKeyword, .fallthroughKeyword, .returnKeyword, .throwKeyword, .yield,
+      .keyword(.break), .keyword(.continue), .keyword(.fallthrough), .keyword(.return), .keyword(.throw), .yield,
       // #error, #warning and #assert are statement-like
       .poundErrorKeyword, .poundWarningKeyword, .poundAssertKeyword:
       self = .stmtKeyword

@@ -115,7 +115,7 @@ TYPE_NODES = [
     # pack-expansion-type -> type '...'
     Node('PackExpansionType', name_for_diagnostics='variadic expansion', kind='Type',
          children=[
-             Child('RepeatKeyword', kind='RepeatToken'),
+             Child('RepeatKeyword', kind='KeywordToken', text_choices=['repeat']),
              Child('PatternType', kind='Type')
          ]),
 
@@ -182,12 +182,12 @@ TYPE_NODES = [
              Child('RightParen', kind='RightParenToken'),
              Child('AsyncKeyword', kind='KeyworkToken',
                    text_choices=['async'], is_optional=True),
-             Child('ThrowsOrRethrowsKeyword', kind='Token',
+             Child('ThrowsOrRethrowsKeyword', kind='KeywordToken',
                    is_optional=True,
-                   token_choices=[
-                       'ThrowsToken',
-                       'RethrowsToken',
-                       'ThrowToken',
+                   text_choices=[
+                       'throws',
+                       'rethrows',
+                       'throw',
                    ]),
              Child('Arrow', kind='ArrowToken'),
              Child('ReturnType', kind='Type'),

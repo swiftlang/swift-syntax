@@ -44,7 +44,7 @@ extension CatchClause {
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
-      catchKeyword: .catchKeyword(trailingTrivia: catchItems.isEmpty ? [] : .space),
+      catchKeyword: .keyword(.catch, trailingTrivia: catchItems.isEmpty ? [] : .space),
       catchItems: catchItems,
       body: CodeBlockSyntax(statements: bodyBuilder())
     )
@@ -203,7 +203,7 @@ extension IfStmt {
       leadingTrivia: leadingTrivia,
       conditions: conditions,
       body: CodeBlockSyntax(statements: body()),
-      elseKeyword: generatedElseBody == nil ? nil : .elseKeyword(leadingTrivia: .space),
+      elseKeyword: generatedElseBody == nil ? nil : .keyword(.else, leadingTrivia: .space),
       elseBody: generatedElseBody.map { .codeBlock(CodeBlock(statements: $0)) }
     )
   }

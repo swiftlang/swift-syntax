@@ -98,7 +98,7 @@ class PresentMaker: SyntaxRewriter {
   override func visit(_ node: MissingStmtSyntax) -> StmtSyntax {
     return StmtSyntax(
       DoStmtSyntax(
-        doKeyword: .doKeyword(presence: .missing),
+        doKeyword: .keyword(.do, presence: .missing),
         UnexpectedNodesSyntax([Syntax(TokenSyntax.identifier("<#statement#>"))]),
         body: CodeBlockSyntax(
           leftBrace: .leftBraceToken(presence: .missing),

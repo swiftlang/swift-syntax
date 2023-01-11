@@ -3066,7 +3066,7 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeYieldKeyword: UnexpectedNodesSyntax? = nil,
-    yieldKeyword: TokenSyntax = .yieldToken(),
+    yieldKeyword: TokenSyntax = .keyword(.yield),
     _ unexpectedBetweenYieldKeywordAndYields: UnexpectedNodesSyntax? = nil,
     yields: Yields,
     _ unexpectedAfterYields: UnexpectedNodesSyntax? = nil,

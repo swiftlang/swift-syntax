@@ -6200,7 +6200,7 @@ public enum SyntaxFactory {
       let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .yieldStmt,
         from: [
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.yield, arena: arena),
+        RawSyntax.makeMissingToken(kind: TokenKind.keyword(.yield), arena: arena),
         nil,
         RawSyntax.makeEmptyLayout(kind: SyntaxKind.missing, arena: arena),
         nil,
@@ -9074,15 +9074,6 @@ public enum SyntaxFactory {
     trailingTrivia: Trivia = []
   ) -> TokenSyntax {
     return makeToken(.stringSegment(text), presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
-  }
-  @available(*, deprecated, message: "Use TokenSyntax.yieldToken instead")
-  public static func makeYieldToken(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []
-  ) -> TokenSyntax {
-    return makeToken(.yield, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }

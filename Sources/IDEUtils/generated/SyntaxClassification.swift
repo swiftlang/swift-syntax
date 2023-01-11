@@ -266,8 +266,6 @@ extension RawTokenKind {
       return .none
     case .stringSegment: 
       return .stringLiteral
-    case .yield: 
-      return .none
     case .eof: 
       return .none
     }

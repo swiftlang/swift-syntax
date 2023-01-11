@@ -118,8 +118,7 @@ extension Parser {
       return label(self.parseDoStatement(doHandle: handle), with: optLabel)
     case (.poundAssertKeyword, let handle)?:
       return label(self.parsePoundAssertStatement(poundAssertHandle: handle), with: optLabel)
-    case (.yieldAsIdentifier, let handle)?,
-      (.yield, let handle)?:
+    case (.yield, let handle)?:
       return label(self.parseYieldStatement(yieldHandle: handle), with: optLabel)
     case nil:
       let missingStmt = RawStmtSyntax(RawMissingStmtSyntax(arena: self.arena))
@@ -1257,7 +1256,6 @@ extension Parser.Lookahead {
       .continueKeyword?,
       .fallthroughKeyword?,
       .switchKeyword?,
-      .yield?,
       .poundAssertKeyword?:
       return true
     case .repeatKeyword?:
@@ -1266,7 +1264,7 @@ extension Parser.Lookahead {
       // FIXME: 'repeat' followed by '{' could be a pack expansion
       // with a closure pattern.
       return self.peek().rawTokenKind == .leftBrace
-    case .yieldAsIdentifier?:
+    case .yield?:
       switch self.peek().rawTokenKind {
       case .prefixAmpersand:
         // "yield &" always denotes a yield statement.

@@ -132,7 +132,7 @@ STMT_NODES = [
     # yield-stmt -> 'yield' '('? expr-list? ')'?
     Node('YieldStmt', name_for_diagnostics="'yield' statement", kind='Stmt',
          children=[
-             Child('YieldKeyword', kind='YieldToken'),
+             Child('YieldKeyword', kind='KeywordToken', text_choices=['yield']),
              Child('Yields', kind='Syntax',
                    node_choices=[
                        Child('YieldList', kind='YieldList'),

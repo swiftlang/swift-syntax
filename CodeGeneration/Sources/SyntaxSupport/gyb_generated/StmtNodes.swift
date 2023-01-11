@@ -311,9 +311,12 @@ public let STMT_NODES: [Node] = [
        kind: "Stmt",
        children: [
          Child(name: "YieldKeyword",
-               kind: "YieldToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "Yield"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "yield"
                ]),
          Child(name: "Yields",
                kind: "Syntax",

@@ -847,19 +847,6 @@ extension TokenSyntax {
     )
   }
   
-  public static func yieldToken(
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
-    presence: SourcePresence = .present
-  ) -> TokenSyntax {
-    return TokenSyntax(
-      .yield, 
-      leadingTrivia: leadingTrivia, 
-      trailingTrivia: trailingTrivia, 
-      presence: presence
-    )
-  }
-  
   public static func eof(
     leadingTrivia: Trivia = [], 
     presence: SourcePresence = .present

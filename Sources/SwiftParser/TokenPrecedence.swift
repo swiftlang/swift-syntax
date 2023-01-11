@@ -159,7 +159,7 @@ public enum TokenPrecedence: Comparable {
       // Secondary parts of control-flow constructs
       .keyword(.case), .keyword(.catch), .keyword(.default), .keyword(.else),
       // Return-like statements
-      .keyword(.break), .keyword(.continue), .keyword(.fallthrough), .keyword(.return), .keyword(.throw), .yield,
+      .keyword(.break), .keyword(.continue), .keyword(.fallthrough), .keyword(.return), .keyword(.throw), .keyword(.yield),
       // #error, #warning and #assert are statement-like
       .poundErrorKeyword, .poundWarningKeyword, .poundAssertKeyword:
       self = .stmtKeyword

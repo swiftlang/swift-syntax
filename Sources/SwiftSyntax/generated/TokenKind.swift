@@ -131,8 +131,6 @@ public enum TokenKind: Hashable {
   
   case stringSegment(String)
   
-  case yield
-  
   /// Initializes a keyword token kind from its string representation. If the
   /// given string is not a keyword, this function returns `nil`.
   public init?(keyword: String) {
@@ -320,8 +318,6 @@ public enum TokenKind: Hashable {
       return text
     case .stringSegment(let text): 
       return text
-    case .yield: 
-      return #"yield"#
     case .eof: 
       return ""
     }
@@ -433,8 +429,6 @@ public enum TokenKind: Hashable {
       return #"#_hasSymbol"#
     case .keyword(let assoc): 
       return assoc.defaultText
-    case .yield: 
-      return #"yield"#
     case .eof: 
       return ""
     default: 
@@ -574,8 +568,6 @@ public enum TokenKind: Hashable {
     case .rawStringDelimiter: 
       return false
     case .stringSegment: 
-      return false
-    case .yield: 
       return false
     case .keyword(let keyword): 
       return keyword.isLexerClassified
@@ -717,8 +709,6 @@ public enum TokenKind: Hashable {
       return false
     case .stringSegment: 
       return false
-    case .yield: 
-      return false
     }
   }
 }
@@ -854,8 +844,6 @@ extension TokenKind: Equatable {
       return lhsText == rhsText
     case (.stringSegment(let lhsText), .stringSegment(let rhsText)): 
       return lhsText == rhsText
-    case (.yield, .yield): 
-      return true
     default: 
       return false
     }
@@ -993,8 +981,6 @@ public enum RawTokenKind: Equatable, Hashable {
   
   case stringSegment
   
-  case yield
-  
   @_spi(RawSyntax) 
   public var defaultText: SyntaxText? {
     switch self {
@@ -1102,8 +1088,6 @@ public enum RawTokenKind: Equatable, Hashable {
       return #"#_hasSymbol"#
     case .keyword(let assoc): 
       return assoc.defaultText
-    case .yield: 
-      return #"yield"#
     default: 
       return nil
     }
@@ -1237,8 +1221,6 @@ public enum RawTokenKind: Equatable, Hashable {
       return #"raw string delimiter"#
     case .stringSegment: 
       return #"string segment"#
-    case .yield: 
-      return #"yield"#
     case .keyword(let keyword): 
       return String(syntaxText: keyword.defaultText)
     }
@@ -1377,8 +1359,6 @@ public enum RawTokenKind: Equatable, Hashable {
       return false
     case .stringSegment: 
       return false
-    case .yield: 
-      return false
     case .keyword(let keyword): 
       return keyword.isLexerClassified
     }
@@ -1518,8 +1498,6 @@ public enum RawTokenKind: Equatable, Hashable {
     case .rawStringDelimiter: 
       return false
     case .stringSegment: 
-      return false
-    case .yield: 
       return false
     }
   }
@@ -1825,9 +1803,6 @@ extension TokenKind {
       return .rawStringDelimiter(text)
     case .stringSegment: 
       return .stringSegment(text)
-    case .yield: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .yield
     }
   }
   
@@ -1964,8 +1939,6 @@ extension TokenKind {
       return (.rawStringDelimiter, str)
     case .stringSegment(let str): 
       return (.stringSegment, str)
-    case .yield: 
-      return (.yield, nil)
     }
   }
 }

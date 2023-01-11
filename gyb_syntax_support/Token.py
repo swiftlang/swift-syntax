@@ -300,8 +300,6 @@ SYNTAX_TOKENS = [
          name_for_diagnostics='raw string delimiter'),
     Misc('StringSegment', 'string_segment', name_for_diagnostics='string segment',
          classification='StringLiteral'),
-    Misc('Yield', 'kw_yield', name_for_diagnostics='yield',
-         text='yield'),
 ]
 
 SYNTAX_TOKEN_MAP = {token.name + 'Token': token for token in SYNTAX_TOKENS}

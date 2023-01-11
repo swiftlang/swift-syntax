@@ -266,11 +266,6 @@ public extension TokenSyntax {
     return .poundHasSymbolKeyword()
   }
   
-  /// The `yield` token
-  static var `yield`: TokenSyntax {
-    return .yieldToken()
-  }
-  
   /// The `eof` token
   static var eof: TokenSyntax {
     return .eof()

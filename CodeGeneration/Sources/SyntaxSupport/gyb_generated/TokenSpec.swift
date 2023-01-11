@@ -267,7 +267,6 @@ public let SYNTAX_TOKENS: [TokenSpec] = [
   MiscSpec(name: "Keyword", kind: "keyword", nameForDiagnostics: "keyword", classification: "Keyword", associatedValueClass: "Keyword"),
   MiscSpec(name: "RawStringDelimiter", kind: "raw_string_delimiter", nameForDiagnostics: "raw string delimiter"),
   MiscSpec(name: "StringSegment", kind: "string_segment", nameForDiagnostics: "string segment", classification: "StringLiteral"),
-  MiscSpec(name: "Yield", kind: "kw_yield", nameForDiagnostics: "yield", text: "yield"),
 ]
 
 public let SYNTAX_TOKEN_MAP = Dictionary(uniqueKeysWithValues: SYNTAX_TOKENS.map { ("\($0.name)Token", $0) })

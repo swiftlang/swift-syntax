@@ -126,7 +126,7 @@ let tokenKindFile = SourceFileSyntax {
         .newlines(1)
       ],
       modifiers: [DeclModifierSyntax(name: .public)],
-      name: IdentifierPatternSyntax("isKeyword"),
+      name: IdentifierPatternSyntax("isLexerClassifiedKeyword"),
       type: TypeAnnotationSyntax(type: TypeSyntax("Bool"))
     ) {
       SwitchStmtSyntax(expression: ExprSyntax("self")) {
@@ -278,7 +278,7 @@ let tokenKindFile = SourceFileSyntax {
         .newlines(1),
       ],
       modifiers: [DeclModifierSyntax(name: .public)],
-      name: IdentifierPatternSyntax("isKeyword"),
+      name: IdentifierPatternSyntax("isLexerClassifiedKeyword"),
       type: TypeAnnotationSyntax(type: TypeSyntax("Bool"))
     ) {
       SwitchStmt(expression: ExprSyntax("self")) {

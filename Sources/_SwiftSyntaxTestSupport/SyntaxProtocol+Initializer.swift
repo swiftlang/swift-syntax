@@ -127,7 +127,7 @@ extension SyntaxProtocol {
       let tokenKind = token.tokenKind
       let tokenInitializerName: String
       let requiresExplicitText: Bool
-      if tokenKind.isKeyword || tokenKind == .eof {
+      if tokenKind.isLexerClassifiedKeyword || tokenKind == .eof {
         tokenInitializerName = String(describing: tokenKind)
         requiresExplicitText = false
       } else if tokenKind.decomposeToRaw().rawKind.defaultText != nil {

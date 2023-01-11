@@ -524,7 +524,7 @@ extension Parser {
         continue
       }
 
-      if self.at(.identifier) || self.currentToken.isKeyword {
+      if self.at(.identifier) || self.currentToken.isLexerClassifiedKeyword {
         let name = self.consumeAnyToken()
 
         // If we hit a ')' we may have a zero-argument selector.

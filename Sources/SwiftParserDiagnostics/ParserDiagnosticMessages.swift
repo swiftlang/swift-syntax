@@ -208,7 +208,7 @@ public struct InvalidIdentifierError: ParserError {
       return "\(name) can only start with a letter or underscore, not a number"
     case .wildcardKeyword:
       return "'\(invalidIdentifier.text)' cannot be used as an identifier here"
-    case let tokenKind where tokenKind.isKeyword:
+    case let tokenKind where tokenKind.isLexerClassifiedKeyword:
       return "keyword '\(invalidIdentifier.text)' cannot be used as an identifier here"
     default:
       return "'\(invalidIdentifier.text)' is not a valid identifier"

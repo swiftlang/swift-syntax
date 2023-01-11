@@ -307,7 +307,7 @@ extension ParseDiagnosticsGenerator {
 
     if node.tokenKind.isIdentifier {
       let fixIts: [FixIt]
-      if invalidToken.tokenKind.isKeyword || invalidToken.tokenKind.isDollarIdentifier {
+      if invalidToken.tokenKind.isLexerClassifiedKeyword || invalidToken.tokenKind.isDollarIdentifier {
         // TODO: Should the parser add the text with backticks to the missing
         // node? Then this could just make missing/present.
         fixIts = [

@@ -47,7 +47,7 @@ extension TokenConsumer {
       _ = subparser.consumeAttributeList()
     }
 
-    if subparser.currentToken.isKeyword || subparser.currentToken.rawTokenKind == .identifier {
+    if subparser.currentToken.isLexerClassifiedKeyword || subparser.currentToken.rawTokenKind == .identifier {
       var modifierProgress = LoopProgressCondition()
       while let (modifierKind, handle) = subparser.at(anyIn: DeclarationModifier.self),
         modifierKind != .classKeyword,
@@ -1174,7 +1174,7 @@ extension Parser {
     var elements = [RawFunctionParameterSyntax]()
     // If we are missing the left parenthesis and the next token doesn't appear
     // to be an argument label, don't parse any parameters.
-    let shouldSkipParameterParsing = lparen.isMissing && (!currentToken.canBeArgumentLabel(allowDollarIdentifier: true) || currentToken.isKeyword)
+    let shouldSkipParameterParsing = lparen.isMissing && (!currentToken.canBeArgumentLabel(allowDollarIdentifier: true) || currentToken.isLexerClassifiedKeyword)
     if !shouldSkipParameterParsing {
       var keepGoing = true
       var loopProgress = LoopProgressCondition()

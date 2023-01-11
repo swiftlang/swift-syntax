@@ -68,7 +68,7 @@ extension Parser {
       ident = self.expectIdentifierWithoutRecovery()
     } else if flags.contains(.operators), let (_, _) = self.at(anyIn: Operator.self) {
       ident = self.consumeAnyToken(remapping: .binaryOperator)
-    } else if flags.contains(.keywords) && self.currentToken.rawTokenKind.isKeyword {
+    } else if flags.contains(.keywords) && self.currentToken.rawTokenKind.isLexerClassifiedKeyword {
       ident = self.consumeAnyToken(remapping: .identifier)
     } else {
       ident = self.expectIdentifierWithoutRecovery()
@@ -270,7 +270,7 @@ extension Lexer.Lexeme {
       return allowDollarIdentifier
     default:
       // All other keywords can be argument labels.
-      return self.isKeyword
+      return self.isLexerClassifiedKeyword
     }
   }
 
@@ -278,8 +278,8 @@ extension Lexer.Lexeme {
     return Operator(lexeme: self) != nil && self.tokenText == name
   }
 
-  var isKeyword: Bool {
-    self.rawTokenKind.isKeyword
+  var isLexerClassifiedKeyword: Bool {
+    self.rawTokenKind.isLexerClassifiedKeyword
   }
 
   func starts(with symbol: SyntaxText) -> Bool {

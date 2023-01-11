@@ -831,7 +831,7 @@ public enum TokenKind: Hashable {
   /// Keywords are reserved unconditionally for use by Swift and may not
   /// appear as identifiers in any position without being escaped. For example,
   /// `class`, `func`, or `import`.
-  public var isKeyword: Bool {
+  public var isLexerClassifiedKeyword: Bool {
     switch self {
     case .eof: 
       return false
@@ -2209,7 +2209,7 @@ public enum RawTokenKind: Equatable, Hashable {
   /// Keywords are reserved unconditionally for use by Swift and may not
   /// appear as identifiers in any position without being escaped. For example,
   /// `class`, `func`, or `import`.
-  public var isKeyword: Bool {
+  public var isLexerClassifiedKeyword: Bool {
     switch self {
     case .eof: 
       return false

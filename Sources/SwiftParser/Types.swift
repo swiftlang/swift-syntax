@@ -871,7 +871,7 @@ extension Parser.Lookahead {
     }
 
     // Parse an identifier.
-    guard self.at(.identifier) || self.at(.capitalSelfKeyword) || (allowKeyword && self.currentToken.isKeyword) else {
+    guard self.at(.identifier) || self.at(.capitalSelfKeyword) || (allowKeyword && self.currentToken.isLexerClassifiedKeyword) else {
       return false
     }
     self.consumeAnyToken()

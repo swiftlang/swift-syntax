@@ -182,7 +182,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     }
     if let tryKeyword = node.onlyToken(where: { $0.tokenKind == .tryKeyword }),
       let nextToken = tryKeyword.nextToken(viewMode: .sourceAccurate),
-      nextToken.tokenKind.isKeyword
+      nextToken.tokenKind.isLexerClassifiedKeyword
     {
       addDiagnostic(node, TryCannotBeUsed(nextToken: nextToken))
     } else if let semicolons = node.onlyTokens(satisfying: { $0.tokenKind == .semicolon }) {
@@ -625,7 +625,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
     if let unexpected = node.unexpectedBetweenSubscriptKeywordAndGenericParameterClause,
-      let nameTokens = unexpected.onlyTokens(satisfying: { !$0.tokenKind.isKeyword })
+      let nameTokens = unexpected.onlyTokens(satisfying: { !$0.tokenKind.isLexerClassifiedKeyword })
     {
       addDiagnostic(
         unexpected,
@@ -637,7 +637,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       )
     }
     if let unexpected = node.indices.unexpectedBeforeLeftParen,
-      let nameTokens = unexpected.onlyTokens(satisfying: { !$0.tokenKind.isKeyword })
+      let nameTokens = unexpected.onlyTokens(satisfying: { !$0.tokenKind.isLexerClassifiedKeyword })
     {
       addDiagnostic(
         unexpected,

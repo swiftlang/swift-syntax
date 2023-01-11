@@ -17,10 +17,10 @@ import SwiftSyntaxParser
 public class TokenTests: XCTestCase {
 
   public func testKeywordKinds() {
-    XCTAssertTrue(TokenKind.operatorKeyword.isKeyword)
-    XCTAssertTrue(TokenKind.funcKeyword.isKeyword)
-    XCTAssertFalse(TokenKind.leftAngle.isKeyword)
-    XCTAssertFalse(TokenKind.rightAngle.isKeyword)
+    XCTAssertTrue(TokenKind.operatorKeyword.isLexerClassifiedKeyword)
+    XCTAssertTrue(TokenKind.funcKeyword.isLexerClassifiedKeyword)
+    XCTAssertFalse(TokenKind.leftAngle.isLexerClassifiedKeyword)
+    XCTAssertFalse(TokenKind.rightAngle.isLexerClassifiedKeyword)
   }
 
   public func testPunctuators() {

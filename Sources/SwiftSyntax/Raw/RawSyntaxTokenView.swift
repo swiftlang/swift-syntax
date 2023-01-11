@@ -211,14 +211,14 @@ public struct RawSyntaxTokenView {
     }
   }
 
-  var hasLexerError: Bool {
+  var lexerError: LexerError? {
     switch raw.rawData.payload {
     case .parsedToken(let dat):
-      return dat.hasLexerError
+      return dat.lexerError
     case .materializedToken(_):
-      return false
+      return nil
     case .layout(_):
-      preconditionFailure("'hasError' is a token-only property")
+      preconditionFailure("'lexerError' is a token-only property")
     }
   }
 }

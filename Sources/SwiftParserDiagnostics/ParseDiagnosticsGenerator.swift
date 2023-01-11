@@ -232,19 +232,16 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .skipChildren
   }
 
-  public override func visit(_ node: TokenSyntax) -> SyntaxVisitorContinueKind {
-    if shouldSkip(node) {
+  public override func visit(_ token: TokenSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(token) {
       return .skipChildren
     }
 
-    if node.presence == .missing {
-      handleMissingToken(node)
+    if token.presence == .missing {
+      handleMissingToken(token)
     } else {
-      node.syntaxTextBytes.withUnsafeBufferPointer { buf in
-        var cursor = Lexer.Cursor(input: buf, previous: 0)
-        _ = cursor.nextToken(cursor) { [self] offset, diagnostic in
-          self.addDiagnostic(node, position: node.position.advanced(by: offset), diagnostic)
-        }
+      if let lexerError = token.lexerError {
+        self.addDiagnostic(token, position: token.positionAfterSkippingLeadingTrivia.advanced(by: Int(lexerError.byteOffset)), lexerError.diagnostic(in: token))
       }
     }
 

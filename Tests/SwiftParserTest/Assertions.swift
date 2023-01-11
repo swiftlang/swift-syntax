@@ -13,7 +13,7 @@
 import XCTest
 @_spi(RawSyntax) import SwiftSyntax
 @_spi(Testing)@_spi(RawSyntax) import SwiftParser
-import SwiftParserDiagnostics
+@_spi(RawSyntax) import SwiftParserDiagnostics
 import SwiftDiagnostics
 import _SwiftSyntaxTestSupport
 
@@ -24,6 +24,8 @@ struct LexemeSpec {
   let leadingTrivia: SyntaxText
   let tokenText: SyntaxText
   let trailingTrivia: SyntaxText
+  let errorLocationMarker: String
+  let error: String?
   let flags: Lexer.Lexeme.Flags
 
   /// The file and line at which this `LexemeSpec` was created, so that assertion failures can be reported at its location.
@@ -35,6 +37,8 @@ struct LexemeSpec {
     leading: SyntaxText = "",
     text: SyntaxText,
     trailing: SyntaxText = "",
+    errorLocationMarker: String = "1️⃣",
+    error: String? = nil,
     flags: Lexer.Lexeme.Flags = [],
     file: StaticString = #file,
     line: UInt = #line
@@ -43,6 +47,8 @@ struct LexemeSpec {
     self.leadingTrivia = leading
     self.tokenText = text
     self.trailingTrivia = trailing
+    self.errorLocationMarker = errorLocationMarker
+    self.error = error
     self.flags = flags
     self.file = file
     self.line = line
@@ -59,7 +65,13 @@ struct LexemeSpec {
 ///     which this function was called.
 ///   - line: The line number on which failure occurred. Defaults to the line number on which this
 ///     function was called.
-private func AssertTokens(_ actual: [Lexer.Lexeme], _ expected: [LexemeSpec], file: StaticString = #file, line: UInt = #line) {
+private func AssertTokens(
+  _ actual: [Lexer.Lexeme],
+  _ expected: [LexemeSpec],
+  markerLocations: [String: Int],
+  file: StaticString = #file,
+  line: UInt = #line
+) {
   guard actual.count == expected.count else {
     return XCTFail(
       "Expected \(expected.count) tokens but got \(actual.count)",
@@ -68,7 +80,12 @@ private func AssertTokens(_ actual: [Lexer.Lexeme], _ expected: [LexemeSpec], fi
     )
   }
 
+  // The byte offset at which the leading trivia of `actualLexeme` starts.
+  var lexemeStartOffset = 0
   for (actualLexeme, expectedLexeme) in zip(actual, expected) {
+    defer {
+      lexemeStartOffset = actualLexeme.byteLength
+    }
     if actualLexeme.tokenKind != expectedLexeme.tokenKind {
       XCTFail(
         "Expected token kind \(expectedLexeme.tokenKind) but got \(actualLexeme.tokenKind)",
@@ -107,6 +124,44 @@ private func AssertTokens(_ actual: [Lexer.Lexeme], _ expected: [LexemeSpec], fi
       )
     }
 
+    switch (actualLexeme.error, expectedLexeme.error) {
+    case (nil, nil): break
+    case (nil, .some):
+      XCTFail(
+        "Expected an error but did not receive one",
+        file: expectedLexeme.file,
+        line: expectedLexeme.line
+      )
+    case (let actualError?, nil):
+      XCTFail(
+        "Did not expect an error but got \(actualError.kind) at \(actualError.byteOffset)",
+        file: expectedLexeme.file,
+        line: expectedLexeme.line
+      )
+    case (let actualError?, let expectedError?):
+      AssertStringsEqualWithDiff(
+        actualError.diagnostic(tokenText: actualLexeme.tokenText).message,
+        expectedError,
+        file: expectedLexeme.file,
+        line: expectedLexeme.line
+      )
+      if let location = markerLocations[expectedLexeme.errorLocationMarker] {
+        XCTAssertEqual(
+          Int(actualError.byteOffset),
+          location - lexemeStartOffset - actualLexeme.leadingTriviaByteLength,
+          "Expected location did not match",
+          file: expectedLexeme.file,
+          line: expectedLexeme.line
+        )
+      } else {
+        XCTFail(
+          "Did not find marker \(expectedLexeme.errorLocationMarker) in the source code",
+          file: expectedLexeme.file,
+          line: expectedLexeme.line
+        )
+      }
+    }
+
     if actualLexeme.flags != expectedLexeme.flags {
       XCTFail(
         "Expected flags \(expectedLexeme.flags.debugDescription) but got \(actualLexeme.flags.debugDescription)",
@@ -118,26 +173,26 @@ private func AssertTokens(_ actual: [Lexer.Lexeme], _ expected: [LexemeSpec], fi
 }
 
 func AssertLexemes(
-  _ source: String,
+  _ markedSource: String,
   lexemes expectedLexemes: [LexemeSpec],
   file: StaticString = #file,
   line: UInt = #line
 ) {
+  var (markerLocations, source) = extractMarkers(markedSource)
   var expectedLexemes = expectedLexemes
   if expectedLexemes.last?.tokenKind != .eof {
     expectedLexemes.append(LexemeSpec(.eof, text: ""))
   }
-  var source = source
   source.withUTF8 { buf in
     var lexemes = [Lexer.Lexeme]()
     for token in Lexer.tokenize(buf, from: 0) {
       lexemes.append(token)
 
-      guard token.tokenKind != .eof else {
+      if token.tokenKind == .eof {
         break
       }
     }
-    AssertTokens(lexemes, expectedLexemes, file: file, line: line)
+    AssertTokens(lexemes, expectedLexemes, markerLocations: markerLocations, file: file, line: line)
   }
 }
 

@@ -40,6 +40,7 @@ public extension LexerError {
 public enum StaticLexerError: String, DiagnosticMessage {
   case expectedBinaryExponentInHexFloatLiteral = "hexadecimal floating point literal must end with an exponent"
   case expectedDigitInFloatLiteral = "expected a digit in floating point exponent"
+  case lexerErrorOffsetOverflow = "the lexer dicovered an error in this token but was not able to represent its offset due to overflow; please split the token"
 
   public var message: String { self.rawValue }
 
@@ -88,5 +89,47 @@ public struct InvalidDigitInIntegerLiteral: LexerError {
     case .hex(let digit):
       return "'\(digit)' is not a valid hexadecimal digit (0-9, A-F) in integer literal"
     }
+  }
+}
+
+// MARK: - Convert LexerError from SwiftSyntax to error messages
+
+public extension SwiftSyntax.LexerError {
+  /// `tokenText` is the entire text of the token in which the `LexerError`
+  /// occurred, including trivia.
+  @_spi(RawSyntax)
+  func diagnostic(tokenText: SyntaxText) -> DiagnosticMessage {
+    var scalarAtErrorOffset: UnicodeScalar {
+      Unicode.Scalar(tokenText[Int(self.byteOffset)])
+    }
+
+    switch self.kind {
+    case .expectedBinaryExponentInHexFloatLiteral:
+      return StaticLexerError.expectedBinaryExponentInHexFloatLiteral
+    case .expectedDigitInFloatLiteral:
+      return StaticLexerError.expectedDigitInFloatLiteral
+    case .invalidBinaryDigitInIntegerLiteral:
+      return InvalidDigitInIntegerLiteral(kind: .binary(scalarAtErrorOffset))
+    case .invalidDecimalDigitInIntegerLiteral:
+      return InvalidDigitInIntegerLiteral(kind: .decimal(scalarAtErrorOffset))
+    case .invalidFloatingPointCharacter:
+      fatalError()
+    case .invalidFloatingPointDigit:
+      fatalError()
+    case .invalidFloatingPointExponentCharacter:
+      return InvalidFloatingPointExponentDigit(kind: .character(scalarAtErrorOffset))
+    case .invalidFloatingPointExponentDigit:
+      return InvalidFloatingPointExponentDigit(kind: .digit(scalarAtErrorOffset))
+    case .invalidHexDigitInIntegerLiteral:
+      return InvalidDigitInIntegerLiteral(kind: .hex(scalarAtErrorOffset))
+    case .invalidOctalDigitInIntegerLiteral:
+      return InvalidDigitInIntegerLiteral(kind: .octal(scalarAtErrorOffset))
+    case .lexerErrorOffsetOverflow:
+      return StaticLexerError.lexerErrorOffsetOverflow
+    }
+  }
+
+  func diagnostic(in token: TokenSyntax) -> DiagnosticMessage {
+    return self.diagnostic(tokenText: token.tokenView.rawText)
   }
 }

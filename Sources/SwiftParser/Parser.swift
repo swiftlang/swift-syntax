@@ -187,7 +187,7 @@ public struct Parser {
       wholeText: tok.wholeText,
       textRange: tok.textRange,
       presence: .present,
-      hasLexerError: tok.flags.contains(.isErroneous),
+      lexerError: tok.error,
       arena: arena
     )
   }
@@ -539,12 +539,18 @@ extension Parser {
     assert(tokenText.hasPrefix(prefix))
 
     let endIndex = current.textRange.lowerBound.advanced(by: prefix.count)
+    var lexerError = current.error
+    if let error = lexerError, error.byteOffset > prefix.count {
+      // The lexer error isn't in the prefix. Drop it.
+      lexerError = nil
+    }
+
     let tok = RawTokenSyntax(
       kind: tokenKind,
       wholeText: SyntaxText(rebasing: current.wholeText[..<endIndex]),
       textRange: current.textRange.lowerBound..<endIndex,
       presence: .present,
-      hasLexerError: current.flags.contains(.isErroneous),
+      lexerError: lexerError,
       arena: self.arena
     )
 

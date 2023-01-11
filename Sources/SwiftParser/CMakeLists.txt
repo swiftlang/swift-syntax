@@ -14,7 +14,6 @@ add_swift_host_library(SwiftParser
   Directives.swift
   Expressions.swift
   Lexer.swift
-  LexerDiagnosticMessages.swift
   Lookahead.swift
   LoopProgressCondition.swift
   Modifiers.swift

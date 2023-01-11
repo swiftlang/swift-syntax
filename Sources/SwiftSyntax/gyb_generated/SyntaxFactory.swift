@@ -9039,8 +9039,8 @@ public enum SyntaxFactory {
   }
   @available(*, deprecated, message: "Use TokenSyntax.leftAngleToken instead")
   public static func makeLeftAngleToken(
-    leadingTrivia: Trivia = .space,
-    trailingTrivia: Trivia = .space
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []
   ) -> TokenSyntax {
     return makeToken(.leftAngle, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -9048,8 +9048,8 @@ public enum SyntaxFactory {
   }
   @available(*, deprecated, message: "Use TokenSyntax.rightAngleToken instead")
   public static func makeRightAngleToken(
-    leadingTrivia: Trivia = .space,
-    trailingTrivia: Trivia = .space
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []
   ) -> TokenSyntax {
     return makeToken(.rightAngle, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -9166,7 +9166,7 @@ public enum SyntaxFactory {
   @available(*, deprecated, message: "Use TokenSyntax.exclamationMarkToken instead")
   public static func makeExclamationMarkToken(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.exclamationMark, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -9175,7 +9175,7 @@ public enum SyntaxFactory {
   @available(*, deprecated, message: "Use TokenSyntax.postfixQuestionMarkToken instead")
   public static func makePostfixQuestionMarkToken(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.postfixQuestionMark, presence: .present,
                      leadingTrivia: leadingTrivia,

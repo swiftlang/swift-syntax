@@ -69,7 +69,7 @@ final class StructTests: XCTestCase {
       public struct TestStruct {
           /// A nested struct
           /// with multi line comment
-          struct NestedStruct < A, B: C, D > where A: X, A.P == D {
+          struct NestedStruct<A, B: C, D> where A: X, A.P == D {
           }
           /// A nested struct\r\
           /// with multi line comment where the newline is a CR\r\

@@ -136,6 +136,12 @@ open class BasicFormat: SyntaxRewriter {
   }
   
   open func requiresLeadingSpace(_ token: TokenSyntax) -> Bool {
+    switch (token.previousToken(viewMode: .sourceAccurate)?.tokenKind, token.tokenKind) {
+    case (.leftParen, .spacedBinaryOperator): 
+      return false
+    default: 
+      break 
+    }
     switch token.tokenKind {
     case .inKeyword: 
       return true
@@ -144,10 +150,6 @@ open class BasicFormat: SyntaxRewriter {
     case .catchKeyword: 
       return true
     case .leftBrace: 
-      return true
-    case .leftAngle: 
-      return true
-    case .rightAngle: 
       return true
     case .equal: 
       return true
@@ -166,12 +168,19 @@ open class BasicFormat: SyntaxRewriter {
       return false
     }
     switch (token.tokenKind, token.nextToken(viewMode: .sourceAccurate)?.tokenKind) {
-    case (.asKeyword, .exclamationMark), 
-     (.asKeyword, .postfixQuestionMark), 
-     (.initKeyword, .leftParen), 
-     (.initKeyword, .postfixQuestionMark), 
-     (.tryKeyword, .exclamationMark), 
-     (.tryKeyword, .postfixQuestionMark): 
+    case (.asKeyword, .exclamationMark), // Ensures there is not space in `as!`
+     (.asKeyword, .postfixQuestionMark), // Ensures there is not space in `as?`
+     (.exclamationMark, .leftParen), // Ensures there is not space in `myOptionalClosure!()`
+     (.exclamationMark, .period), // Ensures there is not space in `myOptionalBar!.foo()`
+     (.initKeyword, .leftParen), // Ensures there is not space in `init()`
+     (.initKeyword, .postfixQuestionMark), // Ensures there is not space in `init?`
+     (.postfixQuestionMark, .leftParen), // Ensures there is not space in `init?()`
+     (.postfixQuestionMark, .rightAngle), // Ensures there is not space in `ContiguousArray<RawSyntax?>`
+     (.postfixQuestionMark, .rightParen), // Ensures there is not space in `myOptionalClosure?()`
+     (.tryKeyword, .exclamationMark), // Ensures there is not space in `try!`
+     (.tryKeyword, .postfixQuestionMark): // Ensures there is not space in `try?`
+      return false
+    case (.spacedBinaryOperator, .comma): 
       return false
     default: 
       break 
@@ -267,10 +276,6 @@ open class BasicFormat: SyntaxRewriter {
       return true
     case .wildcardKeyword: 
       return true
-    case .leftAngle: 
-      return true
-    case .rightAngle: 
-      return true
     case .comma: 
       return true
     case .colon: 
@@ -278,6 +283,10 @@ open class BasicFormat: SyntaxRewriter {
     case .equal: 
       return true
     case .arrow: 
+      return true
+    case .exclamationMark: 
+      return true
+    case .postfixQuestionMark: 
       return true
     case .poundKeyPathKeyword: 
       return true

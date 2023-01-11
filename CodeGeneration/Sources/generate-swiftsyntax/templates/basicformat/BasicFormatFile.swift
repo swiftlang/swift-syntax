@@ -122,6 +122,15 @@ let basicFormatFile = SourceFile {
     }
 
     FunctionDecl("open func requiresLeadingSpace(_ token: TokenSyntax) -> Bool") {
+      SwitchStmt("""
+        switch (token.previousToken(viewMode: .sourceAccurate)?.tokenKind, token.tokenKind) {
+        case (.leftParen, .spacedBinaryOperator):
+          return false
+        default:
+          break
+        }
+        """)
+      
       SwitchStmt(expression: Expr("token.tokenKind")) {
         for token in SYNTAX_TOKENS {
           if token.requiresLeadingSpace {
@@ -146,12 +155,19 @@ let basicFormatFile = SourceFile {
 
       SwitchStmt("""
         switch (token.tokenKind, token.nextToken(viewMode: .sourceAccurate)?.tokenKind) {
-        case (.asKeyword, .exclamationMark),
-             (.asKeyword, .postfixQuestionMark),
-             (.initKeyword, .leftParen),
-             (.initKeyword, .postfixQuestionMark),
-             (.tryKeyword, .exclamationMark),
-             (.tryKeyword, .postfixQuestionMark):
+        case (.asKeyword, .exclamationMark), // Ensures there is not space in `as!`
+             (.asKeyword, .postfixQuestionMark), // Ensures there is not space in `as?`
+             (.exclamationMark, .leftParen), // Ensures there is not space in `myOptionalClosure!()`
+             (.exclamationMark, .period), // Ensures there is not space in `myOptionalBar!.foo()`
+             (.initKeyword, .leftParen), // Ensures there is not space in `init()`
+             (.initKeyword, .postfixQuestionMark), // Ensures there is not space in `init?`
+             (.postfixQuestionMark, .leftParen), // Ensures there is not space in `init?()`
+             (.postfixQuestionMark, .rightAngle), // Ensures there is not space in `ContiguousArray<RawSyntax?>`
+             (.postfixQuestionMark, .rightParen), // Ensures there is not space in `myOptionalClosure?()`
+             (.tryKeyword, .exclamationMark), // Ensures there is not space in `try!`
+             (.tryKeyword, .postfixQuestionMark): // Ensures there is not space in `try?`
+          return false
+        case (.spacedBinaryOperator, .comma):
           return false
         default:
           break

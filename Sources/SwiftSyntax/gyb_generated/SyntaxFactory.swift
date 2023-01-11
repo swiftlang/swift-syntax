@@ -6373,11 +6373,11 @@ public enum SyntaxFactory {
     }
   }
   @available(*, deprecated, message: "Use initializer on AvailabilityConditionSyntax")
-  public static func makeAvailabilityCondition(_ unexpectedBeforePoundAvailableKeyword: UnexpectedNodesSyntax? = nil, poundAvailableKeyword: TokenSyntax, _ unexpectedBetweenPoundAvailableKeywordAndLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax, _ unexpectedBetweenLeftParenAndAvailabilitySpec: UnexpectedNodesSyntax? = nil, availabilitySpec: AvailabilitySpecListSyntax, _ unexpectedBetweenAvailabilitySpecAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax, _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil) -> AvailabilityConditionSyntax {
+  public static func makeAvailabilityCondition(_ unexpectedBeforeAvailabilityKeyword: UnexpectedNodesSyntax? = nil, availabilityKeyword: TokenSyntax, _ unexpectedBetweenAvailabilityKeywordAndLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax, _ unexpectedBetweenLeftParenAndAvailabilitySpec: UnexpectedNodesSyntax? = nil, availabilitySpec: AvailabilitySpecListSyntax, _ unexpectedBetweenAvailabilitySpecAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax, _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil) -> AvailabilityConditionSyntax {
     let layout: [RawSyntax?] = [
-      unexpectedBeforePoundAvailableKeyword?.raw,
-      poundAvailableKeyword.raw,
-      unexpectedBetweenPoundAvailableKeywordAndLeftParen?.raw,
+      unexpectedBeforeAvailabilityKeyword?.raw,
+      availabilityKeyword.raw,
+      unexpectedBetweenAvailabilityKeywordAndLeftParen?.raw,
       leftParen.raw,
       unexpectedBetweenLeftParenAndAvailabilitySpec?.raw,
       availabilitySpec.raw,
@@ -6487,45 +6487,6 @@ public enum SyntaxFactory {
         nil,
       ], arena: arena))
       return OptionalBindingConditionSyntax(data)
-    }
-  }
-  @available(*, deprecated, message: "Use initializer on UnavailabilityConditionSyntax")
-  public static func makeUnavailabilityCondition(_ unexpectedBeforePoundUnavailableKeyword: UnexpectedNodesSyntax? = nil, poundUnavailableKeyword: TokenSyntax, _ unexpectedBetweenPoundUnavailableKeywordAndLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax, _ unexpectedBetweenLeftParenAndAvailabilitySpec: UnexpectedNodesSyntax? = nil, availabilitySpec: AvailabilitySpecListSyntax, _ unexpectedBetweenAvailabilitySpecAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax, _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil) -> UnavailabilityConditionSyntax {
-    let layout: [RawSyntax?] = [
-      unexpectedBeforePoundUnavailableKeyword?.raw,
-      poundUnavailableKeyword.raw,
-      unexpectedBetweenPoundUnavailableKeywordAndLeftParen?.raw,
-      leftParen.raw,
-      unexpectedBetweenLeftParenAndAvailabilitySpec?.raw,
-      availabilitySpec.raw,
-      unexpectedBetweenAvailabilitySpecAndRightParen?.raw,
-      rightParen.raw,
-      unexpectedAfterRightParen?.raw,
-    ]
-    return withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.unavailabilityCondition,
-        from: layout, arena: arena)
-      let data = SyntaxData.forRoot(raw)
-      return UnavailabilityConditionSyntax(data)
-    }
-  }
-
-  @available(*, deprecated, message: "Use initializer on UnavailabilityConditionSyntax")
-  public static func makeBlankUnavailabilityCondition(presence: SourcePresence = .present) -> UnavailabilityConditionSyntax {
-    return withExtendedLifetime(SyntaxArena()) { arena in
-      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .unavailabilityCondition,
-        from: [
-        nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.poundUnavailableKeyword, arena: arena),
-        nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: arena),
-        nil,
-        RawSyntax.makeEmptyLayout(kind: SyntaxKind.availabilitySpecList, arena: arena),
-        nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: arena),
-        nil,
-      ], arena: arena))
-      return UnavailabilityConditionSyntax(data)
     }
   }
   @available(*, deprecated, message: "Use initializer on HasSymbolConditionSyntax")

@@ -496,8 +496,6 @@ public enum SyntaxKind {
   
   case typealiasDecl
   
-  case unavailabilityCondition
-  
   case unexpectedNodes
   
   case unresolvedAsExpr

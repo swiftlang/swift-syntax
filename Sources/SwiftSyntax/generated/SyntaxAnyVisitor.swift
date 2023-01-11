@@ -1969,14 +1969,6 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: UnavailabilityConditionSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-  
-  override open func visitPost(_ node: UnavailabilityConditionSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  
   override open func visit(_ node: UnexpectedNodesSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

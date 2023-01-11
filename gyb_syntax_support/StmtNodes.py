@@ -181,7 +181,6 @@ STMT_NODES = [
                    node_choices=[
                        Child('Expression', kind='Expr'),
                        Child('Availability', kind='AvailabilityCondition'),
-                       Child('Unavailability', kind='UnavailabilityCondition'),
                        Child('MatchingPattern',
                              kind='MatchingPatternCondition'),
                        Child('OptionalBinding',
@@ -193,10 +192,10 @@ STMT_NODES = [
          ]),
 
     # availability-condition -> '#available' '(' availability-spec ')'
-    Node('AvailabilityCondition', name_for_diagnostics="'#availabile' condition",
+    Node('AvailabilityCondition', name_for_diagnostics="availability condition",
          kind='Syntax',
          children=[
-             Child('PoundAvailableKeyword', kind='PoundAvailableToken'),
+             Child('AvailabilityKeyword', kind='Token', token_choices=['PoundAvailableToken', 'PoundUnavailableToken']),
              Child('LeftParen', kind='LeftParenToken'),
              Child('AvailabilitySpec', kind='AvailabilitySpecList',
                    collection_element_name='AvailabilityArgument'),
@@ -221,17 +220,6 @@ STMT_NODES = [
                    is_optional=True),
              Child('Initializer', kind='InitializerClause',
                    is_optional=True),
-         ]),
-
-    # unavailability-condition -> '#unavailable' '(' availability-spec ')'
-    Node('UnavailabilityCondition', name_for_diagnostics="'#unavailable' condition",
-         kind='Syntax',
-         children=[
-             Child('PoundUnavailableKeyword', kind='PoundUnavailableToken'),
-             Child('LeftParen', kind='LeftParenToken'),
-             Child('AvailabilitySpec', kind='AvailabilitySpecList',
-                   collection_element_name='AvailabilityArgument'),
-             Child('RightParen', kind='RightParenToken'),
          ]),
 
     # has-symbol-condition -> '#_hasSymbol' '(' expression ')'

@@ -405,8 +405,6 @@ public let STMT_NODES: [Node] = [
                        kind: "Expr"),
                  Child(name: "Availability",
                        kind: "AvailabilityCondition"),
-                 Child(name: "Unavailability",
-                       kind: "UnavailabilityCondition"),
                  Child(name: "MatchingPattern",
                        kind: "MatchingPatternCondition"),
                  Child(name: "OptionalBinding",
@@ -423,13 +421,14 @@ public let STMT_NODES: [Node] = [
        ]),
 
   Node(name: "AvailabilityCondition",
-       nameForDiagnostics: "'#availabile' condition",
+       nameForDiagnostics: "availability condition",
        kind: "Syntax",
        children: [
-         Child(name: "PoundAvailableKeyword",
-               kind: "PoundAvailableToken",
+         Child(name: "AvailabilityKeyword",
+               kind: "Token",
                tokenChoices: [
-                 "PoundAvailable"
+                 "PoundAvailable",
+                 "PoundUnavailable"
                ]),
          Child(name: "LeftParen",
                kind: "LeftParenToken",
@@ -488,30 +487,6 @@ public let STMT_NODES: [Node] = [
          Child(name: "Initializer",
                kind: "InitializerClause",
                isOptional: true)
-       ]),
-
-  Node(name: "UnavailabilityCondition",
-       nameForDiagnostics: "'#unavailable' condition",
-       kind: "Syntax",
-       children: [
-         Child(name: "PoundUnavailableKeyword",
-               kind: "PoundUnavailableToken",
-               tokenChoices: [
-                 "PoundUnavailable"
-               ]),
-         Child(name: "LeftParen",
-               kind: "LeftParenToken",
-               tokenChoices: [
-                 "LeftParen"
-               ]),
-         Child(name: "AvailabilitySpec",
-               kind: "AvailabilitySpecList",
-               collectionElementName: "AvailabilityArgument"),
-         Child(name: "RightParen",
-               kind: "RightParenToken",
-               tokenChoices: [
-                 "RightParen"
-               ])
        ]),
 
   Node(name: "HasSymbolCondition",

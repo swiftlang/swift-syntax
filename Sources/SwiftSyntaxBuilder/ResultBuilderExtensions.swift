@@ -35,10 +35,6 @@ extension ConditionElementListBuilder {
     return buildExpression(ConditionElementSyntax(condition: .availability(expression)))
   }
 
-  public static func buildExpression(_ expression: UnavailabilityConditionSyntax) -> Component {
-    return buildExpression(ConditionElementSyntax(condition: .unavailability(expression)))
-  }
-
   public static func buildExpression(_ expression: MatchingPatternConditionSyntax) -> Component {
     return buildExpression(ConditionElementSyntax(condition: .matchingPattern(expression)))
   }

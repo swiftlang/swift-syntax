@@ -371,7 +371,6 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/AvailabilityConditionSyntax>
 - <doc:SwiftSyntax/MatchingPatternConditionSyntax>
 - <doc:SwiftSyntax/OptionalBindingConditionSyntax>
-- <doc:SwiftSyntax/UnavailabilityConditionSyntax>
 - <doc:SwiftSyntax/HasSymbolConditionSyntax>
 - <doc:SwiftSyntax/ConditionElementListSyntax>
 - <doc:SwiftSyntax/SwitchCaseSyntax>

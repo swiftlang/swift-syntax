@@ -354,22 +354,10 @@ extension Parser {
     let spec = self.parseAvailabilitySpecList(from: kind)
     let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
     switch kind {
-    case .available:
+    case .available, .unavailable:
       return .availability(
         RawAvailabilityConditionSyntax(
-          poundAvailableKeyword: keyword,
-          unexpectedBeforeLParen,
-          leftParen: lparen,
-          availabilitySpec: spec,
-          unexpectedBeforeRParen,
-          rightParen: rparen,
-          arena: self.arena
-        )
-      )
-    case .unavailable:
-      return .unavailability(
-        RawUnavailabilityConditionSyntax(
-          poundUnavailableKeyword: keyword,
+          availabilityKeyword: keyword,
           unexpectedBeforeLParen,
           leftParen: lparen,
           availabilitySpec: spec,

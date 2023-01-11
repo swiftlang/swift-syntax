@@ -47,6 +47,48 @@ final class VariableTests: XCTestCase {
         }
         """
       ),
+      #line: (
+        VariableDecl("var foo: String? { myOptional?.someProperty }"),
+        """
+        var foo: String? {
+            myOptional?.someProperty
+        }
+        """
+      ),
+      #line: (
+        VariableDecl("let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)"),
+        """
+        let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+        """
+      ),
+      #line: (
+        VariableDecl("var foo: String { bar(baz!) }"),
+        """
+        var foo: String {
+            bar(baz!)
+        }
+        """
+      ),
+      #line: (
+        VariableDecl(#"var foo: String { bar ?? "" }"#),
+        #"""
+        var foo: String {
+            bar ?? ""
+        }
+        """#
+      ),
+      #line: (
+        VariableDecl("let bar = try! (foo())"),
+        """
+        let bar = try! (foo())
+        """
+      ),
+      #line: (
+        VariableDecl("let bar = try! !functionThatThrows()"),
+        """
+        let bar = try! !functionThatThrows()
+        """
+      ),
     ]
 
     for (line, testCase) in testCases {

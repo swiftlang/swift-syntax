@@ -12,7 +12,6 @@ add_swift_host_library(SwiftSyntax
   CommonAncestor.swift
   IncrementalParseTransition.swift
   LexerError.swift
-  Keyword.swift
   SourceLength.swift
   SourceLocation.swift
   SourcePresence.swift
@@ -33,6 +32,7 @@ add_swift_host_library(SwiftSyntax
   Raw/gyb_generated/RawSyntaxNodes.swift
   Raw/gyb_generated/RawSyntaxValidation.swift
 
+  generated/Keyword.swift
   generated/Misc.swift
   generated/SyntaxAnyVisitor.swift
   generated/SyntaxBaseNodes.swift

@@ -335,6 +335,20 @@ open class BasicFormat: SyntaxRewriter {
       return true
     case .binaryOperator: 
       return true
+    case .keyword(.`class`): 
+      return true
+    case .keyword(.`fileprivate`): 
+      return true
+    case .keyword(.`internal`): 
+      return true
+    case .keyword(.`private`): 
+      return true
+    case .keyword(.`public`): 
+      return true
+    case .keyword(.`rethrows`): 
+      return true
+    case .keyword(.`static`): 
+      return true
     case .keyword(.async): 
       return true
     default: 

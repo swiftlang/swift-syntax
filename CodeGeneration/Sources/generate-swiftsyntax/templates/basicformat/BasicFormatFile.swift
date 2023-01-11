@@ -181,6 +181,11 @@ let basicFormatFile = SourceFile {
             }
           }
         }
+        for keyword in KEYWORDS where keyword.isLexerClassified {
+          SwitchCase("case .keyword(.\(raw: keyword.escapedName)):") {
+            ReturnStmt("return true")
+          }
+        }
         SwitchCase("case .keyword(.async):") {
           ReturnStmt("return true")
         }

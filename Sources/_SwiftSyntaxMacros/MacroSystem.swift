@@ -106,9 +106,7 @@ class MacroApplication: SyntaxRewriter {
           return true
         }
 
-        return !(macro is PeerDeclarationMacro.Type ||
-                 macro is MemberDeclarationMacro.Type ||
-                 macro is AccessorDeclarationMacro.Type)
+        return !(macro is PeerDeclarationMacro.Type || macro is MemberDeclarationMacro.Type || macro is AccessorDeclarationMacro.Type)
       }
 
       if newAttributes.isEmpty {
@@ -265,7 +263,8 @@ class MacroApplication: SyntaxRewriter {
     }
 
     guard let binding = visitedVarDecl.bindings.first,
-          visitedVarDecl.bindings.count == 1 else {
+      visitedVarDecl.bindings.count == 1
+    else {
       return DeclSyntax(node)
     }
 
@@ -292,12 +291,19 @@ class MacroApplication: SyntaxRewriter {
 
     return DeclSyntax(
       visitedVarDecl.withBindings(
-      visitedVarDecl.bindings.replacing(childAt: 0, with: binding.withAccessor(.accessors(
-        .init(
-          leftBrace: .leftBraceToken(leadingTrivia: .space),
-          accessors: .init(accessors),
-          rightBrace: .rightBraceToken(leadingTrivia: .newline))
-      ))))
+        visitedVarDecl.bindings.replacing(
+          childAt: 0,
+          with: binding.withAccessor(
+            .accessors(
+              .init(
+                leftBrace: .leftBraceToken(leadingTrivia: .space),
+                accessors: .init(accessors),
+                rightBrace: .rightBraceToken(leadingTrivia: .newline)
+              )
+            )
+          )
+        )
+      )
     )
   }
 

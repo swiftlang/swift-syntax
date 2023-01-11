@@ -208,7 +208,7 @@ struct DefineBitwidthNumberedStructsMacro: FreestandingDeclarationMacro {
   }
 }
 
-public struct PropertyWrapper { }
+public struct PropertyWrapper {}
 
 extension PropertyWrapper: AccessorDeclarationMacro {
   public static func expansion(
@@ -217,9 +217,10 @@ extension PropertyWrapper: AccessorDeclarationMacro {
     in context: inout MacroExpansionContext
   ) throws -> [AccessorDeclSyntax] {
     guard let varDecl = declaration.as(VariableDeclSyntax.self),
-       let binding = varDecl.bindings.first,
-       let identifier =     binding.pattern.as(IdentifierPatternSyntax.self)?.identifier,
-       binding.accessor == nil else {
+      let binding = varDecl.bindings.first,
+      let identifier = binding.pattern.as(IdentifierPatternSyntax.self)?.identifier,
+      binding.accessor == nil
+    else {
       return []
     }
 
@@ -235,7 +236,7 @@ extension PropertyWrapper: AccessorDeclarationMacro {
         set {
           _\(identifier).wrappedValue = newValue
         }
-      """
+      """,
     ]
   }
 }
@@ -247,17 +248,19 @@ extension PropertyWrapper: PeerDeclarationMacro {
     in context: inout MacroExpansionContext
   ) throws -> [SwiftSyntax.DeclSyntax] {
     guard let varDecl = declaration.as(VariableDeclSyntax.self),
-       let binding = varDecl.bindings.first,
-       let identifier = binding.pattern.as(IdentifierPatternSyntax.self)?.identifier,
-       let type = binding.typeAnnotation?.type,
-       binding.accessor == nil else {
+      let binding = varDecl.bindings.first,
+      let identifier = binding.pattern.as(IdentifierPatternSyntax.self)?.identifier,
+      let type = binding.typeAnnotation?.type,
+      binding.accessor == nil
+    else {
       return []
     }
 
     guard let wrapperTypeNameExpr = node.argumentList?.first?.expression,
-       let stringLiteral = wrapperTypeNameExpr.as(StringLiteralExprSyntax.self),
-       stringLiteral.segments.count == 1,
-       case let .stringSegment(wrapperTypeNameSegment)? = stringLiteral.segments.first else {
+      let stringLiteral = wrapperTypeNameExpr.as(StringLiteralExprSyntax.self),
+      stringLiteral.segments.count == 1,
+      case let .stringSegment(wrapperTypeNameSegment)? = stringLiteral.segments.first
+    else {
       return []
     }
 
@@ -461,7 +464,7 @@ public let testMacros: [String: Macro.Type] = [
   "stringify": StringifyMacro.self,
   "myError": ErrorMacro.self,
   "bitwidthNumberedStructs": DefineBitwidthNumberedStructsMacro.self,
-  "wrapProperty" : PropertyWrapper.self,
+  "wrapProperty": PropertyWrapper.self,
   "addCompletionHandler": AddCompletionHandler.self,
   "addBackingStorage": AddBackingStorage.self,
 ]
@@ -600,7 +603,8 @@ final class MacroSystemTests: XCTestCase {
         }
       }
       private var _x: MyWrapperType<Int>
-      """)
+      """
+    )
   }
 
   func testAddCompletionHandler() {

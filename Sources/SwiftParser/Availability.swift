@@ -13,32 +13,22 @@
 @_spi(RawSyntax) import SwiftSyntax
 
 extension Parser {
-  enum AvailabilitySpecSource {
-    case available
-    case unavailable
-    case macro
-  }
-
   /// Parse a list of availability arguments.
   ///
   /// Grammar
   /// =======
   ///
   ///     availability-arguments → availability-argument | availability-argument , availability-arguments
-  mutating func parseAvailabilitySpecList(
-    from source: AvailabilitySpecSource
-  ) -> RawAvailabilitySpecListSyntax {
+  mutating func parseAvailabilitySpecList() -> RawAvailabilitySpecListSyntax {
     var elements = [RawAvailabilityArgumentSyntax]()
     do {
       var keepGoing: RawTokenSyntax? = nil
       var availablityArgumentProgress = LoopProgressCondition()
       repeat {
         let entry: RawAvailabilityArgumentSyntax.Entry
-        switch source {
-        case .available where self.at(.identifier),
-          .unavailable where self.at(.identifier):
+        if self.at(.identifier) {
           entry = .availabilityVersionRestriction(self.parseAvailabilityMacro())
-        default:
+        } else {
           entry = self.parseAvailabilitySpec()
         }
 

@@ -86,14 +86,11 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   func testAvailabilityQueryUnavailability4() {
     AssertParse(
       """
-      if #unavailable 1️⃣{ 
-      }2️⃣
+      if #unavailable 1️⃣{
+      }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected availability condition
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(' in availability condition"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end availability condition"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected code block in 'if' statement"),
+        DiagnosticSpec(message: "expected '(', '@availability' arguments, and ')' in availability condition")
       ]
     )
   }
@@ -101,18 +98,12 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   func testAvailabilityQueryUnavailability5() {
     AssertParse(
       """
-      if #unavailableℹ️( { 
-      }1️⃣
+      if #unavailable( 1️⃣{
+      }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected platform name
-        DiagnosticSpec(
-          message: "expected ')' to end availability condition",
-          notes: [
-            NoteSpec(message: "to match this opening '('")
-          ]
-        ),
-        DiagnosticSpec(message: "expected code block in 'if' statement"),
+        DiagnosticSpec(message: "expected platform and version in availability argument"),
+        DiagnosticSpec(message: "expected ')' to end availability condition"),
       ]
     )
   }
@@ -120,13 +111,11 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   func testAvailabilityQueryUnavailability6() {
     AssertParse(
       """
-      if #unavailable() { 1️⃣
+      if #unavailable(1️⃣) {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected platform name
-        DiagnosticSpec(message: "expected ')' to end availability condition"),
-        DiagnosticSpec(message: "expected '{' in 'if' statement"),
+        DiagnosticSpec(message: "expected platform and version in availability argument")
       ]
     )
   }
@@ -264,13 +253,11 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
     AssertParse(
       """
       // Should this be a valid spelling since `#unvailable(*)` cannot be written?
-      if #unavailable() { 1️⃣
+      if #unavailable(1️⃣) {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected platform name
-        DiagnosticSpec(message: "expected ')' to end availability condition"),
-        DiagnosticSpec(message: "expected '{' in 'if' statement"),
+        DiagnosticSpec(message: "expected platform and version in availability argument")
       ]
     )
   }
@@ -305,18 +292,12 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   func testAvailabilityQueryUnavailability22() {
     AssertParse(
       """
-      if #unavailableℹ️(OSX 10.51, {
-      }1️⃣
+      if #unavailable(OSX 10.51, 1️⃣{
+      }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected platform name
-        DiagnosticSpec(
-          message: "expected ')' to end availability condition",
-          notes: [
-            NoteSpec(message: "to match this opening '('")
-          ]
-        ),
-        DiagnosticSpec(message: "expected code block in 'if' statement"),
+        DiagnosticSpec(message: "expected platform and version in availability argument"),
+        DiagnosticSpec(message: "expected ')' to end availability condition"),
       ]
     )
   }
@@ -324,13 +305,11 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   func testAvailabilityQueryUnavailability23() {
     AssertParse(
       """
-      if #unavailable(OSX 10.51,) { 1️⃣
+      if #unavailable(OSX 10.51,1️⃣) {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected platform name
-        DiagnosticSpec(message: "expected ')' to end availability condition"),
-        DiagnosticSpec(message: "expected '{' in 'if' statement"),
+        DiagnosticSpec(message: "expected platform and version in availability argument")
       ]
     )
   }

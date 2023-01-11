@@ -106,13 +106,10 @@ final class AvailabilityQueryTests: XCTestCase {
     AssertParse(
       """
       if #available 1️⃣{ 
-      }2️⃣
+      }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected availability condition
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(' in availability condition"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end availability condition"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected code block in 'if' statement"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(', '@availability' arguments, and ')' in availability condition")
       ]
     )
   }
@@ -120,18 +117,12 @@ final class AvailabilityQueryTests: XCTestCase {
   func testAvailabilityQuery8() {
     AssertParse(
       """
-      if #availableℹ️( {
-      }1️⃣
+      if #available( 1️⃣{
+      }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected platform name
-        DiagnosticSpec(
-          message: "expected ')' to end availability condition",
-          notes: [
-            NoteSpec(message: "to match this opening '('")
-          ]
-        ),
-        DiagnosticSpec(message: "expected code block in 'if' statement"),
+        DiagnosticSpec(message: "expected platform and version in availability argument"),
+        DiagnosticSpec(message: "expected ')' to end availability condition"),
       ]
     )
   }
@@ -139,13 +130,11 @@ final class AvailabilityQueryTests: XCTestCase {
   func testAvailabilityQuery9() {
     AssertParse(
       """
-      if #available() { 1️⃣
+      if #available(1️⃣) {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected platform name
-        DiagnosticSpec(message: "expected ')' to end availability condition"),
-        DiagnosticSpec(message: "expected '{' in 'if' statement"),
+        DiagnosticSpec(message: "expected platform and version in availability argument")
       ]
     )
   }
@@ -335,18 +324,12 @@ final class AvailabilityQueryTests: XCTestCase {
   func testAvailabilityQuery27() {
     AssertParse(
       """
-      if #availableℹ️(OSX 10.51, {
-      }1️⃣
+      if #available(OSX 10.51, 1️⃣{
+      }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected platform name
-        DiagnosticSpec(
-          message: "expected ')' to end availability condition",
-          notes: [
-            NoteSpec(message: "to match this opening '('")
-          ]
-        ),
-        DiagnosticSpec(message: "expected code block in 'if' statement"),
+        DiagnosticSpec(message: "expected platform and version in availability argument"),
+        DiagnosticSpec(message: "expected ')' to end availability condition"),
       ]
     )
   }
@@ -354,13 +337,11 @@ final class AvailabilityQueryTests: XCTestCase {
   func testAvailabilityQuery28() {
     AssertParse(
       """
-      if #available(OSX 10.51,) { 1️⃣
+      if #available(OSX 10.51,1️⃣) {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected platform name
-        DiagnosticSpec(message: "expected ')' to end availability condition"),
-        DiagnosticSpec(message: "expected '{' in 'if' statement"),
+        DiagnosticSpec(message: "expected platform and version in availability argument")
       ]
     )
   }

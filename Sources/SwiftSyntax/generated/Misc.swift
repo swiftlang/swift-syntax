@@ -833,17 +833,17 @@ extension SyntaxKind {
     case .attributedType: 
       return "type"
     case .availabilityArgument: 
-      return "'@available' argument"
+      return "availability argument"
     case .availabilityCondition: 
       return "availability condition"
     case .availabilityEntry: 
       return "availability entry"
     case .availabilityLabeledArgument: 
-      return "'@available' argument"
+      return "availability argument"
     case .availabilitySpecList: 
       return "'@availability' arguments"
     case .availabilityVersionRestriction: 
-      return "'@available' argument"
+      return "availability argument"
     case .awaitExpr: 
       return "'await' expression"
     case .backDeployAttributeSpecList: 

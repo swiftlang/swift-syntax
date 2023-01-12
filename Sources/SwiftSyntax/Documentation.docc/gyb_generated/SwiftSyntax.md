@@ -361,6 +361,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/OpaqueReturnTypeOfAttributeArgumentsSyntax>
 - <doc:SwiftSyntax/ConventionAttributeArgumentsSyntax>
 - <doc:SwiftSyntax/ConventionWitnessMethodAttributeArgumentsSyntax>
+- <doc:SwiftSyntax/ExposeAttributeArgumentsSyntax>
 - <doc:SwiftSyntax/SwitchCaseListSyntax>
 - <doc:SwiftSyntax/WhereClauseSyntax>
 - <doc:SwiftSyntax/CatchClauseListSyntax>

@@ -10448,10 +10448,11 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol {
     case `conventionArguments`(RawConventionAttributeArgumentsSyntax)
     case `conventionWitnessMethodArguments`(RawConventionWitnessMethodAttributeArgumentsSyntax)
     case `opaqueReturnTypeOfAttributeArguments`(RawOpaqueReturnTypeOfAttributeArgumentsSyntax)
+    case `exposeAttributeArguments`(RawExposeAttributeArgumentsSyntax)
     case `tokenList`(RawTokenListSyntax)
 
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
-      return RawTokenSyntax.isKindOf(raw) || RawStringLiteralExprSyntax.isKindOf(raw) || RawAvailabilitySpecListSyntax.isKindOf(raw) || RawSpecializeAttributeSpecListSyntax.isKindOf(raw) || RawObjCSelectorSyntax.isKindOf(raw) || RawImplementsAttributeArgumentsSyntax.isKindOf(raw) || RawDifferentiableAttributeArgumentsSyntax.isKindOf(raw) || RawDerivativeRegistrationAttributeArgumentsSyntax.isKindOf(raw) || RawNamedAttributeStringArgumentSyntax.isKindOf(raw) || RawBackDeployAttributeSpecListSyntax.isKindOf(raw) || RawConventionAttributeArgumentsSyntax.isKindOf(raw) || RawConventionWitnessMethodAttributeArgumentsSyntax.isKindOf(raw) || RawOpaqueReturnTypeOfAttributeArgumentsSyntax.isKindOf(raw) || RawTokenListSyntax.isKindOf(raw)
+      return RawTokenSyntax.isKindOf(raw) || RawStringLiteralExprSyntax.isKindOf(raw) || RawAvailabilitySpecListSyntax.isKindOf(raw) || RawSpecializeAttributeSpecListSyntax.isKindOf(raw) || RawObjCSelectorSyntax.isKindOf(raw) || RawImplementsAttributeArgumentsSyntax.isKindOf(raw) || RawDifferentiableAttributeArgumentsSyntax.isKindOf(raw) || RawDerivativeRegistrationAttributeArgumentsSyntax.isKindOf(raw) || RawNamedAttributeStringArgumentSyntax.isKindOf(raw) || RawBackDeployAttributeSpecListSyntax.isKindOf(raw) || RawConventionAttributeArgumentsSyntax.isKindOf(raw) || RawConventionWitnessMethodAttributeArgumentsSyntax.isKindOf(raw) || RawOpaqueReturnTypeOfAttributeArgumentsSyntax.isKindOf(raw) || RawExposeAttributeArgumentsSyntax.isKindOf(raw) || RawTokenListSyntax.isKindOf(raw)
     }
 
     public var raw: RawSyntax {
@@ -10469,6 +10470,7 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol {
       case .conventionArguments(let node): return node.raw
       case .conventionWitnessMethodArguments(let node): return node.raw
       case .opaqueReturnTypeOfAttributeArguments(let node): return node.raw
+      case .exposeAttributeArguments(let node): return node.raw
       case .tokenList(let node): return node.raw
       }
     }
@@ -10524,6 +10526,10 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol {
       }
       if let node = RawOpaqueReturnTypeOfAttributeArgumentsSyntax(other) {
         self = .opaqueReturnTypeOfAttributeArguments(node)
+        return
+      }
+      if let node = RawExposeAttributeArgumentsSyntax(other) {
+        self = .exposeAttributeArguments(node)
         return
       }
       if let node = RawTokenListSyntax(other) {
@@ -12302,6 +12308,76 @@ public struct RawConventionWitnessMethodAttributeArgumentsSyntax: RawSyntaxNodeP
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
   }
   public var unexpectedAfterProtocolName: RawUnexpectedNodesSyntax? {
+    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+}
+
+@_spi(RawSyntax)
+public struct RawExposeAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
+
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
+    return raw.layoutView!
+  }
+
+  public static func isKindOf(_ raw: RawSyntax) -> Bool {
+    return raw.kind == .exposeAttributeArguments
+  }
+
+  public var raw: RawSyntax
+  init(raw: RawSyntax) {
+    assert(Self.isKindOf(raw))
+    self.raw = raw
+  }
+
+  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+    guard Self.isKindOf(other.raw) else { return nil }
+    self.init(raw: other.raw)
+  }
+
+  public init(
+    _ unexpectedBeforeLanguage: RawUnexpectedNodesSyntax? = nil,
+    language: RawTokenSyntax,
+    _ unexpectedBetweenLanguageAndComma: RawUnexpectedNodesSyntax? = nil,
+    comma: RawTokenSyntax?,
+    _ unexpectedBetweenCommaAndCxxName: RawUnexpectedNodesSyntax? = nil,
+    cxxName: RawTokenSyntax?,
+    _ unexpectedAfterCxxName: RawUnexpectedNodesSyntax? = nil,
+    arena: __shared SyntaxArena
+  ) {
+    let raw = RawSyntax.makeLayout(
+      kind: .exposeAttributeArguments, uninitializedCount: 7, arena: arena) { layout in
+      layout.initialize(repeating: nil)
+      layout[0] = unexpectedBeforeLanguage?.raw
+      layout[1] = language.raw
+      layout[2] = unexpectedBetweenLanguageAndComma?.raw
+      layout[3] = comma?.raw
+      layout[4] = unexpectedBetweenCommaAndCxxName?.raw
+      layout[5] = cxxName?.raw
+      layout[6] = unexpectedAfterCxxName?.raw
+    }
+    self.init(raw: raw)
+  }
+
+  public var unexpectedBeforeLanguage: RawUnexpectedNodesSyntax? {
+    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  public var language: RawTokenSyntax {
+    layoutView.children[1].map(RawTokenSyntax.init(raw:))!
+  }
+  public var unexpectedBetweenLanguageAndComma: RawUnexpectedNodesSyntax? {
+    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  public var comma: RawTokenSyntax? {
+    layoutView.children[3].map(RawTokenSyntax.init(raw:))
+  }
+  public var unexpectedBetweenCommaAndCxxName: RawUnexpectedNodesSyntax? {
+    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  public var cxxName: RawTokenSyntax? {
+    layoutView.children[5].map(RawTokenSyntax.init(raw:))
+  }
+  public var unexpectedAfterCxxName: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }

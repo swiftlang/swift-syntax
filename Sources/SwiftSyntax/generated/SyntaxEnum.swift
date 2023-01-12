@@ -194,6 +194,8 @@ public enum SyntaxEnum {
   
   case enumDecl(EnumDeclSyntax)
   
+  case exposeAttributeArguments(ExposeAttributeArgumentsSyntax)
+  
   case exprList(ExprListSyntax)
   
   case expressionPattern(ExpressionPatternSyntax)
@@ -709,6 +711,8 @@ public extension Syntax {
       return .enumCaseElement(EnumCaseElementSyntax(self)!)
     case .enumDecl: 
       return .enumDecl(EnumDeclSyntax(self)!)
+    case .exposeAttributeArguments: 
+      return .exposeAttributeArguments(ExposeAttributeArgumentsSyntax(self)!)
     case .exprList: 
       return .exprList(ExprListSyntax(self)!)
     case .expressionPattern: 

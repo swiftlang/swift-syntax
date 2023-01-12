@@ -194,6 +194,8 @@ public enum SyntaxKind {
   
   case enumDecl
   
+  case exposeAttributeArguments
+  
   case exprList
   
   case expressionPattern

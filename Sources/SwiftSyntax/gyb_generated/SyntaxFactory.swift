@@ -5720,6 +5720,41 @@ public enum SyntaxFactory {
       return ConventionWitnessMethodAttributeArgumentsSyntax(data)
     }
   }
+  @available(*, deprecated, message: "Use initializer on ExposeAttributeArgumentsSyntax")
+  public static func makeExposeAttributeArguments(_ unexpectedBeforeLanguage: UnexpectedNodesSyntax? = nil, language: TokenSyntax, _ unexpectedBetweenLanguageAndComma: UnexpectedNodesSyntax? = nil, comma: TokenSyntax?, _ unexpectedBetweenCommaAndCxxName: UnexpectedNodesSyntax? = nil, cxxName: TokenSyntax?, _ unexpectedAfterCxxName: UnexpectedNodesSyntax? = nil) -> ExposeAttributeArgumentsSyntax {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeLanguage?.raw,
+      language.raw,
+      unexpectedBetweenLanguageAndComma?.raw,
+      comma?.raw,
+      unexpectedBetweenCommaAndCxxName?.raw,
+      cxxName?.raw,
+      unexpectedAfterCxxName?.raw,
+    ]
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.exposeAttributeArguments,
+        from: layout, arena: arena)
+      let data = SyntaxData.forRoot(raw)
+      return ExposeAttributeArgumentsSyntax(data)
+    }
+  }
+
+  @available(*, deprecated, message: "Use initializer on ExposeAttributeArgumentsSyntax")
+  public static func makeBlankExposeAttributeArguments(presence: SourcePresence = .present) -> ExposeAttributeArgumentsSyntax {
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .exposeAttributeArguments,
+        from: [
+        nil,
+        RawSyntax.makeMissingToken(kind: TokenKind.unknown(""), arena: arena),
+        nil,
+        nil,
+        nil,
+        nil,
+        nil,
+      ], arena: arena))
+      return ExposeAttributeArgumentsSyntax(data)
+    }
+  }
   @available(*, deprecated, message: "Use initializer on LabeledStmtSyntax")
   public static func makeLabeledStmt(_ unexpectedBeforeLabelName: UnexpectedNodesSyntax? = nil, labelName: TokenSyntax, _ unexpectedBetweenLabelNameAndLabelColon: UnexpectedNodesSyntax? = nil, labelColon: TokenSyntax, _ unexpectedBetweenLabelColonAndStatement: UnexpectedNodesSyntax? = nil, statement: StmtSyntax, _ unexpectedAfterStatement: UnexpectedNodesSyntax? = nil) -> LabeledStmtSyntax {
     let layout: [RawSyntax?] = [

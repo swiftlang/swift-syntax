@@ -1084,6 +1084,18 @@ open class SyntaxVisitor {
   open func visitPost(_ node: EnumDeclSyntax) {
   }
   
+  /// Visiting `ExposeAttributeArgumentsSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: ExposeAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting `ExposeAttributeArgumentsSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: ExposeAttributeArgumentsSyntax) {
+  }
+  
   /// Visiting `ExprListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -4057,6 +4069,17 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplExposeAttributeArgumentsSyntax(_ data: SyntaxData) {
+    let node = ExposeAttributeArgumentsSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplExprListSyntax(_ data: SyntaxData) {
     let node = ExprListSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -6065,6 +6088,8 @@ open class SyntaxVisitor {
       visitImplEnumCaseElementSyntax(data)
     case .enumDecl: 
       visitImplEnumDeclSyntax(data)
+    case .exposeAttributeArguments: 
+      visitImplExposeAttributeArgumentsSyntax(data)
     case .exprList: 
       visitImplExprListSyntax(data)
     case .expressionPattern: 

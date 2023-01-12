@@ -496,6 +496,18 @@ extension EnumDecl {
   }
 }
 
+/// The arguments for the '@_expose' attribute
+extension ExposeAttributeArguments {
+  /// A convenience initializer that allows:
+  ///  - Initializing syntax collections using result builders
+  ///  - Initializing tokens without default text using strings
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeLanguage: UnexpectedNodes? = nil, language: Token, unexpectedBetweenLanguageAndComma: UnexpectedNodes? = nil, comma: Token? = nil, unexpectedBetweenCommaAndCxxName: UnexpectedNodes? = nil, cxxName: String? = nil, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLanguage, language: language, unexpectedBetweenLanguageAndComma, comma: comma, unexpectedBetweenCommaAndCxxName, cxxName: cxxName.map { 
+        Token.`stringLiteral`($0) 
+      }, trailingTrivia: trailingTrivia)
+  }
+}
+
 extension ExpressionSegment {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders

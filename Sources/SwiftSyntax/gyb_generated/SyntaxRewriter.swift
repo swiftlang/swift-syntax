@@ -1220,6 +1220,13 @@ open class SyntaxRewriter {
     return Syntax(visitChildren(node)).cast(ConventionWitnessMethodAttributeArgumentsSyntax.self)
   }
 
+  /// Visit a `ExposeAttributeArgumentsSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: ExposeAttributeArgumentsSyntax) -> ExposeAttributeArgumentsSyntax {
+    return Syntax(visitChildren(node)).cast(ExposeAttributeArgumentsSyntax.self)
+  }
+
   /// Visit a `LabeledStmtSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -3586,6 +3593,16 @@ open class SyntaxRewriter {
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplExposeAttributeArgumentsSyntax(_ data: SyntaxData) -> Syntax {
+    let node = ExposeAttributeArgumentsSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { visitPost(node._syntaxNode) }
+    if let newNode = visitAny(node._syntaxNode) { return newNode }
+    return Syntax(visit(node))
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplLabeledStmtSyntax(_ data: SyntaxData) -> Syntax {
     let node = LabeledStmtSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -4797,6 +4814,8 @@ open class SyntaxRewriter {
       return visitImplConventionAttributeArgumentsSyntax
     case .conventionWitnessMethodAttributeArguments:
       return visitImplConventionWitnessMethodAttributeArgumentsSyntax
+    case .exposeAttributeArguments:
+      return visitImplExposeAttributeArgumentsSyntax
     case .labeledStmt:
       return visitImplLabeledStmtSyntax
     case .continueStmt:
@@ -5318,6 +5337,8 @@ open class SyntaxRewriter {
       return visitImplConventionAttributeArgumentsSyntax(data)
     case .conventionWitnessMethodAttributeArguments:
       return visitImplConventionWitnessMethodAttributeArgumentsSyntax(data)
+    case .exposeAttributeArguments:
+      return visitImplExposeAttributeArgumentsSyntax(data)
     case .labeledStmt:
       return visitImplLabeledStmtSyntax(data)
     case .continueStmt:

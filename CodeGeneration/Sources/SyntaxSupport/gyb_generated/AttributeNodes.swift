@@ -105,6 +105,8 @@ public let ATTRIBUTE_NODES: [Node] = [
                        kind: "ConventionWitnessMethodAttributeArguments"),
                  Child(name: "OpaqueReturnTypeOfAttributeArguments",
                        kind: "OpaqueReturnTypeOfAttributeArguments"),
+                 Child(name: "ExposeAttributeArguments",
+                       kind: "ExposeAttributeArguments"),
                  Child(name: "TokenList",
                        kind: "TokenList",
                        collectionElementName: "Token")
@@ -653,6 +655,27 @@ public let ATTRIBUTE_NODES: [Node] = [
                kind: "IdentifierToken",
                tokenChoices: [
                  "Identifier"
+               ])
+       ]),
+
+  Node(name: "ExposeAttributeArguments",
+       nameForDiagnostics: "@_expose arguments",
+       description: "The arguments for the '@_expose' attribute",
+       kind: "Syntax",
+       children: [
+         Child(name: "Language",
+               kind: "Token"),
+         Child(name: "Comma",
+               kind: "CommaToken",
+               isOptional: true,
+               tokenChoices: [
+                 "Comma"
+               ]),
+         Child(name: "CxxName",
+               kind: "StringLiteralToken",
+               isOptional: true,
+               tokenChoices: [
+                 "StringLiteral"
                ])
        ]),
 

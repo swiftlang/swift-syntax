@@ -365,4 +365,34 @@ final class AttributeTests: XCTestCase {
       """
     )
   }
+
+  func testExpose() {
+    AssertParse(
+      """
+      @_expose(Cxx) func foo() {}
+      """
+    )
+
+    AssertParse(
+      """
+      @_expose(Cplusplus) func foo() {}
+      """
+    )
+
+    AssertParse(
+      """
+      @_expose(Cxx, "baz") func foo() {}
+      """
+    )
+
+    AssertParse(
+      """
+      @_expose(Cxx, 1️⃣baz) func foo() {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected string literal in @_expose arguments"),
+        DiagnosticSpec(message: "unexpected code 'baz' in attribute"),
+      ]
+    )
+  }
 }

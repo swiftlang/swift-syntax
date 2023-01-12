@@ -73,6 +73,8 @@ ATTRIBUTE_NODES = [
                              kind='ConventionWitnessMethodAttributeArguments'), 
                        Child('OpaqueReturnTypeOfAttributeArguments',
                              kind='OpaqueReturnTypeOfAttributeArguments'),
+                       Child('ExposeAttributeArguments',
+                             kind='ExposeAttributeArguments'),
                        # TokenList for custom effects which are parsed by
                        # `FunctionEffects.parse()` in swift.
                        Child('TokenList', kind='TokenList',
@@ -485,4 +487,15 @@ ATTRIBUTE_NODES = [
              Child('Colon', kind='ColonToken'),
              Child('ProtocolName', kind='IdentifierToken'),
         ]),
+
+    Node('ExposeAttributeArguments', name_for_diagnostics='@_expose arguments',
+         kind='Syntax',
+         description='''
+         The arguments for the '@_expose' attribute
+         ''',
+         children=[
+           Child('Language', kind='Token'),
+           Child('Comma', kind='CommaToken', is_optional=True),
+           Child('CxxName', kind='StringLiteralToken', is_optional=True)
+         ]),
 ]

@@ -761,6 +761,14 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
+  override open func visit(_ node: ExposeAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: ExposeAttributeArgumentsSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
   override open func visit(_ node: ExprListSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

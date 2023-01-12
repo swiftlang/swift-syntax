@@ -12300,6 +12300,7 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
     case `conventionArguments`(ConventionAttributeArgumentsSyntax)
     case `conventionWitnessMethodArguments`(ConventionWitnessMethodAttributeArgumentsSyntax)
     case `opaqueReturnTypeOfAttributeArguments`(OpaqueReturnTypeOfAttributeArgumentsSyntax)
+    case `exposeAttributeArguments`(ExposeAttributeArgumentsSyntax)
     case `tokenList`(TokenListSyntax)
     public var _syntaxNode: Syntax {
       switch self {
@@ -12316,6 +12317,7 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
       case .conventionArguments(let node): return node._syntaxNode
       case .conventionWitnessMethodArguments(let node): return node._syntaxNode
       case .opaqueReturnTypeOfAttributeArguments(let node): return node._syntaxNode
+      case .exposeAttributeArguments(let node): return node._syntaxNode
       case .tokenList(let node): return node._syntaxNode
       }
     }
@@ -12358,6 +12360,9 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
     }
     public init(_ node: OpaqueReturnTypeOfAttributeArgumentsSyntax) {
       self = .opaqueReturnTypeOfAttributeArguments(node)
+    }
+    public init(_ node: ExposeAttributeArgumentsSyntax) {
+      self = .exposeAttributeArguments(node)
     }
     public init(_ node: TokenListSyntax) {
       self = .tokenList(node)
@@ -12415,6 +12420,10 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
         self = .opaqueReturnTypeOfAttributeArguments(node)
         return
       }
+      if let node = node.as(ExposeAttributeArgumentsSyntax.self) {
+        self = .exposeAttributeArguments(node)
+        return
+      }
       if let node = node.as(TokenListSyntax.self) {
         self = .tokenList(node)
         return
@@ -12437,6 +12446,7 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
         .node(ConventionAttributeArgumentsSyntax.self),
         .node(ConventionWitnessMethodAttributeArgumentsSyntax.self),
         .node(OpaqueReturnTypeOfAttributeArgumentsSyntax.self),
+        .node(ExposeAttributeArgumentsSyntax.self),
         .node(TokenListSyntax.self),
       ])
     }
@@ -17951,6 +17961,252 @@ extension ConventionWitnessMethodAttributeArgumentsSyntax: CustomReflectable {
       "unexpectedBetweenColonAndProtocolName": unexpectedBetweenColonAndProtocolName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "protocolName": Syntax(protocolName).asProtocol(SyntaxProtocol.self),
       "unexpectedAfterProtocolName": unexpectedAfterProtocolName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+    ])
+  }
+}
+
+// MARK: - ExposeAttributeArgumentsSyntax
+
+/// 
+/// The arguments for the '@_expose' attribute
+/// 
+public struct ExposeAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .exposeAttributeArguments else { return nil }
+    self._syntaxNode = node._syntaxNode
+  }
+
+  /// Creates a `ExposeAttributeArgumentsSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .exposeAttributeArguments)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeLanguage: UnexpectedNodesSyntax? = nil,
+    language: TokenSyntax,
+    _ unexpectedBetweenLanguageAndComma: UnexpectedNodesSyntax? = nil,
+    comma: TokenSyntax? = nil,
+    _ unexpectedBetweenCommaAndCxxName: UnexpectedNodesSyntax? = nil,
+    cxxName: TokenSyntax? = nil,
+    _ unexpectedAfterCxxName: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed 
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeLanguage, language, unexpectedBetweenLanguageAndComma, comma, unexpectedBetweenCommaAndCxxName, cxxName, unexpectedAfterCxxName))) { (arena, _) in
+      let layout: [RawSyntax?] = [
+        unexpectedBeforeLanguage?.raw,
+        language.raw,
+        unexpectedBetweenLanguageAndComma?.raw,
+        comma?.raw,
+        unexpectedBetweenCommaAndCxxName?.raw,
+        cxxName?.raw,
+        unexpectedAfterCxxName?.raw,
+      ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.exposeAttributeArguments, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+
+  public var unexpectedBeforeLanguage: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 0, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBeforeLanguage(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBeforeLanguage` replaced.
+  /// - param newChild: The new `unexpectedBeforeLanguage` to replace the node's
+  ///                   current `unexpectedBeforeLanguage`, if present.
+  public func withUnexpectedBeforeLanguage(_ newChild: UnexpectedNodesSyntax?) -> ExposeAttributeArgumentsSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
+    return ExposeAttributeArgumentsSyntax(newData)
+  }
+
+  public var language: TokenSyntax {
+    get {
+      let childData = data.child(at: 1, parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLanguage(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `language` replaced.
+  /// - param newChild: The new `language` to replace the node's
+  ///                   current `language`, if present.
+  public func withLanguage(_ newChild: TokenSyntax) -> ExposeAttributeArgumentsSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild.raw
+    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
+    return ExposeAttributeArgumentsSyntax(newData)
+  }
+
+  public var unexpectedBetweenLanguageAndComma: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 2, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenLanguageAndComma(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenLanguageAndComma` replaced.
+  /// - param newChild: The new `unexpectedBetweenLanguageAndComma` to replace the node's
+  ///                   current `unexpectedBetweenLanguageAndComma`, if present.
+  public func withUnexpectedBetweenLanguageAndComma(_ newChild: UnexpectedNodesSyntax?) -> ExposeAttributeArgumentsSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
+    return ExposeAttributeArgumentsSyntax(newData)
+  }
+
+  public var comma: TokenSyntax? {
+    get {
+      let childData = data.child(at: 3, parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withComma(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `comma` replaced.
+  /// - param newChild: The new `comma` to replace the node's
+  ///                   current `comma`, if present.
+  public func withComma(_ newChild: TokenSyntax?) -> ExposeAttributeArgumentsSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
+    return ExposeAttributeArgumentsSyntax(newData)
+  }
+
+  public var unexpectedBetweenCommaAndCxxName: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 4, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenCommaAndCxxName(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenCommaAndCxxName` replaced.
+  /// - param newChild: The new `unexpectedBetweenCommaAndCxxName` to replace the node's
+  ///                   current `unexpectedBetweenCommaAndCxxName`, if present.
+  public func withUnexpectedBetweenCommaAndCxxName(_ newChild: UnexpectedNodesSyntax?) -> ExposeAttributeArgumentsSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
+    return ExposeAttributeArgumentsSyntax(newData)
+  }
+
+  public var cxxName: TokenSyntax? {
+    get {
+      let childData = data.child(at: 5, parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withCxxName(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `cxxName` replaced.
+  /// - param newChild: The new `cxxName` to replace the node's
+  ///                   current `cxxName`, if present.
+  public func withCxxName(_ newChild: TokenSyntax?) -> ExposeAttributeArgumentsSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
+    return ExposeAttributeArgumentsSyntax(newData)
+  }
+
+  public var unexpectedAfterCxxName: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 6, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterCxxName(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterCxxName` replaced.
+  /// - param newChild: The new `unexpectedAfterCxxName` to replace the node's
+  ///                   current `unexpectedAfterCxxName`, if present.
+  public func withUnexpectedAfterCxxName(_ newChild: UnexpectedNodesSyntax?) -> ExposeAttributeArgumentsSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
+    return ExposeAttributeArgumentsSyntax(newData)
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeLanguage,
+      \Self.language,
+      \Self.unexpectedBetweenLanguageAndComma,
+      \Self.comma,
+      \Self.unexpectedBetweenCommaAndCxxName,
+      \Self.cxxName,
+      \Self.unexpectedAfterCxxName,
+    ])
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    case 5:
+      return nil
+    case 6:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
+}
+
+extension ExposeAttributeArgumentsSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "unexpectedBeforeLanguage": unexpectedBeforeLanguage.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "language": Syntax(language).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenLanguageAndComma": unexpectedBetweenLanguageAndComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "comma": comma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenCommaAndCxxName": unexpectedBetweenCommaAndCxxName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "cxxName": cxxName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedAfterCxxName": unexpectedAfterCxxName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }

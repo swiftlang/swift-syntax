@@ -136,6 +136,7 @@ public let KEYWORDS: [KeywordSpec] = [
   KeywordSpec("availability"),
   KeywordSpec("available"),
   KeywordSpec("await"),
+  KeywordSpec("before"),
   KeywordSpec("break", isLexerClassified: true, requiresTrailingSpace: true),
   KeywordSpec("case", isLexerClassified: true, requiresTrailingSpace: true),
   KeywordSpec("catch", isLexerClassified: true, requiresLeadingSpace: true),

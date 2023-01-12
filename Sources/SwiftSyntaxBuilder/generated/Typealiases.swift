@@ -195,6 +195,8 @@ public typealias EnumCaseElement = EnumCaseElementSyntax
 
 public typealias EnumDecl = EnumDeclSyntax
 
+public typealias ExposeAttributeArguments = ExposeAttributeArgumentsSyntax
+
 public typealias ExprList = ExprListSyntax
 
 public typealias Expr = ExprSyntax

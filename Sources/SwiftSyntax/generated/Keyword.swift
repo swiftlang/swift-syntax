@@ -223,6 +223,8 @@ public enum Keyword: StaticString {
   
   case await
   
+  case before
+  
   case `break`
   
   case `case`
@@ -667,6 +669,8 @@ public enum Keyword: StaticString {
         self = ._const
       case "_local": 
         self = ._local
+      case "before": 
+        self = .before
       case "deinit": 
         self = .`deinit`
       case "didSet": 

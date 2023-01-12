@@ -107,6 +107,7 @@ extension Syntax {
       .node(EnumCaseElementListSyntax.self), 
       .node(EnumCaseElementSyntax.self), 
       .node(EnumDeclSyntax.self), 
+      .node(ExposeAttributeArgumentsSyntax.self), 
       .node(ExprListSyntax.self), 
       .node(ExpressionPatternSyntax.self), 
       .node(ExpressionSegmentSyntax.self), 
@@ -457,6 +458,8 @@ extension SyntaxKind {
       return EnumCaseElementSyntax.self
     case .enumDecl: 
       return EnumDeclSyntax.self
+    case .exposeAttributeArguments: 
+      return ExposeAttributeArgumentsSyntax.self
     case .exprList: 
       return ExprListSyntax.self
     case .expressionPattern: 
@@ -972,6 +975,8 @@ extension SyntaxKind {
       return nil
     case .enumDecl: 
       return "enum"
+    case .exposeAttributeArguments: 
+      return "@_expose arguments"
     case .exprList: 
       return nil
     case .expressionPattern: 

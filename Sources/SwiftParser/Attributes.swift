@@ -203,6 +203,10 @@ extension Parser {
       return parseAttribute(hasRequiredArguments: true) { parser in
         return .backDeployArguments(parser.parseBackDeployArguments())
       }
+    case ._expose:
+      return parseAttribute(hasRequiredArguments: true) { parser in
+        return .exposeAttributeArguments(parser.parseExposeArguments())
+      }
     case .__objc_bridged, .__raw_doc_comment, ._alwaysEmitConformanceMetadata, ._alwaysEmitIntoClient, ._assemblyVision, ._borrowed, ._compilerInitialized, ._custom, ._disfavoredOverload, ._eagerMove, ._exported, ._fixed_layout, ._frozen, ._hasInitialValue, ._hasMissingDesignatedInitializers, ._hasStorage, ._implementationOnly, ._implicitSelfCapture, ._inheritActorContext, ._inheritsConvenienceInitializers, ._marker, ._moveOnly, ._noAllocation, ._noEagerMove, ._noImplicitCopy, ._noLocks, ._noMetadata, ._nonEphemeral, ._nonoverride, ._objc_non_lazy_realization, ._show_in_interface, ._specializeExtension, ._spiOnly, ._staticInitializeObjCMetadata, ._transparent, ._unsafeInheritExecutor, ._weakLinked, .atReasync, .atRethrows, .discardableResult, .dynamicCallable, .dynamicMemberLookup, .frozen, .GKInspectable, .globalActor, .IBAction, .IBDesignable, .IBInspectable, .IBOutlet, .IBSegueAction, .inlinable, .LLDBDebuggerFunction, .main, .noDerivative, .nonobjc, .NSApplicationMain, .NSCopying,
       .NSManaged, .objcMembers, .preconcurrency, .propertyWrapper, .requires_stored_property_inits, .resultBuilder, .runtimeMetadata, .Sendable, .testable, .typeWrapper, .typeWrapperIgnored, .UIApplicationMain, .unsafe_no_objc_tagged_pointer, .usableFromInline, .warn_unqualified_access:
       // No arguments
@@ -211,10 +215,6 @@ extension Parser {
       // Virtual attributes that should not be parsed
       break
     // MARK: - Other
-    case ._expose:
-      // @_expose(<language>)
-      // @_expose(Cxx, "cxxName")
-      break
     case ._originallyDefinedIn:
       // @_originallyDefinedIn(module: "HighLevel", OSX 10.9, iOS 13.0)
       break
@@ -877,7 +877,7 @@ extension Parser {
 
 extension Parser {
   mutating func parseBackDeployArguments() -> RawBackDeployAttributeSpecListSyntax {
-    let (unexpectedBeforeLabel, label) = self.expectContextualKeyword("before")
+    let (unexpectedBeforeLabel, label) = self.expect(.keyword(.before), remapping: .identifier)
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
     var elements: [RawBackDeployVersionArgumentSyntax] = []
     var keepGoing: RawTokenSyntax? = nil
@@ -898,6 +898,38 @@ extension Parser {
       unexpectedBeforeColon,
       colon: colon,
       versionList: RawBackDeployVersionListSyntax(elements: elements, arena: self.arena),
+      arena: self.arena
+    )
+  }
+}
+
+extension Parser {
+  mutating func parseExposeArguments() -> RawExposeAttributeArgumentsSyntax {
+    let language: RawTokenSyntax
+    if !self.at(any: [.rightParen, .comma]) {
+      language = self.consumeAnyToken()
+    } else {
+      language = missingToken(.identifier)
+    }
+    let unexpectedBeforeComma: RawUnexpectedNodesSyntax?
+    let comma: RawTokenSyntax?
+    let unexpectedBeforeCxxName: RawUnexpectedNodesSyntax?
+    let cxxName: RawTokenSyntax?
+    if self.at(.comma) {
+      (unexpectedBeforeComma, comma) = self.expect(.comma)
+      (unexpectedBeforeCxxName, cxxName) = self.expect(.stringLiteral)
+    } else {
+      unexpectedBeforeComma = nil
+      comma = nil
+      unexpectedBeforeCxxName = nil
+      cxxName = nil
+    }
+    return RawExposeAttributeArgumentsSyntax(
+      language: language,
+      unexpectedBeforeComma,
+      comma: comma,
+      unexpectedBeforeCxxName,
+      cxxName: cxxName,
       arena: self.arena
     )
   }

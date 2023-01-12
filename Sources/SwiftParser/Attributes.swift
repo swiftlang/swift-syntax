@@ -250,7 +250,7 @@ extension Parser {
       return parseAttribute(argumentMode: .required) { parser in
         return .dynamicReplacementArguments(parser.parseDynamicReplacementArguments())
       }
-    case ._spi, ._objcRuntimeName, ._projectedValueProperty, ._swift_native_objc_runtime_base, ._typeEraser, ._documentation, ._optimize, ._nonSendable, .exclusivity, .inline, ._alignment:
+    case ._spi, ._objcRuntimeName, ._projectedValueProperty, ._swift_native_objc_runtime_base, ._typeEraser, ._documentation, ._optimize, .exclusivity, .inline, ._alignment:
       // Attributes that take a single token as argument. Some examples of these include:
       //  - Arbitrary identifiers (e.g. `@_spi(RawSyntax)`)
       //  - An integer literal (e.g. `@_alignment(4)`)
@@ -258,6 +258,15 @@ extension Parser {
       //
       //  Because there seem to be very little restrictions on these parameters (they could be keywords instead of identifeirs), we just allow any token.
       return parseAttribute(argumentMode: .required) { parser in
+        if !parser.at(.rightParen) {
+          return .token(parser.consumeAnyToken())
+        } else {
+          return .token(parser.missingToken(.identifier))
+        }
+      }
+    case ._objcImplementation, ._nonSendable:
+      // Similar to the above but the argument is optional
+      return parseAttribute(argumentMode: .optional) { parser in
         if !parser.at(.rightParen) {
           return .token(parser.consumeAnyToken())
         } else {
@@ -273,15 +282,6 @@ extension Parser {
           tokens.append(parser.consumeAnyToken())
         }
         return .effectsArguments(RawEffectsArgumentsSyntax(elements: tokens, arena: parser.arena))
-      }
-    case ._objcImplementation:
-      // Similar to the above but the argument is optional
-      return parseAttribute(argumentMode: .optional) { parser in
-        if !parser.at(.rightParen) {
-          return .token(parser.consumeAnyToken())
-        } else {
-          return .token(parser.missingToken(.identifier))
-        }
       }
     case ._cdecl, ._silgen_name:
       return parseAttribute(argumentMode: .required) { parser in

@@ -489,4 +489,14 @@ final class AttributeTests: XCTestCase {
       "func foo(closure: @escaping () -> Void) {}"
     )
   }
+
+  func testNonSendable() {
+    AssertParse(
+      """
+      @_nonSendable
+      class NonSendableType {
+      }
+      """
+    )
+  }
 }

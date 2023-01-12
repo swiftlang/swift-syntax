@@ -131,7 +131,7 @@ final class SuperTests: XCTestCase {
       """#,
       substructure: Syntax(
         FunctionCallExprSyntax(
-          calledExpression: SuperRefExprSyntax(superKeyword: .superKeyword()),
+          calledExpression: SuperRefExprSyntax(superKeyword: .keyword(.super)),
           leftParen: .leftParenToken(),
           argumentList: TupleExprElementListSyntax([
             TupleExprElementSyntax(

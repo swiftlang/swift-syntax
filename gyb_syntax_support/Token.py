@@ -184,69 +184,8 @@ class Misc(Token):
 
 
 SYNTAX_TOKENS = [
-    # Keywords that start decls
-    DeclKeyword('Associatedtype', 'associatedtype'),
-    DeclKeyword('Class', 'class'),
-    DeclKeyword('Deinit', 'deinit'),
-    DeclKeyword('Enum', 'enum'),
-    DeclKeyword('Extension', 'extension'),
-    DeclKeyword('Func', 'func'),
-    DeclKeyword('Import', 'import'),
-    DeclKeyword('Init', 'init'),
-    DeclKeyword('Inout', 'inout'),
-    DeclKeyword('Let', 'let'),
-    DeclKeyword('Operator', 'operator'),
-    DeclKeyword('Precedencegroup', 'precedencegroup'),
-    DeclKeyword('Protocol', 'protocol'),
-    DeclKeyword('Struct', 'struct'),
-    DeclKeyword('Subscript', 'subscript'),
-    DeclKeyword('Typealias', 'typealias'),
-    DeclKeyword('Var', 'var'),
-
-    DeclKeyword('Fileprivate', 'fileprivate'),
-    DeclKeyword('Internal', 'internal'),
-    DeclKeyword('Private', 'private'),
-    DeclKeyword('Public', 'public'),
-    DeclKeyword('Static', 'static'),
-
-    # Statement keywords
-    StmtKeyword('Defer', 'defer'),
-    StmtKeyword('If', 'if'),
-    StmtKeyword('Guard', 'guard'),
-    StmtKeyword('Do', 'do', requires_trailing_space=False),
-    StmtKeyword('Repeat', 'repeat'),
-    StmtKeyword('Else', 'else'),
-    StmtKeyword('For', 'for'),
-    StmtKeyword('In', 'in', requires_leading_space=True),
-    StmtKeyword('While', 'while'),
-    StmtKeyword('Return', 'return'),
-    StmtKeyword('Break', 'break'),
-    StmtKeyword('Continue', 'continue'),
-    StmtKeyword('Fallthrough', 'fallthrough'),
-    StmtKeyword('Switch', 'switch'),
-    StmtKeyword('Case', 'case'),
-    StmtKeyword('Default', 'default', requires_trailing_space=False),
-    StmtKeyword('Where', 'where', requires_leading_space=True),
-    StmtKeyword('Catch', 'catch', requires_leading_space=True,
-                requires_trailing_space=False),
-    StmtKeyword('Throw', 'throw'),
-
-    # Expression keywords
-    ExprKeyword('As', 'as'),
-    ExprKeyword('Any', 'Any'),
-    ExprKeyword('False', 'false', requires_trailing_space=False),
-    ExprKeyword('Is', 'is'),
-    ExprKeyword('Nil', 'nil', requires_trailing_space=False),
-    ExprKeyword('Rethrows', 'rethrows'),
-    ExprKeyword('Super', 'super', requires_trailing_space=False),
-    ExprKeyword('Self', 'self', requires_trailing_space=False),
-    ExprKeyword('CapitalSelf', 'Self', requires_trailing_space=False),
-    ExprKeyword('True', 'true', requires_trailing_space=False),
-    ExprKeyword('Try', 'try'),
-    ExprKeyword('Throws', 'throws'),
-
     # Pattern keywords
-    PatternKeyword('Wildcard', '_'),
+    Misc('Wildcard', '_', text='_', name_for_diagnostics='wildcard'),
 
     # Punctuators
     Punctuator('LeftParen', 'l_paren', text='('),
@@ -355,14 +294,12 @@ SYNTAX_TOKENS = [
     Misc('DollarIdentifier', 'dollarident', name_for_diagnostics='dollar identifier',
          classification='DollarIdentifier'),
 
-    Misc('ContextualKeyword', 'contextual_keyword', name_for_diagnostics='keyword',
+    Misc('Keyword', 'keyword', name_for_diagnostics='keyword',
          classification='Keyword', associated_value_class='Keyword'),
     Misc('RawStringDelimiter', 'raw_string_delimiter',
          name_for_diagnostics='raw string delimiter'),
     Misc('StringSegment', 'string_segment', name_for_diagnostics='string segment',
          classification='StringLiteral'),
-    Misc('Yield', 'kw_yield', name_for_diagnostics='yield',
-         text='yield'),
 ]
 
 SYNTAX_TOKEN_MAP = {token.name + 'Token': token for token in SYNTAX_TOKENS}

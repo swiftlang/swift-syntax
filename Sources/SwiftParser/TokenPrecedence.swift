@@ -106,32 +106,31 @@ public enum TokenPrecedence: Comparable {
       self = .unknownToken
     // MARK: Identifier like
     case  // Literals
-    .capitalSelfKeyword, .falseKeyword, .floatingLiteral, .integerLiteral, .nilKeyword, .regexLiteral, .selfKeyword, .stringLiteral, .superKeyword, .trueKeyword,
+    .keyword(.Self), .keyword(.false), .floatingLiteral, .integerLiteral, .keyword(.nil), .regexLiteral, .keyword(.self), .stringLiteral, .keyword(.super), .keyword(.true),
       // Pound literals
       .poundAvailableKeyword, .poundColorLiteralKeyword, .poundColumnKeyword, .poundDsohandleKeyword, .poundFileIDKeyword, .poundFileKeyword, .poundFileLiteralKeyword, .poundFilePathKeyword, .poundFunctionKeyword, .poundImageLiteralKeyword, .poundKeyPathKeyword, .poundLineKeyword, .poundSelectorKeyword, .poundSourceLocationKeyword, .poundUnavailableKeyword, .poundHasSymbolKeyword,
       // Identifiers
       .dollarIdentifier, .identifier,
       // '_' can occur in types to replace a type identifier
-      .wildcardKeyword,
+      .wildcard,
       // String segment, string interpolation anchor and pound don't really fit anywhere else
       .pound, .stringSegment:
       self = .identifierLike
 
     // MARK: Expr keyword
     case  // Keywords
-    .asKeyword, .isKeyword, .tryKeyword,
+    .keyword(.as), .keyword(.is), .keyword(.try),
       // We don't know much about which contextual keyword it is, be conservative an allow considering it as unexpected.
-      .contextualKeyword,
       // Keywords in function types (we should be allowed to skip them inside parenthesis)
-      .rethrowsKeyword, .throwsKeyword,
+      .keyword(.rethrows), .keyword(.throws),
       // Operators can occur inside expressions
       .postfixOperator, .prefixOperator, .binaryOperator,
       // Consider 'any' and 'inout' like a prefix operator to a type and a type is expression-like.
-      .anyKeyword, .inoutKeyword,
+      .keyword(.Any), .keyword(.inout),
       // 'where' can only occur in the signature of declarations. Consider the signature expression-like.
-      .whereKeyword,
+      .keyword(.where),
       // 'in' occurs in closure input/output definitions and for loops. Consider both constructs expression-like.
-      .inKeyword:
+      .keyword(.in):
       self = .exprKeyword
 
     // MARK: Weak bracketet
@@ -156,11 +155,11 @@ public enum TokenPrecedence: Comparable {
 
     // MARK: Statement keyword punctuator
     case  // Control-flow constructs
-    .deferKeyword, .doKeyword, .forKeyword, .guardKeyword, .ifKeyword, .repeatKeyword, .switchKeyword, .whileKeyword,
+    .keyword(.defer), .keyword(.do), .keyword(.for), .keyword(.guard), .keyword(.if), .keyword(.repeat), .keyword(.switch), .keyword(.while),
       // Secondary parts of control-flow constructs
-      .caseKeyword, .catchKeyword, .defaultKeyword, .elseKeyword,
+      .keyword(.case), .keyword(.catch), .keyword(.default), .keyword(.else),
       // Return-like statements
-      .breakKeyword, .continueKeyword, .fallthroughKeyword, .returnKeyword, .throwKeyword, .yield,
+      .keyword(.break), .keyword(.continue), .keyword(.fallthrough), .keyword(.return), .keyword(.throw), .keyword(.yield),
       // #error, #warning and #assert are statement-like
       .poundErrorKeyword, .poundWarningKeyword, .poundAssertKeyword:
       self = .stmtKeyword
@@ -190,18 +189,22 @@ public enum TokenPrecedence: Comparable {
 
     // MARK: Decl keywords
     case  // Types
-    .associatedtypeKeyword, .classKeyword, .enumKeyword, .extensionKeyword, .protocolKeyword, .structKeyword, .typealiasKeyword,
+    .keyword(.associatedtype), .keyword(.class), .keyword(.enum), .keyword(.extension), .keyword(.protocol), .keyword(.struct), .keyword(.typealias),
       // Access modifiers
-      .fileprivateKeyword, .internalKeyword, .privateKeyword, .publicKeyword, .staticKeyword,
+      .keyword(.fileprivate), .keyword(.internal), .keyword(.private), .keyword(.public), .keyword(.static),
       // Functions
-      .deinitKeyword, .funcKeyword, .initKeyword, .subscriptKeyword,
+      .keyword(.deinit), .keyword(.func), .keyword(.`init`), .keyword(.subscript),
       // Variables
-      .letKeyword, .varKeyword,
+      .keyword(.let), .keyword(.var),
       // Operator stuff
-      .operatorKeyword, .precedencegroupKeyword,
+      .keyword(.operator), .keyword(.precedencegroup),
       // Misc
-      .importKeyword:
+      .keyword(.import):
       self = .declKeyword
+    case .keyword:
+      // Treat all keywords that weren't handled above as expression keywords as a fallback option.
+      // FIXME: We should assign a token precedence to all keywords
+      self = .exprKeyword
     }
   }
 }

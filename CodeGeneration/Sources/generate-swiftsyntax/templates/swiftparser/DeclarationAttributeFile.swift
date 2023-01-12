@@ -38,7 +38,7 @@ let declarationAttributeFile = SourceFile {
               SequenceExpr("self = .\(raw: attribute.swiftName)")
             }
           }
-          SwitchCase("case RawTokenKindMatch(.rethrowsKeyword):") {
+          SwitchCase("case RawTokenKindMatch(.rethrows):") {
             SequenceExpr("self = .atRethrows")
           }
           SwitchCase("case RawTokenKindMatch(._spi_available):") {
@@ -60,11 +60,11 @@ let declarationAttributeFile = SourceFile {
         SwitchStmt(switchKeyword: .switch, expression: Expr("self")) {
           for attribute in DECL_ATTR_KINDS {
             SwitchCase("case .\(raw: attribute.swiftName):") {
-              ReturnStmt("return .contextualKeyword(.\(raw: attribute.name))")
+              ReturnStmt("return .keyword(.\(raw: attribute.name))")
             }
           }
           SwitchCase("case ._spi_available:") {
-            ReturnStmt("return .contextualKeyword(._spi_available)")
+            ReturnStmt("return .keyword(._spi_available)")
           }
         }
       }

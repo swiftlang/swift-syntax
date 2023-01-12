@@ -126,7 +126,7 @@ let tokenKindFile = SourceFileSyntax {
         .newlines(1)
       ],
       modifiers: [DeclModifierSyntax(name: .public)],
-      name: IdentifierPatternSyntax("isKeyword"),
+      name: IdentifierPatternSyntax("isLexerClassifiedKeyword"),
       type: TypeAnnotationSyntax(type: TypeSyntax("Bool"))
     ) {
       SwitchStmtSyntax(expression: ExprSyntax("self")) {
@@ -134,10 +134,13 @@ let tokenKindFile = SourceFileSyntax {
           ReturnStmtSyntax("return false")
         }
         
-        for token in SYNTAX_TOKENS {
+        for token in SYNTAX_TOKENS where token.swiftKind != "keyword" {
           SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
             ReturnStmtSyntax("return \(raw: token.isKeyword)")
           }
+        }
+        SwitchCaseSyntax("case .keyword(let keyword):") {
+          ReturnStmtSyntax("return keyword.isLexerClassified")
         }
       }
     }
@@ -253,10 +256,13 @@ let tokenKindFile = SourceFileSyntax {
           ReturnStmtSyntax(#"return "end of file""#)
         }
 
-        for token in SYNTAX_TOKENS {
+        for token in SYNTAX_TOKENS where token.swiftKind != "keyword" {
           SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
             ReturnStmtSyntax("return #\"\(raw: token.nameForDiagnostics)\"#")
           }
+        }
+        SwitchCaseSyntax("case .keyword(let keyword):") {
+          ReturnStmtSyntax("return String(syntaxText: keyword.defaultText)")
         }
       }
     }
@@ -275,7 +281,7 @@ let tokenKindFile = SourceFileSyntax {
         .newlines(1),
       ],
       modifiers: [DeclModifierSyntax(name: .public)],
-      name: IdentifierPatternSyntax("isKeyword"),
+      name: IdentifierPatternSyntax("isLexerClassifiedKeyword"),
       type: TypeAnnotationSyntax(type: TypeSyntax("Bool"))
     ) {
       SwitchStmt(expression: ExprSyntax("self")) {
@@ -283,10 +289,13 @@ let tokenKindFile = SourceFileSyntax {
           ReturnStmtSyntax("return false")
         }
         
-        for token in SYNTAX_TOKENS {
+        for token in SYNTAX_TOKENS where token.swiftKind != "keyword" {
           SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
             ReturnStmtSyntax("return \(raw: token.isKeyword)")
           }
+        }
+        SwitchCaseSyntax("case .keyword(let keyword):") {
+          ReturnStmtSyntax("return keyword.isLexerClassified")
         }
       }
     }

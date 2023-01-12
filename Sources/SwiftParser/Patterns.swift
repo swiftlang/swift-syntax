@@ -48,7 +48,7 @@ extension Parser {
   public mutating func parsePattern() -> RawPatternSyntax {
     enum ExpectedTokens: RawTokenKindSubset {
       case leftParen
-      case wildcardKeyword
+      case wildcard
       case identifier
       case dollarIdentifier  // For recovery
       case letKeyword
@@ -57,11 +57,11 @@ extension Parser {
       init?(lexeme: Lexer.Lexeme) {
         switch lexeme.rawTokenKind {
         case .leftParen: self = .leftParen
-        case .wildcardKeyword: self = .wildcardKeyword
+        case .wildcard: self = .wildcard
         case .identifier: self = .identifier
         case .dollarIdentifier: self = .dollarIdentifier
-        case .letKeyword: self = .letKeyword
-        case .varKeyword: self = .varKeyword
+        case .keyword(.let): self = .letKeyword
+        case .keyword(.var): self = .varKeyword
         default: return nil
         }
       }
@@ -69,11 +69,11 @@ extension Parser {
       var rawTokenKind: RawTokenKind {
         switch self {
         case .leftParen: return .leftParen
-        case .wildcardKeyword: return .wildcardKeyword
+        case .wildcard: return .wildcard
         case .identifier: return .identifier
         case .dollarIdentifier: return .dollarIdentifier
-        case .letKeyword: return .letKeyword
-        case .varKeyword: return .varKeyword
+        case .letKeyword: return .keyword(.let)
+        case .varKeyword: return .keyword(.var)
         }
       }
     }
@@ -92,7 +92,7 @@ extension Parser {
           arena: self.arena
         )
       )
-    case (.wildcardKeyword, let handle)?:
+    case (.wildcard, let handle)?:
       let wildcard = self.eat(handle)
       return RawPatternSyntax(
         RawWildcardPatternSyntax(
@@ -131,7 +131,7 @@ extension Parser {
         )
       )
     case nil:
-      if self.currentToken.rawTokenKind.isKeyword, !self.currentToken.isAtStartOfLine {
+      if self.currentToken.rawTokenKind.isLexerClassifiedKeyword, !self.currentToken.isAtStartOfLine {
         // Recover if a keyword was used instead of an identifier
         let keyword = self.consumeAnyToken()
         return RawPatternSyntax(
@@ -290,7 +290,7 @@ extension Parser.Lookahead {
   mutating func canParsePattern() -> Bool {
     enum PatternStartTokens: RawTokenKindSubset {
       case identifier
-      case wildcardKeyword
+      case wildcard
       case letKeyword
       case varKeyword
       case leftParen
@@ -298,9 +298,9 @@ extension Parser.Lookahead {
       init?(lexeme: Lexer.Lexeme) {
         switch lexeme.rawTokenKind {
         case .identifier: self = .identifier
-        case .wildcardKeyword: self = .wildcardKeyword
-        case .letKeyword: self = .letKeyword
-        case .varKeyword: self = .varKeyword
+        case .wildcard: self = .wildcard
+        case .keyword(.let): self = .letKeyword
+        case .keyword(.var): self = .varKeyword
         case .leftParen: self = .leftParen
         default: return nil
         }
@@ -309,9 +309,9 @@ extension Parser.Lookahead {
       var rawTokenKind: RawTokenKind {
         switch self {
         case .identifier: return .identifier
-        case .wildcardKeyword: return .wildcardKeyword
-        case .letKeyword: return .letKeyword
-        case .varKeyword: return .varKeyword
+        case .wildcard: return .wildcard
+        case .letKeyword: return .keyword(.let)
+        case .varKeyword: return .keyword(.var)
         case .leftParen: return .leftParen
         }
       }
@@ -319,7 +319,7 @@ extension Parser.Lookahead {
 
     switch self.at(anyIn: PatternStartTokens.self) {
     case (.identifier, let handle)?,
-      (.wildcardKeyword, let handle)?:
+      (.wildcard, let handle)?:
       self.eat(handle)
       return true
     case (.letKeyword, let handle)?,
@@ -373,7 +373,7 @@ extension Parser.Lookahead {
     // If the next token can be an argument label, we might have a name.
     if nextTok.canBeArgumentLabel(allowDollarIdentifier: true) {
       // If the first name wasn't "isolated", we're done.
-      if !self.at(.contextualKeyword(.isolated)) && !self.at(.contextualKeyword(.some)) && !self.at(.contextualKeyword(.any)) && !self.at(.contextualKeyword(.each)) && !self.at(.repeatKeyword) {
+      if !self.at(.keyword(.isolated)) && !self.at(.keyword(.some)) && !self.at(.keyword(.any)) && !self.at(.keyword(.each)) && !self.at(.keyword(.repeat)) {
         return true
       }
 

@@ -25,7 +25,7 @@ fileprivate func cannedVarDecl() -> VariableDeclSyntax {
     )
   )
   return VariableDeclSyntax(
-    letOrVarKeyword: .letKeyword(trailingTrivia: .space),
+    letOrVarKeyword: .keyword(.let, trailingTrivia: .space),
     bindings: PatternBindingListSyntax([pattern])
   )
 }
@@ -35,7 +35,7 @@ public class SyntaxTreeModifierTests: XCTestCase {
   public func testAccessorAsModifier() {
     var VD = cannedVarDecl()
     XCTAssertEqual("\(VD)", "let a: Int")
-    VD.letOrVarKeyword = .varKeyword(trailingTrivia: .space)
+    VD.letOrVarKeyword = .keyword(.var, trailingTrivia: .space)
     XCTAssertEqual("\(VD)", "var a: Int")
   }
 }

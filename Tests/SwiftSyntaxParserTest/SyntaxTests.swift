@@ -101,7 +101,8 @@ public class SyntaxTests: XCTestCase {
     do {
       let leading = Trivia(pieces: [.spaces(2)])
       let trailing = Trivia(pieces: [.spaces(1)])
-      let funcKW = TokenSyntax.funcKeyword(
+      let funcKW = TokenSyntax.keyword(
+        .func,
         leadingTrivia: leading,
         trailingTrivia: trailing
       )

@@ -138,7 +138,7 @@ extension Parser.Lookahead {
 extension Parser.Lookahead {
   mutating func skipTypeAttribute() {
     // These are keywords that we accept as attribute names.
-    guard self.at(.identifier) || self.at(any: [.inKeyword, .inoutKeyword]) else {
+    guard self.at(.identifier) || self.at(any: [.keyword(.in), .keyword(.inout)]) else {
       return
     }
 
@@ -169,7 +169,7 @@ extension Parser.Lookahead {
         backtrack.skipSingle()
         // If we found '->', or 'throws' after paren, it's likely a parameter
         // of function type.
-        guard backtrack.at(any: [.arrow, .throwsKeyword, .rethrowsKeyword, .throwKeyword]) else {
+        guard backtrack.at(any: [.arrow, .keyword(.throws), .keyword(.rethrows), .keyword(.throw)]) else {
           self.skipSingle()
           return
         }
@@ -261,7 +261,7 @@ extension Parser.Lookahead {
     // If we have a 'didSet' or a 'willSet' label, disambiguate immediately as
     // an accessor block.
     let nextToken = self.peek()
-    if nextToken.isContextualKeyword(["didSet", "willSet"]) {
+    if RawTokenKindMatch(.keyword(.didSet)) ~= nextToken || RawTokenKindMatch(.keyword(.willSet)) ~= nextToken {
       return true
     }
 
@@ -286,7 +286,7 @@ extension Parser.Lookahead {
     }
 
     // Check if we have 'didSet'/'willSet' after attributes.
-    return lookahead.at(any: [.contextualKeyword(.didSet), .contextualKeyword(.willSet)])
+    return lookahead.at(any: [.keyword(.didSet), .keyword(.willSet)])
   }
 }
 

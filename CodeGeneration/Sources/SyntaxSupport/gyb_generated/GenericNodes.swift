@@ -18,9 +18,12 @@ public let GENERIC_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "WhereKeyword",
-               kind: "WhereToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "Where"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "where"
                ]),
          Child(name: "RequirementList",
                kind: "GenericRequirementList",

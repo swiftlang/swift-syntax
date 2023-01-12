@@ -31,7 +31,7 @@ extension Parser {
         self.missingToken(.identifier, text: nil)
       )
     } else {
-      if let wildcardToken = self.consume(if: .wildcardKeyword) {
+      if let wildcardToken = self.consume(if: .wildcard) {
         return (nil, wildcardToken)
       }
       return (nil, self.consumeAnyToken(remapping: .identifier))
@@ -64,11 +64,11 @@ extension Parser {
   mutating func parseDeclNameRef(_ flags: DeclNameOptions = []) -> (RawTokenSyntax, RawDeclNameArgumentsSyntax?) {
     // Consume the base name.
     let ident: RawTokenSyntax
-    if self.at(.identifier) || self.at(any: [.selfKeyword, .capitalSelfKeyword, .initKeyword]) {
+    if self.at(.identifier) || self.at(any: [.keyword(.self), .keyword(.Self), .keyword(.`init`)]) {
       ident = self.expectIdentifierWithoutRecovery()
     } else if flags.contains(.operators), let (_, _) = self.at(anyIn: Operator.self) {
       ident = self.consumeAnyToken(remapping: .binaryOperator)
-    } else if flags.contains(.keywords) && self.currentToken.rawTokenKind.isKeyword {
+    } else if flags.contains(.keywords) && self.currentToken.rawTokenKind.isLexerClassifiedKeyword {
       ident = self.consumeAnyToken(remapping: .identifier)
     } else {
       ident = self.expectIdentifierWithoutRecovery()
@@ -168,7 +168,7 @@ extension Parser {
 
   @_spi(RawSyntax)
   public mutating func parseQualifiedTypeIdentifier() -> RawTypeSyntax {
-    if self.at(.anyKeyword) {
+    if self.at(.keyword(.Any)) {
       return RawTypeSyntax(self.parseAnyType())
     }
 
@@ -263,32 +263,14 @@ extension Lexer.Lexeme {
       return false
     }
     switch self.rawTokenKind {
-    case .identifier, .wildcardKeyword:
+    case .identifier, .wildcard:
       // Identifiers, escaped identifiers, and '_' can be argument labels.
       return true
     case .dollarIdentifier:
       return allowDollarIdentifier
     default:
       // All other keywords can be argument labels.
-      return self.isKeyword
-    }
-  }
-
-  func isContextualKeyword(_ name: SyntaxText) -> Bool {
-    switch self.rawTokenKind {
-    case .identifier, .contextualKeyword:
-      return self.tokenText == name
-    default:
-      return false
-    }
-  }
-
-  func isContextualKeyword(_ names: [SyntaxText]) -> Bool {
-    switch self.rawTokenKind {
-    case .identifier, .contextualKeyword:
-      return names.contains(self.tokenText)
-    default:
-      return false
+      return self.isLexerClassifiedKeyword
     }
   }
 
@@ -296,8 +278,8 @@ extension Lexer.Lexeme {
     return Operator(lexeme: self) != nil && self.tokenText == name
   }
 
-  var isKeyword: Bool {
-    self.rawTokenKind.isKeyword
+  var isLexerClassifiedKeyword: Bool {
+    self.rawTokenKind.isLexerClassifiedKeyword
   }
 
   func starts(with symbol: SyntaxText) -> Bool {

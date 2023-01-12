@@ -22,12 +22,12 @@ final class StatementTests: XCTestCase {
       """,
       substructure: Syntax(
         IfStmtSyntax(
-          ifKeyword: .ifKeyword(),
+          ifKeyword: .keyword(.if),
           conditions: ConditionElementListSyntax([
             ConditionElementSyntax(
               condition: .init(
                 OptionalBindingConditionSyntax(
-                  letOrVarKeyword: .letKeyword(),
+                  letOrVarKeyword: .keyword(.let),
                   pattern: IdentifierPatternSyntax(identifier: .identifier("baz"))
                 )
               )
@@ -48,14 +48,14 @@ final class StatementTests: XCTestCase {
       """,
       substructure: Syntax(
         IfStmtSyntax(
-          ifKeyword: .ifKeyword(),
+          ifKeyword: .keyword(.if),
           conditions: ConditionElementListSyntax([
             ConditionElementSyntax(
               condition: .init(
                 OptionalBindingConditionSyntax(
-                  letOrVarKeyword: .letKeyword(),
-                  pattern: IdentifierPatternSyntax(identifier: .selfKeyword()),
-                  initializer: InitializerClauseSyntax(equal: .equalToken(), value: IdentifierExprSyntax(identifier: .selfKeyword()))
+                  letOrVarKeyword: .keyword(.let),
+                  pattern: IdentifierPatternSyntax(identifier: .keyword(.self)),
+                  initializer: InitializerClauseSyntax(equal: .equalToken(), value: IdentifierExprSyntax(identifier: .keyword(.self)))
                 )
               )
             )
@@ -144,7 +144,7 @@ final class StatementTests: XCTestCase {
       { ExprSyntax.parse(from: &$0) },
       substructure: Syntax(
         ReturnStmtSyntax(
-          returnKeyword: .returnKeyword(),
+          returnKeyword: .keyword(.return),
           expression: IntegerLiteralExprSyntax(digits: .integerLiteral("0"))
         )
       ),
@@ -381,7 +381,7 @@ final class StatementTests: XCTestCase {
             leftAngleBracket: .leftAngleToken(),
             arguments: GenericArgumentListSyntax([
               GenericArgumentSyntax(
-                argumentType: SimpleTypeIdentifierSyntax(name: .anyKeyword())
+                argumentType: SimpleTypeIdentifierSyntax(name: .keyword(.Any))
               )
             ]),
             rightAngleBracket: .rightAngleToken()
@@ -415,7 +415,7 @@ final class StatementTests: XCTestCase {
       """,
       substructure: Syntax(
         YieldStmtSyntax(
-          yieldKeyword: .contextualKeyword(.yield),
+          yieldKeyword: .keyword(.yield),
           yields: .init(
             InOutExprSyntax(
               ampersand: .prefixAmpersandToken(),
@@ -449,7 +449,7 @@ final class StatementTests: XCTestCase {
       """,
       substructure: Syntax(
         YieldStmtSyntax(
-          yieldKeyword: .contextualKeyword(.yield),
+          yieldKeyword: .keyword(.yield),
           yields: .init(
             InOutExprSyntax(
               ampersand: .prefixAmpersandToken(),
@@ -464,7 +464,7 @@ final class StatementTests: XCTestCase {
                   TupleExprElementSyntax(
                     label: .identifier("isUnique"),
                     colon: .colonToken(),
-                    expression: BooleanLiteralExprSyntax(booleanLiteral: .trueKeyword())
+                    expression: BooleanLiteralExprSyntax(booleanLiteral: .keyword(.true))
                   ),
                 ]),
                 rightBracket: .rightSquareBracketToken()

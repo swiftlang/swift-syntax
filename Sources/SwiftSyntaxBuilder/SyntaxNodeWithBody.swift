@@ -22,11 +22,11 @@ import SwiftSyntax
 //
 // This is sort of what we used to have, but there weren't enough convenience
 // initializers.
-//   `SwitchCase(label: SwitchCaseLabel(caseItems: [CaseItem(pattern: ExpressionPattern(expression: MemberAccessExpr(name: "contextualKeyword")))]))`
+//   `SwitchCase(label: SwitchCaseLabel(caseItems: [CaseItem(pattern: ExpressionPattern(expression: MemberAccessExpr(name: "keyword")))]))`
 // is currently
-//   `SwitchCase("case .contextualKeyword:")`
+//   `SwitchCase("case .keyword:")`
 // but ideally we'd have enough convenience initializers such that we could have:
-//   `SwitchCase(pattern: ".contextualKeyword") { }`
+//   `SwitchCase(pattern: ".keyword") { }`
 //
 // Another example is that we now have
 //   `ExtensionDecl("\(docComment)extension \(node.type.shorthandName): ExpressibleByArrayLiteral")`
@@ -97,13 +97,13 @@ public extension IfStmt {
     self = "\(raw: signature) {}"
     self.body = CodeBlock(statements: bodyBuilder())
     self.elseBody = elseBuilder().map { .codeBlock(CodeBlock(statements: $0)) }
-    self.elseKeyword = elseBody != nil ? .elseKeyword() : nil
+    self.elseKeyword = elseBody != nil ? .keyword(.else) : nil
   }
 
   init(_ signature: String, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemList, elseIf: IfStmt) {
     self = "\(raw: signature) {}"
     self.body = CodeBlock(statements: bodyBuilder())
     self.elseBody = .ifStmt(elseIf)
-    self.elseKeyword = elseBody != nil ? .elseKeyword() : nil
+    self.elseKeyword = elseBody != nil ? .keyword(.else) : nil
   }
 }

@@ -16,19 +16,19 @@ import XCTest
 public class SyntaxTests: XCTestCase {
 
   public func testHasError() {
-    XCTAssertTrue(TokenSyntax.funcKeyword(presence: .missing).hasError)
-    XCTAssertFalse(TokenSyntax.funcKeyword(presence: .present).hasError)
+    XCTAssertTrue(TokenSyntax.keyword(.func, presence: .missing).hasError)
+    XCTAssertFalse(TokenSyntax.keyword(.func, presence: .present).hasError)
     XCTAssertTrue(UnexpectedNodesSyntax([]).hasError)
     XCTAssertTrue(MissingExprSyntax().hasError)
     XCTAssertFalse(CodeBlockItemListSyntax([]).hasError)
 
-    XCTAssertTrue(TokenListSyntax([TokenSyntax.funcKeyword(presence: .missing)]).hasError)
-    XCTAssertFalse(TokenListSyntax([TokenSyntax.funcKeyword(presence: .present)]).hasError)
+    XCTAssertTrue(TokenListSyntax([TokenSyntax.keyword(.func, presence: .missing)]).hasError)
+    XCTAssertFalse(TokenListSyntax([TokenSyntax.keyword(.func, presence: .present)]).hasError)
   }
 
   public func testDetach() {
     let s = StructDeclSyntax(
-      structKeyword: .structKeyword(),
+      structKeyword: .keyword(.struct),
       identifier: .identifier("someStruct"),
       members: MemberDeclBlockSyntax(leftBrace: .leftBrace, members: [], rightBrace: .rightBrace)
     )

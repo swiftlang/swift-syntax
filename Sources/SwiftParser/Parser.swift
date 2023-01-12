@@ -394,7 +394,10 @@ extension Parser {
         RawUnexpectedNodesSyntax(elements: [RawSyntax(number)], arena: self.arena),
         self.missingToken(.identifier, text: nil)
       )
-    } else if keywordRecovery, self.currentToken.rawTokenKind.isKeyword, !self.currentToken.isAtStartOfLine {
+    } else if keywordRecovery,
+      (self.currentToken.rawTokenKind.isLexerClassifiedKeyword || self.currentToken.rawTokenKind == .wildcard),
+      !self.currentToken.isAtStartOfLine
+    {
       let keyword = self.consumeAnyToken()
       return (
         RawUnexpectedNodesSyntax(elements: [RawSyntax(keyword)], arena: self.arena),

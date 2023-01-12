@@ -144,7 +144,7 @@ extension Parser {
 extension Parser {
   mutating func parseAvailabilityAttribute() -> RawAttributeSyntax {
     let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-    let (unexpectedBeforeAvailable, available) = self.expect(.contextualKeyword(.available))
+    let (unexpectedBeforeAvailable, available) = self.expect(.keyword(.available))
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
 
     let argument: RawAttributeSyntax.Argument
@@ -176,7 +176,7 @@ extension Parser {
 
   mutating func parseSPIAvailableAttribute() -> RawAttributeSyntax {
     let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-    let (unexpectedBeforeAvailable, available) = self.expect(.contextualKeyword(._spi_available))
+    let (unexpectedBeforeAvailable, available) = self.expect(.keyword(._spi_available))
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
 
     let argument: RawAttributeSyntax.Argument
@@ -210,7 +210,7 @@ extension Parser {
 extension Parser {
   mutating func parseDifferentiableAttribute() -> RawAttributeSyntax {
     let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-    let (unexpectedBeforeDifferentiable, differentiable) = self.expect(.contextualKeyword(.differentiable))
+    let (unexpectedBeforeDifferentiable, differentiable) = self.expect(.keyword(.differentiable))
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
 
     let argument = self.parseDifferentiableAttributeArguments()
@@ -247,9 +247,9 @@ extension Parser {
 
     var rawTokenKind: RawTokenKind {
       switch self {
-      case .reverse: return .contextualKeyword(.reverse)
-      case .linear: return .contextualKeyword(._linear)
-      case .forward: return .contextualKeyword(._forward)
+      case .reverse: return .keyword(.reverse)
+      case .linear: return .keyword(._linear)
+      case .forward: return .keyword(._forward)
       }
     }
   }
@@ -267,7 +267,7 @@ extension Parser {
 
     let diffParams: RawDifferentiabilityParamsClauseSyntax?
     let diffParamsComma: RawTokenSyntax?
-    if self.at(.contextualKeyword(.wrt)) {
+    if self.at(.keyword(.wrt)) {
       diffParams = self.parseDifferentiabilityParameters()
       diffParamsComma = self.consume(if: .comma)
     } else {
@@ -276,7 +276,7 @@ extension Parser {
     }
 
     let whereClause: RawGenericWhereClauseSyntax?
-    if self.at(.whereKeyword) {
+    if self.at(.keyword(.where)) {
       whereClause = self.parseGenericWhereClause()
     } else {
       whereClause = nil
@@ -348,10 +348,10 @@ extension Parser {
       case selfKeyword
 
       init?(lexeme: Lexer.Lexeme) {
-        switch lexeme.rawTokenKind {
-        case .identifier: self = .identifier
-        case .integerLiteral: self = .integerLiteral
-        case .selfKeyword: self = .selfKeyword
+        switch lexeme {
+        case RawTokenKindMatch(.identifier): self = .identifier
+        case RawTokenKindMatch(.integerLiteral): self = .integerLiteral
+        case RawTokenKindMatch(.self): self = .selfKeyword
         default: return nil
         }
       }
@@ -360,7 +360,7 @@ extension Parser {
         switch self {
         case .identifier: return .identifier
         case .integerLiteral: return .integerLiteral
-        case .selfKeyword: return .selfKeyword
+        case .selfKeyword: return .keyword(.self)
         }
       }
     }
@@ -399,7 +399,7 @@ extension Parser {
 extension Parser {
   mutating func parseDerivativeAttribute() -> RawAttributeSyntax {
     let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-    let (unexpectedBeforeDerivative, derivative) = self.expect(.contextualKeyword(.derivative))
+    let (unexpectedBeforeDerivative, derivative) = self.expect(.keyword(.derivative))
 
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
     let argument = self.parseDerivativeAttributeArguments()
@@ -422,7 +422,7 @@ extension Parser {
 
   mutating func parseTransposeAttribute() -> RawAttributeSyntax {
     let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-    let (unexpectedBeforeTranspose, transpose) = self.expect(.contextualKeyword(.transpose))
+    let (unexpectedBeforeTranspose, transpose) = self.expect(.keyword(.transpose))
 
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
     let argument = self.parseDerivativeAttributeArguments()
@@ -444,7 +444,7 @@ extension Parser {
   }
 
   mutating func parseDerivativeAttributeArguments() -> RawDerivativeRegistrationAttributeArgumentsSyntax {
-    let (unexpectedBeforeOfLabel, ofLabel) = self.expect(.contextualKeyword(.of))
+    let (unexpectedBeforeOfLabel, ofLabel) = self.expect(.keyword(.of))
     let (unexpectedBetweenOfLabelAndColon, colon) = self.expect(.colon)
     let originalDeclName = self.parseQualifiedDeclarationName()
     let period = self.consume(if: .period)
@@ -479,7 +479,7 @@ extension Parser {
 extension Parser {
   mutating func parseObjectiveCAttribute() -> RawAttributeSyntax {
     let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-    let (unexpectedBeforeObjc, objc) = self.expect(.contextualKeyword(.objc))
+    let (unexpectedBeforeObjc, objc) = self.expect(.keyword(.objc))
 
     let leftParen = self.consume(if: .leftParen)
     let argument: RawObjCSelectorSyntax?
@@ -524,7 +524,7 @@ extension Parser {
         continue
       }
 
-      if self.at(.identifier) || self.currentToken.isKeyword {
+      if self.at(.identifier) || self.currentToken.isLexerClassifiedKeyword {
         let name = self.consumeAnyToken()
 
         // If we hit a ')' we may have a zero-argument selector.
@@ -557,7 +557,7 @@ extension Parser {
 extension Parser {
   mutating func parseSpecializeAttribute() -> RawAttributeSyntax {
     let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-    let (unexpectedBeforeSpecialize, specializeToken) = self.expect(.contextualKeyword(._specialize))
+    let (unexpectedBeforeSpecialize, specializeToken) = self.expect(.keyword(._specialize))
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
     let argument = self.parseSpecializeAttributeSpecList()
     let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
@@ -600,13 +600,13 @@ extension Parser {
 
     var rawTokenKind: RawTokenKind {
       switch self {
-      case .target: return .contextualKeyword(.target)
-      case .availability: return .contextualKeyword(.availability)
-      case .exported: return .contextualKeyword(.exported)
-      case .kind: return .contextualKeyword(.kind)
-      case .spi: return .contextualKeyword(.spi)
-      case .spiModule: return .contextualKeyword(.spiModule)
-      case .available: return .contextualKeyword(.available)
+      case .target: return .keyword(.target)
+      case .availability: return .keyword(.availability)
+      case .exported: return .keyword(.exported)
+      case .kind: return .keyword(.kind)
+      case .spi: return .keyword(.spi)
+      case .spiModule: return .keyword(.spiModule)
+      case .available: return .keyword(.available)
       }
     }
   }
@@ -614,7 +614,7 @@ extension Parser {
     var elements = [RawSpecializeAttributeSpecListSyntax.Element]()
     // Parse optional "exported" and "kind" labeled parameters.
     var loopProgress = LoopProgressCondition()
-    while !self.at(any: [.eof, .rightParen, .whereKeyword]) && loopProgress.evaluate(currentToken) {
+    while !self.at(any: [.eof, .rightParen, .keyword(.where)]) && loopProgress.evaluate(currentToken) {
       switch self.at(anyIn: SpecializeParameter.self) {
       case (.target, let handle)?:
         let ident = self.eat(handle)
@@ -678,7 +678,7 @@ extension Parser {
       case (.exported, let handle)?:
         let ident = self.eat(handle)
         let (unexpectedBeforeColon, colon) = self.expect(.colon)
-        let (unexpectedBeforeValue, value) = self.expectAny([.trueKeyword, .falseKeyword], default: .falseKeyword)
+        let (unexpectedBeforeValue, value) = self.expectAny([.keyword(.true), .keyword(.false)], default: .keyword(.false))
         let comma = self.consume(if: .comma)
         elements.append(
           .labeledSpecializeEntry(
@@ -749,7 +749,7 @@ extension Parser {
     }
 
     // Parse the where clause.
-    if self.at(.whereKeyword) {
+    if self.at(.keyword(.where)) {
       let whereClause = self.parseGenericWhereClause()
       elements.append(.genericWhereClause(whereClause))
     }
@@ -760,7 +760,7 @@ extension Parser {
 extension Parser {
   mutating func parsePrivateImportAttribute() -> RawAttributeSyntax {
     let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-    let (unexpectedBeforePrivateToken, privateToken) = self.expect(.contextualKeyword(._private))
+    let (unexpectedBeforePrivateToken, privateToken) = self.expect(.keyword(._private))
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
     let (unexpectedBeforeLabel, label) = self.expectIdentifier(keywordRecovery: true)
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
@@ -794,9 +794,9 @@ extension Parser {
 extension Parser {
   mutating func parseDynamicReplacementAttribute() -> RawAttributeSyntax {
     let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-    let (unexpectedBeforeDynamicReplacementToken, dynamicReplacementToken) = self.expect(.contextualKeyword(._dynamicReplacement))
+    let (unexpectedBeforeDynamicReplacementToken, dynamicReplacementToken) = self.expect(.keyword(._dynamicReplacement))
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-    let (unexpectedBeforeLabel, label) = self.expect(.forKeyword, remapping: .identifier)
+    let (unexpectedBeforeLabel, label) = self.expect(.keyword(.for), remapping: .identifier)
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
     let base: RawTokenSyntax
     let args: RawDeclNameArgumentsSyntax?
@@ -838,7 +838,7 @@ extension Parser {
 extension Parser {
   mutating func parseSPIAttribute() -> RawAttributeSyntax {
     let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-    let (unexpectedBeforeSpiToken, spiToken) = self.expect(.contextualKeyword(._spi))
+    let (unexpectedBeforeSpiToken, spiToken) = self.expect(.keyword(._spi))
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
     let label = self.consumeAnyToken()
     let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
@@ -861,7 +861,7 @@ extension Parser {
 extension Parser {
   mutating func parseImplementsAttribute() -> RawAttributeSyntax {
     let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-    let (unexpectedBeforeSpiToken, spiToken) = self.expect(.contextualKeyword(._implements))
+    let (unexpectedBeforeSpiToken, spiToken) = self.expect(.keyword(._implements))
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
     let label = self.parseImplementsAttributeArguments()
     let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
@@ -918,7 +918,7 @@ extension Parser {
 extension Parser {
   mutating func parseSemanticsAttribute() -> RawAttributeSyntax {
     let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-    let (unexpectedBeforeSemanticsToken, semanticsToken) = self.expect(.contextualKeyword(._semantics))
+    let (unexpectedBeforeSemanticsToken, semanticsToken) = self.expect(.keyword(._semantics))
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
     let label = self.parseStringLiteral()
     let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
@@ -940,7 +940,7 @@ extension Parser {
 
 extension Parser {
   mutating func parseConventionArguments() -> RawAttributeSyntax.Argument {
-    if let witnessMethod = self.consume(if: .contextualKeyword(.witness_method)) {
+    if let witnessMethod = self.consume(if: .keyword(.witness_method)) {
       let (unexpectedBeforeColon, colon) = self.expect(.colon)
       let name = self.parseAnyIdentifier()
       return .conventionWitnessMethodArguments(
@@ -1006,17 +1006,17 @@ extension Parser.Lookahead {
     // what follows the attribute.
     switch lookahead.currentToken.rawTokenKind {
     case .arrow,
-      .throwKeyword,
-      .throwsKeyword,
-      .rethrowsKeyword,
+      .keyword(.throw),
+      .keyword(.throws),
+      .keyword(.rethrows),
       .rightParen,
       .rightBrace,
       .rightSquareBracket,
       .rightAngle:
       return false
-    case _ where lookahead.at(.contextualKeyword(.async)):
+    case _ where lookahead.at(.keyword(.async)):
       return false
-    case _ where lookahead.at(.contextualKeyword(.reasync)):
+    case _ where lookahead.at(.keyword(.reasync)):
       return false
     default:
       return true

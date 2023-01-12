@@ -53,9 +53,12 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "TryKeyword",
-               kind: "TryToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "Try"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "try"
                ]),
          Child(name: "QuestionOrExclamationMark",
                kind: "Token",
@@ -73,9 +76,9 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "AwaitKeyword",
-               kind: "ContextualKeywordToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "ContextualKeyword"
+                 "Keyword"
                ],
                textChoices: [
                  "await"
@@ -89,9 +92,9 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "MoveKeyword",
-               kind: "ContextualKeywordToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "ContextualKeyword"
+                 "Keyword"
                ],
                textChoices: [
                  "_move"
@@ -105,9 +108,9 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "BorrowKeyword",
-               kind: "ContextualKeywordToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "ContextualKeyword"
+                 "Keyword"
                ],
                textChoices: [
                  "_borrow"
@@ -164,8 +167,7 @@ public let EXPR_NODES: [Node] = [
                kind: "Token",
                tokenChoices: [
                  "Identifier",
-                 "Self",
-                 "CapitalSelf",
+                 "Keyword",
                  "DollarIdentifier",
                  "BinaryOperator"
                ]),
@@ -179,9 +181,12 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "SuperKeyword",
-               kind: "SuperToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "Super"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "super"
                ])
        ]),
 
@@ -190,9 +195,12 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "NilKeyword",
-               kind: "NilToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "Nil"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "nil"
                ])
        ]),
 
@@ -223,9 +231,12 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "RepeatKeyword",
-               kind: "RepeatToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "Repeat"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "repeat"
                ]),
          Child(name: "PatternExpr",
                kind: "Expr")
@@ -236,9 +247,9 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "EachKeyword",
-               kind: "ContextualKeywordToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "ContextualKeyword"
+                 "Keyword"
                ],
                textChoices: [
                  "each"
@@ -293,20 +304,17 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "AsyncKeyword",
-               kind: "ContextualKeywordToken",
+               kind: "KeywordToken",
                isOptional: true,
                tokenChoices: [
-                 "ContextualKeyword"
+                 "Keyword"
                ],
                textChoices: [
                  "async"
                ]),
          Child(name: "ThrowsToken",
                kind: "ThrowsToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Throws"
-               ]),
+               isOptional: true),
          Child(name: "ArrowToken",
                kind: "ArrowToken",
                tokenChoices: [
@@ -496,10 +504,13 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "BooleanLiteral",
-               kind: "Token",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "True",
-                 "False"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "true",
+                 "false"
                ])
        ]),
 
@@ -567,9 +578,12 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "IsTok",
-               kind: "IsToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "Is"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "is"
                ])
        ]),
 
@@ -580,9 +594,12 @@ public let EXPR_NODES: [Node] = [
          Child(name: "Expression",
                kind: "Expr"),
          Child(name: "IsTok",
-               kind: "IsToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "Is"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "is"
                ]),
          Child(name: "TypeName",
                kind: "Type")
@@ -593,9 +610,12 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "AsTok",
-               kind: "AsToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "As"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "as"
                ]),
          Child(name: "QuestionOrExclamationMark",
                kind: "Token",
@@ -613,9 +633,12 @@ public let EXPR_NODES: [Node] = [
          Child(name: "Expression",
                kind: "Expr"),
          Child(name: "AsTok",
-               kind: "AsToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "As"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "as"
                ]),
          Child(name: "QuestionOrExclamationMark",
                kind: "Token",
@@ -744,27 +767,33 @@ public let EXPR_NODES: [Node] = [
                        kind: "ParameterClause")
                ]),
          Child(name: "AsyncKeyword",
-               kind: "ContextualKeywordToken",
+               kind: "KeywordToken",
                isOptional: true,
                tokenChoices: [
-                 "ContextualKeyword"
+                 "Keyword"
                ],
                textChoices: [
                  "async"
                ]),
          Child(name: "ThrowsTok",
-               kind: "ThrowsToken",
+               kind: "KeywordToken",
                isOptional: true,
                tokenChoices: [
-                 "Throws"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "throws"
                ]),
          Child(name: "Output",
                kind: "ReturnClause",
                isOptional: true),
          Child(name: "InTok",
-               kind: "InToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "In"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "in"
                ])
        ]),
 
@@ -1080,8 +1109,7 @@ public let EXPR_NODES: [Node] = [
                kind: "Token",
                tokenChoices: [
                  "Identifier",
-                 "Self",
-                 "CapitalSelf",
+                 "Keyword",
                  "DollarIdentifier",
                  "BinaryOperator",
                  "IntegerLiteral"

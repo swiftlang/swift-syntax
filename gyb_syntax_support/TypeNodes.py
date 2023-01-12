@@ -8,8 +8,7 @@ TYPE_NODES = [
              Child('Name', kind='Token', classification='TypeIdentifier',
                    token_choices=[
                        'IdentifierToken',
-                       'CapitalSelfToken',
-                       'AnyToken',
+                       'KeywordToken',
                    ]),
              Child('GenericArgumentClause', kind='GenericArgumentClause',
                    is_optional=True),
@@ -23,8 +22,7 @@ TYPE_NODES = [
              Child('Name', kind='Token',  name_for_diagnostics='name', classification='TypeIdentifier',
                    token_choices=[
                        'IdentifierToken',
-                       'CapitalSelfToken',
-                       'AnyToken',
+                       'KeywordToken',
                    ]),
              Child('GenericArgumentClause', kind='GenericArgumentClause',
                    is_optional=True),
@@ -33,7 +31,7 @@ TYPE_NODES = [
     # class-restriction-type -> 'class'
     Node('ClassRestrictionType', name_for_diagnostics=None, kind='Type',
          children=[
-             Child('ClassKeyword', kind='ClassToken'),
+             Child('ClassKeyword', kind='KeywordToken', text_choices=['class']),
          ]),
     # array-type -> '[' type ']'
     Node('ArrayType', name_for_diagnostics='array type', kind='Type',
@@ -115,14 +113,14 @@ TYPE_NODES = [
     # pack-expansion-type -> type '...'
     Node('PackExpansionType', name_for_diagnostics='variadic expansion', kind='Type',
          children=[
-             Child('RepeatKeyword', kind='RepeatToken'),
+             Child('RepeatKeyword', kind='KeywordToken', text_choices=['repeat']),
              Child('PatternType', kind='Type')
          ]),
 
     # pack-reference-type -> 'each' type
     Node('PackReferenceType', name_for_diagnostics='pack reference', kind='Type',
          children=[
-             Child('EachKeyword', kind='ContextualKeyworkToken',
+             Child('EachKeyword', kind='KeyworkToken',
                    text_choices=['each'], is_optional=False),
              Child('PackType', kind='Type')
          ]),
@@ -180,14 +178,14 @@ TYPE_NODES = [
              Child('Arguments', kind='TupleTypeElementList',
                    collection_element_name='Argument', is_indented=True),
              Child('RightParen', kind='RightParenToken'),
-             Child('AsyncKeyword', kind='ContextualKeyworkToken',
+             Child('AsyncKeyword', kind='KeyworkToken',
                    text_choices=['async'], is_optional=True),
-             Child('ThrowsOrRethrowsKeyword', kind='Token',
+             Child('ThrowsOrRethrowsKeyword', kind='KeywordToken',
                    is_optional=True,
-                   token_choices=[
-                       'ThrowsToken',
-                       'RethrowsToken',
-                       'ThrowToken',
+                   text_choices=[
+                       'throws',
+                       'rethrows',
+                       'throw',
                    ]),
              Child('Arrow', kind='ArrowToken'),
              Child('ReturnType', kind='Type'),

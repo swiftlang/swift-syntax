@@ -118,8 +118,7 @@ extension Parser {
       return label(self.parseDoStatement(doHandle: handle), with: optLabel)
     case (.poundAssertKeyword, let handle)?:
       return label(self.parsePoundAssertStatement(poundAssertHandle: handle), with: optLabel)
-    case (.yieldAsIdentifier, let handle)?,
-      (.yield, let handle)?:
+    case (.yield, let handle)?:
       return label(self.parseYieldStatement(yieldHandle: handle), with: optLabel)
     case nil:
       let missingStmt = RawStmtSyntax(RawMissingStmtSyntax(arena: self.arena))
@@ -147,11 +146,11 @@ extension Parser {
     let body = self.parseCodeBlock(introducer: ifKeyword)
 
     // The else branch, if any, is outside of the scope of the condition.
-    let elseKeyword = self.consume(if: .elseKeyword)
+    let elseKeyword = self.consume(if: .keyword(.else))
     let elseBody: RawIfStmtSyntax.ElseBody?
     if elseKeyword != nil {
-      if self.at(.ifKeyword) {
-        elseBody = .ifStmt(self.parseIfStatement(ifHandle: .constant(.ifKeyword)))
+      if self.at(.keyword(.if)) {
+        elseBody = .ifStmt(self.parseIfStatement(ifHandle: .constant(.keyword(.if))))
       } else {
         elseBody = .codeBlock(self.parseCodeBlock(introducer: ifKeyword))
       }
@@ -182,7 +181,7 @@ extension Parser {
   public mutating func parseGuardStatement(guardHandle: RecoveryConsumptionHandle) -> RawGuardStmtSyntax {
     let (unexpectedBeforeGuardKeyword, guardKeyword) = self.eat(guardHandle)
     let conditions = self.parseConditionList()
-    let (unexpectedBeforeElseKeyword, elseKeyword) = self.expect(.elseKeyword)
+    let (unexpectedBeforeElseKeyword, elseKeyword) = self.expect(.keyword(.else))
     let body = self.parseCodeBlock(introducer: guardKeyword)
     return RawGuardStmtSyntax(
       unexpectedBeforeGuardKeyword,
@@ -249,7 +248,7 @@ extension Parser {
 
     // Parse the basic expression case.  If we have a leading let/var/case
     // keyword or an assignment, then we know this is a binding.
-    guard self.at(any: [.letKeyword, .varKeyword, .caseKeyword]) else {
+    guard self.at(any: [.keyword(.let), .keyword(.var), .keyword(.case)]) else {
       // If we lack it, then this is theoretically a boolean condition.
       // However, we also need to handle migrating from Swift 2 syntax, in
       // which a comma followed by an expression could actually be a pattern
@@ -266,14 +265,14 @@ extension Parser {
     }
 
     // We're parsing a conditional binding.
-    assert(self.at(any: [.letKeyword, .varKeyword, .caseKeyword]))
+    assert(self.at(any: [.keyword(.let), .keyword(.var), .keyword(.case)]))
     enum BindingKind {
       case pattern(RawTokenSyntax, RawPatternSyntax)
       case optional(RawTokenSyntax, RawPatternSyntax)
     }
 
     let kind: BindingKind
-    if let caseKeyword = self.consume(if: .caseKeyword) {
+    if let caseKeyword = self.consume(if: .keyword(.case)) {
       let pattern = self.parseMatchingPattern(context: .matching)
       kind = .pattern(caseKeyword, pattern)
     } else {
@@ -421,12 +420,12 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseThrowStatement(throwHandle: RecoveryConsumptionHandle) -> RawThrowStmtSyntax {
     let (unexpectedBeforeThrowKeyword, throwKeyword) = self.eat(throwHandle)
-    let hasMisplacedTry = unexpectedBeforeThrowKeyword?.containsToken(where: { $0.tokenKind == .tryKeyword }) ?? false
+    let hasMisplacedTry = unexpectedBeforeThrowKeyword?.containsToken(where: { $0.tokenKind == .keyword(.try) }) ?? false
     var expr = self.parseExpression()
     if hasMisplacedTry && !expr.is(RawTryExprSyntax.self) {
       expr = RawExprSyntax(
         RawTryExprSyntax(
-          tryKeyword: missingToken(.tryKeyword, text: nil),
+          tryKeyword: missingToken(.keyword(.try), text: nil),
           questionOrExclamationMark: nil,
           expression: expr,
           arena: self.arena
@@ -481,7 +480,7 @@ extension Parser {
     // If the next token is 'catch', this is a 'do'/'catch' statement.
     var elements = [RawCatchClauseSyntax]()
     var loopProgress = LoopProgressCondition()
-    while self.at(.catchKeyword) && loopProgress.evaluate(self.currentToken) {
+    while self.at(.keyword(.catch)) && loopProgress.evaluate(self.currentToken) {
       // Parse 'catch' clauses
       elements.append(self.parseCatchClause())
     }
@@ -508,7 +507,7 @@ extension Parser {
   ///     catch-pattern-list → catch-pattern | catch-pattern ',' catch-pattern-list
   @_spi(RawSyntax)
   public mutating func parseCatchClause() -> RawCatchClauseSyntax {
-    let (unexpectedBeforeCatchKeyword, catchKeyword) = self.expect(.catchKeyword)
+    let (unexpectedBeforeCatchKeyword, catchKeyword) = self.expect(.keyword(.catch))
     var catchItems = [RawCatchItemSyntax]()
     if !self.at(.leftBrace) {
       var keepGoing: RawTokenSyntax? = nil
@@ -547,7 +546,7 @@ extension Parser {
     // If this is a 'catch' clause and we have "catch {" or "catch where...",
     // then we get an implicit "let error" pattern.
     let pattern: RawPatternSyntax?
-    if self.at(any: [.leftBrace, .whereKeyword]) {
+    if self.at(any: [.leftBrace, .keyword(.where)]) {
       pattern = nil
     } else {
       pattern = self.parseMatchingPattern(context: .matching)
@@ -555,7 +554,7 @@ extension Parser {
 
     // Parse the optional 'where' guard.
     let whereClause: RawWhereClauseSyntax?
-    if let whereKeyword = self.consume(if: .whereKeyword) {
+    if let whereKeyword = self.consume(if: .keyword(.where)) {
       let guardExpr = self.parseExpression(.basic)
       whereClause = RawWhereClauseSyntax(
         whereKeyword: whereKeyword,
@@ -604,7 +603,7 @@ extension Parser {
   public mutating func parseRepeatWhileStatement(repeatHandle: RecoveryConsumptionHandle) -> RawRepeatWhileStmtSyntax {
     let (unexpectedBeforeRepeatKeyword, repeatKeyword) = self.eat(repeatHandle)
     let body = self.parseCodeBlock(introducer: repeatKeyword)
-    let (unexpectedBeforeWhileKeyword, whileKeyword) = self.expect(.whileKeyword)
+    let (unexpectedBeforeWhileKeyword, whileKeyword) = self.expect(.keyword(.while))
     let condition = self.parseExpression()
     return RawRepeatWhileStmtSyntax(
       unexpectedBeforeRepeatKeyword,
@@ -630,13 +629,13 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseForEachStatement(forHandle: RecoveryConsumptionHandle) -> RawForInStmtSyntax {
     let (unexpectedBeforeForKeyword, forKeyword) = self.eat(forHandle)
-    let tryKeyword = self.consume(if: .tryKeyword)
+    let tryKeyword = self.consume(if: .keyword(.try))
 
-    let awaitKeyword = self.consume(if: .contextualKeyword(.await))
+    let awaitKeyword = self.consume(if: .keyword(.await))
 
     // Parse the pattern.  This is either 'case <refutable pattern>' or just a
     // normal pattern.
-    let caseKeyword = self.consume(if: .caseKeyword)
+    let caseKeyword = self.consume(if: .keyword(.case))
     let pattern: RawPatternSyntax
     let type: RawTypeAnnotationSyntax?
     if caseKeyword != nil {
@@ -656,13 +655,13 @@ extension Parser {
       (pattern, type) = self.parseTypedPattern(allowRecoveryFromMissingColon: false)
     }
 
-    let (unexpectedBeforeInKeyword, inKeyword) = self.expect(.inKeyword)
+    let (unexpectedBeforeInKeyword, inKeyword) = self.expect(.keyword(.in))
 
     let expr = self.parseExpression(.basic)
 
     // Parse the 'where' expression if present.
     let whereClause: RawWhereClauseSyntax?
-    if let whereKeyword = self.consume(if: .whereKeyword) {
+    if let whereKeyword = self.consume(if: .keyword(.where)) {
       let guardExpr = self.parseExpression(.basic)
       whereClause = RawWhereClauseSyntax(
         whereKeyword: whereKeyword,
@@ -772,7 +771,7 @@ extension Parser {
               unknownAttr: nil,
               label: .case(
                 RawSwitchCaseLabelSyntax(
-                  caseKeyword: missingToken(.caseKeyword, text: nil),
+                  caseKeyword: missingToken(.keyword(.case), text: nil),
                   caseItems: RawCaseItemListSyntax(
                     elements: [
                       RawCaseItemSyntax(
@@ -864,7 +863,7 @@ extension Parser {
     case nil:
       label = .case(
         RawSwitchCaseLabelSyntax(
-          caseKeyword: missingToken(.caseKeyword),
+          caseKeyword: missingToken(.keyword(.case)),
           caseItems: RawCaseItemListSyntax(
             elements: [
               RawCaseItemSyntax(
@@ -967,7 +966,7 @@ extension Parser {
     // Parse the optional 'where' guard, with this particular pattern's bound
     // vars in scope.
     let whereClause: RawWhereClauseSyntax?
-    if let whereKeyword = self.consume(if: .whereKeyword) {
+    if let whereKeyword = self.consume(if: .keyword(.where)) {
       let guardExpr = self.parseExpression(.trailingClosure)
       whereClause = RawWhereClauseSyntax(
         whereKeyword: whereKeyword,
@@ -993,14 +992,14 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseReturnStatement(returnHandle: RecoveryConsumptionHandle) -> RawReturnStmtSyntax {
     let (unexpectedBeforeRet, ret) = self.eat(returnHandle)
-    let hasMisplacedTry = unexpectedBeforeRet?.containsToken(where: { $0.tokenKind == .tryKeyword }) ?? false
+    let hasMisplacedTry = unexpectedBeforeRet?.containsToken(where: { $0.tokenKind == .keyword(.try) }) ?? false
 
     // Handle the ambiguity between consuming the expression and allowing the
     // enclosing stmt-brace to get it by eagerly eating it unless the return is
     // followed by a '}', '', statement or decl start keyword sequence.
     let expr: RawExprSyntax?
     if !self.at(any: [
-      .rightBrace, .caseKeyword, .defaultKeyword, .semicolon, .eof,
+      .rightBrace, .keyword(.case), .keyword(.default), .semicolon, .eof,
       .poundIfKeyword, .poundErrorKeyword, .poundWarningKeyword,
       .poundEndifKeyword, .poundElseKeyword, .poundElseifKeyword,
     ])
@@ -1010,7 +1009,7 @@ extension Parser {
       if hasMisplacedTry && !parsedExpr.is(RawTryExprSyntax.self) {
         expr = RawExprSyntax(
           RawTryExprSyntax(
-            tryKeyword: missingToken(.tryKeyword, text: nil),
+            tryKeyword: missingToken(.keyword(.try), text: nil),
             questionOrExclamationMark: nil,
             expression: parsedExpr,
             arena: self.arena
@@ -1257,7 +1256,6 @@ extension Parser.Lookahead {
       .continueKeyword?,
       .fallthroughKeyword?,
       .switchKeyword?,
-      .yield?,
       .poundAssertKeyword?:
       return true
     case .repeatKeyword?:
@@ -1266,7 +1264,7 @@ extension Parser.Lookahead {
       // FIXME: 'repeat' followed by '{' could be a pack expansion
       // with a closure pattern.
       return self.peek().rawTokenKind == .leftBrace
-    case .yieldAsIdentifier?:
+    case .yield?:
       switch self.peek().rawTokenKind {
       case .prefixAmpersand:
         // "yield &" always denotes a yield statement.

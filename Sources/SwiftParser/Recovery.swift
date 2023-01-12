@@ -42,11 +42,10 @@ public struct RecoveryConsumptionHandle {
 }
 
 extension Parser.Lookahead {
-  /// Tries eating tokens until it finds a token whose kind is in `kinds` or a
-  /// contextual keyword with a text in `contextualKeywords` without skipping
-  /// tokens that have a precedence that's higher than the lowest precedence in
-  /// `kinds`. If it found a token of `kind` in this way, returns `true`,
-  /// otherwise `false`.
+  /// Tries eating tokens until it finds a token whose kind is in `kinds`
+  /// without skipping tokens that have a precedence that's higher than the
+  /// lowest precedence in `kinds`. If it found a token of `kind` in this way,
+  /// returns `true`, otherwise `false`.
   /// If this method returns `true`, the parser probably wants to consume the
   /// tokens this lookahead skipped over to find `kind` by consuming
   /// `lookahead.tokensConsumed` as unexpected.

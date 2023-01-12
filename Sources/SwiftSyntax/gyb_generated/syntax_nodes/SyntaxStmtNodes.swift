@@ -323,7 +323,7 @@ public struct ContinueStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeContinueKeyword: UnexpectedNodesSyntax? = nil,
-    continueKeyword: TokenSyntax = .continueKeyword(),
+    continueKeyword: TokenSyntax = .keyword(.continue),
     _ unexpectedBetweenContinueKeywordAndLabel: UnexpectedNodesSyntax? = nil,
     label: TokenSyntax? = nil,
     _ unexpectedAfterLabel: UnexpectedNodesSyntax? = nil,
@@ -512,7 +512,7 @@ public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeWhileKeyword: UnexpectedNodesSyntax? = nil,
-    whileKeyword: TokenSyntax = .whileKeyword(),
+    whileKeyword: TokenSyntax = .keyword(.while),
     _ unexpectedBetweenWhileKeywordAndConditions: UnexpectedNodesSyntax? = nil,
     conditions: ConditionElementListSyntax,
     _ unexpectedBetweenConditionsAndBody: UnexpectedNodesSyntax? = nil,
@@ -772,7 +772,7 @@ public struct DeferStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeDeferKeyword: UnexpectedNodesSyntax? = nil,
-    deferKeyword: TokenSyntax = .deferKeyword(),
+    deferKeyword: TokenSyntax = .keyword(.defer),
     _ unexpectedBetweenDeferKeywordAndBody: UnexpectedNodesSyntax? = nil,
     body: CodeBlockSyntax,
     _ unexpectedAfterBody: UnexpectedNodesSyntax? = nil,
@@ -960,11 +960,11 @@ public struct RepeatWhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public init<C: ExprSyntaxProtocol>(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeRepeatKeyword: UnexpectedNodesSyntax? = nil,
-    repeatKeyword: TokenSyntax = .repeatKeyword(),
+    repeatKeyword: TokenSyntax = .keyword(.repeat),
     _ unexpectedBetweenRepeatKeywordAndBody: UnexpectedNodesSyntax? = nil,
     body: CodeBlockSyntax,
     _ unexpectedBetweenBodyAndWhileKeyword: UnexpectedNodesSyntax? = nil,
-    whileKeyword: TokenSyntax = .whileKeyword(),
+    whileKeyword: TokenSyntax = .keyword(.while),
     _ unexpectedBetweenWhileKeywordAndCondition: UnexpectedNodesSyntax? = nil,
     condition: C,
     _ unexpectedAfterCondition: UnexpectedNodesSyntax? = nil,
@@ -1254,11 +1254,11 @@ public struct GuardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeGuardKeyword: UnexpectedNodesSyntax? = nil,
-    guardKeyword: TokenSyntax = .guardKeyword(),
+    guardKeyword: TokenSyntax = .keyword(.guard),
     _ unexpectedBetweenGuardKeywordAndConditions: UnexpectedNodesSyntax? = nil,
     conditions: ConditionElementListSyntax,
     _ unexpectedBetweenConditionsAndElseKeyword: UnexpectedNodesSyntax? = nil,
-    elseKeyword: TokenSyntax = .elseKeyword(),
+    elseKeyword: TokenSyntax = .keyword(.else),
     _ unexpectedBetweenElseKeywordAndBody: UnexpectedNodesSyntax? = nil,
     body: CodeBlockSyntax,
     _ unexpectedAfterBody: UnexpectedNodesSyntax? = nil,
@@ -1567,7 +1567,7 @@ public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public init<P: PatternSyntaxProtocol, S: ExprSyntaxProtocol>(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeForKeyword: UnexpectedNodesSyntax? = nil,
-    forKeyword: TokenSyntax = .forKeyword(),
+    forKeyword: TokenSyntax = .keyword(.for),
     _ unexpectedBetweenForKeywordAndTryKeyword: UnexpectedNodesSyntax? = nil,
     tryKeyword: TokenSyntax? = nil,
     _ unexpectedBetweenTryKeywordAndAwaitKeyword: UnexpectedNodesSyntax? = nil,
@@ -1579,7 +1579,7 @@ public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenPatternAndTypeAnnotation: UnexpectedNodesSyntax? = nil,
     typeAnnotation: TypeAnnotationSyntax? = nil,
     _ unexpectedBetweenTypeAnnotationAndInKeyword: UnexpectedNodesSyntax? = nil,
-    inKeyword: TokenSyntax = .inKeyword(),
+    inKeyword: TokenSyntax = .keyword(.in),
     _ unexpectedBetweenInKeywordAndSequenceExpr: UnexpectedNodesSyntax? = nil,
     sequenceExpr: S,
     _ unexpectedBetweenSequenceExprAndWhereClause: UnexpectedNodesSyntax? = nil,
@@ -2184,7 +2184,7 @@ public struct SwitchStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public init<E: ExprSyntaxProtocol>(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeSwitchKeyword: UnexpectedNodesSyntax? = nil,
-    switchKeyword: TokenSyntax = .switchKeyword(),
+    switchKeyword: TokenSyntax = .keyword(.switch),
     _ unexpectedBetweenSwitchKeywordAndExpression: UnexpectedNodesSyntax? = nil,
     expression: E,
     _ unexpectedBetweenExpressionAndLeftBrace: UnexpectedNodesSyntax? = nil,
@@ -2550,7 +2550,7 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeDoKeyword: UnexpectedNodesSyntax? = nil,
-    doKeyword: TokenSyntax = .doKeyword(),
+    doKeyword: TokenSyntax = .keyword(.do),
     _ unexpectedBetweenDoKeywordAndBody: UnexpectedNodesSyntax? = nil,
     body: CodeBlockSyntax,
     _ unexpectedBetweenBodyAndCatchClauses: UnexpectedNodesSyntax? = nil,
@@ -2811,7 +2811,7 @@ public struct ReturnStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public init<E: ExprSyntaxProtocol>(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeReturnKeyword: UnexpectedNodesSyntax? = nil,
-    returnKeyword: TokenSyntax = .returnKeyword(),
+    returnKeyword: TokenSyntax = .keyword(.return),
     _ unexpectedBetweenReturnKeywordAndExpression: UnexpectedNodesSyntax? = nil,
     expression: E? = nil,
     _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,
@@ -2848,7 +2848,7 @@ public struct ReturnStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeReturnKeyword: UnexpectedNodesSyntax? = nil,
-    returnKeyword: TokenSyntax = .returnKeyword(),
+    returnKeyword: TokenSyntax = .keyword(.return),
     _ unexpectedBetweenReturnKeywordAndExpression: UnexpectedNodesSyntax? = nil,
     expression: MissingExprSyntax? = nil,
     _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,
@@ -3066,7 +3066,7 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeYieldKeyword: UnexpectedNodesSyntax? = nil,
-    yieldKeyword: TokenSyntax = .yieldToken(),
+    yieldKeyword: TokenSyntax = .keyword(.yield),
     _ unexpectedBetweenYieldKeywordAndYields: UnexpectedNodesSyntax? = nil,
     yields: Yields,
     _ unexpectedAfterYields: UnexpectedNodesSyntax? = nil,
@@ -3254,7 +3254,7 @@ public struct FallthroughStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeFallthroughKeyword: UnexpectedNodesSyntax? = nil,
-    fallthroughKeyword: TokenSyntax = .fallthroughKeyword(),
+    fallthroughKeyword: TokenSyntax = .keyword(.fallthrough),
     _ unexpectedAfterFallthroughKeyword: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
   ) {
@@ -3389,7 +3389,7 @@ public struct BreakStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeBreakKeyword: UnexpectedNodesSyntax? = nil,
-    breakKeyword: TokenSyntax = .breakKeyword(),
+    breakKeyword: TokenSyntax = .keyword(.break),
     _ unexpectedBetweenBreakKeywordAndLabel: UnexpectedNodesSyntax? = nil,
     label: TokenSyntax? = nil,
     _ unexpectedAfterLabel: UnexpectedNodesSyntax? = nil,
@@ -3578,7 +3578,7 @@ public struct ThrowStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public init<E: ExprSyntaxProtocol>(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeThrowKeyword: UnexpectedNodesSyntax? = nil,
-    throwKeyword: TokenSyntax = .throwKeyword(),
+    throwKeyword: TokenSyntax = .keyword(.throw),
     _ unexpectedBetweenThrowKeywordAndExpression: UnexpectedNodesSyntax? = nil,
     expression: E,
     _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,
@@ -3802,7 +3802,7 @@ public struct IfStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeIfKeyword: UnexpectedNodesSyntax? = nil,
-    ifKeyword: TokenSyntax = .ifKeyword(),
+    ifKeyword: TokenSyntax = .keyword(.if),
     _ unexpectedBetweenIfKeywordAndConditions: UnexpectedNodesSyntax? = nil,
     conditions: ConditionElementListSyntax,
     _ unexpectedBetweenConditionsAndBody: UnexpectedNodesSyntax? = nil,

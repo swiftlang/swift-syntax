@@ -44,7 +44,7 @@ final class StructTests: XCTestCase {
         .docLineComment("/// with multi line comment where the newline is a CR"),
         .carriageReturns(1),
       ],
-      structKeyword: .struct,
+      structKeyword: .keyword(.struct),
       identifier: "CarriateReturnsStruct"
     )
     let carriageReturnFormFeedsStruct = StructDecl(
@@ -54,7 +54,7 @@ final class StructTests: XCTestCase {
         .docLineComment("/// with multi line comment where the newline is a CRLF"),
         .carriageReturnLineFeeds(1),
       ],
-      structKeyword: .struct,
+      structKeyword: .keyword(.struct),
       identifier: "CarriageReturnFormFeedsStruct"
     )
     let testStruct = StructDecl("public struct TestStruct") {

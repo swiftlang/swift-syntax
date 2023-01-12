@@ -17,9 +17,9 @@
 @_spi(RawSyntax) import SwiftSyntax
 
 enum DeclarationModifier: RawTokenKindSubset {
-  case staticKeyword
+  case `static`
   
-  case classKeyword
+  case `class`
   
   case final
   
@@ -47,13 +47,13 @@ enum DeclarationModifier: RawTokenKindSubset {
   
   case override
   
-  case privateKeyword
+  case `private`
   
-  case fileprivateKeyword
+  case `fileprivate`
   
-  case internalKeyword
+  case `internal`
   
-  case publicKeyword
+  case `public`
   
   case package
   
@@ -85,10 +85,10 @@ enum DeclarationModifier: RawTokenKindSubset {
   
   init?(lexeme: Lexer.Lexeme) {
     switch lexeme {
-    case RawTokenKindMatch(.staticKeyword): 
-      self = .staticKeyword
-    case RawTokenKindMatch(.classKeyword): 
-      self = .classKeyword
+    case RawTokenKindMatch(.`static`): 
+      self = .`static`
+    case RawTokenKindMatch(.`class`): 
+      self = .`class`
     case RawTokenKindMatch(.final): 
       self = .final
     case RawTokenKindMatch(.required): 
@@ -115,14 +115,14 @@ enum DeclarationModifier: RawTokenKindSubset {
       self = .convenience
     case RawTokenKindMatch(.override): 
       self = .override
-    case RawTokenKindMatch(.privateKeyword): 
-      self = .privateKeyword
-    case RawTokenKindMatch(.fileprivateKeyword): 
-      self = .fileprivateKeyword
-    case RawTokenKindMatch(.internalKeyword): 
-      self = .internalKeyword
-    case RawTokenKindMatch(.publicKeyword): 
-      self = .publicKeyword
+    case RawTokenKindMatch(.`private`): 
+      self = .`private`
+    case RawTokenKindMatch(.`fileprivate`): 
+      self = .`fileprivate`
+    case RawTokenKindMatch(.`internal`): 
+      self = .`internal`
+    case RawTokenKindMatch(.`public`): 
+      self = .`public`
     case RawTokenKindMatch(.package): 
       self = .package
     case RawTokenKindMatch(.open): 
@@ -158,72 +158,72 @@ enum DeclarationModifier: RawTokenKindSubset {
   
   var rawTokenKind: RawTokenKind {
     switch self {
-    case .staticKeyword: 
-      return .staticKeyword
-    case .classKeyword: 
-      return .classKeyword
+    case .`static`: 
+      return .keyword(.`static`)
+    case .`class`: 
+      return .keyword(.`class`)
     case .final: 
-      return .contextualKeyword(.final)
+      return .keyword(.final)
     case .required: 
-      return .contextualKeyword(.required)
+      return .keyword(.required)
     case .optional: 
-      return .contextualKeyword(.optional)
+      return .keyword(.optional)
     case .lazy: 
-      return .contextualKeyword(.lazy)
+      return .keyword(.lazy)
     case .dynamic: 
-      return .contextualKeyword(.dynamic)
+      return .keyword(.dynamic)
     case .infix: 
-      return .contextualKeyword(.infix)
+      return .keyword(.infix)
     case .prefix: 
-      return .contextualKeyword(.prefix)
+      return .keyword(.prefix)
     case .postfix: 
-      return .contextualKeyword(.postfix)
+      return .keyword(.postfix)
     case .__consuming: 
-      return .contextualKeyword(.__consuming)
+      return .keyword(.__consuming)
     case .mutating: 
-      return .contextualKeyword(.mutating)
+      return .keyword(.mutating)
     case .nonmutating: 
-      return .contextualKeyword(.nonmutating)
+      return .keyword(.nonmutating)
     case .convenience: 
-      return .contextualKeyword(.convenience)
+      return .keyword(.convenience)
     case .override: 
-      return .contextualKeyword(.override)
-    case .privateKeyword: 
-      return .privateKeyword
-    case .fileprivateKeyword: 
-      return .fileprivateKeyword
-    case .internalKeyword: 
-      return .internalKeyword
-    case .publicKeyword: 
-      return .publicKeyword
+      return .keyword(.override)
+    case .`private`: 
+      return .keyword(.`private`)
+    case .`fileprivate`: 
+      return .keyword(.`fileprivate`)
+    case .`internal`: 
+      return .keyword(.`internal`)
+    case .`public`: 
+      return .keyword(.`public`)
     case .package: 
-      return .contextualKeyword(.package)
+      return .keyword(.package)
     case .open: 
-      return .contextualKeyword(.open)
+      return .keyword(.open)
     case .__setter_access: 
-      return .contextualKeyword(.__setter_access)
+      return .keyword(.__setter_access)
     case .weak: 
-      return .contextualKeyword(.weak)
+      return .keyword(.weak)
     case .unowned: 
-      return .contextualKeyword(.unowned)
+      return .keyword(.unowned)
     case .`rethrows`: 
-      return .contextualKeyword(.`rethrows`)
+      return .keyword(.`rethrows`)
     case .indirect: 
-      return .contextualKeyword(.indirect)
+      return .keyword(.indirect)
     case .isolated: 
-      return .contextualKeyword(.isolated)
+      return .keyword(.isolated)
     case .async: 
-      return .contextualKeyword(.async)
+      return .keyword(.async)
     case .reasync: 
-      return .contextualKeyword(.reasync)
+      return .keyword(.reasync)
     case .nonisolated: 
-      return .contextualKeyword(.nonisolated)
+      return .keyword(.nonisolated)
     case .distributed: 
-      return .contextualKeyword(.distributed)
+      return .keyword(.distributed)
     case ._const: 
-      return .contextualKeyword(._const)
+      return .keyword(._const)
     case ._local: 
-      return .contextualKeyword(._local)
+      return .keyword(._local)
     }
   }
 }

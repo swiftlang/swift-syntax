@@ -21,8 +21,7 @@ public let TYPE_NODES: [Node] = [
                kind: "Token",
                tokenChoices: [
                  "Identifier",
-                 "CapitalSelf",
-                 "Any"
+                 "Keyword"
                ],
                classification: "TypeIdentifier"),
          Child(name: "GenericArgumentClause",
@@ -45,8 +44,7 @@ public let TYPE_NODES: [Node] = [
                kind: "Token",
                tokenChoices: [
                  "Identifier",
-                 "CapitalSelf",
-                 "Any"
+                 "Keyword"
                ],
                classification: "TypeIdentifier"),
          Child(name: "GenericArgumentClause",
@@ -59,9 +57,12 @@ public let TYPE_NODES: [Node] = [
        kind: "Type",
        children: [
          Child(name: "ClassKeyword",
-               kind: "ClassToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "Class"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "class"
                ])
        ]),
   
@@ -207,9 +208,12 @@ public let TYPE_NODES: [Node] = [
        kind: "Type",
        children: [
          Child(name: "RepeatKeyword",
-               kind: "RepeatToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "Repeat"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "repeat"
                ]),
          Child(name: "PatternType",
                kind: "Type")
@@ -220,7 +224,7 @@ public let TYPE_NODES: [Node] = [
        kind: "Type",
        children: [
          Child(name: "EachKeyword",
-               kind: "ContextualKeyworkToken",
+               kind: "KeyworkToken",
                textChoices: [
                  "each"
                ]),
@@ -237,10 +241,7 @@ public let TYPE_NODES: [Node] = [
        children: [
          Child(name: "InOut",
                kind: "InoutToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Inout"
-               ]),
+               isOptional: true),
          Child(name: "Name",
                kind: "Token",
                isOptional: true,
@@ -330,18 +331,21 @@ public let TYPE_NODES: [Node] = [
                  "RightParen"
                ]),
          Child(name: "AsyncKeyword",
-               kind: "ContextualKeyworkToken",
+               kind: "KeyworkToken",
                isOptional: true,
                textChoices: [
                  "async"
                ]),
          Child(name: "ThrowsOrRethrowsKeyword",
-               kind: "Token",
+               kind: "KeywordToken",
                isOptional: true,
                tokenChoices: [
-                 "Throws",
-                 "Rethrows",
-                 "Throw"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "throws",
+                 "rethrows",
+                 "throw"
                ]),
          Child(name: "Arrow",
                kind: "ArrowToken",

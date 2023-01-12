@@ -70,41 +70,6 @@ public class TokenSpec {
   }
 }
 
-/// Represents a keyword token.
-public class KeywordSpec: TokenSpec {
-  init(
-    name: String,
-    text: String,
-    classification: String = "Keyword",
-    requiresLeadingSpace: Bool = false,
-    requiresTrailingSpace: Bool = false
-  ) {
-    super.init(
-      name: name,
-      kind: "kw_\(text)",
-      nameForDiagnostics: text,
-      unprefixedKind: text,
-      text: text,
-      classification: classification,
-      isKeyword: true,
-      requiresLeadingSpace: requiresLeadingSpace,
-      requiresTrailingSpace: requiresTrailingSpace
-    )
-  }
-}
-
-public class SwiftKeywordSpec: KeywordSpec { }
-
-public class DeclKeywordSpec: SwiftKeywordSpec { }
-
-public class StmtKeywordSpec: SwiftKeywordSpec { }
-
-public class ExprKeywordSpec: SwiftKeywordSpec { }
-
-public class PatternKeywordSpec: SwiftKeywordSpec { }
-
-public class SilKeywordSpec: KeywordSpec { }
-
 public class PoundKeywordSpec: TokenSpec {
   init(
     name: String,

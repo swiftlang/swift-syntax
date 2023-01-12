@@ -43,7 +43,7 @@ public class LexerTests: XCTestCase {
       func not_doc5() {}
       """,
       lexemes: [
-        LexemeSpec(.funcKeyword, leading: "/*/ */\n", text: "func", trailing: " ", flags: [.isAtStartOfLine]),
+        LexemeSpec(.keyword(.func), leading: "/*/ */\n", text: "func", trailing: " ", flags: [.isAtStartOfLine]),
         LexemeSpec(.identifier, text: "not_doc5"),
         LexemeSpec(.leftParen, text: "("),
         LexemeSpec(.rightParen, text: ")", trailing: " "),
@@ -216,7 +216,7 @@ public class LexerTests: XCTestCase {
       let x = 42
       """,
       lexemes: [
-        LexemeSpec(.letKeyword, leading: "#!/usr/bin/swiftc\n", text: "let", trailing: " ", flags: [.isAtStartOfLine]),
+        LexemeSpec(.keyword(.let), leading: "#!/usr/bin/swiftc\n", text: "let", trailing: " ", flags: [.isAtStartOfLine]),
         LexemeSpec(.identifier, text: "x", trailing: " "),
         LexemeSpec(.equal, text: "=", trailing: " "),
         LexemeSpec(.integerLiteral, text: "42"),
@@ -232,7 +232,7 @@ public class LexerTests: XCTestCase {
       /* regular comment */
       """,
       lexemes: [
-        LexemeSpec(.varKeyword, leading: "/** hello */\n", text: "var", trailing: " ", flags: [.isAtStartOfLine]),
+        LexemeSpec(.keyword(.var), leading: "/** hello */\n", text: "var", trailing: " ", flags: [.isAtStartOfLine]),
         LexemeSpec(.identifier, text: "x"),
         LexemeSpec(.colon, text: ":", trailing: " "),
         LexemeSpec(.identifier, text: "Int"),
@@ -254,11 +254,11 @@ public class LexerTests: XCTestCase {
       lexemes: [
         LexemeSpec(.atSign, leading: "/* TestApp */\n", text: "@", flags: [.isAtStartOfLine]),
         LexemeSpec(.identifier, text: "main", trailing: " "),
-        LexemeSpec(.structKeyword, text: "struct", trailing: " "),
+        LexemeSpec(.keyword(.struct), text: "struct", trailing: " "),
         LexemeSpec(.identifier, text: "TestApp", trailing: " "),
         LexemeSpec(.leftBrace, text: "{"),
-        LexemeSpec(.staticKeyword, leading: "\n  ", text: "static", trailing: " ", flags: [.isAtStartOfLine]),
-        LexemeSpec(.funcKeyword, text: "func", trailing: " "),
+        LexemeSpec(.keyword(.static), leading: "\n  ", text: "static", trailing: " ", flags: [.isAtStartOfLine]),
+        LexemeSpec(.keyword(.func), text: "func", trailing: " "),
         LexemeSpec(.identifier, text: "main"),
         LexemeSpec(.leftParen, text: "("),
         LexemeSpec(.rightParen, text: ")", trailing: " "),
@@ -368,8 +368,8 @@ public class LexerTests: XCTestCase {
     AssertLexemes(
       "static func �() {}",
       lexemes: [
-        LexemeSpec(.staticKeyword, text: "static", trailing: " "),
-        LexemeSpec(.funcKeyword, text: "func", trailing: " �"),
+        LexemeSpec(.keyword(.static), text: "static", trailing: " "),
+        LexemeSpec(.keyword(.func), text: "func", trailing: " �"),
         LexemeSpec(.leftParen, text: "("),
         LexemeSpec(.rightParen, text: ")", trailing: " "),
         LexemeSpec(.leftBrace, text: "{"),
@@ -503,12 +503,12 @@ public class LexerTests: XCTestCase {
       ///
       """,
       lexemes: [
-        LexemeSpec(.varKeyword, text: "var", trailing: " "),
+        LexemeSpec(.keyword(.var), text: "var", trailing: " "),
         LexemeSpec(.identifier, text: "x"),
         LexemeSpec(.colon, text: ":", trailing: " "),
         LexemeSpec(.identifier, text: "Int", trailing: " "),
         LexemeSpec(.leftBrace, text: "{"),
-        LexemeSpec(.returnKeyword, leading: "\n  ", text: "return", trailing: " ", flags: [.isAtStartOfLine]),
+        LexemeSpec(.keyword(.return), leading: "\n  ", text: "return", trailing: " ", flags: [.isAtStartOfLine]),
         LexemeSpec(.integerLiteral, text: "0", trailing: " "),
         LexemeSpec(.binaryOperator, text: "/"),
         LexemeSpec(.identifier, leading: "\n         ", text: "x", flags: [.isAtStartOfLine]),
@@ -617,7 +617,7 @@ public class LexerTests: XCTestCase {
       }
       """,
       lexemes: [
-        LexemeSpec(.funcKeyword, text: "func", trailing: " "),
+        LexemeSpec(.keyword(.func), text: "func", trailing: " "),
         LexemeSpec(.identifier, text: "foo"),
         LexemeSpec(.leftParen, text: "("),
         LexemeSpec(.rightParen, text: ")", trailing: " "),

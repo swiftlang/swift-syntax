@@ -18,29 +18,29 @@ public class SyntaxChildrenTests: XCTestCase {
 
   public func testIterateWithAllPresent() throws {
     let returnStmt = ReturnStmtSyntax(
-      returnKeyword: .returnKeyword(),
+      returnKeyword: .keyword(.return),
       expression: ExprSyntax(MissingExprSyntax())
     )
 
     var iterator = returnStmt.children(viewMode: .sourceAccurate).makeIterator()
-    try XCTAssertNext(&iterator) { $0.as(TokenSyntax.self)?.tokenKind == .returnKeyword }
+    try XCTAssertNext(&iterator) { $0.as(TokenSyntax.self)?.tokenKind == .keyword(.return) }
     try XCTAssertNext(&iterator) { $0.is(ExprSyntax.self) }
     XCTAssertNextIsNil(&iterator)
   }
 
   public func testIterateWithSomeMissing() throws {
     let returnStmt = ReturnStmtSyntax(
-      returnKeyword: .returnKeyword()
+      returnKeyword: .keyword(.return)
     )
 
     var iterator = returnStmt.children(viewMode: .sourceAccurate).makeIterator()
-    try XCTAssertNext(&iterator) { $0.as(TokenSyntax.self)?.tokenKind == .returnKeyword }
+    try XCTAssertNext(&iterator) { $0.as(TokenSyntax.self)?.tokenKind == .keyword(.return) }
     XCTAssertNextIsNil(&iterator)
   }
 
   public func testIterateWithAllMissing() {
     let returnStmt = ReturnStmtSyntax(
-      returnKeyword: TokenSyntax.returnKeyword(presence: .missing)
+      returnKeyword: TokenSyntax.keyword(.return, presence: .missing)
     )
 
     var iterator = returnStmt.children(viewMode: .sourceAccurate).makeIterator()
@@ -49,19 +49,19 @@ public class SyntaxChildrenTests: XCTestCase {
 
   public func testMissingTokens() throws {
     let returnStmt = ReturnStmtSyntax(
-      returnKeyword: .returnKeyword(presence: .missing)
+      returnKeyword: .keyword(.return, presence: .missing)
     )
 
     var sourceAccurateIterator = returnStmt.children(viewMode: .sourceAccurate).makeIterator()
     XCTAssertNextIsNil(&sourceAccurateIterator)
 
     var fixedUpIterator = returnStmt.children(viewMode: .fixedUp).makeIterator()
-    try XCTAssertNext(&fixedUpIterator) { $0.as(TokenSyntax.self)?.tokenKind == .returnKeyword }
+    try XCTAssertNext(&fixedUpIterator) { $0.as(TokenSyntax.self)?.tokenKind == .keyword(.return) }
     XCTAssertNextIsNil(&fixedUpIterator)
   }
 
   public func testMissingNodes() throws {
-    let node = ReturnStmtSyntax(returnKeyword: .return, expression: ExprSyntax(MissingExprSyntax()))
+    let node = ReturnStmtSyntax(returnKeyword: .keyword(.return), expression: ExprSyntax(MissingExprSyntax()))
 
     var sourceAccurateIt = node.children(viewMode: .sourceAccurate).makeIterator()
     try XCTAssertNext(&sourceAccurateIt) { $0.is(TokenSyntax.self) }

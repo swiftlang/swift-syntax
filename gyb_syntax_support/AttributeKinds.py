@@ -736,8 +736,8 @@ DECL_MODIFIER_KINDS = [
     # These are not really attributes or modifiers in the C++ AST and they are
     # serialized directly into the ASTs they are attached to rather than using
     # the generic attribute serialization infrastructure.
-    BuiltinDeclModifier('static', swift_name='staticKeyword'),
-    BuiltinDeclModifier('class', swift_name='classKeyword'),
+    BuiltinDeclModifier('static', swift_name='`static`'),
+    BuiltinDeclModifier('class', swift_name='`class`'),
 
     ContextualSimpleDeclAttribute('final', 'Final',
                                   OnClass,  OnFunc,  OnAccessor,  OnVar,  OnSubscript,
@@ -815,11 +815,11 @@ DECL_MODIFIER_KINDS = [
                   DeclModifier,
                   NotSerialized,
                   ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,
-                  swift_name='privateKeyword',
+                  swift_name='`private`',
                   code=46),
-    DeclAttributeAlias('fileprivate', 'AccessControl', swift_name='fileprivateKeyword'),
-    DeclAttributeAlias('internal', 'AccessControl', swift_name='internalKeyword'),
-    DeclAttributeAlias('public', 'AccessControl', swift_name='publicKeyword'),
+    DeclAttributeAlias('fileprivate', 'AccessControl', swift_name='`fileprivate`'),
+    DeclAttributeAlias('internal', 'AccessControl', swift_name='`internal`'),
+    DeclAttributeAlias('public', 'AccessControl', swift_name='`public`'),
     ContextualDeclAttributeAlias('package', 'AccessControl'),
     ContextualDeclAttributeAlias('open', 'AccessControl'),
     DeclAttribute('__setter_access', 'SetterAccess',

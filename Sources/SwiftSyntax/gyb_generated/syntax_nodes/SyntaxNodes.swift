@@ -2780,7 +2780,7 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenThrowsTokAndOutput: UnexpectedNodesSyntax? = nil,
     output: ReturnClauseSyntax? = nil,
     _ unexpectedBetweenOutputAndInTok: UnexpectedNodesSyntax? = nil,
-    inTok: TokenSyntax = .inKeyword(),
+    inTok: TokenSyntax = .keyword(.in),
     _ unexpectedAfterInTok: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
   ) {
@@ -18049,7 +18049,7 @@ public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
   public init<G: ExprSyntaxProtocol>(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeWhereKeyword: UnexpectedNodesSyntax? = nil,
-    whereKeyword: TokenSyntax = .whereKeyword(),
+    whereKeyword: TokenSyntax = .keyword(.where),
     _ unexpectedBetweenWhereKeywordAndGuardResult: UnexpectedNodesSyntax? = nil,
     guardResult: G,
     _ unexpectedAfterGuardResult: UnexpectedNodesSyntax? = nil,
@@ -19075,7 +19075,7 @@ public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable {
   public init<P: PatternSyntaxProtocol>(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeCaseKeyword: UnexpectedNodesSyntax? = nil,
-    caseKeyword: TokenSyntax = .caseKeyword(),
+    caseKeyword: TokenSyntax = .keyword(.case),
     _ unexpectedBetweenCaseKeywordAndPattern: UnexpectedNodesSyntax? = nil,
     pattern: P,
     _ unexpectedBetweenPatternAndTypeAnnotation: UnexpectedNodesSyntax? = nil,
@@ -20570,7 +20570,7 @@ public struct SwitchDefaultLabelSyntax: SyntaxProtocol, SyntaxHashable {
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeDefaultKeyword: UnexpectedNodesSyntax? = nil,
-    defaultKeyword: TokenSyntax = .defaultKeyword(),
+    defaultKeyword: TokenSyntax = .keyword(.default),
     _ unexpectedBetweenDefaultKeywordAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax = .colonToken(),
     _ unexpectedAfterColon: UnexpectedNodesSyntax? = nil,
@@ -21279,7 +21279,7 @@ public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable {
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeCaseKeyword: UnexpectedNodesSyntax? = nil,
-    caseKeyword: TokenSyntax = .caseKeyword(),
+    caseKeyword: TokenSyntax = .keyword(.case),
     _ unexpectedBetweenCaseKeywordAndCaseItems: UnexpectedNodesSyntax? = nil,
     caseItems: CaseItemListSyntax,
     _ unexpectedBetweenCaseItemsAndColon: UnexpectedNodesSyntax? = nil,
@@ -21539,7 +21539,7 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable {
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeCatchKeyword: UnexpectedNodesSyntax? = nil,
-    catchKeyword: TokenSyntax = .catchKeyword(),
+    catchKeyword: TokenSyntax = .keyword(.catch),
     _ unexpectedBetweenCatchKeywordAndCatchItems: UnexpectedNodesSyntax? = nil,
     catchItems: CatchItemListSyntax? = nil,
     _ unexpectedBetweenCatchItemsAndBody: UnexpectedNodesSyntax? = nil,
@@ -21800,7 +21800,7 @@ public struct GenericWhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeWhereKeyword: UnexpectedNodesSyntax? = nil,
-    whereKeyword: TokenSyntax = .whereKeyword(),
+    whereKeyword: TokenSyntax = .keyword(.where),
     _ unexpectedBetweenWhereKeywordAndRequirementList: UnexpectedNodesSyntax? = nil,
     requirementList: GenericRequirementListSyntax,
     _ unexpectedAfterRequirementList: UnexpectedNodesSyntax? = nil,

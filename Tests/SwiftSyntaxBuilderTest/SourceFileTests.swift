@@ -20,7 +20,7 @@ final class SourceFileTests: XCTestCase {
       ImportDecl("import Foundation")
       ImportDecl("import UIKit")
       ClassDecl(
-        classKeyword: .class,
+        classKeyword: .keyword(.class),
         identifier: "SomeViewController",
         membersBuilder: {
           VariableDecl("let tableView: UITableView")

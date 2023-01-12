@@ -23,9 +23,9 @@ final class VariadicGenericsTests: XCTestCase {
       """,
       substructure: Syntax(
         PackExpansionExprSyntax(
-          repeatKeyword: .repeatKeyword(),
+          repeatKeyword: .keyword(.repeat),
           patternExpr: PackElementExprSyntax(
-            eachKeyword: .contextualKeyword(.each),
+            eachKeyword: .keyword(.each),
             packRefExpr: IdentifierExprSyntax(
               identifier: .identifier("t")
             )
@@ -100,7 +100,7 @@ final class VariadicGenericsTests: XCTestCase {
     )
   }
 
-  func testEachExprContextualKeyword() {
+  func testEachExprKeyword() {
     let callExpr = FunctionCallExprSyntax(
       calledExpression: IdentifierExprSyntax(
         identifier: .identifier("each")
@@ -145,7 +145,7 @@ final class VariadicGenericsTests: XCTestCase {
       """,
       substructure: Syntax(
         PackElementExprSyntax(
-          eachKeyword: .contextualKeyword(.each),
+          eachKeyword: .keyword(.each),
           packRefExpr: IdentifierExprSyntax(
             identifier: .identifier("x")
           )
@@ -164,7 +164,7 @@ final class VariadicGenericsTests: XCTestCase {
       """,
       substructure: Syntax(
         PackExpansionExprSyntax(
-          repeatKeyword: .repeatKeyword(),
+          repeatKeyword: .keyword(.repeat),
           patternExpr: FunctionCallExprSyntax(
             callee: MemberAccessExprSyntax(
               base: ExprSyntax(
@@ -172,7 +172,7 @@ final class VariadicGenericsTests: XCTestCase {
                   elementList: .init([
                     TupleExprElementSyntax(
                       expression: PackElementExprSyntax(
-                        eachKeyword: .contextualKeyword(.each),
+                        eachKeyword: .keyword(.each),
                         packRefExpr: IdentifierExprSyntax(
                           identifier: .identifier("t")
                         )
@@ -197,9 +197,9 @@ final class VariadicGenericsTests: XCTestCase {
       """,
       substructure: Syntax(
         PackExpansionExprSyntax(
-          repeatKeyword: .repeatKeyword(),
+          repeatKeyword: .keyword(.repeat),
           patternExpr: PackElementExprSyntax(
-            eachKeyword: .contextualKeyword(.each),
+            eachKeyword: .keyword(.each),
             packRefExpr: MemberAccessExprSyntax(
               base: ExprSyntax(
                 IdentifierExprSyntax(
@@ -222,7 +222,7 @@ final class VariadicGenericsTests: XCTestCase {
       """,
       substructure: Syntax(
         PackExpansionExprSyntax(
-          repeatKeyword: .repeatKeyword(),
+          repeatKeyword: .keyword(.repeat),
           patternExpr: SequenceExprSyntax(
             elements: .init([
               ExprSyntax(
@@ -237,7 +237,7 @@ final class VariadicGenericsTests: XCTestCase {
               ),
               ExprSyntax(
                 PackElementExprSyntax(
-                  eachKeyword: .contextualKeyword(.each),
+                  eachKeyword: .keyword(.each),
                   packRefExpr: IdentifierExprSyntax(
                     identifier: .identifier("t")
                   )

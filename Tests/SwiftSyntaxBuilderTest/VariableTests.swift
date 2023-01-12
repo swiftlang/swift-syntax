@@ -71,7 +71,7 @@ final class VariableTests: XCTestCase {
 
   func testVariableDeclWithExplicitTrailingCommas() {
     let buildable = VariableDecl(
-      letOrVarKeyword: .let,
+      letOrVarKeyword: .keyword(.let),
       bindings: [
         PatternBinding(
           pattern: PatternSyntax("a"),
@@ -153,7 +153,7 @@ final class VariableTests: XCTestCase {
 
   func testAccessorList() {
     let buildable = VariableDecl(name: "test", type: TypeAnnotation(type: Type("Int"))) {
-      AccessorDecl(accessorKind: .contextualKeyword(.get), asyncKeyword: nil) {
+      AccessorDecl(accessorKind: .keyword(.get), asyncKeyword: nil) {
         SequenceExpr {
           IntegerLiteralExpr(4)
           BinaryOperatorExpr(text: "+")
@@ -161,7 +161,7 @@ final class VariableTests: XCTestCase {
         }
       }
 
-      AccessorDecl(accessorKind: .contextualKeyword(.willSet), asyncKeyword: nil) {}
+      AccessorDecl(accessorKind: .keyword(.willSet), asyncKeyword: nil) {}
     }
 
     AssertBuildResult(
@@ -231,7 +231,7 @@ final class VariableTests: XCTestCase {
               TupleExprElement(expression: Expr("value"))
             }
           },
-          modifiers: [DeclModifier(name: .public)],
+          modifiers: [DeclModifier(name: .keyword(.public))],
           .let,
           name: "z",
           type: TypeAnnotation(type: Type("Float"))

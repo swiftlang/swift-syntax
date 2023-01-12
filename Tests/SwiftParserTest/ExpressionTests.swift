@@ -756,7 +756,7 @@ final class ExpressionTests: XCTestCase {
     AssertParse(
       "Foo 1️⃣async ->2️⃣",
       { ExprSyntax.parse(from: &$0) },
-      substructure: Syntax(TokenSyntax.contextualKeyword(.async)),
+      substructure: Syntax(TokenSyntax.keyword(.async)),
       substructureAfterMarker: "1️⃣",
       diagnostics: [
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression")

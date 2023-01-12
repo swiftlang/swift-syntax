@@ -26,7 +26,7 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseType(misplacedSpecifiers: [RawTokenSyntax] = []) -> RawTypeSyntax {
     // Parse pack expansion 'repeat T'.
-    if let repeatKeyword = self.consume(if: .repeatKeyword) {
+    if let repeatKeyword = self.consume(if: .keyword(.repeat)) {
       let type = self.parseTypeScalar(misplacedSpecifiers: misplacedSpecifiers)
       return RawTypeSyntax(
         RawPackExpansionTypeSyntax(
@@ -134,7 +134,7 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseSimpleOrCompositionType() -> RawTypeSyntax {
     // 'each' is a contextual keyword for a pack reference.
-    if let each = consume(if: .contextualKeyword(.each)) {
+    if let each = consume(if: .keyword(.each)) {
       let packType = parseSimpleType()
       return RawTypeSyntax(
         RawPackReferenceTypeSyntax(
@@ -145,7 +145,7 @@ extension Parser {
       )
     }
 
-    let someOrAny = self.consume(ifAny: [.contextualKeyword(.some), .contextualKeyword(.any)])
+    let someOrAny = self.consume(ifAny: [.keyword(.some), .keyword(.any)])
 
     var base = self.parseSimpleType()
     guard self.atContextualPunctuator("&") else {
@@ -233,15 +233,15 @@ extension Parser {
   ) -> RawTypeSyntax {
     var base: RawTypeSyntax
     switch self.currentToken.rawTokenKind {
-    case .capitalSelfKeyword,
-      .anyKeyword,
+    case .keyword(.Self),
+      .keyword(.Any),
       .identifier:
       base = self.parseTypeIdentifier()
     case .leftParen:
       base = RawTypeSyntax(self.parseTupleTypeBody())
     case .leftSquareBracket:
       base = RawTypeSyntax(self.parseCollectionType())
-    case .wildcardKeyword:
+    case .wildcard:
       base = RawTypeSyntax(self.parsePlaceholderType())
     default:
       return RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena))
@@ -264,8 +264,8 @@ extension Parser {
             )
           )
           break
-        } else if self.at(.contextualKeyword(.Type)) || self.at(.contextualKeyword(.Protocol)) {
-          let typeOrProtocol = self.consume(if: .contextualKeyword(.Type)) ?? self.consume(if: .contextualKeyword(.Protocol))!
+        } else if self.at(.keyword(.Type)) || self.at(.keyword(.Protocol)) {
+          let typeOrProtocol = self.consume(if: .keyword(.Type)) ?? self.consume(if: .keyword(.Protocol))!
           base = RawTypeSyntax(
             RawMetatypeTypeSyntax(
               baseType: base,
@@ -357,7 +357,7 @@ extension Parser {
   ///
   ///     type-identifier → identifier generic-argument-clause?
   mutating func parseTypeIdentifier() -> RawTypeSyntax {
-    if self.at(.anyKeyword) {
+    if self.at(.keyword(.Any)) {
       return RawTypeSyntax(self.parseAnyType())
     }
 
@@ -379,7 +379,7 @@ extension Parser {
   ///     any-type → 'Any'
   @_spi(RawSyntax)
   public mutating func parseAnyType() -> RawSimpleTypeIdentifierSyntax {
-    let (unexpectedBeforeName, name) = self.expect(.anyKeyword)
+    let (unexpectedBeforeName, name) = self.expect(.keyword(.Any))
     return RawSimpleTypeIdentifierSyntax(
       unexpectedBeforeName,
       name: name,
@@ -396,7 +396,7 @@ extension Parser {
   ///     placeholder-type → wildcard
   @_spi(RawSyntax)
   public mutating func parsePlaceholderType() -> RawSimpleTypeIdentifierSyntax {
-    let (unexpectedBeforeName, name) = self.expect(.wildcardKeyword)
+    let (unexpectedBeforeName, name) = self.expect(.wildcard)
     // FIXME: Need a better syntax node than this
     return RawSimpleTypeIdentifierSyntax(
       unexpectedBeforeName,
@@ -662,7 +662,7 @@ extension Parser.Lookahead {
   mutating func skipTypeAttributeList() {
     var specifierProgress = LoopProgressCondition()
     // TODO: Can we model isolated/_const so that they're specified in both canParse* and parse*?
-    while self.at(anyIn: TypeSpecifier.self) != nil || self.at(.contextualKeyword(.isolated)) || self.at(.contextualKeyword(._const)),
+    while self.at(anyIn: TypeSpecifier.self) != nil || self.at(.keyword(.isolated)) || self.at(.keyword(._const)),
       specifierProgress.evaluate(currentToken)
     {
       self.consumeAnyToken()
@@ -677,7 +677,7 @@ extension Parser.Lookahead {
 
   mutating func canParseTypeScalar() -> Bool {
     // 'repeat' starts a pack expansion type
-    self.consume(if: .repeatKeyword)
+    self.consume(if: .keyword(.repeat))
 
     self.skipTypeAttributeList()
 
@@ -704,7 +704,7 @@ extension Parser.Lookahead {
   }
 
   mutating func canParseSimpleOrCompositionType() -> Bool {
-    if self.at(.contextualKeyword(.some)) || self.at(.contextualKeyword(.any)) || self.at(.contextualKeyword(.each)) {
+    if self.at(.keyword(.some)) || self.at(.keyword(.any)) || self.at(.keyword(.each)) {
       self.consumeAnyToken()
     }
 
@@ -725,9 +725,9 @@ extension Parser.Lookahead {
 
   mutating func canParseSimpleType() -> Bool {
     switch self.currentToken.rawTokenKind {
-    case .anyKeyword:
+    case .keyword(.Any):
       self.consumeAnyToken()
-    case .capitalSelfKeyword, .identifier:
+    case .keyword(.Self), .identifier:
       guard self.canParseTypeIdentifier() else {
         return false
       }
@@ -749,9 +749,9 @@ extension Parser.Lookahead {
       guard self.consume(if: .rightSquareBracket) != nil else {
         return false
       }
-    case .wildcardKeyword:
+    case .wildcard:
       self.consumeAnyToken()
-    case .repeatKeyword:
+    case .keyword(.repeat):
       return true
     default:
       return false
@@ -761,7 +761,7 @@ extension Parser.Lookahead {
     while loopCondition.evaluate(currentToken) {
       if self.at(.period) {
         self.consumeAnyToken()
-        if self.at(.contextualKeyword(.Type)) || self.at(.contextualKeyword(.Protocol)) {
+        if self.at(.keyword(.Type)) || self.at(.keyword(.Protocol)) {
           self.consumeAnyToken()
           continue
         }
@@ -796,7 +796,7 @@ extension Parser.Lookahead {
     var loopProgress = LoopProgressCondition()
     repeat {
       // The contextual inout marker is part of argument lists.
-      _ = self.consume(if: .inoutKeyword)
+      _ = self.consume(if: .keyword(.inout))
 
       // If the tuple element starts with "ident :", then it is followed
       // by a type annotation.
@@ -865,13 +865,13 @@ extension Parser.Lookahead {
   }
 
   mutating func canParseTypeIdentifier(allowKeyword: Bool = false) -> Bool {
-    if self.at(.anyKeyword) {
+    if self.at(.keyword(.Any)) {
       self.consumeAnyToken()
       return true
     }
 
     // Parse an identifier.
-    guard self.at(.identifier) || self.at(.capitalSelfKeyword) || (allowKeyword && self.currentToken.isKeyword) else {
+    guard self.at(.identifier) || self.at(.keyword(.Self)) || (allowKeyword && self.currentToken.isLexerClassifiedKeyword) else {
       return false
     }
     self.consumeAnyToken()
@@ -934,7 +934,7 @@ extension Parser {
       specifier = missingToken(misplacedSpecifier.tokenKind, text: misplacedSpecifier.tokenText)
     }
     var extraneousSpecifiers: [RawTokenSyntax] = []
-    while let extraSpecifier = self.consume(ifAny: [.inoutKeyword, .contextualKeyword(.__shared), .contextualKeyword(.__owned), .contextualKeyword(.isolated), .contextualKeyword(._const)]) {
+    while let extraSpecifier = self.consume(ifAny: [.keyword(.inout), .keyword(.__shared), .keyword(.__owned), .keyword(.isolated), .keyword(._const)]) {
       if specifier == nil {
         specifier = extraSpecifier
       } else {

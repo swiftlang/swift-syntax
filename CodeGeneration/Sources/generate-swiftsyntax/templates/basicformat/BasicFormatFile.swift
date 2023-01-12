@@ -139,6 +139,11 @@ let basicFormatFile = SourceFile {
             }
           }
         }
+        for keyword in KEYWORDS where keyword.requiresLeadingSpace {
+          SwitchCase("case .keyword(.\(raw: keyword.escapedName)):") {
+            ReturnStmt("return true")
+          }
+        }
         SwitchCase("default:") {
           ReturnStmt("return false")
         }
@@ -155,17 +160,17 @@ let basicFormatFile = SourceFile {
 
       SwitchStmt("""
         switch (token.tokenKind, token.nextToken(viewMode: .sourceAccurate)?.tokenKind) {
-        case (.asKeyword, .exclamationMark), // Ensures there is not space in `as!`
-             (.asKeyword, .postfixQuestionMark), // Ensures there is not space in `as?`
+        case (.keyword(.as), .exclamationMark), // Ensures there is not space in `as!`
+             (.keyword(.as), .postfixQuestionMark), // Ensures there is not space in `as?`
              (.exclamationMark, .leftParen), // Ensures there is not space in `myOptionalClosure!()`
              (.exclamationMark, .period), // Ensures there is not space in `myOptionalBar!.foo()`
-             (.initKeyword, .leftParen), // Ensures there is not space in `init()`
-             (.initKeyword, .postfixQuestionMark), // Ensures there is not space in `init?`
+             (.keyword(.`init`), .leftParen), // Ensures there is not space in `init()`
+             (.keyword(.`init`), .postfixQuestionMark), // Ensures there is not space in `init?`
              (.postfixQuestionMark, .leftParen), // Ensures there is not space in `init?()`
              (.postfixQuestionMark, .rightAngle), // Ensures there is not space in `ContiguousArray<RawSyntax?>`
              (.postfixQuestionMark, .rightParen), // Ensures there is not space in `myOptionalClosure?()`
-             (.tryKeyword, .exclamationMark), // Ensures there is not space in `try!`
-             (.tryKeyword, .postfixQuestionMark), // Ensures there is not space in `try?`
+             (.keyword(.try), .exclamationMark), // Ensures there is not space in `try!`
+             (.keyword(.try), .postfixQuestionMark), // Ensures there is not space in `try?`
              (.binaryOperator, .comma): // Ensures there is no space in @available(*, deprecated)
           return false
         default:
@@ -181,8 +186,10 @@ let basicFormatFile = SourceFile {
             }
           }
         }
-        SwitchCase("case .contextualKeyword(.async):") {
-          ReturnStmt("return true")
+        for keyword in KEYWORDS where keyword.requiresTrailingSpace {
+          SwitchCase("case .keyword(.\(raw: keyword.escapedName)):") {
+            ReturnStmt("return true")
+          }
         }
         SwitchCase("default:") {
           ReturnStmt("return false")

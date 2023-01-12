@@ -82,7 +82,7 @@ public struct IsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public init<T: TypeSyntaxProtocol>(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeIsKeyword: UnexpectedNodesSyntax? = nil,
-    isKeyword: TokenSyntax = .isKeyword(),
+    isKeyword: TokenSyntax = .keyword(.is),
     _ unexpectedBetweenIsKeywordAndType: UnexpectedNodesSyntax? = nil,
     type: T,
     _ unexpectedAfterType: UnexpectedNodesSyntax? = nil,
@@ -665,7 +665,7 @@ public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeWildcard: UnexpectedNodesSyntax? = nil,
-    wildcard: TokenSyntax = .wildcardKeyword(),
+    wildcard: TokenSyntax = .wildcardToken(),
     _ unexpectedBetweenWildcardAndTypeAnnotation: UnexpectedNodesSyntax? = nil,
     typeAnnotation: TypeAnnotationSyntax? = nil,
     _ unexpectedAfterTypeAnnotation: UnexpectedNodesSyntax? = nil,

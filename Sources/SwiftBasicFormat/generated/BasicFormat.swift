@@ -143,12 +143,6 @@ open class BasicFormat: SyntaxRewriter {
       break 
     }
     switch token.tokenKind {
-    case .inKeyword: 
-      return true
-    case .whereKeyword: 
-      return true
-    case .catchKeyword: 
-      return true
     case .leftBrace: 
       return true
     case .equal: 
@@ -156,6 +150,12 @@ open class BasicFormat: SyntaxRewriter {
     case .arrow: 
       return true
     case .binaryOperator: 
+      return true
+    case .keyword(.`catch`): 
+      return true
+    case .keyword(.`in`): 
+      return true
+    case .keyword(.`where`): 
       return true
     default: 
       return false
@@ -168,113 +168,23 @@ open class BasicFormat: SyntaxRewriter {
       return false
     }
     switch (token.tokenKind, token.nextToken(viewMode: .sourceAccurate)?.tokenKind) {
-    case (.asKeyword, .exclamationMark), // Ensures there is not space in `as!`
-     (.asKeyword, .postfixQuestionMark), // Ensures there is not space in `as?`
+    case (.keyword(.as), .exclamationMark), // Ensures there is not space in `as!`
+     (.keyword(.as), .postfixQuestionMark), // Ensures there is not space in `as?`
      (.exclamationMark, .leftParen), // Ensures there is not space in `myOptionalClosure!()`
      (.exclamationMark, .period), // Ensures there is not space in `myOptionalBar!.foo()`
-     (.initKeyword, .leftParen), // Ensures there is not space in `init()`
-     (.initKeyword, .postfixQuestionMark), // Ensures there is not space in `init?`
+     (.keyword(.`init`), .leftParen), // Ensures there is not space in `init()`
+     (.keyword(.`init`), .postfixQuestionMark), // Ensures there is not space in `init?`
      (.postfixQuestionMark, .leftParen), // Ensures there is not space in `init?()`
      (.postfixQuestionMark, .rightAngle), // Ensures there is not space in `ContiguousArray<RawSyntax?>`
      (.postfixQuestionMark, .rightParen), // Ensures there is not space in `myOptionalClosure?()`
-     (.tryKeyword, .exclamationMark), // Ensures there is not space in `try!`
-     (.tryKeyword, .postfixQuestionMark), // Ensures there is not space in `try?`
+     (.keyword(.try), .exclamationMark), // Ensures there is not space in `try!`
+     (.keyword(.try), .postfixQuestionMark), // Ensures there is not space in `try?`
      (.binaryOperator, .comma): // Ensures there is no space in @available(*, deprecated)
       return false
     default: 
       break 
     }
     switch token.tokenKind {
-    case .associatedtypeKeyword: 
-      return true
-    case .classKeyword: 
-      return true
-    case .deinitKeyword: 
-      return true
-    case .enumKeyword: 
-      return true
-    case .extensionKeyword: 
-      return true
-    case .funcKeyword: 
-      return true
-    case .importKeyword: 
-      return true
-    case .initKeyword: 
-      return true
-    case .inoutKeyword: 
-      return true
-    case .letKeyword: 
-      return true
-    case .operatorKeyword: 
-      return true
-    case .precedencegroupKeyword: 
-      return true
-    case .protocolKeyword: 
-      return true
-    case .structKeyword: 
-      return true
-    case .subscriptKeyword: 
-      return true
-    case .typealiasKeyword: 
-      return true
-    case .varKeyword: 
-      return true
-    case .fileprivateKeyword: 
-      return true
-    case .internalKeyword: 
-      return true
-    case .privateKeyword: 
-      return true
-    case .publicKeyword: 
-      return true
-    case .staticKeyword: 
-      return true
-    case .deferKeyword: 
-      return true
-    case .ifKeyword: 
-      return true
-    case .guardKeyword: 
-      return true
-    case .repeatKeyword: 
-      return true
-    case .elseKeyword: 
-      return true
-    case .forKeyword: 
-      return true
-    case .inKeyword: 
-      return true
-    case .whileKeyword: 
-      return true
-    case .returnKeyword: 
-      return true
-    case .breakKeyword: 
-      return true
-    case .continueKeyword: 
-      return true
-    case .fallthroughKeyword: 
-      return true
-    case .switchKeyword: 
-      return true
-    case .caseKeyword: 
-      return true
-    case .whereKeyword: 
-      return true
-    case .throwKeyword: 
-      return true
-    case .asKeyword: 
-      return true
-    case .anyKeyword: 
-      return true
-    case .isKeyword: 
-      return true
-    case .rethrowsKeyword: 
-      return true
-    case .tryKeyword: 
-      return true
-    case .throwsKeyword: 
-      return true
-    case .wildcardKeyword: 
-      return true
     case .comma: 
       return true
     case .colon: 
@@ -335,7 +245,95 @@ open class BasicFormat: SyntaxRewriter {
       return true
     case .binaryOperator: 
       return true
-    case .contextualKeyword(.async): 
+    case .keyword(.`Any`): 
+      return true
+    case .keyword(.`as`): 
+      return true
+    case .keyword(.`associatedtype`): 
+      return true
+    case .keyword(.async): 
+      return true
+    case .keyword(.`break`): 
+      return true
+    case .keyword(.`case`): 
+      return true
+    case .keyword(.`class`): 
+      return true
+    case .keyword(.`continue`): 
+      return true
+    case .keyword(.`defer`): 
+      return true
+    case .keyword(.`deinit`): 
+      return true
+    case .keyword(.`else`): 
+      return true
+    case .keyword(.`enum`): 
+      return true
+    case .keyword(.`extension`): 
+      return true
+    case .keyword(.`fallthrough`): 
+      return true
+    case .keyword(.`fileprivate`): 
+      return true
+    case .keyword(.`for`): 
+      return true
+    case .keyword(.`func`): 
+      return true
+    case .keyword(.`guard`): 
+      return true
+    case .keyword(.`if`): 
+      return true
+    case .keyword(.`import`): 
+      return true
+    case .keyword(.`in`): 
+      return true
+    case .keyword(.`init`): 
+      return true
+    case .keyword(.`inout`): 
+      return true
+    case .keyword(.`internal`): 
+      return true
+    case .keyword(.`is`): 
+      return true
+    case .keyword(.`let`): 
+      return true
+    case .keyword(.`operator`): 
+      return true
+    case .keyword(.`precedencegroup`): 
+      return true
+    case .keyword(.`private`): 
+      return true
+    case .keyword(.`protocol`): 
+      return true
+    case .keyword(.`public`): 
+      return true
+    case .keyword(.`repeat`): 
+      return true
+    case .keyword(.`rethrows`): 
+      return true
+    case .keyword(.`return`): 
+      return true
+    case .keyword(.`static`): 
+      return true
+    case .keyword(.`struct`): 
+      return true
+    case .keyword(.`subscript`): 
+      return true
+    case .keyword(.`switch`): 
+      return true
+    case .keyword(.`throw`): 
+      return true
+    case .keyword(.`throws`): 
+      return true
+    case .keyword(.`try`): 
+      return true
+    case .keyword(.`typealias`): 
+      return true
+    case .keyword(.`var`): 
+      return true
+    case .keyword(.`where`): 
+      return true
+    case .keyword(.`while`): 
       return true
     default: 
       return false

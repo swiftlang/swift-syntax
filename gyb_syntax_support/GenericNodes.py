@@ -5,7 +5,7 @@ GENERIC_NODES = [
     # generic-where-clause -> 'where' requirement-list
     Node('GenericWhereClause', name_for_diagnostics="'where' clause", kind='Syntax',
          children=[
-             Child('WhereKeyword', kind='WhereToken'),
+             Child('WhereKeyword', kind='KeywordToken', text_choices=['where']),
              Child('RequirementList', kind='GenericRequirementList',
                    collection_element_name='Requirement'),
          ]),

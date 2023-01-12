@@ -59,7 +59,7 @@ final class TypeMetatypeTests: XCTestCase {
           substructure: Syntax(
             MetatypeTypeSyntax(
               baseType: baseTypeSyntax,
-              typeOrProtocol: .contextualKeyword(metaKind)
+              typeOrProtocol: .keyword(metaKind)
             )
           ),
           line: line

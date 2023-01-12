@@ -16,13 +16,13 @@ extension DeclarationModifier {
   var canHaveParenthesizedArgument: Bool {
     switch self {
     case .__consuming, .__setter_access, ._const, ._local, .async,
-      .classKeyword, .convenience, .distributed, .dynamic, .final,
+      .class, .convenience, .distributed, .dynamic, .final,
       .indirect, .infix, .isolated, .lazy, .mutating, .nonisolated,
       .nonmutating, .optional, .override, .postfix, .prefix, .reasync,
-      .required, .rethrows, .staticKeyword, .weak:
+      .required, .rethrows, .static, .weak:
       return false
-    case .fileprivateKeyword, .internalKeyword, .package, .open, .privateKeyword,
-      .publicKeyword, .unowned:
+    case .fileprivate, .internal, .package, .open, .private,
+      .public, .unowned:
       return true
     }
   }
@@ -47,10 +47,10 @@ extension TokenConsumer {
       _ = subparser.consumeAttributeList()
     }
 
-    if subparser.currentToken.isKeyword || subparser.currentToken.rawTokenKind == .identifier {
+    if subparser.currentToken.isLexerClassifiedKeyword || subparser.currentToken.rawTokenKind == .identifier {
       var modifierProgress = LoopProgressCondition()
       while let (modifierKind, handle) = subparser.at(anyIn: DeclarationModifier.self),
-        modifierKind != .classKeyword,
+        modifierKind != .class,
         modifierProgress.evaluate(subparser.currentToken)
       {
         subparser.eat(handle)
@@ -83,7 +83,7 @@ extension TokenConsumer {
       declStartKeyword = subparser.at(anyIn: DeclarationStart.self)?.0
     }
     switch declStartKeyword {
-    case .actorContextualKeyword:
+    case .actorKeyword:
       // actor Foo {}
       if subparser.peek().rawTokenKind == .identifier {
         return true
@@ -102,7 +102,7 @@ extension TokenConsumer {
       return false
     case .initKeyword:
       return allowInitDecl
-    case .macroContextualKeyword:
+    case .macroKeyword:
       // macro Foo ...
       return subparser.peek().rawTokenKind == .identifier
     case .some(_):
@@ -244,23 +244,23 @@ extension Parser {
       return RawDeclSyntax(self.parseOperatorDeclaration(attrs, handle))
     case (.precedencegroupKeyword, let handle)?:
       return RawDeclSyntax(self.parsePrecedenceGroupDeclaration(attrs, handle))
-    case (.actorContextualKeyword, let handle)?:
+    case (.actorKeyword, let handle)?:
       return RawDeclSyntax(self.parseNominalTypeDeclaration(for: RawActorDeclSyntax.self, attrs: attrs, introucerHandle: handle))
-    case (.macroContextualKeyword, let handle)?:
+    case (.macroKeyword, let handle)?:
       return RawDeclSyntax(self.parseMacroDeclaration(attrs: attrs, introducerHandle: handle))
     case nil:
       if inMemberDeclList {
-        let isProbablyVarDecl = self.at(any: [.identifier, .wildcardKeyword]) && self.peek().rawTokenKind.is(any: [.colon, .equal, .comma])
-        let isProbablyTupleDecl = self.at(.leftParen) && self.peek().rawTokenKind.is(any: [.identifier, .wildcardKeyword])
+        let isProbablyVarDecl = self.at(any: [.identifier, .wildcard]) && self.peek().rawTokenKind.is(any: [.colon, .equal, .comma])
+        let isProbablyTupleDecl = self.at(.leftParen) && self.peek().rawTokenKind.is(any: [.identifier, .wildcard])
 
         if isProbablyVarDecl || isProbablyTupleDecl {
-          return RawDeclSyntax(self.parseLetOrVarDeclaration(attrs, .missing(.varKeyword)))
+          return RawDeclSyntax(self.parseLetOrVarDeclaration(attrs, .missing(.keyword(.var))))
         }
 
-        let isProbablyFuncDecl = self.at(any: [.identifier, .wildcardKeyword]) || self.at(anyIn: Operator.self) != nil
+        let isProbablyFuncDecl = self.at(any: [.identifier, .wildcard]) || self.at(anyIn: Operator.self) != nil
 
         if isProbablyFuncDecl {
-          return RawDeclSyntax(self.parseFuncDeclaration(attrs, .missing(.funcKeyword)))
+          return RawDeclSyntax(self.parseFuncDeclaration(attrs, .missing(.keyword(.func))))
         }
       }
       return RawDeclSyntax(
@@ -304,7 +304,7 @@ extension Parser {
 
   @_spi(RawSyntax)
   public mutating func parseImportKind() -> RawTokenSyntax? {
-    return self.consume(ifAny: [.typealiasKeyword, .structKeyword, .classKeyword, .enumKeyword, .protocolKeyword, .varKeyword, .letKeyword, .funcKeyword])
+    return self.consume(ifAny: [.keyword(.typealias), .keyword(.struct), .keyword(.class), .keyword(.enum), .keyword(.protocol), .keyword(.var), .keyword(.let), .keyword(.func)])
   }
 
   @_spi(RawSyntax)
@@ -353,7 +353,7 @@ extension Parser {
     }
 
     let whereClause: RawGenericWhereClauseSyntax?
-    if self.at(.whereKeyword) {
+    if self.at(.keyword(.where)) {
       whereClause = self.parseGenericWhereClause()
     } else {
       whereClause = nil
@@ -425,10 +425,10 @@ extension Parser {
         let unexpectedBeforeInherited: RawUnexpectedNodesSyntax?
         let inherited: RawTypeSyntax?
         if colon != nil {
-          if self.at(any: [.identifier, .protocolKeyword, .anyKeyword]) {
+          if self.at(any: [.identifier, .keyword(.protocol), .keyword(.Any)]) {
             unexpectedBeforeInherited = nil
             inherited = self.parseType()
-          } else if let classKeyword = self.consume(if: .classKeyword) {
+          } else if let classKeyword = self.consume(if: .keyword(.class)) {
             unexpectedBeforeInherited = RawUnexpectedNodesSyntax([classKeyword], arena: self.arena)
             inherited = RawTypeSyntax(
               RawSimpleTypeIdentifierSyntax(
@@ -463,7 +463,7 @@ extension Parser {
     }
 
     let whereClause: RawGenericWhereClauseSyntax?
-    if self.at(.whereKeyword) {
+    if self.at(.keyword(.where)) {
       whereClause = self.parseGenericWhereClause()
     } else {
       whereClause = nil
@@ -515,13 +515,13 @@ extension Parser {
 
     var rawTokenKind: RawTokenKind {
       switch self {
-      case .trivialLayout: return .contextualKeyword(._Trivial)
-      case .trivialAtMostLayout: return .contextualKeyword(._TrivialAtMost)
-      case .unknownLayout: return .contextualKeyword(._UnknownLayout)
-      case .refCountedObjectLayout: return .contextualKeyword(._RefCountedObject)
-      case .nativeRefCountedObjectLayout: return .contextualKeyword(._NativeRefCountedObject)
-      case .classLayout: return .contextualKeyword(._Class)
-      case .nativeClassLayout: return .contextualKeyword(._NativeClass)
+      case .trivialLayout: return .keyword(._Trivial)
+      case .trivialAtMostLayout: return .keyword(._TrivialAtMost)
+      case .unknownLayout: return .keyword(._UnknownLayout)
+      case .refCountedObjectLayout: return .keyword(._RefCountedObject)
+      case .nativeRefCountedObjectLayout: return .keyword(._NativeRefCountedObject)
+      case .classLayout: return .keyword(._Class)
+      case .nativeClassLayout: return .keyword(._NativeClass)
       }
     }
 
@@ -543,7 +543,7 @@ extension Parser {
 
   @_spi(RawSyntax)
   public mutating func parseGenericWhereClause() -> RawGenericWhereClauseSyntax {
-    let (unexpectedBeforeWhereKeyword, whereKeyword) = self.expect(.whereKeyword)
+    let (unexpectedBeforeWhereKeyword, whereKeyword) = self.expect(.keyword(.where))
 
     var elements = [RawGenericRequirementSyntax]()
     do {
@@ -918,7 +918,7 @@ extension Parser {
 
     // Parse a 'where' clause if present.
     let whereClause: RawGenericWhereClauseSyntax?
-    if self.at(.whereKeyword) {
+    if self.at(.keyword(.where)) {
       whereClause = self.parseGenericWhereClause()
     } else {
       whereClause = nil
@@ -981,7 +981,7 @@ extension Parser {
     let signature = self.parseFunctionSignature()
 
     let whereClause: RawGenericWhereClauseSyntax?
-    if self.at(.whereKeyword) {
+    if self.at(.keyword(.where)) {
       whereClause = self.parseGenericWhereClause()
     } else {
       whereClause = nil
@@ -1174,7 +1174,7 @@ extension Parser {
     var elements = [RawFunctionParameterSyntax]()
     // If we are missing the left parenthesis and the next token doesn't appear
     // to be an argument label, don't parse any parameters.
-    let shouldSkipParameterParsing = lparen.isMissing && (!currentToken.canBeArgumentLabel(allowDollarIdentifier: true) || currentToken.isKeyword)
+    let shouldSkipParameterParsing = lparen.isMissing && (!currentToken.canBeArgumentLabel(allowDollarIdentifier: true) || currentToken.isLexerClassifiedKeyword)
     if !shouldSkipParameterParsing {
       var keepGoing = true
       var loopProgress = LoopProgressCondition()
@@ -1212,7 +1212,7 @@ extension Parser {
     let (unexpectedBeforeArrow, arrow) = self.expect(.arrow)
     var misplacedThrowsKeyword: RawTokenSyntax? = nil
     let unexpectedBeforeReturnType: RawUnexpectedNodesSyntax?
-    if let throwsKeyword = self.consume(ifAny: [.rethrowsKeyword, .throwsKeyword]) {
+    if let throwsKeyword = self.consume(ifAny: [.keyword(.rethrows), .keyword(.throws)]) {
       misplacedThrowsKeyword = throwsKeyword
       unexpectedBeforeReturnType = RawUnexpectedNodesSyntax(elements: [RawSyntax(throwsKeyword)], arena: self.arena)
     } else {
@@ -1282,7 +1282,7 @@ extension Parser {
     let signature = self.parseFunctionSignature()
 
     let generics: RawGenericWhereClauseSyntax?
-    if self.at(.whereKeyword) {
+    if self.at(.keyword(.where)) {
       generics = self.parseGenericWhereClause()
     } else {
       generics = nil
@@ -1309,15 +1309,15 @@ extension Parser {
     let input = self.parseParameterClause(for: .functionParameters)
 
     let async: RawTokenSyntax?
-    if let asyncTok = self.consume(if: .contextualKeyword(.async)) {
+    if let asyncTok = self.consume(if: .keyword(.async)) {
       async = asyncTok
-    } else if let reasync = self.consume(if: .contextualKeyword(.reasync)) {
+    } else if let reasync = self.consume(if: .keyword(.reasync)) {
       async = reasync
     } else {
       async = nil
     }
 
-    var throwsKeyword = self.consume(ifAny: [.throwsKeyword, .rethrowsKeyword])
+    var throwsKeyword = self.consume(ifAny: [.keyword(.throws), .keyword(.rethrows)])
 
     let output: RawReturnClauseSyntax?
     if self.at(.arrow) {
@@ -1378,7 +1378,7 @@ extension Parser {
 
     // Parse a 'where' clause if present.
     let genericWhereClause: RawGenericWhereClauseSyntax?
-    if self.at(.whereKeyword) {
+    if self.at(.keyword(.where)) {
       genericWhereClause = self.parseGenericWhereClause()
     } else {
       genericWhereClause = nil
@@ -1436,7 +1436,7 @@ extension Parser {
     inMemberDeclList: Bool = false
   ) -> RawVariableDeclSyntax {
     let (unexpectedBeforeIntroducer, introducer) = self.eat(handle)
-    let hasTryBeforeIntroducer = unexpectedBeforeIntroducer?.containsToken(where: { $0.tokenKind == .tryKeyword }) ?? false
+    let hasTryBeforeIntroducer = unexpectedBeforeIntroducer?.containsToken(where: { $0.tokenKind == .keyword(.try) }) ?? false
 
     var elements = [RawPatternBindingSyntax]()
     do {
@@ -1453,7 +1453,7 @@ extension Parser {
           if hasTryBeforeIntroducer && !value.is(RawTryExprSyntax.self) {
             value = RawExprSyntax(
               RawTryExprSyntax(
-                tryKeyword: missingToken(.tryKeyword, text: nil),
+                tryKeyword: missingToken(.keyword(.try), text: nil),
                 questionOrExclamationMark: nil,
                 expression: value,
                 arena: self.arena
@@ -1549,7 +1549,7 @@ extension Parser {
     // Check there is an identifier before consuming
     var look = self.lookahead()
     let _ = look.consumeAttributeList()
-    let hasModifier = look.consume(ifAny: [.contextualKeyword(.mutating), .contextualKeyword(.nonmutating), .contextualKeyword(.__consuming)]) != nil
+    let hasModifier = look.consume(ifAny: [.keyword(.mutating), .keyword(.nonmutating), .keyword(.__consuming)]) != nil
     guard let (kind, handle) = look.at(anyIn: AccessorKind.self) ?? forcedKind else {
       return nil
     }
@@ -1581,22 +1581,22 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseEffectsSpecifier() -> RawTokenSyntax? {
     // 'async'
-    if let async = self.consume(if: .contextualKeyword(.async)) {
+    if let async = self.consume(if: .keyword(.async)) {
       return async
     }
 
     // 'reasync'
-    if let reasync = self.consume(if: .contextualKeyword(.reasync)) {
+    if let reasync = self.consume(if: .keyword(.reasync)) {
       return reasync
     }
 
     // 'throws'/'rethrows'
-    if let throwsRethrows = self.consume(ifAny: [.throwsKeyword, .rethrowsKeyword]) {
+    if let throwsRethrows = self.consume(ifAny: [.keyword(.throws), .keyword(.rethrows)]) {
       return throwsRethrows
     }
 
     // diagnose 'throw'/'try'.
-    if let throwTry = self.consume(ifAny: [.throwKeyword, .tryKeyword], where: { !$0.isAtStartOfLine }) {
+    if let throwTry = self.consume(ifAny: [.keyword(.throw), .keyword(.try)], where: { !$0.isAtStartOfLine }) {
       return throwTry
     }
 
@@ -1615,7 +1615,7 @@ extension Parser {
 
   /// Parse an accessor.
   mutating func parseAccessorDecl() -> RawAccessorDeclSyntax {
-    let forcedHandle = TokenConsumptionHandle(tokenKind: .contextualKeyword(.get), missing: true)
+    let forcedHandle = TokenConsumptionHandle(tokenKind: .keyword(.get), missing: true)
     let introducer = parseAccessorIntroducer(forcedKind: (.get, forcedHandle))!
     return parseAccessorDecl(introducer: introducer)
   }
@@ -1809,7 +1809,7 @@ extension Parser {
 
     // Parse a 'where' clause if present.
     let genericWhereClause: RawGenericWhereClauseSyntax?
-    if self.at(.whereKeyword) {
+    if self.at(.keyword(.where)) {
       genericWhereClause = self.parseGenericWhereClause()
     } else {
       genericWhereClause = nil
@@ -2007,10 +2007,10 @@ extension Parser {
 
       var rawTokenKind: RawTokenKind {
         switch self {
-        case .associativity: return .contextualKeyword(.associativity)
-        case .assignment: return .contextualKeyword(.assignment)
-        case .higherThan: return .contextualKeyword(.higherThan)
-        case .lowerThan: return .contextualKeyword(.lowerThan)
+        case .associativity: return .keyword(.associativity)
+        case .assignment: return .keyword(.assignment)
+        case .higherThan: return .keyword(.higherThan)
+        case .lowerThan: return .keyword(.lowerThan)
         }
       }
     }
@@ -2039,7 +2039,7 @@ extension Parser {
         case (.assignment, let handle)?:
           let assignmentKeyword = self.eat(handle)
           let (unexpectedBeforeColon, colon) = self.expect(.colon)
-          let (unexpectedBeforeFlag, flag) = self.expectAny([.trueKeyword, .falseKeyword], default: .trueKeyword)
+          let (unexpectedBeforeFlag, flag) = self.expectAny([.keyword(.true), .keyword(.false)], default: .keyword(.true))
           let unexpectedAfterFlag: RawUnexpectedNodesSyntax?
           if flag.isMissing, let unexpectedIdentifier = self.consume(if: .identifier, where: { !$0.isAtStartOfLine }) {
             unexpectedAfterFlag = RawUnexpectedNodesSyntax([unexpectedIdentifier], arena: self.arena)
@@ -2226,7 +2226,7 @@ extension Parser {
 
     // Parse a 'where' clause if present.
     let whereClause: RawGenericWhereClauseSyntax?
-    if self.at(.whereKeyword) {
+    if self.at(.keyword(.where)) {
       whereClause = self.parseGenericWhereClause()
     } else {
       whereClause = nil

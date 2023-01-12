@@ -44,6 +44,18 @@ public extension Child {
     flattened(indentedDocumentation: description ?? "")
   }
 
+  var defaultInitialization: Expr? {
+    if self.textChoices.count == 1, let token = token, token.associatedValueClass != nil {
+      var textChoice = self.textChoices[0]
+      if textChoice == "init" {
+        textChoice = "`init`"
+      }
+      return Expr(".\(raw: token.swiftKind)(.\(raw: textChoice))")
+    } else {
+      return type.defaultInitialization
+    }
+  }
+
   /// If this node is a token that can't contain arbitrary text, generate a Swift
   /// `assert` statement that verifies the variable with name var_name and of type
   /// `TokenSyntax` contains one of the supported text options. Otherwise return `nil`.

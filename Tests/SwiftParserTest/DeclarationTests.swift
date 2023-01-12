@@ -81,7 +81,7 @@ final class DeclarationTests: XCTestCase {
       """,
       substructure: Syntax(
         FunctionParameterSyntax(
-          firstName: .wildcardKeyword(),
+          firstName: .wildcard,
           secondName: .identifier("default"),
           colon: .colonToken(),
           type: SimpleTypeIdentifierSyntax(name: .identifier("Int"))
@@ -649,7 +649,7 @@ final class DeclarationTests: XCTestCase {
       """,
       substructure: Syntax(
         FunctionDeclSyntax(
-          funcKeyword: .funcKeyword(),
+          funcKeyword: .keyword(.func),
           identifier: .identifier("withoutParameters"),
           signature: FunctionSignatureSyntax(
             input: ParameterClauseSyntax(
@@ -964,14 +964,14 @@ final class DeclarationTests: XCTestCase {
     AssertParse("public class Foo: Superclass {}")
   }
 
-  func testReturnAsyncContextualKeyword() {
+  func testReturnVariableNamedAsync() {
     AssertParse(
       ##"""
-      if let async = self.consumeIfContextualKeyword("async") {
+      if let async = self.consume(if: .keyword(.async)) {
         return async
       }
 
-      if let reasync = self.consumeIfContextualKeyword("reasync") {
+      if let reasync = self.consume(if: .keyword(.reasync)) {
         return reasync
       }
       """##
@@ -1240,7 +1240,7 @@ final class DeclarationTests: XCTestCase {
           CodeBlockItemSyntax(
             item: .init(
               ClassDeclSyntax(
-                classKeyword: .classKeyword(),
+                classKeyword: .keyword(.class),
                 identifier: .identifier("A"),
                 members: MemberDeclBlockSyntax(
                   leftBrace: .leftBraceToken(),
@@ -1248,7 +1248,7 @@ final class DeclarationTests: XCTestCase {
                     MemberDeclListItemSyntax(
                       decl: Decl(
                         FunctionDeclSyntax(
-                          funcKeyword: .funcKeyword(presence: .missing),
+                          funcKeyword: .keyword(.func, presence: .missing),
                           identifier: .binaryOperator("^"),
                           signature: FunctionSignatureSyntax(
                             input: ParameterClauseSyntax(
@@ -1269,7 +1269,7 @@ final class DeclarationTests: XCTestCase {
           CodeBlockItemSyntax(
             item: .init(
               ClassDeclSyntax(
-                classKeyword: .classKeyword(),
+                classKeyword: .keyword(.class),
                 identifier: .identifier("B"),
                 members: MemberDeclBlockSyntax(
                   leftBrace: .leftBraceToken(),

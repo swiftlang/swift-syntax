@@ -52,7 +52,6 @@ ATTRIBUTE_NODES = [
              Child('Argument', kind='Syntax', is_optional=True,
                    node_choices=[
                        Child('Token', kind='Token'),
-                       Child('StringExpr', kind='StringLiteralExpr'),
                        Child('Availability', kind='AvailabilitySpecList'),
                        Child('SpecializeArguments',
                              kind='SpecializeAttributeSpecList'),

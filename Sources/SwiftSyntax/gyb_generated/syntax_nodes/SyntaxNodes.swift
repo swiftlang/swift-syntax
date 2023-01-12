@@ -12288,7 +12288,6 @@ extension CustomAttributeSyntax: CustomReflectable {
 public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
   public enum Argument: SyntaxChildChoices {
     case `token`(TokenSyntax)
-    case `stringExpr`(StringLiteralExprSyntax)
     case `availability`(AvailabilitySpecListSyntax)
     case `specializeArguments`(SpecializeAttributeSpecListSyntax)
     case `objCName`(ObjCSelectorSyntax)
@@ -12305,7 +12304,6 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
     public var _syntaxNode: Syntax {
       switch self {
       case .token(let node): return node._syntaxNode
-      case .stringExpr(let node): return node._syntaxNode
       case .availability(let node): return node._syntaxNode
       case .specializeArguments(let node): return node._syntaxNode
       case .objCName(let node): return node._syntaxNode
@@ -12324,9 +12322,6 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
     init(_ data: SyntaxData) { self.init(Syntax(data))! }
     public init(_ node: TokenSyntax) {
       self = .token(node)
-    }
-    public init(_ node: StringLiteralExprSyntax) {
-      self = .stringExpr(node)
     }
     public init(_ node: AvailabilitySpecListSyntax) {
       self = .availability(node)
@@ -12370,10 +12365,6 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
     public init?<S: SyntaxProtocol>(_ node: S) {
       if let node = node.as(TokenSyntax.self) {
         self = .token(node)
-        return
-      }
-      if let node = node.as(StringLiteralExprSyntax.self) {
-        self = .stringExpr(node)
         return
       }
       if let node = node.as(AvailabilitySpecListSyntax.self) {
@@ -12434,7 +12425,6 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
     public static var structure: SyntaxNodeStructure {
       return .choices([
         .node(TokenSyntax.self),
-        .node(StringLiteralExprSyntax.self),
         .node(AvailabilitySpecListSyntax.self),
         .node(SpecializeAttributeSpecListSyntax.self),
         .node(ObjCSelectorSyntax.self),

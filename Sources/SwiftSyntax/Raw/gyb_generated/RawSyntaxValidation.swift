@@ -1573,7 +1573,6 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
       verify(layout[7], as: RawSyntax?.self),
       verify(layout[7], as: RawSyntax?.self),
       verify(layout[7], as: RawSyntax?.self),
-      verify(layout[7], as: RawSyntax?.self),
     ])
     assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 9, verify(layout[9], as: RawTokenSyntax?.self))

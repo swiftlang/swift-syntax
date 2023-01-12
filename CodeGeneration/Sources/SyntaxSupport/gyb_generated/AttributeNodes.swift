@@ -81,8 +81,6 @@ public let ATTRIBUTE_NODES: [Node] = [
                nodeChoices: [
                  Child(name: "Token",
                        kind: "Token"),
-                 Child(name: "StringExpr",
-                       kind: "StringLiteralExpr"),
                  Child(name: "Availability",
                        kind: "AvailabilitySpecList"),
                  Child(name: "SpecializeArguments",

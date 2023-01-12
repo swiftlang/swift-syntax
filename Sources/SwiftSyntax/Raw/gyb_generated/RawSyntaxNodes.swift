@@ -10436,7 +10436,6 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Argument: RawSyntaxNodeProtocol {
     case `token`(RawTokenSyntax)
-    case `stringExpr`(RawStringLiteralExprSyntax)
     case `availability`(RawAvailabilitySpecListSyntax)
     case `specializeArguments`(RawSpecializeAttributeSpecListSyntax)
     case `objCName`(RawObjCSelectorSyntax)
@@ -10452,13 +10451,12 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol {
     case `originallyDefinedInArguments`(RawOriginallyDefinedInArgumentsSyntax)
 
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
-      return RawTokenSyntax.isKindOf(raw) || RawStringLiteralExprSyntax.isKindOf(raw) || RawAvailabilitySpecListSyntax.isKindOf(raw) || RawSpecializeAttributeSpecListSyntax.isKindOf(raw) || RawObjCSelectorSyntax.isKindOf(raw) || RawImplementsAttributeArgumentsSyntax.isKindOf(raw) || RawDifferentiableAttributeArgumentsSyntax.isKindOf(raw) || RawDerivativeRegistrationAttributeArgumentsSyntax.isKindOf(raw) || RawNamedAttributeStringArgumentSyntax.isKindOf(raw) || RawBackDeployAttributeSpecListSyntax.isKindOf(raw) || RawConventionAttributeArgumentsSyntax.isKindOf(raw) || RawConventionWitnessMethodAttributeArgumentsSyntax.isKindOf(raw) || RawOpaqueReturnTypeOfAttributeArgumentsSyntax.isKindOf(raw) || RawExposeAttributeArgumentsSyntax.isKindOf(raw) || RawOriginallyDefinedInArgumentsSyntax.isKindOf(raw)
+      return RawTokenSyntax.isKindOf(raw) || RawAvailabilitySpecListSyntax.isKindOf(raw) || RawSpecializeAttributeSpecListSyntax.isKindOf(raw) || RawObjCSelectorSyntax.isKindOf(raw) || RawImplementsAttributeArgumentsSyntax.isKindOf(raw) || RawDifferentiableAttributeArgumentsSyntax.isKindOf(raw) || RawDerivativeRegistrationAttributeArgumentsSyntax.isKindOf(raw) || RawNamedAttributeStringArgumentSyntax.isKindOf(raw) || RawBackDeployAttributeSpecListSyntax.isKindOf(raw) || RawConventionAttributeArgumentsSyntax.isKindOf(raw) || RawConventionWitnessMethodAttributeArgumentsSyntax.isKindOf(raw) || RawOpaqueReturnTypeOfAttributeArgumentsSyntax.isKindOf(raw) || RawExposeAttributeArgumentsSyntax.isKindOf(raw) || RawOriginallyDefinedInArgumentsSyntax.isKindOf(raw)
     }
 
     public var raw: RawSyntax {
       switch self {
       case .token(let node): return node.raw
-      case .stringExpr(let node): return node.raw
       case .availability(let node): return node.raw
       case .specializeArguments(let node): return node.raw
       case .objCName(let node): return node.raw
@@ -10478,10 +10476,6 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol {
     public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
       if let node = RawTokenSyntax(other) {
         self = .token(node)
-        return
-      }
-      if let node = RawStringLiteralExprSyntax(other) {
-        self = .stringExpr(node)
         return
       }
       if let node = RawAvailabilitySpecListSyntax(other) {

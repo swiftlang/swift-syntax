@@ -197,7 +197,11 @@ extension Parser {
       }
     case ._semantics:
       return parseAttribute(hasRequiredArguments: true) { parser in
-        return .stringExpr(parser.parseStringLiteral())
+        if let value = parser.consume(if: .stringLiteral) {
+          return .token(value)
+        } else {
+          return .token(parser.missingToken(.stringLiteral))
+        }
       }
     case ._backDeploy:
       return parseAttribute(hasRequiredArguments: true) { parser in

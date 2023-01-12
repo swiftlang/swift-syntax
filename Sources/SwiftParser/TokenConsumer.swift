@@ -181,8 +181,17 @@ extension TokenConsumer {
     ifAny kinds: [RawTokenKind],
     allowTokenAtStartOfLine: Bool = true
   ) -> Token? {
-    if self.at(any: kinds, allowTokenAtStartOfLine: allowTokenAtStartOfLine) {
-      return self.consumeAnyToken()
+    if !allowTokenAtStartOfLine && self.currentToken.isAtStartOfLine {
+      return nil
+    }
+    for kind in kinds {
+      if case RawTokenKindMatch(kind) = self.currentToken {
+        if case .keyword = kind {
+          return self.consumeAnyToken(remapping: kind)
+        } else {
+          return self.consumeAnyToken()
+        }
+      }
     }
     return nil
   }

@@ -55,8 +55,28 @@ internal struct RawSyntaxData {
 
     var presence: SourcePresence
 
-    /// If the token has a lexial error, the type of the error.
-    var lexerError: LexerError?
+    /// Store the members of `LexerError` individually so the compiler can pack
+    /// `ParsedToken` more efficiently (saving 2 bytes)
+    /// `lexerErrorByteOffset` is ignored if `lexerErrorKind` is `nil`
+    private var lexerErrorKind: LexerError.Kind?
+    private var lexerErrorByteOffset: UInt16
+
+    var lexerError: LexerError? {
+      if let kind = lexerErrorKind {
+        return LexerError(kind, byteOffset: lexerErrorByteOffset)
+      } else {
+        return nil
+      }
+    }
+
+    init(tokenKind: RawTokenKind, wholeText: SyntaxText, textRange: Range<SyntaxText.Index>, presence: SourcePresence, lexerError: LexerError?) {
+      self.tokenKind = tokenKind
+      self.wholeText = wholeText
+      self.textRange = textRange
+      self.presence = presence
+      self.lexerErrorKind = lexerError?.kind
+      self.lexerErrorByteOffset = lexerError?.byteOffset ?? 0
+    }
   }
 
   /// Token typically created with `TokenSyntax.<someToken>`.

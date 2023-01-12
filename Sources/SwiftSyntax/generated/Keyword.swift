@@ -27,35 +27,19 @@ extension StaticString: Equatable {
 public enum Keyword: StaticString {
   case __consuming
   
-  case __objc_bridged
-  
   case __owned
-  
-  case __raw_doc_comment
   
   case __setter_access
   
   case __shared
   
-  case __synthesized_protocol
-  
   case _alignment
-  
-  case _alwaysEmitConformanceMetadata
-  
-  case _alwaysEmitIntoClient
-  
-  case _assemblyVision
   
   case _backDeploy
   
   case _borrow
   
-  case _borrowed
-  
   case _cdecl
-  
-  case _clangImporterSynthesizedType
   
   case _Class
   
@@ -63,79 +47,33 @@ public enum Keyword: StaticString {
   
   case _const
   
-  case _custom
-  
-  case _disfavoredOverload
-  
   case _documentation
   
   case _dynamicReplacement
   
-  case _eagerMove
-  
   case _effects
-  
-  case _exported
   
   case _expose
   
-  case _fixed_layout
-  
-  case _forbidSerializingReference
-  
   case _forward
   
-  case _frozen
-  
-  case _hasInitialValue
-  
-  case _hasMissingDesignatedInitializers
-  
-  case _hasStorage
-  
-  case _implementationOnly
-  
   case _implements
-  
-  case _implicitSelfCapture
-  
-  case _inheritActorContext
-  
-  case _inheritsConvenienceInitializers
   
   case _linear
   
   case _local
   
-  case _marker
-  
   case _modify
   
   case _move
-  
-  case _moveOnly
   
   case _NativeClass
   
   case _NativeRefCountedObject
   
-  case _noAllocation
-  
-  case _noEagerMove
-  
-  case _noImplicitCopy
-  
-  case _noLocks
-  
   case _noMetadata
   
-  case _nonEphemeral
-  
-  case _nonoverride
-  
   case _nonSendable
-  
-  case _objc_non_lazy_realization
   
   case _objcImplementation
   
@@ -157,29 +95,17 @@ public enum Keyword: StaticString {
   
   case _RefCountedObject
   
-  case _restatedObjCConformance
-  
   case _semantics
-  
-  case _show_in_interface
   
   case _silgen_name
   
   case _specialize
   
-  case _specializeExtension
-  
   case _spi
   
   case _spi_available
   
-  case _spiOnly
-  
-  case _staticInitializeObjCMetadata
-  
   case _swift_native_objc_runtime_base
-  
-  case _transparent
   
   case _Trivial
   
@@ -190,10 +116,6 @@ public enum Keyword: StaticString {
   case _unavailableFromAsync
   
   case _UnknownLayout
-  
-  case _unsafeInheritExecutor
-  
-  case _weakLinked
   
   case actor
   
@@ -253,17 +175,11 @@ public enum Keyword: StaticString {
   
   case differentiable
   
-  case discardableResult
-  
   case distributed
   
   case `do`
   
   case dynamic
-  
-  case dynamicCallable
-  
-  case dynamicMemberLookup
   
   case each
   
@@ -289,29 +205,13 @@ public enum Keyword: StaticString {
   
   case `for`
   
-  case frozen
-  
   case `func`
   
   case get
   
-  case GKInspectable
-  
-  case globalActor
-  
   case `guard`
   
   case higherThan
-  
-  case IBAction
-  
-  case IBDesignable
-  
-  case IBInspectable
-  
-  case IBOutlet
-  
-  case IBSegueAction
   
   case `if`
   
@@ -324,8 +224,6 @@ public enum Keyword: StaticString {
   case infix
   
   case `init`
-  
-  case inlinable
   
   case inline
   
@@ -345,13 +243,9 @@ public enum Keyword: StaticString {
   
   case `let`
   
-  case LLDBDebuggerFunction
-  
   case lowerThan
   
   case macro
-  
-  case main
   
   case message
   
@@ -375,17 +269,7 @@ public enum Keyword: StaticString {
   
   case nonmutating
   
-  case nonobjc
-  
-  case NSApplicationMain
-  
-  case NSCopying
-  
-  case NSManaged
-  
   case objc
-  
-  case objcMembers
   
   case obsoleted
   
@@ -405,13 +289,9 @@ public enum Keyword: StaticString {
   
   case `precedencegroup`
   
-  case preconcurrency
-  
   case prefix
   
   case `private`
-  
-  case propertyWrapper
   
   case `Protocol`
   
@@ -427,17 +307,11 @@ public enum Keyword: StaticString {
   
   case required
   
-  case requires_stored_property_inits
-  
-  case resultBuilder
-  
   case `rethrows`
   
   case `return`
   
   case reverse
-  
-  case runtimeMetadata
   
   case safe
   
@@ -471,8 +345,6 @@ public enum Keyword: StaticString {
   
   case target
   
-  case testable
-  
   case `throw`
   
   case `throws`
@@ -487,12 +359,6 @@ public enum Keyword: StaticString {
   
   case `typealias`
   
-  case typeWrapper
-  
-  case typeWrapperIgnored
-  
-  case UIApplicationMain
-  
   case unavailable
   
   case unchecked
@@ -501,17 +367,11 @@ public enum Keyword: StaticString {
   
   case unsafe
   
-  case unsafe_no_objc_tagged_pointer
-  
   case unsafeAddress
   
   case unsafeMutableAddress
   
-  case usableFromInline
-  
   case `var`
-  
-  case warn_unqualified_access
   
   case weak
   
@@ -593,8 +453,6 @@ public enum Keyword: StaticString {
         self = .kind
       case "lazy": 
         self = .lazy
-      case "main": 
-        self = .main
       case "objc": 
         self = .objc
       case "open": 
@@ -679,8 +537,6 @@ public enum Keyword: StaticString {
         self = .`deinit`
       case "didSet": 
         self = .didSet
-      case "frozen": 
-        self = .frozen
       case "import": 
         self = .`import`
       case "inline": 
@@ -716,16 +572,10 @@ public enum Keyword: StaticString {
         self = .__owned
       case "_borrow": 
         self = ._borrow
-      case "_custom": 
-        self = ._custom
       case "_expose": 
         self = ._expose
-      case "_frozen": 
-        self = ._frozen
       case "_linear": 
         self = ._linear
-      case "_marker": 
-        self = ._marker
       case "_modify": 
         self = ._modify
       case "default": 
@@ -736,8 +586,6 @@ public enum Keyword: StaticString {
         self = .message
       case "noasync": 
         self = .noasync
-      case "nonobjc": 
-        self = .nonobjc
       case "package": 
         self = .package
       case "postfix": 
@@ -765,12 +613,8 @@ public enum Keyword: StaticString {
         self = ._effects
       case "_forward": 
         self = ._forward
-      case "_noLocks": 
-        self = ._noLocks
       case "_private": 
         self = ._private
-      case "_spiOnly": 
-        self = ._spiOnly
       case "_Trivial": 
         self = ._Trivial
       case "continue": 
@@ -779,10 +623,6 @@ public enum Keyword: StaticString {
         self = .escaping
       case "exported": 
         self = .exported
-      case "IBAction": 
-        self = .IBAction
-      case "IBOutlet": 
-        self = .IBOutlet
       case "indirect": 
         self = .indirect
       case "internal": 
@@ -809,33 +649,19 @@ public enum Keyword: StaticString {
         self = .`rethrows`
       case "Sendable": 
         self = .Sendable
-      case "testable": 
-        self = .testable
       default: 
         return nil
       }
     case 9: 
       switch text {
-      case "_borrowed": 
-        self = ._borrowed
-      case "_exported": 
-        self = ._exported
-      case "_moveOnly": 
-        self = ._moveOnly
       case "_optimize": 
         self = ._optimize
       case "available": 
         self = .available
       case "extension": 
         self = .`extension`
-      case "inlinable": 
-        self = .inlinable
       case "lowerThan": 
         self = .lowerThan
-      case "NSCopying": 
-        self = .NSCopying
-      case "NSManaged": 
-        self = .NSManaged
       case "obsoleted": 
         self = .obsoleted
       case "spiModule": 
@@ -855,8 +681,6 @@ public enum Keyword: StaticString {
       switch text {
       case "_alignment": 
         self = ._alignment
-      case "_eagerMove": 
-        self = ._eagerMove
       case "_semantics": 
         self = ._semantics
       case "assignment": 
@@ -882,8 +706,6 @@ public enum Keyword: StaticString {
         self = .__consuming
       case "_backDeploy": 
         self = ._backDeploy
-      case "_hasStorage": 
-        self = ._hasStorage
       case "_implements": 
         self = ._implements
       case "_noMetadata": 
@@ -892,8 +714,6 @@ public enum Keyword: StaticString {
         self = ._specialize
       case "_typeEraser": 
         self = ._typeEraser
-      case "_weakLinked": 
-        self = ._weakLinked
       case "autoclosure": 
         self = .autoclosure
       case "convenience": 
@@ -906,16 +726,10 @@ public enum Keyword: StaticString {
         self = .`fallthrough`
       case "fileprivate": 
         self = .`fileprivate`
-      case "globalActor": 
-        self = .globalActor
       case "nonisolated": 
         self = .nonisolated
       case "nonmutating": 
         self = .nonmutating
-      case "objcMembers": 
-        self = .objcMembers
-      case "typeWrapper": 
-        self = .typeWrapper
       case "unavailable": 
         self = .unavailable
       default: 
@@ -925,20 +739,12 @@ public enum Keyword: StaticString {
       switch text {
       case "_NativeClass": 
         self = ._NativeClass
-      case "_noEagerMove": 
-        self = ._noEagerMove
-      case "_nonoverride": 
-        self = ._nonoverride
       case "_nonSendable": 
         self = ._nonSendable
       case "_silgen_name": 
         self = ._silgen_name
-      case "_transparent": 
-        self = ._transparent
       case "availability": 
         self = .availability
-      case "IBDesignable": 
-        self = .IBDesignable
       case "noDerivative": 
         self = .noDerivative
       default: 
@@ -946,22 +752,8 @@ public enum Keyword: StaticString {
       }
     case 13: 
       switch text {
-      case "_fixed_layout": 
-        self = ._fixed_layout
-      case "_noAllocation": 
-        self = ._noAllocation
-      case "_nonEphemeral": 
-        self = ._nonEphemeral
       case "associativity": 
         self = .associativity
-      case "GKInspectable": 
-        self = .GKInspectable
-      case "IBInspectable": 
-        self = .IBInspectable
-      case "IBSegueAction": 
-        self = .IBSegueAction
-      case "resultBuilder": 
-        self = .resultBuilder
       case "unsafeAddress": 
         self = .unsafeAddress
       default: 
@@ -969,8 +761,6 @@ public enum Keyword: StaticString {
       }
     case 14: 
       switch text {
-      case "__objc_bridged": 
-        self = .__objc_bridged
       case "_documentation": 
         self = ._documentation
       case "_spi_available": 
@@ -983,8 +773,6 @@ public enum Keyword: StaticString {
         self = .`associatedtype`
       case "differentiable": 
         self = .differentiable
-      case "preconcurrency": 
-        self = .preconcurrency
       case "witness_method": 
         self = .witness_method
       default: 
@@ -994,74 +782,37 @@ public enum Keyword: StaticString {
       switch text {
       case "__setter_access": 
         self = .__setter_access
-      case "_assemblyVision": 
-        self = ._assemblyVision
-      case "_noImplicitCopy": 
-        self = ._noImplicitCopy
-      case "dynamicCallable": 
-        self = .dynamicCallable
       case "precedencegroup": 
         self = .`precedencegroup`
-      case "propertyWrapper": 
-        self = .propertyWrapper
-      case "runtimeMetadata": 
-        self = .runtimeMetadata
       default: 
         return nil
       }
     case 16: 
       switch text {
-      case "_hasInitialValue": 
-        self = ._hasInitialValue
       case "_objcRuntimeName": 
         self = ._objcRuntimeName
       case "addressWithOwner": 
         self = .addressWithOwner
-      case "usableFromInline": 
-        self = .usableFromInline
       default: 
         return nil
       }
     case 17: 
       switch text {
-      case "__raw_doc_comment": 
-        self = .__raw_doc_comment
       case "_RefCountedObject": 
         self = ._RefCountedObject
-      case "discardableResult": 
-        self = .discardableResult
-      case "NSApplicationMain": 
-        self = .NSApplicationMain
-      case "UIApplicationMain": 
-        self = .UIApplicationMain
-      default: 
-        return nil
-      }
-    case 18: 
-      switch text {
-      case "_show_in_interface": 
-        self = ._show_in_interface
-      case "typeWrapperIgnored": 
-        self = .typeWrapperIgnored
       default: 
         return nil
       }
     case 19: 
       switch text {
-      case "_disfavoredOverload": 
-        self = ._disfavoredOverload
       case "_dynamicReplacement": 
         self = ._dynamicReplacement
-      case "_implementationOnly": 
-        self = ._implementationOnly
       case "_objcImplementation": 
         self = ._objcImplementation
       case "_opaqueReturnTypeOf": 
         self = ._opaqueReturnTypeOf
       case "_PackageDescription": 
         self = ._PackageDescription
-      case "dynamicMemberLookup": 
-        self = .dynamicMemberLookup
       default: 
         return nil
       }
@@ -1069,16 +820,8 @@ public enum Keyword: StaticString {
       switch text {
       case "_compilerInitialized": 
         self = ._compilerInitialized
-      case "_implicitSelfCapture": 
-        self = ._implicitSelfCapture
-      case "_inheritActorContext": 
-        self = ._inheritActorContext
       case "_originallyDefinedIn": 
         self = ._originallyDefinedIn
-      case "_specializeExtension": 
-        self = ._specializeExtension
-      case "LLDBDebuggerFunction": 
-        self = .LLDBDebuggerFunction
       case "unsafeMutableAddress": 
         self = .unsafeMutableAddress
       default: 
@@ -1086,8 +829,6 @@ public enum Keyword: StaticString {
       }
     case 21: 
       switch text {
-      case "_alwaysEmitIntoClient": 
-        self = ._alwaysEmitIntoClient
       case "_unavailableFromAsync": 
         self = ._unavailableFromAsync
       default: 
@@ -1095,10 +836,6 @@ public enum Keyword: StaticString {
       }
     case 22: 
       switch text {
-      case "__synthesized_protocol": 
-        self = .__synthesized_protocol
-      case "_unsafeInheritExecutor": 
-        self = ._unsafeInheritExecutor
       case "addressWithNativeOwner": 
         self = .addressWithNativeOwner
       default: 
@@ -1112,51 +849,13 @@ public enum Keyword: StaticString {
         self = ._projectedValueProperty
       case "mutableAddressWithOwner": 
         self = .mutableAddressWithOwner
-      case "warn_unqualified_access": 
-        self = .warn_unqualified_access
-      default: 
-        return nil
-      }
-    case 24: 
-      switch text {
-      case "_restatedObjCConformance": 
-        self = ._restatedObjCConformance
-      default: 
-        return nil
-      }
-    case 26: 
-      switch text {
-      case "_objc_non_lazy_realization": 
-        self = ._objc_non_lazy_realization
-      default: 
-        return nil
-      }
-    case 27: 
-      switch text {
-      case "_forbidSerializingReference": 
-        self = ._forbidSerializingReference
       default: 
         return nil
       }
     case 29: 
       switch text {
-      case "_clangImporterSynthesizedType": 
-        self = ._clangImporterSynthesizedType
-      case "_staticInitializeObjCMetadata": 
-        self = ._staticInitializeObjCMetadata
       case "mutableAddressWithNativeOwner": 
         self = .mutableAddressWithNativeOwner
-      case "unsafe_no_objc_tagged_pointer": 
-        self = .unsafe_no_objc_tagged_pointer
-      default: 
-        return nil
-      }
-    case 30: 
-      switch text {
-      case "_alwaysEmitConformanceMetadata": 
-        self = ._alwaysEmitConformanceMetadata
-      case "requires_stored_property_inits": 
-        self = .requires_stored_property_inits
       default: 
         return nil
       }
@@ -1164,20 +863,6 @@ public enum Keyword: StaticString {
       switch text {
       case "_swift_native_objc_runtime_base": 
         self = ._swift_native_objc_runtime_base
-      default: 
-        return nil
-      }
-    case 32: 
-      switch text {
-      case "_inheritsConvenienceInitializers": 
-        self = ._inheritsConvenienceInitializers
-      default: 
-        return nil
-      }
-    case 33: 
-      switch text {
-      case "_hasMissingDesignatedInitializers": 
-        self = ._hasMissingDesignatedInitializers
       default: 
         return nil
       }

@@ -29,6 +29,117 @@ extension Parser {
 }
 
 extension Parser {
+  /// Compiler-known attributes that take arguments.
+  enum DeclarationAttributeWithSpecialSyntax: RawTokenKindSubset {
+    case _alignment
+    case _backDeploy
+    case _cdecl
+    case _documentation
+    case _dynamicReplacement
+    case _effects
+    case _expose
+    case _implements
+    case _nonSendable
+    case _objcImplementation
+    case _objcRuntimeName
+    case _optimize
+    case _originallyDefinedIn
+    case _private
+    case _projectedValueProperty
+    case _semantics
+    case _silgen_name
+    case _specialize
+    case _spi
+    case _spi_available
+    case _swift_native_objc_runtime_base
+    case _typeEraser
+    case _unavailableFromAsync
+    case `rethrows`
+    case available
+    case derivative
+    case differentiable
+    case exclusivity
+    case inline
+    case objc
+    case transpose
+
+    init?(lexeme: Lexer.Lexeme) {
+      switch lexeme {
+      case RawTokenKindMatch(._alignment): self = ._alignment
+      case RawTokenKindMatch(._backDeploy): self = ._backDeploy
+      case RawTokenKindMatch(._cdecl): self = ._cdecl
+      case RawTokenKindMatch(._documentation): self = ._documentation
+      case RawTokenKindMatch(._dynamicReplacement): self = ._dynamicReplacement
+      case RawTokenKindMatch(._effects): self = ._effects
+      case RawTokenKindMatch(._expose): self = ._expose
+      case RawTokenKindMatch(._implements): self = ._implements
+      case RawTokenKindMatch(._nonSendable): self = ._nonSendable
+      case RawTokenKindMatch(._objcImplementation): self = ._objcImplementation
+      case RawTokenKindMatch(._objcRuntimeName): self = ._objcRuntimeName
+      case RawTokenKindMatch(._optimize): self = ._optimize
+      case RawTokenKindMatch(._originallyDefinedIn): self = ._originallyDefinedIn
+      case RawTokenKindMatch(._private): self = ._private
+      case RawTokenKindMatch(._projectedValueProperty): self = ._projectedValueProperty
+      case RawTokenKindMatch(._semantics): self = ._semantics
+      case RawTokenKindMatch(._silgen_name): self = ._silgen_name
+      case RawTokenKindMatch(._specialize): self = ._specialize
+      case RawTokenKindMatch(._spi): self = ._spi
+      case RawTokenKindMatch(._spi_available): self = ._spi_available
+      case RawTokenKindMatch(._swift_native_objc_runtime_base): self = ._swift_native_objc_runtime_base
+      case RawTokenKindMatch(._typeEraser): self = ._typeEraser
+      case RawTokenKindMatch(._unavailableFromAsync): self = ._unavailableFromAsync
+      case RawTokenKindMatch(.`rethrows`): self = .rethrows
+      case RawTokenKindMatch(.available): self = .available
+      case RawTokenKindMatch(.derivative): self = .derivative
+      case RawTokenKindMatch(.differentiable): self = .differentiable
+      case RawTokenKindMatch(.exclusivity): self = .exclusivity
+      case RawTokenKindMatch(.inline): self = .inline
+      case RawTokenKindMatch(.objc): self = .objc
+      case RawTokenKindMatch(.transpose): self = .transpose
+      default:
+        return nil
+      }
+    }
+
+    var rawTokenKind: RawTokenKind {
+      switch self {
+      case ._alignment: return .keyword(._alignment)
+      case ._backDeploy: return .keyword(._backDeploy)
+      case ._cdecl: return .keyword(._cdecl)
+      case ._documentation: return .keyword(._documentation)
+      case ._dynamicReplacement: return .keyword(._dynamicReplacement)
+      case ._effects: return .keyword(._effects)
+      case ._expose: return .keyword(._expose)
+      case ._implements: return .keyword(._implements)
+      case ._nonSendable: return .keyword(._nonSendable)
+      case ._objcImplementation: return .keyword(._objcImplementation)
+      case ._objcRuntimeName: return .keyword(._objcRuntimeName)
+      case ._optimize: return .keyword(._optimize)
+      case ._originallyDefinedIn: return .keyword(._originallyDefinedIn)
+      case ._private: return .keyword(._private)
+      case ._projectedValueProperty: return .keyword(._projectedValueProperty)
+      case ._semantics: return .keyword(._semantics)
+      case ._silgen_name: return .keyword(._silgen_name)
+      case ._specialize: return .keyword(._specialize)
+      case ._spi: return .keyword(._spi)
+      case ._spi_available: return .keyword(._spi_available)
+      case ._swift_native_objc_runtime_base: return .keyword(._swift_native_objc_runtime_base)
+      case ._typeEraser: return .keyword(._typeEraser)
+      case ._unavailableFromAsync: return .keyword(._unavailableFromAsync)
+      case .`rethrows`: return .keyword(.rethrows)
+      case .available: return .keyword(.available)
+      case .derivative: return .keyword(.derivative)
+      case .differentiable: return .keyword(.differentiable)
+      case .exclusivity: return .keyword(.exclusivity)
+      case .inline: return .keyword(.inline)
+      case .objc: return .keyword(.objc)
+      case .transpose: return .keyword(.transpose)
+      }
+    }
+  }
+}
+
+extension Parser {
   mutating func parseAttributeWithoutArguments() -> RawAttributeListSyntax.Element {
     let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
     let attributeName = self.parseType()
@@ -106,9 +217,7 @@ extension Parser {
       )
     }
 
-    let declAttr = DeclarationAttribute(lexeme: self.peek())
-
-    switch declAttr {
+    switch DeclarationAttributeWithSpecialSyntax(lexeme: self.peek()) {
     case .available, ._spi_available:
       return parseAttribute(argumentMode: .required) { parser in
         if parser.peek().rawTokenKind == .integerLiteral || parser.peek().rawTokenKind == .floatingLiteral {
@@ -206,7 +315,7 @@ extension Parser {
       return parseAttribute(argumentMode: .optional) { parser in
         return .unavailableFromAsyncArguments(parser.parseUnavailableFromAsyncArguments())
       }
-    case .atRethrows:
+    case .rethrows:
       let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
       let (unexpectedBeforeAttributeName, attributeName) = self.expect(.keyword(.rethrows), remapping: .identifier)
       return .attribute(
@@ -221,10 +330,6 @@ extension Parser {
           arena: self.arena
         )
       )
-    case .__objc_bridged, .__raw_doc_comment, ._alwaysEmitConformanceMetadata, ._alwaysEmitIntoClient, ._assemblyVision, ._borrowed, ._compilerInitialized, ._custom, ._disfavoredOverload, ._eagerMove, ._exported, ._fixed_layout, ._frozen, ._hasInitialValue, ._hasMissingDesignatedInitializers, ._hasStorage, ._implementationOnly, ._implicitSelfCapture, ._inheritActorContext, ._inheritsConvenienceInitializers, ._marker, ._moveOnly, ._noAllocation, ._noEagerMove, ._noImplicitCopy, ._noLocks, ._noMetadata, ._nonEphemeral, ._nonoverride, ._objc_non_lazy_realization, ._show_in_interface, ._specializeExtension, ._spiOnly, ._staticInitializeObjCMetadata, ._transparent, ._unsafeInheritExecutor, ._weakLinked, .atReasync, .discardableResult, .dynamicCallable, .dynamicMemberLookup, .frozen, .GKInspectable, .globalActor, .IBAction, .IBDesignable, .IBInspectable, .IBOutlet, .IBSegueAction, .inlinable, .LLDBDebuggerFunction, .main, .noDerivative, .nonobjc, .NSApplicationMain, .NSCopying,
-      .NSManaged, .objcMembers, .preconcurrency, .propertyWrapper, .requires_stored_property_inits, .resultBuilder, .runtimeMetadata, .Sendable, .testable, .typeWrapper, .typeWrapperIgnored, .UIApplicationMain, .unsafe_no_objc_tagged_pointer, .usableFromInline, .warn_unqualified_access,
-      .__synthesized_protocol, ._clangImporterSynthesizedType, ._forbidSerializingReference, ._restatedObjCConformance:
-      return parseAttributeWithoutArguments()
     case nil:
       return parseAttribute(argumentMode: .customAttribute) { parser in
         let arguments = parser.parseArgumentListElements(pattern: .none)

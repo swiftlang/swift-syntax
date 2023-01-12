@@ -158,7 +158,7 @@ extension Parser.Lookahead {
       return
     }
 
-    if let (_, handle) = self.at(anyIn: Parser.DeclarationAttribute.self) {
+    if let (_, handle) = self.at(anyIn: Parser.DeclarationAttributeWithSpecialSyntax.self) {
       // This is a valid decl attribute so they should have put it on the decl
       // instead of the type.
       //

@@ -86,37 +86,6 @@ public let TYPE_ATTR_KINDS = [
 % end
 ]
 
-/// Schema for `DeclAttribute`s:
-///
-/// - Attribute name.
-/// - C++ class name without the 'Attr' suffix
-/// - Options for the attribute, including:
-///    * the declarations the attribute can appear on
-///    * whether duplicates are allowed
-/// - Unique attribute identifier used for serialization. This
-///   can never be changed.
-///
-/// SimpleDeclAttribute is the same, but the class becomes
-/// SimpleDeclAttr<DAK_##NAME> on the C++ side.
-///
-/// Please help ease code review/audits:
-/// - Please place the "OnXYZ" flags together on the next line.
-/// - Please place the non-OnXYZ flags together on the next to last line.
-/// - Please place the unique code number on the last line.
-/// - Please sort attributes by serialization number.
-/// - Please create a "NOTE" comment if a unique number is skipped.
-///
-/// If you're adding a new kind of "attribute" that is spelled without a leading
-/// '@' symbol, add an entry to the `DECL_MODIFIER_KINDS` array instead.
-///
-/// If you're adding a new underscored attribute here, please document it in
-/// docs/ReferenceGuides/UnderscoredAttributes.md.
-public let DECL_ATTR_KINDS: [Attribute] = [
-% for attr in DECL_ATTR_KINDS:
-  ${make_swift_attribute(attr)},
-% end
-]
-
 /// Schema for declaration modifiers:
 ///
 /// - Modifier name.

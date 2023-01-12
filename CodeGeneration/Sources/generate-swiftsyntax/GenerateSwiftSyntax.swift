@@ -50,7 +50,6 @@ struct GenerateSwiftSyntax: ParsableCommand {
     let templates: [TemplateSpec] = [
       TemplateSpec(sourceFile: basicFormatFile, module: swiftBasicFormatDir, filename: "BasicFormat.swift"),
       TemplateSpec(sourceFile: syntaxClassificationFile, module: IDEUtilsDir, filename: "SyntaxClassification.swift"),
-      TemplateSpec(sourceFile: declarationAttributeFile, module: swiftParserDir, filename: "DeclarationAttribute.swift"),
       TemplateSpec(sourceFile: declarationModifierFile, module: swiftParserDir, filename: "DeclarationModifier.swift"),
       TemplateSpec(sourceFile: parserEntryFile, module: swiftParserDir, filename: "Parser+Entry.swift"),
       TemplateSpec(sourceFile: typeAttributeFile, module: swiftParserDir, filename: "TypeAttribute.swift"),

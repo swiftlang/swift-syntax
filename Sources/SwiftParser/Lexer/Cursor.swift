@@ -129,6 +129,19 @@ extension Lexer {
 
 // MARK: - Peeking
 
+/// Essentially a UInt8 that is expressible by integer and string literals.
+struct CharacterByte: ExpressibleByUnicodeScalarLiteral, ExpressibleByIntegerLiteral {
+  let value: UInt8
+
+  init(unicodeScalarLiteral value: Unicode.Scalar) {
+    self.value = UInt8(ascii: Unicode.Scalar(unicodeScalarLiteral: value))
+  }
+
+  init(integerLiteral value: UInt8) {
+    self.value = value
+  }
+}
+
 extension Lexer.Cursor {
   func peek(at offset: Int = 0) -> UInt8? {
     assert(offset >= 0)
@@ -138,24 +151,11 @@ extension Lexer.Cursor {
     return self.input[offset]
   }
 
-  /// Essentially a UInt8 that is expressible by integer and string literals.
-  struct PeekMatch: ExpressibleByUnicodeScalarLiteral, ExpressibleByIntegerLiteral {
-    let value: UInt8
-
-    init(unicodeScalarLiteral value: Unicode.Scalar) {
-      self.value = UInt8(ascii: Unicode.Scalar(unicodeScalarLiteral: value))
-    }
-
-    init(integerLiteral value: UInt8) {
-      self.value = value
-    }
-  }
-
   // MARK: Positive matches
 
   /// Stamped out copy of `peek(at:matches:)` in case we are matching a single
   /// character to avoid construction of an array.
-  func peek(at offset: Int = 0, matches character: PeekMatch) -> Bool {
+  func peek(at offset: Int = 0, matches character: CharacterByte) -> Bool {
     guard let peeked = self.peek(at: offset) else {
       return false
     }
@@ -164,7 +164,7 @@ extension Lexer.Cursor {
 
   /// Stamped out copy of `peek(at:matches:)` in case we are matching two
   /// characters to avoid construction of an array.
-  func peek(at offset: Int = 0, matches character1: PeekMatch, _ character2: PeekMatch) -> Bool {
+  func peek(at offset: Int = 0, matches character1: CharacterByte, _ character2: CharacterByte) -> Bool {
     guard let peeked = self.peek(at: offset) else {
       return false
     }
@@ -174,7 +174,7 @@ extension Lexer.Cursor {
   /// Returns `true` if we are not at the end of the file and the character at
   /// offset `offset` is in `characters`.
   @_disfavoredOverload  // favor the stamped out copies
-  func peek(at offset: Int = 0, matches characters: PeekMatch...) -> Bool {
+  func peek(at offset: Int = 0, matches characters: CharacterByte...) -> Bool {
     guard let peeked = self.peek(at: offset) else {
       return false
     }
@@ -185,7 +185,7 @@ extension Lexer.Cursor {
 
   /// Stamped out copy of `peek(at:doesntMatch:)` in case we are matching two
   /// characters to avoid construction of an array.
-  func peek(at offset: Int = 0, doesntMatch character: PeekMatch) -> Bool {
+  func peek(at offset: Int = 0, doesntMatch character: CharacterByte) -> Bool {
     guard let peeked = self.peek(at: offset) else {
       return false
     }
@@ -194,7 +194,7 @@ extension Lexer.Cursor {
 
   /// Stamped out copy of `peek(at:doesntMatch:)` in case we are matching two
   /// characters to avoid construction of an array.
-  func peek(at offset: Int = 0, doesntMatch character1: PeekMatch, _ character2: PeekMatch) -> Bool {
+  func peek(at offset: Int = 0, doesntMatch character1: CharacterByte, _ character2: CharacterByte) -> Bool {
     guard let peeked = self.peek(at: offset) else {
       return false
     }
@@ -204,11 +204,174 @@ extension Lexer.Cursor {
   /// Returns `true` if we are not at the end of the file and the character at
   /// offset `offset` is not in `characters`.
   @_disfavoredOverload  // favor the stamped out copies
-  func peek(at offset: Int = 0, doesntMatch characters: PeekMatch...) -> Bool {
+  func peek(at offset: Int = 0, doesntMatch characters: CharacterByte...) -> Bool {
     guard let peeked = self.peek(at: offset) else {
       return false
     }
     return characters.allSatisfy { peeked != $0.value }
+  }
+}
+
+// MARK: - Advancing the cursor
+
+extension Lexer.Cursor {
+  /// If there is a character in the input, and return it, advancing the cursor.
+  /// If the end of the input is reached, return `nil`.
+  mutating func advance() -> UInt8? {
+    var input = self.input[...]
+    guard let c = input.popFirst() else {
+      return nil  // end of input
+    }
+    self.previous = c
+    self.input = UnsafeBufferPointer(rebasing: input)
+    return c
+  }
+
+  /// If the current character is `matching`, advance the cursor and return `true`.
+  /// Otherwise, this is a no-op and returns `false`.
+  mutating func advance(matching: CharacterByte) -> Bool {
+    guard self.peek() == matching.value else {
+      return false
+    }
+    _ = self.advance()
+    return true
+  }
+
+  /// If the current character matches `predicate`, consume it and return `true`.
+  /// Otherwise, this is a no-op and returns `false`.
+  mutating func advance(if predicate: (Unicode.Scalar) -> Bool) -> Bool {
+    guard !self.isAtEndOfFile else {
+      return false
+    }
+
+    var tmp = self
+    guard let c = tmp.validateUTF8CharacterAndAdvance() else {
+      return false
+    }
+
+    if predicate(c) {
+      self = tmp
+      return true
+    } else {
+      return false
+    }
+  }
+
+  /// Advance the cursor while `predicate` is satsified.
+  mutating func advance(while predicate: (Unicode.Scalar) -> Bool) {
+    while self.advance(if: predicate) {}
+  }
+
+  /// Advance the cursor to the end of the current line.
+  mutating func advanceToEndOfLine() {
+    while self.peek(doesntMatch: "\n", "\r") {
+      _ = self.advance()
+    }
+  }
+
+  /// Returns `true` if the comment spaned multiple lines and `false` otherwise.
+  /// Assumes that the curser is currently pointing at the `*` of the opening `/*`.
+  mutating func advanceToEndOfSlashStarComment() -> Bool {
+    assert(self.previous == UInt8(ascii: "/"))
+    // Make sure to advance over the * so that we don't incorrectly handle /*/ as
+    // the beginning and end of the comment.
+    let consumedStar = self.advance(matching: "*")
+    assert(consumedStar)
+
+    var depth = 1
+    var isMultiline = false
+
+    while true {
+      switch self.advance() {
+      case UInt8(ascii: "*"):
+        // Check for a '*/'
+        if self.advance(matching: "/") {
+          depth -= 1
+          if depth == 0 {
+            return isMultiline
+          }
+        }
+      case UInt8(ascii: "/"):
+        // Check for a '/*'
+        if self.advance(matching: "*") {
+          depth += 1
+        }
+
+      case UInt8(ascii: "\n"), UInt8(ascii: "\r"):
+        isMultiline = true
+        continue
+      case nil:
+        return isMultiline
+      case .some:
+        continue
+      }
+    }
+  }
+
+  /// If this is the opening delimiter of a raw string literal, return the number
+  /// of `#` in the raw string delimiter.
+  /// Assumes that the parser is currently pointing at the character after the first `#`.
+  /// In other words, the first `#` is expected to already be consumed.
+  mutating func advanceIfOpeningRawStringDelimiter() -> Int? {
+    assert(self.previous == UInt8(ascii: "#"))
+
+    var tmp = self
+    var length = 1
+    while tmp.advance(matching: "#") {
+      length += 1
+    }
+
+    if tmp.peek(matches: #"""#) {
+      self = tmp
+      return length
+    }
+    return nil
+  }
+
+  /// If we are positioned at the start of a multiline string delimiter, consume
+  /// that delimiter and return `true`, otherwise return `false`.
+  ///
+  /// Assumes that the lexer is currently pointing at the character after the first `"`.
+  /// In other words, the `"` is expected to already be consumed.
+  ///
+  /// `openingRawStringDelimiters` are the number of `#` that are preceeding the `"`.
+  /// This is used to disambiguate e.g. `#"""#` as a single-line string literal.
+  /// If we are looking for the closing `"""` of a string literal, this is `nil`.
+  mutating func advanceIfMultilineStringDelimiter(
+    openingRawStringDelimiters: Int?
+  ) -> Bool {
+    assert(self.previous == UInt8(ascii: #"""#))
+    // Test for single-line string literals that resemble multiline delimiter.
+    var sameLineCloseCheck = self
+    _ = sameLineCloseCheck.advance()
+    if let openingRawStringDelimiters, openingRawStringDelimiters != 0 {
+      // Scan if the current line contains `"` followed by `openingRawStringDelimiters` `#` characters
+      while sameLineCloseCheck.peek(doesntMatch: "\r", "\n") {
+        if sameLineCloseCheck.advance(matching: #"""#) {
+          if sameLineCloseCheck.delimiterMatches(customDelimiterLength: openingRawStringDelimiters) {
+            // The string literal is being terminated on a single line. Not a multi-line string literal.
+            return false
+          }
+        } else {
+          _ = sameLineCloseCheck.advance()
+        }
+      }
+    }
+
+    var tmp = self
+    if tmp.advance(matching: #"""#) && tmp.advance(matching: #"""#) {
+      self = tmp
+      return true
+    }
+
+    return false
+  }
+
+  /// Rever the lexer by `offset` bytes. This should only be used by `resetForSplit`.
+  mutating func backUp(by offset: Int) {
+    assert(!self.isAtStartOfFile)
+    self.previous = self.input.baseAddress!.advanced(by: -(offset + 1)).pointee
+    self.input = UnsafeBufferPointer(start: self.input.baseAddress!.advanced(by: -offset), count: self.input.count + offset)
   }
 }
 
@@ -294,154 +457,6 @@ extension Lexer.Cursor {
 }
 
 extension Lexer.Cursor {
-  mutating func backUp(by offset: Int) {
-    assert(!self.isAtStartOfFile)
-    self.previous = self.input.baseAddress!.advanced(by: -(offset + 1)).pointee
-    self.input = UnsafeBufferPointer(start: self.input.baseAddress!.advanced(by: -offset), count: self.input.count + offset)
-  }
-
-  mutating func advance() -> UInt8? {
-    var input = self.input[...]
-    guard let c = input.popFirst() else {
-      return nil  // end of input
-    }
-    self.previous = c
-    self.input = UnsafeBufferPointer(rebasing: input)
-    return c
-  }
-
-  mutating func advance(matching: UInt8) -> UInt8? {
-    guard self.peek() == matching else {
-      return nil
-    }
-    return self.advance()
-  }
-
-  mutating func advance(while predicate: (Unicode.Scalar) -> Bool) {
-    var next = self
-    while !next.isAtEndOfFile,
-      let c = next.validateUTF8CharacterAndAdvance(),
-      predicate(c)
-    {
-      self = next
-    }
-  }
-
-  mutating func advance(if predicate: (Unicode.Scalar) -> Bool) -> Bool {
-    guard !self.isAtEndOfFile else {
-      return false
-    }
-
-    var tmp = self
-    guard let c = tmp.validateUTF8CharacterAndAdvance() else {
-      return false
-    }
-
-    guard predicate(c) else {
-      return false
-    }
-
-    self = tmp
-    return true
-  }
-
-  mutating func advanceToEndOfLine() -> Bool {
-    while true {
-      switch self.peek() {
-      case UInt8(ascii: "\n"):
-        fallthrough
-      case UInt8(ascii: "\r"):
-        return true
-      case nil:
-        return false
-      case .some:
-        _ = self.advance()
-      }
-    }
-  }
-
-  mutating func advanceToEndOfSlashStarComment() -> Bool {
-    // Make sure to advance over the * so that we don't incorrectly handle /*/ as
-    // the beginning and end of the comment.
-    _ = self.advance()
-
-    var depth = 1
-    var isMultiline = false
-
-    while true {
-      switch self.advance() {
-      case UInt8(ascii: "*"):
-        // Check for a '*/'
-        if self.advance(if: { $0 == Unicode.Scalar("/") }) {
-          depth -= 1
-          if depth == 0 {
-            return isMultiline
-          }
-        }
-      case UInt8(ascii: "/"):
-        // Check for a '/*'
-        if self.advance(if: { $0 == Unicode.Scalar("*") }) {
-          depth += 1
-        }
-
-      case UInt8(ascii: "\n"), UInt8(ascii: "\r"):
-        isMultiline = true
-        continue
-      case nil:
-        return isMultiline
-      case .some:
-        continue
-      }
-    }
-  }
-
-  mutating func advanceIfCustomDelimiter() -> Int? {
-    assert(self.previous == UInt8(ascii: "#"))
-
-    var clone = self
-    var length = 1
-    clone.advance(while: { char in
-      let isDelimeter = (char == Unicode.Scalar("#"))
-      if isDelimeter { length += 1 }
-      return isDelimeter
-    })
-
-    guard clone.peek(matches: #"""#) else {
-      return nil
-    }
-    self = clone
-    return length
-  }
-
-  /// advanceIfMultilineDelimiter - Centralized check for multiline delimiter.
-  mutating func advanceIfMultilineDelimiter(
-    _ customDelimiterLen: Int,
-    _ isOpening: Bool = false
-  ) -> Bool {
-    // Test for single-line string literals that resemble multiline delimiter.
-    var tmpPtr = self
-    _ = tmpPtr.advance()
-    if isOpening && customDelimiterLen != 0 {
-      while tmpPtr.peek(doesntMatch: "\r", "\n") {
-        if tmpPtr.advance(if: { $0 == Unicode.Scalar(UInt8(ascii: #"""#)) }) {
-          if tmpPtr.delimiterMatches(customDelimiterLength: customDelimiterLen) {
-            return false
-          }
-          continue
-        }
-        _ = tmpPtr.advance()
-      }
-    }
-
-    tmpPtr = self
-    if (tmpPtr.previous == UInt8(ascii: #"""#) && tmpPtr.advance(matching: UInt8(ascii: #"""#)) != nil && tmpPtr.advance(matching: UInt8(ascii: #"""#)) != nil) {
-      self = tmpPtr
-      return true
-    }
-
-    return false
-  }
-
   mutating func lexStringQuote() -> Lexer.Result {
     func newState(currentState: LexerCursorState, kind: StringLiteralKind) -> LexerCursorState {
       switch currentState {
@@ -463,7 +478,7 @@ extension Lexer.Cursor {
     assert(self.previous == UInt8(ascii: #"""#))
 
     var lookingForMultilineString = self
-    if lookingForMultilineString.advance(matching: UInt8(ascii: #"""#)) != nil, lookingForMultilineString.advance(matching: UInt8(ascii: #"""#)) != nil {
+    if lookingForMultilineString.advance(matching: #"""#), lookingForMultilineString.advance(matching: #"""#) {
       if case .afterRawStringDelimiter(delimiterLength: let delimiterLength) = state {
         // If this is a string literal, check if we have the closing delimiter on the same line to correctly parse things like `#"""#` as a single line string containing a quote.
         var isSingleLineString = lookingForMultilineString
@@ -593,7 +608,7 @@ extension Lexer.Cursor {
     }
 
     var tmpPtr = self
-    while tmpPtr.advance(matching: UInt8(ascii: "#")) != nil {
+    while tmpPtr.advance(matching: "#") {
 
     }
 
@@ -648,22 +663,19 @@ extension Lexer.Cursor {
         return last
 
       case UInt8(ascii: "#"):
-        guard !inStringLiteral(), let delim = curPtr.advanceIfCustomDelimiter() else {
+        guard !inStringLiteral(), let delim = curPtr.advanceIfOpeningRawStringDelimiter() else {
           continue
         }
-        let quote = curPtr.advance(matching: UInt8(ascii: #"""#))
+        let quoteConsumed = curPtr.advance(matching: #"""#)
         customDelimiterLen = delim
-        assert(
-          quote != nil,
-          "advanceIfCustomDelimiter() must stop in front of a quote"
-        )
+        assert(quoteConsumed, "advanceIfOpeningRawStringDelimiter() must stop in front of a quote")
         fallthrough
 
       case UInt8(ascii: #"""#), UInt8(ascii: #"'"#):
         if (!inStringLiteral()) {
           // Open string literal.
           openDelimiters.append(curPtr.previous)
-          allowNewline.append(curPtr.advanceIfMultilineDelimiter(customDelimiterLen, true))
+          allowNewline.append(curPtr.advanceIfMultilineStringDelimiter(openingRawStringDelimiters: customDelimiterLen))
           customDelimiter.append(customDelimiterLen)
           continue
         }
@@ -676,7 +688,7 @@ extension Lexer.Cursor {
         }
 
         // Multi-line string can only be closed by '"""'.
-        if (allowNewline.last! && !curPtr.advanceIfMultilineDelimiter(customDelimiterLen)) {
+        if (allowNewline.last! && !curPtr.advanceIfMultilineStringDelimiter(openingRawStringDelimiters: nil)) {
           continue
         }
 
@@ -754,7 +766,8 @@ extension Lexer.Cursor {
             return last
           }
           // Advance to the end of the comment.
-          if curPtr.advanceToEndOfLine() {
+          curPtr.advanceToEndOfLine()
+          if curPtr.isAtEndOfFile {
             _ = curPtr.advance()
           }
         }
@@ -869,7 +882,7 @@ extension Lexer.Cursor {
         return Lexer.Result(.rawStringDelimiter, newState: .normal)
       }
       // Try lex a raw string literal.
-      if let customDelimiterLength = self.advanceIfCustomDelimiter() {
+      if let customDelimiterLength = self.advanceIfOpeningRawStringDelimiter() {
         return Lexer.Result(.rawStringDelimiter, newState: .afterRawStringDelimiter(delimiterLength: customDelimiterLength))
       }
 
@@ -1007,7 +1020,7 @@ extension Lexer.Cursor {
       case UInt8(ascii: "/"):
         switch self.peek() {
         case UInt8(ascii: "/"):
-          _ = self.advanceToEndOfLine()
+          self.advanceToEndOfLine()
           continue
         case UInt8(ascii: "*"):
           _ = self.advanceToEndOfSlashStarComment()
@@ -1019,7 +1032,7 @@ extension Lexer.Cursor {
         guard start.isAtStartOfFile, self.advance(if: { $0 == "!" }) else {
           break
         }
-        _ = self.advanceToEndOfLine()
+        self.advanceToEndOfLine()
         continue
       case UInt8(ascii: "<"), UInt8(ascii: ">"):
         guard self.tryLexConflictMarker(start: start) else {
@@ -1209,10 +1222,10 @@ extension Lexer.Cursor {
         }
 
         var tmpPtr = self
-        if isMultilineString && !tmpPtr.advanceIfMultilineDelimiter(customDelimiterLen) {
+        if isMultilineString && !tmpPtr.advanceIfMultilineStringDelimiter(openingRawStringDelimiters: nil) {
           return .success(Unicode.Scalar(UInt8(ascii: #"""#)))
         }
-        if customDelimiterLen > 0 && !tmpPtr.delimiterMatches(customDelimiterLength: customDelimiterLen, /*IsClosing=*/ isClosing: true) {
+        if customDelimiterLen > 0 && !tmpPtr.delimiterMatches(customDelimiterLength: customDelimiterLen, isClosing: true) {
           return .success(Unicode.Scalar(UInt8(ascii: #"""#)))
         }
         self = tmpPtr
@@ -2037,7 +2050,7 @@ extension Lexer.Cursor {
 
     // Skip ahead to the end of the marker.
     if !self.isAtEndOfFile {
-      _ = self.advanceToEndOfLine()
+      self.advanceToEndOfLine()
     }
     return true
   }
@@ -2092,11 +2105,11 @@ extension Lexer.Cursor {
     var poundCount = 0
     var parenCount = 0
 
-    while tmp.advance(matching: UInt8(ascii: "#")) != nil {
+    while tmp.advance(matching: "#") {
       poundCount += 1
     }
 
-    guard tmp.advance(matching: UInt8(ascii: "/")) != nil else {
+    guard tmp.advance(matching: "/") else {
       return nil
     }
 
@@ -2146,7 +2159,7 @@ extension Lexer.Cursor {
 
         var endLex = tmp
         for _ in 0..<poundCount {
-          guard endLex.advance(matching: UInt8(ascii: "#")) != nil else {
+          guard endLex.advance(matching: "#") else {
             continue DELIMITLOOP
           }
         }

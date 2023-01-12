@@ -86,7 +86,7 @@ public struct TriviaParser {
         // file. We don't know if this trivia is at the start of the file, but
         // we believe that the lexer lexed it accordingly.
         if position == .leading && pieces.isEmpty && cursor.advance(if: { $0 == "!" }) {
-          _ = cursor.advanceToEndOfLine()
+          cursor.advanceToEndOfLine()
           pieces.append(.shebang(start.textUpTo(cursor)))
           continue
         }
@@ -173,7 +173,7 @@ extension Lexer.Cursor {
     // "//...": .lineComment.
     assert(self.previous == UInt8(ascii: "/") && self.peek(matches: "/"))
     let isDocComment = self.input.count > 1 && self.peek(at: 1, matches: "/")
-    _ = self.advanceToEndOfLine()
+    self.advanceToEndOfLine()
     let contents = start.textUpTo(self)
     return isDocComment ? .docLineComment(contents) : .lineComment(contents)
   }

@@ -108,10 +108,7 @@ public let ATTRIBUTE_NODES: [Node] = [
                  Child(name: "ExposeAttributeArguments",
                        kind: "ExposeAttributeArguments"),
                  Child(name: "OriginallyDefinedInArguments",
-                       kind: "OriginallyDefinedInArguments"),
-                 Child(name: "TokenList",
-                       kind: "TokenList",
-                       collectionElementName: "Token")
+                       kind: "OriginallyDefinedInArguments")
                ]),
          Child(name: "RightParen",
                kind: "RightParenToken",

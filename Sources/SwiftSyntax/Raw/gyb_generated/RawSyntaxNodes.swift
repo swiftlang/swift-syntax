@@ -10450,10 +10450,9 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol {
     case `opaqueReturnTypeOfAttributeArguments`(RawOpaqueReturnTypeOfAttributeArgumentsSyntax)
     case `exposeAttributeArguments`(RawExposeAttributeArgumentsSyntax)
     case `originallyDefinedInArguments`(RawOriginallyDefinedInArgumentsSyntax)
-    case `tokenList`(RawTokenListSyntax)
 
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
-      return RawTokenSyntax.isKindOf(raw) || RawStringLiteralExprSyntax.isKindOf(raw) || RawAvailabilitySpecListSyntax.isKindOf(raw) || RawSpecializeAttributeSpecListSyntax.isKindOf(raw) || RawObjCSelectorSyntax.isKindOf(raw) || RawImplementsAttributeArgumentsSyntax.isKindOf(raw) || RawDifferentiableAttributeArgumentsSyntax.isKindOf(raw) || RawDerivativeRegistrationAttributeArgumentsSyntax.isKindOf(raw) || RawNamedAttributeStringArgumentSyntax.isKindOf(raw) || RawBackDeployAttributeSpecListSyntax.isKindOf(raw) || RawConventionAttributeArgumentsSyntax.isKindOf(raw) || RawConventionWitnessMethodAttributeArgumentsSyntax.isKindOf(raw) || RawOpaqueReturnTypeOfAttributeArgumentsSyntax.isKindOf(raw) || RawExposeAttributeArgumentsSyntax.isKindOf(raw) || RawOriginallyDefinedInArgumentsSyntax.isKindOf(raw) || RawTokenListSyntax.isKindOf(raw)
+      return RawTokenSyntax.isKindOf(raw) || RawStringLiteralExprSyntax.isKindOf(raw) || RawAvailabilitySpecListSyntax.isKindOf(raw) || RawSpecializeAttributeSpecListSyntax.isKindOf(raw) || RawObjCSelectorSyntax.isKindOf(raw) || RawImplementsAttributeArgumentsSyntax.isKindOf(raw) || RawDifferentiableAttributeArgumentsSyntax.isKindOf(raw) || RawDerivativeRegistrationAttributeArgumentsSyntax.isKindOf(raw) || RawNamedAttributeStringArgumentSyntax.isKindOf(raw) || RawBackDeployAttributeSpecListSyntax.isKindOf(raw) || RawConventionAttributeArgumentsSyntax.isKindOf(raw) || RawConventionWitnessMethodAttributeArgumentsSyntax.isKindOf(raw) || RawOpaqueReturnTypeOfAttributeArgumentsSyntax.isKindOf(raw) || RawExposeAttributeArgumentsSyntax.isKindOf(raw) || RawOriginallyDefinedInArgumentsSyntax.isKindOf(raw)
     }
 
     public var raw: RawSyntax {
@@ -10473,7 +10472,6 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol {
       case .opaqueReturnTypeOfAttributeArguments(let node): return node.raw
       case .exposeAttributeArguments(let node): return node.raw
       case .originallyDefinedInArguments(let node): return node.raw
-      case .tokenList(let node): return node.raw
       }
     }
 
@@ -10536,10 +10534,6 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol {
       }
       if let node = RawOriginallyDefinedInArgumentsSyntax(other) {
         self = .originallyDefinedInArguments(node)
-        return
-      }
-      if let node = RawTokenListSyntax(other) {
-        self = .tokenList(node)
         return
       }
       return nil

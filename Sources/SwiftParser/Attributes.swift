@@ -211,51 +211,41 @@ extension Parser {
       return parseAttribute(hasRequiredArguments: true) { parser in
         return .originallyDefinedInArguments(parser.parseOriginallyDefinedInArguments())
       }
-    case .__objc_bridged, .__raw_doc_comment, ._alwaysEmitConformanceMetadata, ._alwaysEmitIntoClient, ._assemblyVision, ._borrowed, ._compilerInitialized, ._custom, ._disfavoredOverload, ._eagerMove, ._exported, ._fixed_layout, ._frozen, ._hasInitialValue, ._hasMissingDesignatedInitializers, ._hasStorage, ._implementationOnly, ._implicitSelfCapture, ._inheritActorContext, ._inheritsConvenienceInitializers, ._marker, ._moveOnly, ._noAllocation, ._noEagerMove, ._noImplicitCopy, ._noLocks, ._noMetadata, ._nonEphemeral, ._nonoverride, ._objc_non_lazy_realization, ._show_in_interface, ._specializeExtension, ._spiOnly, ._staticInitializeObjCMetadata, ._transparent, ._unsafeInheritExecutor, ._weakLinked, .atReasync, .atRethrows, .discardableResult, .dynamicCallable, .dynamicMemberLookup, .frozen, .GKInspectable, .globalActor, .IBAction, .IBDesignable, .IBInspectable, .IBOutlet, .IBSegueAction, .inlinable, .LLDBDebuggerFunction, .main, .noDerivative, .nonobjc, .NSApplicationMain, .NSCopying,
-      .NSManaged, .objcMembers, .preconcurrency, .propertyWrapper, .requires_stored_property_inits, .resultBuilder, .runtimeMetadata, .Sendable, .testable, .typeWrapper, .typeWrapperIgnored, .UIApplicationMain, .unsafe_no_objc_tagged_pointer, .usableFromInline, .warn_unqualified_access:
-      // No arguments
-      break
-    case .__synthesized_protocol, ._clangImporterSynthesizedType, ._forbidSerializingReference, ._restatedObjCConformance:
-      // Virtual attributes that should not be parsed
-      break
-    // MARK: - Other
     case ._unavailableFromAsync:
-      // @_unavailableFromAsync(message: "Use Task.runInline from a sync context to begin an async context.")
-      break
-    }
-
-    let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-    let (unexpectedBeforeIdent, ident) = self.expectIdentifierOrRethrows()
-    let leftParen = self.consume(if: .leftParen)
-    let arg: RawAttributeSyntax.Argument?
-    let unexpectedBeforeRightParen: RawUnexpectedNodesSyntax?
-    let rightParen: RawTokenSyntax?
-    if leftParen != nil {
-      var args = [RawTokenSyntax]()
-      var loopProgress = LoopProgressCondition()
-      while !self.at(any: [.eof, .rightParen]) && loopProgress.evaluate(currentToken) {
-        args.append(self.consumeAnyToken())
+      return parseAttribute(hasRequiredArguments: false) { parser in
+        let (unexpectedBeforeLabel, label) = parser.expect(.keyword(.message), remapping: .identifier)
+        let (unexpectedBeforeColon, colon) = parser.expect(.colon)
+        let (unexpectedBeforeMessage, message) = parser.expect(.stringLiteral)
+        return .namedAttributeString(
+          RawNamedAttributeStringArgumentSyntax(
+            unexpectedBeforeLabel,
+            nameTok: label,
+            unexpectedBeforeColon,
+            colon: colon,
+            unexpectedBeforeMessage,
+            stringOrDeclname: .string(message),
+            arena: parser.arena
+          )
+        )
       }
-      arg = .tokenList(RawTokenListSyntax(elements: args, arena: self.arena))
-      (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
-    } else {
-      arg = nil
-      unexpectedBeforeRightParen = nil
-      rightParen = nil
-    }
-    return .attribute(
-      RawAttributeSyntax(
-        unexpectedBeforeAtSign,
-        atSignToken: atSign,
-        unexpectedBeforeIdent,
-        attributeName: ident,
-        leftParen: leftParen,
-        argument: arg,
-        unexpectedBeforeRightParen,
-        rightParen: rightParen,
-        arena: self.arena
+    case .__objc_bridged, .__raw_doc_comment, ._alwaysEmitConformanceMetadata, ._alwaysEmitIntoClient, ._assemblyVision, ._borrowed, ._compilerInitialized, ._custom, ._disfavoredOverload, ._eagerMove, ._exported, ._fixed_layout, ._frozen, ._hasInitialValue, ._hasMissingDesignatedInitializers, ._hasStorage, ._implementationOnly, ._implicitSelfCapture, ._inheritActorContext, ._inheritsConvenienceInitializers, ._marker, ._moveOnly, ._noAllocation, ._noEagerMove, ._noImplicitCopy, ._noLocks, ._noMetadata, ._nonEphemeral, ._nonoverride, ._objc_non_lazy_realization, ._show_in_interface, ._specializeExtension, ._spiOnly, ._staticInitializeObjCMetadata, ._transparent, ._unsafeInheritExecutor, ._weakLinked, .atReasync, .atRethrows, .discardableResult, .dynamicCallable, .dynamicMemberLookup, .frozen, .GKInspectable, .globalActor, .IBAction, .IBDesignable, .IBInspectable, .IBOutlet, .IBSegueAction, .inlinable, .LLDBDebuggerFunction, .main, .noDerivative, .nonobjc, .NSApplicationMain, .NSCopying,
+      .NSManaged, .objcMembers, .preconcurrency, .propertyWrapper, .requires_stored_property_inits, .resultBuilder, .runtimeMetadata, .Sendable, .testable, .typeWrapper, .typeWrapperIgnored, .UIApplicationMain, .unsafe_no_objc_tagged_pointer, .usableFromInline, .warn_unqualified_access,
+      .__synthesized_protocol, ._clangImporterSynthesizedType, ._forbidSerializingReference, ._restatedObjCConformance:
+      let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
+      let (unexpectedBeforeAttributeName, attributeName) = self.expectIdentifierOrRethrows()
+      return .attribute(
+        RawAttributeSyntax(
+          unexpectedBeforeAtSign,
+          atSignToken: atSign,
+          unexpectedBeforeAttributeName,
+          attributeName: attributeName,
+          leftParen: nil,
+          argument: nil,
+          rightParen: nil,
+          arena: self.arena
+        )
       )
-    )
+    }
   }
 
   mutating func parseCustomAttribute() -> RawCustomAttributeSyntax {

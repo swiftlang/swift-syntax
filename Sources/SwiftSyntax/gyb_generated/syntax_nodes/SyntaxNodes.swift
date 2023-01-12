@@ -12302,7 +12302,6 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
     case `opaqueReturnTypeOfAttributeArguments`(OpaqueReturnTypeOfAttributeArgumentsSyntax)
     case `exposeAttributeArguments`(ExposeAttributeArgumentsSyntax)
     case `originallyDefinedInArguments`(OriginallyDefinedInArgumentsSyntax)
-    case `tokenList`(TokenListSyntax)
     public var _syntaxNode: Syntax {
       switch self {
       case .token(let node): return node._syntaxNode
@@ -12320,7 +12319,6 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
       case .opaqueReturnTypeOfAttributeArguments(let node): return node._syntaxNode
       case .exposeAttributeArguments(let node): return node._syntaxNode
       case .originallyDefinedInArguments(let node): return node._syntaxNode
-      case .tokenList(let node): return node._syntaxNode
       }
     }
     init(_ data: SyntaxData) { self.init(Syntax(data))! }
@@ -12368,9 +12366,6 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
     }
     public init(_ node: OriginallyDefinedInArgumentsSyntax) {
       self = .originallyDefinedInArguments(node)
-    }
-    public init(_ node: TokenListSyntax) {
-      self = .tokenList(node)
     }
     public init?<S: SyntaxProtocol>(_ node: S) {
       if let node = node.as(TokenSyntax.self) {
@@ -12433,10 +12428,6 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
         self = .originallyDefinedInArguments(node)
         return
       }
-      if let node = node.as(TokenListSyntax.self) {
-        self = .tokenList(node)
-        return
-      }
       return nil
     }
 
@@ -12457,7 +12448,6 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
         .node(OpaqueReturnTypeOfAttributeArgumentsSyntax.self),
         .node(ExposeAttributeArgumentsSyntax.self),
         .node(OriginallyDefinedInArgumentsSyntax.self),
-        .node(TokenListSyntax.self),
       ])
     }
   }

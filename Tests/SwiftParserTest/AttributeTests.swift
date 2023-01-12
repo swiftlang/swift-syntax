@@ -418,4 +418,54 @@ final class AttributeTests: XCTestCase {
       """
     )
   }
+
+  func testUnavailableFromAsync() {
+    AssertParse(
+      """
+      @_unavailableFromAsync
+      func foo() {}
+      """
+    )
+
+    AssertParse(
+      """
+      @_unavailableFromAsync(message: "abc")
+      func foo() {}
+      """
+    )
+
+    AssertParse(
+      """
+      @_unavailableFromAsync(1️⃣nope: "abc")
+      func foo() {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected 'message' in attribute argument"),
+        DiagnosticSpec(message: "unexpected code 'nope' before attribute argument"),
+      ]
+    )
+
+    AssertParse(
+      """
+      @_unavailableFromAsync(message1️⃣= "abc")
+      func foo() {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected ':' and value in attribute argument"),
+        DiagnosticSpec(message: #"unexpected code '= "abc"' in attribute"#),
+      ]
+    )
+
+    AssertParse(
+      """
+      @_unavailableFromAsync(message: 1️⃣abc)
+      func foo() {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected value in attribute argument"),
+        DiagnosticSpec(message: "unexpected code 'abc' in attribute"),
+      ]
+    )
+
+  }
 }

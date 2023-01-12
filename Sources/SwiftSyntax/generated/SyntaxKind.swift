@@ -184,6 +184,8 @@ public enum SyntaxKind {
   
   case doStmt
   
+  case dynamicReplacementArguments
+  
   case editorPlaceholderExpr
   
   case enumCaseDecl
@@ -339,8 +341,6 @@ public enum SyntaxKind {
   case multipleTrailingClosureElementList
   
   case multipleTrailingClosureElement
-  
-  case namedAttributeStringArgument
   
   case namedOpaqueReturnType
   
@@ -499,6 +499,10 @@ public enum SyntaxKind {
   case typeInitializerClause
   
   case typealiasDecl
+  
+  case unavailableFromAsyncArguments
+  
+  case underscorePrivateAttributeArguments
   
   case unexpectedNodes
   

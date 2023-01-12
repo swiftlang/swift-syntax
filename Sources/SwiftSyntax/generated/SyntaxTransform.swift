@@ -436,6 +436,11 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: DoStmtSyntax) -> ResultType
   
+  /// Visiting `DynamicReplacementArgumentsSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: DynamicReplacementArgumentsSyntax) -> ResultType
+  
   /// Visiting `EditorPlaceholderExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -825,11 +830,6 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: MultipleTrailingClosureElementSyntax) -> ResultType
-  
-  /// Visiting `NamedAttributeStringArgumentSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: NamedAttributeStringArgumentSyntax) -> ResultType
   
   /// Visiting `NamedOpaqueReturnTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -1225,6 +1225,16 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: TypealiasDeclSyntax) -> ResultType
+  
+  /// Visiting `UnavailableFromAsyncArgumentsSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: UnavailableFromAsyncArgumentsSyntax) -> ResultType
+  
+  /// Visiting `UnderscorePrivateAttributeArgumentsSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: UnderscorePrivateAttributeArgumentsSyntax) -> ResultType
   
   /// Visiting `UnexpectedNodesSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -1888,6 +1898,13 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
+  /// Visiting `DynamicReplacementArgumentsSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: DynamicReplacementArgumentsSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
   /// Visiting `EditorPlaceholderExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -2431,13 +2448,6 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: MultipleTrailingClosureElementSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
-  /// Visiting `NamedAttributeStringArgumentSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: NamedAttributeStringArgumentSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -2994,6 +3004,20 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
+  /// Visiting `UnavailableFromAsyncArgumentsSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: UnavailableFromAsyncArgumentsSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting `UnderscorePrivateAttributeArgumentsSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: UnderscorePrivateAttributeArgumentsSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
   /// Visiting `UnexpectedNodesSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -3269,6 +3293,8 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .doStmt(let derived): 
       return visit(derived)
+    case .dynamicReplacementArguments(let derived): 
+      return visit(derived)
     case .editorPlaceholderExpr(let derived): 
       return visit(derived)
     case .enumCaseDecl(let derived): 
@@ -3424,8 +3450,6 @@ extension SyntaxTransformVisitor {
     case .multipleTrailingClosureElementList(let derived): 
       return visit(derived)
     case .multipleTrailingClosureElement(let derived): 
-      return visit(derived)
-    case .namedAttributeStringArgument(let derived): 
       return visit(derived)
     case .namedOpaqueReturnType(let derived): 
       return visit(derived)
@@ -3584,6 +3608,10 @@ extension SyntaxTransformVisitor {
     case .typeInitializerClause(let derived): 
       return visit(derived)
     case .typealiasDecl(let derived): 
+      return visit(derived)
+    case .unavailableFromAsyncArguments(let derived): 
+      return visit(derived)
+    case .underscorePrivateAttributeArguments(let derived): 
       return visit(derived)
     case .unexpectedNodes(let derived): 
       return visit(derived)

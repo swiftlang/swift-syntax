@@ -5111,41 +5111,6 @@ public enum SyntaxFactory {
       return TargetFunctionEntrySyntax(data)
     }
   }
-  @available(*, deprecated, message: "Use initializer on NamedAttributeStringArgumentSyntax")
-  public static func makeNamedAttributeStringArgument(_ unexpectedBeforeNameTok: UnexpectedNodesSyntax? = nil, nameTok: TokenSyntax, _ unexpectedBetweenNameTokAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndStringOrDeclname: UnexpectedNodesSyntax? = nil, stringOrDeclname: Syntax, _ unexpectedAfterStringOrDeclname: UnexpectedNodesSyntax? = nil) -> NamedAttributeStringArgumentSyntax {
-    let layout: [RawSyntax?] = [
-      unexpectedBeforeNameTok?.raw,
-      nameTok.raw,
-      unexpectedBetweenNameTokAndColon?.raw,
-      colon.raw,
-      unexpectedBetweenColonAndStringOrDeclname?.raw,
-      stringOrDeclname.raw,
-      unexpectedAfterStringOrDeclname?.raw,
-    ]
-    return withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.namedAttributeStringArgument,
-        from: layout, arena: arena)
-      let data = SyntaxData.forRoot(raw)
-      return NamedAttributeStringArgumentSyntax(data)
-    }
-  }
-
-  @available(*, deprecated, message: "Use initializer on NamedAttributeStringArgumentSyntax")
-  public static func makeBlankNamedAttributeStringArgument(presence: SourcePresence = .present) -> NamedAttributeStringArgumentSyntax {
-    return withExtendedLifetime(SyntaxArena()) { arena in
-      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .namedAttributeStringArgument,
-        from: [
-        nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.unknown(""), arena: arena),
-        nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena),
-        nil,
-        RawSyntax.makeEmptyLayout(kind: SyntaxKind.missing, arena: arena),
-        nil,
-      ], arena: arena))
-      return NamedAttributeStringArgumentSyntax(data)
-    }
-  }
   @available(*, deprecated, message: "Use initializer on DeclNameSyntax")
   public static func makeDeclName(_ unexpectedBeforeDeclBaseName: UnexpectedNodesSyntax? = nil, declBaseName: TokenSyntax, _ unexpectedBetweenDeclBaseNameAndDeclNameArguments: UnexpectedNodesSyntax? = nil, declNameArguments: DeclNameArgumentsSyntax?, _ unexpectedAfterDeclNameArguments: UnexpectedNodesSyntax? = nil) -> DeclNameSyntax {
     let layout: [RawSyntax?] = [
@@ -5796,6 +5761,111 @@ public enum SyntaxFactory {
         nil,
       ], arena: arena))
       return OriginallyDefinedInArgumentsSyntax(data)
+    }
+  }
+  @available(*, deprecated, message: "Use initializer on UnderscorePrivateAttributeArgumentsSyntax")
+  public static func makeUnderscorePrivateAttributeArguments(_ unexpectedBeforeSourceFileLabel: UnexpectedNodesSyntax? = nil, sourceFileLabel: TokenSyntax, _ unexpectedBetweenSourceFileLabelAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndFilename: UnexpectedNodesSyntax? = nil, filename: TokenSyntax, _ unexpectedAfterFilename: UnexpectedNodesSyntax? = nil) -> UnderscorePrivateAttributeArgumentsSyntax {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeSourceFileLabel?.raw,
+      sourceFileLabel.raw,
+      unexpectedBetweenSourceFileLabelAndColon?.raw,
+      colon.raw,
+      unexpectedBetweenColonAndFilename?.raw,
+      filename.raw,
+      unexpectedAfterFilename?.raw,
+    ]
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.underscorePrivateAttributeArguments,
+        from: layout, arena: arena)
+      let data = SyntaxData.forRoot(raw)
+      return UnderscorePrivateAttributeArgumentsSyntax(data)
+    }
+  }
+
+  @available(*, deprecated, message: "Use initializer on UnderscorePrivateAttributeArgumentsSyntax")
+  public static func makeBlankUnderscorePrivateAttributeArguments(presence: SourcePresence = .present) -> UnderscorePrivateAttributeArgumentsSyntax {
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .underscorePrivateAttributeArguments,
+        from: [
+        nil,
+        RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena),
+        nil,
+        RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena),
+        nil,
+        RawSyntax.makeMissingToken(kind: TokenKind.stringLiteral(""), arena: arena),
+        nil,
+      ], arena: arena))
+      return UnderscorePrivateAttributeArgumentsSyntax(data)
+    }
+  }
+  @available(*, deprecated, message: "Use initializer on DynamicReplacementArgumentsSyntax")
+  public static func makeDynamicReplacementArguments(_ unexpectedBeforeForLabel: UnexpectedNodesSyntax? = nil, forLabel: TokenSyntax, _ unexpectedBetweenForLabelAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndDeclname: UnexpectedNodesSyntax? = nil, declname: DeclNameSyntax, _ unexpectedAfterDeclname: UnexpectedNodesSyntax? = nil) -> DynamicReplacementArgumentsSyntax {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeForLabel?.raw,
+      forLabel.raw,
+      unexpectedBetweenForLabelAndColon?.raw,
+      colon.raw,
+      unexpectedBetweenColonAndDeclname?.raw,
+      declname.raw,
+      unexpectedAfterDeclname?.raw,
+    ]
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.dynamicReplacementArguments,
+        from: layout, arena: arena)
+      let data = SyntaxData.forRoot(raw)
+      return DynamicReplacementArgumentsSyntax(data)
+    }
+  }
+
+  @available(*, deprecated, message: "Use initializer on DynamicReplacementArgumentsSyntax")
+  public static func makeBlankDynamicReplacementArguments(presence: SourcePresence = .present) -> DynamicReplacementArgumentsSyntax {
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .dynamicReplacementArguments,
+        from: [
+        nil,
+        RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena),
+        nil,
+        RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena),
+        nil,
+        RawSyntax.makeEmptyLayout(kind: SyntaxKind.declName, arena: arena),
+        nil,
+      ], arena: arena))
+      return DynamicReplacementArgumentsSyntax(data)
+    }
+  }
+  @available(*, deprecated, message: "Use initializer on UnavailableFromAsyncArgumentsSyntax")
+  public static func makeUnavailableFromAsyncArguments(_ unexpectedBeforeMessageLabel: UnexpectedNodesSyntax? = nil, messageLabel: TokenSyntax, _ unexpectedBetweenMessageLabelAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndMessage: UnexpectedNodesSyntax? = nil, message: TokenSyntax, _ unexpectedAfterMessage: UnexpectedNodesSyntax? = nil) -> UnavailableFromAsyncArgumentsSyntax {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeMessageLabel?.raw,
+      messageLabel.raw,
+      unexpectedBetweenMessageLabelAndColon?.raw,
+      colon.raw,
+      unexpectedBetweenColonAndMessage?.raw,
+      message.raw,
+      unexpectedAfterMessage?.raw,
+    ]
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.unavailableFromAsyncArguments,
+        from: layout, arena: arena)
+      let data = SyntaxData.forRoot(raw)
+      return UnavailableFromAsyncArgumentsSyntax(data)
+    }
+  }
+
+  @available(*, deprecated, message: "Use initializer on UnavailableFromAsyncArgumentsSyntax")
+  public static func makeBlankUnavailableFromAsyncArguments(presence: SourcePresence = .present) -> UnavailableFromAsyncArgumentsSyntax {
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .unavailableFromAsyncArguments,
+        from: [
+        nil,
+        RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena),
+        nil,
+        RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena),
+        nil,
+        RawSyntax.makeMissingToken(kind: TokenKind.stringLiteral(""), arena: arena),
+        nil,
+      ], arena: arena))
+      return UnavailableFromAsyncArgumentsSyntax(data)
     }
   }
   @available(*, deprecated, message: "Use initializer on LabeledStmtSyntax")

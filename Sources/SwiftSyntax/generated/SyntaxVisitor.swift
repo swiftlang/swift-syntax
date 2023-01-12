@@ -1024,6 +1024,18 @@ open class SyntaxVisitor {
   open func visitPost(_ node: DoStmtSyntax) {
   }
   
+  /// Visiting `DynamicReplacementArgumentsSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: DynamicReplacementArgumentsSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting `DynamicReplacementArgumentsSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: DynamicReplacementArgumentsSyntax) {
+  }
+  
   /// Visiting `EditorPlaceholderExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -1958,18 +1970,6 @@ open class SyntaxVisitor {
   /// The function called after visiting `MultipleTrailingClosureElementSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: MultipleTrailingClosureElementSyntax) {
-  }
-  
-  /// Visiting `NamedAttributeStringArgumentSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: NamedAttributeStringArgumentSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting `NamedAttributeStringArgumentSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: NamedAttributeStringArgumentSyntax) {
   }
   
   /// Visiting `NamedOpaqueReturnTypeSyntax` specifically.
@@ -2918,6 +2918,30 @@ open class SyntaxVisitor {
   /// The function called after visiting `TypealiasDeclSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: TypealiasDeclSyntax) {
+  }
+  
+  /// Visiting `UnavailableFromAsyncArgumentsSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: UnavailableFromAsyncArgumentsSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting `UnavailableFromAsyncArgumentsSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: UnavailableFromAsyncArgumentsSyntax) {
+  }
+  
+  /// Visiting `UnderscorePrivateAttributeArgumentsSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: UnderscorePrivateAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting `UnderscorePrivateAttributeArgumentsSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: UnderscorePrivateAttributeArgumentsSyntax) {
   }
   
   /// Visiting `UnexpectedNodesSyntax` specifically.
@@ -4026,6 +4050,17 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplDynamicReplacementArgumentsSyntax(_ data: SyntaxData) {
+    let node = DynamicReplacementArgumentsSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplEditorPlaceholderExprSyntax(_ data: SyntaxData) {
     let node = EditorPlaceholderExprSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -4875,17 +4910,6 @@ open class SyntaxVisitor {
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplMultipleTrailingClosureElementSyntax(_ data: SyntaxData) {
     let node = MultipleTrailingClosureElementSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplNamedAttributeStringArgumentSyntax(_ data: SyntaxData) {
-    let node = NamedAttributeStringArgumentSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -5764,6 +5788,28 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplUnavailableFromAsyncArgumentsSyntax(_ data: SyntaxData) {
+    let node = UnavailableFromAsyncArgumentsSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplUnderscorePrivateAttributeArgumentsSyntax(_ data: SyntaxData) {
+    let node = UnderscorePrivateAttributeArgumentsSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplUnexpectedNodesSyntax(_ data: SyntaxData) {
     let node = UnexpectedNodesSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -6101,6 +6147,8 @@ open class SyntaxVisitor {
       visitImplDiscardAssignmentExprSyntax(data)
     case .doStmt: 
       visitImplDoStmtSyntax(data)
+    case .dynamicReplacementArguments: 
+      visitImplDynamicReplacementArgumentsSyntax(data)
     case .editorPlaceholderExpr: 
       visitImplEditorPlaceholderExprSyntax(data)
     case .enumCaseDecl: 
@@ -6257,8 +6305,6 @@ open class SyntaxVisitor {
       visitImplMultipleTrailingClosureElementListSyntax(data)
     case .multipleTrailingClosureElement: 
       visitImplMultipleTrailingClosureElementSyntax(data)
-    case .namedAttributeStringArgument: 
-      visitImplNamedAttributeStringArgumentSyntax(data)
     case .namedOpaqueReturnType: 
       visitImplNamedOpaqueReturnTypeSyntax(data)
     case .nilLiteralExpr: 
@@ -6417,6 +6463,10 @@ open class SyntaxVisitor {
       visitImplTypeInitializerClauseSyntax(data)
     case .typealiasDecl: 
       visitImplTypealiasDeclSyntax(data)
+    case .unavailableFromAsyncArguments: 
+      visitImplUnavailableFromAsyncArgumentsSyntax(data)
+    case .underscorePrivateAttributeArguments: 
+      visitImplUnderscorePrivateAttributeArgumentsSyntax(data)
     case .unexpectedNodes: 
       visitImplUnexpectedNodesSyntax(data)
     case .unresolvedAsExpr: 

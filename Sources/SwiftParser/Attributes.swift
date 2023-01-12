@@ -124,45 +124,11 @@ extension Parser {
       }
     case ._private:
       return parseAttribute(hasRequiredArguments: true) { parser in
-        let (unexpectedBeforeLabel, label) = parser.expectIdentifier(keywordRecovery: true)
-        let (unexpectedBeforeColon, colon) = parser.expect(.colon)
-        let filename = parser.consumeAnyToken()
-        return .namedAttributeString(
-          RawNamedAttributeStringArgumentSyntax(
-            unexpectedBeforeLabel,
-            nameTok: label,
-            unexpectedBeforeColon,
-            colon: colon,
-            stringOrDeclname: .string(filename),
-            arena: parser.arena
-          )
-        )
+        return .underscorePrivateAttributeArguments(parser.parseUnderscorePrivateAttributeArguments())
       }
     case ._dynamicReplacement:
       return parseAttribute(hasRequiredArguments: true) { parser in
-        let (unexpectedBeforeLabel, label) = parser.expect(.keyword(.for), remapping: .identifier)
-        let (unexpectedBeforeColon, colon) = parser.expect(.colon)
-        let base: RawTokenSyntax
-        let args: RawDeclNameArgumentsSyntax?
-        if label.isMissing && colon.isMissing && parser.currentToken.isAtStartOfLine {
-          base = RawTokenSyntax(missing: .identifier, arena: parser.arena)
-          args = nil
-        } else {
-          (base, args) = parser.parseDeclNameRef([
-            .zeroArgCompoundNames, .keywordsUsingSpecialNames, .operators,
-          ])
-        }
-        let method = RawDeclNameSyntax(declBaseName: base, declNameArguments: args, arena: parser.arena)
-        return .namedAttributeString(
-          RawNamedAttributeStringArgumentSyntax(
-            unexpectedBeforeLabel,
-            nameTok: label,
-            unexpectedBeforeColon,
-            colon: colon,
-            stringOrDeclname: .declname(method),
-            arena: parser.arena
-          )
-        )
+        return .dynamicReplacementArguments(parser.parseDynamicReplacementArguments())
       }
     case ._spi, ._effects, ._objcRuntimeName, ._projectedValueProperty, ._swift_native_objc_runtime_base, ._typeEraser, ._documentation, ._optimize, ._nonSendable, .exclusivity, .inline, ._alignment:
       // Attributes that take a single token as argument. Some examples of these include:
@@ -217,20 +183,7 @@ extension Parser {
       }
     case ._unavailableFromAsync:
       return parseAttribute(hasRequiredArguments: false) { parser in
-        let (unexpectedBeforeLabel, label) = parser.expect(.keyword(.message), remapping: .identifier)
-        let (unexpectedBeforeColon, colon) = parser.expect(.colon)
-        let (unexpectedBeforeMessage, message) = parser.expect(.stringLiteral)
-        return .namedAttributeString(
-          RawNamedAttributeStringArgumentSyntax(
-            unexpectedBeforeLabel,
-            nameTok: label,
-            unexpectedBeforeColon,
-            colon: colon,
-            unexpectedBeforeMessage,
-            stringOrDeclname: .string(message),
-            arena: parser.arena
-          )
-        )
+        return .unavailableFromAsyncArguments(parser.parseUnavailableFromAsyncArguments())
       }
     case .__objc_bridged, .__raw_doc_comment, ._alwaysEmitConformanceMetadata, ._alwaysEmitIntoClient, ._assemblyVision, ._borrowed, ._compilerInitialized, ._custom, ._disfavoredOverload, ._eagerMove, ._exported, ._fixed_layout, ._frozen, ._hasInitialValue, ._hasMissingDesignatedInitializers, ._hasStorage, ._implementationOnly, ._implicitSelfCapture, ._inheritActorContext, ._inheritsConvenienceInitializers, ._marker, ._moveOnly, ._noAllocation, ._noEagerMove, ._noImplicitCopy, ._noLocks, ._noMetadata, ._nonEphemeral, ._nonoverride, ._objc_non_lazy_realization, ._show_in_interface, ._specializeExtension, ._spiOnly, ._staticInitializeObjCMetadata, ._transparent, ._unsafeInheritExecutor, ._weakLinked, .atReasync, .atRethrows, .discardableResult, .dynamicCallable, .dynamicMemberLookup, .frozen, .GKInspectable, .globalActor, .IBAction, .IBDesignable, .IBInspectable, .IBOutlet, .IBSegueAction, .inlinable, .LLDBDebuggerFunction, .main, .noDerivative, .nonobjc, .NSApplicationMain, .NSCopying,
       .NSManaged, .objcMembers, .preconcurrency, .propertyWrapper, .requires_stored_property_inits, .resultBuilder, .runtimeMetadata, .Sendable, .testable, .typeWrapper, .typeWrapperIgnored, .UIApplicationMain, .unsafe_no_objc_tagged_pointer, .usableFromInline, .warn_unqualified_access,
@@ -961,6 +914,66 @@ extension Parser {
       unexpectedBeforeComma,
       comma: comma,
       platforms: RawAvailabilityVersionRestrictionListSyntax(elements: platforms, arena: self.arena),
+      arena: self.arena
+    )
+  }
+}
+
+extension Parser {
+  mutating func parseUnderscorePrivateAttributeArguments() -> RawUnderscorePrivateAttributeArgumentsSyntax {
+    let (unexpectedBeforeLabel, label) = self.expect(.keyword(.sourceFile), remapping: .identifier)
+    let (unexpectedBeforeColon, colon) = self.expect(.colon)
+    let (unexpectedBeforeFilename, filename) = self.expect(.stringLiteral)
+    return RawUnderscorePrivateAttributeArgumentsSyntax(
+      unexpectedBeforeLabel,
+      sourceFileLabel: label,
+      unexpectedBeforeColon,
+      colon: colon,
+      unexpectedBeforeFilename,
+      filename: filename,
+      arena: self.arena
+    )
+  }
+}
+
+extension Parser {
+  mutating func parseDynamicReplacementArguments() -> RawDynamicReplacementArgumentsSyntax {
+    let (unexpectedBeforeLabel, label) = self.expect(.keyword(.for), remapping: .identifier)
+    let (unexpectedBeforeColon, colon) = self.expect(.colon)
+    let base: RawTokenSyntax
+    let args: RawDeclNameArgumentsSyntax?
+    if label.isMissing && colon.isMissing && self.currentToken.isAtStartOfLine {
+      base = RawTokenSyntax(missing: .identifier, arena: self.arena)
+      args = nil
+    } else {
+      (base, args) = self.parseDeclNameRef([
+        .zeroArgCompoundNames, .keywordsUsingSpecialNames, .operators,
+      ])
+    }
+    let method = RawDeclNameSyntax(declBaseName: base, declNameArguments: args, arena: self.arena)
+    return RawDynamicReplacementArgumentsSyntax(
+      unexpectedBeforeLabel,
+      forLabel: label,
+      unexpectedBeforeColon,
+      colon: colon,
+      declname: method,
+      arena: self.arena
+    )
+  }
+}
+
+extension Parser {
+  mutating func parseUnavailableFromAsyncArguments() -> RawUnavailableFromAsyncArgumentsSyntax {
+    let (unexpectedBeforeLabel, label) = self.expect(.keyword(.message), remapping: .identifier)
+    let (unexpectedBeforeColon, colon) = self.expect(.colon)
+    let (unexpectedBeforeMessage, message) = self.expect(.stringLiteral)
+    return RawUnavailableFromAsyncArgumentsSyntax(
+      unexpectedBeforeLabel,
+      messageLabel: label,
+      unexpectedBeforeColon,
+      colon: colon,
+      unexpectedBeforeMessage,
+      message: message,
       arena: self.arena
     )
   }

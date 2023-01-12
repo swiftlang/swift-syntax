@@ -12294,13 +12294,15 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
     case `implementsArguments`(ImplementsAttributeArgumentsSyntax)
     case `differentiableArguments`(DifferentiableAttributeArgumentsSyntax)
     case `derivativeRegistrationArguments`(DerivativeRegistrationAttributeArgumentsSyntax)
-    case `namedAttributeString`(NamedAttributeStringArgumentSyntax)
     case `backDeployArguments`(BackDeployAttributeSpecListSyntax)
     case `conventionArguments`(ConventionAttributeArgumentsSyntax)
     case `conventionWitnessMethodArguments`(ConventionWitnessMethodAttributeArgumentsSyntax)
     case `opaqueReturnTypeOfAttributeArguments`(OpaqueReturnTypeOfAttributeArgumentsSyntax)
     case `exposeAttributeArguments`(ExposeAttributeArgumentsSyntax)
     case `originallyDefinedInArguments`(OriginallyDefinedInArgumentsSyntax)
+    case `underscorePrivateAttributeArguments`(UnderscorePrivateAttributeArgumentsSyntax)
+    case `dynamicReplacementArguments`(DynamicReplacementArgumentsSyntax)
+    case `unavailableFromAsyncArguments`(UnavailableFromAsyncArgumentsSyntax)
     public var _syntaxNode: Syntax {
       switch self {
       case .token(let node): return node._syntaxNode
@@ -12310,13 +12312,15 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
       case .implementsArguments(let node): return node._syntaxNode
       case .differentiableArguments(let node): return node._syntaxNode
       case .derivativeRegistrationArguments(let node): return node._syntaxNode
-      case .namedAttributeString(let node): return node._syntaxNode
       case .backDeployArguments(let node): return node._syntaxNode
       case .conventionArguments(let node): return node._syntaxNode
       case .conventionWitnessMethodArguments(let node): return node._syntaxNode
       case .opaqueReturnTypeOfAttributeArguments(let node): return node._syntaxNode
       case .exposeAttributeArguments(let node): return node._syntaxNode
       case .originallyDefinedInArguments(let node): return node._syntaxNode
+      case .underscorePrivateAttributeArguments(let node): return node._syntaxNode
+      case .dynamicReplacementArguments(let node): return node._syntaxNode
+      case .unavailableFromAsyncArguments(let node): return node._syntaxNode
       }
     }
     init(_ data: SyntaxData) { self.init(Syntax(data))! }
@@ -12341,9 +12345,6 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
     public init(_ node: DerivativeRegistrationAttributeArgumentsSyntax) {
       self = .derivativeRegistrationArguments(node)
     }
-    public init(_ node: NamedAttributeStringArgumentSyntax) {
-      self = .namedAttributeString(node)
-    }
     public init(_ node: BackDeployAttributeSpecListSyntax) {
       self = .backDeployArguments(node)
     }
@@ -12361,6 +12362,15 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
     }
     public init(_ node: OriginallyDefinedInArgumentsSyntax) {
       self = .originallyDefinedInArguments(node)
+    }
+    public init(_ node: UnderscorePrivateAttributeArgumentsSyntax) {
+      self = .underscorePrivateAttributeArguments(node)
+    }
+    public init(_ node: DynamicReplacementArgumentsSyntax) {
+      self = .dynamicReplacementArguments(node)
+    }
+    public init(_ node: UnavailableFromAsyncArgumentsSyntax) {
+      self = .unavailableFromAsyncArguments(node)
     }
     public init?<S: SyntaxProtocol>(_ node: S) {
       if let node = node.as(TokenSyntax.self) {
@@ -12391,10 +12401,6 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
         self = .derivativeRegistrationArguments(node)
         return
       }
-      if let node = node.as(NamedAttributeStringArgumentSyntax.self) {
-        self = .namedAttributeString(node)
-        return
-      }
       if let node = node.as(BackDeployAttributeSpecListSyntax.self) {
         self = .backDeployArguments(node)
         return
@@ -12419,6 +12425,18 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
         self = .originallyDefinedInArguments(node)
         return
       }
+      if let node = node.as(UnderscorePrivateAttributeArgumentsSyntax.self) {
+        self = .underscorePrivateAttributeArguments(node)
+        return
+      }
+      if let node = node.as(DynamicReplacementArgumentsSyntax.self) {
+        self = .dynamicReplacementArguments(node)
+        return
+      }
+      if let node = node.as(UnavailableFromAsyncArgumentsSyntax.self) {
+        self = .unavailableFromAsyncArguments(node)
+        return
+      }
       return nil
     }
 
@@ -12431,13 +12449,15 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
         .node(ImplementsAttributeArgumentsSyntax.self),
         .node(DifferentiableAttributeArgumentsSyntax.self),
         .node(DerivativeRegistrationAttributeArgumentsSyntax.self),
-        .node(NamedAttributeStringArgumentSyntax.self),
         .node(BackDeployAttributeSpecListSyntax.self),
         .node(ConventionAttributeArgumentsSyntax.self),
         .node(ConventionWitnessMethodAttributeArgumentsSyntax.self),
         .node(OpaqueReturnTypeOfAttributeArgumentsSyntax.self),
         .node(ExposeAttributeArgumentsSyntax.self),
         .node(OriginallyDefinedInArgumentsSyntax.self),
+        .node(UnderscorePrivateAttributeArgumentsSyntax.self),
+        .node(DynamicReplacementArgumentsSyntax.self),
+        .node(UnavailableFromAsyncArgumentsSyntax.self),
       ])
     }
   }
@@ -13727,290 +13747,6 @@ extension TargetFunctionEntrySyntax: CustomReflectable {
       "unexpectedBetweenDeclnameAndTrailingComma": unexpectedBetweenDeclnameAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "trailingComma": trailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "unexpectedAfterTrailingComma": unexpectedAfterTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-    ])
-  }
-}
-
-// MARK: - NamedAttributeStringArgumentSyntax
-
-/// 
-/// The argument for the `@_dynamic_replacement` or `@_private`
-/// attribute of the form `for: "function()"` or `sourceFile:
-/// "Src.swift"`
-/// 
-public struct NamedAttributeStringArgumentSyntax: SyntaxProtocol, SyntaxHashable {
-  public enum StringOrDeclname: SyntaxChildChoices {
-    case `string`(TokenSyntax)
-    case `declname`(DeclNameSyntax)
-    public var _syntaxNode: Syntax {
-      switch self {
-      case .string(let node): return node._syntaxNode
-      case .declname(let node): return node._syntaxNode
-      }
-    }
-    init(_ data: SyntaxData) { self.init(Syntax(data))! }
-    public init(_ node: TokenSyntax) {
-      self = .string(node)
-    }
-    public init(_ node: DeclNameSyntax) {
-      self = .declname(node)
-    }
-    public init?<S: SyntaxProtocol>(_ node: S) {
-      if let node = node.as(TokenSyntax.self) {
-        self = .string(node)
-        return
-      }
-      if let node = node.as(DeclNameSyntax.self) {
-        self = .declname(node)
-        return
-      }
-      return nil
-    }
-
-    public static var structure: SyntaxNodeStructure {
-      return .choices([
-        .node(TokenSyntax.self),
-        .node(DeclNameSyntax.self),
-      ])
-    }
-  }
-
-  public let _syntaxNode: Syntax
-
-  public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .namedAttributeStringArgument else { return nil }
-    self._syntaxNode = node._syntaxNode
-  }
-
-  /// Creates a `NamedAttributeStringArgumentSyntax` node from the given `SyntaxData`. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
-  internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .namedAttributeStringArgument)
-    self._syntaxNode = Syntax(data)
-  }
-
-  public init(
-    leadingTrivia: Trivia? = nil,
-    _ unexpectedBeforeNameTok: UnexpectedNodesSyntax? = nil,
-    nameTok: TokenSyntax,
-    _ unexpectedBetweenNameTokAndColon: UnexpectedNodesSyntax? = nil,
-    colon: TokenSyntax = .colonToken(),
-    _ unexpectedBetweenColonAndStringOrDeclname: UnexpectedNodesSyntax? = nil,
-    stringOrDeclname: StringOrDeclname,
-    _ unexpectedAfterStringOrDeclname: UnexpectedNodesSyntax? = nil,
-    trailingTrivia: Trivia? = nil
-  ) {
-    // Extend the lifetime of all parameters so their arenas don't get destroyed 
-    // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeNameTok, nameTok, unexpectedBetweenNameTokAndColon, colon, unexpectedBetweenColonAndStringOrDeclname, stringOrDeclname, unexpectedAfterStringOrDeclname))) { (arena, _) in
-      let layout: [RawSyntax?] = [
-        unexpectedBeforeNameTok?.raw,
-        nameTok.raw,
-        unexpectedBetweenNameTokAndColon?.raw,
-        colon.raw,
-        unexpectedBetweenColonAndStringOrDeclname?.raw,
-        stringOrDeclname.raw,
-        unexpectedAfterStringOrDeclname?.raw,
-      ]
-      let raw = RawSyntax.makeLayout(
-        kind: SyntaxKind.namedAttributeStringArgument, from: layout, arena: arena,
-        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
-  }
-
-  public var unexpectedBeforeNameTok: UnexpectedNodesSyntax? {
-    get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withUnexpectedBeforeNameTok(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBeforeNameTok` replaced.
-  /// - param newChild: The new `unexpectedBeforeNameTok` to replace the node's
-  ///                   current `unexpectedBeforeNameTok`, if present.
-  public func withUnexpectedBeforeNameTok(_ newChild: UnexpectedNodesSyntax?) -> NamedAttributeStringArgumentSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-    return NamedAttributeStringArgumentSyntax(newData)
-  }
-
-  /// The label of the argument
-  public var nameTok: TokenSyntax {
-    get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return TokenSyntax(childData!)
-    }
-    set(value) {
-      self = withNameTok(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `nameTok` replaced.
-  /// - param newChild: The new `nameTok` to replace the node's
-  ///                   current `nameTok`, if present.
-  public func withNameTok(_ newChild: TokenSyntax) -> NamedAttributeStringArgumentSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-    return NamedAttributeStringArgumentSyntax(newData)
-  }
-
-  public var unexpectedBetweenNameTokAndColon: UnexpectedNodesSyntax? {
-    get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withUnexpectedBetweenNameTokAndColon(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenNameTokAndColon` replaced.
-  /// - param newChild: The new `unexpectedBetweenNameTokAndColon` to replace the node's
-  ///                   current `unexpectedBetweenNameTokAndColon`, if present.
-  public func withUnexpectedBetweenNameTokAndColon(_ newChild: UnexpectedNodesSyntax?) -> NamedAttributeStringArgumentSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-    return NamedAttributeStringArgumentSyntax(newData)
-  }
-
-  /// The colon separating the label and the value
-  public var colon: TokenSyntax {
-    get {
-      let childData = data.child(at: 3, parent: Syntax(self))
-      return TokenSyntax(childData!)
-    }
-    set(value) {
-      self = withColon(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `colon` replaced.
-  /// - param newChild: The new `colon` to replace the node's
-  ///                   current `colon`, if present.
-  public func withColon(_ newChild: TokenSyntax) -> NamedAttributeStringArgumentSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-    return NamedAttributeStringArgumentSyntax(newData)
-  }
-
-  public var unexpectedBetweenColonAndStringOrDeclname: UnexpectedNodesSyntax? {
-    get {
-      let childData = data.child(at: 4, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withUnexpectedBetweenColonAndStringOrDeclname(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenColonAndStringOrDeclname` replaced.
-  /// - param newChild: The new `unexpectedBetweenColonAndStringOrDeclname` to replace the node's
-  ///                   current `unexpectedBetweenColonAndStringOrDeclname`, if present.
-  public func withUnexpectedBetweenColonAndStringOrDeclname(_ newChild: UnexpectedNodesSyntax?) -> NamedAttributeStringArgumentSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-    return NamedAttributeStringArgumentSyntax(newData)
-  }
-
-  public var stringOrDeclname: StringOrDeclname {
-    get {
-      let childData = data.child(at: 5, parent: Syntax(self))
-      return StringOrDeclname(childData!)
-    }
-    set(value) {
-      self = withStringOrDeclname(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `stringOrDeclname` replaced.
-  /// - param newChild: The new `stringOrDeclname` to replace the node's
-  ///                   current `stringOrDeclname`, if present.
-  public func withStringOrDeclname(_ newChild: StringOrDeclname) -> NamedAttributeStringArgumentSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
-    return NamedAttributeStringArgumentSyntax(newData)
-  }
-
-  public var unexpectedAfterStringOrDeclname: UnexpectedNodesSyntax? {
-    get {
-      let childData = data.child(at: 6, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withUnexpectedAfterStringOrDeclname(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedAfterStringOrDeclname` replaced.
-  /// - param newChild: The new `unexpectedAfterStringOrDeclname` to replace the node's
-  ///                   current `unexpectedAfterStringOrDeclname`, if present.
-  public func withUnexpectedAfterStringOrDeclname(_ newChild: UnexpectedNodesSyntax?) -> NamedAttributeStringArgumentSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
-    return NamedAttributeStringArgumentSyntax(newData)
-  }
-
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-      \Self.unexpectedBeforeNameTok,
-      \Self.nameTok,
-      \Self.unexpectedBetweenNameTokAndColon,
-      \Self.colon,
-      \Self.unexpectedBetweenColonAndStringOrDeclname,
-      \Self.stringOrDeclname,
-      \Self.unexpectedAfterStringOrDeclname,
-    ])
-  }
-
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "label"
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    case 5:
-      return "value"
-    case 6:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension NamedAttributeStringArgumentSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-      "unexpectedBeforeNameTok": unexpectedBeforeNameTok.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "nameTok": Syntax(nameTok).asProtocol(SyntaxProtocol.self),
-      "unexpectedBetweenNameTokAndColon": unexpectedBetweenNameTokAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "colon": Syntax(colon).asProtocol(SyntaxProtocol.self),
-      "unexpectedBetweenColonAndStringOrDeclname": unexpectedBetweenColonAndStringOrDeclname.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "stringOrDeclname": Syntax(stringOrDeclname).asProtocol(SyntaxProtocol.self),
-      "unexpectedAfterStringOrDeclname": unexpectedAfterStringOrDeclname.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -18565,6 +18301,738 @@ extension OriginallyDefinedInArgumentsSyntax: CustomReflectable {
       "unexpectedBetweenCommaAndPlatforms": unexpectedBetweenCommaAndPlatforms.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "platforms": Syntax(platforms).asProtocol(SyntaxProtocol.self),
       "unexpectedAfterPlatforms": unexpectedAfterPlatforms.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+    ])
+  }
+}
+
+// MARK: - UnderscorePrivateAttributeArgumentsSyntax
+
+/// 
+/// The arguments for the '@_private' attribute
+/// 
+public struct UnderscorePrivateAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .underscorePrivateAttributeArguments else { return nil }
+    self._syntaxNode = node._syntaxNode
+  }
+
+  /// Creates a `UnderscorePrivateAttributeArgumentsSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .underscorePrivateAttributeArguments)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeSourceFileLabel: UnexpectedNodesSyntax? = nil,
+    sourceFileLabel: TokenSyntax = .identifier("sourceFile"),
+    _ unexpectedBetweenSourceFileLabelAndColon: UnexpectedNodesSyntax? = nil,
+    colon: TokenSyntax = .colonToken(),
+    _ unexpectedBetweenColonAndFilename: UnexpectedNodesSyntax? = nil,
+    filename: TokenSyntax,
+    _ unexpectedAfterFilename: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed 
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeSourceFileLabel, sourceFileLabel, unexpectedBetweenSourceFileLabelAndColon, colon, unexpectedBetweenColonAndFilename, filename, unexpectedAfterFilename))) { (arena, _) in
+      let layout: [RawSyntax?] = [
+        unexpectedBeforeSourceFileLabel?.raw,
+        sourceFileLabel.raw,
+        unexpectedBetweenSourceFileLabelAndColon?.raw,
+        colon.raw,
+        unexpectedBetweenColonAndFilename?.raw,
+        filename.raw,
+        unexpectedAfterFilename?.raw,
+      ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.underscorePrivateAttributeArguments, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+
+  public var unexpectedBeforeSourceFileLabel: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 0, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBeforeSourceFileLabel(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBeforeSourceFileLabel` replaced.
+  /// - param newChild: The new `unexpectedBeforeSourceFileLabel` to replace the node's
+  ///                   current `unexpectedBeforeSourceFileLabel`, if present.
+  public func withUnexpectedBeforeSourceFileLabel(_ newChild: UnexpectedNodesSyntax?) -> UnderscorePrivateAttributeArgumentsSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
+    return UnderscorePrivateAttributeArgumentsSyntax(newData)
+  }
+
+  public var sourceFileLabel: TokenSyntax {
+    get {
+      let childData = data.child(at: 1, parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withSourceFileLabel(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `sourceFileLabel` replaced.
+  /// - param newChild: The new `sourceFileLabel` to replace the node's
+  ///                   current `sourceFileLabel`, if present.
+  public func withSourceFileLabel(_ newChild: TokenSyntax) -> UnderscorePrivateAttributeArgumentsSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild.raw
+    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
+    return UnderscorePrivateAttributeArgumentsSyntax(newData)
+  }
+
+  public var unexpectedBetweenSourceFileLabelAndColon: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 2, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenSourceFileLabelAndColon(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenSourceFileLabelAndColon` replaced.
+  /// - param newChild: The new `unexpectedBetweenSourceFileLabelAndColon` to replace the node's
+  ///                   current `unexpectedBetweenSourceFileLabelAndColon`, if present.
+  public func withUnexpectedBetweenSourceFileLabelAndColon(_ newChild: UnexpectedNodesSyntax?) -> UnderscorePrivateAttributeArgumentsSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
+    return UnderscorePrivateAttributeArgumentsSyntax(newData)
+  }
+
+  public var colon: TokenSyntax {
+    get {
+      let childData = data.child(at: 3, parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withColon(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `colon` replaced.
+  /// - param newChild: The new `colon` to replace the node's
+  ///                   current `colon`, if present.
+  public func withColon(_ newChild: TokenSyntax) -> UnderscorePrivateAttributeArgumentsSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild.raw
+    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
+    return UnderscorePrivateAttributeArgumentsSyntax(newData)
+  }
+
+  public var unexpectedBetweenColonAndFilename: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 4, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenColonAndFilename(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenColonAndFilename` replaced.
+  /// - param newChild: The new `unexpectedBetweenColonAndFilename` to replace the node's
+  ///                   current `unexpectedBetweenColonAndFilename`, if present.
+  public func withUnexpectedBetweenColonAndFilename(_ newChild: UnexpectedNodesSyntax?) -> UnderscorePrivateAttributeArgumentsSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
+    return UnderscorePrivateAttributeArgumentsSyntax(newData)
+  }
+
+  public var filename: TokenSyntax {
+    get {
+      let childData = data.child(at: 5, parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withFilename(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `filename` replaced.
+  /// - param newChild: The new `filename` to replace the node's
+  ///                   current `filename`, if present.
+  public func withFilename(_ newChild: TokenSyntax) -> UnderscorePrivateAttributeArgumentsSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild.raw
+    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
+    return UnderscorePrivateAttributeArgumentsSyntax(newData)
+  }
+
+  public var unexpectedAfterFilename: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 6, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterFilename(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterFilename` replaced.
+  /// - param newChild: The new `unexpectedAfterFilename` to replace the node's
+  ///                   current `unexpectedAfterFilename`, if present.
+  public func withUnexpectedAfterFilename(_ newChild: UnexpectedNodesSyntax?) -> UnderscorePrivateAttributeArgumentsSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
+    return UnderscorePrivateAttributeArgumentsSyntax(newData)
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeSourceFileLabel,
+      \Self.sourceFileLabel,
+      \Self.unexpectedBetweenSourceFileLabelAndColon,
+      \Self.colon,
+      \Self.unexpectedBetweenColonAndFilename,
+      \Self.filename,
+      \Self.unexpectedAfterFilename,
+    ])
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    case 5:
+      return nil
+    case 6:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
+}
+
+extension UnderscorePrivateAttributeArgumentsSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "unexpectedBeforeSourceFileLabel": unexpectedBeforeSourceFileLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "sourceFileLabel": Syntax(sourceFileLabel).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenSourceFileLabelAndColon": unexpectedBetweenSourceFileLabelAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "colon": Syntax(colon).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenColonAndFilename": unexpectedBetweenColonAndFilename.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "filename": Syntax(filename).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterFilename": unexpectedAfterFilename.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+    ])
+  }
+}
+
+// MARK: - DynamicReplacementArgumentsSyntax
+
+/// 
+/// The arguments for the '@_dynamicReplacement' attribute
+/// 
+public struct DynamicReplacementArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .dynamicReplacementArguments else { return nil }
+    self._syntaxNode = node._syntaxNode
+  }
+
+  /// Creates a `DynamicReplacementArgumentsSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .dynamicReplacementArguments)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeForLabel: UnexpectedNodesSyntax? = nil,
+    forLabel: TokenSyntax = .identifier("for"),
+    _ unexpectedBetweenForLabelAndColon: UnexpectedNodesSyntax? = nil,
+    colon: TokenSyntax = .colonToken(),
+    _ unexpectedBetweenColonAndDeclname: UnexpectedNodesSyntax? = nil,
+    declname: DeclNameSyntax,
+    _ unexpectedAfterDeclname: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed 
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeForLabel, forLabel, unexpectedBetweenForLabelAndColon, colon, unexpectedBetweenColonAndDeclname, declname, unexpectedAfterDeclname))) { (arena, _) in
+      let layout: [RawSyntax?] = [
+        unexpectedBeforeForLabel?.raw,
+        forLabel.raw,
+        unexpectedBetweenForLabelAndColon?.raw,
+        colon.raw,
+        unexpectedBetweenColonAndDeclname?.raw,
+        declname.raw,
+        unexpectedAfterDeclname?.raw,
+      ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.dynamicReplacementArguments, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+
+  public var unexpectedBeforeForLabel: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 0, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBeforeForLabel(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBeforeForLabel` replaced.
+  /// - param newChild: The new `unexpectedBeforeForLabel` to replace the node's
+  ///                   current `unexpectedBeforeForLabel`, if present.
+  public func withUnexpectedBeforeForLabel(_ newChild: UnexpectedNodesSyntax?) -> DynamicReplacementArgumentsSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
+    return DynamicReplacementArgumentsSyntax(newData)
+  }
+
+  public var forLabel: TokenSyntax {
+    get {
+      let childData = data.child(at: 1, parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withForLabel(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `forLabel` replaced.
+  /// - param newChild: The new `forLabel` to replace the node's
+  ///                   current `forLabel`, if present.
+  public func withForLabel(_ newChild: TokenSyntax) -> DynamicReplacementArgumentsSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild.raw
+    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
+    return DynamicReplacementArgumentsSyntax(newData)
+  }
+
+  public var unexpectedBetweenForLabelAndColon: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 2, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenForLabelAndColon(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenForLabelAndColon` replaced.
+  /// - param newChild: The new `unexpectedBetweenForLabelAndColon` to replace the node's
+  ///                   current `unexpectedBetweenForLabelAndColon`, if present.
+  public func withUnexpectedBetweenForLabelAndColon(_ newChild: UnexpectedNodesSyntax?) -> DynamicReplacementArgumentsSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
+    return DynamicReplacementArgumentsSyntax(newData)
+  }
+
+  public var colon: TokenSyntax {
+    get {
+      let childData = data.child(at: 3, parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withColon(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `colon` replaced.
+  /// - param newChild: The new `colon` to replace the node's
+  ///                   current `colon`, if present.
+  public func withColon(_ newChild: TokenSyntax) -> DynamicReplacementArgumentsSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild.raw
+    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
+    return DynamicReplacementArgumentsSyntax(newData)
+  }
+
+  public var unexpectedBetweenColonAndDeclname: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 4, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenColonAndDeclname(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenColonAndDeclname` replaced.
+  /// - param newChild: The new `unexpectedBetweenColonAndDeclname` to replace the node's
+  ///                   current `unexpectedBetweenColonAndDeclname`, if present.
+  public func withUnexpectedBetweenColonAndDeclname(_ newChild: UnexpectedNodesSyntax?) -> DynamicReplacementArgumentsSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
+    return DynamicReplacementArgumentsSyntax(newData)
+  }
+
+  public var declname: DeclNameSyntax {
+    get {
+      let childData = data.child(at: 5, parent: Syntax(self))
+      return DeclNameSyntax(childData!)
+    }
+    set(value) {
+      self = withDeclname(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `declname` replaced.
+  /// - param newChild: The new `declname` to replace the node's
+  ///                   current `declname`, if present.
+  public func withDeclname(_ newChild: DeclNameSyntax) -> DynamicReplacementArgumentsSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild.raw
+    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
+    return DynamicReplacementArgumentsSyntax(newData)
+  }
+
+  public var unexpectedAfterDeclname: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 6, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterDeclname(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterDeclname` replaced.
+  /// - param newChild: The new `unexpectedAfterDeclname` to replace the node's
+  ///                   current `unexpectedAfterDeclname`, if present.
+  public func withUnexpectedAfterDeclname(_ newChild: UnexpectedNodesSyntax?) -> DynamicReplacementArgumentsSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
+    return DynamicReplacementArgumentsSyntax(newData)
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeForLabel,
+      \Self.forLabel,
+      \Self.unexpectedBetweenForLabelAndColon,
+      \Self.colon,
+      \Self.unexpectedBetweenColonAndDeclname,
+      \Self.declname,
+      \Self.unexpectedAfterDeclname,
+    ])
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    case 5:
+      return nil
+    case 6:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
+}
+
+extension DynamicReplacementArgumentsSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "unexpectedBeforeForLabel": unexpectedBeforeForLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "forLabel": Syntax(forLabel).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenForLabelAndColon": unexpectedBetweenForLabelAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "colon": Syntax(colon).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenColonAndDeclname": unexpectedBetweenColonAndDeclname.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "declname": Syntax(declname).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterDeclname": unexpectedAfterDeclname.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+    ])
+  }
+}
+
+// MARK: - UnavailableFromAsyncArgumentsSyntax
+
+/// 
+/// The arguments for the '@_unavailableFromAsync' attribute
+/// 
+public struct UnavailableFromAsyncArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .unavailableFromAsyncArguments else { return nil }
+    self._syntaxNode = node._syntaxNode
+  }
+
+  /// Creates a `UnavailableFromAsyncArgumentsSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .unavailableFromAsyncArguments)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeMessageLabel: UnexpectedNodesSyntax? = nil,
+    messageLabel: TokenSyntax = .identifier("message"),
+    _ unexpectedBetweenMessageLabelAndColon: UnexpectedNodesSyntax? = nil,
+    colon: TokenSyntax = .colonToken(),
+    _ unexpectedBetweenColonAndMessage: UnexpectedNodesSyntax? = nil,
+    message: TokenSyntax,
+    _ unexpectedAfterMessage: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed 
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeMessageLabel, messageLabel, unexpectedBetweenMessageLabelAndColon, colon, unexpectedBetweenColonAndMessage, message, unexpectedAfterMessage))) { (arena, _) in
+      let layout: [RawSyntax?] = [
+        unexpectedBeforeMessageLabel?.raw,
+        messageLabel.raw,
+        unexpectedBetweenMessageLabelAndColon?.raw,
+        colon.raw,
+        unexpectedBetweenColonAndMessage?.raw,
+        message.raw,
+        unexpectedAfterMessage?.raw,
+      ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.unavailableFromAsyncArguments, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+
+  public var unexpectedBeforeMessageLabel: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 0, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBeforeMessageLabel(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBeforeMessageLabel` replaced.
+  /// - param newChild: The new `unexpectedBeforeMessageLabel` to replace the node's
+  ///                   current `unexpectedBeforeMessageLabel`, if present.
+  public func withUnexpectedBeforeMessageLabel(_ newChild: UnexpectedNodesSyntax?) -> UnavailableFromAsyncArgumentsSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
+    return UnavailableFromAsyncArgumentsSyntax(newData)
+  }
+
+  public var messageLabel: TokenSyntax {
+    get {
+      let childData = data.child(at: 1, parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withMessageLabel(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `messageLabel` replaced.
+  /// - param newChild: The new `messageLabel` to replace the node's
+  ///                   current `messageLabel`, if present.
+  public func withMessageLabel(_ newChild: TokenSyntax) -> UnavailableFromAsyncArgumentsSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild.raw
+    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
+    return UnavailableFromAsyncArgumentsSyntax(newData)
+  }
+
+  public var unexpectedBetweenMessageLabelAndColon: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 2, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenMessageLabelAndColon(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenMessageLabelAndColon` replaced.
+  /// - param newChild: The new `unexpectedBetweenMessageLabelAndColon` to replace the node's
+  ///                   current `unexpectedBetweenMessageLabelAndColon`, if present.
+  public func withUnexpectedBetweenMessageLabelAndColon(_ newChild: UnexpectedNodesSyntax?) -> UnavailableFromAsyncArgumentsSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
+    return UnavailableFromAsyncArgumentsSyntax(newData)
+  }
+
+  public var colon: TokenSyntax {
+    get {
+      let childData = data.child(at: 3, parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withColon(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `colon` replaced.
+  /// - param newChild: The new `colon` to replace the node's
+  ///                   current `colon`, if present.
+  public func withColon(_ newChild: TokenSyntax) -> UnavailableFromAsyncArgumentsSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild.raw
+    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
+    return UnavailableFromAsyncArgumentsSyntax(newData)
+  }
+
+  public var unexpectedBetweenColonAndMessage: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 4, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenColonAndMessage(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenColonAndMessage` replaced.
+  /// - param newChild: The new `unexpectedBetweenColonAndMessage` to replace the node's
+  ///                   current `unexpectedBetweenColonAndMessage`, if present.
+  public func withUnexpectedBetweenColonAndMessage(_ newChild: UnexpectedNodesSyntax?) -> UnavailableFromAsyncArgumentsSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
+    return UnavailableFromAsyncArgumentsSyntax(newData)
+  }
+
+  public var message: TokenSyntax {
+    get {
+      let childData = data.child(at: 5, parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withMessage(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `message` replaced.
+  /// - param newChild: The new `message` to replace the node's
+  ///                   current `message`, if present.
+  public func withMessage(_ newChild: TokenSyntax) -> UnavailableFromAsyncArgumentsSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild.raw
+    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
+    return UnavailableFromAsyncArgumentsSyntax(newData)
+  }
+
+  public var unexpectedAfterMessage: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 6, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterMessage(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterMessage` replaced.
+  /// - param newChild: The new `unexpectedAfterMessage` to replace the node's
+  ///                   current `unexpectedAfterMessage`, if present.
+  public func withUnexpectedAfterMessage(_ newChild: UnexpectedNodesSyntax?) -> UnavailableFromAsyncArgumentsSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
+    return UnavailableFromAsyncArgumentsSyntax(newData)
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeMessageLabel,
+      \Self.messageLabel,
+      \Self.unexpectedBetweenMessageLabelAndColon,
+      \Self.colon,
+      \Self.unexpectedBetweenColonAndMessage,
+      \Self.message,
+      \Self.unexpectedAfterMessage,
+    ])
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    case 5:
+      return nil
+    case 6:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
+}
+
+extension UnavailableFromAsyncArgumentsSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "unexpectedBeforeMessageLabel": unexpectedBeforeMessageLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "messageLabel": Syntax(messageLabel).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenMessageLabelAndColon": unexpectedBetweenMessageLabelAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "colon": Syntax(colon).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenColonAndMessage": unexpectedBetweenColonAndMessage.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "message": Syntax(message).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterMessage": unexpectedAfterMessage.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }

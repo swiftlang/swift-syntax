@@ -102,6 +102,7 @@ extension Syntax {
       .node(DifferentiableAttributeArgumentsSyntax.self), 
       .node(DiscardAssignmentExprSyntax.self), 
       .node(DoStmtSyntax.self), 
+      .node(DynamicReplacementArgumentsSyntax.self), 
       .node(EditorPlaceholderExprSyntax.self), 
       .node(EnumCaseDeclSyntax.self), 
       .node(EnumCaseElementListSyntax.self), 
@@ -180,7 +181,6 @@ extension Syntax {
       .node(MoveExprSyntax.self), 
       .node(MultipleTrailingClosureElementListSyntax.self), 
       .node(MultipleTrailingClosureElementSyntax.self), 
-      .node(NamedAttributeStringArgumentSyntax.self), 
       .node(NamedOpaqueReturnTypeSyntax.self), 
       .node(NilLiteralExprSyntax.self), 
       .node(ObjCSelectorPieceSyntax.self), 
@@ -260,6 +260,8 @@ extension Syntax {
       .node(TypeInheritanceClauseSyntax.self), 
       .node(TypeInitializerClauseSyntax.self), 
       .node(TypealiasDeclSyntax.self), 
+      .node(UnavailableFromAsyncArgumentsSyntax.self), 
+      .node(UnderscorePrivateAttributeArgumentsSyntax.self), 
       .node(UnexpectedNodesSyntax.self), 
       .node(UnresolvedAsExprSyntax.self), 
       .node(UnresolvedIsExprSyntax.self), 
@@ -449,6 +451,8 @@ extension SyntaxKind {
       return DiscardAssignmentExprSyntax.self
     case .doStmt: 
       return DoStmtSyntax.self
+    case .dynamicReplacementArguments: 
+      return DynamicReplacementArgumentsSyntax.self
     case .editorPlaceholderExpr: 
       return EditorPlaceholderExprSyntax.self
     case .enumCaseDecl: 
@@ -605,8 +609,6 @@ extension SyntaxKind {
       return MultipleTrailingClosureElementListSyntax.self
     case .multipleTrailingClosureElement: 
       return MultipleTrailingClosureElementSyntax.self
-    case .namedAttributeStringArgument: 
-      return NamedAttributeStringArgumentSyntax.self
     case .namedOpaqueReturnType: 
       return NamedOpaqueReturnTypeSyntax.self
     case .nilLiteralExpr: 
@@ -765,6 +767,10 @@ extension SyntaxKind {
       return TypeInitializerClauseSyntax.self
     case .typealiasDecl: 
       return TypealiasDeclSyntax.self
+    case .unavailableFromAsyncArguments: 
+      return UnavailableFromAsyncArgumentsSyntax.self
+    case .underscorePrivateAttributeArguments: 
+      return UnderscorePrivateAttributeArgumentsSyntax.self
     case .unexpectedNodes: 
       return UnexpectedNodesSyntax.self
     case .unresolvedAsExpr: 
@@ -968,6 +974,8 @@ extension SyntaxKind {
       return nil
     case .doStmt: 
       return "'do' statement"
+    case .dynamicReplacementArguments: 
+      return "@_dynamicReplacement argument"
     case .editorPlaceholderExpr: 
       return "editor placeholder"
     case .enumCaseDecl: 
@@ -1124,8 +1132,6 @@ extension SyntaxKind {
       return nil
     case .multipleTrailingClosureElement: 
       return "trailing closure"
-    case .namedAttributeStringArgument: 
-      return "attribute argument"
     case .namedOpaqueReturnType: 
       return "named opaque return type"
     case .nilLiteralExpr: 
@@ -1284,6 +1290,10 @@ extension SyntaxKind {
       return nil
     case .typealiasDecl: 
       return "typealias declaration"
+    case .unavailableFromAsyncArguments: 
+      return "@_unavailableFromAsync argument"
+    case .underscorePrivateAttributeArguments: 
+      return "@_private argument"
     case .unexpectedNodes: 
       return nil
     case .unresolvedAsExpr: 

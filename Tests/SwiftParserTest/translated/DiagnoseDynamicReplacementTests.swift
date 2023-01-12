@@ -32,7 +32,7 @@ final class DiagnoseDynamicReplacementTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '(', attribute argument, and ')' in attribute")
+        DiagnosticSpec(message: "expected '(', @_dynamicReplacement argument, and ')' in attribute")
       ]
     )
   }

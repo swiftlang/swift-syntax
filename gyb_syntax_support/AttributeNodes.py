@@ -62,8 +62,6 @@ ATTRIBUTE_NODES = [
                              kind='DifferentiableAttributeArguments'),
                        Child('DerivativeRegistrationArguments',
                              kind='DerivativeRegistrationAttributeArguments'),
-                       Child('NamedAttributeString',
-                             kind='NamedAttributeStringArgument'),
                        Child('BackDeployArguments',
                              kind='BackDeployAttributeSpecList'),
                        Child('ConventionArguments',
@@ -76,6 +74,12 @@ ATTRIBUTE_NODES = [
                              kind='ExposeAttributeArguments'),
                        Child('OriginallyDefinedInArguments',
                              kind='OriginallyDefinedInArguments'),
+                       Child('UnderscorePrivateAttributeArguments',
+                             kind='UnderscorePrivateAttributeArguments'),
+                       Child('DynamicReplacementArguments',
+                             kind='DynamicReplacementArguments'),
+                       Child('UnavailableFromAsyncArguments',
+                             kind='UnavailableFromAsyncArguments'),
                    ], description='''
                    The arguments of the attribute. In case the attribute
                    takes multiple arguments, they are gather in the
@@ -173,25 +177,6 @@ ATTRIBUTE_NODES = [
                    '''),
          ]),
 
-    # The argument of '@_dynamic_replacement(for:)' or '@_private(sourceFile:)'
-    # named-attribute-string-arg -> 'name': string-literal
-    Node('NamedAttributeStringArgument', kind='Syntax',
-         name_for_diagnostics='attribute argument',
-         description='''
-         The argument for the `@_dynamic_replacement` or `@_private`
-         attribute of the form `for: "function()"` or `sourceFile:
-         "Src.swift"`
-         ''',
-         children=[
-             Child('NameTok', kind='Token', name_for_diagnostics='label',
-                   description='The label of the argument'),
-             Child('Colon', kind='ColonToken',
-                   description='The colon separating the label and the value'),
-             Child('StringOrDeclname', kind='Syntax', name_for_diagnostics='value', node_choices=[
-                 Child('String', kind='StringLiteralToken'),
-                 Child('Declname', kind='DeclName'),
-             ]),
-         ]),
     Node('DeclName', name_for_diagnostics='declaration name', kind='Syntax', children=[
          Child('DeclBaseName', kind='Token', name_for_diagnostics='base name', 
                token_choices=['IdentifierToken', 'PrefixOperatorToken'],
@@ -506,5 +491,38 @@ ATTRIBUTE_NODES = [
            Child('ModuleName', kind='StringLiteralToken'),
            Child('Comma', kind='CommaToken'),
            Child('Platforms', kind='AvailabilityVersionRestrictionList', collection_element_name='Platform')
+         ]),
+
+    Node('UnderscorePrivateAttributeArguments', name_for_diagnostics='@_private argument',
+         kind='Syntax',
+         description='''
+         The arguments for the '@_private' attribute
+         ''',
+         children=[
+           Child('SourceFileLabel', kind='IdentifierToken', text_choices=['sourceFile']),
+           Child('Colon', kind='ColonToken'),
+           Child('Filename', kind='StringLiteralToken'),
+         ]),
+
+    Node('DynamicReplacementArguments', name_for_diagnostics='@_dynamicReplacement argument',
+         kind='Syntax',
+         description='''
+         The arguments for the '@_dynamicReplacement' attribute
+         ''',
+         children=[
+           Child('ForLabel', kind='IdentifierToken', text_choices=['for']),
+           Child('Colon', kind='ColonToken'),
+           Child('Declname', kind='DeclName'),
+         ]),
+
+    Node('UnavailableFromAsyncArguments', name_for_diagnostics='@_unavailableFromAsync argument',
+         kind='Syntax',
+         description='''
+         The arguments for the '@_unavailableFromAsync' attribute
+         ''',
+         children=[
+           Child('MessageLabel', kind='IdentifierToken', text_choices=['message']),
+           Child('Colon', kind='ColonToken'),
+           Child('Message', kind='StringLiteralToken'),
          ]),
 ]

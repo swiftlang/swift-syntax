@@ -184,6 +184,8 @@ public enum SyntaxEnum {
   
   case doStmt(DoStmtSyntax)
   
+  case dynamicReplacementArguments(DynamicReplacementArgumentsSyntax)
+  
   case editorPlaceholderExpr(EditorPlaceholderExprSyntax)
   
   case enumCaseDecl(EnumCaseDeclSyntax)
@@ -339,8 +341,6 @@ public enum SyntaxEnum {
   case multipleTrailingClosureElementList(MultipleTrailingClosureElementListSyntax)
   
   case multipleTrailingClosureElement(MultipleTrailingClosureElementSyntax)
-  
-  case namedAttributeStringArgument(NamedAttributeStringArgumentSyntax)
   
   case namedOpaqueReturnType(NamedOpaqueReturnTypeSyntax)
   
@@ -499,6 +499,10 @@ public enum SyntaxEnum {
   case typeInitializerClause(TypeInitializerClauseSyntax)
   
   case typealiasDecl(TypealiasDeclSyntax)
+  
+  case unavailableFromAsyncArguments(UnavailableFromAsyncArgumentsSyntax)
+  
+  case underscorePrivateAttributeArguments(UnderscorePrivateAttributeArgumentsSyntax)
   
   case unexpectedNodes(UnexpectedNodesSyntax)
   
@@ -703,6 +707,8 @@ public extension Syntax {
       return .discardAssignmentExpr(DiscardAssignmentExprSyntax(self)!)
     case .doStmt: 
       return .doStmt(DoStmtSyntax(self)!)
+    case .dynamicReplacementArguments: 
+      return .dynamicReplacementArguments(DynamicReplacementArgumentsSyntax(self)!)
     case .editorPlaceholderExpr: 
       return .editorPlaceholderExpr(EditorPlaceholderExprSyntax(self)!)
     case .enumCaseDecl: 
@@ -859,8 +865,6 @@ public extension Syntax {
       return .multipleTrailingClosureElementList(MultipleTrailingClosureElementListSyntax(self)!)
     case .multipleTrailingClosureElement: 
       return .multipleTrailingClosureElement(MultipleTrailingClosureElementSyntax(self)!)
-    case .namedAttributeStringArgument: 
-      return .namedAttributeStringArgument(NamedAttributeStringArgumentSyntax(self)!)
     case .namedOpaqueReturnType: 
       return .namedOpaqueReturnType(NamedOpaqueReturnTypeSyntax(self)!)
     case .nilLiteralExpr: 
@@ -1019,6 +1023,10 @@ public extension Syntax {
       return .typeInitializerClause(TypeInitializerClauseSyntax(self)!)
     case .typealiasDecl: 
       return .typealiasDecl(TypealiasDeclSyntax(self)!)
+    case .unavailableFromAsyncArguments: 
+      return .unavailableFromAsyncArguments(UnavailableFromAsyncArgumentsSyntax(self)!)
+    case .underscorePrivateAttributeArguments: 
+      return .underscorePrivateAttributeArguments(UnderscorePrivateAttributeArgumentsSyntax(self)!)
     case .unexpectedNodes: 
       return .unexpectedNodes(UnexpectedNodesSyntax(self)!)
     case .unresolvedAsExpr: 

@@ -343,7 +343,6 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/AvailabilityEntrySyntax>
 - <doc:SwiftSyntax/LabeledSpecializeEntrySyntax>
 - <doc:SwiftSyntax/TargetFunctionEntrySyntax>
-- <doc:SwiftSyntax/NamedAttributeStringArgumentSyntax>
 - <doc:SwiftSyntax/DeclNameSyntax>
 - <doc:SwiftSyntax/ImplementsAttributeArgumentsSyntax>
 - <doc:SwiftSyntax/ObjCSelectorPieceSyntax>
@@ -363,6 +362,9 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/ConventionWitnessMethodAttributeArgumentsSyntax>
 - <doc:SwiftSyntax/ExposeAttributeArgumentsSyntax>
 - <doc:SwiftSyntax/OriginallyDefinedInArgumentsSyntax>
+- <doc:SwiftSyntax/UnderscorePrivateAttributeArgumentsSyntax>
+- <doc:SwiftSyntax/DynamicReplacementArgumentsSyntax>
+- <doc:SwiftSyntax/UnavailableFromAsyncArgumentsSyntax>
 - <doc:SwiftSyntax/SwitchCaseListSyntax>
 - <doc:SwiftSyntax/WhereClauseSyntax>
 - <doc:SwiftSyntax/CatchClauseListSyntax>

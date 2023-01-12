@@ -1094,13 +1094,6 @@ open class SyntaxRewriter {
     return Syntax(visitChildren(node)).cast(TargetFunctionEntrySyntax.self)
   }
 
-  /// Visit a `NamedAttributeStringArgumentSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: NamedAttributeStringArgumentSyntax) -> NamedAttributeStringArgumentSyntax {
-    return Syntax(visitChildren(node)).cast(NamedAttributeStringArgumentSyntax.self)
-  }
-
   /// Visit a `DeclNameSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -1232,6 +1225,27 @@ open class SyntaxRewriter {
   ///   - Returns: the rewritten node
   open func visit(_ node: OriginallyDefinedInArgumentsSyntax) -> OriginallyDefinedInArgumentsSyntax {
     return Syntax(visitChildren(node)).cast(OriginallyDefinedInArgumentsSyntax.self)
+  }
+
+  /// Visit a `UnderscorePrivateAttributeArgumentsSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: UnderscorePrivateAttributeArgumentsSyntax) -> UnderscorePrivateAttributeArgumentsSyntax {
+    return Syntax(visitChildren(node)).cast(UnderscorePrivateAttributeArgumentsSyntax.self)
+  }
+
+  /// Visit a `DynamicReplacementArgumentsSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: DynamicReplacementArgumentsSyntax) -> DynamicReplacementArgumentsSyntax {
+    return Syntax(visitChildren(node)).cast(DynamicReplacementArgumentsSyntax.self)
+  }
+
+  /// Visit a `UnavailableFromAsyncArgumentsSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: UnavailableFromAsyncArgumentsSyntax) -> UnavailableFromAsyncArgumentsSyntax {
+    return Syntax(visitChildren(node)).cast(UnavailableFromAsyncArgumentsSyntax.self)
   }
 
   /// Visit a `LabeledStmtSyntax`.
@@ -3420,16 +3434,6 @@ open class SyntaxRewriter {
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplNamedAttributeStringArgumentSyntax(_ data: SyntaxData) -> Syntax {
-    let node = NamedAttributeStringArgumentSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer { visitPost(node._syntaxNode) }
-    if let newNode = visitAny(node._syntaxNode) { return newNode }
-    return Syntax(visit(node))
-  }
-
-  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplDeclNameSyntax(_ data: SyntaxData) -> Syntax {
     let node = DeclNameSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -3612,6 +3616,36 @@ open class SyntaxRewriter {
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplOriginallyDefinedInArgumentsSyntax(_ data: SyntaxData) -> Syntax {
     let node = OriginallyDefinedInArgumentsSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { visitPost(node._syntaxNode) }
+    if let newNode = visitAny(node._syntaxNode) { return newNode }
+    return Syntax(visit(node))
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplUnderscorePrivateAttributeArgumentsSyntax(_ data: SyntaxData) -> Syntax {
+    let node = UnderscorePrivateAttributeArgumentsSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { visitPost(node._syntaxNode) }
+    if let newNode = visitAny(node._syntaxNode) { return newNode }
+    return Syntax(visit(node))
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplDynamicReplacementArgumentsSyntax(_ data: SyntaxData) -> Syntax {
+    let node = DynamicReplacementArgumentsSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { visitPost(node._syntaxNode) }
+    if let newNode = visitAny(node._syntaxNode) { return newNode }
+    return Syntax(visit(node))
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplUnavailableFromAsyncArgumentsSyntax(_ data: SyntaxData) -> Syntax {
+    let node = UnavailableFromAsyncArgumentsSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer { visitPost(node._syntaxNode) }
@@ -4795,8 +4829,6 @@ open class SyntaxRewriter {
       return visitImplLabeledSpecializeEntrySyntax
     case .targetFunctionEntry:
       return visitImplTargetFunctionEntrySyntax
-    case .namedAttributeStringArgument:
-      return visitImplNamedAttributeStringArgumentSyntax
     case .declName:
       return visitImplDeclNameSyntax
     case .implementsAttributeArguments:
@@ -4835,6 +4867,12 @@ open class SyntaxRewriter {
       return visitImplExposeAttributeArgumentsSyntax
     case .originallyDefinedInArguments:
       return visitImplOriginallyDefinedInArgumentsSyntax
+    case .underscorePrivateAttributeArguments:
+      return visitImplUnderscorePrivateAttributeArgumentsSyntax
+    case .dynamicReplacementArguments:
+      return visitImplDynamicReplacementArgumentsSyntax
+    case .unavailableFromAsyncArguments:
+      return visitImplUnavailableFromAsyncArgumentsSyntax
     case .labeledStmt:
       return visitImplLabeledStmtSyntax
     case .continueStmt:
@@ -5320,8 +5358,6 @@ open class SyntaxRewriter {
       return visitImplLabeledSpecializeEntrySyntax(data)
     case .targetFunctionEntry:
       return visitImplTargetFunctionEntrySyntax(data)
-    case .namedAttributeStringArgument:
-      return visitImplNamedAttributeStringArgumentSyntax(data)
     case .declName:
       return visitImplDeclNameSyntax(data)
     case .implementsAttributeArguments:
@@ -5360,6 +5396,12 @@ open class SyntaxRewriter {
       return visitImplExposeAttributeArgumentsSyntax(data)
     case .originallyDefinedInArguments:
       return visitImplOriginallyDefinedInArgumentsSyntax(data)
+    case .underscorePrivateAttributeArguments:
+      return visitImplUnderscorePrivateAttributeArgumentsSyntax(data)
+    case .dynamicReplacementArguments:
+      return visitImplDynamicReplacementArgumentsSyntax(data)
+    case .unavailableFromAsyncArguments:
+      return visitImplUnavailableFromAsyncArgumentsSyntax(data)
     case .labeledStmt:
       return visitImplLabeledStmtSyntax(data)
     case .continueStmt:

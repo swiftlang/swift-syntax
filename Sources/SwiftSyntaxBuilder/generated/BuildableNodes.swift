@@ -444,6 +444,16 @@ extension DoStmt {
   }
 }
 
+/// The arguments for the '@_dynamicReplacement' attribute
+extension DynamicReplacementArguments {
+  /// A convenience initializer that allows:
+  ///  - Initializing syntax collections using result builders
+  ///  - Initializing tokens without default text using strings
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeForLabel: UnexpectedNodes? = nil, forLabel: String, unexpectedBetweenForLabelAndColon: UnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndDeclname: UnexpectedNodes? = nil, declname: DeclName, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeForLabel, forLabel: Token.`identifier`(forLabel), unexpectedBetweenForLabelAndColon, colon: colon, unexpectedBetweenColonAndDeclname, declname: declname, trailingTrivia: trailingTrivia)
+  }
+}
+
 extension EditorPlaceholderExpr {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
@@ -1265,6 +1275,26 @@ extension TypealiasDecl {
   ///  - Initializing tokens without default text using strings
   public init(leadingTrivia: Trivia? = nil, unexpectedBeforeAttributes: UnexpectedNodes? = nil, attributes: AttributeList? = nil, unexpectedBetweenAttributesAndModifiers: UnexpectedNodes? = nil, modifiers: ModifierList? = nil, unexpectedBetweenModifiersAndTypealiasKeyword: UnexpectedNodes? = nil, typealiasKeyword: Token = .keyword(.typealias), unexpectedBetweenTypealiasKeywordAndIdentifier: UnexpectedNodes? = nil, identifier: String, unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodes? = nil, genericParameterClause: GenericParameterClause? = nil, unexpectedBetweenGenericParameterClauseAndInitializer: UnexpectedNodes? = nil, initializer: TypeInitializerClause, unexpectedBetweenInitializerAndGenericWhereClause: UnexpectedNodes? = nil, genericWhereClause: GenericWhereClause? = nil, trailingTrivia: Trivia? = nil) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndTypealiasKeyword, typealiasKeyword: typealiasKeyword, unexpectedBetweenTypealiasKeywordAndIdentifier, identifier: Token.`identifier`(identifier), unexpectedBetweenIdentifierAndGenericParameterClause, genericParameterClause: genericParameterClause, unexpectedBetweenGenericParameterClauseAndInitializer, initializer: initializer, unexpectedBetweenInitializerAndGenericWhereClause, genericWhereClause: genericWhereClause, trailingTrivia: trailingTrivia)
+  }
+}
+
+/// The arguments for the '@_unavailableFromAsync' attribute
+extension UnavailableFromAsyncArguments {
+  /// A convenience initializer that allows:
+  ///  - Initializing syntax collections using result builders
+  ///  - Initializing tokens without default text using strings
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeMessageLabel: UnexpectedNodes? = nil, messageLabel: String, unexpectedBetweenMessageLabelAndColon: UnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndMessage: UnexpectedNodes? = nil, message: String, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeMessageLabel, messageLabel: Token.`identifier`(messageLabel), unexpectedBetweenMessageLabelAndColon, colon: colon, unexpectedBetweenColonAndMessage, message: Token.`stringLiteral`(message), trailingTrivia: trailingTrivia)
+  }
+}
+
+/// The arguments for the '@_private' attribute
+extension UnderscorePrivateAttributeArguments {
+  /// A convenience initializer that allows:
+  ///  - Initializing syntax collections using result builders
+  ///  - Initializing tokens without default text using strings
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeSourceFileLabel: UnexpectedNodes? = nil, sourceFileLabel: String, unexpectedBetweenSourceFileLabelAndColon: UnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndFilename: UnexpectedNodes? = nil, filename: String, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeSourceFileLabel, sourceFileLabel: Token.`identifier`(sourceFileLabel), unexpectedBetweenSourceFileLabelAndColon, colon: colon, unexpectedBetweenColonAndFilename, filename: Token.`stringLiteral`(filename), trailingTrivia: trailingTrivia)
   }
 }
 

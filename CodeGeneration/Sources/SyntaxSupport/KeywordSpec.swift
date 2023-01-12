@@ -250,6 +250,7 @@ public let KEYWORDS: [KeywordSpec] = [
   KeywordSpec("Sendable"),
   KeywordSpec("set"),
   KeywordSpec("some"),
+  KeywordSpec("sourceFile"),
   KeywordSpec("spi"),
   KeywordSpec("spiModule"),
   KeywordSpec("static", isLexerClassified: true, requiresTrailingSpace: true),

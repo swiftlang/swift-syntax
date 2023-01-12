@@ -185,6 +185,8 @@ public typealias DiscardAssignmentExpr = DiscardAssignmentExprSyntax
 
 public typealias DoStmt = DoStmtSyntax
 
+public typealias DynamicReplacementArguments = DynamicReplacementArgumentsSyntax
+
 public typealias EditorPlaceholderExpr = EditorPlaceholderExprSyntax
 
 public typealias EnumCaseDecl = EnumCaseDeclSyntax
@@ -330,8 +332,6 @@ public typealias MoveExpr = MoveExprSyntax
 public typealias MultipleTrailingClosureElementList = MultipleTrailingClosureElementListSyntax
 
 public typealias MultipleTrailingClosureElement = MultipleTrailingClosureElementSyntax
-
-public typealias NamedAttributeStringArgument = NamedAttributeStringArgumentSyntax
 
 public typealias NamedOpaqueReturnType = NamedOpaqueReturnTypeSyntax
 
@@ -496,6 +496,10 @@ public typealias TypeInitializerClause = TypeInitializerClauseSyntax
 public typealias Type = TypeSyntax
 
 public typealias TypealiasDecl = TypealiasDeclSyntax
+
+public typealias UnavailableFromAsyncArguments = UnavailableFromAsyncArgumentsSyntax
+
+public typealias UnderscorePrivateAttributeArguments = UnderscorePrivateAttributeArgumentsSyntax
 
 public typealias UnexpectedNodes = UnexpectedNodesSyntax
 

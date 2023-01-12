@@ -451,6 +451,8 @@ public enum Keyword: StaticString {
   
   case some
   
+  case sourceFile
+  
   case spi
   
   case spiModule
@@ -869,6 +871,8 @@ public enum Keyword: StaticString {
         self = .higherThan
       case "introduced": 
         self = .introduced
+      case "sourceFile": 
+        self = .sourceFile
       default: 
         return nil
       }

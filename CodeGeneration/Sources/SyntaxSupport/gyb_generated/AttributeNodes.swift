@@ -93,8 +93,6 @@ public let ATTRIBUTE_NODES: [Node] = [
                        kind: "DifferentiableAttributeArguments"),
                  Child(name: "DerivativeRegistrationArguments",
                        kind: "DerivativeRegistrationAttributeArguments"),
-                 Child(name: "NamedAttributeString",
-                       kind: "NamedAttributeStringArgument"),
                  Child(name: "BackDeployArguments",
                        kind: "BackDeployAttributeSpecList"),
                  Child(name: "ConventionArguments",
@@ -106,7 +104,13 @@ public let ATTRIBUTE_NODES: [Node] = [
                  Child(name: "ExposeAttributeArguments",
                        kind: "ExposeAttributeArguments"),
                  Child(name: "OriginallyDefinedInArguments",
-                       kind: "OriginallyDefinedInArguments")
+                       kind: "OriginallyDefinedInArguments"),
+                 Child(name: "UnderscorePrivateAttributeArguments",
+                       kind: "UnderscorePrivateAttributeArguments"),
+                 Child(name: "DynamicReplacementArguments",
+                       kind: "DynamicReplacementArguments"),
+                 Child(name: "UnavailableFromAsyncArguments",
+                       kind: "UnavailableFromAsyncArguments")
                ]),
          Child(name: "RightParen",
                kind: "RightParenToken",
@@ -221,33 +225,6 @@ public let ATTRIBUTE_NODES: [Node] = [
                isOptional: true,
                tokenChoices: [
                  "Comma"
-               ])
-       ]),
-
-  Node(name: "NamedAttributeStringArgument",
-       nameForDiagnostics: "attribute argument",
-       description: "The argument for the `@_dynamic_replacement` or `@_private`attribute of the form `for: \"function()\"` or `sourceFile:\"Src.swift\"`",
-       kind: "Syntax",
-       children: [
-         Child(name: "NameTok",
-               kind: "Token",
-               description: "The label of the argument"),
-         Child(name: "Colon",
-               kind: "ColonToken",
-               description: "The colon separating the label and the value",
-               tokenChoices: [
-                 "Colon"
-               ]),
-         Child(name: "StringOrDeclname",
-               kind: "Syntax",
-               nodeChoices: [
-                 Child(name: "String",
-                       kind: "StringLiteralToken",
-                       tokenChoices: [
-                         "StringLiteral"
-                       ]),
-                 Child(name: "Declname",
-                       kind: "DeclName")
                ])
        ]),
 
@@ -707,6 +684,78 @@ public let ATTRIBUTE_NODES: [Node] = [
          Child(name: "Platforms",
                kind: "AvailabilityVersionRestrictionList",
                collectionElementName: "Platform")
+       ]),
+
+  Node(name: "UnderscorePrivateAttributeArguments",
+       nameForDiagnostics: "@_private argument",
+       description: "The arguments for the '@_private' attribute",
+       kind: "Syntax",
+       children: [
+         Child(name: "SourceFileLabel",
+               kind: "IdentifierToken",
+               tokenChoices: [
+                 "Identifier"
+               ],
+               textChoices: [
+                 "sourceFile"
+               ]),
+         Child(name: "Colon",
+               kind: "ColonToken",
+               tokenChoices: [
+                 "Colon"
+               ]),
+         Child(name: "Filename",
+               kind: "StringLiteralToken",
+               tokenChoices: [
+                 "StringLiteral"
+               ])
+       ]),
+
+  Node(name: "DynamicReplacementArguments",
+       nameForDiagnostics: "@_dynamicReplacement argument",
+       description: "The arguments for the '@_dynamicReplacement' attribute",
+       kind: "Syntax",
+       children: [
+         Child(name: "ForLabel",
+               kind: "IdentifierToken",
+               tokenChoices: [
+                 "Identifier"
+               ],
+               textChoices: [
+                 "for"
+               ]),
+         Child(name: "Colon",
+               kind: "ColonToken",
+               tokenChoices: [
+                 "Colon"
+               ]),
+         Child(name: "Declname",
+               kind: "DeclName")
+       ]),
+
+  Node(name: "UnavailableFromAsyncArguments",
+       nameForDiagnostics: "@_unavailableFromAsync argument",
+       description: "The arguments for the '@_unavailableFromAsync' attribute",
+       kind: "Syntax",
+       children: [
+         Child(name: "MessageLabel",
+               kind: "IdentifierToken",
+               tokenChoices: [
+                 "Identifier"
+               ],
+               textChoices: [
+                 "message"
+               ]),
+         Child(name: "Colon",
+               kind: "ColonToken",
+               tokenChoices: [
+                 "Colon"
+               ]),
+         Child(name: "Message",
+               kind: "StringLiteralToken",
+               tokenChoices: [
+                 "StringLiteral"
+               ])
        ]),
 
 ]

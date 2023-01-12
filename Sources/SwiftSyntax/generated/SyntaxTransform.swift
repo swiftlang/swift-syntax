@@ -136,6 +136,16 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: AvailabilitySpecListSyntax) -> ResultType
   
+  /// Visiting `AvailabilityVersionRestrictionListEntrySyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: AvailabilityVersionRestrictionListEntrySyntax) -> ResultType
+  
+  /// Visiting `AvailabilityVersionRestrictionListSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: AvailabilityVersionRestrictionListSyntax) -> ResultType
+  
   /// Visiting `AvailabilityVersionRestrictionSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -150,16 +160,6 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: BackDeployAttributeSpecListSyntax) -> ResultType
-  
-  /// Visiting `BackDeployVersionArgumentSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: BackDeployVersionArgumentSyntax) -> ResultType
-  
-  /// Visiting `BackDeployVersionListSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: BackDeployVersionListSyntax) -> ResultType
   
   /// Visiting `BinaryOperatorExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -881,6 +881,11 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: OptionalTypeSyntax) -> ResultType
   
+  /// Visiting `OriginallyDefinedInArgumentsSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: OriginallyDefinedInArgumentsSyntax) -> ResultType
+  
   /// Visiting `PackElementExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -1463,6 +1468,20 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
+  /// Visiting `AvailabilityVersionRestrictionListEntrySyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: AvailabilityVersionRestrictionListEntrySyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting `AvailabilityVersionRestrictionListSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: AvailabilityVersionRestrictionListSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
   /// Visiting `AvailabilityVersionRestrictionSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -1481,20 +1500,6 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: BackDeployAttributeSpecListSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
-  /// Visiting `BackDeployVersionArgumentSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: BackDeployVersionArgumentSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
-  /// Visiting `BackDeployVersionListSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: BackDeployVersionListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -2506,6 +2511,13 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
+  /// Visiting `OriginallyDefinedInArgumentsSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: OriginallyDefinedInArgumentsSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
   /// Visiting `PackElementExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -3137,15 +3149,15 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .availabilitySpecList(let derived): 
       return visit(derived)
+    case .availabilityVersionRestrictionListEntry(let derived): 
+      return visit(derived)
+    case .availabilityVersionRestrictionList(let derived): 
+      return visit(derived)
     case .availabilityVersionRestriction(let derived): 
       return visit(derived)
     case .awaitExpr(let derived): 
       return visit(derived)
     case .backDeployAttributeSpecList(let derived): 
-      return visit(derived)
-    case .backDeployVersionArgument(let derived): 
-      return visit(derived)
-    case .backDeployVersionList(let derived): 
       return visit(derived)
     case .binaryOperatorExpr(let derived): 
       return visit(derived)
@@ -3434,6 +3446,8 @@ extension SyntaxTransformVisitor {
     case .optionalChainingExpr(let derived): 
       return visit(derived)
     case .optionalType(let derived): 
+      return visit(derived)
+    case .originallyDefinedInArguments(let derived): 
       return visit(derived)
     case .packElementExpr(let derived): 
       return visit(derived)

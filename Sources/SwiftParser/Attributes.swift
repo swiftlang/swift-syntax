@@ -207,6 +207,10 @@ extension Parser {
       return parseAttribute(hasRequiredArguments: true) { parser in
         return .exposeAttributeArguments(parser.parseExposeArguments())
       }
+    case ._originallyDefinedIn:
+      return parseAttribute(hasRequiredArguments: true) { parser in
+        return .originallyDefinedInArguments(parser.parseOriginallyDefinedInArguments())
+      }
     case .__objc_bridged, .__raw_doc_comment, ._alwaysEmitConformanceMetadata, ._alwaysEmitIntoClient, ._assemblyVision, ._borrowed, ._compilerInitialized, ._custom, ._disfavoredOverload, ._eagerMove, ._exported, ._fixed_layout, ._frozen, ._hasInitialValue, ._hasMissingDesignatedInitializers, ._hasStorage, ._implementationOnly, ._implicitSelfCapture, ._inheritActorContext, ._inheritsConvenienceInitializers, ._marker, ._moveOnly, ._noAllocation, ._noEagerMove, ._noImplicitCopy, ._noLocks, ._noMetadata, ._nonEphemeral, ._nonoverride, ._objc_non_lazy_realization, ._show_in_interface, ._specializeExtension, ._spiOnly, ._staticInitializeObjCMetadata, ._transparent, ._unsafeInheritExecutor, ._weakLinked, .atReasync, .atRethrows, .discardableResult, .dynamicCallable, .dynamicMemberLookup, .frozen, .GKInspectable, .globalActor, .IBAction, .IBDesignable, .IBInspectable, .IBOutlet, .IBSegueAction, .inlinable, .LLDBDebuggerFunction, .main, .noDerivative, .nonobjc, .NSApplicationMain, .NSCopying,
       .NSManaged, .objcMembers, .preconcurrency, .propertyWrapper, .requires_stored_property_inits, .resultBuilder, .runtimeMetadata, .Sendable, .testable, .typeWrapper, .typeWrapperIgnored, .UIApplicationMain, .unsafe_no_objc_tagged_pointer, .usableFromInline, .warn_unqualified_access:
       // No arguments
@@ -215,9 +219,6 @@ extension Parser {
       // Virtual attributes that should not be parsed
       break
     // MARK: - Other
-    case ._originallyDefinedIn:
-      // @_originallyDefinedIn(module: "HighLevel", OSX 10.9, iOS 13.0)
-      break
     case ._unavailableFromAsync:
       // @_unavailableFromAsync(message: "Use Task.runInline from a sync context to begin an async context.")
       break
@@ -879,13 +880,13 @@ extension Parser {
   mutating func parseBackDeployArguments() -> RawBackDeployAttributeSpecListSyntax {
     let (unexpectedBeforeLabel, label) = self.expect(.keyword(.before), remapping: .identifier)
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
-    var elements: [RawBackDeployVersionArgumentSyntax] = []
+    var elements: [RawAvailabilityVersionRestrictionListEntrySyntax] = []
     var keepGoing: RawTokenSyntax? = nil
     repeat {
       let versionRestriction = self.parseAvailabilityMacro()
       keepGoing = self.consume(if: .comma)
       elements.append(
-        RawBackDeployVersionArgumentSyntax(
+        RawAvailabilityVersionRestrictionListEntrySyntax(
           availabilityVersionRestriction: versionRestriction,
           trailingComma: keepGoing,
           arena: self.arena
@@ -897,7 +898,7 @@ extension Parser {
       beforeLabel: label,
       unexpectedBeforeColon,
       colon: colon,
-      versionList: RawBackDeployVersionListSyntax(elements: elements, arena: self.arena),
+      versionList: RawAvailabilityVersionRestrictionListSyntax(elements: elements, arena: self.arena),
       arena: self.arena
     )
   }
@@ -930,6 +931,42 @@ extension Parser {
       comma: comma,
       unexpectedBeforeCxxName,
       cxxName: cxxName,
+      arena: self.arena
+    )
+  }
+}
+
+extension Parser {
+  mutating func parseOriginallyDefinedInArguments() -> RawOriginallyDefinedInArgumentsSyntax {
+    let (unexpectedBeforeModuleLabel, moduleLabel) = self.expect(.keyword(.module), remapping: .identifier)
+    let (unexpectedBeforeColon, colon) = self.expect(.colon)
+    let (unexpectedBeforeModuleName, moduleName) = self.expect(.stringLiteral)
+    let (unexpectedBeforeComma, comma) = self.expect(.comma)
+
+    var platforms: [RawAvailabilityVersionRestrictionListEntrySyntax] = []
+    var keepGoing: RawTokenSyntax?
+    repeat {
+      let restriction = self.parseAvailabilityMacro()
+      keepGoing = self.consume(if: .comma)
+      platforms.append(
+        RawAvailabilityVersionRestrictionListEntrySyntax(
+          availabilityVersionRestriction: restriction,
+          trailingComma: keepGoing,
+          arena: self.arena
+        )
+      )
+    } while keepGoing != nil
+
+    return RawOriginallyDefinedInArgumentsSyntax(
+      unexpectedBeforeModuleLabel,
+      moduleLabel: moduleLabel,
+      unexpectedBeforeColon,
+      colon: colon,
+      unexpectedBeforeModuleName,
+      moduleName: moduleName,
+      unexpectedBeforeComma,
+      comma: comma,
+      platforms: RawAvailabilityVersionRestrictionListSyntax(elements: platforms, arena: self.arena),
       arena: self.arena
     )
   }

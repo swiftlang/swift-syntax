@@ -75,6 +75,8 @@ ATTRIBUTE_NODES = [
                              kind='OpaqueReturnTypeOfAttributeArguments'),
                        Child('ExposeAttributeArguments',
                              kind='ExposeAttributeArguments'),
+                       Child('OriginallyDefinedInArguments',
+                             kind='OriginallyDefinedInArguments'),
                        # TokenList for custom effects which are parsed by
                        # `FunctionEffects.parse()` in swift.
                        Child('TokenList', kind='TokenList',
@@ -414,7 +416,7 @@ ATTRIBUTE_NODES = [
              Child('Colon', kind='ColonToken', description='''
                    The colon separating "before" and the parameter list.
                    '''),
-             Child('VersionList', kind='BackDeployVersionList',
+             Child('VersionList', kind='AvailabilityVersionRestrictionList',
                    collection_element_name='Availability', description='''
                    The list of OS versions in which the declaration became ABI
                    stable.
@@ -423,14 +425,13 @@ ATTRIBUTE_NODES = [
 
     # back-deploy-version-list ->
     #   back-deploy-version-entry back-deploy-version-list?
-    Node('BackDeployVersionList', name_for_diagnostics='version list',
-         kind='SyntaxCollection', element='BackDeployVersionArgument'),
+    Node('AvailabilityVersionRestrictionList', name_for_diagnostics='version list',
+         kind='SyntaxCollection', element='AvailabilityVersionRestrictionListEntry'),
 
     # back-deploy-version-entry -> availability-version-restriction ','?
-    Node('BackDeployVersionArgument', name_for_diagnostics='version', kind='Syntax',
+    Node('AvailabilityVersionRestrictionListEntry', name_for_diagnostics='version', kind='Syntax',
          description='''
-         A single platform/version pair in a `@_backDeploy` attribute,
-         e.g. `iOS 10.1`.
+         A single platform/version pair in an attribute, e.g. `iOS 10.1`.
          ''',
          children=[
              Child('AvailabilityVersionRestriction',
@@ -497,5 +498,18 @@ ATTRIBUTE_NODES = [
            Child('Language', kind='Token'),
            Child('Comma', kind='CommaToken', is_optional=True),
            Child('CxxName', kind='StringLiteralToken', is_optional=True)
+         ]),
+
+    Node('OriginallyDefinedInArguments', name_for_diagnostics='@_originallyDefinedIn arguments',
+         kind='Syntax',
+         description='''
+         The arguments for the '@_originallyDefinedIn' attribute
+         ''',
+         children=[
+           Child('ModuleLabel', kind='IdentifierToken', text_choices=['module']),
+           Child('Colon', kind='ColonToken'),
+           Child('ModuleName', kind='StringLiteralToken'),
+           Child('Comma', kind='CommaToken'),
+           Child('Platforms', kind='AvailabilityVersionRestrictionList', collection_element_name='Platform')
          ]),
 ]

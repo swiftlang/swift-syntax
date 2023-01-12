@@ -202,6 +202,7 @@ public let KEYWORDS: [KeywordSpec] = [
   KeywordSpec("macro"),
   KeywordSpec("main"),
   KeywordSpec("message"),
+  KeywordSpec("module"),
   KeywordSpec("mutableAddressWithNativeOwner"),
   KeywordSpec("mutableAddressWithOwner"),
   KeywordSpec("mutating"),

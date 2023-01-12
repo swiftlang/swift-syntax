@@ -355,6 +355,8 @@ public enum Keyword: StaticString {
   
   case message
   
+  case module
+  
   case mutableAddressWithNativeOwner
   
   case mutableAddressWithOwner
@@ -681,6 +683,8 @@ public enum Keyword: StaticString {
         self = .`import`
       case "inline": 
         self = .inline
+      case "module": 
+        self = .module
       case "prefix": 
         self = .prefix
       case "public": 

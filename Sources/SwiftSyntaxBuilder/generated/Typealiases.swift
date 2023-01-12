@@ -63,15 +63,15 @@ public typealias AvailabilityLabeledArgument = AvailabilityLabeledArgumentSyntax
 
 public typealias AvailabilitySpecList = AvailabilitySpecListSyntax
 
+public typealias AvailabilityVersionRestrictionListEntry = AvailabilityVersionRestrictionListEntrySyntax
+
+public typealias AvailabilityVersionRestrictionList = AvailabilityVersionRestrictionListSyntax
+
 public typealias AvailabilityVersionRestriction = AvailabilityVersionRestrictionSyntax
 
 public typealias AwaitExpr = AwaitExprSyntax
 
 public typealias BackDeployAttributeSpecList = BackDeployAttributeSpecListSyntax
-
-public typealias BackDeployVersionArgument = BackDeployVersionArgumentSyntax
-
-public typealias BackDeployVersionList = BackDeployVersionListSyntax
 
 public typealias BinaryOperatorExpr = BinaryOperatorExprSyntax
 
@@ -352,6 +352,8 @@ public typealias OptionalBindingCondition = OptionalBindingConditionSyntax
 public typealias OptionalChainingExpr = OptionalChainingExprSyntax
 
 public typealias OptionalType = OptionalTypeSyntax
+
+public typealias OriginallyDefinedInArguments = OriginallyDefinedInArgumentsSyntax
 
 public typealias PackElementExpr = PackElementExprSyntax
 

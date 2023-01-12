@@ -64,15 +64,15 @@ public enum SyntaxEnum {
   
   case availabilitySpecList(AvailabilitySpecListSyntax)
   
+  case availabilityVersionRestrictionListEntry(AvailabilityVersionRestrictionListEntrySyntax)
+  
+  case availabilityVersionRestrictionList(AvailabilityVersionRestrictionListSyntax)
+  
   case availabilityVersionRestriction(AvailabilityVersionRestrictionSyntax)
   
   case awaitExpr(AwaitExprSyntax)
   
   case backDeployAttributeSpecList(BackDeployAttributeSpecListSyntax)
-  
-  case backDeployVersionArgument(BackDeployVersionArgumentSyntax)
-  
-  case backDeployVersionList(BackDeployVersionListSyntax)
   
   case binaryOperatorExpr(BinaryOperatorExprSyntax)
   
@@ -362,6 +362,8 @@ public enum SyntaxEnum {
   
   case optionalType(OptionalTypeSyntax)
   
+  case originallyDefinedInArguments(OriginallyDefinedInArgumentsSyntax)
+  
   case packElementExpr(PackElementExprSyntax)
   
   case packExpansionExpr(PackExpansionExprSyntax)
@@ -581,16 +583,16 @@ public extension Syntax {
       return .availabilityLabeledArgument(AvailabilityLabeledArgumentSyntax(self)!)
     case .availabilitySpecList: 
       return .availabilitySpecList(AvailabilitySpecListSyntax(self)!)
+    case .availabilityVersionRestrictionListEntry: 
+      return .availabilityVersionRestrictionListEntry(AvailabilityVersionRestrictionListEntrySyntax(self)!)
+    case .availabilityVersionRestrictionList: 
+      return .availabilityVersionRestrictionList(AvailabilityVersionRestrictionListSyntax(self)!)
     case .availabilityVersionRestriction: 
       return .availabilityVersionRestriction(AvailabilityVersionRestrictionSyntax(self)!)
     case .awaitExpr: 
       return .awaitExpr(AwaitExprSyntax(self)!)
     case .backDeployAttributeSpecList: 
       return .backDeployAttributeSpecList(BackDeployAttributeSpecListSyntax(self)!)
-    case .backDeployVersionArgument: 
-      return .backDeployVersionArgument(BackDeployVersionArgumentSyntax(self)!)
-    case .backDeployVersionList: 
-      return .backDeployVersionList(BackDeployVersionListSyntax(self)!)
     case .binaryOperatorExpr: 
       return .binaryOperatorExpr(BinaryOperatorExprSyntax(self)!)
     case .booleanLiteralExpr: 
@@ -879,6 +881,8 @@ public extension Syntax {
       return .optionalChainingExpr(OptionalChainingExprSyntax(self)!)
     case .optionalType: 
       return .optionalType(OptionalTypeSyntax(self)!)
+    case .originallyDefinedInArguments: 
+      return .originallyDefinedInArguments(OriginallyDefinedInArgumentsSyntax(self)!)
     case .packElementExpr: 
       return .packElementExpr(PackElementExprSyntax(self)!)
     case .packExpansionExpr: 

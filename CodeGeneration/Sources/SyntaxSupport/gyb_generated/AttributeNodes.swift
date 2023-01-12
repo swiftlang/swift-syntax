@@ -107,6 +107,8 @@ public let ATTRIBUTE_NODES: [Node] = [
                        kind: "OpaqueReturnTypeOfAttributeArguments"),
                  Child(name: "ExposeAttributeArguments",
                        kind: "ExposeAttributeArguments"),
+                 Child(name: "OriginallyDefinedInArguments",
+                       kind: "OriginallyDefinedInArguments"),
                  Child(name: "TokenList",
                        kind: "TokenList",
                        collectionElementName: "Token")
@@ -538,19 +540,19 @@ public let ATTRIBUTE_NODES: [Node] = [
                  "Colon"
                ]),
          Child(name: "VersionList",
-               kind: "BackDeployVersionList",
+               kind: "AvailabilityVersionRestrictionList",
                description: "The list of OS versions in which the declaration became ABIstable.",
                collectionElementName: "Availability")
        ]),
 
-  Node(name: "BackDeployVersionList",
+  Node(name: "AvailabilityVersionRestrictionList",
        nameForDiagnostics: "version list",
        kind: "SyntaxCollection",
-       element: "BackDeployVersionArgument"),
+       element: "AvailabilityVersionRestrictionListEntry"),
 
-  Node(name: "BackDeployVersionArgument",
+  Node(name: "AvailabilityVersionRestrictionListEntry",
        nameForDiagnostics: "version",
-       description: "A single platform/version pair in a `@_backDeploy` attribute,e.g. `iOS 10.1`.",
+       description: "A single platform/version pair in an attribute, e.g. `iOS 10.1`.",
        kind: "Syntax",
        children: [
          Child(name: "AvailabilityVersionRestriction",
@@ -677,6 +679,39 @@ public let ATTRIBUTE_NODES: [Node] = [
                tokenChoices: [
                  "StringLiteral"
                ])
+       ]),
+
+  Node(name: "OriginallyDefinedInArguments",
+       nameForDiagnostics: "@_originallyDefinedIn arguments",
+       description: "The arguments for the '@_originallyDefinedIn' attribute",
+       kind: "Syntax",
+       children: [
+         Child(name: "ModuleLabel",
+               kind: "IdentifierToken",
+               tokenChoices: [
+                 "Identifier"
+               ],
+               textChoices: [
+                 "module"
+               ]),
+         Child(name: "Colon",
+               kind: "ColonToken",
+               tokenChoices: [
+                 "Colon"
+               ]),
+         Child(name: "ModuleName",
+               kind: "StringLiteralToken",
+               tokenChoices: [
+                 "StringLiteral"
+               ]),
+         Child(name: "Comma",
+               kind: "CommaToken",
+               tokenChoices: [
+                 "Comma"
+               ]),
+         Child(name: "Platforms",
+               kind: "AvailabilityVersionRestrictionList",
+               collectionElementName: "Platform")
        ]),
 
 ]

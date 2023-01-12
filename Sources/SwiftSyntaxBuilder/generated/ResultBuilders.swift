@@ -437,10 +437,10 @@ public extension AvailabilitySpecList {
 }
 
 @resultBuilder
-public struct BackDeployVersionListBuilder {
+public struct AvailabilityVersionRestrictionListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = BackDeployVersionArgument
+  public typealias Expression = AvailabilityVersionRestrictionListEntry
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -448,7 +448,7 @@ public struct BackDeployVersionListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = BackDeployVersionList
+  public typealias FinalResult = AvailabilityVersionRestrictionList
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -510,8 +510,8 @@ public struct BackDeployVersionListBuilder {
   }
 }
 
-public extension BackDeployVersionList {
-  init(@BackDeployVersionListBuilder itemsBuilder: () -> BackDeployVersionList) {
+public extension AvailabilityVersionRestrictionList {
+  init(@AvailabilityVersionRestrictionListBuilder itemsBuilder: () -> AvailabilityVersionRestrictionList) {
     self = itemsBuilder()
   }
 }

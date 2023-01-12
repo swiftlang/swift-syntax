@@ -50,8 +50,8 @@ extension AvailabilitySpecList: ExpressibleByArrayLiteral {
   }
 }
 
-/// `BackDeployVersionList` represents a collection of `BackDeployVersionArgumentSyntax`
-extension BackDeployVersionList: ExpressibleByArrayLiteral {
+/// `AvailabilityVersionRestrictionList` represents a collection of `AvailabilityVersionRestrictionListEntrySyntax`
+extension AvailabilityVersionRestrictionList: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }

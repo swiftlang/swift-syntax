@@ -122,7 +122,7 @@ extension SyntaxClassification {
       }
     }else {
       switch (parentKind, indexInParent) {
-      case (.backDeployVersionArgument, 1): 
+      case (.availabilityVersionRestrictionListEntry, 1): 
         return (.keyword, false)
       case (.customAttribute, 3): 
         return (.attribute, false)

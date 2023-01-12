@@ -64,15 +64,15 @@ public enum SyntaxKind {
   
   case availabilitySpecList
   
+  case availabilityVersionRestrictionListEntry
+  
+  case availabilityVersionRestrictionList
+  
   case availabilityVersionRestriction
   
   case awaitExpr
   
   case backDeployAttributeSpecList
-  
-  case backDeployVersionArgument
-  
-  case backDeployVersionList
   
   case binaryOperatorExpr
   
@@ -362,6 +362,8 @@ public enum SyntaxKind {
   
   case optionalType
   
+  case originallyDefinedInArguments
+  
   case packElementExpr
   
   case packExpansionExpr
@@ -540,7 +542,7 @@ public enum SyntaxKind {
       return true
     case .availabilitySpecList: 
       return true
-    case .backDeployVersionList: 
+    case .availabilityVersionRestrictionList: 
       return true
     case .caseItemList: 
       return true

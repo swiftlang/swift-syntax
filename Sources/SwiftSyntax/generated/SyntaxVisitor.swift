@@ -304,6 +304,30 @@ open class SyntaxVisitor {
   open func visitPost(_ node: AvailabilitySpecListSyntax) {
   }
   
+  /// Visiting `AvailabilityVersionRestrictionListEntrySyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: AvailabilityVersionRestrictionListEntrySyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting `AvailabilityVersionRestrictionListEntrySyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: AvailabilityVersionRestrictionListEntrySyntax) {
+  }
+  
+  /// Visiting `AvailabilityVersionRestrictionListSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: AvailabilityVersionRestrictionListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting `AvailabilityVersionRestrictionListSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: AvailabilityVersionRestrictionListSyntax) {
+  }
+  
   /// Visiting `AvailabilityVersionRestrictionSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -338,30 +362,6 @@ open class SyntaxVisitor {
   /// The function called after visiting `BackDeployAttributeSpecListSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: BackDeployAttributeSpecListSyntax) {
-  }
-  
-  /// Visiting `BackDeployVersionArgumentSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: BackDeployVersionArgumentSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting `BackDeployVersionArgumentSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: BackDeployVersionArgumentSyntax) {
-  }
-  
-  /// Visiting `BackDeployVersionListSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: BackDeployVersionListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting `BackDeployVersionListSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: BackDeployVersionListSyntax) {
   }
   
   /// Visiting `BinaryOperatorExprSyntax` specifically.
@@ -2092,6 +2092,18 @@ open class SyntaxVisitor {
   open func visitPost(_ node: OptionalTypeSyntax) {
   }
   
+  /// Visiting `OriginallyDefinedInArgumentsSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: OriginallyDefinedInArgumentsSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting `OriginallyDefinedInArgumentsSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: OriginallyDefinedInArgumentsSyntax) {
+  }
+  
   /// Visiting `PackElementExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -3354,6 +3366,28 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplAvailabilityVersionRestrictionListEntrySyntax(_ data: SyntaxData) {
+    let node = AvailabilityVersionRestrictionListEntrySyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplAvailabilityVersionRestrictionListSyntax(_ data: SyntaxData) {
+    let node = AvailabilityVersionRestrictionListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplAvailabilityVersionRestrictionSyntax(_ data: SyntaxData) {
     let node = AvailabilityVersionRestrictionSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -3378,28 +3412,6 @@ open class SyntaxVisitor {
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplBackDeployAttributeSpecListSyntax(_ data: SyntaxData) {
     let node = BackDeployAttributeSpecListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplBackDeployVersionArgumentSyntax(_ data: SyntaxData) {
-    let node = BackDeployVersionArgumentSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplBackDeployVersionListSyntax(_ data: SyntaxData) {
-    let node = BackDeployVersionListSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -4993,6 +5005,17 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplOriginallyDefinedInArgumentsSyntax(_ data: SyntaxData) {
+    let node = OriginallyDefinedInArgumentsSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplPackElementExprSyntax(_ data: SyntaxData) {
     let node = PackElementExprSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -5958,16 +5981,16 @@ open class SyntaxVisitor {
       visitImplAvailabilityLabeledArgumentSyntax(data)
     case .availabilitySpecList: 
       visitImplAvailabilitySpecListSyntax(data)
+    case .availabilityVersionRestrictionListEntry: 
+      visitImplAvailabilityVersionRestrictionListEntrySyntax(data)
+    case .availabilityVersionRestrictionList: 
+      visitImplAvailabilityVersionRestrictionListSyntax(data)
     case .availabilityVersionRestriction: 
       visitImplAvailabilityVersionRestrictionSyntax(data)
     case .awaitExpr: 
       visitImplAwaitExprSyntax(data)
     case .backDeployAttributeSpecList: 
       visitImplBackDeployAttributeSpecListSyntax(data)
-    case .backDeployVersionArgument: 
-      visitImplBackDeployVersionArgumentSyntax(data)
-    case .backDeployVersionList: 
-      visitImplBackDeployVersionListSyntax(data)
     case .binaryOperatorExpr: 
       visitImplBinaryOperatorExprSyntax(data)
     case .booleanLiteralExpr: 
@@ -6256,6 +6279,8 @@ open class SyntaxVisitor {
       visitImplOptionalChainingExprSyntax(data)
     case .optionalType: 
       visitImplOptionalTypeSyntax(data)
+    case .originallyDefinedInArguments: 
+      visitImplOriginallyDefinedInArgumentsSyntax(data)
     case .packElementExpr: 
       visitImplPackElementExprSyntax(data)
     case .packExpansionExpr: 

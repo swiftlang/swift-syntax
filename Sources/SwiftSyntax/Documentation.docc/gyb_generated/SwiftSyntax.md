@@ -234,8 +234,8 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/ObjCSelectorPieceSyntax>
 - <doc:SwiftSyntax/DifferentiabilityParamListSyntax>
 - <doc:SwiftSyntax/DifferentiabilityParamSyntax>
-- <doc:SwiftSyntax/BackDeployVersionListSyntax>
-- <doc:SwiftSyntax/BackDeployVersionArgumentSyntax>
+- <doc:SwiftSyntax/AvailabilityVersionRestrictionListSyntax>
+- <doc:SwiftSyntax/AvailabilityVersionRestrictionListEntrySyntax>
 - <doc:SwiftSyntax/CatchClauseListSyntax>
 - <doc:SwiftSyntax/CatchClauseSyntax>
 - <doc:SwiftSyntax/CaseItemListSyntax>
@@ -356,12 +356,13 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/DerivativeRegistrationAttributeArgumentsSyntax>
 - <doc:SwiftSyntax/QualifiedDeclNameSyntax>
 - <doc:SwiftSyntax/BackDeployAttributeSpecListSyntax>
-- <doc:SwiftSyntax/BackDeployVersionListSyntax>
-- <doc:SwiftSyntax/BackDeployVersionArgumentSyntax>
+- <doc:SwiftSyntax/AvailabilityVersionRestrictionListSyntax>
+- <doc:SwiftSyntax/AvailabilityVersionRestrictionListEntrySyntax>
 - <doc:SwiftSyntax/OpaqueReturnTypeOfAttributeArgumentsSyntax>
 - <doc:SwiftSyntax/ConventionAttributeArgumentsSyntax>
 - <doc:SwiftSyntax/ConventionWitnessMethodAttributeArgumentsSyntax>
 - <doc:SwiftSyntax/ExposeAttributeArgumentsSyntax>
+- <doc:SwiftSyntax/OriginallyDefinedInArgumentsSyntax>
 - <doc:SwiftSyntax/SwitchCaseListSyntax>
 - <doc:SwiftSyntax/WhereClauseSyntax>
 - <doc:SwiftSyntax/CatchClauseListSyntax>

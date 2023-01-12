@@ -1392,12 +1392,12 @@ extension AvailabilitySpecListSyntax: BidirectionalCollection {
   }
 }
 
-/// `BackDeployVersionListSyntax` represents a collection of one or more
-/// `BackDeployVersionArgument` nodes. BackDeployVersionListSyntax behaves
+/// `AvailabilityVersionRestrictionListSyntax` represents a collection of one or more
+/// `AvailabilityVersionRestrictionListEntry` nodes. AvailabilityVersionRestrictionListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
-public struct BackDeployVersionListSyntax: SyntaxCollection, SyntaxHashable {
-  public typealias Element = BackDeployVersionArgumentSyntax
+public struct AvailabilityVersionRestrictionListSyntax: SyntaxCollection, SyntaxHashable {
+  public typealias Element = AvailabilityVersionRestrictionListEntrySyntax
   
   public let _syntaxNode: Syntax
   
@@ -1407,7 +1407,7 @@ public struct BackDeployVersionListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init? < S: SyntaxProtocol > (_ node: S) {
-    guard node.raw.kind == .backDeployVersionList else { 
+    guard node.raw.kind == .availabilityVersionRestrictionList else { 
       return nil 
     }
     self._syntaxNode = node._syntaxNode
@@ -1417,13 +1417,13 @@ public struct BackDeployVersionListSyntax: SyntaxCollection, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .backDeployVersionList)
+    assert(data.raw.kind == .availabilityVersionRestrictionList)
     self._syntaxNode = Syntax(data)
   }
   
   public init(_ children: [Element]) {
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.backDeployVersionList, 
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.availabilityVersionRestrictionList, 
                                    from: children.map { 
           $0.raw 
         }, arena: arena)
@@ -1437,50 +1437,50 @@ public struct BackDeployVersionListSyntax: SyntaxCollection, SyntaxHashable {
     return raw.layoutView!.children.count 
   }
   
-  /// Creates a new `BackDeployVersionListSyntax` by replacing the underlying layout with
+  /// Creates a new `AvailabilityVersionRestrictionListSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `BackDeployVersionListSyntax` with the new layout underlying it.
+  /// - Returns: A new `AvailabilityVersionRestrictionListSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> BackDeployVersionListSyntax {
+    _ layout: [RawSyntax?]) -> AvailabilityVersionRestrictionListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
-    return BackDeployVersionListSyntax(newData)
+    return AvailabilityVersionRestrictionListSyntax(newData)
   }
   
-  /// Creates a new `BackDeployVersionListSyntax` by appending the provided syntax element
+  /// Creates a new `AvailabilityVersionRestrictionListSyntax` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `BackDeployVersionListSyntax` with that element appended to the end.
-  public func appending(_ syntax: Element) -> BackDeployVersionListSyntax {
+  /// - Returns: A new `AvailabilityVersionRestrictionListSyntax` with that element appended to the end.
+  public func appending(_ syntax: Element) -> AvailabilityVersionRestrictionListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `BackDeployVersionListSyntax` by prepending the provided syntax element
+  /// Creates a new `AvailabilityVersionRestrictionListSyntax` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `BackDeployVersionListSyntax` with that element prepended to the
+  /// - Returns: A new `AvailabilityVersionRestrictionListSyntax` with that element prepended to the
   ///            beginning.
-  public func prepending(_ syntax: Element) -> BackDeployVersionListSyntax {
+  public func prepending(_ syntax: Element) -> AvailabilityVersionRestrictionListSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `BackDeployVersionListSyntax` by inserting the provided syntax element
+  /// Creates a new `AvailabilityVersionRestrictionListSyntax` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `BackDeployVersionListSyntax` with that element appended to the end.
-  public func inserting(_ syntax: Element, at index: Int) -> BackDeployVersionListSyntax {
+  /// - Returns: A new `AvailabilityVersionRestrictionListSyntax` with that element appended to the end.
+  public func inserting(_ syntax: Element, at index: Int) -> AvailabilityVersionRestrictionListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index), 
@@ -1489,15 +1489,15 @@ public struct BackDeployVersionListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `BackDeployVersionListSyntax` by replacing the syntax element
+  /// Creates a new `AvailabilityVersionRestrictionListSyntax` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `BackDeployVersionListSyntax` with the new element at the provided index.
-  public func replacing(childAt index: Int, with syntax: Element) -> BackDeployVersionListSyntax {
+  /// - Returns: A new `AvailabilityVersionRestrictionListSyntax` with the new element at the provided index.
+  public func replacing(childAt index: Int, with syntax: Element) -> AvailabilityVersionRestrictionListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index), 
@@ -1506,64 +1506,64 @@ public struct BackDeployVersionListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `BackDeployVersionListSyntax` by removing the syntax element at the
+  /// Creates a new `AvailabilityVersionRestrictionListSyntax` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `BackDeployVersionListSyntax` with the element at the provided index
+  /// - Returns: A new `AvailabilityVersionRestrictionListSyntax` with the element at the provided index
   ///            removed.
-  public func removing(childAt index: Int) -> BackDeployVersionListSyntax {
+  public func removing(childAt index: Int) -> AvailabilityVersionRestrictionListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `BackDeployVersionListSyntax` by removing the first element.
+  /// Creates a new `AvailabilityVersionRestrictionListSyntax` by removing the first element.
   ///
-  /// - Returns: A new `BackDeployVersionListSyntax` with the first element removed.
-  public func removingFirst() -> BackDeployVersionListSyntax {
+  /// - Returns: A new `AvailabilityVersionRestrictionListSyntax` with the first element removed.
+  public func removingFirst() -> AvailabilityVersionRestrictionListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `BackDeployVersionListSyntax` by removing the last element.
+  /// Creates a new `AvailabilityVersionRestrictionListSyntax` by removing the last element.
   ///
-  /// - Returns: A new `BackDeployVersionListSyntax` with the last element removed.
-  public func removingLast() -> BackDeployVersionListSyntax {
+  /// - Returns: A new `AvailabilityVersionRestrictionListSyntax` with the last element removed.
+  public func removingLast() -> AvailabilityVersionRestrictionListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
   
-  /// Returns a new `BackDeployVersionListSyntax` with its leading trivia replaced
+  /// Returns a new `AvailabilityVersionRestrictionListSyntax` with its leading trivia replaced
   /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> BackDeployVersionListSyntax {
-    return BackDeployVersionListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> AvailabilityVersionRestrictionListSyntax {
+    return AvailabilityVersionRestrictionListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
   
-  /// Returns a new `BackDeployVersionListSyntax` with its trailing trivia replaced
+  /// Returns a new `AvailabilityVersionRestrictionListSyntax` with its trailing trivia replaced
   /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> BackDeployVersionListSyntax {
-    return BackDeployVersionListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> AvailabilityVersionRestrictionListSyntax {
+    return AvailabilityVersionRestrictionListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
   
-  /// Returns a new `BackDeployVersionListSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> BackDeployVersionListSyntax {
+  /// Returns a new `AvailabilityVersionRestrictionListSyntax` with its leading trivia removed.
+  public func withoutLeadingTrivia() -> AvailabilityVersionRestrictionListSyntax {
     return withLeadingTrivia([])
   }
   
-  /// Returns a new `BackDeployVersionListSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> BackDeployVersionListSyntax {
+  /// Returns a new `AvailabilityVersionRestrictionListSyntax` with its trailing trivia removed.
+  public func withoutTrailingTrivia() -> AvailabilityVersionRestrictionListSyntax {
     return withTrailingTrivia([])
   }
   
-  /// Returns a new `BackDeployVersionListSyntax` with all trivia removed.
-  public func withoutTrivia() -> BackDeployVersionListSyntax {
+  /// Returns a new `AvailabilityVersionRestrictionListSyntax` with all trivia removed.
+  public func withoutTrivia() -> AvailabilityVersionRestrictionListSyntax {
     return withoutLeadingTrivia().withoutTrailingTrivia()
   }
   
-  /// The leading trivia (spaces, newlines, etc.) associated with this `BackDeployVersionListSyntax`.
+  /// The leading trivia (spaces, newlines, etc.) associated with this `AvailabilityVersionRestrictionListSyntax`.
   public var leadingTrivia: Trivia? {
   get {
     return raw.formLeadingTrivia()
@@ -1573,7 +1573,7 @@ public struct BackDeployVersionListSyntax: SyntaxCollection, SyntaxHashable {
   }
   }
   
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `BackDeployVersionListSyntax`.
+  /// The trailing trivia (spaces, newlines, etc.) associated with this `AvailabilityVersionRestrictionListSyntax`.
   public var trailingTrivia: Trivia? {
   get {
     return raw.formTrailingTrivia()
@@ -1588,8 +1588,8 @@ public struct BackDeployVersionListSyntax: SyntaxCollection, SyntaxHashable {
   }
 }
 
-/// Conformance for `BackDeployVersionListSyntax` to the `BidirectionalCollection` protocol.
-extension BackDeployVersionListSyntax: BidirectionalCollection {
+/// Conformance for `AvailabilityVersionRestrictionListSyntax` to the `BidirectionalCollection` protocol.
+extension AvailabilityVersionRestrictionListSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
   public struct Iterator: IteratorProtocol {
@@ -11853,7 +11853,7 @@ extension AvailabilitySpecListSyntax: CustomReflectable {
   }
 }
 
-extension BackDeployVersionListSyntax: CustomReflectable {
+extension AvailabilityVersionRestrictionListSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, unlabeledChildren: self.map { 
         $0 

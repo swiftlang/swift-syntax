@@ -395,4 +395,27 @@ final class AttributeTests: XCTestCase {
       ]
     )
   }
+
+  func testOriginallyDefinedIn() {
+    AssertParse(
+      """
+      @_originallyDefinedIn(module: "ToasterKit", macOS 10.15)
+      struct Vehicle {}
+      """
+    )
+
+    AssertParse(
+      """
+      @_originallyDefinedIn(module: "ToasterKit", macOS 10.15, iOS 13)
+      struct Vehicle {}
+      """
+    )
+
+    AssertParse(
+      """
+      @_originallyDefinedIn(module: "ToasterKit", _iOS13Aligned)
+      struct Vehicle {}
+      """
+    )
+  }
 }

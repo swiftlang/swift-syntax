@@ -125,7 +125,7 @@ extension BackDeployAttributeSpecList {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeBeforeLabel: UnexpectedNodes? = nil, beforeLabel: String, unexpectedBetweenBeforeLabelAndColon: UnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndVersionList: UnexpectedNodes? = nil, versionList: BackDeployVersionList, trailingTrivia: Trivia? = nil) {
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeBeforeLabel: UnexpectedNodes? = nil, beforeLabel: String, unexpectedBetweenBeforeLabelAndColon: UnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndVersionList: UnexpectedNodes? = nil, versionList: AvailabilityVersionRestrictionList, trailingTrivia: Trivia? = nil) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeBeforeLabel, beforeLabel: Token.`identifier`(beforeLabel), unexpectedBetweenBeforeLabelAndColon, colon: colon, unexpectedBetweenColonAndVersionList, versionList: versionList, trailingTrivia: trailingTrivia)
   }
 }
@@ -893,6 +893,16 @@ extension OptionalBindingCondition {
   ///  - Initializing tokens without default text using strings
   public init(leadingTrivia: Trivia? = nil, unexpectedBeforeLetOrVarKeyword: UnexpectedNodes? = nil, letOrVarKeyword: Keyword, unexpectedBetweenLetOrVarKeywordAndPattern: UnexpectedNodes? = nil, pattern: PatternSyntaxProtocol, unexpectedBetweenPatternAndTypeAnnotation: UnexpectedNodes? = nil, typeAnnotation: TypeAnnotation? = nil, unexpectedBetweenTypeAnnotationAndInitializer: UnexpectedNodes? = nil, initializer: InitializerClause? = nil, trailingTrivia: Trivia? = nil) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLetOrVarKeyword, letOrVarKeyword: Token.`keyword`(letOrVarKeyword), unexpectedBetweenLetOrVarKeywordAndPattern, pattern: PatternSyntax(fromProtocol: pattern), unexpectedBetweenPatternAndTypeAnnotation, typeAnnotation: typeAnnotation, unexpectedBetweenTypeAnnotationAndInitializer, initializer: initializer, trailingTrivia: trailingTrivia)
+  }
+}
+
+/// The arguments for the '@_originallyDefinedIn' attribute
+extension OriginallyDefinedInArguments {
+  /// A convenience initializer that allows:
+  ///  - Initializing syntax collections using result builders
+  ///  - Initializing tokens without default text using strings
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeModuleLabel: UnexpectedNodes? = nil, moduleLabel: String, unexpectedBetweenModuleLabelAndColon: UnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndModuleName: UnexpectedNodes? = nil, moduleName: String, unexpectedBetweenModuleNameAndComma: UnexpectedNodes? = nil, comma: Token = Token.`comma`, unexpectedBetweenCommaAndPlatforms: UnexpectedNodes? = nil, platforms: AvailabilityVersionRestrictionList, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeModuleLabel, moduleLabel: Token.`identifier`(moduleLabel), unexpectedBetweenModuleLabelAndColon, colon: colon, unexpectedBetweenColonAndModuleName, moduleName: Token.`stringLiteral`(moduleName), unexpectedBetweenModuleNameAndComma, comma: comma, unexpectedBetweenCommaAndPlatforms, platforms: platforms, trailingTrivia: trailingTrivia)
   }
 }
 

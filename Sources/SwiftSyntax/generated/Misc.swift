@@ -42,11 +42,11 @@ extension Syntax {
       .node(AvailabilityEntrySyntax.self), 
       .node(AvailabilityLabeledArgumentSyntax.self), 
       .node(AvailabilitySpecListSyntax.self), 
+      .node(AvailabilityVersionRestrictionListEntrySyntax.self), 
+      .node(AvailabilityVersionRestrictionListSyntax.self), 
       .node(AvailabilityVersionRestrictionSyntax.self), 
       .node(AwaitExprSyntax.self), 
       .node(BackDeployAttributeSpecListSyntax.self), 
-      .node(BackDeployVersionArgumentSyntax.self), 
-      .node(BackDeployVersionListSyntax.self), 
       .node(BinaryOperatorExprSyntax.self), 
       .node(BooleanLiteralExprSyntax.self), 
       .node(BorrowExprSyntax.self), 
@@ -191,6 +191,7 @@ extension Syntax {
       .node(OptionalBindingConditionSyntax.self), 
       .node(OptionalChainingExprSyntax.self), 
       .node(OptionalTypeSyntax.self), 
+      .node(OriginallyDefinedInArgumentsSyntax.self), 
       .node(PackElementExprSyntax.self), 
       .node(PackExpansionExprSyntax.self), 
       .node(PackExpansionTypeSyntax.self), 
@@ -328,16 +329,16 @@ extension SyntaxKind {
       return AvailabilityLabeledArgumentSyntax.self
     case .availabilitySpecList: 
       return AvailabilitySpecListSyntax.self
+    case .availabilityVersionRestrictionListEntry: 
+      return AvailabilityVersionRestrictionListEntrySyntax.self
+    case .availabilityVersionRestrictionList: 
+      return AvailabilityVersionRestrictionListSyntax.self
     case .availabilityVersionRestriction: 
       return AvailabilityVersionRestrictionSyntax.self
     case .awaitExpr: 
       return AwaitExprSyntax.self
     case .backDeployAttributeSpecList: 
       return BackDeployAttributeSpecListSyntax.self
-    case .backDeployVersionArgument: 
-      return BackDeployVersionArgumentSyntax.self
-    case .backDeployVersionList: 
-      return BackDeployVersionListSyntax.self
     case .binaryOperatorExpr: 
       return BinaryOperatorExprSyntax.self
     case .booleanLiteralExpr: 
@@ -626,6 +627,8 @@ extension SyntaxKind {
       return OptionalChainingExprSyntax.self
     case .optionalType: 
       return OptionalTypeSyntax.self
+    case .originallyDefinedInArguments: 
+      return OriginallyDefinedInArgumentsSyntax.self
     case .packElementExpr: 
       return PackElementExprSyntax.self
     case .packExpansionExpr: 
@@ -845,16 +848,16 @@ extension SyntaxKind {
       return "availability argument"
     case .availabilitySpecList: 
       return "'@availability' arguments"
+    case .availabilityVersionRestrictionListEntry: 
+      return "version"
+    case .availabilityVersionRestrictionList: 
+      return "version list"
     case .availabilityVersionRestriction: 
       return "availability argument"
     case .awaitExpr: 
       return "'await' expression"
     case .backDeployAttributeSpecList: 
       return "'@_backDeploy' arguments"
-    case .backDeployVersionArgument: 
-      return "version"
-    case .backDeployVersionList: 
-      return "version list"
     case .binaryOperatorExpr: 
       return nil
     case .booleanLiteralExpr: 
@@ -1143,6 +1146,8 @@ extension SyntaxKind {
       return "optional chaining"
     case .optionalType: 
       return "optional type"
+    case .originallyDefinedInArguments: 
+      return "@_originallyDefinedIn arguments"
     case .packElementExpr: 
       return nil
     case .packExpansionExpr: 

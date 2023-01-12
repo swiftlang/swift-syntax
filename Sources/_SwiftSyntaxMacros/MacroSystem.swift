@@ -106,7 +106,7 @@ class MacroApplication: SyntaxRewriter {
           return true
         }
 
-        return !(macro is PeerDeclarationMacro.Type || macro is MemberDeclarationMacro.Type)
+        return !(macro is PeerDeclarationMacro.Type || macro is MemberDeclarationMacro.Type || macro is AccessorDeclarationMacro.Type)
       }
 
       if newAttributes.isEmpty {
@@ -254,6 +254,60 @@ class MacroApplication: SyntaxRewriter {
   override func visit(_ node: ExtensionDeclSyntax) -> DeclSyntax {
     return visit(declGroup: node)
   }
+
+  // Properties
+  override func visit(_ node: VariableDeclSyntax) -> DeclSyntax {
+    let visitedNode = super.visit(node)
+    guard let visitedVarDecl = visitedNode.as(VariableDeclSyntax.self) else {
+      return visitedNode
+    }
+
+    guard let binding = visitedVarDecl.bindings.first,
+      visitedVarDecl.bindings.count == 1
+    else {
+      return DeclSyntax(node)
+    }
+
+    var accessors: [AccessorDeclSyntax] = []
+
+    let accessorMacroAttributes = getMacroAttributes(attachedTo: DeclSyntax(node), ofType: AccessorDeclarationMacro.Type.self)
+    for (accessorAttr, accessorMacro) in accessorMacroAttributes {
+      do {
+        let newAccessors = try accessorMacro.expansion(
+          of: accessorAttr,
+          attachedTo: DeclSyntax(visitedNode),
+          in: &context
+        )
+
+        accessors.append(contentsOf: newAccessors)
+      } catch {
+        // FIXME: record the error
+      }
+    }
+
+    if accessors.isEmpty {
+      return visitedNode
+    }
+
+    return DeclSyntax(
+      visitedVarDecl.withBindings(
+        visitedVarDecl.bindings.replacing(
+          childAt: 0,
+          with: binding.withAccessor(
+            .accessors(
+              .init(
+                leftBrace: .leftBraceToken(leadingTrivia: .space),
+                accessors: .init(accessors),
+                rightBrace: .rightBraceToken(leadingTrivia: .newline)
+              )
+            )
+          )
+        )
+      )
+    )
+  }
+
+  // Subscripts
 }
 
 extension MacroApplication {

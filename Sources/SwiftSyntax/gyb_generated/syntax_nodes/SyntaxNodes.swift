@@ -11930,6 +11930,7 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
     case `underscorePrivateAttributeArguments`(UnderscorePrivateAttributeArgumentsSyntax)
     case `dynamicReplacementArguments`(DynamicReplacementArgumentsSyntax)
     case `unavailableFromAsyncArguments`(UnavailableFromAsyncArgumentsSyntax)
+    case `effectsArguments`(EffectsArgumentsSyntax)
     public var _syntaxNode: Syntax {
       switch self {
       case .argumentList(let node): return node._syntaxNode
@@ -11949,6 +11950,7 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
       case .underscorePrivateAttributeArguments(let node): return node._syntaxNode
       case .dynamicReplacementArguments(let node): return node._syntaxNode
       case .unavailableFromAsyncArguments(let node): return node._syntaxNode
+      case .effectsArguments(let node): return node._syntaxNode
       }
     }
     init(_ data: SyntaxData) { self.init(Syntax(data))! }
@@ -12002,6 +12004,9 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
     }
     public init(_ node: UnavailableFromAsyncArgumentsSyntax) {
       self = .unavailableFromAsyncArguments(node)
+    }
+    public init(_ node: EffectsArgumentsSyntax) {
+      self = .effectsArguments(node)
     }
     public init?<S: SyntaxProtocol>(_ node: S) {
       if let node = node.as(TupleExprElementListSyntax.self) {
@@ -12072,6 +12077,10 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
         self = .unavailableFromAsyncArguments(node)
         return
       }
+      if let node = node.as(EffectsArgumentsSyntax.self) {
+        self = .effectsArguments(node)
+        return
+      }
       return nil
     }
 
@@ -12094,6 +12103,7 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
         .node(UnderscorePrivateAttributeArgumentsSyntax.self),
         .node(DynamicReplacementArgumentsSyntax.self),
         .node(UnavailableFromAsyncArgumentsSyntax.self),
+        .node(EffectsArgumentsSyntax.self),
       ])
     }
   }

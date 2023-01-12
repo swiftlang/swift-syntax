@@ -187,6 +187,8 @@ public typealias DynamicReplacementArguments = DynamicReplacementArgumentsSyntax
 
 public typealias EditorPlaceholderExpr = EditorPlaceholderExprSyntax
 
+public typealias EffectsArguments = EffectsArgumentsSyntax
+
 public typealias EnumCaseDecl = EnumCaseDeclSyntax
 
 public typealias EnumCaseElementList = EnumCaseElementListSyntax

@@ -5825,6 +5825,26 @@ public enum SyntaxFactory {
       return UnavailableFromAsyncArgumentsSyntax(data)
     }
   }
+  @available(*, deprecated, message: "Use initializer on EffectsArgumentsSyntax")
+  public static func makeEffectsArguments(
+    _ elements: [TokenSyntax]) -> EffectsArgumentsSyntax {
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.effectsArguments,
+        from: elements.map { $0.raw }, arena: arena)
+      let data = SyntaxData.forRoot(raw)
+      return EffectsArgumentsSyntax(data)
+    }
+  }
+
+  @available(*, deprecated, message: "Use initializer on EffectsArgumentsSyntax")
+  public static func makeBlankEffectsArguments(presence: SourcePresence = .present) -> EffectsArgumentsSyntax {
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .effectsArguments,
+        from: [
+      ], arena: arena))
+      return EffectsArgumentsSyntax(data)
+    }
+  }
   @available(*, deprecated, message: "Use initializer on LabeledStmtSyntax")
   public static func makeLabeledStmt(_ unexpectedBeforeLabelName: UnexpectedNodesSyntax? = nil, labelName: TokenSyntax, _ unexpectedBetweenLabelNameAndLabelColon: UnexpectedNodesSyntax? = nil, labelColon: TokenSyntax, _ unexpectedBetweenLabelColonAndStatement: UnexpectedNodesSyntax? = nil, statement: StmtSyntax, _ unexpectedAfterStatement: UnexpectedNodesSyntax? = nil) -> LabeledStmtSyntax {
     let layout: [RawSyntax?] = [

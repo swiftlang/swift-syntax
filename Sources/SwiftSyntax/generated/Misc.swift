@@ -103,6 +103,7 @@ extension Syntax {
       .node(DoStmtSyntax.self), 
       .node(DynamicReplacementArgumentsSyntax.self), 
       .node(EditorPlaceholderExprSyntax.self), 
+      .node(EffectsArgumentsSyntax.self), 
       .node(EnumCaseDeclSyntax.self), 
       .node(EnumCaseElementListSyntax.self), 
       .node(EnumCaseElementSyntax.self), 
@@ -452,6 +453,8 @@ extension SyntaxKind {
       return DynamicReplacementArgumentsSyntax.self
     case .editorPlaceholderExpr: 
       return EditorPlaceholderExprSyntax.self
+    case .effectsArguments: 
+      return EffectsArgumentsSyntax.self
     case .enumCaseDecl: 
       return EnumCaseDeclSyntax.self
     case .enumCaseElementList: 
@@ -973,6 +976,8 @@ extension SyntaxKind {
       return "@_dynamicReplacement argument"
     case .editorPlaceholderExpr: 
       return "editor placeholder"
+    case .effectsArguments: 
+      return "@_effects arguments"
     case .enumCaseDecl: 
       return "enum case"
     case .enumCaseElementList: 

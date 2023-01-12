@@ -364,6 +364,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/UnderscorePrivateAttributeArgumentsSyntax>
 - <doc:SwiftSyntax/DynamicReplacementArgumentsSyntax>
 - <doc:SwiftSyntax/UnavailableFromAsyncArgumentsSyntax>
+- <doc:SwiftSyntax/EffectsArgumentsSyntax>
 - <doc:SwiftSyntax/SwitchCaseListSyntax>
 - <doc:SwiftSyntax/WhereClauseSyntax>
 - <doc:SwiftSyntax/CatchClauseListSyntax>

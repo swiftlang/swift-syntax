@@ -4785,6 +4785,265 @@ extension DifferentiabilityParamListSyntax: BidirectionalCollection {
   }
 }
 
+/// The arguments of the '@_effect' attribute. These will be parsed during the SIL stage.
+public struct EffectsArgumentsSyntax: SyntaxCollection, SyntaxHashable {
+  public typealias Element = TokenSyntax
+  
+  public let _syntaxNode: Syntax
+  
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
+    data.raw.layoutView!
+  }
+  
+  public init? < S: SyntaxProtocol > (_ node: S) {
+    guard node.raw.kind == .effectsArguments else { 
+      return nil 
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+  
+  /// Creates a Syntax node from the provided root and data. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .effectsArguments)
+    self._syntaxNode = Syntax(data)
+  }
+  
+  public init(_ children: [Element]) {
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.effectsArguments, 
+                                   from: children.map { 
+          $0.raw 
+        }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+  
+  /// The number of elements, `present` or `missing`, in this collection.
+  public var count: Int { 
+    return raw.layoutView!.children.count 
+  }
+  
+  /// Creates a new `EffectsArgumentsSyntax` by replacing the underlying layout with
+  /// a different set of raw syntax nodes.
+  ///
+  /// - Parameter layout: The new list of raw syntax nodes underlying this
+  ///                     collection.
+  /// - Returns: A new `EffectsArgumentsSyntax` with the new layout underlying it.
+  internal func replacingLayout(
+    _ layout: [RawSyntax?]) -> EffectsArgumentsSyntax {
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
+    return EffectsArgumentsSyntax(newData)
+  }
+  
+  /// Creates a new `EffectsArgumentsSyntax` by appending the provided syntax element
+  /// to the children.
+  ///
+  /// - Parameter syntax: The element to append.
+  /// - Returns: A new `EffectsArgumentsSyntax` with that element appended to the end.
+  public func appending(_ syntax: Element) -> EffectsArgumentsSyntax {
+    var newLayout = layoutView.formLayoutArray()
+    newLayout.append(syntax.raw)
+    return replacingLayout(newLayout)
+  }
+  
+  /// Creates a new `EffectsArgumentsSyntax` by prepending the provided syntax element
+  /// to the children.
+  ///
+  /// - Parameter syntax: The element to prepend.
+  /// - Returns: A new `EffectsArgumentsSyntax` with that element prepended to the
+  ///            beginning.
+  public func prepending(_ syntax: Element) -> EffectsArgumentsSyntax {
+    return inserting(syntax, at: 0)
+  }
+  
+  /// Creates a new `EffectsArgumentsSyntax` by inserting the provided syntax element
+  /// at the provided index in the children.
+  ///
+  /// - Parameters:
+  ///   - syntax: The element to insert.
+  ///   - index: The index at which to insert the element in the collection.
+  ///
+  /// - Returns: A new `EffectsArgumentsSyntax` with that element appended to the end.
+  public func inserting(_ syntax: Element, at index: Int) -> EffectsArgumentsSyntax {
+    var newLayout = layoutView.formLayoutArray()
+    /// Make sure the index is a valid insertion index (0 to 1 past the end)
+    precondition((newLayout.startIndex...newLayout.endIndex).contains(index), 
+               "inserting node at invalid index \(index)")
+    newLayout.insert(syntax.raw, at: index)
+    return replacingLayout(newLayout)
+  }
+  
+  /// Creates a new `EffectsArgumentsSyntax` by replacing the syntax element
+  /// at the provided index.
+  ///
+  /// - Parameters:
+  ///   - index: The index at which to replace the element in the collection.
+  ///   - syntax: The element to replace with.
+  ///
+  /// - Returns: A new `EffectsArgumentsSyntax` with the new element at the provided index.
+  public func replacing(childAt index: Int, with syntax: Element) -> EffectsArgumentsSyntax {
+    var newLayout = layoutView.formLayoutArray()
+    /// Make sure the index is a valid index for replacing
+    precondition((newLayout.startIndex..<newLayout.endIndex).contains(index), 
+               "replacing node at invalid index \(index)")
+    newLayout[index] = syntax.raw
+    return replacingLayout(newLayout)
+  }
+  
+  /// Creates a new `EffectsArgumentsSyntax` by removing the syntax element at the
+  /// provided index.
+  ///
+  /// - Parameter index: The index of the element to remove from the collection.
+  /// - Returns: A new `EffectsArgumentsSyntax` with the element at the provided index
+  ///            removed.
+  public func removing(childAt index: Int) -> EffectsArgumentsSyntax {
+    var newLayout = layoutView.formLayoutArray()
+    newLayout.remove(at: index)
+    return replacingLayout(newLayout)
+  }
+  
+  /// Creates a new `EffectsArgumentsSyntax` by removing the first element.
+  ///
+  /// - Returns: A new `EffectsArgumentsSyntax` with the first element removed.
+  public func removingFirst() -> EffectsArgumentsSyntax {
+    var newLayout = layoutView.formLayoutArray()
+    newLayout.removeFirst()
+    return replacingLayout(newLayout)
+  }
+  
+  /// Creates a new `EffectsArgumentsSyntax` by removing the last element.
+  ///
+  /// - Returns: A new `EffectsArgumentsSyntax` with the last element removed.
+  public func removingLast() -> EffectsArgumentsSyntax {
+    var newLayout = layoutView.formLayoutArray()
+    newLayout.removeLast()
+    return replacingLayout(newLayout)
+  }
+  
+  /// Returns a new `EffectsArgumentsSyntax` with its leading trivia replaced
+  /// by the provided trivia.
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> EffectsArgumentsSyntax {
+    return EffectsArgumentsSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
+  }
+  
+  /// Returns a new `EffectsArgumentsSyntax` with its trailing trivia replaced
+  /// by the provided trivia.
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> EffectsArgumentsSyntax {
+    return EffectsArgumentsSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
+  }
+  
+  /// Returns a new `EffectsArgumentsSyntax` with its leading trivia removed.
+  public func withoutLeadingTrivia() -> EffectsArgumentsSyntax {
+    return withLeadingTrivia([])
+  }
+  
+  /// Returns a new `EffectsArgumentsSyntax` with its trailing trivia removed.
+  public func withoutTrailingTrivia() -> EffectsArgumentsSyntax {
+    return withTrailingTrivia([])
+  }
+  
+  /// Returns a new `EffectsArgumentsSyntax` with all trivia removed.
+  public func withoutTrivia() -> EffectsArgumentsSyntax {
+    return withoutLeadingTrivia().withoutTrailingTrivia()
+  }
+  
+  /// The leading trivia (spaces, newlines, etc.) associated with this `EffectsArgumentsSyntax`.
+  public var leadingTrivia: Trivia? {
+  get {
+    return raw.formLeadingTrivia()
+  }
+  set {
+    self = withLeadingTrivia(newValue ?? [])
+  }
+  }
+  
+  /// The trailing trivia (spaces, newlines, etc.) associated with this `EffectsArgumentsSyntax`.
+  public var trailingTrivia: Trivia? {
+  get {
+    return raw.formTrailingTrivia()
+  }
+  set {
+    self = withTrailingTrivia(newValue ?? [])
+  }
+  }
+  
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
+  }
+}
+
+/// Conformance for `EffectsArgumentsSyntax` to the `BidirectionalCollection` protocol.
+extension EffectsArgumentsSyntax: BidirectionalCollection {
+  public typealias Index = SyntaxChildrenIndex
+  
+  public struct Iterator: IteratorProtocol {
+    private let parent: Syntax
+    
+    private var iterator: RawSyntaxChildren.Iterator
+    
+
+    init(parent: Syntax, rawChildren: RawSyntaxChildren) {
+      self.parent = parent
+      self.iterator = rawChildren.makeIterator()
+    }
+    
+
+    public mutating func next() -> Element? {
+      guard let (raw, info) = self.iterator.next() else {
+        return nil
+      }
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let data = SyntaxData(absoluteRaw, parent: parent)
+      return Element(data)
+    }
+  }
+  
+  public func makeIterator() -> Iterator {
+    return Iterator(parent: Syntax(self), rawChildren: rawChildren)
+  }
+  
+  private var rawChildren: RawSyntaxChildren {
+    // We know children in a syntax collection cannot be missing. So we can
+    // use the low-level and faster RawSyntaxChildren collection instead of
+    // NonNilRawSyntaxChildren.
+    return RawSyntaxChildren(self.data.absoluteRaw)
+  }
+  
+  public var startIndex: SyntaxChildrenIndex {
+    return rawChildren.startIndex
+  }
+  
+  public var endIndex: SyntaxChildrenIndex {
+    return rawChildren.endIndex
+  }
+  
+  public func index(after index: SyntaxChildrenIndex) -> SyntaxChildrenIndex {
+    return rawChildren.index(after: index)
+  }
+  
+  public func index(before index: SyntaxChildrenIndex) -> SyntaxChildrenIndex {
+    return rawChildren.index(before: index)
+  }
+  
+  public func distance(from start: SyntaxChildrenIndex, to end: SyntaxChildrenIndex)
+  -> Int {
+    return rawChildren.distance(from: start, to: end)
+  }
+  
+  public subscript (position: SyntaxChildrenIndex) -> Element {
+    let (raw, info) = rawChildren[position]
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let data = SyntaxData(absoluteRaw, parent: Syntax(self))
+    return Element(data)
+  }
+}
+
 /// A collection of 0 or more `EnumCaseElement`s.
 public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = EnumCaseElementSyntax
@@ -11937,6 +12196,14 @@ extension DictionaryElementListSyntax: CustomReflectable {
 }
 
 extension DifferentiabilityParamListSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, unlabeledChildren: self.map { 
+        $0 
+      })
+  }
+}
+
+extension EffectsArgumentsSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, unlabeledChildren: self.map { 
         $0 

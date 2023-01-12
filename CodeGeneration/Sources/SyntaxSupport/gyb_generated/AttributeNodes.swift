@@ -79,7 +79,9 @@ public let ATTRIBUTE_NODES: [Node] = [
                  Child(name: "DynamicReplacementArguments",
                        kind: "DynamicReplacementArguments"),
                  Child(name: "UnavailableFromAsyncArguments",
-                       kind: "UnavailableFromAsyncArguments")
+                       kind: "UnavailableFromAsyncArguments"),
+                 Child(name: "EffectsArguments",
+                       kind: "EffectsArguments")
                ]),
          Child(name: "RightParen",
                kind: "RightParenToken",
@@ -726,5 +728,11 @@ public let ATTRIBUTE_NODES: [Node] = [
                  "StringLiteral"
                ])
        ]),
+
+  Node(name: "EffectsArguments",
+       nameForDiagnostics: "@_effects arguments",
+       description: "The arguments of the '@_effect' attribute. These will be parsed during the SIL stage.",
+       kind: "SyntaxCollection",
+       element: "Token"),
 
 ]

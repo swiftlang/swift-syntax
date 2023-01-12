@@ -1241,6 +1241,13 @@ open class SyntaxRewriter {
     return Syntax(visitChildren(node)).cast(UnavailableFromAsyncArgumentsSyntax.self)
   }
 
+  /// Visit a `EffectsArgumentsSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: EffectsArgumentsSyntax) -> EffectsArgumentsSyntax {
+    return Syntax(visitChildren(node)).cast(EffectsArgumentsSyntax.self)
+  }
+
   /// Visit a `LabeledStmtSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -3637,6 +3644,16 @@ open class SyntaxRewriter {
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplEffectsArgumentsSyntax(_ data: SyntaxData) -> Syntax {
+    let node = EffectsArgumentsSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { visitPost(node._syntaxNode) }
+    if let newNode = visitAny(node._syntaxNode) { return newNode }
+    return Syntax(visit(node))
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplLabeledStmtSyntax(_ data: SyntaxData) -> Syntax {
     let node = LabeledStmtSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -4854,6 +4871,8 @@ open class SyntaxRewriter {
       return visitImplDynamicReplacementArgumentsSyntax
     case .unavailableFromAsyncArguments:
       return visitImplUnavailableFromAsyncArgumentsSyntax
+    case .effectsArguments:
+      return visitImplEffectsArgumentsSyntax
     case .labeledStmt:
       return visitImplLabeledStmtSyntax
     case .continueStmt:
@@ -5381,6 +5400,8 @@ open class SyntaxRewriter {
       return visitImplDynamicReplacementArgumentsSyntax(data)
     case .unavailableFromAsyncArguments:
       return visitImplUnavailableFromAsyncArgumentsSyntax(data)
+    case .effectsArguments:
+      return visitImplEffectsArgumentsSyntax(data)
     case .labeledStmt:
       return visitImplLabeledStmtSyntax(data)
     case .continueStmt:

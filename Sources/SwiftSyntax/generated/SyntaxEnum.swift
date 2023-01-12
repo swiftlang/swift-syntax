@@ -186,6 +186,8 @@ public enum SyntaxEnum {
   
   case editorPlaceholderExpr(EditorPlaceholderExprSyntax)
   
+  case effectsArguments(EffectsArgumentsSyntax)
+  
   case enumCaseDecl(EnumCaseDeclSyntax)
   
   case enumCaseElementList(EnumCaseElementListSyntax)
@@ -707,6 +709,8 @@ public extension Syntax {
       return .dynamicReplacementArguments(DynamicReplacementArgumentsSyntax(self)!)
     case .editorPlaceholderExpr: 
       return .editorPlaceholderExpr(EditorPlaceholderExprSyntax(self)!)
+    case .effectsArguments: 
+      return .effectsArguments(EffectsArgumentsSyntax(self)!)
     case .enumCaseDecl: 
       return .enumCaseDecl(EnumCaseDeclSyntax(self)!)
     case .enumCaseElementList: 

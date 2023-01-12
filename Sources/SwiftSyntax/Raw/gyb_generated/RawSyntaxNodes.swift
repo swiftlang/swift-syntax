@@ -10362,9 +10362,10 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol {
     case `underscorePrivateAttributeArguments`(RawUnderscorePrivateAttributeArgumentsSyntax)
     case `dynamicReplacementArguments`(RawDynamicReplacementArgumentsSyntax)
     case `unavailableFromAsyncArguments`(RawUnavailableFromAsyncArgumentsSyntax)
+    case `effectsArguments`(RawEffectsArgumentsSyntax)
 
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
-      return RawTupleExprElementListSyntax.isKindOf(raw) || RawTokenSyntax.isKindOf(raw) || RawAvailabilitySpecListSyntax.isKindOf(raw) || RawSpecializeAttributeSpecListSyntax.isKindOf(raw) || RawObjCSelectorSyntax.isKindOf(raw) || RawImplementsAttributeArgumentsSyntax.isKindOf(raw) || RawDifferentiableAttributeArgumentsSyntax.isKindOf(raw) || RawDerivativeRegistrationAttributeArgumentsSyntax.isKindOf(raw) || RawBackDeployAttributeSpecListSyntax.isKindOf(raw) || RawConventionAttributeArgumentsSyntax.isKindOf(raw) || RawConventionWitnessMethodAttributeArgumentsSyntax.isKindOf(raw) || RawOpaqueReturnTypeOfAttributeArgumentsSyntax.isKindOf(raw) || RawExposeAttributeArgumentsSyntax.isKindOf(raw) || RawOriginallyDefinedInArgumentsSyntax.isKindOf(raw) || RawUnderscorePrivateAttributeArgumentsSyntax.isKindOf(raw) || RawDynamicReplacementArgumentsSyntax.isKindOf(raw) || RawUnavailableFromAsyncArgumentsSyntax.isKindOf(raw)
+      return RawTupleExprElementListSyntax.isKindOf(raw) || RawTokenSyntax.isKindOf(raw) || RawAvailabilitySpecListSyntax.isKindOf(raw) || RawSpecializeAttributeSpecListSyntax.isKindOf(raw) || RawObjCSelectorSyntax.isKindOf(raw) || RawImplementsAttributeArgumentsSyntax.isKindOf(raw) || RawDifferentiableAttributeArgumentsSyntax.isKindOf(raw) || RawDerivativeRegistrationAttributeArgumentsSyntax.isKindOf(raw) || RawBackDeployAttributeSpecListSyntax.isKindOf(raw) || RawConventionAttributeArgumentsSyntax.isKindOf(raw) || RawConventionWitnessMethodAttributeArgumentsSyntax.isKindOf(raw) || RawOpaqueReturnTypeOfAttributeArgumentsSyntax.isKindOf(raw) || RawExposeAttributeArgumentsSyntax.isKindOf(raw) || RawOriginallyDefinedInArgumentsSyntax.isKindOf(raw) || RawUnderscorePrivateAttributeArgumentsSyntax.isKindOf(raw) || RawDynamicReplacementArgumentsSyntax.isKindOf(raw) || RawUnavailableFromAsyncArgumentsSyntax.isKindOf(raw) || RawEffectsArgumentsSyntax.isKindOf(raw)
     }
 
     public var raw: RawSyntax {
@@ -10386,6 +10387,7 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol {
       case .underscorePrivateAttributeArguments(let node): return node.raw
       case .dynamicReplacementArguments(let node): return node.raw
       case .unavailableFromAsyncArguments(let node): return node.raw
+      case .effectsArguments(let node): return node.raw
       }
     }
 
@@ -10456,6 +10458,10 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol {
       }
       if let node = RawUnavailableFromAsyncArgumentsSyntax(other) {
         self = .unavailableFromAsyncArguments(node)
+        return
+      }
+      if let node = RawEffectsArgumentsSyntax(other) {
+        self = .effectsArguments(node)
         return
       }
       return nil
@@ -12496,6 +12502,46 @@ public struct RawUnavailableFromAsyncArgumentsSyntax: RawSyntaxNodeProtocol {
   }
   public var unexpectedAfterMessage: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+}
+
+@_spi(RawSyntax)
+public struct RawEffectsArgumentsSyntax: RawSyntaxNodeProtocol {
+
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
+    return raw.layoutView!
+  }
+
+  public static func isKindOf(_ raw: RawSyntax) -> Bool {
+    return raw.kind == .effectsArguments
+  }
+
+  public var raw: RawSyntax
+  init(raw: RawSyntax) {
+    assert(Self.isKindOf(raw))
+    self.raw = raw
+  }
+
+  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+    guard Self.isKindOf(other.raw) else { return nil }
+    self.init(raw: other.raw)
+  }
+
+  public init(elements: [RawTokenSyntax], arena: __shared SyntaxArena) {
+    let raw = RawSyntax.makeLayout(
+      kind: .effectsArguments, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
+    self.init(raw: raw)
+  }
+
+  public var elements: [RawTokenSyntax] {
+    layoutView.children.map { RawTokenSyntax(raw: $0!) }
   }
 }
 

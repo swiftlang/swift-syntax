@@ -729,6 +729,14 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
+  override open func visit(_ node: EffectsArgumentsSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: EffectsArgumentsSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
   override open func visit(_ node: EnumCaseDeclSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

@@ -141,6 +141,13 @@ extension DifferentiabilityParamList: ExpressibleByArrayLiteral {
   }
 }
 
+/// The arguments of the '@_effect' attribute. These will be parsed during the SIL stage.
+extension EffectsArguments: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: Element...) {
+    self.init(elements)
+  }
+}
+
 /// A collection of 0 or more `EnumCaseElement`s.
 extension EnumCaseElementList: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {

@@ -441,6 +441,11 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: EditorPlaceholderExprSyntax) -> ResultType
   
+  /// Visiting `EffectsArgumentsSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: EffectsArgumentsSyntax) -> ResultType
+  
   /// Visiting `EnumCaseDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -1900,6 +1905,13 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
+  /// Visiting `EffectsArgumentsSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: EffectsArgumentsSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
   /// Visiting `EnumCaseDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -3282,6 +3294,8 @@ extension SyntaxTransformVisitor {
     case .dynamicReplacementArguments(let derived): 
       return visit(derived)
     case .editorPlaceholderExpr(let derived): 
+      return visit(derived)
+    case .effectsArguments(let derived): 
       return visit(derived)
     case .enumCaseDecl(let derived): 
       return visit(derived)

@@ -141,7 +141,7 @@ extension Parser {
       return parseAttribute(argumentMode: .required) { parser in
         return .dynamicReplacementArguments(parser.parseDynamicReplacementArguments())
       }
-    case ._spi, ._effects, ._objcRuntimeName, ._projectedValueProperty, ._swift_native_objc_runtime_base, ._typeEraser, ._documentation, ._optimize, ._nonSendable, .exclusivity, .inline, ._alignment:
+    case ._spi, ._objcRuntimeName, ._projectedValueProperty, ._swift_native_objc_runtime_base, ._typeEraser, ._documentation, ._optimize, ._nonSendable, .exclusivity, .inline, ._alignment:
       // Attributes that take a single token as argument. Some examples of these include:
       //  - Arbitrary identifiers (e.g. `@_spi(RawSyntax)`)
       //  - An integer literal (e.g. `@_alignment(4)`)
@@ -154,6 +154,16 @@ extension Parser {
         } else {
           return .token(parser.missingToken(.identifier))
         }
+      }
+    case ._effects:
+      return parseAttribute(argumentMode: .required) { parser in
+        // The contents of the @_effects attribute are parsed in SIL, we just
+        // represent the contents as a list of tokens in SwiftSyntax.
+        var tokens: [RawTokenSyntax] = []
+        while !parser.at(any: [.rightParen, .eof]) {
+          tokens.append(parser.consumeAnyToken())
+        }
+        return .effectsArguments(RawEffectsArgumentsSyntax(elements: tokens, arena: parser.arena))
       }
     case ._objcImplementation:
       // Similar to the above but the argument is optional

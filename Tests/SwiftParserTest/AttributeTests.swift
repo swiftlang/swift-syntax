@@ -466,7 +466,22 @@ final class AttributeTests: XCTestCase {
         DiagnosticSpec(message: "unexpected code 'abc' in attribute"),
       ]
     )
+  }
 
+  func testEffects() {
+    AssertParse(
+      """
+      @_effects(notEscaping self.value**)
+      func foo() {}
+      """
+    )
+
+    AssertParse(
+      """
+      @_effects(escaping self.value**.class*.value** => return.value**)
+      func foo() {}
+      """
+    )
   }
 
   func testEscapingOnClosureType() {

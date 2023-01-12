@@ -186,6 +186,8 @@ public enum SyntaxKind {
   
   case editorPlaceholderExpr
   
+  case effectsArguments
+  
   case enumCaseDecl
   
   case enumCaseElementList
@@ -569,6 +571,8 @@ public enum SyntaxKind {
     case .dictionaryElementList: 
       return true
     case .differentiabilityParamList: 
+      return true
+    case .effectsArguments: 
       return true
     case .enumCaseElementList: 
       return true

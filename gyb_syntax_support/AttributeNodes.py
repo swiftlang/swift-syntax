@@ -63,6 +63,8 @@ ATTRIBUTE_NODES = [
                              kind='DynamicReplacementArguments'),
                        Child('UnavailableFromAsyncArguments',
                              kind='UnavailableFromAsyncArguments'),
+                       Child('EffectsArguments',
+                             kind='EffectsArguments')
                    ], description='''
                    The arguments of the attribute. In case the attribute
                    takes multiple arguments, they are gather in the
@@ -507,4 +509,10 @@ ATTRIBUTE_NODES = [
            Child('Colon', kind='ColonToken'),
            Child('Message', kind='StringLiteralToken'),
          ]),
+
+    Node('EffectsArguments', name_for_diagnostics='@_effects arguments', kind='SyntaxCollection',
+         description='''
+         The arguments of the '@_effect' attribute. These will be parsed during the SIL stage.
+         ''',
+         element='Token'),
 ]

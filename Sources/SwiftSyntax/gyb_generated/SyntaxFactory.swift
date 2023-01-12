@@ -5845,6 +5845,65 @@ public enum SyntaxFactory {
       return EffectsArgumentsSyntax(data)
     }
   }
+  @available(*, deprecated, message: "Use initializer on DocumentationAttributeArgumentSyntax")
+  public static func makeDocumentationAttributeArgument(_ unexpectedBeforeLabel: UnexpectedNodesSyntax? = nil, label: TokenSyntax, _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndValue: UnexpectedNodesSyntax? = nil, value: TokenSyntax, _ unexpectedBetweenValueAndTrailingComma: UnexpectedNodesSyntax? = nil, trailingComma: TokenSyntax?, _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil) -> DocumentationAttributeArgumentSyntax {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeLabel?.raw,
+      label.raw,
+      unexpectedBetweenLabelAndColon?.raw,
+      colon.raw,
+      unexpectedBetweenColonAndValue?.raw,
+      value.raw,
+      unexpectedBetweenValueAndTrailingComma?.raw,
+      trailingComma?.raw,
+      unexpectedAfterTrailingComma?.raw,
+    ]
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.documentationAttributeArgument,
+        from: layout, arena: arena)
+      let data = SyntaxData.forRoot(raw)
+      return DocumentationAttributeArgumentSyntax(data)
+    }
+  }
+
+  @available(*, deprecated, message: "Use initializer on DocumentationAttributeArgumentSyntax")
+  public static func makeBlankDocumentationAttributeArgument(presence: SourcePresence = .present) -> DocumentationAttributeArgumentSyntax {
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .documentationAttributeArgument,
+        from: [
+        nil,
+        RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena),
+        nil,
+        RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena),
+        nil,
+        RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena),
+        nil,
+        nil,
+        nil,
+      ], arena: arena))
+      return DocumentationAttributeArgumentSyntax(data)
+    }
+  }
+  @available(*, deprecated, message: "Use initializer on DocumentationAttributeArgumentsSyntax")
+  public static func makeDocumentationAttributeArguments(
+    _ elements: [DocumentationAttributeArgumentSyntax]) -> DocumentationAttributeArgumentsSyntax {
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.documentationAttributeArguments,
+        from: elements.map { $0.raw }, arena: arena)
+      let data = SyntaxData.forRoot(raw)
+      return DocumentationAttributeArgumentsSyntax(data)
+    }
+  }
+
+  @available(*, deprecated, message: "Use initializer on DocumentationAttributeArgumentsSyntax")
+  public static func makeBlankDocumentationAttributeArguments(presence: SourcePresence = .present) -> DocumentationAttributeArgumentsSyntax {
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .documentationAttributeArguments,
+        from: [
+      ], arena: arena))
+      return DocumentationAttributeArgumentsSyntax(data)
+    }
+  }
   @available(*, deprecated, message: "Use initializer on LabeledStmtSyntax")
   public static func makeLabeledStmt(_ unexpectedBeforeLabelName: UnexpectedNodesSyntax? = nil, labelName: TokenSyntax, _ unexpectedBetweenLabelNameAndLabelColon: UnexpectedNodesSyntax? = nil, labelColon: TokenSyntax, _ unexpectedBetweenLabelColonAndStatement: UnexpectedNodesSyntax? = nil, statement: StmtSyntax, _ unexpectedAfterStatement: UnexpectedNodesSyntax? = nil) -> LabeledStmtSyntax {
     let layout: [RawSyntax?] = [

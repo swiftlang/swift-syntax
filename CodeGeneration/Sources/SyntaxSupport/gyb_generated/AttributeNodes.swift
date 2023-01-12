@@ -81,7 +81,9 @@ public let ATTRIBUTE_NODES: [Node] = [
                  Child(name: "UnavailableFromAsyncArguments",
                        kind: "UnavailableFromAsyncArguments"),
                  Child(name: "EffectsArguments",
-                       kind: "EffectsArguments")
+                       kind: "EffectsArguments"),
+                 Child(name: "DocumentationArguments",
+                       kind: "DocumentationAttributeArguments")
                ]),
          Child(name: "RightParen",
                kind: "RightParenToken",
@@ -734,5 +736,48 @@ public let ATTRIBUTE_NODES: [Node] = [
        description: "The arguments of the '@_effect' attribute. These will be parsed during the SIL stage.",
        kind: "SyntaxCollection",
        element: "Token"),
+
+  Node(name: "DocumentationAttributeArgument",
+       nameForDiagnostics: "@_documentation argument",
+       kind: "Syntax",
+       traits: [
+         "WithTrailingComma"
+       ],
+       children: [
+         Child(name: "Label",
+               kind: "IdentifierToken",
+               tokenChoices: [
+                 "Identifier"
+               ],
+               textChoices: [
+                 "visibility",
+                 "metadata"
+               ]),
+         Child(name: "Colon",
+               kind: "ColonToken",
+               tokenChoices: [
+                 "Colon"
+               ]),
+         Child(name: "Value",
+               kind: "Token",
+               tokenChoices: [
+                 "Identifier",
+                 "Keyword",
+                 "StringLiteral"
+               ]),
+         Child(name: "TrailingComma",
+               kind: "CommaToken",
+               description: "A trailing comma if this argument is followed by another one",
+               isOptional: true,
+               tokenChoices: [
+                 "Comma"
+               ])
+       ]),
+
+  Node(name: "DocumentationAttributeArguments",
+       nameForDiagnostics: "@_documentation arguments",
+       description: "The arguments of the '@_documentation' attribute",
+       kind: "SyntaxCollection",
+       element: "DocumentationAttributeArgument"),
 
 ]

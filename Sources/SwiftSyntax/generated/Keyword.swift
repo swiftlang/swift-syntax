@@ -249,6 +249,8 @@ public enum Keyword: StaticString {
   
   case message
   
+  case metadata
+  
   case module
   
   case mutableAddressWithNativeOwner
@@ -372,6 +374,8 @@ public enum Keyword: StaticString {
   case unsafeMutableAddress
   
   case `var`
+  
+  case visibility
   
   case weak
   
@@ -629,6 +633,8 @@ public enum Keyword: StaticString {
         self = .`internal`
       case "isolated": 
         self = .isolated
+      case "metadata": 
+        self = .metadata
       case "mutating": 
         self = .mutating
       case "noescape": 
@@ -697,6 +703,8 @@ public enum Keyword: StaticString {
         self = .introduced
       case "sourceFile": 
         self = .sourceFile
+      case "visibility": 
+        self = .visibility
       default: 
         return nil
       }

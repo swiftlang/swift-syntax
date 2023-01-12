@@ -64,7 +64,9 @@ ATTRIBUTE_NODES = [
                        Child('UnavailableFromAsyncArguments',
                              kind='UnavailableFromAsyncArguments'),
                        Child('EffectsArguments',
-                             kind='EffectsArguments')
+                             kind='EffectsArguments'),
+                       Child('DocumentationArguments',
+                             kind='DocumentationAttributeArguments')
                    ], description='''
                    The arguments of the attribute. In case the attribute
                    takes multiple arguments, they are gather in the
@@ -515,4 +517,22 @@ ATTRIBUTE_NODES = [
          The arguments of the '@_effect' attribute. These will be parsed during the SIL stage.
          ''',
          element='Token'),
+
+    Node('DocumentationAttributeArgument', name_for_diagnostics='@_documentation argument', kind='Syntax',
+         traits=['WithTrailingComma'],
+         children=[
+            Child('Label', kind='IdentifierToken', text_choices=['visibility', 'metadata'], name_for_diagnostics='label'),
+            Child('Colon', kind='ColonToken'),
+            Child('Value', kind='Token', token_choices=['IdentifierToken', 'KeywordToken', 'StringLiteralToken'], name_for_diagnostics='value'), # Keywords can be: public, internal, private, fileprivate, open
+            Child('TrailingComma', kind='CommaToken',
+                   is_optional=True, description='''
+                   A trailing comma if this argument is followed by another one
+                   '''),
+         ]),
+
+    Node('DocumentationAttributeArguments', name_for_diagnostics='@_documentation arguments', kind='SyntaxCollection',
+        description='''
+         The arguments of the '@_documentation' attribute
+         ''',
+         element='DocumentationAttributeArgument'),
 ]

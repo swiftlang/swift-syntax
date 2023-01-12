@@ -250,13 +250,16 @@ extension Parser {
       return parseAttribute(argumentMode: .required) { parser in
         return .dynamicReplacementArguments(parser.parseDynamicReplacementArguments())
       }
-    case ._spi, ._objcRuntimeName, ._projectedValueProperty, ._swift_native_objc_runtime_base, ._typeEraser, ._documentation, ._optimize, .exclusivity, .inline, ._alignment:
+    case ._documentation:
+      return parseAttribute(argumentMode: .required) { parser in
+        return .documentationArguments(parser.parseDocumentationAttributeArguments())
+      }
+    case ._spi, ._objcRuntimeName, ._projectedValueProperty, ._swift_native_objc_runtime_base, ._typeEraser, ._optimize, .exclusivity, .inline, ._alignment:
       // Attributes that take a single token as argument. Some examples of these include:
       //  - Arbitrary identifiers (e.g. `@_spi(RawSyntax)`)
       //  - An integer literal (e.g. `@_alignment(4)`)
-      //  - Keywords (e.g. `@_documentation(public)`)
       //
-      //  Because there seem to be very little restrictions on these parameters (they could be keywords instead of identifeirs), we just allow any token.
+      //  Because there seem to be very little restrictions on these parameters (they could be keywords instead of identifiers), we just allow any token.
       return parseAttribute(argumentMode: .required) { parser in
         if !parser.at(.rightParen) {
           return .token(parser.consumeAnyToken())
@@ -1077,6 +1080,44 @@ extension Parser {
       message: message,
       arena: self.arena
     )
+  }
+}
+
+extension Parser {
+  mutating func parseDocumentationAttributeArguments() -> RawDocumentationAttributeArgumentsSyntax {
+    var arguments: [RawDocumentationAttributeArgumentSyntax] = []
+
+    var keepGoing: RawTokenSyntax? = nil
+    repeat {
+      let (unexpectedBeforeLabel, label) = self.expectAny([.keyword(.visibility), .keyword(.metadata)], default: .keyword(.visibility))
+      let (unexpectedBeforeColon, colon) = self.expect(.colon)
+      let unexpectedBeforeValue: RawUnexpectedNodesSyntax?
+      let value: RawTokenSyntax
+      switch label.tokenText {
+      case "visibility":
+        (unexpectedBeforeValue, value) = self.expectAny([.keyword(.open), .keyword(.public), .keyword(.internal), .keyword(.fileprivate), .keyword(.private)], default: .keyword(.internal))
+      case "metadata":
+        (unexpectedBeforeValue, value) = self.expectAny([.stringLiteral, .identifier], default: .stringLiteral)
+      default:
+        unexpectedBeforeValue = nil
+        value = missingToken(.identifier)
+      }
+      keepGoing = self.consume(if: .comma)
+      arguments.append(
+        RawDocumentationAttributeArgumentSyntax(
+          unexpectedBeforeLabel,
+          label: label,
+          unexpectedBeforeColon,
+          colon: colon,
+          unexpectedBeforeValue,
+          value: value,
+          trailingComma: keepGoing,
+          arena: self.arena
+        )
+      )
+    } while keepGoing != nil
+
+    return RawDocumentationAttributeArgumentsSyntax(elements: arguments, arena: self.arena)
   }
 }
 

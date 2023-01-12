@@ -1012,6 +1012,30 @@ open class SyntaxVisitor {
   open func visitPost(_ node: DoStmtSyntax) {
   }
   
+  /// Visiting `DocumentationAttributeArgumentSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: DocumentationAttributeArgumentSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting `DocumentationAttributeArgumentSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: DocumentationAttributeArgumentSyntax) {
+  }
+  
+  /// Visiting `DocumentationAttributeArgumentsSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: DocumentationAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting `DocumentationAttributeArgumentsSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: DocumentationAttributeArgumentsSyntax) {
+  }
+  
   /// Visiting `DynamicReplacementArgumentsSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -4039,6 +4063,28 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplDocumentationAttributeArgumentSyntax(_ data: SyntaxData) {
+    let node = DocumentationAttributeArgumentSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplDocumentationAttributeArgumentsSyntax(_ data: SyntaxData) {
+    let node = DocumentationAttributeArgumentsSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplDynamicReplacementArgumentsSyntax(_ data: SyntaxData) {
     let node = DynamicReplacementArgumentsSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -6145,6 +6191,10 @@ open class SyntaxVisitor {
       visitImplDiscardAssignmentExprSyntax(data)
     case .doStmt: 
       visitImplDoStmtSyntax(data)
+    case .documentationAttributeArgument: 
+      visitImplDocumentationAttributeArgumentSyntax(data)
+    case .documentationAttributeArguments: 
+      visitImplDocumentationAttributeArgumentsSyntax(data)
     case .dynamicReplacementArguments: 
       visitImplDynamicReplacementArgumentsSyntax(data)
     case .editorPlaceholderExpr: 

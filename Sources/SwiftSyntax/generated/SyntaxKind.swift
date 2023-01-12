@@ -182,6 +182,10 @@ public enum SyntaxKind {
   
   case doStmt
   
+  case documentationAttributeArgument
+  
+  case documentationAttributeArguments
+  
   case dynamicReplacementArguments
   
   case editorPlaceholderExpr
@@ -571,6 +575,8 @@ public enum SyntaxKind {
     case .dictionaryElementList: 
       return true
     case .differentiabilityParamList: 
+      return true
+    case .documentationAttributeArguments: 
       return true
     case .effectsArguments: 
       return true

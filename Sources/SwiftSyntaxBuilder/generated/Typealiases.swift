@@ -183,6 +183,10 @@ public typealias DiscardAssignmentExpr = DiscardAssignmentExprSyntax
 
 public typealias DoStmt = DoStmtSyntax
 
+public typealias DocumentationAttributeArgument = DocumentationAttributeArgumentSyntax
+
+public typealias DocumentationAttributeArguments = DocumentationAttributeArgumentsSyntax
+
 public typealias DynamicReplacementArguments = DynamicReplacementArgumentsSyntax
 
 public typealias EditorPlaceholderExpr = EditorPlaceholderExprSyntax

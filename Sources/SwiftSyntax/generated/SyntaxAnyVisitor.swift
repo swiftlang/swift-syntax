@@ -713,6 +713,22 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
+  override open func visit(_ node: DocumentationAttributeArgumentSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: DocumentationAttributeArgumentSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
+  override open func visit(_ node: DocumentationAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: DocumentationAttributeArgumentsSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
   override open func visit(_ node: DynamicReplacementArgumentsSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

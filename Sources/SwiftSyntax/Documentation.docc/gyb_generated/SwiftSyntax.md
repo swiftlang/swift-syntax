@@ -236,6 +236,8 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/DifferentiabilityParamSyntax>
 - <doc:SwiftSyntax/AvailabilityVersionRestrictionListSyntax>
 - <doc:SwiftSyntax/AvailabilityVersionRestrictionListEntrySyntax>
+- <doc:SwiftSyntax/DocumentationAttributeArgumentsSyntax>
+- <doc:SwiftSyntax/DocumentationAttributeArgumentSyntax>
 - <doc:SwiftSyntax/CatchClauseListSyntax>
 - <doc:SwiftSyntax/CatchClauseSyntax>
 - <doc:SwiftSyntax/CaseItemListSyntax>
@@ -365,6 +367,8 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/DynamicReplacementArgumentsSyntax>
 - <doc:SwiftSyntax/UnavailableFromAsyncArgumentsSyntax>
 - <doc:SwiftSyntax/EffectsArgumentsSyntax>
+- <doc:SwiftSyntax/DocumentationAttributeArgumentSyntax>
+- <doc:SwiftSyntax/DocumentationAttributeArgumentsSyntax>
 - <doc:SwiftSyntax/SwitchCaseListSyntax>
 - <doc:SwiftSyntax/WhereClauseSyntax>
 - <doc:SwiftSyntax/CatchClauseListSyntax>

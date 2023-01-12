@@ -432,6 +432,24 @@ extension DoStmt {
   }
 }
 
+extension DocumentationAttributeArgument: HasTrailingComma {
+  /// A convenience initializer that allows:
+  ///  - Initializing syntax collections using result builders
+  ///  - Initializing tokens without default text using strings
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeLabel: UnexpectedNodes? = nil, label: String, unexpectedBetweenLabelAndColon: UnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndValue: UnexpectedNodes? = nil, value: Token, unexpectedBetweenValueAndTrailingComma: UnexpectedNodes? = nil, trailingComma: Token? = nil, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLabel, label: Token.`identifier`(label), unexpectedBetweenLabelAndColon, colon: colon, unexpectedBetweenColonAndValue, value: value, unexpectedBetweenValueAndTrailingComma, trailingComma: trailingComma, trailingTrivia: trailingTrivia)
+  }
+  
+  var hasTrailingComma: Bool {
+    return trailingComma != nil
+  }
+  
+  /// Conformance to `HasTrailingComma`.
+  public func withTrailingComma(_ withComma: Bool) -> Self {
+    return withTrailingComma(withComma ? .commaToken() : nil)
+  }
+}
+
 /// The arguments for the '@_dynamicReplacement' attribute
 extension DynamicReplacementArguments {
   /// A convenience initializer that allows:

@@ -431,6 +431,16 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: DoStmtSyntax) -> ResultType
   
+  /// Visiting `DocumentationAttributeArgumentSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: DocumentationAttributeArgumentSyntax) -> ResultType
+  
+  /// Visiting `DocumentationAttributeArgumentsSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: DocumentationAttributeArgumentsSyntax) -> ResultType
+  
   /// Visiting `DynamicReplacementArgumentsSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -1891,6 +1901,20 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
+  /// Visiting `DocumentationAttributeArgumentSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: DocumentationAttributeArgumentSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting `DocumentationAttributeArgumentsSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: DocumentationAttributeArgumentsSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
   /// Visiting `DynamicReplacementArgumentsSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -3290,6 +3314,10 @@ extension SyntaxTransformVisitor {
     case .discardAssignmentExpr(let derived): 
       return visit(derived)
     case .doStmt(let derived): 
+      return visit(derived)
+    case .documentationAttributeArgument(let derived): 
+      return visit(derived)
+    case .documentationAttributeArguments(let derived): 
       return visit(derived)
     case .dynamicReplacementArguments(let derived): 
       return visit(derived)

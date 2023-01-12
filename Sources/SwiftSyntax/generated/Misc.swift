@@ -101,6 +101,8 @@ extension Syntax {
       .node(DifferentiableAttributeArgumentsSyntax.self), 
       .node(DiscardAssignmentExprSyntax.self), 
       .node(DoStmtSyntax.self), 
+      .node(DocumentationAttributeArgumentSyntax.self), 
+      .node(DocumentationAttributeArgumentsSyntax.self), 
       .node(DynamicReplacementArgumentsSyntax.self), 
       .node(EditorPlaceholderExprSyntax.self), 
       .node(EffectsArgumentsSyntax.self), 
@@ -449,6 +451,10 @@ extension SyntaxKind {
       return DiscardAssignmentExprSyntax.self
     case .doStmt: 
       return DoStmtSyntax.self
+    case .documentationAttributeArgument: 
+      return DocumentationAttributeArgumentSyntax.self
+    case .documentationAttributeArguments: 
+      return DocumentationAttributeArgumentsSyntax.self
     case .dynamicReplacementArguments: 
       return DynamicReplacementArgumentsSyntax.self
     case .editorPlaceholderExpr: 
@@ -972,6 +978,10 @@ extension SyntaxKind {
       return nil
     case .doStmt: 
       return "'do' statement"
+    case .documentationAttributeArgument: 
+      return "@_documentation argument"
+    case .documentationAttributeArguments: 
+      return "@_documentation arguments"
     case .dynamicReplacementArguments: 
       return "@_dynamicReplacement argument"
     case .editorPlaceholderExpr: 

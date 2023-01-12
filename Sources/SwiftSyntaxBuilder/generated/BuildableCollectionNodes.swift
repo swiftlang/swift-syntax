@@ -141,6 +141,13 @@ extension DifferentiabilityParamList: ExpressibleByArrayLiteral {
   }
 }
 
+/// The arguments of the '@_documentation' attribute
+extension DocumentationAttributeArguments: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: Element...) {
+    self.init(elements)
+  }
+}
+
 /// The arguments of the '@_effect' attribute. These will be parsed during the SIL stage.
 extension EffectsArguments: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {

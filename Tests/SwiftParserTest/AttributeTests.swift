@@ -499,4 +499,11 @@ final class AttributeTests: XCTestCase {
       """
     )
   }
+
+  func testDocumentationAttribute() {
+    AssertParse("@_documentation(visibility: internal) @_exported import A")
+    AssertParse("@_documentation(metadata: cool_stuff) public class SomeClass {}")
+    AssertParse(#"@_documentation(metadata: "this is a longer string") public class OtherClass {}"#)
+    AssertParse(#"@_documentation(visibility: internal, metadata: "this is a longer string") public class OtherClass {}"#)
+  }
 }

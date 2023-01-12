@@ -182,6 +182,10 @@ public enum SyntaxEnum {
   
   case doStmt(DoStmtSyntax)
   
+  case documentationAttributeArgument(DocumentationAttributeArgumentSyntax)
+  
+  case documentationAttributeArguments(DocumentationAttributeArgumentsSyntax)
+  
   case dynamicReplacementArguments(DynamicReplacementArgumentsSyntax)
   
   case editorPlaceholderExpr(EditorPlaceholderExprSyntax)
@@ -705,6 +709,10 @@ public extension Syntax {
       return .discardAssignmentExpr(DiscardAssignmentExprSyntax(self)!)
     case .doStmt: 
       return .doStmt(DoStmtSyntax(self)!)
+    case .documentationAttributeArgument: 
+      return .documentationAttributeArgument(DocumentationAttributeArgumentSyntax(self)!)
+    case .documentationAttributeArguments: 
+      return .documentationAttributeArguments(DocumentationAttributeArgumentsSyntax(self)!)
     case .dynamicReplacementArguments: 
       return .dynamicReplacementArguments(DynamicReplacementArgumentsSyntax(self)!)
     case .editorPlaceholderExpr: 

@@ -134,6 +134,12 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var invalidWhitespaceAfterPeriod: Self {
     .init("extraneous whitespace after '.' is not permitted")
   }
+  public static var joinConditionsUsingComma: Self {
+    .init("expected ',' joining parts of a multi-clause condition")
+  }
+  public static var joinPlatformsUsingComma: Self {
+    .init("expected ',' joining platforms in availability condition")
+  }
   public static var missingColonAndExprInTernaryExpr: Self {
     .init("expected ':' and expression after '? ...' in ternary expression")
   }
@@ -170,6 +176,14 @@ extension DiagnosticMessage where Self == StaticParserError {
 }
 
 // MARK: - Diagnostics (please sort alphabetically)
+
+public struct AvailabilityConditionInExpression: ParserError {
+  public let avaialabilityCondition: AvailabilityConditionSyntax
+
+  public var message: String {
+    return "\(nodesDescription([avaialabilityCondition], format: false)) cannot be used in an expression, only as a condition of 'if' or 'guard'"
+  }
+}
 
 public struct EffectsSpecifierAfterArrow: ParserError {
   public let effectsSpecifiersAfterArrow: [TokenSyntax]
@@ -222,6 +236,15 @@ public struct MissingAttributeArgument: ParserError {
 
   public var message: String {
     return "expected argument for '@\(attributeName)' attribute"
+  }
+}
+
+public struct NegatedAvailabilityCondition: ParserError {
+  public let avaialabilityCondition: AvailabilityConditionSyntax
+  public let negatedAvailabilityKeyword: TokenSyntax
+
+  public var message: String {
+    return "\(nodesDescription([avaialabilityCondition], format: false)) cannot be used in an expression; did you mean \(nodesDescription([negatedAvailabilityKeyword], format: false))?"
   }
 }
 

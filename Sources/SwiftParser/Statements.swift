@@ -212,10 +212,18 @@ extension Parser {
     var loopProgress = LoopProgressCondition()
     repeat {
       let condition = self.parseConditionElement()
+      let unexpectedBeforeKeepGoing: RawUnexpectedNodesSyntax?
       keepGoing = self.consume(if: .comma)
+      if keepGoing == nil, let andOperator = self.consumeIfContextualPunctuator("&&") {
+        unexpectedBeforeKeepGoing = RawUnexpectedNodesSyntax([andOperator], arena: self.arena)
+        keepGoing = missingToken(.comma)
+      } else {
+        unexpectedBeforeKeepGoing = nil
+      }
       elements.append(
         RawConditionElementSyntax(
           condition: condition,
+          unexpectedBeforeKeepGoing,
           trailingComma: keepGoing,
           arena: self.arena
         )
@@ -348,39 +356,21 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parsePoundAvailableConditionElement() -> RawConditionElementSyntax.Condition {
     assert(self.at(any: [.poundAvailableKeyword, .poundUnavailableKeyword]))
-    let kind: AvailabilitySpecSource = self.at(.poundAvailableKeyword) ? .available : .unavailable
     let keyword = self.consumeAnyToken()
     let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
-    let spec = self.parseAvailabilitySpecList(from: kind)
+    let spec = self.parseAvailabilitySpecList()
     let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
-    switch kind {
-    case .available:
-      return .availability(
-        RawAvailabilityConditionSyntax(
-          poundAvailableKeyword: keyword,
-          unexpectedBeforeLParen,
-          leftParen: lparen,
-          availabilitySpec: spec,
-          unexpectedBeforeRParen,
-          rightParen: rparen,
-          arena: self.arena
-        )
+    return .availability(
+      RawAvailabilityConditionSyntax(
+        availabilityKeyword: keyword,
+        unexpectedBeforeLParen,
+        leftParen: lparen,
+        availabilitySpec: spec,
+        unexpectedBeforeRParen,
+        rightParen: rparen,
+        arena: self.arena
       )
-    case .unavailable:
-      return .unavailability(
-        RawUnavailabilityConditionSyntax(
-          poundUnavailableKeyword: keyword,
-          unexpectedBeforeLParen,
-          leftParen: lparen,
-          availabilitySpec: spec,
-          unexpectedBeforeRParen,
-          rightParen: rparen,
-          arena: self.arena
-        )
-      )
-    case .macro:
-      fatalError("Macros are not allowed in this position!")
-    }
+    )
   }
 
   /// Parse a `#_hasSymbol` condition.

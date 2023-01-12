@@ -258,7 +258,6 @@ extension Syntax {
       .node(TypeInheritanceClauseSyntax.self), 
       .node(TypeInitializerClauseSyntax.self), 
       .node(TypealiasDeclSyntax.self), 
-      .node(UnavailabilityConditionSyntax.self), 
       .node(UnexpectedNodesSyntax.self), 
       .node(UnresolvedAsExprSyntax.self), 
       .node(UnresolvedIsExprSyntax.self), 
@@ -760,8 +759,6 @@ extension SyntaxKind {
       return TypeInitializerClauseSyntax.self
     case .typealiasDecl: 
       return TypealiasDeclSyntax.self
-    case .unavailabilityCondition: 
-      return UnavailabilityConditionSyntax.self
     case .unexpectedNodes: 
       return UnexpectedNodesSyntax.self
     case .unresolvedAsExpr: 
@@ -836,17 +833,17 @@ extension SyntaxKind {
     case .attributedType: 
       return "type"
     case .availabilityArgument: 
-      return "'@available' argument"
+      return "availability argument"
     case .availabilityCondition: 
-      return "'#availabile' condition"
+      return "availability condition"
     case .availabilityEntry: 
       return "availability entry"
     case .availabilityLabeledArgument: 
-      return "'@available' argument"
+      return "availability argument"
     case .availabilitySpecList: 
       return "'@availability' arguments"
     case .availabilityVersionRestriction: 
-      return "'@available' argument"
+      return "availability argument"
     case .awaitExpr: 
       return "'await' expression"
     case .backDeployAttributeSpecList: 
@@ -1277,8 +1274,6 @@ extension SyntaxKind {
       return nil
     case .typealiasDecl: 
       return "typealias declaration"
-    case .unavailabilityCondition: 
-      return "'#unavailable' condition"
     case .unexpectedNodes: 
       return nil
     case .unresolvedAsExpr: 

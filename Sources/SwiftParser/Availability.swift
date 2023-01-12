@@ -13,39 +13,37 @@
 @_spi(RawSyntax) import SwiftSyntax
 
 extension Parser {
-  enum AvailabilitySpecSource {
-    case available
-    case unavailable
-    case macro
-  }
-
   /// Parse a list of availability arguments.
   ///
   /// Grammar
   /// =======
   ///
   ///     availability-arguments → availability-argument | availability-argument , availability-arguments
-  mutating func parseAvailabilitySpecList(
-    from source: AvailabilitySpecSource
-  ) -> RawAvailabilitySpecListSyntax {
+  mutating func parseAvailabilitySpecList() -> RawAvailabilitySpecListSyntax {
     var elements = [RawAvailabilityArgumentSyntax]()
     do {
       var keepGoing: RawTokenSyntax? = nil
       var availablityArgumentProgress = LoopProgressCondition()
       repeat {
         let entry: RawAvailabilityArgumentSyntax.Entry
-        switch source {
-        case .available where self.at(.identifier),
-          .unavailable where self.at(.identifier):
+        if self.at(.identifier) {
           entry = .availabilityVersionRestriction(self.parseAvailabilityMacro())
-        default:
+        } else {
           entry = self.parseAvailabilitySpec()
         }
 
+        let unexpectedBeforeKeepGoing: RawUnexpectedNodesSyntax?
         keepGoing = self.consume(if: .comma)
+        if keepGoing == nil, let orOperator = self.consumeIfContextualPunctuator("||") {
+          unexpectedBeforeKeepGoing = RawUnexpectedNodesSyntax([orOperator], arena: self.arena)
+          keepGoing = missingToken(.comma)
+        } else {
+          unexpectedBeforeKeepGoing = nil
+        }
         elements.append(
           RawAvailabilityArgumentSyntax(
             entry: entry,
+            unexpectedBeforeKeepGoing,
             trailingComma: keepGoing,
             arena: self.arena
           )
@@ -256,9 +254,10 @@ extension Parser {
   ///     platform-name → tvOS
   mutating func parsePlatformVersionConstraintSpec() -> RawAvailabilityVersionRestrictionSyntax {
     // Register the platform name as a keyword token.
-    let plaform = self.consumeAnyToken()
+    let (unexpectedBeforePlatform, plaform) = self.expect(.identifier)
     let version = self.parseVersionTuple()
     return RawAvailabilityVersionRestrictionSyntax(
+      unexpectedBeforePlatform,
       platform: plaform,
       version: version,
       arena: self.arena
@@ -301,28 +300,29 @@ extension Parser {
   ///     platform-version → decimal-digits '.' decimal-digits
   ///     platform-version → decimal-digits '.' decimal-digits '.' decimal-digits
   mutating func parseVersionTuple() -> RawVersionTupleSyntax {
-    if let major = self.consume(if: .integerLiteral) {
-      return RawVersionTupleSyntax(
-        majorMinor: major,
-        patchPeriod: nil,
-        patchVersion: nil,
-        arena: self.arena
-      )
-    }
-
-    let majorMinor = self.consumeAnyToken()
-    let period = self.consume(if: .period)
-
+    let (unexpectedBeforeMajorMinor, majorMinor) = self.expectAny([.integerLiteral, .floatingLiteral], default: .integerLiteral)
+    let patchPeriod: RawTokenSyntax?
+    let unexpectedBeforePatch: RawUnexpectedNodesSyntax?
     let patch: RawTokenSyntax?
-    if period != nil {
-      patch = self.consumeAnyToken()
+    if majorMinor.tokenKind == .floatingLiteral {
+      patchPeriod = self.consume(if: .period)
+      if patchPeriod != nil {
+        (unexpectedBeforePatch, patch) = self.expect(.integerLiteral)
+      } else {
+        unexpectedBeforePatch = nil
+        patch = nil
+      }
     } else {
+      patchPeriod = nil
+      unexpectedBeforePatch = nil
       patch = nil
     }
 
     return RawVersionTupleSyntax(
+      unexpectedBeforeMajorMinor,
       majorMinor: majorMinor,
-      patchPeriod: period,
+      patchPeriod: patchPeriod,
+      unexpectedBeforePatch,
       patchVersion: patch,
       arena: self.arena
     )

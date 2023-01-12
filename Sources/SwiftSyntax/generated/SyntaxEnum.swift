@@ -496,8 +496,6 @@ public enum SyntaxEnum {
   
   case typealiasDecl(TypealiasDeclSyntax)
   
-  case unavailabilityCondition(UnavailabilityConditionSyntax)
-  
   case unexpectedNodes(UnexpectedNodesSyntax)
   
   case unresolvedAsExpr(UnresolvedAsExprSyntax)
@@ -1013,8 +1011,6 @@ public extension Syntax {
       return .typeInitializerClause(TypeInitializerClauseSyntax(self)!)
     case .typealiasDecl: 
       return .typealiasDecl(TypealiasDeclSyntax(self)!)
-    case .unavailabilityCondition: 
-      return .unavailabilityCondition(UnavailabilityConditionSyntax(self)!)
     case .unexpectedNodes: 
       return .unexpectedNodes(UnexpectedNodesSyntax(self)!)
     case .unresolvedAsExpr: 

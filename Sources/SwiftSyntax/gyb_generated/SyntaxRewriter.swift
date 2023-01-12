@@ -1381,13 +1381,6 @@ open class SyntaxRewriter {
     return Syntax(visitChildren(node)).cast(OptionalBindingConditionSyntax.self)
   }
 
-  /// Visit a `UnavailabilityConditionSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: UnavailabilityConditionSyntax) -> UnavailabilityConditionSyntax {
-    return Syntax(visitChildren(node)).cast(UnavailabilityConditionSyntax.self)
-  }
-
   /// Visit a `HasSymbolConditionSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -3823,16 +3816,6 @@ open class SyntaxRewriter {
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplUnavailabilityConditionSyntax(_ data: SyntaxData) -> Syntax {
-    let node = UnavailabilityConditionSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer { visitPost(node._syntaxNode) }
-    if let newNode = visitAny(node._syntaxNode) { return newNode }
-    return Syntax(visit(node))
-  }
-
-  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplHasSymbolConditionSyntax(_ data: SyntaxData) -> Syntax {
     let node = HasSymbolConditionSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -4860,8 +4843,6 @@ open class SyntaxRewriter {
       return visitImplMatchingPatternConditionSyntax
     case .optionalBindingCondition:
       return visitImplOptionalBindingConditionSyntax
-    case .unavailabilityCondition:
-      return visitImplUnavailabilityConditionSyntax
     case .hasSymbolCondition:
       return visitImplHasSymbolConditionSyntax
     case .conditionElementList:
@@ -5383,8 +5364,6 @@ open class SyntaxRewriter {
       return visitImplMatchingPatternConditionSyntax(data)
     case .optionalBindingCondition:
       return visitImplOptionalBindingConditionSyntax(data)
-    case .unavailabilityCondition:
-      return visitImplUnavailabilityConditionSyntax(data)
     case .hasSymbolCondition:
       return visitImplHasSymbolConditionSyntax(data)
     case .conditionElementList:

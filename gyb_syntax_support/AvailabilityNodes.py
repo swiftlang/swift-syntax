@@ -11,7 +11,7 @@ AVAILABILITY_NODES = [
     #                     | identifier ','?
     #                     | availability-version-restriction ','?
     #                     | availability-versioned-argument ','?
-    Node('AvailabilityArgument', name_for_diagnostics="'@available' argument",
+    Node('AvailabilityArgument', name_for_diagnostics="availability argument",
          kind='Syntax',
          description='''
          A single argument to an `@available` argument like `*`, `iOS 10.1`,
@@ -38,7 +38,7 @@ AVAILABILITY_NODES = [
 
     # Representation of 'deprecated: 2.3', 'message: "Hello world"' etc.
     # availability-versioned-argument -> identifier ':' version-tuple
-    Node('AvailabilityLabeledArgument', name_for_diagnostics="'@available' argument",
+    Node('AvailabilityLabeledArgument', name_for_diagnostics="availability argument",
          kind='Syntax',
          description='''
          A argument to an `@available` attribute that consists of a label and
@@ -58,7 +58,7 @@ AVAILABILITY_NODES = [
 
     # Representation for 'iOS 10', 'swift 3.4' etc.
     # availability-version-restriction -> identifier version-tuple
-    Node('AvailabilityVersionRestriction', name_for_diagnostics="'@available' argument",
+    Node('AvailabilityVersionRestriction', name_for_diagnostics="availability argument",
          kind='Syntax',
          description='''
          An argument to `@available` that restricts the availability on a

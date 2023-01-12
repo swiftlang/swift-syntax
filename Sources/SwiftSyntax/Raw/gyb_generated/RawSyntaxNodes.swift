@@ -13620,20 +13620,18 @@ public struct RawConditionElementSyntax: RawSyntaxNodeProtocol {
   public enum Condition: RawSyntaxNodeProtocol {
     case `expression`(RawExprSyntax)
     case `availability`(RawAvailabilityConditionSyntax)
-    case `unavailability`(RawUnavailabilityConditionSyntax)
     case `matchingPattern`(RawMatchingPatternConditionSyntax)
     case `optionalBinding`(RawOptionalBindingConditionSyntax)
     case `hasSymbol`(RawHasSymbolConditionSyntax)
 
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
-      return RawExprSyntax.isKindOf(raw) || RawAvailabilityConditionSyntax.isKindOf(raw) || RawUnavailabilityConditionSyntax.isKindOf(raw) || RawMatchingPatternConditionSyntax.isKindOf(raw) || RawOptionalBindingConditionSyntax.isKindOf(raw) || RawHasSymbolConditionSyntax.isKindOf(raw)
+      return RawExprSyntax.isKindOf(raw) || RawAvailabilityConditionSyntax.isKindOf(raw) || RawMatchingPatternConditionSyntax.isKindOf(raw) || RawOptionalBindingConditionSyntax.isKindOf(raw) || RawHasSymbolConditionSyntax.isKindOf(raw)
     }
 
     public var raw: RawSyntax {
       switch self {
       case .expression(let node): return node.raw
       case .availability(let node): return node.raw
-      case .unavailability(let node): return node.raw
       case .matchingPattern(let node): return node.raw
       case .optionalBinding(let node): return node.raw
       case .hasSymbol(let node): return node.raw
@@ -13647,10 +13645,6 @@ public struct RawConditionElementSyntax: RawSyntaxNodeProtocol {
       }
       if let node = RawAvailabilityConditionSyntax(other) {
         self = .availability(node)
-        return
-      }
-      if let node = RawUnavailabilityConditionSyntax(other) {
-        self = .unavailability(node)
         return
       }
       if let node = RawMatchingPatternConditionSyntax(other) {
@@ -13751,9 +13745,9 @@ public struct RawAvailabilityConditionSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ unexpectedBeforePoundAvailableKeyword: RawUnexpectedNodesSyntax? = nil,
-    poundAvailableKeyword: RawTokenSyntax,
-    _ unexpectedBetweenPoundAvailableKeywordAndLeftParen: RawUnexpectedNodesSyntax? = nil,
+    _ unexpectedBeforeAvailabilityKeyword: RawUnexpectedNodesSyntax? = nil,
+    availabilityKeyword: RawTokenSyntax,
+    _ unexpectedBetweenAvailabilityKeywordAndLeftParen: RawUnexpectedNodesSyntax? = nil,
     leftParen: RawTokenSyntax,
     _ unexpectedBetweenLeftParenAndAvailabilitySpec: RawUnexpectedNodesSyntax? = nil,
     availabilitySpec: RawAvailabilitySpecListSyntax,
@@ -13765,9 +13759,9 @@ public struct RawAvailabilityConditionSyntax: RawSyntaxNodeProtocol {
     let raw = RawSyntax.makeLayout(
       kind: .availabilityCondition, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforePoundAvailableKeyword?.raw
-      layout[1] = poundAvailableKeyword.raw
-      layout[2] = unexpectedBetweenPoundAvailableKeywordAndLeftParen?.raw
+      layout[0] = unexpectedBeforeAvailabilityKeyword?.raw
+      layout[1] = availabilityKeyword.raw
+      layout[2] = unexpectedBetweenAvailabilityKeywordAndLeftParen?.raw
       layout[3] = leftParen.raw
       layout[4] = unexpectedBetweenLeftParenAndAvailabilitySpec?.raw
       layout[5] = availabilitySpec.raw
@@ -13778,13 +13772,13 @@ public struct RawAvailabilityConditionSyntax: RawSyntaxNodeProtocol {
     self.init(raw: raw)
   }
 
-  public var unexpectedBeforePoundAvailableKeyword: RawUnexpectedNodesSyntax? {
+  public var unexpectedBeforeAvailabilityKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public var poundAvailableKeyword: RawTokenSyntax {
+  public var availabilityKeyword: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var unexpectedBetweenPoundAvailableKeywordAndLeftParen: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenAvailabilityKeywordAndLeftParen: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var leftParen: RawTokenSyntax {
@@ -13963,86 +13957,6 @@ public struct RawOptionalBindingConditionSyntax: RawSyntaxNodeProtocol {
     layoutView.children[7].map(RawInitializerClauseSyntax.init(raw:))
   }
   public var unexpectedAfterInitializer: RawUnexpectedNodesSyntax? {
-    layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-}
-
-@_spi(RawSyntax)
-public struct RawUnavailabilityConditionSyntax: RawSyntaxNodeProtocol {
-
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
-    return raw.layoutView!
-  }
-
-  public static func isKindOf(_ raw: RawSyntax) -> Bool {
-    return raw.kind == .unavailabilityCondition
-  }
-
-  public var raw: RawSyntax
-  init(raw: RawSyntax) {
-    assert(Self.isKindOf(raw))
-    self.raw = raw
-  }
-
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { return nil }
-    self.init(raw: other.raw)
-  }
-
-  public init(
-    _ unexpectedBeforePoundUnavailableKeyword: RawUnexpectedNodesSyntax? = nil,
-    poundUnavailableKeyword: RawTokenSyntax,
-    _ unexpectedBetweenPoundUnavailableKeywordAndLeftParen: RawUnexpectedNodesSyntax? = nil,
-    leftParen: RawTokenSyntax,
-    _ unexpectedBetweenLeftParenAndAvailabilitySpec: RawUnexpectedNodesSyntax? = nil,
-    availabilitySpec: RawAvailabilitySpecListSyntax,
-    _ unexpectedBetweenAvailabilitySpecAndRightParen: RawUnexpectedNodesSyntax? = nil,
-    rightParen: RawTokenSyntax,
-    _ unexpectedAfterRightParen: RawUnexpectedNodesSyntax? = nil,
-    arena: __shared SyntaxArena
-  ) {
-    let raw = RawSyntax.makeLayout(
-      kind: .unavailabilityCondition, uninitializedCount: 9, arena: arena) { layout in
-      layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforePoundUnavailableKeyword?.raw
-      layout[1] = poundUnavailableKeyword.raw
-      layout[2] = unexpectedBetweenPoundUnavailableKeywordAndLeftParen?.raw
-      layout[3] = leftParen.raw
-      layout[4] = unexpectedBetweenLeftParenAndAvailabilitySpec?.raw
-      layout[5] = availabilitySpec.raw
-      layout[6] = unexpectedBetweenAvailabilitySpecAndRightParen?.raw
-      layout[7] = rightParen.raw
-      layout[8] = unexpectedAfterRightParen?.raw
-    }
-    self.init(raw: raw)
-  }
-
-  public var unexpectedBeforePoundUnavailableKeyword: RawUnexpectedNodesSyntax? {
-    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public var poundUnavailableKeyword: RawTokenSyntax {
-    layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public var unexpectedBetweenPoundUnavailableKeywordAndLeftParen: RawUnexpectedNodesSyntax? {
-    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public var leftParen: RawTokenSyntax {
-    layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public var unexpectedBetweenLeftParenAndAvailabilitySpec: RawUnexpectedNodesSyntax? {
-    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public var availabilitySpec: RawAvailabilitySpecListSyntax {
-    layoutView.children[5].map(RawAvailabilitySpecListSyntax.init(raw:))!
-  }
-  public var unexpectedBetweenAvailabilitySpecAndRightParen: RawUnexpectedNodesSyntax? {
-    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public var rightParen: RawTokenSyntax {
-    layoutView.children[7].map(RawTokenSyntax.init(raw:))!
-  }
-  public var unexpectedAfterRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }

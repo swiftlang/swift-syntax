@@ -19,7 +19,7 @@ public let AVAILABILITY_NODES: [Node] = [
        element: "AvailabilityArgument"),
 
   Node(name: "AvailabilityArgument",
-       nameForDiagnostics: "'@available' argument",
+       nameForDiagnostics: "availability argument",
        description: "A single argument to an `@available` argument like `*`, `iOS 10.1`,or `message: \"This has been deprecated\"`.",
        kind: "Syntax",
        children: [
@@ -50,7 +50,7 @@ public let AVAILABILITY_NODES: [Node] = [
        ]),
 
   Node(name: "AvailabilityLabeledArgument",
-       nameForDiagnostics: "'@available' argument",
+       nameForDiagnostics: "availability argument",
        description: "A argument to an `@available` attribute that consists of a label anda value, e.g. `message: \"This has been deprecated\"`.",
        kind: "Syntax",
        children: [
@@ -81,7 +81,7 @@ public let AVAILABILITY_NODES: [Node] = [
        ]),
 
   Node(name: "AvailabilityVersionRestriction",
-       nameForDiagnostics: "'@available' argument",
+       nameForDiagnostics: "availability argument",
        description: "An argument to `@available` that restricts the availability on acertain platform to a version, e.g. `iOS 10` or `swift 3.4`.",
        kind: "Syntax",
        children: [

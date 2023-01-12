@@ -2,7 +2,7 @@
 //
 // This source file is part of the Swift.org open source project
 //
-// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Copyright (c) 2014 - 2023 Apple Inc. and the Swift project authors
 // Licensed under Apache License v2.0 with Runtime Library Exception
 //
 // See https://swift.org/LICENSE.txt for license information
@@ -12,198 +12,23 @@
 
 @_spi(RawSyntax) import SwiftSyntax
 
-/// A lexical analyzer for the Swift programming language.
-///
-/// - Seealso: ``Lexer/Lexeme``
-/// - Seealso: ``Lexer/Cursor``
-public struct Lexer {
-  /// A trivia-delimited region of source text.
-  ///
-  /// A lexeme is the fundamental output unit of lexical analysis. Each lexeme
-  /// represents a fully identified, meaningful part of the input text that
-  /// will can be consumed by a ``Parser``.
-  public struct Lexeme: CustomDebugStringConvertible {
-    public struct Flags: OptionSet, CustomDebugStringConvertible {
-      public var rawValue: UInt8
+extension SyntaxText {
+  fileprivate func containsPlaceholderEnd() -> Bool {
+    guard self.count >= 2 else {
+      return false
+    }
 
-      public init(rawValue: UInt8) {
-        self.rawValue = rawValue
+    for idx in 0..<(self.count - 1) {
+      let c = self[idx]
+      guard c != UInt8(ascii: "\n") else {
+        return false
       }
 
-      public static let isAtStartOfLine = Flags(rawValue: 1 << 0)
-
-      public var debugDescription: String {
-        var descriptionComponents: [String] = []
-        if self.contains(.isAtStartOfLine) {
-          descriptionComponents.append("isAtStartOfLine")
-        }
-        return "[\(descriptionComponents.joined(separator: ", "))]"
+      if self[idx] == UInt8(ascii: "#"), self[idx + 1] == UInt8(ascii: ">") {
+        return true
       }
     }
-
-    @_spi(RawSyntax)
-    public var rawTokenKind: RawTokenKind
-    public var flags: Lexeme.Flags
-    public var error: LexerError?
-    var start: UnsafePointer<UInt8>
-    public var leadingTriviaByteLength: Int
-    public var textByteLength: Int
-    public var trailingTriviaByteLength: Int
-
-    var isAtStartOfLine: Bool {
-      return self.flags.contains(.isAtStartOfLine)
-    }
-
-    var isEditorPlaceholder: Bool {
-      return self.rawTokenKind == .identifier && self.tokenText.isEditorPlaceholder
-    }
-
-    @_spi(RawSyntax)
-    public init(
-      tokenKind: RawTokenKind,
-      flags: Flags,
-      error: LexerError?,
-      start: UnsafePointer<UInt8>,
-      leadingTriviaLength: Int,
-      textLength: Int,
-      trailingTriviaLength: Int
-    ) {
-      self.rawTokenKind = tokenKind
-      self.flags = flags
-      self.error = error
-      self.start = start
-      self.leadingTriviaByteLength = leadingTriviaLength
-      self.textByteLength = textLength
-      self.trailingTriviaByteLength = trailingTriviaLength
-    }
-
-    public var byteLength: Int {
-      leadingTriviaByteLength + textByteLength + trailingTriviaByteLength
-    }
-
-    @_spi(RawSyntax)
-    public var wholeText: SyntaxText {
-      SyntaxText(baseAddress: start, count: byteLength)
-    }
-
-    @_spi(RawSyntax)
-    public var textRange: Range<SyntaxText.Index> {
-      leadingTriviaByteLength..<leadingTriviaByteLength + textByteLength
-    }
-
-    @_spi(RawSyntax)
-    public var tokenText: SyntaxText {
-      SyntaxText(
-        baseAddress: start.advanced(by: leadingTriviaByteLength),
-        count: textByteLength
-      )
-    }
-    @_spi(RawSyntax)
-    public var leadingTriviaText: SyntaxText {
-      SyntaxText(
-        baseAddress: start,
-        count: leadingTriviaByteLength
-      )
-    }
-    @_spi(RawSyntax)
-    public var trailingTriviaText: SyntaxText {
-      SyntaxText(
-        baseAddress: start.advanced(by: leadingTriviaByteLength + textByteLength),
-        count: trailingTriviaByteLength
-      )
-    }
-
-    public var debugDescription: String {
-      return String(syntaxText: SyntaxText(baseAddress: start, count: byteLength))
-    }
-  }
-}
-
-extension Lexer {
-  /// A sequence of ``Lexer/Lexeme`` tokens starting from a ``Lexer/Cursor``
-  /// that points into an input buffer.
-  public struct LexemeSequence: IteratorProtocol, Sequence, CustomDebugStringConvertible {
-    fileprivate let start: Lexer.Cursor
-    fileprivate var cursor: Lexer.Cursor
-    fileprivate var nextToken: Lexer.Lexeme
-
-    fileprivate init(start: Lexer.Cursor, cursor: Lexer.Cursor) {
-      self.start = start
-      self.cursor = cursor
-      self.nextToken = self.cursor.nextToken(self.start)
-    }
-
-    public mutating func next() -> Lexer.Lexeme? {
-      return self.advance()
-    }
-
-    mutating func advance() -> Lexer.Lexeme {
-      defer {
-        if self.cursor.isAtEndOfFile {
-          self.nextToken = Lexeme(
-            tokenKind: .eof,
-            flags: [],
-            error: nil,
-            start: self.cursor.pointer,
-            leadingTriviaLength: 0,
-            textLength: 0,
-            trailingTriviaLength: 0
-          )
-        } else {
-          self.nextToken = self.cursor.nextToken(self.start)
-        }
-      }
-      return self.nextToken
-    }
-
-    /// - Warning: Do not add more usages of this function.
-    mutating func resetForSplit(of bytes: Int) -> Lexer.Lexeme {
-      guard bytes > 0 else {
-        return self.advance()
-      }
-
-      // FIXME: This is kind of ridiculous. We shouldn't have to look backwards
-      // in the token stream. We should be fusing together runs of operator and
-      // identifier characters in the parser, not splitting and backing up
-      // again in the lexer.
-      let backUpLength = self.nextToken.byteLength + bytes
-      self.cursor.backUp(by: backUpLength)
-      self.nextToken = self.cursor.nextToken(self.start)
-      return self.advance()
-    }
-
-    func peek() -> Lexer.Lexeme {
-      return self.nextToken
-    }
-
-    public var debugDescription: String {
-      let remainingText = self.nextToken.debugDescription + String(syntaxText: SyntaxText(baseAddress: self.cursor.input.baseAddress, count: self.cursor.input.count))
-      if remainingText.count > 100 {
-        return remainingText.prefix(100) + "..."
-      } else {
-        return remainingText
-      }
-    }
-  }
-
-  @_spi(RawSyntax)
-  public static func tokenize(
-    _ input: UnsafeBufferPointer<UInt8>,
-    from startIndex: Int = 0
-  ) -> LexemeSequence {
-    assert(input.isEmpty || startIndex < input.endIndex)
-    let startChar = startIndex == input.startIndex ? UInt8(ascii: "\0") : input[startIndex - 1]
-    let start = Cursor(input: input, previous: UInt8(ascii: "\0"), state: .normal)
-    let cursor = Cursor(input: UnsafeBufferPointer(rebasing: input[startIndex...]), previous: startChar, state: .normal)
-    return LexemeSequence(start: start, cursor: cursor)
-  }
-}
-
-extension Lexer {
-  public static func lexToEndOfInterpolatedExpression(_ input: UnsafeBufferPointer<UInt8>, _ IsMultilineString: Bool) -> Int {
-    let cursor = Lexer.Cursor(input: input, previous: 0, state: .normal)
-    let advancedCursor = Lexer.Cursor.skipToEndOfInterpolatedExpression(cursor, IsMultilineString)
-    return advancedCursor.input.baseAddress! - cursor.input.baseAddress!
+    return false
   }
 }
 
@@ -470,7 +295,7 @@ extension Lexer.Cursor {
 }
 
 extension Lexer.Cursor {
-  fileprivate mutating func backUp(by offset: Int) {
+  mutating func backUp(by offset: Int) {
     assert(!self.isAtStartOfFile)
     self.previous = self.input.baseAddress!.advanced(by: -(offset + 1)).pointee
     self.input = UnsafeBufferPointer(start: self.input.baseAddress!.advanced(by: -offset), count: self.input.count + offset)
@@ -2379,169 +2204,5 @@ extension Lexer.Cursor {
     // We either had a successful lex, or something that was recoverable.
     self = Tmp
     return .regexLiteral
-  }
-}
-
-extension Unicode.Scalar {
-  var isValidIdentifierContinuationCodePoint: Bool {
-    if self.isASCII {
-      return self.isAsciiIdentifierContinue
-    }
-
-    // N1518: Recommendations for extended identifier characters for C and C++
-    // Proposed Annex X.1: Ranges of characters allowed
-    let c = self.value
-    return c == 0x00A8 || c == 0x00AA || c == 0x00AD || c == 0x00AF
-      || (c >= 0x00B2 && c <= 0x00B5) || (c >= 0x00B7 && c <= 0x00BA)
-      || (c >= 0x00BC && c <= 0x00BE) || (c >= 0x00C0 && c <= 0x00D6)
-      || (c >= 0x00D8 && c <= 0x00F6) || (c >= 0x00F8 && c <= 0x00FF)
-
-      || (c >= 0x0100 && c <= 0x167F)
-      || (c >= 0x1681 && c <= 0x180D)
-      || (c >= 0x180F && c <= 0x1FFF)
-
-      || (c >= 0x200B && c <= 0x200D)
-      || (c >= 0x202A && c <= 0x202E)
-      || (c >= 0x203F && c <= 0x2040)
-      || c == 0x2054
-      || (c >= 0x2060 && c <= 0x206F)
-
-      || (c >= 0x2070 && c <= 0x218F)
-      || (c >= 0x2460 && c <= 0x24FF)
-      || (c >= 0x2776 && c <= 0x2793)
-      || (c >= 0x2C00 && c <= 0x2DFF)
-      || (c >= 0x2E80 && c <= 0x2FFF)
-
-      || (c >= 0x3004 && c <= 0x3007)
-      || (c >= 0x3021 && c <= 0x302F)
-      || (c >= 0x3031 && c <= 0x303F)
-
-      || (c >= 0x3040 && c <= 0xD7FF)
-
-      || (c >= 0xF900 && c <= 0xFD3D)
-      || (c >= 0xFD40 && c <= 0xFDCF)
-      || (c >= 0xFDF0 && c <= 0xFE44)
-      || (c >= 0xFE47 && c <= 0xFFF8)
-
-      || (c >= 0x10000 && c <= 0x1FFFD)
-      || (c >= 0x20000 && c <= 0x2FFFD)
-      || (c >= 0x30000 && c <= 0x3FFFD)
-      || (c >= 0x40000 && c <= 0x4FFFD)
-      || (c >= 0x50000 && c <= 0x5FFFD)
-      || (c >= 0x60000 && c <= 0x6FFFD)
-      || (c >= 0x70000 && c <= 0x7FFFD)
-      || (c >= 0x80000 && c <= 0x8FFFD)
-      || (c >= 0x90000 && c <= 0x9FFFD)
-      || (c >= 0xA0000 && c <= 0xAFFFD)
-      || (c >= 0xB0000 && c <= 0xBFFFD)
-      || (c >= 0xC0000 && c <= 0xCFFFD)
-      || (c >= 0xD0000 && c <= 0xDFFFD)
-      || (c >= 0xE0000 && c <= 0xEFFFD)
-  }
-
-  var isValidIdentifierStartCodePoint: Bool {
-    if (self.isASCII) {
-      return self.isAsciiIdentifierStart
-    }
-    guard self.isValidIdentifierContinuationCodePoint else {
-      return false
-    }
-
-    // N1518: Recommendations for extended identifier characters for C and C++
-    // Proposed Annex X.2: Ranges of characters disallowed initially
-    let c = self.value
-    if ((c >= 0x0300 && c <= 0x036F) || (c >= 0x1DC0 && c <= 0x1DFF) || (c >= 0x20D0 && c <= 0x20FF) || (c >= 0xFE20 && c <= 0xFE2F)) {
-      return false
-    }
-
-    return true
-  }
-
-  /// isOperatorStartCodePoint - Return true if the specified code point is a
-  /// valid start of an operator.
-  var isOperatorStartCodePoint: Bool {
-    // ASCII operator chars.
-    if self.value < 0x80 {
-      switch UInt8(self.value) {
-      case UInt8(ascii: "/"),
-        UInt8(ascii: "="),
-        UInt8(ascii: "-"),
-        UInt8(ascii: "+"),
-        UInt8(ascii: "*"),
-        UInt8(ascii: "%"),
-        UInt8(ascii: "<"),
-        UInt8(ascii: ">"),
-        UInt8(ascii: "!"),
-        UInt8(ascii: "&"),
-        UInt8(ascii: "|"),
-        UInt8(ascii: "^"),
-        UInt8(ascii: "~"),
-        UInt8(ascii: "."),
-        UInt8(ascii: "?"):
-        return true
-      default:
-        return false
-      }
-    }
-
-    // Unicode math, symbol, arrow, dingbat, and line/box drawing chars.
-    let C = self.value
-    return (C >= 0x00A1 && C <= 0x00A7)
-      || C == 0x00A9 || C == 0x00AB || C == 0x00AC || C == 0x00AE
-      || C == 0x00B0 || C == 0x00B1 || C == 0x00B6 || C == 0x00BB
-      || C == 0x00BF || C == 0x00D7 || C == 0x00F7
-      || C == 0x2016 || C == 0x2017 || (C >= 0x2020 && C <= 0x2027)
-      || (C >= 0x2030 && C <= 0x203E) || (C >= 0x2041 && C <= 0x2053)
-      || (C >= 0x2055 && C <= 0x205E) || (C >= 0x2190 && C <= 0x23FF)
-      || (C >= 0x2500 && C <= 0x2775) || (C >= 0x2794 && C <= 0x2BFF)
-      || (C >= 0x2E00 && C <= 0x2E7F) || (C >= 0x3001 && C <= 0x3003)
-      || (C >= 0x3008 && C <= 0x3030)
-  }
-
-  /// isOperatorContinuationCodePoint - Return true if the specified code point
-  /// is a valid operator code point.
-  var isOperatorContinuationCodePoint: Bool {
-    if self.isOperatorStartCodePoint {
-      return true
-    }
-
-    // Unicode combining characters and variation selectors.
-    let C = self.value
-    return (C >= 0x0300 && C <= 0x036F)
-      || (C >= 0x1DC0 && C <= 0x1DFF)
-      || (C >= 0x20D0 && C <= 0x20FF)
-      || (C >= 0xFE00 && C <= 0xFE0F)
-      || (C >= 0xFE20 && C <= 0xFE2F)
-      || (C >= 0xE0100 && C <= 0xE01EF)
-  }
-}
-
-extension Unicode.Scalar {
-  /// Whether this character represents a printable ASCII character,
-  /// for the purposes of pattern parsing.
-  public var isPrintableASCII: Bool {
-    // Exclude non-printables before the space character U+20, and anything
-    // including and above the DEL character U+7F.
-    return self.value >= 0x20 && self.value < 0x7F
-  }
-}
-
-extension SyntaxText {
-  fileprivate func containsPlaceholderEnd() -> Bool {
-    guard self.count >= 2 else {
-      return false
-    }
-
-    for idx in 0..<(self.count - 1) {
-      let c = self[idx]
-      guard c != UInt8(ascii: "\n") else {
-        return false
-      }
-
-      if self[idx] == UInt8(ascii: "#"), self[idx + 1] == UInt8(ascii: ">") {
-        return true
-      }
-    }
-    return false
   }
 }

@@ -65,6 +65,9 @@ class MacroApplication: SyntaxRewriter {
   var context: MacroExpansionContext
   var skipNodes: Set<Syntax> = []
 
+  /// A stack of member attribute macos to expand when iterating over a `MemberDeclListSyntax`.
+  var memberAttributeMacros: [([(CustomAttributeSyntax, MemberAttributeMacro.Type)], DeclSyntax)] = []
+
   init(
     macroSystem: MacroSystem,
     context: MacroExpansionContext
@@ -106,7 +109,7 @@ class MacroApplication: SyntaxRewriter {
           return true
         }
 
-        return !(macro is PeerDeclarationMacro.Type || macro is MemberDeclarationMacro.Type || macro is AccessorDeclarationMacro.Type)
+        return !(macro is PeerDeclarationMacro.Type || macro is MemberDeclarationMacro.Type || macro is AccessorDeclarationMacro.Type || macro is MemberAttributeMacro.Type)
       }
 
       if newAttributes.isEmpty {
@@ -203,9 +206,21 @@ class MacroApplication: SyntaxRewriter {
         continue
       }
 
+      // Expand member attribute members attached to the declaration context.
+      let attributedMember: MemberDeclListSyntax.Element
+      if let (macroAttributes, decl) = memberAttributeMacros.last {
+        attributedMember = expandAttributes(
+          for: macroAttributes,
+          attachedTo: decl,
+          annotating: item
+        )
+      } else {
+        attributedMember = item
+      }
+
       // Recurse on the child node.
-      let newDecl = visit(item.decl)
-      newItems.append(item.withDecl(newDecl))
+      let newDecl = visit(attributedMember.decl)
+      newItems.append(attributedMember.withDecl(newDecl))
 
       // Expand any peer declarations triggered by macros used as attributes.
       let peers = expandPeers(of: item.decl)
@@ -222,6 +237,14 @@ class MacroApplication: SyntaxRewriter {
   func visit<DeclType: DeclGroupSyntax & DeclSyntaxProtocol>(
     declGroup: DeclType
   ) -> DeclSyntax {
+    memberAttributeMacros.append(
+      (
+        getMacroAttributes(attachedTo: DeclSyntax(declGroup), ofType: MemberAttributeMacro.Type.self),
+        DeclSyntax(declGroup)
+      )
+    )
+    defer { memberAttributeMacros.removeLast() }
+
     // Expand any attached member macros.
     let expandedDeclGroup = expandMembers(of: declGroup)
 
@@ -391,6 +414,45 @@ extension MacroApplication {
         partialMembers.addMember(.init(decl: newMember))
       }
     )
+  }
+
+  private func expandAttributes(
+    for macroAttributes: [(CustomAttributeSyntax, MemberAttributeMacro.Type)],
+    attachedTo decl: DeclSyntax,
+    annotating member: MemberDeclListSyntax.Element
+  ) -> MemberDeclListSyntax.Element {
+    guard let attributedDecl = member.decl.asProtocol(AttributedSyntax.self) else {
+      return member
+    }
+
+    var attributes: [CustomAttributeSyntax] = []
+    for (attribute, attributeMacro) in macroAttributes {
+      do {
+        try attributes.append(
+          contentsOf: attributeMacro.expansion(
+            of: attribute,
+            attachedTo: DeclSyntax(decl),
+            annotating: member.decl,
+            in: &context
+          )
+        )
+      } catch {
+        // Record the error
+        context.diagnose(
+          Diagnostic(
+            node: Syntax(attribute),
+            message: ThrownErrorDiagnostic(message: String(describing: error))
+          )
+        )
+      }
+    }
+
+    let newAttributes = attributes.reduce(attributedDecl.attributes ?? .init([])) {
+      $0.appending(AttributeListSyntax.Element($1))
+    }
+
+    let newDecl = attributedDecl.withAttributes(newAttributes).as(DeclSyntax.self)!
+    return member.withDecl(newDecl)
   }
 }
 

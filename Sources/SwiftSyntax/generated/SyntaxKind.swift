@@ -138,8 +138,6 @@ public enum SyntaxKind {
   
   case conventionWitnessMethodAttributeArguments
   
-  case customAttribute
-  
   case declModifierDetail
   
   case declModifier

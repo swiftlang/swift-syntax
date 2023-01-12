@@ -468,4 +468,10 @@ final class AttributeTests: XCTestCase {
     )
 
   }
+
+  func testEscapingOnClosureType() {
+    AssertParse(
+      "func foo(closure: @escaping () -> Void) {}"
+    )
+  }
 }

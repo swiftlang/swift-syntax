@@ -137,8 +137,6 @@ public typealias ConventionAttributeArguments = ConventionAttributeArgumentsSynt
 
 public typealias ConventionWitnessMethodAttributeArguments = ConventionWitnessMethodAttributeArgumentsSyntax
 
-public typealias CustomAttribute = CustomAttributeSyntax
-
 public typealias DeclModifierDetail = DeclModifierDetailSyntax
 
 public typealias DeclModifier = DeclModifierSyntax

@@ -16,11 +16,11 @@ import SwiftSyntaxBuilder
 
 final class CustomAttributeTests: XCTestCase {
   func testCustomAttributeConvenienceInitializer() {
-    let testCases: [UInt: (CustomAttribute, String)] = [
-      #line: (CustomAttribute("Test"), "@Test"),
-      #line: (CustomAttribute("WithParens") {}, "@WithParens()"),
+    let testCases: [UInt: (Attribute, String)] = [
+      #line: (Attribute(attributeName: Type("Test")), "@Test"),
+      #line: (Attribute("WithParens") {}, "@WithParens()"),
       #line: (
-        CustomAttribute("WithArgs") {
+        Attribute("WithArgs") {
           TupleExprElement(expression: Expr("value1"))
           TupleExprElement(label: "labelled", expression: Expr("value2"))
         }, "@WithArgs(value1, labelled: value2)"

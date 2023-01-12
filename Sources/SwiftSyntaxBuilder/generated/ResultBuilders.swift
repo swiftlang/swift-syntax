@@ -294,12 +294,6 @@ public struct AttributeListBuilder {
   
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
-  public static func buildExpression(_ expression: CustomAttribute) -> Self.Component {
-    return buildExpression(.init(expression))
-  }
-  
-  /// If declared, provides contextual type information for statement
-  /// expressions to translate them into partial results.
   public static func buildExpression(_ expression: IfConfigDecl) -> Self.Component {
     return buildExpression(.init(expression))
   }

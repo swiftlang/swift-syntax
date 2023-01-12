@@ -24,7 +24,7 @@ public protocol MemberDeclarationMacro: DeclarationMacro {
   /// - Returns: the set of member declarations introduced by this macro, which
   /// are nested inside the `attachedTo` declaration.
   static func expansion(
-    of node: CustomAttributeSyntax,
+    of node: AttributeSyntax,
     attachedTo declaration: DeclSyntax,
     in context: inout MacroExpansionContext
   ) throws -> [DeclSyntax]

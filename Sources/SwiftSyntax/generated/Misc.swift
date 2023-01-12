@@ -79,7 +79,6 @@ extension Syntax {
       .node(ContinueStmtSyntax.self), 
       .node(ConventionAttributeArgumentsSyntax.self), 
       .node(ConventionWitnessMethodAttributeArgumentsSyntax.self), 
-      .node(CustomAttributeSyntax.self), 
       .node(DeclModifierDetailSyntax.self), 
       .node(DeclModifierSyntax.self), 
       .node(DeclNameArgumentListSyntax.self), 
@@ -405,8 +404,6 @@ extension SyntaxKind {
       return ConventionAttributeArgumentsSyntax.self
     case .conventionWitnessMethodAttributeArguments: 
       return ConventionWitnessMethodAttributeArgumentsSyntax.self
-    case .customAttribute: 
-      return CustomAttributeSyntax.self
     case .declModifierDetail: 
       return DeclModifierDetailSyntax.self
     case .declModifier: 
@@ -928,8 +925,6 @@ extension SyntaxKind {
       return "@convention(...) arguments"
     case .conventionWitnessMethodAttributeArguments: 
       return "@convention(...) arguments for witness methods"
-    case .customAttribute: 
-      return "attribute"
     case .declModifierDetail: 
       return nil
     case .declModifier: 

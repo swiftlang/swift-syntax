@@ -826,7 +826,7 @@ extension Parser {
       unknownAttr = RawAttributeSyntax(
         atSignToken: at,
         unexpectedBeforeIdent,
-        attributeName: ident,
+        attributeName: RawTypeSyntax(RawSimpleTypeIdentifierSyntax(name: ident, genericArgumentClause: nil, arena: self.arena)),
         leftParen: nil,
         argument: nil,
         rightParen: nil,

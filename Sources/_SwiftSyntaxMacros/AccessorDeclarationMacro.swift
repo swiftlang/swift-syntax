@@ -15,7 +15,7 @@ public protocol AccessorDeclarationMacro: DeclarationMacro {
   /// the given declaration. The result is a set of accessors for the
   /// declaration.
   static func expansion(
-    of node: CustomAttributeSyntax,
+    of node: AttributeSyntax,
     attachedTo declaration: DeclSyntax,
     in context: inout MacroExpansionContext
   ) throws -> [AccessorDeclSyntax]

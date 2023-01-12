@@ -53,7 +53,7 @@ extension CatchClause {
 
 // MARK: - CustomAttribute
 
-extension CustomAttribute {
+extension Attribute {
   /// A convenience initializer that allows passing in arguments using a result builder
   /// and automatically adds parentheses as needed, similar to the convenience
   /// initializer for ``FunctionCallExpr``.
@@ -65,7 +65,7 @@ extension CustomAttribute {
     self.init(
       attributeName: attributeName,
       leftParen: argumentList != nil ? .leftParen : nil,
-      argumentList: argumentList,
+      argument: argumentList.map(AttributeSyntax.Argument.argumentList),
       rightParen: argumentList != nil ? .rightParen : nil
     )
   }

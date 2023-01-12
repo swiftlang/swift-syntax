@@ -4868,51 +4868,8 @@ public enum SyntaxFactory {
       return TokenListSyntax(data)
     }
   }
-  @available(*, deprecated, message: "Use initializer on CustomAttributeSyntax")
-  public static func makeCustomAttribute(_ unexpectedBeforeAtSignToken: UnexpectedNodesSyntax? = nil, atSignToken: TokenSyntax, _ unexpectedBetweenAtSignTokenAndAttributeName: UnexpectedNodesSyntax? = nil, attributeName: TypeSyntax, _ unexpectedBetweenAttributeNameAndLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax?, _ unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodesSyntax? = nil, argumentList: TupleExprElementListSyntax?, _ unexpectedBetweenArgumentListAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax?, _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil) -> CustomAttributeSyntax {
-    let layout: [RawSyntax?] = [
-      unexpectedBeforeAtSignToken?.raw,
-      atSignToken.raw,
-      unexpectedBetweenAtSignTokenAndAttributeName?.raw,
-      attributeName.raw,
-      unexpectedBetweenAttributeNameAndLeftParen?.raw,
-      leftParen?.raw,
-      unexpectedBetweenLeftParenAndArgumentList?.raw,
-      argumentList?.raw,
-      unexpectedBetweenArgumentListAndRightParen?.raw,
-      rightParen?.raw,
-      unexpectedAfterRightParen?.raw,
-    ]
-    return withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.customAttribute,
-        from: layout, arena: arena)
-      let data = SyntaxData.forRoot(raw)
-      return CustomAttributeSyntax(data)
-    }
-  }
-
-  @available(*, deprecated, message: "Use initializer on CustomAttributeSyntax")
-  public static func makeBlankCustomAttribute(presence: SourcePresence = .present) -> CustomAttributeSyntax {
-    return withExtendedLifetime(SyntaxArena()) { arena in
-      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .customAttribute,
-        from: [
-        nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.atSign, arena: arena),
-        nil,
-        RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: arena),
-        nil,
-        nil,
-        nil,
-        nil,
-        nil,
-        nil,
-        nil,
-      ], arena: arena))
-      return CustomAttributeSyntax(data)
-    }
-  }
   @available(*, deprecated, message: "Use initializer on AttributeSyntax")
-  public static func makeAttribute(_ unexpectedBeforeAtSignToken: UnexpectedNodesSyntax? = nil, atSignToken: TokenSyntax, _ unexpectedBetweenAtSignTokenAndAttributeName: UnexpectedNodesSyntax? = nil, attributeName: TokenSyntax, _ unexpectedBetweenAttributeNameAndLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax?, _ unexpectedBetweenLeftParenAndArgument: UnexpectedNodesSyntax? = nil, argument: Syntax?, _ unexpectedBetweenArgumentAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax?, _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil) -> AttributeSyntax {
+  public static func makeAttribute(_ unexpectedBeforeAtSignToken: UnexpectedNodesSyntax? = nil, atSignToken: TokenSyntax, _ unexpectedBetweenAtSignTokenAndAttributeName: UnexpectedNodesSyntax? = nil, attributeName: TypeSyntax, _ unexpectedBetweenAttributeNameAndLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax?, _ unexpectedBetweenLeftParenAndArgument: UnexpectedNodesSyntax? = nil, argument: Syntax?, _ unexpectedBetweenArgumentAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax?, _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil) -> AttributeSyntax {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAtSignToken?.raw,
       atSignToken.raw,
@@ -4942,7 +4899,7 @@ public enum SyntaxFactory {
         nil,
         RawSyntax.makeMissingToken(kind: TokenKind.atSign, arena: arena),
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.unknown(""), arena: arena),
+        RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: arena),
         nil,
         nil,
         nil,

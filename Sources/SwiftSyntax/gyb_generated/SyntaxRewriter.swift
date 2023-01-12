@@ -1045,13 +1045,6 @@ open class SyntaxRewriter {
     return Syntax(visitChildren(node)).cast(TokenListSyntax.self)
   }
 
-  /// Visit a `CustomAttributeSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: CustomAttributeSyntax) -> CustomAttributeSyntax {
-    return Syntax(visitChildren(node)).cast(CustomAttributeSyntax.self)
-  }
-
   /// Visit a `AttributeSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -3364,16 +3357,6 @@ open class SyntaxRewriter {
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplCustomAttributeSyntax(_ data: SyntaxData) -> Syntax {
-    let node = CustomAttributeSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer { visitPost(node._syntaxNode) }
-    if let newNode = visitAny(node._syntaxNode) { return newNode }
-    return Syntax(visit(node))
-  }
-
-  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplAttributeSyntax(_ data: SyntaxData) -> Syntax {
     let node = AttributeSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -4815,8 +4798,6 @@ open class SyntaxRewriter {
       return visitImplMacroExpansionDeclSyntax
     case .tokenList:
       return visitImplTokenListSyntax
-    case .customAttribute:
-      return visitImplCustomAttributeSyntax
     case .attribute:
       return visitImplAttributeSyntax
     case .attributeList:
@@ -5344,8 +5325,6 @@ open class SyntaxRewriter {
       return visitImplMacroExpansionDeclSyntax(data)
     case .tokenList:
       return visitImplTokenListSyntax(data)
-    case .customAttribute:
-      return visitImplCustomAttributeSyntax(data)
     case .attribute:
       return visitImplAttributeSyntax(data)
     case .attributeList:

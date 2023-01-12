@@ -6,24 +6,6 @@ ATTRIBUTE_NODES = [
     Node('TokenList', name_for_diagnostics='token list', kind='SyntaxCollection',
          element='Token'),
 
-    Node('CustomAttribute', name_for_diagnostics='attribute', kind='Syntax',
-         description='''
-         A custom `@` attribute.
-         ''',
-         children=[
-             Child('AtSignToken', kind='AtSignToken',
-                   description='The `@` sign.'),
-             Child('AttributeName', kind='Type', name_for_diagnostics='name',
-                   classification='Attribute',
-                   description='The name of the attribute.'),
-             Child('LeftParen', kind='LeftParenToken',
-                   is_optional=True),
-             Child('ArgumentList', kind='TupleExprElementList',
-                   collection_element_name='Argument', is_optional=True),
-             Child('RightParen', kind='RightParenToken',
-                   is_optional=True),
-         ]),
-
     # attribute -> '@' identifier '('?
     #              ( identifier
     #                | string-literal
@@ -42,7 +24,7 @@ ATTRIBUTE_NODES = [
          children=[
              Child('AtSignToken', kind='AtSignToken',
                    description='The `@` sign.'),
-             Child('AttributeName', kind='Token', name_for_diagnostics='name',
+             Child('AttributeName', kind='Type', name_for_diagnostics='name',
                    classification='Attribute',
                    description='The name of the attribute.'),
              Child('LeftParen', kind='LeftParenToken', is_optional=True,
@@ -51,6 +33,7 @@ ATTRIBUTE_NODES = [
                    '''),
              Child('Argument', kind='Syntax', is_optional=True,
                    node_choices=[
+                       Child('ArgumentList', kind='TupleExprElementList'),
                        Child('Token', kind='Token'),
                        Child('Availability', kind='AvailabilitySpecList'),
                        Child('SpecializeArguments',
@@ -97,7 +80,6 @@ ATTRIBUTE_NODES = [
          element='Syntax', element_name='Attribute',
          element_choices=[
              'Attribute',
-             'CustomAttribute',
              'IfConfigDecl',
          ]),
 

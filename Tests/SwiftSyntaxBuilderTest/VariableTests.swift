@@ -182,7 +182,7 @@ final class VariableTests: XCTestCase {
     let testCases: [UInt: (VariableDecl, String)] = [
       #line: (
         VariableDecl(
-          attributes: AttributeList { CustomAttribute("Test") },
+          attributes: AttributeList { Attribute(attributeName: TypeSyntax("Test")) },
           .var,
           name: "x",
           type: TypeAnnotation(type: Type("Int"))
@@ -193,7 +193,7 @@ final class VariableTests: XCTestCase {
       ),
       #line: (
         VariableDecl(
-          attributes: AttributeList { CustomAttribute("Test") },
+          attributes: AttributeList { Attribute(attributeName: TypeSyntax("Test")) },
           name: "y",
           type: TypeAnnotation(type: Type("String"))
         ) {
@@ -208,7 +208,7 @@ final class VariableTests: XCTestCase {
       #line: (
         VariableDecl(
           attributes: AttributeList {
-            CustomAttribute("WithArgs") {
+            Attribute("WithArgs") {
               TupleExprElement(expression: Expr("value1"))
               TupleExprElement(label: "label", expression: Expr("value2"))
             }
@@ -227,7 +227,7 @@ final class VariableTests: XCTestCase {
       #line: (
         VariableDecl(
           attributes: AttributeList {
-            CustomAttribute("WithArgs") {
+            Attribute("WithArgs") {
               TupleExprElement(expression: Expr("value"))
             }
           },

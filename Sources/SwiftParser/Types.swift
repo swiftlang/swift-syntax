@@ -962,68 +962,29 @@ extension Parser {
 
   @_spi(RawSyntax)
   public mutating func parseTypeAttribute() -> RawAttributeListSyntax.Element {
-    guard let typeAttr = Parser.TypeAttribute(lexeme: self.peek()) else {
-      return .customAttribute(self.parseCustomAttribute())
-    }
+    let typeAttr = Parser.TypeAttribute(lexeme: self.peek())
 
     switch typeAttr {
+    case ._local, ._noMetadata, .async, .escaping, .noDerivative, .noescape, .Sendable, .unchecked, .autoclosure:
+      // Known type attribute that doesn't take any arguments
+      return parseAttributeWithoutArguments()
     case .differentiable:
       return .attribute(self.parseDifferentiableAttribute())
 
     case .convention:
-      let (unexpectedBeforeAt, at) = self.expect(.atSign)
-      let (unexpectedBeforeIdent, ident) = self.expectIdentifier()
-      let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-      let arguments = self.parseConventionArguments()
-      let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
-      return .attribute(
-        RawAttributeSyntax(
-          unexpectedBeforeAt,
-          atSignToken: at,
-          unexpectedBeforeIdent,
-          attributeName: ident,
-          unexpectedBeforeLeftParen,
-          leftParen: leftParen,
-          argument: arguments,
-          unexpectedBeforeRightParen,
-          rightParen: rightParen,
-          arena: self.arena
-        )
-      )
+      return parseAttribute(argumentMode: .required) { parser in
+        return parser.parseConventionArguments()
+      }
     case ._opaqueReturnTypeOf:
-      let (unexpectedBeforeAt, at) = self.expect(.atSign)
-      let ident = self.expectIdentifierWithoutRecovery()
-      let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-      let argument = self.parseOpaqueReturnTypeOfAttributeArguments()
-      let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
-      return .attribute(
-        RawAttributeSyntax(
-          unexpectedBeforeAt,
-          atSignToken: at,
-          attributeName: ident,
-          unexpectedBeforeLeftParen,
-          leftParen: leftParen,
-          argument: .opaqueReturnTypeOfAttributeArguments(argument),
-          unexpectedBeforeRightParen,
-          rightParen: rightParen,
-          arena: self.arena
-        )
-      )
+      return parseAttribute(argumentMode: .required) { parser in
+        return .opaqueReturnTypeOfAttributeArguments(parser.parseOpaqueReturnTypeOfAttributeArguments())
+      }
+    case nil:  // Custom attribute
+      return parseAttribute(argumentMode: .customAttribute) { parser in
+        let arguments = parser.parseArgumentListElements(pattern: .none)
+        return .argumentList(RawTupleExprElementListSyntax(elements: arguments, arena: parser.arena))
+      }
 
-    default:
-      let (unexpectedBeforeAt, at) = self.expect(.atSign)
-      let ident = self.expectIdentifierWithoutRecovery()
-      return .attribute(
-        RawAttributeSyntax(
-          unexpectedBeforeAt,
-          atSignToken: at,
-          attributeName: ident,
-          leftParen: nil,
-          argument: nil,
-          rightParen: nil,
-          arena: self.arena
-        )
-      )
     }
   }
 }

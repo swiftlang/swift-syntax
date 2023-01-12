@@ -138,8 +138,6 @@ public enum SyntaxEnum {
   
   case conventionWitnessMethodAttributeArguments(ConventionWitnessMethodAttributeArgumentsSyntax)
   
-  case customAttribute(CustomAttributeSyntax)
-  
   case declModifierDetail(DeclModifierDetailSyntax)
   
   case declModifier(DeclModifierSyntax)
@@ -661,8 +659,6 @@ public extension Syntax {
       return .conventionAttributeArguments(ConventionAttributeArgumentsSyntax(self)!)
     case .conventionWitnessMethodAttributeArguments: 
       return .conventionWitnessMethodAttributeArguments(ConventionWitnessMethodAttributeArgumentsSyntax(self)!)
-    case .customAttribute: 
-      return .customAttribute(CustomAttributeSyntax(self)!)
     case .declModifierDetail: 
       return .declModifierDetail(DeclModifierDetailSyntax(self)!)
     case .declModifier: 

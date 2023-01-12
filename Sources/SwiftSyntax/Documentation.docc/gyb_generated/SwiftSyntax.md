@@ -336,7 +336,6 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/PrecedenceGroupAssignmentSyntax>
 - <doc:SwiftSyntax/PrecedenceGroupAssociativitySyntax>
 - <doc:SwiftSyntax/TokenListSyntax>
-- <doc:SwiftSyntax/CustomAttributeSyntax>
 - <doc:SwiftSyntax/AttributeSyntax>
 - <doc:SwiftSyntax/AttributeListSyntax>
 - <doc:SwiftSyntax/SpecializeAttributeSpecListSyntax>

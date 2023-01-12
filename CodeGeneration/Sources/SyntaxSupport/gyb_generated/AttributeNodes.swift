@@ -18,39 +18,6 @@ public let ATTRIBUTE_NODES: [Node] = [
        kind: "SyntaxCollection",
        element: "Token"),
 
-  Node(name: "CustomAttribute",
-       nameForDiagnostics: "attribute",
-       description: "A custom `@` attribute.",
-       kind: "Syntax",
-       children: [
-         Child(name: "AtSignToken",
-               kind: "AtSignToken",
-               description: "The `@` sign.",
-               tokenChoices: [
-                 "AtSign"
-               ]),
-         Child(name: "AttributeName",
-               kind: "Type",
-               description: "The name of the attribute.",
-               classification: "Attribute"),
-         Child(name: "LeftParen",
-               kind: "LeftParenToken",
-               isOptional: true,
-               tokenChoices: [
-                 "LeftParen"
-               ]),
-         Child(name: "ArgumentList",
-               kind: "TupleExprElementList",
-               isOptional: true,
-               collectionElementName: "Argument"),
-         Child(name: "RightParen",
-               kind: "RightParenToken",
-               isOptional: true,
-               tokenChoices: [
-                 "RightParen"
-               ])
-       ]),
-
   Node(name: "Attribute",
        nameForDiagnostics: "attribute",
        description: "An `@` attribute.",
@@ -64,7 +31,7 @@ public let ATTRIBUTE_NODES: [Node] = [
                  "AtSign"
                ]),
          Child(name: "AttributeName",
-               kind: "Token",
+               kind: "Type",
                description: "The name of the attribute.",
                classification: "Attribute"),
          Child(name: "LeftParen",
@@ -79,6 +46,8 @@ public let ATTRIBUTE_NODES: [Node] = [
                description: "The arguments of the attribute. In case the attributetakes multiple arguments, they are gather in theappropriate takes first.",
                isOptional: true,
                nodeChoices: [
+                 Child(name: "ArgumentList",
+                       kind: "TupleExprElementList"),
                  Child(name: "Token",
                        kind: "Token"),
                  Child(name: "Availability",
@@ -126,7 +95,7 @@ public let ATTRIBUTE_NODES: [Node] = [
        kind: "SyntaxCollection",
        element: "Syntax",
        elementName: "Attribute",
-       elementChoices: ["Attribute", "CustomAttribute", "IfConfigDecl"],
+       elementChoices: ["Attribute", "IfConfigDecl"],
        omitWhenEmpty: true),
 
   Node(name: "SpecializeAttributeSpecList",

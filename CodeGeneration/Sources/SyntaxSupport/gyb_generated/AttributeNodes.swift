@@ -80,12 +80,7 @@ public let ATTRIBUTE_NODES: [Node] = [
                isOptional: true,
                nodeChoices: [
                  Child(name: "Token",
-                       kind: "Token",
-                       tokenChoices: [
-                         "Identifier",
-                         "StringLiteral",
-                         "IntegerLiteral"
-                       ]),
+                       kind: "Token"),
                  Child(name: "StringExpr",
                        kind: "StringLiteralExpr"),
                  Child(name: "Availability",

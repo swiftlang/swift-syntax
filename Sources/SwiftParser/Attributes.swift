@@ -164,9 +164,32 @@ extension Parser {
           )
         )
       }
-    case ._spi:
+    case ._spi, ._effects, ._objcRuntimeName, ._projectedValueProperty, ._swift_native_objc_runtime_base, ._typeEraser, ._documentation, ._optimize, ._nonSendable, .exclusivity, .inline, ._alignment:
+      // Attributes that take a single token as argument. Some examples of these include:
+      //  - Arbitrary identifiers (e.g. `@_spi(RawSyntax)`)
+      //  - An integer literal (e.g. `@_alignment(4)`)
+      //  - Keywords (e.g. `@_documentation(public)`)
+      //
+      //  Because there seem to be very little restrictions on these parameters (they could be keywords instead of identifeirs), we just allow any token.
       return parseAttribute(hasRequiredArguments: true) { parser in
-        return .token(parser.consumeAnyToken())
+        if !parser.at(.rightParen) {
+          return .token(parser.consumeAnyToken())
+        } else {
+          return .token(parser.missingToken(.identifier))
+        }
+      }
+    case ._objcImplementation:
+      // Similar to the above but the argument is optional
+      return parseAttribute(hasRequiredArguments: false) { parser in
+        if !parser.at(.rightParen) {
+          return .token(parser.consumeAnyToken())
+        } else {
+          return .token(parser.missingToken(.identifier))
+        }
+      }
+    case ._cdecl, ._silgen_name:
+      return parseAttribute(hasRequiredArguments: true) { parser in
+        return .token(parser.consume(if: .stringLiteral) ?? parser.missingToken(.stringLiteral))
       }
     case ._implements:
       return parseAttribute(hasRequiredArguments: true) { parser in
@@ -183,23 +206,6 @@ extension Parser {
     case .__synthesized_protocol, ._clangImporterSynthesizedType, ._forbidSerializingReference, ._restatedObjCConformance:
       // Virtual attributes that should not be parsed
       break
-    // MARK: - Literals
-    case ._alignment: break  // Integer literal
-    case ._cdecl: break  // String literal
-    case ._silgen_name: break  // string literal
-    // MARK: - Identifiers
-    case ._effects: break  // identifier
-    case ._objcRuntimeName: break  // Identifier (mangled name)
-    case ._objcImplementation: break  // no arguments or identifier (category name)
-    case ._projectedValueProperty: break  // identifier or dollar identifier
-    case ._swift_native_objc_runtime_base: break  // Identifier
-    case ._typeEraser: break  // Identifier
-    // MARK: - Limited list
-    case ._documentation: break  // visibility: Access modifier
-    case ._optimize: break  // @_optimize([none|size|speed])
-    case ._nonSendable: break  // no arguments or @_nonSendable(__assumed)
-    case .exclusivity: break  // checked|unchecked
-    case .inline: break  // __always|never
     // MARK: - Other
     case ._backDeploy: break  // Back deploy syntax
     case ._expose:
@@ -212,7 +218,6 @@ extension Parser {
     case ._unavailableFromAsync:
       // @_unavailableFromAsync(message: "Use Task.runInline from a sync context to begin an async context.")
       break
-
     }
 
     let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
@@ -596,7 +601,7 @@ extension Parser {
 }
 
 extension Parser {
-    enum SpecializeParameter: RawTokenKindSubset {
+  enum SpecializeParameter: RawTokenKindSubset {
     case target
     case availability
     case exported

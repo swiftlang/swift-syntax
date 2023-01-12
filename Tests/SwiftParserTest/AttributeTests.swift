@@ -322,4 +322,23 @@ final class AttributeTests: XCTestCase {
       """
     )
   }
+
+  func testSpiAttributeWithoutParameter() {
+    AssertParse(
+      "@_spi(1️⃣) class Foo {}",
+      diagnostics: [
+        DiagnosticSpec(message: "expected argument for '@_spi' attribute", fixIts: ["insert attribute argument"])
+      ],
+      fixedSource: "@_spi(<#identifier#>) class Foo {}"
+    )
+  }
+
+  func testSilgenName() {
+    AssertParse(
+      """
+      @_silgen_name("testExclusivityBogusPC")
+      private static func _testExclusivityBogusPC()
+      """
+    )
+  }
 }

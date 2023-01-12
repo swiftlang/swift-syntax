@@ -11,7 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftDiagnostics
-@_spi(LexerDiagnostics) import SwiftParser
+import SwiftParser
 @_spi(RawSyntax) import SwiftSyntax
 
 fileprivate extension TokenSyntax {

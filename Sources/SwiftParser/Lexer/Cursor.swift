@@ -32,7 +32,7 @@ extension SyntaxText {
   }
 }
 
-public enum StringLiteralKind {
+enum StringLiteralKind: Equatable {
   /// A normal single-line string literal started by `"`.
   case singleLine
   /// A multi-line string literal started by `"""`.
@@ -41,7 +41,7 @@ public enum StringLiteralKind {
   case singleQuote
 }
 
-public enum LexerCursorState {
+enum LexerCursorState: Equatable {
   /// Normal top-level lexing mode
   case normal
 
@@ -85,20 +85,19 @@ extension Lexer {
   /// cursor and updated when the cursor advances. A cursor is a safe interface
   /// to reading bytes from an input buffer: all accesses to its input are
   /// bounds-checked.
-  public struct Cursor: Equatable {
+  struct Cursor: Equatable {
     var input: UnsafeBufferPointer<UInt8>
     var previous: UInt8
     var state: LexerCursorState
 
-    @_spi(LexerDiagnostics)
-    public init(input: UnsafeBufferPointer<UInt8>, previous: UInt8, state: LexerCursorState) {
+    init(input: UnsafeBufferPointer<UInt8>, previous: UInt8, state: LexerCursorState) {
       self.input = input
       self.previous = previous
       self.state = state
     }
 
     public static func == (lhs: Cursor, rhs: Cursor) -> Bool {
-      return lhs.input.baseAddress == rhs.input.baseAddress
+      return lhs.input.baseAddress == rhs.input.baseAddress && lhs.previous == rhs.previous && lhs.state == rhs.state
     }
 
     public func starts<PossiblePrefix>(with possiblePrefix: PossiblePrefix) -> Bool
@@ -792,8 +791,7 @@ extension Lexer {
 }
 
 extension Lexer.Cursor {
-  @_spi(LexerDiagnostics)
-  public mutating func nextToken(_ ContentStart: Lexer.Cursor) -> Lexer.Lexeme {
+  mutating func nextToken(_ ContentStart: Lexer.Cursor) -> Lexer.Lexeme {
     // Leading trivia.
     let leadingTriviaStart = self
     let newlineInLeadingTrivia: NewlinePresence

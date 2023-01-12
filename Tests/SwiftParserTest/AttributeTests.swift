@@ -506,4 +506,9 @@ final class AttributeTests: XCTestCase {
     AssertParse(#"@_documentation(metadata: "this is a longer string") public class OtherClass {}"#)
     AssertParse(#"@_documentation(visibility: internal, metadata: "this is a longer string") public class OtherClass {}"#)
   }
+
+  func testSendable() {
+    AssertParse("func takeRepeater(_ f: @MainActor @Sendable @escaping () -> Int) {}")
+    AssertParse("takeRepesater { @MainActor @Sendable () -> Int in 0 }")
+  }
 }

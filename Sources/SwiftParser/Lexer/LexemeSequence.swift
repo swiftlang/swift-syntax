@@ -23,7 +23,7 @@ extension Lexer {
     fileprivate init(start: Lexer.Cursor, cursor: Lexer.Cursor) {
       self.start = start
       self.cursor = cursor
-      self.nextToken = self.cursor.nextToken(self.start)
+      self.nextToken = self.cursor.nextToken(contentStart: self.start)
     }
 
     public mutating func next() -> Lexer.Lexeme? {
@@ -43,7 +43,7 @@ extension Lexer {
             trailingTriviaLength: 0
           )
         } else {
-          self.nextToken = self.cursor.nextToken(self.start)
+          self.nextToken = self.cursor.nextToken(contentStart: self.start)
         }
       }
       return self.nextToken
@@ -61,7 +61,7 @@ extension Lexer {
       // again in the lexer.
       let backUpLength = self.nextToken.byteLength + bytes
       self.cursor.backUp(by: backUpLength)
-      self.nextToken = self.cursor.nextToken(self.start)
+      self.nextToken = self.cursor.nextToken(contentStart: self.start)
       return self.advance()
     }
 

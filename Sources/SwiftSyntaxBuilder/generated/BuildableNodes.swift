@@ -125,7 +125,7 @@ extension BackDeployAttributeSpecList {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeBeforeLabel: UnexpectedNodes? = nil, beforeLabel: String, unexpectedBetweenBeforeLabelAndColon: UnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndVersionList: UnexpectedNodes? = nil, versionList: BackDeployVersionList, trailingTrivia: Trivia? = nil) {
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeBeforeLabel: UnexpectedNodes? = nil, beforeLabel: String, unexpectedBetweenBeforeLabelAndColon: UnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndVersionList: UnexpectedNodes? = nil, versionList: AvailabilityVersionRestrictionList, trailingTrivia: Trivia? = nil) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeBeforeLabel, beforeLabel: Token.`identifier`(beforeLabel), unexpectedBetweenBeforeLabelAndColon, colon: colon, unexpectedBetweenColonAndVersionList, versionList: versionList, trailingTrivia: trailingTrivia)
   }
 }
@@ -322,18 +322,6 @@ extension ConventionWitnessMethodAttributeArguments {
   }
 }
 
-/// A custom `@` attribute.
-extension CustomAttribute {
-  /// A convenience initializer that allows:
-  ///  - Initializing syntax collections using result builders
-  ///  - Initializing tokens without default text using strings
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeAtSignToken: UnexpectedNodes? = nil, atSignToken: Token = Token.`atSign`, unexpectedBetweenAtSignTokenAndAttributeName: UnexpectedNodes? = nil, attributeName: TypeSyntaxProtocol, unexpectedBetweenAttributeNameAndLeftParen: UnexpectedNodes? = nil, leftParen: Token? = nil, unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodes? = nil, unexpectedBetweenArgumentListAndRightParen: UnexpectedNodes? = nil, rightParen: Token? = nil, @TupleExprElementListBuilder argumentListBuilder: () -> TupleExprElementListSyntax? = {
-      nil
-    }, trailingTrivia: Trivia? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAtSignToken, atSignToken: atSignToken, unexpectedBetweenAtSignTokenAndAttributeName, attributeName: TypeSyntax(fromProtocol: attributeName), unexpectedBetweenAttributeNameAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndArgumentList, argumentList: argumentListBuilder(), unexpectedBetweenArgumentListAndRightParen, rightParen: rightParen, trailingTrivia: trailingTrivia)
-  }
-}
-
 extension DeclModifierDetail {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
@@ -444,6 +432,34 @@ extension DoStmt {
   }
 }
 
+extension DocumentationAttributeArgument: HasTrailingComma {
+  /// A convenience initializer that allows:
+  ///  - Initializing syntax collections using result builders
+  ///  - Initializing tokens without default text using strings
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeLabel: UnexpectedNodes? = nil, label: String, unexpectedBetweenLabelAndColon: UnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndValue: UnexpectedNodes? = nil, value: Token, unexpectedBetweenValueAndTrailingComma: UnexpectedNodes? = nil, trailingComma: Token? = nil, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLabel, label: Token.`identifier`(label), unexpectedBetweenLabelAndColon, colon: colon, unexpectedBetweenColonAndValue, value: value, unexpectedBetweenValueAndTrailingComma, trailingComma: trailingComma, trailingTrivia: trailingTrivia)
+  }
+  
+  var hasTrailingComma: Bool {
+    return trailingComma != nil
+  }
+  
+  /// Conformance to `HasTrailingComma`.
+  public func withTrailingComma(_ withComma: Bool) -> Self {
+    return withTrailingComma(withComma ? .commaToken() : nil)
+  }
+}
+
+/// The arguments for the '@_dynamicReplacement' attribute
+extension DynamicReplacementArguments {
+  /// A convenience initializer that allows:
+  ///  - Initializing syntax collections using result builders
+  ///  - Initializing tokens without default text using strings
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeForLabel: UnexpectedNodes? = nil, forLabel: String, unexpectedBetweenForLabelAndColon: UnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndDeclname: UnexpectedNodes? = nil, declname: DeclName, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeForLabel, forLabel: Token.`identifier`(forLabel), unexpectedBetweenForLabelAndColon, colon: colon, unexpectedBetweenColonAndDeclname, declname: declname, trailingTrivia: trailingTrivia)
+  }
+}
+
 extension EditorPlaceholderExpr {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
@@ -493,6 +509,18 @@ extension EnumDecl {
       MemberDeclListSyntax([])
     }, trailingTrivia: Trivia? = nil) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndEnumKeyword, enumKeyword: enumKeyword, unexpectedBetweenEnumKeywordAndIdentifier, identifier: Token.`identifier`(identifier), unexpectedBetweenIdentifierAndGenericParameters, genericParameters: genericParameters, unexpectedBetweenGenericParametersAndInheritanceClause, inheritanceClause: inheritanceClause, unexpectedBetweenInheritanceClauseAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndMembers, members: MemberDeclBlockSyntax(members: membersBuilder()), trailingTrivia: trailingTrivia)
+  }
+}
+
+/// The arguments for the '@_expose' attribute
+extension ExposeAttributeArguments {
+  /// A convenience initializer that allows:
+  ///  - Initializing syntax collections using result builders
+  ///  - Initializing tokens without default text using strings
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeLanguage: UnexpectedNodes? = nil, language: Token, unexpectedBetweenLanguageAndComma: UnexpectedNodes? = nil, comma: Token? = nil, unexpectedBetweenCommaAndCxxName: UnexpectedNodes? = nil, cxxName: String? = nil, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLanguage, language: language, unexpectedBetweenLanguageAndComma, comma: comma, unexpectedBetweenCommaAndCxxName, cxxName: cxxName.map { 
+        Token.`stringLiteral`($0) 
+      }, trailingTrivia: trailingTrivia)
   }
 }
 
@@ -884,6 +912,16 @@ extension OptionalBindingCondition {
   }
 }
 
+/// The arguments for the '@_originallyDefinedIn' attribute
+extension OriginallyDefinedInArguments {
+  /// A convenience initializer that allows:
+  ///  - Initializing syntax collections using result builders
+  ///  - Initializing tokens without default text using strings
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeModuleLabel: UnexpectedNodes? = nil, moduleLabel: String, unexpectedBetweenModuleLabelAndColon: UnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndModuleName: UnexpectedNodes? = nil, moduleName: String, unexpectedBetweenModuleNameAndComma: UnexpectedNodes? = nil, comma: Token = Token.`comma`, unexpectedBetweenCommaAndPlatforms: UnexpectedNodes? = nil, platforms: AvailabilityVersionRestrictionList, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeModuleLabel, moduleLabel: Token.`identifier`(moduleLabel), unexpectedBetweenModuleLabelAndColon, colon: colon, unexpectedBetweenColonAndModuleName, moduleName: Token.`stringLiteral`(moduleName), unexpectedBetweenModuleNameAndComma, comma: comma, unexpectedBetweenCommaAndPlatforms, platforms: platforms, trailingTrivia: trailingTrivia)
+  }
+}
+
 extension ParameterClause {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
@@ -1243,6 +1281,26 @@ extension TypealiasDecl {
   ///  - Initializing tokens without default text using strings
   public init(leadingTrivia: Trivia? = nil, unexpectedBeforeAttributes: UnexpectedNodes? = nil, attributes: AttributeList? = nil, unexpectedBetweenAttributesAndModifiers: UnexpectedNodes? = nil, modifiers: ModifierList? = nil, unexpectedBetweenModifiersAndTypealiasKeyword: UnexpectedNodes? = nil, typealiasKeyword: Token = .keyword(.typealias), unexpectedBetweenTypealiasKeywordAndIdentifier: UnexpectedNodes? = nil, identifier: String, unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodes? = nil, genericParameterClause: GenericParameterClause? = nil, unexpectedBetweenGenericParameterClauseAndInitializer: UnexpectedNodes? = nil, initializer: TypeInitializerClause, unexpectedBetweenInitializerAndGenericWhereClause: UnexpectedNodes? = nil, genericWhereClause: GenericWhereClause? = nil, trailingTrivia: Trivia? = nil) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndTypealiasKeyword, typealiasKeyword: typealiasKeyword, unexpectedBetweenTypealiasKeywordAndIdentifier, identifier: Token.`identifier`(identifier), unexpectedBetweenIdentifierAndGenericParameterClause, genericParameterClause: genericParameterClause, unexpectedBetweenGenericParameterClauseAndInitializer, initializer: initializer, unexpectedBetweenInitializerAndGenericWhereClause, genericWhereClause: genericWhereClause, trailingTrivia: trailingTrivia)
+  }
+}
+
+/// The arguments for the '@_unavailableFromAsync' attribute
+extension UnavailableFromAsyncArguments {
+  /// A convenience initializer that allows:
+  ///  - Initializing syntax collections using result builders
+  ///  - Initializing tokens without default text using strings
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeMessageLabel: UnexpectedNodes? = nil, messageLabel: String, unexpectedBetweenMessageLabelAndColon: UnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndMessage: UnexpectedNodes? = nil, message: String, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeMessageLabel, messageLabel: Token.`identifier`(messageLabel), unexpectedBetweenMessageLabelAndColon, colon: colon, unexpectedBetweenColonAndMessage, message: Token.`stringLiteral`(message), trailingTrivia: trailingTrivia)
+  }
+}
+
+/// The arguments for the '@_private' attribute
+extension UnderscorePrivateAttributeArguments {
+  /// A convenience initializer that allows:
+  ///  - Initializing syntax collections using result builders
+  ///  - Initializing tokens without default text using strings
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeSourceFileLabel: UnexpectedNodes? = nil, sourceFileLabel: String, unexpectedBetweenSourceFileLabelAndColon: UnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndFilename: UnexpectedNodes? = nil, filename: String, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeSourceFileLabel, sourceFileLabel: Token.`identifier`(sourceFileLabel), unexpectedBetweenSourceFileLabelAndColon, colon: colon, unexpectedBetweenColonAndFilename, filename: Token.`stringLiteral`(filename), trailingTrivia: trailingTrivia)
   }
 }
 

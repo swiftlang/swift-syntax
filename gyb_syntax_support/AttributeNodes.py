@@ -6,24 +6,6 @@ ATTRIBUTE_NODES = [
     Node('TokenList', name_for_diagnostics='token list', kind='SyntaxCollection',
          element='Token'),
 
-    Node('CustomAttribute', name_for_diagnostics='attribute', kind='Syntax',
-         description='''
-         A custom `@` attribute.
-         ''',
-         children=[
-             Child('AtSignToken', kind='AtSignToken',
-                   description='The `@` sign.'),
-             Child('AttributeName', kind='Type', name_for_diagnostics='name',
-                   classification='Attribute',
-                   description='The name of the attribute.'),
-             Child('LeftParen', kind='LeftParenToken',
-                   is_optional=True),
-             Child('ArgumentList', kind='TupleExprElementList',
-                   collection_element_name='Argument', is_optional=True),
-             Child('RightParen', kind='RightParenToken',
-                   is_optional=True),
-         ]),
-
     # attribute -> '@' identifier '('?
     #              ( identifier
     #                | string-literal
@@ -42,7 +24,7 @@ ATTRIBUTE_NODES = [
          children=[
              Child('AtSignToken', kind='AtSignToken',
                    description='The `@` sign.'),
-             Child('AttributeName', kind='Token', name_for_diagnostics='name',
+             Child('AttributeName', kind='Type', name_for_diagnostics='name',
                    classification='Attribute',
                    description='The name of the attribute.'),
              Child('LeftParen', kind='LeftParenToken', is_optional=True,
@@ -51,9 +33,8 @@ ATTRIBUTE_NODES = [
                    '''),
              Child('Argument', kind='Syntax', is_optional=True,
                    node_choices=[
-                       Child('Token', kind='Token', 
-                             token_choices=['IdentifierToken', 'StringLiteralToken', 'IntegerLiteralToken']),
-                       Child('StringExpr', kind='StringLiteralExpr'),
+                       Child('ArgumentList', kind='TupleExprElementList'),
+                       Child('Token', kind='Token'),
                        Child('Availability', kind='AvailabilitySpecList'),
                        Child('SpecializeArguments',
                              kind='SpecializeAttributeSpecList'),
@@ -64,8 +45,6 @@ ATTRIBUTE_NODES = [
                              kind='DifferentiableAttributeArguments'),
                        Child('DerivativeRegistrationArguments',
                              kind='DerivativeRegistrationAttributeArguments'),
-                       Child('NamedAttributeString',
-                             kind='NamedAttributeStringArgument'),
                        Child('BackDeployArguments',
                              kind='BackDeployAttributeSpecList'),
                        Child('ConventionArguments',
@@ -74,10 +53,20 @@ ATTRIBUTE_NODES = [
                              kind='ConventionWitnessMethodAttributeArguments'), 
                        Child('OpaqueReturnTypeOfAttributeArguments',
                              kind='OpaqueReturnTypeOfAttributeArguments'),
-                       # TokenList for custom effects which are parsed by
-                       # `FunctionEffects.parse()` in swift.
-                       Child('TokenList', kind='TokenList',
-                             collection_element_name='Token'),
+                       Child('ExposeAttributeArguments',
+                             kind='ExposeAttributeArguments'),
+                       Child('OriginallyDefinedInArguments',
+                             kind='OriginallyDefinedInArguments'),
+                       Child('UnderscorePrivateAttributeArguments',
+                             kind='UnderscorePrivateAttributeArguments'),
+                       Child('DynamicReplacementArguments',
+                             kind='DynamicReplacementArguments'),
+                       Child('UnavailableFromAsyncArguments',
+                             kind='UnavailableFromAsyncArguments'),
+                       Child('EffectsArguments',
+                             kind='EffectsArguments'),
+                       Child('DocumentationArguments',
+                             kind='DocumentationAttributeArguments')
                    ], description='''
                    The arguments of the attribute. In case the attribute
                    takes multiple arguments, they are gather in the
@@ -86,11 +75,7 @@ ATTRIBUTE_NODES = [
              Child('RightParen', kind='RightParenToken', is_optional=True,
                    description='''
                    If the attribute takes arguments, the closing parenthesis.
-                   '''),
-             # TokenList to gather remaining tokens of invalid attributes
-             # FIXME: Remove this recovery option entirely
-             Child('TokenList', kind='TokenList',
-                   collection_element_name='Token', is_optional=True),
+                   ''')
          ]),
 
     # attribute-list -> attribute attribute-list?
@@ -99,7 +84,6 @@ ATTRIBUTE_NODES = [
          element='Syntax', element_name='Attribute',
          element_choices=[
              'Attribute',
-             'CustomAttribute',
              'IfConfigDecl',
          ]),
 
@@ -179,25 +163,6 @@ ATTRIBUTE_NODES = [
                    '''),
          ]),
 
-    # The argument of '@_dynamic_replacement(for:)' or '@_private(sourceFile:)'
-    # named-attribute-string-arg -> 'name': string-literal
-    Node('NamedAttributeStringArgument', kind='Syntax',
-         name_for_diagnostics='attribute argument',
-         description='''
-         The argument for the `@_dynamic_replacement` or `@_private`
-         attribute of the form `for: "function()"` or `sourceFile:
-         "Src.swift"`
-         ''',
-         children=[
-             Child('NameTok', kind='Token', name_for_diagnostics='label',
-                   description='The label of the argument'),
-             Child('Colon', kind='ColonToken',
-                   description='The colon separating the label and the value'),
-             Child('StringOrDeclname', kind='Syntax', name_for_diagnostics='value', node_choices=[
-                 Child('String', kind='StringLiteralToken'),
-                 Child('Declname', kind='DeclName'),
-             ]),
-         ]),
     Node('DeclName', name_for_diagnostics='declaration name', kind='Syntax', children=[
          Child('DeclBaseName', kind='Token', name_for_diagnostics='base name', 
                token_choices=['IdentifierToken', 'PrefixOperatorToken'],
@@ -417,7 +382,7 @@ ATTRIBUTE_NODES = [
              Child('Colon', kind='ColonToken', description='''
                    The colon separating "before" and the parameter list.
                    '''),
-             Child('VersionList', kind='BackDeployVersionList',
+             Child('VersionList', kind='AvailabilityVersionRestrictionList',
                    collection_element_name='Availability', description='''
                    The list of OS versions in which the declaration became ABI
                    stable.
@@ -426,14 +391,13 @@ ATTRIBUTE_NODES = [
 
     # back-deploy-version-list ->
     #   back-deploy-version-entry back-deploy-version-list?
-    Node('BackDeployVersionList', name_for_diagnostics='version list',
-         kind='SyntaxCollection', element='BackDeployVersionArgument'),
+    Node('AvailabilityVersionRestrictionList', name_for_diagnostics='version list',
+         kind='SyntaxCollection', element='AvailabilityVersionRestrictionListEntry'),
 
     # back-deploy-version-entry -> availability-version-restriction ','?
-    Node('BackDeployVersionArgument', name_for_diagnostics='version', kind='Syntax',
+    Node('AvailabilityVersionRestrictionListEntry', name_for_diagnostics='version', kind='Syntax',
          description='''
-         A single platform/version pair in a `@_backDeploy` attribute,
-         e.g. `iOS 10.1`.
+         A single platform/version pair in an attribute, e.g. `iOS 10.1`.
          ''',
          children=[
              Child('AvailabilityVersionRestriction',
@@ -490,4 +454,85 @@ ATTRIBUTE_NODES = [
              Child('Colon', kind='ColonToken'),
              Child('ProtocolName', kind='IdentifierToken'),
         ]),
+
+    Node('ExposeAttributeArguments', name_for_diagnostics='@_expose arguments',
+         kind='Syntax',
+         description='''
+         The arguments for the '@_expose' attribute
+         ''',
+         children=[
+           Child('Language', kind='Token'),
+           Child('Comma', kind='CommaToken', is_optional=True),
+           Child('CxxName', kind='StringLiteralToken', is_optional=True)
+         ]),
+
+    Node('OriginallyDefinedInArguments', name_for_diagnostics='@_originallyDefinedIn arguments',
+         kind='Syntax',
+         description='''
+         The arguments for the '@_originallyDefinedIn' attribute
+         ''',
+         children=[
+           Child('ModuleLabel', kind='IdentifierToken', text_choices=['module']),
+           Child('Colon', kind='ColonToken'),
+           Child('ModuleName', kind='StringLiteralToken'),
+           Child('Comma', kind='CommaToken'),
+           Child('Platforms', kind='AvailabilityVersionRestrictionList', collection_element_name='Platform')
+         ]),
+
+    Node('UnderscorePrivateAttributeArguments', name_for_diagnostics='@_private argument',
+         kind='Syntax',
+         description='''
+         The arguments for the '@_private' attribute
+         ''',
+         children=[
+           Child('SourceFileLabel', kind='IdentifierToken', text_choices=['sourceFile']),
+           Child('Colon', kind='ColonToken'),
+           Child('Filename', kind='StringLiteralToken'),
+         ]),
+
+    Node('DynamicReplacementArguments', name_for_diagnostics='@_dynamicReplacement argument',
+         kind='Syntax',
+         description='''
+         The arguments for the '@_dynamicReplacement' attribute
+         ''',
+         children=[
+           Child('ForLabel', kind='IdentifierToken', text_choices=['for']),
+           Child('Colon', kind='ColonToken'),
+           Child('Declname', kind='DeclName'),
+         ]),
+
+    Node('UnavailableFromAsyncArguments', name_for_diagnostics='@_unavailableFromAsync argument',
+         kind='Syntax',
+         description='''
+         The arguments for the '@_unavailableFromAsync' attribute
+         ''',
+         children=[
+           Child('MessageLabel', kind='IdentifierToken', text_choices=['message']),
+           Child('Colon', kind='ColonToken'),
+           Child('Message', kind='StringLiteralToken'),
+         ]),
+
+    Node('EffectsArguments', name_for_diagnostics='@_effects arguments', kind='SyntaxCollection',
+         description='''
+         The arguments of the '@_effect' attribute. These will be parsed during the SIL stage.
+         ''',
+         element='Token'),
+
+    Node('DocumentationAttributeArgument', name_for_diagnostics='@_documentation argument', kind='Syntax',
+         traits=['WithTrailingComma'],
+         children=[
+            Child('Label', kind='IdentifierToken', text_choices=['visibility', 'metadata'], name_for_diagnostics='label'),
+            Child('Colon', kind='ColonToken'),
+            Child('Value', kind='Token', token_choices=['IdentifierToken', 'KeywordToken', 'StringLiteralToken'], name_for_diagnostics='value'), # Keywords can be: public, internal, private, fileprivate, open
+            Child('TrailingComma', kind='CommaToken',
+                   is_optional=True, description='''
+                   A trailing comma if this argument is followed by another one
+                   '''),
+         ]),
+
+    Node('DocumentationAttributeArguments', name_for_diagnostics='@_documentation arguments', kind='SyntaxCollection',
+        description='''
+         The arguments of the '@_documentation' attribute
+         ''',
+         element='DocumentationAttributeArgument'),
 ]

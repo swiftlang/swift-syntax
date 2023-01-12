@@ -64,15 +64,15 @@ public enum SyntaxKind {
   
   case availabilitySpecList
   
+  case availabilityVersionRestrictionListEntry
+  
+  case availabilityVersionRestrictionList
+  
   case availabilityVersionRestriction
   
   case awaitExpr
   
   case backDeployAttributeSpecList
-  
-  case backDeployVersionArgument
-  
-  case backDeployVersionList
   
   case binaryOperatorExpr
   
@@ -138,8 +138,6 @@ public enum SyntaxKind {
   
   case conventionWitnessMethodAttributeArguments
   
-  case customAttribute
-  
   case declModifierDetail
   
   case declModifier
@@ -184,7 +182,15 @@ public enum SyntaxKind {
   
   case doStmt
   
+  case documentationAttributeArgument
+  
+  case documentationAttributeArguments
+  
+  case dynamicReplacementArguments
+  
   case editorPlaceholderExpr
+  
+  case effectsArguments
   
   case enumCaseDecl
   
@@ -193,6 +199,8 @@ public enum SyntaxKind {
   case enumCaseElement
   
   case enumDecl
+  
+  case exposeAttributeArguments
   
   case exprList
   
@@ -338,8 +346,6 @@ public enum SyntaxKind {
   
   case multipleTrailingClosureElement
   
-  case namedAttributeStringArgument
-  
   case namedOpaqueReturnType
   
   case nilLiteralExpr
@@ -359,6 +365,8 @@ public enum SyntaxKind {
   case optionalChainingExpr
   
   case optionalType
+  
+  case originallyDefinedInArguments
   
   case packElementExpr
   
@@ -496,6 +504,10 @@ public enum SyntaxKind {
   
   case typealiasDecl
   
+  case unavailableFromAsyncArguments
+  
+  case underscorePrivateAttributeArguments
+  
   case unexpectedNodes
   
   case unresolvedAsExpr
@@ -538,7 +550,7 @@ public enum SyntaxKind {
       return true
     case .availabilitySpecList: 
       return true
-    case .backDeployVersionList: 
+    case .availabilityVersionRestrictionList: 
       return true
     case .caseItemList: 
       return true
@@ -563,6 +575,10 @@ public enum SyntaxKind {
     case .dictionaryElementList: 
       return true
     case .differentiabilityParamList: 
+      return true
+    case .documentationAttributeArguments: 
+      return true
+    case .effectsArguments: 
       return true
     case .enumCaseElementList: 
       return true

@@ -50,8 +50,8 @@ extension AvailabilitySpecList: ExpressibleByArrayLiteral {
   }
 }
 
-/// `BackDeployVersionList` represents a collection of `BackDeployVersionArgumentSyntax`
-extension BackDeployVersionList: ExpressibleByArrayLiteral {
+/// `AvailabilityVersionRestrictionList` represents a collection of `AvailabilityVersionRestrictionListEntrySyntax`
+extension AvailabilityVersionRestrictionList: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }
@@ -136,6 +136,20 @@ extension DictionaryElementList: ExpressibleByArrayLiteral {
 
 /// `DifferentiabilityParamList` represents a collection of `DifferentiabilityParamSyntax`
 extension DifferentiabilityParamList: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: Element...) {
+    self.init(elements)
+  }
+}
+
+/// The arguments of the '@_documentation' attribute
+extension DocumentationAttributeArguments: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: Element...) {
+    self.init(elements)
+  }
+}
+
+/// The arguments of the '@_effect' attribute. These will be parsed during the SIL stage.
+extension EffectsArguments: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }

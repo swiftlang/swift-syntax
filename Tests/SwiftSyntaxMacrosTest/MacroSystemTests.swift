@@ -212,7 +212,7 @@ public struct PropertyWrapper {}
 
 extension PropertyWrapper: AccessorDeclarationMacro {
   public static func expansion(
-    of node: CustomAttributeSyntax,
+    of node: AttributeSyntax,
     attachedTo declaration: DeclSyntax,
     in context: inout MacroExpansionContext
   ) throws -> [AccessorDeclSyntax] {
@@ -243,7 +243,7 @@ extension PropertyWrapper: AccessorDeclarationMacro {
 
 extension PropertyWrapper: PeerDeclarationMacro {
   public static func expansion(
-    of node: CustomAttributeSyntax,
+    of node: AttributeSyntax,
     attachedTo declaration: DeclSyntax,
     in context: inout MacroExpansionContext
   ) throws -> [SwiftSyntax.DeclSyntax] {
@@ -256,7 +256,8 @@ extension PropertyWrapper: PeerDeclarationMacro {
       return []
     }
 
-    guard let wrapperTypeNameExpr = node.argumentList?.first?.expression,
+    guard case .argumentList(let arguments) = node.argument,
+      let wrapperTypeNameExpr = arguments.first?.expression,
       let stringLiteral = wrapperTypeNameExpr.as(StringLiteralExprSyntax.self),
       stringLiteral.segments.count == 1,
       case let .stringSegment(wrapperTypeNameSegment)? = stringLiteral.segments.first
@@ -279,7 +280,7 @@ extension PropertyWrapper: PeerDeclarationMacro {
 
 public struct AddCompletionHandler: PeerDeclarationMacro {
   public static func expansion(
-    of node: CustomAttributeSyntax,
+    of node: AttributeSyntax,
     attachedTo declaration: DeclSyntax,
     in context: inout MacroExpansionContext
   ) throws -> [DeclSyntax] {
@@ -353,11 +354,11 @@ public struct AddCompletionHandler: PeerDeclarationMacro {
     // Drop the @addCompletionHandler attribute from the new declaration.
     let newAttributeList = AttributeListSyntax(
       funcDecl.attributes?.filter {
-        guard case let .customAttribute(customAttr) = $0 else {
+        guard case let .attribute(attribute) = $0 else {
           return true
         }
 
-        return customAttr != node
+        return attribute != node
       } ?? []
     )
 
@@ -390,7 +391,7 @@ public struct AddCompletionHandler: PeerDeclarationMacro {
 
 public struct AddBackingStorage: MemberDeclarationMacro {
   public static func expansion(
-    of node: CustomAttributeSyntax,
+    of node: AttributeSyntax,
     attachedTo decl: DeclSyntax,
     in context: inout MacroExpansionContext
   )
@@ -405,17 +406,17 @@ public struct AddBackingStorage: MemberDeclarationMacro {
 
 public struct WrapAllProperties: MemberAttributeMacro {
   public static func expansion(
-    of node: CustomAttributeSyntax,
+    of node: AttributeSyntax,
     attachedTo decl: DeclSyntax,
     annotating member: DeclSyntax,
     in context: inout MacroExpansionContext
-  ) throws -> [CustomAttributeSyntax] {
+  ) throws -> [AttributeSyntax] {
     guard member.is(VariableDeclSyntax.self) else {
       return []
     }
 
     return [
-      CustomAttributeSyntax(
+      AttributeSyntax(
         attributeName: SimpleTypeIdentifierSyntax(
           name: .identifier("Wrapper")
         )
@@ -427,11 +428,11 @@ public struct WrapAllProperties: MemberAttributeMacro {
 
 public struct WrapStoredProperties: MemberAttributeMacro {
   public static func expansion(
-    of node: CustomAttributeSyntax,
+    of node: AttributeSyntax,
     attachedTo decl: DeclSyntax,
     annotating member: DeclSyntax,
     in context: inout MacroExpansionContext
-  ) throws -> [CustomAttributeSyntax] {
+  ) throws -> [AttributeSyntax] {
     guard let property = member.as(VariableDeclSyntax.self),
       property.bindings.count == 1
     else {
@@ -457,7 +458,7 @@ public struct WrapStoredProperties: MemberAttributeMacro {
     }
 
     return [
-      CustomAttributeSyntax(
+      AttributeSyntax(
         attributeName: SimpleTypeIdentifierSyntax(
           name: .identifier("Wrapper")
         )

@@ -70,14 +70,14 @@ final class TriviaTests: XCTestCase {
     let testCases: [UInt: (AttributeList, String)] = [
       #line: (
         AttributeList {
-          CustomAttribute("Test").withLeadingTrivia(.space)
+          Attribute(attributeName: TypeSyntax("Test")).withLeadingTrivia(.space)
         },
         " @Test"
       ),
       #line: (
         AttributeList {
-          CustomAttribute("A").withTrailingTrivia(.space)
-          CustomAttribute("B").withTrailingTrivia(.space)
+          Attribute(attributeName: TypeSyntax("A")).withTrailingTrivia(.space)
+          Attribute(attributeName: TypeSyntax("B")).withTrailingTrivia(.space)
         },
         "@A @B "
       ),

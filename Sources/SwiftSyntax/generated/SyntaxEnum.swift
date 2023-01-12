@@ -64,15 +64,15 @@ public enum SyntaxEnum {
   
   case availabilitySpecList(AvailabilitySpecListSyntax)
   
+  case availabilityVersionRestrictionListEntry(AvailabilityVersionRestrictionListEntrySyntax)
+  
+  case availabilityVersionRestrictionList(AvailabilityVersionRestrictionListSyntax)
+  
   case availabilityVersionRestriction(AvailabilityVersionRestrictionSyntax)
   
   case awaitExpr(AwaitExprSyntax)
   
   case backDeployAttributeSpecList(BackDeployAttributeSpecListSyntax)
-  
-  case backDeployVersionArgument(BackDeployVersionArgumentSyntax)
-  
-  case backDeployVersionList(BackDeployVersionListSyntax)
   
   case binaryOperatorExpr(BinaryOperatorExprSyntax)
   
@@ -138,8 +138,6 @@ public enum SyntaxEnum {
   
   case conventionWitnessMethodAttributeArguments(ConventionWitnessMethodAttributeArgumentsSyntax)
   
-  case customAttribute(CustomAttributeSyntax)
-  
   case declModifierDetail(DeclModifierDetailSyntax)
   
   case declModifier(DeclModifierSyntax)
@@ -184,7 +182,15 @@ public enum SyntaxEnum {
   
   case doStmt(DoStmtSyntax)
   
+  case documentationAttributeArgument(DocumentationAttributeArgumentSyntax)
+  
+  case documentationAttributeArguments(DocumentationAttributeArgumentsSyntax)
+  
+  case dynamicReplacementArguments(DynamicReplacementArgumentsSyntax)
+  
   case editorPlaceholderExpr(EditorPlaceholderExprSyntax)
+  
+  case effectsArguments(EffectsArgumentsSyntax)
   
   case enumCaseDecl(EnumCaseDeclSyntax)
   
@@ -193,6 +199,8 @@ public enum SyntaxEnum {
   case enumCaseElement(EnumCaseElementSyntax)
   
   case enumDecl(EnumDeclSyntax)
+  
+  case exposeAttributeArguments(ExposeAttributeArgumentsSyntax)
   
   case exprList(ExprListSyntax)
   
@@ -338,8 +346,6 @@ public enum SyntaxEnum {
   
   case multipleTrailingClosureElement(MultipleTrailingClosureElementSyntax)
   
-  case namedAttributeStringArgument(NamedAttributeStringArgumentSyntax)
-  
   case namedOpaqueReturnType(NamedOpaqueReturnTypeSyntax)
   
   case nilLiteralExpr(NilLiteralExprSyntax)
@@ -359,6 +365,8 @@ public enum SyntaxEnum {
   case optionalChainingExpr(OptionalChainingExprSyntax)
   
   case optionalType(OptionalTypeSyntax)
+  
+  case originallyDefinedInArguments(OriginallyDefinedInArgumentsSyntax)
   
   case packElementExpr(PackElementExprSyntax)
   
@@ -496,6 +504,10 @@ public enum SyntaxEnum {
   
   case typealiasDecl(TypealiasDeclSyntax)
   
+  case unavailableFromAsyncArguments(UnavailableFromAsyncArgumentsSyntax)
+  
+  case underscorePrivateAttributeArguments(UnderscorePrivateAttributeArgumentsSyntax)
+  
   case unexpectedNodes(UnexpectedNodesSyntax)
   
   case unresolvedAsExpr(UnresolvedAsExprSyntax)
@@ -579,16 +591,16 @@ public extension Syntax {
       return .availabilityLabeledArgument(AvailabilityLabeledArgumentSyntax(self)!)
     case .availabilitySpecList: 
       return .availabilitySpecList(AvailabilitySpecListSyntax(self)!)
+    case .availabilityVersionRestrictionListEntry: 
+      return .availabilityVersionRestrictionListEntry(AvailabilityVersionRestrictionListEntrySyntax(self)!)
+    case .availabilityVersionRestrictionList: 
+      return .availabilityVersionRestrictionList(AvailabilityVersionRestrictionListSyntax(self)!)
     case .availabilityVersionRestriction: 
       return .availabilityVersionRestriction(AvailabilityVersionRestrictionSyntax(self)!)
     case .awaitExpr: 
       return .awaitExpr(AwaitExprSyntax(self)!)
     case .backDeployAttributeSpecList: 
       return .backDeployAttributeSpecList(BackDeployAttributeSpecListSyntax(self)!)
-    case .backDeployVersionArgument: 
-      return .backDeployVersionArgument(BackDeployVersionArgumentSyntax(self)!)
-    case .backDeployVersionList: 
-      return .backDeployVersionList(BackDeployVersionListSyntax(self)!)
     case .binaryOperatorExpr: 
       return .binaryOperatorExpr(BinaryOperatorExprSyntax(self)!)
     case .booleanLiteralExpr: 
@@ -653,8 +665,6 @@ public extension Syntax {
       return .conventionAttributeArguments(ConventionAttributeArgumentsSyntax(self)!)
     case .conventionWitnessMethodAttributeArguments: 
       return .conventionWitnessMethodAttributeArguments(ConventionWitnessMethodAttributeArgumentsSyntax(self)!)
-    case .customAttribute: 
-      return .customAttribute(CustomAttributeSyntax(self)!)
     case .declModifierDetail: 
       return .declModifierDetail(DeclModifierDetailSyntax(self)!)
     case .declModifier: 
@@ -699,8 +709,16 @@ public extension Syntax {
       return .discardAssignmentExpr(DiscardAssignmentExprSyntax(self)!)
     case .doStmt: 
       return .doStmt(DoStmtSyntax(self)!)
+    case .documentationAttributeArgument: 
+      return .documentationAttributeArgument(DocumentationAttributeArgumentSyntax(self)!)
+    case .documentationAttributeArguments: 
+      return .documentationAttributeArguments(DocumentationAttributeArgumentsSyntax(self)!)
+    case .dynamicReplacementArguments: 
+      return .dynamicReplacementArguments(DynamicReplacementArgumentsSyntax(self)!)
     case .editorPlaceholderExpr: 
       return .editorPlaceholderExpr(EditorPlaceholderExprSyntax(self)!)
+    case .effectsArguments: 
+      return .effectsArguments(EffectsArgumentsSyntax(self)!)
     case .enumCaseDecl: 
       return .enumCaseDecl(EnumCaseDeclSyntax(self)!)
     case .enumCaseElementList: 
@@ -709,6 +727,8 @@ public extension Syntax {
       return .enumCaseElement(EnumCaseElementSyntax(self)!)
     case .enumDecl: 
       return .enumDecl(EnumDeclSyntax(self)!)
+    case .exposeAttributeArguments: 
+      return .exposeAttributeArguments(ExposeAttributeArgumentsSyntax(self)!)
     case .exprList: 
       return .exprList(ExprListSyntax(self)!)
     case .expressionPattern: 
@@ -853,8 +873,6 @@ public extension Syntax {
       return .multipleTrailingClosureElementList(MultipleTrailingClosureElementListSyntax(self)!)
     case .multipleTrailingClosureElement: 
       return .multipleTrailingClosureElement(MultipleTrailingClosureElementSyntax(self)!)
-    case .namedAttributeStringArgument: 
-      return .namedAttributeStringArgument(NamedAttributeStringArgumentSyntax(self)!)
     case .namedOpaqueReturnType: 
       return .namedOpaqueReturnType(NamedOpaqueReturnTypeSyntax(self)!)
     case .nilLiteralExpr: 
@@ -875,6 +893,8 @@ public extension Syntax {
       return .optionalChainingExpr(OptionalChainingExprSyntax(self)!)
     case .optionalType: 
       return .optionalType(OptionalTypeSyntax(self)!)
+    case .originallyDefinedInArguments: 
+      return .originallyDefinedInArguments(OriginallyDefinedInArgumentsSyntax(self)!)
     case .packElementExpr: 
       return .packElementExpr(PackElementExprSyntax(self)!)
     case .packExpansionExpr: 
@@ -1011,6 +1031,10 @@ public extension Syntax {
       return .typeInitializerClause(TypeInitializerClauseSyntax(self)!)
     case .typealiasDecl: 
       return .typealiasDecl(TypealiasDeclSyntax(self)!)
+    case .unavailableFromAsyncArguments: 
+      return .unavailableFromAsyncArguments(UnavailableFromAsyncArgumentsSyntax(self)!)
+    case .underscorePrivateAttributeArguments: 
+      return .underscorePrivateAttributeArguments(UnderscorePrivateAttributeArgumentsSyntax(self)!)
     case .unexpectedNodes: 
       return .unexpectedNodes(UnexpectedNodesSyntax(self)!)
     case .unresolvedAsExpr: 

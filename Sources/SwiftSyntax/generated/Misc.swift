@@ -42,11 +42,11 @@ extension Syntax {
       .node(AvailabilityEntrySyntax.self), 
       .node(AvailabilityLabeledArgumentSyntax.self), 
       .node(AvailabilitySpecListSyntax.self), 
+      .node(AvailabilityVersionRestrictionListEntrySyntax.self), 
+      .node(AvailabilityVersionRestrictionListSyntax.self), 
       .node(AvailabilityVersionRestrictionSyntax.self), 
       .node(AwaitExprSyntax.self), 
       .node(BackDeployAttributeSpecListSyntax.self), 
-      .node(BackDeployVersionArgumentSyntax.self), 
-      .node(BackDeployVersionListSyntax.self), 
       .node(BinaryOperatorExprSyntax.self), 
       .node(BooleanLiteralExprSyntax.self), 
       .node(BorrowExprSyntax.self), 
@@ -79,7 +79,6 @@ extension Syntax {
       .node(ContinueStmtSyntax.self), 
       .node(ConventionAttributeArgumentsSyntax.self), 
       .node(ConventionWitnessMethodAttributeArgumentsSyntax.self), 
-      .node(CustomAttributeSyntax.self), 
       .node(DeclModifierDetailSyntax.self), 
       .node(DeclModifierSyntax.self), 
       .node(DeclNameArgumentListSyntax.self), 
@@ -102,11 +101,16 @@ extension Syntax {
       .node(DifferentiableAttributeArgumentsSyntax.self), 
       .node(DiscardAssignmentExprSyntax.self), 
       .node(DoStmtSyntax.self), 
+      .node(DocumentationAttributeArgumentSyntax.self), 
+      .node(DocumentationAttributeArgumentsSyntax.self), 
+      .node(DynamicReplacementArgumentsSyntax.self), 
       .node(EditorPlaceholderExprSyntax.self), 
+      .node(EffectsArgumentsSyntax.self), 
       .node(EnumCaseDeclSyntax.self), 
       .node(EnumCaseElementListSyntax.self), 
       .node(EnumCaseElementSyntax.self), 
       .node(EnumDeclSyntax.self), 
+      .node(ExposeAttributeArgumentsSyntax.self), 
       .node(ExprListSyntax.self), 
       .node(ExpressionPatternSyntax.self), 
       .node(ExpressionSegmentSyntax.self), 
@@ -179,7 +183,6 @@ extension Syntax {
       .node(MoveExprSyntax.self), 
       .node(MultipleTrailingClosureElementListSyntax.self), 
       .node(MultipleTrailingClosureElementSyntax.self), 
-      .node(NamedAttributeStringArgumentSyntax.self), 
       .node(NamedOpaqueReturnTypeSyntax.self), 
       .node(NilLiteralExprSyntax.self), 
       .node(ObjCSelectorPieceSyntax.self), 
@@ -190,6 +193,7 @@ extension Syntax {
       .node(OptionalBindingConditionSyntax.self), 
       .node(OptionalChainingExprSyntax.self), 
       .node(OptionalTypeSyntax.self), 
+      .node(OriginallyDefinedInArgumentsSyntax.self), 
       .node(PackElementExprSyntax.self), 
       .node(PackExpansionExprSyntax.self), 
       .node(PackExpansionTypeSyntax.self), 
@@ -258,6 +262,8 @@ extension Syntax {
       .node(TypeInheritanceClauseSyntax.self), 
       .node(TypeInitializerClauseSyntax.self), 
       .node(TypealiasDeclSyntax.self), 
+      .node(UnavailableFromAsyncArgumentsSyntax.self), 
+      .node(UnderscorePrivateAttributeArgumentsSyntax.self), 
       .node(UnexpectedNodesSyntax.self), 
       .node(UnresolvedAsExprSyntax.self), 
       .node(UnresolvedIsExprSyntax.self), 
@@ -327,16 +333,16 @@ extension SyntaxKind {
       return AvailabilityLabeledArgumentSyntax.self
     case .availabilitySpecList: 
       return AvailabilitySpecListSyntax.self
+    case .availabilityVersionRestrictionListEntry: 
+      return AvailabilityVersionRestrictionListEntrySyntax.self
+    case .availabilityVersionRestrictionList: 
+      return AvailabilityVersionRestrictionListSyntax.self
     case .availabilityVersionRestriction: 
       return AvailabilityVersionRestrictionSyntax.self
     case .awaitExpr: 
       return AwaitExprSyntax.self
     case .backDeployAttributeSpecList: 
       return BackDeployAttributeSpecListSyntax.self
-    case .backDeployVersionArgument: 
-      return BackDeployVersionArgumentSyntax.self
-    case .backDeployVersionList: 
-      return BackDeployVersionListSyntax.self
     case .binaryOperatorExpr: 
       return BinaryOperatorExprSyntax.self
     case .booleanLiteralExpr: 
@@ -401,8 +407,6 @@ extension SyntaxKind {
       return ConventionAttributeArgumentsSyntax.self
     case .conventionWitnessMethodAttributeArguments: 
       return ConventionWitnessMethodAttributeArgumentsSyntax.self
-    case .customAttribute: 
-      return CustomAttributeSyntax.self
     case .declModifierDetail: 
       return DeclModifierDetailSyntax.self
     case .declModifier: 
@@ -447,8 +451,16 @@ extension SyntaxKind {
       return DiscardAssignmentExprSyntax.self
     case .doStmt: 
       return DoStmtSyntax.self
+    case .documentationAttributeArgument: 
+      return DocumentationAttributeArgumentSyntax.self
+    case .documentationAttributeArguments: 
+      return DocumentationAttributeArgumentsSyntax.self
+    case .dynamicReplacementArguments: 
+      return DynamicReplacementArgumentsSyntax.self
     case .editorPlaceholderExpr: 
       return EditorPlaceholderExprSyntax.self
+    case .effectsArguments: 
+      return EffectsArgumentsSyntax.self
     case .enumCaseDecl: 
       return EnumCaseDeclSyntax.self
     case .enumCaseElementList: 
@@ -457,6 +469,8 @@ extension SyntaxKind {
       return EnumCaseElementSyntax.self
     case .enumDecl: 
       return EnumDeclSyntax.self
+    case .exposeAttributeArguments: 
+      return ExposeAttributeArgumentsSyntax.self
     case .exprList: 
       return ExprListSyntax.self
     case .expressionPattern: 
@@ -601,8 +615,6 @@ extension SyntaxKind {
       return MultipleTrailingClosureElementListSyntax.self
     case .multipleTrailingClosureElement: 
       return MultipleTrailingClosureElementSyntax.self
-    case .namedAttributeStringArgument: 
-      return NamedAttributeStringArgumentSyntax.self
     case .namedOpaqueReturnType: 
       return NamedOpaqueReturnTypeSyntax.self
     case .nilLiteralExpr: 
@@ -623,6 +635,8 @@ extension SyntaxKind {
       return OptionalChainingExprSyntax.self
     case .optionalType: 
       return OptionalTypeSyntax.self
+    case .originallyDefinedInArguments: 
+      return OriginallyDefinedInArgumentsSyntax.self
     case .packElementExpr: 
       return PackElementExprSyntax.self
     case .packExpansionExpr: 
@@ -759,6 +773,10 @@ extension SyntaxKind {
       return TypeInitializerClauseSyntax.self
     case .typealiasDecl: 
       return TypealiasDeclSyntax.self
+    case .unavailableFromAsyncArguments: 
+      return UnavailableFromAsyncArgumentsSyntax.self
+    case .underscorePrivateAttributeArguments: 
+      return UnderscorePrivateAttributeArgumentsSyntax.self
     case .unexpectedNodes: 
       return UnexpectedNodesSyntax.self
     case .unresolvedAsExpr: 
@@ -842,16 +860,16 @@ extension SyntaxKind {
       return "availability argument"
     case .availabilitySpecList: 
       return "'@availability' arguments"
+    case .availabilityVersionRestrictionListEntry: 
+      return "version"
+    case .availabilityVersionRestrictionList: 
+      return "version list"
     case .availabilityVersionRestriction: 
       return "availability argument"
     case .awaitExpr: 
       return "'await' expression"
     case .backDeployAttributeSpecList: 
       return "'@_backDeploy' arguments"
-    case .backDeployVersionArgument: 
-      return "version"
-    case .backDeployVersionList: 
-      return "version list"
     case .binaryOperatorExpr: 
       return nil
     case .booleanLiteralExpr: 
@@ -916,8 +934,6 @@ extension SyntaxKind {
       return "@convention(...) arguments"
     case .conventionWitnessMethodAttributeArguments: 
       return "@convention(...) arguments for witness methods"
-    case .customAttribute: 
-      return "attribute"
     case .declModifierDetail: 
       return nil
     case .declModifier: 
@@ -962,8 +978,16 @@ extension SyntaxKind {
       return nil
     case .doStmt: 
       return "'do' statement"
+    case .documentationAttributeArgument: 
+      return "@_documentation argument"
+    case .documentationAttributeArguments: 
+      return "@_documentation arguments"
+    case .dynamicReplacementArguments: 
+      return "@_dynamicReplacement argument"
     case .editorPlaceholderExpr: 
       return "editor placeholder"
+    case .effectsArguments: 
+      return "@_effects arguments"
     case .enumCaseDecl: 
       return "enum case"
     case .enumCaseElementList: 
@@ -972,6 +996,8 @@ extension SyntaxKind {
       return nil
     case .enumDecl: 
       return "enum"
+    case .exposeAttributeArguments: 
+      return "@_expose arguments"
     case .exprList: 
       return nil
     case .expressionPattern: 
@@ -1116,8 +1142,6 @@ extension SyntaxKind {
       return nil
     case .multipleTrailingClosureElement: 
       return "trailing closure"
-    case .namedAttributeStringArgument: 
-      return "attribute argument"
     case .namedOpaqueReturnType: 
       return "named opaque return type"
     case .nilLiteralExpr: 
@@ -1138,6 +1162,8 @@ extension SyntaxKind {
       return "optional chaining"
     case .optionalType: 
       return "optional type"
+    case .originallyDefinedInArguments: 
+      return "@_originallyDefinedIn arguments"
     case .packElementExpr: 
       return nil
     case .packExpansionExpr: 
@@ -1274,6 +1300,10 @@ extension SyntaxKind {
       return nil
     case .typealiasDecl: 
       return "typealias declaration"
+    case .unavailableFromAsyncArguments: 
+      return "@_unavailableFromAsync argument"
+    case .underscorePrivateAttributeArguments: 
+      return "@_private argument"
     case .unexpectedNodes: 
       return nil
     case .unresolvedAsExpr: 

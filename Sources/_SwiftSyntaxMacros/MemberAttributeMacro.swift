@@ -26,9 +26,9 @@ public protocol MemberAttributeMacro: DeclarationMacro {
   ///
   /// - Returns: the set of attributes to apply to the given member.
   static func expansion(
-    of node: CustomAttributeSyntax,
+    of node: AttributeSyntax,
     attachedTo declaration: DeclSyntax,
     annotating member: DeclSyntax,
     in context: inout MacroExpansionContext
-  ) throws -> [CustomAttributeSyntax]
+  ) throws -> [AttributeSyntax]
 }

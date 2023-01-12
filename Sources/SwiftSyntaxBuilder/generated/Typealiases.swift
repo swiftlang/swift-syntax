@@ -63,15 +63,15 @@ public typealias AvailabilityLabeledArgument = AvailabilityLabeledArgumentSyntax
 
 public typealias AvailabilitySpecList = AvailabilitySpecListSyntax
 
+public typealias AvailabilityVersionRestrictionListEntry = AvailabilityVersionRestrictionListEntrySyntax
+
+public typealias AvailabilityVersionRestrictionList = AvailabilityVersionRestrictionListSyntax
+
 public typealias AvailabilityVersionRestriction = AvailabilityVersionRestrictionSyntax
 
 public typealias AwaitExpr = AwaitExprSyntax
 
 public typealias BackDeployAttributeSpecList = BackDeployAttributeSpecListSyntax
-
-public typealias BackDeployVersionArgument = BackDeployVersionArgumentSyntax
-
-public typealias BackDeployVersionList = BackDeployVersionListSyntax
 
 public typealias BinaryOperatorExpr = BinaryOperatorExprSyntax
 
@@ -137,8 +137,6 @@ public typealias ConventionAttributeArguments = ConventionAttributeArgumentsSynt
 
 public typealias ConventionWitnessMethodAttributeArguments = ConventionWitnessMethodAttributeArgumentsSyntax
 
-public typealias CustomAttribute = CustomAttributeSyntax
-
 public typealias DeclModifierDetail = DeclModifierDetailSyntax
 
 public typealias DeclModifier = DeclModifierSyntax
@@ -185,7 +183,15 @@ public typealias DiscardAssignmentExpr = DiscardAssignmentExprSyntax
 
 public typealias DoStmt = DoStmtSyntax
 
+public typealias DocumentationAttributeArgument = DocumentationAttributeArgumentSyntax
+
+public typealias DocumentationAttributeArguments = DocumentationAttributeArgumentsSyntax
+
+public typealias DynamicReplacementArguments = DynamicReplacementArgumentsSyntax
+
 public typealias EditorPlaceholderExpr = EditorPlaceholderExprSyntax
+
+public typealias EffectsArguments = EffectsArgumentsSyntax
 
 public typealias EnumCaseDecl = EnumCaseDeclSyntax
 
@@ -194,6 +200,8 @@ public typealias EnumCaseElementList = EnumCaseElementListSyntax
 public typealias EnumCaseElement = EnumCaseElementSyntax
 
 public typealias EnumDecl = EnumDeclSyntax
+
+public typealias ExposeAttributeArguments = ExposeAttributeArgumentsSyntax
 
 public typealias ExprList = ExprListSyntax
 
@@ -329,8 +337,6 @@ public typealias MultipleTrailingClosureElementList = MultipleTrailingClosureEle
 
 public typealias MultipleTrailingClosureElement = MultipleTrailingClosureElementSyntax
 
-public typealias NamedAttributeStringArgument = NamedAttributeStringArgumentSyntax
-
 public typealias NamedOpaqueReturnType = NamedOpaqueReturnTypeSyntax
 
 public typealias NilLiteralExpr = NilLiteralExprSyntax
@@ -350,6 +356,8 @@ public typealias OptionalBindingCondition = OptionalBindingConditionSyntax
 public typealias OptionalChainingExpr = OptionalChainingExprSyntax
 
 public typealias OptionalType = OptionalTypeSyntax
+
+public typealias OriginallyDefinedInArguments = OriginallyDefinedInArgumentsSyntax
 
 public typealias PackElementExpr = PackElementExprSyntax
 
@@ -492,6 +500,10 @@ public typealias TypeInitializerClause = TypeInitializerClauseSyntax
 public typealias Type = TypeSyntax
 
 public typealias TypealiasDecl = TypealiasDeclSyntax
+
+public typealias UnavailableFromAsyncArguments = UnavailableFromAsyncArgumentsSyntax
+
+public typealias UnderscorePrivateAttributeArguments = UnderscorePrivateAttributeArgumentsSyntax
 
 public typealias UnexpectedNodes = UnexpectedNodesSyntax
 

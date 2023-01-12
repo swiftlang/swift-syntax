@@ -89,8 +89,6 @@ extension SyntaxClassification {
     // Separate checks for token nodes (most common checks) versus checks for layout nodes.
     if childKind == .token {
       switch (parentKind, indexInParent) {
-      case (.attribute, 3): 
-        return (.attribute, false)
       case (.availabilityVersionRestriction, 1): 
         return (.keyword, false)
       case (.constrainedSugarType, 1): 
@@ -122,10 +120,10 @@ extension SyntaxClassification {
       }
     }else {
       switch (parentKind, indexInParent) {
-      case (.backDeployVersionArgument, 1): 
-        return (.keyword, false)
-      case (.customAttribute, 3): 
+      case (.attribute, 3): 
         return (.attribute, false)
+      case (.availabilityVersionRestrictionListEntry, 1): 
+        return (.keyword, false)
       case (.ifConfigClause, 3): 
         return (.buildConfigId, false)
       case (.operatorDecl, 3): 

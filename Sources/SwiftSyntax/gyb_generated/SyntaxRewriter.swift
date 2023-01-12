@@ -1045,13 +1045,6 @@ open class SyntaxRewriter {
     return Syntax(visitChildren(node)).cast(TokenListSyntax.self)
   }
 
-  /// Visit a `CustomAttributeSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: CustomAttributeSyntax) -> CustomAttributeSyntax {
-    return Syntax(visitChildren(node)).cast(CustomAttributeSyntax.self)
-  }
-
   /// Visit a `AttributeSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -1092,13 +1085,6 @@ open class SyntaxRewriter {
   ///   - Returns: the rewritten node
   open func visit(_ node: TargetFunctionEntrySyntax) -> TargetFunctionEntrySyntax {
     return Syntax(visitChildren(node)).cast(TargetFunctionEntrySyntax.self)
-  }
-
-  /// Visit a `NamedAttributeStringArgumentSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: NamedAttributeStringArgumentSyntax) -> NamedAttributeStringArgumentSyntax {
-    return Syntax(visitChildren(node)).cast(NamedAttributeStringArgumentSyntax.self)
   }
 
   /// Visit a `DeclNameSyntax`.
@@ -1185,18 +1171,18 @@ open class SyntaxRewriter {
     return Syntax(visitChildren(node)).cast(BackDeployAttributeSpecListSyntax.self)
   }
 
-  /// Visit a `BackDeployVersionListSyntax`.
+  /// Visit a `AvailabilityVersionRestrictionListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: BackDeployVersionListSyntax) -> BackDeployVersionListSyntax {
-    return Syntax(visitChildren(node)).cast(BackDeployVersionListSyntax.self)
+  open func visit(_ node: AvailabilityVersionRestrictionListSyntax) -> AvailabilityVersionRestrictionListSyntax {
+    return Syntax(visitChildren(node)).cast(AvailabilityVersionRestrictionListSyntax.self)
   }
 
-  /// Visit a `BackDeployVersionArgumentSyntax`.
+  /// Visit a `AvailabilityVersionRestrictionListEntrySyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: BackDeployVersionArgumentSyntax) -> BackDeployVersionArgumentSyntax {
-    return Syntax(visitChildren(node)).cast(BackDeployVersionArgumentSyntax.self)
+  open func visit(_ node: AvailabilityVersionRestrictionListEntrySyntax) -> AvailabilityVersionRestrictionListEntrySyntax {
+    return Syntax(visitChildren(node)).cast(AvailabilityVersionRestrictionListEntrySyntax.self)
   }
 
   /// Visit a `OpaqueReturnTypeOfAttributeArgumentsSyntax`.
@@ -1218,6 +1204,62 @@ open class SyntaxRewriter {
   ///   - Returns: the rewritten node
   open func visit(_ node: ConventionWitnessMethodAttributeArgumentsSyntax) -> ConventionWitnessMethodAttributeArgumentsSyntax {
     return Syntax(visitChildren(node)).cast(ConventionWitnessMethodAttributeArgumentsSyntax.self)
+  }
+
+  /// Visit a `ExposeAttributeArgumentsSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: ExposeAttributeArgumentsSyntax) -> ExposeAttributeArgumentsSyntax {
+    return Syntax(visitChildren(node)).cast(ExposeAttributeArgumentsSyntax.self)
+  }
+
+  /// Visit a `OriginallyDefinedInArgumentsSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: OriginallyDefinedInArgumentsSyntax) -> OriginallyDefinedInArgumentsSyntax {
+    return Syntax(visitChildren(node)).cast(OriginallyDefinedInArgumentsSyntax.self)
+  }
+
+  /// Visit a `UnderscorePrivateAttributeArgumentsSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: UnderscorePrivateAttributeArgumentsSyntax) -> UnderscorePrivateAttributeArgumentsSyntax {
+    return Syntax(visitChildren(node)).cast(UnderscorePrivateAttributeArgumentsSyntax.self)
+  }
+
+  /// Visit a `DynamicReplacementArgumentsSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: DynamicReplacementArgumentsSyntax) -> DynamicReplacementArgumentsSyntax {
+    return Syntax(visitChildren(node)).cast(DynamicReplacementArgumentsSyntax.self)
+  }
+
+  /// Visit a `UnavailableFromAsyncArgumentsSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: UnavailableFromAsyncArgumentsSyntax) -> UnavailableFromAsyncArgumentsSyntax {
+    return Syntax(visitChildren(node)).cast(UnavailableFromAsyncArgumentsSyntax.self)
+  }
+
+  /// Visit a `EffectsArgumentsSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: EffectsArgumentsSyntax) -> EffectsArgumentsSyntax {
+    return Syntax(visitChildren(node)).cast(EffectsArgumentsSyntax.self)
+  }
+
+  /// Visit a `DocumentationAttributeArgumentSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: DocumentationAttributeArgumentSyntax) -> DocumentationAttributeArgumentSyntax {
+    return Syntax(visitChildren(node)).cast(DocumentationAttributeArgumentSyntax.self)
+  }
+
+  /// Visit a `DocumentationAttributeArgumentsSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: DocumentationAttributeArgumentsSyntax) -> DocumentationAttributeArgumentsSyntax {
+    return Syntax(visitChildren(node)).cast(DocumentationAttributeArgumentsSyntax.self)
   }
 
   /// Visit a `LabeledStmtSyntax`.
@@ -3336,16 +3378,6 @@ open class SyntaxRewriter {
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplCustomAttributeSyntax(_ data: SyntaxData) -> Syntax {
-    let node = CustomAttributeSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer { visitPost(node._syntaxNode) }
-    if let newNode = visitAny(node._syntaxNode) { return newNode }
-    return Syntax(visit(node))
-  }
-
-  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplAttributeSyntax(_ data: SyntaxData) -> Syntax {
     let node = AttributeSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -3398,16 +3430,6 @@ open class SyntaxRewriter {
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplTargetFunctionEntrySyntax(_ data: SyntaxData) -> Syntax {
     let node = TargetFunctionEntrySyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer { visitPost(node._syntaxNode) }
-    if let newNode = visitAny(node._syntaxNode) { return newNode }
-    return Syntax(visit(node))
-  }
-
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplNamedAttributeStringArgumentSyntax(_ data: SyntaxData) -> Syntax {
-    let node = NamedAttributeStringArgumentSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer { visitPost(node._syntaxNode) }
@@ -3536,8 +3558,8 @@ open class SyntaxRewriter {
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplBackDeployVersionListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = BackDeployVersionListSyntax(data)
+  private func visitImplAvailabilityVersionRestrictionListSyntax(_ data: SyntaxData) -> Syntax {
+    let node = AvailabilityVersionRestrictionListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer { visitPost(node._syntaxNode) }
@@ -3546,8 +3568,8 @@ open class SyntaxRewriter {
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplBackDeployVersionArgumentSyntax(_ data: SyntaxData) -> Syntax {
-    let node = BackDeployVersionArgumentSyntax(data)
+  private func visitImplAvailabilityVersionRestrictionListEntrySyntax(_ data: SyntaxData) -> Syntax {
+    let node = AvailabilityVersionRestrictionListEntrySyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer { visitPost(node._syntaxNode) }
@@ -3578,6 +3600,86 @@ open class SyntaxRewriter {
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplConventionWitnessMethodAttributeArgumentsSyntax(_ data: SyntaxData) -> Syntax {
     let node = ConventionWitnessMethodAttributeArgumentsSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { visitPost(node._syntaxNode) }
+    if let newNode = visitAny(node._syntaxNode) { return newNode }
+    return Syntax(visit(node))
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplExposeAttributeArgumentsSyntax(_ data: SyntaxData) -> Syntax {
+    let node = ExposeAttributeArgumentsSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { visitPost(node._syntaxNode) }
+    if let newNode = visitAny(node._syntaxNode) { return newNode }
+    return Syntax(visit(node))
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplOriginallyDefinedInArgumentsSyntax(_ data: SyntaxData) -> Syntax {
+    let node = OriginallyDefinedInArgumentsSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { visitPost(node._syntaxNode) }
+    if let newNode = visitAny(node._syntaxNode) { return newNode }
+    return Syntax(visit(node))
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplUnderscorePrivateAttributeArgumentsSyntax(_ data: SyntaxData) -> Syntax {
+    let node = UnderscorePrivateAttributeArgumentsSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { visitPost(node._syntaxNode) }
+    if let newNode = visitAny(node._syntaxNode) { return newNode }
+    return Syntax(visit(node))
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplDynamicReplacementArgumentsSyntax(_ data: SyntaxData) -> Syntax {
+    let node = DynamicReplacementArgumentsSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { visitPost(node._syntaxNode) }
+    if let newNode = visitAny(node._syntaxNode) { return newNode }
+    return Syntax(visit(node))
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplUnavailableFromAsyncArgumentsSyntax(_ data: SyntaxData) -> Syntax {
+    let node = UnavailableFromAsyncArgumentsSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { visitPost(node._syntaxNode) }
+    if let newNode = visitAny(node._syntaxNode) { return newNode }
+    return Syntax(visit(node))
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplEffectsArgumentsSyntax(_ data: SyntaxData) -> Syntax {
+    let node = EffectsArgumentsSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { visitPost(node._syntaxNode) }
+    if let newNode = visitAny(node._syntaxNode) { return newNode }
+    return Syntax(visit(node))
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplDocumentationAttributeArgumentSyntax(_ data: SyntaxData) -> Syntax {
+    let node = DocumentationAttributeArgumentSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { visitPost(node._syntaxNode) }
+    if let newNode = visitAny(node._syntaxNode) { return newNode }
+    return Syntax(visit(node))
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplDocumentationAttributeArgumentsSyntax(_ data: SyntaxData) -> Syntax {
+    let node = DocumentationAttributeArgumentsSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer { visitPost(node._syntaxNode) }
@@ -4747,8 +4849,6 @@ open class SyntaxRewriter {
       return visitImplMacroExpansionDeclSyntax
     case .tokenList:
       return visitImplTokenListSyntax
-    case .customAttribute:
-      return visitImplCustomAttributeSyntax
     case .attribute:
       return visitImplAttributeSyntax
     case .attributeList:
@@ -4761,8 +4861,6 @@ open class SyntaxRewriter {
       return visitImplLabeledSpecializeEntrySyntax
     case .targetFunctionEntry:
       return visitImplTargetFunctionEntrySyntax
-    case .namedAttributeStringArgument:
-      return visitImplNamedAttributeStringArgumentSyntax
     case .declName:
       return visitImplDeclNameSyntax
     case .implementsAttributeArguments:
@@ -4787,16 +4885,32 @@ open class SyntaxRewriter {
       return visitImplQualifiedDeclNameSyntax
     case .backDeployAttributeSpecList:
       return visitImplBackDeployAttributeSpecListSyntax
-    case .backDeployVersionList:
-      return visitImplBackDeployVersionListSyntax
-    case .backDeployVersionArgument:
-      return visitImplBackDeployVersionArgumentSyntax
+    case .availabilityVersionRestrictionList:
+      return visitImplAvailabilityVersionRestrictionListSyntax
+    case .availabilityVersionRestrictionListEntry:
+      return visitImplAvailabilityVersionRestrictionListEntrySyntax
     case .opaqueReturnTypeOfAttributeArguments:
       return visitImplOpaqueReturnTypeOfAttributeArgumentsSyntax
     case .conventionAttributeArguments:
       return visitImplConventionAttributeArgumentsSyntax
     case .conventionWitnessMethodAttributeArguments:
       return visitImplConventionWitnessMethodAttributeArgumentsSyntax
+    case .exposeAttributeArguments:
+      return visitImplExposeAttributeArgumentsSyntax
+    case .originallyDefinedInArguments:
+      return visitImplOriginallyDefinedInArgumentsSyntax
+    case .underscorePrivateAttributeArguments:
+      return visitImplUnderscorePrivateAttributeArgumentsSyntax
+    case .dynamicReplacementArguments:
+      return visitImplDynamicReplacementArgumentsSyntax
+    case .unavailableFromAsyncArguments:
+      return visitImplUnavailableFromAsyncArgumentsSyntax
+    case .effectsArguments:
+      return visitImplEffectsArgumentsSyntax
+    case .documentationAttributeArgument:
+      return visitImplDocumentationAttributeArgumentSyntax
+    case .documentationAttributeArguments:
+      return visitImplDocumentationAttributeArgumentsSyntax
     case .labeledStmt:
       return visitImplLabeledStmtSyntax
     case .continueStmt:
@@ -5268,8 +5382,6 @@ open class SyntaxRewriter {
       return visitImplMacroExpansionDeclSyntax(data)
     case .tokenList:
       return visitImplTokenListSyntax(data)
-    case .customAttribute:
-      return visitImplCustomAttributeSyntax(data)
     case .attribute:
       return visitImplAttributeSyntax(data)
     case .attributeList:
@@ -5282,8 +5394,6 @@ open class SyntaxRewriter {
       return visitImplLabeledSpecializeEntrySyntax(data)
     case .targetFunctionEntry:
       return visitImplTargetFunctionEntrySyntax(data)
-    case .namedAttributeStringArgument:
-      return visitImplNamedAttributeStringArgumentSyntax(data)
     case .declName:
       return visitImplDeclNameSyntax(data)
     case .implementsAttributeArguments:
@@ -5308,16 +5418,32 @@ open class SyntaxRewriter {
       return visitImplQualifiedDeclNameSyntax(data)
     case .backDeployAttributeSpecList:
       return visitImplBackDeployAttributeSpecListSyntax(data)
-    case .backDeployVersionList:
-      return visitImplBackDeployVersionListSyntax(data)
-    case .backDeployVersionArgument:
-      return visitImplBackDeployVersionArgumentSyntax(data)
+    case .availabilityVersionRestrictionList:
+      return visitImplAvailabilityVersionRestrictionListSyntax(data)
+    case .availabilityVersionRestrictionListEntry:
+      return visitImplAvailabilityVersionRestrictionListEntrySyntax(data)
     case .opaqueReturnTypeOfAttributeArguments:
       return visitImplOpaqueReturnTypeOfAttributeArgumentsSyntax(data)
     case .conventionAttributeArguments:
       return visitImplConventionAttributeArgumentsSyntax(data)
     case .conventionWitnessMethodAttributeArguments:
       return visitImplConventionWitnessMethodAttributeArgumentsSyntax(data)
+    case .exposeAttributeArguments:
+      return visitImplExposeAttributeArgumentsSyntax(data)
+    case .originallyDefinedInArguments:
+      return visitImplOriginallyDefinedInArgumentsSyntax(data)
+    case .underscorePrivateAttributeArguments:
+      return visitImplUnderscorePrivateAttributeArgumentsSyntax(data)
+    case .dynamicReplacementArguments:
+      return visitImplDynamicReplacementArgumentsSyntax(data)
+    case .unavailableFromAsyncArguments:
+      return visitImplUnavailableFromAsyncArgumentsSyntax(data)
+    case .effectsArguments:
+      return visitImplEffectsArgumentsSyntax(data)
+    case .documentationAttributeArgument:
+      return visitImplDocumentationAttributeArgumentSyntax(data)
+    case .documentationAttributeArguments:
+      return visitImplDocumentationAttributeArgumentsSyntax(data)
     case .labeledStmt:
       return visitImplLabeledStmtSyntax(data)
     case .continueStmt:

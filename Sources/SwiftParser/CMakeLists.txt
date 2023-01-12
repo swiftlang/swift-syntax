@@ -32,7 +32,6 @@ add_swift_host_library(SwiftParser
   TriviaParser.swift
   Types.swift
 
-  generated/DeclarationAttribute.swift
   generated/DeclarationModifier.swift
   generated/Parser+Entry.swift
   generated/TypeAttribute.swift)

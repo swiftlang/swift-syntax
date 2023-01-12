@@ -232,7 +232,7 @@ public struct InvalidIdentifierError: ParserError {
 
 public struct MissingAttributeArgument: ParserError {
   /// The name of the attribute that's missing the argument, without `@`.
-  public let attributeName: TokenSyntax
+  public let attributeName: TypeSyntax
 
   public var message: String {
     return "expected argument for '@\(attributeName)' attribute"

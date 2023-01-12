@@ -66,7 +66,7 @@ class MacroApplication: SyntaxRewriter {
   var skipNodes: Set<Syntax> = []
 
   /// A stack of member attribute macos to expand when iterating over a `MemberDeclListSyntax`.
-  var memberAttributeMacros: [([(CustomAttributeSyntax, MemberAttributeMacro.Type)], DeclSyntax)] = []
+  var memberAttributeMacros: [([(AttributeSyntax, MemberAttributeMacro.Type)], DeclSyntax)] = []
 
   init(
     macroSystem: MacroSystem,
@@ -99,11 +99,11 @@ class MacroApplication: SyntaxRewriter {
 
       // Remove any attached attributes.
       let newAttributes = attributes.filter {
-        guard case let .customAttribute(customAttr) = $0 else {
+        guard case let .attribute(attribute) = $0 else {
           return true
         }
 
-        guard let attributeName = customAttr.attributeName.as(SimpleTypeIdentifierSyntax.self)?.name.text,
+        guard let attributeName = attribute.attributeName.as(SimpleTypeIdentifierSyntax.self)?.name.text,
           let macro = macroSystem.macros[attributeName]
         else {
           return true
@@ -337,7 +337,7 @@ extension MacroApplication {
   private func getMacroAttributes<MacroType>(
     attachedTo decl: DeclSyntax,
     ofType: MacroType.Type
-  ) -> [(CustomAttributeSyntax, MacroType)] {
+  ) -> [(AttributeSyntax, MacroType)] {
     guard let attributedNode = decl.asProtocol(AttributedSyntax.self),
       let attributes = attributedNode.attributes
     else {
@@ -345,15 +345,15 @@ extension MacroApplication {
     }
 
     return attributes.compactMap {
-      guard case let .customAttribute(customAttr) = $0,
-        let attributeName = customAttr.attributeName.as(SimpleTypeIdentifierSyntax.self)?.name.text,
+      guard case let .attribute(attribute) = $0,
+        let attributeName = attribute.attributeName.as(SimpleTypeIdentifierSyntax.self)?.name.text,
         let macro = macroSystem.macros[attributeName],
         let macroType = macro as? MacroType
       else {
         return nil
       }
 
-      return (customAttr, macroType)
+      return (attribute, macroType)
     }
   }
 
@@ -417,7 +417,7 @@ extension MacroApplication {
   }
 
   private func expandAttributes(
-    for macroAttributes: [(CustomAttributeSyntax, MemberAttributeMacro.Type)],
+    for macroAttributes: [(AttributeSyntax, MemberAttributeMacro.Type)],
     attachedTo decl: DeclSyntax,
     annotating member: MemberDeclListSyntax.Element
   ) -> MemberDeclListSyntax.Element {
@@ -425,7 +425,7 @@ extension MacroApplication {
       return member
     }
 
-    var attributes: [CustomAttributeSyntax] = []
+    var attributes: [AttributeSyntax] = []
     for (attribute, attributeMacro) in macroAttributes {
       do {
         try attributes.append(

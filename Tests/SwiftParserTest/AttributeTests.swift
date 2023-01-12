@@ -322,4 +322,193 @@ final class AttributeTests: XCTestCase {
       """
     )
   }
+
+  func testSpiAttributeWithoutParameter() {
+    AssertParse(
+      "@_spi(1️⃣) class Foo {}",
+      diagnostics: [
+        DiagnosticSpec(message: "expected argument for '@_spi' attribute", fixIts: ["insert attribute argument"])
+      ],
+      fixedSource: "@_spi(<#identifier#>) class Foo {}"
+    )
+  }
+
+  func testSilgenName() {
+    AssertParse(
+      """
+      @_silgen_name("testExclusivityBogusPC")
+      private static func _testExclusivityBogusPC()
+      """
+    )
+  }
+
+  func testBackDeploy() {
+    AssertParse(
+      """
+      @_backDeploy(before: macOS 12.0)
+      struct Foo {}
+      """
+    )
+
+    AssertParse(
+      """
+      @_backDeploy(before: macos 12.0, iOS 15.0)
+      struct Foo {}
+      """
+    )
+
+    AssertParse(
+      """
+      @available(macOS 11.0, *)
+      @_backDeploy(before: _macOS12_1)
+      public func backDeployTopLevelFunc2() -> Int { return 48 }
+      """
+    )
+  }
+
+  func testExpose() {
+    AssertParse(
+      """
+      @_expose(Cxx) func foo() {}
+      """
+    )
+
+    AssertParse(
+      """
+      @_expose(Cplusplus) func foo() {}
+      """
+    )
+
+    AssertParse(
+      """
+      @_expose(Cxx, "baz") func foo() {}
+      """
+    )
+
+    AssertParse(
+      """
+      @_expose(Cxx, 1️⃣baz) func foo() {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected string literal in @_expose arguments"),
+        DiagnosticSpec(message: "unexpected code 'baz' in attribute"),
+      ]
+    )
+  }
+
+  func testOriginallyDefinedIn() {
+    AssertParse(
+      """
+      @_originallyDefinedIn(module: "ToasterKit", macOS 10.15)
+      struct Vehicle {}
+      """
+    )
+
+    AssertParse(
+      """
+      @_originallyDefinedIn(module: "ToasterKit", macOS 10.15, iOS 13)
+      struct Vehicle {}
+      """
+    )
+
+    AssertParse(
+      """
+      @_originallyDefinedIn(module: "ToasterKit", _iOS13Aligned)
+      struct Vehicle {}
+      """
+    )
+  }
+
+  func testUnavailableFromAsync() {
+    AssertParse(
+      """
+      @_unavailableFromAsync
+      func foo() {}
+      """
+    )
+
+    AssertParse(
+      """
+      @_unavailableFromAsync(message: "abc")
+      func foo() {}
+      """
+    )
+
+    AssertParse(
+      """
+      @_unavailableFromAsync(1️⃣nope: "abc")
+      func foo() {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected 'message' in @_unavailableFromAsync argument"),
+        DiagnosticSpec(message: "unexpected code 'nope' before @_unavailableFromAsync argument"),
+      ]
+    )
+
+    AssertParse(
+      """
+      @_unavailableFromAsync(message1️⃣= "abc")
+      func foo() {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected ':' and string literal in @_unavailableFromAsync argument"),
+        DiagnosticSpec(message: #"unexpected code '= "abc"' in attribute"#),
+      ]
+    )
+
+    AssertParse(
+      """
+      @_unavailableFromAsync(message: 1️⃣abc)
+      func foo() {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected string literal in @_unavailableFromAsync argument"),
+        DiagnosticSpec(message: "unexpected code 'abc' in attribute"),
+      ]
+    )
+  }
+
+  func testEffects() {
+    AssertParse(
+      """
+      @_effects(notEscaping self.value**)
+      func foo() {}
+      """
+    )
+
+    AssertParse(
+      """
+      @_effects(escaping self.value**.class*.value** => return.value**)
+      func foo() {}
+      """
+    )
+  }
+
+  func testEscapingOnClosureType() {
+    AssertParse(
+      "func foo(closure: @escaping () -> Void) {}"
+    )
+  }
+
+  func testNonSendable() {
+    AssertParse(
+      """
+      @_nonSendable
+      class NonSendableType {
+      }
+      """
+    )
+  }
+
+  func testDocumentationAttribute() {
+    AssertParse("@_documentation(visibility: internal) @_exported import A")
+    AssertParse("@_documentation(metadata: cool_stuff) public class SomeClass {}")
+    AssertParse(#"@_documentation(metadata: "this is a longer string") public class OtherClass {}"#)
+    AssertParse(#"@_documentation(visibility: internal, metadata: "this is a longer string") public class OtherClass {}"#)
+  }
+
+  func testSendable() {
+    AssertParse("func takeRepeater(_ f: @MainActor @Sendable @escaping () -> Int) {}")
+    AssertParse("takeRepesater { @MainActor @Sendable () -> Int in 0 }")
+  }
 }

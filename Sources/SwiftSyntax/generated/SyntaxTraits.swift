@@ -280,6 +280,9 @@ extension DifferentiabilityParamSyntax: WithTrailingCommaSyntax {
 extension DoStmtSyntax: WithCodeBlockSyntax {
 }
 
+extension DocumentationAttributeArgumentSyntax: WithTrailingCommaSyntax {
+}
+
 extension EnumCaseDeclSyntax: AttributedSyntax {
 }
 

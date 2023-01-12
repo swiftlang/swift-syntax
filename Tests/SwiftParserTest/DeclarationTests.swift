@@ -1334,6 +1334,16 @@ final class DeclarationTests: XCTestCase {
       ]
     )
   }
+
+  func testFoo() {
+    AssertParse(
+      """
+      struct Properties {
+        class private(set) var privateSetterCustomNames: Bool
+      }
+      """
+    )
+  }
 }
 
 extension Parser.DeclAttributes {

@@ -17,7 +17,7 @@ public protocol PeerDeclarationMacro: DeclarationMacro {
   /// The macro expansion can introduce "peer" declarations that sit alongside
   /// the given declaration.
   static func expansion(
-    of node: CustomAttributeSyntax,
+    of node: AttributeSyntax,
     attachedTo declaration: DeclSyntax,
     in context: inout MacroExpansionContext
   ) throws -> [DeclSyntax]

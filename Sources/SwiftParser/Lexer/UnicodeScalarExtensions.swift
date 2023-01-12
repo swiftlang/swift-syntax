@@ -113,17 +113,17 @@ extension Unicode.Scalar {
     }
 
     // Unicode math, symbol, arrow, dingbat, and line/box drawing chars.
-    let C = self.value
-    return (C >= 0x00A1 && C <= 0x00A7)
-      || C == 0x00A9 || C == 0x00AB || C == 0x00AC || C == 0x00AE
-      || C == 0x00B0 || C == 0x00B1 || C == 0x00B6 || C == 0x00BB
-      || C == 0x00BF || C == 0x00D7 || C == 0x00F7
-      || C == 0x2016 || C == 0x2017 || (C >= 0x2020 && C <= 0x2027)
-      || (C >= 0x2030 && C <= 0x203E) || (C >= 0x2041 && C <= 0x2053)
-      || (C >= 0x2055 && C <= 0x205E) || (C >= 0x2190 && C <= 0x23FF)
-      || (C >= 0x2500 && C <= 0x2775) || (C >= 0x2794 && C <= 0x2BFF)
-      || (C >= 0x2E00 && C <= 0x2E7F) || (C >= 0x3001 && C <= 0x3003)
-      || (C >= 0x3008 && C <= 0x3030)
+    let c = self.value
+    return (c >= 0x00A1 && c <= 0x00A7)
+      || c == 0x00A9 || c == 0x00AB || c == 0x00AC || c == 0x00AE
+      || c == 0x00B0 || c == 0x00B1 || c == 0x00B6 || c == 0x00BB
+      || c == 0x00BF || c == 0x00D7 || c == 0x00F7
+      || c == 0x2016 || c == 0x2017 || (c >= 0x2020 && c <= 0x2027)
+      || (c >= 0x2030 && c <= 0x203E) || (c >= 0x2041 && c <= 0x2053)
+      || (c >= 0x2055 && c <= 0x205E) || (c >= 0x2190 && c <= 0x23FF)
+      || (c >= 0x2500 && c <= 0x2775) || (c >= 0x2794 && c <= 0x2BFF)
+      || (c >= 0x2E00 && c <= 0x2E7F) || (c >= 0x3001 && c <= 0x3003)
+      || (c >= 0x3008 && c <= 0x3030)
   }
 
   /// isOperatorContinuationCodePoint - Return true if the specified code point
@@ -134,13 +134,13 @@ extension Unicode.Scalar {
     }
 
     // Unicode combining characters and variation selectors.
-    let C = self.value
-    return (C >= 0x0300 && C <= 0x036F)
-      || (C >= 0x1DC0 && C <= 0x1DFF)
-      || (C >= 0x20D0 && C <= 0x20FF)
-      || (C >= 0xFE00 && C <= 0xFE0F)
-      || (C >= 0xFE20 && C <= 0xFE2F)
-      || (C >= 0xE0100 && C <= 0xE01EF)
+    let c = self.value
+    return (c >= 0x0300 && c <= 0x036F)
+      || (c >= 0x1DC0 && c <= 0x1DFF)
+      || (c >= 0x20D0 && c <= 0x20FF)
+      || (c >= 0xFE00 && c <= 0xFE0F)
+      || (c >= 0xFE20 && c <= 0xFE2F)
+      || (c >= 0xE0100 && c <= 0xE01EF)
   }
 
   /// Whether this character represents a printable ASCII character,

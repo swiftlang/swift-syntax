@@ -17,102 +17,113 @@ import SwiftSyntaxBuilder
 import XCTest
 import _SwiftSyntaxTestSupport
 
+@discardableResult
+func testRefactorIfLet(
+  _ syntax: ExprSyntax,
+  expected: ExprSyntax,
+  file: StaticString = #file,
+  line: UInt = #line
+) throws -> ExprSyntax {
+  let ifExpr = try XCTUnwrap(
+    syntax.as(IfExprSyntax.self),
+    file: file,
+    line: line
+  )
+
+  let refactored = try XCTUnwrap(
+    MigrateToNewIfLetSyntax.refactor(syntax: ifExpr),
+    file: file,
+    line: line
+  )
+
+  AssertStringsEqualWithDiff(expected.description, refactored.description)
+  return ExprSyntax(refactored)
+}
+
 final class MigrateToNewIfLetSyntaxTest: XCTestCase {
   func testRefactoring() throws {
-    let baselineSyntax: StmtSyntax = """
+    let baselineSyntax: ExprSyntax = """
       if let x = x {}
       """
 
-    let expectedSyntax: StmtSyntax = """
+    let expectedSyntax: ExprSyntax = """
       if let x {}
       """
 
-    let baseline = try XCTUnwrap(baselineSyntax.as(IfStmtSyntax.self))
-    let expected = try XCTUnwrap(expectedSyntax.as(IfStmtSyntax.self))
-
-    let refactored = try XCTUnwrap(MigrateToNewIfLetSyntax.refactor(syntax: baseline))
-
-    AssertStringsEqualWithDiff(expected.description, refactored.description)
+    try testRefactorIfLet(baselineSyntax, expected: expectedSyntax)
   }
 
   func testIdempotence() throws {
+    let baselineSyntax: ExprSyntax = """
+      if let x = x {}
+      """
+
+    let expectedSyntax: ExprSyntax = """
+      if let x {}
+      """
+
+    let refactored = try testRefactorIfLet(baselineSyntax, expected: expectedSyntax)
+    try testRefactorIfLet(refactored, expected: expectedSyntax)
+  }
+
+  func testMultiBinding() throws {
+    let baselineSyntax: ExprSyntax = """
+      if let x = x, var y = y, let z = z {}
+      """
+
+    let expectedSyntax: ExprSyntax = """
+      if let x, var y, let z {}
+      """
+
+    try testRefactorIfLet(baselineSyntax, expected: expectedSyntax)
+  }
+
+  func testMixedBinding() throws {
+    let baselineSyntax: ExprSyntax = """
+      if let x = x, var y = x, let z = y.w {}
+      """
+
+    let expectedSyntax: ExprSyntax = """
+      if let x, var y = x, let z = y.w {}
+      """
+
+    try testRefactorIfLet(baselineSyntax, expected: expectedSyntax)
+  }
+
+  func testConditions() throws {
+    let baselineSyntax: ExprSyntax = """
+      if let x = x + 1, x == x, !x {}
+      """
+
+    let expectedSyntax: ExprSyntax = """
+      if let x = x + 1, x == x, !x {}
+      """
+
+    try testRefactorIfLet(baselineSyntax, expected: expectedSyntax)
+  }
+
+  func testWhitespaceNormalization() throws {
+    let baselineSyntax: ExprSyntax = """
+      if let x = x   , let y = y {}
+      """
+
+    let expectedSyntax: ExprSyntax = """
+      if let x, let y {}
+      """
+
+    try testRefactorIfLet(baselineSyntax, expected: expectedSyntax)
+  }
+
+  func testIfStmt() throws {
     let baselineSyntax: StmtSyntax = """
       if let x = x {}
       """
 
-    let baseline = try XCTUnwrap(baselineSyntax.as(IfStmtSyntax.self))
-
-    let refactored = try XCTUnwrap(MigrateToNewIfLetSyntax.refactor(syntax: baseline))
-    let refactoredAgain = try XCTUnwrap(MigrateToNewIfLetSyntax.refactor(syntax: baseline))
-
-    AssertStringsEqualWithDiff(refactored.description, refactoredAgain.description)
-  }
-
-  func testMultiBinding() throws {
-    let baselineSyntax: StmtSyntax = """
-      if let x = x, var y = y, let z = z {}
+    let expectedSyntax: ExprSyntax = """
+      if let x {}
       """
 
-    let expectedSyntax: StmtSyntax = """
-      if let x, var y, let z {}
-      """
-
-    let baseline = try XCTUnwrap(baselineSyntax.as(IfStmtSyntax.self))
-    let expected = try XCTUnwrap(expectedSyntax.as(IfStmtSyntax.self))
-
-    let refactored = try XCTUnwrap(MigrateToNewIfLetSyntax.refactor(syntax: baseline))
-
-    AssertStringsEqualWithDiff(expected.description, refactored.description)
-  }
-
-  func testMixedBinding() throws {
-    let baselineSyntax: StmtSyntax = """
-      if let x = x, var y = x, let z = y.w {}
-      """
-
-    let expectedSyntax: StmtSyntax = """
-      if let x, var y = x, let z = y.w {}
-      """
-
-    let baseline = try XCTUnwrap(baselineSyntax.as(IfStmtSyntax.self))
-    let expected = try XCTUnwrap(expectedSyntax.as(IfStmtSyntax.self))
-
-    let refactored = try XCTUnwrap(MigrateToNewIfLetSyntax.refactor(syntax: baseline))
-
-    AssertStringsEqualWithDiff(expected.description, refactored.description)
-  }
-
-  func testConditions() throws {
-    let baselineSyntax: StmtSyntax = """
-      if let x = x + 1, x == x, !x {}
-      """
-
-    let expectedSyntax: StmtSyntax = """
-      if let x = x + 1, x == x, !x {}
-      """
-
-    let baseline = try XCTUnwrap(baselineSyntax.as(IfStmtSyntax.self))
-    let expected = try XCTUnwrap(expectedSyntax.as(IfStmtSyntax.self))
-
-    let refactored = try XCTUnwrap(MigrateToNewIfLetSyntax.refactor(syntax: baseline))
-
-    AssertStringsEqualWithDiff(expected.description, refactored.description)
-  }
-
-  func testWhitespaceNormalization() throws {
-    let baselineSyntax: StmtSyntax = """
-      if let x = x   , let y = y {}
-      """
-
-    let expectedSyntax: StmtSyntax = """
-      if let x, let y {}
-      """
-
-    let baseline = try XCTUnwrap(baselineSyntax.as(IfStmtSyntax.self))
-    let expected = try XCTUnwrap(expectedSyntax.as(IfStmtSyntax.self))
-
-    let refactored = try XCTUnwrap(MigrateToNewIfLetSyntax.refactor(syntax: baseline))
-
-    AssertStringsEqualWithDiff(expected.description, refactored.description)
+    let exprStmt = try XCTUnwrap(baselineSyntax.as(ExpressionStmtSyntax.self))
+    try testRefactorIfLet(exprStmt.expression, expected: expectedSyntax)
   }
 }

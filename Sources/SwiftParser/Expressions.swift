@@ -2587,6 +2587,51 @@ extension Parser.Lookahead {
   }
 }
 
+// MARK: Conditional Expressions
+
+extension Parser {
+  /// Parse an if statement.
+  ///
+  /// Grammar
+  /// =======
+  ///
+  ///     if-expression → 'if' condition-list code-block else-clause?
+  ///     else-clause  → 'else' code-block | else if-statement
+  @_spi(RawSyntax)
+  public mutating func parseIfExpression(
+    ifHandle: RecoveryConsumptionHandle
+  ) -> RawIfExprSyntax {
+    let (unexpectedBeforeIfKeyword, ifKeyword) = self.eat(ifHandle)
+    // A scope encloses the condition and true branch for any variables bound
+    // by a conditional binding. The else branch does *not* see these variables.
+    let conditions = self.parseConditionList()
+    let body = self.parseCodeBlock(introducer: ifKeyword)
+
+    // The else branch, if any, is outside of the scope of the condition.
+    let elseKeyword = self.consume(if: .keyword(.else))
+    let elseBody: RawIfExprSyntax.ElseBody?
+    if elseKeyword != nil {
+      if self.at(.keyword(.if)) {
+        elseBody = .ifExpr(self.parseIfExpression(ifHandle: .constant(.keyword(.if))))
+      } else {
+        elseBody = .codeBlock(self.parseCodeBlock(introducer: ifKeyword))
+      }
+    } else {
+      elseBody = nil
+    }
+
+    return RawIfExprSyntax(
+      unexpectedBeforeIfKeyword,
+      ifKeyword: ifKeyword,
+      conditions: conditions,
+      body: body,
+      elseKeyword: elseKeyword,
+      elseBody: elseBody,
+      arena: self.arena
+    )
+  }
+}
+
 // MARK: Lookahead
 
 extension Parser.Lookahead {

@@ -88,11 +88,11 @@ extension ExtensionDecl: HasTrailingMemberDeclBlock {}
 extension ProtocolDecl: HasTrailingMemberDeclBlock {}
 extension StructDecl: HasTrailingMemberDeclBlock {}
 
-// MARK: - IfStmt
-// IfStmtSyntax is a special scenario as we also have the `else` body or an if-else
+// MARK: - IfExpr
+// IfExprSyntax is a special scenario as we also have the `else` body or an if-else
 // So we cannot conform to `HasTrailingCodeBlock`
 
-public extension IfStmt {
+public extension IfExpr {
   init(_ signature: String, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemList, @CodeBlockItemListBuilder `else` elseBuilder: () -> CodeBlockItemList? = { nil }) {
     self = "\(raw: signature) {}"
     self.body = CodeBlock(statements: bodyBuilder())
@@ -100,10 +100,10 @@ public extension IfStmt {
     self.elseKeyword = elseBody != nil ? .keyword(.else) : nil
   }
 
-  init(_ signature: String, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemList, elseIf: IfStmt) {
+  init(_ signature: String, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemList, elseIf: IfExpr) {
     self = "\(raw: signature) {}"
     self.body = CodeBlock(statements: bodyBuilder())
-    self.elseBody = .ifStmt(elseIf)
+    self.elseBody = .ifExpr(elseIf)
     self.elseKeyword = elseBody != nil ? .keyword(.else) : nil
   }
 }

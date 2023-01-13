@@ -281,6 +281,25 @@ EXPR_NODES = [
              Child("BooleanLiteral", kind='KeywordToken', text_choices=['true', 'false'])
          ]),
 
+    # if-stmt -> identifier? ':'? 'if' condition-list code-block
+    #   else-clause ';'?
+    Node('IfExpr', name_for_diagnostics="'if' statement", kind='Expr',
+         traits=['WithCodeBlock'],
+         children=[
+             Child('IfKeyword', kind='KeywordToken', text_choices=['if']),
+             Child('Conditions', kind='ConditionElementList',
+                   collection_element_name='Condition'),
+             Child('Body', kind='CodeBlock', name_for_diagnostics='body'),
+             Child('ElseKeyword', kind='ElseToken',
+                   is_optional=True),
+             Child('ElseBody', kind='Syntax', name_for_diagnostics='else body',
+                   node_choices=[
+                       Child('IfExpr', kind='IfExpr'),
+                       Child('CodeBlock', kind='CodeBlock'),
+                   ],
+                   is_optional=True),
+         ]),
+
     # ? expr :
     # Ternary expression without the condition and the second choice.
     # NOTE: This appears only in SequenceExpr.

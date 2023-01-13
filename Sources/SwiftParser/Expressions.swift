@@ -725,7 +725,7 @@ extension Parser {
       }
 
       // If there is an expr-call-suffix, parse it and form a call.
-      if let lparen = self.consume(if: .leftParen, where: { !$0.isAtStartOfLine }) {
+      if let lparen = self.consume(if: .leftParen, allowTokenAtStartOfLine: false) {
         let args = self.parseArgumentListElements(pattern: pattern)
         let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
 
@@ -756,7 +756,7 @@ extension Parser {
 
       // Check for a [expr] suffix.
       // Note that this cannot be the start of a new line.
-      if let lsquare = self.consume(if: .leftSquareBracket, where: { !$0.isAtStartOfLine }) {
+      if let lsquare = self.consume(if: .leftSquareBracket, allowTokenAtStartOfLine: false) {
         let args: [RawTupleExprElementSyntax]
         if self.at(.rightSquareBracket) {
           args = []
@@ -997,7 +997,7 @@ extension Parser {
     while loopCondition.evaluate(currentToken) {
       // Check for a [] or .[] suffix. The latter is only permitted when there
       // are no components.
-      if self.at(.leftSquareBracket, where: { !$0.isAtStartOfLine })
+      if self.at(.leftSquareBracket, allowTokenAtStartOfLine: false)
         || (components.isEmpty && self.at(.period) && self.peek().rawTokenKind == .leftSquareBracket)
       {
         // Consume the '.', if it's allowed here.
@@ -1326,7 +1326,7 @@ extension Parser {
     }
 
     // Parse the optional parenthesized argument list.
-    let leftParen = self.consume(if: .leftParen, where: { !$0.isAtStartOfLine })
+    let leftParen = self.consume(if: .leftParen, allowTokenAtStartOfLine: false)
     let args: [RawTupleExprElementSyntax]
     let unexpectedBeforeRightParen: RawUnexpectedNodesSyntax?
     let rightParen: RawTokenSyntax?

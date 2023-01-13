@@ -59,9 +59,12 @@ extension TokenConsumer {
   /// - Returns: `true` if the given `kind` matches the current token's kind.
   public func at(
     _ kind: RawTokenKind,
-    where condition: (Lexer.Lexeme) -> Bool = { _ in true }
+    allowTokenAtStartOfLine: Bool = true
   ) -> Bool {
-    return RawTokenKindMatch(kind) ~= self.currentToken && condition(self.currentToken)
+    if !allowTokenAtStartOfLine && self.currentToken.isAtStartOfLine {
+      return false
+    }
+    return RawTokenKindMatch(kind) ~= self.currentToken
   }
 
   /// Returns whether the current token is an operator with the given `name`.
@@ -80,9 +83,12 @@ extension TokenConsumer {
   @_spi(RawSyntax)
   public func at(
     any kinds: [RawTokenKind],
-    where condition: (Lexer.Lexeme) -> Bool = { _ in true }
+    allowTokenAtStartOfLine: Bool = true
   ) -> Bool {
-    return kinds.contains(where: { RawTokenKindMatch($0) ~= self.currentToken }) && condition(self.currentToken)
+    if !allowTokenAtStartOfLine && self.currentToken.isAtStartOfLine {
+      return false
+    }
+    return kinds.contains(where: { RawTokenKindMatch($0) ~= self.currentToken })
   }
 
   /// Checks whether the parser is currently positioned at any token in `Subset`.
@@ -139,9 +145,9 @@ extension TokenConsumer {
   public mutating func consume(
     if kind: RawTokenKind,
     remapping: RawTokenKind? = nil,
-    where condition: (Lexer.Lexeme) -> Bool = { _ in true }
+    allowTokenAtStartOfLine: Bool = true
   ) -> Token? {
-    if self.at(kind, where: condition) {
+    if self.at(kind, allowTokenAtStartOfLine: allowTokenAtStartOfLine) {
       if let remapping = remapping {
         return self.consumeAnyToken(remapping: remapping)
       } else if case .keyword = kind {
@@ -173,9 +179,9 @@ extension TokenConsumer {
   @_spi(RawSyntax)
   public mutating func consume(
     ifAny kinds: [RawTokenKind],
-    where condition: (Lexer.Lexeme) -> Bool = { _ in true }
+    allowTokenAtStartOfLine: Bool = true
   ) -> Token? {
-    if self.at(any: kinds, where: condition) {
+    if self.at(any: kinds, allowTokenAtStartOfLine: allowTokenAtStartOfLine) {
       return self.consumeAnyToken()
     }
     return nil
@@ -230,11 +236,8 @@ extension TokenConsumer {
   /// - Parameter condition: An additional condition that must be satisfied for
   ///                        the token to be consumed.
   /// - Returns: A token of the given kind.
-  public mutating func expectWithoutRecovery(
-    _ kind: RawTokenKind,
-    where condition: (Lexer.Lexeme) -> Bool = { _ in true }
-  ) -> Token {
-    if let token = self.consume(if: kind, where: condition) {
+  public mutating func expectWithoutRecovery(_ kind: RawTokenKind) -> Token {
+    if let token = self.consume(if: kind) {
       return token
     } else {
       return missingToken(kind, text: nil)

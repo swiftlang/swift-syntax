@@ -225,6 +225,15 @@ extension Lexer.Cursor {
     }
     return characters.allSatisfy { peeked != $0.value }
   }
+
+  // MARK: Misc
+
+  /// Returns the text from `self` to `other`.
+  func text(upTo other: Lexer.Cursor) -> SyntaxText {
+    let count = other.input.baseAddress! - self.input.baseAddress!
+    assert(count >= 0)
+    return SyntaxText(baseAddress: self.input.baseAddress, count: count)
+  }
 }
 
 // MARK: - Advancing the cursor
@@ -260,7 +269,7 @@ extension Lexer.Cursor {
     }
 
     var tmp = self
-    guard let c = tmp.validateUTF8CharacterAndAdvance() else {
+    guard let c = tmp.advanceValidatingUTF8Character() else {
       return false
     }
 
@@ -382,6 +391,72 @@ extension Lexer.Cursor {
     return false
   }
 
+  /// Read a single UTF-8 scalar, which may span multiple bytes.
+  /// Returns `nil` if
+  ///  - The cursor is at the end of the buffer or reaches the end of the buffer
+  ///    while reading the character
+  ///  - The cursor is currently placed at an invalid UTF-8 byte sequence. In
+  ///    that case bytes are consumed until we reach the next start of a UTF-8
+  ///    character.
+  mutating func advanceValidatingUTF8Character() -> Unicode.Scalar? {
+    guard let curByte = self.advance() else {
+      return nil
+    }
+
+    if (curByte < 0x80) {
+      return Unicode.Scalar(curByte)
+    }
+
+    // Read the number of high bits set, which indicates the number of bytes in
+    // the character.
+    let encodedBytes = (~(UInt32(curByte) << 24)).leadingZeroBitCount
+
+    // If this is 0b10XXXXXX, then it is a continuation character.
+    if encodedBytes == 1 || !Unicode.Scalar(curByte).isStartOfUTF8Character {
+      // Skip until we get the start of another character.  This is guaranteed to
+      // at least stop at the nul at the end of the buffer.
+      self.advance(while: { !$0.isStartOfUTF8Character })
+      return nil
+    }
+
+    // Drop the high bits indicating the # bytes of the result.
+    var charValue = UInt32(curByte << encodedBytes) >> encodedBytes
+
+    // Read and validate the continuation bytes.
+    for _ in 1..<encodedBytes {
+      guard let curByte = self.peek() else {
+        return nil
+      }
+      // If the high bit isn't set or the second bit isn't clear, then this is not
+      // a continuation byte!
+      if (curByte < 0x80 || curByte >= 0xC0) {
+        return nil
+      }
+
+      // Accumulate our result.
+      charValue <<= 6
+      charValue |= UInt32(curByte & 0x3F)
+      _ = self.advance()
+    }
+
+    // UTF-16 surrogate pair values are not valid code points.
+    if (charValue >= 0xD800 && charValue <= 0xDFFF) {
+      return nil
+    }
+
+    // If we got here, we read the appropriate number of accumulated bytes.
+    // Verify that the encoding was actually minimal.
+    // Number of bits in the value, ignoring leading zeros.
+    let numBits = 32 - charValue.leadingZeroBitCount
+    if numBits <= 5 + 6 {
+      return encodedBytes == 2 ? Unicode.Scalar(charValue) : nil
+    }
+    if numBits <= 4 + 6 + 6 {
+      return encodedBytes == 3 ? Unicode.Scalar(charValue) : nil
+    }
+    return encodedBytes == 4 ? Unicode.Scalar(charValue) : nil
+  }
+
   /// Rever the lexer by `offset` bytes. This should only be used by `resetForSplit`.
   mutating func backUp(by offset: Int) {
     assert(!self.isAtStartOfFile)
@@ -464,14 +539,6 @@ extension Lexer.Cursor {
 }
 
 extension Lexer.Cursor {
-  func textUpTo(_ other: Lexer.Cursor) -> SyntaxText {
-    let count = other.input.baseAddress! - self.input.baseAddress!
-    assert(count >= 0)
-    return SyntaxText(baseAddress: self.input.baseAddress, count: count)
-  }
-}
-
-extension Lexer.Cursor {
   mutating func lexStringQuote() -> Lexer.Result {
     func newState(currentState: LexerCursorState, kind: StringLiteralKind) -> LexerCursorState {
       switch currentState {
@@ -522,70 +589,6 @@ extension Lexer.Cursor {
     } else {
       return Lexer.Result(.stringQuote, newState: newState(currentState: self.state, kind: .singleLine))
     }
-  }
-
-  mutating func validateUTF8CharacterAndAdvance() -> Unicode.Scalar? {
-    guard let curByte = self.advance() else {
-      return nil
-    }
-
-    if (curByte < 0x80) {
-      return Unicode.Scalar(curByte)
-    }
-
-    // Read the number of high bits set, which indicates the number of bytes in
-    // the character.
-    let encodedBytes = (~(UInt32(curByte) << 24)).leadingZeroBitCount
-    func isStartOfUTF8Character(_ scalar: Unicode.Scalar) -> Bool {
-      // RFC 2279: The octet values FE and FF never appear.
-      // RFC 3629: The octet values C0, C1, F5 to FF never appear.
-      let c = scalar.value
-      return c <= 0x80 || (c >= 0xC2 && c < 0xF5)
-    }
-    // If this is 0b10XXXXXX, then it is a continuation character.
-    if (encodedBytes == 1 || !isStartOfUTF8Character(Unicode.Scalar(curByte))) {
-      // Skip until we get the start of another character.  This is guaranteed to
-      // at least stop at the nul at the end of the buffer.
-      self.advance(while: { !isStartOfUTF8Character($0) })
-      return nil
-    }
-
-    // Drop the high bits indicating the # bytes of the result.
-    var charValue = UInt32(curByte << encodedBytes) >> encodedBytes
-
-    // Read and validate the continuation bytes.
-    for _ in 1..<encodedBytes {
-      guard let curByte = self.peek() else {
-        return nil
-      }
-      // If the high bit isn't set or the second bit isn't clear, then this is not
-      // a continuation byte!
-      if (curByte < 0x80 || curByte >= 0xC0) {
-        return nil
-      }
-
-      // Accumulate our result.
-      charValue <<= 6
-      charValue |= UInt32(curByte & 0x3F)
-      _ = self.advance()
-    }
-
-    // UTF-16 surrogate pair values are not valid code points.
-    if (charValue >= 0xD800 && charValue <= 0xDFFF) {
-      return nil
-    }
-
-    // If we got here, we read the appropriate number of accumulated bytes.
-    // Verify that the encoding was actually minimal.
-    // Number of bits in the value, ignoring leading zeros.
-    let numBits = 32 - charValue.leadingZeroBitCount
-    if (numBits <= 5 + 6) {
-      return encodedBytes == 2 ? Unicode.Scalar(charValue) : nil
-    }
-    if (numBits <= 4 + 6 + 6) {
-      return encodedBytes == 3 ? Unicode.Scalar(charValue) : nil
-    }
-    return encodedBytes == 4 ? Unicode.Scalar(charValue) : nil
   }
 
   mutating func maybeConsumeNewlineEscape() -> Bool {
@@ -1282,7 +1285,7 @@ extension Lexer.Cursor {
       //        return CurPtr[-1]
       //      }
       self = charStart
-      guard let charValue = self.validateUTF8CharacterAndAdvance() else {
+      guard let charValue = self.advanceValidatingUTF8Character() else {
         //      if (EmitDiagnostics)
         //        diagnose(CharStart, diag::lex_invalid_utf8)
         return .error
@@ -1649,7 +1652,7 @@ extension Lexer.Cursor {
       } while clone.peek().map { Unicode.Scalar($0) }?.isAsciiIdentifierContinue == true
     }
 
-    let literal = start.textUpTo(clone)
+    let literal = start.text(upTo: clone)
 
     let kind: RawTokenKind
     switch literal {
@@ -1689,7 +1692,7 @@ extension Lexer.Cursor {
     // Lex [a-zA-Z_$0-9[[:XID_Continue:]]]*
     self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
 
-    let text = tokStart.textUpTo(self)
+    let text = tokStart.text(upTo: self)
     if let keywordKind = RawTokenKind(keyword: text) {
       return Lexer.Result(keywordKind)
     } else if let keyword = Keyword(text), keyword.isLexerClassified {
@@ -1817,7 +1820,7 @@ extension Lexer.Cursor {
     } else {
       // Verify there is no "*/" in the middle of the identifier token, we reject
       // it as potentially ending a block comment.
-      if tokStart.textUpTo(self).contains("*/") {
+      if tokStart.text(upTo: self).contains("*/") {
         //        diagnose(TokStart+Pos, diag::lex_unexpected_block_comment_end)
         return Lexer.Result(.unknown)
       }
@@ -1946,7 +1949,7 @@ extension Lexer.Cursor {
     }
 
     // This character isn't allowed in Swift source.
-    guard let codepoint = tmp.validateUTF8CharacterAndAdvance() else {
+    guard let codepoint = tmp.advanceValidatingUTF8Character() else {
       //      diagnose(CurPtr - 1, diag::lex_invalid_utf8)
       //          .fixItReplaceChars(getSourceLoc(CurPtr - 1), getSourceLoc(Tmp), " ")
       self = tmp

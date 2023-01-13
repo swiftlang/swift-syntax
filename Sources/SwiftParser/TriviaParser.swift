@@ -87,14 +87,14 @@ public struct TriviaParser {
         // we believe that the lexer lexed it accordingly.
         if position == .leading && pieces.isEmpty && cursor.advance(if: { $0 == "!" }) {
           cursor.advanceToEndOfLine()
-          pieces.append(.shebang(start.textUpTo(cursor)))
+          pieces.append(.shebang(start.text(upTo: cursor)))
           continue
         }
 
       case UInt8(ascii: "<"), UInt8(ascii: ">"):
         // SCM conflict markers.
         if cursor.tryLexConflictMarker(start: start) {
-          pieces.append(.unexpectedText(start.textUpTo(cursor)))
+          pieces.append(.unexpectedText(start.text(upTo: cursor)))
           continue
         }
 
@@ -127,7 +127,7 @@ public struct TriviaParser {
         )
         pieces[pieces.count - 1] = .unexpectedText(mergedText)
       } else {
-        pieces.append(.unexpectedText(start.textUpTo(cursor)))
+        pieces.append(.unexpectedText(start.text(upTo: cursor)))
       }
     }
 
@@ -174,7 +174,7 @@ extension Lexer.Cursor {
     assert(self.previous == UInt8(ascii: "/") && self.peek(matches: "/"))
     let isDocComment = self.input.count > 1 && self.peek(at: 1, matches: "/")
     self.advanceToEndOfLine()
-    let contents = start.textUpTo(self)
+    let contents = start.text(upTo: self)
     return isDocComment ? .docLineComment(contents) : .lineComment(contents)
   }
 
@@ -185,7 +185,7 @@ extension Lexer.Cursor {
     assert(self.previous == UInt8(ascii: "/") && self.peek(matches: "*"))
     let isDocComment = self.input.count > 2 && self.peek(at: 1, matches: "*") && self.peek(at: 2, doesntMatch: "/")
     _ = self.advanceToEndOfSlashStarComment()
-    let contents = start.textUpTo(self)
+    let contents = start.text(upTo: self)
     return isDocComment ? .docBlockComment(contents) : .blockComment(contents)
   }
 }

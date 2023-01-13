@@ -630,6 +630,13 @@ public class LexerTests: XCTestCase {
         LexemeSpec(.identifier, text: "<#b2#>"),
       ]
     )
+
+    AssertLexemes(
+      "<##>",
+      lexemes: [
+        LexemeSpec(.identifier, text: "<##>", trailing: "")
+      ]
+    )
   }
 
   func testCommentAttribution() {

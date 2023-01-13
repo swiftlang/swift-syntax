@@ -125,6 +125,77 @@ extension Lexer {
       return SyntaxText(baseAddress: input.baseAddress, count: input.count)
     }
   }
+
+  struct Result {
+    let tokenKind: RawTokenKind
+    let flags: Lexer.Lexeme.Flags
+    let error: LexerError?
+    let newState: LexerCursorState?
+
+    init(
+      _ tokenKind: RawTokenKind,
+      flags: Lexer.Lexeme.Flags = [],
+      error: LexerError? = nil,
+      newState: LexerCursorState? = nil
+    ) {
+      self.tokenKind = tokenKind
+      self.flags = flags
+      self.error = error
+      self.newState = newState
+    }
+  }
+}
+
+// MARK: - Entry point
+
+extension Lexer.Cursor {
+  mutating func nextToken(sourceBufferStart: Lexer.Cursor) -> Lexer.Lexeme {
+    // Leading trivia.
+    let leadingTriviaStart = self
+    let newlineInLeadingTrivia: NewlinePresence
+    if self.state.shouldLexTrivia(cursor: self) {
+      newlineInLeadingTrivia = self.lexTrivia(for: .leading)
+    } else {
+      newlineInLeadingTrivia = .absent
+    }
+
+    // Token text.
+    let textStart = self
+
+    let result = self.lexImpl(sourceBufferStart: sourceBufferStart)
+
+    // Trailing trivia.
+    let trailingTriviaStart = self
+    let newlineInTrailingTrivia: NewlinePresence
+    if (result.newState ?? self.state).shouldLexTrivia(cursor: self) {
+      newlineInTrailingTrivia = self.lexTrivia(for: .trailing)
+    } else {
+      newlineInTrailingTrivia = .absent
+    }
+    assert(
+      newlineInTrailingTrivia == .absent,
+      "trailingTrivia should not have a newline"
+    )
+
+    var flags = result.flags
+    if newlineInLeadingTrivia == .present {
+      flags.insert(.isAtStartOfLine)
+    }
+    if let newState = result.newState {
+      self.state = newState
+    }
+
+    return .init(
+      tokenKind: result.tokenKind,
+      flags: flags,
+      error: result.error,
+      start: leadingTriviaStart.pointer,
+      leadingTriviaLength: leadingTriviaStart.distance(to: textStart),
+      textLength: textStart.distance(to: trailingTriviaStart),
+      trailingTriviaLength: trailingTriviaStart.distance(to: self)
+    )
+  }
+
 }
 
 // MARK: - Peeking
@@ -538,337 +609,9 @@ extension Lexer.Cursor {
   }
 }
 
-extension Lexer.Cursor {
-  mutating func lexStringQuote() -> Lexer.Result {
-    func newState(currentState: LexerCursorState, kind: StringLiteralKind) -> LexerCursorState {
-      switch currentState {
-      case .afterStringLiteral(delimiterLength: 0):
-        return .normal
-      case .afterStringLiteral(delimiterLength: let delimiterLength):
-        return .afterClosingStringQuote(delimiterLength: delimiterLength)
-      case .afterRawStringDelimiter(delimiterLength: let delimiterLength):
-        return .inStringLiteral(kind: kind, delimiterLength: delimiterLength)
-      default:
-        return .inStringLiteral(kind: kind, delimiterLength: 0)
-      }
-    }
-
-    if self.previous == UInt8(ascii: "'") {
-      return Lexer.Result(.singleQuote, newState: newState(currentState: self.state, kind: .singleQuote))
-    }
-
-    assert(self.previous == UInt8(ascii: #"""#))
-
-    var lookingForMultilineString = self
-    if lookingForMultilineString.advance(matching: #"""#), lookingForMultilineString.advance(matching: #"""#) {
-      if case .afterRawStringDelimiter(delimiterLength: let delimiterLength) = state {
-        // If this is a string literal, check if we have the closing delimiter on the same line to correctly parse things like `#"""#` as a single line string containing a quote.
-        var isSingleLineString = lookingForMultilineString
-
-        if isSingleLineString.delimiterMatches(customDelimiterLength: delimiterLength) {
-          // If we have the correct number of delimiters now, we have something like `#"""#`.
-          // This is a single-line string.
-          return Lexer.Result(.stringQuote, newState: newState(currentState: self.state, kind: .singleLine))
-        }
-
-        // Scan ahead until the end of the line. Every time we see a closing
-        // quote, check if it is followed by the correct number of closing delimiters.
-        while isSingleLineString.peek(doesntMatch: "\r", "\n") {
-          if isSingleLineString.advance(if: { $0 == Unicode.Scalar(UInt8(ascii: #"""#)) }) {
-            if isSingleLineString.delimiterMatches(customDelimiterLength: delimiterLength) {
-              return Lexer.Result(.stringQuote, newState: newState(currentState: self.state, kind: .singleLine))
-            }
-            continue
-          }
-          _ = isSingleLineString.advance()
-        }
-      }
-
-      self = lookingForMultilineString
-      return Lexer.Result(.multilineStringQuote, newState: newState(currentState: self.state, kind: .multiLine))
-    } else {
-      return Lexer.Result(.stringQuote, newState: newState(currentState: self.state, kind: .singleLine))
-    }
-  }
-
-  mutating func maybeConsumeNewlineEscape() -> Bool {
-    var tmpPtr = self
-    while true {
-      switch tmpPtr.advance() {
-      case UInt8(ascii: " "), UInt8(ascii: "\t"):
-        continue
-      case UInt8(ascii: "\r"):
-        _ = tmpPtr.advance(if: { $0 == Unicode.Scalar("\n") })
-        fallthrough
-      case UInt8(ascii: "\n"):
-        self = tmpPtr
-        return true
-      case 0:
-        return false
-      default:
-        return false
-      }
-    }
-  }
-
-  /// delimiterMatches - Does custom delimiter ('#' characters surrounding quotes)
-  /// match the number of '#' characters after '\' inside the string? This allows
-  /// interpolation inside a "raw" string. Normal/cooked string processing is
-  /// the degenerate case of there being no '#' characters surrounding the quotes.
-  /// If delimiter matches, advances byte pointer passed in and returns true.
-  /// Also used to detect the final delimiter of a string when IsClosing == true.
-  mutating func delimiterMatches(
-    customDelimiterLength: Int,
-    isClosing: Bool = false
-  ) -> Bool {
-    guard customDelimiterLength > 0 else {
-      return true
-    }
-
-    var tmpPtr = self
-    while tmpPtr.advance(matching: "#") {
-
-    }
-
-    if tmpPtr.input.baseAddress! - self.input.baseAddress! < customDelimiterLength {
-      return false
-    }
-
-    for _ in 0..<customDelimiterLength {
-      _ = self.advance()
-    }
-    return true
-  }
-
-  static func skipToEndOfInterpolatedExpression(_ curPtr: Lexer.Cursor, isMultilineString: Bool) -> Lexer.Cursor {
-    var curPtr = curPtr
-    var openDelimiters = [UInt8]()
-    var allowNewline = [isMultilineString]
-    var customDelimiter = [Int]()
-
-    let inStringLiteral = { () -> Bool in
-      guard let last = openDelimiters.last else {
-        return false
-      }
-      return last == UInt8(ascii: #"""#) || last == UInt8(ascii: #"'"#)
-    }
-    while true {
-      // This is a simple scanner, capable of recognizing nested parentheses and
-      // string literals but not much else.  The implications of this include not
-      // being able to break an expression over multiple lines in an interpolated
-      // string.  This limitation allows us to recover from common errors though.
-      //
-      // On success scanning the expression body, the real lexer will be used to
-      // relex the body when parsing the expressions.  We let it diagnose any
-      // issues with malformed tokens or other problems.
-      var customDelimiterLen = 0
-      let last = curPtr
-      switch curPtr.advance() {
-      // String literals in general cannot be split across multiple lines
-      // interpolated ones are no exception - unless multiline literals.
-      case UInt8(ascii: "\n"), UInt8(ascii: "\r"):
-        if allowNewline.last! {
-          continue
-        }
-        // Will be diagnosed as an unterminated string literal.
-        return last
-      case 0:
-        guard !last.isAtEndOfFile else {
-          // CC token or random NUL character.
-          continue
-        }
-        // Will be diagnosed as an unterminated string literal.
-        return last
-
-      case UInt8(ascii: "#"):
-        guard !inStringLiteral(), let delim = curPtr.advanceIfOpeningRawStringDelimiter() else {
-          continue
-        }
-        let quoteConsumed = curPtr.advance(matching: #"""#)
-        customDelimiterLen = delim
-        assert(quoteConsumed, "advanceIfOpeningRawStringDelimiter() must stop in front of a quote")
-        fallthrough
-
-      case UInt8(ascii: #"""#), UInt8(ascii: #"'"#):
-        if (!inStringLiteral()) {
-          // Open string literal.
-          openDelimiters.append(curPtr.previous)
-          allowNewline.append(curPtr.advanceIfMultilineStringDelimiter(openingRawStringDelimiters: customDelimiterLen))
-          customDelimiter.append(customDelimiterLen)
-          continue
-        }
-
-        // In string literal.
-
-        // Skip if it's an another kind of quote in string literal. e.g. "foo's".
-        guard openDelimiters.last == curPtr.previous else {
-          continue
-        }
-
-        // Multi-line string can only be closed by '"""'.
-        if (allowNewline.last! && !curPtr.advanceIfMultilineStringDelimiter(openingRawStringDelimiters: nil)) {
-          continue
-        }
-
-        // Check whether we have equivalent number of '#'s.
-        guard curPtr.delimiterMatches(customDelimiterLength: customDelimiter.last!, isClosing: true) else {
-          continue
-        }
-
-        // Close string literal.
-        _ = openDelimiters.popLast()
-        _ = allowNewline.popLast()
-        _ = customDelimiter.popLast()
-        continue
-      case UInt8(ascii: "\\"):
-        // We ignore invalid escape sequence here. They should be diagnosed in
-        // the real lexer functions.
-        if (inStringLiteral() && curPtr.delimiterMatches(customDelimiterLength: customDelimiter.last!)) {
-          let last = curPtr
-          switch curPtr.advance() {
-          case UInt8(ascii: "("):
-            // Entering a recursive interpolated expression
-            openDelimiters.append(UInt8(ascii: "("))
-            continue
-          case UInt8(ascii: "\n"), UInt8(ascii: "\r"), 0:
-            // Don't jump over newline/EOF due to preceding backslash.
-            // Let the outer switch to handle it.
-            curPtr = last
-            continue
-          default:
-            continue
-          }
-        }
-        continue
-
-      // Paren nesting deeper to support "foo = \((a+b)-(c*d)) bar".
-      case UInt8(ascii: "("):
-        if (!inStringLiteral()) {
-          openDelimiters.append(UInt8(ascii: "("))
-        }
-        continue
-      case UInt8(ascii: ")"):
-        if openDelimiters.isEmpty {
-          // No outstanding open delimiters; we're done.
-          return last
-        } else if openDelimiters.last == UInt8(ascii: "(") {
-          // Pop the matching bracket and keep going.
-          _ = openDelimiters.popLast()
-          if openDelimiters.isEmpty {
-            // No outstanding open delimiters; we're done.
-            return last
-          }
-          continue
-        } else {
-          // It's a right parenthesis in a string literal.
-          assert(inStringLiteral())
-          continue
-        }
-      case UInt8(ascii: "/"):
-        if (inStringLiteral()) {
-          continue
-        }
-
-        if curPtr.peek(matches: "*") {
-          let commentStart = last
-          let isMultilineComment = curPtr.advanceToEndOfSlashStarComment()
-          if isMultilineComment && !allowNewline.last! {
-            // Multiline comment is prohibited in string literal.
-            // Return the start of the comment.
-            return commentStart
-          }
-        } else if curPtr.peek(matches: "/") {
-          if !allowNewline.last! {
-            // '//' comment is impossible in single line string literal.
-            // Return the start of the comment.
-            return last
-          }
-          // Advance to the end of the comment.
-          curPtr.advanceToEndOfLine()
-          if curPtr.isAtEndOfFile {
-            _ = curPtr.advance()
-          }
-        }
-        continue
-      case nil:
-        return curPtr
-      default:
-        // Normal token character.
-        continue
-      }
-    }
-  }
-}
-
-extension Lexer {
-  struct Result {
-    let tokenKind: RawTokenKind
-    let flags: Lexer.Lexeme.Flags
-    let error: LexerError?
-    let newState: LexerCursorState?
-
-    init(
-      _ tokenKind: RawTokenKind,
-      flags: Lexer.Lexeme.Flags = [],
-      error: LexerError? = nil,
-      newState: LexerCursorState? = nil
-    ) {
-      self.tokenKind = tokenKind
-      self.flags = flags
-      self.error = error
-      self.newState = newState
-    }
-  }
-}
+// MARK: - Main entry point
 
 extension Lexer.Cursor {
-  mutating func nextToken(sourceBufferStart: Lexer.Cursor) -> Lexer.Lexeme {
-    // Leading trivia.
-    let leadingTriviaStart = self
-    let newlineInLeadingTrivia: NewlinePresence
-    if self.state.shouldLexTrivia(cursor: self) {
-      newlineInLeadingTrivia = self.lexTrivia(for: .leading)
-    } else {
-      newlineInLeadingTrivia = .absent
-    }
-
-    // Token text.
-    let textStart = self
-
-    let result = self.lexImpl(sourceBufferStart: sourceBufferStart)
-
-    // Trailing trivia.
-    let trailingTriviaStart = self
-    let newlineInTrailingTrivia: NewlinePresence
-    if (result.newState ?? self.state).shouldLexTrivia(cursor: self) {
-      newlineInTrailingTrivia = self.lexTrivia(for: .trailing)
-    } else {
-      newlineInTrailingTrivia = .absent
-    }
-    assert(
-      newlineInTrailingTrivia == .absent,
-      "trailingTrivia should not have a newline"
-    )
-
-    var flags = result.flags
-    if newlineInLeadingTrivia == .present {
-      flags.insert(.isAtStartOfLine)
-    }
-    if let newState = result.newState {
-      self.state = newState
-    }
-
-    return .init(
-      tokenKind: result.tokenKind,
-      flags: flags,
-      error: result.error,
-      start: leadingTriviaStart.pointer,
-      leadingTriviaLength: leadingTriviaStart.distance(to: textStart),
-      textLength: textStart.distance(to: trailingTriviaStart),
-      trailingTriviaLength: trailingTriviaStart.distance(to: self)
-    )
-  }
-
   private mutating func lexImpl(sourceBufferStart: Lexer.Cursor) -> Lexer.Result {
     if case .inStringLiteral(kind: let kind, delimiterLength: let delimiterLength) = state {
       return self.lexStringLiteralContents(
@@ -989,7 +732,7 @@ extension Lexer.Cursor {
         return self.lexOperatorIdentifier(tokenStart: start, sourceBufferStart: sourceBufferStart)
       }
 
-      let shouldTokenize = self.lexUnknown(start)
+      let shouldTokenize = self.lexUnknown(tokenStart: start)
       assert(shouldTokenize, "Invalid UTF-8 sequence should be eaten by lexTrivia as LeadingTrivia")
       return Lexer.Result(.unknown)
     }
@@ -1119,7 +862,7 @@ extension Lexer.Cursor {
           break
         }
 
-        guard self.lexUnknown(start) else {
+        guard self.lexUnknown(tokenStart: start) else {
           continue
         }
 
@@ -1344,7 +1087,7 @@ extension Lexer.Cursor {
     _ = self.advance()
 
     let digitStart = self
-    var numDigits = 0;
+    var numDigits = 0
     while self.advance(if: { $0.isHexDigit }) {
       numDigits += 1
     }
@@ -1680,6 +1423,270 @@ extension Lexer.Cursor {
   }
 }
 
+// MARK: - String literals
+
+extension Lexer.Cursor {
+  mutating func lexStringQuote() -> Lexer.Result {
+    func newState(currentState: LexerCursorState, kind: StringLiteralKind) -> LexerCursorState {
+      switch currentState {
+      case .afterStringLiteral(delimiterLength: 0):
+        return .normal
+      case .afterStringLiteral(delimiterLength: let delimiterLength):
+        return .afterClosingStringQuote(delimiterLength: delimiterLength)
+      case .afterRawStringDelimiter(delimiterLength: let delimiterLength):
+        return .inStringLiteral(kind: kind, delimiterLength: delimiterLength)
+      default:
+        return .inStringLiteral(kind: kind, delimiterLength: 0)
+      }
+    }
+
+    if self.previous == UInt8(ascii: "'") {
+      return Lexer.Result(.singleQuote, newState: newState(currentState: self.state, kind: .singleQuote))
+    }
+
+    assert(self.previous == UInt8(ascii: #"""#))
+
+    var lookingForMultilineString = self
+    if lookingForMultilineString.advance(matching: #"""#), lookingForMultilineString.advance(matching: #"""#) {
+      if case .afterRawStringDelimiter(delimiterLength: let delimiterLength) = state {
+        // If this is a string literal, check if we have the closing delimiter on the same line to correctly parse things like `#"""#` as a single line string containing a quote.
+        var isSingleLineString = lookingForMultilineString
+
+        if isSingleLineString.delimiterMatches(customDelimiterLength: delimiterLength) {
+          // If we have the correct number of delimiters now, we have something like `#"""#`.
+          // This is a single-line string.
+          return Lexer.Result(.stringQuote, newState: newState(currentState: self.state, kind: .singleLine))
+        }
+
+        // Scan ahead until the end of the line. Every time we see a closing
+        // quote, check if it is followed by the correct number of closing delimiters.
+        while isSingleLineString.peek(doesntMatch: "\r", "\n") {
+          if isSingleLineString.advance(if: { $0 == Unicode.Scalar(UInt8(ascii: #"""#)) }) {
+            if isSingleLineString.delimiterMatches(customDelimiterLength: delimiterLength) {
+              return Lexer.Result(.stringQuote, newState: newState(currentState: self.state, kind: .singleLine))
+            }
+            continue
+          }
+          _ = isSingleLineString.advance()
+        }
+      }
+
+      self = lookingForMultilineString
+      return Lexer.Result(.multilineStringQuote, newState: newState(currentState: self.state, kind: .multiLine))
+    } else {
+      return Lexer.Result(.stringQuote, newState: newState(currentState: self.state, kind: .singleLine))
+    }
+  }
+
+  mutating func maybeConsumeNewlineEscape() -> Bool {
+    var tmpPtr = self
+    while true {
+      switch tmpPtr.advance() {
+      case UInt8(ascii: " "), UInt8(ascii: "\t"):
+        continue
+      case UInt8(ascii: "\r"):
+        _ = tmpPtr.advance(if: { $0 == Unicode.Scalar("\n") })
+        fallthrough
+      case UInt8(ascii: "\n"):
+        self = tmpPtr
+        return true
+      case 0:
+        return false
+      default:
+        return false
+      }
+    }
+  }
+
+  /// delimiterMatches - Does custom delimiter ('#' characters surrounding quotes)
+  /// match the number of '#' characters after '\' inside the string? This allows
+  /// interpolation inside a "raw" string. Normal/cooked string processing is
+  /// the degenerate case of there being no '#' characters surrounding the quotes.
+  /// If delimiter matches, advances byte pointer passed in and returns true.
+  /// Also used to detect the final delimiter of a string when IsClosing == true.
+  mutating func delimiterMatches(
+    customDelimiterLength: Int,
+    isClosing: Bool = false
+  ) -> Bool {
+    guard customDelimiterLength > 0 else {
+      return true
+    }
+
+    var tmpPtr = self
+    while tmpPtr.advance(matching: "#") {
+
+    }
+
+    if tmpPtr.input.baseAddress! - self.input.baseAddress! < customDelimiterLength {
+      return false
+    }
+
+    for _ in 0..<customDelimiterLength {
+      _ = self.advance()
+    }
+    return true
+  }
+
+  static func skipToEndOfInterpolatedExpression(_ curPtr: Lexer.Cursor, isMultilineString: Bool) -> Lexer.Cursor {
+    var curPtr = curPtr
+    var openDelimiters = [UInt8]()
+    var allowNewline = [isMultilineString]
+    var customDelimiter = [Int]()
+
+    let inStringLiteral = { () -> Bool in
+      guard let last = openDelimiters.last else {
+        return false
+      }
+      return last == UInt8(ascii: #"""#) || last == UInt8(ascii: #"'"#)
+    }
+    while true {
+      // This is a simple scanner, capable of recognizing nested parentheses and
+      // string literals but not much else.  The implications of this include not
+      // being able to break an expression over multiple lines in an interpolated
+      // string.  This limitation allows us to recover from common errors though.
+      //
+      // On success scanning the expression body, the real lexer will be used to
+      // relex the body when parsing the expressions.  We let it diagnose any
+      // issues with malformed tokens or other problems.
+      var customDelimiterLen = 0
+      let last = curPtr
+      switch curPtr.advance() {
+      // String literals in general cannot be split across multiple lines
+      // interpolated ones are no exception - unless multiline literals.
+      case UInt8(ascii: "\n"), UInt8(ascii: "\r"):
+        if allowNewline.last! {
+          continue
+        }
+        // Will be diagnosed as an unterminated string literal.
+        return last
+      case 0:
+        guard !last.isAtEndOfFile else {
+          // CC token or random NUL character.
+          continue
+        }
+        // Will be diagnosed as an unterminated string literal.
+        return last
+
+      case UInt8(ascii: "#"):
+        guard !inStringLiteral(), let delim = curPtr.advanceIfOpeningRawStringDelimiter() else {
+          continue
+        }
+        let quoteConsumed = curPtr.advance(matching: #"""#)
+        customDelimiterLen = delim
+        assert(quoteConsumed, "advanceIfOpeningRawStringDelimiter() must stop in front of a quote")
+        fallthrough
+
+      case UInt8(ascii: #"""#), UInt8(ascii: #"'"#):
+        if (!inStringLiteral()) {
+          // Open string literal.
+          openDelimiters.append(curPtr.previous)
+          allowNewline.append(curPtr.advanceIfMultilineStringDelimiter(openingRawStringDelimiters: customDelimiterLen))
+          customDelimiter.append(customDelimiterLen)
+          continue
+        }
+
+        // In string literal.
+
+        // Skip if it's an another kind of quote in string literal. e.g. "foo's".
+        guard openDelimiters.last == curPtr.previous else {
+          continue
+        }
+
+        // Multi-line string can only be closed by '"""'.
+        if (allowNewline.last! && !curPtr.advanceIfMultilineStringDelimiter(openingRawStringDelimiters: nil)) {
+          continue
+        }
+
+        // Check whether we have equivalent number of '#'s.
+        guard curPtr.delimiterMatches(customDelimiterLength: customDelimiter.last!, isClosing: true) else {
+          continue
+        }
+
+        // Close string literal.
+        _ = openDelimiters.popLast()
+        _ = allowNewline.popLast()
+        _ = customDelimiter.popLast()
+        continue
+      case UInt8(ascii: "\\"):
+        // We ignore invalid escape sequence here. They should be diagnosed in
+        // the real lexer functions.
+        if (inStringLiteral() && curPtr.delimiterMatches(customDelimiterLength: customDelimiter.last!)) {
+          let last = curPtr
+          switch curPtr.advance() {
+          case UInt8(ascii: "("):
+            // Entering a recursive interpolated expression
+            openDelimiters.append(UInt8(ascii: "("))
+            continue
+          case UInt8(ascii: "\n"), UInt8(ascii: "\r"), 0:
+            // Don't jump over newline/EOF due to preceding backslash.
+            // Let the outer switch to handle it.
+            curPtr = last
+            continue
+          default:
+            continue
+          }
+        }
+        continue
+
+      // Paren nesting deeper to support "foo = \((a+b)-(c*d)) bar".
+      case UInt8(ascii: "("):
+        if (!inStringLiteral()) {
+          openDelimiters.append(UInt8(ascii: "("))
+        }
+        continue
+      case UInt8(ascii: ")"):
+        if openDelimiters.isEmpty {
+          // No outstanding open delimiters; we're done.
+          return last
+        } else if openDelimiters.last == UInt8(ascii: "(") {
+          // Pop the matching bracket and keep going.
+          _ = openDelimiters.popLast()
+          if openDelimiters.isEmpty {
+            // No outstanding open delimiters; we're done.
+            return last
+          }
+          continue
+        } else {
+          // It's a right parenthesis in a string literal.
+          assert(inStringLiteral())
+          continue
+        }
+      case UInt8(ascii: "/"):
+        if (inStringLiteral()) {
+          continue
+        }
+
+        if curPtr.peek(matches: "*") {
+          let commentStart = last
+          let isMultilineComment = curPtr.advanceToEndOfSlashStarComment()
+          if isMultilineComment && !allowNewline.last! {
+            // Multiline comment is prohibited in string literal.
+            // Return the start of the comment.
+            return commentStart
+          }
+        } else if curPtr.peek(matches: "/") {
+          if !allowNewline.last! {
+            // '//' comment is impossible in single line string literal.
+            // Return the start of the comment.
+            return last
+          }
+          // Advance to the end of the comment.
+          curPtr.advanceToEndOfLine()
+          if curPtr.isAtEndOfFile {
+            _ = curPtr.advance()
+          }
+        }
+        continue
+      case nil:
+        return curPtr
+      default:
+        // Normal token character.
+        continue
+      }
+    }
+  }
+}
+
 // MARK: - Identifiers
 
 extension Lexer.Cursor {
@@ -1933,8 +1940,8 @@ extension Lexer.Cursor {
     }
   }
 
-  mutating func lexUnknown(_ start: Lexer.Cursor) -> Bool {
-    var tmp = start
+  mutating func lexUnknown(tokenStart: Lexer.Cursor) -> Bool {
+    var tmp = tokenStart
     if tmp.advance(if: { Unicode.Scalar($0).isValidIdentifierContinuationCodePoint }) {
       // If this is a valid identifier continuation, but not a valid identifier
       // start, attempt to recover by eating more continuation characters.
@@ -2017,7 +2024,7 @@ extension Lexer.Cursor {
     //    }
 
     self = tmp
-    return false;  // Skip presumed whitespace.
+    return false  // Skip presumed whitespace.
   }
 
   enum ConflictMarker {

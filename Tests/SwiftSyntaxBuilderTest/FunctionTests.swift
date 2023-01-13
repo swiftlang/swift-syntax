@@ -152,7 +152,7 @@ final class FunctionTests: XCTestCase {
         """
       ),
       #line: (
-        FunctionDecl(
+        FunctionDeclSyntax(
           """
           public func foo(myOptionalValue: String?, myOtherOptionalValue: [String?])  {
           }

@@ -48,7 +48,7 @@ final class VariableTests: XCTestCase {
         """
       ),
       #line: (
-        VariableDecl("var foo: String? { myOptional?.someProperty }"),
+        VariableDeclSyntax("var foo: String? { myOptional?.someProperty }"),
         """
         var foo: String? {
             myOptional?.someProperty
@@ -56,13 +56,13 @@ final class VariableTests: XCTestCase {
         """
       ),
       #line: (
-        VariableDecl("let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)"),
+        VariableDeclSyntax("let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)"),
         """
         let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
         """
       ),
       #line: (
-        VariableDecl("var foo: String { bar(baz!) }"),
+        VariableDeclSyntax("var foo: String { bar(baz!) }"),
         """
         var foo: String {
             bar(baz!)
@@ -70,7 +70,7 @@ final class VariableTests: XCTestCase {
         """
       ),
       #line: (
-        VariableDecl(#"var foo: String { bar ?? "" }"#),
+        VariableDeclSyntax(#"var foo: String { bar ?? "" }"#),
         #"""
         var foo: String {
             bar ?? ""
@@ -78,13 +78,13 @@ final class VariableTests: XCTestCase {
         """#
       ),
       #line: (
-        VariableDecl("let bar = try! (foo())"),
+        VariableDeclSyntax("let bar = try! (foo())"),
         """
         let bar = try! (foo())
         """
       ),
       #line: (
-        VariableDecl("let bar = try! !functionThatThrows()"),
+        VariableDeclSyntax("let bar = try! !functionThatThrows()"),
         """
         let bar = try! !functionThatThrows()
         """

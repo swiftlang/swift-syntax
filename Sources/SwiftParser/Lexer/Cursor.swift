@@ -68,7 +68,7 @@ enum LexerCursorState: Equatable {
     case .inStringLiteral(kind: let kind, delimiterLength: _):
       switch kind {
       case .singleLine, .singleQuote:
-        return cursor.peek(matches: "\r", "\n")
+        return cursor.is(at: "\r", "\n")
       case .multiLine: return false
       }
     case .afterStringLiteral: return false
@@ -245,18 +245,18 @@ extension Lexer.Cursor {
 
   // MARK: Positive matches
 
-  /// Stamped out copy of `peek(at:matches:)` in case we are matching a single
-  /// character to avoid construction of an array.
-  func peek(at offset: Int = 0, matches character: CharacterByte) -> Bool {
+  /// Returns `true` if we are not at the end of the file and the character at
+  /// offset `offset` is `character`.
+  func `is`(offset: Int = 0, at character: CharacterByte) -> Bool {
     guard let peeked = self.peek(at: offset) else {
       return false
     }
     return peeked == character.value
   }
 
-  /// Stamped out copy of `peek(at:matches:)` in case we are matching two
-  /// characters to avoid construction of an array.
-  func peek(at offset: Int = 0, matches character1: CharacterByte, _ character2: CharacterByte) -> Bool {
+  /// Returns `true` if we are not at the end of the file and the character at
+  /// offset `offset` is `character1` or `character2`.
+  func `is`(offset: Int = 0, at character1: CharacterByte, _ character2: CharacterByte) -> Bool {
     guard let peeked = self.peek(at: offset) else {
       return false
     }
@@ -264,29 +264,28 @@ extension Lexer.Cursor {
   }
 
   /// Returns `true` if we are not at the end of the file and the character at
-  /// offset `offset` is in `characters`.
-  @_disfavoredOverload  // favor the stamped out copies
-  func peek(at offset: Int = 0, matches characters: CharacterByte...) -> Bool {
+  /// offset `offset` is `character1`, `character2`, or `character3`.
+  func `is`(offset: Int = 0, at character1: CharacterByte, _ character2: CharacterByte, _ character3: CharacterByte) -> Bool {
     guard let peeked = self.peek(at: offset) else {
       return false
     }
-    return characters.contains { peeked == $0.value }
+    return peeked == character1.value || peeked == character2.value || peeked == character3.value
   }
 
   // MARK: Negative matches
 
-  /// Stamped out copy of `peek(at:doesntMatch:)` in case we are matching two
-  /// characters to avoid construction of an array.
-  func peek(at offset: Int = 0, doesntMatch character: CharacterByte) -> Bool {
+  /// Returns `true` if we are not at the end of the file and the character at
+  /// offset `offset` is not `character`.
+  func `is`(offset: Int = 0, notAt character: CharacterByte) -> Bool {
     guard let peeked = self.peek(at: offset) else {
       return false
     }
     return peeked != character.value
   }
 
-  /// Stamped out copy of `peek(at:doesntMatch:)` in case we are matching two
-  /// characters to avoid construction of an array.
-  func peek(at offset: Int = 0, doesntMatch character1: CharacterByte, _ character2: CharacterByte) -> Bool {
+  /// Returns `true` if we are not at the end of the file and the character at
+  /// offset `offset` is neither `character1` nor `character2`.
+  func `is`(offset: Int = 0, notAt character1: CharacterByte, _ character2: CharacterByte) -> Bool {
     guard let peeked = self.peek(at: offset) else {
       return false
     }
@@ -294,13 +293,12 @@ extension Lexer.Cursor {
   }
 
   /// Returns `true` if we are not at the end of the file and the character at
-  /// offset `offset` is not in `characters`.
-  @_disfavoredOverload  // favor the stamped out copies
-  func peek(at offset: Int = 0, doesntMatch characters: CharacterByte...) -> Bool {
+  /// offset `offset` is neither `character1` nor `character2` nor `character3`.
+  func `is`(offset: Int = 0, notAt character1: CharacterByte, _ character2: CharacterByte, _ character3: CharacterByte) -> Bool {
     guard let peeked = self.peek(at: offset) else {
       return false
     }
-    return characters.allSatisfy { peeked != $0.value }
+    return peeked != character1.value && peeked != character2.value && peeked != character3.value
   }
 
   // MARK: Misc
@@ -331,7 +329,7 @@ extension Lexer.Cursor {
   /// If the current character is `matching`, advance the cursor and return `true`.
   /// Otherwise, this is a no-op and returns `false`.
   mutating func advance(matching: CharacterByte) -> Bool {
-    if self.peek(matches: matching) {
+    if self.is(at: matching) {
       _ = self.advance()
       return true
     } else {
@@ -342,7 +340,7 @@ extension Lexer.Cursor {
   /// If the current character is `matching`, advance the cursor and return `true`.
   /// Otherwise, this is a no-op and returns `false`.
   mutating func advance(matching character1: CharacterByte, _ character2: CharacterByte) -> Bool {
-    if self.peek(matches: character1) || self.peek(matches: character2) {
+    if self.is(at: character1) || self.is(at: character2) {
       _ = self.advance()
       return true
     } else {
@@ -354,7 +352,7 @@ extension Lexer.Cursor {
   /// Otherwise, this is a no-op and returns `false`.
   @_disfavoredOverload  // favor the stamped out copies
   mutating func advance(matching characters: CharacterByte...) -> Bool {
-    if characters.contains(where: { self.peek(matches: $0) }) {
+    if characters.contains(where: { self.is(at: $0) }) {
       _ = self.advance()
       return true
     } else {
@@ -389,7 +387,7 @@ extension Lexer.Cursor {
 
   /// Advance the cursor to the end of the current line.
   mutating func advanceToEndOfLine() {
-    while self.peek(doesntMatch: "\n", "\r") {
+    while self.is(notAt: "\n", "\r") {
       _ = self.advance()
     }
   }
@@ -437,7 +435,7 @@ extension Lexer.Cursor {
   /// of `#` in the raw string delimiter.
   /// Assumes that the parser is currently pointing at the first `#`.
   mutating func advanceIfOpeningRawStringDelimiter() -> Int? {
-    assert(self.peek(matches: "#"))
+    assert(self.is(at: "#"))
 
     var tmp = self
     var length = 0
@@ -445,7 +443,7 @@ extension Lexer.Cursor {
       length += 1
     }
 
-    if tmp.peek(matches: #"""#) {
+    if tmp.is(at: #"""#) {
       self = tmp
       return length
     }
@@ -465,7 +463,7 @@ extension Lexer.Cursor {
       length += 1
     }
 
-    if tmp.peek(matches: #"""#) {
+    if tmp.is(at: #"""#) {
       self = tmp
       return length
     }
@@ -488,9 +486,9 @@ extension Lexer.Cursor {
     // Test for single-line string literals that resemble multiline delimiter.
     var sameLineCloseCheck = self
     _ = sameLineCloseCheck.advance()
-    if let openingRawStringDelimiters, openingRawStringDelimiters != 0 {
+    if let openingRawStringDelimiters = openingRawStringDelimiters, openingRawStringDelimiters != 0 {
       // Scan if the current line contains `"` followed by `openingRawStringDelimiters` `#` characters
-      while sameLineCloseCheck.peek(doesntMatch: "\r", "\n") {
+      while sameLineCloseCheck.is(notAt: "\r", "\n") {
         if sameLineCloseCheck.advance(matching: #"""#) {
           if sameLineCloseCheck.delimiterMatches(customDelimiterLength: openingRawStringDelimiters) {
             // The string literal is being terminated on a single line. Not a multi-line string literal.
@@ -639,13 +637,13 @@ extension Lexer.Cursor {
 
     case UInt8(ascii: "/"):
       // A following comment counts as whitespace, so this token is not right bound.
-      if (self.peek(at: 1, matches: "/", "*")) {
+      if (self.is(offset: 1, at: "/", "*")) {
         return false
       } else {
         return true
       }
     case 0xC2:
-      if self.peek(at: 1, matches: 0xA0) {
+      if self.is(offset: 1, at: 0xA0) {
         return false  // Non-breaking whitespace (U+00A0)
       } else {
         return true
@@ -724,7 +722,7 @@ extension Lexer.Cursor {
       return self.lexOperatorIdentifier(sourceBufferStart: sourceBufferStart)
 
     case UInt8(ascii: "<"):
-      if self.peek(at: 1, matches: "#") {
+      if self.is(offset: 1, at: "#") {
         return self.tryLexEditorPlaceholder(sourceBufferStart: sourceBufferStart)
       }
       return self.lexOperatorIdentifier(sourceBufferStart: sourceBufferStart)
@@ -895,7 +893,7 @@ extension Lexer.Cursor {
         UInt8(ascii: "^"), UInt8(ascii: "~"), UInt8(ascii: "."):
         break
       case 0xEF:
-        if self.peek(matches: 0xBB), self.peek(at: 1, matches: 0xBF) {
+        if self.is(at: 0xBB), self.is(offset: 1, at: 0xBF) {
           // BOM marker.
           _ = self.advance()
           _ = self.advance()
@@ -945,11 +943,11 @@ extension Lexer.Cursor {
     assert(self.peek().map(Unicode.Scalar.init)?.isDigit == true, "Unexpected start")
     let tokenStart = self
 
-    if self.peek(matches: "0") && self.peek(at: 1, matches: "x") {
+    if self.is(at: "0") && self.is(offset: 1, at: "x") {
       return self.lexHexNumber()
     }
 
-    if self.peek(matches: "0") && self.peek(at: 1, matches: "o") {
+    if self.is(at: "0") && self.is(offset: 1, at: "o") {
       // 0o[0-7][0-7_]*
 
       let zeroConsumed = self.advance(matching: "0")  // Consume '0'
@@ -981,12 +979,12 @@ extension Lexer.Cursor {
       return Lexer.Result(.integerLiteral)
     }
 
-    if self.peek(matches: "0") && self.peek(at: 1, matches: "b") {
+    if self.is(at: "0") && self.is(offset: 1, at: "b") {
       // 0b[01][01_]*
       let zeroConsumed = self.advance(matching: "0")  // Consume '0'
       let bConsumed = self.advance(matching: "b")  // Consume 'b'
       assert(zeroConsumed && bConsumed)
-      if self.peek(doesntMatch: "0", "1") {
+      if self.is(notAt: "0", "1") {
         let errorOffset = tokenStart.distance(to: self)
         self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
         return Lexer.Result(
@@ -1019,13 +1017,13 @@ extension Lexer.Cursor {
     // TODO: This can probably be unified with lexHexNumber somehow
 
     // Lex things like 4.x as '4' followed by a tok::period.
-    if self.peek(matches: ".") {
+    if self.is(at: ".") {
       // NextToken is the soon to be previous token
       // Therefore: x.0.1 is sub-tuple access, not x.float_literal
       if let peeked = self.peek(at: 1), !Unicode.Scalar(peeked).isDigit || tokenStart.previous == UInt8(ascii: ".") {
         return Lexer.Result(.integerLiteral)
       }
-    } else if self.isAtEndOfFile || self.peek(doesntMatch: "e", "E") {
+    } else if self.isAtEndOfFile || self.is(notAt: "e", "E") {
       // Floating literals must have '.', 'e', or 'E' after digits.  If it is
       // something else, then this is the end of the token.
       let tmp = self
@@ -1058,7 +1056,7 @@ extension Lexer.Cursor {
         let tmp = self
         var errorKind: LexerError.Kind
         if self.advance(if: { $0.isValidIdentifierContinuationCodePoint }) {
-          if tmp.peek(matches: "_") {
+          if tmp.is(at: "_") {
             errorKind = .invalidFloatingPointExponentCharacter
           } else {
             errorKind = .invalidFloatingPointExponentDigit
@@ -1111,7 +1109,7 @@ extension Lexer.Cursor {
 
     self.advance(while: { $0.isHexDigit || $0 == Unicode.Scalar("_") })
 
-    if self.isAtEndOfFile || self.peek(doesntMatch: ".", "p", "P") {
+    if self.isAtEndOfFile || self.is(notAt: ".", "p", "P") {
       let tmp = self
       if self.advance(if: { $0.isValidIdentifierContinuationCodePoint }) {
         let errorOffset = tokStart.distance(to: tmp)
@@ -1139,7 +1137,7 @@ extension Lexer.Cursor {
 
       self.advance(while: { $0.isHexDigit || $0 == Unicode.Scalar("_") })
 
-      if self.isAtEndOfFile || self.peek(doesntMatch: "p", "P") {
+      if self.isAtEndOfFile || self.is(notAt: "p", "P") {
         if let peeked = self.peek(at: 1), !Unicode.Scalar(peeked).isDigit {
           // e.g: 0xff.description
           self = cursorToDot!
@@ -1178,7 +1176,7 @@ extension Lexer.Cursor {
       let tmp = self
       let errorKind: LexerError.Kind
       if self.advance(if: { $0.isValidIdentifierContinuationCodePoint }) {
-        if tmp.peek(matches: "_") {
+        if tmp.is(at: "_") {
           errorKind = .invalidFloatingPointExponentCharacter
         } else {
           errorKind = .invalidFloatingPointExponentDigit
@@ -1348,7 +1346,7 @@ extension Lexer.Cursor {
 
     case UInt8(ascii: "u"):  //  \u HEX HEX HEX HEX
       _ = self.advance()
-      guard self.peek(matches: "{") else {
+      guard self.is(at: "{") else {
         //        if (EmitDiagnostics)
         //          diagnose(CurPtr-1, diag::lex_unicode_escape_braces)
         return nil
@@ -1380,7 +1378,7 @@ extension Lexer.Cursor {
   }
 
   fileprivate mutating func lexUnicodeEscape() -> UInt32? {
-    assert(self.peek(matches: "{"), "Invalid unicode escape")
+    assert(self.is(at: "{"), "Invalid unicode escape")
     _ = self.advance()
 
     let digitStart = self
@@ -1389,7 +1387,7 @@ extension Lexer.Cursor {
       numDigits += 1
     }
 
-    if self.peek(doesntMatch: "}") {
+    if self.is(notAt: "}") {
       //      if (Diags)
       //        Diags->diagnose(CurPtr, diag::lex_invalid_u_escape_rbrace)
       return nil
@@ -1442,7 +1440,7 @@ extension Lexer.Cursor {
 
         // Scan ahead until the end of the line. Every time we see a closing
         // quote, check if it is followed by the correct number of closing delimiters.
-        while isSingleLineString.peek(doesntMatch: "\r", "\n") {
+        while isSingleLineString.is(notAt: "\r", "\n") {
           if isSingleLineString.advance(if: { $0 == Unicode.Scalar(UInt8(ascii: #"""#)) }) {
             if isSingleLineString.delimiterMatches(customDelimiterLength: delimiterLength) {
               return Lexer.Result(.stringQuote, newState: newState(currentState: self.state, kind: .singleLine))
@@ -1479,13 +1477,13 @@ extension Lexer.Cursor {
         // This is the end of string, we are done.
         break DELIMITLOOP
       }
-      if self.peek(matches: "\\") && tmpPtr.delimiterMatches(customDelimiterLength: customDelimiterLength) && tmpPtr.peek(matches: "(") {
+      if self.is(at: "\\") && tmpPtr.delimiterMatches(customDelimiterLength: customDelimiterLength) && tmpPtr.is(at: "(") {
         // Consume tokens until we hit the corresponding ')'.
         self = Self.skipToEndOfInterpolatedExpression(tmpPtr, isMultilineString: isMultilineString)
         if self.advance(if: { $0 == Unicode.Scalar(")") }) {
           // Successfully scanned the body of the expression literal.
           continue
-        } else if self.peek(matches: "\r", "\n") && isMultilineString {
+        } else if self.is(at: "\r", "\n") && isMultilineString {
           // The only case we reach here is unterminated single line string in the
           // interpolation. For better recovery, go on after emitting an error.
           //          diagnose(CurPtr, diag::lex_unterminated_string)
@@ -1497,7 +1495,7 @@ extension Lexer.Cursor {
       }
 
       // String literals cannot have \n or \r in them (unless multiline).
-      if self.peek(matches: "\r", "\n") && !isMultilineString {
+      if self.is(at: "\r", "\n") && !isMultilineString {
         //        diagnose(TokStart, diag::lex_unterminated_string)
         return Lexer.Result(.unknown)
       }
@@ -1706,7 +1704,7 @@ extension Lexer.Cursor {
           continue
         }
 
-        if curPtr.peek(matches: "*") {
+        if curPtr.is(at: "*") {
           let commentStart = last
           let isMultilineComment = curPtr.advanceToEndOfSlashStarComment()
           if isMultilineComment && !allowNewline.last! {
@@ -1714,7 +1712,7 @@ extension Lexer.Cursor {
             // Return the start of the comment.
             return commentStart
           }
-        } else if curPtr.peek(matches: "/") {
+        } else if curPtr.is(at: "/") {
           if !allowNewline.last! {
             // '//' comment is impossible in single line string literal.
             // Return the start of the comment.
@@ -1802,7 +1800,7 @@ extension Lexer.Cursor {
     repeat {
       // '.' cannot appear in the middle of an operator unless the operator
       // started with a '.'.
-      if self.peek(matches: ".") && tokStart.peek(doesntMatch: ".") {
+      if self.is(at: ".") && tokStart.is(notAt: ".") {
         break
       }
       let text = SyntaxText(baseAddress: self.input.baseAddress, count: self.input.count)
@@ -1826,7 +1824,7 @@ extension Lexer.Cursor {
       // been consumed as trivia.
       _ = ptr.advance()
       while ptr.input.baseAddress! < self.input.baseAddress! {
-        if ptr.peek(matches: "/") && ptr.peek(at: 1, matches: "/", "*") {
+        if ptr.is(at: "/") && ptr.is(offset: 1, at: "/", "*") {
           self = ptr
           break
         }
@@ -1931,7 +1929,7 @@ extension Lexer.Cursor {
 
 extension Lexer.Cursor {
   mutating func tryLexEditorPlaceholder(sourceBufferStart: Lexer.Cursor) -> Lexer.Result {
-    assert(self.peek(matches: "<") && self.peek(at: 1, matches: "#"))
+    assert(self.is(at: "<") && self.is(offset: 1, at: "#"))
     var ptr = self
     let leftAngleConsumed = ptr.advance(matching: "<")
     let poundConsumed = ptr.advance(matching: "#")
@@ -1940,9 +1938,9 @@ extension Lexer.Cursor {
       switch consumed {
       case UInt8(ascii: "\n"):
         break LOOP
-      case UInt8(ascii: "<") where ptr.peek(matches: "#"):
+      case UInt8(ascii: "<") where ptr.is(at: "#"):
         break LOOP
-      case UInt8(ascii: "#") where ptr.peek(matches: ">"):
+      case UInt8(ascii: "#") where ptr.is(at: ">"):
         let closingAngleConsumed = ptr.advance(matching: ">")
         assert(closingAngleConsumed)
         self = ptr
@@ -1964,12 +1962,12 @@ extension Lexer.Cursor {
     var body = self
     while true {
       // Don't bother with string interpolations.
-      if body.peek(matches: "\\") && body.peek(at: 1, matches: "(") {
+      if body.is(at: "\\") && body.is(offset: 1, at: "(") {
         return nil
       }
 
       // We didn't find the end of the string literal if we ran to end of line.
-      if body.isAtEndOfFile || body.peek(matches: "\r", "\n") {
+      if body.isAtEndOfFile || body.is(at: "\r", "\n") {
         return nil
       }
 
@@ -2030,7 +2028,7 @@ extension Lexer.Cursor {
     }
     if codepoint.value == 0x000000A0 {
       // Non-breaking whitespace (U+00A0)
-      while tmp.peek(matches: 0xC2) && tmp.peek(at: 1, matches: 0xA0) {
+      while tmp.is(at: 0xC2) && tmp.is(offset: 1, at: 0xA0) {
         _ = tmp.advance()
         _ = tmp.advance()
       }
@@ -2126,7 +2124,7 @@ extension Lexer.Cursor {
       return false
     }
 
-    let kind = start.peek(matches: "<") ? ConflictMarker.normal : .perforce
+    let kind = start.is(at: "<") ? ConflictMarker.normal : .perforce
     guard let end = Self.findConflictEnd(start, markerKind: kind) else {
       // No end of conflict marker found.
       return false
@@ -2207,7 +2205,7 @@ extension Lexer.Cursor {
     //   2
     // }
     //
-    if poundCount == 0 && tmp.peek(matches: " ", "\n", "\t") {
+    if poundCount == 0 && tmp.is(at: " ", "\n", "\t") {
       return nil
     }
 
@@ -2235,7 +2233,7 @@ extension Lexer.Cursor {
       case UInt8(ascii: "/"):
         // If we're at the end of the literal, peek ahead to see if the closing
         // slash is actually the start of a comment.
-        if tmp.peek(matches: "/", "*") {
+        if tmp.is(at: "/", "*") {
           return nil
         }
 

@@ -171,8 +171,8 @@ extension Lexer.Cursor {
   fileprivate mutating func lexLineComment(start: Lexer.Cursor) -> RawTriviaPiece {
     // "///...": .docLineComment.
     // "//...": .lineComment.
-    assert(self.previous == UInt8(ascii: "/") && self.peek(matches: "/"))
-    let isDocComment = self.input.count > 1 && self.peek(at: 1, matches: "/")
+    assert(self.previous == UInt8(ascii: "/") && self.is(at: "/"))
+    let isDocComment = self.input.count > 1 && self.is(offset: 1, at: "/")
     self.advanceToEndOfLine()
     let contents = start.text(upTo: self)
     return isDocComment ? .docLineComment(contents) : .lineComment(contents)
@@ -182,8 +182,8 @@ extension Lexer.Cursor {
     // "/**...*/": .docBlockComment.
     // "/*...*/": .blockComment.
     // "/**/": .blockComment.
-    assert(self.previous == UInt8(ascii: "/") && self.peek(matches: "*"))
-    let isDocComment = self.input.count > 2 && self.peek(at: 1, matches: "*") && self.peek(at: 2, doesntMatch: "/")
+    assert(self.previous == UInt8(ascii: "/") && self.is(at: "*"))
+    let isDocComment = self.input.count > 2 && self.is(offset: 1, at: "*") && self.is(offset: 2, notAt: "/")
     _ = self.advanceToEndOfSlashStarComment()
     let contents = start.text(upTo: self)
     return isDocComment ? .docBlockComment(contents) : .blockComment(contents)

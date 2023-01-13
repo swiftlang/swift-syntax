@@ -435,9 +435,28 @@ extension Lexer.Cursor {
 
   /// If this is the opening delimiter of a raw string literal, return the number
   /// of `#` in the raw string delimiter.
+  /// Assumes that the parser is currently pointing at the first `#`.
+  mutating func advanceIfOpeningRawStringDelimiter() -> Int? {
+    assert(self.peek(matches: "#"))
+
+    var tmp = self
+    var length = 0
+    while tmp.advance(matching: "#") {
+      length += 1
+    }
+
+    if tmp.peek(matches: #"""#) {
+      self = tmp
+      return length
+    }
+    return nil
+  }
+
+  /// If this is the opening delimiter of a raw string literal, return the number
+  /// of `#` in the raw string delimiter.
   /// Assumes that the parser is currently pointing at the character after the first `#`.
   /// In other words, the first `#` is expected to already be consumed.
-  mutating func advanceIfOpeningRawStringDelimiter() -> Int? {
+  mutating func legacyAdvanceIfOpeningRawStringDelimiter() -> Int? {
     assert(self.previous == UInt8(ascii: "#"))
 
     var tmp = self
@@ -652,20 +671,19 @@ extension Lexer.Cursor {
       )
     }
 
-    var start = self
-    switch self.advance() {
-    case UInt8(ascii: "@"): return Lexer.Result(.atSign)
-    case UInt8(ascii: "{"): return Lexer.Result(.leftBrace)
-    case UInt8(ascii: "["): return Lexer.Result(.leftSquareBracket)
-    case UInt8(ascii: "("): return Lexer.Result(.leftParen)
-    case UInt8(ascii: "}"): return Lexer.Result(.rightBrace)
-    case UInt8(ascii: "]"): return Lexer.Result(.rightSquareBracket)
-    case UInt8(ascii: ")"): return Lexer.Result(.rightParen)
+    switch self.peek() {
+    case UInt8(ascii: "@"): _ = self.advance(); return Lexer.Result(.atSign)
+    case UInt8(ascii: "{"): _ = self.advance(); return Lexer.Result(.leftBrace)
+    case UInt8(ascii: "["): _ = self.advance(); return Lexer.Result(.leftSquareBracket)
+    case UInt8(ascii: "("): _ = self.advance(); return Lexer.Result(.leftParen)
+    case UInt8(ascii: "}"): _ = self.advance(); return Lexer.Result(.rightBrace)
+    case UInt8(ascii: "]"): _ = self.advance(); return Lexer.Result(.rightSquareBracket)
+    case UInt8(ascii: ")"): _ = self.advance(); return Lexer.Result(.rightParen)
 
-    case UInt8(ascii: ","): return Lexer.Result(.comma)
-    case UInt8(ascii: ";"): return Lexer.Result(.semicolon)
-    case UInt8(ascii: ":"): return Lexer.Result(.colon)
-    case UInt8(ascii: "\\"): return Lexer.Result(.backslash)
+    case UInt8(ascii: ","): _ = self.advance(); return Lexer.Result(.comma)
+    case UInt8(ascii: ";"): _ = self.advance(); return Lexer.Result(.semicolon)
+    case UInt8(ascii: ":"): _ = self.advance(); return Lexer.Result(.colon)
+    case UInt8(ascii: "\\"): _ = self.advance(); return Lexer.Result(.backslash)
 
     case UInt8(ascii: "#"):
       if case .afterClosingStringQuote(delimiterLength: _) = state {
@@ -678,60 +696,46 @@ extension Lexer.Cursor {
       }
 
       // Try lex a regex literal.
-      if let token = start.tryLexRegexLiteral(sourceBufferStart: sourceBufferStart) {
-        self = start
+      if let token = self.tryLexRegexLiteral(sourceBufferStart: sourceBufferStart) {
         return Lexer.Result(token)
       }
       // Otherwise try lex a magic pound literal.
       return self.lexMagicPoundLiteral()
     case UInt8(ascii: "/"):
       // Try lex a regex literal.
-      if let token = start.tryLexRegexLiteral(sourceBufferStart: sourceBufferStart) {
-        self = start
+      if let token = self.tryLexRegexLiteral(sourceBufferStart: sourceBufferStart) {
         return Lexer.Result(token)
       }
 
       // Otherwise try lex a magic pound literal.
-      let result = start.lexOperatorIdentifier(sourceBufferStart: sourceBufferStart)
-      self = start
-      return result
+      return self.lexOperatorIdentifier(sourceBufferStart: sourceBufferStart)
     case UInt8(ascii: "!"):
-      if start.isLeftBound(sourceBufferStart: sourceBufferStart) {
+      if self.isLeftBound(sourceBufferStart: sourceBufferStart) {
+        _ = self.advance()
         return Lexer.Result(.exclamationMark)
       }
-      let result = start.lexOperatorIdentifier(sourceBufferStart: sourceBufferStart)
-      self = start
-      return result
+      return self.lexOperatorIdentifier(sourceBufferStart: sourceBufferStart)
 
     case UInt8(ascii: "?"):
-      if start.isLeftBound(sourceBufferStart: sourceBufferStart) {
+      if self.isLeftBound(sourceBufferStart: sourceBufferStart) {
+        _ = self.advance()
         return Lexer.Result(.postfixQuestionMark)
       }
-      let result = start.lexOperatorIdentifier(sourceBufferStart: sourceBufferStart)
-      self = start
-      return result
+      return self.lexOperatorIdentifier(sourceBufferStart: sourceBufferStart)
 
     case UInt8(ascii: "<"):
-      if self.peek(matches: "#") {
-        let result = start.tryLexEditorPlaceholder(sourceBufferStart: sourceBufferStart)
-        self = start
-        return result
+      if self.peek(at: 1, matches: "#") {
+        return self.tryLexEditorPlaceholder(sourceBufferStart: sourceBufferStart)
       }
-      let result = start.lexOperatorIdentifier(sourceBufferStart: sourceBufferStart)
-      self = start
-      return result
+      return self.lexOperatorIdentifier(sourceBufferStart: sourceBufferStart)
     case UInt8(ascii: ">"):
-      let result = start.lexOperatorIdentifier(sourceBufferStart: sourceBufferStart)
-      self = start
-      return result
+      return self.lexOperatorIdentifier(sourceBufferStart: sourceBufferStart)
 
     case UInt8(ascii: "="), UInt8(ascii: "-"), UInt8(ascii: "+"),
       UInt8(ascii: "*"), UInt8(ascii: "%"), UInt8(ascii: "&"),
       UInt8(ascii: "|"), UInt8(ascii: "^"), UInt8(ascii: "~"),
       UInt8(ascii: "."):
-      let result = start.lexOperatorIdentifier(sourceBufferStart: sourceBufferStart)
-      self = start
-      return result
+      return self.lexOperatorIdentifier(sourceBufferStart: sourceBufferStart)
     case UInt8(ascii: "A"), UInt8(ascii: "B"), UInt8(ascii: "C"),
       UInt8(ascii: "D"), UInt8(ascii: "E"), UInt8(ascii: "F"),
       UInt8(ascii: "G"), UInt8(ascii: "H"), UInt8(ascii: "I"),
@@ -751,47 +755,34 @@ extension Lexer.Cursor {
       UInt8(ascii: "v"), UInt8(ascii: "w"), UInt8(ascii: "x"),
       UInt8(ascii: "y"), UInt8(ascii: "z"),
       UInt8(ascii: "_"):
-      let result = start.lexIdentifier()
-      self = start
-      return result
+      return self.lexIdentifier()
 
     case UInt8(ascii: "$"):
-      let result = start.lexDollarIdentifier()
-      self = start
-      return result
+      return self.lexDollarIdentifier()
 
     case UInt8(ascii: "0"), UInt8(ascii: "1"), UInt8(ascii: "2"),
       UInt8(ascii: "3"), UInt8(ascii: "4"), UInt8(ascii: "5"),
       UInt8(ascii: "6"), UInt8(ascii: "7"), UInt8(ascii: "8"),
       UInt8(ascii: "9"):
-      let result = start.lexNumber()
-      self = start
-      return result
+      return self.lexNumber()
     case UInt8(ascii: #"'"#), UInt8(ascii: #"""#):
       return self.lexStringQuote()
 
     case UInt8(ascii: "`"):
-      let result = start.lexEscapedIdentifier()
-      self = start
-      return result
+      return self.lexEscapedIdentifier()
     case nil:
       return Lexer.Result(.eof)
     default:
-      var tmp = start
+      var tmp = self
       if tmp.advance(if: { Unicode.Scalar($0).isValidIdentifierStartCodePoint }) {
-        let result = start.lexIdentifier()
-        self = start
-        return result
+        return self.lexIdentifier()
       }
 
       if tmp.advance(if: { Unicode.Scalar($0).isOperatorStartCodePoint }) {
-        let result = start.lexOperatorIdentifier(sourceBufferStart: sourceBufferStart)
-        self = start
-        return result
+        return self.lexOperatorIdentifier(sourceBufferStart: sourceBufferStart)
       }
 
-      let unknownClassification = start.lexUnknown()
-      self = start
+      let unknownClassification = self.lexUnknown()
       assert(unknownClassification == .lexemeContents, "Invalid UTF-8 sequence should be eaten by lexTrivia as LeadingTrivia")
       return Lexer.Result(.unknown)
     }
@@ -1217,6 +1208,8 @@ extension Lexer.Cursor {
 
 extension Lexer.Cursor {
   mutating func lexMagicPoundLiteral() -> Lexer.Result {
+    let poundConsumed = self.advance(matching: "#")
+    assert(poundConsumed)
     var tmp = self
     // Scan for [a-zA-Z]+ to see what we match.
     while let peeked = tmp.peek(), Unicode.Scalar(peeked).isAsciiIdentifierStart {
@@ -1428,11 +1421,12 @@ extension Lexer.Cursor {
       }
     }
 
-    if self.previous == UInt8(ascii: "'") {
+    if self.advance(matching: "'") {
       return Lexer.Result(.singleQuote, newState: newState(currentState: self.state, kind: .singleQuote))
     }
 
-    assert(self.previous == UInt8(ascii: #"""#))
+    let firstQuoteConsumed = self.advance(matching: #"""#)
+    assert(firstQuoteConsumed)
 
     var lookingForMultilineString = self
     if lookingForMultilineString.advance(matching: #"""#), lookingForMultilineString.advance(matching: #"""#) {
@@ -1624,7 +1618,7 @@ extension Lexer.Cursor {
         return last
 
       case UInt8(ascii: "#"):
-        guard !inStringLiteral(), let delim = curPtr.advanceIfOpeningRawStringDelimiter() else {
+        guard !inStringLiteral(), let delim = curPtr.legacyAdvanceIfOpeningRawStringDelimiter() else {
           continue
         }
         let quoteConsumed = curPtr.advance(matching: #"""#)

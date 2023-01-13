@@ -790,7 +790,8 @@ extension Lexer.Cursor {
         return result
       }
 
-      let unknownClassification = self.lexUnknown(tokenStart: start)
+      let unknownClassification = start.lexUnknown()
+      self = start
       assert(unknownClassification == .lexemeContents, "Invalid UTF-8 sequence should be eaten by lexTrivia as LeadingTrivia")
       return Lexer.Result(.unknown)
     }
@@ -919,7 +920,9 @@ extension Lexer.Cursor {
           break
         }
 
-        if self.lexUnknown(tokenStart: start) == .trivia {
+        // `lexUnknown` expects that the first character has not been consumed yet.
+        self = start
+        if self.lexUnknown() == .trivia {
           continue
         } else {
           break
@@ -2010,9 +2013,9 @@ extension Lexer.Cursor {
   /// Assuming the cursor is positioned at neighter a valid identifier nor a
   /// valid operator start, advance the cursor by what can be considered a
   /// lexeme.
-  mutating func lexUnknown(tokenStart: Lexer.Cursor) -> UnknownCharactersClassification {
-    assert(tokenStart.peekScalar()?.isValidIdentifierStartCodePoint == false && tokenStart.peekScalar()?.isOperatorStartCodePoint == false)
-    var tmp = tokenStart
+  mutating func lexUnknown() -> UnknownCharactersClassification {
+    assert(self.peekScalar()?.isValidIdentifierStartCodePoint == false && self.peekScalar()?.isOperatorStartCodePoint == false)
+    var tmp = self
     if tmp.advance(if: { Unicode.Scalar($0).isValidIdentifierContinuationCodePoint }) {
       // If this is a valid identifier continuation, but not a valid identifier
       // start, attempt to recover by eating more continuation characters.

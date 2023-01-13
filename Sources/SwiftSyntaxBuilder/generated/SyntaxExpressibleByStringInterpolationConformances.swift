@@ -177,6 +177,9 @@ extension ExprSyntax: SyntaxExpressibleByStringInterpolation {
 extension ExpressionPatternSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
+extension ExpressionStmtSyntax: SyntaxExpressibleByStringInterpolation { 
+}
+
 extension ExtensionDeclSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
@@ -221,7 +224,7 @@ extension IdentifierPatternSyntax: SyntaxExpressibleByStringInterpolation {
 extension IfConfigDeclSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
-extension IfStmtSyntax: SyntaxExpressibleByStringInterpolation { 
+extension IfExprSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
 extension ImplicitlyUnwrappedOptionalTypeSyntax: SyntaxExpressibleByStringInterpolation { 
@@ -426,7 +429,7 @@ extension SwitchCaseSyntax: SyntaxExpressibleByStringInterpolation {
   }
 }
 
-extension SwitchStmtSyntax: SyntaxExpressibleByStringInterpolation { 
+extension SwitchExprSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
 extension TernaryExprSyntax: SyntaxExpressibleByStringInterpolation { 

@@ -331,6 +331,55 @@ open class SyntaxRewriter {
     return ExprSyntax(visitChildren(node))
   }
 
+  /// Visit a `IfExprSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: IfExprSyntax) -> ExprSyntax {
+    return ExprSyntax(visitChildren(node))
+  }
+
+  /// Visit a `SwitchExprSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: SwitchExprSyntax) -> ExprSyntax {
+    return ExprSyntax(visitChildren(node))
+  }
+
+  /// Visit a `SwitchCaseListSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: SwitchCaseListSyntax) -> SwitchCaseListSyntax {
+    return Syntax(visitChildren(node)).cast(SwitchCaseListSyntax.self)
+  }
+
+  /// Visit a `SwitchCaseSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: SwitchCaseSyntax) -> SwitchCaseSyntax {
+    return Syntax(visitChildren(node)).cast(SwitchCaseSyntax.self)
+  }
+
+  /// Visit a `SwitchCaseLabelSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: SwitchCaseLabelSyntax) -> SwitchCaseLabelSyntax {
+    return Syntax(visitChildren(node)).cast(SwitchCaseLabelSyntax.self)
+  }
+
+  /// Visit a `SwitchDefaultLabelSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: SwitchDefaultLabelSyntax) -> SwitchDefaultLabelSyntax {
+    return Syntax(visitChildren(node)).cast(SwitchDefaultLabelSyntax.self)
+  }
+
+  /// Visit a `CaseItemSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: CaseItemSyntax) -> CaseItemSyntax {
+    return Syntax(visitChildren(node)).cast(CaseItemSyntax.self)
+  }
+
   /// Visit a `UnresolvedTernaryExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -1269,6 +1318,13 @@ open class SyntaxRewriter {
     return StmtSyntax(visitChildren(node))
   }
 
+  /// Visit a `ExpressionStmtSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: ExpressionStmtSyntax) -> StmtSyntax {
+    return StmtSyntax(visitChildren(node))
+  }
+
   /// Visit a `ContinueStmtSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -1288,13 +1344,6 @@ open class SyntaxRewriter {
   ///   - Returns: the rewritten node
   open func visit(_ node: DeferStmtSyntax) -> StmtSyntax {
     return StmtSyntax(visitChildren(node))
-  }
-
-  /// Visit a `SwitchCaseListSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: SwitchCaseListSyntax) -> SwitchCaseListSyntax {
-    return Syntax(visitChildren(node)).cast(SwitchCaseListSyntax.self)
   }
 
   /// Visit a `RepeatWhileStmtSyntax`.
@@ -1322,13 +1371,6 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ForInStmtSyntax) -> StmtSyntax {
-    return StmtSyntax(visitChildren(node))
-  }
-
-  /// Visit a `SwitchStmtSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: SwitchStmtSyntax) -> StmtSyntax {
     return StmtSyntax(visitChildren(node))
   }
 
@@ -1444,46 +1486,11 @@ open class SyntaxRewriter {
     return StmtSyntax(visitChildren(node))
   }
 
-  /// Visit a `IfStmtSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: IfStmtSyntax) -> StmtSyntax {
-    return StmtSyntax(visitChildren(node))
-  }
-
-  /// Visit a `SwitchCaseSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: SwitchCaseSyntax) -> SwitchCaseSyntax {
-    return Syntax(visitChildren(node)).cast(SwitchCaseSyntax.self)
-  }
-
-  /// Visit a `SwitchDefaultLabelSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: SwitchDefaultLabelSyntax) -> SwitchDefaultLabelSyntax {
-    return Syntax(visitChildren(node)).cast(SwitchDefaultLabelSyntax.self)
-  }
-
-  /// Visit a `CaseItemSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: CaseItemSyntax) -> CaseItemSyntax {
-    return Syntax(visitChildren(node)).cast(CaseItemSyntax.self)
-  }
-
   /// Visit a `CatchItemSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: CatchItemSyntax) -> CatchItemSyntax {
     return Syntax(visitChildren(node)).cast(CatchItemSyntax.self)
-  }
-
-  /// Visit a `SwitchCaseLabelSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: SwitchCaseLabelSyntax) -> SwitchCaseLabelSyntax {
-    return Syntax(visitChildren(node)).cast(SwitchCaseLabelSyntax.self)
   }
 
   /// Visit a `CatchClauseSyntax`.
@@ -2350,6 +2357,76 @@ open class SyntaxRewriter {
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplBooleanLiteralExprSyntax(_ data: SyntaxData) -> Syntax {
     let node = BooleanLiteralExprSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { visitPost(node._syntaxNode) }
+    if let newNode = visitAny(node._syntaxNode) { return newNode }
+    return Syntax(visit(node))
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplIfExprSyntax(_ data: SyntaxData) -> Syntax {
+    let node = IfExprSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { visitPost(node._syntaxNode) }
+    if let newNode = visitAny(node._syntaxNode) { return newNode }
+    return Syntax(visit(node))
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplSwitchExprSyntax(_ data: SyntaxData) -> Syntax {
+    let node = SwitchExprSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { visitPost(node._syntaxNode) }
+    if let newNode = visitAny(node._syntaxNode) { return newNode }
+    return Syntax(visit(node))
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplSwitchCaseListSyntax(_ data: SyntaxData) -> Syntax {
+    let node = SwitchCaseListSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { visitPost(node._syntaxNode) }
+    if let newNode = visitAny(node._syntaxNode) { return newNode }
+    return Syntax(visit(node))
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplSwitchCaseSyntax(_ data: SyntaxData) -> Syntax {
+    let node = SwitchCaseSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { visitPost(node._syntaxNode) }
+    if let newNode = visitAny(node._syntaxNode) { return newNode }
+    return Syntax(visit(node))
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplSwitchCaseLabelSyntax(_ data: SyntaxData) -> Syntax {
+    let node = SwitchCaseLabelSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { visitPost(node._syntaxNode) }
+    if let newNode = visitAny(node._syntaxNode) { return newNode }
+    return Syntax(visit(node))
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplSwitchDefaultLabelSyntax(_ data: SyntaxData) -> Syntax {
+    let node = SwitchDefaultLabelSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { visitPost(node._syntaxNode) }
+    if let newNode = visitAny(node._syntaxNode) { return newNode }
+    return Syntax(visit(node))
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplCaseItemSyntax(_ data: SyntaxData) -> Syntax {
+    let node = CaseItemSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer { visitPost(node._syntaxNode) }
@@ -3698,6 +3775,16 @@ open class SyntaxRewriter {
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplExpressionStmtSyntax(_ data: SyntaxData) -> Syntax {
+    let node = ExpressionStmtSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { visitPost(node._syntaxNode) }
+    if let newNode = visitAny(node._syntaxNode) { return newNode }
+    return Syntax(visit(node))
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplContinueStmtSyntax(_ data: SyntaxData) -> Syntax {
     let node = ContinueStmtSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -3720,16 +3807,6 @@ open class SyntaxRewriter {
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplDeferStmtSyntax(_ data: SyntaxData) -> Syntax {
     let node = DeferStmtSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer { visitPost(node._syntaxNode) }
-    if let newNode = visitAny(node._syntaxNode) { return newNode }
-    return Syntax(visit(node))
-  }
-
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplSwitchCaseListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = SwitchCaseListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer { visitPost(node._syntaxNode) }
@@ -3770,16 +3847,6 @@ open class SyntaxRewriter {
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplForInStmtSyntax(_ data: SyntaxData) -> Syntax {
     let node = ForInStmtSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer { visitPost(node._syntaxNode) }
-    if let newNode = visitAny(node._syntaxNode) { return newNode }
-    return Syntax(visit(node))
-  }
-
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplSwitchStmtSyntax(_ data: SyntaxData) -> Syntax {
-    let node = SwitchStmtSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer { visitPost(node._syntaxNode) }
@@ -3948,58 +4015,8 @@ open class SyntaxRewriter {
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplIfStmtSyntax(_ data: SyntaxData) -> Syntax {
-    let node = IfStmtSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer { visitPost(node._syntaxNode) }
-    if let newNode = visitAny(node._syntaxNode) { return newNode }
-    return Syntax(visit(node))
-  }
-
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplSwitchCaseSyntax(_ data: SyntaxData) -> Syntax {
-    let node = SwitchCaseSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer { visitPost(node._syntaxNode) }
-    if let newNode = visitAny(node._syntaxNode) { return newNode }
-    return Syntax(visit(node))
-  }
-
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplSwitchDefaultLabelSyntax(_ data: SyntaxData) -> Syntax {
-    let node = SwitchDefaultLabelSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer { visitPost(node._syntaxNode) }
-    if let newNode = visitAny(node._syntaxNode) { return newNode }
-    return Syntax(visit(node))
-  }
-
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplCaseItemSyntax(_ data: SyntaxData) -> Syntax {
-    let node = CaseItemSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer { visitPost(node._syntaxNode) }
-    if let newNode = visitAny(node._syntaxNode) { return newNode }
-    return Syntax(visit(node))
-  }
-
-  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplCatchItemSyntax(_ data: SyntaxData) -> Syntax {
     let node = CatchItemSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer { visitPost(node._syntaxNode) }
-    if let newNode = visitAny(node._syntaxNode) { return newNode }
-    return Syntax(visit(node))
-  }
-
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplSwitchCaseLabelSyntax(_ data: SyntaxData) -> Syntax {
-    let node = SwitchCaseLabelSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer { visitPost(node._syntaxNode) }
@@ -4645,6 +4662,20 @@ open class SyntaxRewriter {
       return visitImplIntegerLiteralExprSyntax
     case .booleanLiteralExpr:
       return visitImplBooleanLiteralExprSyntax
+    case .ifExpr:
+      return visitImplIfExprSyntax
+    case .switchExpr:
+      return visitImplSwitchExprSyntax
+    case .switchCaseList:
+      return visitImplSwitchCaseListSyntax
+    case .switchCase:
+      return visitImplSwitchCaseSyntax
+    case .switchCaseLabel:
+      return visitImplSwitchCaseLabelSyntax
+    case .switchDefaultLabel:
+      return visitImplSwitchDefaultLabelSyntax
+    case .caseItem:
+      return visitImplCaseItemSyntax
     case .unresolvedTernaryExpr:
       return visitImplUnresolvedTernaryExprSyntax
     case .ternaryExpr:
@@ -4913,14 +4944,14 @@ open class SyntaxRewriter {
       return visitImplDocumentationAttributeArgumentsSyntax
     case .labeledStmt:
       return visitImplLabeledStmtSyntax
+    case .expressionStmt:
+      return visitImplExpressionStmtSyntax
     case .continueStmt:
       return visitImplContinueStmtSyntax
     case .whileStmt:
       return visitImplWhileStmtSyntax
     case .deferStmt:
       return visitImplDeferStmtSyntax
-    case .switchCaseList:
-      return visitImplSwitchCaseListSyntax
     case .repeatWhileStmt:
       return visitImplRepeatWhileStmtSyntax
     case .guardStmt:
@@ -4929,8 +4960,6 @@ open class SyntaxRewriter {
       return visitImplWhereClauseSyntax
     case .forInStmt:
       return visitImplForInStmtSyntax
-    case .switchStmt:
-      return visitImplSwitchStmtSyntax
     case .catchClauseList:
       return visitImplCatchClauseListSyntax
     case .doStmt:
@@ -4963,18 +4992,8 @@ open class SyntaxRewriter {
       return visitImplConditionElementListSyntax
     case .throwStmt:
       return visitImplThrowStmtSyntax
-    case .ifStmt:
-      return visitImplIfStmtSyntax
-    case .switchCase:
-      return visitImplSwitchCaseSyntax
-    case .switchDefaultLabel:
-      return visitImplSwitchDefaultLabelSyntax
-    case .caseItem:
-      return visitImplCaseItemSyntax
     case .catchItem:
       return visitImplCatchItemSyntax
-    case .switchCaseLabel:
-      return visitImplSwitchCaseLabelSyntax
     case .catchClause:
       return visitImplCatchClauseSyntax
     case .poundAssertStmt:
@@ -5178,6 +5197,20 @@ open class SyntaxRewriter {
       return visitImplIntegerLiteralExprSyntax(data)
     case .booleanLiteralExpr:
       return visitImplBooleanLiteralExprSyntax(data)
+    case .ifExpr:
+      return visitImplIfExprSyntax(data)
+    case .switchExpr:
+      return visitImplSwitchExprSyntax(data)
+    case .switchCaseList:
+      return visitImplSwitchCaseListSyntax(data)
+    case .switchCase:
+      return visitImplSwitchCaseSyntax(data)
+    case .switchCaseLabel:
+      return visitImplSwitchCaseLabelSyntax(data)
+    case .switchDefaultLabel:
+      return visitImplSwitchDefaultLabelSyntax(data)
+    case .caseItem:
+      return visitImplCaseItemSyntax(data)
     case .unresolvedTernaryExpr:
       return visitImplUnresolvedTernaryExprSyntax(data)
     case .ternaryExpr:
@@ -5446,14 +5479,14 @@ open class SyntaxRewriter {
       return visitImplDocumentationAttributeArgumentsSyntax(data)
     case .labeledStmt:
       return visitImplLabeledStmtSyntax(data)
+    case .expressionStmt:
+      return visitImplExpressionStmtSyntax(data)
     case .continueStmt:
       return visitImplContinueStmtSyntax(data)
     case .whileStmt:
       return visitImplWhileStmtSyntax(data)
     case .deferStmt:
       return visitImplDeferStmtSyntax(data)
-    case .switchCaseList:
-      return visitImplSwitchCaseListSyntax(data)
     case .repeatWhileStmt:
       return visitImplRepeatWhileStmtSyntax(data)
     case .guardStmt:
@@ -5462,8 +5495,6 @@ open class SyntaxRewriter {
       return visitImplWhereClauseSyntax(data)
     case .forInStmt:
       return visitImplForInStmtSyntax(data)
-    case .switchStmt:
-      return visitImplSwitchStmtSyntax(data)
     case .catchClauseList:
       return visitImplCatchClauseListSyntax(data)
     case .doStmt:
@@ -5496,18 +5527,8 @@ open class SyntaxRewriter {
       return visitImplConditionElementListSyntax(data)
     case .throwStmt:
       return visitImplThrowStmtSyntax(data)
-    case .ifStmt:
-      return visitImplIfStmtSyntax(data)
-    case .switchCase:
-      return visitImplSwitchCaseSyntax(data)
-    case .switchDefaultLabel:
-      return visitImplSwitchDefaultLabelSyntax(data)
-    case .caseItem:
-      return visitImplCaseItemSyntax(data)
     case .catchItem:
       return visitImplCatchItemSyntax(data)
-    case .switchCaseLabel:
-      return visitImplSwitchCaseLabelSyntax(data)
     case .catchClause:
       return visitImplCatchClauseSyntax(data)
     case .poundAssertStmt:

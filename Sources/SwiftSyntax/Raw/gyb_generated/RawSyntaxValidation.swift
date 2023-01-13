@@ -409,6 +409,86 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
     break
+  case .ifExpr:
+    assert(layout.count == 11)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawConditionElementListSyntax.self))
+    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 5, verify(layout[5], as: RawCodeBlockSyntax.self))
+    assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 7, verify(layout[7], as: RawTokenSyntax?.self))
+    assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
+    assertAnyHasNoError(kind, 9, [
+      verify(layout[9], as: RawSyntax?.self),
+      verify(layout[9], as: RawSyntax?.self),
+    ])
+    assertNoError(kind, 10, verify(layout[10], as: RawUnexpectedNodesSyntax?.self))
+    break
+  case .switchExpr:
+    assert(layout.count == 11)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawExprSyntax.self))
+    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self))
+    assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 7, verify(layout[7], as: RawSwitchCaseListSyntax.self))
+    assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 9, verify(layout[9], as: RawTokenSyntax.self))
+    assertNoError(kind, 10, verify(layout[10], as: RawUnexpectedNodesSyntax?.self))
+    break
+  case .switchCaseList:
+    for (index, element) in layout.enumerated() {
+      assertAnyHasNoError(kind, index, [
+        verify(element, as: RawSwitchCaseSyntax.self),
+        verify(element, as: RawIfConfigDeclSyntax.self),
+      ])
+    }
+    break
+  case .switchCase:
+    assert(layout.count == 7)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawAttributeSyntax?.self))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+    assertAnyHasNoError(kind, 3, [
+      verify(layout[3], as: RawSyntax.self),
+      verify(layout[3], as: RawSyntax.self),
+    ])
+    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 5, verify(layout[5], as: RawCodeBlockItemListSyntax.self))
+    assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
+    break
+  case .switchCaseLabel:
+    assert(layout.count == 7)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawCaseItemListSyntax.self))
+    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self))
+    assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
+    break
+  case .switchDefaultLabel:
+    assert(layout.count == 5)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawTokenSyntax.self))
+    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
+    break
+  case .caseItem:
+    assert(layout.count == 7)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawPatternSyntax.self))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawWhereClauseSyntax?.self))
+    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax?.self))
+    assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
+    break
   case .unresolvedTernaryExpr:
     assert(layout.count == 7)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
@@ -1879,6 +1959,12 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 5, verify(layout[5], as: RawStmtSyntax.self))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
     break
+  case .expressionStmt:
+    assert(layout.count == 3)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawExprSyntax.self))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+    break
   case .continueStmt:
     assert(layout.count == 5)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
@@ -1904,14 +1990,6 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 3, verify(layout[3], as: RawCodeBlockSyntax.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
-    break
-  case .switchCaseList:
-    for (index, element) in layout.enumerated() {
-      assertAnyHasNoError(kind, index, [
-        verify(element, as: RawSwitchCaseSyntax.self),
-        verify(element, as: RawIfConfigDeclSyntax.self),
-      ])
-    }
     break
   case .repeatWhileStmt:
     assert(layout.count == 9)
@@ -1968,20 +2046,6 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 18, verify(layout[18], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 19, verify(layout[19], as: RawCodeBlockSyntax.self))
     assertNoError(kind, 20, verify(layout[20], as: RawUnexpectedNodesSyntax?.self))
-    break
-  case .switchStmt:
-    assert(layout.count == 11)
-    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self))
-    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawExprSyntax.self))
-    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self))
-    assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 7, verify(layout[7], as: RawSwitchCaseListSyntax.self))
-    assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 9, verify(layout[9], as: RawTokenSyntax.self))
-    assertNoError(kind, 10, verify(layout[10], as: RawUnexpectedNodesSyntax?.self))
     break
   case .catchClauseList:
     for (index, element) in layout.enumerated() {
@@ -2126,54 +2190,6 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 3, verify(layout[3], as: RawExprSyntax.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
     break
-  case .ifStmt:
-    assert(layout.count == 11)
-    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self))
-    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawConditionElementListSyntax.self))
-    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 5, verify(layout[5], as: RawCodeBlockSyntax.self))
-    assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 7, verify(layout[7], as: RawTokenSyntax?.self))
-    assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
-    assertAnyHasNoError(kind, 9, [
-      verify(layout[9], as: RawSyntax?.self),
-      verify(layout[9], as: RawSyntax?.self),
-    ])
-    assertNoError(kind, 10, verify(layout[10], as: RawUnexpectedNodesSyntax?.self))
-    break
-  case .switchCase:
-    assert(layout.count == 7)
-    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawAttributeSyntax?.self))
-    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertAnyHasNoError(kind, 3, [
-      verify(layout[3], as: RawSyntax.self),
-      verify(layout[3], as: RawSyntax.self),
-    ])
-    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 5, verify(layout[5], as: RawCodeBlockItemListSyntax.self))
-    assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
-    break
-  case .switchDefaultLabel:
-    assert(layout.count == 5)
-    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self))
-    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawTokenSyntax.self))
-    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
-    break
-  case .caseItem:
-    assert(layout.count == 7)
-    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawPatternSyntax.self))
-    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawWhereClauseSyntax?.self))
-    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax?.self))
-    assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
-    break
   case .catchItem:
     assert(layout.count == 7)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
@@ -2182,16 +2198,6 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 3, verify(layout[3], as: RawWhereClauseSyntax?.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax?.self))
-    assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
-    break
-  case .switchCaseLabel:
-    assert(layout.count == 7)
-    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self))
-    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawCaseItemListSyntax.self))
-    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
     break
   case .catchClause:

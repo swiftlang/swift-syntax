@@ -302,6 +302,141 @@ extension LabeledStmtSyntax: CustomReflectable {
   }
 }
 
+// MARK: - ExpressionStmtSyntax
+
+public struct ExpressionStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .expressionStmt else { return nil }
+    self._syntaxNode = node._syntaxNode
+  }
+
+  /// Creates a `ExpressionStmtSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .expressionStmt)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public init<E: ExprSyntaxProtocol>(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeExpression: UnexpectedNodesSyntax? = nil,
+    expression: E,
+    _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed 
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeExpression, expression, unexpectedAfterExpression))) { (arena, _) in
+      let layout: [RawSyntax?] = [
+        unexpectedBeforeExpression?.raw,
+        expression.raw,
+        unexpectedAfterExpression?.raw,
+      ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.expressionStmt, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+
+  public var unexpectedBeforeExpression: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 0, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBeforeExpression(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBeforeExpression` replaced.
+  /// - param newChild: The new `unexpectedBeforeExpression` to replace the node's
+  ///                   current `unexpectedBeforeExpression`, if present.
+  public func withUnexpectedBeforeExpression(_ newChild: UnexpectedNodesSyntax?) -> ExpressionStmtSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
+    return ExpressionStmtSyntax(newData)
+  }
+
+  public var expression: ExprSyntax {
+    get {
+      let childData = data.child(at: 1, parent: Syntax(self))
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withExpression(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `expression` replaced.
+  /// - param newChild: The new `expression` to replace the node's
+  ///                   current `expression`, if present.
+  public func withExpression(_ newChild: ExprSyntax) -> ExpressionStmtSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild.raw
+    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
+    return ExpressionStmtSyntax(newData)
+  }
+
+  public var unexpectedAfterExpression: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 2, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterExpression(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterExpression` replaced.
+  /// - param newChild: The new `unexpectedAfterExpression` to replace the node's
+  ///                   current `unexpectedAfterExpression`, if present.
+  public func withUnexpectedAfterExpression(_ newChild: UnexpectedNodesSyntax?) -> ExpressionStmtSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
+    return ExpressionStmtSyntax(newData)
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeExpression,
+      \Self.expression,
+      \Self.unexpectedAfterExpression,
+    ])
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
+}
+
+extension ExpressionStmtSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "unexpectedBeforeExpression": unexpectedBeforeExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "expression": Syntax(expression).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterExpression": unexpectedAfterExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+    ])
+  }
+}
+
 // MARK: - ContinueStmtSyntax
 
 public struct ContinueStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
@@ -2163,372 +2298,6 @@ extension ForInStmtSyntax: CustomReflectable {
   }
 }
 
-// MARK: - SwitchStmtSyntax
-
-public struct SwitchStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
-  public let _syntaxNode: Syntax
-
-  public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .switchStmt else { return nil }
-    self._syntaxNode = node._syntaxNode
-  }
-
-  /// Creates a `SwitchStmtSyntax` node from the given `SyntaxData`. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
-  internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .switchStmt)
-    self._syntaxNode = Syntax(data)
-  }
-
-  public init<E: ExprSyntaxProtocol>(
-    leadingTrivia: Trivia? = nil,
-    _ unexpectedBeforeSwitchKeyword: UnexpectedNodesSyntax? = nil,
-    switchKeyword: TokenSyntax = .keyword(.switch),
-    _ unexpectedBetweenSwitchKeywordAndExpression: UnexpectedNodesSyntax? = nil,
-    expression: E,
-    _ unexpectedBetweenExpressionAndLeftBrace: UnexpectedNodesSyntax? = nil,
-    leftBrace: TokenSyntax = .leftBraceToken(),
-    _ unexpectedBetweenLeftBraceAndCases: UnexpectedNodesSyntax? = nil,
-    cases: SwitchCaseListSyntax,
-    _ unexpectedBetweenCasesAndRightBrace: UnexpectedNodesSyntax? = nil,
-    rightBrace: TokenSyntax = .rightBraceToken(),
-    _ unexpectedAfterRightBrace: UnexpectedNodesSyntax? = nil,
-    trailingTrivia: Trivia? = nil
-  ) {
-    // Extend the lifetime of all parameters so their arenas don't get destroyed 
-    // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeSwitchKeyword, switchKeyword, unexpectedBetweenSwitchKeywordAndExpression, expression, unexpectedBetweenExpressionAndLeftBrace, leftBrace, unexpectedBetweenLeftBraceAndCases, cases, unexpectedBetweenCasesAndRightBrace, rightBrace, unexpectedAfterRightBrace))) { (arena, _) in
-      let layout: [RawSyntax?] = [
-        unexpectedBeforeSwitchKeyword?.raw,
-        switchKeyword.raw,
-        unexpectedBetweenSwitchKeywordAndExpression?.raw,
-        expression.raw,
-        unexpectedBetweenExpressionAndLeftBrace?.raw,
-        leftBrace.raw,
-        unexpectedBetweenLeftBraceAndCases?.raw,
-        cases.raw,
-        unexpectedBetweenCasesAndRightBrace?.raw,
-        rightBrace.raw,
-        unexpectedAfterRightBrace?.raw,
-      ]
-      let raw = RawSyntax.makeLayout(
-        kind: SyntaxKind.switchStmt, from: layout, arena: arena,
-        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
-  }
-
-  public var unexpectedBeforeSwitchKeyword: UnexpectedNodesSyntax? {
-    get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withUnexpectedBeforeSwitchKeyword(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBeforeSwitchKeyword` replaced.
-  /// - param newChild: The new `unexpectedBeforeSwitchKeyword` to replace the node's
-  ///                   current `unexpectedBeforeSwitchKeyword`, if present.
-  public func withUnexpectedBeforeSwitchKeyword(_ newChild: UnexpectedNodesSyntax?) -> SwitchStmtSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-    return SwitchStmtSyntax(newData)
-  }
-
-  public var switchKeyword: TokenSyntax {
-    get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return TokenSyntax(childData!)
-    }
-    set(value) {
-      self = withSwitchKeyword(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `switchKeyword` replaced.
-  /// - param newChild: The new `switchKeyword` to replace the node's
-  ///                   current `switchKeyword`, if present.
-  public func withSwitchKeyword(_ newChild: TokenSyntax) -> SwitchStmtSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-    return SwitchStmtSyntax(newData)
-  }
-
-  public var unexpectedBetweenSwitchKeywordAndExpression: UnexpectedNodesSyntax? {
-    get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withUnexpectedBetweenSwitchKeywordAndExpression(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenSwitchKeywordAndExpression` replaced.
-  /// - param newChild: The new `unexpectedBetweenSwitchKeywordAndExpression` to replace the node's
-  ///                   current `unexpectedBetweenSwitchKeywordAndExpression`, if present.
-  public func withUnexpectedBetweenSwitchKeywordAndExpression(_ newChild: UnexpectedNodesSyntax?) -> SwitchStmtSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-    return SwitchStmtSyntax(newData)
-  }
-
-  public var expression: ExprSyntax {
-    get {
-      let childData = data.child(at: 3, parent: Syntax(self))
-      return ExprSyntax(childData!)
-    }
-    set(value) {
-      self = withExpression(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `expression` replaced.
-  /// - param newChild: The new `expression` to replace the node's
-  ///                   current `expression`, if present.
-  public func withExpression(_ newChild: ExprSyntax) -> SwitchStmtSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-    return SwitchStmtSyntax(newData)
-  }
-
-  public var unexpectedBetweenExpressionAndLeftBrace: UnexpectedNodesSyntax? {
-    get {
-      let childData = data.child(at: 4, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withUnexpectedBetweenExpressionAndLeftBrace(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenExpressionAndLeftBrace` replaced.
-  /// - param newChild: The new `unexpectedBetweenExpressionAndLeftBrace` to replace the node's
-  ///                   current `unexpectedBetweenExpressionAndLeftBrace`, if present.
-  public func withUnexpectedBetweenExpressionAndLeftBrace(_ newChild: UnexpectedNodesSyntax?) -> SwitchStmtSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-    return SwitchStmtSyntax(newData)
-  }
-
-  public var leftBrace: TokenSyntax {
-    get {
-      let childData = data.child(at: 5, parent: Syntax(self))
-      return TokenSyntax(childData!)
-    }
-    set(value) {
-      self = withLeftBrace(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `leftBrace` replaced.
-  /// - param newChild: The new `leftBrace` to replace the node's
-  ///                   current `leftBrace`, if present.
-  public func withLeftBrace(_ newChild: TokenSyntax) -> SwitchStmtSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
-    return SwitchStmtSyntax(newData)
-  }
-
-  public var unexpectedBetweenLeftBraceAndCases: UnexpectedNodesSyntax? {
-    get {
-      let childData = data.child(at: 6, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withUnexpectedBetweenLeftBraceAndCases(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenLeftBraceAndCases` replaced.
-  /// - param newChild: The new `unexpectedBetweenLeftBraceAndCases` to replace the node's
-  ///                   current `unexpectedBetweenLeftBraceAndCases`, if present.
-  public func withUnexpectedBetweenLeftBraceAndCases(_ newChild: UnexpectedNodesSyntax?) -> SwitchStmtSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
-    return SwitchStmtSyntax(newData)
-  }
-
-  public var cases: SwitchCaseListSyntax {
-    get {
-      let childData = data.child(at: 7, parent: Syntax(self))
-      return SwitchCaseListSyntax(childData!)
-    }
-    set(value) {
-      self = withCases(value)
-    }
-  }
-
-  /// Adds the provided `Case` to the node's `cases`
-  /// collection.
-  /// - param element: The new `Case` to add to the node's
-  ///                  `cases` collection.
-  /// - returns: A copy of the receiver with the provided `Case`
-  ///            appended to its `cases` collection.
-  public func addCase(_ element: Syntax) -> SwitchStmtSyntax {
-    var collection: RawSyntax
-    let arena = SyntaxArena()
-    if let col = raw.layoutView!.children[7] {
-      collection = col.layoutView!.appending(element.raw, arena: arena)
-    } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.switchCaseList,
-        from: [element.raw], arena: arena)
-    }
-    let newData = data.replacingChild(at: 7, with: collection, arena: arena)
-    return SwitchStmtSyntax(newData)
-  }
-
-  /// Returns a copy of the receiver with its `cases` replaced.
-  /// - param newChild: The new `cases` to replace the node's
-  ///                   current `cases`, if present.
-  public func withCases(_ newChild: SwitchCaseListSyntax) -> SwitchStmtSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 7, with: raw, arena: arena)
-    return SwitchStmtSyntax(newData)
-  }
-
-  public var unexpectedBetweenCasesAndRightBrace: UnexpectedNodesSyntax? {
-    get {
-      let childData = data.child(at: 8, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withUnexpectedBetweenCasesAndRightBrace(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenCasesAndRightBrace` replaced.
-  /// - param newChild: The new `unexpectedBetweenCasesAndRightBrace` to replace the node's
-  ///                   current `unexpectedBetweenCasesAndRightBrace`, if present.
-  public func withUnexpectedBetweenCasesAndRightBrace(_ newChild: UnexpectedNodesSyntax?) -> SwitchStmtSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 8, with: raw, arena: arena)
-    return SwitchStmtSyntax(newData)
-  }
-
-  public var rightBrace: TokenSyntax {
-    get {
-      let childData = data.child(at: 9, parent: Syntax(self))
-      return TokenSyntax(childData!)
-    }
-    set(value) {
-      self = withRightBrace(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `rightBrace` replaced.
-  /// - param newChild: The new `rightBrace` to replace the node's
-  ///                   current `rightBrace`, if present.
-  public func withRightBrace(_ newChild: TokenSyntax) -> SwitchStmtSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 9, with: raw, arena: arena)
-    return SwitchStmtSyntax(newData)
-  }
-
-  public var unexpectedAfterRightBrace: UnexpectedNodesSyntax? {
-    get {
-      let childData = data.child(at: 10, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withUnexpectedAfterRightBrace(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedAfterRightBrace` replaced.
-  /// - param newChild: The new `unexpectedAfterRightBrace` to replace the node's
-  ///                   current `unexpectedAfterRightBrace`, if present.
-  public func withUnexpectedAfterRightBrace(_ newChild: UnexpectedNodesSyntax?) -> SwitchStmtSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 10, with: raw, arena: arena)
-    return SwitchStmtSyntax(newData)
-  }
-
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-      \Self.unexpectedBeforeSwitchKeyword,
-      \Self.switchKeyword,
-      \Self.unexpectedBetweenSwitchKeywordAndExpression,
-      \Self.expression,
-      \Self.unexpectedBetweenExpressionAndLeftBrace,
-      \Self.leftBrace,
-      \Self.unexpectedBetweenLeftBraceAndCases,
-      \Self.cases,
-      \Self.unexpectedBetweenCasesAndRightBrace,
-      \Self.rightBrace,
-      \Self.unexpectedAfterRightBrace,
-    ])
-  }
-
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    case 9:
-      return nil
-    case 10:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension SwitchStmtSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-      "unexpectedBeforeSwitchKeyword": unexpectedBeforeSwitchKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "switchKeyword": Syntax(switchKeyword).asProtocol(SyntaxProtocol.self),
-      "unexpectedBetweenSwitchKeywordAndExpression": unexpectedBetweenSwitchKeywordAndExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "expression": Syntax(expression).asProtocol(SyntaxProtocol.self),
-      "unexpectedBetweenExpressionAndLeftBrace": unexpectedBetweenExpressionAndLeftBrace.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "leftBrace": Syntax(leftBrace).asProtocol(SyntaxProtocol.self),
-      "unexpectedBetweenLeftBraceAndCases": unexpectedBetweenLeftBraceAndCases.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "cases": Syntax(cases).asProtocol(SyntaxProtocol.self),
-      "unexpectedBetweenCasesAndRightBrace": unexpectedBetweenCasesAndRightBrace.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "rightBrace": Syntax(rightBrace).asProtocol(SyntaxProtocol.self),
-      "unexpectedAfterRightBrace": unexpectedAfterRightBrace.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-    ])
-  }
-}
-
 // MARK: - DoStmtSyntax
 
 public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
@@ -3741,410 +3510,6 @@ extension ThrowStmtSyntax: CustomReflectable {
       "unexpectedBetweenThrowKeywordAndExpression": unexpectedBetweenThrowKeywordAndExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "expression": Syntax(expression).asProtocol(SyntaxProtocol.self),
       "unexpectedAfterExpression": unexpectedAfterExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-    ])
-  }
-}
-
-// MARK: - IfStmtSyntax
-
-public struct IfStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
-  public enum ElseBody: SyntaxChildChoices {
-    case `ifStmt`(IfStmtSyntax)
-    case `codeBlock`(CodeBlockSyntax)
-    public var _syntaxNode: Syntax {
-      switch self {
-      case .ifStmt(let node): return node._syntaxNode
-      case .codeBlock(let node): return node._syntaxNode
-      }
-    }
-    init(_ data: SyntaxData) { self.init(Syntax(data))! }
-    public init(_ node: IfStmtSyntax) {
-      self = .ifStmt(node)
-    }
-    public init(_ node: CodeBlockSyntax) {
-      self = .codeBlock(node)
-    }
-    public init?<S: SyntaxProtocol>(_ node: S) {
-      if let node = node.as(IfStmtSyntax.self) {
-        self = .ifStmt(node)
-        return
-      }
-      if let node = node.as(CodeBlockSyntax.self) {
-        self = .codeBlock(node)
-        return
-      }
-      return nil
-    }
-
-    public static var structure: SyntaxNodeStructure {
-      return .choices([
-        .node(IfStmtSyntax.self),
-        .node(CodeBlockSyntax.self),
-      ])
-    }
-  }
-
-  public let _syntaxNode: Syntax
-
-  public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .ifStmt else { return nil }
-    self._syntaxNode = node._syntaxNode
-  }
-
-  /// Creates a `IfStmtSyntax` node from the given `SyntaxData`. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
-  internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .ifStmt)
-    self._syntaxNode = Syntax(data)
-  }
-
-  public init(
-    leadingTrivia: Trivia? = nil,
-    _ unexpectedBeforeIfKeyword: UnexpectedNodesSyntax? = nil,
-    ifKeyword: TokenSyntax = .keyword(.if),
-    _ unexpectedBetweenIfKeywordAndConditions: UnexpectedNodesSyntax? = nil,
-    conditions: ConditionElementListSyntax,
-    _ unexpectedBetweenConditionsAndBody: UnexpectedNodesSyntax? = nil,
-    body: CodeBlockSyntax,
-    _ unexpectedBetweenBodyAndElseKeyword: UnexpectedNodesSyntax? = nil,
-    elseKeyword: TokenSyntax? = nil,
-    _ unexpectedBetweenElseKeywordAndElseBody: UnexpectedNodesSyntax? = nil,
-    elseBody: ElseBody? = nil,
-    _ unexpectedAfterElseBody: UnexpectedNodesSyntax? = nil,
-    trailingTrivia: Trivia? = nil
-  ) {
-    // Extend the lifetime of all parameters so their arenas don't get destroyed 
-    // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeIfKeyword, ifKeyword, unexpectedBetweenIfKeywordAndConditions, conditions, unexpectedBetweenConditionsAndBody, body, unexpectedBetweenBodyAndElseKeyword, elseKeyword, unexpectedBetweenElseKeywordAndElseBody, elseBody, unexpectedAfterElseBody))) { (arena, _) in
-      let layout: [RawSyntax?] = [
-        unexpectedBeforeIfKeyword?.raw,
-        ifKeyword.raw,
-        unexpectedBetweenIfKeywordAndConditions?.raw,
-        conditions.raw,
-        unexpectedBetweenConditionsAndBody?.raw,
-        body.raw,
-        unexpectedBetweenBodyAndElseKeyword?.raw,
-        elseKeyword?.raw,
-        unexpectedBetweenElseKeywordAndElseBody?.raw,
-        elseBody?.raw,
-        unexpectedAfterElseBody?.raw,
-      ]
-      let raw = RawSyntax.makeLayout(
-        kind: SyntaxKind.ifStmt, from: layout, arena: arena,
-        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
-  }
-
-  public var unexpectedBeforeIfKeyword: UnexpectedNodesSyntax? {
-    get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withUnexpectedBeforeIfKeyword(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBeforeIfKeyword` replaced.
-  /// - param newChild: The new `unexpectedBeforeIfKeyword` to replace the node's
-  ///                   current `unexpectedBeforeIfKeyword`, if present.
-  public func withUnexpectedBeforeIfKeyword(_ newChild: UnexpectedNodesSyntax?) -> IfStmtSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-    return IfStmtSyntax(newData)
-  }
-
-  public var ifKeyword: TokenSyntax {
-    get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return TokenSyntax(childData!)
-    }
-    set(value) {
-      self = withIfKeyword(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `ifKeyword` replaced.
-  /// - param newChild: The new `ifKeyword` to replace the node's
-  ///                   current `ifKeyword`, if present.
-  public func withIfKeyword(_ newChild: TokenSyntax) -> IfStmtSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-    return IfStmtSyntax(newData)
-  }
-
-  public var unexpectedBetweenIfKeywordAndConditions: UnexpectedNodesSyntax? {
-    get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withUnexpectedBetweenIfKeywordAndConditions(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenIfKeywordAndConditions` replaced.
-  /// - param newChild: The new `unexpectedBetweenIfKeywordAndConditions` to replace the node's
-  ///                   current `unexpectedBetweenIfKeywordAndConditions`, if present.
-  public func withUnexpectedBetweenIfKeywordAndConditions(_ newChild: UnexpectedNodesSyntax?) -> IfStmtSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-    return IfStmtSyntax(newData)
-  }
-
-  public var conditions: ConditionElementListSyntax {
-    get {
-      let childData = data.child(at: 3, parent: Syntax(self))
-      return ConditionElementListSyntax(childData!)
-    }
-    set(value) {
-      self = withConditions(value)
-    }
-  }
-
-  /// Adds the provided `Condition` to the node's `conditions`
-  /// collection.
-  /// - param element: The new `Condition` to add to the node's
-  ///                  `conditions` collection.
-  /// - returns: A copy of the receiver with the provided `Condition`
-  ///            appended to its `conditions` collection.
-  public func addCondition(_ element: ConditionElementSyntax) -> IfStmtSyntax {
-    var collection: RawSyntax
-    let arena = SyntaxArena()
-    if let col = raw.layoutView!.children[3] {
-      collection = col.layoutView!.appending(element.raw, arena: arena)
-    } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.conditionElementList,
-        from: [element.raw], arena: arena)
-    }
-    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
-    return IfStmtSyntax(newData)
-  }
-
-  /// Returns a copy of the receiver with its `conditions` replaced.
-  /// - param newChild: The new `conditions` to replace the node's
-  ///                   current `conditions`, if present.
-  public func withConditions(_ newChild: ConditionElementListSyntax) -> IfStmtSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-    return IfStmtSyntax(newData)
-  }
-
-  public var unexpectedBetweenConditionsAndBody: UnexpectedNodesSyntax? {
-    get {
-      let childData = data.child(at: 4, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withUnexpectedBetweenConditionsAndBody(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenConditionsAndBody` replaced.
-  /// - param newChild: The new `unexpectedBetweenConditionsAndBody` to replace the node's
-  ///                   current `unexpectedBetweenConditionsAndBody`, if present.
-  public func withUnexpectedBetweenConditionsAndBody(_ newChild: UnexpectedNodesSyntax?) -> IfStmtSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-    return IfStmtSyntax(newData)
-  }
-
-  public var body: CodeBlockSyntax {
-    get {
-      let childData = data.child(at: 5, parent: Syntax(self))
-      return CodeBlockSyntax(childData!)
-    }
-    set(value) {
-      self = withBody(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `body` replaced.
-  /// - param newChild: The new `body` to replace the node's
-  ///                   current `body`, if present.
-  public func withBody(_ newChild: CodeBlockSyntax) -> IfStmtSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
-    return IfStmtSyntax(newData)
-  }
-
-  public var unexpectedBetweenBodyAndElseKeyword: UnexpectedNodesSyntax? {
-    get {
-      let childData = data.child(at: 6, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withUnexpectedBetweenBodyAndElseKeyword(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenBodyAndElseKeyword` replaced.
-  /// - param newChild: The new `unexpectedBetweenBodyAndElseKeyword` to replace the node's
-  ///                   current `unexpectedBetweenBodyAndElseKeyword`, if present.
-  public func withUnexpectedBetweenBodyAndElseKeyword(_ newChild: UnexpectedNodesSyntax?) -> IfStmtSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
-    return IfStmtSyntax(newData)
-  }
-
-  public var elseKeyword: TokenSyntax? {
-    get {
-      let childData = data.child(at: 7, parent: Syntax(self))
-      if childData == nil { return nil }
-      return TokenSyntax(childData!)
-    }
-    set(value) {
-      self = withElseKeyword(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `elseKeyword` replaced.
-  /// - param newChild: The new `elseKeyword` to replace the node's
-  ///                   current `elseKeyword`, if present.
-  public func withElseKeyword(_ newChild: TokenSyntax?) -> IfStmtSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 7, with: raw, arena: arena)
-    return IfStmtSyntax(newData)
-  }
-
-  public var unexpectedBetweenElseKeywordAndElseBody: UnexpectedNodesSyntax? {
-    get {
-      let childData = data.child(at: 8, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withUnexpectedBetweenElseKeywordAndElseBody(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenElseKeywordAndElseBody` replaced.
-  /// - param newChild: The new `unexpectedBetweenElseKeywordAndElseBody` to replace the node's
-  ///                   current `unexpectedBetweenElseKeywordAndElseBody`, if present.
-  public func withUnexpectedBetweenElseKeywordAndElseBody(_ newChild: UnexpectedNodesSyntax?) -> IfStmtSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 8, with: raw, arena: arena)
-    return IfStmtSyntax(newData)
-  }
-
-  public var elseBody: ElseBody? {
-    get {
-      let childData = data.child(at: 9, parent: Syntax(self))
-      if childData == nil { return nil }
-      return ElseBody(childData!)
-    }
-    set(value) {
-      self = withElseBody(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `elseBody` replaced.
-  /// - param newChild: The new `elseBody` to replace the node's
-  ///                   current `elseBody`, if present.
-  public func withElseBody(_ newChild: ElseBody?) -> IfStmtSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 9, with: raw, arena: arena)
-    return IfStmtSyntax(newData)
-  }
-
-  public var unexpectedAfterElseBody: UnexpectedNodesSyntax? {
-    get {
-      let childData = data.child(at: 10, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withUnexpectedAfterElseBody(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedAfterElseBody` replaced.
-  /// - param newChild: The new `unexpectedAfterElseBody` to replace the node's
-  ///                   current `unexpectedAfterElseBody`, if present.
-  public func withUnexpectedAfterElseBody(_ newChild: UnexpectedNodesSyntax?) -> IfStmtSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 10, with: raw, arena: arena)
-    return IfStmtSyntax(newData)
-  }
-
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-      \Self.unexpectedBeforeIfKeyword,
-      \Self.ifKeyword,
-      \Self.unexpectedBetweenIfKeywordAndConditions,
-      \Self.conditions,
-      \Self.unexpectedBetweenConditionsAndBody,
-      \Self.body,
-      \Self.unexpectedBetweenBodyAndElseKeyword,
-      \Self.elseKeyword,
-      \Self.unexpectedBetweenElseKeywordAndElseBody,
-      \Self.elseBody,
-      \Self.unexpectedAfterElseBody,
-    ])
-  }
-
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    case 5:
-      return "body"
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    case 9:
-      return "else body"
-    case 10:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension IfStmtSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-      "unexpectedBeforeIfKeyword": unexpectedBeforeIfKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "ifKeyword": Syntax(ifKeyword).asProtocol(SyntaxProtocol.self),
-      "unexpectedBetweenIfKeywordAndConditions": unexpectedBetweenIfKeywordAndConditions.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "conditions": Syntax(conditions).asProtocol(SyntaxProtocol.self),
-      "unexpectedBetweenConditionsAndBody": unexpectedBetweenConditionsAndBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "body": Syntax(body).asProtocol(SyntaxProtocol.self),
-      "unexpectedBetweenBodyAndElseKeyword": unexpectedBetweenBodyAndElseKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "elseKeyword": elseKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "unexpectedBetweenElseKeywordAndElseBody": unexpectedBetweenElseKeywordAndElseBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "elseBody": elseBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "unexpectedAfterElseBody": unexpectedAfterElseBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }

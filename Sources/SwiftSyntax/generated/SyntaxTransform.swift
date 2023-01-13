@@ -496,6 +496,11 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ExpressionSegmentSyntax) -> ResultType
   
+  /// Visiting `ExpressionStmtSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: ExpressionStmtSyntax) -> ResultType
+  
   /// Visiting `ExtensionDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -631,10 +636,10 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: IfConfigDeclSyntax) -> ResultType
   
-  /// Visiting `IfStmtSyntax` specifically.
+  /// Visiting `IfExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: IfStmtSyntax) -> ResultType
+  func visit(_ node: IfExprSyntax) -> ResultType
   
   /// Visiting `ImplementsAttributeArgumentsSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -1136,10 +1141,10 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: SwitchDefaultLabelSyntax) -> ResultType
   
-  /// Visiting `SwitchStmtSyntax` specifically.
+  /// Visiting `SwitchExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: SwitchStmtSyntax) -> ResultType
+  func visit(_ node: SwitchExprSyntax) -> ResultType
   
   /// Visiting `TargetFunctionEntrySyntax` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -1992,6 +1997,13 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
+  /// Visiting `ExpressionStmtSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: ExpressionStmtSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
   /// Visiting `ExtensionDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -2181,10 +2193,10 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `IfStmtSyntax` specifically.
+  /// Visiting `IfExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: IfStmtSyntax) -> ResultType {
+  public func visit(_ node: IfExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -2888,10 +2900,10 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `SwitchStmtSyntax` specifically.
+  /// Visiting `SwitchExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: SwitchStmtSyntax) -> ResultType {
+  public func visit(_ node: SwitchExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -3341,6 +3353,8 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .expressionSegment(let derived): 
       return visit(derived)
+    case .expressionStmt(let derived): 
+      return visit(derived)
     case .extensionDecl(let derived): 
       return visit(derived)
     case .fallthroughStmt(let derived): 
@@ -3395,7 +3409,7 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .ifConfigDecl(let derived): 
       return visit(derived)
-    case .ifStmt(let derived): 
+    case .ifExpr(let derived): 
       return visit(derived)
     case .implementsAttributeArguments(let derived): 
       return visit(derived)
@@ -3597,7 +3611,7 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .switchDefaultLabel(let derived): 
       return visit(derived)
-    case .switchStmt(let derived): 
+    case .switchExpr(let derived): 
       return visit(derived)
     case .targetFunctionEntry(let derived): 
       return visit(derived)

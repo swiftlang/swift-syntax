@@ -322,7 +322,7 @@ extension GenericRequirementSyntax: WithTrailingCommaSyntax {
 extension GuardStmtSyntax: WithCodeBlockSyntax {
 }
 
-extension IfStmtSyntax: WithCodeBlockSyntax {
+extension IfExprSyntax: WithCodeBlockSyntax {
 }
 
 extension ImportDeclSyntax: AttributedSyntax {
@@ -388,7 +388,7 @@ extension SubscriptDeclSyntax: AttributedSyntax {
 extension SwitchCaseSyntax: WithStatementsSyntax {
 }
 
-extension SwitchStmtSyntax: BracedSyntax {
+extension SwitchExprSyntax: BracedSyntax {
 }
 
 extension TargetFunctionEntrySyntax: WithTrailingCommaSyntax {

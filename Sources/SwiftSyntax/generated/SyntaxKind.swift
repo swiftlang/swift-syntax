@@ -208,6 +208,8 @@ public enum SyntaxKind {
   
   case expressionSegment
   
+  case expressionStmt
+  
   case extensionDecl
   
   case fallthroughStmt
@@ -262,7 +264,7 @@ public enum SyntaxKind {
   
   case ifConfigDecl
   
-  case ifStmt
+  case ifExpr
   
   case implementsAttributeArguments
   
@@ -464,7 +466,7 @@ public enum SyntaxKind {
   
   case switchDefaultLabel
   
-  case switchStmt
+  case switchExpr
   
   case targetFunctionEntry
   

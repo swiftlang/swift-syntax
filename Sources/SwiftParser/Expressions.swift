@@ -18,6 +18,11 @@ extension TokenConsumer {
     case (.awaitTryMove, let handle)?:
       var backtrack = self.lookahead()
       backtrack.eat(handle)
+
+      // These can be parsed as expressions with try/await.
+      if backtrack.at(anyIn: IfOrSwitch.self) != nil {
+        return true
+      }
       if backtrack.atStartOfDeclaration() || backtrack.atStartOfStatement() {
         // If after the 'try' we are at a declaration or statement, it can't be a valid expression.
         // Decide how we want to consume the 'try':
@@ -202,6 +207,30 @@ extension Parser {
     )
   }
 
+  /// Parse an unresolved 'as' expression.
+  ///
+  ///     type-casting-operator → 'as' type
+  ///     type-casting-operator → 'as' '?' type
+  ///     type-casting-operator → 'as' '!' type
+  ///
+  mutating func parseUnresolvedAsExpr(
+    handle: TokenConsumptionHandle
+  ) -> (operator: RawExprSyntax, rhs: RawExprSyntax) {
+    let asKeyword = self.eat(handle)
+    let failable = self.consume(ifAny: [.postfixQuestionMark, .exclamationMark])
+    let op = RawUnresolvedAsExprSyntax(
+      asTok: asKeyword,
+      questionOrExclamationMark: failable,
+      arena: self.arena
+    )
+
+    // Parse the right type expression operand as part of the 'as' production.
+    let type = self.parseType()
+    let rhs = RawTypeExprSyntax(type: type, arena: self.arena)
+
+    return (RawExprSyntax(op), RawExprSyntax(rhs))
+  }
+
   /// Parse an expression sequence operators.
   ///
   /// Returns `nil` if the current token is not at an operator.
@@ -324,19 +353,7 @@ extension Parser {
       return (RawExprSyntax(op), RawExprSyntax(rhs))
 
     case (.asKeyword, let handle)?:
-      let asKeyword = self.eat(handle)
-      let failable = self.consume(ifAny: [.postfixQuestionMark, .exclamationMark])
-      let op = RawUnresolvedAsExprSyntax(
-        asTok: asKeyword,
-        questionOrExclamationMark: failable,
-        arena: self.arena
-      )
-
-      // Parse the right type expression operand as part of the 'as' production.
-      let type = self.parseType()
-      let rhs = RawTypeExprSyntax(type: type, arena: self.arena)
-
-      return (RawExprSyntax(op), RawExprSyntax(rhs))
+      return parseUnresolvedAsExpr(handle: handle)
 
     case (.async, _)?:
       if self.peek().rawTokenKind == .arrow || self.peek().rawTokenKind == .keyword(.throws) {
@@ -507,6 +524,21 @@ extension Parser {
     if (self.at(.keyword(.repeat))) {
       return RawExprSyntax(
         parsePackExpansionExpr(flavor, pattern: pattern)
+      )
+    }
+
+    // Try parse an 'if' or 'switch' as an expression. Note we do this here in
+    // parseUnaryExpression as we don't allow postfix syntax to hang off such
+    // expressions to avoid ambiguities such as postfix '.member', which can
+    // currently be parsed as a static dot member for a result builder.
+    if self.at(.keyword(.switch)) {
+      return RawExprSyntax(
+        parseSwitchExpression(switchHandle: .constant(.keyword(.switch)))
+      )
+    }
+    if self.at(.keyword(.if)) {
+      return RawExprSyntax(
+        parseIfExpression(ifHandle: .constant(.keyword(.if)))
       )
     }
 
@@ -2524,6 +2556,11 @@ extension Parser.Lookahead {
     // closure.
     guard !self.lookahead().isStartOfGetSetAccessor() else {
       return false
+    }
+
+    // If this is the start of a switch body, this isn't a trailing closure.
+    if self.peek().rawTokenKind == .keyword(.case) {
+      return false;
     }
 
     // If this is a normal expression (not an expr-basic) then trailing closures

@@ -654,6 +654,24 @@ extension Parser {
 // MARK: Control Transfer Statements
 
 extension Parser {
+  private func isStartOfReturnExpr() -> Bool {
+    if self.at(any: [
+      .rightBrace, .keyword(.case), .keyword(.default), .semicolon, .eof,
+      .poundIfKeyword, .poundErrorKeyword, .poundWarningKeyword,
+      .poundEndifKeyword, .poundElseKeyword, .poundElseifKeyword,
+    ]) {
+      return false
+    }
+    // Allowed for if/switch expressions.
+    if self.at(anyIn: IfOrSwitch.self) != nil {
+      return true
+    }
+    if self.atStartOfStatement() || self.atStartOfDeclaration() {
+      return false
+    }
+    return true
+  }
+
   /// Parse a return statement
   ///
   /// Grammar
@@ -669,13 +687,7 @@ extension Parser {
     // enclosing stmt-brace to get it by eagerly eating it unless the return is
     // followed by a '}', '', statement or decl start keyword sequence.
     let expr: RawExprSyntax?
-    if !self.at(any: [
-      .rightBrace, .keyword(.case), .keyword(.default), .semicolon, .eof,
-      .poundIfKeyword, .poundErrorKeyword, .poundWarningKeyword,
-      .poundEndifKeyword, .poundElseKeyword, .poundElseifKeyword,
-    ])
-      && !self.atStartOfStatement() && !self.atStartOfDeclaration()
-    {
+    if isStartOfReturnExpr() {
       let parsedExpr = self.parseExpression()
       if hasMisplacedTry && !parsedExpr.is(RawTryExprSyntax.self) {
         expr = RawExprSyntax(

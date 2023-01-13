@@ -331,11 +331,35 @@ extension Lexer.Cursor {
   /// If the current character is `matching`, advance the cursor and return `true`.
   /// Otherwise, this is a no-op and returns `false`.
   mutating func advance(matching: CharacterByte) -> Bool {
-    guard self.peek() == matching.value else {
+    if self.peek(matches: matching) {
+      _ = self.advance()
+      return true
+    } else {
       return false
     }
-    _ = self.advance()
-    return true
+  }
+
+  /// If the current character is `matching`, advance the cursor and return `true`.
+  /// Otherwise, this is a no-op and returns `false`.
+  mutating func advance(matching character1: CharacterByte, _ character2: CharacterByte) -> Bool {
+    if self.peek(matches: character1) || self.peek(matches: character2) {
+      _ = self.advance()
+      return true
+    } else {
+      return false
+    }
+  }
+
+  /// If the current character is in `matching`, advance the cursor and return `true`.
+  /// Otherwise, this is a no-op and returns `false`.
+  @_disfavoredOverload  // favor the stamped out copies
+  mutating func advance(matching characters: CharacterByte...) -> Bool {
+    if characters.contains(where: { self.peek(matches: $0) }) {
+      _ = self.advance()
+      return true
+    } else {
+      return false
+    }
   }
 
   /// If the current character matches `predicate`, consume it and return `true`.
@@ -628,7 +652,7 @@ extension Lexer.Cursor {
       )
     }
 
-    let start = self
+    var start = self
     switch self.advance() {
     case UInt8(ascii: "@"): return Lexer.Result(.atSign)
     case UInt8(ascii: "{"): return Lexer.Result(.leftBrace)
@@ -720,7 +744,9 @@ extension Lexer.Cursor {
       UInt8(ascii: "3"), UInt8(ascii: "4"), UInt8(ascii: "5"),
       UInt8(ascii: "6"), UInt8(ascii: "7"), UInt8(ascii: "8"),
       UInt8(ascii: "9"):
-      return self.lexNumber(tokenStart: start)
+      let result = start.lexNumber()
+      self = start
+      return result
     case UInt8(ascii: #"'"#), UInt8(ascii: #"""#):
       return self.lexStringQuote()
 
@@ -895,21 +921,22 @@ extension Lexer.Cursor {
   ///   floating_literal ::= [0-9][0-9_]*[eE][+-]?[0-9][0-9_]*
   ///   floating_literal ::= 0x[0-9A-Fa-f][0-9A-Fa-f_]*
   ///                          (\.[0-9A-Fa-f][0-9A-Fa-f_]*)?[pP][+-]?[0-9][0-9_]*
-  mutating func lexNumber(tokenStart tokStart: Lexer.Cursor) -> Lexer.Result {
-    assert(
-      (Unicode.Scalar(self.previous).isDigit || self.previous == UInt8(ascii: ".")),
-      "Unexpected start"
-    )
+  mutating func lexNumber() -> Lexer.Result {
+    assert(self.peek().map(Unicode.Scalar.init)?.isDigit == true, "Unexpected start")
+    let tokenStart = self
 
-    if self.previous == UInt8(ascii: "0") && self.peek(matches: "x") {
-      return self.lexHexNumber(tokenStart: tokStart)
+    if self.peek(matches: "0") && self.peek(at: 1, matches: "x") {
+      return self.lexHexNumber()
     }
 
-    if self.previous == UInt8(ascii: "0") && self.peek(matches: "o") {
+    if self.peek(matches: "0") && self.peek(at: 1, matches: "o") {
       // 0o[0-7][0-7_]*
-      _ = self.advance()
+
+      let zeroConsumed = self.advance(matching: "0")  // Consume '0'
+      let oConsumed = self.advance(matching: "o")  // Consome 'o'
+      assert(zeroConsumed && oConsumed)
       if let peeked = self.peek(), peeked < UInt8(ascii: "0") || peeked > UInt8(ascii: "7") {
-        let errorOffset = tokStart.distance(to: self)
+        let errorOffset = tokenStart.distance(to: self)
         self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
         return Lexer.Result(
           .integerLiteral,
@@ -923,7 +950,7 @@ extension Lexer.Cursor {
 
       let tmp = self
       if self.advance(if: { $0.isValidIdentifierContinuationCodePoint }) {
-        let errorOffset = tokStart.distance(to: tmp)
+        let errorOffset = tokenStart.distance(to: tmp)
         self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
         return Lexer.Result(
           .integerLiteral,
@@ -934,11 +961,13 @@ extension Lexer.Cursor {
       return Lexer.Result(.integerLiteral)
     }
 
-    if tokStart.peek(matches: "0") && self.peek(matches: "b") {
+    if self.peek(matches: "0") && self.peek(at: 1, matches: "b") {
       // 0b[01][01_]*
-      _ = self.advance()
+      let zeroConsumed = self.advance(matching: "0")  // Consume '0'
+      let bConsumed = self.advance(matching: "b")  // Consume 'b'
+      assert(zeroConsumed && bConsumed)
       if self.peek(doesntMatch: "0", "1") {
-        let errorOffset = tokStart.distance(to: self)
+        let errorOffset = tokenStart.distance(to: self)
         self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
         return Lexer.Result(
           .integerLiteral,
@@ -952,7 +981,7 @@ extension Lexer.Cursor {
 
       let tmp = self
       if self.advance(if: { $0.isValidIdentifierContinuationCodePoint }) {
-        let errorOffset = tokStart.distance(to: tmp)
+        let errorOffset = tokenStart.distance(to: tmp)
         self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
         return Lexer.Result(
           .integerLiteral,
@@ -967,40 +996,40 @@ extension Lexer.Cursor {
     // floating point value.
     self.advance(while: { $0.isDigit || $0 == Unicode.Scalar("_") })
 
+    // TODO: This can probably be unified with lexHexNumber somehow
+
     // Lex things like 4.x as '4' followed by a tok::period.
     if self.peek(matches: ".") {
       // NextToken is the soon to be previous token
       // Therefore: x.0.1 is sub-tuple access, not x.float_literal
-      if let peeked = self.peek(at: 1), !Unicode.Scalar(peeked).isDigit || tokStart.previous == UInt8(ascii: ".") {
+      if let peeked = self.peek(at: 1), !Unicode.Scalar(peeked).isDigit || tokenStart.previous == UInt8(ascii: ".") {
         return Lexer.Result(.integerLiteral)
       }
-    } else {
+    } else if self.isAtEndOfFile || self.peek(doesntMatch: "e", "E") {
       // Floating literals must have '.', 'e', or 'E' after digits.  If it is
       // something else, then this is the end of the token.
-      if self.isAtEndOfFile || self.peek(doesntMatch: "e", "E") {
-        let tmp = self
-        if self.advance(if: { $0.isValidIdentifierContinuationCodePoint }) {
-          let errorOffset = tokStart.distance(to: tmp)
-          self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
-          return Lexer.Result(
-            .integerLiteral,
-            error: LexerError(.invalidDecimalDigitInIntegerLiteral, byteOffset: errorOffset)
-          )
-        }
-
-        return Lexer.Result(.integerLiteral)
+      let tmp = self
+      if self.advance(if: { $0.isValidIdentifierContinuationCodePoint }) {
+        let errorOffset = tokenStart.distance(to: tmp)
+        self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
+        return Lexer.Result(
+          .integerLiteral,
+          error: LexerError(.invalidDecimalDigitInIntegerLiteral, byteOffset: errorOffset)
+        )
       }
+
+      return Lexer.Result(.integerLiteral)
     }
 
     // Lex decimal point.
-    if self.advance(if: { $0 == Unicode.Scalar(".") }) {
+    if self.advance(matching: ".") {
       // Lex any digits after the decimal point.
       self.advance(while: { $0.isDigit || $0 == Unicode.Scalar("_") })
     }
 
     // Lex exponent.
-    if self.advance(if: { $0 == Unicode.Scalar("e") || $0 == Unicode.Scalar("E") }) {
-      _ = self.advance(if: { $0 == Unicode.Scalar("-") || $0 == Unicode.Scalar("+") })
+    if self.advance(matching: "e", "E") {
+      _ = self.advance(matching: "-", "+")
 
       guard let peeked = self.peek(), Unicode.Scalar(peeked).isDigit else {
         // There are 3 cases to diagnose if the exponent starts with a non-digit:
@@ -1018,18 +1047,16 @@ extension Lexer.Cursor {
           errorKind = .expectedDigitInFloatLiteral
         }
 
-        let errorOffset = tokStart.distance(to: tmp)
+        let errorOffset = tokenStart.distance(to: tmp)
         self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
         return Lexer.Result(.floatingLiteral, error: LexerError(errorKind, byteOffset: errorOffset))
       }
 
-      self.advance(while: { char in
-        char.isDigit || char == Unicode.Scalar("_")
-      })
+      self.advance(while: { $0.isDigit || $0 == Unicode.Scalar("_") })
 
       let tmp = self
       if self.advance(if: { $0.isValidIdentifierContinuationCodePoint }) {
-        let errorOffset = tokStart.distance(to: tmp)
+        let errorOffset = tokenStart.distance(to: tmp)
         self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
         return Lexer.Result(
           .floatingLiteral,
@@ -1041,14 +1068,16 @@ extension Lexer.Cursor {
     return Lexer.Result(.floatingLiteral)
   }
 
-  mutating func lexHexNumber(tokenStart tokStart: Lexer.Cursor) -> Lexer.Result {
+  mutating func lexHexNumber() -> Lexer.Result {
+    let tokStart = self
     // We assume we're starting from the 'x' in a '0x...' floating-point literal.
-    assert(self.peek(matches: "x"), "not a hex literal")
-    assert(self.previous == UInt8(ascii: "0"), "not a hex literal")
+    let zeroConsumed = self.advance(matching: "0")
+    let xConsumed = self.advance(matching: "x")
+    assert(zeroConsumed && xConsumed, "not a hex literal")
 
     // 0x[0-9a-fA-F][0-9a-fA-F_]*
-    _ = self.advance()
     if self.isAtEndOfFile {
+      // TODO: Diagnose invalid hex literal '0x'
       return Lexer.Result(.integerLiteral)
     }
     guard let peeked = self.peek(), Unicode.Scalar(peeked).isHexDigit else {
@@ -1062,11 +1091,7 @@ extension Lexer.Cursor {
 
     self.advance(while: { $0.isHexDigit || $0 == Unicode.Scalar("_") })
 
-    if self.isAtEndOfFile {
-      return Lexer.Result(.integerLiteral)
-    }
-
-    if self.peek(doesntMatch: ".", "p", "P") {
+    if self.isAtEndOfFile || self.peek(doesntMatch: ".", "p", "P") {
       let tmp = self
       if self.advance(if: { $0.isValidIdentifierContinuationCodePoint }) {
         let errorOffset = tokStart.distance(to: tmp)
@@ -1081,12 +1106,14 @@ extension Lexer.Cursor {
     }
 
     // (\.[0-9A-Fa-f][0-9A-Fa-f_]*)?
-    var ptrOnDot: Lexer.Cursor? = self
-    if self.advance(if: { $0 == Unicode.Scalar(".") }) {
+
+    // If a '.' was consumed, the cursor pointing to the '.', otherwise nil
+    var cursorToDot: Lexer.Cursor? = self
+    if self.advance(matching: ".") {
       // If the character after the '.' is not a digit, assume we have an int
       // literal followed by a dot expression.
       if let peeked = self.peek(), !Unicode.Scalar(peeked).isHexDigit {
-        self = ptrOnDot!
+        self = cursorToDot!
         return Lexer.Result(.integerLiteral)
       }
 
@@ -1095,7 +1122,7 @@ extension Lexer.Cursor {
       if self.isAtEndOfFile || self.peek(doesntMatch: "p", "P") {
         if let peeked = self.peek(at: 1), !Unicode.Scalar(peeked).isDigit {
           // e.g: 0xff.description
-          self = ptrOnDot!
+          self = cursorToDot!
           return Lexer.Result(.integerLiteral)
         }
         return Lexer.Result(
@@ -1104,23 +1131,23 @@ extension Lexer.Cursor {
         )
       }
     } else {
-      ptrOnDot = nil
+      cursorToDot = nil
     }
 
     // [pP][+-]?[0-9][0-9_]*
-    assert(self.isAtEndOfFile || self.peek(matches: "p", "P"), "not at a hex float exponent?!")
-    _ = self.advance()
+    let pConsumed = self.advance(matching: "p", "P")
+    assert(self.isAtEndOfFile || pConsumed, "not at a hex float exponent?!")
 
     var signedExponent = false
-    if self.advance(if: { $0 == Unicode.Scalar("+") || $0 == Unicode.Scalar("-") }) {
+    if self.advance(matching: "+", "-") {
       // Eat the sign.
       signedExponent = true
     }
 
     if let peeked = self.peek(), !Unicode.Scalar(peeked).isDigit {
-      if let ptrOnDot = ptrOnDot, let peeked = ptrOnDot.peek(at: 1), !Unicode.Scalar(peeked).isDigit && !signedExponent {
+      if let cursorToDot = cursorToDot, let peeked = cursorToDot.peek(at: 1), !Unicode.Scalar(peeked).isDigit && !signedExponent {
         // e.g: 0xff.fpValue, 0xff.fp
-        self = ptrOnDot
+        self = cursorToDot
         return Lexer.Result(.integerLiteral)
       }
       // Note: 0xff.fp+otherExpr can be valid expression. But we don't accept it.

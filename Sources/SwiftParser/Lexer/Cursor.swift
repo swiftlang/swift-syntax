@@ -151,6 +151,21 @@ extension Lexer.Cursor {
     return self.input[offset]
   }
 
+  /// Peeks back `offset` bytes.
+  /// `bufferBegin` is the start of the source file buffer to guard that we are
+  /// not dereferencing a pointer that points before the source buffer.
+  func peekBack(by offset: Int, bufferBegin: Lexer.Cursor) -> UInt8? {
+    guard let bufferBaseAddress = bufferBegin.input.baseAddress,
+      let selfBaseAddress = self.input.baseAddress
+    else {
+      return nil
+    }
+    guard bufferBaseAddress <= selfBaseAddress - offset else {
+      return nil
+    }
+    return selfBaseAddress.advanced(by: -offset).pointee
+  }
+
   // MARK: Positive matches
 
   /// Stamped out copy of `peek(at:matches:)` in case we are matching a single
@@ -375,10 +390,14 @@ extension Lexer.Cursor {
   }
 }
 
+// MARK: - Boundness of operators
+
 extension Lexer.Cursor {
-  func isLeftBound(bufferBegin: Lexer.Cursor) -> Bool {
+  /// `bufferBegin` is a cursor that points to the start of the source file that
+  /// is being lexed.
+  func isLeftBound(sourceBufferStart: Lexer.Cursor) -> Bool {
     // The first character in the file is not left-bound.
-    if self.input.baseAddress == bufferBegin.input.baseAddress {
+    if self.input.baseAddress == sourceBufferStart.input.baseAddress {
       return false
     }
 
@@ -389,17 +408,13 @@ extension Lexer.Cursor {
       0:  // whitespace / last char in file
       return false
     case UInt8(ascii: "/"):
-      if self.input.baseAddress! - 1 != bufferBegin.input.baseAddress
-        && self.input.baseAddress!.advanced(by: -2).pointee == UInt8(ascii: "*")
-      {
+      if self.peekBack(by: 2, bufferBegin: sourceBufferStart) == UInt8(ascii: "*") {
         return false  // End of a slash-star comment, so whitespace.
       } else {
         return true
       }
     case 0xA0:
-      if self.input.baseAddress! - 1 != bufferBegin.input.baseAddress
-        && self.input.baseAddress!.advanced(by: -2).pointee == 0xC2
-      {
+      if self.peekBack(by: 2, bufferBegin: sourceBufferStart) == 0xC2 {
         return false  // End of a Non-breaking whitespace (U+00A0).
       } else {
         return true
@@ -804,7 +819,7 @@ extension Lexer {
 }
 
 extension Lexer.Cursor {
-  mutating func nextToken(contentStart: Lexer.Cursor) -> Lexer.Lexeme {
+  mutating func nextToken(sourceBufferStart: Lexer.Cursor) -> Lexer.Lexeme {
     // Leading trivia.
     let leadingTriviaStart = self
     let newlineInLeadingTrivia: NewlinePresence
@@ -817,7 +832,7 @@ extension Lexer.Cursor {
     // Token text.
     let textStart = self
 
-    let result = self.lexImpl(contentStart: contentStart)
+    let result = self.lexImpl(sourceBufferStart: sourceBufferStart)
 
     // Trailing trivia.
     let trailingTriviaStart = self
@@ -851,7 +866,7 @@ extension Lexer.Cursor {
     )
   }
 
-  private mutating func lexImpl(contentStart: Lexer.Cursor) -> Lexer.Result {
+  private mutating func lexImpl(sourceBufferStart: Lexer.Cursor) -> Lexer.Result {
     if case .inStringLiteral(kind: let kind, delimiterLength: let delimiterLength) = state {
       return self.lexStringLiteralContents(
         start: self,
@@ -887,44 +902,44 @@ extension Lexer.Cursor {
       }
 
       // Try lex a regex literal.
-      if let token = self.tryLexRegexLiteral(tokenStart: start, contentStart: contentStart) {
+      if let token = self.tryLexRegexLiteral(tokenStart: start, sourceBufferStart: sourceBufferStart) {
         return Lexer.Result(token)
       }
       // Otherwise try lex a magic pound literal.
       return self.lexMagicPoundLiteral()
     case UInt8(ascii: "/"):
       // Try lex a regex literal.
-      if let token = self.tryLexRegexLiteral(tokenStart: start, contentStart: contentStart) {
+      if let token = self.tryLexRegexLiteral(tokenStart: start, sourceBufferStart: sourceBufferStart) {
         return Lexer.Result(token)
       }
 
       // Otherwise try lex a magic pound literal.
-      return self.lexOperatorIdentifier(tokenStart: start, contentStart: contentStart)
+      return self.lexOperatorIdentifier(tokenStart: start, sourceBufferStart: sourceBufferStart)
     case UInt8(ascii: "!"):
-      if start.isLeftBound(bufferBegin: contentStart) {
+      if start.isLeftBound(sourceBufferStart: sourceBufferStart) {
         return Lexer.Result(.exclamationMark)
       }
-      return self.lexOperatorIdentifier(tokenStart: start, contentStart: contentStart)
+      return self.lexOperatorIdentifier(tokenStart: start, sourceBufferStart: sourceBufferStart)
 
     case UInt8(ascii: "?"):
-      if start.isLeftBound(bufferBegin: contentStart) {
+      if start.isLeftBound(sourceBufferStart: sourceBufferStart) {
         return Lexer.Result(.postfixQuestionMark)
       }
-      return self.lexOperatorIdentifier(tokenStart: start, contentStart: contentStart)
+      return self.lexOperatorIdentifier(tokenStart: start, sourceBufferStart: sourceBufferStart)
 
     case UInt8(ascii: "<"):
       if self.peek(matches: "#") {
-        return self.tryLexEditorPlaceholder(tokenStart: start, contentStart: contentStart)
+        return self.tryLexEditorPlaceholder(tokenStart: start, sourceBufferStart: sourceBufferStart)
       }
-      return self.lexOperatorIdentifier(tokenStart: start, contentStart: contentStart)
+      return self.lexOperatorIdentifier(tokenStart: start, sourceBufferStart: sourceBufferStart)
     case UInt8(ascii: ">"):
-      return self.lexOperatorIdentifier(tokenStart: start, contentStart: contentStart)
+      return self.lexOperatorIdentifier(tokenStart: start, sourceBufferStart: sourceBufferStart)
 
     case UInt8(ascii: "="), UInt8(ascii: "-"), UInt8(ascii: "+"),
       UInt8(ascii: "*"), UInt8(ascii: "%"), UInt8(ascii: "&"),
       UInt8(ascii: "|"), UInt8(ascii: "^"), UInt8(ascii: "~"),
       UInt8(ascii: "."):
-      return self.lexOperatorIdentifier(tokenStart: start, contentStart: contentStart)
+      return self.lexOperatorIdentifier(tokenStart: start, sourceBufferStart: sourceBufferStart)
     case UInt8(ascii: "A"), UInt8(ascii: "B"), UInt8(ascii: "C"),
       UInt8(ascii: "D"), UInt8(ascii: "E"), UInt8(ascii: "F"),
       UInt8(ascii: "G"), UInt8(ascii: "H"), UInt8(ascii: "I"),
@@ -953,7 +968,7 @@ extension Lexer.Cursor {
       UInt8(ascii: "3"), UInt8(ascii: "4"), UInt8(ascii: "5"),
       UInt8(ascii: "6"), UInt8(ascii: "7"), UInt8(ascii: "8"),
       UInt8(ascii: "9"):
-      return self.lexNumber(tokenStart: start, contentStart: contentStart)
+      return self.lexNumber(tokenStart: start)
     case UInt8(ascii: #"'"#), UInt8(ascii: #"""#):
       return self.lexStringQuote()
 
@@ -968,7 +983,7 @@ extension Lexer.Cursor {
       }
 
       if tmp.advance(if: { Unicode.Scalar($0).isOperatorStartCodePoint }) {
-        return self.lexOperatorIdentifier(tokenStart: start, contentStart: contentStart)
+        return self.lexOperatorIdentifier(tokenStart: start, sourceBufferStart: sourceBufferStart)
       }
 
       let shouldTokenize = self.lexUnknown(start)
@@ -1359,10 +1374,7 @@ extension Lexer.Cursor {
   ///   floating_literal ::= [0-9][0-9_]*[eE][+-]?[0-9][0-9_]*
   ///   floating_literal ::= 0x[0-9A-Fa-f][0-9A-Fa-f_]*
   ///                          (\.[0-9A-Fa-f][0-9A-Fa-f_]*)?[pP][+-]?[0-9][0-9_]*
-  mutating func lexNumber(
-    tokenStart tokStart: Lexer.Cursor,
-    contentStart: Lexer.Cursor
-  ) -> Lexer.Result {
+  mutating func lexNumber(tokenStart tokStart: Lexer.Cursor) -> Lexer.Result {
     assert(
       (Unicode.Scalar(self.previous).isDigit || self.previous == UInt8(ascii: ".")),
       "Unexpected start"
@@ -1719,7 +1731,7 @@ extension Lexer.Cursor {
     return Lexer.Result(.backtick)
   }
 
-  mutating func lexOperatorIdentifier(tokenStart tokStart: Lexer.Cursor, contentStart: Lexer.Cursor) -> Lexer.Result {
+  mutating func lexOperatorIdentifier(tokenStart tokStart: Lexer.Cursor, sourceBufferStart: Lexer.Cursor) -> Lexer.Result {
     self = tokStart
     let didStart = self.advance(if: { $0.isOperatorStartCodePoint })
     assert(didStart, "unexpected operator start")
@@ -1760,7 +1772,7 @@ extension Lexer.Cursor {
     // Decide between the binary, prefix, and postfix cases.
     // It's binary if either both sides are bound or both sides are not bound.
     // Otherwise, it's postfix if left-bound and prefix if right-bound.
-    let leftBound = tokStart.isLeftBound(bufferBegin: contentStart)
+    let leftBound = tokStart.isLeftBound(sourceBufferStart: sourceBufferStart)
     let rightBound = self.isRightBound(isLeftBound: leftBound)
 
     // Match various reserved words.
@@ -1851,7 +1863,7 @@ extension Lexer.Cursor {
 // MARK: - Editor Placeholders
 
 extension Lexer.Cursor {
-  mutating func tryLexEditorPlaceholder(tokenStart tokStart: Lexer.Cursor, contentStart: Lexer.Cursor) -> Lexer.Result {
+  mutating func tryLexEditorPlaceholder(tokenStart tokStart: Lexer.Cursor, sourceBufferStart: Lexer.Cursor) -> Lexer.Result {
     assert(self.previous == UInt8(ascii: "<") && self.peek(matches: "#"))
     var ptr = self
     _ = ptr.advance()
@@ -1874,7 +1886,7 @@ extension Lexer.Cursor {
     }
 
     // Not a well-formed placeholder.
-    return self.lexOperatorIdentifier(tokenStart: tokStart, contentStart: contentStart)
+    return self.lexOperatorIdentifier(tokenStart: tokStart, sourceBufferStart: sourceBufferStart)
   }
 }
 
@@ -2095,9 +2107,9 @@ extension Lexer.Cursor {
 extension Lexer.Cursor {
   mutating func tryLexRegexLiteral(
     tokenStart tokStart: Lexer.Cursor,
-    contentStart: Lexer.Cursor
+    sourceBufferStart: Lexer.Cursor
   ) -> RawTokenKind? {
-    guard !tokStart.isLeftBound(bufferBegin: contentStart) else {
+    guard !tokStart.isLeftBound(sourceBufferStart: sourceBufferStart) else {
       return nil
     }
 

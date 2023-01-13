@@ -16,14 +16,14 @@ extension Lexer {
   /// A sequence of ``Lexer/Lexeme`` tokens starting from a ``Lexer/Cursor``
   /// that points into an input buffer.
   public struct LexemeSequence: IteratorProtocol, Sequence, CustomDebugStringConvertible {
-    fileprivate let start: Lexer.Cursor
+    fileprivate let sourceBufferStart: Lexer.Cursor
     fileprivate var cursor: Lexer.Cursor
     fileprivate var nextToken: Lexer.Lexeme
 
-    fileprivate init(start: Lexer.Cursor, cursor: Lexer.Cursor) {
-      self.start = start
+    fileprivate init(sourceBufferStart: Lexer.Cursor, cursor: Lexer.Cursor) {
+      self.sourceBufferStart = sourceBufferStart
       self.cursor = cursor
-      self.nextToken = self.cursor.nextToken(contentStart: self.start)
+      self.nextToken = self.cursor.nextToken(sourceBufferStart: self.sourceBufferStart)
     }
 
     public mutating func next() -> Lexer.Lexeme? {
@@ -43,7 +43,7 @@ extension Lexer {
             trailingTriviaLength: 0
           )
         } else {
-          self.nextToken = self.cursor.nextToken(contentStart: self.start)
+          self.nextToken = self.cursor.nextToken(sourceBufferStart: self.sourceBufferStart)
         }
       }
       return self.nextToken
@@ -61,7 +61,7 @@ extension Lexer {
       // again in the lexer.
       let backUpLength = self.nextToken.byteLength + bytes
       self.cursor.backUp(by: backUpLength)
-      self.nextToken = self.cursor.nextToken(contentStart: self.start)
+      self.nextToken = self.cursor.nextToken(sourceBufferStart: self.sourceBufferStart)
       return self.advance()
     }
 
@@ -88,6 +88,6 @@ extension Lexer {
     let startChar = startIndex == input.startIndex ? UInt8(ascii: "\0") : input[startIndex - 1]
     let start = Cursor(input: input, previous: UInt8(ascii: "\0"), state: .normal)
     let cursor = Cursor(input: UnsafeBufferPointer(rebasing: input[startIndex...]), previous: startChar, state: .normal)
-    return LexemeSequence(start: start, cursor: cursor)
+    return LexemeSequence(sourceBufferStart: start, cursor: cursor)
   }
 }

@@ -764,13 +764,13 @@ extension Lexer.Cursor {
       case nil:
         break
       case UInt8(ascii: "\n"):
-        if case .trailing = position {
+        if position == .trailing {
           break
         }
         hasNewline = true
         continue
       case UInt8(ascii: "\r"):
-        if case .trailing = position {
+        if position == .trailing {
           break
         }
         hasNewline = true
@@ -860,11 +860,10 @@ extension Lexer.Cursor {
 
         fallthrough
       default:
-        var tmp = start
-        if tmp.advance(if: { Unicode.Scalar($0).isValidIdentifierStartCodePoint }) {
+        if let peekedScalar = start.peekScalar(), peekedScalar.isValidIdentifierStartCodePoint {
           break
         }
-        if tmp.advance(if: { Unicode.Scalar($0).isOperatorStartCodePoint }) {
+        if let peekedScalar = start.peekScalar(), peekedScalar.isOperatorStartCodePoint {
           break
         }
 

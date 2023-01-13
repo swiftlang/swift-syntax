@@ -152,6 +152,18 @@ final class FunctionTests: XCTestCase {
         """
       ),
       #line: (
+        FunctionDecl(
+          """
+          public func foo(myOptionalValue: String?, myOtherOptionalValue: [String?])  {
+          }
+          """
+        ),
+        """
+        public func foo(myOptionalValue: String?, myOtherOptionalValue: [String?])  {
+        }
+        """
+      ),
+      #line: (
         FunctionDeclSyntax(
           modifiers: [DeclModifier(name: .keyword(.public)), DeclModifier(name: .keyword(.static))],
           identifier: Token.identifier("=="),

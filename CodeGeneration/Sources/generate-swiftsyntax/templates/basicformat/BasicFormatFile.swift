@@ -151,14 +151,19 @@ let basicFormatFile = SourceFile {
     }
 
     FunctionDecl("open func requiresTrailingSpace(_ token: TokenSyntax) -> Bool") {
-      IfStmt("""
-        // Format `[:]` as-is.
-        if token.tokenKind == .colon && token.parent?.kind == .dictionaryExpr {
+        SwitchStmtSyntax("""
+        switch (token.tokenKind, token.parent?.kind) {
+        case (.colon, .dictionaryExpr): // Ensures there is not space in `[:]`
           return false
+        case (.exclamationMark, .tryExpr), // Ensures there is a space in `try! foo`
+             (.postfixQuestionMark, .tryExpr): // Ensures there is a space in `try? foo`
+          return true
+        default:
+          break
         }
         """)
 
-      SwitchStmt("""
+      SwitchStmtSyntax("""
         switch (token.tokenKind, token.nextToken(viewMode: .sourceAccurate)?.tokenKind) {
         case (.keyword(.as), .exclamationMark), // Ensures there is not space in `as!`
              (.keyword(.as), .postfixQuestionMark), // Ensures there is not space in `as?`
@@ -171,7 +176,7 @@ let basicFormatFile = SourceFile {
              (.postfixQuestionMark, .rightParen), // Ensures there is not space in `myOptionalClosure?()`
              (.keyword(.try), .exclamationMark), // Ensures there is not space in `try!`
              (.keyword(.try), .postfixQuestionMark), // Ensures there is not space in `try?`
-             (.binaryOperator, .comma): // Ensures there is no space in @available(*, deprecated)
+             (.binaryOperator, .comma): // Ensures there is no space in `@available(*, deprecated)`
           return false
         default:
           break

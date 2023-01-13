@@ -55,8 +55,8 @@ let tokenKindFile = SourceFileSyntax {
     
     VariableDeclSyntax(
       leadingTrivia: .docBlockComment("/// The textual representation of this token kind.") + .newlines(1),
-      attributes: [.attribute(AttributeSyntax(attributeName: .identifier("_spi(Testing)")))],
-      modifiers: [DeclModifierSyntax(leadingTrivia: .newline, name: .public)],
+      attributes: [.attribute(AttributeSyntax(attributeName: TypeSyntax("_spi"), leftParen: .leftParen, argument: .token(.identifier("Testing")), rightParen: .rightParen))],
+      modifiers: [DeclModifierSyntax(leadingTrivia: .newline, name: .keyword(.public))],
       name: IdentifierPatternSyntax("text"),
       type: TypeAnnotationSyntax(type: TypeSyntax("String"))
     ) {
@@ -85,8 +85,8 @@ let tokenKindFile = SourceFileSyntax {
 
     VariableDeclSyntax(
       leadingTrivia: .docBlockComment("/// If this token kind always has the same syntax text, that syntax text, otherwise `nil`.") + .newlines(1),
-      attributes: [.attribute(AttributeSyntax(attributeName: .identifier("_spi(RawSyntax)")))],
-      modifiers: [DeclModifierSyntax(leadingTrivia: .newline, name: .public)],
+      attributes: [.attribute(AttributeSyntax(attributeName: TypeSyntax("_spi"), leftParen: .leftParen, argument: .token(.identifier("RawSyntax")), rightParen: .rightParen))],
+      modifiers: [DeclModifierSyntax(leadingTrivia: .newline, name: .keyword(.public))],
       name: IdentifierPatternSyntax("defaultText"),
       type: TypeAnnotationSyntax(type: TypeSyntax("SyntaxText?"))
     ) {
@@ -125,7 +125,7 @@ let tokenKindFile = SourceFileSyntax {
         .docBlockComment("/// `class`, `func`, or `import`."),
         .newlines(1)
       ],
-      modifiers: [DeclModifierSyntax(name: .public)],
+      modifiers: [DeclModifierSyntax(name: .keyword(.public))],
       name: IdentifierPatternSyntax("isLexerClassifiedKeyword"),
       type: TypeAnnotationSyntax(type: TypeSyntax("Bool"))
     ) {
@@ -158,7 +158,7 @@ let tokenKindFile = SourceFileSyntax {
         .docBlockComment("/// quote characters in a string literal."),
         .newlines(1)
       ],
-      modifiers: [DeclModifierSyntax(name: .public)],
+      modifiers: [DeclModifierSyntax(name: .keyword(.public))],
       name: IdentifierPatternSyntax("isPunctuation"),
       type: TypeAnnotationSyntax(type: TypeSyntax("Bool"))
     ) {
@@ -218,9 +218,9 @@ let tokenKindFile = SourceFileSyntax {
     }
     
     VariableDeclSyntax(
-      attributes: [.attribute(AttributeSyntax(attributeName: .identifier("_spi(RawSyntax)")))],
-      modifiers: [DeclModifierSyntax(leadingTrivia: .newline, name: .public)],
-      name: IdentifierPattern("defaultText"),
+      attributes: [.attribute(AttributeSyntax(attributeName: TypeSyntax("_spi"), leftParen: .leftParen, argument: .token(.identifier("RawSyntax")), rightParen: .rightParen))],
+      modifiers: [DeclModifierSyntax(leadingTrivia: .newline, name: .keyword(.public))],
+      name: IdentifierPatternSyntax("defaultText"),
       type: TypeAnnotationSyntax(type: OptionalTypeSyntax("SyntaxText?"))
     ) {
       SwitchStmtSyntax(expression: ExprSyntax("self")) {
@@ -247,7 +247,7 @@ let tokenKindFile = SourceFileSyntax {
     }
 
     VariableDeclSyntax(
-      modifiers: [DeclModifierSyntax(name: .public)],
+      modifiers: [DeclModifierSyntax(name: .keyword(.public))],
       name: IdentifierPatternSyntax("nameForDiagnostics"),
       type: TypeAnnotationSyntax(type: TypeSyntax("String"))
     ) {
@@ -280,11 +280,11 @@ let tokenKindFile = SourceFileSyntax {
         .docBlockComment("/// `class`, `func`, or `import`."),
         .newlines(1),
       ],
-      modifiers: [DeclModifierSyntax(name: .public)],
+      modifiers: [DeclModifierSyntax(name: .keyword(.public))],
       name: IdentifierPatternSyntax("isLexerClassifiedKeyword"),
       type: TypeAnnotationSyntax(type: TypeSyntax("Bool"))
     ) {
-      SwitchStmt(expression: ExprSyntax("self")) {
+      SwitchStmtSyntax(expression: ExprSyntax("self")) {
         SwitchCaseSyntax("case .eof:") {
           ReturnStmtSyntax("return false")
         }
@@ -313,7 +313,7 @@ let tokenKindFile = SourceFileSyntax {
         .docBlockComment("/// quote characters in a string literal."),
             .newlines(1)
       ],
-      modifiers: [DeclModifierSyntax(name: .public)],
+      modifiers: [DeclModifierSyntax(name: .keyword(.public))],
       name: IdentifierPatternSyntax("isPunctuation"),
       type: TypeAnnotationSyntax(type: TypeSyntax("Bool"))
     ) {
@@ -370,7 +370,7 @@ let tokenKindFile = SourceFileSyntax {
       @_spi(RawSyntax)
       public static func fromRaw(kind rawKind: RawTokenKind, text: String) -> TokenKind
       """) {
-      SwitchStmt(expression: Expr("rawKind")) {
+      SwitchStmtSyntax(expression: ExprSyntax("rawKind")) {
         SwitchCaseSyntax("case .eof:") {
           ReturnStmtSyntax("return .eof")
         }

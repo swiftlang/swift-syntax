@@ -15,8 +15,8 @@ import SwiftSyntaxBuilder
 import SyntaxSupport
 import Utils
 
-let keywordFile = SourceFile {
-  ExtensionDecl(
+let keywordFile = SourceFileSyntax {
+  ExtensionDeclSyntax(
     """
     \(raw: generateCopyrightHeader(for: "generate-swiftparser"))
 
@@ -29,22 +29,22 @@ let keywordFile = SourceFile {
     """
   )
 
-  EnumDecl("""
+  EnumDeclSyntax("""
     @frozen  // FIXME: Not actually stable, works around a miscompile
     public enum Keyword: StaticString
     """) {
     for keyword in KEYWORDS {
-      EnumCaseDecl("case \(raw: keyword.escapedName)")
+      EnumCaseDeclSyntax("case \(raw: keyword.escapedName)")
     }
 
-    InitializerDecl("@_spi(RawSyntax) public init?(_ text: SyntaxText)") {
-      SwitchStmt(expression: Expr("text.count")) {
+    InitializerDeclSyntax("@_spi(RawSyntax) public init?(_ text: SyntaxText)") {
+      SwitchStmtSyntax(expression: ExprSyntax("text.count")) {
         for (length, keywords) in keywordsByLength() {
           SwitchCaseSyntax("case \(raw: length):") {
-            SwitchStmt(expression: Expr("text")) {
+            SwitchStmtSyntax(expression: ExprSyntax("text")) {
               for keyword in keywords {
                 SwitchCaseSyntax(#"case "\#(raw: keyword.name)":"#) {
-                  Expr("self = .\(raw: keyword.escapedName)")
+                  ExprSyntax("self = .\(raw: keyword.escapedName)")
                 }
               }
               SwitchCaseSyntax("default: return nil")
@@ -55,17 +55,17 @@ let keywordFile = SourceFile {
       }
     }
 
-    VariableDecl(
+    VariableDeclSyntax(
       leadingTrivia: [
         .docLineComment("/// Whether the token kind is switched from being an identifier to being an identifier to a keyword in the lexer."),
         .newlines(1),
         .docLineComment("/// This is true for keywords that used to be considered non-contextual."),
         .newlines(1)
       ],
-      modifiers: [DeclModifier(name: .public)],
+      modifiers: [DeclModifierSyntax(name: .keyword(.public))],
       name: "isLexerClassified",
-      type: TypeAnnotation(type: Type("Bool"))) {
-      SwitchStmt(expression: Expr("self")) {
+      type: TypeAnnotationSyntax(type: TypeSyntax("Bool"))) {
+      SwitchStmtSyntax(expression: ExprSyntax("self")) {
         for keyword in KEYWORDS {
           if keyword.isLexerClassified {
             SwitchCaseSyntax("case .\(raw: keyword.escapedName): return true")
@@ -75,7 +75,7 @@ let keywordFile = SourceFile {
       }
     }
 
-    VariableDecl(
+    VariableDeclSyntax(
       """
       var defaultText: SyntaxText {
         return SyntaxText(self.rawValue)

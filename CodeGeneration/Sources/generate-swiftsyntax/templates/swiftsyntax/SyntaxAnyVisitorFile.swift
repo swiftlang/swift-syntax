@@ -15,8 +15,8 @@ import SwiftSyntaxBuilder
 import SyntaxSupport
 import Utils
 
-let syntaxAnyVisitorFile = SourceFile {
-  ClassDecl("""
+let syntaxAnyVisitorFile = SourceFileSyntax {
+  ClassDeclSyntax("""
     \(generateCopyrightHeader(for: "generate-swiftsyntax"))
     
     /// A `SyntaxVisitor` that can visit the nodes as generic `Syntax` values.
@@ -42,19 +42,19 @@ let syntaxAnyVisitorFile = SourceFile {
     ///       }
     open class SyntaxAnyVisitor: SyntaxVisitor
     """) {
-    FunctionDecl("""
+    FunctionDeclSyntax("""
       open func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
         return .visitChildren
       }
       """)
     
-    FunctionDecl("""
+    FunctionDeclSyntax("""
       /// The function called after visiting the node and its descendents.
       ///   - node: the node we just finished visiting.
       open func visitAnyPost(_ node: Syntax) {}
       """)
     
-    FunctionDecl("""
+    FunctionDeclSyntax("""
       // MARK: Override type specific visit methods
 
       override open func visit(_ token: TokenSyntax) -> SyntaxVisitorContinueKind {
@@ -62,20 +62,20 @@ let syntaxAnyVisitorFile = SourceFile {
       }
       """)
 
-    FunctionDecl("""
+    FunctionDeclSyntax("""
       override open func visitPost(_ node: TokenSyntax) {
         visitAnyPost(node._syntaxNode)
       }
       """)
 
     for node in SYNTAX_NODES where node.isVisitable {
-      FunctionDecl("""
+      FunctionDeclSyntax("""
         override open func visit(_ node: \(raw: node.name)) -> SyntaxVisitorContinueKind {
           return visitAny(node._syntaxNode)
         }
         """)
       
-      FunctionDecl("""
+      FunctionDeclSyntax("""
         override open func visitPost(_ node: \(raw: node.name)) {
           visitAnyPost(node._syntaxNode)
         }

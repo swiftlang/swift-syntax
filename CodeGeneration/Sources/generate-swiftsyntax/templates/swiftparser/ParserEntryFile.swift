@@ -15,8 +15,8 @@ import SwiftSyntaxBuilder
 import SyntaxSupport
 import Utils
 
-let parserEntryFile = SourceFile {
-  ImportDecl(
+let parserEntryFile = SourceFileSyntax {
+  ImportDeclSyntax(
     """
     \(raw: generateCopyrightHeader(for: "generate-swiftparser"))
     @_spi(RawSyntax) import SwiftSyntax
@@ -24,8 +24,8 @@ let parserEntryFile = SourceFile {
     """
   )
   
-  ExtensionDecl("extension Parser") {
-    FunctionDecl("""
+  ExtensionDeclSyntax("extension Parser") {
+    FunctionDeclSyntax("""
     /// Parse the source code in the given string as Swift source file. See
     /// `Parser.init` for more details.
     public static func parse(
@@ -37,7 +37,7 @@ let parserEntryFile = SourceFile {
     }
     """)
     
-    FunctionDecl("""
+    FunctionDeclSyntax("""
     /// Parse the source code in the given string as Swift source file. See
     /// `Parser.init` for more details.
     public static func parse(
@@ -51,7 +51,7 @@ let parserEntryFile = SourceFile {
     """)
   }
   
-  ProtocolDecl("""
+  ProtocolDeclSyntax("""
     public protocol SyntaxParseable: SyntaxProtocol {
       static func parse(from parser: inout Parser) -> Self
     }
@@ -61,7 +61,7 @@ let parserEntryFile = SourceFile {
 
   for node in SYNTAX_NODES {
     if let parserFunction = node.parserFunction {
-      ExtensionDecl("""
+      ExtensionDeclSyntax("""
         extension \(raw: node.name): SyntaxParseable {
           public static func parse(from parser: inout Parser) -> Self {
             let node = parser.\(raw: parserFunction)()
@@ -73,8 +73,8 @@ let parserEntryFile = SourceFile {
     }
   }
 
-  ExtensionDecl("fileprivate extension Parser") {
-    FunctionDecl("""
+  ExtensionDeclSyntax("fileprivate extension Parser") {
+    FunctionDeclSyntax("""
       mutating func parseRemainder<R: RawSyntaxNodeProtocol>(into: R) -> R {
         guard !into.raw.kind.isSyntaxCollection, let layout = into.raw.layoutView else {
           assertionFailure("Only support parsing of non-collection layout nodes")

@@ -53,14 +53,14 @@ public struct SyntaxBuildableType: Hashable {
   /// with fixed test), return an expression of the form ` = defaultValue`
   /// that can be used as the default value for a function parameter.
   /// Otherwise, return the empty string.
-  public var defaultInitialization: Expr? {
+  public var defaultInitialization: ExprSyntax? {
     if isOptional {
-      return Expr(NilLiteralExpr())
+      return ExprSyntax(NilLiteralExprSyntax())
     } else if isToken {
       if let token = token, token.text != nil {
-        return Expr(MemberAccessExpr(base: "TokenSyntax", name: lowercaseFirstWord(name: token.name).backticked))
+        return ExprSyntax(MemberAccessExprSyntax(base: "TokenSyntax", name: lowercaseFirstWord(name: token.name).backticked))
       } else if tokenKind == "EOFToken" {
-        return Expr(MemberAccessExpr(base: "TokenSyntax", name: "eof"))
+        return ExprSyntax(MemberAccessExprSyntax(base: "TokenSyntax", name: "eof"))
       }
     }
     return nil
@@ -86,8 +86,8 @@ public struct SyntaxBuildableType: Hashable {
   ///  - For base kinds: `<BaseKind>Buildable`, e.g. `ExprBuildable` (these are implemented as protocols)
   ///  - For token: `TokenSyntax` (tokens don't have a dedicated type in SwiftSyntaxBuilder)
   /// If the type is optional, the type is wrapped in an `OptionalType`.
-  public var buildable: Type {
-    optionalWrapped(type: SimpleTypeIdentifier(name: .identifier(syntaxBaseName)))
+  public var buildable: TypeSyntax {
+    optionalWrapped(type: SimpleTypeIdentifierSyntax(name: .identifier(syntaxBaseName)))
   }
 
   /// Whether parameters of this type should be initializable by a result builder.
@@ -120,7 +120,7 @@ public struct SyntaxBuildableType: Hashable {
   /// which will eventually get built from `SwiftSyntaxBuilder`. If the type
   /// is optional, this terminates with a `?`.
   public var syntax: TypeSyntax {
-    return optionalWrapped(type: SimpleTypeIdentifier(name: .identifier(syntaxBaseName)))
+    return optionalWrapped(type: SimpleTypeIdentifierSyntax(name: .identifier(syntaxBaseName)))
   }
 
   /// The type that is used for paramters in SwiftSyntaxBuilder that take this
@@ -134,7 +134,7 @@ public struct SyntaxBuildableType: Hashable {
   }
 
   public var parameterType: TypeSyntax {
-    return optionalWrapped(type: SimpleTypeIdentifier(name: .identifier(parameterBaseType)))
+    return optionalWrapped(type: SimpleTypeIdentifierSyntax(name: .identifier(parameterBaseType)))
   }
 
   /// Assuming that this is a collection type, the non-optional type of the result builder
@@ -161,25 +161,25 @@ public struct SyntaxBuildableType: Hashable {
   /// Wraps a type in an optional depending on whether `isOptional` is true.
   public func optionalWrapped<TypeNode: TypeSyntaxProtocol>(type: TypeNode) -> TypeSyntax {
     if isOptional {
-      return TypeSyntax(OptionalType(wrappedType: type))
+      return TypeSyntax(OptionalTypeSyntax(wrappedType: type))
     } else {
       return TypeSyntax(type)
     }
   }
 
   /// Wraps a type in an optional chaining depending on whether `isOptional` is true.
-  public func optionalChained(expr: ExprSyntaxProtocol) -> Expr {
+  public func optionalChained(expr: ExprSyntaxProtocol) -> ExprSyntax {
     if isOptional {
-      return Expr(OptionalChainingExpr(expression: expr))
+      return ExprSyntax(OptionalChainingExprSyntax(expression: expr))
     } else {
-      return Expr(expr)
+      return ExprSyntax(expr)
     }
   }
 
   /// Wraps a type in a force unwrap expression depending on whether `isOptional` is true.
   public func forceUnwrappedIfNeeded(expr: ExprSyntaxProtocol) -> ExprSyntax {
     if isOptional {
-      return ExprSyntax(ForcedValueExpr(expression: expr))
+      return ExprSyntax(ForcedValueExprSyntax(expression: expr))
     } else {
       return ExprSyntax(expr)
     }

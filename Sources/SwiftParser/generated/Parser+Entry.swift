@@ -153,6 +153,6 @@ fileprivate extension Parser {
 
     let unexpected = RawUnexpectedNodesSyntax(elements: remainingTokens, arena: self.arena)
     let withUnexpected = layout.replacingChild(at: layout.children.count - 1, with: unexpected.raw, arena: self.arena)
-    return R.init(withUnexpected)! 
+    return R.init(withUnexpected)!
   }
 }

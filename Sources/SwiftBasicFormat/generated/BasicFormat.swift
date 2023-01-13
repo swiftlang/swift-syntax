@@ -26,7 +26,7 @@ open class BasicFormat: SyntaxRewriter {
     Trivia(pieces: [.newlines(1), indentation]) 
   }
   
-  private var lastRewrittenToken: TokenSyntax? 
+  private var lastRewrittenToken: TokenSyntax?
   
   private var putNextTokenOnNewLine: Bool = false
   
@@ -48,13 +48,13 @@ open class BasicFormat: SyntaxRewriter {
   open override func visit(_ node: TokenSyntax) -> TokenSyntax {
     var leadingTrivia = node.leadingTrivia
     var trailingTrivia = node.trailingTrivia
-    if requiresLeadingSpace(node) && leadingTrivia.isEmpty && lastRewrittenToken? .trailingTrivia.isEmpty != false {
+    if requiresLeadingSpace(node) && leadingTrivia.isEmpty && lastRewrittenToken?.trailingTrivia.isEmpty != false {
       leadingTrivia += .space
     }
     if requiresTrailingSpace(node) && trailingTrivia.isEmpty {
       trailingTrivia += .space
     }
-    if let keyPath = getKeyPath(Syntax(node)), requiresLeadingNewline(keyPath), !(leadingTrivia.first? .isNewline ?? false) {
+    if let keyPath = getKeyPath(Syntax(node)), requiresLeadingNewline(keyPath), !(leadingTrivia.first?.isNewline ?? false) {
       leadingTrivia = .newline + leadingTrivia
     }
     leadingTrivia = leadingTrivia.indented(indentation: indentation)
@@ -136,7 +136,7 @@ open class BasicFormat: SyntaxRewriter {
   }
   
   open func requiresLeadingSpace(_ token: TokenSyntax) -> Bool {
-    switch (token.previousToken(viewMode: .sourceAccurate)? .tokenKind, token.tokenKind) {
+    switch (token.previousToken(viewMode: .sourceAccurate)?.tokenKind, token.tokenKind) {
     case (.leftParen, .binaryOperator):  // Ensures there is no space in @available(*, deprecated)
       return false
     default: 
@@ -163,7 +163,7 @@ open class BasicFormat: SyntaxRewriter {
   }
   
   open func requiresTrailingSpace(_ token: TokenSyntax) -> Bool {
-    switch (token.tokenKind, token.parent? .kind) {
+    switch (token.tokenKind, token.parent?.kind) {
     case (.colon, .dictionaryExpr): // Ensures there is not space in `[:]`
       return false
     case (.exclamationMark, .tryExpr), // Ensures there is a space in `try! foo`
@@ -172,7 +172,7 @@ open class BasicFormat: SyntaxRewriter {
     default: 
       break 
     }
-    switch (token.tokenKind, token.nextToken(viewMode: .sourceAccurate)? .tokenKind) {
+    switch (token.tokenKind, token.nextToken(viewMode: .sourceAccurate)?.tokenKind) {
     case (.keyword(.as), .exclamationMark), // Ensures there is not space in `as!`
      (.keyword(.as), .postfixQuestionMark), // Ensures there is not space in `as?`
      (.exclamationMark, .leftParen), // Ensures there is not space in `myOptionalClosure!()`

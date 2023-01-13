@@ -15,8 +15,8 @@ import SwiftSyntaxBuilder
 import SyntaxSupport
 import Utils
 
-let typeAttributeFile = SourceFile {
-  ImportDecl(
+let typeAttributeFile = SourceFileSyntax {
+  ImportDeclSyntax(
     """
     \(raw: generateCopyrightHeader(for: "generate-swiftparser"))
     @_spi(RawSyntax) import SwiftSyntax
@@ -24,36 +24,36 @@ let typeAttributeFile = SourceFile {
     """
   )
   
-  ExtensionDecl("extension Parser") {
-    EnumDecl("enum TypeAttribute: RawTokenKindSubset") {
+  ExtensionDeclSyntax("extension Parser") {
+    EnumDeclSyntax("enum TypeAttribute: RawTokenKindSubset") {
       for attribute in TYPE_ATTR_KINDS {
-        EnumCaseDecl("case \(raw: attribute.name)")
+        EnumCaseDeclSyntax("case \(raw: attribute.name)")
       }
 
-      InitializerDecl("init?(lexeme: Lexer.Lexeme)") {
-        SwitchStmt(switchKeyword: .switch, expression: Expr("lexeme")) {
+      InitializerDeclSyntax("init?(lexeme: Lexer.Lexeme)") {
+        SwitchStmtSyntax(switchKeyword: .keyword(.switch), expression: ExprSyntax("lexeme")) {
           for attribute in TYPE_ATTR_KINDS {
-            SwitchCase("case RawTokenKindMatch(.\(raw: attribute.name)):") {
-              SequenceExpr("self = .\(raw: attribute.swiftName)")
+            SwitchCaseSyntax("case RawTokenKindMatch(.\(raw: attribute.name)):") {
+              SequenceExprSyntax("self = .\(raw: attribute.swiftName)")
             }
           }
-          SwitchCase("default:") {
-            ReturnStmt("return nil")
+          SwitchCaseSyntax("default:") {
+            ReturnStmtSyntax("return nil")
           }
         }
       }
 
-      VariableDecl(
-        name: IdentifierPattern("rawTokenKind"),
-        type: TypeAnnotation(
+      VariableDeclSyntax(
+        name: IdentifierPatternSyntax("rawTokenKind"),
+        type: TypeAnnotationSyntax(
           colon: .colon,
-          type: SimpleTypeIdentifier("RawTokenKind")
+          type: SimpleTypeIdentifierSyntax("RawTokenKind")
         )
       ) {
-        SwitchStmt(switchKeyword: .switch, expression: Expr("self")) {
+        SwitchStmtSyntax(switchKeyword: .keyword(.switch), expression: ExprSyntax("self")) {
           for attribute in TYPE_ATTR_KINDS {
-            SwitchCase("case .\(raw: attribute.swiftName):") {
-              ReturnStmt("return .keyword(.\(raw: attribute.name))")
+            SwitchCaseSyntax("case .\(raw: attribute.swiftName):") {
+              ReturnStmtSyntax("return .keyword(.\(raw: attribute.name))")
             }
           }
         }

@@ -15,21 +15,21 @@ import SyntaxSupport
 import SwiftSyntaxBuilder
 import Utils
 
-let resultBuildersFile = SourceFile {
-  ImportDecl(
+let resultBuildersFile = SourceFileSyntax {
+  ImportDeclSyntax(
     leadingTrivia: .docLineComment(generateCopyrightHeader(for: "generate-swiftsyntaxbuilder")),
-    path: [AccessPathComponent(name: "SwiftSyntax")]
+    path: [AccessPathComponentSyntax(name: "SwiftSyntax")]
   )
   for node in SYNTAX_NODES where node.isSyntaxCollection {
     let type = SyntaxBuildableType(syntaxKind: node.syntaxKind)
     let elementType = node.collectionElementType
-    let expressionType: Type = (node.collectionElementChoices?.isEmpty ?? true) ? elementType.parameterType : Type(MemberTypeIdentifier("\(type.buildable).Element"))
+    let expressionType: TypeSyntax = (node.collectionElementChoices?.isEmpty ?? true) ? elementType.parameterType : TypeSyntax(MemberTypeIdentifierSyntax("\(type.buildable).Element"))
 
-    StructDecl("""
+    StructDeclSyntax("""
       @resultBuilder
       public struct \(type.syntaxKind)Builder
       """) {
-      TypealiasDecl(
+      TypealiasDeclSyntax(
           """
           /// The type of individual statement expressions in the transformed function,
           /// which defaults to Component if buildExpression() is not provided.
@@ -37,7 +37,7 @@ let resultBuildersFile = SourceFile {
           """
         )
 
-        TypealiasDecl(
+        TypealiasDeclSyntax(
           """
           /// The type of a partial result, which will be carried through all of the
           /// build methods.
@@ -45,7 +45,7 @@ let resultBuildersFile = SourceFile {
           """
         )
 
-        TypealiasDecl(
+        TypealiasDeclSyntax(
           """
           /// The type of the final returned result, which defaults to Component if
           /// buildFinalResult() is not provided.
@@ -53,7 +53,7 @@ let resultBuildersFile = SourceFile {
           """
         )
 
-        FunctionDecl(
+        FunctionDeclSyntax(
           """
           /// Required by every result builder to build combined results from
           /// statement blocks.
@@ -63,7 +63,7 @@ let resultBuildersFile = SourceFile {
           """
         )
 
-        FunctionDecl(
+        FunctionDeclSyntax(
           """
           /// If declared, provides contextual type information for statement
           /// expressions to translate them into partial results.
@@ -74,7 +74,7 @@ let resultBuildersFile = SourceFile {
         )
 
         for elementChoice in node.collectionElementChoices ?? [] {
-          FunctionDecl(
+          FunctionDeclSyntax(
             """
             /// If declared, provides contextual type information for statement
             /// expressions to translate them into partial results.
@@ -85,7 +85,7 @@ let resultBuildersFile = SourceFile {
           )
         }
         
-        FunctionDecl(
+        FunctionDeclSyntax(
           """
           /// Add all the elements of `expression` to this result builder, effectively flattening them.
           public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
@@ -94,7 +94,7 @@ let resultBuildersFile = SourceFile {
           """
         )
 
-        FunctionDecl(
+        FunctionDeclSyntax(
           """
           /// Enables support for `if` statements that do not have an `else`.
           public static func buildOptional(_ component: Self.Component?) -> Self.Component {
@@ -103,7 +103,7 @@ let resultBuildersFile = SourceFile {
           """
         )
 
-        FunctionDecl(
+        FunctionDeclSyntax(
           """
           /// With buildEither(second:), enables support for 'if-else' and 'switch'
           /// statements by folding conditional results into a single result.
@@ -113,7 +113,7 @@ let resultBuildersFile = SourceFile {
           """
         )
 
-        FunctionDecl(
+        FunctionDeclSyntax(
           """
           /// With buildEither(first:), enables support for 'if-else' and 'switch'
           /// statements by folding conditional results into a single result.
@@ -123,7 +123,7 @@ let resultBuildersFile = SourceFile {
           """
         )
 
-        FunctionDecl(
+        FunctionDeclSyntax(
           """
           /// Enables support for 'for..in' loops by combining the
           /// results of all iterations into a single result.
@@ -133,7 +133,7 @@ let resultBuildersFile = SourceFile {
           """
         )
 
-        FunctionDecl(
+        FunctionDeclSyntax(
           """
           /// If declared, this will be called on the partial result of an 'if'
           /// #available' block to allow the result builder to erase type
@@ -144,29 +144,29 @@ let resultBuildersFile = SourceFile {
           """
         )
 
-        FunctionDecl("""
+        FunctionDeclSyntax("""
           
           /// If declared, this will be called on the partial result from the outermost
           /// block statement to produce the final returned result.
           public static func buildFinalResult(_ component: Component) -> FinalResult
           """) {
           if elementType.isToken {
-            ReturnStmt("return .init(component)")
+            ReturnStmtSyntax("return .init(component)")
           } else if elementType.hasWithTrailingCommaTrait {
-            VariableDecl("let lastIndex = component.count - 1")
+            VariableDeclSyntax("let lastIndex = component.count - 1")
 
-            ReturnStmt("""
+            ReturnStmtSyntax("""
               return .init(component.enumerated().map { index, source in
                 return index < lastIndex ? source.ensuringTrailingComma() : source
               })
               """)
           } else {
-            ReturnStmt("return .init(component)")
+            ReturnStmtSyntax("return .init(component)")
           }
         }
       }
       
-    ExtensionDecl(
+    ExtensionDeclSyntax(
       """
       public extension \(raw: type.syntaxBaseName) {
         init(@\(raw: type.resultBuilderBaseName) itemsBuilder: () -> \(raw: type.syntaxBaseName)) {

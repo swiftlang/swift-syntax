@@ -16,10 +16,10 @@ import SyntaxSupport
 import Utils
 import SwiftBasicFormat
 
-let buildableCollectionNodesFile = SourceFile {
-  ImportDecl(
+let buildableCollectionNodesFile = SourceFileSyntax {
+  ImportDeclSyntax(
     leadingTrivia: .docLineComment(generateCopyrightHeader(for: "generate-swiftsyntaxbuilder")),
-    path: [AccessPathComponent(name: "SwiftSyntax")]
+    path: [AccessPathComponentSyntax(name: "SwiftSyntax")]
   )
 
   for node in SYNTAX_NODES where node.isSyntaxCollection {
@@ -27,18 +27,18 @@ let buildableCollectionNodesFile = SourceFile {
 
     let docComment = node.documentation.isEmpty ? "" : "/// \(node.documentation)\n"
     // Generate collection node struct
-    ExtensionDecl("\(docComment)extension \(node.type.syntaxBaseName): ExpressibleByArrayLiteral") {
+    ExtensionDeclSyntax("\(docComment)extension \(node.type.syntaxBaseName): ExpressibleByArrayLiteral") {
       // Generate initializers
       if elementType.isBaseType && node.collectionElementChoices?.isEmpty ?? true {
-        InitializerDecl(
+        InitializerDeclSyntax(
           """
-          public init(_ elements: \(ArrayType(elementType: elementType.parameterType))) {
+          public init(_ elements: \(ArrayTypeSyntax(elementType: elementType.parameterType))) {
             self = \(raw: node.type.syntaxBaseName)(elements.map { \(elementType.syntax)(fromProtocol: $0) })
           }
           """
         )
 
-        InitializerDecl(
+        InitializerDeclSyntax(
           """
           public init(arrayLiteral elements: \(elementType.parameterType)...) {
             self.init(elements)
@@ -46,7 +46,7 @@ let buildableCollectionNodesFile = SourceFile {
           """
         )
       } else {
-        InitializerDecl(
+        InitializerDeclSyntax(
           """
           public init(arrayLiteral elements: Element...) {
             self.init(elements)

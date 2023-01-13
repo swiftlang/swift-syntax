@@ -678,14 +678,16 @@ extension Lexer.Cursor {
       }
 
       // Try lex a regex literal.
-      if let token = self.tryLexRegexLiteral(tokenStart: start, sourceBufferStart: sourceBufferStart) {
+      if let token = start.tryLexRegexLiteral(sourceBufferStart: sourceBufferStart) {
+        self = start
         return Lexer.Result(token)
       }
       // Otherwise try lex a magic pound literal.
       return self.lexMagicPoundLiteral()
     case UInt8(ascii: "/"):
       // Try lex a regex literal.
-      if let token = self.tryLexRegexLiteral(tokenStart: start, sourceBufferStart: sourceBufferStart) {
+      if let token = start.tryLexRegexLiteral(sourceBufferStart: sourceBufferStart) {
+        self = start
         return Lexer.Result(token)
       }
 
@@ -2182,15 +2184,12 @@ extension Lexer.Cursor {
 }
 
 extension Lexer.Cursor {
-  mutating func tryLexRegexLiteral(
-    tokenStart tokStart: Lexer.Cursor,
-    sourceBufferStart: Lexer.Cursor
-  ) -> RawTokenKind? {
-    guard !tokStart.isLeftBound(sourceBufferStart: sourceBufferStart) else {
+  mutating func tryLexRegexLiteral(sourceBufferStart: Lexer.Cursor) -> RawTokenKind? {
+    guard !self.isLeftBound(sourceBufferStart: sourceBufferStart) else {
       return nil
     }
 
-    var tmp = tokStart
+    var tmp = self
     var poundCount = 0
     var parenCount = 0
 
@@ -2220,15 +2219,12 @@ extension Lexer.Cursor {
       switch tmp.peek() {
       case UInt8(ascii: " "), UInt8(ascii: "\t"):
         _ = tmp.advance()
-        continue
       case UInt8(ascii: "\n"), UInt8(ascii: "\r"):
         isMultiline = true
-      case nil:
         break LOOP
-      case .some:
-        break
+      default:
+        break LOOP
       }
-      break
     }
 
     var escaped = false
@@ -2297,7 +2293,7 @@ extension Lexer.Cursor {
         parenCount -= 1
 
       default:
-        continue DELIMITLOOP
+        break
       }
     }
 

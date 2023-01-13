@@ -49,8 +49,7 @@ final class DollarIdentifierTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'$' is not a valid identifier")
-        // TODO: Old parser expected error on line 3: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 9 - 10 = '`$`'
+        DiagnosticSpec(message: "'$' is not a valid identifier", fixIts: ["if this name is unavoidable, use backticks to escape it"])
       ]
     )
   }
@@ -118,7 +117,6 @@ final class DollarIdentifierTests: XCTestCase {
       $(1️⃣$: 24)
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 3 - 4 = '`$`'
         DiagnosticSpec(message: "'$' is not a valid identifier")
       ]
     )
@@ -171,7 +169,6 @@ final class DollarIdentifierTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: expected expression
         DiagnosticSpec(message: "unexpected code in function")
       ]
     )

@@ -110,11 +110,29 @@ final class IdentifiersTests: XCTestCase {
   func testIdentifiers8b() {
     AssertParse(
       """
-      struct Self {}
+      struct 1️⃣Self {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: keyword 'Self' cannot be used as an identifier here
-        // TODO: Old parser expected note on line 3: if this name is unavoidable, use backticks to escape it, Fix-It replacements: 8 - 12 = '`Self`'
+        DiagnosticSpec(message: "keyword 'Self' cannot be used as an identifier here")
+      ]
+    )
+  }
+
+  func testStructNamedLowercaseAny() {
+    AssertParse(
+      """
+      struct any {}
+      """
+    )
+  }
+
+  func testStructNamedCapitalAny() {
+    AssertParse(
+      """
+      struct 1️⃣Any {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "keyword 'Any' cannot be used as an identifier here")
       ]
     )
   }

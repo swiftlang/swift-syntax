@@ -12,21 +12,47 @@
 
 // This test file has been translated from swift/test/Parse/hashbang_library.swift
 
+import SwiftSyntax
+
 import XCTest
 
 final class HashbangLibraryTests: XCTestCase {
   func testHashbangLibrary1() {
+    // Check that we diagnose and skip the hashbang at the beginning of the file
+    // when compiling in library mode.
     AssertParse(
       """
-      #!/usr/bin/swift 
+      #!/usr/bin/swift
       class Foo {}
-      // Check that we diagnose and skip the hashbang at the beginning of the file
-      // when compiling in library mode.
       """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: hashbang line is allowed only in the main file
-      ]
+      substructure: Syntax(
+        SourceFileSyntax(
+          statements: CodeBlockItemListSyntax([
+            CodeBlockItemSyntax(
+              item: .decl(
+                DeclSyntax(
+                  ClassDeclSyntax(
+                    classKeyword: .keyword(
+                      .class,
+                      leadingTrivia: [
+                        .shebang("#!/usr/bin/swift"),
+                        .newlines(1),
+                      ],
+                      trailingTrivia: .space
+                    ),
+                    identifier: .identifier("Foo", trailingTrivia: .space),
+                    members: MemberDeclBlockSyntax(
+                      members: MemberDeclListSyntax([])
+                    )
+                  )
+                )
+              )
+            )
+          ]),
+          eofToken: .eof()
+        )
+      ),
+      substructureCheckTrivia: true
     )
   }
-
 }

@@ -443,6 +443,7 @@ func AssertParse(
   _ markedSource: String,
   substructure expectedSubstructure: Syntax? = nil,
   substructureAfterMarker: String = "START",
+  substructureCheckTrivia: Bool = false,
   diagnostics expectedDiagnostics: [DiagnosticSpec] = [],
   applyFixIts: [String]? = nil,
   fixedSource expectedFixedSource: String? = nil,
@@ -454,6 +455,7 @@ func AssertParse(
     { SourceFileSyntax.parse(from: &$0) },
     substructure: expectedSubstructure,
     substructureAfterMarker: substructureAfterMarker,
+    substructureCheckTrivia: substructureCheckTrivia,
     diagnostics: expectedDiagnostics,
     applyFixIts: applyFixIts,
     fixedSource: expectedFixedSource,
@@ -470,6 +472,7 @@ func AssertParse<S: SyntaxProtocol>(
   _ parse: (inout Parser) -> S,
   substructure expectedSubstructure: Syntax? = nil,
   substructureAfterMarker: String = "START",
+  substructureCheckTrivia: Bool = false,
   diagnostics expectedDiagnostics: [DiagnosticSpec] = [],
   applyFixIts: [String]? = nil,
   fixedSource expectedFixedSource: String? = nil,
@@ -484,6 +487,7 @@ func AssertParse<S: SyntaxProtocol>(
     },
     substructure: expectedSubstructure,
     substructureAfterMarker: substructureAfterMarker,
+    substructureCheckTrivia: substructureCheckTrivia,
     diagnostics: expectedDiagnostics,
     applyFixIts: applyFixIts,
     fixedSource: expectedFixedSource,
@@ -515,6 +519,7 @@ func AssertParse<S: SyntaxProtocol>(
   _ parse: (String) -> S,
   substructure expectedSubstructure: Syntax? = nil,
   substructureAfterMarker: String = "START",
+  substructureCheckTrivia: Bool = false,
   diagnostics expectedDiagnostics: [DiagnosticSpec] = [],
   applyFixIts: [String]? = nil,
   fixedSource expectedFixedSource: String? = nil,
@@ -545,7 +550,7 @@ func AssertParse<S: SyntaxProtocol>(
   if let expectedSubstructure = expectedSubstructure {
     let subtreeMatcher = SubtreeMatcher(Syntax(tree), markers: markerLocations)
     do {
-      try subtreeMatcher.assertSameStructure(afterMarker: substructureAfterMarker, Syntax(expectedSubstructure), file: file, line: line)
+      try subtreeMatcher.assertSameStructure(afterMarker: substructureAfterMarker, Syntax(expectedSubstructure), includeTrivia: substructureCheckTrivia, file: file, line: line)
     } catch {
       XCTFail("Matching for a subtree failed with error: \(error)", file: file, line: line)
     }

@@ -16,10 +16,10 @@ import SwiftSyntaxBuilder
 
 final class ClosureExprTests: XCTestCase {
   func testClosureExpr() {
-    let buildable = ClosureExpr(
-      signature: ClosureSignature(
+    let buildable = ClosureExprSyntax(
+      signature: ClosureSignatureSyntax(
         input: .simpleInput(
-          ClosureParamList {
+          ClosureParamListSyntax {
             ClosureParamSyntax(name: .identifier("area"))
           }
         )

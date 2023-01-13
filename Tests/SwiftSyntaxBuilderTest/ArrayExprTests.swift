@@ -16,16 +16,16 @@ import SwiftSyntaxBuilder
 
 final class ArrayExprTests: XCTestCase {
   func testPlainArrayExpr() {
-    let buildable = ArrayExpr {
+    let buildable = ArrayExprSyntax {
       for i in 1...4 {
-        ArrayElement(expression: IntegerLiteralExpr(i))
+        ArrayElementSyntax(expression: IntegerLiteralExprSyntax(i))
       }
     }
     AssertBuildResult(buildable, "[1, 2, 3, 4]")
   }
 
   func testMultilineArrayLiteral() {
-    let builder = ArrayExpr(
+    let builder = ArrayExprSyntax(
       """
       [
         1,

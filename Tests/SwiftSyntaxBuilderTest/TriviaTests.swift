@@ -16,19 +16,19 @@ import SwiftSyntaxBuilder
 
 final class TriviaTests: XCTestCase {
   func testLeadingTrivia() {
-    let decl = VariableDecl(
+    let decl = VariableDeclSyntax(
       leadingTrivia: .docLineComment("/// A doc comment") + .newline + .blockComment("/* An inline comment */") + .space,
-      modifiers: [DeclModifier(name: .keyword(.static))],
+      modifiers: [DeclModifierSyntax(name: .keyword(.static))],
       letOrVarKeyword: .var
     ) {
-      PatternBinding(
+      PatternBindingSyntax(
         // TODO: This is meant to be `Pattern`, but it's ambiguous with XCTest
         // Really we should just remove that method in favor of the regular
         // syntax `init`, though that will mean callers have to wrap in
         // `PatternSyntax`. Changing those inits to be generic would be
         // possible, but then still fails here for the same reason.
         pattern: PatternSyntax("test"),
-        typeAnnotation: TypeAnnotation(type: Type("String"))
+        typeAnnotation: TypeAnnotationSyntax(type: TypeSyntax("String"))
       )
     }
 
@@ -50,13 +50,13 @@ final class TriviaTests: XCTestCase {
   }
 
   func testAttachedTrivia() {
-    let testCases: [UInt: (VariableDecl, String)] = [
+    let testCases: [UInt: (VariableDeclSyntax, String)] = [
       #line: (
-        VariableDecl("let x: Int").withLeadingTrivia(.space),
+        VariableDeclSyntax("let x: Int").withLeadingTrivia(.space),
         " let x: Int"
       ),
       #line: (
-        VariableDecl("let x: Int").withTrailingTrivia(.space),
+        VariableDeclSyntax("let x: Int").withTrailingTrivia(.space),
         "let x: Int "
       ),
     ]
@@ -67,17 +67,17 @@ final class TriviaTests: XCTestCase {
   }
 
   func testAttachedListTrivia() {
-    let testCases: [UInt: (AttributeList, String)] = [
+    let testCases: [UInt: (AttributeListSyntax, String)] = [
       #line: (
-        AttributeList {
-          Attribute(attributeName: TypeSyntax("Test")).withLeadingTrivia(.space)
+        AttributeListSyntax {
+          AttributeSyntax(attributeName: TypeSyntax("Test")).withLeadingTrivia(.space)
         },
         " @Test"
       ),
       #line: (
-        AttributeList {
-          Attribute(attributeName: TypeSyntax("A")).withTrailingTrivia(.space)
-          Attribute(attributeName: TypeSyntax("B")).withTrailingTrivia(.space)
+        AttributeListSyntax {
+          AttributeSyntax(attributeName: TypeSyntax("A")).withTrailingTrivia(.space)
+          AttributeSyntax(attributeName: TypeSyntax("B")).withTrailingTrivia(.space)
         },
         "@A @B "
       ),

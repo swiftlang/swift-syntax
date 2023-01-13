@@ -16,11 +16,11 @@ import SwiftSyntaxBuilder
 
 final class BooleanLiteralTests: XCTestCase {
   func testBooleanLiteral() {
-    let testCases: [UInt: (BooleanLiteralExpr, String)] = [
-      #line: (BooleanLiteralExpr(booleanLiteral: .true), "true"),
-      #line: (BooleanLiteralExpr(booleanLiteral: .false), "false"),
-      #line: (BooleanLiteralExpr(true), "true"),
-      #line: (BooleanLiteralExpr(false), "false"),
+    let testCases: [UInt: (BooleanLiteralExprSyntax, String)] = [
+      #line: (BooleanLiteralExprSyntax(booleanLiteral: .true), "true"),
+      #line: (BooleanLiteralExprSyntax(booleanLiteral: .false), "false"),
+      #line: (BooleanLiteralExprSyntax(true), "true"),
+      #line: (BooleanLiteralExprSyntax(false), "false"),
       #line: (true, "true"),
       #line: (false, "false"),
     ]

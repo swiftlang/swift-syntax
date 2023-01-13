@@ -19,7 +19,7 @@ import SwiftSyntax
 public struct AccessPathBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = AccessPathComponent
+  public typealias Expression = AccessPathComponentSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -27,7 +27,7 @@ public struct AccessPathBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = AccessPath
+  public typealias FinalResult = AccessPathSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -89,8 +89,8 @@ public struct AccessPathBuilder {
   }
 }
 
-public extension AccessPath {
-  init(@AccessPathBuilder itemsBuilder: () -> AccessPath) {
+public extension AccessPathSyntax {
+  init(@AccessPathBuilder itemsBuilder: () -> AccessPathSyntax) {
     self = itemsBuilder()
   }
 }
@@ -99,7 +99,7 @@ public extension AccessPath {
 public struct AccessorListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = AccessorDecl
+  public typealias Expression = AccessorDeclSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -107,7 +107,7 @@ public struct AccessorListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = AccessorList
+  public typealias FinalResult = AccessorListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -169,8 +169,8 @@ public struct AccessorListBuilder {
   }
 }
 
-public extension AccessorList {
-  init(@AccessorListBuilder itemsBuilder: () -> AccessorList) {
+public extension AccessorListSyntax {
+  init(@AccessorListBuilder itemsBuilder: () -> AccessorListSyntax) {
     self = itemsBuilder()
   }
 }
@@ -179,7 +179,7 @@ public extension AccessorList {
 public struct ArrayElementListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ArrayElement
+  public typealias Expression = ArrayElementSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -187,7 +187,7 @@ public struct ArrayElementListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = ArrayElementList
+  public typealias FinalResult = ArrayElementListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -252,8 +252,8 @@ public struct ArrayElementListBuilder {
   }
 }
 
-public extension ArrayElementList {
-  init(@ArrayElementListBuilder itemsBuilder: () -> ArrayElementList) {
+public extension ArrayElementListSyntax {
+  init(@ArrayElementListBuilder itemsBuilder: () -> ArrayElementListSyntax) {
     self = itemsBuilder()
   }
 }
@@ -262,7 +262,7 @@ public extension ArrayElementList {
 public struct AttributeListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = AttributeList.Element
+  public typealias Expression = AttributeListSyntax.Element
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -270,7 +270,7 @@ public struct AttributeListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = AttributeList
+  public typealias FinalResult = AttributeListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -288,13 +288,13 @@ public struct AttributeListBuilder {
   
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
-  public static func buildExpression(_ expression: Attribute) -> Self.Component {
+  public static func buildExpression(_ expression: AttributeSyntax) -> Self.Component {
     return buildExpression(.init(expression))
   }
   
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
-  public static func buildExpression(_ expression: IfConfigDecl) -> Self.Component {
+  public static func buildExpression(_ expression: IfConfigDeclSyntax) -> Self.Component {
     return buildExpression(.init(expression))
   }
   
@@ -344,8 +344,8 @@ public struct AttributeListBuilder {
   }
 }
 
-public extension AttributeList {
-  init(@AttributeListBuilder itemsBuilder: () -> AttributeList) {
+public extension AttributeListSyntax {
+  init(@AttributeListBuilder itemsBuilder: () -> AttributeListSyntax) {
     self = itemsBuilder()
   }
 }
@@ -354,7 +354,7 @@ public extension AttributeList {
 public struct AvailabilitySpecListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = AvailabilityArgument
+  public typealias Expression = AvailabilityArgumentSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -362,7 +362,7 @@ public struct AvailabilitySpecListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = AvailabilitySpecList
+  public typealias FinalResult = AvailabilitySpecListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -424,8 +424,8 @@ public struct AvailabilitySpecListBuilder {
   }
 }
 
-public extension AvailabilitySpecList {
-  init(@AvailabilitySpecListBuilder itemsBuilder: () -> AvailabilitySpecList) {
+public extension AvailabilitySpecListSyntax {
+  init(@AvailabilitySpecListBuilder itemsBuilder: () -> AvailabilitySpecListSyntax) {
     self = itemsBuilder()
   }
 }
@@ -434,7 +434,7 @@ public extension AvailabilitySpecList {
 public struct AvailabilityVersionRestrictionListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = AvailabilityVersionRestrictionListEntry
+  public typealias Expression = AvailabilityVersionRestrictionListEntrySyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -442,7 +442,7 @@ public struct AvailabilityVersionRestrictionListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = AvailabilityVersionRestrictionList
+  public typealias FinalResult = AvailabilityVersionRestrictionListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -504,8 +504,8 @@ public struct AvailabilityVersionRestrictionListBuilder {
   }
 }
 
-public extension AvailabilityVersionRestrictionList {
-  init(@AvailabilityVersionRestrictionListBuilder itemsBuilder: () -> AvailabilityVersionRestrictionList) {
+public extension AvailabilityVersionRestrictionListSyntax {
+  init(@AvailabilityVersionRestrictionListBuilder itemsBuilder: () -> AvailabilityVersionRestrictionListSyntax) {
     self = itemsBuilder()
   }
 }
@@ -514,7 +514,7 @@ public extension AvailabilityVersionRestrictionList {
 public struct CaseItemListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = CaseItem
+  public typealias Expression = CaseItemSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -522,7 +522,7 @@ public struct CaseItemListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = CaseItemList
+  public typealias FinalResult = CaseItemListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -587,8 +587,8 @@ public struct CaseItemListBuilder {
   }
 }
 
-public extension CaseItemList {
-  init(@CaseItemListBuilder itemsBuilder: () -> CaseItemList) {
+public extension CaseItemListSyntax {
+  init(@CaseItemListBuilder itemsBuilder: () -> CaseItemListSyntax) {
     self = itemsBuilder()
   }
 }
@@ -597,7 +597,7 @@ public extension CaseItemList {
 public struct CatchClauseListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = CatchClause
+  public typealias Expression = CatchClauseSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -605,7 +605,7 @@ public struct CatchClauseListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = CatchClauseList
+  public typealias FinalResult = CatchClauseListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -667,8 +667,8 @@ public struct CatchClauseListBuilder {
   }
 }
 
-public extension CatchClauseList {
-  init(@CatchClauseListBuilder itemsBuilder: () -> CatchClauseList) {
+public extension CatchClauseListSyntax {
+  init(@CatchClauseListBuilder itemsBuilder: () -> CatchClauseListSyntax) {
     self = itemsBuilder()
   }
 }
@@ -677,7 +677,7 @@ public extension CatchClauseList {
 public struct CatchItemListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = CatchItem
+  public typealias Expression = CatchItemSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -685,7 +685,7 @@ public struct CatchItemListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = CatchItemList
+  public typealias FinalResult = CatchItemListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -750,8 +750,8 @@ public struct CatchItemListBuilder {
   }
 }
 
-public extension CatchItemList {
-  init(@CatchItemListBuilder itemsBuilder: () -> CatchItemList) {
+public extension CatchItemListSyntax {
+  init(@CatchItemListBuilder itemsBuilder: () -> CatchItemListSyntax) {
     self = itemsBuilder()
   }
 }
@@ -760,7 +760,7 @@ public extension CatchItemList {
 public struct ClosureCaptureItemListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ClosureCaptureItem
+  public typealias Expression = ClosureCaptureItemSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -768,7 +768,7 @@ public struct ClosureCaptureItemListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = ClosureCaptureItemList
+  public typealias FinalResult = ClosureCaptureItemListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -833,8 +833,8 @@ public struct ClosureCaptureItemListBuilder {
   }
 }
 
-public extension ClosureCaptureItemList {
-  init(@ClosureCaptureItemListBuilder itemsBuilder: () -> ClosureCaptureItemList) {
+public extension ClosureCaptureItemListSyntax {
+  init(@ClosureCaptureItemListBuilder itemsBuilder: () -> ClosureCaptureItemListSyntax) {
     self = itemsBuilder()
   }
 }
@@ -843,7 +843,7 @@ public extension ClosureCaptureItemList {
 public struct ClosureParamListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ClosureParam
+  public typealias Expression = ClosureParamSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -851,7 +851,7 @@ public struct ClosureParamListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = ClosureParamList
+  public typealias FinalResult = ClosureParamListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -916,8 +916,8 @@ public struct ClosureParamListBuilder {
   }
 }
 
-public extension ClosureParamList {
-  init(@ClosureParamListBuilder itemsBuilder: () -> ClosureParamList) {
+public extension ClosureParamListSyntax {
+  init(@ClosureParamListBuilder itemsBuilder: () -> ClosureParamListSyntax) {
     self = itemsBuilder()
   }
 }
@@ -926,7 +926,7 @@ public extension ClosureParamList {
 public struct CodeBlockItemListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = CodeBlockItem
+  public typealias Expression = CodeBlockItemSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -934,7 +934,7 @@ public struct CodeBlockItemListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = CodeBlockItemList
+  public typealias FinalResult = CodeBlockItemListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -996,8 +996,8 @@ public struct CodeBlockItemListBuilder {
   }
 }
 
-public extension CodeBlockItemList {
-  init(@CodeBlockItemListBuilder itemsBuilder: () -> CodeBlockItemList) {
+public extension CodeBlockItemListSyntax {
+  init(@CodeBlockItemListBuilder itemsBuilder: () -> CodeBlockItemListSyntax) {
     self = itemsBuilder()
   }
 }
@@ -1006,7 +1006,7 @@ public extension CodeBlockItemList {
 public struct CompositionTypeElementListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = CompositionTypeElement
+  public typealias Expression = CompositionTypeElementSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -1014,7 +1014,7 @@ public struct CompositionTypeElementListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = CompositionTypeElementList
+  public typealias FinalResult = CompositionTypeElementListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -1076,8 +1076,8 @@ public struct CompositionTypeElementListBuilder {
   }
 }
 
-public extension CompositionTypeElementList {
-  init(@CompositionTypeElementListBuilder itemsBuilder: () -> CompositionTypeElementList) {
+public extension CompositionTypeElementListSyntax {
+  init(@CompositionTypeElementListBuilder itemsBuilder: () -> CompositionTypeElementListSyntax) {
     self = itemsBuilder()
   }
 }
@@ -1086,7 +1086,7 @@ public extension CompositionTypeElementList {
 public struct ConditionElementListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ConditionElement
+  public typealias Expression = ConditionElementSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -1094,7 +1094,7 @@ public struct ConditionElementListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = ConditionElementList
+  public typealias FinalResult = ConditionElementListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -1159,8 +1159,8 @@ public struct ConditionElementListBuilder {
   }
 }
 
-public extension ConditionElementList {
-  init(@ConditionElementListBuilder itemsBuilder: () -> ConditionElementList) {
+public extension ConditionElementListSyntax {
+  init(@ConditionElementListBuilder itemsBuilder: () -> ConditionElementListSyntax) {
     self = itemsBuilder()
   }
 }
@@ -1169,7 +1169,7 @@ public extension ConditionElementList {
 public struct DeclNameArgumentListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = DeclNameArgument
+  public typealias Expression = DeclNameArgumentSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -1177,7 +1177,7 @@ public struct DeclNameArgumentListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = DeclNameArgumentList
+  public typealias FinalResult = DeclNameArgumentListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -1239,8 +1239,8 @@ public struct DeclNameArgumentListBuilder {
   }
 }
 
-public extension DeclNameArgumentList {
-  init(@DeclNameArgumentListBuilder itemsBuilder: () -> DeclNameArgumentList) {
+public extension DeclNameArgumentListSyntax {
+  init(@DeclNameArgumentListBuilder itemsBuilder: () -> DeclNameArgumentListSyntax) {
     self = itemsBuilder()
   }
 }
@@ -1249,7 +1249,7 @@ public extension DeclNameArgumentList {
 public struct DesignatedTypeListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = DesignatedTypeElement
+  public typealias Expression = DesignatedTypeElementSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -1257,7 +1257,7 @@ public struct DesignatedTypeListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = DesignatedTypeList
+  public typealias FinalResult = DesignatedTypeListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -1319,8 +1319,8 @@ public struct DesignatedTypeListBuilder {
   }
 }
 
-public extension DesignatedTypeList {
-  init(@DesignatedTypeListBuilder itemsBuilder: () -> DesignatedTypeList) {
+public extension DesignatedTypeListSyntax {
+  init(@DesignatedTypeListBuilder itemsBuilder: () -> DesignatedTypeListSyntax) {
     self = itemsBuilder()
   }
 }
@@ -1329,7 +1329,7 @@ public extension DesignatedTypeList {
 public struct DictionaryElementListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = DictionaryElement
+  public typealias Expression = DictionaryElementSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -1337,7 +1337,7 @@ public struct DictionaryElementListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = DictionaryElementList
+  public typealias FinalResult = DictionaryElementListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -1402,8 +1402,8 @@ public struct DictionaryElementListBuilder {
   }
 }
 
-public extension DictionaryElementList {
-  init(@DictionaryElementListBuilder itemsBuilder: () -> DictionaryElementList) {
+public extension DictionaryElementListSyntax {
+  init(@DictionaryElementListBuilder itemsBuilder: () -> DictionaryElementListSyntax) {
     self = itemsBuilder()
   }
 }
@@ -1412,7 +1412,7 @@ public extension DictionaryElementList {
 public struct DifferentiabilityParamListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = DifferentiabilityParam
+  public typealias Expression = DifferentiabilityParamSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -1420,7 +1420,7 @@ public struct DifferentiabilityParamListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = DifferentiabilityParamList
+  public typealias FinalResult = DifferentiabilityParamListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -1485,8 +1485,8 @@ public struct DifferentiabilityParamListBuilder {
   }
 }
 
-public extension DifferentiabilityParamList {
-  init(@DifferentiabilityParamListBuilder itemsBuilder: () -> DifferentiabilityParamList) {
+public extension DifferentiabilityParamListSyntax {
+  init(@DifferentiabilityParamListBuilder itemsBuilder: () -> DifferentiabilityParamListSyntax) {
     self = itemsBuilder()
   }
 }
@@ -1495,7 +1495,7 @@ public extension DifferentiabilityParamList {
 public struct DocumentationAttributeArgumentsBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = DocumentationAttributeArgument
+  public typealias Expression = DocumentationAttributeArgumentSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -1503,7 +1503,7 @@ public struct DocumentationAttributeArgumentsBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = DocumentationAttributeArguments
+  public typealias FinalResult = DocumentationAttributeArgumentsSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -1568,8 +1568,8 @@ public struct DocumentationAttributeArgumentsBuilder {
   }
 }
 
-public extension DocumentationAttributeArguments {
-  init(@DocumentationAttributeArgumentsBuilder itemsBuilder: () -> DocumentationAttributeArguments) {
+public extension DocumentationAttributeArgumentsSyntax {
+  init(@DocumentationAttributeArgumentsBuilder itemsBuilder: () -> DocumentationAttributeArgumentsSyntax) {
     self = itemsBuilder()
   }
 }
@@ -1578,7 +1578,7 @@ public extension DocumentationAttributeArguments {
 public struct EffectsArgumentsBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = Token
+  public typealias Expression = TokenSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -1586,7 +1586,7 @@ public struct EffectsArgumentsBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = EffectsArguments
+  public typealias FinalResult = EffectsArgumentsSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -1648,8 +1648,8 @@ public struct EffectsArgumentsBuilder {
   }
 }
 
-public extension EffectsArguments {
-  init(@EffectsArgumentsBuilder itemsBuilder: () -> EffectsArguments) {
+public extension EffectsArgumentsSyntax {
+  init(@EffectsArgumentsBuilder itemsBuilder: () -> EffectsArgumentsSyntax) {
     self = itemsBuilder()
   }
 }
@@ -1658,7 +1658,7 @@ public extension EffectsArguments {
 public struct EnumCaseElementListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = EnumCaseElement
+  public typealias Expression = EnumCaseElementSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -1666,7 +1666,7 @@ public struct EnumCaseElementListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = EnumCaseElementList
+  public typealias FinalResult = EnumCaseElementListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -1731,8 +1731,8 @@ public struct EnumCaseElementListBuilder {
   }
 }
 
-public extension EnumCaseElementList {
-  init(@EnumCaseElementListBuilder itemsBuilder: () -> EnumCaseElementList) {
+public extension EnumCaseElementListSyntax {
+  init(@EnumCaseElementListBuilder itemsBuilder: () -> EnumCaseElementListSyntax) {
     self = itemsBuilder()
   }
 }
@@ -1749,7 +1749,7 @@ public struct ExprListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = ExprList
+  public typealias FinalResult = ExprListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -1811,8 +1811,8 @@ public struct ExprListBuilder {
   }
 }
 
-public extension ExprList {
-  init(@ExprListBuilder itemsBuilder: () -> ExprList) {
+public extension ExprListSyntax {
+  init(@ExprListBuilder itemsBuilder: () -> ExprListSyntax) {
     self = itemsBuilder()
   }
 }
@@ -1821,7 +1821,7 @@ public extension ExprList {
 public struct FunctionParameterListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = FunctionParameter
+  public typealias Expression = FunctionParameterSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -1829,7 +1829,7 @@ public struct FunctionParameterListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = FunctionParameterList
+  public typealias FinalResult = FunctionParameterListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -1894,8 +1894,8 @@ public struct FunctionParameterListBuilder {
   }
 }
 
-public extension FunctionParameterList {
-  init(@FunctionParameterListBuilder itemsBuilder: () -> FunctionParameterList) {
+public extension FunctionParameterListSyntax {
+  init(@FunctionParameterListBuilder itemsBuilder: () -> FunctionParameterListSyntax) {
     self = itemsBuilder()
   }
 }
@@ -1904,7 +1904,7 @@ public extension FunctionParameterList {
 public struct GenericArgumentListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = GenericArgument
+  public typealias Expression = GenericArgumentSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -1912,7 +1912,7 @@ public struct GenericArgumentListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = GenericArgumentList
+  public typealias FinalResult = GenericArgumentListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -1977,8 +1977,8 @@ public struct GenericArgumentListBuilder {
   }
 }
 
-public extension GenericArgumentList {
-  init(@GenericArgumentListBuilder itemsBuilder: () -> GenericArgumentList) {
+public extension GenericArgumentListSyntax {
+  init(@GenericArgumentListBuilder itemsBuilder: () -> GenericArgumentListSyntax) {
     self = itemsBuilder()
   }
 }
@@ -1987,7 +1987,7 @@ public extension GenericArgumentList {
 public struct GenericParameterListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = GenericParameter
+  public typealias Expression = GenericParameterSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -1995,7 +1995,7 @@ public struct GenericParameterListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = GenericParameterList
+  public typealias FinalResult = GenericParameterListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -2060,8 +2060,8 @@ public struct GenericParameterListBuilder {
   }
 }
 
-public extension GenericParameterList {
-  init(@GenericParameterListBuilder itemsBuilder: () -> GenericParameterList) {
+public extension GenericParameterListSyntax {
+  init(@GenericParameterListBuilder itemsBuilder: () -> GenericParameterListSyntax) {
     self = itemsBuilder()
   }
 }
@@ -2070,7 +2070,7 @@ public extension GenericParameterList {
 public struct GenericRequirementListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = GenericRequirement
+  public typealias Expression = GenericRequirementSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -2078,7 +2078,7 @@ public struct GenericRequirementListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = GenericRequirementList
+  public typealias FinalResult = GenericRequirementListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -2143,8 +2143,8 @@ public struct GenericRequirementListBuilder {
   }
 }
 
-public extension GenericRequirementList {
-  init(@GenericRequirementListBuilder itemsBuilder: () -> GenericRequirementList) {
+public extension GenericRequirementListSyntax {
+  init(@GenericRequirementListBuilder itemsBuilder: () -> GenericRequirementListSyntax) {
     self = itemsBuilder()
   }
 }
@@ -2153,7 +2153,7 @@ public extension GenericRequirementList {
 public struct IfConfigClauseListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = IfConfigClause
+  public typealias Expression = IfConfigClauseSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -2161,7 +2161,7 @@ public struct IfConfigClauseListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = IfConfigClauseList
+  public typealias FinalResult = IfConfigClauseListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -2223,8 +2223,8 @@ public struct IfConfigClauseListBuilder {
   }
 }
 
-public extension IfConfigClauseList {
-  init(@IfConfigClauseListBuilder itemsBuilder: () -> IfConfigClauseList) {
+public extension IfConfigClauseListSyntax {
+  init(@IfConfigClauseListBuilder itemsBuilder: () -> IfConfigClauseListSyntax) {
     self = itemsBuilder()
   }
 }
@@ -2233,7 +2233,7 @@ public extension IfConfigClauseList {
 public struct InheritedTypeListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = InheritedType
+  public typealias Expression = InheritedTypeSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -2241,7 +2241,7 @@ public struct InheritedTypeListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = InheritedTypeList
+  public typealias FinalResult = InheritedTypeListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -2306,8 +2306,8 @@ public struct InheritedTypeListBuilder {
   }
 }
 
-public extension InheritedTypeList {
-  init(@InheritedTypeListBuilder itemsBuilder: () -> InheritedTypeList) {
+public extension InheritedTypeListSyntax {
+  init(@InheritedTypeListBuilder itemsBuilder: () -> InheritedTypeListSyntax) {
     self = itemsBuilder()
   }
 }
@@ -2316,7 +2316,7 @@ public extension InheritedTypeList {
 public struct KeyPathComponentListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = KeyPathComponent
+  public typealias Expression = KeyPathComponentSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -2324,7 +2324,7 @@ public struct KeyPathComponentListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = KeyPathComponentList
+  public typealias FinalResult = KeyPathComponentListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -2386,8 +2386,8 @@ public struct KeyPathComponentListBuilder {
   }
 }
 
-public extension KeyPathComponentList {
-  init(@KeyPathComponentListBuilder itemsBuilder: () -> KeyPathComponentList) {
+public extension KeyPathComponentListSyntax {
+  init(@KeyPathComponentListBuilder itemsBuilder: () -> KeyPathComponentListSyntax) {
     self = itemsBuilder()
   }
 }
@@ -2396,7 +2396,7 @@ public extension KeyPathComponentList {
 public struct MemberDeclListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = MemberDeclListItem
+  public typealias Expression = MemberDeclListItemSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -2404,7 +2404,7 @@ public struct MemberDeclListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = MemberDeclList
+  public typealias FinalResult = MemberDeclListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -2466,8 +2466,8 @@ public struct MemberDeclListBuilder {
   }
 }
 
-public extension MemberDeclList {
-  init(@MemberDeclListBuilder itemsBuilder: () -> MemberDeclList) {
+public extension MemberDeclListSyntax {
+  init(@MemberDeclListBuilder itemsBuilder: () -> MemberDeclListSyntax) {
     self = itemsBuilder()
   }
 }
@@ -2476,7 +2476,7 @@ public extension MemberDeclList {
 public struct ModifierListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = DeclModifier
+  public typealias Expression = DeclModifierSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -2484,7 +2484,7 @@ public struct ModifierListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = ModifierList
+  public typealias FinalResult = ModifierListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -2546,8 +2546,8 @@ public struct ModifierListBuilder {
   }
 }
 
-public extension ModifierList {
-  init(@ModifierListBuilder itemsBuilder: () -> ModifierList) {
+public extension ModifierListSyntax {
+  init(@ModifierListBuilder itemsBuilder: () -> ModifierListSyntax) {
     self = itemsBuilder()
   }
 }
@@ -2556,7 +2556,7 @@ public extension ModifierList {
 public struct MultipleTrailingClosureElementListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = MultipleTrailingClosureElement
+  public typealias Expression = MultipleTrailingClosureElementSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -2564,7 +2564,7 @@ public struct MultipleTrailingClosureElementListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = MultipleTrailingClosureElementList
+  public typealias FinalResult = MultipleTrailingClosureElementListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -2626,8 +2626,8 @@ public struct MultipleTrailingClosureElementListBuilder {
   }
 }
 
-public extension MultipleTrailingClosureElementList {
-  init(@MultipleTrailingClosureElementListBuilder itemsBuilder: () -> MultipleTrailingClosureElementList) {
+public extension MultipleTrailingClosureElementListSyntax {
+  init(@MultipleTrailingClosureElementListBuilder itemsBuilder: () -> MultipleTrailingClosureElementListSyntax) {
     self = itemsBuilder()
   }
 }
@@ -2636,7 +2636,7 @@ public extension MultipleTrailingClosureElementList {
 public struct ObjCSelectorBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ObjCSelectorPiece
+  public typealias Expression = ObjCSelectorPieceSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -2644,7 +2644,7 @@ public struct ObjCSelectorBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = ObjCSelector
+  public typealias FinalResult = ObjCSelectorSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -2706,8 +2706,8 @@ public struct ObjCSelectorBuilder {
   }
 }
 
-public extension ObjCSelector {
-  init(@ObjCSelectorBuilder itemsBuilder: () -> ObjCSelector) {
+public extension ObjCSelectorSyntax {
+  init(@ObjCSelectorBuilder itemsBuilder: () -> ObjCSelectorSyntax) {
     self = itemsBuilder()
   }
 }
@@ -2716,7 +2716,7 @@ public extension ObjCSelector {
 public struct PatternBindingListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = PatternBinding
+  public typealias Expression = PatternBindingSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -2724,7 +2724,7 @@ public struct PatternBindingListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = PatternBindingList
+  public typealias FinalResult = PatternBindingListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -2789,8 +2789,8 @@ public struct PatternBindingListBuilder {
   }
 }
 
-public extension PatternBindingList {
-  init(@PatternBindingListBuilder itemsBuilder: () -> PatternBindingList) {
+public extension PatternBindingListSyntax {
+  init(@PatternBindingListBuilder itemsBuilder: () -> PatternBindingListSyntax) {
     self = itemsBuilder()
   }
 }
@@ -2799,7 +2799,7 @@ public extension PatternBindingList {
 public struct PrecedenceGroupAttributeListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = PrecedenceGroupAttributeList.Element
+  public typealias Expression = PrecedenceGroupAttributeListSyntax.Element
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -2807,7 +2807,7 @@ public struct PrecedenceGroupAttributeListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = PrecedenceGroupAttributeList
+  public typealias FinalResult = PrecedenceGroupAttributeListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -2825,19 +2825,19 @@ public struct PrecedenceGroupAttributeListBuilder {
   
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
-  public static func buildExpression(_ expression: PrecedenceGroupRelation) -> Self.Component {
+  public static func buildExpression(_ expression: PrecedenceGroupRelationSyntax) -> Self.Component {
     return buildExpression(.init(expression))
   }
   
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
-  public static func buildExpression(_ expression: PrecedenceGroupAssignment) -> Self.Component {
+  public static func buildExpression(_ expression: PrecedenceGroupAssignmentSyntax) -> Self.Component {
     return buildExpression(.init(expression))
   }
   
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
-  public static func buildExpression(_ expression: PrecedenceGroupAssociativity) -> Self.Component {
+  public static func buildExpression(_ expression: PrecedenceGroupAssociativitySyntax) -> Self.Component {
     return buildExpression(.init(expression))
   }
   
@@ -2887,8 +2887,8 @@ public struct PrecedenceGroupAttributeListBuilder {
   }
 }
 
-public extension PrecedenceGroupAttributeList {
-  init(@PrecedenceGroupAttributeListBuilder itemsBuilder: () -> PrecedenceGroupAttributeList) {
+public extension PrecedenceGroupAttributeListSyntax {
+  init(@PrecedenceGroupAttributeListBuilder itemsBuilder: () -> PrecedenceGroupAttributeListSyntax) {
     self = itemsBuilder()
   }
 }
@@ -2897,7 +2897,7 @@ public extension PrecedenceGroupAttributeList {
 public struct PrecedenceGroupNameListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = PrecedenceGroupNameElement
+  public typealias Expression = PrecedenceGroupNameElementSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -2905,7 +2905,7 @@ public struct PrecedenceGroupNameListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = PrecedenceGroupNameList
+  public typealias FinalResult = PrecedenceGroupNameListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -2967,8 +2967,8 @@ public struct PrecedenceGroupNameListBuilder {
   }
 }
 
-public extension PrecedenceGroupNameList {
-  init(@PrecedenceGroupNameListBuilder itemsBuilder: () -> PrecedenceGroupNameList) {
+public extension PrecedenceGroupNameListSyntax {
+  init(@PrecedenceGroupNameListBuilder itemsBuilder: () -> PrecedenceGroupNameListSyntax) {
     self = itemsBuilder()
   }
 }
@@ -2977,7 +2977,7 @@ public extension PrecedenceGroupNameList {
 public struct PrimaryAssociatedTypeListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = PrimaryAssociatedType
+  public typealias Expression = PrimaryAssociatedTypeSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -2985,7 +2985,7 @@ public struct PrimaryAssociatedTypeListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = PrimaryAssociatedTypeList
+  public typealias FinalResult = PrimaryAssociatedTypeListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -3050,8 +3050,8 @@ public struct PrimaryAssociatedTypeListBuilder {
   }
 }
 
-public extension PrimaryAssociatedTypeList {
-  init(@PrimaryAssociatedTypeListBuilder itemsBuilder: () -> PrimaryAssociatedTypeList) {
+public extension PrimaryAssociatedTypeListSyntax {
+  init(@PrimaryAssociatedTypeListBuilder itemsBuilder: () -> PrimaryAssociatedTypeListSyntax) {
     self = itemsBuilder()
   }
 }
@@ -3060,7 +3060,7 @@ public extension PrimaryAssociatedTypeList {
 public struct SpecializeAttributeSpecListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = SpecializeAttributeSpecList.Element
+  public typealias Expression = SpecializeAttributeSpecListSyntax.Element
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -3068,7 +3068,7 @@ public struct SpecializeAttributeSpecListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = SpecializeAttributeSpecList
+  public typealias FinalResult = SpecializeAttributeSpecListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -3086,25 +3086,25 @@ public struct SpecializeAttributeSpecListBuilder {
   
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
-  public static func buildExpression(_ expression: LabeledSpecializeEntry) -> Self.Component {
+  public static func buildExpression(_ expression: LabeledSpecializeEntrySyntax) -> Self.Component {
     return buildExpression(.init(expression))
   }
   
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
-  public static func buildExpression(_ expression: AvailabilityEntry) -> Self.Component {
+  public static func buildExpression(_ expression: AvailabilityEntrySyntax) -> Self.Component {
     return buildExpression(.init(expression))
   }
   
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
-  public static func buildExpression(_ expression: TargetFunctionEntry) -> Self.Component {
+  public static func buildExpression(_ expression: TargetFunctionEntrySyntax) -> Self.Component {
     return buildExpression(.init(expression))
   }
   
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
-  public static func buildExpression(_ expression: GenericWhereClause) -> Self.Component {
+  public static func buildExpression(_ expression: GenericWhereClauseSyntax) -> Self.Component {
     return buildExpression(.init(expression))
   }
   
@@ -3154,8 +3154,8 @@ public struct SpecializeAttributeSpecListBuilder {
   }
 }
 
-public extension SpecializeAttributeSpecList {
-  init(@SpecializeAttributeSpecListBuilder itemsBuilder: () -> SpecializeAttributeSpecList) {
+public extension SpecializeAttributeSpecListSyntax {
+  init(@SpecializeAttributeSpecListBuilder itemsBuilder: () -> SpecializeAttributeSpecListSyntax) {
     self = itemsBuilder()
   }
 }
@@ -3164,7 +3164,7 @@ public extension SpecializeAttributeSpecList {
 public struct StringLiteralSegmentsBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = StringLiteralSegments.Element
+  public typealias Expression = StringLiteralSegmentsSyntax.Element
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -3172,7 +3172,7 @@ public struct StringLiteralSegmentsBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = StringLiteralSegments
+  public typealias FinalResult = StringLiteralSegmentsSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -3190,13 +3190,13 @@ public struct StringLiteralSegmentsBuilder {
   
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
-  public static func buildExpression(_ expression: StringSegment) -> Self.Component {
+  public static func buildExpression(_ expression: StringSegmentSyntax) -> Self.Component {
     return buildExpression(.init(expression))
   }
   
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
-  public static func buildExpression(_ expression: ExpressionSegment) -> Self.Component {
+  public static func buildExpression(_ expression: ExpressionSegmentSyntax) -> Self.Component {
     return buildExpression(.init(expression))
   }
   
@@ -3246,8 +3246,8 @@ public struct StringLiteralSegmentsBuilder {
   }
 }
 
-public extension StringLiteralSegments {
-  init(@StringLiteralSegmentsBuilder itemsBuilder: () -> StringLiteralSegments) {
+public extension StringLiteralSegmentsSyntax {
+  init(@StringLiteralSegmentsBuilder itemsBuilder: () -> StringLiteralSegmentsSyntax) {
     self = itemsBuilder()
   }
 }
@@ -3256,7 +3256,7 @@ public extension StringLiteralSegments {
 public struct SwitchCaseListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = SwitchCaseList.Element
+  public typealias Expression = SwitchCaseListSyntax.Element
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -3264,7 +3264,7 @@ public struct SwitchCaseListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = SwitchCaseList
+  public typealias FinalResult = SwitchCaseListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -3282,13 +3282,13 @@ public struct SwitchCaseListBuilder {
   
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
-  public static func buildExpression(_ expression: SwitchCase) -> Self.Component {
+  public static func buildExpression(_ expression: SwitchCaseSyntax) -> Self.Component {
     return buildExpression(.init(expression))
   }
   
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
-  public static func buildExpression(_ expression: IfConfigDecl) -> Self.Component {
+  public static func buildExpression(_ expression: IfConfigDeclSyntax) -> Self.Component {
     return buildExpression(.init(expression))
   }
   
@@ -3338,8 +3338,8 @@ public struct SwitchCaseListBuilder {
   }
 }
 
-public extension SwitchCaseList {
-  init(@SwitchCaseListBuilder itemsBuilder: () -> SwitchCaseList) {
+public extension SwitchCaseListSyntax {
+  init(@SwitchCaseListBuilder itemsBuilder: () -> SwitchCaseListSyntax) {
     self = itemsBuilder()
   }
 }
@@ -3348,7 +3348,7 @@ public extension SwitchCaseList {
 public struct TokenListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = Token
+  public typealias Expression = TokenSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -3356,7 +3356,7 @@ public struct TokenListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = TokenList
+  public typealias FinalResult = TokenListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -3418,8 +3418,8 @@ public struct TokenListBuilder {
   }
 }
 
-public extension TokenList {
-  init(@TokenListBuilder itemsBuilder: () -> TokenList) {
+public extension TokenListSyntax {
+  init(@TokenListBuilder itemsBuilder: () -> TokenListSyntax) {
     self = itemsBuilder()
   }
 }
@@ -3428,7 +3428,7 @@ public extension TokenList {
 public struct TupleExprElementListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = TupleExprElement
+  public typealias Expression = TupleExprElementSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -3436,7 +3436,7 @@ public struct TupleExprElementListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = TupleExprElementList
+  public typealias FinalResult = TupleExprElementListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -3501,8 +3501,8 @@ public struct TupleExprElementListBuilder {
   }
 }
 
-public extension TupleExprElementList {
-  init(@TupleExprElementListBuilder itemsBuilder: () -> TupleExprElementList) {
+public extension TupleExprElementListSyntax {
+  init(@TupleExprElementListBuilder itemsBuilder: () -> TupleExprElementListSyntax) {
     self = itemsBuilder()
   }
 }
@@ -3511,7 +3511,7 @@ public extension TupleExprElementList {
 public struct TuplePatternElementListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = TuplePatternElement
+  public typealias Expression = TuplePatternElementSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -3519,7 +3519,7 @@ public struct TuplePatternElementListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = TuplePatternElementList
+  public typealias FinalResult = TuplePatternElementListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -3584,8 +3584,8 @@ public struct TuplePatternElementListBuilder {
   }
 }
 
-public extension TuplePatternElementList {
-  init(@TuplePatternElementListBuilder itemsBuilder: () -> TuplePatternElementList) {
+public extension TuplePatternElementListSyntax {
+  init(@TuplePatternElementListBuilder itemsBuilder: () -> TuplePatternElementListSyntax) {
     self = itemsBuilder()
   }
 }
@@ -3594,7 +3594,7 @@ public extension TuplePatternElementList {
 public struct TupleTypeElementListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = TupleTypeElement
+  public typealias Expression = TupleTypeElementSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -3602,7 +3602,7 @@ public struct TupleTypeElementListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = TupleTypeElementList
+  public typealias FinalResult = TupleTypeElementListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -3667,8 +3667,8 @@ public struct TupleTypeElementListBuilder {
   }
 }
 
-public extension TupleTypeElementList {
-  init(@TupleTypeElementListBuilder itemsBuilder: () -> TupleTypeElementList) {
+public extension TupleTypeElementListSyntax {
+  init(@TupleTypeElementListBuilder itemsBuilder: () -> TupleTypeElementListSyntax) {
     self = itemsBuilder()
   }
 }
@@ -3685,7 +3685,7 @@ public struct UnexpectedNodesBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = UnexpectedNodes
+  public typealias FinalResult = UnexpectedNodesSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -3747,8 +3747,8 @@ public struct UnexpectedNodesBuilder {
   }
 }
 
-public extension UnexpectedNodes {
-  init(@UnexpectedNodesBuilder itemsBuilder: () -> UnexpectedNodes) {
+public extension UnexpectedNodesSyntax {
+  init(@UnexpectedNodesBuilder itemsBuilder: () -> UnexpectedNodesSyntax) {
     self = itemsBuilder()
   }
 }
@@ -3757,7 +3757,7 @@ public extension UnexpectedNodes {
 public struct YieldExprListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = YieldExprListElement
+  public typealias Expression = YieldExprListElementSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -3765,7 +3765,7 @@ public struct YieldExprListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = YieldExprList
+  public typealias FinalResult = YieldExprListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -3827,8 +3827,8 @@ public struct YieldExprListBuilder {
   }
 }
 
-public extension YieldExprList {
-  init(@YieldExprListBuilder itemsBuilder: () -> YieldExprList) {
+public extension YieldExprListSyntax {
+  init(@YieldExprListBuilder itemsBuilder: () -> YieldExprListSyntax) {
     self = itemsBuilder()
   }
 }

@@ -16,9 +16,9 @@ import SwiftSyntaxBuilder
 
 final class ExprListTests: XCTestCase {
   func testExprList() {
-    let testCases: [UInt: (ExprList, String)] = [
-      #line: (ExprList([IntegerLiteralExpr(1), BinaryOperatorExpr(text: "+"), FloatLiteralExpr(2.34)]), "1 + 2.34"),
-      #line: ([IntegerLiteralExpr(1), BinaryOperatorExpr(text: "+"), FloatLiteralExpr(2.34)], "1 + 2.34"),
+    let testCases: [UInt: (ExprListSyntax, String)] = [
+      #line: (ExprListSyntax([IntegerLiteralExprSyntax(1), BinaryOperatorExprSyntax(text: "+"), FloatLiteralExprSyntax(2.34)]), "1 + 2.34"),
+      #line: ([IntegerLiteralExprSyntax(1), BinaryOperatorExprSyntax(text: "+"), FloatLiteralExprSyntax(2.34)], "1 + 2.34"),
     ]
 
     for (line, testCase) in testCases {

@@ -32,17 +32,17 @@ final class FormatRawStringLiteralTest: XCTestCase {
     ]
 
     for (line, literal, expectation) in tests {
-      let literal = try XCTUnwrap(StringLiteralExpr.parseWithoutDiagnostics(from: literal))
-      let expectation = try XCTUnwrap(StringLiteralExpr.parseWithoutDiagnostics(from: expectation))
+      let literal = try XCTUnwrap(StringLiteralExprSyntax.parseWithoutDiagnostics(from: literal))
+      let expectation = try XCTUnwrap(StringLiteralExprSyntax.parseWithoutDiagnostics(from: expectation))
       let refactored = try XCTUnwrap(FormatRawStringLiteral.refactor(syntax: literal))
       AssertStringsEqualWithDiff(refactored.description, expectation.description, line: UInt(line))
     }
   }
 }
 
-extension StringLiteralExpr {
-  static func parseWithoutDiagnostics(from source: String) -> StringLiteralExpr? {
+extension StringLiteralExprSyntax {
+  static func parseWithoutDiagnostics(from source: String) -> StringLiteralExprSyntax? {
     var parser = Parser(source)
-    return ExprSyntax.parse(from: &parser).as(StringLiteralExpr.self)
+    return ExprSyntax.parse(from: &parser).as(StringLiteralExprSyntax.self)
   }
 }

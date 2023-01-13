@@ -1246,7 +1246,7 @@ final class DeclarationTests: XCTestCase {
                   leftBrace: .leftBraceToken(),
                   members: MemberDeclListSyntax([
                     MemberDeclListItemSyntax(
-                      decl: Decl(
+                      decl: DeclSyntax(
                         FunctionDeclSyntax(
                           funcKeyword: .keyword(.func, presence: .missing),
                           identifier: .binaryOperator("^"),

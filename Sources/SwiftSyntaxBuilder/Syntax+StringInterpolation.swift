@@ -121,7 +121,7 @@ extension SyntaxStringInterpolation: StringInterpolationProtocol {
     literal value: Literal,
     format: BasicFormat = BasicFormat()
   ) {
-    self.appendInterpolation(Expr(literal: value), format: format)
+    self.appendInterpolation(ExprSyntax(literal: value), format: format)
   }
 
   // This overload is technically redundant with the previous one, except that
@@ -133,7 +133,7 @@ extension SyntaxStringInterpolation: StringInterpolationProtocol {
     literal value: Literal?,
     format: BasicFormat = BasicFormat()
   ) {
-    self.appendInterpolation(Expr(literal: value), format: format)
+    self.appendInterpolation(ExprSyntax(literal: value), format: format)
   }
 }
 
@@ -250,23 +250,23 @@ extension SyntaxExpressibleByStringInterpolation {
 // MARK: ExpressibleByLiteralSyntax conformances
 
 extension Substring: ExpressibleByLiteralSyntax {
-  public func makeLiteralSyntax() -> StringLiteralExpr {
+  public func makeLiteralSyntax() -> StringLiteralExprSyntax {
     String(self).makeLiteralSyntax()
   }
 }
 
 extension String: ExpressibleByLiteralSyntax {
-  public func makeLiteralSyntax() -> StringLiteralExpr {
+  public func makeLiteralSyntax() -> StringLiteralExprSyntax {
     // TODO: Use a multi-line literal if there are more than N inner newlines.
-    StringLiteralExpr(content: self)
+    StringLiteralExprSyntax(content: self)
   }
 }
 
 extension ExpressibleByLiteralSyntax where Self: BinaryInteger {
-  public func makeLiteralSyntax() -> IntegerLiteralExpr {
+  public func makeLiteralSyntax() -> IntegerLiteralExprSyntax {
     // TODO: Radix selection? Thousands separators?
     let digits = String(self, radix: 10)
-    return IntegerLiteralExpr(digits: digits)
+    return IntegerLiteralExprSyntax(digits: digits)
   }
 }
 extension Int: ExpressibleByLiteralSyntax {}
@@ -284,17 +284,17 @@ extension ExpressibleByLiteralSyntax where Self: FloatingPoint, Self: LosslessSt
   public func makeLiteralSyntax() -> ExprSyntax {
     switch floatingPointClass {
     case .positiveInfinity:
-      return ExprSyntax(MemberAccessExpr(name: "infinity"))
+      return ExprSyntax(MemberAccessExprSyntax(name: "infinity"))
 
     case .quietNaN:
-      return ExprSyntax(MemberAccessExpr(name: "nan"))
+      return ExprSyntax(MemberAccessExprSyntax(name: "nan"))
 
     case .signalingNaN:
-      return ExprSyntax(MemberAccessExpr(name: "signalingNaN"))
+      return ExprSyntax(MemberAccessExprSyntax(name: "signalingNaN"))
 
     case .negativeInfinity, .negativeZero:
       return ExprSyntax(
-        PrefixOperatorExpr(
+        PrefixOperatorExprSyntax(
           operatorToken: "-",
           postfixExpression: (-self).makeLiteralSyntax()
         )
@@ -303,7 +303,7 @@ extension ExpressibleByLiteralSyntax where Self: FloatingPoint, Self: LosslessSt
     case .negativeNormal, .negativeSubnormal, .positiveZero, .positiveSubnormal, .positiveNormal:
       // TODO: Thousands separators?
       let digits = String(self)
-      return ExprSyntax(FloatLiteralExpr(floatingDigits: digits))
+      return ExprSyntax(FloatLiteralExprSyntax(floatingDigits: digits))
     }
 
   }
@@ -317,8 +317,8 @@ extension Float16: ExpressibleByLiteralSyntax {}
 #endif
 
 extension Bool: ExpressibleByLiteralSyntax {
-  public func makeLiteralSyntax() -> BooleanLiteralExpr {
-    BooleanLiteralExpr(self)
+  public func makeLiteralSyntax() -> BooleanLiteralExprSyntax {
+    BooleanLiteralExprSyntax(self)
   }
 }
 
@@ -326,7 +326,7 @@ extension ArraySlice: ExpressibleByLiteralSyntax where Element: ExpressibleByLit
   public func makeLiteralSyntax() -> ArrayExprSyntax {
     ArrayExprSyntax(
       leftSquare: .leftSquareBracket,
-      elements: ArrayElementList {
+      elements: ArrayElementListSyntax {
         for elem in self {
           ArrayElementSyntax(expression: elem.makeLiteralSyntax())
         }
@@ -353,7 +353,7 @@ extension Set: ExpressibleByLiteralSyntax where Element: ExpressibleByLiteralSyn
 
     return ArrayExprSyntax(
       leftSquare: .leftSquareBracket,
-      elements: ArrayElementList {
+      elements: ArrayElementListSyntax {
         for elemSyntax in elemSyntaxes {
           ArrayElementSyntax(expression: elemSyntax)
         }
@@ -401,12 +401,12 @@ extension Dictionary: ExpressibleByLiteralSyntax where Key: ExpressibleByLiteral
 extension Optional: ExpressibleByLiteralSyntax where Wrapped: ExpressibleByLiteralSyntax {
   public func makeLiteralSyntax() -> ExprSyntax {
     func containsNil(_ expr: ExprSyntaxProtocol) -> Bool {
-      if expr.is(NilLiteralExpr.self) {
+      if expr.is(NilLiteralExprSyntax.self) {
         return true
       }
 
-      if let call = expr.as(FunctionCallExpr.self),
-        let memberAccess = call.calledExpression.as(MemberAccessExpr.self),
+      if let call = expr.as(FunctionCallExprSyntax.self),
+        let memberAccess = call.calledExpression.as(MemberAccessExprSyntax.self),
         memberAccess.name.text == "some",
         let argument = call.argumentList.first?.expression
       {
@@ -418,7 +418,7 @@ extension Optional: ExpressibleByLiteralSyntax where Wrapped: ExpressibleByLiter
 
     switch self {
     case nil:
-      return ExprSyntax(NilLiteralExpr())
+      return ExprSyntax(NilLiteralExprSyntax())
 
     case let wrapped?:
       let wrappedExpr = wrapped.makeLiteralSyntax()
@@ -428,8 +428,8 @@ extension Optional: ExpressibleByLiteralSyntax where Wrapped: ExpressibleByLiter
       // depth of the data structure.
       if containsNil(wrappedExpr) {
         return ExprSyntax(
-          FunctionCallExpr(callee: MemberAccessExpr(name: "some")) {
-            TupleExprElement(expression: wrappedExpr)
+          FunctionCallExprSyntax(callee: MemberAccessExprSyntax(name: "some")) {
+            TupleExprElementSyntax(expression: wrappedExpr)
           }
         )
       }

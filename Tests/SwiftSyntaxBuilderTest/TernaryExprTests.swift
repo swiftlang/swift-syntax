@@ -16,7 +16,7 @@ import SwiftSyntaxBuilder
 
 final class TernaryExprTests: XCTestCase {
   func testTernaryExpr() {
-    let buildable = TernaryExpr(if: BooleanLiteralExpr(true), then: Expr("a"), else: Expr("b"))
+    let buildable = TernaryExprSyntax(if: BooleanLiteralExprSyntax(true), then: ExprSyntax("a"), else: ExprSyntax("b"))
     AssertBuildResult(
       buildable,
       """

@@ -26,7 +26,7 @@ let tokenFile = SourceFile {
       if token.isKeyword {
         VariableDecl("""
           /// The `\(raw: token.text!)` keyword
-          static var \(raw: token.name.withFirstCharacterLowercased.backticked): Token {
+          static var \(raw: token.name.withFirstCharacterLowercased.backticked): TokenSyntax {
             return .\(raw: token.swiftKind)()
           }
           """

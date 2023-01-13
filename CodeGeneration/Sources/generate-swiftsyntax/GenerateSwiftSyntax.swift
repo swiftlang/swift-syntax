@@ -70,7 +70,6 @@ struct GenerateSwiftSyntax: ParsableCommand {
       TemplateSpec(sourceFile: resultBuildersFile, module: swiftSyntaxBuilderDir, filename: "ResultBuilders.swift"),
       TemplateSpec(sourceFile: syntaxExpressibleByStringInterpolationConformancesFile, module: swiftSyntaxBuilderDir, filename: "SyntaxExpressibleByStringInterpolationConformances.swift"),
       TemplateSpec(sourceFile: tokenFile, module: swiftSyntaxBuilderDir, filename: "Token.swift"),
-      TemplateSpec(sourceFile: typealiasesFile, module: swiftSyntaxBuilderDir, filename: "Typealiases.swift"),
     ]
 
     var errors: [Error] = []

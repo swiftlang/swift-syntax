@@ -58,9 +58,9 @@ public struct SyntaxBuildableType: Hashable {
       return Expr(NilLiteralExpr())
     } else if isToken {
       if let token = token, token.text != nil {
-        return Expr(MemberAccessExpr(base: "Token", name: lowercaseFirstWord(name: token.name).backticked))
+        return Expr(MemberAccessExpr(base: "TokenSyntax", name: lowercaseFirstWord(name: token.name).backticked))
       } else if tokenKind == "EOFToken" {
-        return Expr(MemberAccessExpr(base: "Token", name: "eof"))
+        return Expr(MemberAccessExpr(base: "TokenSyntax", name: "eof"))
       }
     }
     return nil
@@ -87,7 +87,7 @@ public struct SyntaxBuildableType: Hashable {
   ///  - For token: `TokenSyntax` (tokens don't have a dedicated type in SwiftSyntaxBuilder)
   /// If the type is optional, the type is wrapped in an `OptionalType`.
   public var buildable: Type {
-    optionalWrapped(type: SimpleTypeIdentifier(name: .identifier(shorthandName)))
+    optionalWrapped(type: SimpleTypeIdentifier(name: .identifier(syntaxBaseName)))
   }
 
   /// Whether parameters of this type should be initializable by a result builder.
@@ -101,15 +101,9 @@ public struct SyntaxBuildableType: Hashable {
   /// returns `CodeBlockItemList` for `CodeBlock`) and otherwise itself.
   public var builderInitializableType: Self {
     Self(
-      syntaxKind: BUILDER_INITIALIZABLE_TYPES[shorthandName].flatMap { $0 } ?? shorthandName,
+      syntaxKind: BUILDER_INITIALIZABLE_TYPES[syntaxKind].flatMap { $0 } ?? syntaxKind,
       isOptional: isOptional
     )
-  }
-
-  /// The type name without the `Syntax`. `SwiftSyntaxBuilder` declares typealiases
-  /// that map these to the corresponding `*Syntax` nodes.
-  public var shorthandName: String {
-    return syntaxKind
   }
 
   /// The corresponding `*Syntax` type defined in the `SwiftSyntax` module,
@@ -135,7 +129,7 @@ public struct SyntaxBuildableType: Hashable {
     if isBaseType {
       return "\(syntaxBaseName)Protocol"
     } else {
-      return shorthandName
+      return syntaxBaseName
     }
   }
 

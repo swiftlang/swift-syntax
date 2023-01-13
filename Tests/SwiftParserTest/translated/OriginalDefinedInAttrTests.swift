@@ -56,12 +56,11 @@ final class OriginalDefinedInAttrTests: XCTestCase {
   func testOriginalDefinedInAttr4() {
     AssertParse(
       #"""
-      @_originallyDefinedIn(module: "foo"1️⃣) 2️⃣
+      @_originallyDefinedIn(module: "foo"1️⃣)
       public class ToplevelClass1 {}
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ',' in @_originallyDefinedIn arguments"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end attribute"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ',' and version list in @_originallyDefinedIn arguments")
       ]
     )
   }
@@ -81,12 +80,12 @@ final class OriginalDefinedInAttrTests: XCTestCase {
   func testOriginalDefinedInAttr6() {
     AssertParse(
       #"""
-      @_originallyDefinedIn(module: "foo",
-      public 1️⃣class ToplevelClass3 {}
+      @_originallyDefinedIn(module: "foo",1️⃣
+      public class ToplevelClass3 {}
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected platform in '@_originallyDefinedIn' attribute
-        DiagnosticSpec(message: "expected ')' to end attribute")
+        DiagnosticSpec(message: "expected version restriction in version"),
+        DiagnosticSpec(message: "expected ')' to end attribute"),
       ]
     )
   }
@@ -96,23 +95,36 @@ final class OriginalDefinedInAttrTests: XCTestCase {
       #"""
       @available(OSX 13.10, *)
       @_originallyDefinedIn(module: "foo", * 13.13) 
+      public class ToplevelClass4 {}
+      """#
+    )
+
+    AssertParse(
+      #"""
+      @available(OSX 13.10, *)
       @_originallyDefinedIn(module: "foo", OSX 13.13, iOS 7.0)
-      @_originallyDefinedIn(module: "foo", OSX 13.14, * 7.0) 
+      public class ToplevelClass4 {}
+      """#
+    )
+
+    AssertParse(
+      #"""
+      @available(OSX 13.10, *)
+      @_originallyDefinedIn(module: "foo", OSX 13.14, * 7.0)
+      public class ToplevelClass4 {}
+      """#
+    )
+
+    AssertParse(
+      #"""
       public class ToplevelClass4 {
-      	@_originallyDefinedIn(module: "foo", OSX 13.13) 
-      	subscript(index: Int) -> Int {
+        @_originallyDefinedIn(module: "foo", OSX 13.13)
+        subscript(index: Int) -> Int {
               get { return 1 }
               set(newValue) {}
-      	}
+        }
       }
-      """#,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 2: * as platform name has no effect
-        // TODO: Old parser expected error on line 2: expected at least one platform version in '@_originallyDefinedIn' attribute
-        // TODO: Old parser expected warning on line 4: * as platform name has no effect
-        // TODO: Old parser expected error on line 4: '@_originallyDefinedIn' contains multiple versions for macOS
-        // TODO: Old parser expected error on line 6: '@_originallyDefinedIn' attribute cannot be applied to this declaration
-      ]
+      """#
     )
   }
 

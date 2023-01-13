@@ -865,7 +865,7 @@ extension SyntaxKind {
     case .availabilityVersionRestrictionList: 
       return "version list"
     case .availabilityVersionRestriction: 
-      return "availability argument"
+      return "version restriction"
     case .awaitExpr: 
       return "'await' expression"
     case .backDeployAttributeSpecList: 

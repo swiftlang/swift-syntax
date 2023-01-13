@@ -26734,13 +26734,11 @@ public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
     case `token`(TokenSyntax)
     case `availabilityVersionRestriction`(AvailabilityVersionRestrictionSyntax)
     case `availabilityLabeledArgument`(AvailabilityLabeledArgumentSyntax)
-    case `tokenList`(TokenListSyntax)
     public var _syntaxNode: Syntax {
       switch self {
       case .token(let node): return node._syntaxNode
       case .availabilityVersionRestriction(let node): return node._syntaxNode
       case .availabilityLabeledArgument(let node): return node._syntaxNode
-      case .tokenList(let node): return node._syntaxNode
       }
     }
     init(_ data: SyntaxData) { self.init(Syntax(data))! }
@@ -26752,9 +26750,6 @@ public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
     }
     public init(_ node: AvailabilityLabeledArgumentSyntax) {
       self = .availabilityLabeledArgument(node)
-    }
-    public init(_ node: TokenListSyntax) {
-      self = .tokenList(node)
     }
     public init?<S: SyntaxProtocol>(_ node: S) {
       if let node = node.as(TokenSyntax.self) {
@@ -26769,10 +26764,6 @@ public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
         self = .availabilityLabeledArgument(node)
         return
       }
-      if let node = node.as(TokenListSyntax.self) {
-        self = .tokenList(node)
-        return
-      }
       return nil
     }
 
@@ -26781,7 +26772,6 @@ public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
         .node(TokenSyntax.self),
         .node(AvailabilityVersionRestrictionSyntax.self),
         .node(AvailabilityLabeledArgumentSyntax.self),
-        .node(TokenListSyntax.self),
       ])
     }
   }

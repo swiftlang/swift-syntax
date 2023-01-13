@@ -22,7 +22,11 @@ final class AvailabilityTests: XCTestCase {
       // expected-error@-1 {{'introduced' can't be combined with shorthand specification 'OSX 10.0'}}
       // expected-error@-2 {{expected declaration}}
       func shorthandFollowedByIntroduced() {}
+      """
+    )
 
+    AssertParse(
+      """
       @available(iOS 6.0, OSX 10.8, *)
       func availableOnMultiplePlatforms() {}
       """

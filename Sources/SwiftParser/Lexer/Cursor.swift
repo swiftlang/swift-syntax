@@ -222,6 +222,12 @@ extension Lexer.Cursor {
     return self.input[offset]
   }
 
+  /// Same as `advanceValidatingUTF8Character` but without advancing the cursor.
+  func peekScalar() -> Unicode.Scalar? {
+    var tmp = self
+    return tmp.advanceValidatingUTF8Character()
+  }
+
   /// Peeks back `offset` bytes.
   /// `bufferBegin` is the start of the source file buffer to guard that we are
   /// not dereferencing a pointer that points before the source buffer.
@@ -732,8 +738,8 @@ extension Lexer.Cursor {
         return self.lexOperatorIdentifier(tokenStart: start, sourceBufferStart: sourceBufferStart)
       }
 
-      let shouldTokenize = self.lexUnknown(tokenStart: start)
-      assert(shouldTokenize, "Invalid UTF-8 sequence should be eaten by lexTrivia as LeadingTrivia")
+      let unknownClassification = self.lexUnknown(tokenStart: start)
+      assert(unknownClassification == .lexemeContents, "Invalid UTF-8 sequence should be eaten by lexTrivia as LeadingTrivia")
       return Lexer.Result(.unknown)
     }
   }
@@ -862,11 +868,11 @@ extension Lexer.Cursor {
           break
         }
 
-        guard self.lexUnknown(tokenStart: start) else {
+        if self.lexUnknown(tokenStart: start) == .trivia {
           continue
+        } else {
+          break
         }
-
-        break
       }
 
       // `break` means the character was not a trivia. Reset the cursor and
@@ -1940,7 +1946,18 @@ extension Lexer.Cursor {
     }
   }
 
-  mutating func lexUnknown(tokenStart: Lexer.Cursor) -> Bool {
+  enum UnknownCharactersClassification {
+    /// The characters consumed by `lexUnknown` should be classified as trivia
+    case trivia
+    /// The characters consumed by `lexUnknown` should be classified as the contents of a lexeme
+    case lexemeContents
+  }
+
+  /// Assuming the cursor is positioned at neighter a valid identifier nor a
+  /// valid operator start, advance the cursor by what can be considered a
+  /// lexeme.
+  mutating func lexUnknown(tokenStart: Lexer.Cursor) -> UnknownCharactersClassification {
+    assert(tokenStart.peekScalar()?.isValidIdentifierStartCodePoint == false && tokenStart.peekScalar()?.isOperatorStartCodePoint == false)
     var tmp = tokenStart
     if tmp.advance(if: { Unicode.Scalar($0).isValidIdentifierContinuationCodePoint }) {
       // If this is a valid identifier continuation, but not a valid identifier
@@ -1948,11 +1965,9 @@ extension Lexer.Cursor {
       //      if (EmitDiagnosticsIfToken) {
       //        diagnose(CurPtr - 1, diag::lex_invalid_identifier_start_character)
       //      }
-      while tmp.advance(if: { Unicode.Scalar($0).isValidIdentifierContinuationCodePoint }) {
-
-      }
+      tmp.advance(while: { Unicode.Scalar($0).isValidIdentifierContinuationCodePoint })
       self = tmp
-      return true
+      return .lexemeContents
     }
 
     // This character isn't allowed in Swift source.
@@ -1960,9 +1975,9 @@ extension Lexer.Cursor {
       //      diagnose(CurPtr - 1, diag::lex_invalid_utf8)
       //          .fixItReplaceChars(getSourceLoc(CurPtr - 1), getSourceLoc(Tmp), " ")
       self = tmp
-      return false;  // Skip presumed whitespace.
+      return .trivia
     }
-    if (codepoint.value == 0x000000A0) {
+    if codepoint.value == 0x000000A0 {
       // Non-breaking whitespace (U+00A0)
       while tmp.peek(matches: 0xC2) && tmp.peek(at: 1, matches: 0xA0) {
         _ = tmp.advance()
@@ -1975,7 +1990,7 @@ extension Lexer.Cursor {
       //        .fixItReplaceChars(getSourceLoc(CurPtr - 1), getSourceLoc(Tmp),
       //                           Spaces)
       self = tmp
-      return false
+      return .trivia
     } else if (codepoint.value == 0x0000201D) {
       // If this is an end curly quote, just diagnose it with a fixit hint.
       //      if (EmitDiagnosticsIfToken) {
@@ -1983,7 +1998,7 @@ extension Lexer.Cursor {
       //            .fixItReplaceChars(getSourceLoc(CurPtr - 1), getSourceLoc(Tmp), "\"")
       //      }
       self = tmp
-      return true
+      return .lexemeContents
     } else if (codepoint.value == 0x0000201C) {
       // If this is a start curly quote, do a fuzzy match of a string literal
       // to improve recovery.
@@ -2002,7 +2017,7 @@ extension Lexer.Cursor {
       //                               "\"")
       //      }
       self = tmp
-      return true
+      return .lexemeContents
     }
 
     //    diagnose(CurPtr - 1, diag::lex_invalid_character)
@@ -2024,7 +2039,7 @@ extension Lexer.Cursor {
     //    }
 
     self = tmp
-    return false  // Skip presumed whitespace.
+    return .trivia
   }
 
   enum ConflictMarker {

@@ -1188,16 +1188,13 @@ extension Lexer.Cursor {
 
 extension Lexer.Cursor {
   mutating func lexMagicPoundLiteral() -> Lexer.Result {
-    let start = self
-    var clone = self
+    var tmp = self
     // Scan for [a-zA-Z]+ to see what we match.
-    if let peeked = clone.peek(), Unicode.Scalar(peeked).isAsciiIdentifierStart {
-      repeat {
-        _ = clone.advance()
-      } while clone.peek().map { Unicode.Scalar($0) }?.isAsciiIdentifierContinue == true
+    while let peeked = tmp.peek(), Unicode.Scalar(peeked).isAsciiIdentifierStart {
+      _ = tmp.advance()
     }
 
-    let literal = start.text(upTo: clone)
+    let literal = self.text(upTo: tmp)
 
     let kind: RawTokenKind
     switch literal {
@@ -1220,7 +1217,7 @@ extension Lexer.Cursor {
     }
 
     // If we found something specific, return it.
-    self = clone
+    self = tmp
     return Lexer.Result(kind)
   }
 }

@@ -69,17 +69,15 @@ public struct TriviaParser {
         continue
 
       case UInt8(ascii: "/"):
-        if !cursor.isAtEndOfFile {
-          switch cursor.peek() {
-          case UInt8(ascii: "/"):
-            pieces.append(cursor.lexLineComment(start: start))
-            continue
-          case UInt8(ascii: "*"):
-            pieces.append(cursor.lexBlockComment(start: start))
-            continue
-          default:
-            break
-          }
+        switch cursor.peek() {
+        case UInt8(ascii: "/"):
+          pieces.append(cursor.lexLineComment(start: start))
+          continue
+        case UInt8(ascii: "*"):
+          pieces.append(cursor.lexBlockComment(start: start))
+          continue
+        default:
+          break
         }
 
       case UInt8(ascii: "#"):
@@ -173,8 +171,8 @@ extension Lexer.Cursor {
   fileprivate mutating func lexLineComment(start: Lexer.Cursor) -> RawTriviaPiece {
     // "///...": .docLineComment.
     // "//...": .lineComment.
-    assert(self.previous == UInt8(ascii: "/") && self.peek() == UInt8(ascii: "/"))
-    let isDocComment = self.input.count > 1 && self.peek(at: 1) == UInt8(ascii: "/")
+    assert(self.previous == UInt8(ascii: "/") && self.peek(matches: "/"))
+    let isDocComment = self.input.count > 1 && self.peek(at: 1, matches: "/")
     _ = self.advanceToEndOfLine()
     let contents = start.textUpTo(self)
     return isDocComment ? .docLineComment(contents) : .lineComment(contents)
@@ -184,8 +182,8 @@ extension Lexer.Cursor {
     // "/**...*/": .docBlockComment.
     // "/*...*/": .blockComment.
     // "/**/": .blockComment.
-    assert(self.previous == UInt8(ascii: "/") && self.peek() == UInt8(ascii: "*"))
-    let isDocComment = self.input.count > 2 && self.peek(at: 1) == UInt8(ascii: "*") && self.peek(at: 2) != UInt8(ascii: "/")
+    assert(self.previous == UInt8(ascii: "/") && self.peek(matches: "*"))
+    let isDocComment = self.input.count > 2 && self.peek(at: 1, matches: "*") && self.peek(at: 2, doesntMatch: "/")
     _ = self.advanceToEndOfSlashStarComment()
     let contents = start.textUpTo(self)
     return isDocComment ? .docBlockComment(contents) : .blockComment(contents)

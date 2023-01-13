@@ -220,11 +220,7 @@ extension Parser {
     switch DeclarationAttributeWithSpecialSyntax(lexeme: self.peek()) {
     case .available, ._spi_available:
       return parseAttribute(argumentMode: .required) { parser in
-        if parser.peek().rawTokenKind == .integerLiteral || parser.peek().rawTokenKind == .floatingLiteral {
-          return .availability(parser.parseAvailabilitySpecList())
-        } else {
-          return .availability(parser.parseExtendedAvailabilitySpecList())
-        }
+        return .availability(parser.parseAvailabilityArgumentSpecList())
       }
     case .differentiable:
       return parseAttribute(argumentMode: .required) { parser in
@@ -997,7 +993,7 @@ extension Parser {
     var platforms: [RawAvailabilityVersionRestrictionListEntrySyntax] = []
     var keepGoing: RawTokenSyntax?
     repeat {
-      let restriction = self.parseAvailabilityMacro()
+      let restriction = self.parseAvailabilityMacro(allowStarAsVersionNumber: true)
       keepGoing = self.consume(if: .comma)
       platforms.append(
         RawAvailabilityVersionRestrictionListEntrySyntax(

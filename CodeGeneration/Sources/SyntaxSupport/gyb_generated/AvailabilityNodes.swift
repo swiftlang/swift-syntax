@@ -36,9 +36,7 @@ public let AVAILABILITY_NODES: [Node] = [
                  Child(name: "AvailabilityVersionRestriction",
                        kind: "AvailabilityVersionRestriction"),
                  Child(name: "AvailabilityLabeledArgument",
-                       kind: "AvailabilityLabeledArgument"),
-                 Child(name: "TokenList",
-                       kind: "TokenList")
+                       kind: "AvailabilityLabeledArgument")
                ]),
          Child(name: "TrailingComma",
                kind: "CommaToken",
@@ -81,7 +79,7 @@ public let AVAILABILITY_NODES: [Node] = [
        ]),
 
   Node(name: "AvailabilityVersionRestriction",
-       nameForDiagnostics: "availability argument",
+       nameForDiagnostics: "version restriction",
        description: "An argument to `@available` that restricts the availability on acertain platform to a version, e.g. `iOS 10` or `swift 3.4`.",
        kind: "Syntax",
        children: [

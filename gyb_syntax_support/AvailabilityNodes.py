@@ -27,7 +27,6 @@ AVAILABILITY_NODES = [
                              kind='AvailabilityVersionRestriction'),
                        Child('AvailabilityLabeledArgument',
                              kind='AvailabilityLabeledArgument'),
-                       Child('TokenList', kind='TokenList'),
                    ]),
              Child('TrailingComma', kind='CommaToken', is_optional=True,
                    description='''
@@ -58,7 +57,7 @@ AVAILABILITY_NODES = [
 
     # Representation for 'iOS 10', 'swift 3.4' etc.
     # availability-version-restriction -> identifier version-tuple
-    Node('AvailabilityVersionRestriction', name_for_diagnostics="availability argument",
+    Node('AvailabilityVersionRestriction', name_for_diagnostics="version restriction",
          kind='Syntax',
          description='''
          An argument to `@available` that restricts the availability on a

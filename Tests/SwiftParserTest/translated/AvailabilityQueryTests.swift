@@ -121,7 +121,7 @@ final class AvailabilityQueryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected platform and version in availability argument"),
+        DiagnosticSpec(message: "expected version restriction in availability argument"),
         DiagnosticSpec(message: "expected ')' to end availability condition"),
       ]
     )
@@ -134,7 +134,7 @@ final class AvailabilityQueryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected platform and version in availability argument")
+        DiagnosticSpec(message: "expected version restriction in availability argument")
       ]
     )
   }
@@ -328,7 +328,7 @@ final class AvailabilityQueryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected platform and version in availability argument"),
+        DiagnosticSpec(message: "expected version restriction in availability argument"),
         DiagnosticSpec(message: "expected ')' to end availability condition"),
       ]
     )
@@ -341,7 +341,7 @@ final class AvailabilityQueryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected platform and version in availability argument")
+        DiagnosticSpec(message: "expected version restriction in availability argument")
       ]
     )
   }

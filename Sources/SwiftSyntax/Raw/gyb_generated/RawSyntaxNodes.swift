@@ -18086,10 +18086,9 @@ public struct RawAvailabilityArgumentSyntax: RawSyntaxNodeProtocol {
     case `token`(RawTokenSyntax)
     case `availabilityVersionRestriction`(RawAvailabilityVersionRestrictionSyntax)
     case `availabilityLabeledArgument`(RawAvailabilityLabeledArgumentSyntax)
-    case `tokenList`(RawTokenListSyntax)
 
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
-      return RawTokenSyntax.isKindOf(raw) || RawAvailabilityVersionRestrictionSyntax.isKindOf(raw) || RawAvailabilityLabeledArgumentSyntax.isKindOf(raw) || RawTokenListSyntax.isKindOf(raw)
+      return RawTokenSyntax.isKindOf(raw) || RawAvailabilityVersionRestrictionSyntax.isKindOf(raw) || RawAvailabilityLabeledArgumentSyntax.isKindOf(raw)
     }
 
     public var raw: RawSyntax {
@@ -18097,7 +18096,6 @@ public struct RawAvailabilityArgumentSyntax: RawSyntaxNodeProtocol {
       case .token(let node): return node.raw
       case .availabilityVersionRestriction(let node): return node.raw
       case .availabilityLabeledArgument(let node): return node.raw
-      case .tokenList(let node): return node.raw
       }
     }
 
@@ -18112,10 +18110,6 @@ public struct RawAvailabilityArgumentSyntax: RawSyntaxNodeProtocol {
       }
       if let node = RawAvailabilityLabeledArgumentSyntax(other) {
         self = .availabilityLabeledArgument(node)
-        return
-      }
-      if let node = RawTokenListSyntax(other) {
-        self = .tokenList(node)
         return
       }
       return nil

@@ -738,12 +738,12 @@ extension RawSyntax {
       if let leadingTrivia = leadingTrivia,
         let idx = layout.firstIndex(where: { $0 != nil })
       {
-        layout[idx] = layout[idx]!.withLeadingTrivia(leadingTrivia, arena: arena)
+        layout[idx] = layout[idx]!.withLeadingTrivia(leadingTrivia + (layout[idx]?.formLeadingTrivia() ?? []), arena: arena)
       }
       if let trailingTrivia = trailingTrivia,
         let idx = layout.lastIndex(where: { $0 != nil })
       {
-        layout[idx] = layout[idx]!.withTrailingTrivia(trailingTrivia, arena: arena)
+        layout[idx] = layout[idx]!.withTrailingTrivia((layout[idx]?.formTrailingTrivia() ?? []) + trailingTrivia, arena: arena)
       }
       return .makeLayout(kind: kind, from: layout, arena: arena)
     }

@@ -39,6 +39,10 @@ private class InitializerExprFormat: BasicFormat {
   override func visit(_ node: TupleExprElementListSyntax) -> TupleExprElementListSyntax {
     let children = node.children(viewMode: .all)
     // If the function only takes a single argument, display it on the same line
+    if let callee = node.parent?.as(FunctionCallExprSyntax.self)?.calledExpression.as(MemberAccessExprSyntax.self), callee.base == nil {
+      // This is a constructor for tokens. Write them on a single line
+      return super.visit(node)
+    }
     if children.count > 1 {
       return TupleExprElementListSyntax(formatChildrenSeparatedByNewline(children: children, elementType: TupleExprElementSyntax.self))
     } else {
@@ -127,24 +131,25 @@ extension SyntaxProtocol {
     } else if let token = Syntax(self).as(TokenSyntax.self) {
       let tokenKind = token.tokenKind
       let tokenInitializerName: String
-      let requiresExplicitText: Bool
+      let tokenKindArgument: ExprSyntax?
       if tokenKind.isLexerClassifiedKeyword || tokenKind == .eof {
         tokenInitializerName = String(describing: tokenKind)
-        requiresExplicitText = false
+        tokenKindArgument = nil
+      } else if case .keyword(let keyword) = tokenKind {
+        tokenInitializerName = "keyword"
+        tokenKindArgument = ExprSyntax(MemberAccessExprSyntax(name: String(describing: keyword)))
       } else if tokenKind.decomposeToRaw().rawKind.defaultText != nil {
         tokenInitializerName = "\(String(describing: tokenKind))Token"
-        requiresExplicitText = false
+        tokenKindArgument = nil
       } else {
         let tokenKindStr = String(describing: tokenKind)
         tokenInitializerName = String(tokenKindStr[..<tokenKindStr.firstIndex(of: "(")!])
-        requiresExplicitText = true
+        tokenKindArgument = ExprSyntax(StringLiteralExprSyntax(content: token.text))
       }
       return ExprSyntax(
         FunctionCallExprSyntax(callee: MemberAccessExprSyntax(name: tokenInitializerName)) {
-          if requiresExplicitText {
-            TupleExprElementSyntax(
-              expression: StringLiteralExprSyntax(content: token.text)
-            )
+          if let tokenKindArgument = tokenKindArgument {
+            TupleExprElementSyntax(expression: tokenKindArgument)
           }
           if includeTrivia && !token.leadingTrivia.isEmpty {
             TupleExprElementSyntax(

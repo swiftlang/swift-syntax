@@ -325,13 +325,13 @@ extension Bool: ExpressibleByLiteralSyntax {
 extension ArraySlice: ExpressibleByLiteralSyntax where Element: ExpressibleByLiteralSyntax {
   public func makeLiteralSyntax() -> ArrayExprSyntax {
     ArrayExprSyntax(
-      leftSquare: .leftSquareBracket,
+      leftSquare: .leftSquareBracketToken(),
       elements: ArrayElementListSyntax {
         for elem in self {
           ArrayElementSyntax(expression: elem.makeLiteralSyntax())
         }
       },
-      rightSquare: .rightSquareBracket
+      rightSquare: .rightSquareBracketToken()
     )
   }
 }
@@ -352,24 +352,24 @@ extension Set: ExpressibleByLiteralSyntax where Element: ExpressibleByLiteralSyn
     }
 
     return ArrayExprSyntax(
-      leftSquare: .leftSquareBracket,
+      leftSquare: .leftSquareBracketToken(),
       elements: ArrayElementListSyntax {
         for elemSyntax in elemSyntaxes {
           ArrayElementSyntax(expression: elemSyntax)
         }
       },
-      rightSquare: .rightSquareBracket
+      rightSquare: .rightSquareBracketToken()
     )
   }
 }
 
 extension KeyValuePairs: ExpressibleByLiteralSyntax where Key: ExpressibleByLiteralSyntax, Value: ExpressibleByLiteralSyntax {
   public func makeLiteralSyntax() -> DictionaryExprSyntax {
-    DictionaryExprSyntax(leftSquare: .leftSquareBracket, rightSquare: .rightSquareBracket) {
+    DictionaryExprSyntax(leftSquare: .leftSquareBracketToken(), rightSquare: .rightSquareBracketToken()) {
       for elem in self {
         DictionaryElementSyntax(
           keyExpression: elem.key.makeLiteralSyntax(),
-          colon: .colon,
+          colon: .colonToken(),
           valueExpression: elem.value.makeLiteralSyntax()
         )
       }
@@ -386,11 +386,11 @@ extension Dictionary: ExpressibleByLiteralSyntax where Key: ExpressibleByLiteral
       $0.key.syntaxTextBytes.lexicographicallyPrecedes($1.key.syntaxTextBytes)
     }
 
-    return DictionaryExprSyntax(leftSquare: .leftSquareBracket, rightSquare: .rightSquareBracket) {
+    return DictionaryExprSyntax(leftSquare: .leftSquareBracketToken(), rightSquare: .rightSquareBracketToken()) {
       for elemSyntax in elemSyntaxes {
         DictionaryElementSyntax(
           keyExpression: elemSyntax.key,
-          colon: .colon,
+          colon: .colonToken(),
           valueExpression: elemSyntax.value
         )
       }

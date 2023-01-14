@@ -56,12 +56,14 @@ public struct SyntaxBuildableType: Hashable {
   public var defaultInitialization: ExprSyntax? {
     if isOptional {
       return ExprSyntax(NilLiteralExprSyntax())
-    } else if isToken {
-      if let token = token, token.text != nil {
-        return ExprSyntax(MemberAccessExprSyntax(base: "TokenSyntax", name: lowercaseFirstWord(name: token.name).backticked))
-      } else if tokenKind == "EOFToken" {
-        return ExprSyntax(MemberAccessExprSyntax(base: "TokenSyntax", name: "eof"))
+    } else if let token = token {
+      if token.isKeyword {
+        return ExprSyntax(".\(raw: token.swiftKind)()")
+      } else if token.text != nil {
+        return ExprSyntax(".\(raw: lowercaseFirstWord(name: token.name))Token()")
       }
+    } else if tokenKind == "EOFToken" {
+      return ExprSyntax(".eof()")
     }
     return nil
   }

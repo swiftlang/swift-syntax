@@ -105,7 +105,7 @@ final class VariadicGenericsTests: XCTestCase {
       calledExpression: IdentifierExprSyntax(
         identifier: .identifier("each")
       ),
-      leftParen: .leftParen,
+      leftParen: .leftParenToken(),
       argumentList: TupleExprElementListSyntax([
         .init(
           expression:
@@ -114,7 +114,7 @@ final class VariadicGenericsTests: XCTestCase {
             )
         )
       ]),
-      rightParen: .rightParen
+      rightParen: .rightParenToken()
     )
 
     AssertParse(

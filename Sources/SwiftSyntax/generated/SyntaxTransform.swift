@@ -446,6 +446,11 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: DynamicReplacementArgumentsSyntax) -> ResultType
   
+  /// Visiting `EditorPlaceholderDeclSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: EditorPlaceholderDeclSyntax) -> ResultType
+  
   /// Visiting `EditorPlaceholderExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -1922,6 +1927,13 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
+  /// Visiting `EditorPlaceholderDeclSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: EditorPlaceholderDeclSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
   /// Visiting `EditorPlaceholderExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -3320,6 +3332,8 @@ extension SyntaxTransformVisitor {
     case .documentationAttributeArguments(let derived): 
       return visit(derived)
     case .dynamicReplacementArguments(let derived): 
+      return visit(derived)
+    case .editorPlaceholderDecl(let derived): 
       return visit(derived)
     case .editorPlaceholderExpr(let derived): 
       return visit(derived)

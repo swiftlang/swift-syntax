@@ -11272,3 +11272,138 @@ extension MacroExpansionDeclSyntax: CustomReflectable {
   }
 }
 
+// MARK: - EditorPlaceholderDeclSyntax
+
+public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .editorPlaceholderDecl else { return nil }
+    self._syntaxNode = node._syntaxNode
+  }
+
+  /// Creates a `EditorPlaceholderDeclSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .editorPlaceholderDecl)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeIdentifier: UnexpectedNodesSyntax? = nil,
+    identifier: TokenSyntax,
+    _ unexpectedAfterIdentifier: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed 
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeIdentifier, identifier, unexpectedAfterIdentifier))) { (arena, _) in
+      let layout: [RawSyntax?] = [
+        unexpectedBeforeIdentifier?.raw,
+        identifier.raw,
+        unexpectedAfterIdentifier?.raw,
+      ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.editorPlaceholderDecl, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+
+  public var unexpectedBeforeIdentifier: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 0, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBeforeIdentifier(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBeforeIdentifier` replaced.
+  /// - param newChild: The new `unexpectedBeforeIdentifier` to replace the node's
+  ///                   current `unexpectedBeforeIdentifier`, if present.
+  public func withUnexpectedBeforeIdentifier(_ newChild: UnexpectedNodesSyntax?) -> EditorPlaceholderDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
+    return EditorPlaceholderDeclSyntax(newData)
+  }
+
+  public var identifier: TokenSyntax {
+    get {
+      let childData = data.child(at: 1, parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withIdentifier(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `identifier` replaced.
+  /// - param newChild: The new `identifier` to replace the node's
+  ///                   current `identifier`, if present.
+  public func withIdentifier(_ newChild: TokenSyntax) -> EditorPlaceholderDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild.raw
+    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
+    return EditorPlaceholderDeclSyntax(newData)
+  }
+
+  public var unexpectedAfterIdentifier: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 2, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterIdentifier(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterIdentifier` replaced.
+  /// - param newChild: The new `unexpectedAfterIdentifier` to replace the node's
+  ///                   current `unexpectedAfterIdentifier`, if present.
+  public func withUnexpectedAfterIdentifier(_ newChild: UnexpectedNodesSyntax?) -> EditorPlaceholderDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
+    return EditorPlaceholderDeclSyntax(newData)
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeIdentifier,
+      \Self.identifier,
+      \Self.unexpectedAfterIdentifier,
+    ])
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
+}
+
+extension EditorPlaceholderDeclSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "unexpectedBeforeIdentifier": unexpectedBeforeIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "identifier": Syntax(identifier).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterIdentifier": unexpectedAfterIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+    ])
+  }
+}
+

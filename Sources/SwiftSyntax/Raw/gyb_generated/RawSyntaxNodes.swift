@@ -34,7 +34,7 @@ public struct RawDeclSyntax: RawDeclSyntaxNodeProtocol {
 
   public static func isKindOf(_ raw: RawSyntax) -> Bool {
     switch raw.kind {
-    case .missingDecl, .typealiasDecl, .associatedtypeDecl, .ifConfigDecl, .poundErrorDecl, .poundWarningDecl, .poundSourceLocation, .classDecl, .actorDecl, .structDecl, .protocolDecl, .extensionDecl, .functionDecl, .initializerDecl, .deinitializerDecl, .subscriptDecl, .importDecl, .accessorDecl, .variableDecl, .enumCaseDecl, .enumDecl, .operatorDecl, .precedenceGroupDecl, .macroDecl, .macroExpansionDecl: return true
+    case .missingDecl, .typealiasDecl, .associatedtypeDecl, .ifConfigDecl, .poundErrorDecl, .poundWarningDecl, .poundSourceLocation, .classDecl, .actorDecl, .structDecl, .protocolDecl, .extensionDecl, .functionDecl, .initializerDecl, .deinitializerDecl, .subscriptDecl, .importDecl, .accessorDecl, .variableDecl, .enumCaseDecl, .enumDecl, .operatorDecl, .precedenceGroupDecl, .macroDecl, .macroExpansionDecl, .editorPlaceholderDecl: return true
     default: return false
     }
   }
@@ -10298,6 +10298,56 @@ public struct RawMacroExpansionDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
   public var unexpectedAfterAdditionalTrailingClosures: RawUnexpectedNodesSyntax? {
     layoutView.children[16].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+}
+
+@_spi(RawSyntax)
+public struct RawEditorPlaceholderDeclSyntax: RawDeclSyntaxNodeProtocol {
+
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
+    return raw.layoutView!
+  }
+
+  public static func isKindOf(_ raw: RawSyntax) -> Bool {
+    return raw.kind == .editorPlaceholderDecl
+  }
+
+  public var raw: RawSyntax
+  init(raw: RawSyntax) {
+    assert(Self.isKindOf(raw))
+    self.raw = raw
+  }
+
+  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+    guard Self.isKindOf(other.raw) else { return nil }
+    self.init(raw: other.raw)
+  }
+
+  public init(
+    _ unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax? = nil,
+    identifier: RawTokenSyntax,
+    _ unexpectedAfterIdentifier: RawUnexpectedNodesSyntax? = nil,
+    arena: __shared SyntaxArena
+  ) {
+    let raw = RawSyntax.makeLayout(
+      kind: .editorPlaceholderDecl, uninitializedCount: 3, arena: arena) { layout in
+      layout.initialize(repeating: nil)
+      layout[0] = unexpectedBeforeIdentifier?.raw
+      layout[1] = identifier.raw
+      layout[2] = unexpectedAfterIdentifier?.raw
+    }
+    self.init(raw: raw)
+  }
+
+  public var unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax? {
+    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  public var identifier: RawTokenSyntax {
+    layoutView.children[1].map(RawTokenSyntax.init(raw:))!
+  }
+  public var unexpectedAfterIdentifier: RawUnexpectedNodesSyntax? {
+    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 

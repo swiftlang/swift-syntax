@@ -79,6 +79,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/PrecedenceGroupDeclSyntax>
 - <doc:SwiftSyntax/MacroDeclSyntax>
 - <doc:SwiftSyntax/MacroExpansionDeclSyntax>
+- <doc:SwiftSyntax/EditorPlaceholderDeclSyntax>
 
 ### Statements
 

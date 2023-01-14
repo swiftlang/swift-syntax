@@ -1038,6 +1038,13 @@ open class SyntaxRewriter {
     return DeclSyntax(visitChildren(node))
   }
 
+  /// Visit a `EditorPlaceholderDeclSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: EditorPlaceholderDeclSyntax) -> DeclSyntax {
+    return DeclSyntax(visitChildren(node))
+  }
+
   /// Visit a `TokenListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -3368,6 +3375,16 @@ open class SyntaxRewriter {
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplEditorPlaceholderDeclSyntax(_ data: SyntaxData) -> Syntax {
+    let node = EditorPlaceholderDeclSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { visitPost(node._syntaxNode) }
+    if let newNode = visitAny(node._syntaxNode) { return newNode }
+    return Syntax(visit(node))
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplTokenListSyntax(_ data: SyntaxData) -> Syntax {
     let node = TokenListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -4847,6 +4864,8 @@ open class SyntaxRewriter {
       return visitImplMacroDeclSyntax
     case .macroExpansionDecl:
       return visitImplMacroExpansionDeclSyntax
+    case .editorPlaceholderDecl:
+      return visitImplEditorPlaceholderDeclSyntax
     case .tokenList:
       return visitImplTokenListSyntax
     case .attribute:
@@ -5380,6 +5399,8 @@ open class SyntaxRewriter {
       return visitImplMacroDeclSyntax(data)
     case .macroExpansionDecl:
       return visitImplMacroExpansionDeclSyntax(data)
+    case .editorPlaceholderDecl:
+      return visitImplEditorPlaceholderDeclSyntax(data)
     case .tokenList:
       return visitImplTokenListSyntax(data)
     case .attribute:

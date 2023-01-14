@@ -460,6 +460,15 @@ extension DynamicReplacementArgumentsSyntax {
   }
 }
 
+extension EditorPlaceholderDeclSyntax {
+  /// A convenience initializer that allows:
+  ///  - Initializing syntax collections using result builders
+  ///  - Initializing tokens without default text using strings
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeIdentifier: UnexpectedNodesSyntax? = nil, identifier: String, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeIdentifier, identifier: TokenSyntax.`identifier`(identifier), trailingTrivia: trailingTrivia)
+  }
+}
+
 extension EditorPlaceholderExprSyntax {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders

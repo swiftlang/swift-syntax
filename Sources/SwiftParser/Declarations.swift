@@ -257,6 +257,16 @@ extension Parser {
           return RawDeclSyntax(self.parseLetOrVarDeclaration(attrs, .missing(.keyword(.var))))
         }
 
+        if self.currentToken.isEditorPlaceholder {
+          let placeholder = self.consumeAnyToken()
+          return RawDeclSyntax(
+            RawEditorPlaceholderDeclSyntax(
+              identifier: placeholder,
+              arena: self.arena
+            )
+          )
+        }
+
         let isProbablyFuncDecl = self.at(any: [.identifier, .wildcard]) || self.at(anyIn: Operator.self) != nil
 
         if isProbablyFuncDecl {

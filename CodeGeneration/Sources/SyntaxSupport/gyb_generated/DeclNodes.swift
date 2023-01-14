@@ -1677,4 +1677,15 @@ public let DECL_NODES: [Node] = [
                collectionElementName: "AdditionalTrailingClosure")
        ]),
 
+  Node(name: "EditorPlaceholderDecl",
+       nameForDiagnostics: "editor placeholder",
+       kind: "Decl",
+       children: [
+         Child(name: "Identifier",
+               kind: "IdentifierToken",
+               tokenChoices: [
+                 "Identifier"
+               ])
+       ]),
+
 ]

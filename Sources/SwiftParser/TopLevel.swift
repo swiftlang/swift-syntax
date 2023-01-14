@@ -73,9 +73,7 @@ extension Parser {
           item: .init(lastItem.item)!,
           lastItem.unexpectedBetweenItemAndSemicolon,
           semicolon: self.missingToken(.semicolon, text: nil),
-          lastItem.unexpectedBetweenSemicolonAndErrorTokens,
-          errorTokens: lastItem.errorTokens,
-          lastItem.unexpectedAfterErrorTokens,
+          lastItem.unexpectedAfterSemicolon,
           arena: self.arena
         )
       }
@@ -156,7 +154,6 @@ extension Parser {
         remainingTokens,
         item: .expr(RawExprSyntax(RawMissingExprSyntax(arena: self.arena))),
         semicolon: nil,
-        errorTokens: nil,
         arena: self.arena
       )
     }
@@ -168,7 +165,6 @@ extension Parser {
         RawUnexpectedNodesSyntax(elements: [RawSyntax(switchCase)], arena: self.arena),
         item: .expr(RawExprSyntax(RawMissingExprSyntax(arena: self.arena))),
         semicolon: nil,
-        errorTokens: nil,
         arena: self.arena
       )
     }
@@ -189,7 +185,6 @@ extension Parser {
       item: item,
       semicolon: semi,
       RawUnexpectedNodesSyntax(trailingSemis, arena: self.arena),
-      errorTokens: nil,
       arena: self.arena
     )
   }
@@ -210,9 +205,7 @@ extension Parser {
             item: .init(lastElement.item)!,
             lastElement.unexpectedBetweenItemAndSemicolon,
             semicolon: parser.missingToken(.semicolon, text: nil),
-            lastElement.unexpectedBetweenSemicolonAndErrorTokens,
-            errorTokens: lastElement.errorTokens,
-            lastElement.unexpectedAfterErrorTokens,
+            lastElement.unexpectedAfterSemicolon,
             arena: parser.arena
           )
         } else {

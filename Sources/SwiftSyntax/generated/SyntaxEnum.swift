@@ -100,6 +100,8 @@ public enum SyntaxEnum {
   
   case closureCaptureItemList(ClosureCaptureItemListSyntax)
   
+  case closureCaptureItemSpecifier(ClosureCaptureItemSpecifierSyntax)
+  
   case closureCaptureItem(ClosureCaptureItemSyntax)
   
   case closureCaptureSignature(ClosureCaptureSignatureSyntax)
@@ -474,8 +476,6 @@ public enum SyntaxEnum {
   
   case throwStmt(ThrowStmtSyntax)
   
-  case tokenList(TokenListSyntax)
-  
   case tryExpr(TryExprSyntax)
   
   case tupleExprElementList(TupleExprElementListSyntax)
@@ -629,6 +629,8 @@ public extension Syntax {
       return .classRestrictionType(ClassRestrictionTypeSyntax(self)!)
     case .closureCaptureItemList: 
       return .closureCaptureItemList(ClosureCaptureItemListSyntax(self)!)
+    case .closureCaptureItemSpecifier: 
+      return .closureCaptureItemSpecifier(ClosureCaptureItemSpecifierSyntax(self)!)
     case .closureCaptureItem: 
       return .closureCaptureItem(ClosureCaptureItemSyntax(self)!)
     case .closureCaptureSignature: 
@@ -1003,8 +1005,6 @@ public extension Syntax {
       return .ternaryExpr(TernaryExprSyntax(self)!)
     case .throwStmt: 
       return .throwStmt(ThrowStmtSyntax(self)!)
-    case .tokenList: 
-      return .tokenList(TokenListSyntax(self)!)
     case .tryExpr: 
       return .tryExpr(TryExprSyntax(self)!)
     case .tupleExprElementList: 

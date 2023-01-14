@@ -111,10 +111,9 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assert(layout.count == 0)
     break
   case .codeBlockItem:
-    assert(layout.count == 7)
+    assert(layout.count == 5)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertAnyHasNoError(kind, 1, [
-      verify(layout[1], as: RawSyntax.self),
       verify(layout[1], as: RawSyntax.self),
       verify(layout[1], as: RawSyntax.self),
       verify(layout[1], as: RawSyntax.self),
@@ -122,8 +121,6 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 3, verify(layout[3], as: RawTokenSyntax?.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 5, verify(layout[5], as: RawSyntax?.self))
-    assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
     break
   case .codeBlockItemList:
     for (index, element) in layout.enumerated() {
@@ -487,10 +484,22 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 1, verify(layout[1], as: RawTypeSyntax.self))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
     break
+  case .closureCaptureItemSpecifier:
+    assert(layout.count == 9)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawTokenSyntax?.self))
+    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax?.self))
+    assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 7, verify(layout[7], as: RawTokenSyntax?.self))
+    assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
+    break
   case .closureCaptureItem:
     assert(layout.count == 11)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawTokenListSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawClosureCaptureItemSpecifierSyntax?.self))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 3, verify(layout[3], as: RawTokenSyntax?.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
@@ -1535,11 +1544,6 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    break
-  case .tokenList:
-    for (index, element) in layout.enumerated() {
-      assertNoError(kind, index, verify(element, as: RawTokenSyntax.self))
-    }
     break
   case .attribute:
     assert(layout.count == 11)

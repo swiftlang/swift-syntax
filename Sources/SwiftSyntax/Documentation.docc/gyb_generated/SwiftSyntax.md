@@ -283,6 +283,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/TupleExprElementSyntax>
 - <doc:SwiftSyntax/ArrayElementSyntax>
 - <doc:SwiftSyntax/DictionaryElementSyntax>
+- <doc:SwiftSyntax/ClosureCaptureItemSpecifierSyntax>
 - <doc:SwiftSyntax/ClosureCaptureItemSyntax>
 - <doc:SwiftSyntax/ClosureCaptureItemListSyntax>
 - <doc:SwiftSyntax/ClosureCaptureSignatureSyntax>
@@ -338,7 +339,6 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/PrecedenceGroupNameElementSyntax>
 - <doc:SwiftSyntax/PrecedenceGroupAssignmentSyntax>
 - <doc:SwiftSyntax/PrecedenceGroupAssociativitySyntax>
-- <doc:SwiftSyntax/TokenListSyntax>
 - <doc:SwiftSyntax/AttributeSyntax>
 - <doc:SwiftSyntax/AttributeListSyntax>
 - <doc:SwiftSyntax/SpecializeAttributeSpecListSyntax>

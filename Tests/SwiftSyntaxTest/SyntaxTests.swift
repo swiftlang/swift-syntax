@@ -22,8 +22,20 @@ public class SyntaxTests: XCTestCase {
     XCTAssertTrue(MissingExprSyntax().hasError)
     XCTAssertFalse(CodeBlockItemListSyntax([]).hasError)
 
-    XCTAssertTrue(TokenListSyntax([TokenSyntax.keyword(.func, presence: .missing)]).hasError)
-    XCTAssertFalse(TokenListSyntax([TokenSyntax.keyword(.func, presence: .present)]).hasError)
+    XCTAssertTrue(
+      FunctionDeclSyntax(
+        funcKeyword: TokenSyntax.keyword(.func, presence: .missing),
+        identifier: .identifier("foo"),
+        signature: FunctionSignatureSyntax(input: ParameterClauseSyntax(parameterList: []))
+      ).hasError
+    )
+    XCTAssertFalse(
+      FunctionDeclSyntax(
+        funcKeyword: TokenSyntax.keyword(.func, presence: .present),
+        identifier: .identifier("foo"),
+        signature: FunctionSignatureSyntax(input: ParameterClauseSyntax(parameterList: []))
+      ).hasError
+    )
   }
 
   public func testDetach() {

@@ -2333,39 +2333,42 @@ extension Parser {
   }
 
   @_spi(RawSyntax)
-  public mutating func parseClosureCaptureSpecifiers() -> RawTokenListSyntax? {
-    var specifiers = [RawTokenSyntax]()
-    do {
-      // Check for the strength specifier: "weak", "unowned", or
-      // "unowned(safe/unsafe)".
-      if let weakKeyword = self.consume(if: .keyword(.weak)) {
-        specifiers.append(weakKeyword)
-      } else if let unownedKeyword = self.consume(if: .keyword(.unowned)) {
-        specifiers.append(unownedKeyword)
-        if let lparen = self.consume(if: .leftParen) {
-          specifiers.append(lparen)
-          if self.currentToken.tokenText == "safe" {
-            specifiers.append(self.expectWithoutRecovery(.keyword(.safe)))
-          } else {
-            specifiers.append(self.expectWithoutRecovery(.keyword(.unsafe)))
-          }
-          specifiers.append(self.expectWithoutRecovery(.rightParen))
-        }
-      } else if self.at(.identifier) || self.at(.keyword(.self)) {
-        let next = self.peek()
-        // "x = 42", "x," and "x]" are all strong captures of x.
-        guard
-          next.rawTokenKind == .equal || next.rawTokenKind == .comma
-            || next.rawTokenKind == .rightSquareBracket || next.rawTokenKind == .period
-        else {
-          return nil
-        }
+  public mutating func parseClosureCaptureSpecifiers() -> RawClosureCaptureItemSpecifierSyntax? {
+    // Check for the strength specifier: "weak", "unowned", or
+    // "unowned(safe/unsafe)".
+    if let weakContextualKeyword = self.consume(if: .keyword(.weak)) {
+      return RawClosureCaptureItemSpecifierSyntax(
+        specifier: weakContextualKeyword,
+        leftParen: nil,
+        detail: nil,
+        rightParen: nil,
+        arena: self.arena
+      )
+    } else if let unownedContextualKeyword = self.consume(if: .keyword(.unowned)) {
+      if let lparen = self.consume(if: .leftParen) {
+        let (unexpectedBeforeDetail, detail) = self.expectAny([.keyword(.safe), .keyword(.unsafe)], default: .keyword(.safe))
+        let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
+        return RawClosureCaptureItemSpecifierSyntax(
+          specifier: unownedContextualKeyword,
+          leftParen: lparen,
+          unexpectedBeforeDetail,
+          detail: detail,
+          unexpectedBeforeRParen,
+          rightParen: rparen,
+          arena: self.arena
+        )
       } else {
-        return nil
+        return RawClosureCaptureItemSpecifierSyntax(
+          specifier: unownedContextualKeyword,
+          leftParen: nil,
+          detail: nil,
+          rightParen: nil,
+          arena: self.arena
+        )
       }
+    } else {
+      return nil
     }
-    // Squash all tokens, if any, as the specifier of the captured item.
-    return RawTokenListSyntax(elements: specifiers, arena: self.arena)
   }
 }
 

@@ -520,6 +520,18 @@ open class SyntaxVisitor {
   open func visitPost(_ node: ClosureCaptureItemListSyntax) {
   }
   
+  /// Visiting `ClosureCaptureItemSpecifierSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: ClosureCaptureItemSpecifierSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting `ClosureCaptureItemSpecifierSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: ClosureCaptureItemSpecifierSyntax) {
+  }
+  
   /// Visiting `ClosureCaptureItemSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -2764,18 +2776,6 @@ open class SyntaxVisitor {
   open func visitPost(_ node: ThrowStmtSyntax) {
   }
   
-  /// Visiting `TokenListSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: TokenListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting `TokenListSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: TokenListSyntax) {
-  }
-  
   /// Visiting `TryExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -3615,6 +3615,17 @@ open class SyntaxVisitor {
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplClosureCaptureItemListSyntax(_ data: SyntaxData) {
     let node = ClosureCaptureItemListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplClosureCaptureItemSpecifierSyntax(_ data: SyntaxData) {
+    let node = ClosureCaptureItemSpecifierSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -5681,17 +5692,6 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplTokenListSyntax(_ data: SyntaxData) {
-    let node = TokenListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplTryExprSyntax(_ data: SyntaxData) {
     let node = TryExprSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -6132,6 +6132,8 @@ open class SyntaxVisitor {
       visitImplClassRestrictionTypeSyntax(data)
     case .closureCaptureItemList: 
       visitImplClosureCaptureItemListSyntax(data)
+    case .closureCaptureItemSpecifier: 
+      visitImplClosureCaptureItemSpecifierSyntax(data)
     case .closureCaptureItem: 
       visitImplClosureCaptureItemSyntax(data)
     case .closureCaptureSignature: 
@@ -6506,8 +6508,6 @@ open class SyntaxVisitor {
       visitImplTernaryExprSyntax(data)
     case .throwStmt: 
       visitImplThrowStmtSyntax(data)
-    case .tokenList: 
-      visitImplTokenListSyntax(data)
     case .tryExpr: 
       visitImplTryExprSyntax(data)
     case .tupleExprElementList: 

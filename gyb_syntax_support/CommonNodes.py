@@ -40,14 +40,12 @@ COMMON_NODES = [
                        Child('Decl', kind='Decl'),
                        Child('Stmt', kind='Stmt'),
                        Child('Expr', kind='Expr'),
-                       Child('TokenList', kind='TokenList'),
                    ]),
              Child('Semicolon', kind='SemicolonToken',
                    description="""
                    If present, the trailing semicolon at the end of the item.
                    """,
                    is_optional=True),
-             Child('ErrorTokens', kind='Syntax', is_optional=True),
          ]),
 
     # code-block-item-list -> code-block-item code-block-item-list?

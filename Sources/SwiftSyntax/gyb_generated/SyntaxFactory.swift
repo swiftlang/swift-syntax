@@ -123,15 +123,13 @@ public enum SyntaxFactory {
     }
   }
   @available(*, deprecated, message: "Use initializer on CodeBlockItemSyntax")
-  public static func makeCodeBlockItem(_ unexpectedBeforeItem: UnexpectedNodesSyntax? = nil, item: Syntax, _ unexpectedBetweenItemAndSemicolon: UnexpectedNodesSyntax? = nil, semicolon: TokenSyntax?, _ unexpectedBetweenSemicolonAndErrorTokens: UnexpectedNodesSyntax? = nil, errorTokens: Syntax?, _ unexpectedAfterErrorTokens: UnexpectedNodesSyntax? = nil) -> CodeBlockItemSyntax {
+  public static func makeCodeBlockItem(_ unexpectedBeforeItem: UnexpectedNodesSyntax? = nil, item: Syntax, _ unexpectedBetweenItemAndSemicolon: UnexpectedNodesSyntax? = nil, semicolon: TokenSyntax?, _ unexpectedAfterSemicolon: UnexpectedNodesSyntax? = nil) -> CodeBlockItemSyntax {
     let layout: [RawSyntax?] = [
       unexpectedBeforeItem?.raw,
       item.raw,
       unexpectedBetweenItemAndSemicolon?.raw,
       semicolon?.raw,
-      unexpectedBetweenSemicolonAndErrorTokens?.raw,
-      errorTokens?.raw,
-      unexpectedAfterErrorTokens?.raw,
+      unexpectedAfterSemicolon?.raw,
     ]
     return withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.codeBlockItem,
@@ -148,8 +146,6 @@ public enum SyntaxFactory {
         from: [
         nil,
         RawSyntax.makeEmptyLayout(kind: SyntaxKind.missing, arena: arena),
-        nil,
-        nil,
         nil,
         nil,
         nil,
@@ -1504,8 +1500,47 @@ public enum SyntaxFactory {
       return TypeExprSyntax(data)
     }
   }
+  @available(*, deprecated, message: "Use initializer on ClosureCaptureItemSpecifierSyntax")
+  public static func makeClosureCaptureItemSpecifier(_ unexpectedBeforeSpecifier: UnexpectedNodesSyntax? = nil, specifier: TokenSyntax, _ unexpectedBetweenSpecifierAndLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax?, _ unexpectedBetweenLeftParenAndDetail: UnexpectedNodesSyntax? = nil, detail: TokenSyntax?, _ unexpectedBetweenDetailAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax?, _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil) -> ClosureCaptureItemSpecifierSyntax {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeSpecifier?.raw,
+      specifier.raw,
+      unexpectedBetweenSpecifierAndLeftParen?.raw,
+      leftParen?.raw,
+      unexpectedBetweenLeftParenAndDetail?.raw,
+      detail?.raw,
+      unexpectedBetweenDetailAndRightParen?.raw,
+      rightParen?.raw,
+      unexpectedAfterRightParen?.raw,
+    ]
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.closureCaptureItemSpecifier,
+        from: layout, arena: arena)
+      let data = SyntaxData.forRoot(raw)
+      return ClosureCaptureItemSpecifierSyntax(data)
+    }
+  }
+
+  @available(*, deprecated, message: "Use initializer on ClosureCaptureItemSpecifierSyntax")
+  public static func makeBlankClosureCaptureItemSpecifier(presence: SourcePresence = .present) -> ClosureCaptureItemSpecifierSyntax {
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .closureCaptureItemSpecifier,
+        from: [
+        nil,
+        RawSyntax.makeMissingToken(kind: TokenKind.unknown(""), arena: arena),
+        nil,
+        nil,
+        nil,
+        nil,
+        nil,
+        nil,
+        nil,
+      ], arena: arena))
+      return ClosureCaptureItemSpecifierSyntax(data)
+    }
+  }
   @available(*, deprecated, message: "Use initializer on ClosureCaptureItemSyntax")
-  public static func makeClosureCaptureItem(_ unexpectedBeforeSpecifier: UnexpectedNodesSyntax? = nil, specifier: TokenListSyntax?, _ unexpectedBetweenSpecifierAndName: UnexpectedNodesSyntax? = nil, name: TokenSyntax?, _ unexpectedBetweenNameAndAssignToken: UnexpectedNodesSyntax? = nil, assignToken: TokenSyntax?, _ unexpectedBetweenAssignTokenAndExpression: UnexpectedNodesSyntax? = nil, expression: ExprSyntax, _ unexpectedBetweenExpressionAndTrailingComma: UnexpectedNodesSyntax? = nil, trailingComma: TokenSyntax?, _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil) -> ClosureCaptureItemSyntax {
+  public static func makeClosureCaptureItem(_ unexpectedBeforeSpecifier: UnexpectedNodesSyntax? = nil, specifier: ClosureCaptureItemSpecifierSyntax?, _ unexpectedBetweenSpecifierAndName: UnexpectedNodesSyntax? = nil, name: TokenSyntax?, _ unexpectedBetweenNameAndAssignToken: UnexpectedNodesSyntax? = nil, assignToken: TokenSyntax?, _ unexpectedBetweenAssignTokenAndExpression: UnexpectedNodesSyntax? = nil, expression: ExprSyntax, _ unexpectedBetweenExpressionAndTrailingComma: UnexpectedNodesSyntax? = nil, trailingComma: TokenSyntax?, _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil) -> ClosureCaptureItemSyntax {
     let layout: [RawSyntax?] = [
       unexpectedBeforeSpecifier?.raw,
       specifier?.raw,
@@ -4873,26 +4908,6 @@ public enum SyntaxFactory {
         nil,
       ], arena: arena))
       return EditorPlaceholderDeclSyntax(data)
-    }
-  }
-  @available(*, deprecated, message: "Use initializer on TokenListSyntax")
-  public static func makeTokenList(
-    _ elements: [TokenSyntax]) -> TokenListSyntax {
-    return withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.tokenList,
-        from: elements.map { $0.raw }, arena: arena)
-      let data = SyntaxData.forRoot(raw)
-      return TokenListSyntax(data)
-    }
-  }
-
-  @available(*, deprecated, message: "Use initializer on TokenListSyntax")
-  public static func makeBlankTokenList(presence: SourcePresence = .present) -> TokenListSyntax {
-    return withExtendedLifetime(SyntaxArena()) { arena in
-      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .tokenList,
-        from: [
-      ], arena: arena))
-      return TokenListSyntax(data)
     }
   }
   @available(*, deprecated, message: "Use initializer on AttributeSyntax")

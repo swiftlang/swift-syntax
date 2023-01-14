@@ -387,6 +387,13 @@ open class SyntaxRewriter {
     return ExprSyntax(visitChildren(node))
   }
 
+  /// Visit a `ClosureCaptureItemSpecifierSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: ClosureCaptureItemSpecifierSyntax) -> ClosureCaptureItemSpecifierSyntax {
+    return Syntax(visitChildren(node)).cast(ClosureCaptureItemSpecifierSyntax.self)
+  }
+
   /// Visit a `ClosureCaptureItemSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -1043,13 +1050,6 @@ open class SyntaxRewriter {
   ///   - Returns: the rewritten node
   open func visit(_ node: EditorPlaceholderDeclSyntax) -> DeclSyntax {
     return DeclSyntax(visitChildren(node))
-  }
-
-  /// Visit a `TokenListSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: TokenListSyntax) -> TokenListSyntax {
-    return Syntax(visitChildren(node)).cast(TokenListSyntax.self)
   }
 
   /// Visit a `AttributeSyntax`.
@@ -2445,6 +2445,16 @@ open class SyntaxRewriter {
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplClosureCaptureItemSpecifierSyntax(_ data: SyntaxData) -> Syntax {
+    let node = ClosureCaptureItemSpecifierSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { visitPost(node._syntaxNode) }
+    if let newNode = visitAny(node._syntaxNode) { return newNode }
+    return Syntax(visit(node))
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplClosureCaptureItemSyntax(_ data: SyntaxData) -> Syntax {
     let node = ClosureCaptureItemSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -3377,16 +3387,6 @@ open class SyntaxRewriter {
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplEditorPlaceholderDeclSyntax(_ data: SyntaxData) -> Syntax {
     let node = EditorPlaceholderDeclSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer { visitPost(node._syntaxNode) }
-    if let newNode = visitAny(node._syntaxNode) { return newNode }
-    return Syntax(visit(node))
-  }
-
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplTokenListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = TokenListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer { visitPost(node._syntaxNode) }
@@ -4678,6 +4678,8 @@ open class SyntaxRewriter {
       return visitImplAsExprSyntax
     case .typeExpr:
       return visitImplTypeExprSyntax
+    case .closureCaptureItemSpecifier:
+      return visitImplClosureCaptureItemSpecifierSyntax
     case .closureCaptureItem:
       return visitImplClosureCaptureItemSyntax
     case .closureCaptureItemList:
@@ -4866,8 +4868,6 @@ open class SyntaxRewriter {
       return visitImplMacroExpansionDeclSyntax
     case .editorPlaceholderDecl:
       return visitImplEditorPlaceholderDeclSyntax
-    case .tokenList:
-      return visitImplTokenListSyntax
     case .attribute:
       return visitImplAttributeSyntax
     case .attributeList:
@@ -5213,6 +5213,8 @@ open class SyntaxRewriter {
       return visitImplAsExprSyntax(data)
     case .typeExpr:
       return visitImplTypeExprSyntax(data)
+    case .closureCaptureItemSpecifier:
+      return visitImplClosureCaptureItemSpecifierSyntax(data)
     case .closureCaptureItem:
       return visitImplClosureCaptureItemSyntax(data)
     case .closureCaptureItemList:
@@ -5401,8 +5403,6 @@ open class SyntaxRewriter {
       return visitImplMacroExpansionDeclSyntax(data)
     case .editorPlaceholderDecl:
       return visitImplEditorPlaceholderDeclSyntax(data)
-    case .tokenList:
-      return visitImplTokenListSyntax(data)
     case .attribute:
       return visitImplAttributeSyntax(data)
     case .attributeList:

@@ -100,6 +100,8 @@ public enum SyntaxKind {
   
   case closureCaptureItemList
   
+  case closureCaptureItemSpecifier
+  
   case closureCaptureItem
   
   case closureCaptureSignature
@@ -474,8 +476,6 @@ public enum SyntaxKind {
   
   case throwStmt
   
-  case tokenList
-  
   case tryExpr
   
   case tupleExprElementList
@@ -621,8 +621,6 @@ public enum SyntaxKind {
     case .stringLiteralSegments: 
       return true
     case .switchCaseList: 
-      return true
-    case .tokenList: 
       return true
     case .tupleExprElementList: 
       return true

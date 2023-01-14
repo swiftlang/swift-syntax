@@ -60,6 +60,7 @@ extension Syntax {
         .node(ClassDeclSyntax.self), 
         .node(ClassRestrictionTypeSyntax.self), 
         .node(ClosureCaptureItemListSyntax.self), 
+        .node(ClosureCaptureItemSpecifierSyntax.self), 
         .node(ClosureCaptureItemSyntax.self), 
         .node(ClosureCaptureSignatureSyntax.self), 
         .node(ClosureExprSyntax.self), 
@@ -247,7 +248,6 @@ extension Syntax {
         .node(TargetFunctionEntrySyntax.self), 
         .node(TernaryExprSyntax.self), 
         .node(ThrowStmtSyntax.self), 
-        .node(TokenListSyntax.self), 
         .node(TryExprSyntax.self), 
         .node(TupleExprElementListSyntax.self), 
         .node(TupleExprElementSyntax.self), 
@@ -370,6 +370,8 @@ extension SyntaxKind {
       return ClassRestrictionTypeSyntax.self
     case .closureCaptureItemList: 
       return ClosureCaptureItemListSyntax.self
+    case .closureCaptureItemSpecifier: 
+      return ClosureCaptureItemSpecifierSyntax.self
     case .closureCaptureItem: 
       return ClosureCaptureItemSyntax.self
     case .closureCaptureSignature: 
@@ -744,8 +746,6 @@ extension SyntaxKind {
       return TernaryExprSyntax.self
     case .throwStmt: 
       return ThrowStmtSyntax.self
-    case .tokenList: 
-      return TokenListSyntax.self
     case .tryExpr: 
       return TryExprSyntax.self
     case .tupleExprElementList: 
@@ -899,6 +899,8 @@ extension SyntaxKind {
       return nil
     case .closureCaptureItemList: 
       return nil
+    case .closureCaptureItemSpecifier: 
+      return "closure capture specifier"
     case .closureCaptureItem: 
       return "closure capture item"
     case .closureCaptureSignature: 
@@ -1273,8 +1275,6 @@ extension SyntaxKind {
       return "ternay expression"
     case .throwStmt: 
       return "'throw' statement"
-    case .tokenList: 
-      return "token list"
     case .tryExpr: 
       return "'try' expression"
     case .tupleExprElementList: 

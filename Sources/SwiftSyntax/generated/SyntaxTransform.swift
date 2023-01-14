@@ -226,6 +226,11 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ClosureCaptureItemListSyntax) -> ResultType
   
+  /// Visiting `ClosureCaptureItemSpecifierSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: ClosureCaptureItemSpecifierSyntax) -> ResultType
+  
   /// Visiting `ClosureCaptureItemSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -1161,11 +1166,6 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ThrowStmtSyntax) -> ResultType
   
-  /// Visiting `TokenListSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: TokenListSyntax) -> ResultType
-  
   /// Visiting `TryExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -1616,6 +1616,13 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ClosureCaptureItemListSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting `ClosureCaptureItemSpecifierSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: ClosureCaptureItemSpecifierSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -2928,13 +2935,6 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `TokenListSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: TokenListSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
   /// Visiting `TryExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -3244,6 +3244,8 @@ extension SyntaxTransformVisitor {
     case .classRestrictionType(let derived): 
       return visit(derived)
     case .closureCaptureItemList(let derived): 
+      return visit(derived)
+    case .closureCaptureItemSpecifier(let derived): 
       return visit(derived)
     case .closureCaptureItem(let derived): 
       return visit(derived)
@@ -3618,8 +3620,6 @@ extension SyntaxTransformVisitor {
     case .ternaryExpr(let derived): 
       return visit(derived)
     case .throwStmt(let derived): 
-      return visit(derived)
-    case .tokenList(let derived): 
       return visit(derived)
     case .tryExpr(let derived): 
       return visit(derived)

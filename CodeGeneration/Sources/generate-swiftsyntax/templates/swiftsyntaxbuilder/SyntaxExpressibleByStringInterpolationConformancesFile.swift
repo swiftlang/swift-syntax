@@ -15,17 +15,17 @@ import SyntaxSupport
 import SwiftSyntaxBuilder
 import Utils
 
-let syntaxExpressibleByStringInterpolationConformancesFile = SourceFile {
-  ImportDecl(
+let syntaxExpressibleByStringInterpolationConformancesFile = SourceFileSyntax {
+  ImportDeclSyntax(
     """
     \(raw: generateCopyrightHeader(for: "generate-swiftsyntaxbuilder"))
     import SwiftSyntax
     """)
-  ImportDecl("import SwiftParser")
-  ImportDecl("import SwiftParserDiagnostics")
+  ImportDeclSyntax("import SwiftParser")
+  ImportDeclSyntax("import SwiftParserDiagnostics")
   
-  ExtensionDecl("extension SyntaxParseable") {
-    InitializerDecl(
+  ExtensionDeclSyntax("extension SyntaxParseable") {
+    InitializerDeclSyntax(
       """
       public init(stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
         self = try performParse(source: stringInterpolation.sourceText, parse: { parser in
@@ -37,8 +37,8 @@ let syntaxExpressibleByStringInterpolationConformancesFile = SourceFile {
   
   for node in SYNTAX_NODES {
     if node.isBase {
-      ExtensionDecl("extension \(node.name)Protocol") {
-        InitializerDecl(
+      ExtensionDeclSyntax("extension \(node.name)Protocol") {
+        InitializerDeclSyntax(
           """
           public init(stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
             self = try performParse(source: stringInterpolation.sourceText, parse: { parser in
@@ -54,8 +54,8 @@ let syntaxExpressibleByStringInterpolationConformancesFile = SourceFile {
     }
 
     if node.parserFunction != nil {
-      ExtensionDecl("extension \(node.name): SyntaxExpressibleByStringInterpolation") {
-        InitializerDecl(
+      ExtensionDeclSyntax("extension \(node.name): SyntaxExpressibleByStringInterpolation") {
+        InitializerDeclSyntax(
           """
           public init(stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
             self = try performParse(source: stringInterpolation.sourceText, parse: { parser in
@@ -65,11 +65,11 @@ let syntaxExpressibleByStringInterpolationConformancesFile = SourceFile {
           """)
       }
     } else if !node.isMissing && node.baseType.baseName != "Syntax" && node.baseType.baseName != "SyntaxCollection" {
-      ExtensionDecl("extension \(raw: node.name): SyntaxExpressibleByStringInterpolation { }")
+      ExtensionDeclSyntax("extension \(raw: node.name): SyntaxExpressibleByStringInterpolation { }")
     }
   }
   
-  FunctionDecl(
+  FunctionDeclSyntax(
     """
     // TODO: This should be fileprivate, but is currently used in
     // `ConvenienceInitializers.swift`. See the corresponding TODO there.

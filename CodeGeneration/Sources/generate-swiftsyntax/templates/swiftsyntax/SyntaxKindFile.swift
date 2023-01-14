@@ -15,55 +15,55 @@ import SwiftSyntaxBuilder
 import SyntaxSupport
 import Utils
 
-let syntaxKindFile = SourceFile(leadingTrivia: .docLineComment(generateCopyrightHeader(for: "generate-swiftsyntax"))) {
-  EnumDecl("""
+let syntaxKindFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCopyrightHeader(for: "generate-swiftsyntax"))) {
+  EnumDeclSyntax("""
     /// Enumerates the known kinds of Syntax represented in the Syntax tree.
     @frozen // FIXME: Not actually stable, works around a miscompile
     public enum SyntaxKind
     """) {
-    EnumCaseDecl("case token")
+    EnumCaseDeclSyntax("case token")
     for node in NON_BASE_SYNTAX_NODES {
-      EnumCaseDecl("case \(raw: node.swiftSyntaxKind)")
+      EnumCaseDeclSyntax("case \(raw: node.swiftSyntaxKind)")
     }
     
-    VariableDecl(
-      modifiers: [DeclModifier(name: .public)],
-      name: IdentifierPattern("isSyntaxCollection"),
-      type: TypeAnnotation(
+    VariableDeclSyntax(
+      modifiers: [DeclModifierSyntax(name: .keyword(.public))],
+      name: IdentifierPatternSyntax("isSyntaxCollection"),
+      type: TypeAnnotationSyntax(
         colon: .colon,
-        type: SimpleTypeIdentifier("Bool")
+        type: SimpleTypeIdentifierSyntax("Bool")
       )
     ) {
-      SwitchStmt(expression: Expr("self")) {
+      SwitchStmtSyntax(expression: ExprSyntax("self")) {
         for node in SYNTAX_NODES where node.baseKind == "SyntaxCollection"{
-          SwitchCase("case .\(raw: node.swiftSyntaxKind):") {
-            ReturnStmt("return true")
+          SwitchCaseSyntax("case .\(raw: node.swiftSyntaxKind):") {
+            ReturnStmtSyntax("return true")
           }
         }
         
-        SwitchCase("default:") {
-          ReturnStmt("return false")
+        SwitchCaseSyntax("default:") {
+          ReturnStmtSyntax("return false")
         }
       }
     }
     
-    VariableDecl(
-      modifiers: [DeclModifier(name: .public)],
-      name: IdentifierPattern("isMissing"),
-      type: TypeAnnotation(
+    VariableDeclSyntax(
+      modifiers: [DeclModifierSyntax(name: .keyword(.public))],
+      name: IdentifierPatternSyntax("isMissing"),
+      type: TypeAnnotationSyntax(
         colon: .colon,
-        type: SimpleTypeIdentifier("Bool")
+        type: SimpleTypeIdentifierSyntax("Bool")
       )
     ) {
-      SwitchStmt(expression: Expr("self")) {
+      SwitchStmtSyntax(expression: ExprSyntax("self")) {
         for name in SYNTAX_BASE_KINDS where !["Syntax", "SyntaxCollection"].contains(name) {
-          SwitchCase("case .missing\(raw: name):") {
-            ReturnStmt("return true")
+          SwitchCaseSyntax("case .missing\(raw: name):") {
+            ReturnStmtSyntax("return true")
           }
         }
         
-        SwitchCase("default:") {
-          ReturnStmt("return false")
+        SwitchCaseSyntax("default:") {
+          ReturnStmtSyntax("return false")
         }
       }
     }

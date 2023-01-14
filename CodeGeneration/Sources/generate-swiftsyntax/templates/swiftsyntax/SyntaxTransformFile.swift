@@ -15,16 +15,16 @@ import SwiftSyntaxBuilder
 import SyntaxSupport
 import Utils
 
-let syntaxTransformFile = SourceFile(leadingTrivia: .docLineComment(generateCopyrightHeader(for: "generate-swiftsyntax"))) {
-  ProtocolDecl("public protocol SyntaxTransformVisitor") {
-    AssociatedtypeDecl("associatedtype ResultType = Void")
+let syntaxTransformFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCopyrightHeader(for: "generate-swiftsyntax"))) {
+  ProtocolDeclSyntax("public protocol SyntaxTransformVisitor") {
+    AssociatedtypeDeclSyntax("associatedtype ResultType = Void")
     
-    FunctionDecl("func visitAny(_ node: Syntax) -> ResultType")
+    FunctionDeclSyntax("func visitAny(_ node: Syntax) -> ResultType")
     
-    FunctionDecl("func visit(_ token: TokenSyntax) -> ResultType")
+    FunctionDeclSyntax("func visit(_ token: TokenSyntax) -> ResultType")
     
     for node in SYNTAX_NODES where node.isVisitable {
-      FunctionDecl("""
+      FunctionDeclSyntax("""
         /// Visiting `\(raw: node.name)` specifically.
         ///   - Parameter node: the node we are visiting.
         ///   - Returns: the sum of whatever the child visitors return.
@@ -33,15 +33,15 @@ let syntaxTransformFile = SourceFile(leadingTrivia: .docLineComment(generateCopy
     }
   }
   
-  ExtensionDecl("extension SyntaxTransformVisitor") {
-    FunctionDecl("""
+  ExtensionDeclSyntax("extension SyntaxTransformVisitor") {
+    FunctionDeclSyntax("""
     public func visit(_ token: TokenSyntax) -> ResultType {
       visitAny(Syntax(token))
     }
     """)
     
     for node in SYNTAX_NODES where node.isVisitable {
-      FunctionDecl("""
+      FunctionDeclSyntax("""
         /// Visiting `\(raw: node.name)` specifically.
         ///   - Parameter node: the node we are visiting.
         ///   - Returns: nil by default.
@@ -51,44 +51,44 @@ let syntaxTransformFile = SourceFile(leadingTrivia: .docLineComment(generateCopy
         """)
     }
     
-    FunctionDecl("public func visit(_ node: Syntax) -> ResultType") {
-      SwitchStmt(expression: Expr("node.as(SyntaxEnum.self)")) {
-        SwitchCase("case .token(let node):") {
-          ReturnStmt("return visit(node)")
+    FunctionDeclSyntax("public func visit(_ node: Syntax) -> ResultType") {
+      SwitchStmtSyntax(expression: ExprSyntax("node.as(SyntaxEnum.self)")) {
+        SwitchCaseSyntax("case .token(let node):") {
+          ReturnStmtSyntax("return visit(node)")
         }
         for node in NON_BASE_SYNTAX_NODES {
-          SwitchCase("case .\(raw: node.swiftSyntaxKind)(let derived):") {
-            ReturnStmt("return visit(derived)")
+          SwitchCaseSyntax("case .\(raw: node.swiftSyntaxKind)(let derived):") {
+            ReturnStmtSyntax("return visit(derived)")
           }
         }
       }
     }
     
-    FunctionDecl("""
+    FunctionDeclSyntax("""
       public func visit(_ node: ExprSyntax) -> ResultType {
         visit(Syntax(node))
       }
       """)
     
-    FunctionDecl("""
+    FunctionDeclSyntax("""
       public func visit(_ node: PatternSyntax) -> ResultType {
         visit(Syntax(node))
       }
       """)
     
-    FunctionDecl("""
+    FunctionDeclSyntax("""
       public func visit(_ node: TypeSyntax) -> ResultType {
         visit(Syntax(node))
       }
       """)
     
-    FunctionDecl("""
+    FunctionDeclSyntax("""
       public func visit<T: SyntaxChildChoices>(_ node: T) -> ResultType {
         return visit(Syntax(node))
       }
       """)
     
-    FunctionDecl("""
+    FunctionDeclSyntax("""
       public func visitChildren<SyntaxType: SyntaxProtocol>(_ node: SyntaxType) -> [ResultType] {
         let syntaxNode = Syntax(node)
         return NonNilRawSyntaxChildren(syntaxNode, viewMode: .sourceAccurate).map { rawChild in

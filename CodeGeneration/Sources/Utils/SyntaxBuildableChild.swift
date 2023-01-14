@@ -34,8 +34,8 @@ public extension Child {
     }
   }
 
-  var parameterType: Type {
-    return self.type.optionalWrapped(type: SimpleTypeIdentifier(name: .identifier(parameterBaseType)))
+  var parameterType: TypeSyntax {
+    return self.type.optionalWrapped(type: SimpleTypeIdentifierSyntax(name: .identifier(parameterBaseType)))
   }
 
   /// If the child node has documentation associated with it, return it as single
@@ -44,13 +44,13 @@ public extension Child {
     flattened(indentedDocumentation: description ?? "")
   }
 
-  var defaultInitialization: Expr? {
+  var defaultInitialization: ExprSyntax? {
     if self.textChoices.count == 1, let token = token, token.associatedValueClass != nil {
       var textChoice = self.textChoices[0]
       if textChoice == "init" {
         textChoice = "`init`"
       }
-      return Expr(".\(raw: token.swiftKind)(.\(raw: textChoice))")
+      return ExprSyntax(".\(raw: token.swiftKind)(.\(raw: textChoice))")
     } else {
       return type.defaultInitialization
     }
@@ -59,7 +59,7 @@ public extension Child {
   /// If this node is a token that can't contain arbitrary text, generate a Swift
   /// `assert` statement that verifies the variable with name var_name and of type
   /// `TokenSyntax` contains one of the supported text options. Otherwise return `nil`.
-  func generateAssertStmtTextChoices(varName: String) -> FunctionCallExpr? {
+  func generateAssertStmtTextChoices(varName: String) -> FunctionCallExprSyntax? {
     guard type.isToken else {
       return nil
     }
@@ -76,24 +76,24 @@ public extension Child {
       return nil
     }
 
-    var assertChoices: [Expr] = []
+    var assertChoices: [ExprSyntax] = []
     if type.isOptional {
-      assertChoices.append(Expr(SequenceExpr {
-        IdentifierExpr(identifier: .identifier(varName))
-        BinaryOperatorExpr(text: "==")
-        NilLiteralExpr()
+      assertChoices.append(ExprSyntax(SequenceExprSyntax {
+        IdentifierExprSyntax(identifier: .identifier(varName))
+        BinaryOperatorExprSyntax(text: "==")
+        NilLiteralExprSyntax()
       }))
     }
     for textChoice in choices {
-      assertChoices.append(Expr(SequenceExpr {
-        MemberAccessExpr(base: type.forceUnwrappedIfNeeded(expr: IdentifierExpr(identifier: .identifier(varName))), name: "text")
-        BinaryOperatorExpr(text: "==")
-        StringLiteralExpr(content: textChoice)
+      assertChoices.append(ExprSyntax(SequenceExprSyntax {
+        MemberAccessExprSyntax(base: type.forceUnwrappedIfNeeded(expr: IdentifierExprSyntax(identifier: .identifier(varName))), name: "text")
+        BinaryOperatorExprSyntax(text: "==")
+        StringLiteralExprSyntax(content: textChoice)
       }))
     }
-    let disjunction = ExprList(assertChoices.flatMap { [$0, Expr(BinaryOperatorExpr(text: "||"))] }.dropLast())
-    return FunctionCallExpr(callee: Expr("assert")) {
-      TupleExprElement(expression: SequenceExpr(elements: disjunction))
+    let disjunction = ExprListSyntax(assertChoices.flatMap { [$0, ExprSyntax(BinaryOperatorExprSyntax(text: "||"))] }.dropLast())
+    return FunctionCallExprSyntax(callee: ExprSyntax("assert")) {
+      TupleExprElementSyntax(expression: SequenceExprSyntax(elements: disjunction))
     }
   }
 }

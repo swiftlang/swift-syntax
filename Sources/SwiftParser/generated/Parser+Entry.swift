@@ -30,7 +30,7 @@ extension Parser {
   /// Parse the source code in the given string as Swift source file. See
   /// `Parser.init` for more details.
   public static func parse(
-    source: UnsafeBufferPointer < UInt8 > , 
+    source: UnsafeBufferPointer<UInt8>, 
     maximumNestingLevel: Int? = nil, 
     parseTransition: IncrementalParseTransition? = nil
   ) -> SourceFileSyntax {
@@ -140,7 +140,7 @@ extension TypeSyntax: SyntaxParseable {
 }
 
 fileprivate extension Parser {
-  mutating func parseRemainder < R: RawSyntaxNodeProtocol > (into: R) -> R {
+  mutating func parseRemainder<R: RawSyntaxNodeProtocol>(into: R) -> R {
     guard !into.raw.kind.isSyntaxCollection, let layout = into.raw.layoutView else {
       assertionFailure("Only support parsing of non-collection layout nodes")
       return into

@@ -54,14 +54,14 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: [.blockComment(gener
           }
           
           VariableDeclSyntax(
-            modifiers: [DeclModifierSyntax(name: .public)],
+            modifiers: [DeclModifierSyntax(name: .keyword(.public))],
             name: IdentifierPatternSyntax("_syntaxNode"),
             type: TypeAnnotationSyntax(
               colon: .colon,
               type: TypeSyntax("Syntax")
             )
           ) {
-            SwitchStmtSyntax(switchKeyword: .switch, expression: ExprSyntax("self")) {
+            SwitchStmtSyntax(switchKeyword: .keyword(.switch), expression: ExprSyntax("self")) {
               for choiceName in node.collectionElementChoices ?? [] {
                 let choice = SYNTAX_NODE_MAP[choiceName]!
                 SwitchCaseSyntax("case .\(raw: choice.swiftSyntaxKind)(let node):") {
@@ -106,9 +106,9 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: [.blockComment(gener
           }
           
           VariableDeclSyntax(
-            modifiers: [DeclModifier(name: .public), DeclModifier(name: .static)],
-            name: IdentifierPattern("structure"),
-            type: TypeAnnotation(
+            modifiers: [DeclModifierSyntax(name: .keyword(.public)), DeclModifierSyntax(name: .keyword(.static))],
+            name: IdentifierPatternSyntax("structure"),
+            type: TypeAnnotationSyntax(
               colon: .colon,
               type: TypeSyntax("SyntaxNodeStructure")
             )

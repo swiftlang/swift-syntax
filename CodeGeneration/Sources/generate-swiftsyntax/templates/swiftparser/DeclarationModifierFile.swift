@@ -15,8 +15,8 @@ import SwiftSyntaxBuilder
 import SyntaxSupport
 import Utils
 
-let declarationModifierFile = SourceFile {
-  ImportDecl(
+let declarationModifierFile = SourceFileSyntax {
+  ImportDeclSyntax(
     """
     \(raw: generateCopyrightHeader(for: "generate-swiftparser"))
     @_spi(RawSyntax) import SwiftSyntax
@@ -24,37 +24,37 @@ let declarationModifierFile = SourceFile {
     """
   )
   
-  EnumDecl("enum DeclarationModifier: RawTokenKindSubset") {
+  EnumDeclSyntax("enum DeclarationModifier: RawTokenKindSubset") {
     for attribute in DECL_MODIFIER_KINDS {
-      EnumCaseDecl("case \(raw: attribute.swiftName)")
+      EnumCaseDeclSyntax("case \(raw: attribute.swiftName)")
     }
-    InitializerDecl("init?(lexeme: Lexer.Lexeme)") {
-      SwitchStmt(expression: Expr("lexeme")) {
+    InitializerDeclSyntax("init?(lexeme: Lexer.Lexeme)") {
+      SwitchStmtSyntax(expression: ExprSyntax("lexeme")) {
         for attribute in DECL_MODIFIER_KINDS {
-          SwitchCase("case RawTokenKindMatch(.\(raw: attribute.swiftName)):") {
-            SequenceExpr("self = .\(raw: attribute.swiftName)")
+          SwitchCaseSyntax("case RawTokenKindMatch(.\(raw: attribute.swiftName)):") {
+            SequenceExprSyntax("self = .\(raw: attribute.swiftName)")
           }
         }
-        SwitchCase("default:") {
-          ReturnStmt("return nil")
+        SwitchCaseSyntax("default:") {
+          ReturnStmtSyntax("return nil")
         }
       }
     }
     
-    VariableDecl(
-      name: IdentifierPattern("rawTokenKind"),
-      type: TypeAnnotation(
+    VariableDeclSyntax(
+      name: IdentifierPatternSyntax("rawTokenKind"),
+      type: TypeAnnotationSyntax(
         colon: .colon,
-        type: SimpleTypeIdentifier("RawTokenKind")
+        type: SimpleTypeIdentifierSyntax("RawTokenKind")
       )
     ) {
-      SwitchStmt(expression: Expr("self")) {
+      SwitchStmtSyntax(expression: ExprSyntax("self")) {
         for attribute in DECL_MODIFIER_KINDS {
-          SwitchCase("case .\(raw: attribute.swiftName):") {
+          SwitchCaseSyntax("case .\(raw: attribute.swiftName):") {
             if attribute.swiftName.hasSuffix("Keyword") {
-              ReturnStmt("return .\(raw: attribute.swiftName)")
+              ReturnStmtSyntax("return .\(raw: attribute.swiftName)")
             } else {
-              ReturnStmt("return .keyword(.\(raw: attribute.swiftName))")
+              ReturnStmtSyntax("return .keyword(.\(raw: attribute.swiftName))")
             }
           }
         }

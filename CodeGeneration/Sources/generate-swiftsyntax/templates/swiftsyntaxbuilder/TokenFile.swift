@@ -15,16 +15,16 @@ import SwiftSyntaxBuilder
 import SyntaxSupport
 import Utils
 
-let tokenFile = SourceFile {
-  ImportDecl(
+let tokenFile = SourceFileSyntax {
+  ImportDeclSyntax(
     leadingTrivia: .docLineComment(generateCopyrightHeader(for: "generate-swiftsyntaxbuilder")),
-    path: [AccessPathComponent(name: "SwiftSyntax")]
+    path: [AccessPathComponentSyntax(name: "SwiftSyntax")]
   )
 
-  ExtensionDecl("public extension TokenSyntax") {
+  ExtensionDeclSyntax("public extension TokenSyntax") {
     for token in SYNTAX_TOKENS {
       if token.isKeyword {
-        VariableDecl("""
+        VariableDeclSyntax("""
           /// The `\(raw: token.text!)` keyword
           static var \(raw: token.name.withFirstCharacterLowercased.backticked): TokenSyntax {
             return .\(raw: token.swiftKind)()
@@ -32,7 +32,7 @@ let tokenFile = SourceFile {
           """
         )
       } else if let text = token.text {
-        VariableDecl("""
+        VariableDeclSyntax("""
           /// The `\(raw: text)` token
           static var \(raw: token.name.withFirstCharacterLowercased.backticked): TokenSyntax {
             return .\(raw: token.swiftKind)Token()
@@ -41,7 +41,7 @@ let tokenFile = SourceFile {
         )
       }
     }
-    VariableDecl("""
+    VariableDeclSyntax("""
       /// The `eof` token
       static var eof: TokenSyntax {
         return .eof()
@@ -49,7 +49,7 @@ let tokenFile = SourceFile {
       """
     )
 
-    VariableDecl("""
+    VariableDeclSyntax("""
       /// The `open` contextual token
       static var open: TokenSyntax {
         return .keyword(.open).withTrailingTrivia(.space)

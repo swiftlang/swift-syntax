@@ -541,7 +541,7 @@ public enum SyntaxEnum {
 
 public extension Syntax {
   /// Get an enum that can be used to exhaustively switch over all syntax nodes.
-  func `as`(_ : SyntaxEnum.Type) -> SyntaxEnum {
+  func `as`(_: SyntaxEnum.Type) -> SyntaxEnum {
     switch raw.kind {
     case .token: 
       return .token(TokenSyntax(self)!)

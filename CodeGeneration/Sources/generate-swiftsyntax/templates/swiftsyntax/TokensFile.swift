@@ -15,12 +15,12 @@ import SwiftSyntaxBuilder
 import SyntaxSupport
 import Utils
 
-let tokensFile = SourceFile(
+let tokensFile = SourceFileSyntax(
   leadingTrivia: .docLineComment(generateCopyrightHeader(for: "generate-swiftsyntax"))) {
-    ExtensionDecl("extension TokenSyntax") {
+    ExtensionDeclSyntax("extension TokenSyntax") {
       for token in SYNTAX_TOKENS {
         if token.isKeyword {
-          FunctionDecl("""
+          FunctionDeclSyntax("""
           public static func \(raw: token.swiftKind)(
             leadingTrivia: Trivia = [],
             trailingTrivia: Trivia = [],
@@ -35,7 +35,7 @@ let tokensFile = SourceFile(
           }
           """)
         } else if let text = token.text {
-          FunctionDecl("""
+          FunctionDeclSyntax("""
           public static func \(raw: token.swiftKind)Token(
             leadingTrivia: Trivia = [],
             trailingTrivia: Trivia = [],
@@ -50,7 +50,7 @@ let tokensFile = SourceFile(
           }
           """)
         } else if let associatedValueClass = token.associatedValueClass {
-          FunctionDecl("""
+          FunctionDeclSyntax("""
           public static func \(raw: token.swiftKind)(
             _ value: \(raw: associatedValueClass),
             leadingTrivia: Trivia = [],
@@ -66,7 +66,7 @@ let tokensFile = SourceFile(
           }
           """)
         } else {
-          FunctionDecl("""
+          FunctionDeclSyntax("""
           public static func \(raw: token.swiftKind)(
             _ text: String,
             leadingTrivia: Trivia = [],
@@ -84,7 +84,7 @@ let tokensFile = SourceFile(
         }
       }
       
-      FunctionDecl("""
+      FunctionDeclSyntax("""
       public static func eof(
         leadingTrivia: Trivia = [],
         presence: SourcePresence = .present

@@ -55,7 +55,7 @@ let tokenKindFile = SourceFileSyntax {
     
     VariableDeclSyntax(
       leadingTrivia: .docBlockComment("/// The textual representation of this token kind.") + .newlines(1),
-      attributes: [.attribute(AttributeSyntax(attributeName: TypeSyntax("_spi"), leftParen: .leftParen, argument: .token(.identifier("Testing")), rightParen: .rightParen))],
+      attributes: [.attribute(AttributeSyntax(attributeName: TypeSyntax("_spi"), leftParen: .leftParenToken(), argument: .token(.identifier("Testing")), rightParen: .rightParenToken()))],
       modifiers: [DeclModifierSyntax(leadingTrivia: .newline, name: .keyword(.public))],
       name: IdentifierPatternSyntax("text"),
       type: TypeAnnotationSyntax(type: TypeSyntax("String"))
@@ -85,7 +85,7 @@ let tokenKindFile = SourceFileSyntax {
 
     VariableDeclSyntax(
       leadingTrivia: .docBlockComment("/// If this token kind always has the same syntax text, that syntax text, otherwise `nil`.") + .newlines(1),
-      attributes: [.attribute(AttributeSyntax(attributeName: TypeSyntax("_spi"), leftParen: .leftParen, argument: .token(.identifier("RawSyntax")), rightParen: .rightParen))],
+      attributes: [.attribute(AttributeSyntax(attributeName: TypeSyntax("_spi"), leftParen: .leftParenToken(), argument: .token(.identifier("RawSyntax")), rightParen: .rightParenToken()))],
       modifiers: [DeclModifierSyntax(leadingTrivia: .newline, name: .keyword(.public))],
       name: IdentifierPatternSyntax("defaultText"),
       type: TypeAnnotationSyntax(type: TypeSyntax("SyntaxText?"))
@@ -218,7 +218,7 @@ let tokenKindFile = SourceFileSyntax {
     }
     
     VariableDeclSyntax(
-      attributes: [.attribute(AttributeSyntax(attributeName: TypeSyntax("_spi"), leftParen: .leftParen, argument: .token(.identifier("RawSyntax")), rightParen: .rightParen))],
+      attributes: [.attribute(AttributeSyntax(attributeName: TypeSyntax("_spi"), leftParen: .leftParenToken(), argument: .token(.identifier("RawSyntax")), rightParen: .rightParenToken()))],
       modifiers: [DeclModifierSyntax(leadingTrivia: .newline, name: .keyword(.public))],
       name: IdentifierPatternSyntax("defaultText"),
       type: TypeAnnotationSyntax(type: OptionalTypeSyntax("SyntaxText?"))

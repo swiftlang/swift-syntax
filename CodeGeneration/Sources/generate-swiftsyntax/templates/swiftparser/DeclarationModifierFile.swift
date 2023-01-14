@@ -44,7 +44,7 @@ let declarationModifierFile = SourceFileSyntax {
     VariableDeclSyntax(
       name: IdentifierPatternSyntax("rawTokenKind"),
       type: TypeAnnotationSyntax(
-        colon: .colon,
+        colon: .colonToken(),
         type: SimpleTypeIdentifierSyntax("RawTokenKind")
       )
     ) {

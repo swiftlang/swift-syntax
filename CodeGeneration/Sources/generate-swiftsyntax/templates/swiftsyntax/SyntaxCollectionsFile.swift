@@ -57,7 +57,7 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: [.blockComment(gener
             modifiers: [DeclModifierSyntax(name: .keyword(.public))],
             name: IdentifierPatternSyntax("_syntaxNode"),
             type: TypeAnnotationSyntax(
-              colon: .colon,
+              colon: .colonToken(),
               type: TypeSyntax("Syntax")
             )
           ) {
@@ -109,7 +109,7 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: [.blockComment(gener
             modifiers: [DeclModifierSyntax(name: .keyword(.public)), DeclModifierSyntax(name: .keyword(.static))],
             name: IdentifierPatternSyntax("structure"),
             type: TypeAnnotationSyntax(
-              colon: .colon,
+              colon: .colonToken(),
               type: TypeSyntax("SyntaxNodeStructure")
             )
           ) {

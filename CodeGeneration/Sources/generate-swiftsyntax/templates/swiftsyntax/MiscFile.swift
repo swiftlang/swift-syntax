@@ -24,7 +24,7 @@ let miscFile = SourceFileSyntax {
       modifiers: [DeclModifierSyntax(name: .keyword(.public)), DeclModifierSyntax(name: .keyword(.static))],
       name: IdentifierPatternSyntax("structure"),
       type: TypeAnnotationSyntax(
-        colon: .colon,
+        colon: .colonToken(),
         type: SimpleTypeIdentifierSyntax("SyntaxNodeStructure")
       )
     ) {
@@ -33,12 +33,12 @@ let miscFile = SourceFileSyntax {
           TupleExprElementSyntax(
             expression: ArrayExprSyntax {
               ArrayElementSyntax(
-                expression: FunctionCallExprSyntax("\n.node(TokenSyntax.self)"),
-                trailingComma: .comma)
+                expression: FunctionCallExprSyntax("\n.node(TokenSyntax.self)")
+              )
               for node in NON_BASE_SYNTAX_NODES {
                 ArrayElementSyntax(
-                  expression: FunctionCallExprSyntax("\n.node(\(raw: node.name).self)"),
-                  trailingComma: .comma)
+                  expression: FunctionCallExprSyntax("\n.node(\(raw: node.name).self)")
+                )
               }
             })
         }
@@ -51,7 +51,7 @@ let miscFile = SourceFileSyntax {
       modifiers: [DeclModifierSyntax(name: .keyword(.public))],
       name: IdentifierPatternSyntax("syntaxNodeType"),
       type: TypeAnnotationSyntax(
-        colon: .colon,
+        colon: .colonToken(),
         type: MetatypeTypeSyntax("SyntaxProtocol.Type")
       )
     ) {
@@ -71,7 +71,7 @@ let miscFile = SourceFileSyntax {
       modifiers: [DeclModifierSyntax(name: .keyword(.public))],
       name: IdentifierPatternSyntax("nameForDiagnostics"),
       type: TypeAnnotationSyntax(
-        colon: .colon,
+        colon: .colonToken(),
         type: OptionalTypeSyntax("String?")
       )
     ) {

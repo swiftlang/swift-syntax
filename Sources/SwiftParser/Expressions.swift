@@ -1756,7 +1756,14 @@ extension Parser {
           var runexpectedTokens = [RawSyntax]()
           let runexpected: RawUnexpectedNodesSyntax?
           var loopProgress = LoopProgressCondition()
-          while !subparser.at(any: [.eof, .rightParen]) && loopProgress.evaluate(subparser.currentToken) {
+          var openParens = 0
+          // Terminate the loop when we've reached EOF or are at a ')' with no more open '(' that we need to skip
+          while !subparser.at(.eof) && !(subparser.at(.rightParen) && openParens == 0) && loopProgress.evaluate(subparser.currentToken) {
+            if subparser.at(.leftParen) {
+              openParens += 1
+            } else if subparser.at(.rightParen) {
+              openParens -= 1
+            }
             runexpectedTokens.append(RawSyntax(subparser.consumeAnyToken()))
           }
           if !runexpectedTokens.isEmpty {

@@ -468,6 +468,74 @@ public struct WrapStoredProperties: MemberAttributeMacro {
   }
 }
 
+struct CustomTypeWrapperMacro {}
+
+extension CustomTypeWrapperMacro: MemberDeclarationMacro {
+  static func expansion(
+    of node: AttributeSyntax,
+    attachedTo declaration: DeclSyntax,
+    in context: inout MacroExpansionContext
+  ) throws -> [DeclSyntax] {
+    return [
+      """
+
+        var _storage: Wrapper<Self>
+      """
+    ]
+  }
+}
+
+extension CustomTypeWrapperMacro: MemberAttributeMacro {
+  static func expansion(
+    of node: AttributeSyntax,
+    attachedTo declaration: DeclSyntax,
+    annotating member: DeclSyntax,
+    in context: inout MacroExpansionContext
+  ) throws -> [AttributeSyntax] {
+    return [
+      AttributeSyntax(
+        attributeName: SimpleTypeIdentifierSyntax(
+          name: .identifier("customTypeWrapper")
+        )
+      )
+      .withLeadingTrivia([.newlines(1), .spaces(2)])
+    ]
+  }
+}
+
+extension CustomTypeWrapperMacro: AccessorDeclarationMacro {
+  static func expansion(
+    of node: AttributeSyntax,
+    attachedTo declaration: DeclSyntax,
+    in context: inout MacroExpansionContext
+  ) throws -> [AccessorDeclSyntax] {
+    guard let property = declaration.as(VariableDeclSyntax.self),
+      let binding = property.bindings.first,
+      let identifier = binding.pattern.as(IdentifierPatternSyntax.self)?.identifier,
+      binding.accessor == nil
+    else {
+      return []
+    }
+
+    if identifier.text == "_storage" { return [] }
+
+    return [
+      """
+
+          get {
+            _storage[wrappedKeyPath: \\.\(identifier)]
+          }
+      """,
+      """
+
+          set {
+            _storage[wrappedKeyPath: \\.\(identifier)] = newValue
+          }
+      """,
+    ]
+  }
+}
+
 // MARK: Assertion helper functions
 
 /// Assert that expanding the given macros in the original source produces
@@ -534,6 +602,7 @@ public let testMacros: [String: Macro.Type] = [
   "addBackingStorage": AddBackingStorage.self,
   "wrapAllProperties": WrapAllProperties.self,
   "wrapStoredProperties": WrapStoredProperties.self,
+  "customTypeWrapper": CustomTypeWrapperMacro.self,
 ]
 
 final class MacroSystemTests: XCTestCase {
@@ -787,5 +856,42 @@ final class MacroSystemTests: XCTestCase {
       }
       """
     )
+  }
+
+  func testTypeWrapperTransform() {
+    AssertMacroExpansion(
+      macros: testMacros,
+      """
+      @customTypeWrapper
+      struct Point {
+        var x: Int
+        var y: Int
+      }
+      """,
+      // FIXME: Accessor brace indentation is off
+      """
+
+      struct Point {
+        var x: Int {
+          get {
+            _storage[wrappedKeyPath: \\.x]
+          }
+          set {
+            _storage[wrappedKeyPath: \\.x] = newValue
+          }
+      }
+        var y: Int {
+          get {
+            _storage[wrappedKeyPath: \\.y]
+          }
+          set {
+            _storage[wrappedKeyPath: \\.y] = newValue
+          }
+      }
+        var _storage: Wrapper<Self>
+      }
+      """
+    )
+
   }
 }

@@ -708,7 +708,12 @@ DECL_ATTR_KINDS = [
     SimpleDeclAttribute('runtimeMetadata', 'RuntimeMetadata',
                         OnStruct,  OnClass,
                         ABIBreakingToAdd,  ABIBreakingToRemove,  APIBreakingToAdd,  APIBreakingToRemove,
-                        code=139)
+                        code=139),
+
+    DeclAttribute('_package', 'Package',
+                  OnImport, UserInaccessible,
+                  APIStableToAdd, APIStableToRemove, ABIStableToAdd, ABIStableToRemove, NotSerialized,
+                  code=140),
 ]
 
 # Schema for declaration modifiers:

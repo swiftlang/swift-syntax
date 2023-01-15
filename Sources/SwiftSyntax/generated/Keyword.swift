@@ -85,6 +85,8 @@ public enum Keyword: UInt8, Hashable {
   
   case _originallyDefinedIn
   
+  case _package
+  
   case _PackageDescription
   
   case _private
@@ -655,6 +657,8 @@ public enum Keyword: UInt8, Hashable {
         self = ._effects
       case "_forward": 
         self = ._forward
+      case "_package": 
+        self = ._package
       case "_private": 
         self = ._private
       case "_Trivial": 

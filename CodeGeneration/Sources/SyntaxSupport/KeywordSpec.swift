@@ -67,6 +67,7 @@ public let KEYWORDS: [KeywordSpec] = [
   KeywordSpec("_opaqueReturnTypeOf"),
   KeywordSpec("_optimize"),
   KeywordSpec("_originallyDefinedIn"),
+  KeywordSpec("_package"),
   KeywordSpec("_PackageDescription"),
   KeywordSpec("_private"),
   KeywordSpec("_projectedValueProperty"),

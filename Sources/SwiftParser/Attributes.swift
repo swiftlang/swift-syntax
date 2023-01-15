@@ -43,6 +43,7 @@ extension Parser {
     case _objcRuntimeName
     case _optimize
     case _originallyDefinedIn
+    case _package
     case _private
     case _projectedValueProperty
     case _semantics
@@ -78,6 +79,7 @@ extension Parser {
       case RawTokenKindMatch(._objcRuntimeName): self = ._objcRuntimeName
       case RawTokenKindMatch(._optimize): self = ._optimize
       case RawTokenKindMatch(._originallyDefinedIn): self = ._originallyDefinedIn
+      case RawTokenKindMatch(._package): self = ._package
       case RawTokenKindMatch(._private): self = ._private
       case RawTokenKindMatch(._projectedValueProperty): self = ._projectedValueProperty
       case RawTokenKindMatch(._semantics): self = ._semantics
@@ -116,6 +118,7 @@ extension Parser {
       case ._objcRuntimeName: return .keyword(._objcRuntimeName)
       case ._optimize: return .keyword(._optimize)
       case ._originallyDefinedIn: return .keyword(._originallyDefinedIn)
+      case ._package: return .keyword(._package)
       case ._private: return .keyword(._private)
       case ._projectedValueProperty: return .keyword(._projectedValueProperty)
       case ._semantics: return .keyword(._semantics)
@@ -242,6 +245,15 @@ extension Parser {
     case ._specialize:
       return parseAttribute(argumentMode: .required) { parser in
         return .specializeArguments(parser.parseSpecializeAttributeSpecList())
+      }
+    case ._package:
+      return parseAttribute(argumentMode: .required) { parser in
+        // TODO: @_package(...) argument parsing
+        if !parser.at(.rightParen) {
+          return .token(parser.consumeAnyToken())
+        } else {
+          return .token(parser.missingToken(.identifier))
+        }
       }
     case ._private:
       return parseAttribute(argumentMode: .required) { parser in

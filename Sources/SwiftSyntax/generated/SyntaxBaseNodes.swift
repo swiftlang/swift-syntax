@@ -14,6 +14,11 @@
 //
 //===----------------------------------------------------------------------===//
 
+// MARK: - DeclSyntax
+
+/// Protocol to which all `DeclSyntax` nodes conform. Extension point to add
+/// common methods to all `DeclSyntax` nodes.
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
 public protocol DeclSyntaxProtocol: SyntaxProtocol {
 }
 

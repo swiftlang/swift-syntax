@@ -14,6 +14,15 @@
 //
 //===----------------------------------------------------------------------===//
 
+//
+// This file defines the SyntaxRewriter, a class that performs a standard walk
+// and tree-rebuilding pattern.
+//
+// Subclassers of this class can override the walking behavior for any syntax
+// node and transform nodes however they like.
+//
+//===----------------------------------------------------------------------===//
+
 open class SyntaxRewriter {
   public init() {
   }

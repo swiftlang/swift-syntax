@@ -540,4 +540,9 @@ final class AttributeTests: XCTestCase {
     AssertParse("func takeRepeater(_ f: @MainActor @Sendable @escaping () -> Int) {}")
     AssertParse("takeRepesater { @MainActor @Sendable () -> Int in 0 }")
   }
+
+  func testPackageAttribute() {
+    AssertParse(#"@_package(path: "../my-package") import A"#)
+    AssertParse(#"@_package(url: "https://example.com/package.git", from: "0.0.1") @_exported import A"#)
+  }
 }

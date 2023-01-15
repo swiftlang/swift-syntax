@@ -153,6 +153,8 @@ public enum Keyword: UInt8, Hashable {
   
   case block
   
+  case branch
+  
   case `break`
   
   case `case`
@@ -217,6 +219,8 @@ public enum Keyword: UInt8, Hashable {
   
   case forward
   
+  case from
+  
   case `func`
   
   case get
@@ -224,6 +228,8 @@ public enum Keyword: UInt8, Hashable {
   case `guard`
   
   case higherThan
+  
+  case id
   
   case `if`
   
@@ -307,6 +313,8 @@ public enum Keyword: UInt8, Hashable {
   
   case package
   
+  case path
+  
   case postfix
   
   case `precedencegroup`
@@ -314,6 +322,8 @@ public enum Keyword: UInt8, Hashable {
   case prefix
   
   case `private`
+  
+  case product
   
   case `Protocol`
   
@@ -334,6 +344,8 @@ public enum Keyword: UInt8, Hashable {
   case `return`
   
   case reverse
+  
+  case revision
   
   case right
   
@@ -395,6 +407,8 @@ public enum Keyword: UInt8, Hashable {
   
   case unsafeMutableAddress
   
+  case url
+  
   case `var`
   
   case visibility
@@ -421,6 +435,8 @@ public enum Keyword: UInt8, Hashable {
         self = .`as`
       case "do": 
         self = .`do`
+      case "id": 
+        self = .id
       case "if": 
         self = .`if`
       case "in": 
@@ -452,6 +468,8 @@ public enum Keyword: UInt8, Hashable {
         self = .spi
       case "try": 
         self = .`try`
+      case "url": 
+        self = .url
       case "var": 
         self = .`var`
       case "wrt": 
@@ -473,6 +491,8 @@ public enum Keyword: UInt8, Hashable {
         self = .`enum`
       case "file": 
         self = .file
+      case "from": 
+        self = .from
       case "func": 
         self = .`func`
       case "init": 
@@ -491,6 +511,8 @@ public enum Keyword: UInt8, Hashable {
         self = .objc
       case "open": 
         self = .open
+      case "path": 
+        self = .path
       case "safe": 
         self = .safe
       case "self": 
@@ -573,6 +595,8 @@ public enum Keyword: UInt8, Hashable {
         self = ._local
       case "before": 
         self = .before
+      case "branch": 
+        self = .branch
       case "deinit": 
         self = .`deinit`
       case "didSet": 
@@ -636,6 +660,8 @@ public enum Keyword: UInt8, Hashable {
         self = .postfix
       case "private": 
         self = .`private`
+      case "product": 
+        self = .product
       case "reasync": 
         self = .reasync
       case "renamed": 
@@ -695,6 +721,8 @@ public enum Keyword: UInt8, Hashable {
         self = .required
       case "rethrows": 
         self = .`rethrows`
+      case "revision": 
+        self = .revision
       case "Sendable": 
         self = .Sendable
       default: 
@@ -1108,6 +1136,7 @@ public enum Keyword: UInt8, Hashable {
     "backDeployed", 
     "before", 
     "block", 
+    "branch", 
     "break", 
     "case", 
     "catch", 
@@ -1140,10 +1169,12 @@ public enum Keyword: UInt8, Hashable {
     "final", 
     "for", 
     "forward", 
+    "from", 
     "func", 
     "get", 
     "guard", 
     "higherThan", 
+    "id", 
     "if", 
     "import", 
     "in", 
@@ -1185,10 +1216,12 @@ public enum Keyword: UInt8, Hashable {
     "optional", 
     "override", 
     "package", 
+    "path", 
     "postfix", 
     "precedencegroup", 
     "prefix", 
     "private", 
+    "product", 
     "Protocol", 
     "protocol", 
     "public", 
@@ -1199,6 +1232,7 @@ public enum Keyword: UInt8, Hashable {
     "rethrows", 
     "return", 
     "reverse", 
+    "revision", 
     "right", 
     "safe", 
     "self", 
@@ -1229,6 +1263,7 @@ public enum Keyword: UInt8, Hashable {
     "unsafe", 
     "unsafeAddress", 
     "unsafeMutableAddress", 
+    "url", 
     "var", 
     "visibility", 
     "weak", 

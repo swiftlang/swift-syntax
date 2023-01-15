@@ -10574,7 +10574,7 @@ public struct PackageAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenLocationColonAndLocation: UnexpectedNodesSyntax? = nil,
     location: StringLiteralExprSyntax,
     _ unexpectedBetweenLocationAndLocReqComma: UnexpectedNodesSyntax? = nil,
-    locReqComma: TokenSyntax = .commaToken(),
+    locReqComma: TokenSyntax? = nil,
     _ unexpectedBetweenLocReqCommaAndRequirementLabel: UnexpectedNodesSyntax? = nil,
     requirementLabel: TokenSyntax? = nil,
     _ unexpectedBetweenRequirementLabelAndRequirementColon: UnexpectedNodesSyntax? = nil,
@@ -10603,7 +10603,7 @@ public struct PackageAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
         unexpectedBetweenLocationColonAndLocation?.raw,
         location.raw,
         unexpectedBetweenLocationAndLocReqComma?.raw,
-        locReqComma.raw,
+        locReqComma?.raw,
         unexpectedBetweenLocReqCommaAndRequirementLabel?.raw,
         requirementLabel?.raw,
         unexpectedBetweenRequirementLabelAndRequirementColon?.raw,
@@ -10647,7 +10647,7 @@ public struct PackageAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenLocationColonAndLocation: UnexpectedNodesSyntax? = nil,
     location: StringLiteralExprSyntax,
     _ unexpectedBetweenLocationAndLocReqComma: UnexpectedNodesSyntax? = nil,
-    locReqComma: TokenSyntax = .commaToken(),
+    locReqComma: TokenSyntax? = nil,
     _ unexpectedBetweenLocReqCommaAndRequirementLabel: UnexpectedNodesSyntax? = nil,
     requirementLabel: TokenSyntax? = nil,
     _ unexpectedBetweenRequirementLabelAndRequirementColon: UnexpectedNodesSyntax? = nil,
@@ -10762,12 +10762,12 @@ public struct PackageAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   /// 
   /// The comma separating the location and requirement
   /// 
-  public var locReqComma: TokenSyntax {
+  public var locReqComma: TokenSyntax? {
     get {
-      return TokenSyntax(data.child(at: 7, parent: Syntax(self))!)
+      return data.child(at: 7, parent: Syntax(self)).map(TokenSyntax.init)
     }
     set(value) {
-      self = PackageAttributeArgumentsSyntax(data.replacingChild(at: 7, with: value.raw, arena: SyntaxArena()))
+      self = PackageAttributeArgumentsSyntax(data.replacingChild(at: 7, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -11007,7 +11007,7 @@ extension PackageAttributeArgumentsSyntax: CustomReflectable {
       "unexpectedBetweenLocationColonAndLocation": unexpectedBetweenLocationColonAndLocation.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "location": Syntax(location).asProtocol(SyntaxProtocol.self),
       "unexpectedBetweenLocationAndLocReqComma": unexpectedBetweenLocationAndLocReqComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "locReqComma": Syntax(locReqComma).asProtocol(SyntaxProtocol.self),
+      "locReqComma": locReqComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "unexpectedBetweenLocReqCommaAndRequirementLabel": unexpectedBetweenLocReqCommaAndRequirementLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "requirementLabel": requirementLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "unexpectedBetweenRequirementLabelAndRequirementColon": unexpectedBetweenRequirementLabelAndRequirementColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,

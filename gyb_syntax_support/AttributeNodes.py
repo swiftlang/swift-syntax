@@ -204,8 +204,8 @@ ATTRIBUTE_NODES = [
          ]),
 
     # The argument of '@_package(...)'
-    # package-attr-arguments -> package-location-label ':' package-location ','
-    #                           package-requirement-label? ':'? package-requirement?
+    # package-attr-arguments -> package-location-label ':' package-location
+    #                           ( ',' package-requirement-label? ':'? package-requirement )?
     #                           ( ',' 'product' ':' package-product-name )?
     Node('PackageAttributeArguments', name_for_diagnostics='@_package arguemnts',
          kind='Syntax',
@@ -220,7 +220,7 @@ ATTRIBUTE_NODES = [
              Child('Location', kind='StringLiteralExpr',
                    description='The location/identifier of package.'),
              Child('LocReqComma', kind='CommaToken',
-                   description='''
+                   is_optional=True, description='''
                    The comma separating the location and requirement
                    '''),
              Child('RequirementLabel', kind='IdentifierToken',

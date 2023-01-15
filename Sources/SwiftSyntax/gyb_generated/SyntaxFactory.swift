@@ -5456,7 +5456,7 @@ public enum SyntaxFactory {
     }
   }
   @available(*, deprecated, message: "Use initializer on PackageAttributeArgumentsSyntax")
-  public static func makePackageAttributeArguments(_ unexpectedBeforeLocationLabel: UnexpectedNodesSyntax? = nil, locationLabel: TokenSyntax, _ unexpectedBetweenLocationLabelAndLocationColon: UnexpectedNodesSyntax? = nil, locationColon: TokenSyntax, _ unexpectedBetweenLocationColonAndLocation: UnexpectedNodesSyntax? = nil, location: StringLiteralExprSyntax, _ unexpectedBetweenLocationAndLocReqComma: UnexpectedNodesSyntax? = nil, locReqComma: TokenSyntax, _ unexpectedBetweenLocReqCommaAndRequirementLabel: UnexpectedNodesSyntax? = nil, requirementLabel: TokenSyntax?, _ unexpectedBetweenRequirementLabelAndRequirementColon: UnexpectedNodesSyntax? = nil, requirementColon: TokenSyntax?, _ unexpectedBetweenRequirementColonAndRequirement: UnexpectedNodesSyntax? = nil, requirement: ExprSyntax?, _ unexpectedBetweenRequirementAndReqProdComma: UnexpectedNodesSyntax? = nil, reqProdComma: TokenSyntax?, _ unexpectedBetweenReqProdCommaAndProductLabel: UnexpectedNodesSyntax? = nil, productLabel: TokenSyntax?, _ unexpectedBetweenProductLabelAndProductColon: UnexpectedNodesSyntax? = nil, productColon: TokenSyntax?, _ unexpectedBetweenProductColonAndProductName: UnexpectedNodesSyntax? = nil, productName: StringLiteralExprSyntax?, _ unexpectedAfterProductName: UnexpectedNodesSyntax? = nil) -> PackageAttributeArgumentsSyntax {
+  public static func makePackageAttributeArguments(_ unexpectedBeforeLocationLabel: UnexpectedNodesSyntax? = nil, locationLabel: TokenSyntax, _ unexpectedBetweenLocationLabelAndLocationColon: UnexpectedNodesSyntax? = nil, locationColon: TokenSyntax, _ unexpectedBetweenLocationColonAndLocation: UnexpectedNodesSyntax? = nil, location: StringLiteralExprSyntax, _ unexpectedBetweenLocationAndLocReqComma: UnexpectedNodesSyntax? = nil, locReqComma: TokenSyntax?, _ unexpectedBetweenLocReqCommaAndRequirementLabel: UnexpectedNodesSyntax? = nil, requirementLabel: TokenSyntax?, _ unexpectedBetweenRequirementLabelAndRequirementColon: UnexpectedNodesSyntax? = nil, requirementColon: TokenSyntax?, _ unexpectedBetweenRequirementColonAndRequirement: UnexpectedNodesSyntax? = nil, requirement: ExprSyntax?, _ unexpectedBetweenRequirementAndReqProdComma: UnexpectedNodesSyntax? = nil, reqProdComma: TokenSyntax?, _ unexpectedBetweenReqProdCommaAndProductLabel: UnexpectedNodesSyntax? = nil, productLabel: TokenSyntax?, _ unexpectedBetweenProductLabelAndProductColon: UnexpectedNodesSyntax? = nil, productColon: TokenSyntax?, _ unexpectedBetweenProductColonAndProductName: UnexpectedNodesSyntax? = nil, productName: StringLiteralExprSyntax?, _ unexpectedAfterProductName: UnexpectedNodesSyntax? = nil) -> PackageAttributeArgumentsSyntax {
     let layout: [RawSyntax?] = [
       unexpectedBeforeLocationLabel?.raw,
       locationLabel.raw,
@@ -5465,7 +5465,7 @@ public enum SyntaxFactory {
       unexpectedBetweenLocationColonAndLocation?.raw,
       location.raw,
       unexpectedBetweenLocationAndLocReqComma?.raw,
-      locReqComma.raw,
+      locReqComma?.raw,
       unexpectedBetweenLocReqCommaAndRequirementLabel?.raw,
       requirementLabel?.raw,
       unexpectedBetweenRequirementLabelAndRequirementColon?.raw,
@@ -5502,7 +5502,7 @@ public enum SyntaxFactory {
         nil,
         RawSyntax.makeEmptyLayout(kind: SyntaxKind.stringLiteralExpr, arena: arena),
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.comma, arena: arena),
+        nil,
         nil,
         nil,
         nil,

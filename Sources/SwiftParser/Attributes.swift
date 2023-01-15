@@ -893,20 +893,80 @@ extension Parser {
     )
   }
 
+  enum PackageLocationLabel: RawTokenKindSubset {
+    case id
+    case path
+    case url
+
+    init?(lexeme: Lexer.Lexeme) {
+      switch lexeme {
+      case RawTokenKindMatch(.id): self = .id
+      case RawTokenKindMatch(.path): self = .path
+      case RawTokenKindMatch(.url): self = .url
+      default: return nil
+      }
+    }
+
+    var rawTokenKind: RawTokenKind {
+      switch self {
+      case .id: return .keyword(.id)
+      case .path: return .keyword(.path)
+      case .url: return .keyword(.url)
+      }
+    }
+  }
+
+  enum PackageRequirementLabel: RawTokenKindSubset {
+    case branch
+    case from
+    case revision
+
+    init?(lexeme: Lexer.Lexeme) {
+      switch lexeme {
+      case RawTokenKindMatch(.branch): self = .branch
+      case RawTokenKindMatch(.from): self = .from
+      case RawTokenKindMatch(.revision): self = .revision
+      default: return nil
+      }
+    }
+
+    var rawTokenKind: RawTokenKind {
+      switch self {
+      case .branch: return .keyword(.branch)
+      case .from: return .keyword(.from)
+      case .revision: return .keyword(.revision)
+      }
+    }
+  }
+
   mutating func parsePackageAttributeArguments() -> RawPackageAttributeArgumentsSyntax {
-    let (unexpectedBeforeLocationLabel, locationLabel) = self.parseArgumentLabel()
+    // Parsing package location.
+    let locationLabel = self.consume(ifAnyIn: PackageLocationLabel.self) ?? missingToken(.identifier)
     let (unexpectedBeforeLocationColon, locationColon) = self.expect(.colon)
     let location = self.parseStringLiteral()
-    let (unexpectedBeforeLocReqComma, locReqComma) = self.expect(.comma)
-    // FIXME: Requirement label/colon is optional.
-    let (unexpectedBeforeRequirementLabel, requirementLabel) = self.parseArgumentLabel()
-    let (unexpectedBeforeRequirementColon, requirementColon) = self.expect(.colon)
-    // TODO: Semantically parsing according to `locationLabel`.
-    let requirement = self.parseExpression()
-    // FIXME: What about unexpected token before comma?
+    // Parsing package requirement.
+    let (unexpectedBeforeLocReqComma, locReqComma): (RawUnexpectedNodesSyntax?, RawTokenSyntax?)
+    let (unexpectedBeforeRequirementLabel, requirementLabel): (RawUnexpectedNodesSyntax?, RawTokenSyntax?)
+    let (unexpectedBeforeRequirementColon, requirementColon): (RawUnexpectedNodesSyntax?, RawTokenSyntax?)
+    let requirement: RawExprSyntax?
+    if locationLabel.tokenKind != .keyword(.path) {
+      (unexpectedBeforeLocReqComma, locReqComma) = self.expect(.comma)
+      if let label = self.consume(ifAnyIn: PackageRequirementLabel.self) {
+        (unexpectedBeforeRequirementLabel, requirementLabel) = (nil, label)
+        (unexpectedBeforeRequirementColon, requirementColon) = self.expect(.colon)
+      } else {
+        (unexpectedBeforeRequirementLabel, requirementLabel) = (nil, nil)
+        (unexpectedBeforeRequirementColon, requirementColon) = (nil, nil)
+      }
+      requirement = self.parseExpression()
+    } else {
+      (unexpectedBeforeLocReqComma, locReqComma) = (nil, nil)
+      (unexpectedBeforeRequirementLabel, requirementLabel) = (nil, nil)
+      (unexpectedBeforeRequirementColon, requirementColon) = (nil, nil)
+      requirement = nil
+    }
     guard self.at(.comma) else {
       return RawPackageAttributeArgumentsSyntax(
-        unexpectedBeforeLocationLabel,
         locationLabel: locationLabel,
         unexpectedBeforeLocationColon,
         locationColon: locationColon,
@@ -927,11 +987,10 @@ extension Parser {
       )
     }
     let (unexpectedBeforeReqProdComma, reqProdComma) = self.expect(.comma)
-    let (unexpectedBeforeProductLabel, productLabel) = self.parseArgumentLabel()
+    let (unexpectedBeforeProductLabel, productLabel) = self.expect(.keyword(.product))
     let (unexpectedBeforeProductColon, productColon) = self.expect(.colon)
     let productName = self.parseStringLiteral()
     return RawPackageAttributeArgumentsSyntax(
-      unexpectedBeforeLocationLabel,
       locationLabel: locationLabel,
       unexpectedBeforeLocationColon,
       locationColon: locationColon,

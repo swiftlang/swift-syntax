@@ -11746,7 +11746,7 @@ public struct RawPackageAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
     _ unexpectedBetweenLocationColonAndLocation: RawUnexpectedNodesSyntax? = nil,
     location: RawStringLiteralExprSyntax,
     _ unexpectedBetweenLocationAndLocReqComma: RawUnexpectedNodesSyntax? = nil,
-    locReqComma: RawTokenSyntax,
+    locReqComma: RawTokenSyntax?,
     _ unexpectedBetweenLocReqCommaAndRequirementLabel: RawUnexpectedNodesSyntax? = nil,
     requirementLabel: RawTokenSyntax?,
     _ unexpectedBetweenRequirementLabelAndRequirementColon: RawUnexpectedNodesSyntax? = nil,
@@ -11774,7 +11774,7 @@ public struct RawPackageAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
       layout[4] = unexpectedBetweenLocationColonAndLocation?.raw
       layout[5] = location.raw
       layout[6] = unexpectedBetweenLocationAndLocReqComma?.raw
-      layout[7] = locReqComma.raw
+      layout[7] = locReqComma?.raw
       layout[8] = unexpectedBetweenLocReqCommaAndRequirementLabel?.raw
       layout[9] = requirementLabel?.raw
       layout[10] = unexpectedBetweenRequirementLabelAndRequirementColon?.raw
@@ -11815,8 +11815,8 @@ public struct RawPackageAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
   public var unexpectedBetweenLocationAndLocReqComma: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public var locReqComma: RawTokenSyntax {
-    layoutView.children[7].map(RawTokenSyntax.init(raw:))!
+  public var locReqComma: RawTokenSyntax? {
+    layoutView.children[7].map(RawTokenSyntax.init(raw:))
   }
   public var unexpectedBetweenLocReqCommaAndRequirementLabel: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))

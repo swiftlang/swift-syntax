@@ -383,6 +383,8 @@ public enum SyntaxKind {
   
   case packReferenceType
   
+  case packageAttributeArguments
+  
   case parameterClause
   
   case patternBindingList

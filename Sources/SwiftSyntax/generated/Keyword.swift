@@ -1074,6 +1074,7 @@ public enum Keyword: UInt8, Hashable {
     "_opaqueReturnTypeOf", 
     "_optimize", 
     "_originallyDefinedIn", 
+    "_package", 
     "_PackageDescription", 
     "_private", 
     "_projectedValueProperty", 

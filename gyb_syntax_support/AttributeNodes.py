@@ -47,7 +47,7 @@ ATTRIBUTE_NODES = [
                        Child('ConventionArguments',
                              kind='ConventionAttributeArguments'),
                        Child('ConventionWitnessMethodArguments',
-                             kind='ConventionWitnessMethodAttributeArguments'), 
+                             kind='ConventionWitnessMethodAttributeArguments'),
                        Child('OpaqueReturnTypeOfAttributeArguments',
                              kind='OpaqueReturnTypeOfAttributeArguments'),
                        Child('ExposeAttributeArguments',
@@ -63,7 +63,9 @@ ATTRIBUTE_NODES = [
                        Child('EffectsArguments',
                              kind='EffectsArguments'),
                        Child('DocumentationArguments',
-                             kind='DocumentationAttributeArguments')
+                             kind='DocumentationAttributeArguments'),
+                       Child('PackageAttributeArguments',
+                             kind='PackageAttributeArguments')
                    ], description='''
                    The arguments of the attribute. In case the attribute
                    takes multiple arguments, they are gather in the
@@ -198,6 +200,46 @@ ATTRIBUTE_NODES = [
                    is_optional=True, description='''
                    The argument labels of the protocol\'s requirement if it
                    is a function requirement.
+                   '''),
+         ]),
+
+    # The argument of '@_package(...)'
+    # package-attr-arguments -> package-location-label ':' package-location ','
+    #                           package-requirement-label? ':'? package-requirement?
+    #                           ( ',' 'product' ':' package-product-name )?
+    Node('PackageAttributeArguments', name_for_diagnostics='@_package arguemnts',
+         kind='Syntax',
+         description='''
+         The arguments for the `@_package` attribute imitating `PackageDescription`
+         ''',
+         children=[
+             Child('LocationLabel', kind='IdentifierToken',
+                   token_choices=['KeywordToken|id', 'KeywordToken|path', 'KeywordToken|url'],
+                   description='The location label.'),
+             Child('LocationColon', kind='ColonToken'),
+             Child('Location', kind='StringLiteralExpr',
+                   description='The location/identifier of package.'),
+             Child('LocReqComma', kind='CommaToken',
+                   description='''
+                   The comma separating the location and requirement
+                   '''),
+             Child('RequirementLabel', kind='IdentifierToken',
+                   token_choices=['KeywordToken|branch', 'KeywordToken|from', 'KeywordToken|revision'],
+                   description='The requirement label.', is_optional=True),
+             Child('RequirementColon', kind='ColonToken', is_optional=True),
+             Child('Requirement', kind='Expr',
+                   description='The version requirement of package.', is_optional=True),
+             Child('ReqProdComma', kind='CommaToken',
+                   is_optional=True, description='''
+                   The comma separating the requirement and product name
+                   '''),
+             Child('ProductLabel', kind='IdentifierToken',
+                   token_choices=['KeywordToken|product'], is_optional=True,
+                   description='The product label.'),
+             Child('ProductColon', kind='ColonToken', is_optional=True),
+             Child('ProductName', kind='StringLiteralExpr',
+                   is_optional=True, description='''
+                   The exact product name from package
                    '''),
          ]),
 

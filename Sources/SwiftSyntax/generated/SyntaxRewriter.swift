@@ -1301,6 +1301,13 @@ open class SyntaxRewriter {
     return TypeSyntax(visitChildren(node))
   }
   
+  /// Visit a `PackageAttributeArgumentsSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: PackageAttributeArgumentsSyntax) -> PackageAttributeArgumentsSyntax {
+    return Syntax(visitChildren(node)).cast(PackageAttributeArgumentsSyntax.self)
+  }
+  
   /// Visit a `ParameterClauseSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -4470,6 +4477,20 @@ open class SyntaxRewriter {
   }
   
   /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplPackageAttributeArgumentsSyntax(_ data: SyntaxData) -> Syntax {
+    let node = PackageAttributeArgumentsSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { 
+      visitPost(node._syntaxNode) 
+    }
+    if let newNode = visitAny(node._syntaxNode) { 
+      return newNode 
+    }
+    return Syntax(visit(node))
+  }
+  
+  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplParameterClauseSyntax(_ data: SyntaxData) -> Syntax {
     let node = ParameterClauseSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -5967,6 +5988,8 @@ open class SyntaxRewriter {
       return visitImplPackExpansionTypeSyntax
     case .packReferenceType: 
       return visitImplPackReferenceTypeSyntax
+    case .packageAttributeArguments: 
+      return visitImplPackageAttributeArgumentsSyntax
     case .parameterClause: 
       return visitImplParameterClauseSyntax
     case .patternBindingList: 
@@ -6497,6 +6520,8 @@ open class SyntaxRewriter {
       return visitImplPackExpansionTypeSyntax(data)
     case .packReferenceType: 
       return visitImplPackReferenceTypeSyntax(data)
+    case .packageAttributeArguments: 
+      return visitImplPackageAttributeArgumentsSyntax(data)
     case .parameterClause: 
       return visitImplParameterClauseSyntax(data)
     case .patternBindingList: 

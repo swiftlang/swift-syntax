@@ -248,12 +248,7 @@ extension Parser {
       }
     case ._package:
       return parseAttribute(argumentMode: .required) { parser in
-        // TODO: @_package(...) argument parsing
-        if !parser.at(.rightParen) {
-          return .token(parser.consumeAnyToken())
-        } else {
-          return .token(parser.missingToken(.identifier))
-        }
+        return .packageAttributeArguments(parser.parsePackageAttributeArguments())
       }
     case ._private:
       return parseAttribute(argumentMode: .required) { parser in
@@ -872,6 +867,90 @@ extension Parser {
       comma: comma,
       unexpectedBeforeOrdinal,
       ordinal: ordinal,
+      arena: self.arena
+    )
+  }
+}
+
+extension Parser {
+  mutating func parsePackageAttribute() -> RawAttributeSyntax {
+    let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
+    let (unexpectedBeforePackageToken, packageToken) = self.expect(.keyword(._package))
+    let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
+    let arguments = self.parsePackageAttributeArguments()
+    let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
+    return RawAttributeSyntax(
+      unexpectedBeforeAtSign,
+      atSignToken: atSign,
+      unexpectedBeforePackageToken,
+      attributeName: RawTypeSyntax(RawSimpleTypeIdentifierSyntax(name: packageToken, genericArgumentClause: nil, arena: self.arena)),
+      unexpectedBeforeLeftParen,
+      leftParen: leftParen,
+      argument: .packageAttributeArguments(arguments),
+      unexpectedBeforeRightParen,
+      rightParen: rightParen,
+      arena: self.arena
+    )
+  }
+
+  mutating func parsePackageAttributeArguments() -> RawPackageAttributeArgumentsSyntax {
+    let (unexpectedBeforeLocationLabel, locationLabel) = self.parseArgumentLabel()
+    let (unexpectedBeforeLocationColon, locationColon) = self.expect(.colon)
+    let location = self.parseStringLiteral()
+    let (unexpectedBeforeLocReqComma, locReqComma) = self.expect(.comma)
+    // FIXME: Requirement label/colon is optional.
+    let (unexpectedBeforeRequirementLabel, requirementLabel) = self.parseArgumentLabel()
+    let (unexpectedBeforeRequirementColon, requirementColon) = self.expect(.colon)
+    // TODO: Semantically parsing according to `locationLabel`.
+    let requirement = self.parseExpression()
+    // FIXME: What about unexpected token before comma?
+    guard self.at(.comma) else {
+      return RawPackageAttributeArgumentsSyntax(
+        unexpectedBeforeLocationLabel,
+        locationLabel: locationLabel,
+        unexpectedBeforeLocationColon,
+        locationColon: locationColon,
+        location: location,
+        unexpectedBeforeLocReqComma,
+        locReqComma: locReqComma,
+        unexpectedBeforeRequirementLabel,
+        requirementLabel: requirementLabel,
+        unexpectedBeforeRequirementColon,
+        requirementColon: requirementColon,
+        requirement: requirement,
+        reqProdComma: nil,
+        productLabel: nil,
+        productColon: nil,
+        productName: nil,
+        self.remainingTokensIfMaximumNestingLevelReached(),
+        arena: self.arena
+      )
+    }
+    let (unexpectedBeforeReqProdComma, reqProdComma) = self.expect(.comma)
+    let (unexpectedBeforeProductLabel, productLabel) = self.parseArgumentLabel()
+    let (unexpectedBeforeProductColon, productColon) = self.expect(.colon)
+    let productName = self.parseStringLiteral()
+    return RawPackageAttributeArgumentsSyntax(
+      unexpectedBeforeLocationLabel,
+      locationLabel: locationLabel,
+      unexpectedBeforeLocationColon,
+      locationColon: locationColon,
+      location: location,
+      unexpectedBeforeLocReqComma,
+      locReqComma: locReqComma,
+      unexpectedBeforeRequirementLabel,
+      requirementLabel: requirementLabel,
+      unexpectedBeforeRequirementColon,
+      requirementColon: requirementColon,
+      requirement: requirement,
+      unexpectedBeforeReqProdComma,
+      reqProdComma: reqProdComma,
+      unexpectedBeforeProductLabel,
+      productLabel: productLabel,
+      unexpectedBeforeProductColon,
+      productColon: productColon,
+      productName: productName,
+      self.remainingTokensIfMaximumNestingLevelReached(),
       arena: self.arena
     )
   }

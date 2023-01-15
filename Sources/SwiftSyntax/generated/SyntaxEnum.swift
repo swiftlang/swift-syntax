@@ -383,6 +383,8 @@ public enum SyntaxEnum {
   
   case packReferenceType(PackReferenceTypeSyntax)
   
+  case packageAttributeArguments(PackageAttributeArgumentsSyntax)
+  
   case parameterClause(ParameterClauseSyntax)
   
   case patternBindingList(PatternBindingListSyntax)
@@ -910,6 +912,8 @@ public extension Syntax {
       return .packExpansionType(PackExpansionTypeSyntax(self)!)
     case .packReferenceType: 
       return .packReferenceType(PackReferenceTypeSyntax(self)!)
+    case .packageAttributeArguments: 
+      return .packageAttributeArguments(PackageAttributeArgumentsSyntax(self)!)
     case .parameterClause: 
       return .parameterClause(ParameterClauseSyntax(self)!)
     case .patternBindingList: 

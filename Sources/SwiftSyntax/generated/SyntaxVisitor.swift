@@ -2212,6 +2212,18 @@ open class SyntaxVisitor {
   open func visitPost(_ node: PackReferenceTypeSyntax) {
   }
   
+  /// Visiting `PackageAttributeArgumentsSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: PackageAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting `PackageAttributeArgumentsSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: PackageAttributeArgumentsSyntax) {
+  }
+  
   /// Visiting `ParameterClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -5163,6 +5175,17 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplPackageAttributeArgumentsSyntax(_ data: SyntaxData) {
+    let node = PackageAttributeArgumentsSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplParameterClauseSyntax(_ data: SyntaxData) {
     let node = ParameterClauseSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -6391,6 +6414,8 @@ open class SyntaxVisitor {
       visitImplPackExpansionTypeSyntax(data)
     case .packReferenceType: 
       visitImplPackReferenceTypeSyntax(data)
+    case .packageAttributeArguments: 
+      visitImplPackageAttributeArgumentsSyntax(data)
     case .parameterClause: 
       visitImplParameterClauseSyntax(data)
     case .patternBindingList: 

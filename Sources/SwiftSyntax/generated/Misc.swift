@@ -201,6 +201,7 @@ extension Syntax {
         .node(PackExpansionExprSyntax.self), 
         .node(PackExpansionTypeSyntax.self), 
         .node(PackReferenceTypeSyntax.self), 
+        .node(PackageAttributeArgumentsSyntax.self), 
         .node(ParameterClauseSyntax.self), 
         .node(PatternBindingListSyntax.self), 
         .node(PatternBindingSyntax.self), 
@@ -651,6 +652,8 @@ extension SyntaxKind {
       return PackExpansionTypeSyntax.self
     case .packReferenceType: 
       return PackReferenceTypeSyntax.self
+    case .packageAttributeArguments: 
+      return PackageAttributeArgumentsSyntax.self
     case .parameterClause: 
       return ParameterClauseSyntax.self
     case .patternBindingList: 
@@ -1178,6 +1181,8 @@ extension SyntaxKind {
       return "variadic expansion"
     case .packReferenceType: 
       return "pack reference"
+    case .packageAttributeArguments: 
+      return "@_package arguemnts"
     case .parameterClause: 
       return "parameter clause"
     case .patternBindingList: 

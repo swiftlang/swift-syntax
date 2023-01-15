@@ -5455,6 +5455,73 @@ public enum SyntaxFactory {
       return ImplementsAttributeArgumentsSyntax(data)
     }
   }
+  @available(*, deprecated, message: "Use initializer on PackageAttributeArgumentsSyntax")
+  public static func makePackageAttributeArguments(_ unexpectedBeforeLocationLabel: UnexpectedNodesSyntax? = nil, locationLabel: TokenSyntax, _ unexpectedBetweenLocationLabelAndLocationColon: UnexpectedNodesSyntax? = nil, locationColon: TokenSyntax, _ unexpectedBetweenLocationColonAndLocation: UnexpectedNodesSyntax? = nil, location: StringLiteralExprSyntax, _ unexpectedBetweenLocationAndLocReqComma: UnexpectedNodesSyntax? = nil, locReqComma: TokenSyntax, _ unexpectedBetweenLocReqCommaAndRequirementLabel: UnexpectedNodesSyntax? = nil, requirementLabel: TokenSyntax?, _ unexpectedBetweenRequirementLabelAndRequirementColon: UnexpectedNodesSyntax? = nil, requirementColon: TokenSyntax?, _ unexpectedBetweenRequirementColonAndRequirement: UnexpectedNodesSyntax? = nil, requirement: ExprSyntax?, _ unexpectedBetweenRequirementAndReqProdComma: UnexpectedNodesSyntax? = nil, reqProdComma: TokenSyntax?, _ unexpectedBetweenReqProdCommaAndProductLabel: UnexpectedNodesSyntax? = nil, productLabel: TokenSyntax?, _ unexpectedBetweenProductLabelAndProductColon: UnexpectedNodesSyntax? = nil, productColon: TokenSyntax?, _ unexpectedBetweenProductColonAndProductName: UnexpectedNodesSyntax? = nil, productName: StringLiteralExprSyntax?, _ unexpectedAfterProductName: UnexpectedNodesSyntax? = nil) -> PackageAttributeArgumentsSyntax {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeLocationLabel?.raw,
+      locationLabel.raw,
+      unexpectedBetweenLocationLabelAndLocationColon?.raw,
+      locationColon.raw,
+      unexpectedBetweenLocationColonAndLocation?.raw,
+      location.raw,
+      unexpectedBetweenLocationAndLocReqComma?.raw,
+      locReqComma.raw,
+      unexpectedBetweenLocReqCommaAndRequirementLabel?.raw,
+      requirementLabel?.raw,
+      unexpectedBetweenRequirementLabelAndRequirementColon?.raw,
+      requirementColon?.raw,
+      unexpectedBetweenRequirementColonAndRequirement?.raw,
+      requirement?.raw,
+      unexpectedBetweenRequirementAndReqProdComma?.raw,
+      reqProdComma?.raw,
+      unexpectedBetweenReqProdCommaAndProductLabel?.raw,
+      productLabel?.raw,
+      unexpectedBetweenProductLabelAndProductColon?.raw,
+      productColon?.raw,
+      unexpectedBetweenProductColonAndProductName?.raw,
+      productName?.raw,
+      unexpectedAfterProductName?.raw,
+    ]
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.packageAttributeArguments,
+        from: layout, arena: arena)
+      let data = SyntaxData.forRoot(raw)
+      return PackageAttributeArgumentsSyntax(data)
+    }
+  }
+
+  @available(*, deprecated, message: "Use initializer on PackageAttributeArgumentsSyntax")
+  public static func makeBlankPackageAttributeArguments(presence: SourcePresence = .present) -> PackageAttributeArgumentsSyntax {
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .packageAttributeArguments,
+        from: [
+        nil,
+        RawSyntax.makeMissingToken(kind: TokenKind.keyword(.id), arena: arena),
+        nil,
+        RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena),
+        nil,
+        RawSyntax.makeEmptyLayout(kind: SyntaxKind.stringLiteralExpr, arena: arena),
+        nil,
+        RawSyntax.makeMissingToken(kind: TokenKind.comma, arena: arena),
+        nil,
+        nil,
+        nil,
+        nil,
+        nil,
+        nil,
+        nil,
+        nil,
+        nil,
+        nil,
+        nil,
+        nil,
+        nil,
+        nil,
+        nil,
+      ], arena: arena))
+      return PackageAttributeArgumentsSyntax(data)
+    }
+  }
   @available(*, deprecated, message: "Use initializer on ObjCSelectorPieceSyntax")
   public static func makeObjCSelectorPiece(_ unexpectedBeforeName: UnexpectedNodesSyntax? = nil, name: TokenSyntax?, _ unexpectedBetweenNameAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax?, _ unexpectedAfterColon: UnexpectedNodesSyntax? = nil) -> ObjCSelectorPieceSyntax {
     let layout: [RawSyntax?] = [

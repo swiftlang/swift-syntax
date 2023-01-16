@@ -101,7 +101,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: .docLineComment(generat
       }
       """)
     
-    for baseKind in SYNTAX_BASE_KINDS.filter { !["Syntax", "SyntaxCollection"].contains($0) } {
+    for baseKind in SYNTAX_BASE_KINDS.filter({ !["Syntax", "SyntaxCollection"].contains($0) }) {
       FunctionDeclSyntax("""
         /// Visit any \(raw: baseKind)Syntax node.
         ///   - Parameter node: the node that is being visited

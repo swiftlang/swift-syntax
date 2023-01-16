@@ -11,7 +11,7 @@ let package = Package(
     .executable(name: "generate-swiftsyntax", targets: ["generate-swiftsyntax"]),
   ],
   dependencies: [
-    .package(url: "https://github.com/apple/swift-syntax.git", revision: "dc89ef5759b58298f04c5edee48aed5e678e80f0"),
+    .package(url: "https://github.com/apple/swift-syntax.git", revision: "486a86c2c41785026cdc4813af1d4a508d644759"),
     .package(url: "https://github.com/apple/swift-argument-parser.git", .upToNextMinor(from: "1.1.4")),
   ],
   targets: [

@@ -1281,7 +1281,9 @@ extension Parser.Lookahead {
       .poundAssertKeyword?:
       return true
     case .tryKeyword?:
-      return true
+      // strip the try and then check if the rest is a statement
+      self.eat(.keyword(.try))
+      return isStartOfStatement(allowRecovery: allowRecovery)
     case .repeatKeyword?:
       // 'repeat' followed by anything other than a brace stmt
       // is a pack expansion expression.

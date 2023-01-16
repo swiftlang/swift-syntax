@@ -18,7 +18,7 @@ import SwiftSyntaxBuilder
 import Utils
 
 private let swiftBasicFormatDir: String = "SwiftBasicFormat"
-private let IDEUtilsDir: String = "IDEUtils"
+private let ideUtilsDir: String = "IDEUtils"
 private let swiftParserDir: String = "SwiftParser"
 private let swiftSyntaxDir: String = "SwiftSyntax"
 private let swiftSyntaxBuilderDir: String = "SwiftSyntaxBuilder"
@@ -40,19 +40,26 @@ struct TemplateSpec {
 
 @main
 struct GenerateSwiftSyntax: ParsableCommand {
-  @Argument(help: "The path to the source directory where the source files are to be generated")
-  var generatedPath: String
+  @Argument(help: "The path to the source directory (i.e. 'swift-syntax/Sources') where the source files are to be generated")
+  var destination: String
 
   @Flag(help: "Enable verbose output")
   var verbose: Bool = false
 
   func run() throws {
     let templates: [TemplateSpec] = [
+      // SwiftBasicFormat
       TemplateSpec(sourceFile: basicFormatFile, module: swiftBasicFormatDir, filename: "BasicFormat.swift"),
-      TemplateSpec(sourceFile: syntaxClassificationFile, module: IDEUtilsDir, filename: "SyntaxClassification.swift"),
+
+      // IDEUtils
+      TemplateSpec(sourceFile: syntaxClassificationFile, module: ideUtilsDir, filename: "SyntaxClassification.swift"),
+
+      // SwiftParser
       TemplateSpec(sourceFile: declarationModifierFile, module: swiftParserDir, filename: "DeclarationModifier.swift"),
       TemplateSpec(sourceFile: parserEntryFile, module: swiftParserDir, filename: "Parser+Entry.swift"),
       TemplateSpec(sourceFile: typeAttributeFile, module: swiftParserDir, filename: "TypeAttribute.swift"),
+
+      // SwiftSyntax
       TemplateSpec(sourceFile: keywordFile, module: swiftSyntaxDir, filename: "Keyword.swift"),
       TemplateSpec(sourceFile: miscFile, module: swiftSyntaxDir, filename: "Misc.swift"),
       TemplateSpec(sourceFile: syntaxAnyVisitorFile, module: swiftSyntaxDir, filename: "SyntaxAnyVisitor.swift"),
@@ -66,21 +73,41 @@ struct GenerateSwiftSyntax: ParsableCommand {
       TemplateSpec(sourceFile: syntaxVisitorFile, module: swiftSyntaxDir, filename: "SyntaxVisitor.swift"),
       TemplateSpec(sourceFile: tokenKindFile, module: swiftSyntaxDir, filename: "TokenKind.swift"),
       TemplateSpec(sourceFile: tokensFile, module: swiftSyntaxDir, filename: "Tokens.swift"),
+
+      // SwiftSyntaxBuilder
       TemplateSpec(sourceFile: buildableCollectionNodesFile, module: swiftSyntaxBuilderDir, filename: "BuildableCollectionNodes.swift"),
       TemplateSpec(sourceFile: buildableNodesFile, module: swiftSyntaxBuilderDir, filename: "BuildableNodes.swift"),
       TemplateSpec(sourceFile: resultBuildersFile, module: swiftSyntaxBuilderDir, filename: "ResultBuilders.swift"),
       TemplateSpec(sourceFile: syntaxExpressibleByStringInterpolationConformancesFile, module: swiftSyntaxBuilderDir, filename: "SyntaxExpressibleByStringInterpolationConformances.swift"),
     ]
 
+    let modules = Set(templates.map(\.module))
+
+    let previouslyGeneratedFilesLock = NSLock()
+    var previouslyGeneratedFiles = Set(modules.flatMap { (module) -> [URL] in
+      let generatedDir = URL(fileURLWithPath: destination)
+        .appendingPathComponent(module)
+        .appendingPathComponent("generated")
+      return FileManager.default
+        .enumerator(at: generatedDir, includingPropertiesForKeys: nil)!
+        .compactMap { $0 as? URL}
+        .filter { $0.pathExtension == "swift" }
+    })
+
     var errors: [Error] = []
     DispatchQueue.concurrentPerform(iterations: templates.count) { index in
       let template = templates[index]
       do {
+        let destination = URL(fileURLWithPath: destination)
+          .appendingPathComponent(template.module)
+          .appendingPathComponent("generated")
+          .appendingPathComponent(template.filename)
+        previouslyGeneratedFilesLock.withLock {
+          _ = previouslyGeneratedFiles.remove(destination)
+        }
         try generateTemplate(
           sourceFile: template.sourceFile,
-          module: template.module,
-          filename: template.filename,
-          destination: URL(fileURLWithPath: generatedPath),
+          destination: destination,
           verbose: verbose
         )
       } catch {
@@ -92,29 +119,28 @@ struct GenerateSwiftSyntax: ParsableCommand {
       // TODO: It would be nice if we could emit all errors
       throw firstError
     }
+
+    for file in previouslyGeneratedFiles {
+      // All files in `previouslyGeneratedFiles` that haven't been removed from
+      // the set above no longer exist. Remove them.
+      try FileManager.default.removeItem(at: file)
+    }
   }
 
   private func generateTemplate(
     sourceFile: SourceFileSyntax,
-    module: String,
-    filename: String,
     destination: URL,
     verbose: Bool) throws {
       try FileManager.default.createDirectory(
-        atPath: destination.path,
+        atPath: destination.deletingLastPathComponent().path,
         withIntermediateDirectories: true,
         attributes: nil
       )
 
-      let fileURL = destination
-        .appendingPathComponent(module)
-        .appendingPathComponent("generated")
-        .appendingPathComponent(filename)
-
       if verbose {
-        print("Generating \(fileURL.path)...")
+        print("Generating \(destination.path)...")
       }
       let syntax = sourceFile.formatted(using: CodeGenerationFormat())
-      try "\(syntax)\n".write(to: fileURL, atomically: true, encoding: .utf8)
+      try "\(syntax)\n".write(to: destination, atomically: true, encoding: .utf8)
     }
 }

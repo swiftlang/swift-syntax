@@ -1251,7 +1251,7 @@ extension Parser {
     /// consumes the entire regex literal, we're done.
     return self.currentToken.tokenText.withBuffer {
       (buffer: UnsafeBufferPointer<UInt8>) -> Bool in
-      var cursor = Lexer.Cursor(input: buffer, previous: 0, state: .normal)
+      var cursor = Lexer.Cursor(input: buffer, previous: 0)
       guard buffer[0] == UInt8(ascii: "/") else { return false }
       switch cursor.lexOperatorIdentifier(sourceBufferStart: cursor).tokenKind {
       case .unknown:

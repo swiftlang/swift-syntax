@@ -18,7 +18,7 @@
 /// - Seealso: ``Lexer/Cursor``
 public enum Lexer {
   public static func lexToEndOfInterpolatedExpression(_ input: UnsafeBufferPointer<UInt8>, _ isMultilineString: Bool) -> Int {
-    let cursor = Lexer.Cursor(input: input, previous: 0, state: .normal)
+    let cursor = Lexer.Cursor(input: input, previous: 0)
     let advancedCursor = Lexer.Cursor.skipToEndOfInterpolatedExpression(cursor, isMultilineString: isMultilineString)
     return advancedCursor.input.baseAddress! - cursor.input.baseAddress!
   }

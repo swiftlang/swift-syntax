@@ -88,12 +88,16 @@ extension Parser {
   }
   
   @_spi(RawSyntax)
-  public mutating func parseStatementAfterLabel() -> RawStmtSyntax {
+  public mutating func parseStatementAfterLabel(
+    with tryPrefix: (RawUnexpectedNodesSyntax?, RawTokenSyntax)? = nil
+  ) -> RawStmtSyntax {
     switch self.canRecoverTo(anyIn: CanBeStatementStart.self) {
+    case (.tryKeyword, let handle)?:
+      return parseStatementAfterLabel(with: self.eat(handle))
     case (.forKeyword, let handle)?:
       return RawStmtSyntax(self.parseForEachStatement(forHandle: handle))
     case (.whileKeyword, let handle)?:
-      return RawStmtSyntax(self.parseWhileStatement(whileHandle: handle))
+      return RawStmtSyntax(self.parseWhileStatement(whileHandle: handle, with: tryPrefix))
     case (.repeatKeyword, let handle)?:
       return RawStmtSyntax(self.parseRepeatWhileStatement(repeatHandle: handle))
     case (.ifKeyword, let handle)?:
@@ -103,15 +107,15 @@ extension Parser {
     case (.switchKeyword, let handle)?:
       return RawStmtSyntax(self.parseSwitchStatement(switchHandle: handle))
     case (.breakKeyword, let handle)?:
-      return RawStmtSyntax(self.parseBreakStatement(breakHandle: handle))
+      return RawStmtSyntax(self.parseBreakStatement(breakHandle: handle, with: tryPrefix))
     case (.continueKeyword, let handle)?:
       return RawStmtSyntax(self.parseContinueStatement(continueHandle: handle))
     case (.fallthroughKeyword, let handle)?:
       return RawStmtSyntax(self.parseFallthroughStatement(fallthroughHandle: handle))
     case (.returnKeyword, let handle)?:
-      return RawStmtSyntax(self.parseReturnStatement(returnHandle: handle))
+      return RawStmtSyntax(self.parseReturnStatement(returnHandle: handle, with: tryPrefix))
     case (.throwKeyword, let handle)?:
-      return RawStmtSyntax(self.parseThrowStatement(throwHandle: handle))
+      return RawStmtSyntax(self.parseThrowStatement(throwHandle: handle, with: tryPrefix))
     case (.deferKeyword, let handle)?:
       return RawStmtSyntax(self.parseDeferStatement(deferHandle: handle))
     case (.doKeyword, let handle)?:
@@ -119,7 +123,7 @@ extension Parser {
     case (.poundAssertKeyword, let handle)?:
       return RawStmtSyntax(self.parsePoundAssertStatement(poundAssertHandle: handle))
     case (.yield, let handle)?:
-      return RawStmtSyntax(self.parseYieldStatement(yieldHandle: handle))
+      return RawStmtSyntax(self.parseYieldStatement(yieldHandle: handle, with: tryPrefix))
     case nil:
       return RawStmtSyntax(RawMissingStmtSyntax(arena: self.arena))
     }
@@ -407,11 +411,14 @@ extension Parser {
   ///
   ///     throw-statement → 'throw' expression
   @_spi(RawSyntax)
-  public mutating func parseThrowStatement(throwHandle: RecoveryConsumptionHandle) -> RawThrowStmtSyntax {
+  public mutating func parseThrowStatement(
+    throwHandle: RecoveryConsumptionHandle,
+    with tryPrefix: (RawUnexpectedNodesSyntax?, RawTokenSyntax)?
+  ) -> RawThrowStmtSyntax {
     let (unexpectedBeforeThrowKeyword, throwKeyword) = self.eat(throwHandle)
-    let hasMisplacedTry = unexpectedBeforeThrowKeyword?.containsToken(where: { $0.tokenKind == .keyword(.try) }) ?? false
+
     var expr = self.parseExpression()
-    if hasMisplacedTry && !expr.is(RawTryExprSyntax.self) {
+    if tryPrefix != nil && !expr.is(RawTryExprSyntax.self) {
       expr = RawExprSyntax(
         RawTryExprSyntax(
           tryKeyword: missingToken(.keyword(.try), text: nil),
@@ -421,8 +428,13 @@ extension Parser {
         )
       )
     }
+
+    let unexpectedPreamble = RawUnexpectedNodesSyntax(
+        combining: tryPrefix?.0, tryPrefix?.1, unexpectedBeforeThrowKeyword,
+        arena: self.arena)
+    
     return RawThrowStmtSyntax(
-      unexpectedBeforeThrowKeyword,
+      unexpectedPreamble,
       throwKeyword: throwKeyword,
       expression: expr,
       arena: self.arena
@@ -567,12 +579,21 @@ extension Parser {
   ///
   ///     while-statement → 'while' condition-list code-block
   @_spi(RawSyntax)
-  public mutating func parseWhileStatement(whileHandle: RecoveryConsumptionHandle) -> RawWhileStmtSyntax {
+  @_spi(RawSyntax)
+  public mutating func parseWhileStatement(
+    whileHandle: RecoveryConsumptionHandle,
+    with tryPrefix: (RawUnexpectedNodesSyntax?, RawTokenSyntax)?
+  ) -> RawWhileStmtSyntax {
     let (unexpectedBeforeWhileKeyword, whileKeyword) = self.eat(whileHandle)
     let conditions = self.parseConditionList()
     let body = self.parseCodeBlock(introducer: whileKeyword)
+    
+    let unexpectedPreamble = RawUnexpectedNodesSyntax(
+        combining: tryPrefix?.0, tryPrefix?.1, unexpectedBeforeWhileKeyword,
+        arena: self.arena)
+    
     return RawWhileStmtSyntax(
-      unexpectedBeforeWhileKeyword,
+      unexpectedPreamble,
       whileKeyword: whileKeyword,
       conditions: conditions,
       body: body,
@@ -971,10 +992,12 @@ extension Parser {
   ///
   ///     return-statement → 'return' expression?
   @_spi(RawSyntax)
-  public mutating func parseReturnStatement(returnHandle: RecoveryConsumptionHandle) -> RawReturnStmtSyntax {
-    let (unexpectedBeforeRet, ret) = self.eat(returnHandle)
-    let hasMisplacedTry = unexpectedBeforeRet?.containsToken(where: { $0.tokenKind == .keyword(.try) }) ?? false
-
+  public mutating func parseReturnStatement(
+    returnHandle: RecoveryConsumptionHandle,
+    with tryPrefix: (RawUnexpectedNodesSyntax?, RawTokenSyntax)?
+  ) -> RawReturnStmtSyntax {
+    let (unexpectedBeforeReturnKeyword, ret) = self.eat(returnHandle)
+    
     // Handle the ambiguity between consuming the expression and allowing the
     // enclosing stmt-brace to get it by eagerly eating it unless the return is
     // followed by a '}', '', statement or decl start keyword sequence.
@@ -987,7 +1010,7 @@ extension Parser {
       && !self.atStartOfStatement() && !self.atStartOfDeclaration()
     {
       let parsedExpr = self.parseExpression()
-      if hasMisplacedTry && !parsedExpr.is(RawTryExprSyntax.self) {
+      if tryPrefix != nil && !parsedExpr.is(RawTryExprSyntax.self) {
         expr = RawExprSyntax(
           RawTryExprSyntax(
             tryKeyword: missingToken(.keyword(.try), text: nil),
@@ -1002,8 +1025,13 @@ extension Parser {
     } else {
       expr = nil
     }
+
+    let unexpectedPreamble = RawUnexpectedNodesSyntax(
+        combining: tryPrefix?.0, tryPrefix?.1, unexpectedBeforeReturnKeyword,
+        arena: self.arena)
+
     return RawReturnStmtSyntax(
-      unexpectedBeforeRet,
+      unexpectedPreamble,
       returnKeyword: ret,
       expression: expr,
       arena: self.arena
@@ -1021,7 +1049,10 @@ extension Parser {
   ///
   ///     yield-statement → 'try'? 'yield' '('? expr-list? ')'?
   @_spi(RawSyntax)
-  public mutating func parseYieldStatement(yieldHandle: RecoveryConsumptionHandle) -> RawYieldStmtSyntax {
+  public mutating func parseYieldStatement(
+    yieldHandle: RecoveryConsumptionHandle,
+    with tryPrefix: (RawUnexpectedNodesSyntax?, RawTokenSyntax)?
+  ) -> RawYieldStmtSyntax {
     let (unexpectedBeforeYield, yield) = self.eat(yieldHandle)
 
     let yields: RawYieldStmtSyntax.Yields
@@ -1059,10 +1090,10 @@ extension Parser {
     } else {
       yields = .simpleYield(self.parseExpression())
     }
-
+    
     return RawYieldStmtSyntax(
-      nil,
-      tryKeyword: nil,
+      tryPrefix?.0,
+      tryKeyword: tryPrefix?.1,
       unexpectedBeforeYield,
       yieldKeyword: yield,
       yields: yields,
@@ -1114,11 +1145,19 @@ extension Parser {
   ///
   ///     break-statement → 'break' label-name?
   @_spi(RawSyntax)
-  public mutating func parseBreakStatement(breakHandle: RecoveryConsumptionHandle) -> RawBreakStmtSyntax {
+  public mutating func parseBreakStatement(
+    breakHandle: RecoveryConsumptionHandle,
+    with tryPrefix: (RawUnexpectedNodesSyntax?, RawTokenSyntax)?
+  ) -> RawBreakStmtSyntax {
     let (unexpectedBeforeBreakKeyword, breakKeyword) = self.eat(breakHandle)
     let label = self.parseOptionalControlTransferTarget()
+    
+    let unexpectedPreamble = RawUnexpectedNodesSyntax(
+        combining: tryPrefix?.0, tryPrefix?.1, unexpectedBeforeBreakKeyword,
+        arena: self.arena)
+    
     return RawBreakStmtSyntax(
-      unexpectedBeforeBreakKeyword,
+      unexpectedPreamble,
       breakKeyword: breakKeyword,
       label: label,
       arena: self.arena
@@ -1240,6 +1279,8 @@ extension Parser.Lookahead {
       .fallthroughKeyword?,
       .switchKeyword?,
       .poundAssertKeyword?:
+      return true
+    case .tryKeyword?:
       return true
     case .repeatKeyword?:
       // 'repeat' followed by anything other than a brace stmt

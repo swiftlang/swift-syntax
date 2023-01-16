@@ -111,6 +111,7 @@ enum CanBeStatementStart: RawTokenKindSubset {
   case throwKeyword
   case whileKeyword
   case yield
+  case tryKeyword
 
   init?(lexeme: Lexer.Lexeme) {
     switch lexeme {
@@ -129,6 +130,7 @@ enum CanBeStatementStart: RawTokenKindSubset {
     case RawTokenKindMatch(.throw): self = .throwKeyword
     case RawTokenKindMatch(.while): self = .whileKeyword
     case RawTokenKindMatch(.yield): self = .yield
+    case RawTokenKindMatch(.try): self = .tryKeyword
     default: return nil
     }
   }
@@ -150,6 +152,7 @@ enum CanBeStatementStart: RawTokenKindSubset {
     case .throwKeyword: return .keyword(.throw)
     case .whileKeyword: return .keyword(.while)
     case .yield: return .keyword(.yield)
+    case .tryKeyword: return .keyword(.try)
     }
   }
 }

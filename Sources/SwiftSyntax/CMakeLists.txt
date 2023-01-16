@@ -46,7 +46,7 @@ add_swift_host_library(SwiftSyntax
   generated/SyntaxVisitor.swift
   generated/TokenKind.swift
   generated/Tokens.swift
-  gyb_generated/Trivia.swift
+  generated/Trivia.swift
 
   gyb_generated/syntax_nodes/SyntaxDeclNodes.swift
   gyb_generated/syntax_nodes/SyntaxExprNodes.swift

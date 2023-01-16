@@ -73,6 +73,7 @@ struct GenerateSwiftSyntax: ParsableCommand {
       TemplateSpec(sourceFile: syntaxVisitorFile, module: swiftSyntaxDir, filename: "SyntaxVisitor.swift"),
       TemplateSpec(sourceFile: tokenKindFile, module: swiftSyntaxDir, filename: "TokenKind.swift"),
       TemplateSpec(sourceFile: tokensFile, module: swiftSyntaxDir, filename: "Tokens.swift"),
+      TemplateSpec(sourceFile: triviaFile, module: swiftSyntaxDir, filename: "Trivia.swift"),
 
       // SwiftSyntaxBuilder
       TemplateSpec(sourceFile: buildableCollectionNodesFile, module: swiftSyntaxBuilderDir, filename: "BuildableCollectionNodes.swift"),

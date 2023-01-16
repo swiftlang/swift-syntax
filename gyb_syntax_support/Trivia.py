@@ -30,9 +30,11 @@ class Trivia(object):
 TRIVIAS = [
     Trivia('Space', 'A space \' \' character.', characters=[' ']),
     Trivia('Tab', 'A tab \'\\t\' character.', characters=['\\t']),
+    # Swift don't support vertical tab '\v' so we use the raw unicode
     Trivia('VerticalTab', 'A vertical tab \'\\v\' character.',
-           characters=['\\v'], swift_characters=['\\u{2B7F}']),
-    Trivia('Formfeed', 'A form-feed \'f\' character.', characters=['\\f'],
+           characters=['\\u{b}'], swift_characters=['\\u{2B7F}']),
+    # Swift don't support form feed '\f' so we use the raw unicode
+    Trivia('Formfeed', 'A form-feed \'f\' character.', characters=['\\u{c}'],
            swift_characters=['\\u{240C}']),
     Trivia('Newline', 'A newline \'\\n\' character.', characters=['\\n'],
            is_new_line=True),

@@ -52,62 +52,62 @@ public let TRIVIAS: [Trivia] = [
   Trivia(name: "Space",
          comment: #"A space ' ' character."#,
          characters: [
-           Character(#" "#)
+           Character(" ")
          ],
          swiftCharacters: [
-          Character(#" "#)
+          Character(" ")
         ]),
   Trivia(name: "Tab",
          comment: #"A tab '\t' character."#,
          characters: [
-           Character(#"\t"#)
+           Character("\t")
          ],
          swiftCharacters: [
-          Character(#"\t"#)
+          Character("\t")
         ]),
   Trivia(name: "VerticalTab",
          comment: #"A vertical tab '\v' character."#,
          characters: [
-           Character(#"\v"#)
+           Character("\u{b}")
          ],
          swiftCharacters: [
-          Character(#"\u{2B7F}"#)
+          Character("\u{2B7F}")
         ]),
   Trivia(name: "Formfeed",
          comment: #"A form-feed 'f' character."#,
          characters: [
-           Character(#"\f"#)
+           Character("\u{c}")
          ],
          swiftCharacters: [
-          Character(#"\u{240C}"#)
+          Character("\u{240C}")
         ]),
   Trivia(name: "Newline",
          comment: #"A newline '\n' character."#,
          characters: [
-           Character(#"\n"#)
+           Character("\n")
          ],
          swiftCharacters: [
-          Character(#"\n"#)
+          Character("\n")
         ],
          isNewLine: true),
   Trivia(name: "CarriageReturn",
          comment: #"A newline '\r' character."#,
          characters: [
-           Character(#"\r"#)
+           Character("\r")
          ],
          swiftCharacters: [
-          Character(#"\r"#)
+          Character("\r")
         ],
          isNewLine: true),
   Trivia(name: "CarriageReturnLineFeed",
          comment: #"A newline consists of contiguous '\r' and '\n' characters."#,
          characters: [
-           Character(#"\r"#),
-           Character(#"\n"#)
+           Character("\r"),
+           Character("\n")
          ],
          swiftCharacters: [
-          Character(#"\r"#),
-          Character(#"\n"#)
+          Character("\r"),
+          Character("\n")
         ],
          isNewLine: true),
   Trivia(name: "LineComment",

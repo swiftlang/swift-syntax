@@ -439,4 +439,50 @@ final class StringInterpolationTests: XCTestCase {
       """
     )
   }
+
+  func testTrivia() {
+    XCTAssertEqual(
+      "/// doc comment" as Trivia,
+      [
+        .docLineComment("/// doc comment")
+      ]
+    )
+
+    XCTAssertEqual(
+      """
+      /// doc comment
+      /// another doc comment
+      """ as Trivia,
+      [
+        .docLineComment("/// doc comment"),
+        .newlines(1),
+        .docLineComment("/// another doc comment"),
+      ]
+    )
+
+    XCTAssertEqual(
+      """
+      // 1 + 1 = \(1 + 1)
+      """ as Trivia,
+      [
+        .lineComment("// 1 + 1 = 2")
+      ]
+    )
+  }
+
+  func testInvalidTrivia() {
+    var interpolation = String.StringInterpolation(literalCapacity: 1, interpolationCount: 0)
+    interpolation.appendLiteral("/*comment*/ invalid /*comm*/")
+    XCTAssertThrowsError(try Trivia(stringInterpolationOrThrow: interpolation)) { error in
+      AssertStringsEqualWithDiff(
+        String(describing: error),
+        """
+
+        1 │ /*comment*/ invalid /*comm*/
+          ∣             ╰─ unexpected trivia 'invalid'
+
+        """
+      )
+    }
+  }
 }

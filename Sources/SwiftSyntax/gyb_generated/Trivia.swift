@@ -434,7 +434,7 @@ extension RawTriviaPiece: CustomDebugStringConvertible {
 }
 
 extension TriviaPiece {
-  init(raw: RawTriviaPiece) {
+  @_spi(RawSyntax) public init(raw: RawTriviaPiece) {
     switch raw {
     case let .spaces(count): self = .spaces(count)
     case let .tabs(count): self = .tabs(count)

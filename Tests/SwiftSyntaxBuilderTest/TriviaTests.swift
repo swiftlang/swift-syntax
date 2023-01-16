@@ -17,7 +17,11 @@ import SwiftSyntaxBuilder
 final class TriviaTests: XCTestCase {
   func testLeadingTrivia() {
     let decl = VariableDeclSyntax(
-      leadingTrivia: .docLineComment("/// A doc comment") + .newline + .blockComment("/* An inline comment */") + .space,
+      leadingTrivia: """
+        /// A doc comment
+        /* An inline comment */ \
+
+        """,
       modifiers: [DeclModifierSyntax(name: .keyword(.static))],
       letOrVarKeyword: .keyword(.var)
     ) {

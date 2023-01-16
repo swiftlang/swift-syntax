@@ -140,7 +140,7 @@ extension SyntaxStringInterpolation: StringInterpolationProtocol {
 /// Syntax nodes that can be formed by a string interpolation involve source
 /// code and interpolated syntax nodes.
 public protocol SyntaxExpressibleByStringInterpolation:
-  ExpressibleByStringInterpolation, SyntaxProtocol
+  ExpressibleByStringInterpolation
 where Self.StringInterpolation == SyntaxStringInterpolation {
   init(stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws
 }

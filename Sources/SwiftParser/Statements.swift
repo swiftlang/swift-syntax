@@ -1020,7 +1020,7 @@ extension Parser {
   /// Grammar
   /// =======
   ///
-  ///     yield-statement → 'yield' '('? expr-list? ')'?
+  ///     yield-statement → 'try'? 'yield' '('? expr-list? ')'?
   @_spi(RawSyntax)
   public mutating func parseYieldStatement(yieldHandle: RecoveryConsumptionHandle) -> RawYieldStmtSyntax {
     let (unexpectedBeforeYield, yield) = self.eat(yieldHandle)
@@ -1062,6 +1062,8 @@ extension Parser {
     }
 
     return RawYieldStmtSyntax(
+      nil,
+      tryKeyword: nil,
       unexpectedBeforeYield,
       yieldKeyword: yield,
       yields: yields,

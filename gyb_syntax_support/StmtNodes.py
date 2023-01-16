@@ -129,9 +129,10 @@ STMT_NODES = [
                    is_optional=True),
          ]),
 
-    # yield-stmt -> 'yield' '('? expr-list? ')'?
+    # yield-stmt -> 'try'? 'yield' '('? expr-list? ')'?
     Node('YieldStmt', name_for_diagnostics="'yield' statement", kind='Stmt',
          children=[
+             Child('TryKeyword', kind='TryToken', is_optional=True),
              Child('YieldKeyword', kind='KeywordToken', text_choices=['yield']),
              Child('Yields', kind='Syntax',
                    node_choices=[

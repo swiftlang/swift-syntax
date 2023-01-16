@@ -13782,7 +13782,9 @@ public struct RawYieldStmtSyntax: RawStmtSyntaxNodeProtocol {
   }
 
   public init(
-    _ unexpectedBeforeYieldKeyword: RawUnexpectedNodesSyntax? = nil,
+    _ unexpectedBeforeTryKeyword: RawUnexpectedNodesSyntax? = nil,
+    tryKeyword: RawTokenSyntax?,
+    _ unexpectedBetweenTryKeywordAndYieldKeyword: RawUnexpectedNodesSyntax? = nil,
     yieldKeyword: RawTokenSyntax,
     _ unexpectedBetweenYieldKeywordAndYields: RawUnexpectedNodesSyntax? = nil,
     yields: Yields,
@@ -13790,31 +13792,39 @@ public struct RawYieldStmtSyntax: RawStmtSyntaxNodeProtocol {
     arena: __shared SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
-      kind: .yieldStmt, uninitializedCount: 5, arena: arena) { layout in
+      kind: .yieldStmt, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeYieldKeyword?.raw
-      layout[1] = yieldKeyword.raw
-      layout[2] = unexpectedBetweenYieldKeywordAndYields?.raw
-      layout[3] = yields.raw
-      layout[4] = unexpectedAfterYields?.raw
+      layout[0] = unexpectedBeforeTryKeyword?.raw
+      layout[1] = tryKeyword?.raw
+      layout[2] = unexpectedBetweenTryKeywordAndYieldKeyword?.raw
+      layout[3] = yieldKeyword.raw
+      layout[4] = unexpectedBetweenYieldKeywordAndYields?.raw
+      layout[5] = yields.raw
+      layout[6] = unexpectedAfterYields?.raw
     }
     self.init(raw: raw)
   }
 
-  public var unexpectedBeforeYieldKeyword: RawUnexpectedNodesSyntax? {
+  public var unexpectedBeforeTryKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public var yieldKeyword: RawTokenSyntax {
-    layoutView.children[1].map(RawTokenSyntax.init(raw:))!
+  public var tryKeyword: RawTokenSyntax? {
+    layoutView.children[1].map(RawTokenSyntax.init(raw:))
   }
-  public var unexpectedBetweenYieldKeywordAndYields: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenTryKeywordAndYieldKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
+  public var yieldKeyword: RawTokenSyntax {
+    layoutView.children[3].map(RawTokenSyntax.init(raw:))!
+  }
+  public var unexpectedBetweenYieldKeywordAndYields: RawUnexpectedNodesSyntax? {
+    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
   public var yields: RawSyntax {
-    layoutView.children[3]!
+    layoutView.children[5]!
   }
   public var unexpectedAfterYields: RawUnexpectedNodesSyntax? {
-    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 

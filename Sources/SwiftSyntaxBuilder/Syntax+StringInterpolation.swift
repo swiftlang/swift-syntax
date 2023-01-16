@@ -12,7 +12,7 @@
 
 import SwiftBasicFormat
 import SwiftDiagnostics
-import SwiftSyntax
+@_spi(RawSyntax) import SwiftSyntax
 
 /// An individual interpolated syntax node.
 struct InterpolatedSyntaxNode {
@@ -266,7 +266,7 @@ extension ExpressibleByLiteralSyntax where Self: BinaryInteger {
   public func makeLiteralSyntax() -> IntegerLiteralExprSyntax {
     // TODO: Radix selection? Thousands separators?
     let digits = String(self, radix: 10)
-    return IntegerLiteralExprSyntax(digits: digits)
+    return IntegerLiteralExprSyntax(digits: .integerLiteral(digits))
   }
 }
 extension Int: ExpressibleByLiteralSyntax {}
@@ -303,7 +303,7 @@ extension ExpressibleByLiteralSyntax where Self: FloatingPoint, Self: LosslessSt
     case .negativeNormal, .negativeSubnormal, .positiveZero, .positiveSubnormal, .positiveNormal:
       // TODO: Thousands separators?
       let digits = String(self)
-      return ExprSyntax(FloatLiteralExprSyntax(floatingDigits: digits))
+      return ExprSyntax(FloatLiteralExprSyntax(floatingDigits: .floatingLiteral(digits)))
     }
 
   }
@@ -436,5 +436,14 @@ extension Optional: ExpressibleByLiteralSyntax where Wrapped: ExpressibleByLiter
 
       return ExprSyntax(wrappedExpr)
     }
+  }
+}
+
+extension TokenSyntax: SyntaxExpressibleByStringInterpolation {
+  public init(stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
+    let string = stringInterpolation.sourceText.withUnsafeBufferPointer { buf in
+      return String(syntaxText: SyntaxText(buffer: buf))
+    }
+    self = .identifier(string)
   }
 }

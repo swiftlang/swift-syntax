@@ -25,7 +25,7 @@ extension BinaryOperatorExprSyntax {
 
 extension BooleanLiteralExprSyntax: ExpressibleByBooleanLiteral {
   public init(_ value: Bool) {
-    self.init(booleanLiteral: value ? .true : .false)
+    self.init(booleanLiteral: value ? .keyword(.true) : .keyword(.false))
   }
 
   public init(booleanLiteral value: Bool) {
@@ -130,7 +130,7 @@ extension ExprSyntax {
 
 extension FloatLiteralExprSyntax: ExpressibleByFloatLiteral {
   public init(_ value: Float) {
-    self.init(floatingDigits: String(value))
+    self.init(floatingDigits: .floatingLiteral(String(value)))
   }
 
   public init(floatLiteral value: Float) {
@@ -213,7 +213,7 @@ extension IfStmtSyntax {
 
 extension IntegerLiteralExprSyntax: ExpressibleByIntegerLiteral {
   public init(_ value: Int) {
-    self.init(digits: String(value))
+    self.init(digits: .integerLiteral(String(value)))
   }
 
   public init(integerLiteral value: Int) {
@@ -402,7 +402,7 @@ extension VariableDeclSyntax {
       leadingTrivia: leadingTrivia,
       attributes: attributes?.withTrailingTrivia(.space),
       modifiers: modifiers,
-      letOrVarKeyword: letOrVarKeyword
+      letOrVarKeyword: .keyword(letOrVarKeyword)
     ) {
       PatternBindingSyntax(
         pattern: name,
@@ -425,7 +425,7 @@ extension VariableDeclSyntax {
       leadingTrivia: leadingTrivia,
       attributes: attributes?.withTrailingTrivia(.space),
       modifiers: modifiers,
-      letOrVarKeyword: .var
+      letOrVarKeyword: .keyword(.var)
     ) {
       PatternBindingSyntax(
         pattern: name,

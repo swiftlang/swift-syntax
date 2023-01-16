@@ -18,7 +18,7 @@ final class VariableTests: XCTestCase {
   func testVariableDecl() {
     let leadingTrivia = Trivia.unexpectedText("␣")
 
-    let buildable = VariableDeclSyntax(leadingTrivia: leadingTrivia, letOrVarKeyword: .let) {
+    let buildable = VariableDeclSyntax(leadingTrivia: leadingTrivia, letOrVarKeyword: .keyword(.let)) {
       PatternBindingSyntax(pattern: PatternSyntax("a"), typeAnnotation: TypeAnnotationSyntax(type: ArrayTypeSyntax(elementType: TypeSyntax("Int"))))
     }
 
@@ -100,7 +100,7 @@ final class VariableTests: XCTestCase {
   func testVariableDeclWithValue() {
     let leadingTrivia = Trivia.unexpectedText("␣")
 
-    let buildable = VariableDeclSyntax(leadingTrivia: leadingTrivia, letOrVarKeyword: .var) {
+    let buildable = VariableDeclSyntax(leadingTrivia: leadingTrivia, letOrVarKeyword: .keyword(.var)) {
       PatternBindingSyntax(
         pattern: PatternSyntax("d"),
         typeAnnotation: TypeAnnotationSyntax(type: DictionaryTypeSyntax(keyType: TypeSyntax("String"), valueType: TypeSyntax("Int"))),
@@ -139,7 +139,7 @@ final class VariableTests: XCTestCase {
   }
 
   func testMultiPatternVariableDecl() {
-    let buildable = VariableDeclSyntax(letOrVarKeyword: .let) {
+    let buildable = VariableDeclSyntax(letOrVarKeyword: .keyword(.let)) {
       PatternBindingSyntax(
         pattern: PatternSyntax("a"),
         initializer: InitializerClauseSyntax(
@@ -168,7 +168,7 @@ final class VariableTests: XCTestCase {
 
   func testClosureTypeVariableDecl() {
     let type = FunctionTypeSyntax(arguments: [TupleTypeElementSyntax(type: TypeSyntax("Int"))], returnType: TypeSyntax("Bool"))
-    let buildable = VariableDeclSyntax(letOrVarKeyword: .let) {
+    let buildable = VariableDeclSyntax(letOrVarKeyword: .keyword(.let)) {
       PatternBindingSyntax(pattern: PatternSyntax("c"), typeAnnotation: TypeAnnotationSyntax(type: type))
     }
     AssertBuildResult(buildable, "let c: (Int) -> Bool")

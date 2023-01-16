@@ -109,22 +109,6 @@ private func createConvenienceInitializer(node: Node) -> InitializerDeclSyntax? 
         "@\(builderInitializableType.resultBuilderBaseName) \(child.swiftName)Builder: () -> \(builderInitializableType.syntax) = \(defaultArgument)",
         for: .functionParameters
       ))
-    } else if let token = child.type.token, token.text == nil, (child.textChoices.count != 1 || token.associatedValueClass == nil) {
-      // Allow initializing identifiers and other tokens without default text with a String
-      shouldCreateInitializer = true
-      let paramType = child.type.optionalWrapped(type: "\(raw: token.associatedValueClass ?? "String")" as TypeSyntax)
-      let tokenExpr = MemberAccessExprSyntax("TokenSyntax.\(raw: token.swiftKind.withFirstCharacterLowercased.backticked)")
-      if child.type.isOptional {
-        produceExpr = ExprSyntax(FunctionCallExprSyntax("\(raw: child.swiftName).map { \(tokenExpr)($0) }"))
-      } else {
-        produceExpr = ExprSyntax(FunctionCallExprSyntax("\(tokenExpr)(\(raw: child.swiftName))"))
-      }
-      normalParameters.append(FunctionParameterSyntax(
-        firstName: .identifier(child.swiftName),
-        colon: .colonToken(),
-        type: paramType,
-        defaultArgument: child.defaultInitialization.map { InitializerClauseSyntax(value: $0) }
-      ))
     } else {
       produceExpr = convertFromSyntaxProtocolToSyntaxType(child: child)
       normalParameters.append(FunctionParameterSyntax(
@@ -142,11 +126,7 @@ private func createConvenienceInitializer(node: Node) -> InitializerDeclSyntax? 
   }
 
   return InitializerDeclSyntax(
-    leadingTrivia: [
-      "/// A convenience initializer that allows:",
-      "///  - Initializing syntax collections using result builders",
-      "///  - Initializing tokens without default text using strings",
-    ].map { .docLineComment($0) + .newline }.reduce([], +),
+    leadingTrivia: .docLineComment("/// A convenience initializer that allows initializing syntax collections using result builders") + .newline,
     modifiers: [DeclModifierSyntax(name: .keyword(.public))],
     signature: FunctionSignatureSyntax(
       input: ParameterClauseSyntax {

@@ -8,11 +8,11 @@
 
 add_swift_host_library(SwiftSyntaxBuilder
   ConvenienceInitializers.swift
-  HasTrailingComma.swift
   Indenter.swift
   ResultBuilderExtensions.swift
   Syntax+StringInterpolation.swift
   SyntaxNodeWithBody.swift
+  WithTrailingCommaSyntax+EnsuringTrailingComma.swift
 
 
   generated/BuildableCollectionNodes.swift

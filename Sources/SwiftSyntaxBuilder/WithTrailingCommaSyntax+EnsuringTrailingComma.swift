@@ -12,15 +12,12 @@
 
 import SwiftSyntax
 
-protocol HasTrailingComma {
-  var hasTrailingComma: Bool { get }
-
-  /// Returns this node overriding presence of the trailing comma
-  func withTrailingComma(_ withComma: Bool) -> Self
-}
-
-extension HasTrailingComma {
+extension WithTrailingCommaSyntax {
   func ensuringTrailingComma() -> Self {
-    hasTrailingComma ? self : withTrailingComma(true)
+    if trailingComma == nil {
+      return self.withTrailingComma(.commaToken())
+    } else {
+      return self
+    }
   }
 }

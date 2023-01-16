@@ -35,34 +35,12 @@ extension ActorDeclSyntax {
   }
 }
 
-extension ArrayElementSyntax: HasTrailingComma {
-  var hasTrailingComma: Bool {
-    return trailingComma != nil
-  }
-  
-  /// Conformance to `HasTrailingComma`.
-  public func withTrailingComma(_ withComma: Bool) -> Self {
-    return withTrailingComma(withComma ? .commaToken() : nil)
-  }
-}
-
 extension ArrayExprSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(leadingTrivia: Trivia? = nil, unexpectedBeforeLeftSquare: UnexpectedNodesSyntax? = nil, leftSquare: TokenSyntax = .leftSquareBracketToken(), unexpectedBetweenLeftSquareAndElements: UnexpectedNodesSyntax? = nil, unexpectedBetweenElementsAndRightSquare: UnexpectedNodesSyntax? = nil, rightSquare: TokenSyntax = .rightSquareBracketToken(), @ArrayElementListBuilder elementsBuilder: () -> ArrayElementListSyntax = {
       ArrayElementListSyntax([])
     }, trailingTrivia: Trivia? = nil) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftSquare, leftSquare: leftSquare, unexpectedBetweenLeftSquareAndElements, elements: elementsBuilder(), unexpectedBetweenElementsAndRightSquare, rightSquare: rightSquare, trailingTrivia: trailingTrivia)
-  }
-}
-
-extension CaseItemSyntax: HasTrailingComma {
-  var hasTrailingComma: Bool {
-    return trailingComma != nil
-  }
-  
-  /// Conformance to `HasTrailingComma`.
-  public func withTrailingComma(_ withComma: Bool) -> Self {
-    return withTrailingComma(withComma ? .commaToken() : nil)
   }
 }
 
@@ -75,34 +53,12 @@ extension CatchClauseSyntax {
   }
 }
 
-extension CatchItemSyntax: HasTrailingComma {
-  var hasTrailingComma: Bool {
-    return trailingComma != nil
-  }
-  
-  /// Conformance to `HasTrailingComma`.
-  public func withTrailingComma(_ withComma: Bool) -> Self {
-    return withTrailingComma(withComma ? .commaToken() : nil)
-  }
-}
-
 extension ClassDeclSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(leadingTrivia: Trivia? = nil, unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax? = nil, unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, modifiers: ModifierListSyntax? = nil, unexpectedBetweenModifiersAndClassKeyword: UnexpectedNodesSyntax? = nil, classKeyword: TokenSyntax = .keyword(.class), unexpectedBetweenClassKeywordAndIdentifier: UnexpectedNodesSyntax? = nil, identifier: TokenSyntax, unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? = nil, genericParameterClause: GenericParameterClauseSyntax? = nil, unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil, inheritanceClause: TypeInheritanceClauseSyntax? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax? = nil, unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil, @MemberDeclListBuilder membersBuilder: () -> MemberDeclListSyntax = {
       MemberDeclListSyntax([])
     }, trailingTrivia: Trivia? = nil) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndClassKeyword, classKeyword: classKeyword, unexpectedBetweenClassKeywordAndIdentifier, identifier: identifier, unexpectedBetweenIdentifierAndGenericParameterClause, genericParameterClause: genericParameterClause, unexpectedBetweenGenericParameterClauseAndInheritanceClause, inheritanceClause: inheritanceClause, unexpectedBetweenInheritanceClauseAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndMembers, members: MemberDeclBlockSyntax(members: membersBuilder()), trailingTrivia: trailingTrivia)
-  }
-}
-
-extension ClosureCaptureItemSyntax: HasTrailingComma {
-  var hasTrailingComma: Bool {
-    return trailingComma != nil
-  }
-  
-  /// Conformance to `HasTrailingComma`.
-  public func withTrailingComma(_ withComma: Bool) -> Self {
-    return withTrailingComma(withComma ? .commaToken() : nil)
   }
 }
 
@@ -124,34 +80,12 @@ extension ClosureExprSyntax {
   }
 }
 
-extension ClosureParamSyntax: HasTrailingComma {
-  var hasTrailingComma: Bool {
-    return trailingComma != nil
-  }
-  
-  /// Conformance to `HasTrailingComma`.
-  public func withTrailingComma(_ withComma: Bool) -> Self {
-    return withTrailingComma(withComma ? .commaToken() : nil)
-  }
-}
-
 extension CodeBlockSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(leadingTrivia: Trivia? = nil, unexpectedBeforeLeftBrace: UnexpectedNodesSyntax? = nil, leftBrace: TokenSyntax = .leftBraceToken(), unexpectedBetweenLeftBraceAndStatements: UnexpectedNodesSyntax? = nil, unexpectedBetweenStatementsAndRightBrace: UnexpectedNodesSyntax? = nil, rightBrace: TokenSyntax = .rightBraceToken(), @CodeBlockItemListBuilder statementsBuilder: () -> CodeBlockItemListSyntax = {
       CodeBlockItemListSyntax([])
     }, trailingTrivia: Trivia? = nil) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftBrace, leftBrace: leftBrace, unexpectedBetweenLeftBraceAndStatements, statements: statementsBuilder(), unexpectedBetweenStatementsAndRightBrace, rightBrace: rightBrace, trailingTrivia: trailingTrivia)
-  }
-}
-
-extension ConditionElementSyntax: HasTrailingComma {
-  var hasTrailingComma: Bool {
-    return trailingComma != nil
-  }
-  
-  /// Conformance to `HasTrailingComma`.
-  public func withTrailingComma(_ withComma: Bool) -> Self {
-    return withTrailingComma(withComma ? .commaToken() : nil)
   }
 }
 
@@ -175,46 +109,12 @@ extension DeinitializerDeclSyntax {
   }
 }
 
-extension DictionaryElementSyntax: HasTrailingComma {
-  var hasTrailingComma: Bool {
-    return trailingComma != nil
-  }
-  
-  /// Conformance to `HasTrailingComma`.
-  public func withTrailingComma(_ withComma: Bool) -> Self {
-    return withTrailingComma(withComma ? .commaToken() : nil)
-  }
-}
-
-/// A differentiability parameter: either the "self" identifier, a functionparameter name, or a function parameter index.
-extension DifferentiabilityParamSyntax: HasTrailingComma {
-  var hasTrailingComma: Bool {
-    return trailingComma != nil
-  }
-  
-  /// Conformance to `HasTrailingComma`.
-  public func withTrailingComma(_ withComma: Bool) -> Self {
-    return withTrailingComma(withComma ? .commaToken() : nil)
-  }
-}
-
 extension DoStmtSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(leadingTrivia: Trivia? = nil, unexpectedBeforeDoKeyword: UnexpectedNodesSyntax? = nil, doKeyword: TokenSyntax = .keyword(.do), unexpectedBetweenDoKeywordAndBody: UnexpectedNodesSyntax? = nil, unexpectedBetweenBodyAndCatchClauses: UnexpectedNodesSyntax? = nil, catchClauses: CatchClauseListSyntax? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemListSyntax = {
       CodeBlockItemListSyntax([])
     }, trailingTrivia: Trivia? = nil) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeDoKeyword, doKeyword: doKeyword, unexpectedBetweenDoKeywordAndBody, body: CodeBlockSyntax(statements: bodyBuilder()), unexpectedBetweenBodyAndCatchClauses, catchClauses: catchClauses, trailingTrivia: trailingTrivia)
-  }
-}
-
-extension DocumentationAttributeArgumentSyntax: HasTrailingComma {
-  var hasTrailingComma: Bool {
-    return trailingComma != nil
-  }
-  
-  /// Conformance to `HasTrailingComma`.
-  public func withTrailingComma(_ withComma: Bool) -> Self {
-    return withTrailingComma(withComma ? .commaToken() : nil)
   }
 }
 
@@ -225,18 +125,6 @@ extension EnumCaseDeclSyntax {
       EnumCaseElementListSyntax([])
     }, trailingTrivia: Trivia? = nil) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndCaseKeyword, caseKeyword: caseKeyword, unexpectedBetweenCaseKeywordAndElements, elements: elementsBuilder(), trailingTrivia: trailingTrivia)
-  }
-}
-
-/// An element of an enum case, containing the name of the case and,optionally, either associated values or an assignment to a raw value.
-extension EnumCaseElementSyntax: HasTrailingComma {
-  var hasTrailingComma: Bool {
-    return trailingComma != nil
-  }
-  
-  /// Conformance to `HasTrailingComma`.
-  public func withTrailingComma(_ withComma: Bool) -> Self {
-    return withTrailingComma(withComma ? .commaToken() : nil)
   }
 }
 
@@ -297,17 +185,6 @@ extension FunctionDeclSyntax {
   }
 }
 
-extension FunctionParameterSyntax: HasTrailingComma {
-  var hasTrailingComma: Bool {
-    return trailingComma != nil
-  }
-  
-  /// Conformance to `HasTrailingComma`.
-  public func withTrailingComma(_ withComma: Bool) -> Self {
-    return withTrailingComma(withComma ? .commaToken() : nil)
-  }
-}
-
 extension GenericArgumentClauseSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(leadingTrivia: Trivia? = nil, unexpectedBeforeLeftAngleBracket: UnexpectedNodesSyntax? = nil, leftAngleBracket: TokenSyntax = .leftAngleToken(), unexpectedBetweenLeftAngleBracketAndArguments: UnexpectedNodesSyntax? = nil, unexpectedBetweenArgumentsAndRightAngleBracket: UnexpectedNodesSyntax? = nil, rightAngleBracket: TokenSyntax = .rightAngleToken(), @GenericArgumentListBuilder argumentsBuilder: () -> GenericArgumentListSyntax = {
@@ -317,45 +194,12 @@ extension GenericArgumentClauseSyntax {
   }
 }
 
-extension GenericArgumentSyntax: HasTrailingComma {
-  var hasTrailingComma: Bool {
-    return trailingComma != nil
-  }
-  
-  /// Conformance to `HasTrailingComma`.
-  public func withTrailingComma(_ withComma: Bool) -> Self {
-    return withTrailingComma(withComma ? .commaToken() : nil)
-  }
-}
-
 extension GenericParameterClauseSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(leadingTrivia: Trivia? = nil, unexpectedBeforeLeftAngleBracket: UnexpectedNodesSyntax? = nil, leftAngleBracket: TokenSyntax = .leftAngleToken(), unexpectedBetweenLeftAngleBracketAndGenericParameterList: UnexpectedNodesSyntax? = nil, unexpectedBetweenGenericParameterListAndGenericWhereClause: UnexpectedNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax? = nil, unexpectedBetweenGenericWhereClauseAndRightAngleBracket: UnexpectedNodesSyntax? = nil, rightAngleBracket: TokenSyntax = .rightAngleToken(), @GenericParameterListBuilder genericParameterListBuilder: () -> GenericParameterListSyntax = {
       GenericParameterListSyntax([])
     }, trailingTrivia: Trivia? = nil) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftAngleBracket, leftAngleBracket: leftAngleBracket, unexpectedBetweenLeftAngleBracketAndGenericParameterList, genericParameterList: genericParameterListBuilder(), unexpectedBetweenGenericParameterListAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndRightAngleBracket, rightAngleBracket: rightAngleBracket, trailingTrivia: trailingTrivia)
-  }
-}
-
-extension GenericParameterSyntax: HasTrailingComma {
-  var hasTrailingComma: Bool {
-    return trailingComma != nil
-  }
-  
-  /// Conformance to `HasTrailingComma`.
-  public func withTrailingComma(_ withComma: Bool) -> Self {
-    return withTrailingComma(withComma ? .commaToken() : nil)
-  }
-}
-
-extension GenericRequirementSyntax: HasTrailingComma {
-  var hasTrailingComma: Bool {
-    return trailingComma != nil
-  }
-  
-  /// Conformance to `HasTrailingComma`.
-  public func withTrailingComma(_ withComma: Bool) -> Self {
-    return withTrailingComma(withComma ? .commaToken() : nil)
   }
 }
 
@@ -386,17 +230,6 @@ extension IfStmtSyntax {
   }
 }
 
-extension InheritedTypeSyntax: HasTrailingComma {
-  var hasTrailingComma: Bool {
-    return trailingComma != nil
-  }
-  
-  /// Conformance to `HasTrailingComma`.
-  public func withTrailingComma(_ withComma: Bool) -> Self {
-    return withTrailingComma(withComma ? .commaToken() : nil)
-  }
-}
-
 extension InitializerDeclSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(leadingTrivia: Trivia? = nil, unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax? = nil, unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, modifiers: ModifierListSyntax? = nil, unexpectedBetweenModifiersAndInitKeyword: UnexpectedNodesSyntax? = nil, initKeyword: TokenSyntax = .keyword(.`init`), unexpectedBetweenInitKeywordAndOptionalMark: UnexpectedNodesSyntax? = nil, optionalMark: TokenSyntax? = nil, unexpectedBetweenOptionalMarkAndGenericParameterClause: UnexpectedNodesSyntax? = nil, genericParameterClause: GenericParameterClauseSyntax? = nil, unexpectedBetweenGenericParameterClauseAndSignature: UnexpectedNodesSyntax? = nil, signature: FunctionSignatureSyntax, unexpectedBetweenSignatureAndGenericWhereClause: UnexpectedNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax? = nil, unexpectedBetweenGenericWhereClauseAndBody: UnexpectedNodesSyntax? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemListSyntax? = {
@@ -414,18 +247,6 @@ extension KeyPathSubscriptComponentSyntax {
       TupleExprElementListSyntax([])
     }, trailingTrivia: Trivia? = nil) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftBracket, leftBracket: leftBracket, unexpectedBetweenLeftBracketAndArgumentList, argumentList: argumentListBuilder(), unexpectedBetweenArgumentListAndRightBracket, rightBracket: rightBracket, trailingTrivia: trailingTrivia)
-  }
-}
-
-/// A labeled argument for the `@_specialize` attribute like`exported: true`
-extension LabeledSpecializeEntrySyntax: HasTrailingComma {
-  var hasTrailingComma: Bool {
-    return trailingComma != nil
-  }
-  
-  /// Conformance to `HasTrailingComma`.
-  public func withTrailingComma(_ withComma: Bool) -> Self {
-    return withTrailingComma(withComma ? .commaToken() : nil)
   }
 }
 
@@ -462,28 +283,6 @@ extension ParameterClauseSyntax {
       FunctionParameterListSyntax([])
     }, trailingTrivia: Trivia? = nil) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndParameterList, parameterList: parameterListBuilder(), unexpectedBetweenParameterListAndRightParen, rightParen: rightParen, trailingTrivia: trailingTrivia)
-  }
-}
-
-extension PatternBindingSyntax: HasTrailingComma {
-  var hasTrailingComma: Bool {
-    return trailingComma != nil
-  }
-  
-  /// Conformance to `HasTrailingComma`.
-  public func withTrailingComma(_ withComma: Bool) -> Self {
-    return withTrailingComma(withComma ? .commaToken() : nil)
-  }
-}
-
-extension PrimaryAssociatedTypeSyntax: HasTrailingComma {
-  var hasTrailingComma: Bool {
-    return trailingComma != nil
-  }
-  
-  /// Conformance to `HasTrailingComma`.
-  public func withTrailingComma(_ withComma: Bool) -> Self {
-    return withTrailingComma(withComma ? .commaToken() : nil)
   }
 }
 
@@ -568,29 +367,6 @@ extension SwitchStmtSyntax {
   }
 }
 
-/// A labeled argument for the `@_specialize` attribute with a functiondecl value like`target: myFunc(_:)`
-extension TargetFunctionEntrySyntax: HasTrailingComma {
-  var hasTrailingComma: Bool {
-    return trailingComma != nil
-  }
-  
-  /// Conformance to `HasTrailingComma`.
-  public func withTrailingComma(_ withComma: Bool) -> Self {
-    return withTrailingComma(withComma ? .commaToken() : nil)
-  }
-}
-
-extension TupleExprElementSyntax: HasTrailingComma {
-  var hasTrailingComma: Bool {
-    return trailingComma != nil
-  }
-  
-  /// Conformance to `HasTrailingComma`.
-  public func withTrailingComma(_ withComma: Bool) -> Self {
-    return withTrailingComma(withComma ? .commaToken() : nil)
-  }
-}
-
 extension TupleExprSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(leadingTrivia: Trivia? = nil, unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax = .leftParenToken(), unexpectedBetweenLeftParenAndElementList: UnexpectedNodesSyntax? = nil, unexpectedBetweenElementListAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax = .rightParenToken(), @TupleExprElementListBuilder elementListBuilder: () -> TupleExprElementListSyntax = {
@@ -600,34 +376,12 @@ extension TupleExprSyntax {
   }
 }
 
-extension TuplePatternElementSyntax: HasTrailingComma {
-  var hasTrailingComma: Bool {
-    return trailingComma != nil
-  }
-  
-  /// Conformance to `HasTrailingComma`.
-  public func withTrailingComma(_ withComma: Bool) -> Self {
-    return withTrailingComma(withComma ? .commaToken() : nil)
-  }
-}
-
 extension TuplePatternSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(leadingTrivia: Trivia? = nil, unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax = .leftParenToken(), unexpectedBetweenLeftParenAndElements: UnexpectedNodesSyntax? = nil, unexpectedBetweenElementsAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax = .rightParenToken(), @TuplePatternElementListBuilder elementsBuilder: () -> TuplePatternElementListSyntax = {
       TuplePatternElementListSyntax([])
     }, trailingTrivia: Trivia? = nil) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndElements, elements: elementsBuilder(), unexpectedBetweenElementsAndRightParen, rightParen: rightParen, trailingTrivia: trailingTrivia)
-  }
-}
-
-extension TupleTypeElementSyntax: HasTrailingComma {
-  var hasTrailingComma: Bool {
-    return trailingComma != nil
-  }
-  
-  /// Conformance to `HasTrailingComma`.
-  public func withTrailingComma(_ withComma: Bool) -> Self {
-    return withTrailingComma(withComma ? .commaToken() : nil)
   }
 }
 

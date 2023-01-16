@@ -73,56 +73,55 @@ extension Parser {
   public mutating func parseStatement() -> RawStmtSyntax {
     // If this is a label on a loop/switch statement, consume it and pass it into
     // parsing logic below.
-    func label<S: RawStmtSyntaxNodeProtocol>(_ stmt: S, with label: Parser.StatementLabel?) -> RawStmtSyntax {
-      guard let label = label else {
-        return RawStmtSyntax(stmt)
-      }
+    if let label = self.parseOptionalStatementLabel() {
       return RawStmtSyntax(
         RawLabeledStmtSyntax(
           labelName: label.label,
           labelColon: label.colon,
-          statement: RawStmtSyntax(stmt),
+          statement: parseStatementAfterLabel(),
           arena: self.arena
         )
       )
+    } else {
+        return parseStatementAfterLabel()
     }
-
-    let optLabel = self.parseOptionalStatementLabel()
+  }
+  
+  @_spi(RawSyntax)
+  public mutating func parseStatementAfterLabel() -> RawStmtSyntax {
     switch self.canRecoverTo(anyIn: CanBeStatementStart.self) {
     case (.forKeyword, let handle)?:
-      return label(self.parseForEachStatement(forHandle: handle), with: optLabel)
+      return RawStmtSyntax(self.parseForEachStatement(forHandle: handle))
     case (.whileKeyword, let handle)?:
-      return label(self.parseWhileStatement(whileHandle: handle), with: optLabel)
+      return RawStmtSyntax(self.parseWhileStatement(whileHandle: handle))
     case (.repeatKeyword, let handle)?:
-      return label(self.parseRepeatWhileStatement(repeatHandle: handle), with: optLabel)
-
+      return RawStmtSyntax(self.parseRepeatWhileStatement(repeatHandle: handle))
     case (.ifKeyword, let handle)?:
-      return label(self.parseIfStatement(ifHandle: handle), with: optLabel)
+      return RawStmtSyntax(self.parseIfStatement(ifHandle: handle))
     case (.guardKeyword, let handle)?:
-      return label(self.parseGuardStatement(guardHandle: handle), with: optLabel)
+      return RawStmtSyntax(self.parseGuardStatement(guardHandle: handle))
     case (.switchKeyword, let handle)?:
-      return label(self.parseSwitchStatement(switchHandle: handle), with: optLabel)
+      return RawStmtSyntax(self.parseSwitchStatement(switchHandle: handle))
     case (.breakKeyword, let handle)?:
-      return label(self.parseBreakStatement(breakHandle: handle), with: optLabel)
+      return RawStmtSyntax(self.parseBreakStatement(breakHandle: handle))
     case (.continueKeyword, let handle)?:
-      return label(self.parseContinueStatement(continueHandle: handle), with: optLabel)
+      return RawStmtSyntax(self.parseContinueStatement(continueHandle: handle))
     case (.fallthroughKeyword, let handle)?:
-      return label(self.parseFallthroughStatement(fallthroughHandle: handle), with: optLabel)
+      return RawStmtSyntax(self.parseFallthroughStatement(fallthroughHandle: handle))
     case (.returnKeyword, let handle)?:
-      return label(self.parseReturnStatement(returnHandle: handle), with: optLabel)
+      return RawStmtSyntax(self.parseReturnStatement(returnHandle: handle))
     case (.throwKeyword, let handle)?:
-      return label(self.parseThrowStatement(throwHandle: handle), with: optLabel)
+      return RawStmtSyntax(self.parseThrowStatement(throwHandle: handle))
     case (.deferKeyword, let handle)?:
-      return label(self.parseDeferStatement(deferHandle: handle), with: optLabel)
+      return RawStmtSyntax(self.parseDeferStatement(deferHandle: handle))
     case (.doKeyword, let handle)?:
-      return label(self.parseDoStatement(doHandle: handle), with: optLabel)
+      return RawStmtSyntax(self.parseDoStatement(doHandle: handle))
     case (.poundAssertKeyword, let handle)?:
-      return label(self.parsePoundAssertStatement(poundAssertHandle: handle), with: optLabel)
+      return RawStmtSyntax(self.parsePoundAssertStatement(poundAssertHandle: handle))
     case (.yield, let handle)?:
-      return label(self.parseYieldStatement(yieldHandle: handle), with: optLabel)
+      return RawStmtSyntax(self.parseYieldStatement(yieldHandle: handle))
     case nil:
-      let missingStmt = RawStmtSyntax(RawMissingStmtSyntax(arena: self.arena))
-      return label(missingStmt, with: optLabel)
+      return RawStmtSyntax(RawMissingStmtSyntax(arena: self.arena))
     }
   }
 }

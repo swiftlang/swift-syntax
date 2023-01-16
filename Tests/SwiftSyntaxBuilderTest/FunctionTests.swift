@@ -170,8 +170,8 @@ final class FunctionTests: XCTestCase {
           signature: FunctionSignatureSyntax(
             input: ParameterClauseSyntax(
               parameterList: FunctionParameterListSyntax {
-                FunctionParameterSyntax(firstName: TokenSyntax.identifier("lhs"), colon: .colon, type: SimpleTypeIdentifierSyntax("String"))
-                FunctionParameterSyntax(firstName: TokenSyntax.identifier("rhs"), colon: .colon, type: SimpleTypeIdentifierSyntax("String"))
+                FunctionParameterSyntax(firstName: TokenSyntax.identifier("lhs"), colon: .colonToken(), type: SimpleTypeIdentifierSyntax("String"))
+                FunctionParameterSyntax(firstName: TokenSyntax.identifier("rhs"), colon: .colonToken(), type: SimpleTypeIdentifierSyntax("String"))
               }
             ),
             output: ReturnClauseSyntax(
@@ -203,10 +203,10 @@ final class FunctionTests: XCTestCase {
           signature: FunctionSignatureSyntax(
             input: ParameterClauseSyntax(
               parameterList: FunctionParameterListSyntax {
-                FunctionParameterSyntax(firstName: TokenSyntax.identifier("lhs1"), colon: .colon, type: SimpleTypeIdentifierSyntax("String"))
-                FunctionParameterSyntax(firstName: TokenSyntax.identifier("lhs2"), colon: .colon, type: SimpleTypeIdentifierSyntax("String"))
-                FunctionParameterSyntax(firstName: TokenSyntax.identifier("rhs1"), colon: .colon, type: SimpleTypeIdentifierSyntax("String"))
-                FunctionParameterSyntax(firstName: TokenSyntax.identifier("rhs2"), colon: .colon, type: SimpleTypeIdentifierSyntax("String"))
+                FunctionParameterSyntax(firstName: TokenSyntax.identifier("lhs1"), colon: .colonToken(), type: SimpleTypeIdentifierSyntax("String"))
+                FunctionParameterSyntax(firstName: TokenSyntax.identifier("lhs2"), colon: .colonToken(), type: SimpleTypeIdentifierSyntax("String"))
+                FunctionParameterSyntax(firstName: TokenSyntax.identifier("rhs1"), colon: .colonToken(), type: SimpleTypeIdentifierSyntax("String"))
+                FunctionParameterSyntax(firstName: TokenSyntax.identifier("rhs2"), colon: .colonToken(), type: SimpleTypeIdentifierSyntax("String"))
               }
             ),
             output: ReturnClauseSyntax(

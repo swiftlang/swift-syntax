@@ -64,9 +64,9 @@ extension AttributeSyntax {
     let argumentList = argumentList()
     self.init(
       attributeName: attributeName,
-      leftParen: argumentList != nil ? .leftParen : nil,
+      leftParen: argumentList != nil ? .leftParenToken() : nil,
       argument: argumentList.map(AttributeSyntax.Argument.argumentList),
-      rightParen: argumentList != nil ? .rightParen : nil
+      rightParen: argumentList != nil ? .rightParenToken() : nil
     )
   }
 }
@@ -77,8 +77,8 @@ extension DictionaryExprSyntax {
   /// A convenience initializer that allows passing in members using a result builder
   /// instead of having to wrap them in a `DictionaryElementList`.
   public init(
-    leftSquare: TokenSyntax = .`leftSquareBracket`,
-    rightSquare: TokenSyntax = .`rightSquareBracket`,
+    leftSquare: TokenSyntax = .leftSquareBracketToken(),
+    rightSquare: TokenSyntax = .rightSquareBracketToken(),
     @DictionaryElementListBuilder contentBuilder: () -> DictionaryElementListSyntax = { DictionaryElementListSyntax([]) }
   ) {
     let elementList = contentBuilder()
@@ -154,9 +154,9 @@ extension FunctionCallExprSyntax {
     let shouldOmitParens = argumentList.isEmpty && trailingClosure != nil
     self.init(
       calledExpression: callee,
-      leftParen: shouldOmitParens ? nil : .leftParen,
+      leftParen: shouldOmitParens ? nil : .leftParenToken(),
       argumentList: argumentList,
-      rightParen: shouldOmitParens ? nil : .rightParen,
+      rightParen: shouldOmitParens ? nil : .rightParenToken(),
       trailingClosure: trailingClosure,
       additionalTrailingClosures: additionalTrailingClosures
     )
@@ -227,7 +227,7 @@ extension MemberAccessExprSyntax {
   /// Creates a `MemberAccessExpr` using the provided parameters.
   public init(
     base: ExprSyntax? = nil,
-    dot: TokenSyntax = .period,
+    dot: TokenSyntax = .periodToken(),
     name: String,
     declNameArguments: DeclNameArgumentsSyntax? = nil
   ) {
@@ -312,9 +312,9 @@ extension StringLiteralExprSyntax {
   /// the number of `#`s needed to express the string as-is without any escapes.
   public init(
     openDelimiter: TokenSyntax? = nil,
-    openQuote: TokenSyntax = .stringQuote,
+    openQuote: TokenSyntax = .stringQuoteToken(),
     content: String,
-    closeQuote: TokenSyntax = .stringQuote,
+    closeQuote: TokenSyntax = .stringQuoteToken(),
     closeDelimiter: TokenSyntax? = nil
   ) {
     var openDelimiter = openDelimiter

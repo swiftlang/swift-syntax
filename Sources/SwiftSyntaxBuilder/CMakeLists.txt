@@ -18,7 +18,6 @@ add_swift_host_library(SwiftSyntaxBuilder
   generated/BuildableCollectionNodes.swift
   generated/BuildableNodes.swift
   generated/ResultBuilders.swift
-  generated/Token.swift
   generated/SyntaxExpressibleByStringInterpolationConformances.swift
 )
 

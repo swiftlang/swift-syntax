@@ -154,21 +154,21 @@ extension SyntaxProtocol {
           if includeTrivia && !token.leadingTrivia.isEmpty {
             TupleExprElementSyntax(
               label: .identifier("leadingTrivia"),
-              colon: .colon,
+              colon: .colonToken(),
               expression: token.leadingTrivia.initializerExpr
             )
           }
           if includeTrivia && !token.trailingTrivia.isEmpty {
             TupleExprElementSyntax(
               label: .identifier("trailingTrivia"),
-              colon: .colon,
+              colon: .colonToken(),
               expression: token.trailingTrivia.initializerExpr
             )
           }
           if token.presence != .present {
             TupleExprElementSyntax(
               label: .identifier("presence"),
-              colon: .colon,
+              colon: .colonToken(),
               expression: MemberAccessExprSyntax(name: "missing")
             )
           }
@@ -185,7 +185,7 @@ extension SyntaxProtocol {
             if !isUnexpected || value != nil {
               TupleExprElementSyntax(
                 label: isUnexpected ? nil : .identifier(label),
-                colon: isUnexpected ? nil : .colon,
+                colon: isUnexpected ? nil : .colonToken(),
                 expression: value?.debugInitCallExpr(includeTrivia: includeTrivia) ?? ExprSyntax(NilLiteralExprSyntax())
               )
             }

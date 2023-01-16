@@ -140,6 +140,9 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var joinPlatformsUsingComma: Self {
     .init("expected ',' joining platforms in availability condition")
   }
+  public static var maximumNestingLevelOverflow: Self {
+    .init("parsing has exceeded the maximum nesting level")
+  }
   public static var missingColonAndExprInTernaryExpr: Self {
     .init("expected ':' and expression after '? ...' in ternary expression")
   }
@@ -152,14 +155,14 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var standaloneSemicolonStatement: Self {
     .init("standalone ';' statements are not allowed")
   }
-  public static var maximumNestingLevelOverflow: Self {
-    .init("parsing has exceeded the maximum nesting level")
-  }
   public static var subscriptsCannotHaveNames: Self {
     .init("subscripts cannot have a name")
   }
   public static var throwsInReturnPosition: Self {
     .init("'throws' may only occur before '->'")
+  }
+  public static var tooManyClosingRawStringDelimiters: Self {
+    .init("too many '#' characters in closing delimiter")
   }
   public static var tryMustBePlacedOnReturnedExpr: Self {
     .init("'try' must be placed on the returned expression")
@@ -344,6 +347,9 @@ extension FixItMessage where Self == StaticParserFixIt {
   }
   public static var joinIdentifiersWithCamelCase: Self {
     .init("join the identifiers together with camel-case")
+  }
+  public static var removeExtraneousDelimiters: Self {
+    .init("remove extraneous delimiters")
   }
   public static var removeExtraneousWhitespace: Self {
     .init("remove whitespace")

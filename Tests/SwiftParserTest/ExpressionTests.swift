@@ -425,15 +425,22 @@ final class ExpressionTests: XCTestCase {
 
     AssertParse(
       #"""
-      1️⃣"\(()
+      "\(()1️⃣
       """#,
       diagnostics: [
-        DiagnosticSpec(message: #"extraneous code '"\(()' at top level"#)
+        DiagnosticSpec(message: #"expected ')' in string literal"#),
+        DiagnosticSpec(message: #"expected '"' to end string literal"#),
       ]
     )
   }
 
   func testStringLiterals() {
+    AssertParse(
+      #"""
+      "–"
+      """#
+    )
+
     AssertParse(
       #"""
       ""
@@ -603,6 +610,22 @@ final class ExpressionTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(message: #"expected '"' to end string literal"#)
       ]
+    )
+  }
+
+  func testAdjacentRawStringLiterals() {
+    AssertParse(
+      """
+      "normal literal"
+      #"raw literal"#
+      """
+    )
+
+    AssertParse(
+      """
+      #"raw literal"#
+      #"second raw literal"#
+      """
     )
   }
 

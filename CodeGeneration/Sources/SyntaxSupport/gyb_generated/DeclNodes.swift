@@ -327,10 +327,7 @@ public let DECL_NODES: [Node] = [
                  "Colon"
                ]),
          Child(name: "FileName",
-               kind: "StringLiteralToken",
-               tokenChoices: [
-                 "StringLiteral"
-               ]),
+               kind: "StringLiteralExpr"),
          Child(name: "Comma",
                kind: "CommaToken",
                tokenChoices: [

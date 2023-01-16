@@ -31,6 +31,7 @@ ATTRIBUTE_NODES = [
                    node_choices=[
                        Child('ArgumentList', kind='TupleExprElementList'),
                        Child('Token', kind='Token'),
+                       Child('String', kind='StringLiteralExpr'),
                        Child('Availability', kind='AvailabilitySpecList'),
                        Child('SpecializeArguments',
                              kind='SpecializeAttributeSpecList'),
@@ -413,7 +414,7 @@ ATTRIBUTE_NODES = [
          The arguments for the '@_opaqueReturnTypeOf()'.
          ''',
          children=[
-             Child('MangledName', kind='StringLiteralToken',
+             Child('MangledName', kind='StringLiteralExpr',
                    description='The mangled name of a declaration.'),
              Child('Comma', kind='CommaToken'),
              Child('Ordinal', kind='IntegerLiteralToken',
@@ -435,7 +436,7 @@ ATTRIBUTE_NODES = [
              Child('CTypeLabel', kind='IdentifierToken',
                    text_choices=['cType'], is_optional=True),
              Child('Colon', kind='ColonToken', is_optional=True),
-             Child('CTypeString', kind='StringLiteralToken', is_optional=True),
+             Child('CTypeString', kind='StringLiteralExpr', is_optional=True),
         ]),
 
     # convention-attribute-arguments -> 'witness_method' ':' identifier
@@ -459,7 +460,7 @@ ATTRIBUTE_NODES = [
          children=[
            Child('Language', kind='Token'),
            Child('Comma', kind='CommaToken', is_optional=True),
-           Child('CxxName', kind='StringLiteralToken', is_optional=True)
+           Child('CxxName', kind='StringLiteralExpr', is_optional=True)
          ]),
 
     Node('OriginallyDefinedInArguments', name_for_diagnostics='@_originallyDefinedIn arguments',
@@ -470,7 +471,7 @@ ATTRIBUTE_NODES = [
          children=[
            Child('ModuleLabel', kind='IdentifierToken', text_choices=['module']),
            Child('Colon', kind='ColonToken'),
-           Child('ModuleName', kind='StringLiteralToken'),
+           Child('ModuleName', kind='StringLiteralExpr'),
            Child('Comma', kind='CommaToken'),
            Child('Platforms', kind='AvailabilityVersionRestrictionList', collection_element_name='Platform')
          ]),
@@ -483,7 +484,7 @@ ATTRIBUTE_NODES = [
          children=[
            Child('SourceFileLabel', kind='IdentifierToken', text_choices=['sourceFile']),
            Child('Colon', kind='ColonToken'),
-           Child('Filename', kind='StringLiteralToken'),
+           Child('Filename', kind='StringLiteralExpr'),
          ]),
 
     Node('DynamicReplacementArguments', name_for_diagnostics='@_dynamicReplacement argument',
@@ -505,7 +506,7 @@ ATTRIBUTE_NODES = [
          children=[
            Child('MessageLabel', kind='IdentifierToken', text_choices=['message']),
            Child('Colon', kind='ColonToken'),
-           Child('Message', kind='StringLiteralToken'),
+           Child('Message', kind='StringLiteralExpr'),
          ]),
 
     Node('EffectsArguments', name_for_diagnostics='@_effects arguments', kind='SyntaxCollection',
@@ -519,7 +520,10 @@ ATTRIBUTE_NODES = [
          children=[
             Child('Label', kind='IdentifierToken', text_choices=['visibility', 'metadata'], name_for_diagnostics='label'),
             Child('Colon', kind='ColonToken'),
-            Child('Value', kind='Token', token_choices=['IdentifierToken', 'KeywordToken', 'StringLiteralToken'], name_for_diagnostics='value'), # Keywords can be: public, internal, private, fileprivate, open
+            Child('Value', kind='Syntax', node_choices=[
+                  Child('Token', kind='Token', token_choices=['IdentifierToken', 'KeywordToken']), # Keywords can be: public, internal, private, fileprivate, open
+                  Child('String', kind='StringLiteralExpr')
+                  ]),
             Child('TrailingComma', kind='CommaToken',
                    is_optional=True, description='''
                    A trailing comma if this argument is followed by another one

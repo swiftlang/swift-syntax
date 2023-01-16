@@ -693,14 +693,14 @@ extension TokenSyntax {
     )
   }
   
-  public static func stringLiteral(
+  public static func stringLiteralContents(
     _ text: String, 
     leadingTrivia: Trivia = [], 
     trailingTrivia: Trivia = [], 
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
-      .stringLiteral(text), 
+      .stringLiteralContents(text), 
       leadingTrivia: leadingTrivia, 
       trailingTrivia: trailingTrivia, 
       presence: presence

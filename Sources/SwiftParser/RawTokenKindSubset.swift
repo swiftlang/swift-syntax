@@ -697,10 +697,14 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
   case poundUnavailableKeyword  // For recovery
   case regexLiteral
   case selfKeyword
-  case stringLiteral
+  case stringLiteralContents
   case superKeyword
   case trueKeyword
   case wildcard
+  case rawStringDelimiter
+  case stringQuote
+  case multilineStringQuote
+  case singleQuote
 
   init?(lexeme: Lexer.Lexeme) {
     switch lexeme {
@@ -722,10 +726,14 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
     case RawTokenKindMatch(.poundUnavailableKeyword): self = .poundUnavailableKeyword
     case RawTokenKindMatch(.regexLiteral): self = .regexLiteral
     case RawTokenKindMatch(.self): self = .selfKeyword
-    case RawTokenKindMatch(.stringLiteral): self = .stringLiteral
+    case RawTokenKindMatch(.stringLiteralContents): self = .stringLiteralContents
     case RawTokenKindMatch(.super): self = .superKeyword
     case RawTokenKindMatch(.true): self = .trueKeyword
     case RawTokenKindMatch(.wildcard): self = .wildcard
+    case RawTokenKindMatch(.rawStringDelimiter): self = .rawStringDelimiter
+    case RawTokenKindMatch(.stringQuote): self = .stringQuote
+    case RawTokenKindMatch(.multilineStringQuote): self = .multilineStringQuote
+    case RawTokenKindMatch(.singleQuote): self = .singleQuote
     default: return nil
     }
   }
@@ -750,10 +758,14 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
     case .poundUnavailableKeyword: return .poundUnavailableKeyword
     case .regexLiteral: return .regexLiteral
     case .selfKeyword: return .keyword(.self)
-    case .stringLiteral: return .stringLiteral
+    case .stringLiteralContents: return .stringLiteralContents
     case .superKeyword: return .keyword(.super)
     case .trueKeyword: return .keyword(.true)
     case .wildcard: return .wildcard
+    case .rawStringDelimiter: return .rawStringDelimiter
+    case .stringQuote: return .stringQuote
+    case .multilineStringQuote: return .multilineStringQuote
+    case .singleQuote: return .singleQuote
     }
   }
 }

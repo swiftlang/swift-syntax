@@ -156,7 +156,7 @@ DECL_NODES = [
              Child('FileArgLabel', kind='IdentifierToken',
                    text_choices=['file']),
              Child('FileArgColon', kind='ColonToken'),
-             Child('FileName', kind='StringLiteralToken', name_for_diagnostics='file name'),
+             Child('FileName', kind='StringLiteralExpr', name_for_diagnostics='file name'),
              Child('Comma', kind='CommaToken'),
              Child('LineArgLabel', kind='IdentifierToken',
                    text_choices=['line']),

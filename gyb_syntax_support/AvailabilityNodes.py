@@ -50,7 +50,7 @@ AVAILABILITY_NODES = [
                    description='The colon separating label and value'),
              Child('Value', kind='Syntax', name_for_diagnostics='value',
                    node_choices=[
-                       Child('String', 'StringLiteralToken'),
+                       Child('String', 'StringLiteralExpr'),
                        Child('Version', 'VersionTuple'),
                    ], description='The value of this labeled argument',),
          ]),

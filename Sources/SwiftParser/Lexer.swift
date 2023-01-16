@@ -31,15 +31,11 @@ public struct Lexer {
       }
 
       public static let isAtStartOfLine = Flags(rawValue: 1 << 0)
-      public static let isMultilineStringLiteral = Flags(rawValue: 1 << 1)
 
       public var debugDescription: String {
         var descriptionComponents: [String] = []
         if self.contains(.isAtStartOfLine) {
           descriptionComponents.append("isAtStartOfLine")
-        }
-        if self.contains(.isMultilineStringLiteral) {
-          descriptionComponents.append("isMultilineStringLiteral")
         }
         return "[\(descriptionComponents.joined(separator: ", "))]"
       }
@@ -56,11 +52,6 @@ public struct Lexer {
 
     var isAtStartOfLine: Bool {
       return self.flags.contains(.isAtStartOfLine)
-    }
-
-    var isMultilineStringLiteral: Bool {
-      assert(self.rawTokenKind == .stringLiteral)
-      return self.flags.contains(.isMultilineStringLiteral)
     }
 
     var isEditorPlaceholder: Bool {
@@ -202,17 +193,62 @@ extension Lexer {
   ) -> LexemeSequence {
     assert(input.isEmpty || startIndex < input.endIndex)
     let startChar = startIndex == input.startIndex ? UInt8(ascii: "\0") : input[startIndex - 1]
-    let start = Cursor(input: input, previous: UInt8(ascii: "\0"))
-    let cursor = Cursor(input: UnsafeBufferPointer(rebasing: input[startIndex...]), previous: startChar)
+    let start = Cursor(input: input, previous: UInt8(ascii: "\0"), state: .normal)
+    let cursor = Cursor(input: UnsafeBufferPointer(rebasing: input[startIndex...]), previous: startChar, state: .normal)
     return LexemeSequence(start: start, cursor: cursor)
   }
 }
 
 extension Lexer {
   public static func lexToEndOfInterpolatedExpression(_ input: UnsafeBufferPointer<UInt8>, _ IsMultilineString: Bool) -> Int {
-    let cursor = Lexer.Cursor(input: input, previous: 0)
+    let cursor = Lexer.Cursor(input: input, previous: 0, state: .normal)
     let advancedCursor = Lexer.Cursor.skipToEndOfInterpolatedExpression(cursor, IsMultilineString)
     return advancedCursor.input.baseAddress! - cursor.input.baseAddress!
+  }
+}
+
+public enum StringLiteralKind {
+  /// A normal single-line string literal started by `"`.
+  case singleLine
+  /// A multi-line string literal started by `"""`.
+  case multiLine
+  /// A string literal started by a single quote `'`.
+  case singleQuote
+}
+
+public enum LexerCursorState {
+  /// Normal top-level lexing mode
+  case normal
+
+  /// The lexer has lexed `delimiterLength` raw string delimiters '##' but not
+  /// the string quote itself.
+  case afterRawStringDelimiter(delimiterLength: Int)
+
+  /// The lexer is inside a string literal of `kind` after having lexed
+  /// `delimiterLength` raw string delimiters.
+  case inStringLiteral(kind: StringLiteralKind, delimiterLength: Int)
+
+  /// The lexer has finished lexing the contents of a string literal and is now
+  /// looking for the closing quote.
+  case afterStringLiteral(delimiterLength: Int)
+
+  /// The lexer has lexed the closing quote of a string literal that had raw
+  /// string delimiters and is now looking for the closing raw string delimiters.
+  case afterClosingStringQuote(delimiterLength: Int)
+
+  func shouldLexTrivia(cursor: Lexer.Cursor) -> Bool {
+    switch self {
+    case .normal: return true
+    case .afterRawStringDelimiter: return false
+    case .inStringLiteral(kind: let kind, delimiterLength: _):
+      switch kind {
+      case .singleLine, .singleQuote:
+        return !cursor.isAtEndOfFile && (cursor.peek() == UInt8(ascii: "\r") || cursor.peek() == UInt8(ascii: "\n"))
+      case .multiLine: return false
+      }
+    case .afterStringLiteral: return false
+    case .afterClosingStringQuote: return false
+    }
   }
 }
 
@@ -227,11 +263,13 @@ extension Lexer {
   public struct Cursor: Equatable {
     var input: UnsafeBufferPointer<UInt8>
     var previous: UInt8
+    var state: LexerCursorState
 
     @_spi(LexerDiagnostics)
-    public init(input: UnsafeBufferPointer<UInt8>, previous: UInt8) {
+    public init(input: UnsafeBufferPointer<UInt8>, previous: UInt8, state: LexerCursorState) {
       self.input = input
       self.previous = previous
+      self.state = state
     }
 
     public static func == (lhs: Cursor, rhs: Cursor) -> Bool {
@@ -263,6 +301,11 @@ extension Lexer {
 
     var isAtStartOfFile: Bool {
       return !self.input.isEmpty && self.previous == UInt8(ascii: "\0")
+    }
+
+    /// Debug function to print the remaining source text to be lexed.
+    var debugRemainingText: SyntaxText {
+      return SyntaxText(baseAddress: input.baseAddress, count: input.count)
     }
   }
 }
@@ -469,7 +512,7 @@ extension Lexer.Cursor {
       return isDelimeter
     })
 
-    guard clone.advance(matching: UInt8(ascii: #"""#)) != nil else {
+    guard !clone.isAtEndOfFile && clone.peek() == UInt8(ascii: #"""#) else {
       return nil
     }
     self = clone
@@ -503,6 +546,58 @@ extension Lexer.Cursor {
     }
 
     return false
+  }
+
+  mutating func lexStringQuote() -> Lexer.Result {
+    func newState(currentState: LexerCursorState, kind: StringLiteralKind) -> LexerCursorState {
+      switch currentState {
+      case .afterStringLiteral(delimiterLength: 0):
+        return .normal
+      case .afterStringLiteral(delimiterLength: let delimiterLength):
+        return .afterClosingStringQuote(delimiterLength: delimiterLength)
+      case .afterRawStringDelimiter(delimiterLength: let delimiterLength):
+        return .inStringLiteral(kind: kind, delimiterLength: delimiterLength)
+      default:
+        return .inStringLiteral(kind: kind, delimiterLength: 0)
+      }
+    }
+
+    if self.previous == UInt8(ascii: "'") {
+      return Lexer.Result(.singleQuote, newState: newState(currentState: self.state, kind: .singleQuote))
+    }
+
+    assert(self.previous == UInt8(ascii: #"""#))
+
+    var lookingForMultilineString = self
+    if lookingForMultilineString.advance(matching: UInt8(ascii: #"""#)) != nil, lookingForMultilineString.advance(matching: UInt8(ascii: #"""#)) != nil {
+      if case .afterRawStringDelimiter(delimiterLength: let delimiterLength) = state {
+        // If this is a string literal, check if we have the closing delimiter on the same line to correctly parse things like `#"""#` as a single line string containing a quote.
+        var isSingleLineString = lookingForMultilineString
+
+        if isSingleLineString.delimiterMatches(delimiterLength) {
+          // If we have the correct number of delimiters now, we have something like `#"""#`.
+          // This is a single-line string.
+          return Lexer.Result(.stringQuote, newState: newState(currentState: self.state, kind: .singleLine))
+        }
+
+        // Scan ahead until the end of the line. Every time we see a closing
+        // quote, check if it is followed by the correct number of closing delimiters.
+        while !isSingleLineString.isAtEndOfFile, isSingleLineString.peek() != UInt8(ascii: "\r") && isSingleLineString.peek() != UInt8(ascii: "\n") {
+          if isSingleLineString.advance(if: { $0 == Unicode.Scalar(UInt8(ascii: #"""#)) }) {
+            if isSingleLineString.delimiterMatches(delimiterLength) {
+              return Lexer.Result(.stringQuote, newState: newState(currentState: self.state, kind: .singleLine))
+            }
+            continue
+          }
+          _ = isSingleLineString.advance()
+        }
+      }
+
+      self = lookingForMultilineString
+      return Lexer.Result(.multilineStringQuote, newState: newState(currentState: self.state, kind: .multiLine))
+    } else {
+      return Lexer.Result(.stringQuote, newState: newState(currentState: self.state, kind: .singleLine))
+    }
   }
 
   mutating func validateUTF8CharacterAndAdvance() -> Unicode.Scalar? {
@@ -664,10 +759,11 @@ extension Lexer.Cursor {
         guard !inStringLiteral(), let delim = CurPtr.advanceIfCustomDelimiter() else {
           continue
         }
+        let quote = CurPtr.advance(matching: UInt8(ascii: #"""#))
         CustomDelimiterLen = delim
         assert(
-          CurPtr.previous == UInt8(ascii: #"""#),
-          "advanceIfCustomDelimiter() must stop at after the quote"
+          quote != nil,
+          "advanceIfCustomDelimiter() must stop in front of a quote"
         )
         fallthrough
 
@@ -786,15 +882,18 @@ extension Lexer {
     let tokenKind: RawTokenKind
     let flags: Lexer.Lexeme.Flags
     let error: LexerError?
+    let newState: LexerCursorState?
 
     init(
       _ tokenKind: RawTokenKind,
       flags: Lexer.Lexeme.Flags = [],
-      error: LexerError? = nil
+      error: LexerError? = nil,
+      newState: LexerCursorState? = nil
     ) {
       self.tokenKind = tokenKind
       self.flags = flags
       self.error = error
+      self.newState = newState
     }
   }
 }
@@ -804,7 +903,12 @@ extension Lexer.Cursor {
   public mutating func nextToken(_ ContentStart: Lexer.Cursor) -> Lexer.Lexeme {
     // Leading trivia.
     let leadingTriviaStart = self
-    let newlineInLeadingTrivia = self.lexTrivia(.leading)
+    let newlineInLeadingTrivia: NewlinePresence
+    if self.state.shouldLexTrivia(cursor: self) {
+      newlineInLeadingTrivia = self.lexTrivia(.leading)
+    } else {
+      newlineInLeadingTrivia = .absent
+    }
 
     // Token text.
     let textStart = self
@@ -813,7 +917,12 @@ extension Lexer.Cursor {
 
     // Trailing trivia.
     let trailingTriviaStart = self
-    let newlineInTrailingTrivia = self.lexTrivia(.trailing)
+    let newlineInTrailingTrivia: NewlinePresence
+    if (result.newState ?? self.state).shouldLexTrivia(cursor: self) {
+      newlineInTrailingTrivia = self.lexTrivia(.trailing)
+    } else {
+      newlineInTrailingTrivia = .absent
+    }
     assert(
       newlineInTrailingTrivia == .absent,
       "trailingTrivia should not have a newline"
@@ -823,6 +932,10 @@ extension Lexer.Cursor {
     if newlineInLeadingTrivia == .present {
       flags.insert(.isAtStartOfLine)
     }
+    if let newState = result.newState {
+      self.state = newState
+    }
+
     return .init(
       tokenKind: result.tokenKind,
       flags: flags,
@@ -835,6 +948,15 @@ extension Lexer.Cursor {
   }
 
   private mutating func lexImpl(ContentStart: Lexer.Cursor) -> Lexer.Result {
+    if case .inStringLiteral(kind: let kind, delimiterLength: let delimiterLength) = state {
+      return self.lexStringLiteralContents(
+        self,
+        QuoteChar: kind == .singleQuote ? UInt8(ascii: "'") : UInt8(ascii: #"""#),
+        delimiterLength,
+        IsMultilineString: kind == .multiLine
+      )
+    }
+
     let start = self
     switch self.advance() {
     case UInt8(ascii: "@"): return Lexer.Result(.atSign)
@@ -851,9 +973,13 @@ extension Lexer.Cursor {
     case UInt8(ascii: "\\"): return Lexer.Result(.backslash)
 
     case UInt8(ascii: "#"):
+      if case .afterClosingStringQuote(delimiterLength: _) = state {
+        self.advance(while: { $0 == Unicode.Scalar("#") })
+        return Lexer.Result(.rawStringDelimiter, newState: .normal)
+      }
       // Try lex a raw string literal.
       if let customDelimiterLength = self.advanceIfCustomDelimiter() {
-        return self.lexStringLiteral(start, customDelimiterLength)
+        return Lexer.Result(.rawStringDelimiter, newState: .afterRawStringDelimiter(delimiterLength: customDelimiterLength))
       }
 
       // Try lex a regex literal.
@@ -925,7 +1051,7 @@ extension Lexer.Cursor {
       UInt8(ascii: "9"):
       return self.lexNumber(start, ContentStart)
     case UInt8(ascii: #"'"#), UInt8(ascii: #"""#):
-      return self.lexStringLiteral(start)
+      return self.lexStringQuote()
 
     case UInt8(ascii: "`"):
       return self.lexEscapedIdentifier(start)
@@ -1099,11 +1225,7 @@ extension Lexer.Cursor {
   ///   string_literal ::= ["]([^"\\\n\r]|character_escape)*["]
   ///   string_literal ::= ["]["]["].*["]["]["] - approximately
   ///   string_literal ::= (#+)("")?".*"(\2\1) - "raw" strings
-  mutating func lexStringLiteral(_ start: Lexer.Cursor, _ customDelimiterLength: Int = 0) -> Lexer.Result {
-    assert(self.previous == UInt8(ascii: #"""#) || self.previous == UInt8(ascii: #"'"#))
-
-    let QuoteChar = self.previous
-    let IsMultilineString = self.advanceIfMultilineDelimiter(customDelimiterLength, true)
+  mutating func lexStringLiteralContents(_ start: Lexer.Cursor, QuoteChar: UInt8, _ customDelimiterLength: Int, IsMultilineString: Bool) -> Lexer.Result {
     /*
     if IsMultilineString && *CurPtr != '\n' && *CurPtr != '\r' {
       diagnose(CurPtr, diag::lex_illegal_multiline_string_start)
@@ -1131,7 +1253,7 @@ extension Lexer.Cursor {
           continue
         } else {
           //          diagnose(TokStart, diag::lex_unterminated_string)
-          return Lexer.Result(.unknown)
+          return Lexer.Result(.stringLiteralContents, newState: .normal)
         }
       }
 
@@ -1144,16 +1266,17 @@ extension Lexer.Cursor {
         return Lexer.Result(.unknown)
       }
 
-      let CharValue = self.lexCharacter(QuoteChar, IsMultilineString, customDelimiterLength)
+      var clone = self
+      let CharValue = clone.lexCharacter(QuoteChar, IsMultilineString, customDelimiterLength)
       switch CharValue {
       case .endOfString:
         // This is the end of string, we are done.
         break DELIMITLOOP
       case .error:
         // Remember we had already-diagnosed invalid characters.
-        break
+        self = clone
       default:
-        break
+        self = clone
       }
     }
 
@@ -1163,12 +1286,10 @@ extension Lexer.Cursor {
     //      diagnoseSingleQuoteStringLiteral(TokStart, CurPtr)
     //    }
 
-    var flags: Lexer.Lexeme.Flags = []
-    if IsMultilineString {
-      flags.insert(.isMultilineStringLiteral)
-    }
-
-    return Lexer.Result(.stringLiteral, flags: flags)
+    return Lexer.Result(
+      .stringLiteralContents,
+      newState: .afterStringLiteral(delimiterLength: customDelimiterLength)
+    )
   }
 }
 
@@ -2049,7 +2170,8 @@ extension Lexer.Cursor {
     let advanced = CurPtr.input.baseAddress?.advanced(by: CMK.introducer.utf8.count)
     var restOfBuffer = Lexer.Cursor(
       input: .init(start: advanced, count: CurPtr.input.count - CMK.introducer.utf8.count),
-      previous: CurPtr.input[CMK.introducer.utf8.count - 1]
+      previous: CurPtr.input[CMK.introducer.utf8.count - 1],
+      state: .normal
     )
     while !restOfBuffer.isAtEndOfFile {
       let terminatorStart = CMK.terminator.utf8.first!
@@ -2070,7 +2192,8 @@ extension Lexer.Cursor {
       let advanced = restOfBuffer.input.baseAddress?.advanced(by: CMK.terminator.utf8.count)
       return Lexer.Cursor(
         input: .init(start: advanced, count: restOfBuffer.input.count - CMK.terminator.utf8.count),
-        previous: restOfBuffer.input[CMK.terminator.utf8.count - 1]
+        previous: restOfBuffer.input[CMK.terminator.utf8.count - 1],
+        state: .normal
       )
     }
     return nil

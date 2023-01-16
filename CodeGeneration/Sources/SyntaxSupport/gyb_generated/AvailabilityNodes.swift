@@ -69,10 +69,7 @@ public let AVAILABILITY_NODES: [Node] = [
                description: "The value of this labeled argument",
                nodeChoices: [
                  Child(name: "String",
-                       kind: "StringLiteralToken",
-                       tokenChoices: [
-                         "StringLiteral"
-                       ]),
+                       kind: "StringLiteralExpr"),
                  Child(name: "Version",
                        kind: "VersionTuple")
                ])

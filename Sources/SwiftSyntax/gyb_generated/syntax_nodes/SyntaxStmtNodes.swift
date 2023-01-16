@@ -4178,7 +4178,7 @@ public struct PoundAssertStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenConditionAndComma: UnexpectedNodesSyntax? = nil,
     comma: TokenSyntax? = nil,
     _ unexpectedBetweenCommaAndMessage: UnexpectedNodesSyntax? = nil,
-    message: TokenSyntax? = nil,
+    message: StringLiteralExprSyntax? = nil,
     _ unexpectedBetweenMessageAndRightParen: UnexpectedNodesSyntax? = nil,
     rightParen: TokenSyntax = .rightParenToken(),
     _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
@@ -4399,11 +4399,11 @@ public struct PoundAssertStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   }
 
   /// The assertion message.
-  public var message: TokenSyntax? {
+  public var message: StringLiteralExprSyntax? {
     get {
       let childData = data.child(at: 9, parent: Syntax(self))
       if childData == nil { return nil }
-      return TokenSyntax(childData!)
+      return StringLiteralExprSyntax(childData!)
     }
     set(value) {
       self = withMessage(value)
@@ -4413,7 +4413,7 @@ public struct PoundAssertStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `message` replaced.
   /// - param newChild: The new `message` to replace the node's
   ///                   current `message`, if present.
-  public func withMessage(_ newChild: TokenSyntax?) -> PoundAssertStmtSyntax {
+  public func withMessage(_ newChild: StringLiteralExprSyntax?) -> PoundAssertStmtSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
     let newData = data.replacingChild(at: 9, with: raw, arena: arena)

@@ -18,8 +18,12 @@ final class PoundAssertTests: XCTestCase {
   func testPoundAssert1() {
     AssertParse(
       """
-      #assert(true, 123)
-      """
+      #assert(true, 1️⃣123)
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected string literal in '#assert' directive"),
+        DiagnosticSpec(message: "unexpected code '123' in '#assert' directive"),
+      ]
     )
   }
 

@@ -6511,7 +6511,7 @@ public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenFileArgLabelAndFileArgColon: UnexpectedNodesSyntax? = nil,
     fileArgColon: TokenSyntax = .colonToken(),
     _ unexpectedBetweenFileArgColonAndFileName: UnexpectedNodesSyntax? = nil,
-    fileName: TokenSyntax,
+    fileName: StringLiteralExprSyntax,
     _ unexpectedBetweenFileNameAndComma: UnexpectedNodesSyntax? = nil,
     comma: TokenSyntax = .commaToken(),
     _ unexpectedBetweenCommaAndLineArgLabel: UnexpectedNodesSyntax? = nil,
@@ -6654,10 +6654,10 @@ public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
     return PoundSourceLocationArgsSyntax(newData)
   }
 
-  public var fileName: TokenSyntax {
+  public var fileName: StringLiteralExprSyntax {
     get {
       let childData = data.child(at: 5, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return StringLiteralExprSyntax(childData!)
     }
     set(value) {
       self = withFileName(value)
@@ -6667,7 +6667,7 @@ public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `fileName` replaced.
   /// - param newChild: The new `fileName` to replace the node's
   ///                   current `fileName`, if present.
-  public func withFileName(_ newChild: TokenSyntax) -> PoundSourceLocationArgsSyntax {
+  public func withFileName(_ newChild: StringLiteralExprSyntax) -> PoundSourceLocationArgsSyntax {
     let arena = SyntaxArena()
     let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
@@ -12095,6 +12095,7 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
   public enum Argument: SyntaxChildChoices {
     case `argumentList`(TupleExprElementListSyntax)
     case `token`(TokenSyntax)
+    case `string`(StringLiteralExprSyntax)
     case `availability`(AvailabilitySpecListSyntax)
     case `specializeArguments`(SpecializeAttributeSpecListSyntax)
     case `objCName`(ObjCSelectorSyntax)
@@ -12116,6 +12117,7 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
       switch self {
       case .argumentList(let node): return node._syntaxNode
       case .token(let node): return node._syntaxNode
+      case .string(let node): return node._syntaxNode
       case .availability(let node): return node._syntaxNode
       case .specializeArguments(let node): return node._syntaxNode
       case .objCName(let node): return node._syntaxNode
@@ -12141,6 +12143,9 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
     }
     public init(_ node: TokenSyntax) {
       self = .token(node)
+    }
+    public init(_ node: StringLiteralExprSyntax) {
+      self = .string(node)
     }
     public init(_ node: AvailabilitySpecListSyntax) {
       self = .availability(node)
@@ -12200,6 +12205,10 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
       }
       if let node = node.as(TokenSyntax.self) {
         self = .token(node)
+        return
+      }
+      if let node = node.as(StringLiteralExprSyntax.self) {
+        self = .string(node)
         return
       }
       if let node = node.as(AvailabilitySpecListSyntax.self) {
@@ -12277,6 +12286,7 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
       return .choices([
         .node(TupleExprElementListSyntax.self),
         .node(TokenSyntax.self),
+        .node(StringLiteralExprSyntax.self),
         .node(AvailabilitySpecListSyntax.self),
         .node(SpecializeAttributeSpecListSyntax.self),
         .node(ObjCSelectorSyntax.self),
@@ -16705,7 +16715,7 @@ public struct OpaqueReturnTypeOfAttributeArgumentsSyntax: SyntaxProtocol, Syntax
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeMangledName: UnexpectedNodesSyntax? = nil,
-    mangledName: TokenSyntax,
+    mangledName: StringLiteralExprSyntax,
     _ unexpectedBetweenMangledNameAndComma: UnexpectedNodesSyntax? = nil,
     comma: TokenSyntax = .commaToken(),
     _ unexpectedBetweenCommaAndOrdinal: UnexpectedNodesSyntax? = nil,
@@ -16755,10 +16765,10 @@ public struct OpaqueReturnTypeOfAttributeArgumentsSyntax: SyntaxProtocol, Syntax
   }
 
   /// The mangled name of a declaration.
-  public var mangledName: TokenSyntax {
+  public var mangledName: StringLiteralExprSyntax {
     get {
       let childData = data.child(at: 1, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return StringLiteralExprSyntax(childData!)
     }
     set(value) {
       self = withMangledName(value)
@@ -16768,7 +16778,7 @@ public struct OpaqueReturnTypeOfAttributeArgumentsSyntax: SyntaxProtocol, Syntax
   /// Returns a copy of the receiver with its `mangledName` replaced.
   /// - param newChild: The new `mangledName` to replace the node's
   ///                   current `mangledName`, if present.
-  public func withMangledName(_ newChild: TokenSyntax) -> OpaqueReturnTypeOfAttributeArgumentsSyntax {
+  public func withMangledName(_ newChild: StringLiteralExprSyntax) -> OpaqueReturnTypeOfAttributeArgumentsSyntax {
     let arena = SyntaxArena()
     let raw = newChild.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
@@ -16959,7 +16969,7 @@ public struct ConventionAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
     _ unexpectedBetweenCTypeLabelAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax? = nil,
     _ unexpectedBetweenColonAndCTypeString: UnexpectedNodesSyntax? = nil,
-    cTypeString: TokenSyntax? = nil,
+    cTypeString: StringLiteralExprSyntax? = nil,
     _ unexpectedAfterCTypeString: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
   ) {
@@ -17176,11 +17186,11 @@ public struct ConventionAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
     return ConventionAttributeArgumentsSyntax(newData)
   }
 
-  public var cTypeString: TokenSyntax? {
+  public var cTypeString: StringLiteralExprSyntax? {
     get {
       let childData = data.child(at: 9, parent: Syntax(self))
       if childData == nil { return nil }
-      return TokenSyntax(childData!)
+      return StringLiteralExprSyntax(childData!)
     }
     set(value) {
       self = withCTypeString(value)
@@ -17190,7 +17200,7 @@ public struct ConventionAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
   /// Returns a copy of the receiver with its `cTypeString` replaced.
   /// - param newChild: The new `cTypeString` to replace the node's
   ///                   current `cTypeString`, if present.
-  public func withCTypeString(_ newChild: TokenSyntax?) -> ConventionAttributeArgumentsSyntax {
+  public func withCTypeString(_ newChild: StringLiteralExprSyntax?) -> ConventionAttributeArgumentsSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
     let newData = data.replacingChild(at: 9, with: raw, arena: arena)
@@ -17554,7 +17564,7 @@ public struct ExposeAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenLanguageAndComma: UnexpectedNodesSyntax? = nil,
     comma: TokenSyntax? = nil,
     _ unexpectedBetweenCommaAndCxxName: UnexpectedNodesSyntax? = nil,
-    cxxName: TokenSyntax? = nil,
+    cxxName: StringLiteralExprSyntax? = nil,
     _ unexpectedAfterCxxName: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
   ) {
@@ -17682,11 +17692,11 @@ public struct ExposeAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
     return ExposeAttributeArgumentsSyntax(newData)
   }
 
-  public var cxxName: TokenSyntax? {
+  public var cxxName: StringLiteralExprSyntax? {
     get {
       let childData = data.child(at: 5, parent: Syntax(self))
       if childData == nil { return nil }
-      return TokenSyntax(childData!)
+      return StringLiteralExprSyntax(childData!)
     }
     set(value) {
       self = withCxxName(value)
@@ -17696,7 +17706,7 @@ public struct ExposeAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `cxxName` replaced.
   /// - param newChild: The new `cxxName` to replace the node's
   ///                   current `cxxName`, if present.
-  public func withCxxName(_ newChild: TokenSyntax?) -> ExposeAttributeArgumentsSyntax {
+  public func withCxxName(_ newChild: StringLiteralExprSyntax?) -> ExposeAttributeArgumentsSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
@@ -17800,7 +17810,7 @@ public struct OriginallyDefinedInArgumentsSyntax: SyntaxProtocol, SyntaxHashable
     _ unexpectedBetweenModuleLabelAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax = .colonToken(),
     _ unexpectedBetweenColonAndModuleName: UnexpectedNodesSyntax? = nil,
-    moduleName: TokenSyntax,
+    moduleName: StringLiteralExprSyntax,
     _ unexpectedBetweenModuleNameAndComma: UnexpectedNodesSyntax? = nil,
     comma: TokenSyntax = .commaToken(),
     _ unexpectedBetweenCommaAndPlatforms: UnexpectedNodesSyntax? = nil,
@@ -17935,10 +17945,10 @@ public struct OriginallyDefinedInArgumentsSyntax: SyntaxProtocol, SyntaxHashable
     return OriginallyDefinedInArgumentsSyntax(newData)
   }
 
-  public var moduleName: TokenSyntax {
+  public var moduleName: StringLiteralExprSyntax {
     get {
       let childData = data.child(at: 5, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return StringLiteralExprSyntax(childData!)
     }
     set(value) {
       self = withModuleName(value)
@@ -17948,7 +17958,7 @@ public struct OriginallyDefinedInArgumentsSyntax: SyntaxProtocol, SyntaxHashable
   /// Returns a copy of the receiver with its `moduleName` replaced.
   /// - param newChild: The new `moduleName` to replace the node's
   ///                   current `moduleName`, if present.
-  public func withModuleName(_ newChild: TokenSyntax) -> OriginallyDefinedInArgumentsSyntax {
+  public func withModuleName(_ newChild: StringLiteralExprSyntax) -> OriginallyDefinedInArgumentsSyntax {
     let arena = SyntaxArena()
     let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
@@ -18169,7 +18179,7 @@ public struct UnderscorePrivateAttributeArgumentsSyntax: SyntaxProtocol, SyntaxH
     _ unexpectedBetweenSourceFileLabelAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax = .colonToken(),
     _ unexpectedBetweenColonAndFilename: UnexpectedNodesSyntax? = nil,
-    filename: TokenSyntax,
+    filename: StringLiteralExprSyntax,
     _ unexpectedAfterFilename: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
   ) {
@@ -18296,10 +18306,10 @@ public struct UnderscorePrivateAttributeArgumentsSyntax: SyntaxProtocol, SyntaxH
     return UnderscorePrivateAttributeArgumentsSyntax(newData)
   }
 
-  public var filename: TokenSyntax {
+  public var filename: StringLiteralExprSyntax {
     get {
       let childData = data.child(at: 5, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return StringLiteralExprSyntax(childData!)
     }
     set(value) {
       self = withFilename(value)
@@ -18309,7 +18319,7 @@ public struct UnderscorePrivateAttributeArgumentsSyntax: SyntaxProtocol, SyntaxH
   /// Returns a copy of the receiver with its `filename` replaced.
   /// - param newChild: The new `filename` to replace the node's
   ///                   current `filename`, if present.
-  public func withFilename(_ newChild: TokenSyntax) -> UnderscorePrivateAttributeArgumentsSyntax {
+  public func withFilename(_ newChild: StringLiteralExprSyntax) -> UnderscorePrivateAttributeArgumentsSyntax {
     let arena = SyntaxArena()
     let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
@@ -18657,7 +18667,7 @@ public struct UnavailableFromAsyncArgumentsSyntax: SyntaxProtocol, SyntaxHashabl
     _ unexpectedBetweenMessageLabelAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax = .colonToken(),
     _ unexpectedBetweenColonAndMessage: UnexpectedNodesSyntax? = nil,
-    message: TokenSyntax,
+    message: StringLiteralExprSyntax,
     _ unexpectedAfterMessage: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
   ) {
@@ -18784,10 +18794,10 @@ public struct UnavailableFromAsyncArgumentsSyntax: SyntaxProtocol, SyntaxHashabl
     return UnavailableFromAsyncArgumentsSyntax(newData)
   }
 
-  public var message: TokenSyntax {
+  public var message: StringLiteralExprSyntax {
     get {
       let childData = data.child(at: 5, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return StringLiteralExprSyntax(childData!)
     }
     set(value) {
       self = withMessage(value)
@@ -18797,7 +18807,7 @@ public struct UnavailableFromAsyncArgumentsSyntax: SyntaxProtocol, SyntaxHashabl
   /// Returns a copy of the receiver with its `message` replaced.
   /// - param newChild: The new `message` to replace the node's
   ///                   current `message`, if present.
-  public func withMessage(_ newChild: TokenSyntax) -> UnavailableFromAsyncArgumentsSyntax {
+  public func withMessage(_ newChild: StringLiteralExprSyntax) -> UnavailableFromAsyncArgumentsSyntax {
     let arena = SyntaxArena()
     let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
@@ -18876,6 +18886,42 @@ extension UnavailableFromAsyncArgumentsSyntax: CustomReflectable {
 // MARK: - DocumentationAttributeArgumentSyntax
 
 public struct DocumentationAttributeArgumentSyntax: SyntaxProtocol, SyntaxHashable {
+  public enum Value: SyntaxChildChoices {
+    case `token`(TokenSyntax)
+    case `string`(StringLiteralExprSyntax)
+    public var _syntaxNode: Syntax {
+      switch self {
+      case .token(let node): return node._syntaxNode
+      case .string(let node): return node._syntaxNode
+      }
+    }
+    init(_ data: SyntaxData) { self.init(Syntax(data))! }
+    public init(_ node: TokenSyntax) {
+      self = .token(node)
+    }
+    public init(_ node: StringLiteralExprSyntax) {
+      self = .string(node)
+    }
+    public init?<S: SyntaxProtocol>(_ node: S) {
+      if let node = node.as(TokenSyntax.self) {
+        self = .token(node)
+        return
+      }
+      if let node = node.as(StringLiteralExprSyntax.self) {
+        self = .string(node)
+        return
+      }
+      return nil
+    }
+
+    public static var structure: SyntaxNodeStructure {
+      return .choices([
+        .node(TokenSyntax.self),
+        .node(StringLiteralExprSyntax.self),
+      ])
+    }
+  }
+
   public let _syntaxNode: Syntax
 
   public init?<S: SyntaxProtocol>(_ node: S) {
@@ -18898,7 +18944,7 @@ public struct DocumentationAttributeArgumentSyntax: SyntaxProtocol, SyntaxHashab
     _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax = .colonToken(),
     _ unexpectedBetweenColonAndValue: UnexpectedNodesSyntax? = nil,
-    value: TokenSyntax,
+    value: Value,
     _ unexpectedBetweenValueAndTrailingComma: UnexpectedNodesSyntax? = nil,
     trailingComma: TokenSyntax? = nil,
     _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
@@ -19029,10 +19075,10 @@ public struct DocumentationAttributeArgumentSyntax: SyntaxProtocol, SyntaxHashab
     return DocumentationAttributeArgumentSyntax(newData)
   }
 
-  public var value: TokenSyntax {
+  public var value: Value {
     get {
       let childData = data.child(at: 5, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return Value(childData!)
     }
     set(value) {
       self = withValue(value)
@@ -19042,7 +19088,7 @@ public struct DocumentationAttributeArgumentSyntax: SyntaxProtocol, SyntaxHashab
   /// Returns a copy of the receiver with its `value` replaced.
   /// - param newChild: The new `value` to replace the node's
   ///                   current `value`, if present.
-  public func withValue(_ newChild: TokenSyntax) -> DocumentationAttributeArgumentSyntax {
+  public func withValue(_ newChild: Value) -> DocumentationAttributeArgumentSyntax {
     let arena = SyntaxArena()
     let raw = newChild.raw
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
@@ -19142,7 +19188,7 @@ public struct DocumentationAttributeArgumentSyntax: SyntaxProtocol, SyntaxHashab
     case 4:
       return nil
     case 5:
-      return "value"
+      return nil
     case 6:
       return nil
     case 7:
@@ -27155,7 +27201,7 @@ extension AvailabilityArgumentSyntax: CustomReflectable {
 /// 
 public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   public enum Value: SyntaxChildChoices {
-    case `string`(TokenSyntax)
+    case `string`(StringLiteralExprSyntax)
     case `version`(VersionTupleSyntax)
     public var _syntaxNode: Syntax {
       switch self {
@@ -27164,14 +27210,14 @@ public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable 
       }
     }
     init(_ data: SyntaxData) { self.init(Syntax(data))! }
-    public init(_ node: TokenSyntax) {
+    public init(_ node: StringLiteralExprSyntax) {
       self = .string(node)
     }
     public init(_ node: VersionTupleSyntax) {
       self = .version(node)
     }
     public init?<S: SyntaxProtocol>(_ node: S) {
-      if let node = node.as(TokenSyntax.self) {
+      if let node = node.as(StringLiteralExprSyntax.self) {
         self = .string(node)
         return
       }
@@ -27184,7 +27230,7 @@ public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable 
 
     public static var structure: SyntaxNodeStructure {
       return .choices([
-        .node(TokenSyntax.self),
+        .node(StringLiteralExprSyntax.self),
         .node(VersionTupleSyntax.self),
       ])
     }

@@ -720,12 +720,9 @@ public let STMT_NODES: [Node] = [
                  "Comma"
                ]),
          Child(name: "Message",
-               kind: "StringLiteralToken",
+               kind: "StringLiteralExpr",
                description: "The assertion message.",
-               isOptional: true,
-               tokenChoices: [
-                 "StringLiteral"
-               ]),
+               isOptional: true),
          Child(name: "RightParen",
                kind: "RightParenToken",
                tokenChoices: [

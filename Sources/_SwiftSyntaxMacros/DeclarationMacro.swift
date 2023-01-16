@@ -16,7 +16,7 @@ public protocol DeclarationMacro: FreestandingMacro {
   static func expansion(
     of node: MacroExpansionDeclSyntax,
     in context: inout MacroExpansionContext
-  ) throws -> [DeclSyntax]
+  ) throws -> CodeBlockItemListSyntax
 }
 
 @available(*, deprecated, renamed: "DeclarationMacro")

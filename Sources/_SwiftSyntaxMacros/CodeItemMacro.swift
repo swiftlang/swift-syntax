@@ -16,5 +16,5 @@ public protocol CodeItemMacro: FreestandingMacro {
   static func expansion(
     of node: MacroExpansionDeclSyntax,
     in context: inout MacroExpansionContext
-  ) throws -> [CodeBlockItemSyntax]
+  ) throws -> CodeBlockItemListSyntax
 }

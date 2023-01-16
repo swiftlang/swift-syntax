@@ -158,7 +158,7 @@ public struct ErrorMacro: DeclarationMacro {
   public static func expansion(
     of node: MacroExpansionDeclSyntax,
     in context: inout MacroExpansionContext
-  ) throws -> [DeclSyntax] {
+  ) throws -> CodeBlockItemListSyntax {
     guard let firstElement = node.argumentList.first,
       let stringLiteral = firstElement.expression
         .as(StringLiteralExprSyntax.self),
@@ -187,7 +187,7 @@ struct DefineBitwidthNumberedStructsMacro: DeclarationMacro {
   static func expansion(
     of node: MacroExpansionDeclSyntax,
     in context: inout MacroExpansionContext
-  ) throws -> [DeclSyntax] {
+  ) throws -> CodeBlockItemListSyntax {
     guard let firstElement = node.argumentList.first,
       let stringLiteral = firstElement.expression
         .as(StringLiteralExprSyntax.self),
@@ -199,12 +199,17 @@ struct DefineBitwidthNumberedStructsMacro: DeclarationMacro {
       )
     }
 
-    return [8, 16, 32, 64].map { bitwidth in
+    let decls: [DeclSyntax] = [8, 16, 32, 64].map { bitwidth in
       """
 
       struct \(raw: prefix)\(raw: String(bitwidth)) { }
       """
     }
+    // TODO: Interpolate to `CodeBlockItemList` directly when it supports
+    // string interpolation.
+    return CodeBlockItemListSyntax(decls.map {
+      CodeBlockItemSyntax(item: .init($0))
+    })
   }
 }
 

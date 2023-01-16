@@ -134,18 +134,12 @@ class MacroApplication: SyntaxRewriter {
         do {
           if let macro = macro as? DeclarationMacro.Type {
             let expandedItemList = try macro.expansion(
-              of: declExpansion,
-              in: &context
+              of: declExpansion, in: &context
             )
-            newItems.append(
-              contentsOf: expandedItemList.map {
-                CodeBlockItemSyntax(item: .decl($0))
-              }
-            )
+            newItems.append(contentsOf: expandedItemList)
           } else if let macro = macro as? ExpressionMacro.Type {
             let expandedExpr = try macro.expansion(
-              of: declExpansion.asMacroExpansionExpr(),
-              in: &context
+              of: declExpansion.asMacroExpansionExpr(), in: &context
             )
             newItems.append(CodeBlockItemSyntax(item: .init(expandedExpr)))
           }
@@ -194,11 +188,15 @@ class MacroApplication: SyntaxRewriter {
             in: &context
           )
 
-          newItems.append(
-            contentsOf: expandedList.map { decl in
-              return MemberDeclListItemSyntax(decl: decl)
-            }
-          )
+          newItems.append(contentsOf: expandedList.compactMap { item -> MemberDeclListItemSyntax? in
+            guard let decl = item.item.as(DeclSyntax.self) else { return nil }
+            return MemberDeclListItemSyntax(
+              leadingTrivia: item.leadingTrivia,
+              item.unexpectedBeforeItem,
+              decl: decl,
+              semicolon: item.semicolon,
+              trailingTrivia: item.trailingTrivia)
+          })
         } catch {
           // Record the error
           context.diagnose(

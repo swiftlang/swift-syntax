@@ -83,10 +83,10 @@ extension Parser {
         )
       )
     } else {
-        return parseStatementAfterLabel()
+      return parseStatementAfterLabel()
     }
   }
-  
+
   @_spi(RawSyntax)
   public mutating func parseStatementAfterLabel(
     with tryPrefix: (RawUnexpectedNodesSyntax?, RawTokenSyntax)? = nil
@@ -430,9 +430,12 @@ extension Parser {
     }
 
     let unexpectedPreamble = RawUnexpectedNodesSyntax(
-        combining: tryPrefix?.0, tryPrefix?.1, unexpectedBeforeThrowKeyword,
-        arena: self.arena)
-    
+      combining: tryPrefix?.0,
+      tryPrefix?.1,
+      unexpectedBeforeThrowKeyword,
+      arena: self.arena
+    )
+
     return RawThrowStmtSyntax(
       unexpectedPreamble,
       throwKeyword: throwKeyword,
@@ -587,11 +590,14 @@ extension Parser {
     let (unexpectedBeforeWhileKeyword, whileKeyword) = self.eat(whileHandle)
     let conditions = self.parseConditionList()
     let body = self.parseCodeBlock(introducer: whileKeyword)
-    
+
     let unexpectedPreamble = RawUnexpectedNodesSyntax(
-        combining: tryPrefix?.0, tryPrefix?.1, unexpectedBeforeWhileKeyword,
-        arena: self.arena)
-    
+      combining: tryPrefix?.0,
+      tryPrefix?.1,
+      unexpectedBeforeWhileKeyword,
+      arena: self.arena
+    )
+
     return RawWhileStmtSyntax(
       unexpectedPreamble,
       whileKeyword: whileKeyword,
@@ -997,7 +1003,7 @@ extension Parser {
     with tryPrefix: (RawUnexpectedNodesSyntax?, RawTokenSyntax)?
   ) -> RawReturnStmtSyntax {
     let (unexpectedBeforeReturnKeyword, ret) = self.eat(returnHandle)
-    
+
     // Handle the ambiguity between consuming the expression and allowing the
     // enclosing stmt-brace to get it by eagerly eating it unless the return is
     // followed by a '}', '', statement or decl start keyword sequence.
@@ -1027,8 +1033,11 @@ extension Parser {
     }
 
     let unexpectedPreamble = RawUnexpectedNodesSyntax(
-        combining: tryPrefix?.0, tryPrefix?.1, unexpectedBeforeReturnKeyword,
-        arena: self.arena)
+      combining: tryPrefix?.0,
+      tryPrefix?.1,
+      unexpectedBeforeReturnKeyword,
+      arena: self.arena
+    )
 
     return RawReturnStmtSyntax(
       unexpectedPreamble,
@@ -1090,7 +1099,7 @@ extension Parser {
     } else {
       yields = .simpleYield(self.parseExpression())
     }
-    
+
     return RawYieldStmtSyntax(
       tryPrefix?.0,
       tryKeyword: tryPrefix?.1,
@@ -1151,11 +1160,14 @@ extension Parser {
   ) -> RawBreakStmtSyntax {
     let (unexpectedBeforeBreakKeyword, breakKeyword) = self.eat(breakHandle)
     let label = self.parseOptionalControlTransferTarget()
-    
+
     let unexpectedPreamble = RawUnexpectedNodesSyntax(
-        combining: tryPrefix?.0, tryPrefix?.1, unexpectedBeforeBreakKeyword,
-        arena: self.arena)
-    
+      combining: tryPrefix?.0,
+      tryPrefix?.1,
+      unexpectedBeforeBreakKeyword,
+      arena: self.arena
+    )
+
     return RawBreakStmtSyntax(
       unexpectedPreamble,
       breakKeyword: breakKeyword,

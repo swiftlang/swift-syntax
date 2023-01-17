@@ -236,6 +236,7 @@ extension Lexer.Cursor {
 
 extension Lexer.Cursor {
   mutating func nextToken(sourceBufferStart: Lexer.Cursor) -> Lexer.Lexeme {
+    let cursor = self
     // Leading trivia.
     let leadingTriviaStart = self
     let newlineInLeadingTrivia: NewlinePresence
@@ -301,7 +302,8 @@ extension Lexer.Cursor {
       start: leadingTriviaStart.pointer,
       leadingTriviaLength: leadingTriviaStart.distance(to: textStart),
       textLength: textStart.distance(to: trailingTriviaStart),
-      trailingTriviaLength: trailingTriviaStart.distance(to: self)
+      trailingTriviaLength: trailingTriviaStart.distance(to: self),
+      cursor: cursor
     )
   }
 

@@ -45,6 +45,9 @@ extension Lexer {
     public var leadingTriviaByteLength: Int
     public var textByteLength: Int
     public var trailingTriviaByteLength: Int
+    /// The cursor that produces this lexeme by calling `nextToken` on it.
+    /// Used if the token needs to be re-lexed in a different lexer state.
+    var cursor: Lexer.Cursor
 
     var isAtStartOfLine: Bool {
       return self.flags.contains(.isAtStartOfLine)
@@ -54,15 +57,15 @@ extension Lexer {
       return self.rawTokenKind == .identifier && self.tokenText.isEditorPlaceholder
     }
 
-    @_spi(RawSyntax)
-    public init(
+    init(
       tokenKind: RawTokenKind,
       flags: Flags,
       error: LexerError?,
       start: UnsafePointer<UInt8>,
       leadingTriviaLength: Int,
       textLength: Int,
-      trailingTriviaLength: Int
+      trailingTriviaLength: Int,
+      cursor: Lexer.Cursor
     ) {
       self.rawTokenKind = tokenKind
       self.flags = flags
@@ -71,6 +74,7 @@ extension Lexer {
       self.leadingTriviaByteLength = leadingTriviaLength
       self.textByteLength = textLength
       self.trailingTriviaByteLength = trailingTriviaLength
+      self.cursor = cursor
     }
 
     public var byteLength: Int {

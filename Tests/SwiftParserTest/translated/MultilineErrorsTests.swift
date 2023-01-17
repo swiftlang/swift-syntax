@@ -14,6 +14,8 @@
 
 import XCTest
 
+import SwiftSyntax
+
 final class MultilineErrorsTests: XCTestCase {
   func testMultilineErrors1() {
     AssertParse(
@@ -473,4 +475,22 @@ final class MultilineErrorsTests: XCTestCase {
     )
   }
 
+  func testMultilineErrors31() {
+    AssertParse(
+      ##"""
+      let _ = """
+        foo
+        \ℹ️("bar1️⃣
+        2️⃣baz3️⃣
+        """
+        abc
+      """##,
+      substructure: Syntax(IdentifierExprSyntax(identifier: .identifier("abc"))),
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: #"expected '"' to end string literal"#),
+        DiagnosticSpec(locationMarker: "2️⃣", message: #"unexpected code 'baz' in string literal"#),
+        DiagnosticSpec(locationMarker: "3️⃣", message: #"expected ')' in string literal"#, notes: [NoteSpec(message: "to match this opening '('")]),
+      ]
+    )
+  }
 }

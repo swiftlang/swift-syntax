@@ -40,7 +40,8 @@ extension Lexer {
             start: self.cursor.pointer,
             leadingTriviaLength: 0,
             textLength: 0,
-            trailingTriviaLength: 0
+            trailingTriviaLength: 0,
+            cursor: self.cursor
           )
         } else {
           self.nextToken = self.cursor.nextToken(sourceBufferStart: self.sourceBufferStart)
@@ -67,6 +68,15 @@ extension Lexer {
 
     func peek() -> Lexer.Lexeme {
       return self.nextToken
+    }
+
+    /// Force the lexer to perform a state transition, re-lexing `currentToken`
+    /// in the new state.
+    mutating func perform(stateTransition: StateTransition, currentToken: inout Lexeme) {
+      self.cursor = currentToken.cursor
+      self.cursor.perform(stateTransition: stateTransition)
+      self.nextToken = self.cursor.nextToken(sourceBufferStart: self.sourceBufferStart)
+      currentToken = self.advance()
     }
 
     public var debugDescription: String {

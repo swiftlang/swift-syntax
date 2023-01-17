@@ -50,7 +50,7 @@ final class UnclosedStringInterpolationTests: XCTestCase {
   func testUnclosedStringInterpolation4() {
     AssertParse(
       ##"""
-      let equation1 = "2 + 2 = \(2 + 21️⃣"2️⃣
+      let equation1 = "2 + 2 = \(2 + 21️⃣"
       """##,
       diagnostics: [
         DiagnosticSpec(message: "expected ')' in string literal")
@@ -61,11 +61,10 @@ final class UnclosedStringInterpolationTests: XCTestCase {
   func testUnclosedStringInterpolation5() {
     AssertParse(
       ##"""
-      let s = "\(x1️⃣"2️⃣; print(x)
+      let s = "\(x1️⃣"; print(x)
       """##,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ')' in string literal"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code '; print(x)' at top level"),
+        DiagnosticSpec(message: "expected ')' in string literal")
       ]
     )
   }

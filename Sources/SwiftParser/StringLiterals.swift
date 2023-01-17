@@ -72,6 +72,19 @@ extension Parser {
           unexpectedBeforeRightParen.append(self.consumeAnyToken())
         }
         let rightParen = self.expectWithoutRecovery(.rightParen)
+        if rightParen.isMissing, case .inStringInterpolation = self.currentToken.cursor.currentState {
+          // The parser has more knowledge that we have reached the end of the
+          // string interpolation now, even if we haven't seen the closing ')'.
+          // For example, consider the following code
+          //   "\(abc "
+          // Since the lexer doesn't know anything about the expression structure,
+          // it assumes that the `"` starts a new string literal. But since we
+          // know in the parser that an identifier cannot be followed by a string
+          // literal without a connecting binary operator and can thus consider
+          // it as the surrounding string literal end, which thus also terminates
+          // the string interpolation.
+          self.lexemes.perform(stateTransition: .pop, currentToken: &self.currentToken)
+        }
         segments.append(
           .expressionSegment(
             RawExpressionSegmentSyntax(

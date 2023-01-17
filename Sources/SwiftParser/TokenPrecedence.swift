@@ -184,7 +184,7 @@ public enum TokenPrecedence: Comparable {
       self = .identifierLike
     // MARK: Expr keyword
     case  // Keywords
-    .as, .is, .try,
+    .as, .is,
       // We don't know much about which contextual keyword it is, be conservative an allow considering it as unexpected.
       // Keywords in function types (we should be allowed to skip them inside parenthesis)
       .rethrows, .throws,
@@ -202,7 +202,9 @@ public enum TokenPrecedence: Comparable {
       // Secondary parts of control-flow constructs
       .case, .catch, .default, .else,
       // Return-like statements
-      .break, .continue, .fallthrough, .return, .throw, .yield:
+      .break, .continue, .fallthrough, .return, .throw, .yield,
+      // try is usually in an expr, but can appear before yield
+      .try:
       self = .stmtKeyword
     // MARK: Decl keywords
     case  // Types

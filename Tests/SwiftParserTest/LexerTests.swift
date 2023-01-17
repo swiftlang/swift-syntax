@@ -630,6 +630,13 @@ public class LexerTests: XCTestCase {
         LexemeSpec(.identifier, text: "<#b2#>"),
       ]
     )
+
+    AssertLexemes(
+      "<##>",
+      lexemes: [
+        LexemeSpec(.identifier, text: "<##>", trailing: "")
+      ]
+    )
   }
 
   func testCommentAttribution() {
@@ -745,5 +752,79 @@ public class LexerTests: XCTestCase {
         LexemeSpec(.stringQuote, text: #"""#),
       ]
     )
+  }
+
+  func testBOMAtStartOfFile() throws {
+    let sourceBytes: [UInt8] = [0xef, 0xbb, 0xbf]
+    let lexemes = sourceBytes.withUnsafeBufferPointer { buf in
+      var lexemes = [Lexer.Lexeme]()
+      for token in Lexer.tokenize(buf, from: 0) {
+        lexemes.append(token)
+
+        if token.rawTokenKind == .eof {
+          break
+        }
+      }
+      return lexemes
+    }
+
+    XCTAssertEqual(lexemes.count, 1)
+    let lexeme = try XCTUnwrap(lexemes.first)
+    XCTAssertEqual(lexeme.rawTokenKind, .eof)
+
+    let bomBytes: [UInt8] = [0xef, 0xbb, 0xbf]
+    bomBytes.withUnsafeBufferPointer { bomBytes in
+      XCTAssertEqual(lexeme.leadingTriviaText, SyntaxText(buffer: bomBytes))
+    }
+  }
+
+  func testBOMInTheMiddleOfIdentifier() throws {
+    let sourceBytes: [UInt8] = [UInt8(ascii: "a"), 0xef, 0xbb, 0xbf, UInt8(ascii: "b")]
+    let lexemes = sourceBytes.withUnsafeBufferPointer { buf in
+      var lexemes = [Lexer.Lexeme]()
+      for token in Lexer.tokenize(buf, from: 0) {
+        lexemes.append(token)
+
+        if token.rawTokenKind == .eof {
+          break
+        }
+      }
+      return lexemes
+    }
+
+    XCTAssertEqual(lexemes.count, 2)
+    let lexeme = try XCTUnwrap(lexemes.first)
+    XCTAssertEqual(lexeme.rawTokenKind, .identifier)
+
+    sourceBytes.withUnsafeBufferPointer { sourceBytes in
+      XCTAssertEqual(lexeme.tokenText, SyntaxText(buffer: sourceBytes))
+    }
+  }
+
+  func testBOMAsLeadingTriviaInSourceFile() throws {
+    let sourceBytes: [UInt8] = [UInt8(ascii: "1"), UInt8(ascii: " "), UInt8(ascii: "+"), UInt8(ascii: " "), 0xef, 0xbb, 0xbf, UInt8(ascii: "2")]
+    let lexemes = sourceBytes.withUnsafeBufferPointer { buf in
+      var lexemes = [Lexer.Lexeme]()
+      for token in Lexer.tokenize(buf, from: 0) {
+        lexemes.append(token)
+
+        if token.rawTokenKind == .eof {
+          break
+        }
+      }
+      return lexemes
+    }
+
+    guard lexemes.count == 4 else {
+      return XCTFail("Expected 4 lexemes")
+    }
+    let lexeme = lexemes[1]
+    XCTAssertEqual(lexeme.rawTokenKind, .binaryOperator)
+
+    let expectedTrailingTrivia: [UInt8] = [UInt8(ascii: " "), 0xef, 0xbb, 0xbf]
+    expectedTrailingTrivia.withUnsafeBufferPointer { expectedTrailingTrivia in
+      XCTAssertEqual(lexeme.trailingTriviaText, SyntaxText(buffer: expectedTrailingTrivia))
+      XCTAssertEqual(lexeme.tokenText, "+")
+    }
   }
 }

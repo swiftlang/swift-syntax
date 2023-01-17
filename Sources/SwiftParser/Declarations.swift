@@ -1253,7 +1253,7 @@ extension Parser {
       (buffer: UnsafeBufferPointer<UInt8>) -> Bool in
       var cursor = Lexer.Cursor(input: buffer, previous: 0, state: .normal)
       guard buffer[0] == UInt8(ascii: "/") else { return false }
-      switch cursor.lexOperatorIdentifier(cursor, cursor).tokenKind {
+      switch cursor.lexOperatorIdentifier(sourceBufferStart: cursor).tokenKind {
       case .unknown:
         return false
 

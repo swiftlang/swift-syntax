@@ -37,6 +37,10 @@
 public struct SyntaxText {
   var buffer: UnsafeBufferPointer<UInt8>
 
+  public init(buffer: UnsafeBufferPointer<UInt8>) {
+    self.buffer = buffer
+  }
+
   public init(baseAddress: UnsafePointer<UInt8>?, count: Int) {
     assert(
       count == 0 || baseAddress != nil,

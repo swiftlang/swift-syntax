@@ -13,7 +13,6 @@ add_swift_host_library(SwiftParser
   Declarations.swift
   Directives.swift
   Expressions.swift
-  Lexer.swift
   Lookahead.swift
   LoopProgressCondition.swift
   Modifiers.swift
@@ -34,7 +33,14 @@ add_swift_host_library(SwiftParser
 
   generated/DeclarationModifier.swift
   generated/Parser+Entry.swift
-  generated/TypeAttribute.swift)
+  generated/TypeAttribute.swift
+
+  Lexer/Cursor.swift
+  Lexer/Lexeme.swift
+  Lexer/LexemeSequence.swift
+  Lexer/Lexer.swift
+  Lexer/UnicodeScalarExtensions.swift
+)
 
 target_link_libraries(SwiftParser PUBLIC
   SwiftSyntax

@@ -69,17 +69,15 @@ public struct TriviaParser {
         continue
 
       case UInt8(ascii: "/"):
-        if !cursor.isAtEndOfFile {
-          switch cursor.peek() {
-          case UInt8(ascii: "/"):
-            pieces.append(cursor.lexLineComment(start: start))
-            continue
-          case UInt8(ascii: "*"):
-            pieces.append(cursor.lexBlockComment(start: start))
-            continue
-          default:
-            break
-          }
+        switch cursor.peek() {
+        case UInt8(ascii: "/"):
+          pieces.append(cursor.lexLineComment(start: start))
+          continue
+        case UInt8(ascii: "*"):
+          pieces.append(cursor.lexBlockComment(start: start))
+          continue
+        default:
+          break
         }
 
       case UInt8(ascii: "#"):
@@ -88,15 +86,15 @@ public struct TriviaParser {
         // file. We don't know if this trivia is at the start of the file, but
         // we believe that the lexer lexed it accordingly.
         if position == .leading && pieces.isEmpty && cursor.advance(if: { $0 == "!" }) {
-          _ = cursor.advanceToEndOfLine()
-          pieces.append(.shebang(start.textUpTo(cursor)))
+          cursor.advanceToEndOfLine()
+          pieces.append(.shebang(start.text(upTo: cursor)))
           continue
         }
 
       case UInt8(ascii: "<"), UInt8(ascii: ">"):
         // SCM conflict markers.
         if cursor.tryLexConflictMarker(start: start) {
-          pieces.append(.unexpectedText(start.textUpTo(cursor)))
+          pieces.append(.unexpectedText(start.text(upTo: cursor)))
           continue
         }
 
@@ -129,7 +127,7 @@ public struct TriviaParser {
         )
         pieces[pieces.count - 1] = .unexpectedText(mergedText)
       } else {
-        pieces.append(.unexpectedText(start.textUpTo(cursor)))
+        pieces.append(.unexpectedText(start.text(upTo: cursor)))
       }
     }
 
@@ -173,10 +171,10 @@ extension Lexer.Cursor {
   fileprivate mutating func lexLineComment(start: Lexer.Cursor) -> RawTriviaPiece {
     // "///...": .docLineComment.
     // "//...": .lineComment.
-    assert(self.previous == UInt8(ascii: "/") && self.peek() == UInt8(ascii: "/"))
-    let isDocComment = self.input.count > 1 && self.peek(at: 1) == UInt8(ascii: "/")
-    _ = self.advanceToEndOfLine()
-    let contents = start.textUpTo(self)
+    assert(self.previous == UInt8(ascii: "/") && self.is(at: "/"))
+    let isDocComment = self.input.count > 1 && self.is(offset: 1, at: "/")
+    self.advanceToEndOfLine()
+    let contents = start.text(upTo: self)
     return isDocComment ? .docLineComment(contents) : .lineComment(contents)
   }
 
@@ -184,10 +182,10 @@ extension Lexer.Cursor {
     // "/**...*/": .docBlockComment.
     // "/*...*/": .blockComment.
     // "/**/": .blockComment.
-    assert(self.previous == UInt8(ascii: "/") && self.peek() == UInt8(ascii: "*"))
-    let isDocComment = self.input.count > 2 && self.peek(at: 1) == UInt8(ascii: "*") && self.peek(at: 2) != UInt8(ascii: "/")
+    assert(self.previous == UInt8(ascii: "/") && self.is(at: "*"))
+    let isDocComment = self.input.count > 2 && self.is(offset: 1, at: "*") && self.is(offset: 2, notAt: "/")
     _ = self.advanceToEndOfSlashStarComment()
-    let contents = start.textUpTo(self)
+    let contents = start.text(upTo: self)
     return isDocComment ? .docBlockComment(contents) : .blockComment(contents)
   }
 }

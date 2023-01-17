@@ -256,7 +256,7 @@ extension Lexer.Cursor {
     case .afterRawStringDelimiter(delimiterLength: let delimiterLength):
       result = lexAfterRawStringDelimiter(delimiterLength: delimiterLength)
     case .inStringLiteral(kind: let stringLiteralKind, delimiterLength: let delimiterLength):
-      result = lexInStringLiteral(kind: stringLiteralKind, delimiterLength: delimiterLength)
+      result = lexInStringLiteral(stringLiteralKind: stringLiteralKind, delimiterLength: delimiterLength)
     case .afterStringLiteral(isRawString: _):
       result = lexAfterStringLiteral()
     case .afterClosingStringQuote:
@@ -893,13 +893,6 @@ extension Lexer.Cursor {
     default:
       preconditionFailure("state 'afterRawStringDelimiter' expects to be positioned at a quote")
     }
-  }
-
-  private mutating func lexInStringLiteral(kind: StringLiteralKind, delimiterLength: Int) -> Lexer.Result {
-    return self.lexStringLiteralContents(
-      stringLiteralKind: kind,
-      delimiterLength: delimiterLength
-    )
   }
 
   private mutating func lexAfterStringLiteral() -> Lexer.Result {
@@ -1713,7 +1706,7 @@ extension Lexer.Cursor {
     return tmp.advanceIfStringDelimiter(delimiterLength: delimiterLength) && tmp.is(at: "(")
   }
 
-  mutating func lexStringLiteralContents(stringLiteralKind: StringLiteralKind, delimiterLength: Int) -> Lexer.Result {
+  mutating func lexInStringLiteral(stringLiteralKind: StringLiteralKind, delimiterLength: Int) -> Lexer.Result {
     /*
     if IsMultilineString && *CurPtr != '\n' && *CurPtr != '\r' {
       diagnose(CurPtr, diag::lex_illegal_multiline_string_start)

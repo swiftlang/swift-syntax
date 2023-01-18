@@ -1208,4 +1208,20 @@ public class LexerTests: XCTestCase {
     )
   }
 
+  func testHexLiteralWithoutNumbers() {
+    AssertLexemes(
+      "0x1️⃣",
+      lexemes: [
+        LexemeSpec(.integerLiteral, text: "0x", error: "expected hexadecimal digit (0-9, A-F) in integer literal")
+      ]
+    )
+
+    AssertLexemes(
+      "0x1️⃣ ",
+      lexemes: [
+        LexemeSpec(.integerLiteral, text: "0x", trailing: " ", error: "expected hexadecimal digit (0-9, A-F) in integer literal")
+      ]
+    )
+  }
+
 }

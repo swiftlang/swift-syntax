@@ -1328,17 +1328,18 @@ extension Lexer.Cursor {
     assert(zeroConsumed && xConsumed, "not a hex literal")
 
     // 0x[0-9a-fA-F][0-9a-fA-F_]*
-    if self.isAtEndOfFile {
-      // TODO: Diagnose invalid hex literal '0x'
-      return Lexer.Result(.integerLiteral)
+    guard let peeked = self.peek() else {
+      return Lexer.Result(.integerLiteral, error: (.expectedHexDigitInHexLiteral, self))
     }
-    guard let peeked = self.peek(), Unicode.Scalar(peeked).isHexDigit else {
-      let errorPos = self
-      self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
-      return Lexer.Result(
-        .integerLiteral,
-        error: (.invalidHexDigitInIntegerLiteral, errorPos)
-      )
+
+    guard Unicode.Scalar(peeked).isHexDigit else {
+      if Unicode.Scalar(peeked).isValidIdentifierContinuationCodePoint {
+        let errorPos = self
+        self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
+        return Lexer.Result(.integerLiteral, error: (.invalidHexDigitInIntegerLiteral, errorPos))
+      } else {
+        return Lexer.Result(.integerLiteral, error: (.expectedHexDigitInHexLiteral, self))
+      }
     }
 
     self.advance(while: { $0.isHexDigit || $0 == Unicode.Scalar("_") })
@@ -2128,9 +2129,6 @@ extension Lexer.Cursor {
     if tmp.advance(if: { Unicode.Scalar($0).isValidIdentifierContinuationCodePoint }) {
       // If this is a valid identifier continuation, but not a valid identifier
       // start, attempt to recover by eating more continuation characters.
-      //      if (EmitDiagnosticsIfToken) {
-      //        diagnose(CurPtr - 1, diag::lex_invalid_identifier_start_character)
-      //      }
       tmp.advance(while: { Unicode.Scalar($0).isValidIdentifierContinuationCodePoint })
       self = tmp
       return .lexemeContents(Lexer.Result(.identifier, error: (.invalidIdentifierStartCharacter, position: start)))

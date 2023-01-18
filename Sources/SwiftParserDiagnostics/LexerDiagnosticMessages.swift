@@ -42,6 +42,7 @@ public enum StaticLexerError: String, DiagnosticMessage {
   case expectedClosingBraceInUnicodeEscape = #"expected '}' in \u{...} escape sequence"#
   case expectedDigitInFloatLiteral = "expected a digit in floating point exponent"
   case expectedHexCodeInUnicodeEscape = #"expected hexadecimal code in \u{...} escape sequence"#
+  case expectedHexDigitInHexLiteral = "expected hexadecimal digit (0-9, A-F) in integer literal"
   case invalidCharacter = "invalid character in source file"
   case invalidEscapeSequenceInStringLiteral = "invalid escape sequence in literal"
   case invalidIdentifierStartCharacter = "an identifier cannot begin with this character"
@@ -121,6 +122,7 @@ public extension SwiftSyntax.LexerError {
     case .expectedClosingBraceInUnicodeEscape: return StaticLexerError.expectedClosingBraceInUnicodeEscape
     case .expectedDigitInFloatLiteral: return StaticLexerError.expectedDigitInFloatLiteral
     case .expectedHexCodeInUnicodeEscape: return StaticLexerError.expectedHexCodeInUnicodeEscape
+    case .expectedHexDigitInHexLiteral: return StaticLexerError.expectedHexDigitInHexLiteral
     case .insufficientIndentationInMultilineStringLiteral:
       // This should be diagnosed when visiting the `StringLiteralExprSyntax`
       // inside `ParseDiagnosticsGenerator` but fall back to an error message

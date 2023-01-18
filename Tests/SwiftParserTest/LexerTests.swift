@@ -453,7 +453,7 @@ public class LexerTests: XCTestCase {
       """
       // diff3-style conflict markers
 
-      <<<<<<< HEAD:conflict_markers.swift // expected-error {{source control conflict marker in source file}}
+      1️⃣<<<<<<< HEAD:conflict_markers.swift // expected-error {{source control conflict marker in source file}}
       var a : String = "A"
       var b : String = "b"
       =======
@@ -477,6 +477,7 @@ public class LexerTests: XCTestCase {
             >>>>>>> 18844bc65229786b96b89a9fc7739c0fc897905e:conflict_markers.swift
             """,
           text: "",
+          error: "source control conflict marker in source file",
           flags: [.isAtStartOfLine]
         )
       ]
@@ -486,7 +487,7 @@ public class LexerTests: XCTestCase {
       """
       // Perforce-style conflict markers
 
-      >>>> ORIGINAL
+      1️⃣>>>> ORIGINAL
       var a : String = "A"
       var b : String = "B"
       ==== THEIRS
@@ -518,6 +519,7 @@ public class LexerTests: XCTestCase {
 
             """,
           text: "",
+          error: "source control conflict marker in source file",
           flags: [.isAtStartOfLine]
         )
       ]

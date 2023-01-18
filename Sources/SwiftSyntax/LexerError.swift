@@ -38,6 +38,7 @@ public struct LexerError: Hashable {
     case lexerErrorOffsetOverflow
     case nonBreakingSpace
     case nulCharacter
+    case sourceConflictMarker
     case unexpectedBlockCommentEnd
     case unicodeCurlyQuote
   }

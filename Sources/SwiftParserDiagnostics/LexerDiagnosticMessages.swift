@@ -51,6 +51,7 @@ public enum StaticLexerError: String, DiagnosticMessage {
   case lexerErrorOffsetOverflow = "the lexer dicovered an error in this token but was not able to represent its offset due to overflow; please split the token"
   case nonBreakingSpace = "non-breaking space (U+00A0) used instead of regular space"
   case nulCharacter = "nul character embedded in middle of file"
+  case sourceConflictMarker = "source control conflict marker in source file"
   case unexpectedBlockCommentEnd = "unexpected end of block comment"
   case unicodeCurlyQuote = #"unicode curly quote found; use '"' instead"#
 
@@ -142,6 +143,7 @@ public extension SwiftSyntax.LexerError {
     case .lexerErrorOffsetOverflow: return StaticLexerError.lexerErrorOffsetOverflow
     case .nonBreakingSpace: return StaticLexerError.nonBreakingSpace
     case .nulCharacter: return StaticLexerError.nulCharacter
+    case .sourceConflictMarker: return StaticLexerError.sourceConflictMarker
     case .unexpectedBlockCommentEnd: return StaticLexerError.unexpectedBlockCommentEnd
     case .unicodeCurlyQuote: return StaticLexerError.unicodeCurlyQuote
     }

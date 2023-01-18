@@ -1027,7 +1027,7 @@ extension Lexer.Cursor {
       let start = self
 
       switch self.advance() {
-      // 'continue' - the character is a part of the trivia9.
+      // 'continue' - the character is a part of the trivia.
       // 'break' - the character should a part of token text.
       case nil:
         break
@@ -1070,10 +1070,10 @@ extension Lexer.Cursor {
         self.advanceToEndOfLine()
         continue
       case UInt8(ascii: "<"), UInt8(ascii: ">"):
-        guard self.tryLexConflictMarker(start: start) else {
-          break
+        if self.tryLexConflictMarker(start: start) {
+          error = (.sourceConflictMarker, start)
+          continue
         }
-        continue
       // Start character of tokens.
       //        case (char)-1: case (char)-2:
       case  // Punctuation.
@@ -2195,7 +2195,7 @@ extension Lexer.Cursor {
   }
   mutating func tryLexConflictMarker(start: Lexer.Cursor) -> Bool {
     // Only a conflict marker if it starts at the beginning of a line.
-    guard start.previous == UInt8(ascii: "\n") || start.previous == UInt8(ascii: "\r") else {
+    guard start.previous == UInt8(ascii: "\n") || start.previous == UInt8(ascii: "\r") || start.previous == 0 else {
       return false
     }
 
@@ -2211,7 +2211,6 @@ extension Lexer.Cursor {
     }
 
     // Diagnose at the conflict marker, then jump ahead to the end.
-    //    diagnose(CurPtr, diag::lex_conflict_marker_in_file);
     self = end
 
     // Skip ahead to the end of the marker.

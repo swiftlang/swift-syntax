@@ -1925,7 +1925,7 @@ extension TokenKind {
     case .dollarIdentifier(let str): 
       return (.dollarIdentifier, str)
     case .keyword(let assoc): 
-      return (.keyword(assoc), String(syntaxText: assoc.defaultText))
+      return (.keyword(assoc), nil)
     case .rawStringDelimiter(let str): 
       return (.rawStringDelimiter, str)
     case .stringSegment(let str): 

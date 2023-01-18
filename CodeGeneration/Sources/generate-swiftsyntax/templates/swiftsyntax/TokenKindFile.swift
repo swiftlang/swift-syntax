@@ -409,7 +409,7 @@ let tokenKindFile = SourceFileSyntax {
         for token in SYNTAX_TOKENS {
           if token.associatedValueClass != nil {
             SwitchCaseSyntax("case .\(raw: token.swiftKind)(let assoc):") {
-              ReturnStmtSyntax("return (.\(raw: token.swiftKind)(assoc), String(syntaxText: assoc.defaultText))")
+              ReturnStmtSyntax("return (.\(raw: token.swiftKind)(assoc), nil)")
             }
           } else if token.text != nil {
             SwitchCaseSyntax("case .\(raw: token.swiftKind):") {

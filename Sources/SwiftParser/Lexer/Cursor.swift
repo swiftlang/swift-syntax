@@ -1479,7 +1479,7 @@ extension Lexer.Cursor {
     case endOfString
 
     /// The character could not be lexed because it's not a valid Unicode character.
-    case error
+    case error(LexerError.Kind)
   }
 
   /// Lexes a single character in a string literal, handling escape sequences
@@ -1524,10 +1524,8 @@ extension Lexer.Cursor {
         return .success(Unicode.Scalar(character))
       }
     case 0:
-      //      if (EmitDiagnostics)
-      //        diagnose(CurPtr-1, diag::lex_nul_character)
-      let character = self.advance()!
-      return .success(Unicode.Scalar(character))
+      _ = self.advance()
+      return .error(.nulCharacter)
     case UInt8(ascii: "\n"), UInt8(ascii: "\r"):  // String literals cannot have \n or \r in them.
       let character = self.advance()!
       assert(stringLiteralKind == .multiLine, "Caller must handle newlines in non-multiline")
@@ -1538,16 +1536,17 @@ extension Lexer.Cursor {
       if !self.advanceIfStringDelimiter(delimiterLength: delimiterLength) {
         return .success(Unicode.Scalar("\\"))
       }
-      guard let escapedCharacterCode = self.lexEscapedCharacter(isMultilineString: stringLiteralKind == .multiLine) else {
-        return .error
+      switch self.lexEscapedCharacter(isMultilineString: stringLiteralKind == .multiLine) {
+      case .success(let escapedCharacterCode):
+        // Check to see if the encoding is valid.
+        if let validatedScalar = Unicode.Scalar(escapedCharacterCode) {
+          return .validatedEscapeSequence(Character(validatedScalar))
+        } else {
+          return .error(.invalidEscapeSequenceInStringLiteral)
+        }
+      case .error(let kind):
+        return .error(kind)
       }
-
-      // Check to see if the encoding is valid.
-      guard let validatedScalar = Unicode.Scalar(escapedCharacterCode) else {
-        return .error
-      }
-
-      return .validatedEscapeSequence(Character(validatedScalar))
     default:
       _ = self.advance()
       // Normal characters are part of the string.
@@ -1561,12 +1560,17 @@ extension Lexer.Cursor {
       //      }
       self = charStart
       guard let charValue = self.advanceValidatingUTF8Character() else {
-        //      if (EmitDiagnostics)
-        //        diagnose(CharStart, diag::lex_invalid_utf8)
-        return .error
+        return .error(.invalidUtf8)
       }
       return .success(charValue)
     }
+  }
+
+  enum EscapedCharacterLex {
+    // Successfully lexed an escape sequence that represents the Unicode character
+    // at the given codepoint
+    case success(UInt32)
+    case error(LexerError.Kind)
   }
 
   /// Assuming that we are in a string literal and have already consumed a `\`,
@@ -1574,50 +1578,42 @@ extension Lexer.Cursor {
   /// (i.e. UTF-32 value) that the escaped character represents.
   ///
   /// If the character is not a valid escape sequence, return `nil`.
-  private mutating func lexEscapedCharacter(isMultilineString: Bool) -> UInt32? {
+  private mutating func lexEscapedCharacter(isMultilineString: Bool) -> EscapedCharacterLex {
     assert(self.previous == UInt8(ascii: "\\") || self.previous == UInt8(ascii: "#"))
     // Escape processing.  We already ate the "\".
     switch self.peek() {
     // Simple single-character escapes.
-    case UInt8(ascii: "0"): _ = self.advance(); return UInt32(UInt8(ascii: "\0"))
-    case UInt8(ascii: "n"): _ = self.advance(); return UInt32(UInt8(ascii: "\n"))
-    case UInt8(ascii: "r"): _ = self.advance(); return UInt32(UInt8(ascii: "\r"))
-    case UInt8(ascii: "t"): _ = self.advance(); return UInt32(UInt8(ascii: "\t"))
-    case UInt8(ascii: #"""#): _ = self.advance(); return UInt32(UInt8(ascii: #"""#))
-    case UInt8(ascii: "'"): _ = self.advance(); return UInt32(UInt8(ascii: "'"))
-    case UInt8(ascii: "\\"): _ = self.advance(); return UInt32(UInt8(ascii: "\\"))
+    case UInt8(ascii: "0"): _ = self.advance(); return .success(UInt32(UInt8(ascii: "\0")))
+    case UInt8(ascii: "n"): _ = self.advance(); return .success(UInt32(UInt8(ascii: "\n")))
+    case UInt8(ascii: "r"): _ = self.advance(); return .success(UInt32(UInt8(ascii: "\r")))
+    case UInt8(ascii: "t"): _ = self.advance(); return .success(UInt32(UInt8(ascii: "\t")))
+    case UInt8(ascii: #"""#): _ = self.advance(); return .success(UInt32(UInt8(ascii: #"""#)))
+    case UInt8(ascii: "'"): _ = self.advance(); return .success(UInt32(UInt8(ascii: "'")))
+    case UInt8(ascii: "\\"): _ = self.advance(); return .success(UInt32(UInt8(ascii: "\\")))
 
     case UInt8(ascii: "u"):  // e.g. \u{1234}
       _ = self.advance()
 
       guard self.is(at: "{") else {
-        //        if (EmitDiagnostics)
-        //          diagnose(CurPtr-1, diag::lex_unicode_escape_braces)
-        return nil
+        return .error(.expectedHexCodeInUnicodeEscape)
       }
 
-      guard let cv = self.lexUnicodeEscape() else {
-        return nil
-      }
-      return cv
-
+      return self.lexUnicodeEscape()
     case UInt8(ascii: "\n"), UInt8(ascii: "\r"):
       if isMultilineString && self.maybeConsumeNewlineEscape() {
-        return UInt32(UInt8(ascii: "\n"))
+        return .success(UInt32(UInt8(ascii: "\n")))
       }
-      return nil
+      return .error(.invalidEscapeSequenceInStringLiteral)
     case nil:
-      return nil
+      return .error(.invalidEscapeSequenceInStringLiteral)
     case .some(let peekedValue):  // Invalid escape.
-      //     if (EmitDiagnostics)
-      //       diagnose(CurPtr, diag::lex_invalid_escape)
       // If this looks like a plausible escape character, recover as though this
       // is an invalid escape.
       let c = Unicode.Scalar(peekedValue)
       if c.isDigit || c.isLetter {
         _ = self.advance()
       }
-      return nil
+      return .error(.invalidEscapeSequenceInStringLiteral)
     }
   }
 
@@ -1625,7 +1621,7 @@ extension Lexer.Cursor {
   /// placed at the opening `{`.
   ///
   /// If this is not a valid unicode escape, return `nil`.
-  private mutating func lexUnicodeEscape() -> UInt32? {
+  private mutating func lexUnicodeEscape() -> EscapedCharacterLex {
     let quoteConsumed = self.advance(matching: "{")
     assert(quoteConsumed)
 
@@ -1636,18 +1632,18 @@ extension Lexer.Cursor {
     }
 
     guard self.advance(matching: "}") else {
-      //      if (Diags)
-      //        Diags->diagnose(CurPtr, diag::lex_invalid_u_escape_rbrace)
-      return nil
+      return .error(.excpectedClosingBraceInUnicodeEscape)
     }
 
     if numDigits == 0 || numDigits > 8 {
-      //      if (Diags)
-      //        Diags->diagnose(CurPtr, diag::lex_invalid_u_escape)
-      return nil
+      return .error(.invalidNumberOfHexDigitsInUnicodeEscape)
     }
 
-    return UInt32(String(decoding: digitStart.input[0..<numDigits], as: UTF8.self), radix: 16)
+    if let codePoint = UInt32(String(decoding: digitStart.input[0..<numDigits], as: UTF8.self), radix: 16) {
+      return .success(codePoint)
+    } else {
+      return .error(.invalidEscapeSequenceInStringLiteral)
+    }
   }
 
   private mutating func maybeConsumeNewlineEscape() -> Bool {
@@ -1835,8 +1831,8 @@ extension Lexer.Cursor {
           // validate the multi-line string literal's indentation.
           return Lexer.Result(.stringSegment, error: error)
         }
-      case .error:
-        error = (.invalidEscapeSequenceInStringLiteral, self)
+      case .error(let errorKind):
+        error = (errorKind, self)
         self = clone
       case .endOfString:
         return Lexer.Result(

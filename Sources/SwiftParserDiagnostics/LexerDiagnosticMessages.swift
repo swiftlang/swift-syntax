@@ -39,9 +39,14 @@ public extension LexerError {
 /// Please order the cases in this enum alphabetically by case name.
 public enum StaticLexerError: String, DiagnosticMessage {
   case expectedBinaryExponentInHexFloatLiteral = "hexadecimal floating point literal must end with an exponent"
+  case excpectedClosingBraceInUnicodeEscape = #"expected '}' in \u{...} escape sequence"#
   case expectedDigitInFloatLiteral = "expected a digit in floating point exponent"
+  case expectedHexCodeInUnicodeEscape = #"expected hexadecimal code in \u{...} escape sequence"#
   case invalidEscapeSequenceInStringLiteral = "invalid escape sequence in literal"
+  case invalidNumberOfHexDigitsInUnicodeEscape = #"\u{...} escape sequence expects between 1 and 8 hex digits"#
+  case invalidUtf8 = "invalid UTF-8 found in source file"
   case lexerErrorOffsetOverflow = "the lexer dicovered an error in this token but was not able to represent its offset due to overflow; please split the token"
+  case nulCharacter = "nul character embedded in middle of file"
 
   public var message: String { self.rawValue }
 
@@ -109,8 +114,12 @@ public extension SwiftSyntax.LexerError {
     switch self.kind {
     case .expectedBinaryExponentInHexFloatLiteral:
       return StaticLexerError.expectedBinaryExponentInHexFloatLiteral
+    case .excpectedClosingBraceInUnicodeEscape:
+      return StaticLexerError.excpectedClosingBraceInUnicodeEscape
     case .expectedDigitInFloatLiteral:
       return StaticLexerError.expectedDigitInFloatLiteral
+    case .expectedHexCodeInUnicodeEscape:
+      return StaticLexerError.expectedHexCodeInUnicodeEscape
     case .insufficientIndentationInMultilineStringLiteral:
       // This should be diagnosed when visiting the `StringLiteralExprSyntax`
       // inside `ParseDiagnosticsGenerator` but fall back to an error message
@@ -128,10 +137,16 @@ public extension SwiftSyntax.LexerError {
       return InvalidFloatingPointExponentDigit(kind: .digit(scalarAtErrorOffset))
     case .invalidHexDigitInIntegerLiteral:
       return InvalidDigitInIntegerLiteral(kind: .hex(scalarAtErrorOffset))
+    case .invalidNumberOfHexDigitsInUnicodeEscape:
+      return StaticLexerError.invalidNumberOfHexDigitsInUnicodeEscape
     case .invalidOctalDigitInIntegerLiteral:
       return InvalidDigitInIntegerLiteral(kind: .octal(scalarAtErrorOffset))
+    case .invalidUtf8:
+      return StaticLexerError.invalidUtf8
     case .lexerErrorOffsetOverflow:
       return StaticLexerError.lexerErrorOffsetOverflow
+    case .nulCharacter:
+      return StaticLexerError.nulCharacter
     }
   }
 

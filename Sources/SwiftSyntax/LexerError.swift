@@ -18,7 +18,9 @@ public struct LexerError: Hashable {
     // Please order these alphabetically
 
     case expectedBinaryExponentInHexFloatLiteral
+    case excpectedClosingBraceInUnicodeEscape
     case expectedDigitInFloatLiteral
+    case expectedHexCodeInUnicodeEscape
     case insufficientIndentationInMultilineStringLiteral
     case invalidBinaryDigitInIntegerLiteral
     case invalidDecimalDigitInIntegerLiteral
@@ -26,9 +28,12 @@ public struct LexerError: Hashable {
     case invalidFloatingPointExponentCharacter
     case invalidFloatingPointExponentDigit
     case invalidHexDigitInIntegerLiteral
+    case invalidNumberOfHexDigitsInUnicodeEscape
     case invalidOctalDigitInIntegerLiteral
+    case invalidUtf8
     /// The lexer dicovered an error but was not able to represent the offset of the error because it would overflow `LexerErrorOffset`.
     case lexerErrorOffsetOverflow
+    case nulCharacter
   }
 
   public let kind: Kind

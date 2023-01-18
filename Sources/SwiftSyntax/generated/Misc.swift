@@ -279,7 +279,7 @@ extension Syntax {
         .node(YieldExprListElementSyntax.self), 
         .node(YieldExprListSyntax.self), 
         .node(YieldListSyntax.self), 
-        .node(YieldStmtSyntax.self), ])
+        .node(YieldStmtSyntax.self)])
   }
 }
 

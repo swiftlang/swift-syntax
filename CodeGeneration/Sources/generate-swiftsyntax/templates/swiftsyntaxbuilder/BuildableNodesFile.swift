@@ -121,7 +121,7 @@ private func createConvenienceInitializer(node: Node) -> InitializerDeclSyntax? 
       }
       normalParameters.append(FunctionParameterSyntax(
         firstName: .identifier(child.swiftName),
-        colon: .colon,
+        colon: .colonToken(),
         type: paramType,
         defaultArgument: child.defaultInitialization.map { InitializerClauseSyntax(value: $0) }
       ))
@@ -129,7 +129,7 @@ private func createConvenienceInitializer(node: Node) -> InitializerDeclSyntax? 
       produceExpr = convertFromSyntaxProtocolToSyntaxType(child: child)
       normalParameters.append(FunctionParameterSyntax(
         firstName: .identifier(child.swiftName),
-        colon: .colon,
+        colon: .colonToken(),
         type: child.parameterType,
         defaultArgument: child.defaultInitialization.map { InitializerClauseSyntax(value: $0) }
       ))

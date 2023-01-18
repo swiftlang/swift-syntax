@@ -30,7 +30,7 @@ let syntaxKindFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCop
       modifiers: [DeclModifierSyntax(name: .keyword(.public))],
       name: IdentifierPatternSyntax("isSyntaxCollection"),
       type: TypeAnnotationSyntax(
-        colon: .colon,
+        colon: .colonToken(),
         type: SimpleTypeIdentifierSyntax("Bool")
       )
     ) {
@@ -51,7 +51,7 @@ let syntaxKindFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCop
       modifiers: [DeclModifierSyntax(name: .keyword(.public))],
       name: IdentifierPatternSyntax("isMissing"),
       type: TypeAnnotationSyntax(
-        colon: .colon,
+        colon: .colonToken(),
         type: SimpleTypeIdentifierSyntax("Bool")
       )
     ) {

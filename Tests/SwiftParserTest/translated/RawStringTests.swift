@@ -74,9 +74,12 @@ final class RawStringTests: XCTestCase {
       ##"""
       _ = #"""
           Three\r
-          Gamma\
+          Gamma1️⃣\
         """#
-      """##
+      """##,
+      diagnostics: [
+        DiagnosticSpec(message: "escaped newline at the last line of a multi-line string literal is not allowed")
+      ]
     )
   }
 

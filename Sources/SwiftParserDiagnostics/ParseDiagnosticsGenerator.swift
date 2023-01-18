@@ -816,6 +816,26 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     for (diagnostic, handledNodes) in MultiLineStringLiteralIndentatinDiagnosticsGenerator.diagnose(node) {
       addDiagnostic(diagnostic, handledNodes: handledNodes)
     }
+    if case .stringSegment(let segment) = node.segments.last {
+      if let invalidContent = segment.unexpectedBeforeContent?.onlyToken(where: { $0.text.hasSuffix("\\") }) {
+        let leadingTrivia = segment.content.leadingTrivia
+        let trailingTrivia = segment.content.trailingTrivia
+        let fixIt = FixIt(
+          message: .removeBackslash,
+          changes: [
+            .makePresent(segment.content, leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia),
+            .makeMissing(invalidContent, transferTrivia: false),
+          ]
+        )
+        addDiagnostic(
+          invalidContent,
+          position: invalidContent.endPositionBeforeTrailingTrivia.advanced(by: -1),
+          .escapedNewlineAtLatlineOfMultiLineStringLiteralNotAllowed,
+          fixIts: [fixIt],
+          handledNodes: [segment.id]
+        )
+      }
+    }
     return .visitChildren
   }
 

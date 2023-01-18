@@ -101,7 +101,8 @@ extension FixIt.Changes {
       !firstToken.tokenKind.isPunctuation,
       !previousToken.tokenKind.isPunctuation,
       firstToken.leadingTrivia.isEmpty,
-      (previousToken.presence == .missing ? BasicFormat().visit(previousToken).trailingTrivia : previousToken.trailingTrivia).isEmpty
+      (previousToken.presence == .missing ? BasicFormat().visit(previousToken).trailingTrivia : previousToken.trailingTrivia).isEmpty,
+      leadingTrivia == nil
     {
       /// If neither this nor the previous token are punctionation make sure they
       /// are separated by a space.

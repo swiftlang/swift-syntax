@@ -468,12 +468,18 @@ final class MultilineErrorsTests: XCTestCase {
       #"""
       _ = """
         line one
-        line two\
+        line two1️⃣\
         """
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: escaped newline at the last line is not allowed, Fix-It replacements: 11 - 12 = ''
-      ]
+        DiagnosticSpec(message: "escaped newline at the last line of a multi-line string literal is not allowed", fixIts: ["remove '\'"])
+      ],
+      fixedSource: #"""
+        _ = """
+          line one
+          line two
+          """
+        """#
     )
   }
 
@@ -507,12 +513,17 @@ final class MultilineErrorsTests: XCTestCase {
     AssertParse(
       #"""
       _ = """
-        foo\
+        foo1️⃣\
         """
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: escaped newline at the last line is not allowed, Fix-It replacements: 6 - 7 = ''
-      ]
+        DiagnosticSpec(message: "escaped newline at the last line of a multi-line string literal is not allowed")
+      ],
+      fixedSource: #"""
+        _ = """
+          foo
+          """
+        """#
     )
   }
 
@@ -520,12 +531,17 @@ final class MultilineErrorsTests: XCTestCase {
     AssertParse(
       #"""
       _ = """
-        foo\
+        foo1️⃣\
         """
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: escaped newline at the last line is not allowed, Fix-It replacements: 6 - 7 = ''
-      ]
+        DiagnosticSpec(message: "escaped newline at the last line of a multi-line string literal is not allowed")
+      ],
+      fixedSource: #"""
+        _ = """
+          foo
+          """
+        """#
     )
   }
 
@@ -549,12 +565,12 @@ final class MultilineErrorsTests: XCTestCase {
         """
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "insufficient indentation of line in multi-line string literal")
+        DiagnosticSpec(message: "escaped newline at the last line of a multi-line string literal is not allowed")
         // TODO: Old parser expected error on line 2: escaped newline at the last line is not allowed, Fix-It replacements: 1 - 2 = ''
       ],
       fixedSource: #"""
         _ = """
-          \
+          
           """
         """#
     )

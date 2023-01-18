@@ -49,7 +49,7 @@ class PresentMaker: SyntaxRewriter {
     if token.presence == .missing {
       let presentToken: TokenSyntax
       let (rawKind, text) = token.tokenKind.decomposeToRaw()
-      if let text = text, !text.isEmpty {
+      if let text = text, (!text.isEmpty || rawKind == .stringSegment) {  // string segments can have empty text
         presentToken = TokenSyntax(token.tokenKind, presence: .present)
       } else {
         let newKind = TokenKind.fromRaw(kind: rawKind, text: rawKind.defaultText.map(String.init) ?? "<#\(rawKind.nameForDiagnostics)#>")

@@ -575,7 +575,7 @@ final class ExpressionTests: XCTestCase {
       """1️⃣"""
       """##,
       diagnostics: [
-        DiagnosticSpec(message: "multi-line string literal content must begin on a new line")
+        DiagnosticSpec(message: "multi-line string literal closing delimiter must begin on a new line")
       ],
       fixedSource: ##"""
         """
@@ -957,8 +957,8 @@ final class ExpressionTests: XCTestCase {
         StringLiteralExprSyntax(
           openQuote: .multilineStringQuoteToken(leadingTrivia: .spaces(2), trailingTrivia: .newline),
           segments: StringLiteralSegmentsSyntax([
-            .stringSegment(StringSegmentSyntax(leadingTrivia: .spaces(2), content: .stringSegment("line 1\n"))),
-            .stringSegment(StringSegmentSyntax(leadingTrivia: .spaces(2), content: .stringSegment("line 2"), trailingTrivia: .newline)),
+            .stringSegment(StringSegmentSyntax(content: .stringSegment("line 1\n", leadingTrivia: .spaces(2)))),
+            .stringSegment(StringSegmentSyntax(content: .stringSegment("line 2", leadingTrivia: .spaces(2), trailingTrivia: .newline))),
           ]),
           closeQuote: .multilineStringQuoteToken(leadingTrivia: .spaces(2))
         )
@@ -977,8 +977,8 @@ final class ExpressionTests: XCTestCase {
         StringLiteralExprSyntax(
           openQuote: .multilineStringQuoteToken(leadingTrivia: .spaces(2), trailingTrivia: .newline),
           segments: StringLiteralSegmentsSyntax([
-            .stringSegment(StringSegmentSyntax(leadingTrivia: .spaces(2), content: .stringSegment("line 1 "), trailingTrivia: [.unexpectedText("\\"), .newlines(1)])),
-            .stringSegment(StringSegmentSyntax(leadingTrivia: .spaces(2), content: .stringSegment("line 2"), trailingTrivia: .newline)),
+            .stringSegment(StringSegmentSyntax(content: .stringSegment("line 1 ", leadingTrivia: .spaces(2), trailingTrivia: [.unexpectedText("\\"), .newlines(1)]))),
+            .stringSegment(StringSegmentSyntax(content: .stringSegment("line 2", leadingTrivia: .spaces(2), trailingTrivia: .newline))),
           ]),
           closeQuote: .multilineStringQuoteToken(leadingTrivia: .spaces(2))
         )
@@ -990,20 +990,28 @@ final class ExpressionTests: XCTestCase {
       #"""
         """
         line 1
-        line 2 \
+        line 2 1️⃣\
         """
       """#,
       substructure: Syntax(
         StringLiteralExprSyntax(
           openQuote: .multilineStringQuoteToken(leadingTrivia: .spaces(2), trailingTrivia: .newline),
           segments: StringLiteralSegmentsSyntax([
-            .stringSegment(StringSegmentSyntax(leadingTrivia: .spaces(2), content: .stringSegment("line 1\n"))),
-            .stringSegment(StringSegmentSyntax(leadingTrivia: .spaces(2), content: .stringSegment("line 2 \\"), trailingTrivia: .newline)),
+            .stringSegment(StringSegmentSyntax(content: .stringSegment("line 1\n", leadingTrivia: .spaces(2)))),
+            .stringSegment(
+              StringSegmentSyntax(
+                UnexpectedNodesSyntax([Syntax(TokenSyntax.stringSegment("  line 2 \\", trailingTrivia: .newline))]),
+                content: .stringSegment("line 2 ", leadingTrivia: .spaces(2), trailingTrivia: .newline, presence: .missing)
+              )
+            ),
           ]),
           closeQuote: .multilineStringQuoteToken(leadingTrivia: .spaces(2))
         )
       ),
-      substructureCheckTrivia: true
+      substructureCheckTrivia: true,
+      diagnostics: [
+        DiagnosticSpec(message: "escaped newline at the last line of a multi-line string literal is not allowed")
+      ]
     )
   }
 }

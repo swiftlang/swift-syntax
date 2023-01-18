@@ -86,7 +86,6 @@ fileprivate class StringLiteralExpressionIndentationChecker {
   }
 }
 
-
 extension Parser {
   /// Consumes a raw string delimiter that has the same number of `#` as `openDelimiter`.
   private mutating func parseStringDelimiter(openDelimiter: RawTokenSyntax?) -> (unexpectedBeforeCheckedDelimiter: RawUnexpectedNodesSyntax?, checkedDelimiter: RawTokenSyntax?) {
@@ -185,9 +184,25 @@ extension Parser {
       if lastMiddleSegment.content.tokenText.hasSuffix("\n") {
         // The newline at the end of the last line in the string literal is not part of the represented string.
         // Mark it as trivia.
+        var content = lastMiddleSegment.content.reclassifyAsTrailingTrivia([.newlines(1)], arena: self.arena)
+        var unexpectedBeforeContent: RawTokenSyntax?
+        if content.tokenText.hasSuffix("\\") {
+          // The newline on the last line must not be escaped
+          unexpectedBeforeContent = content
+          content = RawTokenSyntax(
+            missing: .stringSegment,
+            text: SyntaxText(rebasing: content.tokenText[0..<content.tokenText.count - 1]),
+            leadingTriviaPieces: content.leadingTriviaPieces,
+            trailingTriviaPieces: content.trailingTriviaPieces,
+            arena: self.arena
+          )
+        }
+
         middleSegments[middleSegments.count - 1] = .stringSegment(
           RawStringSegmentSyntax(
-            content: lastMiddleSegment.content.reclassifyAsTrailingTrivia([.newlines(1)], arena: self.arena),
+            RawUnexpectedNodesSyntax(combining: lastMiddleSegment.unexpectedBeforeContent, unexpectedBeforeContent, arena: self.arena),
+            content: content,
+            lastMiddleSegment.unexpectedAfterContent,
             arena: self.arena
           )
         )
@@ -261,14 +276,10 @@ extension Parser {
     for (index, segment) in middleSegments.enumerated() {
       switch segment {
       case .stringSegment(var segment):
-        if segment.content.isMissing {
-          // Don't diagnose incorrect indentation for segments that we synthesized
-          break
-        }
-        // We are not considering unexpected and leading trivia for indentation
-        // computation. If these assertions are violated, we can probably lift
-        // them but we would need to check the produce the expected results.
-        assert(segment.unexpectedBeforeContent == nil && segment.content.leadingTriviaByteLength == 0)
+        // We are not considering leading trivia for indentation computation.
+        // If these assertions are violated, we can probably lift them but we
+        // would need to check the produce the expected results.
+        assert(segment.content.leadingTriviaByteLength == 0)
 
         // Re-classify indentation as leading trivia
         if isSegmentOnNewLine {

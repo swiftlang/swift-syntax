@@ -122,6 +122,9 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var editorPlaceholderInSourceFile: Self {
     .init("editor placeholder in source file")
   }
+  public static var escapedNewlineAtLatlineOfMultiLineStringLiteralNotAllowed: Self {
+    .init("escaped newline at the last line of a multi-line string literal is not allowed")
+  }
   public static var expectedExpressionAfterTry: Self {
     .init("expected expression after 'try'")
   }
@@ -455,6 +458,9 @@ extension FixItMessage where Self == StaticParserFixIt {
   }
   public static var joinIdentifiersWithCamelCase: Self {
     .init("join the identifiers together with camel-case")
+  }
+  public static var removeBackslash: Self {
+    .init("remove '\'")
   }
   public static var removeExtraneousDelimiters: Self {
     .init("remove extraneous delimiters")

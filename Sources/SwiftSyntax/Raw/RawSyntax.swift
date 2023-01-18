@@ -819,7 +819,7 @@ extension RawSyntax: CustomDebugStringConvertible {
     case .parsedToken(let dat):
       target.write(".parsedToken(")
       target.write(String(describing: dat.tokenKind))
-      target.write(" wholeText=\(dat.tokenText.debugDescription)")
+      target.write(" wholeText=\(dat.wholeText.debugDescription)")
       target.write(" textRange=\(dat.textRange.description)")
     case .materializedToken(let dat):
       target.write(".materializedToken(")

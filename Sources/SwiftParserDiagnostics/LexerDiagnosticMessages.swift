@@ -42,6 +42,7 @@ public enum StaticLexerError: String, DiagnosticMessage {
   case expectedClosingBraceInUnicodeEscape = #"expected '}' in \u{...} escape sequence"#
   case expectedDigitInFloatLiteral = "expected a digit in floating point exponent"
   case expectedHexCodeInUnicodeEscape = #"expected hexadecimal code in \u{...} escape sequence"#
+  case invalidCharacter = "invalid character in source file"
   case invalidEscapeSequenceInStringLiteral = "invalid escape sequence in literal"
   case invalidIdentifierStartCharacter = "an identifier cannot begin with this character"
   case invalidNumberOfHexDigitsInUnicodeEscape = #"\u{...} escape sequence expects between 1 and 8 hex digits"#
@@ -126,6 +127,7 @@ public extension SwiftSyntax.LexerError {
       // here in case the error is not diagnosed.
       return InvalidIndentationInMultiLineStringLiteralError(kind: .insufficientIndentation, lines: 1)
     case .invalidBinaryDigitInIntegerLiteral: return InvalidDigitInIntegerLiteral(kind: .binary(scalarAtErrorOffset))
+    case .invalidCharacter: return StaticLexerError.invalidCharacter
     case .invalidDecimalDigitInIntegerLiteral: return InvalidDigitInIntegerLiteral(kind: .decimal(scalarAtErrorOffset))
     case .invalidEscapeSequenceInStringLiteral: return StaticLexerError.invalidEscapeSequenceInStringLiteral
     case .invalidFloatingPointExponentCharacter: return InvalidFloatingPointExponentDigit(kind: .character(scalarAtErrorOffset))
@@ -150,7 +152,20 @@ public extension SwiftSyntax.LexerError {
   func fixIts(in token: TokenSyntax) -> [FixIt] {
     switch self.kind {
     case .nonBreakingSpace:
-      return []
+      let replaceNonBreakingSpace = { (piece: TriviaPiece) -> TriviaPiece in
+        if piece == .unexpectedText("\u{a0}") {
+          return .spaces(1)
+        } else {
+          return piece
+        }
+      }
+      let fixedToken =
+        token
+        .with(\.leadingTrivia, Trivia(pieces: token.leadingTrivia.map(replaceNonBreakingSpace)))
+        .with(\.trailingTrivia, Trivia(pieces: token.trailingTrivia.map(replaceNonBreakingSpace)))
+      return [
+        FixIt(message: .replaceNonBreakingSpaceBySpace, changes: [[.replace(oldNode: Syntax(token), newNode: Syntax(fixedToken))]])
+      ]
     case .unicodeCurlyQuote:
       let (rawKind, text) = token.tokenKind.decomposeToRaw()
       guard let text = text else {
@@ -158,8 +173,8 @@ public extension SwiftSyntax.LexerError {
       }
       let replacedText =
         text
-        .replaceFirstOccuranceOf("“", with: #"""#)
-        .replaceLastOccuranceOf("”", with: #"""#)
+        .replacingFirstOccurance(of: "“", with: #"""#)
+        .replacingLastOccurance(of: "”", with: #"""#)
 
       let fixedToken = token.withKind(TokenKind.fromRaw(kind: rawKind, text: replacedText))
       return [

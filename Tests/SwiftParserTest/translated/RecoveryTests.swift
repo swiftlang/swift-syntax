@@ -1949,13 +1949,13 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery160() {
+    // <rdar://problem/21196171> compiler should recover better from "unicode Specials" characters
     AssertParse(
       #"""
-      // <rdar://problem/21196171> compiler should recover better from "unicode Specials" characters
-      let ￼tryx  = 123
+      let 1️⃣￼tryx  = 123
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: invalid character in source file, Fix-It replacements: 5 - 8 = ' '
+        DiagnosticSpec(message: "invalid character in source file")
       ]
     )
   }

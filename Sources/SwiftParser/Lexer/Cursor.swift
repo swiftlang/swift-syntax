@@ -289,8 +289,11 @@ extension Lexer.Cursor {
     // Leading trivia.
     let leadingTriviaStart = self
     let newlineInLeadingTrivia: NewlinePresence
+    var error: LexerError? = nil
     if let leadingTriviaMode = self.currentState.leadingTriviaLexingMode(cursor: self) {
-      newlineInLeadingTrivia = self.lexTrivia(mode: leadingTriviaMode)
+      let triviaResult = self.lexTrivia(mode: leadingTriviaMode)
+      newlineInLeadingTrivia = triviaResult.newlinePresence
+      error = error ?? triviaResult.error.map { LexerError($0.kind, byteOffset: cursor.distance(to: $0.position)) }
     } else {
       newlineInLeadingTrivia = .absent
     }
@@ -325,7 +328,8 @@ extension Lexer.Cursor {
     // Trailing trivia.
     let trailingTriviaStart = self
     if let trailingTriviaMode = result.trailingTriviaLexingMode ?? currentState.trailingTriviaLexingMode(cursor: self) {
-      _ = self.lexTrivia(mode: trailingTriviaMode)
+      let triviaResult = self.lexTrivia(mode: trailingTriviaMode)
+      error = error ?? triviaResult.error.map { LexerError($0.kind, byteOffset: cursor.distance(to: $0.position)) }
     }
 
     if self.currentState.shouldPopStateWhenReachingNewlineInTrailingTrivia && self.is(at: "\r", "\n") {
@@ -338,9 +342,7 @@ extension Lexer.Cursor {
     }
 
     self.previousTokenKind = result.tokenKind.base
-    let error = result.error.map { error in
-      return LexerError(error.kind, byteOffset: cursor.distance(to: error.position))
-    }
+    error = error ?? result.error.map { LexerError($0.kind, byteOffset: cursor.distance(to: $0.position)) }
 
     return .init(
       tokenKind: result.tokenKind,
@@ -999,27 +1001,33 @@ extension Lexer.Cursor {
     case escapedNewlineInMultiLineStringLiteral
   }
 
-  fileprivate mutating func lexTrivia(mode: TriviaLexingMode) -> NewlinePresence {
+  fileprivate struct TriviaResult {
+    let newlinePresence: NewlinePresence
+    let error: (kind: LexerError.Kind, position: Lexer.Cursor)?
+  }
+
+  fileprivate mutating func lexTrivia(mode: TriviaLexingMode) -> TriviaResult {
+    var newlinePresence = NewlinePresence.absent
+    var error: (kind: LexerError.Kind, position: Lexer.Cursor)? = nil
     if mode == .escapedNewlineInMultiLineStringLiteral {
       _ = self.advance(matching: "\\")
       self.advance(while: { $0 == "#" })
       self.advance(while: { $0 == " " || $0 == "\t" })
       if self.advance(matching: "\r") {
         _ = self.advance(matching: "\n")
-        return .present
+        return TriviaResult(newlinePresence: .present, error: nil)
       } else if self.advance(matching: "\n") {
-        return .present
+        return TriviaResult(newlinePresence: .present, error: nil)
       } else {
-        return .absent
+        return TriviaResult(newlinePresence: .absent, error: nil)
       }
     }
 
-    var hasNewline = false
     while true {
       let start = self
 
       switch self.advance() {
-      // 'continue' - the character is a part of the trivia.
+      // 'continue' - the character is a part of the trivia9.
       // 'break' - the character should a part of token text.
       case nil:
         break
@@ -1027,13 +1035,13 @@ extension Lexer.Cursor {
         if mode == .noNewlines {
           break
         }
-        hasNewline = true
+        newlinePresence = .present
         continue
       case UInt8(ascii: "\r"):
         if mode == .noNewlines {
           break
         }
-        hasNewline = true
+        newlinePresence = .present
         continue
 
       case UInt8(ascii: " "):
@@ -1129,7 +1137,8 @@ extension Lexer.Cursor {
 
         // `lexUnknown` expects that the first character has not been consumed yet.
         self = start
-        if case .trivia = self.lexUnknown() {
+        if case .trivia(let unknownError) = self.lexUnknown() {
+          error = error ?? unknownError
           continue
         } else {
           break
@@ -1139,7 +1148,7 @@ extension Lexer.Cursor {
       // `break` means the character was not a trivia. Reset the cursor and
       // return the result.
       self = start
-      return hasNewline ? .present : .absent
+      return TriviaResult(newlinePresence: newlinePresence, error: error)
     }
   }
 }
@@ -2104,7 +2113,7 @@ extension Lexer.Cursor {
 
   enum UnknownCharactersClassification {
     /// The characters consumed by `lexUnknown` should be classified as trivia
-    case trivia
+    case trivia(error: (kind: LexerError.Kind, position: Lexer.Cursor))
     /// The characters consumed by `lexUnknown` should be classified as the contents of a lexeme
     case lexemeContents(Lexer.Result)
   }
@@ -2129,10 +2138,8 @@ extension Lexer.Cursor {
 
     // This character isn't allowed in Swift source.
     guard let codepoint = tmp.advanceValidatingUTF8Character() else {
-      //      diagnose(CurPtr - 1, diag::lex_invalid_utf8)
-      //          .fixItReplaceChars(getSourceLoc(CurPtr - 1), getSourceLoc(Tmp), " ")
       self = tmp
-      return .trivia
+      return .trivia(error: (kind: .invalidUtf8, position: start))
     }
     if codepoint.value == 0xA0 {  // Non-breaking whitespace (U+00A0)
       while tmp.is(at: 0xC2) && tmp.is(offset: 1, at: 0xA0) {
@@ -2140,13 +2147,8 @@ extension Lexer.Cursor {
         _ = tmp.advance()
       }
 
-      //      SmallString<8> Spaces
-      //      Spaces.assign((Tmp - CurPtr + 1) / 2, ' ')
-      //      diagnose(CurPtr - 1, diag::lex_nonbreaking_space)
-      //        .fixItReplaceChars(getSourceLoc(CurPtr - 1), getSourceLoc(Tmp),
-      //                           Spaces)
       self = tmp
-      return .trivia
+      return .trivia(error: (kind: .nonBreakingSpace, position: start))
     } else if codepoint.value == 0x201D {  // Closing curly quote (U+201D)
       // If this is an end curly quote, just diagnose it with a fixit hint.
       self = tmp
@@ -2166,26 +2168,9 @@ extension Lexer.Cursor {
       return .lexemeContents(Lexer.Result(.identifier, error: (.unicodeCurlyQuote, position: start)))
     }
 
-    //    diagnose(CurPtr - 1, diag::lex_invalid_character)
-    //        .fixItReplaceChars(getSourceLoc(CurPtr - 1), getSourceLoc(Tmp), " ")
-
-    //    char ExpectedCodepoint
-    //    if ((ExpectedCodepoint =
-    //             confusable::tryConvertConfusableCharacterToASCII(Codepoint))) {
-    //
-    //      llvm::SmallString<4> ConfusedChar
-    //      EncodeToUTF8(Codepoint, ConfusedChar)
-    //      llvm::SmallString<1> ExpectedChar
-    //      ExpectedChar += ExpectedCodepoint
-    //      auto charNames = confusable::getConfusableAndBaseCodepointNames(Codepoint)
-    //      diagnose(CurPtr - 1, diag::lex_confusable_character, ConfusedChar,
-    //               charNames.first, ExpectedChar, charNames.second)
-    //          .fixItReplaceChars(getSourceLoc(CurPtr - 1), getSourceLoc(Tmp),
-    //                             ExpectedChar)
-    //    }
-
+    // TODO: Try map confusables to ASCII characters
     self = tmp
-    return .trivia
+    return .trivia(error: (kind: .invalidCharacter, position: start))
   }
 
   enum ConflictMarker {

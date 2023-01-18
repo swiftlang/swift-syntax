@@ -426,10 +426,10 @@ public class LexerTests: XCTestCase {
 
   func testUnexpectedLexing() {
     AssertLexemes(
-      "static func �() {}",
+      "static func 1️⃣�() {}",
       lexemes: [
         LexemeSpec(.keyword(.static), text: "static", trailing: " "),
-        LexemeSpec(.keyword(.func), text: "func", trailing: " �"),
+        LexemeSpec(.keyword(.func), text: "func", trailing: " �", error: "invalid character in source file"),
         LexemeSpec(.leftParen, text: "("),
         LexemeSpec(.rightParen, text: ")", trailing: " "),
         LexemeSpec(.leftBrace, text: "{"),
@@ -635,9 +635,9 @@ public class LexerTests: XCTestCase {
     )
 
     AssertLexemes(
-      "y\u{fffe} + z",
+      "y1️⃣\u{fffe} + z",
       lexemes: [
-        LexemeSpec(.identifier, text: "y", trailing: "\u{fffe} "),
+        LexemeSpec(.identifier, text: "y", trailing: "\u{fffe} ", error: "invalid character in source file"),
         LexemeSpec(.binaryOperator, text: "+", trailing: " "),
         LexemeSpec(.identifier, text: "z"),
       ]
@@ -861,7 +861,8 @@ public class LexerTests: XCTestCase {
         lexemes[0],
         kind: .eof,
         leadingTrivia: sourceBytes,
-        text: []
+        text: [],
+        error: LexerError(.invalidUtf8, byteOffset: 0)
       )
     }
   }
@@ -877,7 +878,8 @@ public class LexerTests: XCTestCase {
         lexemes[0],
         kind: .eof,
         leadingTrivia: sourceBytes,
-        text: []
+        text: [],
+        error: LexerError(.invalidUtf8, byteOffset: 0)
       )
     }
   }
@@ -1195,4 +1197,15 @@ public class LexerTests: XCTestCase {
       ]
     )
   }
+
+  func testNonBreakingSpace() {
+    AssertLexemes(
+      "a 1️⃣\u{a0} b",
+      lexemes: [
+        LexemeSpec(.identifier, text: "a", trailing: " \u{a0} ", error: "non-breaking space (U+00A0) used instead of regular space"),
+        LexemeSpec(.identifier, text: "b"),
+      ]
+    )
+  }
+
 }

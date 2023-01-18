@@ -477,6 +477,9 @@ extension FixItMessage where Self == StaticParserFixIt {
   public static var replaceCurlyQuoteByNormalQuote: Self {
     .init(#"replace curly quotes by '"'"#)
   }
+  public static var replaceNonBreakingSpaceBySpace: Self {
+    .init("replace non-breaking space by ' '")
+  }
   public static var wrapInBackticks: Self {
     .init("if this name is unavoidable, use backticks to escape it")
   }

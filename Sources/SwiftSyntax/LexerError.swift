@@ -23,6 +23,7 @@ public struct LexerError: Hashable {
     case expectedHexCodeInUnicodeEscape
     case insufficientIndentationInMultilineStringLiteral
     case invalidBinaryDigitInIntegerLiteral
+    case invalidCharacter
     case invalidDecimalDigitInIntegerLiteral
     case invalidEscapeSequenceInStringLiteral
     case invalidFloatingPointExponentCharacter

@@ -1153,6 +1153,16 @@ final class ExpressionTests: XCTestCase {
         """
     )
   }
+
+  func testNonBreakingSpace() {
+    AssertParse(
+      "a 1️⃣\u{a0}+ 2",
+      diagnostics: [
+        DiagnosticSpec(message: "non-breaking space (U+00A0) used instead of regular space", fixIts: ["replace non-breaking space by ' '"])
+      ],
+      fixedSource: "a  + 2"
+    )
+  }
 }
 
 final class MemberExprTests: XCTestCase {

@@ -454,17 +454,22 @@ final class MultilineErrorsTests: XCTestCase {
       ##"""
       let _ = """
         foo
-        \ℹ️("1️⃣bar
-      2️⃣  baz
+        \ℹ️("bar1️⃣
+        2️⃣baz3️⃣
         """
       """##,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: cannot find ')' to match opening '(' in string interpolation
-        // TODO: Old parser expected error on line 3: unterminated string literal
         DiagnosticSpec(locationMarker: "1️⃣", message: #"expected '"' to end string literal"#),
-        DiagnosticSpec(locationMarker: "1️⃣", message: #"unexpected code in string literal"#),
-        DiagnosticSpec(locationMarker: "2️⃣", message: #"expected ')' in string literal"#, notes: [NoteSpec(message: "to match this opening '('")]),
-      ]
+        DiagnosticSpec(locationMarker: "2️⃣", message: #"unexpected code 'baz' in string literal"#),
+        DiagnosticSpec(locationMarker: "3️⃣", message: #"expected ')' in string literal"#, notes: [NoteSpec(message: "to match this opening '('")]),
+      ],
+      fixedSource: ##"""
+        let _ = """
+          foo
+          \("bar"
+          baz)
+          """
+        """##
     )
   }
 

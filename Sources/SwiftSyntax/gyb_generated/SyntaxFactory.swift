@@ -9150,16 +9150,6 @@ public enum SyntaxFactory {
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  @available(*, deprecated, message: "Use TokenSyntax.stringLiteralContents instead")
-  public static func makeStringLiteralContents(
-    _ text: String,
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []
-  ) -> TokenSyntax {
-    return makeToken(.stringLiteralContents(text), presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
-  }
   @available(*, deprecated, message: "Use TokenSyntax.regexLiteral instead")
   public static func makeRegexLiteral(
     _ text: String,

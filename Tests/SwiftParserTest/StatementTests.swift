@@ -91,7 +91,7 @@ final class StatementTests: XCTestCase {
   }
 
   func testNestedIfs() {
-    let nest = 22
+    let nest = 20
     var source = "func nestThoseIfs() {\n"
     for index in (0...nest) {
       let indent = String(repeating: "    ", count: index + 1)

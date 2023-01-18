@@ -29,12 +29,14 @@ final class RawStringErrorsTests: XCTestCase {
   func testRawStringErrors2() {
     AssertParse(
       ###"""
-      let _ = 1️⃣#"\##("invalid")"#
+      let _ = #"\#1️⃣#("invalid")"#
       """###,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: too many '#' characters in delimited escape
-        // TODO: Old parser expected error on line 1: invalid escape sequence in literal
-      ]
+        DiagnosticSpec(message: "too many '#' characters to start string interpolation")
+      ],
+      fixedSource: ###"""
+        let _ = #"\#("invalid")"#
+        """###
     )
   }
 

@@ -221,7 +221,6 @@ public let SYNTAX_TOKENS: [TokenSpec] = [
   PoundConfigSpec(name: "PoundHasSymbol", kind: "pound__hasSymbol", text: "#_hasSymbol"),
   LiteralSpec(name: "IntegerLiteral", kind: "integer_literal", nameForDiagnostics: "integer literal", classification: "IntegerLiteral"),
   LiteralSpec(name: "FloatingLiteral", kind: "floating_literal", nameForDiagnostics: "floating literal", classification: "FloatingLiteral"),
-  LiteralSpec(name: "StringLiteralContents", kind: "string_literal", nameForDiagnostics: "string literal", classification: "StringLiteral"),
   LiteralSpec(name: "RegexLiteral", kind: "regex_literal", nameForDiagnostics: "regex literal"),
   MiscSpec(name: "Unknown", kind: "unknown", nameForDiagnostics: "token"),
   MiscSpec(name: "Identifier", kind: "identifier", nameForDiagnostics: "identifier", classification: "Identifier"),

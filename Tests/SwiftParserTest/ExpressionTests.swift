@@ -673,6 +673,15 @@ final class ExpressionTests: XCTestCase {
     )
   }
 
+  func testPoundsInStringInterpolationWhereNotNecessary() {
+    AssertParse(
+      ##"""
+      "\#(1)"
+      """##,
+      substructure: Syntax(StringSegmentSyntax(content: .stringSegment(##"\#(1)"##)))
+    )
+  }
+
   func testSubscript() {
     AssertParse(
       """

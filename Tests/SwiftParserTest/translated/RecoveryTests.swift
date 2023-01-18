@@ -1920,17 +1920,17 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery158() {
+    // <rdar://problem/16990885> support curly quotes for string literals
     AssertParse(
       """
-      // <rdar://problem/16990885> support curly quotes for string literals
       let curlyQuotes1 = 1️⃣“hello world!”
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: unicode curly quote found, replace with '"', Fix-It replacements: 35 - 38 = '"'
-        // TODO: Old parser expected error on line 2: unicode curly quote found, replace with '"', Fix-It replacements: 20 - 23 = '"'
-        DiagnosticSpec(message: "expected expression in variable"),
-        DiagnosticSpec(message: "extraneous code '“hello world!”' at top level"),
-      ]
+        DiagnosticSpec(message: #"unicode curly quote found; use '"' instead"#)
+      ],
+      fixedSource: """
+        let curlyQuotes1 = "hello world!"
+        """
     )
   }
 
@@ -1940,10 +1940,11 @@ final class RecoveryTests: XCTestCase {
       let curlyQuotes2 = 1️⃣“hello world!"
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: unicode curly quote found, replace with '"', Fix-It replacements: 20 - 23 = '"'
-        DiagnosticSpec(message: "expected expression in variable"),
-        DiagnosticSpec(message: #"extraneous code '“hello world!"' at top level"#),
-      ]
+        DiagnosticSpec(message: #"unicode curly quote found; use '"' instead"#)
+      ],
+      fixedSource: #"""
+        let curlyQuotes2 = "hello world!"
+        """#
     )
   }
 

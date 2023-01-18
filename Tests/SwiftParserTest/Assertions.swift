@@ -143,7 +143,7 @@ private func AssertTokens(
       )
     case (let actualError?, let expectedError?):
       AssertStringsEqualWithDiff(
-        actualError.diagnostic(wholeTextBytes: Array(actualLexeme.wholeText)).message,
+        actualError.diagnosticMessage(wholeTextBytes: Array(actualLexeme.wholeText)).message,
         expectedError,
         file: expectedLexeme.file,
         line: expectedLexeme.line
@@ -182,6 +182,7 @@ func AssertLexemes(
   line: UInt = #line
 ) {
   var (markerLocations, source) = extractMarkers(markedSource)
+  markerLocations["START"] = 0
   var expectedLexemes = expectedLexemes
   if expectedLexemes.last?.rawTokenKind != .eof {
     expectedLexemes.append(LexemeSpec(.eof, text: ""))

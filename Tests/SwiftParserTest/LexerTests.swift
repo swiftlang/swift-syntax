@@ -1135,4 +1135,64 @@ public class LexerTests: XCTestCase {
       ]
     )
   }
+
+  func testCloseBlockCommentWithoutOpen() {
+    AssertLexemes(
+      """
+      1️⃣*/
+      """,
+      lexemes: [
+        LexemeSpec(.unknown, text: "*/", error: "unexpected end of block comment")
+      ]
+    )
+
+    AssertLexemes(
+      """
+      /**/1️⃣*/
+      """,
+      lexemes: [
+        LexemeSpec(.unknown, leading: "/**/", text: "*/", error: "unexpected end of block comment")
+      ]
+    )
+
+    AssertLexemes(
+      """
+      /**/a1️⃣*/
+      """,
+      lexemes: [
+        LexemeSpec(.identifier, leading: "/**/", text: "a"),
+        LexemeSpec(.unknown, text: "*/", error: "unexpected end of block comment"),
+      ]
+    )
+  }
+
+  func testCurlyQuotes() {
+    AssertLexemes(
+      """
+      a 1️⃣“curly string” b
+      """,
+      lexemes: [
+        LexemeSpec(.identifier, text: "a", trailing: " "),
+        LexemeSpec(.identifier, text: "“curly string”", trailing: " ", error: #"unicode curly quote found; use '"' instead"#),
+        LexemeSpec(.identifier, text: "b"),
+      ]
+    )
+  }
+
+  func testInvalidIdentifierStart() {
+    // Verify that U+0330 (combining tilde below) is a valid identifier continuation
+    AssertLexemes(
+      "a\u{0330}",
+      lexemes: [
+        LexemeSpec(.identifier, text: "a\u{0330}")
+      ]
+    )
+
+    AssertLexemes(
+      "\u{0330}",
+      lexemes: [
+        LexemeSpec(.identifier, text: "\u{0330}", errorLocationMarker: "START", error: "an identifier cannot begin with this character")
+      ]
+    )
+  }
 }

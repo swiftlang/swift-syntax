@@ -873,9 +873,13 @@ extension Lexer.Cursor {
         return self.lexOperatorIdentifier(sourceBufferStart: sourceBufferStart)
       }
 
-      let unknownClassification = self.lexUnknown()
-      assert(unknownClassification == .lexemeContents, "Invalid UTF-8 sequence should be eaten by lexTrivia as LeadingTrivia")
-      return Lexer.Result(.unknown)
+      switch self.lexUnknown() {
+      case .lexemeContents(let result):
+        return result
+      case .trivia:
+        assertionFailure("Invalid UTF-8 sequence should be eaten by lexTrivia as LeadingTrivia")
+        return Lexer.Result(.unknown, error: (.invalidUtf8, self))
+      }
     }
   }
 
@@ -1125,7 +1129,7 @@ extension Lexer.Cursor {
 
         // `lexUnknown` expects that the first character has not been consumed yet.
         self = start
-        if self.lexUnknown() == .trivia {
+        if case .trivia = self.lexUnknown() {
           continue
         } else {
           break
@@ -1632,7 +1636,7 @@ extension Lexer.Cursor {
     }
 
     guard self.advance(matching: "}") else {
-      return .error(.excpectedClosingBraceInUnicodeEscape)
+      return .error(.expectedClosingBraceInUnicodeEscape)
     }
 
     if numDigits == 0 || numDigits > 8 {
@@ -1770,12 +1774,6 @@ extension Lexer.Cursor {
   }
 
   mutating func lexInStringLiteral(stringLiteralKind: StringLiteralKind, delimiterLength: Int) -> Lexer.Result {
-    /*
-    if IsMultilineString && *CurPtr != '\n' && *CurPtr != '\r' {
-      diagnose(CurPtr, diag::lex_illegal_multiline_string_start)
-        .fixItInsert(Lexer::getSourceLoc(CurPtr), "\n")
-    }
-*/
     var error: (LexerError.Kind, Lexer.Cursor)? = nil
 
     while true {
@@ -1971,15 +1969,6 @@ extension Lexer.Cursor {
     if self.input.baseAddress! - tokStart.input.baseAddress! == 1 {
       switch tokStart.peek() {
       case UInt8(ascii: "="):
-        // Refrain from emitting this message in operator name position.
-        //        if (NextToken.isNot(tok::kw_operator) && leftBound != rightBound) {
-        //          auto d = diagnose(TokStart, diag::lex_unary_equal)
-        //          if (leftBound)
-        //            d.fixItInsert(getSourceLoc(TokStart), " ")
-        //          else
-        //            d.fixItInsert(getSourceLoc(TokStart+1), " ")
-        //        }
-        // always emit 'tok::equal' to avoid trickle down parse errors
         return Lexer.Result(.equal)
       case UInt8(ascii: "&"):
         if leftBound == rightBound || leftBound {
@@ -2001,8 +1990,7 @@ extension Lexer.Cursor {
       case (UInt8(ascii: "-"), UInt8(ascii: ">")):  // ->
         return Lexer.Result(.arrow)
       case (UInt8(ascii: "*"), UInt8(ascii: "/")):  // */
-        //        diagnose(TokStart, diag::lex_unexpected_block_comment_end)
-        return Lexer.Result(.unknown)
+        return Lexer.Result(.unknown, error: (.unexpectedBlockCommentEnd, tokStart))
       default:
         break
       }
@@ -2010,8 +1998,7 @@ extension Lexer.Cursor {
       // Verify there is no "*/" in the middle of the identifier token, we reject
       // it as potentially ending a block comment.
       if tokStart.text(upTo: self).contains("*/") {
-        //        diagnose(TokStart+Pos, diag::lex_unexpected_block_comment_end)
-        return Lexer.Result(.unknown)
+        return Lexer.Result(.unknown, error: (.unexpectedBlockCommentEnd, tokStart))
       }
     }
 
@@ -2102,24 +2089,15 @@ extension Lexer.Cursor {
 
       // Get the next character.
       switch body.lexCharacterInStringLiteral(stringLiteralKind: .singleLine, delimiterLength: 0) {
-      case .error, .endOfString:
+      case .error:
         // If the character was incorrectly encoded, give up.
         return nil
-      case .success(let charValue) where charValue == Unicode.Scalar(UInt8(ascii: #"""#)):
-        // If we found a straight-quote, then we're done.  Just return the spot
+      case .endOfString, .success(Unicode.Scalar(0x201D)):
+        // If we found a closing quote, then we're done.  Just return the spot
         // to continue.
         return body
-      case .validatedEscapeSequence(let charValue) where charValue == Character(Unicode.Scalar(0x0000201D)!):
-        // If we found an ending curly quote (common since this thing started with
-        // an opening curly quote) diagnose it with a fixit and then return.
-        //        if (EmitDiagnostics) {
-        //          diagnose(CharStart, diag::lex_invalid_curly_quote)
-        //              .fixItReplaceChars(getSourceLoc(CharStart), getSourceLoc(Body),
-        //                                 "\"")
-        //        }
-        return body
       default:
-        continue
+        break
       }
     }
   }
@@ -2128,7 +2106,7 @@ extension Lexer.Cursor {
     /// The characters consumed by `lexUnknown` should be classified as trivia
     case trivia
     /// The characters consumed by `lexUnknown` should be classified as the contents of a lexeme
-    case lexemeContents
+    case lexemeContents(Lexer.Result)
   }
 
   /// Assuming the cursor is positioned at neighter a valid identifier nor a
@@ -2136,6 +2114,7 @@ extension Lexer.Cursor {
   /// lexeme.
   mutating func lexUnknown() -> UnknownCharactersClassification {
     assert(!(self.peekScalar()?.isValidIdentifierStartCodePoint ?? false) && !(self.peekScalar()?.isOperatorStartCodePoint ?? false))
+    let start = self
     var tmp = self
     if tmp.advance(if: { Unicode.Scalar($0).isValidIdentifierContinuationCodePoint }) {
       // If this is a valid identifier continuation, but not a valid identifier
@@ -2145,7 +2124,7 @@ extension Lexer.Cursor {
       //      }
       tmp.advance(while: { Unicode.Scalar($0).isValidIdentifierContinuationCodePoint })
       self = tmp
-      return .lexemeContents
+      return .lexemeContents(Lexer.Result(.identifier, error: (.invalidIdentifierStartCharacter, position: start)))
     }
 
     // This character isn't allowed in Swift source.
@@ -2155,8 +2134,7 @@ extension Lexer.Cursor {
       self = tmp
       return .trivia
     }
-    if codepoint.value == 0x000000A0 {
-      // Non-breaking whitespace (U+00A0)
+    if codepoint.value == 0xA0 {  // Non-breaking whitespace (U+00A0)
       while tmp.is(at: 0xC2) && tmp.is(offset: 1, at: 0xA0) {
         _ = tmp.advance()
         _ = tmp.advance()
@@ -2169,33 +2147,23 @@ extension Lexer.Cursor {
       //                           Spaces)
       self = tmp
       return .trivia
-    } else if (codepoint.value == 0x0000201D) {
+    } else if codepoint.value == 0x201D {  // Closing curly quote (U+201D)
       // If this is an end curly quote, just diagnose it with a fixit hint.
-      //      if (EmitDiagnosticsIfToken) {
-      //        diagnose(CurPtr - 1, diag::lex_invalid_curly_quote)
-      //            .fixItReplaceChars(getSourceLoc(CurPtr - 1), getSourceLoc(Tmp), "\"")
-      //      }
       self = tmp
-      return .lexemeContents
-    } else if (codepoint.value == 0x0000201C) {
+      return .lexemeContents(Lexer.Result(.unknown, error: (.unicodeCurlyQuote, position: start)))
+    } else if codepoint.value == 0x201C {  // Opening curly quote (U+201C)
       // If this is a start curly quote, do a fuzzy match of a string literal
       // to improve recovery.
       if let tmp2 = tmp.findEndOfCurlyQuoteStringLiteral() {
         tmp = tmp2
       }
 
-      // Note, we intentionally diagnose the end quote before the start quote,
-      // so that the IDE suggests fixing the end quote before the start quote.
-      // This, in turn, works better with our error recovery because we won't
-      // diagnose an end curly quote in the middle of a straight quoted
-      // literal.
-      //      if (EmitDiagnosticsIfToken) {
-      //        diagnose(CurPtr - 1, diag::lex_invalid_curly_quote)
-      //            .fixItReplaceChars(getSourceLoc(CurPtr - 1), getSourceLoc(EndPtr),
-      //                               "\"")
-      //      }
       self = tmp
-      return .lexemeContents
+
+      // Identifiers are the closest representation of static string literals
+      // we have in the parser. Classify the entire curly string as an identifier
+      // for best recovery.
+      return .lexemeContents(Lexer.Result(.identifier, error: (.unicodeCurlyQuote, position: start)))
     }
 
     //    diagnose(CurPtr - 1, diag::lex_invalid_character)

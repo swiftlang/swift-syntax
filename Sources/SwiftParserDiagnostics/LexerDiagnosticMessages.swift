@@ -39,14 +39,18 @@ public extension LexerError {
 /// Please order the cases in this enum alphabetically by case name.
 public enum StaticLexerError: String, DiagnosticMessage {
   case expectedBinaryExponentInHexFloatLiteral = "hexadecimal floating point literal must end with an exponent"
-  case excpectedClosingBraceInUnicodeEscape = #"expected '}' in \u{...} escape sequence"#
+  case expectedClosingBraceInUnicodeEscape = #"expected '}' in \u{...} escape sequence"#
   case expectedDigitInFloatLiteral = "expected a digit in floating point exponent"
   case expectedHexCodeInUnicodeEscape = #"expected hexadecimal code in \u{...} escape sequence"#
   case invalidEscapeSequenceInStringLiteral = "invalid escape sequence in literal"
+  case invalidIdentifierStartCharacter = "an identifier cannot begin with this character"
   case invalidNumberOfHexDigitsInUnicodeEscape = #"\u{...} escape sequence expects between 1 and 8 hex digits"#
   case invalidUtf8 = "invalid UTF-8 found in source file"
   case lexerErrorOffsetOverflow = "the lexer dicovered an error in this token but was not able to represent its offset due to overflow; please split the token"
+  case nonBreakingSpace = "non-breaking space (U+00A0) used instead of regular space"
   case nulCharacter = "nul character embedded in middle of file"
+  case unexpectedBlockCommentEnd = "unexpected end of block comment"
+  case unicodeCurlyQuote = #"unicode curly quote found; use '"' instead"#
 
   public var message: String { self.rawValue }
 
@@ -104,7 +108,7 @@ public extension SwiftSyntax.LexerError {
   /// `tokenText` is the entire text of the token in which the `LexerError`
   /// occurred, including trivia.
   @_spi(RawSyntax)
-  func diagnostic(wholeTextBytes: [UInt8]) -> DiagnosticMessage {
+  func diagnosticMessage(wholeTextBytes: [UInt8]) -> DiagnosticMessage {
     var scalarAtErrorOffset: UnicodeScalar {
       // Fall back to the Unicode replacement character U+FFFD in case we can't
       // lex the unicode character at `byteOffset`. It's the best we can do
@@ -112,45 +116,57 @@ public extension SwiftSyntax.LexerError {
     }
 
     switch self.kind {
-    case .expectedBinaryExponentInHexFloatLiteral:
-      return StaticLexerError.expectedBinaryExponentInHexFloatLiteral
-    case .excpectedClosingBraceInUnicodeEscape:
-      return StaticLexerError.excpectedClosingBraceInUnicodeEscape
-    case .expectedDigitInFloatLiteral:
-      return StaticLexerError.expectedDigitInFloatLiteral
-    case .expectedHexCodeInUnicodeEscape:
-      return StaticLexerError.expectedHexCodeInUnicodeEscape
+    case .expectedBinaryExponentInHexFloatLiteral: return StaticLexerError.expectedBinaryExponentInHexFloatLiteral
+    case .expectedClosingBraceInUnicodeEscape: return StaticLexerError.expectedClosingBraceInUnicodeEscape
+    case .expectedDigitInFloatLiteral: return StaticLexerError.expectedDigitInFloatLiteral
+    case .expectedHexCodeInUnicodeEscape: return StaticLexerError.expectedHexCodeInUnicodeEscape
     case .insufficientIndentationInMultilineStringLiteral:
       // This should be diagnosed when visiting the `StringLiteralExprSyntax`
       // inside `ParseDiagnosticsGenerator` but fall back to an error message
       // here in case the error is not diagnosed.
       return InvalidIndentationInMultiLineStringLiteralError(kind: .insufficientIndentation, lines: 1)
-    case .invalidBinaryDigitInIntegerLiteral:
-      return InvalidDigitInIntegerLiteral(kind: .binary(scalarAtErrorOffset))
-    case .invalidDecimalDigitInIntegerLiteral:
-      return InvalidDigitInIntegerLiteral(kind: .decimal(scalarAtErrorOffset))
-    case .invalidEscapeSequenceInStringLiteral:
-      return StaticLexerError.invalidEscapeSequenceInStringLiteral
-    case .invalidFloatingPointExponentCharacter:
-      return InvalidFloatingPointExponentDigit(kind: .character(scalarAtErrorOffset))
-    case .invalidFloatingPointExponentDigit:
-      return InvalidFloatingPointExponentDigit(kind: .digit(scalarAtErrorOffset))
-    case .invalidHexDigitInIntegerLiteral:
-      return InvalidDigitInIntegerLiteral(kind: .hex(scalarAtErrorOffset))
-    case .invalidNumberOfHexDigitsInUnicodeEscape:
-      return StaticLexerError.invalidNumberOfHexDigitsInUnicodeEscape
-    case .invalidOctalDigitInIntegerLiteral:
-      return InvalidDigitInIntegerLiteral(kind: .octal(scalarAtErrorOffset))
-    case .invalidUtf8:
-      return StaticLexerError.invalidUtf8
-    case .lexerErrorOffsetOverflow:
-      return StaticLexerError.lexerErrorOffsetOverflow
-    case .nulCharacter:
-      return StaticLexerError.nulCharacter
+    case .invalidBinaryDigitInIntegerLiteral: return InvalidDigitInIntegerLiteral(kind: .binary(scalarAtErrorOffset))
+    case .invalidDecimalDigitInIntegerLiteral: return InvalidDigitInIntegerLiteral(kind: .decimal(scalarAtErrorOffset))
+    case .invalidEscapeSequenceInStringLiteral: return StaticLexerError.invalidEscapeSequenceInStringLiteral
+    case .invalidFloatingPointExponentCharacter: return InvalidFloatingPointExponentDigit(kind: .character(scalarAtErrorOffset))
+    case .invalidFloatingPointExponentDigit: return InvalidFloatingPointExponentDigit(kind: .digit(scalarAtErrorOffset))
+    case .invalidHexDigitInIntegerLiteral: return InvalidDigitInIntegerLiteral(kind: .hex(scalarAtErrorOffset))
+    case .invalidIdentifierStartCharacter: return StaticLexerError.invalidIdentifierStartCharacter
+    case .invalidNumberOfHexDigitsInUnicodeEscape: return StaticLexerError.invalidNumberOfHexDigitsInUnicodeEscape
+    case .invalidOctalDigitInIntegerLiteral: return InvalidDigitInIntegerLiteral(kind: .octal(scalarAtErrorOffset))
+    case .invalidUtf8: return StaticLexerError.invalidUtf8
+    case .lexerErrorOffsetOverflow: return StaticLexerError.lexerErrorOffsetOverflow
+    case .nonBreakingSpace: return StaticLexerError.nonBreakingSpace
+    case .nulCharacter: return StaticLexerError.nulCharacter
+    case .unexpectedBlockCommentEnd: return StaticLexerError.unexpectedBlockCommentEnd
+    case .unicodeCurlyQuote: return StaticLexerError.unicodeCurlyQuote
     }
   }
 
-  func diagnostic(in token: TokenSyntax) -> DiagnosticMessage {
-    return self.diagnostic(wholeTextBytes: token.syntaxTextBytes)
+  func diagnosticMessage(in token: TokenSyntax) -> DiagnosticMessage {
+    return self.diagnosticMessage(wholeTextBytes: token.syntaxTextBytes)
+  }
+
+  func fixIts(in token: TokenSyntax) -> [FixIt] {
+    switch self.kind {
+    case .nonBreakingSpace:
+      return []
+    case .unicodeCurlyQuote:
+      let (rawKind, text) = token.tokenKind.decomposeToRaw()
+      guard let text = text else {
+        return []
+      }
+      let replacedText =
+        text
+        .replaceFirstOccuranceOf("“", with: #"""#)
+        .replaceLastOccuranceOf("”", with: #"""#)
+
+      let fixedToken = token.withKind(TokenKind.fromRaw(kind: rawKind, text: replacedText))
+      return [
+        FixIt(message: .replaceCurlyQuoteByNormalQuote, changes: [[.replace(oldNode: Syntax(token), newNode: Syntax(fixedToken))]])
+      ]
+    default:
+      return []
+    }
   }
 }

@@ -129,6 +129,34 @@ public struct RawSyntaxTokenView {
     return SourceLength(utf8Length: trailingTriviaByteLength)
   }
 
+  /// Perform `body` with text of th leading trivia.
+  @_spi(RawSyntax)
+  public func leadingTrivia<T>(_ body: (SyntaxText) -> T) -> T {
+    switch raw.rawData.payload {
+    case .parsedToken(let dat):
+      return body(dat.leadingTriviaText)
+    case .materializedToken(let dat):
+      var leadingTriviaStr = Trivia(pieces: dat.leadingTrivia.map(TriviaPiece.init)).description
+      return leadingTriviaStr.withSyntaxText(body)
+    case .layout(_):
+      preconditionFailure("'tokenTrailingRawTriviaPieces' is called on non-token raw syntax")
+    }
+  }
+
+  /// Perform `body` with text of th trailing trivia.
+  @_spi(RawSyntax)
+  public func trailingTrivia<T>(_ body: (SyntaxText) -> T) -> T {
+    switch raw.rawData.payload {
+    case .parsedToken(let dat):
+      return body(dat.trailingTriviaText)
+    case .materializedToken(let dat):
+      var trailingTriviaStr = Trivia(pieces: dat.trailingTrivia.map(TriviaPiece.init)).description
+      return trailingTriviaStr.withSyntaxText(body)
+    case .layout(_):
+      preconditionFailure("'tokenTrailingRawTriviaPieces' is called on non-token raw syntax")
+    }
+  }
+
   /// Returns the leading `Trivia`.
   @_spi(RawSyntax)
   public func formLeadingTrivia() -> Trivia {
@@ -212,7 +240,8 @@ public struct RawSyntaxTokenView {
     }
   }
 
-  var lexerError: LexerError? {
+  @_spi(RawSyntax)
+  public var lexerError: LexerError? {
     switch raw.rawData.payload {
     case .parsedToken(let dat):
       return dat.lexerError
@@ -220,6 +249,20 @@ public struct RawSyntaxTokenView {
       return dat.lexerError
     case .layout(_):
       preconditionFailure("'lexerError' is a token-only property")
+    }
+  }
+
+  @_spi(RawSyntax)
+  public func withLexerError(lexerError: LexerError?, arena: SyntaxArena) -> RawSyntax {
+    switch raw.rawData.payload {
+    case .parsedToken(var dat):
+      dat.lexerError = lexerError
+      return RawSyntax(arena: arena, payload: .parsedToken(dat))
+    case .materializedToken(var dat):
+      dat.lexerError = lexerError
+      return RawSyntax(arena: arena, payload: .materializedToken(dat))
+    default:
+      preconditionFailure("'withLexerError()' is called on non-token raw syntax")
     }
   }
 }

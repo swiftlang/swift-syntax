@@ -12,6 +12,81 @@
 
 @_spi(RawSyntax) import SwiftSyntax
 
+fileprivate class StringLiteralExpressionIndentationChecker {
+  // MARK: Entry
+
+  init(expectedIndentation: SyntaxText, arena: SyntaxArena) {
+    self.expectedIndentation = expectedIndentation
+    self.arena = arena
+  }
+
+  func checkIndentation(of expressionSegment: RawExpressionSegmentSyntax) -> RawExpressionSegmentSyntax? {
+    if let rewrittenSegment = self.visit(node: RawSyntax(expressionSegment)) {
+      return rewrittenSegment.as(RawExpressionSegmentSyntax.self)
+    } else {
+      return nil
+    }
+  }
+
+  // MARK: Implementation
+
+  private let expectedIndentation: SyntaxText
+  private let arena: SyntaxArena
+
+  private func visit(node: RawSyntax) -> RawSyntax? {
+    if node.isToken {
+      return visitTokenNode(token: node.as(RawTokenSyntax.self)!)
+    } else {
+      return visitLayoutNode(node: node)
+    }
+  }
+
+  private func visitTokenNode(token: RawTokenSyntax) -> RawSyntax? {
+    if !token.leadingTriviaPieces.contains(where: { $0.isNewline }) {
+      // Only checking tokens on a newline
+      return nil
+    }
+    let hasSufficientIndentation = token.tokenView.leadingTrivia { leadingTrivia in
+      let indentationStartIndex = leadingTrivia.lastIndex(where: { $0 == UInt8(ascii: "\n") || $0 == UInt8(ascii: "\n") })?.advanced(by: 1) ?? leadingTrivia.startIndex
+      return SyntaxText(rebasing: leadingTrivia[indentationStartIndex...]).hasPrefix(expectedIndentation)
+    }
+    if hasSufficientIndentation {
+      return nil
+    }
+    if token.tokenView.lexerError != nil {
+      // Token already has a lexer error, ignore the indentation error until that
+      // error is fixed
+      return nil
+    }
+    return token.tokenView.withLexerError(
+      lexerError: LexerError(.insufficientIndentationInMultilineStringLiteral, byteOffset: 0),
+      arena: arena
+    )
+  }
+
+  private func visitLayoutNode(node: RawSyntax) -> RawSyntax? {
+    let layoutView = node.layoutView!
+
+    var hasRewrittenChild = false
+    var rewrittenChildren: [RawSyntax?] = []
+    for child in layoutView.children {
+      if let child = child, let rewrittenChild = visit(node: child) {
+        hasRewrittenChild = true
+        rewrittenChildren.append(rewrittenChild)
+      } else {
+        rewrittenChildren.append(child)
+      }
+    }
+    assert(rewrittenChildren.count == layoutView.children.count)
+    if hasRewrittenChild {
+      return layoutView.replacingLayout(with: rewrittenChildren, arena: arena)
+    } else {
+      return nil
+    }
+  }
+}
+
+
 extension Parser {
   /// Consumes a raw string delimiter that has the same number of `#` as `openDelimiter`.
   private mutating func parseStringDelimiter(openDelimiter: RawTokenSyntax?) -> (unexpectedBeforeCheckedDelimiter: RawUnexpectedNodesSyntax?, checkedDelimiter: RawTokenSyntax?) {
@@ -181,6 +256,8 @@ extension Parser {
     // -------------------------------------------------------------------------
     // Check indentation of segments and escaped newlines at end of segment
 
+    let expressionIndentationChecker = StringLiteralExpressionIndentationChecker(expectedIndentation: indentation, arena: self.arena)
+
     for (index, segment) in middleSegments.enumerated() {
       switch segment {
       case .stringSegment(var segment):
@@ -236,8 +313,10 @@ extension Parser {
         middleSegments[index] = .stringSegment(segment)
       case .expressionSegment(let segment):
         isSegmentOnNewLine = segment.rightParen.trailingTriviaPieces.contains(where: { $0.isNewline })
-        // TODO: Check indentation
-        break
+
+        if let rewrittenSegment = expressionIndentationChecker.checkIndentation(of: segment) {
+          middleSegments[index] = .expressionSegment(rewrittenSegment)
+        }
       }
     }
 

@@ -164,8 +164,8 @@ public struct Trivia {
   public let pieces: [TriviaPiece]
   
   /// Creates Trivia with the provided underlying pieces.
-  public init(pieces: [TriviaPiece]) {
-    self.pieces = pieces
+  public init <S: Sequence>(pieces: S) where S.Element == TriviaPiece {
+    self.pieces = Array(pieces)
   }
   
   /// Creates Trivia with no pieces.

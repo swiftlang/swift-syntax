@@ -100,19 +100,43 @@ final class MultilineErrorsTests: XCTestCase {
     )
   }
 
-  func testMultilineErrors6() {
+  func testMultilineErrors6a() {
     AssertParse(
       #"""
       _ = """
           \(42
-      )
+      1️⃣)
           """
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: insufficient indentation of line in multi-line string literal
-        // TODO: Old parser expected note on line 3: change indentation of this line to match closing delimiter, Fix-It replacements: 1 - 1 = '    '
-        // TODO: Old parser expected note on line 4: should match space here
-      ]
+        DiagnosticSpec(message: "insufficient indentation of line in multi-line string literal")
+      ],
+      fixedSource: #"""
+        _ = """
+            \(42
+            )
+            """
+        """#
+    )
+  }
+
+  func testMultilineErrors6b() {
+    AssertParse(
+      #"""
+      _ = """
+          \(42
+       1️⃣)
+          """
+      """#,
+      diagnostics: [
+        DiagnosticSpec(message: "insufficient indentation of line in multi-line string literal")
+      ],
+      fixedSource: #"""
+        _ = """
+            \(42
+            )
+            """
+        """#
     )
   }
 
@@ -609,6 +633,77 @@ final class MultilineErrorsTests: XCTestCase {
         _ = """
         \(1)
         """
+        """#
+    )
+  }
+
+  func testInsufficientIndentationInInterpolation() {
+    AssertParse(
+      #"""
+        """
+        \(
+      1️⃣1
+        )
+        """
+      """#,
+      diagnostics: [
+        DiagnosticSpec(message: "insufficient indentation of line in multi-line string literal")
+      ],
+      fixedSource: #"""
+          """
+          \(
+          1
+          )
+          """
+        """#
+    )
+
+    AssertParse(
+      #"""
+        """
+        \(
+      1️⃣1
+        +
+      2️⃣2
+        )
+        """
+      """#,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "insufficient indentation of line in multi-line string literal"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "insufficient indentation of line in multi-line string literal"),
+      ],
+      fixedSource: #"""
+          """
+          \(
+          1
+          +
+          2
+          )
+          """
+        """#
+    )
+
+    AssertParse(
+      #"""
+        """
+        \(
+      1️⃣1
+      +
+      2
+        )
+        """
+      """#,
+      diagnostics: [
+        DiagnosticSpec(message: "insufficient indentation of next 3 lines in multi-line string literal")
+      ],
+      fixedSource: #"""
+          """
+          \(
+          1
+          +
+          2
+          )
+          """
         """#
     )
   }

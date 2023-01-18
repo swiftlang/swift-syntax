@@ -62,10 +62,21 @@ internal struct RawSyntaxData {
     private var lexerErrorByteOffset: UInt16
 
     var lexerError: LexerError? {
-      if let kind = lexerErrorKind {
-        return LexerError(kind, byteOffset: lexerErrorByteOffset)
-      } else {
-        return nil
+      get {
+        if let kind = lexerErrorKind {
+          return LexerError(kind, byteOffset: lexerErrorByteOffset)
+        } else {
+          return nil
+        }
+      }
+      set {
+        if let newValue = newValue {
+          self.lexerErrorKind = newValue.kind
+          self.lexerErrorByteOffset = newValue.byteOffset
+        } else {
+          self.lexerErrorKind = nil
+          self.lexerErrorByteOffset = 0
+        }
       }
     }
 
@@ -862,12 +873,14 @@ extension RawSyntax: CustomReflectable {
   }
 }
 
-enum RawSyntaxView {
+@_spi(RawSyntax)
+public enum RawSyntaxView {
   case token(RawSyntaxTokenView)
   case layout(RawSyntaxLayoutView)
 }
 
-extension RawSyntax {
+@_spi(RawSyntax)
+public extension RawSyntax {
   var view: RawSyntaxView {
     switch raw.payload {
     case .parsedToken, .materializedToken:

@@ -255,13 +255,15 @@ extension Lexer {
   struct Result {
     let tokenKind: RawTokenKind
     let flags: Lexer.Lexeme.Flags
-    let error: LexerError?
+    /// The error kind and the cursor pointing to the character at which the
+    /// error occurred
+    let error: (kind: LexerError.Kind, position: Lexer.Cursor)?
     let stateTransition: StateTransition?
 
     init(
       _ tokenKind: RawTokenKind,
       flags: Lexer.Lexeme.Flags = [],
-      error: LexerError? = nil,
+      error: (kind: LexerError.Kind, position: Cursor)? = nil,
       stateTransition: StateTransition? = nil
     ) {
       self.tokenKind = tokenKind
@@ -335,10 +337,14 @@ extension Lexer.Cursor {
       flags.insert(.isAtStartOfLine)
     }
 
+    let error = result.error.map { error in
+      return LexerError(error.kind, byteOffset: cursor.distance(to: error.position))
+    }
+
     return .init(
       tokenKind: result.tokenKind,
       flags: flags,
-      error: result.error,
+      error: error,
       start: leadingTriviaStart.pointer,
       leadingTriviaLength: leadingTriviaStart.distance(to: textStart),
       textLength: textStart.distance(to: trailingTriviaStart),
@@ -1194,11 +1200,11 @@ extension Lexer.Cursor {
       let oConsumed = self.advance(matching: "o")  // Consome 'o'
       assert(zeroConsumed && oConsumed)
       if let peeked = self.peek(), peeked < UInt8(ascii: "0") || peeked > UInt8(ascii: "7") {
-        let errorOffset = tokenStart.distance(to: self)
+        let errorPos = self
         self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
         return Lexer.Result(
           .integerLiteral,
-          error: LexerError(.invalidOctalDigitInIntegerLiteral, byteOffset: errorOffset)
+          error: (.invalidOctalDigitInIntegerLiteral, errorPos)
         )
       }
 
@@ -1208,11 +1214,11 @@ extension Lexer.Cursor {
 
       let tmp = self
       if self.advance(if: { $0.isValidIdentifierContinuationCodePoint }) {
-        let errorOffset = tokenStart.distance(to: tmp)
+        let errorPos = tmp
         self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
         return Lexer.Result(
           .integerLiteral,
-          error: LexerError(.invalidOctalDigitInIntegerLiteral, byteOffset: errorOffset)
+          error: (.invalidOctalDigitInIntegerLiteral, errorPos)
         )
       }
 
@@ -1225,11 +1231,11 @@ extension Lexer.Cursor {
       let bConsumed = self.advance(matching: "b")  // Consume 'b'
       assert(zeroConsumed && bConsumed)
       if self.is(notAt: "0", "1") {
-        let errorOffset = tokenStart.distance(to: self)
+        let errorPos = self
         self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
         return Lexer.Result(
           .integerLiteral,
-          error: LexerError(.invalidBinaryDigitInIntegerLiteral, byteOffset: errorOffset)
+          error: (.invalidBinaryDigitInIntegerLiteral, errorPos)
         )
       }
 
@@ -1239,11 +1245,11 @@ extension Lexer.Cursor {
 
       let tmp = self
       if self.advance(if: { $0.isValidIdentifierContinuationCodePoint }) {
-        let errorOffset = tokenStart.distance(to: tmp)
+        let errorPos = tmp
         self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
         return Lexer.Result(
           .integerLiteral,
-          error: LexerError(.invalidBinaryDigitInIntegerLiteral, byteOffset: errorOffset)
+          error: (.invalidBinaryDigitInIntegerLiteral, errorPos)
         )
       }
 
@@ -1268,11 +1274,11 @@ extension Lexer.Cursor {
       // something else, then this is the end of the token.
       let tmp = self
       if self.advance(if: { $0.isValidIdentifierContinuationCodePoint }) {
-        let errorOffset = tokenStart.distance(to: tmp)
+        let errorPos = tmp
         self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
         return Lexer.Result(
           .integerLiteral,
-          error: LexerError(.invalidDecimalDigitInIntegerLiteral, byteOffset: errorOffset)
+          error: (.invalidDecimalDigitInIntegerLiteral, errorPos)
         )
       }
 
@@ -1305,20 +1311,23 @@ extension Lexer.Cursor {
           errorKind = .expectedDigitInFloatLiteral
         }
 
-        let errorOffset = tokenStart.distance(to: tmp)
+        let errorPos = tmp
         self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
-        return Lexer.Result(.floatingLiteral, error: LexerError(errorKind, byteOffset: errorOffset))
+        return Lexer.Result(
+          .floatingLiteral,
+          error: (errorKind, errorPos)
+        )
       }
 
       self.advance(while: { $0.isDigit || $0 == Unicode.Scalar("_") })
 
       let tmp = self
       if self.advance(if: { $0.isValidIdentifierContinuationCodePoint }) {
-        let errorOffset = tokenStart.distance(to: tmp)
+        let errorPos = tmp
         self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
         return Lexer.Result(
           .floatingLiteral,
-          error: LexerError(.invalidFloatingPointExponentDigit, byteOffset: errorOffset)
+          error: (.invalidFloatingPointExponentDigit, errorPos)
         )
       }
     }
@@ -1339,11 +1348,11 @@ extension Lexer.Cursor {
       return Lexer.Result(.integerLiteral)
     }
     guard let peeked = self.peek(), Unicode.Scalar(peeked).isHexDigit else {
-      let errorOffset = tokStart.distance(to: self)
+      let errorPos = self
       self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
       return Lexer.Result(
         .integerLiteral,
-        error: LexerError(.invalidHexDigitInIntegerLiteral, byteOffset: errorOffset)
+        error: (.invalidHexDigitInIntegerLiteral, errorPos)
       )
     }
 
@@ -1352,11 +1361,11 @@ extension Lexer.Cursor {
     if self.isAtEndOfFile || self.is(notAt: ".", "p", "P") {
       let tmp = self
       if self.advance(if: { $0.isValidIdentifierContinuationCodePoint }) {
-        let errorOffset = tokStart.distance(to: tmp)
+        let errorPos = tmp
         self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
         return Lexer.Result(
           .integerLiteral,
-          error: LexerError(.invalidHexDigitInIntegerLiteral, byteOffset: errorOffset)
+          error: (.invalidHexDigitInIntegerLiteral, errorPos)
         )
       } else {
         return Lexer.Result(.integerLiteral)
@@ -1385,7 +1394,7 @@ extension Lexer.Cursor {
         }
         return Lexer.Result(
           .integerLiteral,
-          error: LexerError(.expectedBinaryExponentInHexFloatLiteral, byteOffset: tokStart.distance(to: self))
+          error: (.expectedBinaryExponentInHexFloatLiteral, self)
         )
       }
     } else {
@@ -1424,20 +1433,23 @@ extension Lexer.Cursor {
       } else {
         errorKind = .expectedDigitInFloatLiteral
       }
-      let errorOffset = tokStart.distance(to: tmp)
+      let errorPos = tmp
       self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
-      return Lexer.Result(.floatingLiteral, error: LexerError(errorKind, byteOffset: errorOffset))
+      return Lexer.Result(
+        .floatingLiteral,
+        error: (errorKind, errorPos)
+      )
     }
 
     self.advance(while: { $0.isDigit || $0 == Unicode.Scalar("_") })
 
     let tmp = self
     if self.advance(if: { $0.isValidIdentifierContinuationCodePoint }) {
-      let errorOffset = tokStart.distance(to: tmp)
+      let errorPos = tmp
       self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
       return Lexer.Result(
         .floatingLiteral,
-        error: LexerError(.invalidFloatingPointExponentDigit, byteOffset: errorOffset)
+        error: (.invalidFloatingPointExponentDigit, errorPos)
       )
     }
     return Lexer.Result(.floatingLiteral)

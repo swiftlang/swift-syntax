@@ -143,7 +143,7 @@ private func AssertTokens(
       )
     case (let actualError?, let expectedError?):
       AssertStringsEqualWithDiff(
-        actualError.diagnostic(tokenText: actualLexeme.tokenText).message,
+        actualError.diagnostic(wholeText: actualLexeme.wholeText).message,
         expectedError,
         file: expectedLexeme.file,
         line: expectedLexeme.line
@@ -151,7 +151,7 @@ private func AssertTokens(
       if let location = markerLocations[expectedLexeme.errorLocationMarker] {
         XCTAssertEqual(
           Int(actualError.byteOffset),
-          location - lexemeStartOffset - actualLexeme.leadingTriviaByteLength,
+          location - lexemeStartOffset,
           "Expected location did not match",
           file: expectedLexeme.file,
           line: expectedLexeme.line

@@ -338,7 +338,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       handleMissingToken(token)
     } else {
       if let lexerError = token.lexerError {
-        self.addDiagnostic(token, position: token.positionAfterSkippingLeadingTrivia.advanced(by: Int(lexerError.byteOffset)), lexerError.diagnostic(in: token))
+        self.addDiagnostic(token, position: token.position.advanced(by: Int(lexerError.byteOffset)), lexerError.diagnostic(in: token))
       }
     }
 

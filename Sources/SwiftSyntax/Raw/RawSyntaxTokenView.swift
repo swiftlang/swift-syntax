@@ -65,6 +65,29 @@ public struct RawSyntaxTokenView {
     }
   }
 
+  @_spi(RawSyntax)
+  public func wholeText<T>(_ body: (SyntaxText) -> T) -> T {
+    switch raw.rawData.payload {
+    case .parsedToken(let dat):
+      return body(dat.wholeText)
+    case .materializedToken(let dat):
+      var wholeText: [UInt8] = []
+      wholeText.reserveCapacity(leadingTriviaByteLength + textByteLength + trailingTriviaByteLength)
+      for leadingTriviaPiece in dat.leadingTrivia {
+        leadingTriviaPiece.withSyntaxText { wholeText.append(contentsOf: $0) }
+      }
+      wholeText.append(contentsOf: self.rawText)
+      for trailingTriviaPiece in dat.trailingTrivia {
+        trailingTriviaPiece.withSyntaxText { wholeText.append(contentsOf: $0) }
+      }
+      return wholeText.withUnsafeBufferPointer { buffer in
+        return body(SyntaxText(buffer: buffer))
+      }
+    case .layout(_):
+      preconditionFailure("'wholeText' is not available for non-token node")
+    }
+  }
+
   /// The UTF-8 byte length of the leading trivia.
   @_spi(RawSyntax)
   public var leadingTriviaByteLength: Int {

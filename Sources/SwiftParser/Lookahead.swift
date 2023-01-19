@@ -307,6 +307,13 @@ extension Parser.Lookahead {
     return skip(initialState: .skipSingle)
   }
 
+  // Note: We don't need to treat string quotes as bracketed tokens because:
+  //  - If we skip over the opening quote, we also automatically skip over
+  //    closing quote since it has the same token kind
+  //  - It is very unlikely that we look for string segments, so we
+  //    automatically skip over those as individual tokens
+  //  - String interpolation contains parentheses, so it automatically skips
+  //    until the closing parenthesis.
   private enum BracketedTokens: RawTokenKindSubset {
     case leftParen
     case leftBrace

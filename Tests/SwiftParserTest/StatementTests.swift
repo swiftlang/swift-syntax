@@ -603,4 +603,16 @@ final class StatementTests: XCTestCase {
       )
     )
   }
+
+  func testSkippingOverEmptyStringLiteral() {
+    // https://github.com/apple/swift-syntax/issues/1247
+    AssertParse(
+      """
+      if p{""1️⃣
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected '}' to end 'if' statement")
+      ]
+    )
+  }
 }

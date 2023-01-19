@@ -138,12 +138,36 @@ final class StringLiteralTests: XCTestCase {
     // Note that tabs do *not* get escaped.
     AssertBuildResult(
       StringLiteralExprSyntax(content: "before\u{07}\t\u{7f}after"),
-      #""before\u{7}\#t\u{7f}after""#
+      #""before\u{7}\t\u{7f}after""#
     )
 
     AssertBuildResult(
       StringLiteralExprSyntax(content: "\\before\u{07}\t\u{7f}after"),
-      ##"#"\before\#u{7}\##t\#u{7f}after"#"##
+      ##"#"\before\#u{7}\#t\#u{7f}after"#"##
+    )
+  }
+
+  func testEscapeTab() {
+    // Tab should be escaped in single-line string literals
+    AssertBuildResult(
+      StringLiteralExprSyntax(content: "a\tb"),
+      #"""
+      "a\tb"
+      """#
+    )
+
+    // Tab should not be escaped in single-line string literals
+    AssertBuildResult(
+      StringLiteralExprSyntax(
+        openQuote: .multilineStringQuoteToken(trailingTrivia: .newline),
+        content: "a\tb",
+        closeQuote: .multilineStringQuoteToken(leadingTrivia: .newline)
+      ),
+      #"""
+      """
+      a\#tb
+      """
+      """#
     )
   }
 }

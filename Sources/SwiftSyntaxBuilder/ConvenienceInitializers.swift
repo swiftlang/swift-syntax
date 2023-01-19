@@ -239,14 +239,26 @@ extension MemberAccessExprSyntax {
 
 extension String {
   /// Replace literal newlines with "\r", "\n", "\u{2028}", and ASCII control characters with "\0", "\u{7}"
-  fileprivate func escapingForStringLiteral(usingDelimiter delimiter: String) -> String {
+  fileprivate func escapingForStringLiteral(usingDelimiter delimiter: String, isMultiline: Bool) -> String {
     // String literals cannot contain "unprintable" ASCII characters (control
     // characters, etc.) besides tab. As a matter of style, we also choose to
     // escape Unicode newlines like "\u{2028}" even though swiftc will allow
     // them in string literals.
     func needsEscaping(_ scalar: UnicodeScalar) -> Bool {
-      return (scalar.isASCII && scalar != "\t" && !scalar.isPrintableASCII)
-        || Character(scalar).isNewline
+      if Character(scalar).isNewline {
+        return true
+      }
+
+      if !scalar.isASCII || scalar.isPrintableASCII {
+        return false
+      }
+
+      if scalar == "\t" {
+        // Tabs need to be escaped in single-line string literals but not
+        // multi-line string literals.
+        return !isMultiline
+      }
+      return true
     }
 
     // Work at the Unicode scalar level so that "\r\n" isn't combined.
@@ -261,6 +273,8 @@ extension String {
         result += "r".unicodeScalars
       case "\n":
         result += "n".unicodeScalars
+      case "\t":
+        result += "t".unicodeScalars
       case "\0":
         result += "0".unicodeScalars
       case let other:
@@ -329,7 +343,7 @@ extension StringLiteralExprSyntax {
       }
     }
 
-    let escapedContent = content.escapingForStringLiteral(usingDelimiter: closeDelimiter?.text ?? "")
+    let escapedContent = content.escapingForStringLiteral(usingDelimiter: closeDelimiter?.text ?? "", isMultiline: openQuote.rawTokenKind == .multilineStringQuote)
     let contentToken = TokenSyntax.stringSegment(escapedContent)
     let segment = StringSegmentSyntax(content: contentToken)
     let segments = StringLiteralSegmentsSyntax([.stringSegment(segment)])

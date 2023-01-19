@@ -19,7 +19,7 @@ final class TriviaTests: XCTestCase {
     let decl = VariableDeclSyntax(
       leadingTrivia: .docLineComment("/// A doc comment") + .newline + .blockComment("/* An inline comment */") + .space,
       modifiers: [DeclModifierSyntax(name: .keyword(.static))],
-      letOrVarKeyword: .var
+      letOrVarKeyword: .keyword(.var)
     ) {
       PatternBindingSyntax(
         // TODO: This is meant to be `Pattern`, but it's ambiguous with XCTest

@@ -54,6 +54,7 @@ public enum StaticLexerError: String, DiagnosticMessage {
   case sourceConflictMarker = "source control conflict marker in source file"
   case unexpectedBlockCommentEnd = "unexpected end of block comment"
   case unicodeCurlyQuote = #"unicode curly quote found; use '"' instead"#
+  case unprintableAsciiCharacter = "unprintable ASCII character found in source file"
 
   public var message: String { self.rawValue }
 
@@ -146,6 +147,7 @@ public extension SwiftSyntax.LexerError {
     case .sourceConflictMarker: return StaticLexerError.sourceConflictMarker
     case .unexpectedBlockCommentEnd: return StaticLexerError.unexpectedBlockCommentEnd
     case .unicodeCurlyQuote: return StaticLexerError.unicodeCurlyQuote
+    case .unprintableAsciiCharacter: return StaticLexerError.unprintableAsciiCharacter
     }
   }
 

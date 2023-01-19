@@ -1163,6 +1163,26 @@ final class ExpressionTests: XCTestCase {
       fixedSource: "a  + 2"
     )
   }
+
+  func testTabsIndentationInMultilineStringLiteral() {
+    AssertParse(
+      #"""
+      _ = """
+      \#taq
+      \#t"""
+      """#
+    )
+  }
+
+  func testMixedIndentationInMultilineStringLiteral() {
+    AssertParse(
+      #"""
+      _ = """
+      \#t aq
+      \#t """
+      """#
+    )
+  }
 }
 
 final class MemberExprTests: XCTestCase {

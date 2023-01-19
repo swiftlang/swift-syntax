@@ -1226,4 +1226,16 @@ public class LexerTests: XCTestCase {
     )
   }
 
+  func testUnprintableAsciiCharactersInStringLiteral() {
+    AssertLexemes(
+      """
+      "1️⃣\u{7}"
+      """,
+      lexemes: [
+        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringSegment, text: "\u{7}", error: "unprintable ASCII character found in source file"),
+        LexemeSpec(.stringQuote, text: #"""#),
+      ]
+    )
+  }
 }

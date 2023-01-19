@@ -41,6 +41,7 @@ public struct LexerError: Hashable {
     case sourceConflictMarker
     case unexpectedBlockCommentEnd
     case unicodeCurlyQuote
+    case unprintableAsciiCharacter
   }
 
   public let kind: Kind

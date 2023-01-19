@@ -1563,20 +1563,17 @@ extension Lexer.Cursor {
       }
     default:
       _ = self.advance()
-      // Normal characters are part of the string.
-      // If this is a "high" UTF-8 character, validate it.
-      //      if ((signed char)(CurPtr[-1]) >= 0) {
-      //        if (isPrintable(CurPtr[-1]) == 0)
-      //          if (!(IsMultilineString && (CurPtr[-1] == '\t')))
-      //            if (EmitDiagnostics)
-      //              diagnose(CharStart, diag::lex_unprintable_ascii_character)
-      //        return CurPtr[-1]
-      //      }
       self = charStart
       guard let charValue = self.advanceValidatingUTF8Character() else {
         return .error(.invalidUtf8)
       }
-      return .success(charValue)
+      // We disallow non-printable ASCII characters in a string literal, with
+      // the exception of \t, which is valid only in multi-line string literals.
+      if !charValue.isASCII || charValue.isPrintableASCII || stringLiteralKind == .multiLine && charValue == "\t" {
+        return .success(charValue)
+      } else {
+        return .error(.unprintableAsciiCharacter)
+      }
     }
   }
 

@@ -106,7 +106,7 @@ extension Parser {
       while let poundIfHandle = firstIteration ? self.canRecoverTo(.poundIfKeyword) : self.canRecoverTo(anyIn: IfConfigContinuationClauseStartKeyword.self)?.handle,
         loopProgress.evaluate(self.currentToken)
       {
-        let (unexpectedBeforePoundIf, poundIf) = self.eat(poundIfHandle)
+        var (unexpectedBeforePoundIf, poundIf) = self.eat(poundIfHandle)
         firstIteration = false
         // Parse the condition.
         let condition: RawExprSyntax?
@@ -114,7 +114,13 @@ extension Parser {
         case .poundIfKeyword, .poundElseifKeyword:
           condition = RawExprSyntax(self.parseSequenceExpression(.basic, forDirective: true))
         case .poundElseKeyword:
-          condition = nil
+          if let ifToken = self.consume(if: .init(.if, allowAtStartOfLine: false)) {
+            unexpectedBeforePoundIf = RawUnexpectedNodesSyntax(combining: unexpectedBeforePoundIf, poundIf, ifToken, arena: self.arena)
+            poundIf = self.missingToken(.poundElseifKeyword)
+            condition = RawExprSyntax(self.parseSequenceExpression(.basic, forDirective: true))
+          } else {
+            condition = nil
+          }
         default:
           preconditionFailure("The loop condition should guarantee that we are at one of these tokens")
         }

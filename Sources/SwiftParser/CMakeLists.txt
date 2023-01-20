@@ -24,6 +24,7 @@ add_swift_host_library(SwiftParser
   RawTokenKindSubset.swift
   Recovery.swift
   Statements.swift
+  StringLiterals.swift
   SyntaxUtils.swift
   TokenConsumer.swift
   TokenPrecedence.swift

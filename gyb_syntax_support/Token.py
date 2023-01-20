@@ -274,8 +274,6 @@ SYNTAX_TOKENS = [
             classification='IntegerLiteral'),
     Literal('FloatingLiteral', 'floating_literal',
             name_for_diagnostics='floating literal', classification='FloatingLiteral'),
-    Literal('StringLiteralContents', 'string_literal', name_for_diagnostics='string literal',
-            classification='StringLiteral'),
     Literal('RegexLiteral', 'regex_literal', name_for_diagnostics='regex literal'),
 
     Misc('Unknown', 'unknown', name_for_diagnostics='token'),

@@ -26,12 +26,10 @@ final class UnclosedStringInterpolationTests: XCTestCase {
   func testUnclosedStringInterpolation2() {
     AssertParse(
       ##"""
-      _ = "mid == \(pete1️⃣"2️⃣
+      _ = "mid == \(pete1️⃣"
       """##,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: #"unexpected code '"' in string literal"#),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' in string literal"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#),
+        DiagnosticSpec(message: "expected ')' in string literal")
       ]
     )
   }
@@ -52,12 +50,10 @@ final class UnclosedStringInterpolationTests: XCTestCase {
   func testUnclosedStringInterpolation4() {
     AssertParse(
       ##"""
-      let equation1 = "2 + 2 = \(2 + 21️⃣"2️⃣
+      let equation1 = "2 + 2 = \(2 + 21️⃣"
       """##,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: #"unexpected code '"' in string literal"#),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' in string literal"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#),
+        DiagnosticSpec(message: "expected ')' in string literal")
       ]
     )
   }
@@ -65,12 +61,10 @@ final class UnclosedStringInterpolationTests: XCTestCase {
   func testUnclosedStringInterpolation5() {
     AssertParse(
       ##"""
-      let s = "\(x1️⃣"; print(x)2️⃣
+      let s = "\(x1️⃣"; print(x)
       """##,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: #"unexpected code '"; print(x)' in string literal"#),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' in string literal"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#),
+        DiagnosticSpec(message: "expected ')' in string literal")
       ]
     )
   }
@@ -81,8 +75,7 @@ final class UnclosedStringInterpolationTests: XCTestCase {
       let zzz = "\(x1️⃣; print(x)2️⃣
       """##,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '; print(x)' in string literal"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' in string literal"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '; print(x' in string literal"),
         DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#),
       ]
     )
@@ -118,11 +111,10 @@ final class UnclosedStringInterpolationTests: XCTestCase {
   func testSkipUnexpectedOpeningParensInStringLiteral() {
     AssertParse(
       #"""
-      "\(e 1️⃣H()r2️⃣
+      "\(e 1️⃣H()2️⃣r
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code 'H()r' in string literal"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' in string literal"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code 'H(' in string literal"),
         DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#),
       ]
     )

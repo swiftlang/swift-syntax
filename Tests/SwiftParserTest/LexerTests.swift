@@ -84,7 +84,7 @@ public class LexerTests: XCTestCase {
       """#,
       lexemes: [
         LexemeSpec(.stringQuote, text: #"""#),
-        LexemeSpec(.stringLiteralContents, text: #"\u{1234}"#),
+        LexemeSpec(.stringSegment, text: #"\u{1234}"#),
         LexemeSpec(.stringQuote, text: #"""#),
       ]
     )
@@ -96,7 +96,7 @@ public class LexerTests: XCTestCase {
       lexemes: [
         // FIXME: We should diagnose invalid unicode characters in string literals
         LexemeSpec(.stringQuote, text: #"""#),
-        LexemeSpec(.stringLiteralContents, text: #"\u{12341234}"#),
+        LexemeSpec(.stringSegment, text: #"\u{12341234}"#),
         LexemeSpec(.stringQuote, text: #"""#),
       ]
     )
@@ -181,7 +181,7 @@ public class LexerTests: XCTestCase {
       lexemes: [
         LexemeSpec(.rawStringDelimiter, text: "###"),
         LexemeSpec(.stringQuote, text: #"""#),
-        LexemeSpec(.stringLiteralContents, text: ###"this is a ##"raw"## string"###),
+        LexemeSpec(.stringSegment, text: ###"this is a ##"raw"## string"###),
         LexemeSpec(.stringQuote, text: #"""#),
         LexemeSpec(.rawStringDelimiter, text: "###"),
       ]
@@ -194,7 +194,7 @@ public class LexerTests: XCTestCase {
       lexemes: [
         LexemeSpec(.rawStringDelimiter, text: "#"),
         LexemeSpec(.stringQuote, text: #"""#),
-        LexemeSpec(.stringLiteralContents, text: #"#"abc"#),
+        LexemeSpec(.stringSegment, text: #"#"abc"#),
         LexemeSpec(.stringQuote, text: #"""#),
         LexemeSpec(.rawStringDelimiter, text: "#"),
       ]
@@ -207,7 +207,7 @@ public class LexerTests: XCTestCase {
       lexemes: [
         LexemeSpec(.rawStringDelimiter, text: "###"),
         LexemeSpec(.stringQuote, text: #"""#),
-        LexemeSpec(.stringLiteralContents, text: #"##"abc"#),
+        LexemeSpec(.stringSegment, text: #"##"abc"#),
         LexemeSpec(.stringQuote, text: #"""#),
         LexemeSpec(.rawStringDelimiter, text: "###"),
       ]
@@ -220,7 +220,7 @@ public class LexerTests: XCTestCase {
       lexemes: [
         LexemeSpec(.rawStringDelimiter, text: "##"),
         LexemeSpec(.stringQuote, text: #"""#),
-        LexemeSpec(.stringLiteralContents, text: ###"""abc"###),
+        LexemeSpec(.stringSegment, text: ###"""abc"###),
         LexemeSpec(.stringQuote, text: #"""#),
         LexemeSpec(.rawStringDelimiter, text: "####"),
       ]
@@ -284,7 +284,7 @@ public class LexerTests: XCTestCase {
         LexemeSpec(.identifier, leading: "\n    ", text: "print", flags: [.isAtStartOfLine]),
         LexemeSpec(.leftParen, text: "("),
         LexemeSpec(.stringQuote, text: #"""#),
-        LexemeSpec(.stringLiteralContents, text: "Hello World"),
+        LexemeSpec(.stringSegment, text: "Hello World"),
         LexemeSpec(.stringQuote, text: #"""#),
         LexemeSpec(.rightParen, text: ")"),
         LexemeSpec(.rightBrace, leading: "\n  ", text: "}", flags: [.isAtStartOfLine]),
@@ -491,7 +491,7 @@ public class LexerTests: XCTestCase {
       """#,
       lexemes: [
         LexemeSpec(.stringQuote, text: #"""#),
-        LexemeSpec(.stringLiteralContents, text: #"\\)|[^\\s`!()\\[\\]{};:'\".,<>?«»“”‘’]))"#),
+        LexemeSpec(.stringSegment, text: #"\\)|[^\\s`!()\\[\\]{};:'\".,<>?«»“”‘’]))"#),
         LexemeSpec(.stringQuote, text: #"""#),
       ]
     )
@@ -613,7 +613,7 @@ public class LexerTests: XCTestCase {
         LexemeSpec(.identifier, text: "myString"),
         LexemeSpec(.binaryOperator, text: "=="),
         LexemeSpec(.stringQuote, text: #"""#),
-        LexemeSpec(.stringLiteralContents, text: ""),
+        LexemeSpec(.stringSegment, text: ""),
         LexemeSpec(.stringQuote, text: #"""#),
       ]
     )
@@ -748,7 +748,7 @@ public class LexerTests: XCTestCase {
       """,
       lexemes: [
         LexemeSpec(.stringQuote, text: #"""#),
-        LexemeSpec(.stringLiteralContents, text: "/*"),
+        LexemeSpec(.stringSegment, text: "/*"),
         LexemeSpec(.stringQuote, text: #"""#),
       ]
     )
@@ -826,5 +826,95 @@ public class LexerTests: XCTestCase {
       XCTAssertEqual(lexeme.trailingTriviaText, SyntaxText(buffer: expectedTrailingTrivia))
       XCTAssertEqual(lexeme.tokenText, "+")
     }
+  }
+
+  func testInterpolatedString() {
+    AssertLexemes(
+      #"""
+      "\("message")"
+      """#,
+      lexemes: [
+        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringSegment, text: ""),
+        LexemeSpec(.backslash, text: "\\"),
+        LexemeSpec(.leftParen, text: "("),
+        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringSegment, text: "message"),
+        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.rightParen, text: ")"),
+        LexemeSpec(.stringSegment, text: ""),
+        LexemeSpec(.stringQuote, text: #"""#),
+      ]
+    )
+  }
+
+  func testBackslashInFrontOfStringInterpolation() {
+    AssertLexemes(
+      #"""
+      "\"\(text)"
+      """#,
+      lexemes: [
+        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringSegment, text: #"\""#),
+        LexemeSpec(.backslash, text: "\\"),
+        LexemeSpec(.leftParen, text: "("),
+        LexemeSpec(.identifier, text: "text"),
+        LexemeSpec(.rightParen, text: ")"),
+        LexemeSpec(.stringSegment, text: ""),
+        LexemeSpec(.stringQuote, text: #"""#),
+      ]
+    )
+  }
+
+  func testUnterminatedSingleLineStringLiteral() {
+    AssertLexemes(
+      ##"""
+      "bar
+
+      """##,
+      lexemes: [
+        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringSegment, text: "bar"),
+        LexemeSpec(.eof, leading: "\n", text: "", flags: [.isAtStartOfLine]),
+      ]
+    )
+  }
+
+  func testUnclosedStringInterpolationWithNewline() {
+    AssertLexemes(
+      #"""
+      "\(
+
+      """#,
+      lexemes: [
+        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringSegment, text: ""),
+        LexemeSpec(.backslash, text: "\\"),
+        LexemeSpec(.leftParen, text: "("),
+        LexemeSpec(.stringSegment, text: ""),
+        LexemeSpec(.eof, leading: "\n", text: "", flags: .isAtStartOfLine),
+      ]
+    )
+  }
+
+  func testNewlineInInterpolationOfSingleLineString() {
+    AssertLexemes(
+      #"""
+      "test \(label:
+      foo)"
+      """#,
+      lexemes: [
+        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringSegment, text: "test "),
+        LexemeSpec(.backslash, text: "\\"),
+        LexemeSpec(.leftParen, text: "("),
+        LexemeSpec(.identifier, text: "label"),
+        LexemeSpec(.colon, text: ":"),
+        LexemeSpec(.stringSegment, text: ""),
+        LexemeSpec(.identifier, leading: "\n", text: "foo", flags: .isAtStartOfLine),
+        LexemeSpec(.rightParen, text: ")"),
+        LexemeSpec(.stringQuote, text: #"""#),
+      ]
+    )
   }
 }

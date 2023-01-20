@@ -40,7 +40,8 @@ extension Lexer {
             start: self.cursor.pointer,
             leadingTriviaLength: 0,
             textLength: 0,
-            trailingTriviaLength: 0
+            trailingTriviaLength: 0,
+            cursor: self.cursor
           )
         } else {
           self.nextToken = self.cursor.nextToken(sourceBufferStart: self.sourceBufferStart)
@@ -69,6 +70,15 @@ extension Lexer {
       return self.nextToken
     }
 
+    /// Force the lexer to perform a state transition, re-lexing `currentToken`
+    /// in the new state.
+    mutating func perform(stateTransition: StateTransition, currentToken: inout Lexeme) {
+      self.cursor = currentToken.cursor
+      self.cursor.perform(stateTransition: stateTransition)
+      self.nextToken = self.cursor.nextToken(sourceBufferStart: self.sourceBufferStart)
+      currentToken = self.advance()
+    }
+
     public var debugDescription: String {
       let remainingText = self.nextToken.debugDescription + String(syntaxText: SyntaxText(baseAddress: self.cursor.input.baseAddress, count: self.cursor.input.count))
       if remainingText.count > 100 {
@@ -86,8 +96,8 @@ extension Lexer {
   ) -> LexemeSequence {
     assert(input.isEmpty || startIndex < input.endIndex)
     let startChar = startIndex == input.startIndex ? UInt8(ascii: "\0") : input[startIndex - 1]
-    let start = Cursor(input: input, previous: UInt8(ascii: "\0"), state: .normal)
-    let cursor = Cursor(input: UnsafeBufferPointer(rebasing: input[startIndex...]), previous: startChar, state: .normal)
+    let start = Cursor(input: input, previous: UInt8(ascii: "\0"))
+    let cursor = Cursor(input: UnsafeBufferPointer(rebasing: input[startIndex...]), previous: startChar)
     return LexemeSequence(sourceBufferStart: start, cursor: cursor)
   }
 }

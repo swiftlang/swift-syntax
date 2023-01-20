@@ -697,7 +697,6 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
   case poundUnavailableKeyword  // For recovery
   case regexLiteral
   case selfKeyword
-  case stringLiteralContents
   case superKeyword
   case trueKeyword
   case wildcard
@@ -726,7 +725,6 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
     case RawTokenKindMatch(.poundUnavailableKeyword): self = .poundUnavailableKeyword
     case RawTokenKindMatch(.regexLiteral): self = .regexLiteral
     case RawTokenKindMatch(.self): self = .selfKeyword
-    case RawTokenKindMatch(.stringLiteralContents): self = .stringLiteralContents
     case RawTokenKindMatch(.super): self = .superKeyword
     case RawTokenKindMatch(.true): self = .trueKeyword
     case RawTokenKindMatch(.wildcard): self = .wildcard
@@ -758,7 +756,6 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
     case .poundUnavailableKeyword: return .poundUnavailableKeyword
     case .regexLiteral: return .regexLiteral
     case .selfKeyword: return .keyword(.self)
-    case .stringLiteralContents: return .stringLiteralContents
     case .superKeyword: return .keyword(.super)
     case .trueKeyword: return .keyword(.true)
     case .wildcard: return .wildcard

@@ -106,7 +106,7 @@ public enum TokenPrecedence: Comparable {
       self = .unknownToken
     // MARK: Identifier like
     case  // Literals
-    .keyword(.Self), .keyword(.false), .floatingLiteral, .integerLiteral, .keyword(.nil), .regexLiteral, .keyword(.self), .stringLiteralContents, .keyword(.super), .keyword(.true),
+    .keyword(.Self), .keyword(.false), .floatingLiteral, .integerLiteral, .keyword(.nil), .regexLiteral, .keyword(.self), .keyword(.super), .keyword(.true),
       // Pound literals
       .poundAvailableKeyword, .poundColorLiteralKeyword, .poundColumnKeyword, .poundDsohandleKeyword, .poundFileIDKeyword, .poundFileKeyword, .poundFileLiteralKeyword, .poundFilePathKeyword, .poundFunctionKeyword, .poundImageLiteralKeyword, .poundKeyPathKeyword, .poundLineKeyword, .poundSelectorKeyword, .poundSourceLocationKeyword, .poundUnavailableKeyword, .poundHasSymbolKeyword,
       // Identifiers

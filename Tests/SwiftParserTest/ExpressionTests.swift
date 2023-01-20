@@ -673,6 +673,15 @@ final class ExpressionTests: XCTestCase {
     )
   }
 
+  func testPoundsInStringInterpolationWhereNotNecessary() {
+    AssertParse(
+      ##"""
+      "\#(1)"
+      """##,
+      substructure: Syntax(StringSegmentSyntax(content: .stringSegment(##"\#(1)"##)))
+    )
+  }
+
   func testSubscript() {
     AssertParse(
       """
@@ -874,6 +883,21 @@ final class ExpressionTests: XCTestCase {
         print("This is a test")
       }
       """
+    )
+  }
+
+  func testNewlineInInterpolationOfSingleLineString() {
+    AssertParse(
+      #"""
+      "test \(label:1️⃣
+      foo2️⃣)"
+      """#,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected value in string literal"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ')' in string literal"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: #"expected '"' to end string literal"#),
+        DiagnosticSpec(locationMarker: "2️⃣", message: #"extraneous code ')"' at top level"#),
+      ]
     )
   }
 }

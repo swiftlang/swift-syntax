@@ -693,20 +693,6 @@ extension TokenSyntax {
     )
   }
   
-  public static func stringLiteralContents(
-    _ text: String, 
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
-    presence: SourcePresence = .present
-  ) -> TokenSyntax {
-    return TokenSyntax(
-      .stringLiteralContents(text), 
-      leadingTrivia: leadingTrivia, 
-      trailingTrivia: trailingTrivia, 
-      presence: presence
-    )
-  }
-  
   public static func regexLiteral(
     _ text: String, 
     leadingTrivia: Trivia = [], 

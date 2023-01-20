@@ -13,6 +13,7 @@
 import SwiftBasicFormat
 import SwiftDiagnostics
 @_spi(RawSyntax) import SwiftSyntax
+@_spi(RawSyntax) import SwiftParser
 
 /// An individual interpolated syntax node.
 struct InterpolatedSyntaxNode {
@@ -445,5 +446,89 @@ extension TokenSyntax: SyntaxExpressibleByStringInterpolation {
       return String(syntaxText: SyntaxText(buffer: buf))
     }
     self = .identifier(string)
+  }
+}
+
+// MARK: - Trivia expressible as string
+
+extension TriviaPiece {
+  var isUnexpected: Bool {
+    switch self {
+    case .unexpectedText: return true
+    default: return false
+    }
+  }
+}
+
+struct UnexpectedTrivia: DiagnosticMessage {
+  let triviaContents: String
+
+  let diagnosticID = MessageID(domain: "SwiftSyntaxBuilder", id: "UnexpectedTrivia")
+  let severity = DiagnosticSeverity.error
+  var message: String {
+    "unexpected trivia '\(triviaContents)'"
+  }
+
+}
+
+extension Trivia: ExpressibleByStringInterpolation {
+  /// Initialize a syntax node by parsing the contents of the interpolation.
+  /// This function is marked `@_transparent` so that fatalErrors raised here
+  /// are reported at the string literal itself.
+  /// This makes debugging easier because Xcode will jump to the string literal
+  /// that had a parsing error instead of the initializer that raised the `fatalError`
+  @_transparent
+  public init(stringInterpolation: String.StringInterpolation) {
+    do {
+      try self.init(stringInterpolationOrThrow: stringInterpolation)
+    } catch {
+      fatalError(String(describing: error))
+    }
+  }
+
+  public init(stringInterpolationOrThrow stringInterpolation: String.StringInterpolation) throws {
+    var text = String(stringInterpolation: stringInterpolation)
+    let pieces = text.withUTF8 { (buf) -> [TriviaPiece] in
+      // The leading trivia position is a little bit less restrictive (it allows a shebang), so let's use it.
+      let rawPieces = TriviaParser.parseTrivia(SyntaxText(buffer: buf), position: .leading)
+      return rawPieces.map { TriviaPiece.init(raw: $0) }
+    }
+
+    self.init(pieces: pieces)
+
+    if pieces.contains(where: { $0.isUnexpected }) {
+      var diagnostics: [Diagnostic] = []
+      let tree = SourceFileSyntax(statements: [], eofToken: .eof(leadingTrivia: self))
+      var offset = 0
+      for piece in pieces {
+        if case .unexpectedText(let contents) = piece {
+          diagnostics.append(
+            Diagnostic(
+              node: Syntax(tree),
+              position: tree.position.advanced(by: offset),
+              message: UnexpectedTrivia(triviaContents: contents)
+            )
+          )
+        }
+        offset += piece.sourceLength.utf8Length
+      }
+      throw SyntaxStringInterpolationError.diagnostics(diagnostics, tree: Syntax(tree))
+    }
+  }
+
+  @_transparent
+  public init(stringLiteral value: String) {
+    do {
+      try self.init(stringLiteralOrThrow: value)
+    } catch {
+      fatalError(String(describing: error))
+    }
+  }
+
+  /// Initialize a syntax node from a string literal.
+  public init(stringLiteralOrThrow value: String) throws {
+    var interpolation = String.StringInterpolation(literalCapacity: 1, interpolationCount: 0)
+    interpolation.appendLiteral(value)
+    try self.init(stringInterpolationOrThrow: interpolation)
   }
 }

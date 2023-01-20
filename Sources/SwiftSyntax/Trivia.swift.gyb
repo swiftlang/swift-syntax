@@ -282,7 +282,7 @@ extension RawTriviaPiece: CustomDebugStringConvertible {
 }
 
 extension TriviaPiece {
-  init(raw: RawTriviaPiece) {
+  @_spi(RawSyntax) public init(raw: RawTriviaPiece) {
     switch raw {
 % for trivia in TRIVIAS:
 %   if trivia.is_collection():

@@ -1734,7 +1734,10 @@ extension Lexer.Cursor {
         if stringLiteralKind == .multiLine {
           // Make sure each line starts a new string segment so the parser can
           // validate the multi-line string literal's indentation.
-          _ = self.advance()
+          let charcter = self.advance()
+          if charcter == UInt8(ascii: "\r") {
+            _ = self.advance(matching: "\n")
+          }
           return Lexer.Result(.stringSegment)
         } else {
           // Single line literals cannot span multiple lines.

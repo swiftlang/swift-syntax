@@ -963,7 +963,7 @@ final class ExpressionTests: XCTestCase {
           closeQuote: .multilineStringQuoteToken(leadingTrivia: .spaces(2))
         )
       ),
-      substructureCheckTrivia: true
+      options: [.substructureCheckTrivia]
     )
 
     AssertParse(
@@ -983,7 +983,7 @@ final class ExpressionTests: XCTestCase {
           closeQuote: .multilineStringQuoteToken(leadingTrivia: .spaces(2))
         )
       ),
-      substructureCheckTrivia: true
+      options: [.substructureCheckTrivia]
     )
 
     AssertParse(
@@ -1008,10 +1008,10 @@ final class ExpressionTests: XCTestCase {
           closeQuote: .multilineStringQuoteToken(leadingTrivia: .spaces(2))
         )
       ),
-      substructureCheckTrivia: true,
       diagnostics: [
         DiagnosticSpec(message: "escaped newline at the last line of a multi-line string literal is not allowed")
-      ]
+      ],
+      options: [.substructureCheckTrivia]
     )
   }
 }

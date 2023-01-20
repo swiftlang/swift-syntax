@@ -47,7 +47,7 @@ fileprivate class StringLiteralExpressionIndentationChecker {
       return nil
     }
     let hasSufficientIndentation = token.tokenView.leadingTrivia { leadingTrivia in
-      let indentationStartIndex = leadingTrivia.lastIndex(where: { $0 == UInt8(ascii: "\n") || $0 == UInt8(ascii: "\n") })?.advanced(by: 1) ?? leadingTrivia.startIndex
+      let indentationStartIndex = leadingTrivia.lastIndex(where: { $0 == UInt8(ascii: "\n") || $0 == UInt8(ascii: "\r") })?.advanced(by: 1) ?? leadingTrivia.startIndex
       return SyntaxText(rebasing: leadingTrivia[indentationStartIndex...]).hasPrefix(expectedIndentation)
     }
     if hasSufficientIndentation {
@@ -80,6 +80,36 @@ fileprivate class StringLiteralExpressionIndentationChecker {
     assert(rewrittenChildren.count == layoutView.children.count)
     if hasRewrittenChild {
       return layoutView.replacingLayout(with: rewrittenChildren, arena: arena)
+    } else {
+      return nil
+    }
+  }
+}
+
+fileprivate extension SyntaxText {
+  /// If the text ends with any newline character, return the trivia for that
+  /// newline, otherwise `nil`.
+  var newlineSuffix: RawTriviaPiece? {
+    if hasSuffix("\r\n") {
+      return .carriageReturnLineFeeds(1)
+    } else if hasSuffix("\n") {
+      return .newlines(1)
+    } else if hasSuffix("\r") {
+      return .carriageReturns(1)
+    } else {
+      return nil
+    }
+  }
+
+  /// If the text is a single newline character, return the trivia piece that
+  /// represents it, otherwise `nil`.
+  var triviaPieceIfNewline: RawTriviaPiece? {
+    if self == "\r\n" {
+      return .carriageReturnLineFeeds(1)
+    } else if self == "\n" {
+      return .newlines(1)
+    } else if self == "\r" {
+      return .carriageReturns(1)
     } else {
       return nil
     }
@@ -129,7 +159,6 @@ extension Parser {
     }
   }
 
-  // FIXME: Handle \r and \r\n if needed in here
   private func postProcessMultilineStringLiteral(
     openQuote: RawTokenSyntax,
     segments allSegments: [RawStringLiteralSegmentsSyntax.Element],
@@ -181,10 +210,10 @@ extension Parser {
     let closeDelimiterOnNewLine: Bool
     switch middleSegments.last {
     case .stringSegment(let lastMiddleSegment):
-      if lastMiddleSegment.content.tokenText.hasSuffix("\n") {
+      if let newlineSuffix = lastMiddleSegment.content.tokenText.newlineSuffix {
         // The newline at the end of the last line in the string literal is not part of the represented string.
         // Mark it as trivia.
-        var content = lastMiddleSegment.content.reclassifyAsTrailingTrivia([.newlines(1)], arena: self.arena)
+        var content = lastMiddleSegment.content.reclassifyAsTrailingTrivia([newlineSuffix], arena: self.arena)
         var unexpectedBeforeContent: RawTokenSyntax?
         if content.tokenText.hasSuffix("\\") {
           // The newline on the last line must not be escaped
@@ -213,7 +242,11 @@ extension Parser {
     case .expressionSegment:
       closeDelimiterOnNewLine = false
     case nil:
-      closeDelimiterOnNewLine = firstSegment?.content.tokenText.hasSuffix("\n") ?? false
+      if let firstSegment = firstSegment {
+        closeDelimiterOnNewLine = firstSegment.content.tokenText.newlineSuffix != nil
+      } else {
+        closeDelimiterOnNewLine = false
+      }
     }
 
     if !closeDelimiterOnNewLine {
@@ -256,8 +289,8 @@ extension Parser {
     // iterating over is on a new line.
     var isSegmentOnNewLine: Bool
 
-    if firstSegment?.content.tokenText == "\n" {
-      openQuote = openQuote.extendingTrailingTrivia(by: [.newlines(1)], arena: self.arena)
+    if let newlineTrivia = firstSegment?.content.tokenText.triviaPieceIfNewline {
+      openQuote = openQuote.extendingTrailingTrivia(by: [newlineTrivia], arena: self.arena)
       isSegmentOnNewLine = true
     } else {
       if let firstSegment = firstSegment {
@@ -307,15 +340,25 @@ extension Parser {
           }
         }
 
-        isSegmentOnNewLine = segment.content.tokenText.hasSuffix("\n")
+        isSegmentOnNewLine = segment.content.tokenText.newlineSuffix != nil
 
         // If the segment has a `\` in front of its trailing newline, that newline
         // is not part of the reprsented string and should be trivia.
 
-        if segment.content.tokenText.hasSuffix("\\\n") {
+        let backslashNewlineSuffix: [RawTriviaPiece]?
+        if segment.content.tokenText.hasSuffix("\\\r\n") {
+          backslashNewlineSuffix = [.backslashs(1), .carriageReturnLineFeeds(1)]
+        } else if segment.content.tokenText.hasSuffix("\\\n") {
+          backslashNewlineSuffix = [.backslashs(1), .newlines(1)]
+        } else if segment.content.tokenText.hasSuffix("\\\r") {
+          backslashNewlineSuffix = [.backslashs(1), .carriageReturns(1)]
+        } else {
+          backslashNewlineSuffix = nil
+        }
+        if let backslashNewlineSuffix = backslashNewlineSuffix {
           segment = RawStringSegmentSyntax(
             segment.unexpectedBeforeContent,
-            content: segment.content.reclassifyAsTrailingTrivia([.backslashs(1), .newlines(1)], arena: self.arena),
+            content: segment.content.reclassifyAsTrailingTrivia(backslashNewlineSuffix, arena: self.arena),
             segment.unexpectedAfterContent,
             arena: self.arena
           )

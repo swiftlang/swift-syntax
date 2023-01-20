@@ -16,9 +16,34 @@ import XCTest
 
 import SwiftSyntax
 
+func AssertParseWithAllNewlineEndings(
+  _ markedSource: String,
+  substructure expectedSubstructure: Syntax? = nil,
+  substructureAfterMarker: String = "START",
+  diagnostics expectedDiagnostics: [DiagnosticSpec] = [],
+  applyFixIts: [String]? = nil,
+  fixedSource expectedFixedSource: String? = nil,
+  file: StaticString = #file,
+  line: UInt = #line
+) {
+  for newline in ["\n", "\r", "\r\n"] {
+    AssertParse(
+      markedSource.replacingOccurrences(of: "\n", with: newline),
+      substructure: expectedSubstructure,
+      substructureAfterMarker: substructureAfterMarker,
+      diagnostics: expectedDiagnostics,
+      applyFixIts: applyFixIts,
+      fixedSource: expectedFixedSource,
+      options: [.normalizeNewlinesInFixedSource],
+      file: file,
+      line: line
+    )
+  }
+}
+
 final class MultilineErrorsTests: XCTestCase {
   func testMultilineErrors1() {
-    AssertParse(
+    AssertParseWithAllNewlineEndings(
       """
       import Swift
       """
@@ -26,7 +51,7 @@ final class MultilineErrorsTests: XCTestCase {
   }
 
   func testMultilineErrors2() {
-    AssertParse(
+    AssertParseWithAllNewlineEndings(
       """
       // ===---------- Multiline --------===
       """
@@ -35,7 +60,7 @@ final class MultilineErrorsTests: XCTestCase {
 
   func testMultilineErrors3() {
     // expecting at least 4 columns of leading indentation
-    AssertParse(
+    AssertParseWithAllNewlineEndings(
       #"""
       _ = """
           Eleven
@@ -60,7 +85,7 @@ final class MultilineErrorsTests: XCTestCase {
 
   func testMultilineErrors4() {
     // expecting at least 4 columns of leading indentation
-    AssertParse(
+    AssertParseWithAllNewlineEndings(
       #"""
       _ = """
           Eleven
@@ -81,7 +106,7 @@ final class MultilineErrorsTests: XCTestCase {
 
   func testMultilineErrors5() {
     // \t is not the same as an actual tab for de-indentation
-    AssertParse(
+    AssertParseWithAllNewlineEndings(
       #"""
       _ = """
       	Twelve
@@ -101,7 +126,7 @@ final class MultilineErrorsTests: XCTestCase {
   }
 
   func testMultilineErrors6a() {
-    AssertParse(
+    AssertParseWithAllNewlineEndings(
       #"""
       _ = """
           \(42
@@ -121,7 +146,7 @@ final class MultilineErrorsTests: XCTestCase {
   }
 
   func testMultilineErrors6b() {
-    AssertParse(
+    AssertParseWithAllNewlineEndings(
       #"""
       _ = """
           \(42
@@ -141,7 +166,7 @@ final class MultilineErrorsTests: XCTestCase {
   }
 
   func testMultilineErrors7() {
-    AssertParse(
+    AssertParseWithAllNewlineEndings(
       #"""
       _ = """
           Foo
@@ -164,7 +189,7 @@ final class MultilineErrorsTests: XCTestCase {
 
   func testMultilineErrors8() {
     // a tab is not the same as multiple spaces for de-indentation
-    AssertParse(
+    AssertParseWithAllNewlineEndings(
       #"""
       _ = """
         Thirteen
@@ -185,7 +210,7 @@ final class MultilineErrorsTests: XCTestCase {
 
   func testMultilineErrors9() {
     // a tab is not the same as multiple spaces for de-indentation
-    AssertParse(
+    AssertParseWithAllNewlineEndings(
       #"""
       _ = """
           Fourteen
@@ -206,7 +231,7 @@ final class MultilineErrorsTests: XCTestCase {
 
   func testMultilineErrors10() {
     // multiple spaces are not the same as a tab for de-indentation
-    AssertParse(
+    AssertParseWithAllNewlineEndings(
       #"""
       _ = """
       	Thirteen 2
@@ -227,7 +252,7 @@ final class MultilineErrorsTests: XCTestCase {
 
   func testMultilineErrors11() {
     // multiple spaces are not the same as a tab for de-indentation
-    AssertParse(
+    AssertParseWithAllNewlineEndings(
       #"""
       _ = """
       		Fourteen 2
@@ -241,7 +266,7 @@ final class MultilineErrorsTests: XCTestCase {
   }
 
   func testMultilineErrors12() {
-    AssertParse(
+    AssertParseWithAllNewlineEndings(
       #"""
       _ = """1️⃣Fourteen
           Pi
@@ -260,7 +285,7 @@ final class MultilineErrorsTests: XCTestCase {
   }
 
   func testMultilineErrors13() {
-    AssertParse(
+    AssertParseWithAllNewlineEndings(
       #"""
       _ = """
           Fourteen
@@ -279,7 +304,7 @@ final class MultilineErrorsTests: XCTestCase {
   }
 
   func testMultilineErrors14() {
-    AssertParse(
+    AssertParseWithAllNewlineEndings(
       #"""
       _ = """1️⃣"""
       """#,
@@ -294,7 +319,7 @@ final class MultilineErrorsTests: XCTestCase {
   }
 
   func testMultilineErrors15() {
-    AssertParse(
+    AssertParseWithAllNewlineEndings(
       #"""
       _ = """ 1️⃣"""
       """#,
@@ -310,7 +335,7 @@ final class MultilineErrorsTests: XCTestCase {
 
   func testMultilineErrors16() {
     // two lines should get only one error
-    AssertParse(
+    AssertParseWithAllNewlineEndings(
       #"""
       _ = """
       1️⃣    Hello,
@@ -330,7 +355,7 @@ final class MultilineErrorsTests: XCTestCase {
   }
 
   func testMultilineErrors17a() {
-    AssertParse(
+    AssertParseWithAllNewlineEndings(
       #"""
       _ = """
       1️⃣Zero A
@@ -373,7 +398,7 @@ final class MultilineErrorsTests: XCTestCase {
   }
 
   func testMultilineErrors17b() {
-    AssertParse(
+    AssertParseWithAllNewlineEndings(
       #"""
       _ = """
       1️⃣Zero A\(1)B
@@ -395,7 +420,7 @@ final class MultilineErrorsTests: XCTestCase {
   }
 
   func testMultilineErrors17c() {
-    AssertParse(
+    AssertParseWithAllNewlineEndings(
       #"""
       _ = """
       1️⃣Incorrect 1
@@ -418,7 +443,7 @@ final class MultilineErrorsTests: XCTestCase {
   }
 
   func testMultilineErrors18() {
-    AssertParse(
+    AssertParseWithAllNewlineEndings(
       ##"""
       _ = "hello\("""
                   world
@@ -434,7 +459,7 @@ final class MultilineErrorsTests: XCTestCase {
   }
 
   func testMultilineErrors19() {
-    AssertParse(
+    AssertParseWithAllNewlineEndings(
       ##"""
       _ = "h\(1️⃣
                   """
@@ -450,7 +475,7 @@ final class MultilineErrorsTests: XCTestCase {
   }
 
   func testMultilineErrors20() {
-    AssertParse(
+    AssertParseWithAllNewlineEndings(
       ##"""
       _ = 1️⃣"""
         line one \ non-whitespace
@@ -464,7 +489,7 @@ final class MultilineErrorsTests: XCTestCase {
   }
 
   func testMultilineErrors21() {
-    AssertParse(
+    AssertParseWithAllNewlineEndings(
       #"""
       _ = """
         line one
@@ -484,7 +509,7 @@ final class MultilineErrorsTests: XCTestCase {
   }
 
   func testMultilineErrors22() {
-    AssertParse(
+    AssertParseWithAllNewlineEndings(
       #"""
       _ = """
         \\\	   
@@ -497,7 +522,7 @@ final class MultilineErrorsTests: XCTestCase {
   }
 
   func testMultilineErrors23() {
-    AssertParse(
+    AssertParseWithAllNewlineEndings(
       #"""
       _ = """
         \(42)\		
@@ -510,7 +535,7 @@ final class MultilineErrorsTests: XCTestCase {
   }
 
   func testMultilineErrors24() {
-    AssertParse(
+    AssertParseWithAllNewlineEndings(
       #"""
       _ = """
         foo1️⃣\
@@ -528,7 +553,7 @@ final class MultilineErrorsTests: XCTestCase {
   }
 
   func testMultilineErrors25() {
-    AssertParse(
+    AssertParseWithAllNewlineEndings(
       #"""
       _ = """
         foo1️⃣\
@@ -546,7 +571,7 @@ final class MultilineErrorsTests: XCTestCase {
   }
 
   func testMultilineErrors26() {
-    AssertParse(
+    AssertParseWithAllNewlineEndings(
       ##"""
       _ = """
         foo\1️⃣
@@ -558,7 +583,7 @@ final class MultilineErrorsTests: XCTestCase {
   }
 
   func testMultilineErrors28() {
-    AssertParse(
+    AssertParseWithAllNewlineEndings(
       #"""
       _ = """
       1️⃣\
@@ -577,7 +602,7 @@ final class MultilineErrorsTests: XCTestCase {
   }
 
   func testMultilineErrors29() {
-    AssertParse(
+    AssertParseWithAllNewlineEndings(
       #"""
       _ = """1️⃣\
         """
@@ -594,7 +619,7 @@ final class MultilineErrorsTests: XCTestCase {
   }
 
   func testMultilineErrors30() {
-    AssertParse(
+    AssertParseWithAllNewlineEndings(
       ##"""
       let _ = """
         foo
@@ -618,7 +643,7 @@ final class MultilineErrorsTests: XCTestCase {
   }
 
   func testMultilineErrors31() {
-    AssertParse(
+    AssertParseWithAllNewlineEndings(
       ##"""
       let _ = """
         foo
@@ -637,7 +662,7 @@ final class MultilineErrorsTests: XCTestCase {
   }
 
   func testMultilineEndsWithStringInterpolation() {
-    AssertParse(
+    AssertParseWithAllNewlineEndings(
       #"""
       _ = """
       \(1)1️⃣"""
@@ -654,7 +679,7 @@ final class MultilineErrorsTests: XCTestCase {
   }
 
   func testInsufficientIndentationInInterpolation() {
-    AssertParse(
+    AssertParseWithAllNewlineEndings(
       #"""
         """
         \(
@@ -674,7 +699,7 @@ final class MultilineErrorsTests: XCTestCase {
         """#
     )
 
-    AssertParse(
+    AssertParseWithAllNewlineEndings(
       #"""
         """
         \(
@@ -699,7 +724,7 @@ final class MultilineErrorsTests: XCTestCase {
         """#
     )
 
-    AssertParse(
+    AssertParseWithAllNewlineEndings(
       #"""
         """
         \(

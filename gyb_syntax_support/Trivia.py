@@ -56,6 +56,7 @@ TRIVIAS = [
            'A documentation block comment, starting with \'/**\' and ending '
            'with \'*/\'.',
            is_comment=True),
+    Trivia('Backslash', 'A backslash that is at the end of a line in a multi-line string literal to escape the newline.', characters=['\\\\']),
     Trivia('UnexpectedText', 'Any skipped unexpected text.'),
     Trivia('Shebang', 'A script command, starting with \'#!\'.'),
 ]

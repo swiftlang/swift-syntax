@@ -26,6 +26,18 @@ public class Trivia {
   public let isComment: Bool
   
   public var lowerName: String { lowercaseFirstWord(name: name) }
+
+  public var enumCaseName: String {
+    if self.isCollection {
+      if lowerName == "backslash" {
+        return "backslashes"
+      } else {
+        return "\(lowerName)s"
+      }
+    } else {
+      return lowerName
+    }
+  }
   
   public var charactersLen: Int { characters.count }
   

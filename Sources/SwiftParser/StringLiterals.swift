@@ -313,10 +313,9 @@ extension Parser {
         // is not part of the reprsented string and should be trivia.
 
         if segment.content.tokenText.hasSuffix("\\\n") {
-          // TODO: Add a backslash trivia kind
           segment = RawStringSegmentSyntax(
             segment.unexpectedBeforeContent,
-            content: segment.content.reclassifyAsTrailingTrivia([.unexpectedText("\\"), .newlines(1)], arena: self.arena),
+            content: segment.content.reclassifyAsTrailingTrivia([.backslashs(1), .newlines(1)], arena: self.arena),
             segment.unexpectedAfterContent,
             arena: self.arena
           )

@@ -76,7 +76,7 @@ private func AssertTokens(
     return XCTFail(
       """
       Expected \(expected.count) tokens but got \(actual.count):
-      \(actual.map(\.debugDescription).joined(separator: "\n"))
+      \(actual.map({ "\($0.rawTokenKind) '\($0.tokenText)'" }).joined(separator: "\n"))
       """,
       file: file,
       line: line

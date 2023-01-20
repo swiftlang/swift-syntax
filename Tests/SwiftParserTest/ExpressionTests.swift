@@ -885,6 +885,21 @@ final class ExpressionTests: XCTestCase {
       """
     )
   }
+
+  func testNewlineInInterpolationOfSingleLineString() {
+    AssertParse(
+      #"""
+      "test \(label:1️⃣
+      foo2️⃣)"
+      """#,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected value in string literal"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ')' in string literal"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: #"expected '"' to end string literal"#),
+        DiagnosticSpec(locationMarker: "2️⃣", message: #"extraneous code ')"' at top level"#),
+      ]
+    )
+  }
 }
 
 final class MemberExprTests: XCTestCase {

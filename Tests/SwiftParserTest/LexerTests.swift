@@ -835,6 +835,7 @@ public class LexerTests: XCTestCase {
       """#,
       lexemes: [
         LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringSegment, text: ""),
         LexemeSpec(.backslash, text: "\\"),
         LexemeSpec(.leftParen, text: "("),
         LexemeSpec(.stringQuote, text: #"""#),
@@ -887,10 +888,32 @@ public class LexerTests: XCTestCase {
       """#,
       lexemes: [
         LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringSegment, text: ""),
         LexemeSpec(.backslash, text: "\\"),
         LexemeSpec(.leftParen, text: "("),
         LexemeSpec(.stringSegment, text: ""),
         LexemeSpec(.eof, leading: "\n", text: "", flags: .isAtStartOfLine),
+      ]
+    )
+  }
+
+  func testNewlineInInterpolationOfSingleLineString() {
+    AssertLexemes(
+      #"""
+      "test \(label:
+      foo)"
+      """#,
+      lexemes: [
+        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringSegment, text: "test "),
+        LexemeSpec(.backslash, text: "\\"),
+        LexemeSpec(.leftParen, text: "("),
+        LexemeSpec(.identifier, text: "label"),
+        LexemeSpec(.colon, text: ":"),
+        LexemeSpec(.stringSegment, text: ""),
+        LexemeSpec(.identifier, leading: "\n", text: "foo", flags: .isAtStartOfLine),
+        LexemeSpec(.rightParen, text: ")"),
+        LexemeSpec(.stringQuote, text: #"""#),
       ]
     )
   }

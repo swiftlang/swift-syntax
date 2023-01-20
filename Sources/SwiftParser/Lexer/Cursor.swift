@@ -70,9 +70,10 @@ extension Lexer.Cursor {
     case afterClosingStringQuote
 
     /// We are located either
+    ///  - at the '\' of a string interpolation
     ///  - after the `\` of a string interpolation or
     ///  - after the pounds of a raw string interpolation `\#`.
-    case afterBackslashOfStringInterpolation(stringLiteralKind: StringLiteralKind)
+    case inStringInterpolationStart(stringLiteralKind: StringLiteralKind)
 
     /// We are lexing the expressions inside a string interpolation and have seen
     /// `parenCount` parentheses that haven't been closed yet, not counting the
@@ -93,7 +94,7 @@ extension Lexer.Cursor {
       case .inStringLiteral: return nil
       case .afterStringLiteral: return nil
       case .afterClosingStringQuote: return nil
-      case .afterBackslashOfStringInterpolation: return nil
+      case .inStringInterpolationStart: return nil
       case .inStringInterpolation(let stringLiteralKind, _, _):
         // Single line strings cannot span multiple lines, so we don't want to
         // consume any newline inside a string interpolation either.
@@ -114,7 +115,7 @@ extension Lexer.Cursor {
       case .inStringLiteral: return nil
       case .afterStringLiteral: return nil
       case .afterClosingStringQuote: return nil
-      case .afterBackslashOfStringInterpolation: return nil
+      case .inStringInterpolationStart: return nil
       case .inStringInterpolation: return .noNewlines
       case .afterStringInterpolation: return .noNewlines
       }
@@ -131,7 +132,7 @@ extension Lexer.Cursor {
       case .inStringLiteral(kind: let stringLiteralKind, delimiterLength: _): return stringLiteralKind != .multiLine
       case .afterStringLiteral: return false
       case .afterClosingStringQuote: return false
-      case .afterBackslashOfStringInterpolation: return false
+      case .inStringInterpolationStart: return false
       case .inStringInterpolation(stringLiteralKind: let stringLiteralKind, parenCount: _, stringInterpolationStart: _): return stringLiteralKind != .multiLine
       case .afterStringInterpolation: return false
       }
@@ -261,8 +262,8 @@ extension Lexer.Cursor {
       result = lexAfterStringLiteral()
     case .afterClosingStringQuote:
       result = lexAfterClosingStringQuote()
-    case .afterBackslashOfStringInterpolation(stringLiteralKind: let stringLiteralKind):
-      result = lexAfterBackslashOfStringInterpolation(stringLiteralKind: stringLiteralKind)
+    case .inStringInterpolationStart(stringLiteralKind: let stringLiteralKind):
+      result = lexInStringInterpolationStart(stringLiteralKind: stringLiteralKind)
     case .inStringInterpolation(stringLiteralKind: let stringLiteralKind, parenCount: let parenCount, stringInterpolationStart: let stringInterpolationStart):
       result = lexInStringInterpolation(stringLiteralKind: stringLiteralKind, parenCount: parenCount, stringInterpolationStart: stringInterpolationStart)
     case .afterStringInterpolation:
@@ -918,9 +919,16 @@ extension Lexer.Cursor {
     }
   }
 
-  private mutating func lexAfterBackslashOfStringInterpolation(stringLiteralKind: StringLiteralKind) -> Lexer.Result {
+  private mutating func lexInStringInterpolationStart(stringLiteralKind: StringLiteralKind) -> Lexer.Result {
     switch self.peek() {
+    case UInt8(ascii: "\\"):
+      _ = self.advance()
+      return Lexer.Result(.backslash)
     case UInt8(ascii: "#"):
+      /// Consume the '#' that are part of this interpolation. We know that the
+      /// number of '#' is correct because otherwise `isAtStringInterpolationAnchor`
+      /// would have returned false in `lexInStringLiteral` and w we wouldn't have
+      /// transitioned to the `afterBackslashOfStringInterpolation` state.
       self.advance(while: { $0 == Unicode.Scalar("#") })
       return Lexer.Result(.rawStringDelimiter)
     case UInt8(ascii: "("):
@@ -1713,23 +1721,14 @@ extension Lexer.Cursor {
         .fixItInsert(Lexer::getSourceLoc(CurPtr), "\n")
     }
 */
-    if self.isAtStringInterpolationAnchor(delimiterLength: delimiterLength) {
-      let backslashConsumed = self.advance(matching: "\\")
-      assert(backslashConsumed)
-      return Lexer.Result(
-        .backslash,
-        stateTransition: .push(newState: .afterBackslashOfStringInterpolation(stringLiteralKind: stringLiteralKind))
-      )
-    }
-
     while true {
       switch self.peek() {
       case UInt8(ascii: "\\"):
         if self.isAtStringInterpolationAnchor(delimiterLength: delimiterLength) {
-          // Finish the current string segment. The next time
-          // `lexStringLiteralContents` is called, it will consume the backslash
-          // and transition to `afterBackslashOfStringInterpolation`
-          return Lexer.Result(.stringSegment)
+          return Lexer.Result(
+            .stringSegment,
+            stateTransition: .push(newState: .inStringInterpolationStart(stringLiteralKind: stringLiteralKind))
+          )
         }
       case UInt8(ascii: "\r"), UInt8(ascii: "\n"):
         if stringLiteralKind != .multiLine {

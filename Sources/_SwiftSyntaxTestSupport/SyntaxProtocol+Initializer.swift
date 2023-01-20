@@ -26,12 +26,12 @@ private class InitializerExprFormat: BasicFormat {
       if $0.leadingTrivia?.first?.isNewline == true {
         return $0
       } else {
-        return $0.withLeadingTrivia(indentedNewline + ($0.leadingTrivia ?? []))
+        return $0.with(\.leadingTrivia, indentedNewline + ($0.leadingTrivia ?? []))
       }
     }
     indentationLevel -= 1
     if !formattedChildren.isEmpty {
-      formattedChildren[formattedChildren.count - 1] = formattedChildren[formattedChildren.count - 1].withTrailingTrivia(indentedNewline)
+      formattedChildren[formattedChildren.count - 1] = formattedChildren[formattedChildren.count - 1].with(\.trailingTrivia, indentedNewline)
     }
     return formattedChildren
   }

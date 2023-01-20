@@ -49,15 +49,15 @@ public struct FormatRawStringLiteral: RefactoringProvider {
     guard maximumHashes > 0 else {
       return
         lit
-        .withOpenDelimiter(lit.openDelimiter?.withKind(.rawStringDelimiter("")))
-        .withCloseDelimiter(lit.closeDelimiter?.withKind(.rawStringDelimiter("")))
+        .with(\.openDelimiter, lit.openDelimiter?.withKind(.rawStringDelimiter("")))
+        .with(\.closeDelimiter, lit.closeDelimiter?.withKind(.rawStringDelimiter("")))
     }
 
     let delimiters = String(repeating: "#", count: maximumHashes + 1)
     return
       lit
-      .withOpenDelimiter(lit.openDelimiter?.withKind(.rawStringDelimiter(delimiters)))
-      .withCloseDelimiter(lit.closeDelimiter?.withKind(.rawStringDelimiter(delimiters)))
+      .with(\.openDelimiter, lit.openDelimiter?.withKind(.rawStringDelimiter(delimiters)))
+      .with(\.closeDelimiter, lit.closeDelimiter?.withKind(.rawStringDelimiter(delimiters)))
   }
 }
 

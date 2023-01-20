@@ -50,8 +50,8 @@ import Foundation
       case .import(_, let statement):
         return
           statement
-          .withLeadingTrivia(offset == 0 ? [] : .newline)
-          .withTrailingTrivia([])
+          .with(\.leadingTrivia, offset == 0 ? [] : .newline)
+          .with(\.trailingTrivia, [])
       case .other(let statement):
         return statement
       }

@@ -144,7 +144,8 @@ final class TypeMemberTests: XCTestCase {
         "\(baseType).Z<W>",
         TypeSyntax.parse,
         substructure: Syntax(
-          expectedSyntax.withGenericArgumentClause(
+          expectedSyntax.with(
+            \.genericArgumentClause,
             GenericArgumentClauseSyntax(
               arguments: .init([
                 GenericArgumentSyntax(argumentType: SimpleTypeIdentifierSyntax(name: .identifier("W")))

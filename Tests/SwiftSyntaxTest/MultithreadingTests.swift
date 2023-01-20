@@ -55,7 +55,7 @@ public class MultithreadingTests: XCTestCase {
         .calledExpression[as: MemberAccessExprSyntax.self]
         .base![as: IdentifierExprSyntax.self]
         .identifier = .identifier("ident\(i)")
-      copied = copied.withLeadingTrivia([.newlines(1)])
+      copied = copied.with(\.leadingTrivia, [.newlines(1)])
 
       XCTAssertEqual(copied.description, "\nident\(i).member()")
     }

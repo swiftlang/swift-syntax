@@ -300,9 +300,9 @@ class FixItApplier: SyntaxRewriter {
     for change in changes {
       switch change {
       case .replaceLeadingTrivia(token: let changedNode, newTrivia: let newTrivia) where changedNode.id == node.id:
-        modifiedNode = node.withLeadingTrivia(newTrivia)
+        modifiedNode = node.with(\.leadingTrivia, newTrivia)
       case .replaceTrailingTrivia(token: let changedNode, newTrivia: let newTrivia) where changedNode.id == node.id:
-        modifiedNode = node.withTrailingTrivia(newTrivia)
+        modifiedNode = node.with(\.trailingTrivia, newTrivia)
       default:
         break
       }

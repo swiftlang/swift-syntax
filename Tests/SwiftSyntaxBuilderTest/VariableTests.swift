@@ -122,7 +122,7 @@ final class VariableTests: XCTestCase {
               for i in 1...3 {
                 ArrayElementSyntax(
                   expression: IntegerLiteralExprSyntax(i),
-                  trailingComma: .commaToken().withTrailingTrivia(.spaces(3))
+                  trailingComma: .commaToken().with(\.trailingTrivia, .spaces(3))
                 )
               }
             }

@@ -171,53 +171,6 @@ public struct AccessPathSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Returns a new `AccessPathSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> AccessPathSyntax {
-    return AccessPathSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `AccessPathSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> AccessPathSyntax {
-    return AccessPathSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `AccessPathSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> AccessPathSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `AccessPathSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> AccessPathSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `AccessPathSyntax` with all trivia removed.
-  public func withoutTrivia() -> AccessPathSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `AccessPathSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `AccessPathSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
-  }
-  
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     return nil
   }
@@ -433,53 +386,6 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Returns a new `AccessorListSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> AccessorListSyntax {
-    return AccessorListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `AccessorListSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> AccessorListSyntax {
-    return AccessorListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `AccessorListSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> AccessorListSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `AccessorListSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> AccessorListSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `AccessorListSyntax` with all trivia removed.
-  public func withoutTrivia() -> AccessorListSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `AccessorListSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `AccessorListSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
-  }
-  
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     return nil
   }
@@ -693,53 +599,6 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  /// Returns a new `ArrayElementListSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> ArrayElementListSyntax {
-    return ArrayElementListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `ArrayElementListSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> ArrayElementListSyntax {
-    return ArrayElementListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `ArrayElementListSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> ArrayElementListSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `ArrayElementListSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> ArrayElementListSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `ArrayElementListSyntax` with all trivia removed.
-  public func withoutTrivia() -> ArrayElementListSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `ArrayElementListSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `ArrayElementListSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -1001,53 +860,6 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Returns a new `AttributeListSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> AttributeListSyntax {
-    return AttributeListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `AttributeListSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> AttributeListSyntax {
-    return AttributeListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `AttributeListSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> AttributeListSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `AttributeListSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> AttributeListSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `AttributeListSyntax` with all trivia removed.
-  public func withoutTrivia() -> AttributeListSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `AttributeListSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `AttributeListSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
-  }
-  
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     return nil
   }
@@ -1261,53 +1073,6 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  /// Returns a new `AvailabilitySpecListSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> AvailabilitySpecListSyntax {
-    return AvailabilitySpecListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `AvailabilitySpecListSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> AvailabilitySpecListSyntax {
-    return AvailabilitySpecListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `AvailabilitySpecListSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> AvailabilitySpecListSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `AvailabilitySpecListSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> AvailabilitySpecListSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `AvailabilitySpecListSyntax` with all trivia removed.
-  public func withoutTrivia() -> AvailabilitySpecListSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `AvailabilitySpecListSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `AvailabilitySpecListSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -1525,53 +1290,6 @@ public struct AvailabilityVersionRestrictionListSyntax: SyntaxCollection, Syntax
     return replacingLayout(newLayout)
   }
   
-  /// Returns a new `AvailabilityVersionRestrictionListSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> AvailabilityVersionRestrictionListSyntax {
-    return AvailabilityVersionRestrictionListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `AvailabilityVersionRestrictionListSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> AvailabilityVersionRestrictionListSyntax {
-    return AvailabilityVersionRestrictionListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `AvailabilityVersionRestrictionListSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> AvailabilityVersionRestrictionListSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `AvailabilityVersionRestrictionListSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> AvailabilityVersionRestrictionListSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `AvailabilityVersionRestrictionListSyntax` with all trivia removed.
-  public func withoutTrivia() -> AvailabilityVersionRestrictionListSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `AvailabilityVersionRestrictionListSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `AvailabilityVersionRestrictionListSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
-  }
-  
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     return nil
   }
@@ -1785,53 +1503,6 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  /// Returns a new `CaseItemListSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> CaseItemListSyntax {
-    return CaseItemListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `CaseItemListSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> CaseItemListSyntax {
-    return CaseItemListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `CaseItemListSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> CaseItemListSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `CaseItemListSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> CaseItemListSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `CaseItemListSyntax` with all trivia removed.
-  public func withoutTrivia() -> CaseItemListSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `CaseItemListSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `CaseItemListSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -2049,53 +1720,6 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Returns a new `CatchClauseListSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> CatchClauseListSyntax {
-    return CatchClauseListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `CatchClauseListSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> CatchClauseListSyntax {
-    return CatchClauseListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `CatchClauseListSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> CatchClauseListSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `CatchClauseListSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> CatchClauseListSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `CatchClauseListSyntax` with all trivia removed.
-  public func withoutTrivia() -> CatchClauseListSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `CatchClauseListSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `CatchClauseListSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
-  }
-  
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     return nil
   }
@@ -2309,53 +1933,6 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  /// Returns a new `CatchItemListSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> CatchItemListSyntax {
-    return CatchItemListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `CatchItemListSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> CatchItemListSyntax {
-    return CatchItemListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `CatchItemListSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> CatchItemListSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `CatchItemListSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> CatchItemListSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `CatchItemListSyntax` with all trivia removed.
-  public func withoutTrivia() -> CatchItemListSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `CatchItemListSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `CatchItemListSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -2573,53 +2150,6 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Returns a new `ClosureCaptureItemListSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> ClosureCaptureItemListSyntax {
-    return ClosureCaptureItemListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `ClosureCaptureItemListSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> ClosureCaptureItemListSyntax {
-    return ClosureCaptureItemListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `ClosureCaptureItemListSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> ClosureCaptureItemListSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `ClosureCaptureItemListSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> ClosureCaptureItemListSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `ClosureCaptureItemListSyntax` with all trivia removed.
-  public func withoutTrivia() -> ClosureCaptureItemListSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `ClosureCaptureItemListSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `ClosureCaptureItemListSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
-  }
-  
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     return nil
   }
@@ -2833,53 +2363,6 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  /// Returns a new `ClosureParamListSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> ClosureParamListSyntax {
-    return ClosureParamListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `ClosureParamListSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> ClosureParamListSyntax {
-    return ClosureParamListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `ClosureParamListSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> ClosureParamListSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `ClosureParamListSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> ClosureParamListSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `ClosureParamListSyntax` with all trivia removed.
-  public func withoutTrivia() -> ClosureParamListSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `ClosureParamListSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `ClosureParamListSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -3097,53 +2580,6 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Returns a new `CodeBlockItemListSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> CodeBlockItemListSyntax {
-    return CodeBlockItemListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `CodeBlockItemListSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> CodeBlockItemListSyntax {
-    return CodeBlockItemListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `CodeBlockItemListSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> CodeBlockItemListSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `CodeBlockItemListSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> CodeBlockItemListSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `CodeBlockItemListSyntax` with all trivia removed.
-  public func withoutTrivia() -> CodeBlockItemListSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `CodeBlockItemListSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `CodeBlockItemListSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
-  }
-  
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     return nil
   }
@@ -3357,53 +2793,6 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  /// Returns a new `CompositionTypeElementListSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> CompositionTypeElementListSyntax {
-    return CompositionTypeElementListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `CompositionTypeElementListSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> CompositionTypeElementListSyntax {
-    return CompositionTypeElementListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `CompositionTypeElementListSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> CompositionTypeElementListSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `CompositionTypeElementListSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> CompositionTypeElementListSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `CompositionTypeElementListSyntax` with all trivia removed.
-  public func withoutTrivia() -> CompositionTypeElementListSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `CompositionTypeElementListSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `CompositionTypeElementListSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -3621,53 +3010,6 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Returns a new `ConditionElementListSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> ConditionElementListSyntax {
-    return ConditionElementListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `ConditionElementListSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> ConditionElementListSyntax {
-    return ConditionElementListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `ConditionElementListSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> ConditionElementListSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `ConditionElementListSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> ConditionElementListSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `ConditionElementListSyntax` with all trivia removed.
-  public func withoutTrivia() -> ConditionElementListSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `ConditionElementListSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `ConditionElementListSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
-  }
-  
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     return nil
   }
@@ -3881,53 +3223,6 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  /// Returns a new `DeclNameArgumentListSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> DeclNameArgumentListSyntax {
-    return DeclNameArgumentListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `DeclNameArgumentListSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> DeclNameArgumentListSyntax {
-    return DeclNameArgumentListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `DeclNameArgumentListSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> DeclNameArgumentListSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `DeclNameArgumentListSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> DeclNameArgumentListSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `DeclNameArgumentListSyntax` with all trivia removed.
-  public func withoutTrivia() -> DeclNameArgumentListSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `DeclNameArgumentListSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `DeclNameArgumentListSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -4145,53 +3440,6 @@ public struct DesignatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Returns a new `DesignatedTypeListSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> DesignatedTypeListSyntax {
-    return DesignatedTypeListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `DesignatedTypeListSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> DesignatedTypeListSyntax {
-    return DesignatedTypeListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `DesignatedTypeListSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> DesignatedTypeListSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `DesignatedTypeListSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> DesignatedTypeListSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `DesignatedTypeListSyntax` with all trivia removed.
-  public func withoutTrivia() -> DesignatedTypeListSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `DesignatedTypeListSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `DesignatedTypeListSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
-  }
-  
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     return nil
   }
@@ -4405,53 +3653,6 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  /// Returns a new `DictionaryElementListSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> DictionaryElementListSyntax {
-    return DictionaryElementListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `DictionaryElementListSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> DictionaryElementListSyntax {
-    return DictionaryElementListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `DictionaryElementListSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> DictionaryElementListSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `DictionaryElementListSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> DictionaryElementListSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `DictionaryElementListSyntax` with all trivia removed.
-  public func withoutTrivia() -> DictionaryElementListSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `DictionaryElementListSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `DictionaryElementListSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -4669,53 +3870,6 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
     return replacingLayout(newLayout)
   }
   
-  /// Returns a new `DifferentiabilityParamListSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> DifferentiabilityParamListSyntax {
-    return DifferentiabilityParamListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `DifferentiabilityParamListSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> DifferentiabilityParamListSyntax {
-    return DifferentiabilityParamListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `DifferentiabilityParamListSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> DifferentiabilityParamListSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `DifferentiabilityParamListSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> DifferentiabilityParamListSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `DifferentiabilityParamListSyntax` with all trivia removed.
-  public func withoutTrivia() -> DifferentiabilityParamListSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `DifferentiabilityParamListSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `DifferentiabilityParamListSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
-  }
-  
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     return nil
   }
@@ -4926,53 +4080,6 @@ public struct DocumentationAttributeArgumentsSyntax: SyntaxCollection, SyntaxHas
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  /// Returns a new `DocumentationAttributeArgumentsSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> DocumentationAttributeArgumentsSyntax {
-    return DocumentationAttributeArgumentsSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `DocumentationAttributeArgumentsSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> DocumentationAttributeArgumentsSyntax {
-    return DocumentationAttributeArgumentsSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `DocumentationAttributeArgumentsSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> DocumentationAttributeArgumentsSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `DocumentationAttributeArgumentsSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> DocumentationAttributeArgumentsSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `DocumentationAttributeArgumentsSyntax` with all trivia removed.
-  public func withoutTrivia() -> DocumentationAttributeArgumentsSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `DocumentationAttributeArgumentsSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `DocumentationAttributeArgumentsSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -5187,53 +4294,6 @@ public struct EffectsArgumentsSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Returns a new `EffectsArgumentsSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> EffectsArgumentsSyntax {
-    return EffectsArgumentsSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `EffectsArgumentsSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> EffectsArgumentsSyntax {
-    return EffectsArgumentsSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `EffectsArgumentsSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> EffectsArgumentsSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `EffectsArgumentsSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> EffectsArgumentsSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `EffectsArgumentsSyntax` with all trivia removed.
-  public func withoutTrivia() -> EffectsArgumentsSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `EffectsArgumentsSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `EffectsArgumentsSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
-  }
-  
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     return nil
   }
@@ -5446,53 +4506,6 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Returns a new `EnumCaseElementListSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> EnumCaseElementListSyntax {
-    return EnumCaseElementListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `EnumCaseElementListSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> EnumCaseElementListSyntax {
-    return EnumCaseElementListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `EnumCaseElementListSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> EnumCaseElementListSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `EnumCaseElementListSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> EnumCaseElementListSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `EnumCaseElementListSyntax` with all trivia removed.
-  public func withoutTrivia() -> EnumCaseElementListSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `EnumCaseElementListSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `EnumCaseElementListSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
-  }
-  
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     return nil
   }
@@ -5703,53 +4716,6 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  /// Returns a new `ExprListSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> ExprListSyntax {
-    return ExprListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `ExprListSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> ExprListSyntax {
-    return ExprListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `ExprListSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> ExprListSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `ExprListSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> ExprListSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `ExprListSyntax` with all trivia removed.
-  public func withoutTrivia() -> ExprListSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `ExprListSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `ExprListSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -5967,53 +4933,6 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Returns a new `FunctionParameterListSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> FunctionParameterListSyntax {
-    return FunctionParameterListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `FunctionParameterListSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> FunctionParameterListSyntax {
-    return FunctionParameterListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `FunctionParameterListSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> FunctionParameterListSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `FunctionParameterListSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> FunctionParameterListSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `FunctionParameterListSyntax` with all trivia removed.
-  public func withoutTrivia() -> FunctionParameterListSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `FunctionParameterListSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `FunctionParameterListSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
-  }
-  
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     return nil
   }
@@ -6227,53 +5146,6 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  /// Returns a new `GenericArgumentListSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> GenericArgumentListSyntax {
-    return GenericArgumentListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `GenericArgumentListSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> GenericArgumentListSyntax {
-    return GenericArgumentListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `GenericArgumentListSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> GenericArgumentListSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `GenericArgumentListSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> GenericArgumentListSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `GenericArgumentListSyntax` with all trivia removed.
-  public func withoutTrivia() -> GenericArgumentListSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `GenericArgumentListSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `GenericArgumentListSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -6491,53 +5363,6 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Returns a new `GenericParameterListSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> GenericParameterListSyntax {
-    return GenericParameterListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `GenericParameterListSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> GenericParameterListSyntax {
-    return GenericParameterListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `GenericParameterListSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> GenericParameterListSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `GenericParameterListSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> GenericParameterListSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `GenericParameterListSyntax` with all trivia removed.
-  public func withoutTrivia() -> GenericParameterListSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `GenericParameterListSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `GenericParameterListSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
-  }
-  
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     return nil
   }
@@ -6751,53 +5576,6 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  /// Returns a new `GenericRequirementListSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> GenericRequirementListSyntax {
-    return GenericRequirementListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `GenericRequirementListSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> GenericRequirementListSyntax {
-    return GenericRequirementListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `GenericRequirementListSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> GenericRequirementListSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `GenericRequirementListSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> GenericRequirementListSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `GenericRequirementListSyntax` with all trivia removed.
-  public func withoutTrivia() -> GenericRequirementListSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `GenericRequirementListSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `GenericRequirementListSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -7015,53 +5793,6 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Returns a new `IfConfigClauseListSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> IfConfigClauseListSyntax {
-    return IfConfigClauseListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `IfConfigClauseListSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> IfConfigClauseListSyntax {
-    return IfConfigClauseListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `IfConfigClauseListSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> IfConfigClauseListSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `IfConfigClauseListSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> IfConfigClauseListSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `IfConfigClauseListSyntax` with all trivia removed.
-  public func withoutTrivia() -> IfConfigClauseListSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `IfConfigClauseListSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `IfConfigClauseListSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
-  }
-  
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     return nil
   }
@@ -7275,53 +6006,6 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  /// Returns a new `InheritedTypeListSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> InheritedTypeListSyntax {
-    return InheritedTypeListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `InheritedTypeListSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> InheritedTypeListSyntax {
-    return InheritedTypeListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `InheritedTypeListSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> InheritedTypeListSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `InheritedTypeListSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> InheritedTypeListSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `InheritedTypeListSyntax` with all trivia removed.
-  public func withoutTrivia() -> InheritedTypeListSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `InheritedTypeListSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `InheritedTypeListSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -7539,53 +6223,6 @@ public struct KeyPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Returns a new `KeyPathComponentListSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> KeyPathComponentListSyntax {
-    return KeyPathComponentListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `KeyPathComponentListSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> KeyPathComponentListSyntax {
-    return KeyPathComponentListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `KeyPathComponentListSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> KeyPathComponentListSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `KeyPathComponentListSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> KeyPathComponentListSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `KeyPathComponentListSyntax` with all trivia removed.
-  public func withoutTrivia() -> KeyPathComponentListSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `KeyPathComponentListSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `KeyPathComponentListSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
-  }
-  
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     return nil
   }
@@ -7799,53 +6436,6 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  /// Returns a new `MemberDeclListSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> MemberDeclListSyntax {
-    return MemberDeclListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `MemberDeclListSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> MemberDeclListSyntax {
-    return MemberDeclListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `MemberDeclListSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> MemberDeclListSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `MemberDeclListSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> MemberDeclListSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `MemberDeclListSyntax` with all trivia removed.
-  public func withoutTrivia() -> MemberDeclListSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `MemberDeclListSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `MemberDeclListSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -8063,53 +6653,6 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Returns a new `ModifierListSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> ModifierListSyntax {
-    return ModifierListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `ModifierListSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> ModifierListSyntax {
-    return ModifierListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `ModifierListSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> ModifierListSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `ModifierListSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> ModifierListSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `ModifierListSyntax` with all trivia removed.
-  public func withoutTrivia() -> ModifierListSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `ModifierListSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `ModifierListSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
-  }
-  
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     return nil
   }
@@ -8323,53 +6866,6 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  /// Returns a new `MultipleTrailingClosureElementListSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> MultipleTrailingClosureElementListSyntax {
-    return MultipleTrailingClosureElementListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `MultipleTrailingClosureElementListSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> MultipleTrailingClosureElementListSyntax {
-    return MultipleTrailingClosureElementListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `MultipleTrailingClosureElementListSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> MultipleTrailingClosureElementListSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `MultipleTrailingClosureElementListSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> MultipleTrailingClosureElementListSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `MultipleTrailingClosureElementListSyntax` with all trivia removed.
-  public func withoutTrivia() -> MultipleTrailingClosureElementListSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `MultipleTrailingClosureElementListSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `MultipleTrailingClosureElementListSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -8587,53 +7083,6 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Returns a new `ObjCSelectorSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> ObjCSelectorSyntax {
-    return ObjCSelectorSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `ObjCSelectorSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> ObjCSelectorSyntax {
-    return ObjCSelectorSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `ObjCSelectorSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> ObjCSelectorSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `ObjCSelectorSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> ObjCSelectorSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `ObjCSelectorSyntax` with all trivia removed.
-  public func withoutTrivia() -> ObjCSelectorSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `ObjCSelectorSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `ObjCSelectorSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
-  }
-  
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     return nil
   }
@@ -8847,53 +7296,6 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  /// Returns a new `PatternBindingListSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> PatternBindingListSyntax {
-    return PatternBindingListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `PatternBindingListSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> PatternBindingListSyntax {
-    return PatternBindingListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `PatternBindingListSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> PatternBindingListSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `PatternBindingListSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> PatternBindingListSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `PatternBindingListSyntax` with all trivia removed.
-  public func withoutTrivia() -> PatternBindingListSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `PatternBindingListSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `PatternBindingListSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -9168,53 +7570,6 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
     return replacingLayout(newLayout)
   }
   
-  /// Returns a new `PrecedenceGroupAttributeListSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> PrecedenceGroupAttributeListSyntax {
-    return PrecedenceGroupAttributeListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `PrecedenceGroupAttributeListSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> PrecedenceGroupAttributeListSyntax {
-    return PrecedenceGroupAttributeListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `PrecedenceGroupAttributeListSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> PrecedenceGroupAttributeListSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `PrecedenceGroupAttributeListSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> PrecedenceGroupAttributeListSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `PrecedenceGroupAttributeListSyntax` with all trivia removed.
-  public func withoutTrivia() -> PrecedenceGroupAttributeListSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `PrecedenceGroupAttributeListSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `PrecedenceGroupAttributeListSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
-  }
-  
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     return nil
   }
@@ -9430,53 +7785,6 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Returns a new `PrecedenceGroupNameListSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> PrecedenceGroupNameListSyntax {
-    return PrecedenceGroupNameListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `PrecedenceGroupNameListSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> PrecedenceGroupNameListSyntax {
-    return PrecedenceGroupNameListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `PrecedenceGroupNameListSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> PrecedenceGroupNameListSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `PrecedenceGroupNameListSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> PrecedenceGroupNameListSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `PrecedenceGroupNameListSyntax` with all trivia removed.
-  public func withoutTrivia() -> PrecedenceGroupNameListSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `PrecedenceGroupNameListSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `PrecedenceGroupNameListSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
-  }
-  
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     return nil
   }
@@ -9690,53 +7998,6 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  /// Returns a new `PrimaryAssociatedTypeListSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> PrimaryAssociatedTypeListSyntax {
-    return PrimaryAssociatedTypeListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `PrimaryAssociatedTypeListSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> PrimaryAssociatedTypeListSyntax {
-    return PrimaryAssociatedTypeListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `PrimaryAssociatedTypeListSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> PrimaryAssociatedTypeListSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `PrimaryAssociatedTypeListSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> PrimaryAssociatedTypeListSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `PrimaryAssociatedTypeListSyntax` with all trivia removed.
-  public func withoutTrivia() -> PrimaryAssociatedTypeListSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `PrimaryAssociatedTypeListSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `PrimaryAssociatedTypeListSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -10021,53 +8282,6 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
     return replacingLayout(newLayout)
   }
   
-  /// Returns a new `SpecializeAttributeSpecListSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> SpecializeAttributeSpecListSyntax {
-    return SpecializeAttributeSpecListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `SpecializeAttributeSpecListSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> SpecializeAttributeSpecListSyntax {
-    return SpecializeAttributeSpecListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `SpecializeAttributeSpecListSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> SpecializeAttributeSpecListSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `SpecializeAttributeSpecListSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> SpecializeAttributeSpecListSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `SpecializeAttributeSpecListSyntax` with all trivia removed.
-  public func withoutTrivia() -> SpecializeAttributeSpecListSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `SpecializeAttributeSpecListSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `SpecializeAttributeSpecListSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
-  }
-  
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     return nil
   }
@@ -10325,53 +8539,6 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  /// Returns a new `StringLiteralSegmentsSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> StringLiteralSegmentsSyntax {
-    return StringLiteralSegmentsSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `StringLiteralSegmentsSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> StringLiteralSegmentsSyntax {
-    return StringLiteralSegmentsSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `StringLiteralSegmentsSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> StringLiteralSegmentsSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `StringLiteralSegmentsSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> StringLiteralSegmentsSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `StringLiteralSegmentsSyntax` with all trivia removed.
-  public func withoutTrivia() -> StringLiteralSegmentsSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `StringLiteralSegmentsSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `StringLiteralSegmentsSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -10633,53 +8800,6 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Returns a new `SwitchCaseListSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> SwitchCaseListSyntax {
-    return SwitchCaseListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `SwitchCaseListSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> SwitchCaseListSyntax {
-    return SwitchCaseListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `SwitchCaseListSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> SwitchCaseListSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `SwitchCaseListSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> SwitchCaseListSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `SwitchCaseListSyntax` with all trivia removed.
-  public func withoutTrivia() -> SwitchCaseListSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `SwitchCaseListSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `SwitchCaseListSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
-  }
-  
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     return nil
   }
@@ -10893,53 +9013,6 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  /// Returns a new `TupleExprElementListSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> TupleExprElementListSyntax {
-    return TupleExprElementListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `TupleExprElementListSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> TupleExprElementListSyntax {
-    return TupleExprElementListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `TupleExprElementListSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> TupleExprElementListSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `TupleExprElementListSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> TupleExprElementListSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `TupleExprElementListSyntax` with all trivia removed.
-  public func withoutTrivia() -> TupleExprElementListSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `TupleExprElementListSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `TupleExprElementListSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -11157,53 +9230,6 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Returns a new `TuplePatternElementListSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> TuplePatternElementListSyntax {
-    return TuplePatternElementListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `TuplePatternElementListSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> TuplePatternElementListSyntax {
-    return TuplePatternElementListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `TuplePatternElementListSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> TuplePatternElementListSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `TuplePatternElementListSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> TuplePatternElementListSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `TuplePatternElementListSyntax` with all trivia removed.
-  public func withoutTrivia() -> TuplePatternElementListSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `TuplePatternElementListSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `TuplePatternElementListSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
-  }
-  
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     return nil
   }
@@ -11419,53 +9445,6 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Returns a new `TupleTypeElementListSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> TupleTypeElementListSyntax {
-    return TupleTypeElementListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `TupleTypeElementListSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> TupleTypeElementListSyntax {
-    return TupleTypeElementListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `TupleTypeElementListSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> TupleTypeElementListSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `TupleTypeElementListSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> TupleTypeElementListSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `TupleTypeElementListSyntax` with all trivia removed.
-  public func withoutTrivia() -> TupleTypeElementListSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `TupleTypeElementListSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `TupleTypeElementListSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
-  }
-  
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     return nil
   }
@@ -11676,53 +9655,6 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  /// Returns a new `UnexpectedNodesSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> UnexpectedNodesSyntax {
-    return UnexpectedNodesSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `UnexpectedNodesSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> UnexpectedNodesSyntax {
-    return UnexpectedNodesSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `UnexpectedNodesSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> UnexpectedNodesSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `UnexpectedNodesSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> UnexpectedNodesSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `UnexpectedNodesSyntax` with all trivia removed.
-  public func withoutTrivia() -> UnexpectedNodesSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `UnexpectedNodesSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `UnexpectedNodesSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -11938,53 +9870,6 @@ public struct YieldExprListSyntax: SyntaxCollection, SyntaxHashable {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  /// Returns a new `YieldExprListSyntax` with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> YieldExprListSyntax {
-    return YieldExprListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `YieldExprListSyntax` with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> YieldExprListSyntax {
-    return YieldExprListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-  
-  /// Returns a new `YieldExprListSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> YieldExprListSyntax {
-    return withLeadingTrivia([])
-  }
-  
-  /// Returns a new `YieldExprListSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> YieldExprListSyntax {
-    return withTrailingTrivia([])
-  }
-  
-  /// Returns a new `YieldExprListSyntax` with all trivia removed.
-  public func withoutTrivia() -> YieldExprListSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-  
-  /// The leading trivia (spaces, newlines, etc.) associated with this `YieldExprListSyntax`.
-  public var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
-  }
-  
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `YieldExprListSyntax`.
-  public var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {

@@ -615,7 +615,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
 
           let negatedAvailabilityKeyword = availability.availabilityKeyword.negatedAvailabilityKeyword
           let negatedCoditionElement = ConditionElementSyntax(
-            condition: .availability(availability.withAvailabilityKeyword(negatedAvailabilityKeyword)),
+            condition: .availability(availability.with(\.availabilityKeyword, negatedAvailabilityKeyword)),
             trailingComma: conditionElement.trailingComma
           )
           addDiagnostic(

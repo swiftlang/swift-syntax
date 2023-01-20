@@ -18,9 +18,7 @@ import _SwiftSyntaxTestSupport
 fileprivate class FuncRenamer: SyntaxRewriter {
   override func visit(_ node: FunctionDeclSyntax) -> DeclSyntax {
     let rewritten = super.visit(node).as(FunctionDeclSyntax.self)!
-    let modifiedFunctionDecl = rewritten.withIdentifier(
-      .identifier("anotherName")
-    )
+    let modifiedFunctionDecl = rewritten.with(\.identifier, .identifier("anotherName"))
     return DeclSyntax(modifiedFunctionDecl)
   }
 }
@@ -168,13 +166,13 @@ public class AbsolutePositionTests: XCTestCase {
     XCTAssertEqual(AbsolutePositionTests.leadingTrivia, root.leadingTrivia)
     XCTAssertEqual([], root.trailingTrivia)
 
-    var modifiedRoot1 = root.withLeadingTrivia([.spaces(6), .tabs(1)])
+    var modifiedRoot1 = root.with(\.leadingTrivia, [.spaces(6), .tabs(1)])
     XCTAssertEqual([.spaces(6), .tabs(1)], modifiedRoot1.leadingTrivia)
     XCTAssertEqual(AbsolutePositionTests.leadingTrivia, root.leadingTrivia)
     modifiedRoot1.leadingTrivia = [.blockComment("/* this is a comment */")]
     XCTAssertEqual([.blockComment("/* this is a comment */")], modifiedRoot1.leadingTrivia)
 
-    var modifiedRoot2 = root.withTrailingTrivia([.tabs(2)])
+    var modifiedRoot2 = root.with(\.trailingTrivia, [.tabs(2)])
     XCTAssertEqual([.tabs(2)], modifiedRoot2.trailingTrivia)
     XCTAssertEqual([], root.trailingTrivia)
     modifiedRoot2.trailingTrivia = [.carriageReturns(1), .newlines(2)]
@@ -185,13 +183,13 @@ public class AbsolutePositionTests: XCTestCase {
     XCTAssertEqual(AbsolutePositionTests.leadingTrivia, root.statements.leadingTrivia)
     XCTAssertEqual(AbsolutePositionTests.trailingTrivia, root.statements.trailingTrivia)
 
-    var modifiedStatements1 = root.withLeadingTrivia([.carriageReturnLineFeeds(3)])
+    var modifiedStatements1 = root.with(\.leadingTrivia, [.carriageReturnLineFeeds(3)])
     XCTAssertEqual([.carriageReturnLineFeeds(3)], modifiedStatements1.leadingTrivia)
     XCTAssertEqual(AbsolutePositionTests.leadingTrivia, root.statements.leadingTrivia)
     modifiedStatements1.leadingTrivia = [.unexpectedText("UNEXPECTED")]
     XCTAssertEqual([.unexpectedText("UNEXPECTED")], modifiedStatements1.leadingTrivia)
 
-    var modifiedStatements2 = root.withTrailingTrivia([.formfeeds(1), .carriageReturns(3)])
+    var modifiedStatements2 = root.with(\.trailingTrivia, [.formfeeds(1), .carriageReturns(3)])
     XCTAssertEqual([.formfeeds(1), .carriageReturns(3)], modifiedStatements2.trailingTrivia)
     XCTAssertEqual(AbsolutePositionTests.trailingTrivia, root.statements.trailingTrivia)
     modifiedStatements2.trailingTrivia = [.verticalTabs(4)]

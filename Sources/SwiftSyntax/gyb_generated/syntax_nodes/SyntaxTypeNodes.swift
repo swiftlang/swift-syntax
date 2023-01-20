@@ -113,18 +113,11 @@ public struct SimpleTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBeforeName(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
+      self = SimpleTypeIdentifierSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBeforeName` replaced.
-  /// - param newChild: The new `unexpectedBeforeName` to replace the node's
-  ///                   current `unexpectedBeforeName`, if present.
-  public func withUnexpectedBeforeName(_ newChild: UnexpectedNodesSyntax?) -> SimpleTypeIdentifierSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-    return SimpleTypeIdentifierSyntax(newData)
   }
 
   public var name: TokenSyntax {
@@ -133,18 +126,11 @@ public struct SimpleTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(childData!)
     }
     set(value) {
-      self = withName(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
+      self = SimpleTypeIdentifierSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `name` replaced.
-  /// - param newChild: The new `name` to replace the node's
-  ///                   current `name`, if present.
-  public func withName(_ newChild: TokenSyntax) -> SimpleTypeIdentifierSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-    return SimpleTypeIdentifierSyntax(newData)
   }
 
   public var unexpectedBetweenNameAndGenericArgumentClause: UnexpectedNodesSyntax? {
@@ -154,18 +140,11 @@ public struct SimpleTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenNameAndGenericArgumentClause(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
+      self = SimpleTypeIdentifierSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenNameAndGenericArgumentClause` replaced.
-  /// - param newChild: The new `unexpectedBetweenNameAndGenericArgumentClause` to replace the node's
-  ///                   current `unexpectedBetweenNameAndGenericArgumentClause`, if present.
-  public func withUnexpectedBetweenNameAndGenericArgumentClause(_ newChild: UnexpectedNodesSyntax?) -> SimpleTypeIdentifierSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-    return SimpleTypeIdentifierSyntax(newData)
   }
 
   public var genericArgumentClause: GenericArgumentClauseSyntax? {
@@ -175,18 +154,11 @@ public struct SimpleTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return GenericArgumentClauseSyntax(childData!)
     }
     set(value) {
-      self = withGenericArgumentClause(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
+      self = SimpleTypeIdentifierSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `genericArgumentClause` replaced.
-  /// - param newChild: The new `genericArgumentClause` to replace the node's
-  ///                   current `genericArgumentClause`, if present.
-  public func withGenericArgumentClause(_ newChild: GenericArgumentClauseSyntax?) -> SimpleTypeIdentifierSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-    return SimpleTypeIdentifierSyntax(newData)
   }
 
   public var unexpectedAfterGenericArgumentClause: UnexpectedNodesSyntax? {
@@ -196,18 +168,11 @@ public struct SimpleTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedAfterGenericArgumentClause(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
+      self = SimpleTypeIdentifierSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedAfterGenericArgumentClause` replaced.
-  /// - param newChild: The new `unexpectedAfterGenericArgumentClause` to replace the node's
-  ///                   current `unexpectedAfterGenericArgumentClause`, if present.
-  public func withUnexpectedAfterGenericArgumentClause(_ newChild: UnexpectedNodesSyntax?) -> SimpleTypeIdentifierSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-    return SimpleTypeIdentifierSyntax(newData)
   }
 
   public static var structure: SyntaxNodeStructure {
@@ -310,18 +275,11 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBeforeBaseType(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
+      self = MemberTypeIdentifierSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBeforeBaseType` replaced.
-  /// - param newChild: The new `unexpectedBeforeBaseType` to replace the node's
-  ///                   current `unexpectedBeforeBaseType`, if present.
-  public func withUnexpectedBeforeBaseType(_ newChild: UnexpectedNodesSyntax?) -> MemberTypeIdentifierSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-    return MemberTypeIdentifierSyntax(newData)
   }
 
   public var baseType: TypeSyntax {
@@ -330,18 +288,11 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return TypeSyntax(childData!)
     }
     set(value) {
-      self = withBaseType(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
+      self = MemberTypeIdentifierSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `baseType` replaced.
-  /// - param newChild: The new `baseType` to replace the node's
-  ///                   current `baseType`, if present.
-  public func withBaseType(_ newChild: TypeSyntax) -> MemberTypeIdentifierSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-    return MemberTypeIdentifierSyntax(newData)
   }
 
   public var unexpectedBetweenBaseTypeAndPeriod: UnexpectedNodesSyntax? {
@@ -351,18 +302,11 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenBaseTypeAndPeriod(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
+      self = MemberTypeIdentifierSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenBaseTypeAndPeriod` replaced.
-  /// - param newChild: The new `unexpectedBetweenBaseTypeAndPeriod` to replace the node's
-  ///                   current `unexpectedBetweenBaseTypeAndPeriod`, if present.
-  public func withUnexpectedBetweenBaseTypeAndPeriod(_ newChild: UnexpectedNodesSyntax?) -> MemberTypeIdentifierSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-    return MemberTypeIdentifierSyntax(newData)
   }
 
   public var period: TokenSyntax {
@@ -371,18 +315,11 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(childData!)
     }
     set(value) {
-      self = withPeriod(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
+      self = MemberTypeIdentifierSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `period` replaced.
-  /// - param newChild: The new `period` to replace the node's
-  ///                   current `period`, if present.
-  public func withPeriod(_ newChild: TokenSyntax) -> MemberTypeIdentifierSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-    return MemberTypeIdentifierSyntax(newData)
   }
 
   public var unexpectedBetweenPeriodAndName: UnexpectedNodesSyntax? {
@@ -392,18 +329,11 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenPeriodAndName(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
+      self = MemberTypeIdentifierSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenPeriodAndName` replaced.
-  /// - param newChild: The new `unexpectedBetweenPeriodAndName` to replace the node's
-  ///                   current `unexpectedBetweenPeriodAndName`, if present.
-  public func withUnexpectedBetweenPeriodAndName(_ newChild: UnexpectedNodesSyntax?) -> MemberTypeIdentifierSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-    return MemberTypeIdentifierSyntax(newData)
   }
 
   public var name: TokenSyntax {
@@ -412,18 +342,11 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(childData!)
     }
     set(value) {
-      self = withName(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 5, with: raw, arena: arena)
+      self = MemberTypeIdentifierSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `name` replaced.
-  /// - param newChild: The new `name` to replace the node's
-  ///                   current `name`, if present.
-  public func withName(_ newChild: TokenSyntax) -> MemberTypeIdentifierSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
-    return MemberTypeIdentifierSyntax(newData)
   }
 
   public var unexpectedBetweenNameAndGenericArgumentClause: UnexpectedNodesSyntax? {
@@ -433,18 +356,11 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenNameAndGenericArgumentClause(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 6, with: raw, arena: arena)
+      self = MemberTypeIdentifierSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenNameAndGenericArgumentClause` replaced.
-  /// - param newChild: The new `unexpectedBetweenNameAndGenericArgumentClause` to replace the node's
-  ///                   current `unexpectedBetweenNameAndGenericArgumentClause`, if present.
-  public func withUnexpectedBetweenNameAndGenericArgumentClause(_ newChild: UnexpectedNodesSyntax?) -> MemberTypeIdentifierSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
-    return MemberTypeIdentifierSyntax(newData)
   }
 
   public var genericArgumentClause: GenericArgumentClauseSyntax? {
@@ -454,18 +370,11 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return GenericArgumentClauseSyntax(childData!)
     }
     set(value) {
-      self = withGenericArgumentClause(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 7, with: raw, arena: arena)
+      self = MemberTypeIdentifierSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `genericArgumentClause` replaced.
-  /// - param newChild: The new `genericArgumentClause` to replace the node's
-  ///                   current `genericArgumentClause`, if present.
-  public func withGenericArgumentClause(_ newChild: GenericArgumentClauseSyntax?) -> MemberTypeIdentifierSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 7, with: raw, arena: arena)
-    return MemberTypeIdentifierSyntax(newData)
   }
 
   public var unexpectedAfterGenericArgumentClause: UnexpectedNodesSyntax? {
@@ -475,18 +384,11 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedAfterGenericArgumentClause(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 8, with: raw, arena: arena)
+      self = MemberTypeIdentifierSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedAfterGenericArgumentClause` replaced.
-  /// - param newChild: The new `unexpectedAfterGenericArgumentClause` to replace the node's
-  ///                   current `unexpectedAfterGenericArgumentClause`, if present.
-  public func withUnexpectedAfterGenericArgumentClause(_ newChild: UnexpectedNodesSyntax?) -> MemberTypeIdentifierSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 8, with: raw, arena: arena)
-    return MemberTypeIdentifierSyntax(newData)
   }
 
   public static var structure: SyntaxNodeStructure {
@@ -593,18 +495,11 @@ public struct ClassRestrictionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBeforeClassKeyword(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
+      self = ClassRestrictionTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBeforeClassKeyword` replaced.
-  /// - param newChild: The new `unexpectedBeforeClassKeyword` to replace the node's
-  ///                   current `unexpectedBeforeClassKeyword`, if present.
-  public func withUnexpectedBeforeClassKeyword(_ newChild: UnexpectedNodesSyntax?) -> ClassRestrictionTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-    return ClassRestrictionTypeSyntax(newData)
   }
 
   public var classKeyword: TokenSyntax {
@@ -613,18 +508,11 @@ public struct ClassRestrictionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(childData!)
     }
     set(value) {
-      self = withClassKeyword(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
+      self = ClassRestrictionTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `classKeyword` replaced.
-  /// - param newChild: The new `classKeyword` to replace the node's
-  ///                   current `classKeyword`, if present.
-  public func withClassKeyword(_ newChild: TokenSyntax) -> ClassRestrictionTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-    return ClassRestrictionTypeSyntax(newData)
   }
 
   public var unexpectedAfterClassKeyword: UnexpectedNodesSyntax? {
@@ -634,18 +522,11 @@ public struct ClassRestrictionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedAfterClassKeyword(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
+      self = ClassRestrictionTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedAfterClassKeyword` replaced.
-  /// - param newChild: The new `unexpectedAfterClassKeyword` to replace the node's
-  ///                   current `unexpectedAfterClassKeyword`, if present.
-  public func withUnexpectedAfterClassKeyword(_ newChild: UnexpectedNodesSyntax?) -> ClassRestrictionTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-    return ClassRestrictionTypeSyntax(newData)
   }
 
   public static var structure: SyntaxNodeStructure {
@@ -736,18 +617,11 @@ public struct ArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBeforeLeftSquareBracket(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
+      self = ArrayTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBeforeLeftSquareBracket` replaced.
-  /// - param newChild: The new `unexpectedBeforeLeftSquareBracket` to replace the node's
-  ///                   current `unexpectedBeforeLeftSquareBracket`, if present.
-  public func withUnexpectedBeforeLeftSquareBracket(_ newChild: UnexpectedNodesSyntax?) -> ArrayTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-    return ArrayTypeSyntax(newData)
   }
 
   public var leftSquareBracket: TokenSyntax {
@@ -756,18 +630,11 @@ public struct ArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(childData!)
     }
     set(value) {
-      self = withLeftSquareBracket(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
+      self = ArrayTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `leftSquareBracket` replaced.
-  /// - param newChild: The new `leftSquareBracket` to replace the node's
-  ///                   current `leftSquareBracket`, if present.
-  public func withLeftSquareBracket(_ newChild: TokenSyntax) -> ArrayTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-    return ArrayTypeSyntax(newData)
   }
 
   public var unexpectedBetweenLeftSquareBracketAndElementType: UnexpectedNodesSyntax? {
@@ -777,18 +644,11 @@ public struct ArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenLeftSquareBracketAndElementType(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
+      self = ArrayTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenLeftSquareBracketAndElementType` replaced.
-  /// - param newChild: The new `unexpectedBetweenLeftSquareBracketAndElementType` to replace the node's
-  ///                   current `unexpectedBetweenLeftSquareBracketAndElementType`, if present.
-  public func withUnexpectedBetweenLeftSquareBracketAndElementType(_ newChild: UnexpectedNodesSyntax?) -> ArrayTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-    return ArrayTypeSyntax(newData)
   }
 
   public var elementType: TypeSyntax {
@@ -797,18 +657,11 @@ public struct ArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return TypeSyntax(childData!)
     }
     set(value) {
-      self = withElementType(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
+      self = ArrayTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `elementType` replaced.
-  /// - param newChild: The new `elementType` to replace the node's
-  ///                   current `elementType`, if present.
-  public func withElementType(_ newChild: TypeSyntax) -> ArrayTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-    return ArrayTypeSyntax(newData)
   }
 
   public var unexpectedBetweenElementTypeAndRightSquareBracket: UnexpectedNodesSyntax? {
@@ -818,18 +671,11 @@ public struct ArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenElementTypeAndRightSquareBracket(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
+      self = ArrayTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenElementTypeAndRightSquareBracket` replaced.
-  /// - param newChild: The new `unexpectedBetweenElementTypeAndRightSquareBracket` to replace the node's
-  ///                   current `unexpectedBetweenElementTypeAndRightSquareBracket`, if present.
-  public func withUnexpectedBetweenElementTypeAndRightSquareBracket(_ newChild: UnexpectedNodesSyntax?) -> ArrayTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-    return ArrayTypeSyntax(newData)
   }
 
   public var rightSquareBracket: TokenSyntax {
@@ -838,18 +684,11 @@ public struct ArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(childData!)
     }
     set(value) {
-      self = withRightSquareBracket(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 5, with: raw, arena: arena)
+      self = ArrayTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `rightSquareBracket` replaced.
-  /// - param newChild: The new `rightSquareBracket` to replace the node's
-  ///                   current `rightSquareBracket`, if present.
-  public func withRightSquareBracket(_ newChild: TokenSyntax) -> ArrayTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
-    return ArrayTypeSyntax(newData)
   }
 
   public var unexpectedAfterRightSquareBracket: UnexpectedNodesSyntax? {
@@ -859,18 +698,11 @@ public struct ArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedAfterRightSquareBracket(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 6, with: raw, arena: arena)
+      self = ArrayTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedAfterRightSquareBracket` replaced.
-  /// - param newChild: The new `unexpectedAfterRightSquareBracket` to replace the node's
-  ///                   current `unexpectedAfterRightSquareBracket`, if present.
-  public func withUnexpectedAfterRightSquareBracket(_ newChild: UnexpectedNodesSyntax?) -> ArrayTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
-    return ArrayTypeSyntax(newData)
   }
 
   public static var structure: SyntaxNodeStructure {
@@ -985,18 +817,11 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBeforeLeftSquareBracket(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
+      self = DictionaryTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBeforeLeftSquareBracket` replaced.
-  /// - param newChild: The new `unexpectedBeforeLeftSquareBracket` to replace the node's
-  ///                   current `unexpectedBeforeLeftSquareBracket`, if present.
-  public func withUnexpectedBeforeLeftSquareBracket(_ newChild: UnexpectedNodesSyntax?) -> DictionaryTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-    return DictionaryTypeSyntax(newData)
   }
 
   public var leftSquareBracket: TokenSyntax {
@@ -1005,18 +830,11 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(childData!)
     }
     set(value) {
-      self = withLeftSquareBracket(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
+      self = DictionaryTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `leftSquareBracket` replaced.
-  /// - param newChild: The new `leftSquareBracket` to replace the node's
-  ///                   current `leftSquareBracket`, if present.
-  public func withLeftSquareBracket(_ newChild: TokenSyntax) -> DictionaryTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-    return DictionaryTypeSyntax(newData)
   }
 
   public var unexpectedBetweenLeftSquareBracketAndKeyType: UnexpectedNodesSyntax? {
@@ -1026,18 +844,11 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenLeftSquareBracketAndKeyType(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
+      self = DictionaryTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenLeftSquareBracketAndKeyType` replaced.
-  /// - param newChild: The new `unexpectedBetweenLeftSquareBracketAndKeyType` to replace the node's
-  ///                   current `unexpectedBetweenLeftSquareBracketAndKeyType`, if present.
-  public func withUnexpectedBetweenLeftSquareBracketAndKeyType(_ newChild: UnexpectedNodesSyntax?) -> DictionaryTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-    return DictionaryTypeSyntax(newData)
   }
 
   public var keyType: TypeSyntax {
@@ -1046,18 +857,11 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return TypeSyntax(childData!)
     }
     set(value) {
-      self = withKeyType(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
+      self = DictionaryTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `keyType` replaced.
-  /// - param newChild: The new `keyType` to replace the node's
-  ///                   current `keyType`, if present.
-  public func withKeyType(_ newChild: TypeSyntax) -> DictionaryTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-    return DictionaryTypeSyntax(newData)
   }
 
   public var unexpectedBetweenKeyTypeAndColon: UnexpectedNodesSyntax? {
@@ -1067,18 +871,11 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenKeyTypeAndColon(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
+      self = DictionaryTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenKeyTypeAndColon` replaced.
-  /// - param newChild: The new `unexpectedBetweenKeyTypeAndColon` to replace the node's
-  ///                   current `unexpectedBetweenKeyTypeAndColon`, if present.
-  public func withUnexpectedBetweenKeyTypeAndColon(_ newChild: UnexpectedNodesSyntax?) -> DictionaryTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-    return DictionaryTypeSyntax(newData)
   }
 
   public var colon: TokenSyntax {
@@ -1087,18 +884,11 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(childData!)
     }
     set(value) {
-      self = withColon(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 5, with: raw, arena: arena)
+      self = DictionaryTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `colon` replaced.
-  /// - param newChild: The new `colon` to replace the node's
-  ///                   current `colon`, if present.
-  public func withColon(_ newChild: TokenSyntax) -> DictionaryTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
-    return DictionaryTypeSyntax(newData)
   }
 
   public var unexpectedBetweenColonAndValueType: UnexpectedNodesSyntax? {
@@ -1108,18 +898,11 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenColonAndValueType(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 6, with: raw, arena: arena)
+      self = DictionaryTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenColonAndValueType` replaced.
-  /// - param newChild: The new `unexpectedBetweenColonAndValueType` to replace the node's
-  ///                   current `unexpectedBetweenColonAndValueType`, if present.
-  public func withUnexpectedBetweenColonAndValueType(_ newChild: UnexpectedNodesSyntax?) -> DictionaryTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
-    return DictionaryTypeSyntax(newData)
   }
 
   public var valueType: TypeSyntax {
@@ -1128,18 +911,11 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return TypeSyntax(childData!)
     }
     set(value) {
-      self = withValueType(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 7, with: raw, arena: arena)
+      self = DictionaryTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `valueType` replaced.
-  /// - param newChild: The new `valueType` to replace the node's
-  ///                   current `valueType`, if present.
-  public func withValueType(_ newChild: TypeSyntax) -> DictionaryTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 7, with: raw, arena: arena)
-    return DictionaryTypeSyntax(newData)
   }
 
   public var unexpectedBetweenValueTypeAndRightSquareBracket: UnexpectedNodesSyntax? {
@@ -1149,18 +925,11 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenValueTypeAndRightSquareBracket(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 8, with: raw, arena: arena)
+      self = DictionaryTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenValueTypeAndRightSquareBracket` replaced.
-  /// - param newChild: The new `unexpectedBetweenValueTypeAndRightSquareBracket` to replace the node's
-  ///                   current `unexpectedBetweenValueTypeAndRightSquareBracket`, if present.
-  public func withUnexpectedBetweenValueTypeAndRightSquareBracket(_ newChild: UnexpectedNodesSyntax?) -> DictionaryTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 8, with: raw, arena: arena)
-    return DictionaryTypeSyntax(newData)
   }
 
   public var rightSquareBracket: TokenSyntax {
@@ -1169,18 +938,11 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(childData!)
     }
     set(value) {
-      self = withRightSquareBracket(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 9, with: raw, arena: arena)
+      self = DictionaryTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `rightSquareBracket` replaced.
-  /// - param newChild: The new `rightSquareBracket` to replace the node's
-  ///                   current `rightSquareBracket`, if present.
-  public func withRightSquareBracket(_ newChild: TokenSyntax) -> DictionaryTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 9, with: raw, arena: arena)
-    return DictionaryTypeSyntax(newData)
   }
 
   public var unexpectedAfterRightSquareBracket: UnexpectedNodesSyntax? {
@@ -1190,18 +952,11 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedAfterRightSquareBracket(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 10, with: raw, arena: arena)
+      self = DictionaryTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedAfterRightSquareBracket` replaced.
-  /// - param newChild: The new `unexpectedAfterRightSquareBracket` to replace the node's
-  ///                   current `unexpectedAfterRightSquareBracket`, if present.
-  public func withUnexpectedAfterRightSquareBracket(_ newChild: UnexpectedNodesSyntax?) -> DictionaryTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 10, with: raw, arena: arena)
-    return DictionaryTypeSyntax(newData)
   }
 
   public static var structure: SyntaxNodeStructure {
@@ -1324,18 +1079,11 @@ public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBeforeBaseType(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
+      self = MetatypeTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBeforeBaseType` replaced.
-  /// - param newChild: The new `unexpectedBeforeBaseType` to replace the node's
-  ///                   current `unexpectedBeforeBaseType`, if present.
-  public func withUnexpectedBeforeBaseType(_ newChild: UnexpectedNodesSyntax?) -> MetatypeTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-    return MetatypeTypeSyntax(newData)
   }
 
   public var baseType: TypeSyntax {
@@ -1344,18 +1092,11 @@ public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return TypeSyntax(childData!)
     }
     set(value) {
-      self = withBaseType(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
+      self = MetatypeTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `baseType` replaced.
-  /// - param newChild: The new `baseType` to replace the node's
-  ///                   current `baseType`, if present.
-  public func withBaseType(_ newChild: TypeSyntax) -> MetatypeTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-    return MetatypeTypeSyntax(newData)
   }
 
   public var unexpectedBetweenBaseTypeAndPeriod: UnexpectedNodesSyntax? {
@@ -1365,18 +1106,11 @@ public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenBaseTypeAndPeriod(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
+      self = MetatypeTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenBaseTypeAndPeriod` replaced.
-  /// - param newChild: The new `unexpectedBetweenBaseTypeAndPeriod` to replace the node's
-  ///                   current `unexpectedBetweenBaseTypeAndPeriod`, if present.
-  public func withUnexpectedBetweenBaseTypeAndPeriod(_ newChild: UnexpectedNodesSyntax?) -> MetatypeTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-    return MetatypeTypeSyntax(newData)
   }
 
   public var period: TokenSyntax {
@@ -1385,18 +1119,11 @@ public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(childData!)
     }
     set(value) {
-      self = withPeriod(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
+      self = MetatypeTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `period` replaced.
-  /// - param newChild: The new `period` to replace the node's
-  ///                   current `period`, if present.
-  public func withPeriod(_ newChild: TokenSyntax) -> MetatypeTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-    return MetatypeTypeSyntax(newData)
   }
 
   public var unexpectedBetweenPeriodAndTypeOrProtocol: UnexpectedNodesSyntax? {
@@ -1406,18 +1133,11 @@ public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenPeriodAndTypeOrProtocol(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
+      self = MetatypeTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenPeriodAndTypeOrProtocol` replaced.
-  /// - param newChild: The new `unexpectedBetweenPeriodAndTypeOrProtocol` to replace the node's
-  ///                   current `unexpectedBetweenPeriodAndTypeOrProtocol`, if present.
-  public func withUnexpectedBetweenPeriodAndTypeOrProtocol(_ newChild: UnexpectedNodesSyntax?) -> MetatypeTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-    return MetatypeTypeSyntax(newData)
   }
 
   public var typeOrProtocol: TokenSyntax {
@@ -1426,18 +1146,11 @@ public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(childData!)
     }
     set(value) {
-      self = withTypeOrProtocol(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 5, with: raw, arena: arena)
+      self = MetatypeTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `typeOrProtocol` replaced.
-  /// - param newChild: The new `typeOrProtocol` to replace the node's
-  ///                   current `typeOrProtocol`, if present.
-  public func withTypeOrProtocol(_ newChild: TokenSyntax) -> MetatypeTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
-    return MetatypeTypeSyntax(newData)
   }
 
   public var unexpectedAfterTypeOrProtocol: UnexpectedNodesSyntax? {
@@ -1447,18 +1160,11 @@ public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedAfterTypeOrProtocol(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 6, with: raw, arena: arena)
+      self = MetatypeTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedAfterTypeOrProtocol` replaced.
-  /// - param newChild: The new `unexpectedAfterTypeOrProtocol` to replace the node's
-  ///                   current `unexpectedAfterTypeOrProtocol`, if present.
-  public func withUnexpectedAfterTypeOrProtocol(_ newChild: UnexpectedNodesSyntax?) -> MetatypeTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
-    return MetatypeTypeSyntax(newData)
   }
 
   public static var structure: SyntaxNodeStructure {
@@ -1561,18 +1267,11 @@ public struct OptionalTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBeforeWrappedType(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
+      self = OptionalTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBeforeWrappedType` replaced.
-  /// - param newChild: The new `unexpectedBeforeWrappedType` to replace the node's
-  ///                   current `unexpectedBeforeWrappedType`, if present.
-  public func withUnexpectedBeforeWrappedType(_ newChild: UnexpectedNodesSyntax?) -> OptionalTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-    return OptionalTypeSyntax(newData)
   }
 
   public var wrappedType: TypeSyntax {
@@ -1581,18 +1280,11 @@ public struct OptionalTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return TypeSyntax(childData!)
     }
     set(value) {
-      self = withWrappedType(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
+      self = OptionalTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `wrappedType` replaced.
-  /// - param newChild: The new `wrappedType` to replace the node's
-  ///                   current `wrappedType`, if present.
-  public func withWrappedType(_ newChild: TypeSyntax) -> OptionalTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-    return OptionalTypeSyntax(newData)
   }
 
   public var unexpectedBetweenWrappedTypeAndQuestionMark: UnexpectedNodesSyntax? {
@@ -1602,18 +1294,11 @@ public struct OptionalTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenWrappedTypeAndQuestionMark(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
+      self = OptionalTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenWrappedTypeAndQuestionMark` replaced.
-  /// - param newChild: The new `unexpectedBetweenWrappedTypeAndQuestionMark` to replace the node's
-  ///                   current `unexpectedBetweenWrappedTypeAndQuestionMark`, if present.
-  public func withUnexpectedBetweenWrappedTypeAndQuestionMark(_ newChild: UnexpectedNodesSyntax?) -> OptionalTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-    return OptionalTypeSyntax(newData)
   }
 
   public var questionMark: TokenSyntax {
@@ -1622,18 +1307,11 @@ public struct OptionalTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(childData!)
     }
     set(value) {
-      self = withQuestionMark(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
+      self = OptionalTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `questionMark` replaced.
-  /// - param newChild: The new `questionMark` to replace the node's
-  ///                   current `questionMark`, if present.
-  public func withQuestionMark(_ newChild: TokenSyntax) -> OptionalTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-    return OptionalTypeSyntax(newData)
   }
 
   public var unexpectedAfterQuestionMark: UnexpectedNodesSyntax? {
@@ -1643,18 +1321,11 @@ public struct OptionalTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedAfterQuestionMark(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
+      self = OptionalTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedAfterQuestionMark` replaced.
-  /// - param newChild: The new `unexpectedAfterQuestionMark` to replace the node's
-  ///                   current `unexpectedAfterQuestionMark`, if present.
-  public func withUnexpectedAfterQuestionMark(_ newChild: UnexpectedNodesSyntax?) -> OptionalTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-    return OptionalTypeSyntax(newData)
   }
 
   public static var structure: SyntaxNodeStructure {
@@ -1749,18 +1420,11 @@ public struct ConstrainedSugarTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBeforeSomeOrAnySpecifier(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
+      self = ConstrainedSugarTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBeforeSomeOrAnySpecifier` replaced.
-  /// - param newChild: The new `unexpectedBeforeSomeOrAnySpecifier` to replace the node's
-  ///                   current `unexpectedBeforeSomeOrAnySpecifier`, if present.
-  public func withUnexpectedBeforeSomeOrAnySpecifier(_ newChild: UnexpectedNodesSyntax?) -> ConstrainedSugarTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-    return ConstrainedSugarTypeSyntax(newData)
   }
 
   public var someOrAnySpecifier: TokenSyntax {
@@ -1769,18 +1433,11 @@ public struct ConstrainedSugarTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(childData!)
     }
     set(value) {
-      self = withSomeOrAnySpecifier(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
+      self = ConstrainedSugarTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `someOrAnySpecifier` replaced.
-  /// - param newChild: The new `someOrAnySpecifier` to replace the node's
-  ///                   current `someOrAnySpecifier`, if present.
-  public func withSomeOrAnySpecifier(_ newChild: TokenSyntax) -> ConstrainedSugarTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-    return ConstrainedSugarTypeSyntax(newData)
   }
 
   public var unexpectedBetweenSomeOrAnySpecifierAndBaseType: UnexpectedNodesSyntax? {
@@ -1790,18 +1447,11 @@ public struct ConstrainedSugarTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenSomeOrAnySpecifierAndBaseType(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
+      self = ConstrainedSugarTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenSomeOrAnySpecifierAndBaseType` replaced.
-  /// - param newChild: The new `unexpectedBetweenSomeOrAnySpecifierAndBaseType` to replace the node's
-  ///                   current `unexpectedBetweenSomeOrAnySpecifierAndBaseType`, if present.
-  public func withUnexpectedBetweenSomeOrAnySpecifierAndBaseType(_ newChild: UnexpectedNodesSyntax?) -> ConstrainedSugarTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-    return ConstrainedSugarTypeSyntax(newData)
   }
 
   public var baseType: TypeSyntax {
@@ -1810,18 +1460,11 @@ public struct ConstrainedSugarTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return TypeSyntax(childData!)
     }
     set(value) {
-      self = withBaseType(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
+      self = ConstrainedSugarTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `baseType` replaced.
-  /// - param newChild: The new `baseType` to replace the node's
-  ///                   current `baseType`, if present.
-  public func withBaseType(_ newChild: TypeSyntax) -> ConstrainedSugarTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-    return ConstrainedSugarTypeSyntax(newData)
   }
 
   public var unexpectedAfterBaseType: UnexpectedNodesSyntax? {
@@ -1831,18 +1474,11 @@ public struct ConstrainedSugarTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedAfterBaseType(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
+      self = ConstrainedSugarTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedAfterBaseType` replaced.
-  /// - param newChild: The new `unexpectedAfterBaseType` to replace the node's
-  ///                   current `unexpectedAfterBaseType`, if present.
-  public func withUnexpectedAfterBaseType(_ newChild: UnexpectedNodesSyntax?) -> ConstrainedSugarTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-    return ConstrainedSugarTypeSyntax(newData)
   }
 
   public static var structure: SyntaxNodeStructure {
@@ -1937,18 +1573,11 @@ public struct ImplicitlyUnwrappedOptionalTypeSyntax: TypeSyntaxProtocol, SyntaxH
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBeforeWrappedType(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
+      self = ImplicitlyUnwrappedOptionalTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBeforeWrappedType` replaced.
-  /// - param newChild: The new `unexpectedBeforeWrappedType` to replace the node's
-  ///                   current `unexpectedBeforeWrappedType`, if present.
-  public func withUnexpectedBeforeWrappedType(_ newChild: UnexpectedNodesSyntax?) -> ImplicitlyUnwrappedOptionalTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-    return ImplicitlyUnwrappedOptionalTypeSyntax(newData)
   }
 
   public var wrappedType: TypeSyntax {
@@ -1957,18 +1586,11 @@ public struct ImplicitlyUnwrappedOptionalTypeSyntax: TypeSyntaxProtocol, SyntaxH
       return TypeSyntax(childData!)
     }
     set(value) {
-      self = withWrappedType(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
+      self = ImplicitlyUnwrappedOptionalTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `wrappedType` replaced.
-  /// - param newChild: The new `wrappedType` to replace the node's
-  ///                   current `wrappedType`, if present.
-  public func withWrappedType(_ newChild: TypeSyntax) -> ImplicitlyUnwrappedOptionalTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-    return ImplicitlyUnwrappedOptionalTypeSyntax(newData)
   }
 
   public var unexpectedBetweenWrappedTypeAndExclamationMark: UnexpectedNodesSyntax? {
@@ -1978,18 +1600,11 @@ public struct ImplicitlyUnwrappedOptionalTypeSyntax: TypeSyntaxProtocol, SyntaxH
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenWrappedTypeAndExclamationMark(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
+      self = ImplicitlyUnwrappedOptionalTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenWrappedTypeAndExclamationMark` replaced.
-  /// - param newChild: The new `unexpectedBetweenWrappedTypeAndExclamationMark` to replace the node's
-  ///                   current `unexpectedBetweenWrappedTypeAndExclamationMark`, if present.
-  public func withUnexpectedBetweenWrappedTypeAndExclamationMark(_ newChild: UnexpectedNodesSyntax?) -> ImplicitlyUnwrappedOptionalTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-    return ImplicitlyUnwrappedOptionalTypeSyntax(newData)
   }
 
   public var exclamationMark: TokenSyntax {
@@ -1998,18 +1613,11 @@ public struct ImplicitlyUnwrappedOptionalTypeSyntax: TypeSyntaxProtocol, SyntaxH
       return TokenSyntax(childData!)
     }
     set(value) {
-      self = withExclamationMark(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
+      self = ImplicitlyUnwrappedOptionalTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `exclamationMark` replaced.
-  /// - param newChild: The new `exclamationMark` to replace the node's
-  ///                   current `exclamationMark`, if present.
-  public func withExclamationMark(_ newChild: TokenSyntax) -> ImplicitlyUnwrappedOptionalTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-    return ImplicitlyUnwrappedOptionalTypeSyntax(newData)
   }
 
   public var unexpectedAfterExclamationMark: UnexpectedNodesSyntax? {
@@ -2019,18 +1627,11 @@ public struct ImplicitlyUnwrappedOptionalTypeSyntax: TypeSyntaxProtocol, SyntaxH
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedAfterExclamationMark(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
+      self = ImplicitlyUnwrappedOptionalTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedAfterExclamationMark` replaced.
-  /// - param newChild: The new `unexpectedAfterExclamationMark` to replace the node's
-  ///                   current `unexpectedAfterExclamationMark`, if present.
-  public func withUnexpectedAfterExclamationMark(_ newChild: UnexpectedNodesSyntax?) -> ImplicitlyUnwrappedOptionalTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-    return ImplicitlyUnwrappedOptionalTypeSyntax(newData)
   }
 
   public static var structure: SyntaxNodeStructure {
@@ -2121,18 +1722,11 @@ public struct CompositionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBeforeElements(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
+      self = CompositionTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBeforeElements` replaced.
-  /// - param newChild: The new `unexpectedBeforeElements` to replace the node's
-  ///                   current `unexpectedBeforeElements`, if present.
-  public func withUnexpectedBeforeElements(_ newChild: UnexpectedNodesSyntax?) -> CompositionTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-    return CompositionTypeSyntax(newData)
   }
 
   public var elements: CompositionTypeElementListSyntax {
@@ -2141,7 +1735,10 @@ public struct CompositionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return CompositionTypeElementListSyntax(childData!)
     }
     set(value) {
-      self = withElements(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
+      self = CompositionTypeSyntax(newData)
     }
   }
 
@@ -2164,16 +1761,6 @@ public struct CompositionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     return CompositionTypeSyntax(newData)
   }
 
-  /// Returns a copy of the receiver with its `elements` replaced.
-  /// - param newChild: The new `elements` to replace the node's
-  ///                   current `elements`, if present.
-  public func withElements(_ newChild: CompositionTypeElementListSyntax) -> CompositionTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-    return CompositionTypeSyntax(newData)
-  }
-
   public var unexpectedAfterElements: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 2, parent: Syntax(self))
@@ -2181,18 +1768,11 @@ public struct CompositionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedAfterElements(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
+      self = CompositionTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedAfterElements` replaced.
-  /// - param newChild: The new `unexpectedAfterElements` to replace the node's
-  ///                   current `unexpectedAfterElements`, if present.
-  public func withUnexpectedAfterElements(_ newChild: UnexpectedNodesSyntax?) -> CompositionTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-    return CompositionTypeSyntax(newData)
   }
 
   public static var structure: SyntaxNodeStructure {
@@ -2279,18 +1859,11 @@ public struct PackExpansionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBeforeRepeatKeyword(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
+      self = PackExpansionTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBeforeRepeatKeyword` replaced.
-  /// - param newChild: The new `unexpectedBeforeRepeatKeyword` to replace the node's
-  ///                   current `unexpectedBeforeRepeatKeyword`, if present.
-  public func withUnexpectedBeforeRepeatKeyword(_ newChild: UnexpectedNodesSyntax?) -> PackExpansionTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-    return PackExpansionTypeSyntax(newData)
   }
 
   public var repeatKeyword: TokenSyntax {
@@ -2299,18 +1872,11 @@ public struct PackExpansionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(childData!)
     }
     set(value) {
-      self = withRepeatKeyword(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
+      self = PackExpansionTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `repeatKeyword` replaced.
-  /// - param newChild: The new `repeatKeyword` to replace the node's
-  ///                   current `repeatKeyword`, if present.
-  public func withRepeatKeyword(_ newChild: TokenSyntax) -> PackExpansionTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-    return PackExpansionTypeSyntax(newData)
   }
 
   public var unexpectedBetweenRepeatKeywordAndPatternType: UnexpectedNodesSyntax? {
@@ -2320,18 +1886,11 @@ public struct PackExpansionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenRepeatKeywordAndPatternType(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
+      self = PackExpansionTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenRepeatKeywordAndPatternType` replaced.
-  /// - param newChild: The new `unexpectedBetweenRepeatKeywordAndPatternType` to replace the node's
-  ///                   current `unexpectedBetweenRepeatKeywordAndPatternType`, if present.
-  public func withUnexpectedBetweenRepeatKeywordAndPatternType(_ newChild: UnexpectedNodesSyntax?) -> PackExpansionTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-    return PackExpansionTypeSyntax(newData)
   }
 
   public var patternType: TypeSyntax {
@@ -2340,18 +1899,11 @@ public struct PackExpansionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return TypeSyntax(childData!)
     }
     set(value) {
-      self = withPatternType(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
+      self = PackExpansionTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `patternType` replaced.
-  /// - param newChild: The new `patternType` to replace the node's
-  ///                   current `patternType`, if present.
-  public func withPatternType(_ newChild: TypeSyntax) -> PackExpansionTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-    return PackExpansionTypeSyntax(newData)
   }
 
   public var unexpectedAfterPatternType: UnexpectedNodesSyntax? {
@@ -2361,18 +1913,11 @@ public struct PackExpansionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedAfterPatternType(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
+      self = PackExpansionTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedAfterPatternType` replaced.
-  /// - param newChild: The new `unexpectedAfterPatternType` to replace the node's
-  ///                   current `unexpectedAfterPatternType`, if present.
-  public func withUnexpectedAfterPatternType(_ newChild: UnexpectedNodesSyntax?) -> PackExpansionTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-    return PackExpansionTypeSyntax(newData)
   }
 
   public static var structure: SyntaxNodeStructure {
@@ -2467,18 +2012,11 @@ public struct PackReferenceTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBeforeEachKeyword(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
+      self = PackReferenceTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBeforeEachKeyword` replaced.
-  /// - param newChild: The new `unexpectedBeforeEachKeyword` to replace the node's
-  ///                   current `unexpectedBeforeEachKeyword`, if present.
-  public func withUnexpectedBeforeEachKeyword(_ newChild: UnexpectedNodesSyntax?) -> PackReferenceTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-    return PackReferenceTypeSyntax(newData)
   }
 
   public var eachKeyword: TokenSyntax {
@@ -2487,18 +2025,11 @@ public struct PackReferenceTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(childData!)
     }
     set(value) {
-      self = withEachKeyword(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
+      self = PackReferenceTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `eachKeyword` replaced.
-  /// - param newChild: The new `eachKeyword` to replace the node's
-  ///                   current `eachKeyword`, if present.
-  public func withEachKeyword(_ newChild: TokenSyntax) -> PackReferenceTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-    return PackReferenceTypeSyntax(newData)
   }
 
   public var unexpectedBetweenEachKeywordAndPackType: UnexpectedNodesSyntax? {
@@ -2508,18 +2039,11 @@ public struct PackReferenceTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenEachKeywordAndPackType(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
+      self = PackReferenceTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenEachKeywordAndPackType` replaced.
-  /// - param newChild: The new `unexpectedBetweenEachKeywordAndPackType` to replace the node's
-  ///                   current `unexpectedBetweenEachKeywordAndPackType`, if present.
-  public func withUnexpectedBetweenEachKeywordAndPackType(_ newChild: UnexpectedNodesSyntax?) -> PackReferenceTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-    return PackReferenceTypeSyntax(newData)
   }
 
   public var packType: TypeSyntax {
@@ -2528,18 +2052,11 @@ public struct PackReferenceTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return TypeSyntax(childData!)
     }
     set(value) {
-      self = withPackType(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
+      self = PackReferenceTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `packType` replaced.
-  /// - param newChild: The new `packType` to replace the node's
-  ///                   current `packType`, if present.
-  public func withPackType(_ newChild: TypeSyntax) -> PackReferenceTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-    return PackReferenceTypeSyntax(newData)
   }
 
   public var unexpectedAfterPackType: UnexpectedNodesSyntax? {
@@ -2549,18 +2066,11 @@ public struct PackReferenceTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedAfterPackType(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
+      self = PackReferenceTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedAfterPackType` replaced.
-  /// - param newChild: The new `unexpectedAfterPackType` to replace the node's
-  ///                   current `unexpectedAfterPackType`, if present.
-  public func withUnexpectedAfterPackType(_ newChild: UnexpectedNodesSyntax?) -> PackReferenceTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-    return PackReferenceTypeSyntax(newData)
   }
 
   public static var structure: SyntaxNodeStructure {
@@ -2659,18 +2169,11 @@ public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBeforeLeftParen(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
+      self = TupleTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBeforeLeftParen` replaced.
-  /// - param newChild: The new `unexpectedBeforeLeftParen` to replace the node's
-  ///                   current `unexpectedBeforeLeftParen`, if present.
-  public func withUnexpectedBeforeLeftParen(_ newChild: UnexpectedNodesSyntax?) -> TupleTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-    return TupleTypeSyntax(newData)
   }
 
   public var leftParen: TokenSyntax {
@@ -2679,18 +2182,11 @@ public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(childData!)
     }
     set(value) {
-      self = withLeftParen(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
+      self = TupleTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `leftParen` replaced.
-  /// - param newChild: The new `leftParen` to replace the node's
-  ///                   current `leftParen`, if present.
-  public func withLeftParen(_ newChild: TokenSyntax) -> TupleTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-    return TupleTypeSyntax(newData)
   }
 
   public var unexpectedBetweenLeftParenAndElements: UnexpectedNodesSyntax? {
@@ -2700,18 +2196,11 @@ public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenLeftParenAndElements(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
+      self = TupleTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenLeftParenAndElements` replaced.
-  /// - param newChild: The new `unexpectedBetweenLeftParenAndElements` to replace the node's
-  ///                   current `unexpectedBetweenLeftParenAndElements`, if present.
-  public func withUnexpectedBetweenLeftParenAndElements(_ newChild: UnexpectedNodesSyntax?) -> TupleTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-    return TupleTypeSyntax(newData)
   }
 
   public var elements: TupleTypeElementListSyntax {
@@ -2720,7 +2209,10 @@ public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return TupleTypeElementListSyntax(childData!)
     }
     set(value) {
-      self = withElements(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
+      self = TupleTypeSyntax(newData)
     }
   }
 
@@ -2743,16 +2235,6 @@ public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     return TupleTypeSyntax(newData)
   }
 
-  /// Returns a copy of the receiver with its `elements` replaced.
-  /// - param newChild: The new `elements` to replace the node's
-  ///                   current `elements`, if present.
-  public func withElements(_ newChild: TupleTypeElementListSyntax) -> TupleTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-    return TupleTypeSyntax(newData)
-  }
-
   public var unexpectedBetweenElementsAndRightParen: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 4, parent: Syntax(self))
@@ -2760,18 +2242,11 @@ public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenElementsAndRightParen(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
+      self = TupleTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenElementsAndRightParen` replaced.
-  /// - param newChild: The new `unexpectedBetweenElementsAndRightParen` to replace the node's
-  ///                   current `unexpectedBetweenElementsAndRightParen`, if present.
-  public func withUnexpectedBetweenElementsAndRightParen(_ newChild: UnexpectedNodesSyntax?) -> TupleTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-    return TupleTypeSyntax(newData)
   }
 
   public var rightParen: TokenSyntax {
@@ -2780,18 +2255,11 @@ public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(childData!)
     }
     set(value) {
-      self = withRightParen(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 5, with: raw, arena: arena)
+      self = TupleTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `rightParen` replaced.
-  /// - param newChild: The new `rightParen` to replace the node's
-  ///                   current `rightParen`, if present.
-  public func withRightParen(_ newChild: TokenSyntax) -> TupleTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
-    return TupleTypeSyntax(newData)
   }
 
   public var unexpectedAfterRightParen: UnexpectedNodesSyntax? {
@@ -2801,18 +2269,11 @@ public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedAfterRightParen(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 6, with: raw, arena: arena)
+      self = TupleTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedAfterRightParen` replaced.
-  /// - param newChild: The new `unexpectedAfterRightParen` to replace the node's
-  ///                   current `unexpectedAfterRightParen`, if present.
-  public func withUnexpectedAfterRightParen(_ newChild: UnexpectedNodesSyntax?) -> TupleTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
-    return TupleTypeSyntax(newData)
   }
 
   public static var structure: SyntaxNodeStructure {
@@ -2927,18 +2388,11 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBeforeLeftParen(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
+      self = FunctionTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBeforeLeftParen` replaced.
-  /// - param newChild: The new `unexpectedBeforeLeftParen` to replace the node's
-  ///                   current `unexpectedBeforeLeftParen`, if present.
-  public func withUnexpectedBeforeLeftParen(_ newChild: UnexpectedNodesSyntax?) -> FunctionTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-    return FunctionTypeSyntax(newData)
   }
 
   public var leftParen: TokenSyntax {
@@ -2947,18 +2401,11 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(childData!)
     }
     set(value) {
-      self = withLeftParen(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
+      self = FunctionTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `leftParen` replaced.
-  /// - param newChild: The new `leftParen` to replace the node's
-  ///                   current `leftParen`, if present.
-  public func withLeftParen(_ newChild: TokenSyntax) -> FunctionTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-    return FunctionTypeSyntax(newData)
   }
 
   public var unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? {
@@ -2968,18 +2415,11 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenLeftParenAndArguments(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
+      self = FunctionTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenLeftParenAndArguments` replaced.
-  /// - param newChild: The new `unexpectedBetweenLeftParenAndArguments` to replace the node's
-  ///                   current `unexpectedBetweenLeftParenAndArguments`, if present.
-  public func withUnexpectedBetweenLeftParenAndArguments(_ newChild: UnexpectedNodesSyntax?) -> FunctionTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-    return FunctionTypeSyntax(newData)
   }
 
   public var arguments: TupleTypeElementListSyntax {
@@ -2988,7 +2428,10 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return TupleTypeElementListSyntax(childData!)
     }
     set(value) {
-      self = withArguments(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
+      self = FunctionTypeSyntax(newData)
     }
   }
 
@@ -3011,16 +2454,6 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     return FunctionTypeSyntax(newData)
   }
 
-  /// Returns a copy of the receiver with its `arguments` replaced.
-  /// - param newChild: The new `arguments` to replace the node's
-  ///                   current `arguments`, if present.
-  public func withArguments(_ newChild: TupleTypeElementListSyntax) -> FunctionTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-    return FunctionTypeSyntax(newData)
-  }
-
   public var unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 4, parent: Syntax(self))
@@ -3028,18 +2461,11 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenArgumentsAndRightParen(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
+      self = FunctionTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenArgumentsAndRightParen` replaced.
-  /// - param newChild: The new `unexpectedBetweenArgumentsAndRightParen` to replace the node's
-  ///                   current `unexpectedBetweenArgumentsAndRightParen`, if present.
-  public func withUnexpectedBetweenArgumentsAndRightParen(_ newChild: UnexpectedNodesSyntax?) -> FunctionTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-    return FunctionTypeSyntax(newData)
   }
 
   public var rightParen: TokenSyntax {
@@ -3048,18 +2474,11 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(childData!)
     }
     set(value) {
-      self = withRightParen(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 5, with: raw, arena: arena)
+      self = FunctionTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `rightParen` replaced.
-  /// - param newChild: The new `rightParen` to replace the node's
-  ///                   current `rightParen`, if present.
-  public func withRightParen(_ newChild: TokenSyntax) -> FunctionTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
-    return FunctionTypeSyntax(newData)
   }
 
   public var unexpectedBetweenRightParenAndEffectSpecifiers: UnexpectedNodesSyntax? {
@@ -3069,18 +2488,11 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenRightParenAndEffectSpecifiers(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 6, with: raw, arena: arena)
+      self = FunctionTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenRightParenAndEffectSpecifiers` replaced.
-  /// - param newChild: The new `unexpectedBetweenRightParenAndEffectSpecifiers` to replace the node's
-  ///                   current `unexpectedBetweenRightParenAndEffectSpecifiers`, if present.
-  public func withUnexpectedBetweenRightParenAndEffectSpecifiers(_ newChild: UnexpectedNodesSyntax?) -> FunctionTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
-    return FunctionTypeSyntax(newData)
   }
 
   public var effectSpecifiers: TypeEffectSpecifiersSyntax? {
@@ -3090,18 +2502,11 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return TypeEffectSpecifiersSyntax(childData!)
     }
     set(value) {
-      self = withEffectSpecifiers(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 7, with: raw, arena: arena)
+      self = FunctionTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `effectSpecifiers` replaced.
-  /// - param newChild: The new `effectSpecifiers` to replace the node's
-  ///                   current `effectSpecifiers`, if present.
-  public func withEffectSpecifiers(_ newChild: TypeEffectSpecifiersSyntax?) -> FunctionTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 7, with: raw, arena: arena)
-    return FunctionTypeSyntax(newData)
   }
 
   public var unexpectedBetweenEffectSpecifiersAndOutput: UnexpectedNodesSyntax? {
@@ -3111,18 +2516,11 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenEffectSpecifiersAndOutput(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 8, with: raw, arena: arena)
+      self = FunctionTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenEffectSpecifiersAndOutput` replaced.
-  /// - param newChild: The new `unexpectedBetweenEffectSpecifiersAndOutput` to replace the node's
-  ///                   current `unexpectedBetweenEffectSpecifiersAndOutput`, if present.
-  public func withUnexpectedBetweenEffectSpecifiersAndOutput(_ newChild: UnexpectedNodesSyntax?) -> FunctionTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 8, with: raw, arena: arena)
-    return FunctionTypeSyntax(newData)
   }
 
   public var output: ReturnClauseSyntax {
@@ -3131,18 +2529,11 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return ReturnClauseSyntax(childData!)
     }
     set(value) {
-      self = withOutput(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 9, with: raw, arena: arena)
+      self = FunctionTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `output` replaced.
-  /// - param newChild: The new `output` to replace the node's
-  ///                   current `output`, if present.
-  public func withOutput(_ newChild: ReturnClauseSyntax) -> FunctionTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 9, with: raw, arena: arena)
-    return FunctionTypeSyntax(newData)
   }
 
   public var unexpectedAfterOutput: UnexpectedNodesSyntax? {
@@ -3152,18 +2543,11 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedAfterOutput(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 10, with: raw, arena: arena)
+      self = FunctionTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedAfterOutput` replaced.
-  /// - param newChild: The new `unexpectedAfterOutput` to replace the node's
-  ///                   current `unexpectedAfterOutput`, if present.
-  public func withUnexpectedAfterOutput(_ newChild: UnexpectedNodesSyntax?) -> FunctionTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 10, with: raw, arena: arena)
-    return FunctionTypeSyntax(newData)
   }
 
   public static var structure: SyntaxNodeStructure {
@@ -3286,18 +2670,11 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBeforeSpecifier(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
+      self = AttributedTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBeforeSpecifier` replaced.
-  /// - param newChild: The new `unexpectedBeforeSpecifier` to replace the node's
-  ///                   current `unexpectedBeforeSpecifier`, if present.
-  public func withUnexpectedBeforeSpecifier(_ newChild: UnexpectedNodesSyntax?) -> AttributedTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-    return AttributedTypeSyntax(newData)
   }
 
   public var specifier: TokenSyntax? {
@@ -3307,18 +2684,11 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(childData!)
     }
     set(value) {
-      self = withSpecifier(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
+      self = AttributedTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `specifier` replaced.
-  /// - param newChild: The new `specifier` to replace the node's
-  ///                   current `specifier`, if present.
-  public func withSpecifier(_ newChild: TokenSyntax?) -> AttributedTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-    return AttributedTypeSyntax(newData)
   }
 
   public var unexpectedBetweenSpecifierAndAttributes: UnexpectedNodesSyntax? {
@@ -3328,18 +2698,11 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenSpecifierAndAttributes(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
+      self = AttributedTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenSpecifierAndAttributes` replaced.
-  /// - param newChild: The new `unexpectedBetweenSpecifierAndAttributes` to replace the node's
-  ///                   current `unexpectedBetweenSpecifierAndAttributes`, if present.
-  public func withUnexpectedBetweenSpecifierAndAttributes(_ newChild: UnexpectedNodesSyntax?) -> AttributedTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-    return AttributedTypeSyntax(newData)
   }
 
   public var attributes: AttributeListSyntax? {
@@ -3349,7 +2712,10 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return AttributeListSyntax(childData!)
     }
     set(value) {
-      self = withAttributes(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
+      self = AttributedTypeSyntax(newData)
     }
   }
 
@@ -3372,16 +2738,6 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     return AttributedTypeSyntax(newData)
   }
 
-  /// Returns a copy of the receiver with its `attributes` replaced.
-  /// - param newChild: The new `attributes` to replace the node's
-  ///                   current `attributes`, if present.
-  public func withAttributes(_ newChild: AttributeListSyntax?) -> AttributedTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-    return AttributedTypeSyntax(newData)
-  }
-
   public var unexpectedBetweenAttributesAndBaseType: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 4, parent: Syntax(self))
@@ -3389,18 +2745,11 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenAttributesAndBaseType(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
+      self = AttributedTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenAttributesAndBaseType` replaced.
-  /// - param newChild: The new `unexpectedBetweenAttributesAndBaseType` to replace the node's
-  ///                   current `unexpectedBetweenAttributesAndBaseType`, if present.
-  public func withUnexpectedBetweenAttributesAndBaseType(_ newChild: UnexpectedNodesSyntax?) -> AttributedTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-    return AttributedTypeSyntax(newData)
   }
 
   public var baseType: TypeSyntax {
@@ -3409,18 +2758,11 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return TypeSyntax(childData!)
     }
     set(value) {
-      self = withBaseType(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 5, with: raw, arena: arena)
+      self = AttributedTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `baseType` replaced.
-  /// - param newChild: The new `baseType` to replace the node's
-  ///                   current `baseType`, if present.
-  public func withBaseType(_ newChild: TypeSyntax) -> AttributedTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
-    return AttributedTypeSyntax(newData)
   }
 
   public var unexpectedAfterBaseType: UnexpectedNodesSyntax? {
@@ -3430,18 +2772,11 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedAfterBaseType(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 6, with: raw, arena: arena)
+      self = AttributedTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedAfterBaseType` replaced.
-  /// - param newChild: The new `unexpectedAfterBaseType` to replace the node's
-  ///                   current `unexpectedAfterBaseType`, if present.
-  public func withUnexpectedAfterBaseType(_ newChild: UnexpectedNodesSyntax?) -> AttributedTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
-    return AttributedTypeSyntax(newData)
   }
 
   public static var structure: SyntaxNodeStructure {
@@ -3544,18 +2879,11 @@ public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBeforeGenericParameters(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
+      self = NamedOpaqueReturnTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBeforeGenericParameters` replaced.
-  /// - param newChild: The new `unexpectedBeforeGenericParameters` to replace the node's
-  ///                   current `unexpectedBeforeGenericParameters`, if present.
-  public func withUnexpectedBeforeGenericParameters(_ newChild: UnexpectedNodesSyntax?) -> NamedOpaqueReturnTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-    return NamedOpaqueReturnTypeSyntax(newData)
   }
 
   public var genericParameters: GenericParameterClauseSyntax {
@@ -3564,18 +2892,11 @@ public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return GenericParameterClauseSyntax(childData!)
     }
     set(value) {
-      self = withGenericParameters(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
+      self = NamedOpaqueReturnTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `genericParameters` replaced.
-  /// - param newChild: The new `genericParameters` to replace the node's
-  ///                   current `genericParameters`, if present.
-  public func withGenericParameters(_ newChild: GenericParameterClauseSyntax) -> NamedOpaqueReturnTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-    return NamedOpaqueReturnTypeSyntax(newData)
   }
 
   public var unexpectedBetweenGenericParametersAndBaseType: UnexpectedNodesSyntax? {
@@ -3585,18 +2906,11 @@ public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenGenericParametersAndBaseType(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
+      self = NamedOpaqueReturnTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenGenericParametersAndBaseType` replaced.
-  /// - param newChild: The new `unexpectedBetweenGenericParametersAndBaseType` to replace the node's
-  ///                   current `unexpectedBetweenGenericParametersAndBaseType`, if present.
-  public func withUnexpectedBetweenGenericParametersAndBaseType(_ newChild: UnexpectedNodesSyntax?) -> NamedOpaqueReturnTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-    return NamedOpaqueReturnTypeSyntax(newData)
   }
 
   public var baseType: TypeSyntax {
@@ -3605,18 +2919,11 @@ public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return TypeSyntax(childData!)
     }
     set(value) {
-      self = withBaseType(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
+      self = NamedOpaqueReturnTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `baseType` replaced.
-  /// - param newChild: The new `baseType` to replace the node's
-  ///                   current `baseType`, if present.
-  public func withBaseType(_ newChild: TypeSyntax) -> NamedOpaqueReturnTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-    return NamedOpaqueReturnTypeSyntax(newData)
   }
 
   public var unexpectedAfterBaseType: UnexpectedNodesSyntax? {
@@ -3626,18 +2933,11 @@ public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedAfterBaseType(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
+      self = NamedOpaqueReturnTypeSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedAfterBaseType` replaced.
-  /// - param newChild: The new `unexpectedAfterBaseType` to replace the node's
-  ///                   current `unexpectedAfterBaseType`, if present.
-  public func withUnexpectedAfterBaseType(_ newChild: UnexpectedNodesSyntax?) -> NamedOpaqueReturnTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-    return NamedOpaqueReturnTypeSyntax(newData)
   }
 
   public static var structure: SyntaxNodeStructure {

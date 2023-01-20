@@ -71,7 +71,7 @@ extension SyntaxProtocol {
   /// diagnostic message), return that.
   /// Otherwise, return a generic message that describes the tokens in this node.
   var shortSingleLineContentDescription: String {
-    let contentWithoutTrivia = self.withoutLeadingTrivia().withoutTrailingTrivia().description
+    let contentWithoutTrivia = self.trimmedDescription
     if self.children(viewMode: .sourceAccurate).allSatisfy({ $0.as(TokenSyntax.self)?.tokenKind == .rightBrace }) {
       if self.children(viewMode: .sourceAccurate).count == 1 {
         return "brace"

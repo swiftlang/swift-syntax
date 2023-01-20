@@ -46,10 +46,11 @@ public class SyntaxCreationTests: XCTestCase {
     let forType = TokenSyntax.identifier("`for`", trailingTrivia: .space)
     let newBrace = TokenSyntax.rightBraceToken(leadingTrivia: .newlines(2))
 
-    let renamed = structDecl.withIdentifier(forType)
-      .withMembers(
+    let renamed = structDecl.with(\.identifier, forType)
+      .with(
+        \.members,
         structDecl.members
-          .withRightBrace(newBrace)
+          .with(\.rightBrace, newBrace)
       )
 
     XCTAssertEqual(
@@ -81,21 +82,21 @@ public class SyntaxCreationTests: XCTestCase {
     XCTAssertEqual("\(tok)", "struct ")
     XCTAssertEqual(tok.presence, .present)
 
-    let preSpacedTok = tok.withLeadingTrivia(.spaces(3))
+    let preSpacedTok = tok.with(\.leadingTrivia, .spaces(3))
     XCTAssertEqual("\(preSpacedTok)", "   struct ")
 
     var mutablePreSpacedTok = tok
     mutablePreSpacedTok.leadingTrivia = .spaces(4)
     XCTAssertEqual("\(mutablePreSpacedTok)", "    struct ")
 
-    let postSpacedTok = tok.withTrailingTrivia(.spaces(6))
+    let postSpacedTok = tok.with(\.trailingTrivia, .spaces(6))
     XCTAssertEqual("\(postSpacedTok)", "struct      ")
 
     var mutablePostSpacedTok = tok
     mutablePostSpacedTok.trailingTrivia = .spaces(3)
     XCTAssertEqual("\(mutablePostSpacedTok)", "struct   ")
 
-    let prePostSpacedTok = preSpacedTok.withTrailingTrivia(.spaces(4))
+    let prePostSpacedTok = preSpacedTok.with(\.trailingTrivia, .spaces(4))
     XCTAssertEqual("\(prePostSpacedTok)", "   struct    ")
 
     mutablePreSpacedTok.trailingTrivia = .spaces(2)
@@ -132,9 +133,11 @@ public class SyntaxCreationTests: XCTestCase {
       colon: .colonToken(trailingTrivia: .space),
       expression: emptyString
     )
-    let callWithTerminator = call.withArgumentList(
+    let callWithTerminator = call.with(
+      \.argumentList,
       TupleExprElementListSyntax([
-        arg.withTrailingComma(
+        arg.with(
+          \.trailingComma,
           .commaToken(trailingTrivia: .space)
         ),
         terminatorArg,
@@ -166,7 +169,7 @@ public class SyntaxCreationTests: XCTestCase {
     XCTAssertNotNil(call1.leftParen)
     XCTAssertNotNil(call1.rightParen)
 
-    let call2 = call1.withLeftParen(nil).withRightParen(nil)
+    let call2 = call1.with(\.leftParen, nil).with(\.rightParen, nil)
     XCTAssertNil(call2.leftParen)
     XCTAssertNil(call2.rightParen)
 

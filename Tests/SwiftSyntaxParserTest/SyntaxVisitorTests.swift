@@ -41,7 +41,7 @@ public class SyntaxVisitorTests: XCTestCase {
     class ClosureRewriter: SyntaxRewriter {
       override func visit(_ node: ClosureExprSyntax) -> ExprSyntax {
         // Perform a no-op transform that requires rebuilding the node.
-        return ExprSyntax(node.withSignature(node.signature))
+        return ExprSyntax(node.with(\.signature, node.signature))
       }
     }
     XCTAssertNoThrow(
@@ -122,7 +122,7 @@ public class SyntaxVisitorTests: XCTestCase {
   public func testRewriteTrivia() {
     class TriviaRemover: SyntaxRewriter {
       override func visit(_ token: TokenSyntax) -> TokenSyntax {
-        return token.withTrailingTrivia(.zero)
+        return token.with(\.trailingTrivia, .zero)
       }
     }
 

@@ -5,9 +5,19 @@
 public protocol AttributedSyntax: SyntaxProtocol {
   var attributes: AttributeListSyntax? { 
     get 
+    set 
   }
-  
-  func withAttributes(_ newChild: AttributeListSyntax?) -> Self
+}
+
+public extension AttributedSyntax {
+  /// Without this function, the `with` function defined on `SyntaxProtocol`
+  /// does not work on existentials of this protocol type.
+  @_disfavoredOverload
+  func with<T>(_ keyPath: WritableKeyPath<AttributedSyntax, T>, _ newChild: T) -> AttributedSyntax {
+    var copy: AttributedSyntax = self
+    copy[keyPath: keyPath] = newChild
+    return copy
+  }
 }
 
 public extension SyntaxProtocol {
@@ -31,21 +41,29 @@ public extension SyntaxProtocol {
 public protocol DeclGroupSyntax: SyntaxProtocol {
   var attributes: AttributeListSyntax? { 
     get 
+    set 
   }
-  
-  func withAttributes(_ newChild: AttributeListSyntax?) -> Self
   
   var modifiers: ModifierListSyntax? { 
     get 
+    set 
   }
-  
-  func withModifiers(_ newChild: ModifierListSyntax?) -> Self
   
   var members: MemberDeclBlockSyntax { 
     get 
+    set 
   }
-  
-  func withMembers(_ newChild: MemberDeclBlockSyntax) -> Self
+}
+
+public extension DeclGroupSyntax {
+  /// Without this function, the `with` function defined on `SyntaxProtocol`
+  /// does not work on existentials of this protocol type.
+  @_disfavoredOverload
+  func with<T>(_ keyPath: WritableKeyPath<DeclGroupSyntax, T>, _ newChild: T) -> DeclGroupSyntax {
+    var copy: DeclGroupSyntax = self
+    copy[keyPath: keyPath] = newChild
+    return copy
+  }
 }
 
 public extension SyntaxProtocol {
@@ -69,15 +87,24 @@ public extension SyntaxProtocol {
 public protocol BracedSyntax: SyntaxProtocol {
   var leftBrace: TokenSyntax { 
     get 
+    set 
   }
-  
-  func withLeftBrace(_ newChild: TokenSyntax) -> Self
   
   var rightBrace: TokenSyntax { 
     get 
+    set 
   }
-  
-  func withRightBrace(_ newChild: TokenSyntax) -> Self
+}
+
+public extension BracedSyntax {
+  /// Without this function, the `with` function defined on `SyntaxProtocol`
+  /// does not work on existentials of this protocol type.
+  @_disfavoredOverload
+  func with<T>(_ keyPath: WritableKeyPath<BracedSyntax, T>, _ newChild: T) -> BracedSyntax {
+    var copy: BracedSyntax = self
+    copy[keyPath: keyPath] = newChild
+    return copy
+  }
 }
 
 public extension SyntaxProtocol {
@@ -101,9 +128,19 @@ public extension SyntaxProtocol {
 public protocol IdentifiedDeclSyntax: SyntaxProtocol {
   var identifier: TokenSyntax { 
     get 
+    set 
   }
-  
-  func withIdentifier(_ newChild: TokenSyntax) -> Self
+}
+
+public extension IdentifiedDeclSyntax {
+  /// Without this function, the `with` function defined on `SyntaxProtocol`
+  /// does not work on existentials of this protocol type.
+  @_disfavoredOverload
+  func with<T>(_ keyPath: WritableKeyPath<IdentifiedDeclSyntax, T>, _ newChild: T) -> IdentifiedDeclSyntax {
+    var copy: IdentifiedDeclSyntax = self
+    copy[keyPath: keyPath] = newChild
+    return copy
+  }
 }
 
 public extension SyntaxProtocol {
@@ -127,9 +164,19 @@ public extension SyntaxProtocol {
 public protocol WithCodeBlockSyntax: SyntaxProtocol {
   var body: CodeBlockSyntax { 
     get 
+    set 
   }
-  
-  func withBody(_ newChild: CodeBlockSyntax) -> Self
+}
+
+public extension WithCodeBlockSyntax {
+  /// Without this function, the `with` function defined on `SyntaxProtocol`
+  /// does not work on existentials of this protocol type.
+  @_disfavoredOverload
+  func with<T>(_ keyPath: WritableKeyPath<WithCodeBlockSyntax, T>, _ newChild: T) -> WithCodeBlockSyntax {
+    var copy: WithCodeBlockSyntax = self
+    copy[keyPath: keyPath] = newChild
+    return copy
+  }
 }
 
 public extension SyntaxProtocol {
@@ -153,15 +200,24 @@ public extension SyntaxProtocol {
 public protocol ParenthesizedSyntax: SyntaxProtocol {
   var leftParen: TokenSyntax { 
     get 
+    set 
   }
-  
-  func withLeftParen(_ newChild: TokenSyntax) -> Self
   
   var rightParen: TokenSyntax { 
     get 
+    set 
   }
-  
-  func withRightParen(_ newChild: TokenSyntax) -> Self
+}
+
+public extension ParenthesizedSyntax {
+  /// Without this function, the `with` function defined on `SyntaxProtocol`
+  /// does not work on existentials of this protocol type.
+  @_disfavoredOverload
+  func with<T>(_ keyPath: WritableKeyPath<ParenthesizedSyntax, T>, _ newChild: T) -> ParenthesizedSyntax {
+    var copy: ParenthesizedSyntax = self
+    copy[keyPath: keyPath] = newChild
+    return copy
+  }
 }
 
 public extension SyntaxProtocol {
@@ -185,51 +241,54 @@ public extension SyntaxProtocol {
 public protocol FreestandingMacroExpansionSyntax: SyntaxProtocol {
   var poundToken: TokenSyntax { 
     get 
+    set 
   }
-  
-  func withPoundToken(_ newChild: TokenSyntax) -> Self
   
   var macro: TokenSyntax { 
     get 
+    set 
   }
-  
-  func withMacro(_ newChild: TokenSyntax) -> Self
   
   var genericArguments: GenericArgumentClauseSyntax? { 
     get 
+    set 
   }
-  
-  func withGenericArguments(_ newChild: GenericArgumentClauseSyntax?) -> Self
   
   var leftParen: TokenSyntax? { 
     get 
+    set 
   }
-  
-  func withLeftParen(_ newChild: TokenSyntax?) -> Self
   
   var argumentList: TupleExprElementListSyntax { 
     get 
+    set 
   }
-  
-  func withArgumentList(_ newChild: TupleExprElementListSyntax) -> Self
   
   var rightParen: TokenSyntax? { 
     get 
+    set 
   }
-  
-  func withRightParen(_ newChild: TokenSyntax?) -> Self
   
   var trailingClosure: ClosureExprSyntax? { 
     get 
+    set 
   }
-  
-  func withTrailingClosure(_ newChild: ClosureExprSyntax?) -> Self
   
   var additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? { 
     get 
+    set 
   }
-  
-  func withAdditionalTrailingClosures(_ newChild: MultipleTrailingClosureElementListSyntax?) -> Self
+}
+
+public extension FreestandingMacroExpansionSyntax {
+  /// Without this function, the `with` function defined on `SyntaxProtocol`
+  /// does not work on existentials of this protocol type.
+  @_disfavoredOverload
+  func with<T>(_ keyPath: WritableKeyPath<FreestandingMacroExpansionSyntax, T>, _ newChild: T) -> FreestandingMacroExpansionSyntax {
+    var copy: FreestandingMacroExpansionSyntax = self
+    copy[keyPath: keyPath] = newChild
+    return copy
+  }
 }
 
 public extension SyntaxProtocol {
@@ -253,9 +312,19 @@ public extension SyntaxProtocol {
 public protocol WithTrailingCommaSyntax: SyntaxProtocol {
   var trailingComma: TokenSyntax? { 
     get 
+    set 
   }
-  
-  func withTrailingComma(_ newChild: TokenSyntax?) -> Self
+}
+
+public extension WithTrailingCommaSyntax {
+  /// Without this function, the `with` function defined on `SyntaxProtocol`
+  /// does not work on existentials of this protocol type.
+  @_disfavoredOverload
+  func with<T>(_ keyPath: WritableKeyPath<WithTrailingCommaSyntax, T>, _ newChild: T) -> WithTrailingCommaSyntax {
+    var copy: WithTrailingCommaSyntax = self
+    copy[keyPath: keyPath] = newChild
+    return copy
+  }
 }
 
 public extension SyntaxProtocol {
@@ -279,9 +348,19 @@ public extension SyntaxProtocol {
 public protocol WithStatementsSyntax: SyntaxProtocol {
   var statements: CodeBlockItemListSyntax { 
     get 
+    set 
   }
-  
-  func withStatements(_ newChild: CodeBlockItemListSyntax) -> Self
+}
+
+public extension WithStatementsSyntax {
+  /// Without this function, the `with` function defined on `SyntaxProtocol`
+  /// does not work on existentials of this protocol type.
+  @_disfavoredOverload
+  func with<T>(_ keyPath: WritableKeyPath<WithStatementsSyntax, T>, _ newChild: T) -> WithStatementsSyntax {
+    var copy: WithStatementsSyntax = self
+    copy[keyPath: keyPath] = newChild
+    return copy
+  }
 }
 
 public extension SyntaxProtocol {
@@ -305,33 +384,39 @@ public extension SyntaxProtocol {
 public protocol EffectSpecifiersSyntax: SyntaxProtocol {
   var unexpectedBeforeAsyncSpecifier: UnexpectedNodesSyntax? { 
     get 
+    set 
   }
-  
-  func withUnexpectedBeforeAsyncSpecifier(_ newChild: UnexpectedNodesSyntax?) -> Self
   
   var asyncSpecifier: TokenSyntax? { 
     get 
+    set 
   }
-  
-  func withAsyncSpecifier(_ newChild: TokenSyntax?) -> Self
   
   var unexpectedBetweenAsyncSpecifierAndThrowsSpecifier: UnexpectedNodesSyntax? { 
     get 
+    set 
   }
-  
-  func withUnexpectedBetweenAsyncSpecifierAndThrowsSpecifier(_ newChild: UnexpectedNodesSyntax?) -> Self
   
   var throwsSpecifier: TokenSyntax? { 
     get 
+    set 
   }
-  
-  func withThrowsSpecifier(_ newChild: TokenSyntax?) -> Self
   
   var unexpectedAfterThrowsSpecifier: UnexpectedNodesSyntax? { 
     get 
+    set 
   }
-  
-  func withUnexpectedAfterThrowsSpecifier(_ newChild: UnexpectedNodesSyntax?) -> Self
+}
+
+public extension EffectSpecifiersSyntax {
+  /// Without this function, the `with` function defined on `SyntaxProtocol`
+  /// does not work on existentials of this protocol type.
+  @_disfavoredOverload
+  func with<T>(_ keyPath: WritableKeyPath<EffectSpecifiersSyntax, T>, _ newChild: T) -> EffectSpecifiersSyntax {
+    var copy: EffectSpecifiersSyntax = self
+    copy[keyPath: keyPath] = newChild
+    return copy
+  }
 }
 
 public extension SyntaxProtocol {

@@ -113,10 +113,10 @@ class MacroApplication: SyntaxRewriter {
       }
 
       if newAttributes.isEmpty {
-        return Syntax(fromProtocol: visitedNode.withAttributes(nil))
+        return Syntax(fromProtocol: visitedNode.with(\.attributes, nil))
       }
 
-      return Syntax(fromProtocol: visitedNode.withAttributes(AttributeListSyntax(newAttributes)))
+      return Syntax(fromProtocol: visitedNode.with(\.attributes, AttributeListSyntax(newAttributes)))
     }
 
     return nil
@@ -158,7 +158,7 @@ class MacroApplication: SyntaxRewriter {
 
       // Recurse on the child node.
       let newItem = visit(item.item)
-      newItems.append(item.withItem(newItem))
+      newItems.append(item.with(\.item, newItem))
 
       // Expand any peer declarations triggered by macros used as attributes.
       if case let .decl(decl) = item.item {
@@ -220,7 +220,7 @@ class MacroApplication: SyntaxRewriter {
 
       // Recurse on the child node.
       let newDecl = visit(attributedMember.decl)
-      newItems.append(attributedMember.withDecl(newDecl))
+      newItems.append(attributedMember.with(\.decl, newDecl))
 
       // Expand any peer declarations triggered by macros used as attributes.
       let peers = expandPeers(of: item.decl)
@@ -251,7 +251,7 @@ class MacroApplication: SyntaxRewriter {
     // Recurse into member decls.
     let newMembers = visit(expandedDeclGroup.members)
 
-    return DeclSyntax(expandedDeclGroup.withMembers(newMembers))
+    return DeclSyntax(expandedDeclGroup.with(\.members, newMembers))
   }
 
   override func visit(_ node: ActorDeclSyntax) -> DeclSyntax {
@@ -313,10 +313,12 @@ class MacroApplication: SyntaxRewriter {
     }
 
     return DeclSyntax(
-      visitedVarDecl.withBindings(
+      visitedVarDecl.with(
+        \.bindings,
         visitedVarDecl.bindings.replacing(
           childAt: 0,
-          with: binding.withAccessor(
+          with: binding.with(
+            \.accessor,
             .accessors(
               .init(
                 leftBrace: .leftBraceToken(leadingTrivia: .space),
@@ -409,7 +411,8 @@ extension MacroApplication {
     }
 
     // FIXME: Is there a better way to add N members to a decl?
-    return decl.withMembers(
+    return decl.with(
+      \.members,
       newMembers.reduce(decl.members) { partialMembers, newMember in
         partialMembers.addMember(.init(decl: newMember))
       }
@@ -451,8 +454,8 @@ extension MacroApplication {
       $0.appending(AttributeListSyntax.Element($1))
     }
 
-    let newDecl = attributedDecl.withAttributes(newAttributes).as(DeclSyntax.self)!
-    return member.withDecl(newDecl)
+    let newDecl = attributedDecl.with(\.attributes, newAttributes).as(DeclSyntax.self)!
+    return member.with(\.decl, newDecl)
   }
 }
 

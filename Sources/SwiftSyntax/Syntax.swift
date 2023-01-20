@@ -207,6 +207,16 @@ public extension SyntaxProtocol {
 }
 
 public extension SyntaxProtocol {
+  /// Returns a new syntax node that has the child at `keyPath` replaced by
+  /// `value`.
+  func with<T>(_ keyPath: WritableKeyPath<Self, T>, _ value: T) -> Self {
+    var copy = self
+    copy[keyPath: keyPath] = value
+    return copy
+  }
+}
+
+public extension SyntaxProtocol {
   /// If the parent has a dedicated "name for diagnostics" for this node, return it.
   /// Otherwise, return `nil`.
   var childNameInParent: String? {
@@ -462,7 +472,7 @@ public extension SyntaxProtocol {
       return raw.formLeadingTrivia()
     }
     set {
-      self = withLeadingTrivia(newValue ?? [])
+      self = Self(Syntax(data.withLeadingTrivia(newValue ?? [], arena: SyntaxArena())))!
     }
   }
 
@@ -474,7 +484,7 @@ public extension SyntaxProtocol {
       return raw.formTrailingTrivia()
     }
     set {
-      self = withTrailingTrivia(newValue ?? [])
+      self = Self(Syntax(data.withTrailingTrivia(newValue ?? [], arena: SyntaxArena())))!
     }
   }
 
@@ -486,33 +496,6 @@ public extension SyntaxProtocol {
   /// The length this node's trailing trivia takes up spelled out in source.
   var trailingTriviaLength: SourceLength {
     return raw.trailingTriviaLength
-  }
-
-  /// Returns a new syntax node with its leading trivia replaced
-  /// by the provided trivia.
-  func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    return Self(Syntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena())))!
-  }
-
-  /// Returns a new syntax node with its trailing trivia replaced
-  /// by the provided trivia.
-  func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    return Self(Syntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena())))!
-  }
-
-  /// Returns a new syntax node with its leading trivia removed.
-  func withoutLeadingTrivia() -> Self {
-    return withLeadingTrivia([])
-  }
-
-  /// Returns a new syntax node with its trailing trivia removed.
-  func withoutTrailingTrivia() -> Self {
-    return withTrailingTrivia([])
-  }
-
-  /// Returns a new syntax node with all trivia removed.
-  func withoutTrivia() -> Self {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
   }
 
   /// The length of this node including all of its trivia.
@@ -580,6 +563,14 @@ public extension SyntaxProtocol {
   func write<Target>(to target: inout Target)
   where Target: TextOutputStream {
     data.raw.write(to: &target)
+  }
+
+  /// The description of this node without the leading trivia of the first token
+  /// in the node and the trailing trivia of the last token in the node
+  var trimmedDescription: String {
+    // TODO: We shouldn't need to create two intermediate nodes from the `with`
+    // functions just to get the description without trivia.
+    return self.with(\.leadingTrivia, []).with(\.trailingTrivia, []).description
   }
 }
 

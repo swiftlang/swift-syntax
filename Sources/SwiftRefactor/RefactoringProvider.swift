@@ -32,7 +32,7 @@ import SwiftSyntax
 /// syntax trees. The SwiftSyntax API provides a natural, easy-to-use,
 /// and compositional set of updates to the syntax tree. For example, a
 /// refactoring action that wishes to exchange the leading trivia of a node
-/// would call `withLeadingTrivia(_:)` against its input syntax and return
+/// would call `with(\.leadingTrivia, _:)` against its input syntax and return
 /// the resulting syntax node. For compound syntax nodes, entire sub-trees
 /// can be added, exchanged, or removed by calling the corresponding `with`
 /// API.

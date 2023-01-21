@@ -23,38 +23,14 @@ let buildableNodesFile = SourceFileSyntax {
 
   for node in SYNTAX_NODES where node.isBuildable {
     let type = node.type
-    let hasTrailingComma = node.traits.contains("WithTrailingComma")
 
-    let convenienceInit = createConvenienceInitializer(node: node)
-    if convenienceInit != nil || hasTrailingComma {
+    if let convenienceInit = createConvenienceInitializer(node: node) {
       let docComment: SwiftSyntax.Trivia = node.documentation.isEmpty ? [] : .docLineComment("/// \(node.documentation)") + .newline
       ExtensionDeclSyntax(
         leadingTrivia: docComment,
-        extendedType: SimpleTypeIdentifierSyntax(name: .identifier(type.syntaxBaseName)),
-        inheritanceClause: hasTrailingComma ? TypeInheritanceClauseSyntax { InheritedTypeSyntax(typeName: TypeSyntax("HasTrailingComma")) } : nil
+        extendedType: SimpleTypeIdentifierSyntax(name: .identifier(type.syntaxBaseName))
       ) {
-        if let convenienceInit = convenienceInit {
-          convenienceInit
-        }
-
-        if hasTrailingComma {
-          VariableDeclSyntax(
-          """
-          var hasTrailingComma: Bool {
-            return trailingComma != nil
-          }
-          """
-          )
-
-          FunctionDeclSyntax(
-          """
-          /// Conformance to `HasTrailingComma`.
-          public func withTrailingComma(_ withComma: Bool) -> Self {
-            return withTrailingComma(withComma ? .commaToken() : nil)
-          }
-          """
-          )
-        }
+        convenienceInit
       }
     }
   }

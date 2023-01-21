@@ -87,8 +87,7 @@ extension Parser {
     }
   }
 
-  @_spi(RawSyntax)
-  public mutating func parseStatementAfterLabel(
+  private mutating func parseStatementAfterLabel(
     with tryPrefix: (RawUnexpectedNodesSyntax?, RawTokenSyntax)? = nil
   ) -> RawStmtSyntax {
     switch self.canRecoverTo(anyIn: CanBeStatementStart.self) {

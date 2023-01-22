@@ -240,7 +240,7 @@ extension Parser {
   /// Checks if it can reach a token of the given `kind` by skipping unexpected
   /// tokens that have lower ``TokenPrecedence`` than expected token.
   @_spi(RawSyntax)
-  public func canRecoverTo(
+  public mutating func canRecoverTo(
     _ kind: RawTokenKind,
     recoveryPrecedence: TokenPrecedence? = nil
   ) -> RecoveryConsumptionHandle? {
@@ -257,7 +257,7 @@ extension Parser {
   /// Checks if it can reach a token whose kind is in `kinds` by skipping
   /// unexpected tokens that have lower ``TokenPrecedence`` than `precedence`.
   @_spi(RawSyntax)
-  public func canRecoverTo(
+  public mutating func canRecoverTo(
     any kinds: [RawTokenKind]
   ) -> RecoveryConsumptionHandle? {
     if self.at(any: kinds) {
@@ -275,7 +275,7 @@ extension Parser {
   /// precedence of a token in that subset.
   /// If so, return the token that we can recover to and a handle that can be
   /// used to consume the unexpected tokens and the token we recovered to.
-  func canRecoverTo<Subset: RawTokenKindSubset>(
+  mutating func canRecoverTo<Subset: RawTokenKindSubset>(
     anyIn subset: Subset.Type,
     recoveryPrecedence: TokenPrecedence? = nil
   ) -> (Subset, RecoveryConsumptionHandle)? {

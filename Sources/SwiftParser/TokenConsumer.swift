@@ -57,7 +57,7 @@ extension TokenConsumer {
   /// - Parameter condition: An additional condition that must be satisfied for
   ///                        this function to return `true`.
   /// - Returns: `true` if the given `kind` matches the current token's kind.
-  public func at(
+  public mutating func at(
     _ kind: RawTokenKind,
     allowTokenAtStartOfLine: Bool = true
   ) -> Bool {
@@ -69,7 +69,7 @@ extension TokenConsumer {
 
   /// Returns whether the current token is an operator with the given `name`.
   @_spi(RawSyntax)
-  public func atContextualPunctuator(_ name: SyntaxText) -> Bool {
+  public mutating func atContextualPunctuator(_ name: SyntaxText) -> Bool {
     return self.currentToken.isContextualPunctuator(name)
   }
 
@@ -81,7 +81,7 @@ extension TokenConsumer {
   ///                        this function to return `true`.
   /// - Returns: `true` if the current token's kind is in `kinds`.
   @_spi(RawSyntax)
-  public func at(
+  public mutating func at(
     any kinds: [RawTokenKind],
     allowTokenAtStartOfLine: Bool = true
   ) -> Bool {
@@ -94,7 +94,7 @@ extension TokenConsumer {
   /// Checks whether the parser is currently positioned at any token in `Subset`.
   /// If this is the case, return the `Subset` case that the parser is positioned in
   /// as well as a handle to consume that token.
-  func at<Subset: RawTokenKindSubset>(anyIn subset: Subset.Type) -> (Subset, TokenConsumptionHandle)? {
+  mutating func at<Subset: RawTokenKindSubset>(anyIn subset: Subset.Type) -> (Subset, TokenConsumptionHandle)? {
     if let matchedKind = Subset(lexeme: self.currentToken) {
       return (
         matchedKind,

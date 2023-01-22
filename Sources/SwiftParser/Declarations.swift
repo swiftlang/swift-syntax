@@ -29,7 +29,7 @@ extension DeclarationModifier {
 }
 
 extension TokenConsumer {
-  func atStartOfDeclaration(
+  mutating func atStartOfDeclaration(
     isAtTopLevel: Bool = false,
     allowInitDecl: Bool = true,
     allowRecovery: Bool = false
@@ -1242,7 +1242,7 @@ extension Parser {
 
 extension Parser {
   /// Are we at a regular expression literal that could act as an operator?
-  private func atRegexLiteralThatCouldBeAnOperator() -> Bool {
+  private mutating func atRegexLiteralThatCouldBeAnOperator() -> Bool {
     guard self.at(.regexLiteral) else {
       return false
     }
@@ -2258,7 +2258,7 @@ extension Parser {
 
     // Parse the optional generic argument list.
     let generics: RawGenericArgumentClauseSyntax?
-    if self.lookahead().canParseAsGenericArgumentList() {
+    if self.withLookahead({ $0.canParseAsGenericArgumentList() }) {
       generics = self.parseGenericArguments()
     } else {
       generics = nil
@@ -2282,7 +2282,7 @@ extension Parser {
     let trailingClosure: RawClosureExprSyntax?
     let additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax?
     if self.at(.leftBrace),
-      self.lookahead().isValidTrailingClosure(.trailingClosure)
+      self.withLookahead({ $0.isValidTrailingClosure(.trailingClosure) })
     {
       (trailingClosure, additionalTrailingClosures) =
         self.parseTrailingClosures(.trailingClosure)

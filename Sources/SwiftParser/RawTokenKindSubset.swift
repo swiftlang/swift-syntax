@@ -31,7 +31,7 @@ protocol RawTokenKindSubset: CaseIterable {
 
 extension RawTokenKindSubset {
   var remappedKind: RawTokenKind? {
-    if case .keyword = self.rawTokenKind {
+    if .keyword == self.rawTokenKind.base {
       return self.rawTokenKind
     } else {
       return nil

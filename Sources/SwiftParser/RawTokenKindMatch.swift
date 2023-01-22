@@ -28,7 +28,7 @@ struct RawTokenKindMatch {
   func matches(rawTokenKind: RawTokenKind, text: SyntaxText) -> Bool {
     if rawTokenKind == self.rawTokenKind {
       return true
-    } else if rawTokenKind == .identifier, case .keyword = self.rawTokenKind {
+    } else if rawTokenKind == .identifier, self.rawTokenKind.base == .keyword {
       // We are looking for a contextual keyword but have an identifier.
       // If the contents match, we want to interpret the identifier as a keyword.
       let defaultText = self.rawTokenKind.defaultText

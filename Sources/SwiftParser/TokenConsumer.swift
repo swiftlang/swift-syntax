@@ -114,7 +114,7 @@ extension TokenConsumer {
     } else if let remappedKind = handle.remappedKind {
       assert(self.at(handle.tokenKind))
       return consumeAnyToken(remapping: remappedKind)
-    } else if case .keyword = handle.tokenKind {
+    } else if handle.tokenKind.base == .keyword {
       // We support remapping identifiers to contextual keywords
       assert(self.currentToken.rawTokenKind == .identifier || self.currentToken.rawTokenKind == handle.tokenKind)
       return consumeAnyToken(remapping: handle.tokenKind)
@@ -150,7 +150,7 @@ extension TokenConsumer {
     if self.at(kind, allowTokenAtStartOfLine: allowTokenAtStartOfLine) {
       if let remapping = remapping {
         return self.consumeAnyToken(remapping: remapping)
-      } else if case .keyword = kind {
+      } else if kind.base == .keyword {
         // We support remapping identifiers to contextual keywords
         return self.consumeAnyToken(remapping: kind)
       } else {
@@ -186,7 +186,7 @@ extension TokenConsumer {
     }
     for kind in kinds {
       if case RawTokenKindMatch(kind) = self.currentToken {
-        if case .keyword = kind {
+        if kind.base == .keyword {
           return self.consumeAnyToken(remapping: kind)
         } else {
           return self.consumeAnyToken()

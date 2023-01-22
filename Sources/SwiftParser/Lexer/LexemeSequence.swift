@@ -19,11 +19,22 @@ extension Lexer {
     fileprivate let sourceBufferStart: Lexer.Cursor
     fileprivate var cursor: Lexer.Cursor
     fileprivate var nextToken: Lexer.Lexeme
+    /// If the lexer has more than one state on its state stack, it will
+    /// allocate a new memory region in this allocator to represent the
+    /// additional states on its stack. This is more efficient than paying the
+    /// retain/release cost of an array.
+    ///
+    /// The states will be freed when the lexer is finished, i.e. when this
+    /// `LexemeSequence` is deallocated.
+    ///
+    /// The memory footpring of not freeing past lexer states is neglible. It's
+    /// usually less than 0.1% of the memory allocated by the syntax arena.
+    var lexerStateAllocator = BumpPtrAllocator(slabSize: 256)
 
     fileprivate init(sourceBufferStart: Lexer.Cursor, cursor: Lexer.Cursor) {
       self.sourceBufferStart = sourceBufferStart
       self.cursor = cursor
-      self.nextToken = self.cursor.nextToken(sourceBufferStart: self.sourceBufferStart)
+      self.nextToken = self.cursor.nextToken(sourceBufferStart: self.sourceBufferStart, stateAllocator: lexerStateAllocator)
     }
 
     public mutating func next() -> Lexer.Lexeme? {
@@ -44,7 +55,7 @@ extension Lexer {
             cursor: self.cursor
           )
         } else {
-          self.nextToken = self.cursor.nextToken(sourceBufferStart: self.sourceBufferStart)
+          self.nextToken = self.cursor.nextToken(sourceBufferStart: self.sourceBufferStart, stateAllocator: lexerStateAllocator)
         }
       }
       return self.nextToken
@@ -62,7 +73,7 @@ extension Lexer {
       // again in the lexer.
       let backUpLength = self.nextToken.byteLength + bytes
       self.cursor.backUp(by: backUpLength)
-      self.nextToken = self.cursor.nextToken(sourceBufferStart: self.sourceBufferStart)
+      self.nextToken = self.cursor.nextToken(sourceBufferStart: self.sourceBufferStart, stateAllocator: lexerStateAllocator)
       return self.advance()
     }
 
@@ -74,8 +85,8 @@ extension Lexer {
     /// in the new state.
     mutating func perform(stateTransition: StateTransition, currentToken: inout Lexeme) {
       self.cursor = currentToken.cursor
-      self.cursor.perform(stateTransition: stateTransition)
-      self.nextToken = self.cursor.nextToken(sourceBufferStart: self.sourceBufferStart)
+      self.cursor.perform(stateTransition: stateTransition, stateAllocator: self.lexerStateAllocator)
+      self.nextToken = self.cursor.nextToken(sourceBufferStart: self.sourceBufferStart, stateAllocator: self.lexerStateAllocator)
       currentToken = self.advance()
     }
 

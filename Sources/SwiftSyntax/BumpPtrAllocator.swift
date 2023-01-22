@@ -11,7 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 /// Bump-pointer allocation.
-@_spi(Testing)
+@_spi(RawSyntax) @_spi(Testing)
 public class BumpPtrAllocator {
   typealias Slab = UnsafeMutableRawBufferPointer
 

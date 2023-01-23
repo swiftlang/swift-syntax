@@ -675,6 +675,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
     if node.expression != nil {
+    if node.expression?.hasError == true {
       exchangeTokens(
         unexpected: node.unexpectedBeforeReturnKeyword,
         unexpectedTokenCondition: { $0.tokenKind == .keyword(.try) },
@@ -765,6 +766,15 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       message: { _ in .tryMustBePlacedOnThrownExpr },
       moveFixIt: { MoveTokensAfterFixIt(movedTokens: $0, after: .keyword(.throw)) }
     )
+    if node.expression.hasError {
+      exchangeTokens(
+        unexpected: node.unexpectedBeforeThrowKeyword,
+        unexpectedTokenCondition: { $0.tokenKind == .keyword(.try) },
+        correctTokens: [node.expression.as(TryExprSyntax.self)?.tryKeyword],
+        message: { _ in .tryMustBePlacedOnThrownExpr },
+        moveFixIt: { MoveTokensAfterFixIt(movedTokens: $0, after: .keyword(.throw)) }
+      )
+    }
     return .visitChildren
   }
 

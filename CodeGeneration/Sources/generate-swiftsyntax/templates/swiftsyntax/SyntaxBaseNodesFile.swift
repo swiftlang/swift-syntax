@@ -47,8 +47,8 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: [.blockComment(generat
     }
     
     StructDeclSyntax("""
-      \(node.description ?? "")
-      public struct \(node.name): \(node.name)Protocol, SyntaxHashable
+      \(raw: node.description ?? "")
+      public struct \(raw: node.name): \(raw: node.name)Protocol, SyntaxHashable
       """) {
       VariableDeclSyntax("public let _syntaxNode: Syntax")
       
@@ -115,7 +115,7 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: [.blockComment(generat
       }
       
       InitializerDeclSyntax("""
-        /// Creates a `\(node.name)` node from the given `SyntaxData`. This assumes
+        /// Creates a `\(raw: node.name)` node from the given `SyntaxData`. This assumes
         /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
         /// is undefined.
         internal init(_ data: SyntaxData)

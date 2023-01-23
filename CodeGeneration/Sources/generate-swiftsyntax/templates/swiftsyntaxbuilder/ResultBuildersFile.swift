@@ -27,7 +27,7 @@ let resultBuildersFile = SourceFileSyntax {
 
     StructDeclSyntax("""
       @resultBuilder
-      public struct \(type.syntaxKind)Builder
+      public struct \(raw: type.syntaxKind)Builder
       """) {
       TypealiasDeclSyntax(
           """

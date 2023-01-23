@@ -18,9 +18,9 @@ import Utils
 let syntaxTraitsFile = SourceFileSyntax {
   for trait in TRAITS {
     ProtocolDeclSyntax("""
-      // MARK: - \(trait.traitName)Syntax
+      // MARK: - \(raw: trait.traitName)Syntax
       
-      public protocol \(trait.traitName)Syntax: SyntaxProtocol
+      public protocol \(raw: trait.traitName)Syntax: SyntaxProtocol
       """) {
       
       for child in trait.children {

@@ -977,7 +977,7 @@ final class ExpressionTests: XCTestCase {
         StringLiteralExprSyntax(
           openQuote: .multilineStringQuoteToken(leadingTrivia: .spaces(2), trailingTrivia: .newline),
           segments: StringLiteralSegmentsSyntax([
-            .stringSegment(StringSegmentSyntax(content: .stringSegment("line 1 ", leadingTrivia: .spaces(2), trailingTrivia: [.unexpectedText("\\"), .newlines(1)]))),
+            .stringSegment(StringSegmentSyntax(content: .stringSegment("line 1 ", leadingTrivia: .spaces(2), trailingTrivia: [.backslashes(1), .newlines(1)]))),
             .stringSegment(StringSegmentSyntax(content: .stringSegment("line 2", leadingTrivia: .spaces(2), trailingTrivia: .newline))),
           ]),
           closeQuote: .multilineStringQuoteToken(leadingTrivia: .spaces(2))
@@ -1012,6 +1012,17 @@ final class ExpressionTests: XCTestCase {
         DiagnosticSpec(message: "escaped newline at the last line of a multi-line string literal is not allowed")
       ],
       options: [.substructureCheckTrivia]
+    )
+  }
+
+  func testMultiLineStringInInterpolationOfSingleLineStringLiteral() {
+    // It's odd that we accept this but it matches the C++ parser's behavior.
+    AssertParse(
+      #"""
+      "foo\(test("""
+      bar
+      """) )"
+      """#
     )
   }
 }

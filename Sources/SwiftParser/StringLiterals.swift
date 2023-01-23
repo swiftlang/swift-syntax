@@ -12,6 +12,8 @@
 
 @_spi(RawSyntax) import SwiftSyntax
 
+// MARK: - Check multiline string literal indentation
+
 fileprivate class StringLiteralExpressionIndentationChecker {
   // MARK: Entry
 
@@ -86,6 +88,8 @@ fileprivate class StringLiteralExpressionIndentationChecker {
   }
 }
 
+// MARK: - Post-process multi-line string literals
+
 fileprivate extension SyntaxText {
   /// If the text ends with any newline character, return the trivia for that
   /// newline, otherwise `nil`.
@@ -117,6 +121,296 @@ fileprivate extension SyntaxText {
 }
 
 extension Parser {
+  /// If `text` only consists of indentation whitespace (space and tab), return
+  /// the trivia pieces that represent `text`, otherwise return `nil`.
+  private func parseIndentationTrivia(text: SyntaxText) -> [RawTriviaPiece]? {
+    let trivia = TriviaParser.parseTrivia(text, position: .leading)
+    if trivia.allSatisfy({ $0.isIndentationWhitespace }) {
+      return trivia
+    } else {
+      return nil
+    }
+  }
+
+  /// Re-classify the newline of the last line as trivia since the newline is
+  /// not part of the represented string. If the last line has its newline
+  /// escaped by a trailing `\`, mark that string segment as unexpected and
+  /// generate a missing segment that doesn't have a trailing `\`.
+  private func reclassifyNewlineOfLastSegmentAsTrivia(firstSegment: RawStringSegmentSyntax?, middleSegments: inout [RawStringLiteralSegmentsSyntax.Element]) -> Bool {
+    switch middleSegments.last {
+    case .stringSegment(let lastMiddleSegment):
+      if let newlineSuffix = lastMiddleSegment.content.tokenText.newlineSuffix {
+        // The newline at the end of the last line in the string literal is not part of the represented string.
+        // Mark it as trivia.
+        var content = lastMiddleSegment.content.reclassifyAsTrailingTrivia([newlineSuffix], arena: self.arena)
+        var unexpectedBeforeContent: RawTokenSyntax?
+        if content.tokenText.hasSuffix("\\") {
+          // The newline on the last line must not be escaped
+          unexpectedBeforeContent = content
+          content = RawTokenSyntax(
+            missing: .stringSegment,
+            text: SyntaxText(rebasing: content.tokenText[0..<content.tokenText.count - 1]),
+            leadingTriviaPieces: content.leadingTriviaPieces,
+            trailingTriviaPieces: content.trailingTriviaPieces,
+            arena: self.arena
+          )
+        }
+
+        middleSegments[middleSegments.count - 1] = .stringSegment(
+          RawStringSegmentSyntax(
+            RawUnexpectedNodesSyntax(combining: lastMiddleSegment.unexpectedBeforeContent, unexpectedBeforeContent, arena: self.arena),
+            content: content,
+            lastMiddleSegment.unexpectedAfterContent,
+            arena: self.arena
+          )
+        )
+        return true
+      } else {
+        return false
+      }
+    case .expressionSegment:
+      return false
+    case nil:
+      if let firstSegment = firstSegment {
+        return firstSegment.content.tokenText.newlineSuffix != nil
+      } else {
+        return false
+      }
+    }
+  }
+
+  /// Re-classifying the indentation of the middle lines as trivia, such that
+  /// the string segment token only contains whitespace that is part of the
+  /// actual string. If a line is under-indented a
+  /// `.insufficientIndentationInMultilineStringLiteral` lexer error will be
+  /// attached to the string segment token.
+  private func postProcessIndentationAndEscapedNewlineOfMiddleSegments(
+    middleSegments: inout [RawStringLiteralSegmentsSyntax.Element],
+    isFirstSegmentOnNewLine: Bool,
+    indentation: SyntaxText,
+    indentationTrivia: [RawTriviaPiece]
+  ) {
+    let expressionIndentationChecker = StringLiteralExpressionIndentationChecker(expectedIndentation: indentation, arena: self.arena)
+
+    var isSegmentOnNewLine = isFirstSegmentOnNewLine
+    for (index, segment) in middleSegments.enumerated() {
+      switch segment {
+      case .stringSegment(var segment):
+        // We are not considering leading trivia for indentation computation.
+        // If these assertions are violated, we can probably lift them but we
+        // would need to check that they produce the expected results.
+        assert(segment.content.leadingTriviaByteLength == 0)
+
+        // Re-classify indentation as leading trivia
+        if isSegmentOnNewLine {
+          if segment.content.tokenText.hasPrefix(indentation) {
+            segment = RawStringSegmentSyntax(
+              segment.unexpectedBeforeContent,
+              content: segment.content.reclassifyAsLeadingTrivia(indentationTrivia, arena: self.arena),
+              segment.unexpectedAfterContent,
+              arena: self.arena
+            )
+          } else {
+            let actualIndentation = segment.content.tokenText.prefix(while: { $0 == UInt8(ascii: " ") || $0 == UInt8(ascii: "\t") })
+            let actualIndentationTrivia = TriviaParser.parseTrivia(SyntaxText(rebasing: actualIndentation), position: .leading)
+            let content = segment.content.reclassifyAsLeadingTrivia(
+              actualIndentationTrivia,
+              lexerError: LexerError(.insufficientIndentationInMultilineStringLiteral, byteOffset: 0),
+              arena: self.arena
+            )
+            segment = RawStringSegmentSyntax(
+              segment.unexpectedBeforeContent,
+              content: content,
+              segment.unexpectedAfterContent,
+              arena: self.arena
+            )
+          }
+        }
+
+        isSegmentOnNewLine = segment.content.tokenText.newlineSuffix != nil
+
+        // If the segment has a `\` in front of its trailing newline, that newline
+        // is not part of the represented string and should be trivia.
+
+        let backslashNewlineSuffix: [RawTriviaPiece]?
+        if segment.content.tokenText.hasSuffix("\\\r\n") {
+          backslashNewlineSuffix = [.backslashes(1), .carriageReturnLineFeeds(1)]
+        } else if segment.content.tokenText.hasSuffix("\\\n") {
+          backslashNewlineSuffix = [.backslashes(1), .newlines(1)]
+        } else if segment.content.tokenText.hasSuffix("\\\r") {
+          backslashNewlineSuffix = [.backslashes(1), .carriageReturns(1)]
+        } else {
+          backslashNewlineSuffix = nil
+        }
+        if let backslashNewlineSuffix = backslashNewlineSuffix {
+          segment = RawStringSegmentSyntax(
+            segment.unexpectedBeforeContent,
+            content: segment.content.reclassifyAsTrailingTrivia(backslashNewlineSuffix, arena: self.arena),
+            segment.unexpectedAfterContent,
+            arena: self.arena
+          )
+        }
+        middleSegments[index] = .stringSegment(segment)
+      case .expressionSegment(let segment):
+        isSegmentOnNewLine = segment.rightParen.trailingTriviaPieces.contains(where: { $0.isNewline })
+
+        if let rewrittenSegment = expressionIndentationChecker.checkIndentation(of: segment) {
+          middleSegments[index] = .expressionSegment(rewrittenSegment)
+        }
+      }
+    }
+  }
+
+  /// After parsing a multi-line string literal from tokens produced by the lexer,
+  /// post-process the string literal by performing the following steps
+  ///  - Ensuring that the open quote is followed by a newline (i.e. the opening
+  ///    quote shouldn't have any any text on the same line). If this is not the
+  ///    case, produce mark the existing opening quote as unexpected and
+  ///    synthesize a missing quote that is followed by a newline
+  ///  - Re-classifying the indentation of the middle lines as trivia, such that
+  ///    the string segment token only contains whitespace that is part of the
+  ///    actual string. If a line is under-indented a
+  ///    `.insufficientIndentationInMultilineStringLiteral` lexer error will be
+  ///    attached to the string segment token.
+  ///  - If a line ends with `\`, mark that backslash and the following newline
+  ///    as trivia as the newline is not part of the represented string.
+  ///  - Re-classify the newline of the last line as trivia since the newline is
+  ///    not part of the represented string. If the last line has its newline
+  ///    escaped by a trailing `\`, mark that string segment as unexpected and
+  ///    generate a missing segment that doesn't have a trailing `\`.
+  private func postProcessMultilineStringLiteral(
+    openQuote: RawTokenSyntax,
+    segments allSegments: [RawStringLiteralSegmentsSyntax.Element],
+    closeQuote: RawTokenSyntax
+  ) -> (
+    unexpectedBeforeOpenQuote: [RawTokenSyntax],
+    openQuote: RawTokenSyntax,
+    segments: [RawStringLiteralSegmentsSyntax.Element],
+    unexpectedBeforeCloseQuote: [RawTokenSyntax],
+    closeQuote: RawTokenSyntax
+  ) {
+    // -------------------------------------------------------------------------
+    // Precondition
+
+    assert(openQuote.trailingTriviaByteLength == 0, "Open quote produced by the lexer should not have trailing trivia because we would drop it during post-processing")
+    assert(closeQuote.leadingTriviaByteLength == 0, "Closing quote produced by the lexer should not have leading trivia because we would drop it during post-processing")
+    assert(
+      allSegments.allSatisfy {
+        if case .stringSegment(let segment) = $0 {
+          return segment.unexpectedBeforeContent == nil
+            && segment.unexpectedAfterContent == nil
+            && segment.content.leadingTriviaByteLength == 0
+            && segment.content.trailingTriviaByteLength == 0
+        } else {
+          return true
+        }
+      },
+      "String segment produced by the lexer should not have unexpected text or trivia because we would drop it during post-processing"
+    )
+
+    // -------------------------------------------------------------------------
+    // Variables
+
+    var middleSegments = allSegments
+    // In a well-formed string literal, the last segment only consists of whitespace and contains the closing quote's indentation
+    let lastSegment = middleSegments.popLast()?.as(RawStringSegmentSyntax.self)
+    // In a well-formed string literal the first segment only contains a newline because the open quote must be followed by a newline.
+    let firstSegment = !middleSegments.isEmpty ? middleSegments.removeFirst().as(RawStringSegmentSyntax.self) : nil
+
+    let indentation: SyntaxText
+    let indentationTrivia: [RawTriviaPiece]
+
+    var unexpectedBeforeOpenQuote: [RawTokenSyntax] = []
+    var openQuote = openQuote
+    var unexpectedBeforeCloseQuote: [RawTokenSyntax] = []
+    var closeQuote = closeQuote
+
+    // -------------------------------------------------------------------------
+    // Check that the close quote is on new line
+
+    let closeDelimiterOnNewLine = reclassifyNewlineOfLastSegmentAsTrivia(
+      firstSegment: firstSegment,
+      middleSegments: &middleSegments
+    )
+
+    if !closeDelimiterOnNewLine {
+      unexpectedBeforeCloseQuote = [closeQuote]
+      closeQuote = RawTokenSyntax(missing: closeQuote.tokenKind, leadingTriviaPieces: [.newlines(1)], arena: self.arena)
+
+      // The closing delimiter doesn't start on a new line and thus it doesn't
+      // make sense to try and extract indentation from it.
+      return (unexpectedBeforeOpenQuote, openQuote, allSegments, unexpectedBeforeCloseQuote, closeQuote)
+    }
+
+    // -------------------------------------------------------------------------
+    // Parse indentation of the closing quote
+
+    if let lastSegment = lastSegment,
+      let parsedTrivia = parseIndentationTrivia(text: lastSegment.content.tokenText)
+    {
+      indentationTrivia = parsedTrivia
+      indentation = lastSegment.content.tokenText
+      closeQuote = closeQuote.extendingLeadingTrivia(by: parsedTrivia, arena: self.arena)
+    } else {
+      if let lastSegment = lastSegment {
+        indentationTrivia = TriviaParser.parseTrivia(lastSegment.content.tokenText, position: .leading).prefix(while: { $0.isIndentationWhitespace })
+        let indentationByteLength = indentationTrivia.reduce(0, { $0 + $1.byteLength })
+        indentation = SyntaxText(rebasing: lastSegment.content.tokenText[0..<indentationByteLength])
+        middleSegments.append(.stringSegment(lastSegment))
+      } else {
+        indentationTrivia = []
+        indentation = ""
+      }
+
+      unexpectedBeforeCloseQuote = [closeQuote]
+      closeQuote = RawTokenSyntax(missing: closeQuote.tokenKind, leadingTriviaPieces: [.newlines(1)] + indentationTrivia, arena: self.arena)
+    }
+
+    // -------------------------------------------------------------------------
+    // Check that the open quote is followed by newline
+
+    // Condition for the loop below that indicates whether the segment we are
+    // iterating over is on a new line.
+    let isFirstSegmentOnNewLine: Bool
+
+    if let newlineTrivia = firstSegment?.content.tokenText.triviaPieceIfNewline {
+      openQuote = openQuote.extendingTrailingTrivia(by: [newlineTrivia], arena: self.arena)
+      isFirstSegmentOnNewLine = true
+    } else {
+      if let firstSegment = firstSegment {
+        middleSegments.insert(.stringSegment(firstSegment), at: 0)
+      }
+      isFirstSegmentOnNewLine = false
+      unexpectedBeforeOpenQuote = [openQuote]
+      openQuote = RawTokenSyntax(missing: openQuote.tokenKind, trailingTriviaPieces: [.newlines(1)] + indentationTrivia, arena: self.arena)
+    }
+
+    // -------------------------------------------------------------------------
+    // Check indentation of segments and escaped newlines at end of segment
+
+    postProcessIndentationAndEscapedNewlineOfMiddleSegments(
+      middleSegments: &middleSegments,
+      isFirstSegmentOnNewLine: isFirstSegmentOnNewLine,
+      indentation: indentation,
+      indentationTrivia: indentationTrivia
+    )
+
+    // -------------------------------------------------------------------------
+    // Done
+
+    return (
+      unexpectedBeforeOpenQuote,
+      openQuote,
+      middleSegments,
+      unexpectedBeforeCloseQuote,
+      closeQuote
+    )
+  }
+}
+
+// MARK: - Parse string literals
+
+extension Parser {
   /// Consumes a raw string delimiter that has the same number of `#` as `openDelimiter`.
   private mutating func parseStringDelimiter(openDelimiter: RawTokenSyntax?) -> (unexpectedBeforeCheckedDelimiter: RawUnexpectedNodesSyntax?, checkedDelimiter: RawTokenSyntax?) {
     // Check for leadingTriviaText == "" so we don't consume the leading raw
@@ -146,243 +440,6 @@ extension Parser {
         return (RawUnexpectedNodesSyntax([delimiter], arena: self.arena), missingToken(.rawStringDelimiter, text: open.tokenText))
       }
     }
-  }
-
-  /// If `text` only consists of indentation whitespace (space and tab), return
-  /// the trivia pieces that represent `text`, otherwise return `nil`.
-  private func parseIndentationTrivia(text: SyntaxText) -> [RawTriviaPiece]? {
-    let trivia = TriviaParser.parseTrivia(text, position: .leading)
-    if trivia.allSatisfy({ $0.isIndentationWhitespace }) {
-      return trivia
-    } else {
-      return nil
-    }
-  }
-
-  private func postProcessMultilineStringLiteral(
-    openQuote: RawTokenSyntax,
-    segments allSegments: [RawStringLiteralSegmentsSyntax.Element],
-    closeQuote: RawTokenSyntax
-  ) -> (
-    unexpectedBeforeOpenQuote: [RawTokenSyntax],
-    openQuote: RawTokenSyntax,
-    segments: [RawStringLiteralSegmentsSyntax.Element],
-    unexpectedBeforeCloseQuote: [RawTokenSyntax],
-    closeQuote: RawTokenSyntax
-  ) {
-    // -------------------------------------------------------------------------
-    // Precondition
-
-    assert(openQuote.trailingTriviaByteLength == 0, "Open quote produced by the lexer should not have trailing trivia because we would drop it during post-processing")
-    assert(closeQuote.leadingTriviaByteLength == 0, "Closing quote produced by the lexer should not have leading trivia because we would drop it during post-processing")
-    assert(
-      allSegments.allSatisfy {
-        if case .stringSegment(let segment) = $0 {
-          return segment.unexpectedBeforeContent == nil
-            && segment.unexpectedAfterContent == nil
-            && segment.content.leadingTriviaByteLength == 0
-            && segment.content.trailingTriviaByteLength == 0
-        } else {
-          return true
-        }
-      },
-      "String segement produced by the lexer should not have unexpected text or trivia because we would drop it during post-processing"
-    )
-
-    // -------------------------------------------------------------------------
-    // Variables
-
-    var middleSegments = allSegments
-    let lastSegment = !middleSegments.isEmpty ? middleSegments.removeLast().as(RawStringSegmentSyntax.self) : nil
-    let firstSegment = !middleSegments.isEmpty ? middleSegments.removeFirst().as(RawStringSegmentSyntax.self) : nil
-
-    let indentation: SyntaxText
-    let indentationTrivia: [RawTriviaPiece]
-
-    var unexpectedBeforeOpenQuote: [RawTokenSyntax] = []
-    var openQuote = openQuote
-    var unexpectedBeforeCloseQuote: [RawTokenSyntax] = []
-    var closeQuote = closeQuote
-
-    // -------------------------------------------------------------------------
-    // Check close quote is on new line
-
-    let closeDelimiterOnNewLine: Bool
-    switch middleSegments.last {
-    case .stringSegment(let lastMiddleSegment):
-      if let newlineSuffix = lastMiddleSegment.content.tokenText.newlineSuffix {
-        // The newline at the end of the last line in the string literal is not part of the represented string.
-        // Mark it as trivia.
-        var content = lastMiddleSegment.content.reclassifyAsTrailingTrivia([newlineSuffix], arena: self.arena)
-        var unexpectedBeforeContent: RawTokenSyntax?
-        if content.tokenText.hasSuffix("\\") {
-          // The newline on the last line must not be escaped
-          unexpectedBeforeContent = content
-          content = RawTokenSyntax(
-            missing: .stringSegment,
-            text: SyntaxText(rebasing: content.tokenText[0..<content.tokenText.count - 1]),
-            leadingTriviaPieces: content.leadingTriviaPieces,
-            trailingTriviaPieces: content.trailingTriviaPieces,
-            arena: self.arena
-          )
-        }
-
-        middleSegments[middleSegments.count - 1] = .stringSegment(
-          RawStringSegmentSyntax(
-            RawUnexpectedNodesSyntax(combining: lastMiddleSegment.unexpectedBeforeContent, unexpectedBeforeContent, arena: self.arena),
-            content: content,
-            lastMiddleSegment.unexpectedAfterContent,
-            arena: self.arena
-          )
-        )
-        closeDelimiterOnNewLine = true
-      } else {
-        closeDelimiterOnNewLine = false
-      }
-    case .expressionSegment:
-      closeDelimiterOnNewLine = false
-    case nil:
-      if let firstSegment = firstSegment {
-        closeDelimiterOnNewLine = firstSegment.content.tokenText.newlineSuffix != nil
-      } else {
-        closeDelimiterOnNewLine = false
-      }
-    }
-
-    if !closeDelimiterOnNewLine {
-      unexpectedBeforeCloseQuote = [closeQuote]
-      closeQuote = RawTokenSyntax(missing: closeQuote.tokenKind, leadingTriviaPieces: [.newlines(1)], arena: self.arena)
-
-      // The closing delimiter doesn't start on a new line and thus it doesn't
-      // make sense to try and extract indentation from it.
-      return (unexpectedBeforeOpenQuote, openQuote, allSegments, unexpectedBeforeCloseQuote, closeQuote)
-    }
-
-    // -------------------------------------------------------------------------
-    // Parse indentation
-
-    if let lastSegment = lastSegment,
-      let parsedTrivia = parseIndentationTrivia(text: lastSegment.content.tokenText)
-    {
-      indentationTrivia = parsedTrivia
-      indentation = lastSegment.content.tokenText
-      closeQuote = closeQuote.extendingLeadingTrivia(by: parsedTrivia, arena: self.arena)
-    } else {
-      if let lastSegment = lastSegment {
-        indentationTrivia = TriviaParser.parseTrivia(lastSegment.content.tokenText, position: .leading).prefix(while: { $0.isIndentationWhitespace })
-        let indentationByteLength = indentationTrivia.reduce(0, { $0 + $1.byteLength })
-        indentation = SyntaxText(rebasing: lastSegment.content.tokenText[0..<indentationByteLength])
-        middleSegments.append(.stringSegment(lastSegment))
-      } else {
-        indentationTrivia = []
-        indentation = ""
-      }
-
-      unexpectedBeforeCloseQuote = [closeQuote]
-      closeQuote = RawTokenSyntax(missing: closeQuote.tokenKind, leadingTriviaPieces: [.newlines(1)] + indentationTrivia, arena: self.arena)
-    }
-
-    // -------------------------------------------------------------------------
-    // Check open quote followed by newline
-
-    // Condition for the loop below that indicates whether the segment we are
-    // iterating over is on a new line.
-    var isSegmentOnNewLine: Bool
-
-    if let newlineTrivia = firstSegment?.content.tokenText.triviaPieceIfNewline {
-      openQuote = openQuote.extendingTrailingTrivia(by: [newlineTrivia], arena: self.arena)
-      isSegmentOnNewLine = true
-    } else {
-      if let firstSegment = firstSegment {
-        middleSegments.insert(.stringSegment(firstSegment), at: 0)
-      }
-      isSegmentOnNewLine = false
-      unexpectedBeforeOpenQuote = [openQuote]
-      openQuote = RawTokenSyntax(missing: openQuote.tokenKind, trailingTriviaPieces: [.newlines(1)] + indentationTrivia, arena: self.arena)
-    }
-
-    // -------------------------------------------------------------------------
-    // Check indentation of segments and escaped newlines at end of segment
-
-    let expressionIndentationChecker = StringLiteralExpressionIndentationChecker(expectedIndentation: indentation, arena: self.arena)
-
-    for (index, segment) in middleSegments.enumerated() {
-      switch segment {
-      case .stringSegment(var segment):
-        // We are not considering leading trivia for indentation computation.
-        // If these assertions are violated, we can probably lift them but we
-        // would need to check the produce the expected results.
-        assert(segment.content.leadingTriviaByteLength == 0)
-
-        // Re-classify indentation as leading trivia
-        if isSegmentOnNewLine {
-          if segment.content.tokenText.hasPrefix(indentation) {
-            segment = RawStringSegmentSyntax(
-              segment.unexpectedBeforeContent,
-              content: segment.content.reclassifyAsLeadingTrivia(indentationTrivia, arena: self.arena),
-              segment.unexpectedAfterContent,
-              arena: self.arena
-            )
-          } else {
-            let actualIndentation = segment.content.tokenText.prefix(while: { $0 == UInt8(ascii: " ") || $0 == UInt8(ascii: "\t") })
-            let actualIndentationTriva = TriviaParser.parseTrivia(SyntaxText(rebasing: actualIndentation), position: .leading)
-            let content = segment.content.reclassifyAsLeadingTrivia(
-              actualIndentationTriva,
-              lexerError: LexerError(.insufficientIndentationInMultilineStringLiteral, byteOffset: 0),
-              arena: self.arena
-            )
-            segment = RawStringSegmentSyntax(
-              segment.unexpectedBeforeContent,
-              content: content,
-              segment.unexpectedAfterContent,
-              arena: self.arena
-            )
-          }
-        }
-
-        isSegmentOnNewLine = segment.content.tokenText.newlineSuffix != nil
-
-        // If the segment has a `\` in front of its trailing newline, that newline
-        // is not part of the reprsented string and should be trivia.
-
-        let backslashNewlineSuffix: [RawTriviaPiece]?
-        if segment.content.tokenText.hasSuffix("\\\r\n") {
-          backslashNewlineSuffix = [.backslashs(1), .carriageReturnLineFeeds(1)]
-        } else if segment.content.tokenText.hasSuffix("\\\n") {
-          backslashNewlineSuffix = [.backslashs(1), .newlines(1)]
-        } else if segment.content.tokenText.hasSuffix("\\\r") {
-          backslashNewlineSuffix = [.backslashs(1), .carriageReturns(1)]
-        } else {
-          backslashNewlineSuffix = nil
-        }
-        if let backslashNewlineSuffix = backslashNewlineSuffix {
-          segment = RawStringSegmentSyntax(
-            segment.unexpectedBeforeContent,
-            content: segment.content.reclassifyAsTrailingTrivia(backslashNewlineSuffix, arena: self.arena),
-            segment.unexpectedAfterContent,
-            arena: self.arena
-          )
-        }
-        middleSegments[index] = .stringSegment(segment)
-      case .expressionSegment(let segment):
-        isSegmentOnNewLine = segment.rightParen.trailingTriviaPieces.contains(where: { $0.isNewline })
-
-        if let rewrittenSegment = expressionIndentationChecker.checkIndentation(of: segment) {
-          middleSegments[index] = .expressionSegment(rewrittenSegment)
-        }
-      }
-    }
-
-    // -------------------------------------------------------------------------
-    // Done
-
-    return (
-      unexpectedBeforeOpenQuote,
-      openQuote,
-      middleSegments,
-      unexpectedBeforeCloseQuote,
-      closeQuote
-    )
   }
 
   /// Parse a string literal expression.

@@ -452,7 +452,7 @@ public struct AssertParseOptions: OptionSet {
 
   /// Replace all `\r` and `\r\n` in the fixed source by `\n`.
   /// Useful to match source code that contains other line endings to expected
-  /// fixedfixed source that has `\n` line endings.
+  /// fixed source that has `\n` line endings.
   public static let normalizeNewlinesInFixedSource = AssertParseOptions(rawValue: 1 << 1)
 }
 

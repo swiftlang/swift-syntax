@@ -243,7 +243,10 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
     let extendedTriviaByteLength = extendedTrivia.reduce(0, { $0 + $1.byteLength })
     switch raw.rawData.payload {
     case .parsedToken(let dat):
-      assert(String(syntaxText: SyntaxText(baseAddress: dat.wholeText.baseAddress?.advanced(by: -extendedTriviaByteLength), count: extendedTriviaByteLength)) == Trivia(pieces: extendedTrivia.map(TriviaPiece.init)).description)
+      assert(
+        String(syntaxText: SyntaxText(baseAddress: dat.wholeText.baseAddress?.advanced(by: -extendedTriviaByteLength), count: extendedTriviaByteLength))
+          == Trivia(pieces: extendedTrivia.map(TriviaPiece.init)).description
+      )
       let wholeText = SyntaxText(baseAddress: dat.wholeText.baseAddress?.advanced(by: -extendedTriviaByteLength), count: dat.wholeText.count + extendedTriviaByteLength)
       let textRange = (dat.textRange.lowerBound + extendedTriviaByteLength)..<(dat.textRange.upperBound + extendedTriviaByteLength)
       return RawSyntax.parsedToken(
@@ -283,8 +286,10 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
     let extendedTriviaByteLength = extendedTrivia.reduce(0, { $0 + $1.byteLength })
     switch raw.rawData.payload {
     case .parsedToken(let dat):
-      // TODO: Can we write this assert easier using subscript slicing?
-      assert(String(syntaxText: SyntaxText(baseAddress: dat.wholeText.baseAddress?.advanced(by: dat.wholeText.count), count: extendedTriviaByteLength)) == Trivia(pieces: extendedTrivia.map(TriviaPiece.init)).description)
+      assert(
+        String(syntaxText: SyntaxText(baseAddress: dat.wholeText.baseAddress?.advanced(by: dat.wholeText.count), count: extendedTriviaByteLength))
+          == Trivia(pieces: extendedTrivia.map(TriviaPiece.init)).description
+      )
       let wholeText = SyntaxText(baseAddress: dat.wholeText.baseAddress, count: dat.wholeText.count + extendedTriviaByteLength)
       return RawSyntax.parsedToken(
         kind: dat.tokenKind,
@@ -321,10 +326,12 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
   /// that error will be set as the lexer error.
   public func reclassifyAsLeadingTrivia(_ reclassifiedTrivia: [RawTriviaPiece], lexerError: LexerError? = nil, arena: SyntaxArena) -> RawTokenSyntax {
     let reclassifiedTriviaByteLength = reclassifiedTrivia.reduce(0, { $0 + $1.byteLength })
-    assert(String(syntaxText: SyntaxText(rebasing: self.tokenText[0..<reclassifiedTriviaByteLength])) == Trivia(pieces: reclassifiedTrivia.map(TriviaPiece.init)).description)
+    assert(
+      String(syntaxText: SyntaxText(rebasing: self.tokenText[0..<reclassifiedTriviaByteLength]))
+        == Trivia(pieces: reclassifiedTrivia.map(TriviaPiece.init)).description
+    )
     switch raw.rawData.payload {
     case .parsedToken(let dat):
-      assert(String(syntaxText: SyntaxText(rebasing: dat.tokenText[0..<reclassifiedTriviaByteLength])) == Trivia(pieces: reclassifiedTrivia.map(TriviaPiece.init)).description)
       let textRange = (dat.textRange.lowerBound + reclassifiedTriviaByteLength)..<dat.textRange.upperBound
       return RawSyntax.parsedToken(
         kind: dat.tokenKind,
@@ -335,7 +342,6 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
         arena: arena
       ).as(RawTokenSyntax.self)!
     case .materializedToken(let dat):
-      assert(String(syntaxText: SyntaxText(rebasing: dat.tokenText[0..<reclassifiedTriviaByteLength])) == Trivia(pieces: reclassifiedTrivia.map(TriviaPiece.init)).description)
       let triviaBuffer = arena.allocateRawTriviaPieceBuffer(count: dat.triviaPieces.count + reclassifiedTrivia.count)
       let (_, existingLeadingTriviaEndIndex) = triviaBuffer.initialize(from: dat.leadingTrivia)
       let (_, reclassifiedTriviaEndIndex) = triviaBuffer[existingLeadingTriviaEndIndex...].initialize(from: reclassifiedTrivia)
@@ -363,7 +369,10 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
   /// that error will be set as the lexer error.
   public func reclassifyAsTrailingTrivia(_ reclassifiedTrivia: [RawTriviaPiece], lexerError: LexerError? = nil, arena: SyntaxArena) -> RawTokenSyntax {
     let reclassifiedTriviaByteLength = reclassifiedTrivia.reduce(0, { $0 + $1.byteLength })
-    assert(String(syntaxText: SyntaxText(rebasing: self.tokenText[(self.tokenText.count - reclassifiedTriviaByteLength)...])) == Trivia(pieces: reclassifiedTrivia.map(TriviaPiece.init)).description)
+    assert(
+      String(syntaxText: SyntaxText(rebasing: self.tokenText[(self.tokenText.count - reclassifiedTriviaByteLength)...]))
+        == Trivia(pieces: reclassifiedTrivia.map(TriviaPiece.init)).description
+    )
     switch raw.rawData.payload {
     case .parsedToken(let dat):
       let textRange = dat.textRange.lowerBound..<(dat.textRange.upperBound - reclassifiedTriviaByteLength)

@@ -873,14 +873,12 @@ extension RawSyntax: CustomReflectable {
   }
 }
 
-@_spi(RawSyntax)
-public enum RawSyntaxView {
+enum RawSyntaxView {
   case token(RawSyntaxTokenView)
   case layout(RawSyntaxLayoutView)
 }
 
-@_spi(RawSyntax)
-public extension RawSyntax {
+extension RawSyntax {
   var view: RawSyntaxView {
     switch raw.payload {
     case .parsedToken, .materializedToken:

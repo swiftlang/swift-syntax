@@ -114,7 +114,7 @@ public extension SwiftSyntax.LexerError {
       // This should be diagnosed when visiting the `StringLiteralExprSyntax`
       // inside `ParseDiagnosticsGenerator` but fall back to an error message
       // here in case the error is not diagnosed.
-      return InvalidIndentationInMultiLineStringLiteralError(kind: .insufficientIdentation, lines: 1)
+      return InvalidIndentationInMultiLineStringLiteralError(kind: .insufficientIndentation, lines: 1)
     case .invalidBinaryDigitInIntegerLiteral:
       return InvalidDigitInIntegerLiteral(kind: .binary(scalarAtErrorOffset))
     case .invalidDecimalDigitInIntegerLiteral:

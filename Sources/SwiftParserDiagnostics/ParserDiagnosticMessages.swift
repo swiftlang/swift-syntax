@@ -278,13 +278,13 @@ public struct InvalidIdentifierError: ParserError {
 
 public struct InvalidIndentationInMultiLineStringLiteralError: ParserError {
   public enum Kind {
-    case insufficientIdentation
+    case insufficientIndentation
     case unexpectedSpace
     case unexpectedTab
 
     var message: String {
       switch self {
-      case .insufficientIdentation: return "insufficient indentation"
+      case .insufficientIndentation: return "insufficient indentation"
       case .unexpectedSpace: return "unexpected space in indentation"
       case .unexpectedTab: return "unexpected tab in indentation"
       }
@@ -298,7 +298,7 @@ public struct InvalidIndentationInMultiLineStringLiteralError: ParserError {
     if lines == 1 {
       return "\(kind.message) of line in multi-line string literal"
     } else {
-      return "\(kind.message) of next \(lines) lines in multi-line string literal"
+      return "\(kind.message) of the next \(lines) lines in multi-line string literal"
     }
   }
 }

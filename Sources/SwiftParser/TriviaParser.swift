@@ -97,6 +97,11 @@ public struct TriviaParser {
           continue
         }
 
+      case UInt8(ascii: "\\"):
+        cursor.advance(while: { $0 == "\\" })
+        pieces.append(.backslashes(start.distance(to: cursor)))
+        continue
+
       default:
         break
       }

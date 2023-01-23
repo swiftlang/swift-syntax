@@ -40,7 +40,7 @@ final class MultiLineStringLiteralIndentatinDiagnosticsGenerator: SyntaxVisitor 
 
   private let closeQuote: TokenSyntax
 
-  /// Diagnostics that we have finisehed because their incorrect indentation was followed by correct indentation
+  /// Diagnostics that we have finished because their incorrect indentation was followed by correct indentation
   private var finishedDiagnostics: [(diagnostic: Diagnostic, handledNodes: [SyntaxIdentifier])] = []
 
   /// The diagnostic we are currently building up
@@ -53,7 +53,7 @@ final class MultiLineStringLiteralIndentatinDiagnosticsGenerator: SyntaxVisitor 
 
   private func addIncorrectlyIndentedToken(token: TokenSyntax) {
     // Determine kind and position of the diagnonstic
-    var kind: InvalidIndentationInMultiLineStringLiteralError.Kind = .insufficientIdentation
+    var kind: InvalidIndentationInMultiLineStringLiteralError.Kind = .insufficientIndentation
     var position = token.positionAfterSkippingLeadingTrivia
 
     let tokenLeadingTrivia = token.leadingTrivia
@@ -61,7 +61,7 @@ final class MultiLineStringLiteralIndentatinDiagnosticsGenerator: SyntaxVisitor 
     let indentationStartIndex = tokenLeadingTrivia.pieces.lastIndex(where: { $0.isNewline })?.advanced(by: 1) ?? tokenLeadingTrivia.startIndex
     let preIndentationTrivia = Trivia(pieces: tokenLeadingTrivia[0..<indentationStartIndex])
     let indentationTrivia = Trivia(pieces: tokenLeadingTrivia[indentationStartIndex...])
-    var positionOffset = preIndentationTrivia.reduce(0, { $0 + $1.sourceLength.utf8Length })
+    var positionOffset = preIndentationTrivia.byteSize
 
     for (invalidTriviaPiece, missingTriviaPiece) in zip(indentationTrivia.decomposed, closeQuote.leadingTrivia.decomposed) {
       if invalidTriviaPiece == missingTriviaPiece {
@@ -83,7 +83,7 @@ final class MultiLineStringLiteralIndentatinDiagnosticsGenerator: SyntaxVisitor 
       finishInProgressDiagnostic()
     }
 
-    // Append hte inProgress diagnostic or create a new one.
+    // Append the inProgressDiagnostic or create a new one.
     let changes = [FixIt.Change.replaceLeadingTrivia(token: token, newTrivia: preIndentationTrivia + closeQuote.leadingTrivia)]
     let handledNodes = [token.id]
     if self.inProgressDiagnostic != nil {

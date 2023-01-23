@@ -105,7 +105,7 @@ final class MultilineErrorsTests: XCTestCase {
   }
 
   func testMultilineErrors5() {
-    // \t is not the same as an actual tab for de-indentation
+    // \t is not the same as an actual tab
     AssertParseWithAllNewlineEndings(
       #"""
       _ = """
@@ -188,7 +188,7 @@ final class MultilineErrorsTests: XCTestCase {
   }
 
   func testMultilineErrors8() {
-    // a tab is not the same as multiple spaces for de-indentation
+    // a tab is not the same as multiple spaces
     AssertParseWithAllNewlineEndings(
       #"""
       _ = """
@@ -209,7 +209,7 @@ final class MultilineErrorsTests: XCTestCase {
   }
 
   func testMultilineErrors9() {
-    // a tab is not the same as multiple spaces for de-indentation
+    // a tab is not the same as multiple spaces
     AssertParseWithAllNewlineEndings(
       #"""
       _ = """
@@ -230,7 +230,7 @@ final class MultilineErrorsTests: XCTestCase {
   }
 
   func testMultilineErrors10() {
-    // multiple spaces are not the same as a tab for de-indentation
+    // multiple spaces are not the same as a tab
     AssertParseWithAllNewlineEndings(
       #"""
       _ = """
@@ -251,7 +251,7 @@ final class MultilineErrorsTests: XCTestCase {
   }
 
   func testMultilineErrors11() {
-    // multiple spaces are not the same as a tab for de-indentation
+    // multiple spaces are not the same as a tab
     AssertParseWithAllNewlineEndings(
       #"""
       _ = """
@@ -343,7 +343,7 @@ final class MultilineErrorsTests: XCTestCase {
       	"""
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected space in indentation of next 2 lines in multi-line string literal")
+        DiagnosticSpec(message: "unexpected space in indentation of the next 2 lines in multi-line string literal")
       ],
       fixedSource: #"""
         _ = """
@@ -373,10 +373,9 @@ final class MultilineErrorsTests: XCTestCase {
       		"""
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: insufficient indentation of next 2 lines in multi-line string literal
-        DiagnosticSpec(locationMarker: "1️⃣", message: "insufficient indentation of next 4 lines in multi-line string literal"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected space in indentation of next 2 lines in multi-line string literal"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "insufficient indentation of next 2 lines in multi-line string literal"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "insufficient indentation of the next 4 lines in multi-line string literal"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected space in indentation of the next 2 lines in multi-line string literal"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "insufficient indentation of the next 2 lines in multi-line string literal"),
       ],
       fixedSource: #"""
         _ = """
@@ -407,7 +406,7 @@ final class MultilineErrorsTests: XCTestCase {
           """
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "insufficient indentation of next 2 lines in multi-line string literal")
+        DiagnosticSpec(message: "insufficient indentation of the next 2 lines in multi-line string literal")
       ],
       fixedSource: #"""
         _ = """
@@ -735,7 +734,7 @@ final class MultilineErrorsTests: XCTestCase {
         """
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "insufficient indentation of next 3 lines in multi-line string literal")
+        DiagnosticSpec(message: "insufficient indentation of the next 3 lines in multi-line string literal")
       ],
       fixedSource: #"""
           """
@@ -746,6 +745,18 @@ final class MultilineErrorsTests: XCTestCase {
           )
           """
         """#
+    )
+  }
+
+  func testWhitespaceAfterOpenQuote() {
+    AssertParse(
+      #"""
+      """1️⃣\#(" ")
+      """
+      """#,
+      diagnostics: [
+        DiagnosticSpec(message: "multi-line string literal content must begin on a new line")
+      ]
     )
   }
 }

@@ -61,7 +61,7 @@ public struct RawSyntaxTokenView {
     case .materializedToken(let dat):
       return dat.tokenText
     case .layout(_):
-      preconditionFailure("'tokenText' is not available for non-token node")
+      preconditionFailure("'rawText' is not available for non-token node")
     }
   }
 
@@ -74,7 +74,7 @@ public struct RawSyntaxTokenView {
     case .materializedToken(let dat):
       return dat.leadingTrivia.reduce(0) { $0 + $1.byteLength }
     case .layout(_):
-      preconditionFailure("'tokenLeadingTriviaByteLength' is not available for non-token node")
+      preconditionFailure("'leadingTriviaByteLength' is not available for non-token node")
     }
   }
 
@@ -87,7 +87,7 @@ public struct RawSyntaxTokenView {
     case .materializedToken(let dat):
       return dat.trailingTrivia.reduce(0) { $0 + $1.byteLength }
     case .layout(_):
-      preconditionFailure("'tokenTrailingTriviaByteLength' is not available for non-token node")
+      preconditionFailure("'trailingTriviaByteLength' is not available for non-token node")
     }
   }
 
@@ -100,7 +100,7 @@ public struct RawSyntaxTokenView {
     case .materializedToken(let dat):
       return Array(dat.leadingTrivia)
     case .layout(_):
-      preconditionFailure("'tokenLeadingRawTriviaPieces' is called on non-token raw syntax")
+      preconditionFailure("'leadingRawTriviaPieces' is called on non-token raw syntax")
     }
   }
 
@@ -113,7 +113,7 @@ public struct RawSyntaxTokenView {
     case .materializedToken(let dat):
       return Array(dat.trailingTrivia)
     case .layout(_):
-      preconditionFailure("'tokenTrailingRawTriviaPieces' is called on non-token raw syntax")
+      preconditionFailure("'trailingRawTriviaPieces' is called on non-token raw syntax")
     }
   }
 
@@ -129,7 +129,7 @@ public struct RawSyntaxTokenView {
     return SourceLength(utf8Length: trailingTriviaByteLength)
   }
 
-  /// Perform `body` with text of th leading trivia.
+  /// Run `body` with text of the leading trivia and return its result.
   @_spi(RawSyntax)
   public func leadingTrivia<T>(_ body: (SyntaxText) -> T) -> T {
     switch raw.rawData.payload {
@@ -139,11 +139,11 @@ public struct RawSyntaxTokenView {
       var leadingTriviaStr = Trivia(pieces: dat.leadingTrivia.map(TriviaPiece.init)).description
       return leadingTriviaStr.withSyntaxText(body)
     case .layout(_):
-      preconditionFailure("'tokenTrailingRawTriviaPieces' is called on non-token raw syntax")
+      preconditionFailure("'leadingTrivia' is called on non-token raw syntax")
     }
   }
 
-  /// Perform `body` with text of th trailing trivia.
+  /// Run `body` with text of the leading trivia and return its result.
   @_spi(RawSyntax)
   public func trailingTrivia<T>(_ body: (SyntaxText) -> T) -> T {
     switch raw.rawData.payload {
@@ -153,7 +153,7 @@ public struct RawSyntaxTokenView {
       var trailingTriviaStr = Trivia(pieces: dat.trailingTrivia.map(TriviaPiece.init)).description
       return trailingTriviaStr.withSyntaxText(body)
     case .layout(_):
-      preconditionFailure("'tokenTrailingRawTriviaPieces' is called on non-token raw syntax")
+      preconditionFailure("'trailingTrivia' is called on non-token raw syntax")
     }
   }
 
@@ -193,7 +193,7 @@ public struct RawSyntaxTokenView {
       payload.tokenText = text
       return RawSyntax(arena: arena, payload: .materializedToken(payload))
     default:
-      preconditionFailure("'withTokenKind()' is called on non-token raw syntax")
+      preconditionFailure("'withKind()' is called on non-token raw syntax")
     }
   }
 
@@ -207,7 +207,7 @@ public struct RawSyntaxTokenView {
     case .materializedToken(let dat):
       return dat.tokenText.count
     case .layout(_):
-      preconditionFailure("'tokenTextByteLength' is not available for non-token node")
+      preconditionFailure("'textByteLength' is not available for non-token node")
     }
   }
 
@@ -224,7 +224,7 @@ public struct RawSyntaxTokenView {
     case .materializedToken(let dat):
       return TokenKind.fromRaw(kind: dat.tokenKind, text: String(syntaxText: dat.tokenText))
     case .layout(_):
-      preconditionFailure("Must be invoked on a token")
+      preconditionFailure("'formKind' is not available for non-token node")
     }
   }
 
@@ -236,7 +236,7 @@ public struct RawSyntaxTokenView {
     case .materializedToken(let dat):
       return dat.presence
     case .layout(_):
-      preconditionFailure("'presence' is a token-only property")
+      preconditionFailure("'presence' is not available for non-token node")
     }
   }
 
@@ -248,7 +248,7 @@ public struct RawSyntaxTokenView {
     case .materializedToken(let dat):
       return dat.lexerError
     case .layout(_):
-      preconditionFailure("'lexerError' is a token-only property")
+      preconditionFailure("'lexerError' is not available for non-token node")
     }
   }
 
@@ -262,7 +262,7 @@ public struct RawSyntaxTokenView {
       dat.lexerError = lexerError
       return RawSyntax(arena: arena, payload: .materializedToken(dat))
     default:
-      preconditionFailure("'withLexerError()' is called on non-token raw syntax")
+      preconditionFailure("'withLexerError' is not available for non-token node")
     }
   }
 }

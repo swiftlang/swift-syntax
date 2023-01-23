@@ -162,6 +162,9 @@ class PrintDiags: ParsableCommand {
   @Flag(name: .long, help: "Perform sequence folding with the standard operators")
   var foldSequences: Bool = false
 
+  @Flag(name: .long, help: "Colorize output with ANSI color codes")
+  var colorize: Bool = false
+
   func run() throws {
     let source = try getContentsOfSourceFile(at: sourceFile)
 
@@ -169,7 +172,7 @@ class PrintDiags: ParsableCommand {
       let tree = Parser.parse(source: sourceBuffer)
 
       var diags = ParseDiagnosticsGenerator.diagnostics(for: tree)
-      print(DiagnosticsFormatter.annotatedSource(tree: tree, diags: diags))
+      print(DiagnosticsFormatter.annotatedSource(tree: tree, diags: diags, colorize: colorize))
 
       if foldSequences {
         diags += foldAllSequences(tree).1

@@ -24,7 +24,7 @@ public struct DiagnosticsFormatter {
   static let contextSize = 2
 
   /// Print given diagnostics for a given syntax tree on the command line
-  public static func annotatedSource<SyntaxType: SyntaxProtocol>(tree: SyntaxType, diags: [Diagnostic]) -> String {
+  public static func annotatedSource<SyntaxType: SyntaxProtocol>(tree: SyntaxType, diags: [Diagnostic], colorize: Bool = false) -> String {
     let slc = SourceLocationConverter(file: "", tree: tree)
 
     // First, we need to put each line and its diagnostics together
@@ -103,12 +103,76 @@ public struct DiagnosticsFormatter {
         }
 
         for diag in diags.dropLast(1) {
-          annotatedSource.append("\(preMessage)├─ \(diag.message)\n")
+          if colorize {
+            annotatedSource.append("\(preMessage)├─ \(self.colorize(diag.diagMessage))\n")
+          } else {
+            annotatedSource.append("\(preMessage)├─ \(diag.message)\n")
+          }
         }
-        annotatedSource.append("\(preMessage)╰─ \(diags.last!.message)\n")
 
+        if colorize {
+          annotatedSource.append("\(preMessage)╰─ \(self.colorize(diags.last!.diagMessage))\n")
+        } else {
+          annotatedSource.append("\(preMessage)╰─ \(diags.last!.message)\n")
+        }
       }
     }
     return annotatedSource
+  }
+
+  /// Annotates the given ``DiagnosticMessage`` with an appropriate ANSI color code and returns the result as a printable string.
+  static func colorize(_ message: DiagnosticMessage) -> String {
+    switch message.severity {
+    case .error:
+      let annotation = ANSIAnnotation(color: .red, trait: .bold)
+      return annotation.applied(to: message.message)
+    case .warning:
+      let annotation = ANSIAnnotation(color: .yellow)
+      return annotation.applied(to: message.message)
+    case .note:
+      return message.message
+    }
+  }
+
+  enum ANSIColor: UInt8 {
+    case reset = 0
+    case black = 30
+    case red = 31
+    case green = 32
+    case yellow = 33
+    case blue = 34
+    case magenta = 35
+    case cyan = 36
+    case white = 37
+  }
+
+  enum ANSITrait: UInt8 {
+    case bold = 1
+    case underline = 4
+  }
+
+  struct ANSIAnnotation {
+    var color: ANSIColor
+    var trait: ANSITrait?
+
+    /// The textual representation of the annotation.
+    var code: String {
+      "\u{001B}[\(trait?.rawValue ?? 0);\(color.rawValue)m"
+    }
+
+    init(color: ANSIColor, trait: ANSITrait? = nil) {
+      self.color = color
+      self.trait = trait
+    }
+
+    func applied(to message: String) -> String {
+      // Resetting after the message ensures that we don't color unintended lines in the output
+      return "\(code)\(message)\(ANSIAnnotation.reset.code)"
+    }
+
+    /// The "reset" ANSI code used to unset any previously added annotation.
+    static var reset: ANSIAnnotation {
+      self.init(color: .reset, trait: nil)
+    }
   }
 }

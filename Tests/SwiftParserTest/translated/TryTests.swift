@@ -269,11 +269,13 @@ final class TryTests: XCTestCase {
       """
       1️⃣try while true {
         2️⃣try break
+        3️⃣try continue
       }
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "'try' cannot be used with 'while'"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "'try' cannot be used with 'break'"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "'try' cannot be used with 'continue'"),
       ]
     )
   }
@@ -294,10 +296,11 @@ final class TryTests: XCTestCase {
   func testTry12c() {
     AssertParse(
       """
-      1️⃣try return
+      1️⃣try guard boop() else { 2️⃣try return }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'try' cannot be used with 'return'")
+        DiagnosticSpec(locationMarker: "1️⃣", message: "'try' cannot be used with 'guard'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "'try' cannot be used with 'return'")
       ]
     )
   }
@@ -312,6 +315,16 @@ final class TryTests: XCTestCase {
       ],
       fixedSource: "throw try foo()"
     )
+
+    AssertParse(
+      """
+      1️⃣try throw try foo()
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "'try' cannot be used with 'throw'")
+      ]
+    )
+
   }
 
   func testTry12e() {
@@ -324,7 +337,82 @@ final class TryTests: XCTestCase {
       ],
       fixedSource: "return try foo()"
     )
+  
+    AssertParse(
+      """
+      1️⃣try return try foo()
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "'try' cannot be used with 'return'")
+      ]
+    )
   }
+  
+  func testTry12f() {
+    AssertParse(
+      """
+      1️⃣try switch thingy() { }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "'try' must be placed on the switch subject", fixIts: ["move 'try' after 'switch'"]),
+      ],
+      fixedSource: "switch try thingy() { }"
+    )
+  }
+
+  func testTry12g() {
+    AssertParse(
+      """
+      1️⃣try switch try thingy() {
+      case true: 2️⃣try fallthrough
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "'try' cannot be used with 'switch'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "'try' cannot be used with 'fallthrough'"),
+      ]
+    )
+  }
+  
+  func testTry12h() {
+    AssertParse(
+      """
+      1️⃣try do {
+        2️⃣try if p { }
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "'try' cannot be used with 'do'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "'try' cannot be used with 'if'"),
+      ]
+    )
+  }
+
+  func testTry12i() {
+    AssertParse(
+      """
+      1️⃣try for x in y {
+        2️⃣try repeat { } while p
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "'try' cannot be used with 'for'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "'try' cannot be used with 'repeat'"),
+      ]
+    )
+  }
+  
+  func testTry12j() {
+    AssertParse(
+      """
+      1️⃣try defer { i += 1 }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "'try' cannot be used with 'defer'"),
+      ]
+    )
+  }
+
 
   func testTry13() {
     AssertParse(

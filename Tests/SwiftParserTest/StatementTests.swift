@@ -429,6 +429,29 @@ final class StatementTests: XCTestCase {
 
     AssertParse(
       """
+      var x: Int {
+        _read {
+          1️⃣try yield &x
+        }
+      }
+      """,
+      substructure: Syntax(
+        YieldStmtSyntax(
+          tryKeyword: .keyword(.try),
+          yieldKeyword: .keyword(.yield),
+          yields: .init(
+            InOutExprSyntax(
+              ampersand: .prefixAmpersandToken(),
+              expression: IdentifierExprSyntax(identifier: .identifier("x"))
+            )
+          )
+        )
+      ),
+      substructureAfterMarker: "1️⃣"
+    )
+
+    AssertParse(
+      """
       @inlinable internal subscript(key: Key) -> Value? {
         @inline(__always) get {
           return lookup(key)
@@ -449,6 +472,56 @@ final class StatementTests: XCTestCase {
       """,
       substructure: Syntax(
         YieldStmtSyntax(
+          yieldKeyword: .keyword(.yield),
+          yields: .init(
+            InOutExprSyntax(
+              ampersand: .prefixAmpersandToken(),
+              expression: SubscriptExprSyntax(
+                calledExpression: IdentifierExprSyntax(identifier: .identifier("native")),
+                leftBracket: .leftSquareBracketToken(),
+                argumentList: TupleExprElementListSyntax([
+                  TupleExprElementSyntax(
+                    expression: IdentifierExprSyntax(identifier: .identifier("key")),
+                    trailingComma: .commaToken()
+                  ),
+                  TupleExprElementSyntax(
+                    label: .identifier("isUnique"),
+                    colon: .colonToken(),
+                    expression: BooleanLiteralExprSyntax(booleanLiteral: .keyword(.true))
+                  ),
+                ]),
+                rightBracket: .rightSquareBracketToken()
+              )
+            )
+          )
+        )
+      ),
+      substructureAfterMarker: "1️⃣"
+    )
+    
+    AssertParse(
+      """
+      @inlinable internal subscript(key: Key) -> Value? {
+        @inline(__always) get {
+          return lookup(key)
+        }
+        @inline(__always) _modify {
+          guard isNative else {
+            let cocoa = asCocoa
+            var native = _NativeDictionary<Key, Value>(
+              cocoa, capacity: cocoa.count + 1)
+            self = .init(native: native)
+            1️⃣try yield &native[key, isUnique: true]
+            return
+          }
+          let isUnique = isUniquelyReferenced()
+          yield &asNative[key, isUnique: isUnique]
+        }
+      }
+      """,
+      substructure: Syntax(
+        YieldStmtSyntax(
+          tryKeyword: .keyword(.try),
           yieldKeyword: .keyword(.yield),
           yields: .init(
             InOutExprSyntax(

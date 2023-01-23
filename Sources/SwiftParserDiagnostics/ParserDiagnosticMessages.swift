@@ -167,6 +167,9 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var tooManyRawStringDelimitersToStartInterpolation: Self {
     .init("too many '#' characters to start string interpolation")
   }
+  public static var tryMustBePlacedOnSwitchSubject: Self {
+    .init("'try' must be placed on the switch subject")
+  }
   public static var tryMustBePlacedOnReturnedExpr: Self {
     .init("'try' must be placed on the returned expression")
   }

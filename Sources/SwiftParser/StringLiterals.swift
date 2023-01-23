@@ -210,6 +210,8 @@ extension Parser {
               segment.unexpectedAfterContent,
               arena: self.arena
             )
+          } else if segment.content.tokenText == "" || segment.content.tokenText.triviaPieceIfNewline != nil {
+            // Empty lines don't need to be indented and there's no indentation we need to strip away.
           } else {
             let actualIndentation = segment.content.tokenText.prefix(while: { $0 == UInt8(ascii: " ") || $0 == UInt8(ascii: "\t") })
             let actualIndentationTrivia = TriviaParser.parseTrivia(SyntaxText(rebasing: actualIndentation), position: .leading)

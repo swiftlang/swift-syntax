@@ -1025,6 +1025,76 @@ final class ExpressionTests: XCTestCase {
       """#
     )
   }
+
+  func testEmptyLineInMultilineStringLiteral() {
+    AssertParse(
+      #"""
+        """
+        line 1
+
+        line 2
+        """
+      """#,
+      substructure: Syntax(
+        StringLiteralExprSyntax(
+          openDelimiter: nil,
+          openQuote: .multilineStringQuoteToken(leadingTrivia: [.spaces(2)], trailingTrivia: .newline),
+          segments: StringLiteralSegmentsSyntax([
+            .stringSegment(StringSegmentSyntax(content: .stringSegment("line 1\n", leadingTrivia: [.spaces(2)]))),
+            .stringSegment(StringSegmentSyntax(content: .stringSegment("\n"))),
+            .stringSegment(StringSegmentSyntax(content: .stringSegment("line 2", leadingTrivia: [.spaces(2)], trailingTrivia: .newline))),
+          ]),
+          closeQuote: .multilineStringQuoteToken(leadingTrivia: [.spaces(2)]),
+          closeDelimiter: nil
+        )
+      ),
+      options: [.substructureCheckTrivia]
+    )
+
+    AssertParse(
+      #"""
+        """
+        line 1
+
+        """
+      """#,
+      substructure: Syntax(
+        StringLiteralExprSyntax(
+          openDelimiter: nil,
+          openQuote: .multilineStringQuoteToken(leadingTrivia: [.spaces(2)], trailingTrivia: .newline),
+          segments: StringLiteralSegmentsSyntax([
+            .stringSegment(StringSegmentSyntax(content: .stringSegment("line 1\n", leadingTrivia: [.spaces(2)]))),
+            .stringSegment(StringSegmentSyntax(content: .stringSegment("", trailingTrivia: .newline))),
+          ]),
+          closeQuote: .multilineStringQuoteToken(leadingTrivia: [.spaces(2)]),
+          closeDelimiter: nil
+        )
+      ),
+      options: [.substructureCheckTrivia]
+    )
+  }
+
+  func testUnderIndentedWhitespaceonlyLineInMultilineStringLiteral() {
+    AssertParse(
+      #"""
+        """
+        line 1
+       1️⃣
+        line 2
+        """
+      """#,
+      diagnostics: [
+        DiagnosticSpec(message: "insufficient indentation of line in multi-line string literal")
+      ],
+      fixedSource: #"""
+          """
+          line 1
+        \#("  ")
+          line 2
+          """
+        """#
+    )
+  }
 }
 
 final class MemberExprTests: XCTestCase {

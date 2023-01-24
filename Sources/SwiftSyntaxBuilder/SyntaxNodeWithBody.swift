@@ -93,7 +93,7 @@ extension ExtensionDeclSyntax: HasTrailingMemberDeclBlock {}
 extension ProtocolDeclSyntax: HasTrailingMemberDeclBlock {}
 extension StructDeclSyntax: HasTrailingMemberDeclBlock {}
 
-// MARK: - IfStmt
+// MARK: - IfStmtSyntax
 // IfStmtSyntax is a special scenario as we also have the `else` body or an if-else
 // So we cannot conform to `HasTrailingCodeBlock`
 
@@ -105,10 +105,21 @@ public extension IfStmtSyntax {
     self.elseKeyword = elseBody != nil ? .keyword(.else) : nil
   }
 
-  init(_ signature: String, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemListSyntax, elseIf: IfStmtSyntax) {
+  init(_ signature: PartialSyntaxNodeString, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemListSyntax, elseIf: IfStmtSyntax) {
     self = "\(signature) {}"
     self.body = CodeBlockSyntax(statements: bodyBuilder())
     self.elseBody = .ifStmt(elseIf)
     self.elseKeyword = elseBody != nil ? .keyword(.else) : nil
+  }
+}
+
+// MARK: - SwitchStmtSyntax
+// SwitchStmtSyntax is a special scenario as it don't have body or members
+// So we cannot conform to `HasTrailingCodeBlock` or `HasTrailingMemberDeclBlock`
+
+public extension SwitchStmtSyntax {
+  init(_ signature: PartialSyntaxNodeString, @SwitchCaseListBuilder casesBuilder: () -> SwitchCaseListSyntax = { SwitchCaseListSyntax([]) }) {
+    self = "\(signature) {}"
+    self.cases = casesBuilder()
   }
 }

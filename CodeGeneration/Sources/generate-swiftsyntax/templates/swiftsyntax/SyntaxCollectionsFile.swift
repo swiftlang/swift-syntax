@@ -40,8 +40,8 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: [.blockComment(gener
       """
     
     StructDeclSyntax("""
-      \(documentation)
-      public struct \(node.name): SyntaxCollection, SyntaxHashable
+      \(raw: documentation)
+      public struct \(raw: node.name): SyntaxCollection, SyntaxHashable
       """) {
       if let collectionElementChoices = node.collectionElementChoices, !collectionElementChoices.isEmpty {
         EnumDeclSyntax("""
@@ -361,8 +361,8 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: [.blockComment(gener
     }
     
     ExtensionDeclSyntax("""
-      /// Conformance for `\(node.name)` to the `BidirectionalCollection` protocol.
-      extension \(node.name): BidirectionalCollection
+      /// Conformance for `\(raw: node.name)` to the `BidirectionalCollection` protocol.
+      extension \(raw: node.name): BidirectionalCollection
       """) {
       TypealiasDeclSyntax("public typealias Index = SyntaxChildrenIndex")
       

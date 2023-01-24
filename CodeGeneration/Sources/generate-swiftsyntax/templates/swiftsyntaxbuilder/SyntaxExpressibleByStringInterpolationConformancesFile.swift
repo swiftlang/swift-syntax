@@ -37,7 +37,7 @@ let syntaxExpressibleByStringInterpolationConformancesFile = SourceFileSyntax {
   
   for node in SYNTAX_NODES {
     if node.isBase {
-      ExtensionDeclSyntax("extension \(node.name)Protocol") {
+      ExtensionDeclSyntax("extension \(raw: node.name)Protocol") {
         InitializerDeclSyntax(
           """
           public init(stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
@@ -54,7 +54,7 @@ let syntaxExpressibleByStringInterpolationConformancesFile = SourceFileSyntax {
     }
 
     if node.parserFunction != nil {
-      ExtensionDeclSyntax("extension \(node.name): SyntaxExpressibleByStringInterpolation") {
+      ExtensionDeclSyntax("extension \(raw: node.name): SyntaxExpressibleByStringInterpolation") {
         InitializerDeclSyntax(
           """
           public init(stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {

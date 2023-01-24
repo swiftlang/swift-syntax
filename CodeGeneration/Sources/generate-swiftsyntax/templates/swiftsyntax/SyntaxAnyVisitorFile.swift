@@ -17,7 +17,7 @@ import Utils
 
 let syntaxAnyVisitorFile = SourceFileSyntax {
   ClassDeclSyntax("""
-    \(generateCopyrightHeader(for: "generate-swiftsyntax"))
+    \(raw: generateCopyrightHeader(for: "generate-swiftsyntax"))
     
     /// A `SyntaxVisitor` that can visit the nodes as generic `Syntax` values.
     ///

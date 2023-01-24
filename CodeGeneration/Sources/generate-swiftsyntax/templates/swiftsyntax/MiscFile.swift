@@ -17,7 +17,7 @@ import Utils
 
 let miscFile = SourceFileSyntax {
   ExtensionDeclSyntax("""
-    \(generateCopyrightHeader(for: "generate-swiftsyntax"))
+    \(raw: generateCopyrightHeader(for: "generate-swiftsyntax"))
     extension Syntax
     """) {
     VariableDeclSyntax(

@@ -14,35 +14,39 @@
 
 /// Allows pattern matching of lexemes and tokens against `RawTokenKind` in a way
 /// that considers keywords and identifiers the same if their contents match.
+///
+/// All the methods in here need to be marked `@inline(__always)` so the compiler
+/// inlines the RawTokenKind we are matching against and is thus able to rule
+/// out one of the branches in `matches(rawTokenKind:text:)` based on the
+/// matched kind.
 struct RawTokenKindMatch {
-  var rawTokenKind: RawTokenKind
+  private var rawTokenKind: RawTokenKind
 
+  @inline(__always)
   init(_ rawTokenKind: RawTokenKind) {
     self.rawTokenKind = rawTokenKind
   }
 
+  @inline(__always)
   init(_ keyword: Keyword) {
     self.rawTokenKind = .keyword(keyword)
   }
 
+  @inline(__always)
   func matches(rawTokenKind: RawTokenKind, text: SyntaxText) -> Bool {
-    if rawTokenKind == self.rawTokenKind {
-      return true
-    } else if rawTokenKind == .identifier, case .keyword = self.rawTokenKind {
-      // We are looking for a contextual keyword but have an identifier.
-      // If the contents match, we want to interpret the identifier as a keyword.
-      let defaultText = self.rawTokenKind.defaultText
-      assert(defaultText != nil)
-      return text == defaultText
+    if self.rawTokenKind.base == .keyword {
+      return rawTokenKind == self.rawTokenKind || (rawTokenKind == .identifier && self.rawTokenKind.keyword.defaultText == text)
     } else {
-      return false
+      return rawTokenKind == self.rawTokenKind
     }
   }
 
+  @inline(__always)
   static func ~= (kind: RawTokenKindMatch, lexeme: Lexer.Lexeme) -> Bool {
     return kind.matches(rawTokenKind: lexeme.rawTokenKind, text: lexeme.tokenText)
   }
 
+  @inline(__always)
   static func ~= (kind: RawTokenKindMatch, token: TokenSyntax) -> Bool {
     return kind.matches(rawTokenKind: token.rawTokenKind, text: token.tokenView.rawText)
   }

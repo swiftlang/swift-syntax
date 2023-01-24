@@ -79,6 +79,7 @@ class SwiftParserCli: ParsableCommand {
   static var configuration = CommandConfiguration(
     abstract: "Utility to test SwiftSyntax syntax tree creation.",
     subcommands: [
+      PerformanceTest.self,
       PrintDiags.self,
       PrintTree.self,
       Reduce.self,
@@ -145,6 +146,41 @@ class VerifyRoundTrip: ParsableCommand {
     if resultTree.syntaxTextBytes != [UInt8](source) {
       throw Error.roundTripFailed
     }
+  }
+}
+
+class PerformanceTest: ParsableCommand {
+  static var configuration = CommandConfiguration(
+    commandName: "performance-test",
+    abstract: "Parse all .swift files in '--directory' and its subdirectories '--iteration' times and output the average time (in milliseconds) one iteration took."
+  )
+
+  required init() {}
+
+  @Option(help: "The directory in which all .swift files should be parsed")
+  var directory: String
+
+  @Option(help: "How many times should the directory be parsed?")
+  var iterations: Int
+
+  func run() throws {
+    let sourceDir = URL(fileURLWithPath: self.directory)
+
+    let files = try FileManager.default
+      .enumerator(at: sourceDir, includingPropertiesForKeys: nil)!
+      .compactMap({ $0 as? URL })
+      .filter { $0.pathExtension == "swift" }
+      .map { try Data(contentsOf: $0) }
+
+    let start = Date()
+    for _ in 0..<self.iterations {
+      for file in files {
+        file.withUnsafeBytes { buf in
+          _ = Parser.parse(source: buf.bindMemory(to: UInt8.self))
+        }
+      }
+    }
+    print(Date().timeIntervalSince(start) / Double(self.iterations) * 1000)
   }
 }
 

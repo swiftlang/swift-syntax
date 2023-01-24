@@ -94,7 +94,7 @@ let syntaxClassificationFile = SourceFileSyntax {
       modifiers: [DeclModifierSyntax(name: .keyword(.internal))],
       name: IdentifierPatternSyntax("classification"),
       type: TypeAnnotationSyntax(type: TypeSyntax("SyntaxClassification"))) {
-        SwitchStmtSyntax(expression: ExprSyntax("self")) {
+        SwitchStmtSyntax(expression: ExprSyntax("self.base")) {
           for token in SYNTAX_TOKENS {
             SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
               if let classification = token.classification {

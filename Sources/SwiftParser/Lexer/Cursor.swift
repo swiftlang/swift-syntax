@@ -80,7 +80,7 @@ extension Lexer.Cursor {
     /// `(` that opens the string interpolation.
     ///
     /// `stringInterpolationStart` points to the first character inside the interpolation.
-    case inStringInterpolation(stringLiteralKind: StringLiteralKind, parenCount: Int, stringInterpolationStart: Lexer.Cursor)
+    case inStringInterpolation(stringLiteralKind: StringLiteralKind, parenCount: Int)
 
     /// We have parsed a string interpolation segment and are now expecting the closing `)`.
     case afterStringInterpolation
@@ -95,7 +95,7 @@ extension Lexer.Cursor {
       case .afterStringLiteral: return nil
       case .afterClosingStringQuote: return nil
       case .inStringInterpolationStart: return nil
-      case .inStringInterpolation(let stringLiteralKind, _, _):
+      case .inStringInterpolation(let stringLiteralKind, _):
         // Single line strings cannot span multiple lines, so we don't want to
         // consume any newline inside a string interpolation either.
         switch stringLiteralKind {
@@ -133,8 +133,58 @@ extension Lexer.Cursor {
       case .afterStringLiteral: return false
       case .afterClosingStringQuote: return false
       case .inStringInterpolationStart: return false
-      case .inStringInterpolation(stringLiteralKind: let stringLiteralKind, parenCount: _, stringInterpolationStart: _): return stringLiteralKind != .multiLine
+      case .inStringInterpolation(stringLiteralKind: let stringLiteralKind, parenCount: _): return stringLiteralKind != .multiLine
       case .afterStringInterpolation: return false
+      }
+    }
+  }
+
+  /// A data structure that holds the state stack entries in the lexer. It is
+  /// optimized for situations where there's at most one state on the stack
+  /// (in addition to the bottom `normal` mode) and to not create any ARC
+  /// traffic.
+  ///
+  /// It does this by representing the bottom `normal` state implicitly and
+  /// storing one additional state inline. If the stack needs to contain more
+  /// entries, the required memory is allocated in a bump allocator that is
+  /// expected to outlive the stack.
+  struct StateStack {
+    private var topState: State? = nil
+    private var stateStack: UnsafeBufferPointer<State>? = nil
+
+    var currentState: State {
+      return topState ?? .normal
+    }
+
+    mutating func perform(stateTransition: Lexer.StateTransition, stateAllocator: BumpPtrAllocator) {
+      switch stateTransition {
+      case .push(newState: let newState):
+        if let topState = topState {
+          if let stateStack = stateStack {
+            let newStateStack = stateAllocator.allocate(State.self, count: stateStack.count + 1)
+            let (_, existingStateStackEndIndex) = newStateStack.initialize(from: stateStack)
+            newStateStack[existingStateStackEndIndex] = topState
+            self.stateStack = UnsafeBufferPointer(newStateStack)
+          } else {
+            let newStateStack = stateAllocator.allocate(State.self, count: 1)
+            newStateStack[0] = topState
+            self.stateStack = UnsafeBufferPointer(newStateStack)
+          }
+        }
+        topState = newState
+      case .replace(newState: let newState):
+        topState = newState
+      case .pop:
+        if let stateStack = stateStack {
+          topState = stateStack.last!
+          if stateStack.count == 1 {
+            self.stateStack = nil
+          } else {
+            self.stateStack = UnsafeBufferPointer(start: stateStack.baseAddress, count: stateStack.count - 1)
+          }
+        } else {
+          topState = nil
+        }
       }
     }
   }
@@ -151,16 +201,20 @@ extension Lexer {
   struct Cursor {
     var input: UnsafeBufferPointer<UInt8>
     var previous: UInt8
-    private var stateStack: [State]
+    private var stateStack: StateStack = StateStack()
 
     init(input: UnsafeBufferPointer<UInt8>, previous: UInt8) {
       self.input = input
       self.previous = previous
-      self.stateStack = [.normal]
+      self.stateStack = StateStack()
     }
 
     var currentState: State {
-      stateStack.last!
+      stateStack.currentState
+    }
+
+    mutating func perform(stateTransition: Lexer.StateTransition, stateAllocator: BumpPtrAllocator) {
+      self.stateStack.perform(stateTransition: stateTransition, stateAllocator: stateAllocator)
     }
 
     public func starts<PossiblePrefix>(with possiblePrefix: PossiblePrefix) -> Bool
@@ -218,25 +272,10 @@ extension Lexer {
   }
 }
 
-extension Lexer.Cursor {
-  mutating func perform(stateTransition: Lexer.StateTransition) {
-    switch stateTransition {
-    case .push(newState: let newState):
-      stateStack.append(newState)
-    case .replace(newState: let newState):
-      assert(!stateStack.isEmpty)
-      stateStack[stateStack.count - 1] = newState
-    case .pop:
-      assert(stateStack.count > 1)
-      stateStack.removeLast()
-    }
-  }
-}
-
 // MARK: - Entry point
 
 extension Lexer.Cursor {
-  mutating func nextToken(sourceBufferStart: Lexer.Cursor) -> Lexer.Lexeme {
+  mutating func nextToken(sourceBufferStart: Lexer.Cursor, stateAllocator: BumpPtrAllocator) -> Lexer.Lexeme {
     let cursor = self
     // Leading trivia.
     let leadingTriviaStart = self
@@ -264,14 +303,14 @@ extension Lexer.Cursor {
       result = lexAfterClosingStringQuote()
     case .inStringInterpolationStart(stringLiteralKind: let stringLiteralKind):
       result = lexInStringInterpolationStart(stringLiteralKind: stringLiteralKind)
-    case .inStringInterpolation(stringLiteralKind: let stringLiteralKind, parenCount: let parenCount, stringInterpolationStart: let stringInterpolationStart):
-      result = lexInStringInterpolation(stringLiteralKind: stringLiteralKind, parenCount: parenCount, stringInterpolationStart: stringInterpolationStart)
+    case .inStringInterpolation(stringLiteralKind: let stringLiteralKind, parenCount: let parenCount):
+      result = lexInStringInterpolation(stringLiteralKind: stringLiteralKind, parenCount: parenCount, sourceBufferStart: sourceBufferStart)
     case .afterStringInterpolation:
       result = lexAfterStringInterpolation()
     }
 
     if let stateTransition = result.stateTransition {
-      self.perform(stateTransition: stateTransition)
+      self.stateStack.perform(stateTransition: stateTransition, stateAllocator: stateAllocator)
     }
 
     // Trailing trivia.
@@ -288,7 +327,7 @@ extension Lexer.Cursor {
     )
 
     if self.currentState.shouldPopStateWhenReachingNewlineInTrailingTrivia && self.is(at: "\r", "\n") {
-      self.perform(stateTransition: .pop)
+      self.stateStack.perform(stateTransition: .pop, stateAllocator: stateAllocator)
     }
 
     var flags = result.flags
@@ -933,7 +972,7 @@ extension Lexer.Cursor {
       return Lexer.Result(.rawStringDelimiter)
     case UInt8(ascii: "("):
       _ = self.advance()
-      return Lexer.Result(.leftParen, stateTransition: .replace(newState: .inStringInterpolation(stringLiteralKind: stringLiteralKind, parenCount: 0, stringInterpolationStart: self)))
+      return Lexer.Result(.leftParen, stateTransition: .replace(newState: .inStringInterpolation(stringLiteralKind: stringLiteralKind, parenCount: 0)))
     case nil:
       return Lexer.Result(.eof)
     default:
@@ -941,22 +980,22 @@ extension Lexer.Cursor {
     }
   }
 
-  private mutating func lexInStringInterpolation(stringLiteralKind: StringLiteralKind, parenCount: Int, stringInterpolationStart: Lexer.Cursor) -> Lexer.Result {
+  private mutating func lexInStringInterpolation(stringLiteralKind: StringLiteralKind, parenCount: Int, sourceBufferStart: Lexer.Cursor) -> Lexer.Result {
     // Keep track of open parentheses
     switch self.peek() {
     case UInt8(ascii: "("):
       _ = self.advance()
-      return Lexer.Result(.leftParen, stateTransition: .replace(newState: .inStringInterpolation(stringLiteralKind: stringLiteralKind, parenCount: parenCount + 1, stringInterpolationStart: stringInterpolationStart)))
+      return Lexer.Result(.leftParen, stateTransition: .replace(newState: .inStringInterpolation(stringLiteralKind: stringLiteralKind, parenCount: parenCount + 1)))
     case UInt8(ascii: ")"):
       _ = self.advance()
       if parenCount == 0 {
         return Lexer.Result(.rightParen, stateTransition: .pop)
       } else {
-        return Lexer.Result(.rightParen, stateTransition: .replace(newState: .inStringInterpolation(stringLiteralKind: stringLiteralKind, parenCount: parenCount - 1, stringInterpolationStart: stringInterpolationStart)))
+        return Lexer.Result(.rightParen, stateTransition: .replace(newState: .inStringInterpolation(stringLiteralKind: stringLiteralKind, parenCount: parenCount - 1)))
       }
     default:
       // If we haven't reached the end of the string interpolation, lex as if we were in a normal expression.
-      return self.lexNormal(sourceBufferStart: stringInterpolationStart)
+      return self.lexNormal(sourceBufferStart: sourceBufferStart)
     }
   }
 

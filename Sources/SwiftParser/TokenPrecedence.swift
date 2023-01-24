@@ -101,12 +101,12 @@ public enum TokenPrecedence: Comparable {
 
   @_spi(RawSyntax)
   public init(_ tokenKind: RawTokenKind) {
-    switch tokenKind {
+    switch tokenKind.base {
     case .unknown:
       self = .unknownToken
     // MARK: Identifier like
     case  // Literals
-    .keyword(.Self), .keyword(.false), .floatingLiteral, .integerLiteral, .keyword(.nil), .regexLiteral, .keyword(.self), .keyword(.super), .keyword(.true),
+    .floatingLiteral, .integerLiteral, .regexLiteral,
       // Pound literals
       .poundAvailableKeyword, .poundColorLiteralKeyword, .poundColumnKeyword, .poundDsohandleKeyword, .poundFileIDKeyword, .poundFileKeyword, .poundFileLiteralKeyword, .poundFilePathKeyword, .poundFunctionKeyword, .poundImageLiteralKeyword, .poundKeyPathKeyword, .poundLineKeyword, .poundSelectorKeyword, .poundSourceLocationKeyword, .poundUnavailableKeyword, .poundHasSymbolKeyword,
       // Identifiers
@@ -118,19 +118,9 @@ public enum TokenPrecedence: Comparable {
       self = .identifierLike
 
     // MARK: Expr keyword
-    case  // Keywords
-    .keyword(.as), .keyword(.is), .keyword(.try),
-      // We don't know much about which contextual keyword it is, be conservative an allow considering it as unexpected.
-      // Keywords in function types (we should be allowed to skip them inside parenthesis)
-      .keyword(.rethrows), .keyword(.throws),
-      // Operators can occur inside expressions
-      .postfixOperator, .prefixOperator, .binaryOperator,
+    case  // Operators can occur inside expressions
+    .postfixOperator, .prefixOperator, .binaryOperator:
       // Consider 'any' and 'inout' like a prefix operator to a type and a type is expression-like.
-      .keyword(.Any), .keyword(.inout),
-      // 'where' can only occur in the signature of declarations. Consider the signature expression-like.
-      .keyword(.where),
-      // 'in' occurs in closure input/output definitions and for loops. Consider both constructs expression-like.
-      .keyword(.in):
       self = .exprKeyword
 
     // MARK: Weak bracketet
@@ -154,14 +144,8 @@ public enum TokenPrecedence: Comparable {
       self = .weakBracketClose
 
     // MARK: Statement keyword punctuator
-    case  // Control-flow constructs
-    .keyword(.defer), .keyword(.do), .keyword(.for), .keyword(.guard), .keyword(.if), .keyword(.repeat), .keyword(.switch), .keyword(.while),
-      // Secondary parts of control-flow constructs
-      .keyword(.case), .keyword(.catch), .keyword(.default), .keyword(.else),
-      // Return-like statements
-      .keyword(.break), .keyword(.continue), .keyword(.fallthrough), .keyword(.return), .keyword(.throw), .keyword(.yield),
-      // #error, #warning and #assert are statement-like
-      .poundErrorKeyword, .poundWarningKeyword, .poundAssertKeyword:
+    case  // #error, #warning and #assert are statement-like
+    .poundErrorKeyword, .poundWarningKeyword, .poundAssertKeyword:
       self = .stmtKeyword
 
     // MARK: Strong bracketet
@@ -186,22 +170,55 @@ public enum TokenPrecedence: Comparable {
       self = .closingBrace
     case .poundEndifKeyword:
       self = .closingPoundIf
+    case .keyword:
+      self.init(tokenKind.keyword)
+    }
+  }
 
+  @_spi(RawSyntax)
+  public init(_ keyword: Keyword) {
+    switch keyword {
+    // MARK: Identifier like
+    case  // Literals
+    .Self, .false, .nil, .`self`, .super, .true:
+      self = .identifierLike
+    // MARK: Expr keyword
+    case  // Keywords
+    .as, .is, .try,
+      // We don't know much about which contextual keyword it is, be conservative an allow considering it as unexpected.
+      // Keywords in function types (we should be allowed to skip them inside parenthesis)
+      .rethrows, .throws,
+      // Consider 'any' and 'inout' like a prefix operator to a type and a type is expression-like.
+      .inout,
+      // Consider 'any' and 'inout' like a prefix operator to a type and a type is expression-like.
+      .Any,
+      // 'where' can only occur in the signature of declarations. Consider the signature expression-like.
+      .where,
+      // 'in' occurs in closure input/output definitions and for loops. Consider both constructs expression-like.
+      .in:
+      self = .exprKeyword
+    case  // Control-flow constructs
+    .defer, .do, .for, .guard, .if, .repeat, .switch, .while,
+      // Secondary parts of control-flow constructs
+      .case, .catch, .default, .else,
+      // Return-like statements
+      .break, .continue, .fallthrough, .return, .throw, .yield:
+      self = .stmtKeyword
     // MARK: Decl keywords
     case  // Types
-    .keyword(.associatedtype), .keyword(.class), .keyword(.enum), .keyword(.extension), .keyword(.protocol), .keyword(.struct), .keyword(.typealias),
+    .associatedtype, .class, .enum, .extension, .protocol, .struct, .typealias,
       // Access modifiers
-      .keyword(.fileprivate), .keyword(.internal), .keyword(.private), .keyword(.public), .keyword(.static),
+      .fileprivate, .internal, .private, .public, .static,
       // Functions
-      .keyword(.deinit), .keyword(.func), .keyword(.`init`), .keyword(.subscript),
+      .deinit, .func, .`init`, .subscript,
       // Variables
-      .keyword(.let), .keyword(.var),
+      .let, .var,
       // Operator stuff
-      .keyword(.operator), .keyword(.precedencegroup),
+      .operator, .precedencegroup,
       // Misc
-      .keyword(.import):
+      .import:
       self = .declKeyword
-    case .keyword:
+    default:
       // Treat all keywords that weren't handled above as expression keywords as a fallback option.
       // FIXME: We should assign a token precedence to all keywords
       self = .exprKeyword

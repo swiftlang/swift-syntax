@@ -24,372 +24,372 @@ extension StaticString: Equatable {
 }
 
 @frozen  // FIXME: Not actually stable, works around a miscompile
-public enum Keyword: StaticString {
-  case __consuming
+public enum Keyword: UInt8, Hashable {
+  case __consuming = 0
   
-  case __owned
+  case __owned = 1
   
-  case __setter_access
+  case __setter_access = 2
   
-  case __shared
+  case __shared = 3
   
-  case _alignment
+  case _alignment = 4
   
-  case _backDeploy
+  case _backDeploy = 5
   
-  case _borrow
+  case _borrow = 6
   
-  case _cdecl
+  case _cdecl = 7
   
-  case _Class
+  case _Class = 8
   
-  case _compilerInitialized
+  case _compilerInitialized = 9
   
-  case _const
+  case _const = 10
   
-  case _documentation
+  case _documentation = 11
   
-  case _dynamicReplacement
+  case _dynamicReplacement = 12
   
-  case _effects
+  case _effects = 13
   
-  case _expose
+  case _expose = 14
   
-  case _forward
+  case _forward = 15
   
-  case _implements
+  case _implements = 16
   
-  case _linear
+  case _linear = 17
   
-  case _local
+  case _local = 18
   
-  case _modify
+  case _modify = 19
   
-  case _move
+  case _move = 20
   
-  case _NativeClass
+  case _NativeClass = 21
   
-  case _NativeRefCountedObject
+  case _NativeRefCountedObject = 22
   
-  case _noMetadata
+  case _noMetadata = 23
   
-  case _nonSendable
+  case _nonSendable = 24
   
-  case _objcImplementation
+  case _objcImplementation = 25
   
-  case _objcRuntimeName
+  case _objcRuntimeName = 26
   
-  case _opaqueReturnTypeOf
+  case _opaqueReturnTypeOf = 27
   
-  case _optimize
+  case _optimize = 28
   
-  case _originallyDefinedIn
+  case _originallyDefinedIn = 29
   
-  case _PackageDescription
+  case _PackageDescription = 30
   
-  case _private
+  case _private = 31
   
-  case _projectedValueProperty
+  case _projectedValueProperty = 32
   
-  case _read
+  case _read = 33
   
-  case _RefCountedObject
+  case _RefCountedObject = 34
   
-  case _semantics
+  case _semantics = 35
   
-  case _silgen_name
+  case _silgen_name = 36
   
-  case _specialize
+  case _specialize = 37
   
-  case _spi
+  case _spi = 38
   
-  case _spi_available
+  case _spi_available = 39
   
-  case _swift_native_objc_runtime_base
+  case _swift_native_objc_runtime_base = 40
   
-  case _Trivial
+  case _Trivial = 41
   
-  case _TrivialAtMost
+  case _TrivialAtMost = 42
   
-  case _typeEraser
+  case _typeEraser = 43
   
-  case _unavailableFromAsync
+  case _unavailableFromAsync = 44
   
-  case _UnknownLayout
+  case _UnknownLayout = 45
   
-  case actor
+  case actor = 46
   
-  case addressWithNativeOwner
+  case addressWithNativeOwner = 47
   
-  case addressWithOwner
+  case addressWithOwner = 48
   
-  case any
+  case any = 49
   
-  case `Any`
+  case `Any` = 50
   
-  case `as`
+  case `as` = 51
   
-  case assignment
+  case assignment = 52
   
-  case `associatedtype`
+  case `associatedtype` = 53
   
-  case associativity
+  case associativity = 54
   
-  case async
+  case async = 55
   
-  case autoclosure
+  case autoclosure = 56
   
-  case availability
+  case availability = 57
   
-  case available
+  case available = 58
   
-  case await
+  case await = 59
   
-  case before
+  case before = 60
   
-  case `break`
+  case `break` = 61
   
-  case `case`
+  case `case` = 62
   
-  case `catch`
+  case `catch` = 63
   
-  case `class`
+  case `class` = 64
   
-  case `continue`
+  case `continue` = 65
   
-  case convenience
+  case convenience = 66
   
-  case convention
+  case convention = 67
   
-  case `default`
+  case `default` = 68
   
-  case `defer`
+  case `defer` = 69
   
-  case `deinit`
+  case `deinit` = 70
   
-  case deprecated
+  case deprecated = 71
   
-  case derivative
+  case derivative = 72
   
-  case didSet
+  case didSet = 73
   
-  case differentiable
+  case differentiable = 74
   
-  case distributed
+  case distributed = 75
   
-  case `do`
+  case `do` = 76
   
-  case dynamic
+  case dynamic = 77
   
-  case each
+  case each = 78
   
-  case `else`
+  case `else` = 79
   
-  case `enum`
+  case `enum` = 80
   
-  case escaping
+  case escaping = 81
   
-  case exclusivity
+  case exclusivity = 82
   
-  case exported
+  case exported = 83
   
-  case `extension`
+  case `extension` = 84
   
-  case `fallthrough`
+  case `fallthrough` = 85
   
-  case `false`
+  case `false` = 86
   
-  case `fileprivate`
+  case `fileprivate` = 87
   
-  case final
+  case final = 88
   
-  case `for`
+  case `for` = 89
   
-  case `func`
+  case `func` = 90
   
-  case get
+  case get = 91
   
-  case `guard`
+  case `guard` = 92
   
-  case higherThan
+  case higherThan = 93
   
-  case `if`
+  case `if` = 94
   
-  case `import`
+  case `import` = 95
   
-  case `in`
+  case `in` = 96
   
-  case indirect
+  case indirect = 97
   
-  case infix
+  case infix = 98
   
-  case `init`
+  case `init` = 99
   
-  case inline
+  case inline = 100
   
-  case `inout`
+  case `inout` = 101
   
-  case `internal`
+  case `internal` = 102
   
-  case introduced
+  case introduced = 103
   
-  case `is`
+  case `is` = 104
   
-  case isolated
+  case isolated = 105
   
-  case kind
+  case kind = 106
   
-  case lazy
+  case lazy = 107
   
-  case `let`
+  case `let` = 108
   
-  case lowerThan
+  case lowerThan = 109
   
-  case macro
+  case macro = 110
   
-  case message
+  case message = 111
   
-  case metadata
+  case metadata = 112
   
-  case module
+  case module = 113
   
-  case mutableAddressWithNativeOwner
+  case mutableAddressWithNativeOwner = 114
   
-  case mutableAddressWithOwner
+  case mutableAddressWithOwner = 115
   
-  case mutating
+  case mutating = 116
   
-  case `nil`
+  case `nil` = 117
   
-  case noasync
+  case noasync = 118
   
-  case noDerivative
+  case noDerivative = 119
   
-  case noescape
+  case noescape = 120
   
-  case nonisolated
+  case nonisolated = 121
   
-  case nonmutating
+  case nonmutating = 122
   
-  case objc
+  case objc = 123
   
-  case obsoleted
+  case obsoleted = 124
   
-  case of
+  case of = 125
   
-  case open
+  case open = 126
   
-  case `operator`
+  case `operator` = 127
   
-  case optional
+  case optional = 128
   
-  case override
+  case override = 129
   
-  case package
+  case package = 130
   
-  case postfix
+  case postfix = 131
   
-  case `precedencegroup`
+  case `precedencegroup` = 132
   
-  case prefix
+  case prefix = 133
   
-  case `private`
+  case `private` = 134
   
-  case `Protocol`
+  case `Protocol` = 135
   
-  case `protocol`
+  case `protocol` = 136
   
-  case `public`
+  case `public` = 137
   
-  case reasync
+  case reasync = 138
   
-  case renamed
+  case renamed = 139
   
-  case `repeat`
+  case `repeat` = 140
   
-  case required
+  case required = 141
   
-  case `rethrows`
+  case `rethrows` = 142
   
-  case `return`
+  case `return` = 143
   
-  case reverse
+  case reverse = 144
   
-  case safe
+  case safe = 145
   
-  case `self`
+  case `self` = 146
   
-  case `Self`
+  case `Self` = 147
   
-  case Sendable
+  case Sendable = 148
   
-  case set
+  case set = 149
   
-  case some
+  case some = 150
   
-  case sourceFile
+  case sourceFile = 151
   
-  case spi
+  case spi = 152
   
-  case spiModule
+  case spiModule = 153
   
-  case `static`
+  case `static` = 154
   
-  case `struct`
+  case `struct` = 155
   
-  case `subscript`
+  case `subscript` = 156
   
-  case `super`
+  case `super` = 157
   
-  case swift
+  case swift = 158
   
-  case `switch`
+  case `switch` = 159
   
-  case target
+  case target = 160
   
-  case `throw`
+  case `throw` = 161
   
-  case `throws`
+  case `throws` = 162
   
-  case transpose
+  case transpose = 163
   
-  case `true`
+  case `true` = 164
   
-  case `try`
+  case `try` = 165
   
-  case `Type`
+  case `Type` = 166
   
-  case `typealias`
+  case `typealias` = 167
   
-  case unavailable
+  case unavailable = 168
   
-  case unchecked
+  case unchecked = 169
   
-  case unowned
+  case unowned = 170
   
-  case unsafe
+  case unsafe = 171
   
-  case unsafeAddress
+  case unsafeAddress = 172
   
-  case unsafeMutableAddress
+  case unsafeMutableAddress = 173
   
-  case `var`
+  case `var` = 174
   
-  case visibility
+  case visibility = 175
   
-  case weak
+  case weak = 176
   
-  case `where`
+  case `where` = 177
   
-  case `while`
+  case `while` = 178
   
-  case willSet
+  case willSet = 179
   
-  case witness_method
+  case witness_method = 180
   
-  case wrt
+  case wrt = 181
   
-  case yield
+  case yield = 182
   
   @_spi(RawSyntax) public init?(_ text: SyntaxText) {
     switch text.count {
@@ -994,7 +994,15 @@ public enum Keyword: StaticString {
     }
   }
   
-  var defaultText: SyntaxText {
-    return SyntaxText(self.rawValue)
+  /// This is really unfortunate. Really, we should have a `switch` in
+  /// `Keyword.defaultText` to return the keyword's kind but the constant lookup
+  /// table is significantly faster. Ideally, we could also get the compiler to
+  /// constant-evaluate `Keyword.spi.defaultText` to a `SyntaxText` but I don't
+  /// see how that's possible right now.
+  private static let keywordTextLookupTable: [SyntaxText] = ["__consuming", "__owned", "__setter_access", "__shared", "_alignment", "_backDeploy", "_borrow", "_cdecl", "_Class", "_compilerInitialized", "_const", "_documentation", "_dynamicReplacement", "_effects", "_expose", "_forward", "_implements", "_linear", "_local", "_modify", "_move", "_NativeClass", "_NativeRefCountedObject", "_noMetadata", "_nonSendable", "_objcImplementation", "_objcRuntimeName", "_opaqueReturnTypeOf", "_optimize", "_originallyDefinedIn", "_PackageDescription", "_private", "_projectedValueProperty", "_read", "_RefCountedObject", "_semantics", "_silgen_name", "_specialize", "_spi", "_spi_available", "_swift_native_objc_runtime_base", "_Trivial", "_TrivialAtMost", "_typeEraser", "_unavailableFromAsync", "_UnknownLayout", "actor", "addressWithNativeOwner", "addressWithOwner", "any", "Any", "as", "assignment", "associatedtype", "associativity", "async", "autoclosure", "availability", "available", "await", "before", "break", "case", "catch", "class", "continue", "convenience", "convention", "default", "defer", "deinit", "deprecated", "derivative", "didSet", "differentiable", "distributed", "do", "dynamic", "each", "else", "enum", "escaping", "exclusivity", "exported", "extension", "fallthrough", "false", "fileprivate", "final", "for", "func", "get", "guard", "higherThan", "if", "import", "in", "indirect", "infix", "init", "inline", "inout", "internal", "introduced", "is", "isolated", "kind", "lazy", "let", "lowerThan", "macro", "message", "metadata", "module", "mutableAddressWithNativeOwner", "mutableAddressWithOwner", "mutating", "nil", "noasync", "noDerivative", "noescape", "nonisolated", "nonmutating", "objc", "obsoleted", "of", "open", "operator", "optional", "override", "package", "postfix", "precedencegroup", "prefix", "private", "Protocol", "protocol", "public", "reasync", "renamed", "repeat", "required", "rethrows", "return", "reverse", "safe", "self", "Self", "Sendable", "set", "some", "sourceFile", "spi", "spiModule", "static", "struct", "subscript", "super", "swift", "switch", "target", "throw", "throws", "transpose", "true", "try", "Type", "typealias", "unavailable", "unchecked", "unowned", "unsafe", "unsafeAddress", "unsafeMutableAddress", "var", "visibility", "weak", "where", "while", "willSet", "witness_method", "wrt", "yield"]
+  
+  @_spi(RawSyntax)
+  public var defaultText: SyntaxText {
+    return Keyword.keywordTextLookupTable[Int(self.rawValue)]
   }
 }

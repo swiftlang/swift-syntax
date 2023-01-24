@@ -471,7 +471,7 @@ extension RawSyntax {
     wholeText: SyntaxText,
     textRange: Range<SyntaxText.Index>,
     presence: SourcePresence,
-    arena: SyntaxArena,
+    arena: __shared SyntaxArena,
     lexerError: LexerError?
   ) -> RawSyntax {
     assert(
@@ -513,7 +513,7 @@ extension RawSyntax {
     numLeadingTrivia: UInt32,
     byteLength: UInt32,
     presence: SourcePresence,
-    arena: SyntaxArena
+    arena: __shared SyntaxArena
   ) -> RawSyntax {
     let payload = RawSyntaxData.MaterializedToken(
       tokenKind: kind,
@@ -543,7 +543,7 @@ extension RawSyntax {
     leadingTriviaPieceCount: Int,
     trailingTriviaPieceCount: Int,
     presence: SourcePresence,
-    arena: SyntaxArena,
+    arena: __shared SyntaxArena,
     initializingLeadingTriviaWith: (UnsafeMutableBufferPointer<RawTriviaPiece>) -> Void,
     initializingTrailingTriviaWith: (UnsafeMutableBufferPointer<RawTriviaPiece>) -> Void
   ) -> RawSyntax {
@@ -582,7 +582,7 @@ extension RawSyntax {
     leadingTrivia: Trivia,
     trailingTrivia: Trivia,
     presence: SourcePresence,
-    arena: SyntaxArena
+    arena: __shared SyntaxArena
   ) -> RawSyntax {
     let decomposed = kind.decomposeToRaw()
     let rawKind = decomposed.rawKind
@@ -614,7 +614,7 @@ extension RawSyntax {
 
   static func makeMissingToken(
     kind: TokenKind,
-    arena: SyntaxArena
+    arena: __shared SyntaxArena
   ) -> RawSyntax {
     let (rawKind, _) = kind.decomposeToRaw()
     return .materializedToken(
@@ -648,7 +648,7 @@ extension RawSyntax {
     byteLength: Int,
     descendantCount: Int,
     recursiveFlags: RecursiveRawSyntaxFlags,
-    arena: SyntaxArena
+    arena: __shared SyntaxArena
   ) -> RawSyntax {
     validateLayout(layout: layout, as: kind)
     let payload = RawSyntaxData.Layout(
@@ -672,7 +672,7 @@ extension RawSyntax {
     kind: SyntaxKind,
     uninitializedCount count: Int,
     isMaximumNestingLevelOverflow: Bool = false,
-    arena: SyntaxArena,
+    arena: __shared SyntaxArena,
     initializingWith initializer: (UnsafeMutableBufferPointer<RawSyntax?>) -> Void
   ) -> RawSyntax {
     // Allocate and initialize the list.
@@ -710,7 +710,7 @@ extension RawSyntax {
 
   static func makeEmptyLayout(
     kind: SyntaxKind,
-    arena: SyntaxArena
+    arena: __shared SyntaxArena
   ) -> RawSyntax {
     var recursiveFlags = RecursiveRawSyntaxFlags()
     if kind.hasError {
@@ -729,7 +729,7 @@ extension RawSyntax {
   static func makeLayout<C: Collection>(
     kind: SyntaxKind,
     from collection: C,
-    arena: SyntaxArena,
+    arena: __shared SyntaxArena,
     leadingTrivia: Trivia? = nil,
     trailingTrivia: Trivia? = nil
   ) -> RawSyntax where C.Element == RawSyntax? {

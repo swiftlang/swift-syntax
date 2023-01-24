@@ -733,7 +733,7 @@ extension Parser {
     while !self.at(any: [.eof, .rightBrace, .poundEndifKeyword, .poundElseifKeyword, .poundElseKeyword])
       && elementsProgress.evaluate(currentToken)
     {
-      if self.lookahead().isAtStartOfSwitchCase(allowRecovery: false) {
+      if self.withLookahead({ $0.isAtStartOfSwitchCase(allowRecovery: false) }) {
         elements.append(.switchCase(self.parseSwitchCase()))
       } else if self.canRecoverTo(.poundIfKeyword) != nil {
         // '#if' in 'case' position can enclose zero or more 'case' or 'default'
@@ -787,7 +787,7 @@ extension Parser {
             )
           )
         )
-      } else if self.lookahead().isAtStartOfSwitchCase(allowRecovery: true) {
+      } else if self.withLookahead({ $0.isAtStartOfSwitchCase(allowRecovery: true) }) {
         elements.append(.switchCase(self.parseSwitchCase()))
       } else {
         break
@@ -800,7 +800,7 @@ extension Parser {
     var items = [RawCodeBlockItemSyntax]()
     var loopProgress = LoopProgressCondition()
     while !self.at(any: [.rightBrace, .poundEndifKeyword, .poundElseifKeyword, .poundElseKeyword])
-      && !self.lookahead().isStartOfConditionalSwitchCases(),
+      && !self.withLookahead({ $0.isStartOfConditionalSwitchCases() }),
       let newItem = self.parseCodeBlockItem(),
       loopProgress.evaluate(currentToken)
     {
@@ -1271,7 +1271,7 @@ extension Parser.Lookahead {
 
   /// Returns whether the parser's current position is the start of a switch case,
   /// given that we're in the middle of a switch already.
-  func isAtStartOfSwitchCase(allowRecovery: Bool = false) -> Bool {
+  mutating func isAtStartOfSwitchCase(allowRecovery: Bool = false) -> Bool {
     // Check for and consume attributes. The only valid attribute is `@unknown`
     // but that's a semantic restriction.
     var lookahead = self.lookahead()
@@ -1303,7 +1303,7 @@ extension Parser.Lookahead {
     }
   }
 
-  func isStartOfConditionalSwitchCases() -> Bool {
+  mutating func isStartOfConditionalSwitchCases() -> Bool {
     guard self.at(.poundIfKeyword) else {
       return self.isAtStartOfSwitchCase()
     }

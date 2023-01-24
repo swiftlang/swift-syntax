@@ -43,7 +43,7 @@ extension Parser {
   mutating func parseTypeScalar(misplacedSpecifiers: [RawTokenSyntax] = []) -> RawTypeSyntax {
     let (specifier, unexpectedBeforeAttrList, attrList) = self.parseTypeAttributeList(misplacedSpecifiers: misplacedSpecifiers)
     var base = RawTypeSyntax(self.parseSimpleOrCompositionType())
-    if self.lookahead().isAtFunctionTypeArrow() {
+    if self.withLookahead({ $0.isAtFunctionTypeArrow() }) {
       let firstEffect = self.parseEffectsSpecifier()
       let secondEffect = self.parseEffectsSpecifier()
       let (unexpectedBeforeArrow, arrow) = self.expect(.arrow)
@@ -841,7 +841,7 @@ extension Parser.Lookahead {
     return self.consume(if: .rightParen) != nil
   }
 
-  func isAtFunctionTypeArrow() -> Bool {
+  mutating func isAtFunctionTypeArrow() -> Bool {
     if self.at(.arrow) {
       return true
     }
@@ -884,7 +884,7 @@ extension Parser.Lookahead {
     return true
   }
 
-  func canParseAsGenericArgumentList() -> Bool {
+  mutating func canParseAsGenericArgumentList() -> Bool {
     guard self.atContextualPunctuator("<") else {
       return false
     }

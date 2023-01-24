@@ -249,7 +249,7 @@ extension Parser.Lookahead {
 // MARK: Lookahead
 
 extension Parser.Lookahead {
-  func isStartOfGetSetAccessor() -> Bool {
+  mutating func isStartOfGetSetAccessor() -> Bool {
     assert(self.at(.leftBrace), "not checking a brace?")
 
     // The only case this can happen is if the accessor label is immediately after

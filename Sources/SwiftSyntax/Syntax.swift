@@ -406,9 +406,13 @@ public extension SyntaxProtocol {
     }
 
     // Otherwise, it must be one of our children.
-    return children(viewMode: .sourceAccurate).lazy.compactMap { child in
-      child.token(at: position)
-    }.first
+    for child in children(viewMode: .sourceAccurate) {
+      if let token = child.token(at: position) {
+        return token
+      }
+    }
+
+    fatalError("Children of syntax node do not cover all positions in it")
   }
 
   /// The absolute position of the starting point of this node. If the first token

@@ -133,9 +133,11 @@ public struct DiagnosticsFormatter {
       return message.message
     }
   }
+}
 
-  enum ANSIColor: UInt8 {
-    case reset = 0
+struct ANSIAnnotation {
+  enum Color: UInt8 {
+    case normal = 0
     case black = 30
     case red = 31
     case green = 32
@@ -146,33 +148,32 @@ public struct DiagnosticsFormatter {
     case white = 37
   }
 
-  enum ANSITrait: UInt8 {
+  enum Trait: UInt8 {
+    case normal = 0
     case bold = 1
     case underline = 4
   }
 
-  struct ANSIAnnotation {
-    var color: ANSIColor
-    var trait: ANSITrait?
+  var color: Color
+  var trait: Trait
 
-    /// The textual representation of the annotation.
-    var code: String {
-      "\u{001B}[\(trait?.rawValue ?? 0);\(color.rawValue)m"
-    }
+  /// The textual representation of the annotation.
+  var code: String {
+    "\u{001B}[\(trait.rawValue);\(color.rawValue)m"
+  }
 
-    init(color: ANSIColor, trait: ANSITrait? = nil) {
-      self.color = color
-      self.trait = trait
-    }
+  init(color: Color, trait: Trait = .normal) {
+    self.color = color
+    self.trait = trait
+  }
 
-    func applied(to message: String) -> String {
-      // Resetting after the message ensures that we don't color unintended lines in the output
-      return "\(code)\(message)\(ANSIAnnotation.reset.code)"
-    }
+  func applied(to message: String) -> String {
+    // Resetting after the message ensures that we don't color unintended lines in the output
+    return "\(code)\(message)\(ANSIAnnotation.reset.code)"
+  }
 
-    /// The "reset" ANSI code used to unset any previously added annotation.
-    static var reset: ANSIAnnotation {
-      self.init(color: .reset, trait: nil)
-    }
+  /// The "reset" ANSI code used to unset any previously added annotation.
+  static var reset: ANSIAnnotation {
+    self.init(color: .normal, trait: .normal)
   }
 }

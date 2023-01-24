@@ -130,7 +130,7 @@ class MacroApplication: SyntaxRewriter {
       if case let .expr(exprItem) = item.item,
         let exprExpansion = exprItem.as(MacroExpansionExprSyntax.self),
         let macro = macroSystem.macros[exprExpansion.macro.text],
-         let freestandingMacro = macro as? DeclarationMacro.Type
+        let freestandingMacro = macro as? DeclarationMacro.Type
       {
         do {
           let expandedDecls = try freestandingMacro.expansion(
@@ -180,7 +180,7 @@ class MacroApplication: SyntaxRewriter {
       // Expand declaration macros, which produce zero or more declarations.
       if let declExpansion = item.decl.as(MacroExpansionDeclSyntax.self),
         let macro = macroSystem.macros[declExpansion.macro.text],
-         let freestandingMacro = macro as? DeclarationMacro.Type
+        let freestandingMacro = macro as? DeclarationMacro.Type
       {
         do {
           let expandedDecls = try freestandingMacro.expansion(

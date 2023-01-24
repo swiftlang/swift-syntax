@@ -21,10 +21,28 @@ public struct DiagnosticsFormatter {
   }
 
   /// Number of lines which should be printed before and after the diagnostic message
-  static let contextSize = 2
+  public let contextSize: Int
+
+  /// Whether to colorize formatted diagnostics.
+  public let colorize: Bool
+
+  public init(contextSize: Int = 2, colorize: Bool = false) {
+    self.contextSize = contextSize
+    self.colorize = colorize
+  }
+
+  public static func annotatedSource<SyntaxType: SyntaxProtocol>(
+    tree: SyntaxType,
+    diags: [Diagnostic],
+    contextSize: Int = 2,
+    colorize: Bool = false
+  ) -> String {
+    let formatter = DiagnosticsFormatter(contextSize: contextSize, colorize: colorize)
+    return formatter.annotatedSource(tree: tree, diags: diags)
+  }
 
   /// Print given diagnostics for a given syntax tree on the command line
-  public static func annotatedSource<SyntaxType: SyntaxProtocol>(tree: SyntaxType, diags: [Diagnostic], colorize: Bool = false) -> String {
+  public func annotatedSource<SyntaxType: SyntaxProtocol>(tree: SyntaxType, diags: [Diagnostic]) -> String {
     let slc = SourceLocationConverter(file: "", tree: tree)
 
     // First, we need to put each line and its diagnostics together
@@ -41,7 +59,7 @@ public struct DiagnosticsFormatter {
     let rangesToPrint = annotatedSourceLines.enumerated().compactMap { (lineIndex, sourceLine) -> Range<Int>? in
       let lineNumber = lineIndex + 1
       if !sourceLine.diagnostics.isEmpty {
-        return Range<Int>(uncheckedBounds: (lower: lineNumber - Self.contextSize, upper: lineNumber + Self.contextSize + 1))
+        return Range<Int>(uncheckedBounds: (lower: lineNumber - contextSize, upper: lineNumber + contextSize + 1))
       }
       return nil
     }
@@ -103,25 +121,21 @@ public struct DiagnosticsFormatter {
         }
 
         for diag in diags.dropLast(1) {
-          if colorize {
-            annotatedSource.append("\(preMessage)├─ \(self.colorize(diag.diagMessage))\n")
-          } else {
-            annotatedSource.append("\(preMessage)├─ \(diag.message)\n")
-          }
+          annotatedSource.append("\(preMessage)├─ \(colorizeIfRequested(diag.diagMessage))\n")
         }
-
-        if colorize {
-          annotatedSource.append("\(preMessage)╰─ \(self.colorize(diags.last!.diagMessage))\n")
-        } else {
-          annotatedSource.append("\(preMessage)╰─ \(diags.last!.message)\n")
-        }
+        annotatedSource.append("\(preMessage)╰─ \(colorizeIfRequested(diags.last!.diagMessage))\n")
       }
     }
     return annotatedSource
   }
 
-  /// Annotates the given ``DiagnosticMessage`` with an appropriate ANSI color code and returns the result as a printable string.
-  static func colorize(_ message: DiagnosticMessage) -> String {
+  /// Annotates the given ``DiagnosticMessage`` with an appropriate ANSI color code (if the value of the `colorize`
+  /// property is `true`) and returns the result as a printable string.
+  private func colorizeIfRequested(_ message: DiagnosticMessage) -> String {
+    guard colorize else {
+      return message.message
+    }
+
     switch message.severity {
     case .error:
       let annotation = ANSIAnnotation(color: .red, trait: .bold)

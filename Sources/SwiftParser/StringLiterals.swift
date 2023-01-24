@@ -136,7 +136,7 @@ extension Parser {
   /// not part of the represented string. If the last line has its newline
   /// escaped by a trailing `\`, mark that string segment as unexpected and
   /// generate a missing segment that doesn't have a trailing `\`.
-  private func reclassifyNewlineOfLastSegmentAsTrivia(firstSegment: RawStringSegmentSyntax?, middleSegments: inout [RawStringLiteralSegmentsSyntax.Element]) -> Bool {
+  private func reclassifyNewlineOfLastSegmentAsTrivia(rawStringDelimitersToken: RawTokenSyntax?, firstSegment: RawStringSegmentSyntax?, middleSegments: inout [RawStringLiteralSegmentsSyntax.Element]) -> Bool {
     switch middleSegments.last {
     case .stringSegment(let lastMiddleSegment):
       if let newlineSuffix = lastMiddleSegment.content.tokenText.newlineSuffix {
@@ -144,16 +144,24 @@ extension Parser {
         // Mark it as trivia.
         var content = lastMiddleSegment.content.reclassifyAsTrailingTrivia([newlineSuffix], arena: self.arena)
         var unexpectedBeforeContent: RawTokenSyntax?
-        if content.tokenText.hasSuffix("\\") {
-          // The newline on the last line must not be escaped
-          unexpectedBeforeContent = content
-          content = RawTokenSyntax(
-            missing: .stringSegment,
-            text: SyntaxText(rebasing: content.tokenText[0..<content.tokenText.count - 1]),
-            leadingTriviaPieces: content.leadingTriviaPieces,
-            trailingTriviaPieces: content.trailingTriviaPieces,
-            arena: self.arena
-          )
+        if content.tokenText.hasNonEscapedBackslashSuffix(rawStringDelimiters: rawStringDelimitersToken?.tokenText ?? "", newline: "") {
+          // The newline on the last line must not be escaped in non-raw string literals.
+
+          if let rawStringDelimitersToken = rawStringDelimitersToken {
+            // ... except in raw string literals where the C++ parser accepts the
+            // last line to be escaped. To match the C++ parser's behavior, we also
+            // need to allow escaped newline in raw string literals.
+            content = content.reclassifyAsTrailingTrivia([.backslashes(1), .pounds(rawStringDelimitersToken.tokenText.count)], arena: self.arena)
+          } else {
+            unexpectedBeforeContent = content
+            content = RawTokenSyntax(
+              missing: .stringSegment,
+              text: SyntaxText(rebasing: content.tokenText[0..<content.tokenText.count - 1]),
+              leadingTriviaPieces: content.leadingTriviaPieces,
+              trailingTriviaPieces: content.trailingTriviaPieces,
+              arena: self.arena
+            )
+          }
         }
 
         middleSegments[middleSegments.count - 1] = .stringSegment(
@@ -185,6 +193,7 @@ extension Parser {
   /// `.insufficientIndentationInMultilineStringLiteral` lexer error will be
   /// attached to the string segment token.
   private func postProcessIndentationAndEscapedNewlineOfMiddleSegments(
+    rawStringDelimitersToken: RawTokenSyntax?,
     middleSegments: inout [RawStringLiteralSegmentsSyntax.Element],
     isFirstSegmentOnNewLine: Bool,
     indentation: SyntaxText,
@@ -231,16 +240,19 @@ extension Parser {
 
         isSegmentOnNewLine = segment.content.tokenText.newlineSuffix != nil
 
+        let rawDelimiters = rawStringDelimitersToken?.tokenText ?? ""
+        assert(rawDelimiters.allSatisfy({ $0 == UInt8(ascii: "#") }))
+
         // If the segment has a `\` in front of its trailing newline, that newline
         // is not part of the represented string and should be trivia.
 
         let backslashNewlineSuffix: [RawTriviaPiece]?
-        if segment.content.tokenText.hasSuffix("\\\r\n") {
-          backslashNewlineSuffix = [.backslashes(1), .carriageReturnLineFeeds(1)]
-        } else if segment.content.tokenText.hasSuffix("\\\n") {
-          backslashNewlineSuffix = [.backslashes(1), .newlines(1)]
-        } else if segment.content.tokenText.hasSuffix("\\\r") {
-          backslashNewlineSuffix = [.backslashes(1), .carriageReturns(1)]
+        if segment.content.tokenText.hasNonEscapedBackslashSuffix(rawStringDelimiters: rawDelimiters, newline: "\r\n") {
+          backslashNewlineSuffix = [.backslashes(1), .pounds(rawDelimiters.count), .carriageReturnLineFeeds(1)].filter { $0.byteLength > 0 }
+        } else if segment.content.tokenText.hasNonEscapedBackslashSuffix(rawStringDelimiters: rawDelimiters, newline: "\n") {
+          backslashNewlineSuffix = [.backslashes(1), .pounds(rawDelimiters.count), .newlines(1)].filter { $0.byteLength > 0 }
+        } else if segment.content.tokenText.hasNonEscapedBackslashSuffix(rawStringDelimiters: rawDelimiters, newline: "\r") {
+          backslashNewlineSuffix = [.backslashes(1), .pounds(rawDelimiters.count), .carriageReturns(1)].filter { $0.byteLength > 0 }
         } else {
           backslashNewlineSuffix = nil
         }
@@ -281,6 +293,7 @@ extension Parser {
   ///    escaped by a trailing `\`, mark that string segment as unexpected and
   ///    generate a missing segment that doesn't have a trailing `\`.
   private func postProcessMultilineStringLiteral(
+    rawStringDelimitersToken: RawTokenSyntax?,
     openQuote: RawTokenSyntax,
     segments allSegments: [RawStringLiteralSegmentsSyntax.Element],
     closeQuote: RawTokenSyntax
@@ -331,6 +344,7 @@ extension Parser {
     // Check that the close quote is on new line
 
     let closeDelimiterOnNewLine = reclassifyNewlineOfLastSegmentAsTrivia(
+      rawStringDelimitersToken: rawStringDelimitersToken,
       firstSegment: firstSegment,
       middleSegments: &middleSegments
     )
@@ -391,6 +405,7 @@ extension Parser {
     // Check indentation of segments and escaped newlines at end of segment
 
     postProcessIndentationAndEscapedNewlineOfMiddleSegments(
+      rawStringDelimitersToken: rawStringDelimitersToken,
       middleSegments: &middleSegments,
       isFirstSegmentOnNewLine: isFirstSegmentOnNewLine,
       indentation: indentation,
@@ -525,7 +540,7 @@ extension Parser {
     let (unexpectedBeforeCloseDelimiter, closeDelimiter) = self.parseStringDelimiter(openDelimiter: openDelimiter)
 
     if openQuote.tokenKind == .multilineStringQuote, !openQuote.isMissing, !closeQuote.isMissing {
-      let postProcessed = postProcessMultilineStringLiteral(openQuote: openQuote, segments: segments, closeQuote: closeQuote)
+      let postProcessed = postProcessMultilineStringLiteral(rawStringDelimitersToken: openDelimiter, openQuote: openQuote, segments: segments, closeQuote: closeQuote)
       return RawStringLiteralExprSyntax(
         openDelimiter: openDelimiter,
         RawUnexpectedNodesSyntax(combining: unexpectedBeforeOpenQuote, postProcessed.unexpectedBeforeOpenQuote, arena: self.arena),
@@ -550,5 +565,22 @@ extension Parser {
         arena: self.arena
       )
     }
+  }
+}
+
+// MARK: - Utilities
+
+fileprivate extension SyntaxText {
+  private func hasSuffix(_ other: String) -> Bool {
+    var other = other
+    return other.withSyntaxText { self.hasSuffix($0) }
+  }
+
+  /// Returns `true` if this string end with `\<rawStringDelimiters><newline>`
+  /// but the backslash is not escaped, i.e. doesn't end with
+  /// `\\<rawStringDelimiters><newline>`
+  func hasNonEscapedBackslashSuffix(rawStringDelimiters: SyntaxText, newline: SyntaxText) -> Bool {
+    return self.hasSuffix("\\\(rawStringDelimiters)\(newline)")
+      && !self.hasSuffix("\\\\\(rawStringDelimiters)\(newline)")
   }
 }

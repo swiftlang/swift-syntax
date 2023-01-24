@@ -475,7 +475,8 @@ fileprivate extension RawTriviaPiece {
       let .tabs(count),
       let .verticalTabs(count),
       let .formfeeds(count),
-      let .backslashes(count):
+      let .backslashes(count),
+      let .pounds(count):
       lineLength += SourceLength(utf8Length: count)
     case let .newlines(count),
       let .carriageReturns(count):

@@ -176,6 +176,8 @@ extension Trivia {
         return Array(repeating: TriviaPiece.newlines(1), count: count)
       case .backslashes(let count):
         return Array(repeating: TriviaPiece.backslashes(1), count: count)
+      case .pounds(let count):
+        return Array(repeating: TriviaPiece.pounds(1), count: count)
       case .carriageReturns(let count):
         return Array(repeating: TriviaPiece.carriageReturns(1), count: count)
       case .carriageReturnLineFeeds(let count):

@@ -65,6 +65,9 @@ public enum TriviaPiece {
   /// A backslash that is at the end of a line in a multi-line string literal to escape the newline.
   case backslashes(Int)
   
+  /// A '#' that is at the end of a line in a multi-line string literal to escape the newline.
+  case pounds(Int)
+  
   /// Any skipped unexpected text.
   case unexpectedText(String)
   
@@ -107,6 +110,8 @@ extension TriviaPiece: TextOutputStreamable {
       target.write(text)
     case let .backslashes(count): 
       printRepeated(#"\"#, count: count)
+    case let .pounds(count): 
+      printRepeated("#", count: count)
     case let .unexpectedText(text): 
       target.write(text)
     case let .shebang(text): 
@@ -143,6 +148,8 @@ extension TriviaPiece: CustomDebugStringConvertible {
       return "docBlockComment(\(name.debugDescription))"
     case .backslashes(let data): 
       return "backslashes(\(data))"
+    case .pounds(let data): 
+      return "pounds(\(data))"
     case .unexpectedText(let name): 
       return "unexpectedText(\(name.debugDescription))"
     case .shebang(let name): 
@@ -303,6 +310,16 @@ public struct Trivia {
     return .backslashes(1)
   }
   
+  /// Returns a piece of trivia for some number of "#" characters.
+  public static func pounds(_ count: Int) -> Trivia {
+    return [.pounds(count)]
+  }
+  
+  /// Gets a piece of trivia for "#" characters.
+  public static var pound: Trivia {
+    return .pounds(1)
+  }
+  
   /// Returns a piece of trivia for UnexpectedText.
   public static func unexpectedText(_ text: String) -> Trivia {
     return [.unexpectedText(text)]
@@ -418,6 +435,8 @@ extension TriviaPiece {
       return SourceLength(of: text)
     case let .backslashes(count): 
       return SourceLength(utf8Length: count)
+    case let .pounds(count): 
+      return SourceLength(utf8Length: count)
     case let .unexpectedText(text): 
       return SourceLength(of: text)
     case let .shebang(text): 
@@ -456,6 +475,8 @@ public enum RawTriviaPiece: Equatable {
   
   case backslashes(Int)
   
+  case pounds(Int)
+  
   case unexpectedText(SyntaxText)
   
   case shebang(SyntaxText)
@@ -486,6 +507,8 @@ public enum RawTriviaPiece: Equatable {
       return .docBlockComment(arena.intern(text))
     case let .backslashes(count): 
       return .backslashes(count)
+    case let .pounds(count): 
+      return .pounds(count)
     case let .unexpectedText(text): 
       return .unexpectedText(arena.intern(text))
     case let .shebang(text): 
@@ -533,6 +556,8 @@ extension TriviaPiece {
       self = .docBlockComment(String(syntaxText: text))
     case let .backslashes(count): 
       self = .backslashes(count)
+    case let .pounds(count): 
+      self = .pounds(count)
     case let .unexpectedText(text): 
       self = .unexpectedText(String(syntaxText: text))
     case let .shebang(text): 
@@ -568,6 +593,8 @@ extension RawTriviaPiece {
       return text.count
     case let .backslashes(count): 
       return count
+    case let .pounds(count): 
+      return count
     case let .unexpectedText(text): 
       return text.count
     case let .shebang(text): 
@@ -600,6 +627,8 @@ extension RawTriviaPiece {
     case .docBlockComment(let text): 
       return text
     case .backslashes(_): 
+      return nil
+    case .pounds(_): 
       return nil
     case .unexpectedText(let text): 
       return text

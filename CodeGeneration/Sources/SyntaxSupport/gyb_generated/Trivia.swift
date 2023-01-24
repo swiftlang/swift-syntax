@@ -142,6 +142,14 @@ public let TRIVIAS: [Trivia] = [
          swiftCharacters: [
           Character("\\")
         ]),
+  Trivia(name: "Pound",
+         comment: #"A '#' that is at the end of a line in a multi-line string literal to escape the newline."#,
+         characters: [
+           Character("#")
+         ],
+         swiftCharacters: [
+          Character("#")
+        ]),
   Trivia(name: "UnexpectedText",
          comment: #"Any skipped unexpected text."#),
   Trivia(name: "Shebang",

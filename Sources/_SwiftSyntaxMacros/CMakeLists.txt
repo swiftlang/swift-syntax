@@ -7,16 +7,18 @@
 # See http://swift.org/CONTRIBUTORS.txt for Swift project authors
 
 add_swift_host_library(_SwiftSyntaxMacros
-  AccessorDeclarationMacro.swift
+  AccessorMacro.swift
+  AttachedMacro.swift
+  CodeItemMacro.swift
   DeclarationMacro.swift
   ExpressionMacro.swift
-  FreestandingDeclarationMacro.swift
+  FreestandingMacro.swift
   Macro.swift
   MacroExpansionContext.swift
   MacroSystem.swift
   MemberAttributeMacro.swift
-  MemberDeclarationMacro.swift
-  PeerDeclarationMacro.swift
+  MemberMacro.swift
+  PeerMacro.swift
   Syntax+MacroEvaluation.swift
 )
 

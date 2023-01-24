@@ -109,7 +109,7 @@ class MacroApplication: SyntaxRewriter {
           return true
         }
 
-        return !(macro is PeerDeclarationMacro.Type || macro is MemberDeclarationMacro.Type || macro is AccessorDeclarationMacro.Type || macro is MemberAttributeMacro.Type)
+        return !(macro is PeerMacro.Type || macro is MemberMacro.Type || macro is AccessorMacro.Type || macro is MemberAttributeMacro.Type)
       }
 
       if newAttributes.isEmpty {
@@ -130,7 +130,7 @@ class MacroApplication: SyntaxRewriter {
       if case let .expr(exprItem) = item.item,
         let exprExpansion = exprItem.as(MacroExpansionExprSyntax.self),
         let macro = macroSystem.macros[exprExpansion.macro.text],
-        let freestandingMacro = macro as? FreestandingDeclarationMacro.Type
+         let freestandingMacro = macro as? DeclarationMacro.Type
       {
         do {
           let expandedDecls = try freestandingMacro.expansion(
@@ -180,7 +180,7 @@ class MacroApplication: SyntaxRewriter {
       // Expand declaration macros, which produce zero or more declarations.
       if let declExpansion = item.decl.as(MacroExpansionDeclSyntax.self),
         let macro = macroSystem.macros[declExpansion.macro.text],
-        let freestandingMacro = macro as? FreestandingDeclarationMacro.Type
+         let freestandingMacro = macro as? DeclarationMacro.Type
       {
         do {
           let expandedDecls = try freestandingMacro.expansion(
@@ -293,7 +293,7 @@ class MacroApplication: SyntaxRewriter {
 
     var accessors: [AccessorDeclSyntax] = []
 
-    let accessorMacroAttributes = getMacroAttributes(attachedTo: DeclSyntax(node), ofType: AccessorDeclarationMacro.Type.self)
+    let accessorMacroAttributes = getMacroAttributes(attachedTo: DeclSyntax(node), ofType: AccessorMacro.Type.self)
     for (accessorAttr, accessorMacro) in accessorMacroAttributes {
       do {
         let newAccessors = try accessorMacro.expansion(
@@ -362,7 +362,7 @@ extension MacroApplication {
   // set of peer declarations.
   private func expandPeers(of decl: DeclSyntax) -> [DeclSyntax] {
     var peers: [DeclSyntax] = []
-    let macroAttributes = getMacroAttributes(attachedTo: decl, ofType: PeerDeclarationMacro.Type.self)
+    let macroAttributes = getMacroAttributes(attachedTo: decl, ofType: PeerMacro.Type.self)
     for (attribute, peerMacro) in macroAttributes {
       do {
         let newPeers = try peerMacro.expansion(of: attribute, attachedTo: decl, in: &context)
@@ -387,7 +387,7 @@ extension MacroApplication {
     of decl: Decl
   ) -> Decl {
     var newMembers: [DeclSyntax] = []
-    let macroAttributes = getMacroAttributes(attachedTo: DeclSyntax(decl), ofType: MemberDeclarationMacro.Type.self)
+    let macroAttributes = getMacroAttributes(attachedTo: DeclSyntax(decl), ofType: MemberMacro.Type.self)
     for (attribute, memberMacro) in macroAttributes {
       do {
         try newMembers.append(

@@ -154,7 +154,7 @@ extension SimpleDiagnosticMessage: FixItMessage {
   var fixItID: MessageID { diagnosticID }
 }
 
-public struct ErrorMacro: FreestandingDeclarationMacro {
+public struct ErrorMacro: DeclarationMacro {
   public static func expansion(
     of node: MacroExpansionDeclSyntax,
     in context: inout MacroExpansionContext
@@ -183,7 +183,7 @@ public struct ErrorMacro: FreestandingDeclarationMacro {
   }
 }
 
-struct DefineBitwidthNumberedStructsMacro: FreestandingDeclarationMacro {
+struct DefineBitwidthNumberedStructsMacro: DeclarationMacro {
   static func expansion(
     of node: MacroExpansionDeclSyntax,
     in context: inout MacroExpansionContext
@@ -210,7 +210,7 @@ struct DefineBitwidthNumberedStructsMacro: FreestandingDeclarationMacro {
 
 public struct PropertyWrapper {}
 
-extension PropertyWrapper: AccessorDeclarationMacro {
+extension PropertyWrapper: AccessorMacro {
   public static func expansion(
     of node: AttributeSyntax,
     attachedTo declaration: DeclSyntax,
@@ -241,7 +241,7 @@ extension PropertyWrapper: AccessorDeclarationMacro {
   }
 }
 
-extension PropertyWrapper: PeerDeclarationMacro {
+extension PropertyWrapper: PeerMacro {
   public static func expansion(
     of node: AttributeSyntax,
     attachedTo declaration: DeclSyntax,
@@ -278,7 +278,7 @@ extension PropertyWrapper: PeerDeclarationMacro {
   }
 }
 
-public struct AddCompletionHandler: PeerDeclarationMacro {
+public struct AddCompletionHandler: PeerMacro {
   public static func expansion(
     of node: AttributeSyntax,
     attachedTo declaration: DeclSyntax,
@@ -389,7 +389,7 @@ public struct AddCompletionHandler: PeerDeclarationMacro {
   }
 }
 
-public struct AddBackingStorage: MemberDeclarationMacro {
+public struct AddBackingStorage: MemberMacro {
   public static func expansion(
     of node: AttributeSyntax,
     attachedTo decl: DeclSyntax,
@@ -470,7 +470,7 @@ public struct WrapStoredProperties: MemberAttributeMacro {
 
 struct CustomTypeWrapperMacro {}
 
-extension CustomTypeWrapperMacro: MemberDeclarationMacro {
+extension CustomTypeWrapperMacro: MemberMacro {
   static func expansion(
     of node: AttributeSyntax,
     attachedTo declaration: DeclSyntax,
@@ -503,7 +503,7 @@ extension CustomTypeWrapperMacro: MemberAttributeMacro {
   }
 }
 
-extension CustomTypeWrapperMacro: AccessorDeclarationMacro {
+extension CustomTypeWrapperMacro: AccessorMacro {
   static func expansion(
     of node: AttributeSyntax,
     attachedTo declaration: DeclSyntax,

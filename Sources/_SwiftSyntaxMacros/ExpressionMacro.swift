@@ -13,7 +13,7 @@
 import SwiftSyntax
 
 /// Describes a macro that is explicitly expanded as an expression.
-public protocol ExpressionMacro: Macro {
+public protocol ExpressionMacro: FreestandingMacro {
   /// Expand a macro described by the given macro expansion expression
   /// within the given context to produce a replacement expression.
   static func expansion(

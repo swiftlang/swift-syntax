@@ -9,12 +9,12 @@
 
 import SwiftSyntax
 
-/// Describes a macro that forms declarations.
-public protocol FreestandingDeclarationMacro: DeclarationMacro {
+/// Describes a macro that forms code items in a function or closure body.
+public protocol CodeItemMacro: FreestandingMacro {
   /// Expand a macro described by the given freestanding macro expansion
   /// declaration within the given context to produce a set of declarations.
   static func expansion(
     of node: MacroExpansionDeclSyntax,
     in context: inout MacroExpansionContext
-  ) throws -> [DeclSyntax]
+  ) throws -> [CodeBlockItemSyntax]
 }

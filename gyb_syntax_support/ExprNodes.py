@@ -174,10 +174,7 @@ EXPR_NODES = [
     # NOTE: This appears only in SequenceExpr.
     Node('ArrowExpr', name_for_diagnostics=None, kind='Expr',
          children=[
-             Child('AsyncKeyword', kind='KeywordToken',
-                   text_choices=['async'], is_optional=True),
-             Child('ThrowsToken', kind='ThrowsToken',
-                   is_optional=True),
+             Child('EffectSpecifiers', kind='TypeEffectSpecifiers', is_optional=True),
              Child('ArrowToken', kind='ArrowToken'),
          ]),
 
@@ -432,9 +429,8 @@ EXPR_NODES = [
                        Child('SimpleInput', kind='ClosureParamList'),
                        Child('Input', kind='ParameterClause'),
                    ]),
-             Child('AsyncKeyword', kind='KeywordToken',
-                   text_choices=['async'], is_optional=True),
-             Child('ThrowsTok', kind='KeywordToken', text_choices=['throws'], is_optional=True),
+             Child('EffectSpecifiers', kind='TypeEffectSpecifiers',
+                   is_optional=True),
              Child('Output', kind='ReturnClause', is_optional=True),
              Child('InTok', kind='KeywordToken', text_choices=['in']),
          ]),

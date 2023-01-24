@@ -152,26 +152,9 @@ public let DECL_NODES: [Node] = [
        children: [
          Child(name: "Input",
                kind: "ParameterClause"),
-         Child(name: "AsyncOrReasyncKeyword",
-               kind: "KeywordToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Keyword"
-               ],
-               textChoices: [
-                 "async",
-                 "reasync"
-               ]),
-         Child(name: "ThrowsOrRethrowsKeyword",
-               kind: "KeywordToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Keyword"
-               ],
-               textChoices: [
-                 "throws",
-                 "rethrows"
-               ]),
+         Child(name: "EffectSpecifiers",
+               kind: "DeclEffectSpecifiers",
+               isOptional: true),
          Child(name: "Output",
                kind: "ReturnClause",
                isOptional: true)
@@ -1090,25 +1073,9 @@ public let DECL_NODES: [Node] = [
          Child(name: "Parameter",
                kind: "AccessorParameter",
                isOptional: true),
-         Child(name: "AsyncKeyword",
-               kind: "KeywordToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Keyword"
-               ],
-               textChoices: [
-                 "async"
-               ]),
-         Child(name: "ThrowsKeyword",
-               kind: "KeywordToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Keyword"
-               ],
-               textChoices: [
-                 "throws",
-                 "rethrows"
-               ]),
+         Child(name: "EffectSpecifiers",
+               kind: "DeclEffectSpecifiers",
+               isOptional: true),
          Child(name: "Body",
                kind: "CodeBlock",
                isOptional: true)

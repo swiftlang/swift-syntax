@@ -141,6 +141,8 @@ public enum SyntaxKind {
   
   case conventionWitnessMethodAttributeArguments
   
+  case declEffectSpecifiers
+  
   case declModifierDetail
   
   case declModifier
@@ -498,6 +500,8 @@ public enum SyntaxKind {
   case tupleType
   
   case typeAnnotation
+  
+  case typeEffectSpecifiers
   
   case typeExpr
   

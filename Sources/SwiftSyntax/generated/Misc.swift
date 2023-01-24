@@ -80,6 +80,7 @@ extension Syntax {
         .node(ContinueStmtSyntax.self), 
         .node(ConventionAttributeArgumentsSyntax.self), 
         .node(ConventionWitnessMethodAttributeArgumentsSyntax.self), 
+        .node(DeclEffectSpecifiersSyntax.self), 
         .node(DeclModifierDetailSyntax.self), 
         .node(DeclModifierSyntax.self), 
         .node(DeclNameArgumentListSyntax.self), 
@@ -259,6 +260,7 @@ extension Syntax {
         .node(TupleTypeElementSyntax.self), 
         .node(TupleTypeSyntax.self), 
         .node(TypeAnnotationSyntax.self), 
+        .node(TypeEffectSpecifiersSyntax.self), 
         .node(TypeExprSyntax.self), 
         .node(TypeInheritanceClauseSyntax.self), 
         .node(TypeInitializerClauseSyntax.self), 
@@ -410,6 +412,8 @@ extension SyntaxKind {
       return ConventionAttributeArgumentsSyntax.self
     case .conventionWitnessMethodAttributeArguments: 
       return ConventionWitnessMethodAttributeArgumentsSyntax.self
+    case .declEffectSpecifiers: 
+      return DeclEffectSpecifiersSyntax.self
     case .declModifierDetail: 
       return DeclModifierDetailSyntax.self
     case .declModifier: 
@@ -768,6 +772,8 @@ extension SyntaxKind {
       return TupleTypeSyntax.self
     case .typeAnnotation: 
       return TypeAnnotationSyntax.self
+    case .typeEffectSpecifiers: 
+      return TypeEffectSpecifiersSyntax.self
     case .typeExpr: 
       return TypeExprSyntax.self
     case .typeInheritanceClause: 
@@ -939,6 +945,8 @@ extension SyntaxKind {
       return "@convention(...) arguments"
     case .conventionWitnessMethodAttributeArguments: 
       return "@convention(...) arguments for witness methods"
+    case .declEffectSpecifiers: 
+      return "effect specifiers"
     case .declModifierDetail: 
       return nil
     case .declModifier: 
@@ -1297,6 +1305,8 @@ extension SyntaxKind {
       return "tuple type"
     case .typeAnnotation: 
       return "type annotation"
+    case .typeEffectSpecifiers: 
+      return "effect specifiers"
     case .typeExpr: 
       return nil
     case .typeInheritanceClause: 

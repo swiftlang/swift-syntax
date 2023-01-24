@@ -735,7 +735,7 @@ final class ExpressionTests: XCTestCase {
     AssertParse(
       "[(Int) -> 1️⃣throws Int]()",
       diagnostics: [
-        DiagnosticSpec(message: "'throws' may only occur before '->'", fixIts: ["move 'throws' in front of '->'"])
+        DiagnosticSpec(message: "'throws' must preceed '->'", fixIts: ["move 'throws' in front of '->'"])
       ],
       fixedSource: "[(Int) throws -> Int]()"
     )
@@ -743,7 +743,7 @@ final class ExpressionTests: XCTestCase {
     AssertParse(
       "[(Int) -> 1️⃣async throws Int]()",
       diagnostics: [
-        DiagnosticSpec(message: "'async throws' may only occur before '->'", fixIts: ["move 'async throws' in front of '->'"])
+        DiagnosticSpec(message: "'async throws' must preceed '->'", fixIts: ["move 'async throws' in front of '->'"])
       ],
       fixedSource: "[(Int) async throws -> Int]()"
     )
@@ -779,7 +779,7 @@ final class ExpressionTests: XCTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected pattern in variable"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected type in function type"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '..' in function type"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected type in function type"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected return type in function type"),
       ]
     )
   }

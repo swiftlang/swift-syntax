@@ -64,6 +64,27 @@ COMMON_NODES = [
                    requires_leading_newline=True),
          ]),
 
+    # decl-effect-specifiers -> (async | reasync)? (throws | rethrows)?
+    Node('DeclEffectSpecifiers', name_for_diagnostics='effect specifiers', kind='Syntax',
+         traits=['EffectSpecifiers'],
+         children=[
+             Child('AsyncSpecifier', kind='KeywordToken',
+                   text_choices=['async', 'reasync'], is_optional=True),
+             Child('ThrowsSpecifier', kind='KeywordToken',
+                   is_optional=True,
+                   text_choices=['throws', 'rethrows']),
+         ]),
+
+    # type-effect-specifiers -> async? throws?
+    Node('TypeEffectSpecifiers', name_for_diagnostics='effect specifiers', kind='Syntax',
+         traits=['EffectSpecifiers'],
+         children=[
+             Child('AsyncSpecifier', kind='KeywordToken',
+                   text_choices=['async'], is_optional=True),
+             Child('ThrowsSpecifier', kind='KeywordToken', text_choices=['throws'],
+                   is_optional=True),
+         ]),
+
     Node('UnexpectedNodes', name_for_diagnostics=None, kind='SyntaxCollection',
          element='Syntax',
          description='''

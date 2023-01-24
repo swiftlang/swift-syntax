@@ -260,10 +260,19 @@ extension Parser {
   public mutating func canRecoverTo(
     any kinds: [RawTokenKind]
   ) -> RecoveryConsumptionHandle? {
-    if self.at(any: kinds) {
+    if let matchedKind = kinds.filter({ RawTokenKindMatch($0) ~= self.currentToken }).first {
+      let remapKind: RawTokenKind?
+      if matchedKind.base == .keyword {
+        remapKind = matchedKind
+      } else {
+        remapKind = nil
+      }
       return RecoveryConsumptionHandle(
         unexpectedTokens: 0,
-        tokenConsumptionHandle: TokenConsumptionHandle(tokenKind: self.currentToken.rawTokenKind)
+        tokenConsumptionHandle: TokenConsumptionHandle(
+          tokenKind: self.currentToken.rawTokenKind,
+          remappedKind: remapKind
+        )
       )
     }
     var lookahead = self.lookahead()

@@ -454,6 +454,13 @@ open class SyntaxRewriter {
     return Syntax(visitChildren(node)).cast(ConventionWitnessMethodAttributeArgumentsSyntax.self)
   }
   
+  /// Visit a `DeclEffectSpecifiersSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: DeclEffectSpecifiersSyntax) -> DeclEffectSpecifiersSyntax {
+    return Syntax(visitChildren(node)).cast(DeclEffectSpecifiersSyntax.self)
+  }
+  
   /// Visit a `DeclModifierDetailSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -1707,6 +1714,13 @@ open class SyntaxRewriter {
     return Syntax(visitChildren(node)).cast(TypeAnnotationSyntax.self)
   }
   
+  /// Visit a `TypeEffectSpecifiersSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: TypeEffectSpecifiersSyntax) -> TypeEffectSpecifiersSyntax {
+    return Syntax(visitChildren(node)).cast(TypeEffectSpecifiersSyntax.self)
+  }
+  
   /// Visit a `TypeExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -2771,6 +2785,20 @@ open class SyntaxRewriter {
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplConventionWitnessMethodAttributeArgumentsSyntax(_ data: SyntaxData) -> Syntax {
     let node = ConventionWitnessMethodAttributeArgumentsSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { 
+      visitPost(node._syntaxNode) 
+    }
+    if let newNode = visitAny(node._syntaxNode) { 
+      return newNode 
+    }
+    return Syntax(visit(node))
+  }
+  
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplDeclEffectSpecifiersSyntax(_ data: SyntaxData) -> Syntax {
+    let node = DeclEffectSpecifiersSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer { 
@@ -5289,6 +5317,20 @@ open class SyntaxRewriter {
   }
   
   /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplTypeEffectSpecifiersSyntax(_ data: SyntaxData) -> Syntax {
+    let node = TypeEffectSpecifiersSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { 
+      visitPost(node._syntaxNode) 
+    }
+    if let newNode = visitAny(node._syntaxNode) { 
+      return newNode 
+    }
+    return Syntax(visit(node))
+  }
+  
+  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplTypeExprSyntax(_ data: SyntaxData) -> Syntax {
     let node = TypeExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -5746,6 +5788,8 @@ open class SyntaxRewriter {
       return visitImplConventionAttributeArgumentsSyntax
     case .conventionWitnessMethodAttributeArguments: 
       return visitImplConventionWitnessMethodAttributeArgumentsSyntax
+    case .declEffectSpecifiers: 
+      return visitImplDeclEffectSpecifiersSyntax
     case .declModifierDetail: 
       return visitImplDeclModifierDetailSyntax
     case .declModifier: 
@@ -6104,6 +6148,8 @@ open class SyntaxRewriter {
       return visitImplTupleTypeSyntax
     case .typeAnnotation: 
       return visitImplTypeAnnotationSyntax
+    case .typeEffectSpecifiers: 
+      return visitImplTypeEffectSpecifiersSyntax
     case .typeExpr: 
       return visitImplTypeExprSyntax
     case .typeInheritanceClause: 
@@ -6278,6 +6324,8 @@ open class SyntaxRewriter {
       return visitImplConventionAttributeArgumentsSyntax(data)
     case .conventionWitnessMethodAttributeArguments: 
       return visitImplConventionWitnessMethodAttributeArgumentsSyntax(data)
+    case .declEffectSpecifiers: 
+      return visitImplDeclEffectSpecifiersSyntax(data)
     case .declModifierDetail: 
       return visitImplDeclModifierDetailSyntax(data)
     case .declModifier: 
@@ -6636,6 +6684,8 @@ open class SyntaxRewriter {
       return visitImplTupleTypeSyntax(data)
     case .typeAnnotation: 
       return visitImplTypeAnnotationSyntax(data)
+    case .typeEffectSpecifiers: 
+      return visitImplTypeEffectSpecifiersSyntax(data)
     case .typeExpr: 
       return visitImplTypeExprSyntax(data)
     case .typeInheritanceClause: 

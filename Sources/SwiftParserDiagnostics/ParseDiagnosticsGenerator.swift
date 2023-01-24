@@ -123,7 +123,8 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     let correctAndMissingTokens = correctTokens.filter({ $0.presence == .missing })
     var changes: [FixIt.Changes] = []
     if let misplacedToken = misplacedTokens.only, let correctToken = correctTokens.only,
-      misplacedToken.nextToken(viewMode: .all) == correctToken || misplacedToken.previousToken(viewMode: .all) == correctToken
+      misplacedToken.nextToken(viewMode: .all) == correctToken || misplacedToken.previousToken(viewMode: .all) == correctToken,
+      correctToken.presence == .missing
     {
       // We are exchanging two adjacent tokens, transfer the trivia from the incorrect token to the corrected token.
       changes += misplacedTokens.map { FixIt.Changes.makeMissing($0, transferTrivia: false) }
@@ -175,6 +176,85 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     )
   }
 
+  private func handleMisplacedEffectSpecifiersAfterArrow<S: EffectSpecifiersSyntax>(effectSpecifiers: S?, misplacedSpecifiers: UnexpectedNodesSyntax?) {
+    exchangeTokens(
+      unexpected: misplacedSpecifiers,
+      unexpectedTokenCondition: { EffectSpecifier(token: $0) != nil },
+      correctTokens: [effectSpecifiers?.throwsSpecifier, effectSpecifiers?.asyncSpecifier],
+      message: { EffectsSpecifierAfterArrow(effectsSpecifiersAfterArrow: $0) },
+      moveFixIt: { MoveTokensInFrontOfFixIt(movedTokens: $0, inFrontOf: .arrow) },
+      removeRedundantFixIt: { RemoveRedundantFixIt(removeTokens: $0) }
+    )
+  }
+
+  private func handleMisplacedEffectSpecifiers<S: EffectSpecifiersSyntax>(effectSpecifiers: S?, output: ReturnClauseSyntax?) {
+    handleMisplacedEffectSpecifiersAfterArrow(effectSpecifiers: effectSpecifiers, misplacedSpecifiers: output?.unexpectedBetweenArrowAndReturnType)
+    handleMisplacedEffectSpecifiersAfterArrow(effectSpecifiers: effectSpecifiers, misplacedSpecifiers: output?.unexpectedAfterReturnType)
+  }
+
+  private func handleEffectSpecifiers<S: EffectSpecifiersSyntax>(_ node: S) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+
+    let specifierInfo = [
+      (node.asyncSpecifier, { AsyncEffectSpecifier(token: $0) != nil }, StaticParserError.misspelledAsync),
+      (node.throwsSpecifier, { ThrowsEffectSpecifier(token: $0) != nil }, StaticParserError.misspelledThrows),
+    ]
+
+    let unexpectedNodes = [node.unexpectedBeforeAsyncSpecifier, node.unexpectedBetweenAsyncSpecifierAndThrowsSpecifier, node.unexpectedAfterThrowsSpecifier]
+
+    // Diagnostics that are emitted later silence previous diagnostics, so check
+    // for the most contextual (and thus helpful) diagnostics last.
+
+    for (specifier, isOfSameKind, misspelledError) in specifierInfo {
+      guard let specifier = specifier else {
+        continue
+      }
+      for unexpected in unexpectedNodes {
+        exchangeTokens(
+          unexpected: unexpected,
+          unexpectedTokenCondition: isOfSameKind,
+          correctTokens: [specifier],
+          message: { _ in misspelledError },
+          moveFixIt: { ReplaceTokensFixIt(replaceTokens: $0, replacement: specifier) },
+          removeRedundantFixIt: { RemoveRedundantFixIt(removeTokens: $0) }
+        )
+      }
+    }
+
+    if let throwsSpecifier = node.throwsSpecifier {
+      exchangeTokens(
+        unexpected: node.unexpectedAfterThrowsSpecifier,
+        unexpectedTokenCondition: { AsyncEffectSpecifier(token: $0) != nil },
+        correctTokens: [node.asyncSpecifier],
+        message: { AsyncMustPrecedeThrows(asyncKeywords: $0, throwsKeyword: throwsSpecifier) },
+        moveFixIt: { MoveTokensInFrontOfFixIt(movedTokens: $0, inFrontOf: throwsSpecifier.rawTokenKind) },
+        removeRedundantFixIt: { RemoveRedundantFixIt(removeTokens: $0) }
+      )
+    }
+
+    for (specifier, isOfSameKind, _) in specifierInfo {
+      guard let specifier = specifier else {
+        continue
+      }
+      if specifier.presence == .present {
+        for case .some(let unexpected) in unexpectedNodes {
+          for duplicateSpecifier in unexpected.tokens(satisfying: isOfSameKind) {
+            addDiagnostic(
+              duplicateSpecifier,
+              DuplicateEffectSpecifiers(correctSpecifier: specifier, unexpectedSpecifier: duplicateSpecifier),
+              notes: [Note(node: Syntax(specifier), message: EffectSpecifierDeclaredHere(specifier: specifier))],
+              fixIts: [FixIt(message: RemoveRedundantFixIt(removeTokens: [duplicateSpecifier]), changes: [.makeMissing(duplicateSpecifier)])],
+              handledNodes: [unexpected.id]
+            )
+          }
+        }
+      }
+    }
+    return .visitChildren
+  }
+
   // MARK: - Generic diagnostic generation
 
   public override func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
@@ -198,7 +278,8 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     }
     if let tryKeyword = node.onlyToken(where: { $0.tokenKind == .keyword(.try) }),
       let nextToken = tryKeyword.nextToken(viewMode: .sourceAccurate),
-      nextToken.tokenKind.isLexerClassifiedKeyword
+      nextToken.tokenKind.isLexerClassifiedKeyword,
+      !(node.parent?.is(TypeEffectSpecifiersSyntax.self) ?? false)
     {
       addDiagnostic(node, TryCannotBeUsed(nextToken: nextToken))
     } else if let semicolons = node.onlyTokens(satisfying: { $0.tokenKind == .semicolon }) {
@@ -270,13 +351,8 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if shouldSkip(node) {
       return .skipChildren
     }
-    exchangeTokens(
-      unexpected: node.unexpectedAfterArrowToken,
-      unexpectedTokenCondition: { $0.tokenKind == .keyword(.async) || $0.tokenKind == .keyword(.throws) },
-      correctTokens: [node.asyncKeyword, node.throwsToken],
-      message: { EffectsSpecifierAfterArrow(effectsSpecifiersAfterArrow: $0) },
-      moveFixIt: { MoveTokensInFrontOfFixIt(movedTokens: $0, inFrontOf: .arrow) }
-    )
+    handleMisplacedEffectSpecifiersAfterArrow(effectSpecifiers: node.effectSpecifiers, misplacedSpecifiers: node.unexpectedAfterArrowToken)
+
     return .visitChildren
   }
 
@@ -356,6 +432,14 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: ClosureSignatureSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    handleMisplacedEffectSpecifiers(effectSpecifiers: node.effectSpecifiers, output: node.output)
+    return .visitChildren
+  }
+
   public override func visit(_ node: CodeBlockItemSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren
@@ -397,6 +481,10 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
     return .visitChildren
+  }
+
+  public override func visit(_ node: DeclEffectSpecifiersSyntax) -> SyntaxVisitorContinueKind {
+    return handleEffectSpecifiers(node)
   }
 
   public override func visit(_ node: DeinitializerDeclSyntax) -> SyntaxVisitorContinueKind {
@@ -482,13 +570,15 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if shouldSkip(node) {
       return .skipChildren
     }
-    exchangeTokens(
-      unexpected: node.output?.unexpectedBetweenArrowAndReturnType,
-      unexpectedTokenCondition: { $0.tokenKind == .keyword(.throws) },
-      correctTokens: [node.throwsOrRethrowsKeyword],
-      message: { _ in .throwsInReturnPosition },
-      moveFixIt: { MoveTokensInFrontOfFixIt(movedTokens: $0, inFrontOf: .arrow) }
-    )
+    handleMisplacedEffectSpecifiers(effectSpecifiers: node.effectSpecifiers, output: node.output)
+    return .visitChildren
+  }
+
+  public override func visit(_ node: FunctionTypeSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    handleMisplacedEffectSpecifiers(effectSpecifiers: node.effectSpecifiers, output: node.output)
     return .visitChildren
   }
 
@@ -542,7 +632,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
             handledNodes: [unexpected.id, node.identifier.id]
           )
         } else {
-          addDiagnostic(unexpected, AvailabilityConditionInExpression(avaialabilityCondition: availability), handledNodes: [unexpected.id, node.identifier.id])
+          addDiagnostic(unexpected, AvailabilityConditionInExpression(availabilityCondition: availability), handledNodes: [unexpected.id, node.identifier.id])
         }
       }
     }
@@ -798,6 +888,10 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       removeRedundantFixIt: { RemoveRedundantFixIt(removeTokens: $0) }
     )
     return .visitChildren
+  }
+
+  public override func visit(_ node: TypeEffectSpecifiersSyntax) -> SyntaxVisitorContinueKind {
+    return handleEffectSpecifiers(node)
   }
 
   public override func visit(_ node: TypeInitializerClauseSyntax) -> SyntaxVisitorContinueKind {

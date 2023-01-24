@@ -23,6 +23,7 @@ add_swift_host_library(SwiftParser
   RawTokenKindMatch.swift
   RawTokenKindSubset.swift
   Recovery.swift
+  Specifiers.swift
   Statements.swift
   StringLiterals.swift
   SyntaxUtils.swift

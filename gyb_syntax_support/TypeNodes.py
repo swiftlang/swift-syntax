@@ -170,7 +170,7 @@ TYPE_NODES = [
 
     # throwing-specifier -> 'throws' | 'rethrows'
     # function-type -> attribute-list '(' function-type-argument-list ')'
-    #   async? throwing-specifier? '->'? type?
+    #   type-effect-specifiers? return-clause
     Node('FunctionType', name_for_diagnostics='function type', kind='Type',
          traits=['Parenthesized'],
          children=[
@@ -178,17 +178,9 @@ TYPE_NODES = [
              Child('Arguments', kind='TupleTypeElementList',
                    collection_element_name='Argument', is_indented=True),
              Child('RightParen', kind='RightParenToken'),
-             Child('AsyncKeyword', kind='KeyworkToken',
-                   text_choices=['async'], is_optional=True),
-             Child('ThrowsOrRethrowsKeyword', kind='KeywordToken',
-                   is_optional=True,
-                   text_choices=[
-                       'throws',
-                       'rethrows',
-                       'throw',
-                   ]),
-             Child('Arrow', kind='ArrowToken'),
-             Child('ReturnType', kind='Type'),
+             Child('EffectSpecifiers', kind='TypeEffectSpecifiers',
+                   is_optional=True),
+             Child('Output', kind='ReturnClause'),
          ]),
 
     # attributed-type -> type-specifier? attribute-list? type

@@ -326,43 +326,6 @@ enum DeclarationStart: RawTokenKindSubset {
   }
 }
 
-enum EffectsSpecifier: RawTokenKindSubset {
-  case asyncKeyword
-  case awaitKeyword
-  case reasyncKeyword
-  case rethrowsKeyword
-  case throwKeyword
-  case throwsKeyword
-  case tryKeyword
-
-  init?(lexeme: Lexer.Lexeme) {
-    // We'll take 'await', 'throw' and 'try' too for recovery but they have to
-    // be on the same line as the declaration they're modifying.
-    switch lexeme {
-    case RawTokenKindMatch(.async): self = .asyncKeyword
-    case RawTokenKindMatch(.await) where !lexeme.isAtStartOfLine: self = .awaitKeyword
-    case RawTokenKindMatch(.reasync): self = .reasyncKeyword
-    case RawTokenKindMatch(.rethrows): self = .rethrowsKeyword
-    case RawTokenKindMatch(.throw) where !lexeme.isAtStartOfLine: self = .throwKeyword
-    case RawTokenKindMatch(.throws): self = .throwsKeyword
-    case RawTokenKindMatch(.try) where !lexeme.isAtStartOfLine: self = .tryKeyword
-    default: return nil
-    }
-  }
-
-  var rawTokenKind: RawTokenKind {
-    switch self {
-    case .asyncKeyword: return .keyword(.async)
-    case .awaitKeyword: return .keyword(.await)
-    case .reasyncKeyword: return .keyword(.reasync)
-    case .rethrowsKeyword: return .keyword(.rethrows)
-    case .throwKeyword: return .keyword(.throw)
-    case .throwsKeyword: return .keyword(.throws)
-    case .tryKeyword: return .keyword(.try)
-    }
-  }
-}
-
 enum IdentifierTokens: RawTokenKindSubset {
   case anyKeyword
   case capitalSelfKeyword

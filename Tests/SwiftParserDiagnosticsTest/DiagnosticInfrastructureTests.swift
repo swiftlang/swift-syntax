@@ -25,8 +25,8 @@ public class DiagnosticInfrastructureTests: XCTestCase {
     XCTAssertEqual(diag.message, "My test diagnostic")
     XCTAssertEqual(diag.severity, .error)
 
-    XCTAssertEqual(StaticParserError.throwsInReturnPosition.diagnosticID, MessageID(domain: "SwiftParser", id: "StaticParserError.throwsInReturnPosition"))
-    XCTAssertEqual(StaticParserError.throwsInReturnPosition.severity, .error)
+    XCTAssertEqual(StaticParserError.caseOutsideOfSwitchOrEnum.diagnosticID, MessageID(domain: "SwiftParser", id: "StaticParserError.caseOutsideOfSwitchOrEnum"))
+    XCTAssertEqual(StaticParserError.caseOutsideOfSwitchOrEnum.severity, .error)
 
     XCTAssertEqual(
       StaticParserFixIt.insertSemicolon.fixItID,

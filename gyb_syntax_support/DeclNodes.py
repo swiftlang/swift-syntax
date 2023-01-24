@@ -65,7 +65,8 @@ DECL_NODES = [
              Child('RightParen', kind='RightParenToken'),
          ]),
 
-    # -> Type
+    # return-clause ->
+    #   '->' type
     Node('ReturnClause', name_for_diagnostics=None, kind='Syntax',
          children=[
              Child('Arrow', kind='ArrowToken'),
@@ -73,15 +74,12 @@ DECL_NODES = [
          ]),
 
     # function-signature ->
-    #   '(' parameter-list? ')' async? (throws | rethrows)? '->'? type?
+    #   '(' parameter-list? ')' decl-effect-specifiers? return-clause?
     Node('FunctionSignature', name_for_diagnostics='function signature', kind='Syntax',
          children=[
              Child('Input', kind='ParameterClause'),
-             Child('AsyncOrReasyncKeyword', kind='KeywordToken',
-                   text_choices=['async', 'reasync'], is_optional=True),
-             Child('ThrowsOrRethrowsKeyword', kind='KeywordToken',
-                   is_optional=True,
-                   text_choices=['throws', 'rethrows']),
+             Child('EffectSpecifiers', kind='DeclEffectSpecifiers',
+                   is_optional=True),
              Child('Output', kind='ReturnClause', is_optional=True),
          ]),
 
@@ -566,12 +564,7 @@ DECL_NODES = [
                       '_read', '_modify'
                    ]),
              Child('Parameter', name_for_diagnostics='parameter', kind='AccessorParameter', is_optional=True),
-             Child('AsyncKeyword', kind='KeywordToken',
-                   text_choices=['async'], is_optional=True),
-             Child('ThrowsKeyword', kind='KeywordToken',
-                   is_optional=True,
-                   text_choices=['throws', 'rethrows']
-                   ),
+             Child('EffectSpecifiers', kind='DeclEffectSpecifiers', is_optional=True),
              Child('Body', kind='CodeBlock', is_optional=True),
          ]),
 

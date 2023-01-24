@@ -27,94 +27,76 @@ final class AsyncTests: XCTestCase {
 
   func testAsync2() {
     AssertParse(
-      """
-      func asyncGlobal3() throws1️⃣ async { }
-      """,
+      "func asyncGlobal3() throws 1️⃣async { }",
       diagnostics: [
-        // TODO: Old parser expected error on line 1: 'async' must precede 'throws', Fix-It replacements: 28 - 34 = '', 21 - 21 = 'async '
-        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'")
-      ]
+        DiagnosticSpec(message: "'async' must precede 'throws'", fixIts: ["move 'async' in front of 'throws'"])
+      ],
+      fixedSource: "func asyncGlobal3() async throws { }"
     )
   }
 
   func testAsync3() {
     AssertParse(
-      """
-      func asyncGlobal3(fn: () throws -> Int) rethrows1️⃣ async { }
-      """,
+      "func asyncGlobal3(fn: () throws -> Int) rethrows 1️⃣async { }",
       diagnostics: [
-        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'")
-        // TODO: Old parser expected error on line 1: 'async' must precede 'rethrows', Fix-It replacements: 50 - 56 = '', 41 - 41 = 'async '
-      ]
+        DiagnosticSpec(message: "'async' must precede 'rethrows'", fixIts: ["move 'async' in front of 'rethrows'"])
+      ],
+      fixedSource: "func asyncGlobal3(fn: () throws -> Int) async rethrows { }"
     )
   }
 
   func testAsync4() {
     AssertParse(
-      """
-      func asyncGlobal4() -> Int1️⃣ async { }
-      """,
+      "func asyncGlobal4() -> Int 1️⃣async { }",
       diagnostics: [
-        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'")
-        // TODO: Old parser expected error on line 1: 'async' may only occur before '->', Fix-It replacements: 28 - 34 = '', 21 - 21 = 'async '
-      ]
+        DiagnosticSpec(message: "'async' must preceed '->'", fixIts: ["move 'async' in front of '->'"])
+      ],
+      fixedSource: "func asyncGlobal4() async -> Int { }"
     )
   }
 
   func testAsync5() {
     AssertParse(
-      """
-      func asyncGlobal5() -> Int1️⃣ async throws 2️⃣{ }
-      """,
+      "func asyncGlobal5() -> Int 1️⃣async throws { }",
       diagnostics: [
-        // TODO: Old parser expected error on line 1: 'async' may only occur before '->', Fix-It replacements: 28 - 34 = '', 21 - 21 = 'async '
-        // TODO: Old parser expected error on line 1: 'throws' may only occur before '->', Fix-It replacements: 34 - 41 = '', 21 - 21 = 'throws '
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '->'"),
-      ]
+        DiagnosticSpec(message: "'async throws' must preceed '->'")
+      ],
+      fixedSource: "func asyncGlobal5() async throws -> Int { }"
     )
   }
 
   func testAsync6() {
     AssertParse(
-      """
-      func asyncGlobal6() -> Int 1️⃣throws async { }
-      """,
+      "func asyncGlobal6() -> Int 1️⃣throws async { }",
       diagnostics: [
-        // TODO: Old parser expected error on line 1: 'throws' may only occur before '->', Fix-It replacements: 28 - 35 = '', 21 - 21 = 'throws '
-        // TODO: Old parser expected error on line 1: 'async' may only occur before '->', Fix-It replacements: 35 - 41 = '', 21 - 21 = 'async '
-        DiagnosticSpec(message: "extraneous code 'throws async { }' at top level")
-      ]
+        DiagnosticSpec(message: "'throws async' must preceed '->'", fixIts: ["move 'throws async' in front of '->'"])
+      ],
+      fixedSource: "func asyncGlobal6() async throws -> Int { }"
     )
   }
 
   func testAsync7() {
     AssertParse(
-      """
-      func asyncGlobal7() throws -> Int1️⃣ async { }
-      """,
+      "func asyncGlobal7() throws -> Int 1️⃣async { }",
       diagnostics: [
-        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'")
-        // TODO: Old parser expected error on line 1: 'async' may only occur before '->', Fix-It replacements: 35 - 41 = '', 21 - 21 = 'async '
-      ]
+        DiagnosticSpec(message: "'async' must preceed '->'")
+      ],
+      fixedSource: "func asyncGlobal7() async throws -> Int { }"
     )
   }
 
   func testAsync8() {
     AssertParse(
       """
-      func asyncGlobal8() async throws1️⃣ async -> 2️⃣async Int async {}
+      func asyncGlobal8() async throws 1️⃣async -> 2️⃣async Int 3️⃣async {}
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "'async' may only occur before '->'"),
-        // TODO: Old parser expected error on line 1: 'async' has already been specified, Fix-It replacements: 34 - 40 = ''
-        // TODO: Old parser expected error on line 1: 'async' has already been specified, Fix-It replacements: 43 - 49 = ''
-        // TODO: Old parser expected error on line 1: 'async' has already been specified, Fix-It replacements: 53 - 59 = ''
+        DiagnosticSpec(locationMarker: "1️⃣", message: "'async' has already been specified", fixIts: ["remove redundant 'async'"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "'async' must preceed '->'", fixIts: ["remove redundant 'async'"]),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "'async' must preceed '->'", fixIts: ["remove redundant 'async'"]),
       ],
-      // TODO: This should not insert another 'async'
       fixedSource: """
-        func asyncGlobal8() async throws; async async -> Int async {}
+        func asyncGlobal8() async throws -> Int {}
         """
     )
   }
@@ -160,30 +142,47 @@ final class AsyncTests: XCTestCase {
 
   func testAsync10c() {
     AssertParse(
-      """
-      typealias AsyncFunc3 = () throws async -> ()
-      """,
+      "typealias AsyncFunc3 = () throws 1️⃣async -> ()",
       diagnostics: [
-        // TODO: Old parser expected error on line 1: 'async' must precede 'throws', Fix-It replacements: 34 - 40 = '', 27 - 27 = 'async '
-      ]
+        DiagnosticSpec(message: "'async' must precede 'throws'")
+      ],
+      fixedSource: "typealias AsyncFunc3 = () async throws -> ()"
     )
   }
 
-  func testAsync11() {
+  func testAsync11a() {
     AssertParse(
       """
-      // Parsing type expressions with 'async'.
-      func testTypeExprs() {
-        let _ = [() async -> ()]()
-        let _ = [() async throws -> ()]()
-        let _ = [() throws 1️⃣async -> ()]()
-        let _ = [() -> 2️⃣async ()]()
-      }
+      let _ = [() async -> ()]()
+      """
+    )
+  }
+
+  func testAsync11b() {
+    AssertParse(
+      """
+      let _ = [() async throws -> ()]()
+      """
+    )
+  }
+
+  func testAsync11c() {
+    AssertParse(
+      "let _ = [() throws 1️⃣async -> ()]()",
+      diagnostics: [
+        DiagnosticSpec(message: "'async' must precede 'throws'")
+      ],
+      fixedSource: "let _ = [() async throws -> ()]()"
+    )
+  }
+
+  func testAsync11d() {
+    AssertParse(
+      """
+      let _ = [() -> 1️⃣async ()]()
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 5: 'async' must precede 'throws', Fix-It replacements: 22 - 28 = '', 15 - 15 = 'async '
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code 'async' in array element"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "'async' may only occur before '->'"),
+        DiagnosticSpec(message: "'async' must preceed '->'")
       ]
     )
   }
@@ -234,11 +233,7 @@ final class AsyncTests: XCTestCase {
     AssertParse(
       """
       async func asyncIncorrectly() { }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: 'async' must be written after the parameter list of a function, Fix-It replacements: 1 - 7 = '', 30 - 30 = ' async'
-      ]
+      """
     )
   }
-
 }

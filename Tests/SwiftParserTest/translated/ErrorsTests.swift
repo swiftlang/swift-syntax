@@ -12,6 +12,8 @@
 
 // This test file has been translated from swift/test/Parse/errors.swift
 
+import SwiftSyntax
+
 import XCTest
 
 final class ErrorsTests: XCTestCase {
@@ -154,9 +156,13 @@ final class ErrorsTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: 'throws' may only occur before '->', Fix-It replacements: 19 - 19 = 'throws ', 26 - 33 = ''
-        DiagnosticSpec(message: "extraneous code at top level")
-      ]
+        DiagnosticSpec(message: "'throws' must preceed '->'")
+      ],
+      fixedSource: """
+        func postThrows() throws -> Int {
+          return 5
+        }
+        """
     )
   }
 
@@ -168,8 +174,7 @@ final class ErrorsTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: 'throws' may only occur before '->', Fix-It replacements: 20 - 20 = 'throws ', 23 - 30 = ''
-        DiagnosticSpec(message: "'throws' may only occur before '->'")
+        DiagnosticSpec(message: "'throws' must preceed '->'")
       ]
     )
   }
@@ -182,23 +187,25 @@ final class ErrorsTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: 'rethrows' may only occur before '->', Fix-It replacements: 42 - 42 = 'rethrows ', 49 - 58 = ''
-        DiagnosticSpec(message: "extraneous code at top level")
-      ]
+        DiagnosticSpec(message: "'rethrows' must preceed '->'")
+      ],
+      fixedSource: """
+        func postRethrows(_ f: () throws -> Int) rethrows -> Int {
+          return try f()
+        }
+        """
     )
   }
 
   func testErrors11() {
     AssertParse(
       """
-      func postRethrows2(_ f: () throws -> Int) 1️⃣-> 2️⃣rethrows Int { 
+      func postRethrows2(_ f: () throws -> Int) -> 1️⃣rethrows Int {
         return try f()
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: 'rethrows' may only occur before '->', Fix-It replacements: 43 - 43 = 'rethrows ', 46 - 55 = ''
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'rethrows' in function signature"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected 'rethrows' keyword in function signature"),
+        DiagnosticSpec(message: "'rethrows' must preceed '->'")
       ]
     )
   }
@@ -211,9 +218,7 @@ final class ErrorsTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: 'throws' may only occur before '->', Fix-It replacements: 19 - 26 = '', 12 - 12 = 'throws '
-        DiagnosticSpec(message: "expected 'in' in closure signature"),
-        DiagnosticSpec(message: "unexpected code 'throws in' in closure"),
+        DiagnosticSpec(message: "'throws' must preceed '->'")
       ]
     )
   }
@@ -221,14 +226,16 @@ final class ErrorsTests: XCTestCase {
   func testErrors13() {
     AssertParse(
       """
-      func dupThrows1() throws 1️⃣rethrows -> throws Int throw {}
+      func dupThrows1() throws 1️⃣rethrows -> 2️⃣throws Int 3️⃣throw {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: 'rethrows' has already been specified, Fix-It replacements: 26 - 35 = ''
-        // TODO: Old parser expected error on line 1: 'throws' has already been specified, Fix-It replacements: 38 - 45 = ''
-        // TODO: Old parser expected error on line 1: 'throw' has already been specified, Fix-It replacements: 49 - 55 = ''
-        DiagnosticSpec(message: "extraneous code 'rethrows -> throws Int throw {}' at top level")
-      ]
+        DiagnosticSpec(locationMarker: "1️⃣", message: "'rethrows' conflicts with 'throws'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "'throws' must preceed '->'", fixIts: ["remove redundant 'throws'"]),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "'throw' must preceed '->'", fixIts: ["remove redundant 'throw'"]),
+      ],
+      fixedSource: """
+        func dupThrows1() throws -> Int {}
+        """
     )
   }
 
@@ -238,28 +245,39 @@ final class ErrorsTests: XCTestCase {
       func dupThrows2(_ f: () throws -> 1️⃣rethrows Int) {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: 'rethrows' has already been specified, Fix-It replacements: 35 - 44 = ''
-        DiagnosticSpec(message: "expected type in function type"),
-        DiagnosticSpec(message: "unexpected code 'rethrows Int' in parameter clause"),
-      ]
+        DiagnosticSpec(message: "'rethrows' must preceed '->'", fixIts: ["remove redundant 'rethrows'"])
+      ],
+      fixedSource: """
+        func dupThrows2(_ f: () throws -> Int) {}
+        """
     )
   }
 
-  func testErrors15() {
+  func testErrors15a() {
     AssertParse(
       """
-      func dupThrows3() {
-        _ = { () try throws in }
-        _ = { () throws -> Int 1️⃣throws in }
-      }
+      _ = { () 1️⃣try throws in }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected throwing specifier; did you mean 'throws'?, Fix-It replacements: 12 - 15 = 'throws'
-        // TODO: Old parser expected error on line 2: 'throws' has already been specified, Fix-It replacements: 16 - 23 = ''
-        // TODO: Old parser expected error on line 3: 'throws' has already been specified, Fix-It replacements: 26 - 33 = ''
-        DiagnosticSpec(message: "expected 'in' in closure signature"),
-        DiagnosticSpec(message: "unexpected code 'throws in' in closure"),
-      ]
+        DiagnosticSpec(message: "'try' conflicts with 'throws'", fixIts: ["remove redundant 'try'"])
+      ],
+      fixedSource: """
+        _ = { () throws in }
+        """
+    )
+  }
+
+  func testErrors15b() {
+    AssertParse(
+      """
+      _ = { () throws -> Int 1️⃣throws in }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "'throws' must preceed '->'", fixIts: ["remove redundant 'throws'"])
+      ],
+      fixedSource: """
+        _ = { () throws -> Int in }
+        """
     )
   }
 
@@ -267,39 +285,85 @@ final class ErrorsTests: XCTestCase {
     AssertParse(
       """
       func incompleteThrowType() {
-        // FIXME: Bad recovery for incomplete function type.
         let _: () 1️⃣throws
       }
       """,
+      substructure: Syntax(
+        CodeBlockSyntax(
+          statements: CodeBlockItemListSyntax([
+            CodeBlockItemSyntax(
+              item: .decl(
+                DeclSyntax(
+                  VariableDeclSyntax(
+                    letOrVarKeyword: .keyword(.let),
+                    bindings: PatternBindingListSyntax([
+                      PatternBindingSyntax(
+                        pattern: WildcardPatternSyntax(),
+                        typeAnnotation: TypeAnnotationSyntax(type: TupleTypeSyntax(elements: TupleTypeElementListSyntax([])))
+                      )
+                    ])
+                  )
+                )
+              )
+            )
+          ]),
+          UnexpectedNodesSyntax([TokenSyntax.keyword(.throws)])
+        )
+      ),
       diagnostics: [
-        // TODO: Old parser expected error on line 3: consecutive statements on a line must be separated by ';'
-        // TODO: Old parser expected error on line 3: expected expression
         DiagnosticSpec(message: "unexpected 'throws' keyword in function")
       ]
     )
   }
 
-  func testErrors17() {
+  func testErrors17a() {
+    // rdar://21328447
     AssertParse(
       """
-      // rdar://21328447
-      func fixitThrow0()1️⃣ throw {}
-      func fixitThrow1()2️⃣ throw 3️⃣-> Int {}
+      func fixitThrow0() 1️⃣throw {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected throwing specifier; did you mean 'throws'?", fixIts: ["replace 'throw' by 'throws'"])
+      ],
+      fixedSource: """
+        func fixitThrow0() throws {}
+        """
+    )
+  }
+
+  func testErrors17b() {
+    AssertParse(
+      """
+      func fixitThrow1() 1️⃣throw -> Int {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected throwing specifier; did you mean 'throws'?")
+      ],
+      fixedSource: """
+        func fixitThrow1() throws -> Int {}
+        """
+    )
+  }
+
+  func testErrors17c() {
+    AssertParse(
+      """
       func fixitThrow2() throws {
         var _: (Int)
         throw MSV.Foo
-        var _: (Int) throw -> Int 
+        var _: (Int) 1️⃣throw -> Int 
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected throwing specifier; did you mean 'throws'?, Fix-It replacements: 20 - 25 = 'throws'
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        // TODO: Old parser expected error on line 3: expected throwing specifier; did you mean 'throws'?, Fix-It replacements: 20 - 25 = 'throws'
-        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected expression in 'throw' statement"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code '-> Int {}' before function"),
-        // TODO: Old parser expected error on line 7: expected throwing specifier; did you mean 'throws'?, Fix-It replacements: 16 - 21 = 'throws'
-      ]
+        DiagnosticSpec(message: "expected throwing specifier; did you mean 'throws'?")
+      ],
+      fixedSource: """
+        func fixitThrow2() throws {
+          var _: (Int)
+          throw MSV.Foo
+          var _: (Int) throws -> Int 
+        }
+        """
     )
   }
 
@@ -309,10 +373,11 @@ final class ErrorsTests: XCTestCase {
       let fn: () -> 1️⃣throws Void
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: 'throws' may only occur before '->', Fix-It replacements: 12 - 12 = 'throws ', 15 - 22 = ''
-        DiagnosticSpec(message: "expected type in function type"),
-        DiagnosticSpec(message: "extraneous code 'throws Void' at top level"),
-      ]
+        DiagnosticSpec(message: "'throws' must preceed '->'")
+      ],
+      fixedSource: """
+        let fn: () throws -> Void
+        """
     )
   }
 
@@ -327,13 +392,10 @@ final class ErrorsTests: XCTestCase {
   func testErrors20() {
     AssertParse(
       """
-      func fixitTry0<T>(a: T)1️⃣ try 2️⃣where T:ExpressibleByStringLiteral {}
+      func fixitTry0<T>(a: T) 1️⃣try where T:ExpressibleByStringLiteral {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected throwing specifier; did you mean 'throws'?, Fix-It replacements: 25 - 28 = 'throws'
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression after 'try'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code 'where T:ExpressibleByStringLiteral {}' at top level"),
+        DiagnosticSpec(message: "expected throwing specifier; did you mean 'throws'?")
       ]
     )
   }
@@ -341,23 +403,24 @@ final class ErrorsTests: XCTestCase {
   func testErrors21() {
     AssertParse(
       """
-      func fixitTry1<T>(a: T)1️⃣ try {}
+      func fixitTry1<T>(a: T) 1️⃣try {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected throwing specifier; did you mean 'throws'?, Fix-It replacements: 25 - 28 = 'throws'
-        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'")
-      ]
+        DiagnosticSpec(message: "expected throwing specifier; did you mean 'throws'?")
+      ],
+      fixedSource: """
+        func fixitTry1<T>(a: T) throws {}
+        """
     )
   }
 
   func testErrors22() {
     AssertParse(
       """
-      func fixitTry2()1️⃣ try {}
+      func fixitTry2() 1️⃣try {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected throwing specifier; did you mean 'throws'?, Fix-It replacements: 18 - 21 = 'throws'
-        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'")
+        DiagnosticSpec(message: "expected throwing specifier; did you mean 'throws'?")
       ]
     )
   }
@@ -365,10 +428,10 @@ final class ErrorsTests: XCTestCase {
   func testErrors23() {
     AssertParse(
       """
-      let fixitTry3 : () try -> Int
+      let fixitTry3 : () 1️⃣try -> Int
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected throwing specifier; did you mean 'throws'?, Fix-It replacements: 20 - 23 = 'throws'
+        DiagnosticSpec(message: "expected throwing specifier; did you mean 'throws'?")
       ]
     )
   }
@@ -376,38 +439,70 @@ final class ErrorsTests: XCTestCase {
   func testErrors24() {
     AssertParse(
       """
-      func fixitAwait0()1️⃣ await { }
+      func fixitAwait0() 1️⃣await { }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected async specifier; did you mean 'async'?, Fix-It replacements: 20 - 25 = 'async'
-        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'")
-      ]
+        DiagnosticSpec(message: "expected async specifier; did you mean 'async'?", fixIts: ["replace 'await' by 'async'"])
+      ],
+      fixedSource: """
+        func fixitAwait0() async { }
+        """
     )
   }
 
   func testErrors25() {
     AssertParse(
       """
-      func fixitAwait1()1️⃣ await 2️⃣-> Int { }
+      func fixitAwait1() 1️⃣await -> Int { }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected async specifier; did you mean 'async'?, Fix-It replacements: 20 - 25 = 'async'
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression in 'await' expression"),
-      ]
+        DiagnosticSpec(message: "expected async specifier; did you mean 'async'?")
+      ],
+      fixedSource: """
+        func fixitAwait1() async -> Int { }
+        """
     )
   }
 
   func testErrors26() {
     AssertParse(
       """
-      func fixitAwait2() throws1️⃣ await 2️⃣-> Int { }
+      func fixitAwait2() throws 1️⃣await -> Int { }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected async specifier; did you mean 'async'?, Fix-It replacements: 27 - 32 = 'async'
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression in 'await' expression"),
-      ]
+        DiagnosticSpec(message: "'await' must precede 'throws'", fixIts: ["move 'await' in front of 'throws'"])
+      ],
+      fixedSource: """
+        func fixitAwait2() async throws -> Int { }
+        """
+    )
+  }
+
+  func testAwaitBetwenAsyncAndThrows() {
+    AssertParse(
+      """
+      func fixitAwait2() async 1️⃣await throws -> Int { }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "'await' conflicts with 'async'")
+      ],
+      fixedSource: """
+        func fixitAwait2() async throws -> Int { }
+        """
+    )
+  }
+
+  func testAsyncAwait() {
+    AssertParse(
+      """
+      func fixitAwait2() async 1️⃣await -> Int { }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "'await' conflicts with 'async'")
+      ],
+      fixedSource: """
+        func fixitAwait2() async -> Int { }
+        """
     )
   }
 }

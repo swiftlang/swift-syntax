@@ -1217,26 +1217,25 @@ extension Parser {
   }
 
   /// If a `throws` keyword appears right in front of the `arrow`, it is returned as `misplacedThrowsKeyword` so it can be synthesized in front of the arrow.
-  @_spi(RawSyntax)
-  public mutating func parseFunctionReturnClause() -> (returnClause: RawReturnClauseSyntax, misplacedThrowsKeyword: RawTokenSyntax?) {
+  mutating func parseFunctionReturnClause<S: RawEffectSpecifiersTrait>(effectSpecifiers: inout S?, allowNamedOpaqueResultType: Bool) -> RawReturnClauseSyntax {
     let (unexpectedBeforeArrow, arrow) = self.expect(.arrow)
-    var misplacedThrowsKeyword: RawTokenSyntax? = nil
-    let unexpectedBeforeReturnType: RawUnexpectedNodesSyntax?
-    if let throwsKeyword = self.consume(ifAny: [.keyword(.rethrows), .keyword(.throws)]) {
-      misplacedThrowsKeyword = throwsKeyword
-      unexpectedBeforeReturnType = RawUnexpectedNodesSyntax(elements: [RawSyntax(throwsKeyword)], arena: self.arena)
+    let unexpectedBeforeReturnType = self.parseMisplacedEffectSpecifiers(&effectSpecifiers)
+    let result: RawTypeSyntax
+    if allowNamedOpaqueResultType {
+      result = self.parseResultType()
     } else {
-      unexpectedBeforeReturnType = nil
+      result = self.parseType()
     }
-    let result = self.parseResultType()
+    let unexpectedAfterReturnType = self.parseMisplacedEffectSpecifiers(&effectSpecifiers)
     let returnClause = RawReturnClauseSyntax(
       unexpectedBeforeArrow,
       arrow: arrow,
       unexpectedBeforeReturnType,
       returnType: result,
+      unexpectedAfterReturnType,
       arena: self.arena
     )
-    return (returnClause, misplacedThrowsKeyword)
+    return returnClause
   }
 }
 
@@ -1318,32 +1317,18 @@ extension Parser {
   public mutating func parseFunctionSignature() -> RawFunctionSignatureSyntax {
     let input = self.parseParameterClause(for: .functionParameters)
 
-    let async: RawTokenSyntax?
-    if let asyncTok = self.consume(if: .keyword(.async)) {
-      async = asyncTok
-    } else if let reasync = self.consume(if: .keyword(.reasync)) {
-      async = reasync
-    } else {
-      async = nil
-    }
-
-    var throwsKeyword = self.consume(ifAny: [.keyword(.throws), .keyword(.rethrows)])
+    var effectSpecifiers = self.parseDeclEffectSpecifiers()
 
     let output: RawReturnClauseSyntax?
     if self.at(.arrow) {
-      let result = self.parseFunctionReturnClause()
-      output = result.returnClause
-      if let misplacedThrowsKeyword = result.misplacedThrowsKeyword, throwsKeyword == nil {
-        throwsKeyword = RawTokenSyntax(missing: misplacedThrowsKeyword.tokenKind, arena: self.arena)
-      }
+      output = self.parseFunctionReturnClause(effectSpecifiers: &effectSpecifiers, allowNamedOpaqueResultType: true)
     } else {
       output = nil
     }
 
     return RawFunctionSignatureSyntax(
       input: input,
-      asyncOrReasyncKeyword: async,
-      throwsOrRethrowsKeyword: throwsKeyword,
+      effectSpecifiers: effectSpecifiers,
       output: output,
       arena: self.arena
     )
@@ -1384,7 +1369,8 @@ extension Parser {
 
     let indices = self.parseParameterClause(for: .indices)
 
-    let result = self.parseFunctionReturnClause().returnClause
+    var misplacedEffectSpecifiers: RawDeclEffectSpecifiersSyntax?
+    let result = self.parseFunctionReturnClause(effectSpecifiers: &misplacedEffectSpecifiers, allowNamedOpaqueResultType: true)
 
     // Parse a 'where' clause if present.
     let genericWhereClause: RawGenericWhereClauseSyntax?
@@ -1588,41 +1574,6 @@ extension Parser {
     )
   }
 
-  @_spi(RawSyntax)
-  public mutating func parseEffectsSpecifier() -> RawTokenSyntax? {
-    // 'async'
-    if let async = self.consume(if: .keyword(.async)) {
-      return async
-    }
-
-    // 'reasync'
-    if let reasync = self.consume(if: .keyword(.reasync)) {
-      return reasync
-    }
-
-    // 'throws'/'rethrows'
-    if let throwsRethrows = self.consume(ifAny: [.keyword(.throws), .keyword(.rethrows)]) {
-      return throwsRethrows
-    }
-
-    // diagnose 'throw'/'try'.
-    if let throwTry = self.consume(ifAny: [.keyword(.throw), .keyword(.try)], allowTokenAtStartOfLine: false) {
-      return throwTry
-    }
-
-    return nil
-  }
-
-  @_spi(RawSyntax)
-  public mutating func parseEffectsSpecifiers() -> [RawTokenSyntax] {
-    var specifiers = [RawTokenSyntax]()
-    var loopProgress = LoopProgressCondition()
-    while let specifier = self.parseEffectsSpecifier(), loopProgress.evaluate(currentToken) {
-      specifiers.append(specifier)
-    }
-    return specifiers
-  }
-
   /// Parse an accessor.
   mutating func parseAccessorDecl() -> RawAccessorDeclSyntax {
     let forcedHandle = TokenConsumptionHandle(tokenKind: .keyword(.get), missing: true)
@@ -1669,17 +1620,7 @@ extension Parser {
       parameter = nil
     }
 
-    // Next, parse effects specifiers. While it's only valid to have them
-    // on 'get' accessors, we also emit diagnostics if they show up on others.
-    let asyncKeyword: RawTokenSyntax?
-    let throwsKeyword: RawTokenSyntax?
-    if self.at(anyIn: EffectsSpecifier.self) != nil {
-      asyncKeyword = self.parseEffectsSpecifier()
-      throwsKeyword = self.parseEffectsSpecifier()
-    } else {
-      asyncKeyword = nil
-      throwsKeyword = nil
-    }
+    let effectSpecifiers = self.parseDeclEffectSpecifiers()
 
     let body = self.parseOptionalCodeBlock()
     return RawAccessorDeclSyntax(
@@ -1687,8 +1628,7 @@ extension Parser {
       modifier: introducer.modifier,
       accessorKind: introducer.token,
       parameter: parameter,
-      asyncKeyword: asyncKeyword,
-      throwsKeyword: throwsKeyword,
+      effectSpecifiers: effectSpecifiers,
       body: body,
       arena: self.arena
     )

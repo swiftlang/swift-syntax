@@ -670,7 +670,7 @@ final class DeclarationTests: XCTestCase {
     AssertParse(
       "func test() -> 1️⃣throws Int",
       diagnostics: [
-        DiagnosticSpec(message: "'throws' may only occur before '->'", fixIts: ["move 'throws' in front of '->'"])
+        DiagnosticSpec(message: "'throws' must preceed '->'", fixIts: ["move 'throws' in front of '->'"])
       ],
       fixedSource: "func test() throws -> Int"
     )
@@ -759,8 +759,22 @@ final class DeclarationTests: XCTestCase {
         var prop : Int { get 1️⃣bogus rethrows set }
       }
       """,
+      substructure: Syntax(
+        AccessorBlockSyntax(
+          accessors: AccessorListSyntax([
+            AccessorDeclSyntax(
+              accessorKind: .keyword(.get),
+              effectSpecifiers: DeclEffectSpecifiersSyntax(
+                UnexpectedNodesSyntax([TokenSyntax.identifier("bogus")]),
+                throwsSpecifier: .keyword(.rethrows)
+              )
+            ),
+            AccessorDeclSyntax(accessorKind: .keyword(.set)),
+          ])
+        )
+      ),
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code 'bogus rethrows set' in variable")
+        DiagnosticSpec(message: "unexpected code 'bogus' before effect specifiers")
       ]
     )
   }

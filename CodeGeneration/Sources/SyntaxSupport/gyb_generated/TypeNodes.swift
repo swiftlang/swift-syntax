@@ -330,30 +330,11 @@ public let TYPE_NODES: [Node] = [
                tokenChoices: [
                  "RightParen"
                ]),
-         Child(name: "AsyncKeyword",
-               kind: "KeyworkToken",
-               isOptional: true,
-               textChoices: [
-                 "async"
-               ]),
-         Child(name: "ThrowsOrRethrowsKeyword",
-               kind: "KeywordToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Keyword"
-               ],
-               textChoices: [
-                 "throws",
-                 "rethrows",
-                 "throw"
-               ]),
-         Child(name: "Arrow",
-               kind: "ArrowToken",
-               tokenChoices: [
-                 "Arrow"
-               ]),
-         Child(name: "ReturnType",
-               kind: "Type")
+         Child(name: "EffectSpecifiers",
+               kind: "TypeEffectSpecifiers",
+               isOptional: true),
+         Child(name: "Output",
+               kind: "ReturnClause")
        ]),
   
   Node(name: "AttributedType",

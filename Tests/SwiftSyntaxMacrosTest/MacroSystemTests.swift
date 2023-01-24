@@ -291,7 +291,7 @@ public struct AddCompletionHandler: PeerDeclarationMacro {
     }
 
     // This only makes sense for async functions.
-    if funcDecl.signature.asyncOrReasyncKeyword == nil {
+    if funcDecl.signature.effectSpecifiers?.asyncSpecifier == nil {
       throw CustomError.message(
         "@addCompletionHandler requires an async function"
       )
@@ -366,7 +366,9 @@ public struct AddCompletionHandler: PeerDeclarationMacro {
       funcDecl
       .withSignature(
         funcDecl.signature
-          .withAsyncOrReasyncKeyword(nil)  // drop async
+          .withEffectSpecifiers(
+            funcDecl.signature.effectSpecifiers?.withAsyncSpecifier(nil)  // drop async
+          )
           .withOutput(nil)  // drop result type
           .withInput(  // add completion handler parameter
             funcDecl.signature.input.withParameterList(newParameterList)

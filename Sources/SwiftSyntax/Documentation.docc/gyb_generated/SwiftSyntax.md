@@ -271,6 +271,8 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/CodeBlockItemSyntax>
 - <doc:SwiftSyntax/CodeBlockItemListSyntax>
 - <doc:SwiftSyntax/CodeBlockSyntax>
+- <doc:SwiftSyntax/DeclEffectSpecifiersSyntax>
+- <doc:SwiftSyntax/TypeEffectSpecifiersSyntax>
 - <doc:SwiftSyntax/UnexpectedNodesSyntax>
 - <doc:SwiftSyntax/TupleExprElementListSyntax>
 - <doc:SwiftSyntax/ArrayElementListSyntax>
@@ -435,6 +437,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/ParenthesizedSyntax>
 - <doc:SwiftSyntax/WithTrailingCommaSyntax>
 - <doc:SwiftSyntax/WithStatementsSyntax>
+- <doc:SwiftSyntax/EffectSpecifiersSyntax>
 
 ### Syntax Position
 

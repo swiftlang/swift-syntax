@@ -2658,24 +2658,20 @@ public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public init(
     leadingTrivia: Trivia? = nil,
-    _ unexpectedBeforeAsyncKeyword: UnexpectedNodesSyntax? = nil,
-    asyncKeyword: TokenSyntax? = nil,
-    _ unexpectedBetweenAsyncKeywordAndThrowsToken: UnexpectedNodesSyntax? = nil,
-    throwsToken: TokenSyntax? = nil,
-    _ unexpectedBetweenThrowsTokenAndArrowToken: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBeforeEffectSpecifiers: UnexpectedNodesSyntax? = nil,
+    effectSpecifiers: TypeEffectSpecifiersSyntax? = nil,
+    _ unexpectedBetweenEffectSpecifiersAndArrowToken: UnexpectedNodesSyntax? = nil,
     arrowToken: TokenSyntax = .arrowToken(),
     _ unexpectedAfterArrowToken: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed 
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeAsyncKeyword, asyncKeyword, unexpectedBetweenAsyncKeywordAndThrowsToken, throwsToken, unexpectedBetweenThrowsTokenAndArrowToken, arrowToken, unexpectedAfterArrowToken))) { (arena, _) in
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeEffectSpecifiers, effectSpecifiers, unexpectedBetweenEffectSpecifiersAndArrowToken, arrowToken, unexpectedAfterArrowToken))) { (arena, _) in
       let layout: [RawSyntax?] = [
-        unexpectedBeforeAsyncKeyword?.raw,
-        asyncKeyword?.raw,
-        unexpectedBetweenAsyncKeywordAndThrowsToken?.raw,
-        throwsToken?.raw,
-        unexpectedBetweenThrowsTokenAndArrowToken?.raw,
+        unexpectedBeforeEffectSpecifiers?.raw,
+        effectSpecifiers?.raw,
+        unexpectedBetweenEffectSpecifiersAndArrowToken?.raw,
         arrowToken.raw,
         unexpectedAfterArrowToken?.raw,
       ]
@@ -2687,114 +2683,72 @@ public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var unexpectedBeforeAsyncKeyword: UnexpectedNodesSyntax? {
+  public var unexpectedBeforeEffectSpecifiers: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBeforeAsyncKeyword(value)
+      self = withUnexpectedBeforeEffectSpecifiers(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `unexpectedBeforeAsyncKeyword` replaced.
-  /// - param newChild: The new `unexpectedBeforeAsyncKeyword` to replace the node's
-  ///                   current `unexpectedBeforeAsyncKeyword`, if present.
-  public func withUnexpectedBeforeAsyncKeyword(_ newChild: UnexpectedNodesSyntax?) -> ArrowExprSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeEffectSpecifiers` replaced.
+  /// - param newChild: The new `unexpectedBeforeEffectSpecifiers` to replace the node's
+  ///                   current `unexpectedBeforeEffectSpecifiers`, if present.
+  public func withUnexpectedBeforeEffectSpecifiers(_ newChild: UnexpectedNodesSyntax?) -> ArrowExprSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
     let newData = data.replacingChild(at: 0, with: raw, arena: arena)
     return ArrowExprSyntax(newData)
   }
 
-  public var asyncKeyword: TokenSyntax? {
+  public var effectSpecifiers: TypeEffectSpecifiersSyntax? {
     get {
       let childData = data.child(at: 1, parent: Syntax(self))
       if childData == nil { return nil }
-      return TokenSyntax(childData!)
+      return TypeEffectSpecifiersSyntax(childData!)
     }
     set(value) {
-      self = withAsyncKeyword(value)
+      self = withEffectSpecifiers(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `asyncKeyword` replaced.
-  /// - param newChild: The new `asyncKeyword` to replace the node's
-  ///                   current `asyncKeyword`, if present.
-  public func withAsyncKeyword(_ newChild: TokenSyntax?) -> ArrowExprSyntax {
+  /// Returns a copy of the receiver with its `effectSpecifiers` replaced.
+  /// - param newChild: The new `effectSpecifiers` to replace the node's
+  ///                   current `effectSpecifiers`, if present.
+  public func withEffectSpecifiers(_ newChild: TypeEffectSpecifiersSyntax?) -> ArrowExprSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return ArrowExprSyntax(newData)
   }
 
-  public var unexpectedBetweenAsyncKeywordAndThrowsToken: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenEffectSpecifiersAndArrowToken: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 2, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenAsyncKeywordAndThrowsToken(value)
+      self = withUnexpectedBetweenEffectSpecifiersAndArrowToken(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `unexpectedBetweenAsyncKeywordAndThrowsToken` replaced.
-  /// - param newChild: The new `unexpectedBetweenAsyncKeywordAndThrowsToken` to replace the node's
-  ///                   current `unexpectedBetweenAsyncKeywordAndThrowsToken`, if present.
-  public func withUnexpectedBetweenAsyncKeywordAndThrowsToken(_ newChild: UnexpectedNodesSyntax?) -> ArrowExprSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenEffectSpecifiersAndArrowToken` replaced.
+  /// - param newChild: The new `unexpectedBetweenEffectSpecifiersAndArrowToken` to replace the node's
+  ///                   current `unexpectedBetweenEffectSpecifiersAndArrowToken`, if present.
+  public func withUnexpectedBetweenEffectSpecifiersAndArrowToken(_ newChild: UnexpectedNodesSyntax?) -> ArrowExprSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
     let newData = data.replacingChild(at: 2, with: raw, arena: arena)
     return ArrowExprSyntax(newData)
   }
 
-  public var throwsToken: TokenSyntax? {
-    get {
-      let childData = data.child(at: 3, parent: Syntax(self))
-      if childData == nil { return nil }
-      return TokenSyntax(childData!)
-    }
-    set(value) {
-      self = withThrowsToken(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `throwsToken` replaced.
-  /// - param newChild: The new `throwsToken` to replace the node's
-  ///                   current `throwsToken`, if present.
-  public func withThrowsToken(_ newChild: TokenSyntax?) -> ArrowExprSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-    return ArrowExprSyntax(newData)
-  }
-
-  public var unexpectedBetweenThrowsTokenAndArrowToken: UnexpectedNodesSyntax? {
-    get {
-      let childData = data.child(at: 4, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withUnexpectedBetweenThrowsTokenAndArrowToken(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenThrowsTokenAndArrowToken` replaced.
-  /// - param newChild: The new `unexpectedBetweenThrowsTokenAndArrowToken` to replace the node's
-  ///                   current `unexpectedBetweenThrowsTokenAndArrowToken`, if present.
-  public func withUnexpectedBetweenThrowsTokenAndArrowToken(_ newChild: UnexpectedNodesSyntax?) -> ArrowExprSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-    return ArrowExprSyntax(newData)
-  }
-
   public var arrowToken: TokenSyntax {
     get {
-      let childData = data.child(at: 5, parent: Syntax(self))
+      let childData = data.child(at: 3, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -2808,13 +2762,13 @@ public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public func withArrowToken(_ newChild: TokenSyntax) -> ArrowExprSyntax {
     let arena = SyntaxArena()
     let raw = newChild.raw
-    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
+    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return ArrowExprSyntax(newData)
   }
 
   public var unexpectedAfterArrowToken: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 6, parent: Syntax(self))
+      let childData = data.child(at: 4, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -2829,17 +2783,15 @@ public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedAfterArrowToken(_ newChild: UnexpectedNodesSyntax?) -> ArrowExprSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
+    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
     return ArrowExprSyntax(newData)
   }
 
   public static var structure: SyntaxNodeStructure {
     return .layout([
-      \Self.unexpectedBeforeAsyncKeyword,
-      \Self.asyncKeyword,
-      \Self.unexpectedBetweenAsyncKeywordAndThrowsToken,
-      \Self.throwsToken,
-      \Self.unexpectedBetweenThrowsTokenAndArrowToken,
+      \Self.unexpectedBeforeEffectSpecifiers,
+      \Self.effectSpecifiers,
+      \Self.unexpectedBetweenEffectSpecifiersAndArrowToken,
       \Self.arrowToken,
       \Self.unexpectedAfterArrowToken,
     ])
@@ -2857,10 +2809,6 @@ public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return nil
     case 4:
       return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
     default:
       fatalError("Invalid index")
     }
@@ -2870,11 +2818,9 @@ public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 extension ArrowExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "unexpectedBeforeAsyncKeyword": unexpectedBeforeAsyncKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "asyncKeyword": asyncKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "unexpectedBetweenAsyncKeywordAndThrowsToken": unexpectedBetweenAsyncKeywordAndThrowsToken.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "throwsToken": throwsToken.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "unexpectedBetweenThrowsTokenAndArrowToken": unexpectedBetweenThrowsTokenAndArrowToken.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeEffectSpecifiers": unexpectedBeforeEffectSpecifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "effectSpecifiers": effectSpecifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenEffectSpecifiersAndArrowToken": unexpectedBetweenEffectSpecifiersAndArrowToken.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "arrowToken": Syntax(arrowToken).asProtocol(SyntaxProtocol.self),
       "unexpectedAfterArrowToken": unexpectedAfterArrowToken.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])

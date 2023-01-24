@@ -149,6 +149,12 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var missingColonInTernaryExpr: Self {
     .init("expected ':' after '? ...' in ternary expression")
   }
+  public static var misspelledAsync: Self {
+    .init("expected async specifier; did you mean 'async'?")
+  }
+  public static var misspelledThrows: Self {
+    .init("expected throwing specifier; did you mean 'throws'?")
+  }
   public static var operatorShouldBeDeclaredWithoutBody: Self {
     .init("operator should not be declared with body")
   }
@@ -157,9 +163,6 @@ extension DiagnosticMessage where Self == StaticParserError {
   }
   public static var subscriptsCannotHaveNames: Self {
     .init("subscripts cannot have a name")
-  }
-  public static var throwsInReturnPosition: Self {
-    .init("'throws' may only occur before '->'")
   }
   public static var tooManyClosingRawStringDelimiters: Self {
     .init("too many '#' characters in closing delimiter")
@@ -183,11 +186,33 @@ extension DiagnosticMessage where Self == StaticParserError {
 
 // MARK: - Diagnostics (please sort alphabetically)
 
-public struct AvailabilityConditionInExpression: ParserError {
-  public let avaialabilityCondition: AvailabilityConditionSyntax
+public struct AsyncMustPrecedeThrows: ParserError {
+  public let asyncKeywords: [TokenSyntax]
+  public let throwsKeyword: TokenSyntax
 
   public var message: String {
-    return "\(nodesDescription([avaialabilityCondition], format: false)) cannot be used in an expression, only as a condition of 'if' or 'guard'"
+    return "\(nodesDescription(asyncKeywords, format: false)) must precede \(nodesDescription([throwsKeyword], format: false))"
+  }
+}
+
+public struct AvailabilityConditionInExpression: ParserError {
+  public let availabilityCondition: AvailabilityConditionSyntax
+
+  public var message: String {
+    return "\(nodesDescription([availabilityCondition], format: false)) cannot be used in an expression, only as a condition of 'if' or 'guard'"
+  }
+}
+
+public struct DuplicateEffectSpecifiers: ParserError {
+  public let correctSpecifier: TokenSyntax
+  public let unexpectedSpecifier: TokenSyntax
+
+  public var message: String {
+    if correctSpecifier.tokenKind == unexpectedSpecifier.tokenKind {
+      return "\(nodesDescription([unexpectedSpecifier], format: false)) has already been specified"
+    } else {
+      return "\(nodesDescription([unexpectedSpecifier], format: false)) conflicts with \(nodesDescription([correctSpecifier], format: false))"
+    }
   }
 }
 
@@ -195,7 +220,7 @@ public struct EffectsSpecifierAfterArrow: ParserError {
   public let effectsSpecifiersAfterArrow: [TokenSyntax]
 
   public var message: String {
-    "\(nodesDescription(effectsSpecifiersAfterArrow, format: false)) may only occur before '->'"
+    "\(nodesDescription(effectsSpecifiersAfterArrow, format: false)) must preceed '->'"
   }
 }
 
@@ -314,6 +339,16 @@ public struct UnknownDirectiveError: ParserError {
 
   public var message: String {
     return "use of unknown directive \(nodesDescription([unexpected], format: false))"
+  }
+}
+
+// MARK: - Notes (please sort alphabetically)
+
+public struct EffectSpecifierDeclaredHere: ParserNote {
+  let specifier: TokenSyntax
+
+  public var message: String {
+    return "\(nodesDescription([specifier], format: false)) declared here"
   }
 }
 

@@ -59,7 +59,7 @@ final class TypeTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected type in function type"),
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '..' in function type"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected type in function type"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected return type in function type"),
       ]
     )
   }

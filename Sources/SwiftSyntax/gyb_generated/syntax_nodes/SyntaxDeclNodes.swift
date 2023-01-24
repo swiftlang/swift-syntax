@@ -7467,18 +7467,16 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     accessorKind: TokenSyntax,
     _ unexpectedBetweenAccessorKindAndParameter: UnexpectedNodesSyntax? = nil,
     parameter: AccessorParameterSyntax? = nil,
-    _ unexpectedBetweenParameterAndAsyncKeyword: UnexpectedNodesSyntax? = nil,
-    asyncKeyword: TokenSyntax? = nil,
-    _ unexpectedBetweenAsyncKeywordAndThrowsKeyword: UnexpectedNodesSyntax? = nil,
-    throwsKeyword: TokenSyntax? = nil,
-    _ unexpectedBetweenThrowsKeywordAndBody: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenParameterAndEffectSpecifiers: UnexpectedNodesSyntax? = nil,
+    effectSpecifiers: DeclEffectSpecifiersSyntax? = nil,
+    _ unexpectedBetweenEffectSpecifiersAndBody: UnexpectedNodesSyntax? = nil,
     body: CodeBlockSyntax? = nil,
     _ unexpectedAfterBody: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed 
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeAttributes, attributes, unexpectedBetweenAttributesAndModifier, modifier, unexpectedBetweenModifierAndAccessorKind, accessorKind, unexpectedBetweenAccessorKindAndParameter, parameter, unexpectedBetweenParameterAndAsyncKeyword, asyncKeyword, unexpectedBetweenAsyncKeywordAndThrowsKeyword, throwsKeyword, unexpectedBetweenThrowsKeywordAndBody, body, unexpectedAfterBody))) { (arena, _) in
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeAttributes, attributes, unexpectedBetweenAttributesAndModifier, modifier, unexpectedBetweenModifierAndAccessorKind, accessorKind, unexpectedBetweenAccessorKindAndParameter, parameter, unexpectedBetweenParameterAndEffectSpecifiers, effectSpecifiers, unexpectedBetweenEffectSpecifiersAndBody, body, unexpectedAfterBody))) { (arena, _) in
       let layout: [RawSyntax?] = [
         unexpectedBeforeAttributes?.raw,
         attributes?.raw,
@@ -7488,11 +7486,9 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         accessorKind.raw,
         unexpectedBetweenAccessorKindAndParameter?.raw,
         parameter?.raw,
-        unexpectedBetweenParameterAndAsyncKeyword?.raw,
-        asyncKeyword?.raw,
-        unexpectedBetweenAsyncKeywordAndThrowsKeyword?.raw,
-        throwsKeyword?.raw,
-        unexpectedBetweenThrowsKeywordAndBody?.raw,
+        unexpectedBetweenParameterAndEffectSpecifiers?.raw,
+        effectSpecifiers?.raw,
+        unexpectedBetweenEffectSpecifiersAndBody?.raw,
         body?.raw,
         unexpectedAfterBody?.raw,
       ]
@@ -7690,114 +7686,72 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return AccessorDeclSyntax(newData)
   }
 
-  public var unexpectedBetweenParameterAndAsyncKeyword: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenParameterAndEffectSpecifiers: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 8, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenParameterAndAsyncKeyword(value)
+      self = withUnexpectedBetweenParameterAndEffectSpecifiers(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `unexpectedBetweenParameterAndAsyncKeyword` replaced.
-  /// - param newChild: The new `unexpectedBetweenParameterAndAsyncKeyword` to replace the node's
-  ///                   current `unexpectedBetweenParameterAndAsyncKeyword`, if present.
-  public func withUnexpectedBetweenParameterAndAsyncKeyword(_ newChild: UnexpectedNodesSyntax?) -> AccessorDeclSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenParameterAndEffectSpecifiers` replaced.
+  /// - param newChild: The new `unexpectedBetweenParameterAndEffectSpecifiers` to replace the node's
+  ///                   current `unexpectedBetweenParameterAndEffectSpecifiers`, if present.
+  public func withUnexpectedBetweenParameterAndEffectSpecifiers(_ newChild: UnexpectedNodesSyntax?) -> AccessorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
     let newData = data.replacingChild(at: 8, with: raw, arena: arena)
     return AccessorDeclSyntax(newData)
   }
 
-  public var asyncKeyword: TokenSyntax? {
+  public var effectSpecifiers: DeclEffectSpecifiersSyntax? {
     get {
       let childData = data.child(at: 9, parent: Syntax(self))
       if childData == nil { return nil }
-      return TokenSyntax(childData!)
+      return DeclEffectSpecifiersSyntax(childData!)
     }
     set(value) {
-      self = withAsyncKeyword(value)
+      self = withEffectSpecifiers(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `asyncKeyword` replaced.
-  /// - param newChild: The new `asyncKeyword` to replace the node's
-  ///                   current `asyncKeyword`, if present.
-  public func withAsyncKeyword(_ newChild: TokenSyntax?) -> AccessorDeclSyntax {
+  /// Returns a copy of the receiver with its `effectSpecifiers` replaced.
+  /// - param newChild: The new `effectSpecifiers` to replace the node's
+  ///                   current `effectSpecifiers`, if present.
+  public func withEffectSpecifiers(_ newChild: DeclEffectSpecifiersSyntax?) -> AccessorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
     let newData = data.replacingChild(at: 9, with: raw, arena: arena)
     return AccessorDeclSyntax(newData)
   }
 
-  public var unexpectedBetweenAsyncKeywordAndThrowsKeyword: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenEffectSpecifiersAndBody: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 10, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenAsyncKeywordAndThrowsKeyword(value)
+      self = withUnexpectedBetweenEffectSpecifiersAndBody(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `unexpectedBetweenAsyncKeywordAndThrowsKeyword` replaced.
-  /// - param newChild: The new `unexpectedBetweenAsyncKeywordAndThrowsKeyword` to replace the node's
-  ///                   current `unexpectedBetweenAsyncKeywordAndThrowsKeyword`, if present.
-  public func withUnexpectedBetweenAsyncKeywordAndThrowsKeyword(_ newChild: UnexpectedNodesSyntax?) -> AccessorDeclSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenEffectSpecifiersAndBody` replaced.
+  /// - param newChild: The new `unexpectedBetweenEffectSpecifiersAndBody` to replace the node's
+  ///                   current `unexpectedBetweenEffectSpecifiersAndBody`, if present.
+  public func withUnexpectedBetweenEffectSpecifiersAndBody(_ newChild: UnexpectedNodesSyntax?) -> AccessorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
     let newData = data.replacingChild(at: 10, with: raw, arena: arena)
     return AccessorDeclSyntax(newData)
   }
 
-  public var throwsKeyword: TokenSyntax? {
-    get {
-      let childData = data.child(at: 11, parent: Syntax(self))
-      if childData == nil { return nil }
-      return TokenSyntax(childData!)
-    }
-    set(value) {
-      self = withThrowsKeyword(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `throwsKeyword` replaced.
-  /// - param newChild: The new `throwsKeyword` to replace the node's
-  ///                   current `throwsKeyword`, if present.
-  public func withThrowsKeyword(_ newChild: TokenSyntax?) -> AccessorDeclSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 11, with: raw, arena: arena)
-    return AccessorDeclSyntax(newData)
-  }
-
-  public var unexpectedBetweenThrowsKeywordAndBody: UnexpectedNodesSyntax? {
-    get {
-      let childData = data.child(at: 12, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withUnexpectedBetweenThrowsKeywordAndBody(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenThrowsKeywordAndBody` replaced.
-  /// - param newChild: The new `unexpectedBetweenThrowsKeywordAndBody` to replace the node's
-  ///                   current `unexpectedBetweenThrowsKeywordAndBody`, if present.
-  public func withUnexpectedBetweenThrowsKeywordAndBody(_ newChild: UnexpectedNodesSyntax?) -> AccessorDeclSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 12, with: raw, arena: arena)
-    return AccessorDeclSyntax(newData)
-  }
-
   public var body: CodeBlockSyntax? {
     get {
-      let childData = data.child(at: 13, parent: Syntax(self))
+      let childData = data.child(at: 11, parent: Syntax(self))
       if childData == nil { return nil }
       return CodeBlockSyntax(childData!)
     }
@@ -7812,13 +7766,13 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withBody(_ newChild: CodeBlockSyntax?) -> AccessorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(at: 13, with: raw, arena: arena)
+    let newData = data.replacingChild(at: 11, with: raw, arena: arena)
     return AccessorDeclSyntax(newData)
   }
 
   public var unexpectedAfterBody: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 14, parent: Syntax(self))
+      let childData = data.child(at: 12, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -7833,7 +7787,7 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedAfterBody(_ newChild: UnexpectedNodesSyntax?) -> AccessorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(at: 14, with: raw, arena: arena)
+    let newData = data.replacingChild(at: 12, with: raw, arena: arena)
     return AccessorDeclSyntax(newData)
   }
 
@@ -7847,11 +7801,9 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       \Self.accessorKind,
       \Self.unexpectedBetweenAccessorKindAndParameter,
       \Self.parameter,
-      \Self.unexpectedBetweenParameterAndAsyncKeyword,
-      \Self.asyncKeyword,
-      \Self.unexpectedBetweenAsyncKeywordAndThrowsKeyword,
-      \Self.throwsKeyword,
-      \Self.unexpectedBetweenThrowsKeywordAndBody,
+      \Self.unexpectedBetweenParameterAndEffectSpecifiers,
+      \Self.effectSpecifiers,
+      \Self.unexpectedBetweenEffectSpecifiersAndBody,
       \Self.body,
       \Self.unexpectedAfterBody,
     ])
@@ -7885,10 +7837,6 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       return nil
     case 12:
       return nil
-    case 13:
-      return nil
-    case 14:
-      return nil
     default:
       fatalError("Invalid index")
     }
@@ -7906,11 +7854,9 @@ extension AccessorDeclSyntax: CustomReflectable {
       "accessorKind": Syntax(accessorKind).asProtocol(SyntaxProtocol.self),
       "unexpectedBetweenAccessorKindAndParameter": unexpectedBetweenAccessorKindAndParameter.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "parameter": parameter.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "unexpectedBetweenParameterAndAsyncKeyword": unexpectedBetweenParameterAndAsyncKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "asyncKeyword": asyncKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "unexpectedBetweenAsyncKeywordAndThrowsKeyword": unexpectedBetweenAsyncKeywordAndThrowsKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "throwsKeyword": throwsKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "unexpectedBetweenThrowsKeywordAndBody": unexpectedBetweenThrowsKeywordAndBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenParameterAndEffectSpecifiers": unexpectedBetweenParameterAndEffectSpecifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "effectSpecifiers": effectSpecifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenEffectSpecifiersAndBody": unexpectedBetweenEffectSpecifiersAndBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "body": body.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "unexpectedAfterBody": unexpectedAfterBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])

@@ -132,6 +132,62 @@ public let COMMON_NODES: [Node] = [
                requiresLeadingNewline: true)
        ]),
 
+  Node(name: "DeclEffectSpecifiers",
+       nameForDiagnostics: "effect specifiers",
+       kind: "Syntax",
+       traits: [
+         "EffectSpecifiers"
+       ],
+       children: [
+         Child(name: "AsyncSpecifier",
+               kind: "KeywordToken",
+               isOptional: true,
+               tokenChoices: [
+                 "Keyword"
+               ],
+               textChoices: [
+                 "async",
+                 "reasync"
+               ]),
+         Child(name: "ThrowsSpecifier",
+               kind: "KeywordToken",
+               isOptional: true,
+               tokenChoices: [
+                 "Keyword"
+               ],
+               textChoices: [
+                 "throws",
+                 "rethrows"
+               ])
+       ]),
+
+  Node(name: "TypeEffectSpecifiers",
+       nameForDiagnostics: "effect specifiers",
+       kind: "Syntax",
+       traits: [
+         "EffectSpecifiers"
+       ],
+       children: [
+         Child(name: "AsyncSpecifier",
+               kind: "KeywordToken",
+               isOptional: true,
+               tokenChoices: [
+                 "Keyword"
+               ],
+               textChoices: [
+                 "async"
+               ]),
+         Child(name: "ThrowsSpecifier",
+               kind: "KeywordToken",
+               isOptional: true,
+               tokenChoices: [
+                 "Keyword"
+               ],
+               textChoices: [
+                 "throws"
+               ])
+       ]),
+
   Node(name: "UnexpectedNodes",
        nameForDiagnostics: nil,
        description: "A collection of syntax nodes that occurred in the source code butcould not be used to form a valid syntax tree.",

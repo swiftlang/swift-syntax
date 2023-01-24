@@ -183,11 +183,11 @@ struct ANSIAnnotation {
 
   func applied(to message: String) -> String {
     // Resetting after the message ensures that we don't color unintended lines in the output
-    return "\(code)\(message)\(ANSIAnnotation.reset.code)"
+    return "\(code)\(message)\(ANSIAnnotation.normal.code)"
   }
 
-  /// The "reset" ANSI code used to unset any previously added annotation.
-  static var reset: ANSIAnnotation {
+  /// The "normal" or "reset" ANSI code used to unset any previously added annotation.
+  static var normal: ANSIAnnotation {
     self.init(color: .normal, trait: .normal)
   }
 }

@@ -152,12 +152,12 @@ extension Parser {
     let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
     let args: RawPoundSourceLocationArgsSyntax?
     if !self.at(.rightParen) {
-      let (unexpectedBeforeFile, file) = self.expectIdentifier()
+      let (unexpectedBeforeFile, file) = self.expect(.keyword(.file))
       let (unexpectedBeforeFileColon, fileColon) = self.expect(.colon)
       let fileName = self.parseStringLiteral()
       let (unexpectedBeforeComma, comma) = self.expect(.comma)
 
-      let (unexpectedBeforeLine, line) = self.expectIdentifier()
+      let (unexpectedBeforeLine, line) = self.expect(.keyword(.line))
       let (unexpectedBeforeLineColon, lineColon) = self.expect(.colon)
       let lineNumber = self.expectWithoutRecovery(.integerLiteral)
 

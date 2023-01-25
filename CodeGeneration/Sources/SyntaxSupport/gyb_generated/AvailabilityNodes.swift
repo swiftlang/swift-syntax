@@ -45,7 +45,7 @@ public let AVAILABILITY_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "Label",
-               kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+               kind: .token(choices: [.keyword(text: "message"), .keyword(text: "renamed"), .keyword(text: "introduced"), .keyword(text: "obsoleted"), .keyword(text: "deprecated")]),
                description: "The label of the argument"),
          Child(name: "Colon",
                kind: .token(choices: [.token(tokenKind: "ColonToken")]),

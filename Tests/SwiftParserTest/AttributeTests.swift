@@ -27,7 +27,7 @@ final class AttributeTests: XCTestCase {
         DiagnosticSpec(message: "expected ')' to end attribute", fixIts: ["insert ')'"]),
       ],
       fixedSource: """
-        @_dynamicReplacement(for: <#identifier#>)
+        @_dynamicReplacement(for : <#identifier#>)
         func test_dynamic_replacement_for2() {
         }
         """

@@ -695,7 +695,7 @@ extension Parser {
           requirement = .sameTypeRequirement(
             RawSameTypeRequirementSyntax(
               leftTypeIdentifier: firstType,
-              equalityToken: RawTokenSyntax(missing: .equal, arena: self.arena),
+              equalityToken: RawTokenSyntax(missing: .binaryOperator, text: "==", arena: self.arena),
               rightTypeIdentifier: RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)),
               arena: self.arena
             )
@@ -981,7 +981,7 @@ extension Parser {
     let failable: RawTokenSyntax?
     if let parsedFailable = self.consume(ifAny: [.exclamationMark, .postfixQuestionMark, .infixQuestionMark]) {
       failable = parsedFailable
-    } else if let parsedFailable = self.consumeIfContextualPunctuator("!") {
+    } else if let parsedFailable = self.consumeIfContextualPunctuator("!", remapping: .exclamationMark) {
       failable = parsedFailable
     } else {
       failable = nil
@@ -1563,8 +1563,10 @@ extension Parser {
     // get and set.
     let modifier: RawDeclModifierSyntax?
     if hasModifier {
+      let (unexpectedBeforeName, name) = self.expectAny([.keyword(.mutating), .keyword(.nonmutating), .keyword(.__consuming)], default: .keyword(.mutating))
       modifier = RawDeclModifierSyntax(
-        name: self.consumeAnyToken(),
+        unexpectedBeforeName,
+        name: name,
         detail: nil,
         arena: self.arena
       )
@@ -1980,7 +1982,10 @@ extension Parser {
         case (.associativity, let handle)?:
           let associativity = self.eat(handle)
           let (unexpectedBeforeColon, colon) = self.expect(.colon)
-          let (unexpectedBeforeValue, value) = self.expectIdentifier()
+          var (unexpectedBeforeValue, value) = self.expectAny([.keyword(.left), .keyword(.right), .keyword(.none)], default: .keyword(.none))
+          if value.isMissing, let identifier = self.consume(if: .identifier) {
+            unexpectedBeforeValue = RawUnexpectedNodesSyntax(combining: unexpectedBeforeValue, identifier, arena: self.arena)
+          }
           elements.append(
             .precedenceGroupAssociativity(
               RawPrecedenceGroupAssociativitySyntax(

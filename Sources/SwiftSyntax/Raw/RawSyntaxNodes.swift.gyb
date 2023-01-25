@@ -135,6 +135,26 @@ public struct Raw${node.name}: Raw${node.name if node.is_base() else node.base_t
     arena: __shared SyntaxArena
   ) {
 %     if node.children:
+%       for child in node.children:
+%         if child.type_name == 'TokenSyntax' and child.token_choices and 'async' not in child.swift_name and 'throw' not in child.swift_name:
+%           choices = []
+%           for (token, text) in child.token_choices:
+%             if token.name == 'Keyword' and text:
+%               if text == 'init':
+%                 text = '`init`'
+%               end
+%               choices.append(('', f'.keyword(.{text})'))
+%             else:
+%               choices.append(('.base', f'.{token.swift_kind()}'))
+%             end
+%           end
+%           if child.is_optional:
+    assert(${child.swift_name} == nil || ${' || '.join([f'{child.swift_name}?.tokenKind{base} == {choice}' for (base, choice) in choices])}, "Received \(String(describing: ${child.swift_name}?.tokenKind))")
+%           else:
+    assert(${' || '.join([f'{child.swift_name}.tokenKind{base} == {choice}' for (base, choice) in choices])}, "Received \(${child.swift_name}.tokenKind)")
+%           end
+%         end
+%       end
     let raw = RawSyntax.makeLayout(
       kind: .${node.swift_syntax_kind}, uninitializedCount: ${len(node.children)}, arena: arena) { layout in
       layout.initialize(repeating: nil)

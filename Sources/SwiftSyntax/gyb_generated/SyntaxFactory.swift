@@ -4538,7 +4538,7 @@ public enum SyntaxFactory {
         nil,
         RawSyntax.makeMissingToken(kind: TokenKind.comma, arena: arena),
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena),
+        RawSyntax.makeMissingToken(kind: TokenKind.unknown(""), arena: arena),
         nil,
       ], arena: arena))
       return DesignatedTypeElementSyntax(data)
@@ -5053,7 +5053,7 @@ public enum SyntaxFactory {
       let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .availabilityEntry,
         from: [
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena),
+        RawSyntax.makeMissingToken(kind: TokenKind.keyword(.availability), arena: arena),
         nil,
         RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena),
         nil,
@@ -5092,7 +5092,7 @@ public enum SyntaxFactory {
       let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .labeledSpecializeEntry,
         from: [
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena),
+        RawSyntax.makeMissingToken(kind: TokenKind.keyword(.available), arena: arena),
         nil,
         RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena),
         nil,
@@ -5131,7 +5131,7 @@ public enum SyntaxFactory {
       let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .targetFunctionEntry,
         from: [
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena),
+        RawSyntax.makeMissingToken(kind: TokenKind.keyword(.target), arena: arena),
         nil,
         RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena),
         nil,
@@ -5668,7 +5668,7 @@ public enum SyntaxFactory {
       let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .conventionAttributeArguments,
         from: [
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.keyword(.block), arena: arena),
+        RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena),
         nil,
         nil,
         nil,
@@ -5707,7 +5707,7 @@ public enum SyntaxFactory {
       let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .conventionWitnessMethodAttributeArguments,
         from: [
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena),
+        RawSyntax.makeMissingToken(kind: TokenKind.keyword(.witness_method), arena: arena),
         nil,
         RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena),
         nil,
@@ -7200,7 +7200,7 @@ public enum SyntaxFactory {
         nil,
         RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena),
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena),
+        RawSyntax.makeMissingToken(kind: TokenKind.keyword(._Trivial), arena: arena),
         nil,
         nil,
         nil,
@@ -8539,7 +8539,7 @@ public enum SyntaxFactory {
       let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .availabilityLabeledArgument,
         from: [
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena),
+        RawSyntax.makeMissingToken(kind: TokenKind.keyword(.message), arena: arena),
         nil,
         RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena),
         nil,

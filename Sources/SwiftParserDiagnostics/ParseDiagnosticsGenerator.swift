@@ -769,6 +769,20 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: PrecedenceGroupAssociativitySyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    if node.value.presence == .missing {
+      addDiagnostic(
+        Syntax(node.unexpectedBetweenColonAndValue) ?? Syntax(node.value),
+        .invalidPrecedenceGroupAssociativity,
+        handledNodes: [node.unexpectedBetweenColonAndValue?.id, node.value.id].compactMap({ $0 })
+      )
+    }
+    return .visitChildren
+  }
+
   public override func visit(_ node: ReturnStmtSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren

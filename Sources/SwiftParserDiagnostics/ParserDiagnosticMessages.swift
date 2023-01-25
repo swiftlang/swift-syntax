@@ -134,6 +134,9 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var invalidFlagAfterPrecedenceGroupAssignment: Self {
     .init("expected 'true' or 'false' after 'assignment'")
   }
+  public static var invalidPrecedenceGroupAssociativity: Self {
+    .init("Expected 'none', 'left', or 'right' after 'associativity'")
+  }
   public static var invalidWhitespaceAfterPeriod: Self {
     .init("extraneous whitespace after '.' is not permitted")
   }

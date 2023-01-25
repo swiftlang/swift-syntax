@@ -467,6 +467,18 @@ enum OperatorLike: RawTokenKindSubset {
     default: return nil
     }
   }
+
+  var remappedKind: RawTokenKind? {
+    switch self {
+    case .operator(_): return nil
+    case .exclamationMark: return .postfixOperator
+    case .infixQuestionMark: return .binaryOperator
+    case .postfixQuestionMark: return .postfixOperator
+    case .equal: return .binaryOperator
+    case .arrow: return .binaryOperator
+    case .regexLiteral: return .binaryOperator
+    }
+  }
 }
 
 enum PoundDeclarationStart: RawTokenKindSubset {

@@ -563,6 +563,7 @@ EXPR_NODES = [
                    token_choices=[
                        'StringQuoteToken',
                        'MultilineStringQuoteToken',
+                       'SingleQuoteToken',
                    ]),
              Child('Segments', kind='StringLiteralSegments',
                    collection_element_name='Segment'),
@@ -570,6 +571,7 @@ EXPR_NODES = [
                    token_choices=[
                        'StringQuoteToken',
                        'MultilineStringQuoteToken',
+                       'SingleQuoteToken',
                    ]),
              Child('CloseDelimiter', kind='RawStringDelimiterToken',
                    is_optional=True),

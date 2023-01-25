@@ -148,7 +148,7 @@ DECL_NODES = [
          traits=['Parenthesized'],
          children=[
              Child('LeftParen', kind='LeftParenToken'),
-             Child('Detail', kind='IdentifierToken'),
+             Child('Detail', kind='Token', token_choices=['IdentifierToken', 'KeywordToken|set']),
              Child('RightParen', kind='RightParenToken'),
          ]),
 
@@ -162,7 +162,7 @@ DECL_NODES = [
                        'KeywordToken|fileprivate', 'KeywordToken|internal', 'KeywordToken|public', 'KeywordToken|open',
                        'KeywordToken|mutating', 'KeywordToken|nonmutating', 'KeywordToken|indirect', 'KeywordToken|__consuming',
                        'KeywordToken|actor', 'KeywordToken|async', 'KeywordToken|distributed', 'KeywordToken|isolated',
-                       'KeywordToken|nonisolated', 'KeywordToken|_const', 'KeywordToken|_local'
+                       'KeywordToken|nonisolated', 'KeywordToken|_const', 'KeywordToken|_local', 'KeywordToken|package'
                    ]),
              Child('Detail', kind='DeclModifierDetail', is_optional=True),
          ]),
@@ -727,7 +727,7 @@ DECL_NODES = [
     Node('DesignatedTypeElement', name_for_diagnostics=None, kind='Syntax',
          children=[
              Child('LeadingComma', kind='CommaToken'),
-             Child('Name', kind='IdentifierToken'),
+             Child('Name', kind='Token'),
          ]),
 
     # infix-operator-group -> ':' identifier designated-type-list?

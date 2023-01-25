@@ -108,69 +108,46 @@ public struct InOutExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeAmpersand: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = InOutExprSyntax(newData)
+      self = InOutExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var ampersand: TokenSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = InOutExprSyntax(newData)
+      self = InOutExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenAmpersandAndExpression: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = InOutExprSyntax(newData)
+      self = InOutExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var expression: ExprSyntax {
     get {
-      let childData = data.child(at: 3, parent: Syntax(self))
-      return ExprSyntax(childData!)
+      return ExprSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-      self = InOutExprSyntax(newData)
+      self = InOutExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterExpression: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 4, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-      self = InOutExprSyntax(newData)
+      self = InOutExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -265,97 +242,64 @@ public struct TryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeTryKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = TryExprSyntax(newData)
+      self = TryExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var tryKeyword: TokenSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = TryExprSyntax(newData)
+      self = TryExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenTryKeywordAndQuestionOrExclamationMark: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = TryExprSyntax(newData)
+      self = TryExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var questionOrExclamationMark: TokenSyntax? {
     get {
-      let childData = data.child(at: 3, parent: Syntax(self))
-      if childData == nil { return nil }
-      return TokenSyntax(childData!)
+      return data.child(at: 3, parent: Syntax(self)).map(TokenSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-      self = TryExprSyntax(newData)
+      self = TryExprSyntax(data.replacingChild(at: 3, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenQuestionOrExclamationMarkAndExpression: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 4, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-      self = TryExprSyntax(newData)
+      self = TryExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var expression: ExprSyntax {
     get {
-      let childData = data.child(at: 5, parent: Syntax(self))
-      return ExprSyntax(childData!)
+      return ExprSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 5, with: raw, arena: arena)
-      self = TryExprSyntax(newData)
+      self = TryExprSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterExpression: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 6, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 6, with: raw, arena: arena)
-      self = TryExprSyntax(newData)
+      self = TryExprSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -454,69 +398,46 @@ public struct AwaitExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeAwaitKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = AwaitExprSyntax(newData)
+      self = AwaitExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var awaitKeyword: TokenSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = AwaitExprSyntax(newData)
+      self = AwaitExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenAwaitKeywordAndExpression: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = AwaitExprSyntax(newData)
+      self = AwaitExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var expression: ExprSyntax {
     get {
-      let childData = data.child(at: 3, parent: Syntax(self))
-      return ExprSyntax(childData!)
+      return ExprSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-      self = AwaitExprSyntax(newData)
+      self = AwaitExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterExpression: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 4, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-      self = AwaitExprSyntax(newData)
+      self = AwaitExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -607,69 +528,46 @@ public struct MoveExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeMoveKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = MoveExprSyntax(newData)
+      self = MoveExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var moveKeyword: TokenSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = MoveExprSyntax(newData)
+      self = MoveExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenMoveKeywordAndExpression: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = MoveExprSyntax(newData)
+      self = MoveExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var expression: ExprSyntax {
     get {
-      let childData = data.child(at: 3, parent: Syntax(self))
-      return ExprSyntax(childData!)
+      return ExprSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-      self = MoveExprSyntax(newData)
+      self = MoveExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterExpression: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 4, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-      self = MoveExprSyntax(newData)
+      self = MoveExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -760,69 +658,46 @@ public struct BorrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeBorrowKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = BorrowExprSyntax(newData)
+      self = BorrowExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var borrowKeyword: TokenSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = BorrowExprSyntax(newData)
+      self = BorrowExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenBorrowKeywordAndExpression: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = BorrowExprSyntax(newData)
+      self = BorrowExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var expression: ExprSyntax {
     get {
-      let childData = data.child(at: 3, parent: Syntax(self))
-      return ExprSyntax(childData!)
+      return ExprSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-      self = BorrowExprSyntax(newData)
+      self = BorrowExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterExpression: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 4, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-      self = BorrowExprSyntax(newData)
+      self = BorrowExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -913,70 +788,46 @@ public struct IdentifierExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeIdentifier: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = IdentifierExprSyntax(newData)
+      self = IdentifierExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var identifier: TokenSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = IdentifierExprSyntax(newData)
+      self = IdentifierExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenIdentifierAndDeclNameArguments: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = IdentifierExprSyntax(newData)
+      self = IdentifierExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var declNameArguments: DeclNameArgumentsSyntax? {
     get {
-      let childData = data.child(at: 3, parent: Syntax(self))
-      if childData == nil { return nil }
-      return DeclNameArgumentsSyntax(childData!)
+      return data.child(at: 3, parent: Syntax(self)).map(DeclNameArgumentsSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-      self = IdentifierExprSyntax(newData)
+      self = IdentifierExprSyntax(data.replacingChild(at: 3, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterDeclNameArguments: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 4, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-      self = IdentifierExprSyntax(newData)
+      self = IdentifierExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -1063,42 +914,28 @@ public struct SuperRefExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeSuperKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = SuperRefExprSyntax(newData)
+      self = SuperRefExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var superKeyword: TokenSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = SuperRefExprSyntax(newData)
+      self = SuperRefExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterSuperKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = SuperRefExprSyntax(newData)
+      self = SuperRefExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -1177,42 +1014,28 @@ public struct NilLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeNilKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = NilLiteralExprSyntax(newData)
+      self = NilLiteralExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var nilKeyword: TokenSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = NilLiteralExprSyntax(newData)
+      self = NilLiteralExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterNilKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = NilLiteralExprSyntax(newData)
+      self = NilLiteralExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -1291,42 +1114,28 @@ public struct DiscardAssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeWildcard: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = DiscardAssignmentExprSyntax(newData)
+      self = DiscardAssignmentExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var wildcard: TokenSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = DiscardAssignmentExprSyntax(newData)
+      self = DiscardAssignmentExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterWildcard: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = DiscardAssignmentExprSyntax(newData)
+      self = DiscardAssignmentExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -1405,42 +1214,28 @@ public struct AssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeAssignToken: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = AssignmentExprSyntax(newData)
+      self = AssignmentExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var assignToken: TokenSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = AssignmentExprSyntax(newData)
+      self = AssignmentExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterAssignToken: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = AssignmentExprSyntax(newData)
+      self = AssignmentExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -1523,69 +1318,46 @@ public struct PackExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeRepeatKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = PackExpansionExprSyntax(newData)
+      self = PackExpansionExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var repeatKeyword: TokenSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = PackExpansionExprSyntax(newData)
+      self = PackExpansionExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenRepeatKeywordAndPatternExpr: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = PackExpansionExprSyntax(newData)
+      self = PackExpansionExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var patternExpr: ExprSyntax {
     get {
-      let childData = data.child(at: 3, parent: Syntax(self))
-      return ExprSyntax(childData!)
+      return ExprSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-      self = PackExpansionExprSyntax(newData)
+      self = PackExpansionExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterPatternExpr: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 4, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-      self = PackExpansionExprSyntax(newData)
+      self = PackExpansionExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -1676,69 +1448,46 @@ public struct PackElementExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeEachKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = PackElementExprSyntax(newData)
+      self = PackElementExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var eachKeyword: TokenSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = PackElementExprSyntax(newData)
+      self = PackElementExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenEachKeywordAndPackRefExpr: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = PackElementExprSyntax(newData)
+      self = PackElementExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var packRefExpr: ExprSyntax {
     get {
-      let childData = data.child(at: 3, parent: Syntax(self))
-      return ExprSyntax(childData!)
+      return ExprSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-      self = PackElementExprSyntax(newData)
+      self = PackElementExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterPackRefExpr: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 4, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-      self = PackElementExprSyntax(newData)
+      self = PackElementExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -1825,28 +1574,19 @@ public struct SequenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeElements: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = SequenceExprSyntax(newData)
+      self = SequenceExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var elements: ExprListSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return ExprListSyntax(childData!)
+      return ExprListSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = SequenceExprSyntax(newData)
+      self = SequenceExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
@@ -1871,15 +1611,10 @@ public struct SequenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedAfterElements: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = SequenceExprSyntax(newData)
+      self = SequenceExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -1962,70 +1697,46 @@ public struct PrefixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeOperatorToken: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = PrefixOperatorExprSyntax(newData)
+      self = PrefixOperatorExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var operatorToken: TokenSyntax? {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      if childData == nil { return nil }
-      return TokenSyntax(childData!)
+      return data.child(at: 1, parent: Syntax(self)).map(TokenSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = PrefixOperatorExprSyntax(newData)
+      self = PrefixOperatorExprSyntax(data.replacingChild(at: 1, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenOperatorTokenAndPostfixExpression: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = PrefixOperatorExprSyntax(newData)
+      self = PrefixOperatorExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var postfixExpression: ExprSyntax {
     get {
-      let childData = data.child(at: 3, parent: Syntax(self))
-      return ExprSyntax(childData!)
+      return ExprSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-      self = PrefixOperatorExprSyntax(newData)
+      self = PrefixOperatorExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterPostfixExpression: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 4, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-      self = PrefixOperatorExprSyntax(newData)
+      self = PrefixOperatorExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -2112,42 +1823,28 @@ public struct BinaryOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeOperatorToken: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = BinaryOperatorExprSyntax(newData)
+      self = BinaryOperatorExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var operatorToken: TokenSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = BinaryOperatorExprSyntax(newData)
+      self = BinaryOperatorExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterOperatorToken: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = BinaryOperatorExprSyntax(newData)
+      self = BinaryOperatorExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -2230,70 +1927,46 @@ public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeEffectSpecifiers: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = ArrowExprSyntax(newData)
+      self = ArrowExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var effectSpecifiers: TypeEffectSpecifiersSyntax? {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      if childData == nil { return nil }
-      return TypeEffectSpecifiersSyntax(childData!)
+      return data.child(at: 1, parent: Syntax(self)).map(TypeEffectSpecifiersSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = ArrowExprSyntax(newData)
+      self = ArrowExprSyntax(data.replacingChild(at: 1, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenEffectSpecifiersAndArrowToken: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = ArrowExprSyntax(newData)
+      self = ArrowExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var arrowToken: TokenSyntax {
     get {
-      let childData = data.child(at: 3, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-      self = ArrowExprSyntax(newData)
+      self = ArrowExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterArrowToken: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 4, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-      self = ArrowExprSyntax(newData)
+      self = ArrowExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -2388,96 +2061,64 @@ public struct InfixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeLeftOperand: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = InfixOperatorExprSyntax(newData)
+      self = InfixOperatorExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var leftOperand: ExprSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return ExprSyntax(childData!)
+      return ExprSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = InfixOperatorExprSyntax(newData)
+      self = InfixOperatorExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenLeftOperandAndOperatorOperand: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = InfixOperatorExprSyntax(newData)
+      self = InfixOperatorExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var operatorOperand: ExprSyntax {
     get {
-      let childData = data.child(at: 3, parent: Syntax(self))
-      return ExprSyntax(childData!)
+      return ExprSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-      self = InfixOperatorExprSyntax(newData)
+      self = InfixOperatorExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenOperatorOperandAndRightOperand: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 4, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-      self = InfixOperatorExprSyntax(newData)
+      self = InfixOperatorExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var rightOperand: ExprSyntax {
     get {
-      let childData = data.child(at: 5, parent: Syntax(self))
-      return ExprSyntax(childData!)
+      return ExprSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 5, with: raw, arena: arena)
-      self = InfixOperatorExprSyntax(newData)
+      self = InfixOperatorExprSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterRightOperand: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 6, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 6, with: raw, arena: arena)
-      self = InfixOperatorExprSyntax(newData)
+      self = InfixOperatorExprSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -2572,42 +2213,28 @@ public struct FloatLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeFloatingDigits: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = FloatLiteralExprSyntax(newData)
+      self = FloatLiteralExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var floatingDigits: TokenSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = FloatLiteralExprSyntax(newData)
+      self = FloatLiteralExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterFloatingDigits: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = FloatLiteralExprSyntax(newData)
+      self = FloatLiteralExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -2694,55 +2321,37 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeLeftParen: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = TupleExprSyntax(newData)
+      self = TupleExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var leftParen: TokenSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = TupleExprSyntax(newData)
+      self = TupleExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenLeftParenAndElementList: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = TupleExprSyntax(newData)
+      self = TupleExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var elementList: TupleExprElementListSyntax {
     get {
-      let childData = data.child(at: 3, parent: Syntax(self))
-      return TupleExprElementListSyntax(childData!)
+      return TupleExprElementListSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-      self = TupleExprSyntax(newData)
+      self = TupleExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
     }
   }
 
@@ -2767,42 +2376,28 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBetweenElementListAndRightParen: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 4, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-      self = TupleExprSyntax(newData)
+      self = TupleExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var rightParen: TokenSyntax {
     get {
-      let childData = data.child(at: 5, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 5, with: raw, arena: arena)
-      self = TupleExprSyntax(newData)
+      self = TupleExprSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterRightParen: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 6, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 6, with: raw, arena: arena)
-      self = TupleExprSyntax(newData)
+      self = TupleExprSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -2905,55 +2500,37 @@ public struct ArrayExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeLeftSquare: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = ArrayExprSyntax(newData)
+      self = ArrayExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var leftSquare: TokenSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = ArrayExprSyntax(newData)
+      self = ArrayExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenLeftSquareAndElements: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = ArrayExprSyntax(newData)
+      self = ArrayExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var elements: ArrayElementListSyntax {
     get {
-      let childData = data.child(at: 3, parent: Syntax(self))
-      return ArrayElementListSyntax(childData!)
+      return ArrayElementListSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-      self = ArrayExprSyntax(newData)
+      self = ArrayExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
     }
   }
 
@@ -2978,42 +2555,28 @@ public struct ArrayExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBetweenElementsAndRightSquare: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 4, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-      self = ArrayExprSyntax(newData)
+      self = ArrayExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var rightSquare: TokenSyntax {
     get {
-      let childData = data.child(at: 5, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 5, with: raw, arena: arena)
-      self = ArrayExprSyntax(newData)
+      self = ArrayExprSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterRightSquare: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 6, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 6, with: raw, arena: arena)
-      self = ArrayExprSyntax(newData)
+      self = ArrayExprSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -3152,96 +2715,64 @@ public struct DictionaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeLeftSquare: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = DictionaryExprSyntax(newData)
+      self = DictionaryExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var leftSquare: TokenSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = DictionaryExprSyntax(newData)
+      self = DictionaryExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenLeftSquareAndContent: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = DictionaryExprSyntax(newData)
+      self = DictionaryExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var content: Content {
     get {
-      let childData = data.child(at: 3, parent: Syntax(self))
-      return Content(childData!)
+      return Content(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-      self = DictionaryExprSyntax(newData)
+      self = DictionaryExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenContentAndRightSquare: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 4, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-      self = DictionaryExprSyntax(newData)
+      self = DictionaryExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var rightSquare: TokenSyntax {
     get {
-      let childData = data.child(at: 5, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 5, with: raw, arena: arena)
-      self = DictionaryExprSyntax(newData)
+      self = DictionaryExprSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterRightSquare: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 6, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 6, with: raw, arena: arena)
-      self = DictionaryExprSyntax(newData)
+      self = DictionaryExprSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -3336,42 +2867,28 @@ public struct IntegerLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeDigits: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = IntegerLiteralExprSyntax(newData)
+      self = IntegerLiteralExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var digits: TokenSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = IntegerLiteralExprSyntax(newData)
+      self = IntegerLiteralExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterDigits: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = IntegerLiteralExprSyntax(newData)
+      self = IntegerLiteralExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -3450,42 +2967,28 @@ public struct BooleanLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeBooleanLiteral: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = BooleanLiteralExprSyntax(newData)
+      self = BooleanLiteralExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var booleanLiteral: TokenSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = BooleanLiteralExprSyntax(newData)
+      self = BooleanLiteralExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterBooleanLiteral: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = BooleanLiteralExprSyntax(newData)
+      self = BooleanLiteralExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -3572,96 +3075,64 @@ public struct UnresolvedTernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeQuestionMark: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = UnresolvedTernaryExprSyntax(newData)
+      self = UnresolvedTernaryExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var questionMark: TokenSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = UnresolvedTernaryExprSyntax(newData)
+      self = UnresolvedTernaryExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenQuestionMarkAndFirstChoice: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = UnresolvedTernaryExprSyntax(newData)
+      self = UnresolvedTernaryExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var firstChoice: ExprSyntax {
     get {
-      let childData = data.child(at: 3, parent: Syntax(self))
-      return ExprSyntax(childData!)
+      return ExprSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-      self = UnresolvedTernaryExprSyntax(newData)
+      self = UnresolvedTernaryExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenFirstChoiceAndColonMark: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 4, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-      self = UnresolvedTernaryExprSyntax(newData)
+      self = UnresolvedTernaryExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var colonMark: TokenSyntax {
     get {
-      let childData = data.child(at: 5, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 5, with: raw, arena: arena)
-      self = UnresolvedTernaryExprSyntax(newData)
+      self = UnresolvedTernaryExprSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterColonMark: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 6, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 6, with: raw, arena: arena)
-      self = UnresolvedTernaryExprSyntax(newData)
+      self = UnresolvedTernaryExprSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -3772,150 +3243,100 @@ public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeConditionExpression: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = TernaryExprSyntax(newData)
+      self = TernaryExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var conditionExpression: ExprSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return ExprSyntax(childData!)
+      return ExprSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = TernaryExprSyntax(newData)
+      self = TernaryExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenConditionExpressionAndQuestionMark: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = TernaryExprSyntax(newData)
+      self = TernaryExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var questionMark: TokenSyntax {
     get {
-      let childData = data.child(at: 3, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-      self = TernaryExprSyntax(newData)
+      self = TernaryExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenQuestionMarkAndFirstChoice: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 4, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-      self = TernaryExprSyntax(newData)
+      self = TernaryExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var firstChoice: ExprSyntax {
     get {
-      let childData = data.child(at: 5, parent: Syntax(self))
-      return ExprSyntax(childData!)
+      return ExprSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 5, with: raw, arena: arena)
-      self = TernaryExprSyntax(newData)
+      self = TernaryExprSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenFirstChoiceAndColonMark: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 6, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 6, with: raw, arena: arena)
-      self = TernaryExprSyntax(newData)
+      self = TernaryExprSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var colonMark: TokenSyntax {
     get {
-      let childData = data.child(at: 7, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 7, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 7, with: raw, arena: arena)
-      self = TernaryExprSyntax(newData)
+      self = TernaryExprSyntax(data.replacingChild(at: 7, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenColonMarkAndSecondChoice: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 8, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 8, with: raw, arena: arena)
-      self = TernaryExprSyntax(newData)
+      self = TernaryExprSyntax(data.replacingChild(at: 8, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var secondChoice: ExprSyntax {
     get {
-      let childData = data.child(at: 9, parent: Syntax(self))
-      return ExprSyntax(childData!)
+      return ExprSyntax(data.child(at: 9, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 9, with: raw, arena: arena)
-      self = TernaryExprSyntax(newData)
+      self = TernaryExprSyntax(data.replacingChild(at: 9, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterSecondChoice: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 10, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 10, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 10, with: raw, arena: arena)
-      self = TernaryExprSyntax(newData)
+      self = TernaryExprSyntax(data.replacingChild(at: 10, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -4076,125 +3497,82 @@ public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeBase: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = MemberAccessExprSyntax(newData)
+      self = MemberAccessExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var base: ExprSyntax? {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      if childData == nil { return nil }
-      return ExprSyntax(childData!)
+      return data.child(at: 1, parent: Syntax(self)).map(ExprSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = MemberAccessExprSyntax(newData)
+      self = MemberAccessExprSyntax(data.replacingChild(at: 1, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenBaseAndDot: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = MemberAccessExprSyntax(newData)
+      self = MemberAccessExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var dot: TokenSyntax {
     get {
-      let childData = data.child(at: 3, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-      self = MemberAccessExprSyntax(newData)
+      self = MemberAccessExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenDotAndName: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 4, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-      self = MemberAccessExprSyntax(newData)
+      self = MemberAccessExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var name: TokenSyntax {
     get {
-      let childData = data.child(at: 5, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 5, with: raw, arena: arena)
-      self = MemberAccessExprSyntax(newData)
+      self = MemberAccessExprSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenNameAndDeclNameArguments: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 6, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 6, with: raw, arena: arena)
-      self = MemberAccessExprSyntax(newData)
+      self = MemberAccessExprSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var declNameArguments: DeclNameArgumentsSyntax? {
     get {
-      let childData = data.child(at: 7, parent: Syntax(self))
-      if childData == nil { return nil }
-      return DeclNameArgumentsSyntax(childData!)
+      return data.child(at: 7, parent: Syntax(self)).map(DeclNameArgumentsSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 7, with: raw, arena: arena)
-      self = MemberAccessExprSyntax(newData)
+      self = MemberAccessExprSyntax(data.replacingChild(at: 7, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterDeclNameArguments: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 8, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 8, with: raw, arena: arena)
-      self = MemberAccessExprSyntax(newData)
+      self = MemberAccessExprSyntax(data.replacingChild(at: 8, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -4297,42 +3675,28 @@ public struct UnresolvedIsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeIsTok: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = UnresolvedIsExprSyntax(newData)
+      self = UnresolvedIsExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var isTok: TokenSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = UnresolvedIsExprSyntax(newData)
+      self = UnresolvedIsExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterIsTok: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = UnresolvedIsExprSyntax(newData)
+      self = UnresolvedIsExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -4419,96 +3783,64 @@ public struct IsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeExpression: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = IsExprSyntax(newData)
+      self = IsExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var expression: ExprSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return ExprSyntax(childData!)
+      return ExprSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = IsExprSyntax(newData)
+      self = IsExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenExpressionAndIsTok: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = IsExprSyntax(newData)
+      self = IsExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var isTok: TokenSyntax {
     get {
-      let childData = data.child(at: 3, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-      self = IsExprSyntax(newData)
+      self = IsExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenIsTokAndTypeName: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 4, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-      self = IsExprSyntax(newData)
+      self = IsExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var typeName: TypeSyntax {
     get {
-      let childData = data.child(at: 5, parent: Syntax(self))
-      return TypeSyntax(childData!)
+      return TypeSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 5, with: raw, arena: arena)
-      self = IsExprSyntax(newData)
+      self = IsExprSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterTypeName: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 6, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 6, with: raw, arena: arena)
-      self = IsExprSyntax(newData)
+      self = IsExprSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -4607,70 +3939,46 @@ public struct UnresolvedAsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeAsTok: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = UnresolvedAsExprSyntax(newData)
+      self = UnresolvedAsExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var asTok: TokenSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = UnresolvedAsExprSyntax(newData)
+      self = UnresolvedAsExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenAsTokAndQuestionOrExclamationMark: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = UnresolvedAsExprSyntax(newData)
+      self = UnresolvedAsExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var questionOrExclamationMark: TokenSyntax? {
     get {
-      let childData = data.child(at: 3, parent: Syntax(self))
-      if childData == nil { return nil }
-      return TokenSyntax(childData!)
+      return data.child(at: 3, parent: Syntax(self)).map(TokenSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-      self = UnresolvedAsExprSyntax(newData)
+      self = UnresolvedAsExprSyntax(data.replacingChild(at: 3, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterQuestionOrExclamationMark: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 4, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-      self = UnresolvedAsExprSyntax(newData)
+      self = UnresolvedAsExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -4769,124 +4077,82 @@ public struct AsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeExpression: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = AsExprSyntax(newData)
+      self = AsExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var expression: ExprSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return ExprSyntax(childData!)
+      return ExprSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = AsExprSyntax(newData)
+      self = AsExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenExpressionAndAsTok: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = AsExprSyntax(newData)
+      self = AsExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var asTok: TokenSyntax {
     get {
-      let childData = data.child(at: 3, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-      self = AsExprSyntax(newData)
+      self = AsExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenAsTokAndQuestionOrExclamationMark: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 4, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-      self = AsExprSyntax(newData)
+      self = AsExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var questionOrExclamationMark: TokenSyntax? {
     get {
-      let childData = data.child(at: 5, parent: Syntax(self))
-      if childData == nil { return nil }
-      return TokenSyntax(childData!)
+      return data.child(at: 5, parent: Syntax(self)).map(TokenSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 5, with: raw, arena: arena)
-      self = AsExprSyntax(newData)
+      self = AsExprSyntax(data.replacingChild(at: 5, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenQuestionOrExclamationMarkAndTypeName: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 6, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 6, with: raw, arena: arena)
-      self = AsExprSyntax(newData)
+      self = AsExprSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var typeName: TypeSyntax {
     get {
-      let childData = data.child(at: 7, parent: Syntax(self))
-      return TypeSyntax(childData!)
+      return TypeSyntax(data.child(at: 7, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 7, with: raw, arena: arena)
-      self = AsExprSyntax(newData)
+      self = AsExprSyntax(data.replacingChild(at: 7, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterTypeName: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 8, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 8, with: raw, arena: arena)
-      self = AsExprSyntax(newData)
+      self = AsExprSyntax(data.replacingChild(at: 8, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -4989,42 +4255,28 @@ public struct TypeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeType: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = TypeExprSyntax(newData)
+      self = TypeExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var type: TypeSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return TypeSyntax(childData!)
+      return TypeSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = TypeExprSyntax(newData)
+      self = TypeExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterType: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = TypeExprSyntax(newData)
+      self = TypeExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -5115,83 +4367,55 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeLeftBrace: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = ClosureExprSyntax(newData)
+      self = ClosureExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var leftBrace: TokenSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = ClosureExprSyntax(newData)
+      self = ClosureExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenLeftBraceAndSignature: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = ClosureExprSyntax(newData)
+      self = ClosureExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var signature: ClosureSignatureSyntax? {
     get {
-      let childData = data.child(at: 3, parent: Syntax(self))
-      if childData == nil { return nil }
-      return ClosureSignatureSyntax(childData!)
+      return data.child(at: 3, parent: Syntax(self)).map(ClosureSignatureSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-      self = ClosureExprSyntax(newData)
+      self = ClosureExprSyntax(data.replacingChild(at: 3, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenSignatureAndStatements: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 4, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-      self = ClosureExprSyntax(newData)
+      self = ClosureExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var statements: CodeBlockItemListSyntax {
     get {
-      let childData = data.child(at: 5, parent: Syntax(self))
-      return CodeBlockItemListSyntax(childData!)
+      return CodeBlockItemListSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 5, with: raw, arena: arena)
-      self = ClosureExprSyntax(newData)
+      self = ClosureExprSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
     }
   }
 
@@ -5216,42 +4440,28 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBetweenStatementsAndRightBrace: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 6, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 6, with: raw, arena: arena)
-      self = ClosureExprSyntax(newData)
+      self = ClosureExprSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var rightBrace: TokenSyntax {
     get {
-      let childData = data.child(at: 7, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 7, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 7, with: raw, arena: arena)
-      self = ClosureExprSyntax(newData)
+      self = ClosureExprSyntax(data.replacingChild(at: 7, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterRightBrace: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 8, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 8, with: raw, arena: arena)
-      self = ClosureExprSyntax(newData)
+      self = ClosureExprSyntax(data.replacingChild(at: 8, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -5354,42 +4564,28 @@ public struct UnresolvedPatternExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforePattern: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = UnresolvedPatternExprSyntax(newData)
+      self = UnresolvedPatternExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var pattern: PatternSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return PatternSyntax(childData!)
+      return PatternSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = UnresolvedPatternExprSyntax(newData)
+      self = UnresolvedPatternExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterPattern: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = UnresolvedPatternExprSyntax(newData)
+      self = UnresolvedPatternExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -5488,83 +4684,55 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeCalledExpression: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = FunctionCallExprSyntax(newData)
+      self = FunctionCallExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var calledExpression: ExprSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return ExprSyntax(childData!)
+      return ExprSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = FunctionCallExprSyntax(newData)
+      self = FunctionCallExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenCalledExpressionAndLeftParen: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = FunctionCallExprSyntax(newData)
+      self = FunctionCallExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var leftParen: TokenSyntax? {
     get {
-      let childData = data.child(at: 3, parent: Syntax(self))
-      if childData == nil { return nil }
-      return TokenSyntax(childData!)
+      return data.child(at: 3, parent: Syntax(self)).map(TokenSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-      self = FunctionCallExprSyntax(newData)
+      self = FunctionCallExprSyntax(data.replacingChild(at: 3, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 4, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-      self = FunctionCallExprSyntax(newData)
+      self = FunctionCallExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var argumentList: TupleExprElementListSyntax {
     get {
-      let childData = data.child(at: 5, parent: Syntax(self))
-      return TupleExprElementListSyntax(childData!)
+      return TupleExprElementListSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 5, with: raw, arena: arena)
-      self = FunctionCallExprSyntax(newData)
+      self = FunctionCallExprSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
     }
   }
 
@@ -5589,85 +4757,55 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBetweenArgumentListAndRightParen: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 6, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 6, with: raw, arena: arena)
-      self = FunctionCallExprSyntax(newData)
+      self = FunctionCallExprSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var rightParen: TokenSyntax? {
     get {
-      let childData = data.child(at: 7, parent: Syntax(self))
-      if childData == nil { return nil }
-      return TokenSyntax(childData!)
+      return data.child(at: 7, parent: Syntax(self)).map(TokenSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 7, with: raw, arena: arena)
-      self = FunctionCallExprSyntax(newData)
+      self = FunctionCallExprSyntax(data.replacingChild(at: 7, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 8, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 8, with: raw, arena: arena)
-      self = FunctionCallExprSyntax(newData)
+      self = FunctionCallExprSyntax(data.replacingChild(at: 8, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var trailingClosure: ClosureExprSyntax? {
     get {
-      let childData = data.child(at: 9, parent: Syntax(self))
-      if childData == nil { return nil }
-      return ClosureExprSyntax(childData!)
+      return data.child(at: 9, parent: Syntax(self)).map(ClosureExprSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 9, with: raw, arena: arena)
-      self = FunctionCallExprSyntax(newData)
+      self = FunctionCallExprSyntax(data.replacingChild(at: 9, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 10, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 10, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 10, with: raw, arena: arena)
-      self = FunctionCallExprSyntax(newData)
+      self = FunctionCallExprSyntax(data.replacingChild(at: 10, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? {
     get {
-      let childData = data.child(at: 11, parent: Syntax(self))
-      if childData == nil { return nil }
-      return MultipleTrailingClosureElementListSyntax(childData!)
+      return data.child(at: 11, parent: Syntax(self)).map(MultipleTrailingClosureElementListSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 11, with: raw, arena: arena)
-      self = FunctionCallExprSyntax(newData)
+      self = FunctionCallExprSyntax(data.replacingChild(at: 11, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -5692,15 +4830,10 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 12, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 12, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 12, with: raw, arena: arena)
-      self = FunctionCallExprSyntax(newData)
+      self = FunctionCallExprSyntax(data.replacingChild(at: 12, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -5839,82 +4972,55 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeCalledExpression: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = SubscriptExprSyntax(newData)
+      self = SubscriptExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var calledExpression: ExprSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return ExprSyntax(childData!)
+      return ExprSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = SubscriptExprSyntax(newData)
+      self = SubscriptExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenCalledExpressionAndLeftBracket: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = SubscriptExprSyntax(newData)
+      self = SubscriptExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var leftBracket: TokenSyntax {
     get {
-      let childData = data.child(at: 3, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-      self = SubscriptExprSyntax(newData)
+      self = SubscriptExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenLeftBracketAndArgumentList: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 4, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-      self = SubscriptExprSyntax(newData)
+      self = SubscriptExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var argumentList: TupleExprElementListSyntax {
     get {
-      let childData = data.child(at: 5, parent: Syntax(self))
-      return TupleExprElementListSyntax(childData!)
+      return TupleExprElementListSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 5, with: raw, arena: arena)
-      self = SubscriptExprSyntax(newData)
+      self = SubscriptExprSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
     }
   }
 
@@ -5939,84 +5045,55 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBetweenArgumentListAndRightBracket: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 6, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 6, with: raw, arena: arena)
-      self = SubscriptExprSyntax(newData)
+      self = SubscriptExprSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var rightBracket: TokenSyntax {
     get {
-      let childData = data.child(at: 7, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 7, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 7, with: raw, arena: arena)
-      self = SubscriptExprSyntax(newData)
+      self = SubscriptExprSyntax(data.replacingChild(at: 7, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenRightBracketAndTrailingClosure: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 8, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 8, with: raw, arena: arena)
-      self = SubscriptExprSyntax(newData)
+      self = SubscriptExprSyntax(data.replacingChild(at: 8, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var trailingClosure: ClosureExprSyntax? {
     get {
-      let childData = data.child(at: 9, parent: Syntax(self))
-      if childData == nil { return nil }
-      return ClosureExprSyntax(childData!)
+      return data.child(at: 9, parent: Syntax(self)).map(ClosureExprSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 9, with: raw, arena: arena)
-      self = SubscriptExprSyntax(newData)
+      self = SubscriptExprSyntax(data.replacingChild(at: 9, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 10, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 10, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 10, with: raw, arena: arena)
-      self = SubscriptExprSyntax(newData)
+      self = SubscriptExprSyntax(data.replacingChild(at: 10, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? {
     get {
-      let childData = data.child(at: 11, parent: Syntax(self))
-      if childData == nil { return nil }
-      return MultipleTrailingClosureElementListSyntax(childData!)
+      return data.child(at: 11, parent: Syntax(self)).map(MultipleTrailingClosureElementListSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 11, with: raw, arena: arena)
-      self = SubscriptExprSyntax(newData)
+      self = SubscriptExprSyntax(data.replacingChild(at: 11, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -6041,15 +5118,10 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 12, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 12, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 12, with: raw, arena: arena)
-      self = SubscriptExprSyntax(newData)
+      self = SubscriptExprSyntax(data.replacingChild(at: 12, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -6172,69 +5244,46 @@ public struct OptionalChainingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeExpression: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = OptionalChainingExprSyntax(newData)
+      self = OptionalChainingExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var expression: ExprSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return ExprSyntax(childData!)
+      return ExprSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = OptionalChainingExprSyntax(newData)
+      self = OptionalChainingExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenExpressionAndQuestionMark: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = OptionalChainingExprSyntax(newData)
+      self = OptionalChainingExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var questionMark: TokenSyntax {
     get {
-      let childData = data.child(at: 3, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-      self = OptionalChainingExprSyntax(newData)
+      self = OptionalChainingExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterQuestionMark: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 4, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-      self = OptionalChainingExprSyntax(newData)
+      self = OptionalChainingExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -6325,69 +5374,46 @@ public struct ForcedValueExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeExpression: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = ForcedValueExprSyntax(newData)
+      self = ForcedValueExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var expression: ExprSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return ExprSyntax(childData!)
+      return ExprSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = ForcedValueExprSyntax(newData)
+      self = ForcedValueExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenExpressionAndExclamationMark: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = ForcedValueExprSyntax(newData)
+      self = ForcedValueExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var exclamationMark: TokenSyntax {
     get {
-      let childData = data.child(at: 3, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-      self = ForcedValueExprSyntax(newData)
+      self = ForcedValueExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterExclamationMark: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 4, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-      self = ForcedValueExprSyntax(newData)
+      self = ForcedValueExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -6478,69 +5504,46 @@ public struct PostfixUnaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeExpression: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = PostfixUnaryExprSyntax(newData)
+      self = PostfixUnaryExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var expression: ExprSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return ExprSyntax(childData!)
+      return ExprSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = PostfixUnaryExprSyntax(newData)
+      self = PostfixUnaryExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenExpressionAndOperatorToken: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = PostfixUnaryExprSyntax(newData)
+      self = PostfixUnaryExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var operatorToken: TokenSyntax {
     get {
-      let childData = data.child(at: 3, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-      self = PostfixUnaryExprSyntax(newData)
+      self = PostfixUnaryExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterOperatorToken: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 4, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-      self = PostfixUnaryExprSyntax(newData)
+      self = PostfixUnaryExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -6631,69 +5634,46 @@ public struct SpecializeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeExpression: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = SpecializeExprSyntax(newData)
+      self = SpecializeExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var expression: ExprSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return ExprSyntax(childData!)
+      return ExprSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = SpecializeExprSyntax(newData)
+      self = SpecializeExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenExpressionAndGenericArgumentClause: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = SpecializeExprSyntax(newData)
+      self = SpecializeExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var genericArgumentClause: GenericArgumentClauseSyntax {
     get {
-      let childData = data.child(at: 3, parent: Syntax(self))
-      return GenericArgumentClauseSyntax(childData!)
+      return GenericArgumentClauseSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-      self = SpecializeExprSyntax(newData)
+      self = SpecializeExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterGenericArgumentClause: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 4, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-      self = SpecializeExprSyntax(newData)
+      self = SpecializeExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -6796,83 +5776,55 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeOpenDelimiter: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = StringLiteralExprSyntax(newData)
+      self = StringLiteralExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var openDelimiter: TokenSyntax? {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      if childData == nil { return nil }
-      return TokenSyntax(childData!)
+      return data.child(at: 1, parent: Syntax(self)).map(TokenSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = StringLiteralExprSyntax(newData)
+      self = StringLiteralExprSyntax(data.replacingChild(at: 1, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenOpenDelimiterAndOpenQuote: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = StringLiteralExprSyntax(newData)
+      self = StringLiteralExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var openQuote: TokenSyntax {
     get {
-      let childData = data.child(at: 3, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-      self = StringLiteralExprSyntax(newData)
+      self = StringLiteralExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenOpenQuoteAndSegments: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 4, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-      self = StringLiteralExprSyntax(newData)
+      self = StringLiteralExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var segments: StringLiteralSegmentsSyntax {
     get {
-      let childData = data.child(at: 5, parent: Syntax(self))
-      return StringLiteralSegmentsSyntax(childData!)
+      return StringLiteralSegmentsSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 5, with: raw, arena: arena)
-      self = StringLiteralExprSyntax(newData)
+      self = StringLiteralExprSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
     }
   }
 
@@ -6897,70 +5849,46 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBetweenSegmentsAndCloseQuote: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 6, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 6, with: raw, arena: arena)
-      self = StringLiteralExprSyntax(newData)
+      self = StringLiteralExprSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var closeQuote: TokenSyntax {
     get {
-      let childData = data.child(at: 7, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 7, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 7, with: raw, arena: arena)
-      self = StringLiteralExprSyntax(newData)
+      self = StringLiteralExprSyntax(data.replacingChild(at: 7, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenCloseQuoteAndCloseDelimiter: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 8, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 8, with: raw, arena: arena)
-      self = StringLiteralExprSyntax(newData)
+      self = StringLiteralExprSyntax(data.replacingChild(at: 8, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var closeDelimiter: TokenSyntax? {
     get {
-      let childData = data.child(at: 9, parent: Syntax(self))
-      if childData == nil { return nil }
-      return TokenSyntax(childData!)
+      return data.child(at: 9, parent: Syntax(self)).map(TokenSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 9, with: raw, arena: arena)
-      self = StringLiteralExprSyntax(newData)
+      self = StringLiteralExprSyntax(data.replacingChild(at: 9, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterCloseDelimiter: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 10, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 10, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 10, with: raw, arena: arena)
-      self = StringLiteralExprSyntax(newData)
+      self = StringLiteralExprSyntax(data.replacingChild(at: 10, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -7071,42 +5999,28 @@ public struct RegexLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeRegex: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = RegexLiteralExprSyntax(newData)
+      self = RegexLiteralExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var regex: TokenSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = RegexLiteralExprSyntax(newData)
+      self = RegexLiteralExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterRegex: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = RegexLiteralExprSyntax(newData)
+      self = RegexLiteralExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -7227,83 +6141,55 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeBackslash: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = KeyPathExprSyntax(newData)
+      self = KeyPathExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var backslash: TokenSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = KeyPathExprSyntax(newData)
+      self = KeyPathExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenBackslashAndRoot: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = KeyPathExprSyntax(newData)
+      self = KeyPathExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var root: TypeSyntax? {
     get {
-      let childData = data.child(at: 3, parent: Syntax(self))
-      if childData == nil { return nil }
-      return TypeSyntax(childData!)
+      return data.child(at: 3, parent: Syntax(self)).map(TypeSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-      self = KeyPathExprSyntax(newData)
+      self = KeyPathExprSyntax(data.replacingChild(at: 3, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenRootAndComponents: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 4, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-      self = KeyPathExprSyntax(newData)
+      self = KeyPathExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var components: KeyPathComponentListSyntax {
     get {
-      let childData = data.child(at: 5, parent: Syntax(self))
-      return KeyPathComponentListSyntax(childData!)
+      return KeyPathComponentListSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 5, with: raw, arena: arena)
-      self = KeyPathExprSyntax(newData)
+      self = KeyPathExprSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
     }
   }
 
@@ -7328,15 +6214,10 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedAfterComponents: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 6, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 6, with: raw, arena: arena)
-      self = KeyPathExprSyntax(newData)
+      self = KeyPathExprSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -7459,139 +6340,92 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforePoundToken: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = MacroExpansionExprSyntax(newData)
+      self = MacroExpansionExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   /// The `#` sign.
   public var poundToken: TokenSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = MacroExpansionExprSyntax(newData)
+      self = MacroExpansionExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenPoundTokenAndMacro: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = MacroExpansionExprSyntax(newData)
+      self = MacroExpansionExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var macro: TokenSyntax {
     get {
-      let childData = data.child(at: 3, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-      self = MacroExpansionExprSyntax(newData)
+      self = MacroExpansionExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenMacroAndGenericArguments: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 4, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-      self = MacroExpansionExprSyntax(newData)
+      self = MacroExpansionExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var genericArguments: GenericArgumentClauseSyntax? {
     get {
-      let childData = data.child(at: 5, parent: Syntax(self))
-      if childData == nil { return nil }
-      return GenericArgumentClauseSyntax(childData!)
+      return data.child(at: 5, parent: Syntax(self)).map(GenericArgumentClauseSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 5, with: raw, arena: arena)
-      self = MacroExpansionExprSyntax(newData)
+      self = MacroExpansionExprSyntax(data.replacingChild(at: 5, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenGenericArgumentsAndLeftParen: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 6, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 6, with: raw, arena: arena)
-      self = MacroExpansionExprSyntax(newData)
+      self = MacroExpansionExprSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var leftParen: TokenSyntax? {
     get {
-      let childData = data.child(at: 7, parent: Syntax(self))
-      if childData == nil { return nil }
-      return TokenSyntax(childData!)
+      return data.child(at: 7, parent: Syntax(self)).map(TokenSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 7, with: raw, arena: arena)
-      self = MacroExpansionExprSyntax(newData)
+      self = MacroExpansionExprSyntax(data.replacingChild(at: 7, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 8, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 8, with: raw, arena: arena)
-      self = MacroExpansionExprSyntax(newData)
+      self = MacroExpansionExprSyntax(data.replacingChild(at: 8, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var argumentList: TupleExprElementListSyntax {
     get {
-      let childData = data.child(at: 9, parent: Syntax(self))
-      return TupleExprElementListSyntax(childData!)
+      return TupleExprElementListSyntax(data.child(at: 9, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 9, with: raw, arena: arena)
-      self = MacroExpansionExprSyntax(newData)
+      self = MacroExpansionExprSyntax(data.replacingChild(at: 9, with: value.raw, arena: SyntaxArena()))
     }
   }
 
@@ -7616,85 +6450,55 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBetweenArgumentListAndRightParen: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 10, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 10, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 10, with: raw, arena: arena)
-      self = MacroExpansionExprSyntax(newData)
+      self = MacroExpansionExprSyntax(data.replacingChild(at: 10, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var rightParen: TokenSyntax? {
     get {
-      let childData = data.child(at: 11, parent: Syntax(self))
-      if childData == nil { return nil }
-      return TokenSyntax(childData!)
+      return data.child(at: 11, parent: Syntax(self)).map(TokenSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 11, with: raw, arena: arena)
-      self = MacroExpansionExprSyntax(newData)
+      self = MacroExpansionExprSyntax(data.replacingChild(at: 11, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 12, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 12, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 12, with: raw, arena: arena)
-      self = MacroExpansionExprSyntax(newData)
+      self = MacroExpansionExprSyntax(data.replacingChild(at: 12, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var trailingClosure: ClosureExprSyntax? {
     get {
-      let childData = data.child(at: 13, parent: Syntax(self))
-      if childData == nil { return nil }
-      return ClosureExprSyntax(childData!)
+      return data.child(at: 13, parent: Syntax(self)).map(ClosureExprSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 13, with: raw, arena: arena)
-      self = MacroExpansionExprSyntax(newData)
+      self = MacroExpansionExprSyntax(data.replacingChild(at: 13, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 14, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 14, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 14, with: raw, arena: arena)
-      self = MacroExpansionExprSyntax(newData)
+      self = MacroExpansionExprSyntax(data.replacingChild(at: 14, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? {
     get {
-      let childData = data.child(at: 15, parent: Syntax(self))
-      if childData == nil { return nil }
-      return MultipleTrailingClosureElementListSyntax(childData!)
+      return data.child(at: 15, parent: Syntax(self)).map(MultipleTrailingClosureElementListSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 15, with: raw, arena: arena)
-      self = MacroExpansionExprSyntax(newData)
+      self = MacroExpansionExprSyntax(data.replacingChild(at: 15, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -7719,15 +6523,10 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 16, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 16, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 16, with: raw, arena: arena)
-      self = MacroExpansionExprSyntax(newData)
+      self = MacroExpansionExprSyntax(data.replacingChild(at: 16, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -7896,70 +6695,46 @@ public struct PostfixIfConfigExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeBase: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = PostfixIfConfigExprSyntax(newData)
+      self = PostfixIfConfigExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var base: ExprSyntax? {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      if childData == nil { return nil }
-      return ExprSyntax(childData!)
+      return data.child(at: 1, parent: Syntax(self)).map(ExprSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = PostfixIfConfigExprSyntax(newData)
+      self = PostfixIfConfigExprSyntax(data.replacingChild(at: 1, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenBaseAndConfig: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = PostfixIfConfigExprSyntax(newData)
+      self = PostfixIfConfigExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var config: IfConfigDeclSyntax {
     get {
-      let childData = data.child(at: 3, parent: Syntax(self))
-      return IfConfigDeclSyntax(childData!)
+      return IfConfigDeclSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-      self = PostfixIfConfigExprSyntax(newData)
+      self = PostfixIfConfigExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterConfig: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 4, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-      self = PostfixIfConfigExprSyntax(newData)
+      self = PostfixIfConfigExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -8046,42 +6821,28 @@ public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeIdentifier: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = EditorPlaceholderExprSyntax(newData)
+      self = EditorPlaceholderExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var identifier: TokenSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = EditorPlaceholderExprSyntax(newData)
+      self = EditorPlaceholderExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterIdentifier: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = EditorPlaceholderExprSyntax(newData)
+      self = EditorPlaceholderExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 

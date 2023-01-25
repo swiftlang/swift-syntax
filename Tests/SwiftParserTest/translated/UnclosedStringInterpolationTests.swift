@@ -119,4 +119,17 @@ final class UnclosedStringInterpolationTests: XCTestCase {
       ]
     )
   }
+
+  func testUnterminatedStringLiteralInInterpolation() {
+    AssertParse(
+      #"""
+      "\("1️⃣
+      """#,
+      diagnostics: [
+        DiagnosticSpec(message: #"expected '"' to end string literal"#),
+        DiagnosticSpec(message: #"expected ')' in string literal"#),
+        DiagnosticSpec(message: #"expected '"' to end string literal"#),
+      ]
+    )
+  }
 }

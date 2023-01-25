@@ -133,7 +133,7 @@ extension Lexer.Cursor {
       case .afterStringLiteral: return false
       case .afterClosingStringQuote: return false
       case .inStringInterpolationStart: return false
-      case .inStringInterpolation(stringLiteralKind: let stringLiteralKind, parenCount: _): return stringLiteralKind != .multiLine
+      case .inStringInterpolation: return false
       case .afterStringInterpolation: return false
       }
     }
@@ -993,6 +993,14 @@ extension Lexer.Cursor {
       } else {
         return Lexer.Result(.rightParen, stateTransition: .replace(newState: .inStringInterpolation(stringLiteralKind: stringLiteralKind, parenCount: parenCount - 1)))
       }
+    case UInt8(ascii: "\r"), UInt8(ascii: "\n"):
+      // We don't eat newlines as leading trivia in string interpolation of
+      // single line strings but  `lexNormal` expects newlines to already be
+      // eaten. If we reach a newline inside string interpolation of a
+      // single-line string, emit an empty string segment to indicate to the
+      // parser that the string has ended and pop out of string interpolation.
+      assert(stringLiteralKind != .multiLine)
+      return Lexer.Result(.stringSegment, stateTransition: .pop)
     default:
       // If we haven't reached the end of the string interpolation, lex as if we were in a normal expression.
       return self.lexNormal(sourceBufferStart: sourceBufferStart)

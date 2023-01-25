@@ -14,7 +14,7 @@ import SwiftSyntax
 
 /// Describes a macro that can add attributes to the members inside the
 /// declaration it's attached to.
-public protocol MemberAttributeMacro: DeclarationMacro {
+public protocol MemberAttributeMacro: AttachedMacro {
   /// Expand an attached declaration macro to produce an attribute list for
   /// a given member.
   ///

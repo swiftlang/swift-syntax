@@ -13,7 +13,7 @@
 import SwiftSyntax
 
 /// Describes a macro that can add members to the declaration it's attached to.
-public protocol MemberDeclarationMacro: DeclarationMacro {
+public protocol MemberMacro: AttachedMacro {
   /// Expand an attached declaration macro to produce a set of members.
   ///
   /// - Parameters:
@@ -29,3 +29,6 @@ public protocol MemberDeclarationMacro: DeclarationMacro {
     in context: inout MacroExpansionContext
   ) throws -> [DeclSyntax]
 }
+
+@available(*, deprecated, renamed: "MemberMacro")
+public typealias MemberDeclarationMacro = MemberMacro

@@ -7,6 +7,17 @@
 //
 //===----------------------------------------------------------------------===//
 
+import SwiftSyntax
+
 /// Describes a macro that forms declarations.
-public protocol DeclarationMacro: Macro {
+public protocol DeclarationMacro: FreestandingMacro {
+  /// Expand a macro described by the given freestanding macro expansion
+  /// declaration within the given context to produce a set of declarations.
+  static func expansion(
+    of node: MacroExpansionDeclSyntax,
+    in context: inout MacroExpansionContext
+  ) throws -> [DeclSyntax]
 }
+
+@available(*, deprecated, renamed: "DeclarationMacro")
+public typealias FreestandingDeclarationMacro = DeclarationMacro

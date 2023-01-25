@@ -10,7 +10,7 @@
 import SwiftSyntax
 
 /// Describes a macro that adds accessors to a given declaration.
-public protocol AccessorDeclarationMacro: DeclarationMacro {
+public protocol AccessorMacro: AttachedMacro {
   /// Expand a macro that's expressed as a custom attribute attached to
   /// the given declaration. The result is a set of accessors for the
   /// declaration.
@@ -20,3 +20,6 @@ public protocol AccessorDeclarationMacro: DeclarationMacro {
     in context: inout MacroExpansionContext
   ) throws -> [AccessorDeclSyntax]
 }
+
+@available(*, deprecated, renamed: "AccessorMacro")
+public typealias AccessorDeclarationMacro = AccessorMacro

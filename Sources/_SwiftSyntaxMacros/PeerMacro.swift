@@ -9,7 +9,7 @@
 
 import SwiftSyntax
 
-public protocol PeerDeclarationMacro: DeclarationMacro {
+public protocol PeerMacro: AttachedMacro {
   /// Expand a macro described by the given custom attribute and
   /// attached to the given declaration and evaluated within a
   /// particular expansion context.
@@ -22,3 +22,6 @@ public protocol PeerDeclarationMacro: DeclarationMacro {
     in context: inout MacroExpansionContext
   ) throws -> [DeclSyntax]
 }
+
+@available(*, deprecated, renamed: "PeerMacro")
+public typealias PeerDeclarationMacro = PeerMacro

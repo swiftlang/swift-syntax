@@ -123,3 +123,17 @@ public extension SwitchStmtSyntax {
     self.cases = casesBuilder()
   }
 }
+
+// MARK: - VariableDeclSyntax
+// VariableDeclSyntax is a special scenario as it don't have body or members
+// So we cannot conform to `HasTrailingCodeBlock` or `HasTrailingMemberDeclBlock`
+
+public extension VariableDeclSyntax {
+  init(_ signature: PartialSyntaxNodeString, @CodeBlockItemListBuilder accessor: () -> CodeBlockItemListSyntax) {
+    self = "\(signature) {}"
+    assert(self.bindings.count == 1)
+    var binding: PatternBindingSyntax? = self.bindings.last
+    binding?.accessor = .getter(CodeBlockSyntax(statements: accessor()))
+    bindings = PatternBindingListSyntax([binding].compactMap { $0 })
+  }
+}

@@ -175,22 +175,37 @@ final class VariableTests: XCTestCase {
   }
 
   func testComputedProperty() {
-    let buildable = VariableDeclSyntax(name: "test", type: TypeAnnotationSyntax(type: TypeSyntax("Int"))) {
-      SequenceExprSyntax {
-        IntegerLiteralExprSyntax(4)
-        BinaryOperatorExprSyntax(text: "+")
-        IntegerLiteralExprSyntax(5)
-      }
-    }
+    let testCases: [UInt: (VariableDeclSyntax, String)] = [
+      #line: (
+        VariableDeclSyntax(name: "test", type: TypeAnnotationSyntax(type: TypeSyntax("Int"))) {
+          SequenceExprSyntax {
+            IntegerLiteralExprSyntax(4)
+            BinaryOperatorExprSyntax(text: "+")
+            IntegerLiteralExprSyntax(5)
+          }
+        },
+        """
+        var test: Int {
+            4 + 5
+        }
+        """
+      ),
+      #line: (
+        VariableDeclSyntax("var foo: String") {
+          ReturnStmtSyntax(#"return "hello world""#)
+        },
+        """
+        var foo: String {
+            return "hello world"
+        }
+        """
+      ),
+    ]
 
-    AssertBuildResult(
-      buildable,
-      """
-      var test: Int {
-          4 + 5
-      }
-      """
-    )
+    for (line, testCase) in testCases {
+      let (builder, expected) = testCase
+      AssertBuildResult(builder, expected, line: line)
+    }
   }
 
   func testAccessorList() {

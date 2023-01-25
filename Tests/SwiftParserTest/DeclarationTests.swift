@@ -404,12 +404,19 @@ final class DeclarationTests: XCTestCase {
 
     AssertParse(
       """
-      infix operator  <*<<< : MediumPrecedence, &
+      infix operator  <*<<< : MediumPrecedence1️⃣, &
       prefix operator ^^ : PrefixMagicOperatorProtocol
-      infix operator  <*< : MediumPrecedence, InfixMagicOperatorProtocol
+      infix operator  <*< : MediumPrecedence2️⃣, InfixMagicOperatorProtocol
       postfix operator ^^ : PostfixMagicOperatorProtocol
-      infix operator ^^ : PostfixMagicOperatorProtocol, Class, Struct
-      """
+      infix operator ^^ : PostfixMagicOperatorProtocol3️⃣, Class, Struct
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code before operator declaration"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code before operator declaration"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous code ', Class, Struct' at top level"),
+      ]
     )
   }
 

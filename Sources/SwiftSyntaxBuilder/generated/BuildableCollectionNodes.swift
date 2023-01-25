@@ -120,13 +120,6 @@ extension DeclNameArgumentListSyntax: ExpressibleByArrayLiteral {
   }
 }
 
-/// `DesignatedTypeList` represents a collection of `DesignatedTypeElementSyntax`
-extension DesignatedTypeListSyntax: ExpressibleByArrayLiteral {
-  public init(arrayLiteral elements: Element...) {
-    self.init(elements)
-  }
-}
-
 /// `DictionaryElementList` represents a collection of `DictionaryElementSyntax`
 extension DictionaryElementListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {

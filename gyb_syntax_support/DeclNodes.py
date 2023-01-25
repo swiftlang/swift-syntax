@@ -746,15 +746,6 @@ DECL_NODES = [
                    is_optional=True),
          ]),
 
-    # designated-type-list -> (',' identifier)*
-    Node('DesignatedTypeList', name_for_diagnostics=None, kind='SyntaxCollection',
-         element='DesignatedTypeElement'),
-    Node('DesignatedTypeElement', name_for_diagnostics=None, kind='Syntax',
-         children=[
-             Child('LeadingComma', kind='CommaToken'),
-             Child('Name', kind='IdentifierToken'),
-         ]),
-
     # infix-operator-group -> ':' identifier designated-type-list?
     Node('OperatorPrecedenceAndTypes', name_for_diagnostics=None, kind='Syntax',
          description='''
@@ -765,12 +756,7 @@ DECL_NODES = [
              Child('PrecedenceGroup', name_for_diagnostics='precedence group', kind='IdentifierToken',
                    description='''
                    The precedence group for this operator
-                   '''),
-             Child('DesignatedTypes', kind='DesignatedTypeList',
-                   collection_element_name='DesignatedTypeElement',
-                   description='''
-                   The designated types associated with this operator.
-                   '''),
+                   ''')
          ]),
 
     # precedence-group-decl -> attributes? modifiers? 'precedencegroup'

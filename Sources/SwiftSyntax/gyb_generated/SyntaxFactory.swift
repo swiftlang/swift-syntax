@@ -4460,67 +4460,14 @@ public enum SyntaxFactory {
       return OperatorDeclSyntax(data)
     }
   }
-  @available(*, deprecated, message: "Use initializer on DesignatedTypeListSyntax")
-  public static func makeDesignatedTypeList(
-    _ elements: [DesignatedTypeElementSyntax]) -> DesignatedTypeListSyntax {
-    return withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.designatedTypeList,
-        from: elements.map { $0.raw }, arena: arena)
-      let data = SyntaxData.forRoot(raw)
-      return DesignatedTypeListSyntax(data)
-    }
-  }
-
-  @available(*, deprecated, message: "Use initializer on DesignatedTypeListSyntax")
-  public static func makeBlankDesignatedTypeList(presence: SourcePresence = .present) -> DesignatedTypeListSyntax {
-    return withExtendedLifetime(SyntaxArena()) { arena in
-      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .designatedTypeList,
-        from: [
-      ], arena: arena))
-      return DesignatedTypeListSyntax(data)
-    }
-  }
-  @available(*, deprecated, message: "Use initializer on DesignatedTypeElementSyntax")
-  public static func makeDesignatedTypeElement(_ unexpectedBeforeLeadingComma: UnexpectedNodesSyntax? = nil, leadingComma: TokenSyntax, _ unexpectedBetweenLeadingCommaAndName: UnexpectedNodesSyntax? = nil, name: TokenSyntax, _ unexpectedAfterName: UnexpectedNodesSyntax? = nil) -> DesignatedTypeElementSyntax {
-    let layout: [RawSyntax?] = [
-      unexpectedBeforeLeadingComma?.raw,
-      leadingComma.raw,
-      unexpectedBetweenLeadingCommaAndName?.raw,
-      name.raw,
-      unexpectedAfterName?.raw,
-    ]
-    return withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.designatedTypeElement,
-        from: layout, arena: arena)
-      let data = SyntaxData.forRoot(raw)
-      return DesignatedTypeElementSyntax(data)
-    }
-  }
-
-  @available(*, deprecated, message: "Use initializer on DesignatedTypeElementSyntax")
-  public static func makeBlankDesignatedTypeElement(presence: SourcePresence = .present) -> DesignatedTypeElementSyntax {
-    return withExtendedLifetime(SyntaxArena()) { arena in
-      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .designatedTypeElement,
-        from: [
-        nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.comma, arena: arena),
-        nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena),
-        nil,
-      ], arena: arena))
-      return DesignatedTypeElementSyntax(data)
-    }
-  }
   @available(*, deprecated, message: "Use initializer on OperatorPrecedenceAndTypesSyntax")
-  public static func makeOperatorPrecedenceAndTypes(_ unexpectedBeforeColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndPrecedenceGroup: UnexpectedNodesSyntax? = nil, precedenceGroup: TokenSyntax, _ unexpectedBetweenPrecedenceGroupAndDesignatedTypes: UnexpectedNodesSyntax? = nil, designatedTypes: DesignatedTypeListSyntax, _ unexpectedAfterDesignatedTypes: UnexpectedNodesSyntax? = nil) -> OperatorPrecedenceAndTypesSyntax {
+  public static func makeOperatorPrecedenceAndTypes(_ unexpectedBeforeColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndPrecedenceGroup: UnexpectedNodesSyntax? = nil, precedenceGroup: TokenSyntax, _ unexpectedAfterPrecedenceGroup: UnexpectedNodesSyntax? = nil) -> OperatorPrecedenceAndTypesSyntax {
     let layout: [RawSyntax?] = [
       unexpectedBeforeColon?.raw,
       colon.raw,
       unexpectedBetweenColonAndPrecedenceGroup?.raw,
       precedenceGroup.raw,
-      unexpectedBetweenPrecedenceGroupAndDesignatedTypes?.raw,
-      designatedTypes.raw,
-      unexpectedAfterDesignatedTypes?.raw,
+      unexpectedAfterPrecedenceGroup?.raw,
     ]
     return withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.operatorPrecedenceAndTypes,
@@ -4539,8 +4486,6 @@ public enum SyntaxFactory {
         RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena),
         nil,
         RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena),
-        nil,
-        RawSyntax.makeEmptyLayout(kind: SyntaxKind.designatedTypeList, arena: arena),
         nil,
       ], arena: arena))
       return OperatorPrecedenceAndTypesSyntax(data)

@@ -449,12 +449,14 @@ final class OperatorDeclTests: XCTestCase {
   }
 
   func testOperatorDecl21() {
-    // TODO: We should not allow specification of multiple precedence groups
     AssertParse(
       """
       protocol Proto {}
-      infix operator *<*< : F, Proto
-      """
+      infix operator *<*< : F1️⃣, Proto
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "extraneous code ', Proto' at top level")
+      ]
     )
   }
 

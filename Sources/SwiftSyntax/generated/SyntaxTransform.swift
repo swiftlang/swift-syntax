@@ -371,16 +371,6 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: DerivativeRegistrationAttributeArgumentsSyntax) -> ResultType
   
-  /// Visiting `DesignatedTypeElementSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: DesignatedTypeElementSyntax) -> ResultType
-  
-  /// Visiting `DesignatedTypeListSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: DesignatedTypeListSyntax) -> ResultType
-  
   /// Visiting `DictionaryElementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -1819,20 +1809,6 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DerivativeRegistrationAttributeArgumentsSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
-  /// Visiting `DesignatedTypeElementSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: DesignatedTypeElementSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
-  /// Visiting `DesignatedTypeListSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: DesignatedTypeListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -3302,10 +3278,6 @@ extension SyntaxTransformVisitor {
     case .deinitializerDecl(let derived): 
       return visit(derived)
     case .derivativeRegistrationAttributeArguments(let derived): 
-      return visit(derived)
-    case .designatedTypeElement(let derived): 
-      return visit(derived)
-    case .designatedTypeList(let derived): 
       return visit(derived)
     case .dictionaryElementList(let derived): 
       return visit(derived)

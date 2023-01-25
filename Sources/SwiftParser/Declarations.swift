@@ -1891,27 +1891,10 @@ extension Parser {
     let precedenceAndTypes: RawOperatorPrecedenceAndTypesSyntax?
     if let colon = self.consume(if: .colon) {
       let (unexpectedBeforeIdentifier, identifier) = self.expectIdentifier(keywordRecovery: true)
-      var types = [RawDesignatedTypeElementSyntax]()
-      while let comma = self.consume(if: .comma) {
-        // FIXME: The compiler accepts... anything here. This is a bug.
-        // let (unexpectedBeforeDesignatedType, designatedType) = self.expectIdentifier()
-        let designatedType = self.consumeAnyToken()
-        types.append(
-          RawDesignatedTypeElementSyntax(
-            leadingComma: comma,
-            name: designatedType,
-            arena: self.arena
-          )
-        )
-      }
       precedenceAndTypes = RawOperatorPrecedenceAndTypesSyntax(
         colon: colon,
         unexpectedBeforeIdentifier,
         precedenceGroup: identifier,
-        designatedTypes: RawDesignatedTypeListSyntax(
-          elements: types,
-          arena: self.arena
-        ),
         arena: self.arena
       )
     } else {

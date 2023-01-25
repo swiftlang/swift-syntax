@@ -227,8 +227,6 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/PatternBindingSyntax>
 - <doc:SwiftSyntax/EnumCaseElementListSyntax>
 - <doc:SwiftSyntax/EnumCaseElementSyntax>
-- <doc:SwiftSyntax/DesignatedTypeListSyntax>
-- <doc:SwiftSyntax/DesignatedTypeElementSyntax>
 - <doc:SwiftSyntax/PrecedenceGroupNameListSyntax>
 - <doc:SwiftSyntax/PrecedenceGroupNameElementSyntax>
 - <doc:SwiftSyntax/ObjCSelectorSyntax>
@@ -330,8 +328,6 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/PatternBindingListSyntax>
 - <doc:SwiftSyntax/EnumCaseElementSyntax>
 - <doc:SwiftSyntax/EnumCaseElementListSyntax>
-- <doc:SwiftSyntax/DesignatedTypeListSyntax>
-- <doc:SwiftSyntax/DesignatedTypeElementSyntax>
 - <doc:SwiftSyntax/OperatorPrecedenceAndTypesSyntax>
 - <doc:SwiftSyntax/PrecedenceGroupAttributeListSyntax>
 - <doc:SwiftSyntax/PrecedenceGroupRelationSyntax>

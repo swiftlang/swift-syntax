@@ -89,8 +89,6 @@ extension Syntax {
         .node(DeferStmtSyntax.self), 
         .node(DeinitializerDeclSyntax.self), 
         .node(DerivativeRegistrationAttributeArgumentsSyntax.self), 
-        .node(DesignatedTypeElementSyntax.self), 
-        .node(DesignatedTypeListSyntax.self), 
         .node(DictionaryElementListSyntax.self), 
         .node(DictionaryElementSyntax.self), 
         .node(DictionaryExprSyntax.self), 
@@ -428,10 +426,6 @@ extension SyntaxKind {
       return DeinitializerDeclSyntax.self
     case .derivativeRegistrationAttributeArguments: 
       return DerivativeRegistrationAttributeArgumentsSyntax.self
-    case .designatedTypeElement: 
-      return DesignatedTypeElementSyntax.self
-    case .designatedTypeList: 
-      return DesignatedTypeListSyntax.self
     case .dictionaryElementList: 
       return DictionaryElementListSyntax.self
     case .dictionaryElement: 
@@ -957,10 +951,6 @@ extension SyntaxKind {
       return "deinitializer"
     case .derivativeRegistrationAttributeArguments: 
       return "attribute arguments"
-    case .designatedTypeElement: 
-      return nil
-    case .designatedTypeList: 
-      return nil
     case .dictionaryElementList: 
       return nil
     case .dictionaryElement: 

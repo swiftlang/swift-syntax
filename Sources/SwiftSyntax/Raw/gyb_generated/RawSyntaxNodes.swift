@@ -9432,106 +9432,6 @@ public struct RawOperatorDeclSyntax: RawDeclSyntaxNodeProtocol {
 }
 
 @_spi(RawSyntax)
-public struct RawDesignatedTypeListSyntax: RawSyntaxNodeProtocol {
-
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
-    return raw.layoutView!
-  }
-
-  public static func isKindOf(_ raw: RawSyntax) -> Bool {
-    return raw.kind == .designatedTypeList
-  }
-
-  public var raw: RawSyntax
-  init(raw: RawSyntax) {
-    assert(Self.isKindOf(raw))
-    self.raw = raw
-  }
-
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { return nil }
-    self.init(raw: other.raw)
-  }
-
-  public init(elements: [RawDesignatedTypeElementSyntax], arena: __shared SyntaxArena) {
-    let raw = RawSyntax.makeLayout(
-      kind: .designatedTypeList, uninitializedCount: elements.count, arena: arena) { layout in
-      guard var ptr = layout.baseAddress else { return }
-      for elem in elements {
-        ptr.initialize(to: elem.raw)
-        ptr += 1
-      }
-    }
-    self.init(raw: raw)
-  }
-
-  public var elements: [RawDesignatedTypeElementSyntax] {
-    layoutView.children.map { RawDesignatedTypeElementSyntax(raw: $0!) }
-  }
-}
-
-@_spi(RawSyntax)
-public struct RawDesignatedTypeElementSyntax: RawSyntaxNodeProtocol {
-
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
-    return raw.layoutView!
-  }
-
-  public static func isKindOf(_ raw: RawSyntax) -> Bool {
-    return raw.kind == .designatedTypeElement
-  }
-
-  public var raw: RawSyntax
-  init(raw: RawSyntax) {
-    assert(Self.isKindOf(raw))
-    self.raw = raw
-  }
-
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { return nil }
-    self.init(raw: other.raw)
-  }
-
-  public init(
-    _ unexpectedBeforeLeadingComma: RawUnexpectedNodesSyntax? = nil,
-    leadingComma: RawTokenSyntax,
-    _ unexpectedBetweenLeadingCommaAndName: RawUnexpectedNodesSyntax? = nil,
-    name: RawTokenSyntax,
-    _ unexpectedAfterName: RawUnexpectedNodesSyntax? = nil,
-    arena: __shared SyntaxArena
-  ) {
-    let raw = RawSyntax.makeLayout(
-      kind: .designatedTypeElement, uninitializedCount: 5, arena: arena) { layout in
-      layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeLeadingComma?.raw
-      layout[1] = leadingComma.raw
-      layout[2] = unexpectedBetweenLeadingCommaAndName?.raw
-      layout[3] = name.raw
-      layout[4] = unexpectedAfterName?.raw
-    }
-    self.init(raw: raw)
-  }
-
-  public var unexpectedBeforeLeadingComma: RawUnexpectedNodesSyntax? {
-    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public var leadingComma: RawTokenSyntax {
-    layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public var unexpectedBetweenLeadingCommaAndName: RawUnexpectedNodesSyntax? {
-    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public var name: RawTokenSyntax {
-    layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public var unexpectedAfterName: RawUnexpectedNodesSyntax? {
-    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-}
-
-@_spi(RawSyntax)
 public struct RawOperatorPrecedenceAndTypesSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
@@ -9559,21 +9459,17 @@ public struct RawOperatorPrecedenceAndTypesSyntax: RawSyntaxNodeProtocol {
     colon: RawTokenSyntax,
     _ unexpectedBetweenColonAndPrecedenceGroup: RawUnexpectedNodesSyntax? = nil,
     precedenceGroup: RawTokenSyntax,
-    _ unexpectedBetweenPrecedenceGroupAndDesignatedTypes: RawUnexpectedNodesSyntax? = nil,
-    designatedTypes: RawDesignatedTypeListSyntax,
-    _ unexpectedAfterDesignatedTypes: RawUnexpectedNodesSyntax? = nil,
+    _ unexpectedAfterPrecedenceGroup: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
-      kind: .operatorPrecedenceAndTypes, uninitializedCount: 7, arena: arena) { layout in
+      kind: .operatorPrecedenceAndTypes, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeColon?.raw
       layout[1] = colon.raw
       layout[2] = unexpectedBetweenColonAndPrecedenceGroup?.raw
       layout[3] = precedenceGroup.raw
-      layout[4] = unexpectedBetweenPrecedenceGroupAndDesignatedTypes?.raw
-      layout[5] = designatedTypes.raw
-      layout[6] = unexpectedAfterDesignatedTypes?.raw
+      layout[4] = unexpectedAfterPrecedenceGroup?.raw
     }
     self.init(raw: raw)
   }
@@ -9590,14 +9486,8 @@ public struct RawOperatorPrecedenceAndTypesSyntax: RawSyntaxNodeProtocol {
   public var precedenceGroup: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public var unexpectedBetweenPrecedenceGroupAndDesignatedTypes: RawUnexpectedNodesSyntax? {
+  public var unexpectedAfterPrecedenceGroup: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public var designatedTypes: RawDesignatedTypeListSyntax {
-    layoutView.children[5].map(RawDesignatedTypeListSyntax.init(raw:))!
-  }
-  public var unexpectedAfterDesignatedTypes: RawUnexpectedNodesSyntax? {
-    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 

@@ -159,10 +159,6 @@ public enum SyntaxEnum {
   
   case derivativeRegistrationAttributeArguments(DerivativeRegistrationAttributeArgumentsSyntax)
   
-  case designatedTypeElement(DesignatedTypeElementSyntax)
-  
-  case designatedTypeList(DesignatedTypeListSyntax)
-  
   case dictionaryElementList(DictionaryElementListSyntax)
   
   case dictionaryElement(DictionaryElementSyntax)
@@ -688,10 +684,6 @@ public extension Syntax {
       return .deinitializerDecl(DeinitializerDeclSyntax(self)!)
     case .derivativeRegistrationAttributeArguments: 
       return .derivativeRegistrationAttributeArguments(DerivativeRegistrationAttributeArgumentsSyntax(self)!)
-    case .designatedTypeElement: 
-      return .designatedTypeElement(DesignatedTypeElementSyntax(self)!)
-    case .designatedTypeList: 
-      return .designatedTypeList(DesignatedTypeListSyntax(self)!)
     case .dictionaryElementList: 
       return .dictionaryElementList(DictionaryElementListSyntax(self)!)
     case .dictionaryElement: 

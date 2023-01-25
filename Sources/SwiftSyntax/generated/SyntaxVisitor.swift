@@ -868,30 +868,6 @@ open class SyntaxVisitor {
   open func visitPost(_ node: DerivativeRegistrationAttributeArgumentsSyntax) {
   }
   
-  /// Visiting `DesignatedTypeElementSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: DesignatedTypeElementSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting `DesignatedTypeElementSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: DesignatedTypeElementSyntax) {
-  }
-  
-  /// Visiting `DesignatedTypeListSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: DesignatedTypeListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting `DesignatedTypeListSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: DesignatedTypeListSyntax) {
-  }
-  
   /// Visiting `DictionaryElementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -3943,28 +3919,6 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDesignatedTypeElementSyntax(_ data: SyntaxData) {
-    let node = DesignatedTypeElementSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDesignatedTypeListSyntax(_ data: SyntaxData) {
-    let node = DesignatedTypeListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplDictionaryElementListSyntax(_ data: SyntaxData) {
     let node = DictionaryElementListSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -6190,10 +6144,6 @@ open class SyntaxVisitor {
       visitImplDeinitializerDeclSyntax(data)
     case .derivativeRegistrationAttributeArguments: 
       visitImplDerivativeRegistrationAttributeArgumentsSyntax(data)
-    case .designatedTypeElement: 
-      visitImplDesignatedTypeElementSyntax(data)
-    case .designatedTypeList: 
-      visitImplDesignatedTypeListSyntax(data)
     case .dictionaryElementList: 
       visitImplDictionaryElementListSyntax(data)
     case .dictionaryElement: 

@@ -617,22 +617,6 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: DesignatedTypeElementSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-  
-  override open func visitPost(_ node: DesignatedTypeElementSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  
-  override open func visit(_ node: DesignatedTypeListSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-  
-  override open func visitPost(_ node: DesignatedTypeListSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  
   override open func visit(_ node: DictionaryElementListSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

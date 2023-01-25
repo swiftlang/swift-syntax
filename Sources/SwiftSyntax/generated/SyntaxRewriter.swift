@@ -517,20 +517,6 @@ open class SyntaxRewriter {
     return Syntax(visitChildren(node)).cast(DerivativeRegistrationAttributeArgumentsSyntax.self)
   }
   
-  /// Visit a `DesignatedTypeElementSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: DesignatedTypeElementSyntax) -> DesignatedTypeElementSyntax {
-    return Syntax(visitChildren(node)).cast(DesignatedTypeElementSyntax.self)
-  }
-  
-  /// Visit a `DesignatedTypeListSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: DesignatedTypeListSyntax) -> DesignatedTypeListSyntax {
-    return Syntax(visitChildren(node)).cast(DesignatedTypeListSyntax.self)
-  }
-  
   /// Visit a `DictionaryElementListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -2897,34 +2883,6 @@ open class SyntaxRewriter {
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplDerivativeRegistrationAttributeArgumentsSyntax(_ data: SyntaxData) -> Syntax {
     let node = DerivativeRegistrationAttributeArgumentsSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
-    }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplDesignatedTypeElementSyntax(_ data: SyntaxData) -> Syntax {
-    let node = DesignatedTypeElementSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
-    }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplDesignatedTypeListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = DesignatedTypeListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer { 
@@ -5764,10 +5722,6 @@ open class SyntaxRewriter {
       return visitImplDeinitializerDeclSyntax
     case .derivativeRegistrationAttributeArguments: 
       return visitImplDerivativeRegistrationAttributeArgumentsSyntax
-    case .designatedTypeElement: 
-      return visitImplDesignatedTypeElementSyntax
-    case .designatedTypeList: 
-      return visitImplDesignatedTypeListSyntax
     case .dictionaryElementList: 
       return visitImplDictionaryElementListSyntax
     case .dictionaryElement: 
@@ -6296,10 +6250,6 @@ open class SyntaxRewriter {
       return visitImplDeinitializerDeclSyntax(data)
     case .derivativeRegistrationAttributeArguments: 
       return visitImplDerivativeRegistrationAttributeArgumentsSyntax(data)
-    case .designatedTypeElement: 
-      return visitImplDesignatedTypeElementSyntax(data)
-    case .designatedTypeList: 
-      return visitImplDesignatedTypeListSyntax(data)
     case .dictionaryElementList: 
       return visitImplDictionaryElementListSyntax(data)
     case .dictionaryElement: 

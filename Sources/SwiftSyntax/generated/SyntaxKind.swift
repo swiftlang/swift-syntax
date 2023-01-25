@@ -159,10 +159,6 @@ public enum SyntaxKind {
   
   case derivativeRegistrationAttributeArguments
   
-  case designatedTypeElement
-  
-  case designatedTypeList
-  
   case dictionaryElementList
   
   case dictionaryElement
@@ -572,8 +568,6 @@ public enum SyntaxKind {
     case .conditionElementList: 
       return true
     case .declNameArgumentList: 
-      return true
-    case .designatedTypeList: 
       return true
     case .dictionaryElementList: 
       return true

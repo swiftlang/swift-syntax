@@ -25,8 +25,7 @@ extension Operator {
     let precedenceGroupSyntax = precedenceGroup.map { groupName in
       OperatorPrecedenceAndTypesSyntax(
         colon: .colonToken(),
-        precedenceGroup: .identifier(groupName, leadingTrivia: .space),
-        designatedTypes: DesignatedTypeListSyntax([])
+        precedenceGroup: .identifier(groupName, leadingTrivia: .space)
       )
     }
 

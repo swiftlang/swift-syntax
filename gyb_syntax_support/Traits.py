@@ -43,6 +43,26 @@ TRAITS = [
               Child('RightParen', kind='RightParenToken'),
           ]),
 
+    Trait('FreestandingMacroExpansion',
+          children=[
+             Child('PoundToken', kind='PoundToken'),
+             Child('Macro', kind='IdentifierToken'),
+             Child('GenericArguments', kind='GenericArgumentClause',
+                   is_optional=True),
+             Child('LeftParen', kind='LeftParenToken',
+                   is_optional=True),
+             Child('ArgumentList', kind='TupleExprElementList',
+                   collection_element_name='Argument'),
+             Child('RightParen', kind='RightParenToken',
+                   is_optional=True),
+             Child('TrailingClosure', kind='ClosureExpr',
+                   is_optional=True),
+             Child('AdditionalTrailingClosures',
+                   kind='MultipleTrailingClosureElementList',
+                   collection_element_name='AdditionalTrailingClosure',
+                   is_optional=True),
+          ]),
+
     Trait('WithTrailingComma',
           children=[
               Child('TrailingComma', kind='CommaToken', is_optional=True),

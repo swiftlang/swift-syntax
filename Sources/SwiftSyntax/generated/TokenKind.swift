@@ -59,24 +59,6 @@ public enum TokenKind: Hashable {
   
   case multilineStringQuote
   
-  case poundKeyPathKeyword
-  
-  case poundLineKeyword
-  
-  case poundSelectorKeyword
-  
-  case poundFileKeyword
-  
-  case poundFileIDKeyword
-  
-  case poundFilePathKeyword
-  
-  case poundColumnKeyword
-  
-  case poundFunctionKeyword
-  
-  case poundDsohandleKeyword
-  
   case poundAssertKeyword
   
   case poundSourceLocationKeyword
@@ -128,61 +110,6 @@ public enum TokenKind: Hashable {
   case rawStringDelimiter(String)
   
   case stringSegment(String)
-  
-  /// Initializes a keyword token kind from its string representation. If the
-  /// given string is not a keyword, this function returns `nil`.
-  public init?(keyword: String) {
-    switch keyword {
-    case "#keyPath": 
-      self = .poundKeyPathKeyword
-    case "#line": 
-      self = .poundLineKeyword
-    case "#selector": 
-      self = .poundSelectorKeyword
-    case "#file": 
-      self = .poundFileKeyword
-    case "#fileID": 
-      self = .poundFileIDKeyword
-    case "#filePath": 
-      self = .poundFilePathKeyword
-    case "#column": 
-      self = .poundColumnKeyword
-    case "#function": 
-      self = .poundFunctionKeyword
-    case "#dsohandle": 
-      self = .poundDsohandleKeyword
-    case "#assert": 
-      self = .poundAssertKeyword
-    case "#sourceLocation": 
-      self = .poundSourceLocationKeyword
-    case "#warning": 
-      self = .poundWarningKeyword
-    case "#error": 
-      self = .poundErrorKeyword
-    case "#if": 
-      self = .poundIfKeyword
-    case "#else": 
-      self = .poundElseKeyword
-    case "#elseif": 
-      self = .poundElseifKeyword
-    case "#endif": 
-      self = .poundEndifKeyword
-    case "#available": 
-      self = .poundAvailableKeyword
-    case "#unavailable": 
-      self = .poundUnavailableKeyword
-    case "#fileLiteral": 
-      self = .poundFileLiteralKeyword
-    case "#imageLiteral": 
-      self = .poundImageLiteralKeyword
-    case "#colorLiteral": 
-      self = .poundColorLiteralKeyword
-    case "#_hasSymbol": 
-      self = .poundHasSymbolKeyword
-    default: 
-      return nil
-    }
-  }
   
   /// The textual representation of this token kind.
   @_spi(Testing) 
@@ -242,24 +169,6 @@ public enum TokenKind: Hashable {
       return #"'"#
     case .multilineStringQuote: 
       return #"""""#
-    case .poundKeyPathKeyword: 
-      return #"#keyPath"#
-    case .poundLineKeyword: 
-      return #"#line"#
-    case .poundSelectorKeyword: 
-      return #"#selector"#
-    case .poundFileKeyword: 
-      return #"#file"#
-    case .poundFileIDKeyword: 
-      return #"#fileID"#
-    case .poundFilePathKeyword: 
-      return #"#filePath"#
-    case .poundColumnKeyword: 
-      return #"#column"#
-    case .poundFunctionKeyword: 
-      return #"#function"#
-    case .poundDsohandleKeyword: 
-      return #"#dsohandle"#
     case .poundAssertKeyword: 
       return #"#assert"#
     case .poundSourceLocationKeyword: 
@@ -375,24 +284,6 @@ public enum TokenKind: Hashable {
       return #"'"#
     case .multilineStringQuote: 
       return #"""""#
-    case .poundKeyPathKeyword: 
-      return #"#keyPath"#
-    case .poundLineKeyword: 
-      return #"#line"#
-    case .poundSelectorKeyword: 
-      return #"#selector"#
-    case .poundFileKeyword: 
-      return #"#file"#
-    case .poundFileIDKeyword: 
-      return #"#fileID"#
-    case .poundFilePathKeyword: 
-      return #"#filePath"#
-    case .poundColumnKeyword: 
-      return #"#column"#
-    case .poundFunctionKeyword: 
-      return #"#function"#
-    case .poundDsohandleKeyword: 
-      return #"#dsohandle"#
     case .poundAssertKeyword: 
       return #"#assert"#
     case .poundSourceLocationKeyword: 
@@ -493,24 +384,6 @@ public enum TokenKind: Hashable {
       return false
     case .multilineStringQuote: 
       return false
-    case .poundKeyPathKeyword: 
-      return true
-    case .poundLineKeyword: 
-      return true
-    case .poundSelectorKeyword: 
-      return true
-    case .poundFileKeyword: 
-      return true
-    case .poundFileIDKeyword: 
-      return true
-    case .poundFilePathKeyword: 
-      return true
-    case .poundColumnKeyword: 
-      return true
-    case .poundFunctionKeyword: 
-      return true
-    case .poundDsohandleKeyword: 
-      return true
     case .poundAssertKeyword: 
       return true
     case .poundSourceLocationKeyword: 
@@ -629,24 +502,6 @@ public enum TokenKind: Hashable {
       return true
     case .multilineStringQuote: 
       return true
-    case .poundKeyPathKeyword: 
-      return false
-    case .poundLineKeyword: 
-      return false
-    case .poundSelectorKeyword: 
-      return false
-    case .poundFileKeyword: 
-      return false
-    case .poundFileIDKeyword: 
-      return false
-    case .poundFilePathKeyword: 
-      return false
-    case .poundColumnKeyword: 
-      return false
-    case .poundFunctionKeyword: 
-      return false
-    case .poundDsohandleKeyword: 
-      return false
     case .poundAssertKeyword: 
       return false
     case .poundSourceLocationKeyword: 
@@ -761,24 +616,6 @@ extension TokenKind: Equatable {
     case (.singleQuote, .singleQuote): 
       return true
     case (.multilineStringQuote, .multilineStringQuote): 
-      return true
-    case (.poundKeyPathKeyword, .poundKeyPathKeyword): 
-      return true
-    case (.poundLineKeyword, .poundLineKeyword): 
-      return true
-    case (.poundSelectorKeyword, .poundSelectorKeyword): 
-      return true
-    case (.poundFileKeyword, .poundFileKeyword): 
-      return true
-    case (.poundFileIDKeyword, .poundFileIDKeyword): 
-      return true
-    case (.poundFilePathKeyword, .poundFilePathKeyword): 
-      return true
-    case (.poundColumnKeyword, .poundColumnKeyword): 
-      return true
-    case (.poundFunctionKeyword, .poundFunctionKeyword): 
-      return true
-    case (.poundDsohandleKeyword, .poundDsohandleKeyword): 
       return true
     case (.poundAssertKeyword, .poundAssertKeyword): 
       return true
@@ -899,24 +736,6 @@ public enum RawTokenBaseKind: UInt8, Equatable, Hashable {
   case singleQuote
   
   case multilineStringQuote
-  
-  case poundKeyPathKeyword
-  
-  case poundLineKeyword
-  
-  case poundSelectorKeyword
-  
-  case poundFileKeyword
-  
-  case poundFileIDKeyword
-  
-  case poundFilePathKeyword
-  
-  case poundColumnKeyword
-  
-  case poundFunctionKeyword
-  
-  case poundDsohandleKeyword
   
   case poundAssertKeyword
   
@@ -1119,42 +938,6 @@ public struct RawTokenKind: Equatable, Hashable {
     return RawTokenKind(base: .multilineStringQuote, keyword: .rawValueZero)
   }
   
-  public static var poundKeyPathKeyword: RawTokenKind {
-    return RawTokenKind(base: .poundKeyPathKeyword, keyword: .rawValueZero)
-  }
-  
-  public static var poundLineKeyword: RawTokenKind {
-    return RawTokenKind(base: .poundLineKeyword, keyword: .rawValueZero)
-  }
-  
-  public static var poundSelectorKeyword: RawTokenKind {
-    return RawTokenKind(base: .poundSelectorKeyword, keyword: .rawValueZero)
-  }
-  
-  public static var poundFileKeyword: RawTokenKind {
-    return RawTokenKind(base: .poundFileKeyword, keyword: .rawValueZero)
-  }
-  
-  public static var poundFileIDKeyword: RawTokenKind {
-    return RawTokenKind(base: .poundFileIDKeyword, keyword: .rawValueZero)
-  }
-  
-  public static var poundFilePathKeyword: RawTokenKind {
-    return RawTokenKind(base: .poundFilePathKeyword, keyword: .rawValueZero)
-  }
-  
-  public static var poundColumnKeyword: RawTokenKind {
-    return RawTokenKind(base: .poundColumnKeyword, keyword: .rawValueZero)
-  }
-  
-  public static var poundFunctionKeyword: RawTokenKind {
-    return RawTokenKind(base: .poundFunctionKeyword, keyword: .rawValueZero)
-  }
-  
-  public static var poundDsohandleKeyword: RawTokenKind {
-    return RawTokenKind(base: .poundDsohandleKeyword, keyword: .rawValueZero)
-  }
-  
   public static var poundAssertKeyword: RawTokenKind {
     return RawTokenKind(base: .poundAssertKeyword, keyword: .rawValueZero)
   }
@@ -1318,24 +1101,6 @@ public struct RawTokenKind: Equatable, Hashable {
       return #"'"#
     case .multilineStringQuote: 
       return #"""""#
-    case .poundKeyPathKeyword: 
-      return #"#keyPath"#
-    case .poundLineKeyword: 
-      return #"#line"#
-    case .poundSelectorKeyword: 
-      return #"#selector"#
-    case .poundFileKeyword: 
-      return #"#file"#
-    case .poundFileIDKeyword: 
-      return #"#fileID"#
-    case .poundFilePathKeyword: 
-      return #"#filePath"#
-    case .poundColumnKeyword: 
-      return #"#column"#
-    case .poundFunctionKeyword: 
-      return #"#function"#
-    case .poundDsohandleKeyword: 
-      return #"#dsohandle"#
     case .poundAssertKeyword: 
       return #"#assert"#
     case .poundSourceLocationKeyword: 
@@ -1429,24 +1194,6 @@ public struct RawTokenKind: Equatable, Hashable {
       return #"'"#
     case .multilineStringQuote: 
       return #"""""#
-    case .poundKeyPathKeyword: 
-      return #"#keyPath"#
-    case .poundLineKeyword: 
-      return #"#line"#
-    case .poundSelectorKeyword: 
-      return #"#selector"#
-    case .poundFileKeyword: 
-      return #"#file"#
-    case .poundFileIDKeyword: 
-      return #"#fileID"#
-    case .poundFilePathKeyword: 
-      return #"#filePath"#
-    case .poundColumnKeyword: 
-      return #"#column"#
-    case .poundFunctionKeyword: 
-      return #"#function"#
-    case .poundDsohandleKeyword: 
-      return #"#dsohandle"#
     case .poundAssertKeyword: 
       return #"#assert"#
     case .poundSourceLocationKeyword: 
@@ -1565,24 +1312,6 @@ public struct RawTokenKind: Equatable, Hashable {
       return false
     case .multilineStringQuote: 
       return false
-    case .poundKeyPathKeyword: 
-      return true
-    case .poundLineKeyword: 
-      return true
-    case .poundSelectorKeyword: 
-      return true
-    case .poundFileKeyword: 
-      return true
-    case .poundFileIDKeyword: 
-      return true
-    case .poundFilePathKeyword: 
-      return true
-    case .poundColumnKeyword: 
-      return true
-    case .poundFunctionKeyword: 
-      return true
-    case .poundDsohandleKeyword: 
-      return true
     case .poundAssertKeyword: 
       return true
     case .poundSourceLocationKeyword: 
@@ -1701,24 +1430,6 @@ public struct RawTokenKind: Equatable, Hashable {
       return true
     case .multilineStringQuote: 
       return true
-    case .poundKeyPathKeyword: 
-      return false
-    case .poundLineKeyword: 
-      return false
-    case .poundSelectorKeyword: 
-      return false
-    case .poundFileKeyword: 
-      return false
-    case .poundFileIDKeyword: 
-      return false
-    case .poundFilePathKeyword: 
-      return false
-    case .poundColumnKeyword: 
-      return false
-    case .poundFunctionKeyword: 
-      return false
-    case .poundDsohandleKeyword: 
-      return false
     case .poundAssertKeyword: 
       return false
     case .poundSourceLocationKeyword: 
@@ -1771,115 +1482,6 @@ public struct RawTokenKind: Equatable, Hashable {
       return false
     case .stringSegment: 
       return false
-    }
-  }
-  
-  @_spi(RawSyntax)
-  public init?(keyword text: SyntaxText) {
-    switch text.count {
-    case 3: 
-      switch text {
-      case "#if": 
-        self = .poundIfKeyword
-      default: 
-        return nil
-      }
-    case 5: 
-      switch text {
-      case "#line": 
-        self = .poundLineKeyword
-      case "#file": 
-        self = .poundFileKeyword
-      case "#else": 
-        self = .poundElseKeyword
-      default: 
-        return nil
-      }
-    case 6: 
-      switch text {
-      case "#error": 
-        self = .poundErrorKeyword
-      case "#endif": 
-        self = .poundEndifKeyword
-      default: 
-        return nil
-      }
-    case 7: 
-      switch text {
-      case "#fileID": 
-        self = .poundFileIDKeyword
-      case "#column": 
-        self = .poundColumnKeyword
-      case "#assert": 
-        self = .poundAssertKeyword
-      case "#elseif": 
-        self = .poundElseifKeyword
-      default: 
-        return nil
-      }
-    case 8: 
-      switch text {
-      case "#keyPath": 
-        self = .poundKeyPathKeyword
-      case "#warning": 
-        self = .poundWarningKeyword
-      default: 
-        return nil
-      }
-    case 9: 
-      switch text {
-      case "#selector": 
-        self = .poundSelectorKeyword
-      case "#filePath": 
-        self = .poundFilePathKeyword
-      case "#function": 
-        self = .poundFunctionKeyword
-      default: 
-        return nil
-      }
-    case 10: 
-      switch text {
-      case "#dsohandle": 
-        self = .poundDsohandleKeyword
-      case "#available": 
-        self = .poundAvailableKeyword
-      default: 
-        return nil
-      }
-    case 11: 
-      switch text {
-      case "#_hasSymbol": 
-        self = .poundHasSymbolKeyword
-      default: 
-        return nil
-      }
-    case 12: 
-      switch text {
-      case "#unavailable": 
-        self = .poundUnavailableKeyword
-      case "#fileLiteral": 
-        self = .poundFileLiteralKeyword
-      default: 
-        return nil
-      }
-    case 13: 
-      switch text {
-      case "#imageLiteral": 
-        self = .poundImageLiteralKeyword
-      case "#colorLiteral": 
-        self = .poundColorLiteralKeyword
-      default: 
-        return nil
-      }
-    case 15: 
-      switch text {
-      case "#sourceLocation": 
-        self = .poundSourceLocationKeyword
-      default: 
-        return nil
-      }
-    default: 
-      return nil
     }
   }
 }
@@ -1972,33 +1574,6 @@ extension TokenKind {
     case .multilineStringQuote: 
       assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
       return .multilineStringQuote
-    case .poundKeyPathKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .poundKeyPathKeyword
-    case .poundLineKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .poundLineKeyword
-    case .poundSelectorKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .poundSelectorKeyword
-    case .poundFileKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .poundFileKeyword
-    case .poundFileIDKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .poundFileIDKeyword
-    case .poundFilePathKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .poundFilePathKeyword
-    case .poundColumnKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .poundColumnKeyword
-    case .poundFunctionKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .poundFunctionKeyword
-    case .poundDsohandleKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .poundDsohandleKeyword
     case .poundAssertKeyword: 
       assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
       return .poundAssertKeyword
@@ -2130,24 +1705,6 @@ extension TokenKind {
       return (.singleQuote, nil)
     case .multilineStringQuote: 
       return (.multilineStringQuote, nil)
-    case .poundKeyPathKeyword: 
-      return (.poundKeyPathKeyword, nil)
-    case .poundLineKeyword: 
-      return (.poundLineKeyword, nil)
-    case .poundSelectorKeyword: 
-      return (.poundSelectorKeyword, nil)
-    case .poundFileKeyword: 
-      return (.poundFileKeyword, nil)
-    case .poundFileIDKeyword: 
-      return (.poundFileIDKeyword, nil)
-    case .poundFilePathKeyword: 
-      return (.poundFilePathKeyword, nil)
-    case .poundColumnKeyword: 
-      return (.poundColumnKeyword, nil)
-    case .poundFunctionKeyword: 
-      return (.poundFunctionKeyword, nil)
-    case .poundDsohandleKeyword: 
-      return (.poundDsohandleKeyword, nil)
     case .poundAssertKeyword: 
       return (.poundAssertKeyword, nil)
     case .poundSourceLocationKeyword: 

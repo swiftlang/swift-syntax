@@ -108,7 +108,7 @@ public enum TokenPrecedence: Comparable {
     case  // Literals
     .floatingLiteral, .integerLiteral, .regexLiteral,
       // Pound literals
-      .poundAvailableKeyword, .poundColorLiteralKeyword, .poundColumnKeyword, .poundDsohandleKeyword, .poundFileIDKeyword, .poundFileKeyword, .poundFileLiteralKeyword, .poundFilePathKeyword, .poundFunctionKeyword, .poundImageLiteralKeyword, .poundKeyPathKeyword, .poundLineKeyword, .poundSelectorKeyword, .poundSourceLocationKeyword, .poundUnavailableKeyword, .poundHasSymbolKeyword,
+      .poundAvailableKeyword, .poundColorLiteralKeyword, .poundFileLiteralKeyword, .poundImageLiteralKeyword, .poundSourceLocationKeyword, .poundUnavailableKeyword, .poundHasSymbolKeyword,
       // Identifiers
       .dollarIdentifier, .identifier,
       // '_' can occur in types to replace a type identifier

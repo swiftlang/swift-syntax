@@ -18,10 +18,10 @@ import SwiftParserDiagnostics
 
 final class DiagnosticsFormatterTests: XCTestCase {
 
-  func annotate(source: String) -> String {
+  func annotate(source: String, colorize: Bool = false) -> String {
     let tree = Parser.parse(source: source)
     let diags = ParseDiagnosticsGenerator.diagnostics(for: tree)
-    return DiagnosticsFormatter.annotatedSource(tree: tree, diags: diags)
+    return DiagnosticsFormatter.annotatedSource(tree: tree, diags: diags, colorize: colorize)
   }
 
   func testSingleDiagnostic() {
@@ -92,5 +92,32 @@ final class DiagnosticsFormatterTests: XCTestCase {
       """
 
     AssertStringsEqualWithDiff(expectedOutput, annotate(source: source))
+  }
+
+  func testAddsColoringToSingleErrorDiagnostic() {
+    let source = """
+      var foo = bar +
+      """
+
+    let expectedOutput = """
+      1 │ var foo = bar +
+        ∣                ╰─ \u{001B}[1;31mexpected expression in variable\u{001B}[0;0m
+
+      """
+    AssertStringsEqualWithDiff(expectedOutput, annotate(source: source, colorize: true))
+  }
+
+  func testAddsColoringToMultipleDiagnosticsInOneLine() {
+    let source = """
+      foo.[].[].[]
+      """
+    let expectedOutput = """
+      1 │ foo.[].[].[]
+        ∣     │  │  ╰─ \u{001B}[1;31mexpected name in member access\u{001B}[0;0m
+        ∣     │  ╰─ \u{001B}[1;31mexpected name in member access\u{001B}[0;0m
+        ∣     ╰─ \u{001B}[1;31mexpected name in member access\u{001B}[0;0m
+
+      """
+    AssertStringsEqualWithDiff(expectedOutput, annotate(source: source, colorize: true))
   }
 }

@@ -15,9 +15,9 @@ import SwiftSyntaxBuilder
 import SyntaxSupport
 import Utils
 
-let lookupTable = ArrayExprSyntax {
+let lookupTable = ArrayExprSyntax(leftSquare: .leftSquareBracketToken(trailingTrivia: .newline)) {
   for keyword in KEYWORDS {
-    ArrayElementSyntax(expression: ExprSyntax("\(literal: keyword.name)"))
+    ArrayElementSyntax(expression: ExprSyntax("\(literal: keyword.name)"), trailingComma: .commaToken(), trailingTrivia: .newline)
   }
 }
 
@@ -40,7 +40,7 @@ let keywordFile = SourceFileSyntax {
     public enum Keyword: UInt8, Hashable
     """) {
     for (index, keyword) in KEYWORDS.enumerated() {
-      EnumCaseDeclSyntax("case \(raw: keyword.escapedName) = \(literal: index)")
+      EnumCaseDeclSyntax("case \(raw: keyword.escapedName)")
     }
 
     InitializerDeclSyntax("@_spi(RawSyntax) public init?(_ text: SyntaxText)") {

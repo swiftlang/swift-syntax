@@ -91,15 +91,15 @@ fileprivate class StringLiteralExpressionIndentationChecker {
 // MARK: - Post-process multi-line string literals
 
 fileprivate extension SyntaxText {
-  /// If the text ends with any newline character, return the trivia for that
-  /// newline, otherwise `nil`.
-  var newlineSuffix: RawTriviaPiece? {
+  /// If the text ends with any newline character, return that character,
+  /// otherwise `nil`.
+  var newlineSuffix: SyntaxText? {
     if hasSuffix("\r\n") {
-      return .carriageReturnLineFeeds(1)
+      return "\r\n"
     } else if hasSuffix("\n") {
-      return .newlines(1)
+      return "\n"
     } else if hasSuffix("\r") {
-      return .carriageReturns(1)
+      return "\r"
     } else {
       return nil
     }
@@ -130,6 +130,25 @@ extension Parser {
     } else {
       return nil
     }
+  }
+
+  private func reclassifyTrivia(
+    in token: RawTokenSyntax,
+    leading reclassifyLeading: SyntaxText = "",
+    trailing reclassifyTrailing: SyntaxText = "",
+    lexerError: LexerError? = nil
+  ) -> RawTokenSyntax {
+    assert(SyntaxText(rebasing: token.tokenText.prefix(reclassifyLeading.count)) == reclassifyLeading)
+    assert(SyntaxText(rebasing: token.tokenText.suffix(reclassifyTrailing.count)) == reclassifyTrailing)
+    return RawTokenSyntax(
+      kind: token.tokenKind,
+      text: SyntaxText(rebasing: token.tokenText.dropFirst(reclassifyLeading.count).dropLast(reclassifyTrailing.count)),
+      leadingTriviaPieces: token.leadingTriviaPieces + TriviaParser.parseTrivia(reclassifyLeading, position: .trailing),
+      trailingTriviaPieces: TriviaParser.parseTrivia(reclassifyTrailing, position: .trailing) + token.trailingTriviaPieces,
+      presence: token.presence,
+      lexerError: token.tokenView.lexerError ?? lexerError,
+      arena: self.arena
+    )
   }
 
   /// Re-classify the newline of the last line as trivia since the newline is
@@ -178,7 +197,7 @@ extension Parser {
       } else if let newlineSuffix = lastMiddleSegment.content.tokenText.newlineSuffix {
         // The newline at the end of the last line in the string literal is not part of the represented string.
         // Mark it as trivia.
-        let content = lastMiddleSegment.content.reclassifyAsTrailingTrivia([newlineSuffix], arena: self.arena)
+        let content = self.reclassifyTrivia(in: lastMiddleSegment.content, trailing: newlineSuffix)
 
         middleSegments[middleSegments.count - 1] = .stringSegment(
           RawStringSegmentSyntax(
@@ -208,8 +227,7 @@ extension Parser {
     rawStringDelimitersToken: RawTokenSyntax?,
     middleSegments: inout [RawStringLiteralSegmentsSyntax.Element],
     isFirstSegmentOnNewLine: Bool,
-    indentation: SyntaxText,
-    indentationTrivia: [RawTriviaPiece]
+    indentation: SyntaxText
   ) {
     let expressionIndentationChecker = StringLiteralExpressionIndentationChecker(expectedIndentation: indentation, arena: self.arena)
 
@@ -227,20 +245,16 @@ extension Parser {
           if segment.content.tokenText.hasPrefix(indentation) {
             segment = RawStringSegmentSyntax(
               segment.unexpectedBeforeContent,
-              content: segment.content.reclassifyAsLeadingTrivia(indentationTrivia, arena: self.arena),
+              content: self.reclassifyTrivia(in: segment.content, leading: indentation),
               segment.unexpectedAfterContent,
               arena: self.arena
             )
           } else if (segment.content.tokenText == "" || segment.content.tokenText.triviaPieceIfNewline != nil) && segment.content.trailingTriviaPieces.allSatisfy({ $0.isNewline }) {
             // Empty lines don't need to be indented and there's no indentation we need to strip away.
           } else {
-            let actualIndentation = segment.content.tokenText.prefix(while: { $0 == UInt8(ascii: " ") || $0 == UInt8(ascii: "\t") })
-            let actualIndentationTrivia = TriviaParser.parseTrivia(SyntaxText(rebasing: actualIndentation), position: .leading)
-            let content = segment.content.reclassifyAsLeadingTrivia(
-              actualIndentationTrivia,
-              lexerError: LexerError(.insufficientIndentationInMultilineStringLiteral, byteOffset: 0),
-              arena: self.arena
-            )
+            let actualIndentation = SyntaxText(rebasing: segment.content.tokenText.prefix(while: { $0 == UInt8(ascii: " ") || $0 == UInt8(ascii: "\t") }))
+            let lexerError = LexerError(.insufficientIndentationInMultilineStringLiteral, byteOffset: 0)
+            let content = self.reclassifyTrivia(in: segment.content, leading: actualIndentation, lexerError: lexerError)
             segment = RawStringSegmentSyntax(
               segment.unexpectedBeforeContent,
               content: content,
@@ -352,7 +366,15 @@ extension Parser {
     {
       indentationTrivia = parsedTrivia
       indentation = lastSegment.content.tokenText
-      closeQuote = closeQuote.extendingLeadingTrivia(by: parsedTrivia, arena: self.arena)
+      closeQuote = RawTokenSyntax(
+        kind: closeQuote.tokenKind,
+        text: closeQuote.tokenText,
+        leadingTriviaPieces: parsedTrivia + closeQuote.leadingTriviaPieces,
+        trailingTriviaPieces: closeQuote.trailingTriviaPieces,
+        presence: closeQuote.presence,
+        lexerError: closeQuote.tokenView.lexerError,
+        arena: self.arena
+      )
     } else {
       if let lastSegment = lastSegment {
         indentationTrivia = TriviaParser.parseTrivia(lastSegment.content.tokenText, position: .leading).prefix(while: { $0.isIndentationWhitespace })
@@ -386,8 +408,7 @@ extension Parser {
       rawStringDelimitersToken: rawStringDelimitersToken,
       middleSegments: &middleSegments,
       isFirstSegmentOnNewLine: openQuoteHasTrailingNewline,
-      indentation: indentation,
-      indentationTrivia: indentationTrivia
+      indentation: indentation
     )
 
     // -------------------------------------------------------------------------

@@ -230,8 +230,6 @@ SYNTAX_TOKENS = [
     # Keywords prefixed with a '#'.
     PoundDirectiveKeyword('PoundSourceLocation', 'sourceLocation',
                           text='#sourceLocation'),
-    PoundDirectiveKeyword('PoundWarning', 'warning', text='#warning'),
-    PoundDirectiveKeyword('PoundError', 'error', text='#error'),
 
     PoundConditionalDirectiveKeyword('PoundIf', 'if', text='#if'),
     PoundConditionalDirectiveKeyword('PoundElse', 'else', text='#else'),

@@ -60,7 +60,10 @@ extension FixIt.Changes {
 
   /// If `transferTrivia` is `true`, the leading and trailing trivia of the
   /// removed node will be transferred to the trailing trivia of the previous token.
-  static func makeMissing<SyntaxType: SyntaxProtocol>(_ node: SyntaxType, transferTrivia: Bool = true) -> Self {
+  static func makeMissing<SyntaxType: SyntaxProtocol>(_ node: SyntaxType?, transferTrivia: Bool = true) -> Self {
+    guard let node = node else {
+      return FixIt.Changes(changes: [])
+    }
     var changes = [FixIt.Change.replace(oldNode: Syntax(node), newNode: MissingMaker().visit(Syntax(node)))]
     if transferTrivia {
       changes += FixIt.Changes.transferTriviaAtSides(from: [node]).changes

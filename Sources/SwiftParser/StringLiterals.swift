@@ -51,7 +51,12 @@ extension Parser {
     let openDelimiter = self.consume(if: .rawStringDelimiter)
 
     /// Parse open quote.
-    let (unexpectedBeforeOpenQuote, openQuote) = self.expectAny([.stringQuote, .multilineStringQuote, .singleQuote], default: .stringQuote)
+    var (unexpectedBeforeOpenQuote, openQuote) = self.expectAny([.stringQuote, .multilineStringQuote], default: .stringQuote)
+    var openQuoteKind: RawTokenKind = openQuote.tokenKind
+    if openQuote.isMissing, let singleQuote = self.consume(if: .singleQuote) {
+      unexpectedBeforeOpenQuote = RawUnexpectedNodesSyntax(combining: unexpectedBeforeOpenQuote, singleQuote, arena: self.arena)
+      openQuoteKind = .singleQuote
+    }
 
     /// Parse segments.
     var segments: [RawStringLiteralSegmentsSyntax.Element] = []
@@ -68,7 +73,7 @@ extension Parser {
         // This allows us to skip over extraneous identifiers etc. in an unterminated string interpolation.
         var unexpectedBeforeRightParen: [RawTokenSyntax] = []
         var unexpectedProgress = LoopProgressCondition()
-        while !self.at(any: [.rightParen, .stringSegment, .backslash, openQuote.tokenKind, .eof]) && unexpectedProgress.evaluate(self.currentToken) {
+        while !self.at(any: [.rightParen, .stringSegment, .backslash, openQuoteKind, .eof]) && unexpectedProgress.evaluate(self.currentToken) {
           unexpectedBeforeRightParen.append(self.consumeAnyToken())
         }
         let rightParen = self.expectWithoutRecovery(.rightParen)
@@ -106,7 +111,15 @@ extension Parser {
     }
 
     /// Parse close quote.
-    let (unexpectedBeforeCloseQuote, closeQuote) = self.expect(openQuote.tokenKind)
+    let unexpectedBeforeCloseQuote: RawUnexpectedNodesSyntax?
+    let closeQuote: RawTokenSyntax
+    if openQuoteKind == .singleQuote {
+      let (unexpectedBeforeSingleQuote, singleQuote) = self.expect(.singleQuote)
+      unexpectedBeforeCloseQuote = RawUnexpectedNodesSyntax(combining: unexpectedBeforeSingleQuote, singleQuote, arena: self.arena)
+      closeQuote = missingToken(.stringQuote)
+    } else {
+      (unexpectedBeforeCloseQuote, closeQuote) = self.expect(openQuote.tokenKind)
+    }
 
     let (unexpectedBeforeCloseDelimiter, closeDelimiter) = self.parseStringDelimiter(openDelimiter: openDelimiter)
 

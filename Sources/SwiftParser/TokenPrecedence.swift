@@ -144,8 +144,8 @@ public enum TokenPrecedence: Comparable {
       self = .weakBracketClose
 
     // MARK: Statement keyword punctuator
-    case  // #error, #warning and #assert are statement-like
-    .poundErrorKeyword, .poundWarningKeyword, .poundAssertKeyword:
+    case  // #error, #warning is statement-like
+    .poundErrorKeyword, .poundWarningKeyword:
       self = .stmtKeyword
 
     // MARK: Strong bracketet

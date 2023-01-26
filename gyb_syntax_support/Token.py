@@ -227,8 +227,7 @@ SYNTAX_TOKENS = [
     Punctuator('MultilineStringQuote', 'multiline_string_quote',
                text='\\\"\\\"\\\"', classification='StringLiteral'),
 
-    PoundKeyword('PoundAssert', 'assert', text='#assert'),
-
+    # Keywords prefixed with a '#'.
     PoundDirectiveKeyword('PoundSourceLocation', 'sourceLocation',
                           text='#sourceLocation'),
     PoundDirectiveKeyword('PoundWarning', 'warning', text='#warning'),

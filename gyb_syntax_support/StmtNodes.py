@@ -328,18 +328,4 @@ STMT_NODES = [
                    collection_element_name='CatchItem', is_optional=True),
              Child('Body', kind='CodeBlock'),
          ]),
-
-    # e.g. #assert(1 == 2)
-    Node('PoundAssertStmt', name_for_diagnostics="'#assert' directive", kind='Stmt',
-         children=[
-             Child('PoundAssert', kind='PoundAssertToken'),
-             Child('LeftParen', kind='LeftParenToken'),
-             Child('Condition', kind='Expr', name_for_diagnostics='condition',
-                   description='The assertion condition.'),
-             Child('Comma', kind='CommaToken', is_optional=True,
-                   description='The comma after the assertion condition.'),
-             Child('Message', kind='StringLiteralExpr', name_for_diagnostics='message', is_optional=True,
-                   description='The assertion message.'),
-             Child('RightParen', kind='RightParenToken'),
-         ]),
 ]

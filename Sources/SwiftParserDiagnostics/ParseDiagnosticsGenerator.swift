@@ -817,6 +817,37 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: StringLiteralExprSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+
+    if let singleQuote = node.unexpectedBetweenOpenDelimiterAndOpenQuote?.onlyToken(where: { $0.tokenKind == .singleQuote }) {
+      let fixIt = FixIt(
+        message: ReplaceTokensFixIt(replaceTokens: [singleQuote], replacement: node.openQuote),
+        changes: [
+          .makeMissing(singleQuote, transferTrivia: false),
+          .makePresent(node.openQuote, leadingTrivia: singleQuote.leadingTrivia ?? []),
+          .makeMissing(node.unexpectedBetweenSegmentsAndCloseQuote, transferTrivia: false),
+          .makePresent(node.closeQuote, trailingTrivia: node.unexpectedBetweenSegmentsAndCloseQuote?.trailingTrivia ?? []),
+        ]
+      )
+      addDiagnostic(
+        singleQuote,
+        .singleQuoteStringLiteral,
+        fixIts: [fixIt],
+        handledNodes: [
+          node.unexpectedBetweenOpenDelimiterAndOpenQuote?.id,
+          node.openQuote.id,
+          node.unexpectedBetweenSegmentsAndCloseQuote?.id,
+          node.closeQuote.id,
+        ].compactMap { $0 }
+      )
+    }
+
+    return .visitChildren
+  }
+
   public override func visit(_ node: SwitchCaseSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren

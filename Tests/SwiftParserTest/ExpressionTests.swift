@@ -632,8 +632,26 @@ final class ExpressionTests: XCTestCase {
   func testSingleQuoteStringLiteral() {
     AssertParse(
       #"""
-      'red'
-      """#
+      1️⃣'red'
+      """#,
+      diagnostics: [
+        DiagnosticSpec(message: #"Single-quoted string literal found, use '"'"#, fixIts: [#"replace ''' by '"'"#])
+      ],
+      fixedSource: """
+        "red"
+        """
+    )
+
+    AssertParse(
+      #"""
+       1️⃣' red ' + 1
+      """#,
+      diagnostics: [
+        DiagnosticSpec(message: #"Single-quoted string literal found, use '"'"#, fixIts: [#"replace ''' by '"'"#])
+      ],
+      fixedSource: """
+         " red " + 1
+        """
     )
   }
 

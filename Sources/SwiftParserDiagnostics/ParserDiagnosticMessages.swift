@@ -158,6 +158,9 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var operatorShouldBeDeclaredWithoutBody: Self {
     .init("operator should not be declared with body")
   }
+  public static var singleQuoteStringLiteral: Self {
+    .init(#"Single-quoted string literal found, use '"'"#)
+  }
   public static var standaloneSemicolonStatement: Self {
     .init("standalone ';' statements are not allowed")
   }

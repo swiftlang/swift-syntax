@@ -201,6 +201,8 @@ extension Lexer {
   struct Cursor {
     var input: UnsafeBufferPointer<UInt8>
     var previous: UInt8
+    /// If we have already lexed a token, the kind of the previously lexed token
+    var previousTokenKind: RawTokenBaseKind?
     private var stateStack: StateStack = StateStack()
 
     init(input: UnsafeBufferPointer<UInt8>, previous: UInt8) {
@@ -335,6 +337,7 @@ extension Lexer.Cursor {
       flags.insert(.isAtStartOfLine)
     }
 
+    self.previousTokenKind = result.tokenKind.base
     let error = result.error.map { error in
       return LexerError(error.kind, byteOffset: cursor.distance(to: error.position))
     }
@@ -676,6 +679,9 @@ extension Lexer.Cursor {
   }
 
   /// Rever the lexer by `offset` bytes. This should only be used by `resetForSplit`.
+  /// This must not back up by more bytes than the last token because that would
+  /// require us to also update `previousTokenKind`, which we don't do in this
+  /// function
   mutating func backUp(by offset: Int) {
     assert(!self.isAtStartOfFile)
     self.previous = self.input.baseAddress!.advanced(by: -(offset + 1)).pointee
@@ -1224,11 +1230,16 @@ extension Lexer.Cursor {
 
     // TODO: This can probably be unified with lexHexNumber somehow
 
-    // Lex things like 4.x as '4' followed by a tok::period.
     if self.is(at: ".") {
-      // NextToken is the soon to be previous token
-      // Therefore: x.0.1 is sub-tuple access, not x.float_literal
-      if let peeked = self.peek(at: 1), !Unicode.Scalar(peeked).isDigit || tokenStart.previous == UInt8(ascii: ".") {
+      if self.peek(at: 1) == nil {
+        // If there are no more digits following the '.', we don't have a float
+        // literal.
+        return Lexer.Result(.integerLiteral)
+      } else if let peeked = self.peek(at: 1), !Unicode.Scalar(peeked).isDigit {
+        // ".a" is a member access and certainly not a float literal
+        return Lexer.Result(.integerLiteral)
+      } else if self.previousTokenKind == .period {
+        // Lex x.0.1 is sub-tuple access, not x.float_literal.
         return Lexer.Result(.integerLiteral)
       }
     } else if self.isAtEndOfFile || self.is(notAt: "e", "E") {

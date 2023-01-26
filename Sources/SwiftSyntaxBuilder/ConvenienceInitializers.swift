@@ -414,7 +414,7 @@ extension VariableDeclSyntax {
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
-      attributes: attributes?.withTrailingTrivia(.space),
+      attributes: attributes?.with(\.trailingTrivia, .space),
       modifiers: modifiers,
       letOrVarKeyword: .keyword(letOrVarKeyword)
     ) {
@@ -437,7 +437,7 @@ extension VariableDeclSyntax {
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
-      attributes: attributes?.withTrailingTrivia(.space),
+      attributes: attributes?.with(\.trailingTrivia, .space),
       modifiers: modifiers,
       letOrVarKeyword: .keyword(.var)
     ) {

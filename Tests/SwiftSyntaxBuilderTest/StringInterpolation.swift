@@ -244,8 +244,8 @@ final class StringInterpolationTests: XCTestCase {
     class Rewriter: SyntaxRewriter {
       override func visit(_ node: FunctionDeclSyntax) -> DeclSyntax {
         let newFunc = DeclSyntax("func newName() {}")
-          .withLeadingTrivia(node.leadingTrivia!)
-          .withTrailingTrivia(node.trailingTrivia!)
+          .with(\.leadingTrivia, node.leadingTrivia!)
+          .with(\.trailingTrivia, node.trailingTrivia!)
         return DeclSyntax(newFunc)
       }
     }

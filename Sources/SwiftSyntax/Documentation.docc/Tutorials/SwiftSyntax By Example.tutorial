@@ -212,14 +212,14 @@
       
       @Step {
         Normalize the whitespace of all the imports by calling the trivia 
-        manipulation functions `withLeadingTrivia(_:)` and 
-        `withTrailingTrivia(_:)` on import items.
+        manipulation functions `with(\.leadingTrivia, _:)` and 
+        `with(\.trailingTrivia, _:)` on import items.
         
         SwiftSyntax does not automatically format whitespace and trivia when
         items are moved around. SwiftSyntax provides a convenient way of 
         manipulating whitespace by calling the 
-        `withLeadingTrivia(_:)` and 
-        `withTrailingTrivia(_:)` methods. By normalizing all
+        `with(\.leadingTrivia, _:)` and 
+        `with(\.trailingTrivia, _:)` methods. By normalizing all
         of the whitespace to a single leading newline we can fix bug #1. And
         by removing all trailing whitespace we can fix bug #2.
         

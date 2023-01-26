@@ -15,7 +15,7 @@ import SwiftSyntax
 extension WithTrailingCommaSyntax {
   func ensuringTrailingComma() -> Self {
     if trailingComma == nil {
-      return self.withTrailingComma(.commaToken())
+      return self.with(\.trailingComma, .commaToken())
     } else {
       return self
     }

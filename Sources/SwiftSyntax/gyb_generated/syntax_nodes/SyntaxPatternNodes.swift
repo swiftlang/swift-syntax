@@ -113,18 +113,11 @@ public struct IsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBeforeIsKeyword(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
+      self = IsTypePatternSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBeforeIsKeyword` replaced.
-  /// - param newChild: The new `unexpectedBeforeIsKeyword` to replace the node's
-  ///                   current `unexpectedBeforeIsKeyword`, if present.
-  public func withUnexpectedBeforeIsKeyword(_ newChild: UnexpectedNodesSyntax?) -> IsTypePatternSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-    return IsTypePatternSyntax(newData)
   }
 
   public var isKeyword: TokenSyntax {
@@ -133,18 +126,11 @@ public struct IsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(childData!)
     }
     set(value) {
-      self = withIsKeyword(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
+      self = IsTypePatternSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `isKeyword` replaced.
-  /// - param newChild: The new `isKeyword` to replace the node's
-  ///                   current `isKeyword`, if present.
-  public func withIsKeyword(_ newChild: TokenSyntax) -> IsTypePatternSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-    return IsTypePatternSyntax(newData)
   }
 
   public var unexpectedBetweenIsKeywordAndType: UnexpectedNodesSyntax? {
@@ -154,18 +140,11 @@ public struct IsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenIsKeywordAndType(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
+      self = IsTypePatternSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenIsKeywordAndType` replaced.
-  /// - param newChild: The new `unexpectedBetweenIsKeywordAndType` to replace the node's
-  ///                   current `unexpectedBetweenIsKeywordAndType`, if present.
-  public func withUnexpectedBetweenIsKeywordAndType(_ newChild: UnexpectedNodesSyntax?) -> IsTypePatternSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-    return IsTypePatternSyntax(newData)
   }
 
   public var type: TypeSyntax {
@@ -174,18 +153,11 @@ public struct IsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return TypeSyntax(childData!)
     }
     set(value) {
-      self = withType(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
+      self = IsTypePatternSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `type` replaced.
-  /// - param newChild: The new `type` to replace the node's
-  ///                   current `type`, if present.
-  public func withType(_ newChild: TypeSyntax) -> IsTypePatternSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-    return IsTypePatternSyntax(newData)
   }
 
   public var unexpectedAfterType: UnexpectedNodesSyntax? {
@@ -195,18 +167,11 @@ public struct IsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedAfterType(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
+      self = IsTypePatternSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedAfterType` replaced.
-  /// - param newChild: The new `unexpectedAfterType` to replace the node's
-  ///                   current `unexpectedAfterType`, if present.
-  public func withUnexpectedAfterType(_ newChild: UnexpectedNodesSyntax?) -> IsTypePatternSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-    return IsTypePatternSyntax(newData)
   }
 
   public static var structure: SyntaxNodeStructure {
@@ -297,18 +262,11 @@ public struct IdentifierPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBeforeIdentifier(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
+      self = IdentifierPatternSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBeforeIdentifier` replaced.
-  /// - param newChild: The new `unexpectedBeforeIdentifier` to replace the node's
-  ///                   current `unexpectedBeforeIdentifier`, if present.
-  public func withUnexpectedBeforeIdentifier(_ newChild: UnexpectedNodesSyntax?) -> IdentifierPatternSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-    return IdentifierPatternSyntax(newData)
   }
 
   public var identifier: TokenSyntax {
@@ -317,18 +275,11 @@ public struct IdentifierPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(childData!)
     }
     set(value) {
-      self = withIdentifier(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
+      self = IdentifierPatternSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `identifier` replaced.
-  /// - param newChild: The new `identifier` to replace the node's
-  ///                   current `identifier`, if present.
-  public func withIdentifier(_ newChild: TokenSyntax) -> IdentifierPatternSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-    return IdentifierPatternSyntax(newData)
   }
 
   public var unexpectedAfterIdentifier: UnexpectedNodesSyntax? {
@@ -338,18 +289,11 @@ public struct IdentifierPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedAfterIdentifier(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
+      self = IdentifierPatternSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedAfterIdentifier` replaced.
-  /// - param newChild: The new `unexpectedAfterIdentifier` to replace the node's
-  ///                   current `unexpectedAfterIdentifier`, if present.
-  public func withUnexpectedAfterIdentifier(_ newChild: UnexpectedNodesSyntax?) -> IdentifierPatternSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-    return IdentifierPatternSyntax(newData)
   }
 
   public static var structure: SyntaxNodeStructure {
@@ -440,18 +384,11 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBeforeLeftParen(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
+      self = TuplePatternSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBeforeLeftParen` replaced.
-  /// - param newChild: The new `unexpectedBeforeLeftParen` to replace the node's
-  ///                   current `unexpectedBeforeLeftParen`, if present.
-  public func withUnexpectedBeforeLeftParen(_ newChild: UnexpectedNodesSyntax?) -> TuplePatternSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-    return TuplePatternSyntax(newData)
   }
 
   public var leftParen: TokenSyntax {
@@ -460,18 +397,11 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(childData!)
     }
     set(value) {
-      self = withLeftParen(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
+      self = TuplePatternSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `leftParen` replaced.
-  /// - param newChild: The new `leftParen` to replace the node's
-  ///                   current `leftParen`, if present.
-  public func withLeftParen(_ newChild: TokenSyntax) -> TuplePatternSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-    return TuplePatternSyntax(newData)
   }
 
   public var unexpectedBetweenLeftParenAndElements: UnexpectedNodesSyntax? {
@@ -481,18 +411,11 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenLeftParenAndElements(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
+      self = TuplePatternSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenLeftParenAndElements` replaced.
-  /// - param newChild: The new `unexpectedBetweenLeftParenAndElements` to replace the node's
-  ///                   current `unexpectedBetweenLeftParenAndElements`, if present.
-  public func withUnexpectedBetweenLeftParenAndElements(_ newChild: UnexpectedNodesSyntax?) -> TuplePatternSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-    return TuplePatternSyntax(newData)
   }
 
   public var elements: TuplePatternElementListSyntax {
@@ -501,7 +424,10 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return TuplePatternElementListSyntax(childData!)
     }
     set(value) {
-      self = withElements(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
+      self = TuplePatternSyntax(newData)
     }
   }
 
@@ -524,16 +450,6 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     return TuplePatternSyntax(newData)
   }
 
-  /// Returns a copy of the receiver with its `elements` replaced.
-  /// - param newChild: The new `elements` to replace the node's
-  ///                   current `elements`, if present.
-  public func withElements(_ newChild: TuplePatternElementListSyntax) -> TuplePatternSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-    return TuplePatternSyntax(newData)
-  }
-
   public var unexpectedBetweenElementsAndRightParen: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 4, parent: Syntax(self))
@@ -541,18 +457,11 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenElementsAndRightParen(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
+      self = TuplePatternSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenElementsAndRightParen` replaced.
-  /// - param newChild: The new `unexpectedBetweenElementsAndRightParen` to replace the node's
-  ///                   current `unexpectedBetweenElementsAndRightParen`, if present.
-  public func withUnexpectedBetweenElementsAndRightParen(_ newChild: UnexpectedNodesSyntax?) -> TuplePatternSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-    return TuplePatternSyntax(newData)
   }
 
   public var rightParen: TokenSyntax {
@@ -561,18 +470,11 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(childData!)
     }
     set(value) {
-      self = withRightParen(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 5, with: raw, arena: arena)
+      self = TuplePatternSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `rightParen` replaced.
-  /// - param newChild: The new `rightParen` to replace the node's
-  ///                   current `rightParen`, if present.
-  public func withRightParen(_ newChild: TokenSyntax) -> TuplePatternSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
-    return TuplePatternSyntax(newData)
   }
 
   public var unexpectedAfterRightParen: UnexpectedNodesSyntax? {
@@ -582,18 +484,11 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedAfterRightParen(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 6, with: raw, arena: arena)
+      self = TuplePatternSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedAfterRightParen` replaced.
-  /// - param newChild: The new `unexpectedAfterRightParen` to replace the node's
-  ///                   current `unexpectedAfterRightParen`, if present.
-  public func withUnexpectedAfterRightParen(_ newChild: UnexpectedNodesSyntax?) -> TuplePatternSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
-    return TuplePatternSyntax(newData)
   }
 
   public static var structure: SyntaxNodeStructure {
@@ -696,18 +591,11 @@ public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBeforeWildcard(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
+      self = WildcardPatternSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBeforeWildcard` replaced.
-  /// - param newChild: The new `unexpectedBeforeWildcard` to replace the node's
-  ///                   current `unexpectedBeforeWildcard`, if present.
-  public func withUnexpectedBeforeWildcard(_ newChild: UnexpectedNodesSyntax?) -> WildcardPatternSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-    return WildcardPatternSyntax(newData)
   }
 
   public var wildcard: TokenSyntax {
@@ -716,18 +604,11 @@ public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(childData!)
     }
     set(value) {
-      self = withWildcard(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
+      self = WildcardPatternSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `wildcard` replaced.
-  /// - param newChild: The new `wildcard` to replace the node's
-  ///                   current `wildcard`, if present.
-  public func withWildcard(_ newChild: TokenSyntax) -> WildcardPatternSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-    return WildcardPatternSyntax(newData)
   }
 
   public var unexpectedBetweenWildcardAndTypeAnnotation: UnexpectedNodesSyntax? {
@@ -737,18 +618,11 @@ public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenWildcardAndTypeAnnotation(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
+      self = WildcardPatternSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenWildcardAndTypeAnnotation` replaced.
-  /// - param newChild: The new `unexpectedBetweenWildcardAndTypeAnnotation` to replace the node's
-  ///                   current `unexpectedBetweenWildcardAndTypeAnnotation`, if present.
-  public func withUnexpectedBetweenWildcardAndTypeAnnotation(_ newChild: UnexpectedNodesSyntax?) -> WildcardPatternSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-    return WildcardPatternSyntax(newData)
   }
 
   public var typeAnnotation: TypeAnnotationSyntax? {
@@ -758,18 +632,11 @@ public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return TypeAnnotationSyntax(childData!)
     }
     set(value) {
-      self = withTypeAnnotation(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
+      self = WildcardPatternSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `typeAnnotation` replaced.
-  /// - param newChild: The new `typeAnnotation` to replace the node's
-  ///                   current `typeAnnotation`, if present.
-  public func withTypeAnnotation(_ newChild: TypeAnnotationSyntax?) -> WildcardPatternSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-    return WildcardPatternSyntax(newData)
   }
 
   public var unexpectedAfterTypeAnnotation: UnexpectedNodesSyntax? {
@@ -779,18 +646,11 @@ public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedAfterTypeAnnotation(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
+      self = WildcardPatternSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedAfterTypeAnnotation` replaced.
-  /// - param newChild: The new `unexpectedAfterTypeAnnotation` to replace the node's
-  ///                   current `unexpectedAfterTypeAnnotation`, if present.
-  public func withUnexpectedAfterTypeAnnotation(_ newChild: UnexpectedNodesSyntax?) -> WildcardPatternSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-    return WildcardPatternSyntax(newData)
   }
 
   public static var structure: SyntaxNodeStructure {
@@ -881,18 +741,11 @@ public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBeforeExpression(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
+      self = ExpressionPatternSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBeforeExpression` replaced.
-  /// - param newChild: The new `unexpectedBeforeExpression` to replace the node's
-  ///                   current `unexpectedBeforeExpression`, if present.
-  public func withUnexpectedBeforeExpression(_ newChild: UnexpectedNodesSyntax?) -> ExpressionPatternSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-    return ExpressionPatternSyntax(newData)
   }
 
   public var expression: ExprSyntax {
@@ -901,18 +754,11 @@ public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return ExprSyntax(childData!)
     }
     set(value) {
-      self = withExpression(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
+      self = ExpressionPatternSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `expression` replaced.
-  /// - param newChild: The new `expression` to replace the node's
-  ///                   current `expression`, if present.
-  public func withExpression(_ newChild: ExprSyntax) -> ExpressionPatternSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-    return ExpressionPatternSyntax(newData)
   }
 
   public var unexpectedAfterExpression: UnexpectedNodesSyntax? {
@@ -922,18 +768,11 @@ public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedAfterExpression(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
+      self = ExpressionPatternSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedAfterExpression` replaced.
-  /// - param newChild: The new `unexpectedAfterExpression` to replace the node's
-  ///                   current `unexpectedAfterExpression`, if present.
-  public func withUnexpectedAfterExpression(_ newChild: UnexpectedNodesSyntax?) -> ExpressionPatternSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-    return ExpressionPatternSyntax(newData)
   }
 
   public static var structure: SyntaxNodeStructure {
@@ -1020,18 +859,11 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBeforeLetOrVarKeyword(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
+      self = ValueBindingPatternSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBeforeLetOrVarKeyword` replaced.
-  /// - param newChild: The new `unexpectedBeforeLetOrVarKeyword` to replace the node's
-  ///                   current `unexpectedBeforeLetOrVarKeyword`, if present.
-  public func withUnexpectedBeforeLetOrVarKeyword(_ newChild: UnexpectedNodesSyntax?) -> ValueBindingPatternSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-    return ValueBindingPatternSyntax(newData)
   }
 
   public var letOrVarKeyword: TokenSyntax {
@@ -1040,18 +872,11 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(childData!)
     }
     set(value) {
-      self = withLetOrVarKeyword(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
+      self = ValueBindingPatternSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `letOrVarKeyword` replaced.
-  /// - param newChild: The new `letOrVarKeyword` to replace the node's
-  ///                   current `letOrVarKeyword`, if present.
-  public func withLetOrVarKeyword(_ newChild: TokenSyntax) -> ValueBindingPatternSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-    return ValueBindingPatternSyntax(newData)
   }
 
   public var unexpectedBetweenLetOrVarKeywordAndValuePattern: UnexpectedNodesSyntax? {
@@ -1061,18 +886,11 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenLetOrVarKeywordAndValuePattern(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
+      self = ValueBindingPatternSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenLetOrVarKeywordAndValuePattern` replaced.
-  /// - param newChild: The new `unexpectedBetweenLetOrVarKeywordAndValuePattern` to replace the node's
-  ///                   current `unexpectedBetweenLetOrVarKeywordAndValuePattern`, if present.
-  public func withUnexpectedBetweenLetOrVarKeywordAndValuePattern(_ newChild: UnexpectedNodesSyntax?) -> ValueBindingPatternSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-    return ValueBindingPatternSyntax(newData)
   }
 
   public var valuePattern: PatternSyntax {
@@ -1081,18 +899,11 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return PatternSyntax(childData!)
     }
     set(value) {
-      self = withValuePattern(value)
+      let arena = SyntaxArena()
+      let raw = value.raw
+      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
+      self = ValueBindingPatternSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `valuePattern` replaced.
-  /// - param newChild: The new `valuePattern` to replace the node's
-  ///                   current `valuePattern`, if present.
-  public func withValuePattern(_ newChild: PatternSyntax) -> ValueBindingPatternSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild.raw
-    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-    return ValueBindingPatternSyntax(newData)
   }
 
   public var unexpectedAfterValuePattern: UnexpectedNodesSyntax? {
@@ -1102,18 +913,11 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedAfterValuePattern(value)
+      let arena = SyntaxArena()
+      let raw = value?.raw
+      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
+      self = ValueBindingPatternSyntax(newData)
     }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedAfterValuePattern` replaced.
-  /// - param newChild: The new `unexpectedAfterValuePattern` to replace the node's
-  ///                   current `unexpectedAfterValuePattern`, if present.
-  public func withUnexpectedAfterValuePattern(_ newChild: UnexpectedNodesSyntax?) -> ValueBindingPatternSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-    return ValueBindingPatternSyntax(newData)
   }
 
   public static var structure: SyntaxNodeStructure {

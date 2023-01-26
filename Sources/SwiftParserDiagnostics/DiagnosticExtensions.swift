@@ -77,10 +77,10 @@ extension FixIt.Changes {
   ) -> Self {
     var presentNode = PresentMaker().visit(Syntax(node))
     if let leadingTrivia = leadingTrivia {
-      presentNode = presentNode.withLeadingTrivia(leadingTrivia)
+      presentNode = presentNode.with(\.leadingTrivia, leadingTrivia)
     }
     if let trailingTrivia = trailingTrivia {
-      presentNode = presentNode.withTrailingTrivia(trailingTrivia)
+      presentNode = presentNode.with(\.trailingTrivia, trailingTrivia)
     }
     if node.shouldBeInsertedAfterNextTokenTrivia,
       let nextToken = node.nextToken(viewMode: .sourceAccurate),
@@ -89,7 +89,7 @@ extension FixIt.Changes {
       return [
         .replace(
           oldNode: Syntax(node),
-          newNode: Syntax(presentNode).withLeadingTrivia(nextToken.leadingTrivia)
+          newNode: Syntax(presentNode).with(\.leadingTrivia, nextToken.leadingTrivia)
         ),
         .replaceLeadingTrivia(token: nextToken, newTrivia: []),
       ]
@@ -105,7 +105,7 @@ extension FixIt.Changes {
       return [
         .replace(
           oldNode: Syntax(node),
-          newNode: Syntax(presentNode).withLeadingTrivia(.space)
+          newNode: Syntax(presentNode).with(\.leadingTrivia, .space)
         )
       ]
     } else {
@@ -123,7 +123,7 @@ extension FixIt.Changes {
     if let previousToken = token.previousToken(viewMode: .sourceAccurate) {
       var presentToken = PresentMaker().visit(token)
       if !previousToken.trailingTrivia.isEmpty {
-        presentToken = presentToken.withTrailingTrivia(previousToken.trailingTrivia)
+        presentToken = presentToken.with(\.trailingTrivia, previousToken.trailingTrivia)
       }
       return [
         .replaceTrailingTrivia(token: previousToken, newTrivia: []),

@@ -57,7 +57,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
     return tokenView.presence
   }
 
-  /// The text of the token as written in the source code.
+  /// The text of the token as written in the source code, without any trivia.
   public var text: String {
     return tokenKind.text
   }
@@ -78,46 +78,13 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
     return TokenSyntax(newData)
   }
 
-  /// Returns a new TokenSyntax with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> TokenSyntax {
-    guard raw.kind == .token else {
-      fatalError("TokenSyntax must have token as its raw")
-    }
-    return TokenSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
-  }
-
-  /// Returns a new TokenSyntax with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> TokenSyntax {
-    guard raw.kind == .token else {
-      fatalError("TokenSyntax must have token as its raw")
-    }
-    return TokenSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
-  }
-
-  /// Returns a new TokenSyntax with its leading trivia removed.
-  public func withoutLeadingTrivia() -> TokenSyntax {
-    return withLeadingTrivia([])
-  }
-
-  /// Returns a new TokenSyntax with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> TokenSyntax {
-    return withTrailingTrivia([])
-  }
-
-  /// Returns a new TokenSyntax with all trivia removed.
-  public func withoutTrivia() -> TokenSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-
   /// The leading trivia (spaces, newlines, etc.) associated with this token.
   public var leadingTrivia: Trivia {
     get {
       return tokenView.formLeadingTrivia()
     }
     set {
-      self = withLeadingTrivia(newValue)
+      self = TokenSyntax(data.withLeadingTrivia(newValue, arena: SyntaxArena()))
     }
   }
 
@@ -127,7 +94,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
       return tokenView.formTrailingTrivia()
     }
     set {
-      self = withTrailingTrivia(newValue)
+      self = TokenSyntax(data.withTrailingTrivia(newValue, arena: SyntaxArena()))
     }
   }
 

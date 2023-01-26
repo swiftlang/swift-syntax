@@ -51,12 +51,12 @@ public struct MigrateToNewIfLetSyntax: RefactoringProvider {
         binding.initializer = nil
         // ... and remove whitespace before the comma (in `if` statements with multiple conditions).
         if index != node.conditions.count - 1 {
-          binding.pattern = binding.pattern.withoutTrailingTrivia()
+          binding.pattern = binding.pattern.with(\.trailingTrivia, [])
         }
         conditionCopy.condition = .optionalBinding(binding)
       }
       return conditionCopy
     }
-    return StmtSyntax(node.withConditions(ConditionElementListSyntax(newConditions)))
+    return StmtSyntax(node.with(\.conditions, ConditionElementListSyntax(newConditions)))
   }
 }

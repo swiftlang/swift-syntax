@@ -206,7 +206,7 @@ public class SyntaxComparisonTests: XCTestCase {
       body: funcBody
     )
     if indent > 0 {
-      return fd.withLeadingTrivia(.spaces(indent))
+      return fd.with(\.leadingTrivia, .spaces(indent))
     }
     return fd
   }

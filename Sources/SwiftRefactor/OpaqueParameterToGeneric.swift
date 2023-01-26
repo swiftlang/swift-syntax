@@ -48,7 +48,7 @@ fileprivate class SomeParameterRewriter: SyntaxRewriter {
     let colon: TokenSyntax?
     if node.baseType.description != "Any" {
       colon = .colonToken()
-      inheritedType = node.baseType.withLeadingTrivia(.space)
+      inheritedType = node.baseType.with(\.leadingTrivia, .space)
     } else {
       colon = nil
       inheritedType = nil
@@ -143,8 +143,8 @@ public struct OpaqueParameterToGeneric: RefactoringProvider {
       // Add a trailing comma to the prior generic parameter, if there is one.
       if let lastNewGenericParam = newGenericParams.last {
         newGenericParams[newGenericParams.count - 1] =
-          lastNewGenericParam.withTrailingComma(.commaToken())
-        newGenericParams.append(newGenericParam.withLeadingTrivia(.space))
+          lastNewGenericParam.with(\.trailingComma, .commaToken())
+        newGenericParams.append(newGenericParam.with(\.leadingTrivia, .space))
       } else {
         newGenericParams.append(newGenericParam)
       }
@@ -153,7 +153,8 @@ public struct OpaqueParameterToGeneric: RefactoringProvider {
     let newGenericParamSyntax = GenericParameterListSyntax(newGenericParams)
     let newGenericParamClause: GenericParameterClauseSyntax
     if let genericParams = genericParams {
-      newGenericParamClause = genericParams.withGenericParameterList(
+      newGenericParamClause = genericParams.with(
+        \.genericParameterList,
         newGenericParamSyntax
       )
     } else {
@@ -166,7 +167,7 @@ public struct OpaqueParameterToGeneric: RefactoringProvider {
     }
 
     return (
-      params.withParameterList(rewrittenParams),
+      params.with(\.parameterList, rewrittenParams),
       newGenericParamClause
     )
   }
@@ -188,8 +189,8 @@ public struct OpaqueParameterToGeneric: RefactoringProvider {
 
       return DeclSyntax(
         funcSyntax
-          .withSignature(funcSyntax.signature.withInput(newInput))
-          .withGenericParameterClause(newGenericParams)
+          .with(\.signature, funcSyntax.signature.with(\.input, newInput))
+          .with(\.genericParameterClause, newGenericParams)
       )
     }
 
@@ -206,8 +207,8 @@ public struct OpaqueParameterToGeneric: RefactoringProvider {
 
       return DeclSyntax(
         initSyntax
-          .withSignature(initSyntax.signature.withInput(newInput))
-          .withGenericParameterClause(newGenericParams)
+          .with(\.signature, initSyntax.signature.with(\.input, newInput))
+          .with(\.genericParameterClause, newGenericParams)
       )
     }
 
@@ -224,8 +225,8 @@ public struct OpaqueParameterToGeneric: RefactoringProvider {
 
       return DeclSyntax(
         subscriptSyntax
-          .withIndices(newIndices)
-          .withGenericParameterClause(newGenericParams)
+          .with(\.indices, newIndices)
+          .with(\.genericParameterClause, newGenericParams)
       )
     }
 

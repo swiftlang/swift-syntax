@@ -33,8 +33,8 @@ fileprivate enum NodesDescriptionPart {
         tokens = tokens.map({ BasicFormat().visit($0) })
       }
       if !tokens.isEmpty {
-        tokens[0] = tokens[0].withLeadingTrivia([])
-        tokens[tokens.count - 1] = tokens[tokens.count - 1].withTrailingTrivia([])
+        tokens[0] = tokens[0].with(\.leadingTrivia, [])
+        tokens[tokens.count - 1] = tokens[tokens.count - 1].with(\.trailingTrivia, [])
       }
       let tokenContents = tokens.map(\.description).joined()
       return "'\(tokenContents)'"

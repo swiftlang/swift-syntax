@@ -63,12 +63,18 @@ extension Parser.Lookahead {
       {
         break
       }
-      if self.at(any: kinds) {
+      if let matchedKind = kinds.filter({ RawTokenKindMatch($0) ~= self.currentToken }).first {
+        let remapKind: RawTokenKind?
+        if matchedKind.base == .keyword {
+          remapKind = matchedKind
+        } else {
+          remapKind = nil
+        }
         return RecoveryConsumptionHandle(
           unexpectedTokens: self.tokensConsumed - initialTokensConsumed,
           tokenConsumptionHandle: TokenConsumptionHandle(
             tokenKind: self.currentToken.rawTokenKind,
-            remappedKind: nil
+            remappedKind: remapKind
           )
         )
       }

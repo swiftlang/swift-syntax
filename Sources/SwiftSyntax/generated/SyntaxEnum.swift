@@ -141,6 +141,8 @@ public enum SyntaxEnum {
   
   case conventionWitnessMethodAttributeArguments(ConventionWitnessMethodAttributeArgumentsSyntax)
   
+  case declEffectSpecifiers(DeclEffectSpecifiersSyntax)
+  
   case declModifierDetail(DeclModifierDetailSyntax)
   
   case declModifier(DeclModifierSyntax)
@@ -499,6 +501,8 @@ public enum SyntaxEnum {
   
   case typeAnnotation(TypeAnnotationSyntax)
   
+  case typeEffectSpecifiers(TypeEffectSpecifiersSyntax)
+  
   case typeExpr(TypeExprSyntax)
   
   case typeInheritanceClause(TypeInheritanceClauseSyntax)
@@ -670,6 +674,8 @@ public extension Syntax {
       return .conventionAttributeArguments(ConventionAttributeArgumentsSyntax(self)!)
     case .conventionWitnessMethodAttributeArguments: 
       return .conventionWitnessMethodAttributeArguments(ConventionWitnessMethodAttributeArgumentsSyntax(self)!)
+    case .declEffectSpecifiers: 
+      return .declEffectSpecifiers(DeclEffectSpecifiersSyntax(self)!)
     case .declModifierDetail: 
       return .declModifierDetail(DeclModifierDetailSyntax(self)!)
     case .declModifier: 
@@ -1028,6 +1034,8 @@ public extension Syntax {
       return .tupleType(TupleTypeSyntax(self)!)
     case .typeAnnotation: 
       return .typeAnnotation(TypeAnnotationSyntax(self)!)
+    case .typeEffectSpecifiers: 
+      return .typeEffectSpecifiers(TypeEffectSpecifiersSyntax(self)!)
     case .typeExpr: 
       return .typeExpr(TypeExprSyntax(self)!)
     case .typeInheritanceClause: 

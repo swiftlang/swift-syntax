@@ -326,6 +326,11 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ConventionWitnessMethodAttributeArgumentsSyntax) -> ResultType
   
+  /// Visiting `DeclEffectSpecifiersSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: DeclEffectSpecifiersSyntax) -> ResultType
+  
   /// Visiting `DeclModifierDetailSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -1221,6 +1226,11 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: TypeAnnotationSyntax) -> ResultType
   
+  /// Visiting `TypeEffectSpecifiersSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: TypeEffectSpecifiersSyntax) -> ResultType
+  
   /// Visiting `TypeExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -1756,6 +1766,13 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ConventionWitnessMethodAttributeArgumentsSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting `DeclEffectSpecifiersSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: DeclEffectSpecifiersSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -3012,6 +3029,13 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
+  /// Visiting `TypeEffectSpecifiersSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: TypeEffectSpecifiersSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
   /// Visiting `TypeExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -3284,6 +3308,8 @@ extension SyntaxTransformVisitor {
     case .conventionAttributeArguments(let derived): 
       return visit(derived)
     case .conventionWitnessMethodAttributeArguments(let derived): 
+      return visit(derived)
+    case .declEffectSpecifiers(let derived): 
       return visit(derived)
     case .declModifierDetail(let derived): 
       return visit(derived)
@@ -3642,6 +3668,8 @@ extension SyntaxTransformVisitor {
     case .tupleType(let derived): 
       return visit(derived)
     case .typeAnnotation(let derived): 
+      return visit(derived)
+    case .typeEffectSpecifiers(let derived): 
       return visit(derived)
     case .typeExpr(let derived): 
       return visit(derived)

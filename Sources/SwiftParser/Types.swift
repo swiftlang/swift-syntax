@@ -44,10 +44,8 @@ extension Parser {
     let (specifier, unexpectedBeforeAttrList, attrList) = self.parseTypeAttributeList(misplacedSpecifiers: misplacedSpecifiers)
     var base = RawTypeSyntax(self.parseSimpleOrCompositionType())
     if self.withLookahead({ $0.isAtFunctionTypeArrow() }) {
-      let firstEffect = self.parseEffectsSpecifier()
-      let secondEffect = self.parseEffectsSpecifier()
-      let (unexpectedBeforeArrow, arrow) = self.expect(.arrow)
-      let returnTy = self.parseType()
+      var effectSpecifiers = self.parseTypeEffectSpecifiers()
+      let returnClause = self.parseFunctionReturnClause(effectSpecifiers: &effectSpecifiers, allowNamedOpaqueResultType: false)
 
       let unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax?
       let leftParen: RawTokenSyntax
@@ -94,11 +92,8 @@ extension Parser {
           arguments: arguments,
           unexpectedBetweenElementsAndRightParen,
           rightParen: rightParen,
-          asyncKeyword: firstEffect,
-          throwsOrRethrowsKeyword: secondEffect,
-          unexpectedBeforeArrow,
-          arrow: arrow,
-          returnType: returnTy,
+          effectSpecifiers: effectSpecifiers,
+          output: returnClause,
           arena: self.arena
         )
       )
@@ -689,7 +684,7 @@ extension Parser.Lookahead {
       // Handle type-function if we have an '->' with optional
       // 'async' and/or 'throws'.
       var loopProgress = LoopProgressCondition()
-      while let (_, handle) = self.at(anyIn: EffectsSpecifier.self), loopProgress.evaluate(currentToken) {
+      while let (_, handle) = self.at(anyIn: EffectSpecifier.self), loopProgress.evaluate(currentToken) {
         self.eat(handle)
       }
 
@@ -846,12 +841,12 @@ extension Parser.Lookahead {
       return true
     }
 
-    if self.at(anyIn: EffectsSpecifier.self) != nil {
+    if self.at(anyIn: EffectSpecifier.self) != nil {
       if self.peek().rawTokenKind == .arrow {
         return true
       }
 
-      if EffectsSpecifier(lexeme: self.peek()) != nil {
+      if EffectSpecifier(lexeme: self.peek()) != nil {
         var backtrack = self.lookahead()
         backtrack.consumeAnyToken()
         backtrack.consumeAnyToken()

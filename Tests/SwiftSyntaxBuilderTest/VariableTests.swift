@@ -167,7 +167,7 @@ final class VariableTests: XCTestCase {
   }
 
   func testClosureTypeVariableDecl() {
-    let type = FunctionTypeSyntax(arguments: [TupleTypeElementSyntax(type: TypeSyntax("Int"))], returnType: TypeSyntax("Bool"))
+    let type = FunctionTypeSyntax(arguments: [TupleTypeElementSyntax(type: TypeSyntax("Int"))], output: ReturnClauseSyntax(returnType: TypeSyntax("Bool")))
     let buildable = VariableDeclSyntax(letOrVarKeyword: .keyword(.let)) {
       PatternBindingSyntax(pattern: PatternSyntax("c"), typeAnnotation: TypeAnnotationSyntax(type: type))
     }
@@ -210,7 +210,7 @@ final class VariableTests: XCTestCase {
 
   func testAccessorList() {
     let buildable = VariableDeclSyntax(name: "test", type: TypeAnnotationSyntax(type: TypeSyntax("Int"))) {
-      AccessorDeclSyntax(accessorKind: .keyword(.get), asyncKeyword: nil) {
+      AccessorDeclSyntax(accessorKind: .keyword(.get)) {
         SequenceExprSyntax {
           IntegerLiteralExprSyntax(4)
           BinaryOperatorExprSyntax(text: "+")
@@ -218,7 +218,7 @@ final class VariableTests: XCTestCase {
         }
       }
 
-      AccessorDeclSyntax(accessorKind: .keyword(.willSet), asyncKeyword: nil) {}
+      AccessorDeclSyntax(accessorKind: .keyword(.willSet)) {}
     }
 
     AssertBuildResult(

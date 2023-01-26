@@ -242,22 +242,29 @@ final class EffectfulPropertiesTests: XCTestCase {
     )
   }
 
-  func testEffectfulProperties15() {
+  func testEffectfulProperties15a() {
     AssertParse(
       """
       var bad4 : Int = 0 {
-        willSet(theValue) reasync rethrows 1️⃣async throws {}
-        didSet throws bogus {}
+        willSet(theValue) 3️⃣reasync 4️⃣rethrows 1️⃣async 2️⃣throws {}
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: 'willSet' accessor cannot have specifier 'throws'
-        // TODO: Old parser expected error on line 2: 'willSet' accessor cannot have specifier 'async'
-        // TODO: Old parser expected error on line 2: 'willSet' accessor cannot have specifier 'rethrows'
-        // TODO: Old parser expected error on line 2: 'willSet' accessor cannot have specifier 'reasync'
-        DiagnosticSpec(message: "unexpected code in variable")
-        // TODO: Old parser expected error on line 3: expected '{' to start 'didSet' definition
-        // TODO: Old parser expected error on line 3: 'didSet' accessor cannot have specifier 'throws'
+        DiagnosticSpec(locationMarker: "1️⃣", message: "'async' conflicts with 'reasync'", notes: [NoteSpec(locationMarker: "3️⃣", message: "'reasync' declared here")], fixIts: ["remove redundant 'async'"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "'throws' conflicts with 'rethrows'", notes: [NoteSpec(locationMarker: "4️⃣", message: "'rethrows' declared here")], fixIts: ["remove redundant 'throws'"]),
+      ]
+    )
+  }
+
+  func testEffectfulProperties15b() {
+    AssertParse(
+      """
+      var bad4 : Int = 0 {
+        didSet throws 1️⃣bogus {}
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected code 'bogus {}' in variable")
       ]
     )
   }
@@ -270,8 +277,7 @@ final class EffectfulPropertiesTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected '{' to start getter definition
-        DiagnosticSpec(message: "unexpected code 'bogus rethrows {}' in variable")
+        DiagnosticSpec(message: "unexpected code 'bogus' before effect specifiers")
       ]
     )
   }
@@ -295,11 +301,11 @@ final class EffectfulPropertiesTests: XCTestCase {
     AssertParse(
       """
       var bad7 : Double {
-        get throws async { 3.14 } 
+        get throws 1️⃣async { 3.14 } 
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: 'async' must precede 'throws'
+        DiagnosticSpec(message: "'async' must precede 'throws'")
       ]
     )
   }
@@ -309,12 +315,11 @@ final class EffectfulPropertiesTests: XCTestCase {
       """
       var bad8 : Double {
         get {}
-        _modify throws async { yield &bad8 }
+        _modify throws 1️⃣async { yield &bad8 }
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: '_modify' accessor cannot have specifier 'async'
-        // TODO: Old parser expected error on line 3: '_modify' accessor cannot have specifier 'throws'
+        DiagnosticSpec(message: "'async' must precede 'throws'")
       ]
     )
   }
@@ -326,18 +331,14 @@ final class EffectfulPropertiesTests: XCTestCase {
         var prop2 : Int { get 1️⃣bogus rethrows set } 
         var prop3 : Int { get rethrows 2️⃣bogus set }
         var prop4 : Int { get reasync 3️⃣bogus set }
-        var prop5 : Int { get throws async } 
+        var prop5 : Int { get throws 4️⃣async } 
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected get or set in a protocol property
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code 'bogus rethrows set' in variable"),
-        // TODO: Old parser expected error on line 3: only function declarations may be marked 'rethrows'; did you mean 'throws'?
-        // TODO: Old parser expected error on line 3: expected get or set in a protocol property
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code 'bogus' before effect specifiers"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code 'bogus set' in variable"),
-        // TODO: Old parser expected error on line 4: expected get or set in a protocol property
         DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code 'bogus set' in variable"),
-        // TODO: Old parser expected error on line 5: 'async' must precede 'throws'
+        DiagnosticSpec(locationMarker: "4️⃣", message: "'async' must precede 'throws'"),
       ]
     )
   }

@@ -208,6 +208,68 @@ public enum SyntaxFactory {
       return CodeBlockSyntax(data)
     }
   }
+  @available(*, deprecated, message: "Use initializer on DeclEffectSpecifiersSyntax")
+  public static func makeDeclEffectSpecifiers(_ unexpectedBeforeAsyncSpecifier: UnexpectedNodesSyntax? = nil, asyncSpecifier: TokenSyntax?, _ unexpectedBetweenAsyncSpecifierAndThrowsSpecifier: UnexpectedNodesSyntax? = nil, throwsSpecifier: TokenSyntax?, _ unexpectedAfterThrowsSpecifier: UnexpectedNodesSyntax? = nil) -> DeclEffectSpecifiersSyntax {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeAsyncSpecifier?.raw,
+      asyncSpecifier?.raw,
+      unexpectedBetweenAsyncSpecifierAndThrowsSpecifier?.raw,
+      throwsSpecifier?.raw,
+      unexpectedAfterThrowsSpecifier?.raw,
+    ]
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.declEffectSpecifiers,
+        from: layout, arena: arena)
+      let data = SyntaxData.forRoot(raw)
+      return DeclEffectSpecifiersSyntax(data)
+    }
+  }
+
+  @available(*, deprecated, message: "Use initializer on DeclEffectSpecifiersSyntax")
+  public static func makeBlankDeclEffectSpecifiers(presence: SourcePresence = .present) -> DeclEffectSpecifiersSyntax {
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .declEffectSpecifiers,
+        from: [
+        nil,
+        nil,
+        nil,
+        nil,
+        nil,
+      ], arena: arena))
+      return DeclEffectSpecifiersSyntax(data)
+    }
+  }
+  @available(*, deprecated, message: "Use initializer on TypeEffectSpecifiersSyntax")
+  public static func makeTypeEffectSpecifiers(_ unexpectedBeforeAsyncSpecifier: UnexpectedNodesSyntax? = nil, asyncSpecifier: TokenSyntax?, _ unexpectedBetweenAsyncSpecifierAndThrowsSpecifier: UnexpectedNodesSyntax? = nil, throwsSpecifier: TokenSyntax?, _ unexpectedAfterThrowsSpecifier: UnexpectedNodesSyntax? = nil) -> TypeEffectSpecifiersSyntax {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeAsyncSpecifier?.raw,
+      asyncSpecifier?.raw,
+      unexpectedBetweenAsyncSpecifierAndThrowsSpecifier?.raw,
+      throwsSpecifier?.raw,
+      unexpectedAfterThrowsSpecifier?.raw,
+    ]
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.typeEffectSpecifiers,
+        from: layout, arena: arena)
+      let data = SyntaxData.forRoot(raw)
+      return TypeEffectSpecifiersSyntax(data)
+    }
+  }
+
+  @available(*, deprecated, message: "Use initializer on TypeEffectSpecifiersSyntax")
+  public static func makeBlankTypeEffectSpecifiers(presence: SourcePresence = .present) -> TypeEffectSpecifiersSyntax {
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .typeEffectSpecifiers,
+        from: [
+        nil,
+        nil,
+        nil,
+        nil,
+        nil,
+      ], arena: arena))
+      return TypeEffectSpecifiersSyntax(data)
+    }
+  }
   @available(*, deprecated, message: "Use initializer on UnexpectedNodesSyntax")
   public static func makeUnexpectedNodes(
     _ elements: [Syntax]) -> UnexpectedNodesSyntax {
@@ -860,13 +922,11 @@ public enum SyntaxFactory {
     }
   }
   @available(*, deprecated, message: "Use initializer on ArrowExprSyntax")
-  public static func makeArrowExpr(_ unexpectedBeforeAsyncKeyword: UnexpectedNodesSyntax? = nil, asyncKeyword: TokenSyntax?, _ unexpectedBetweenAsyncKeywordAndThrowsToken: UnexpectedNodesSyntax? = nil, throwsToken: TokenSyntax?, _ unexpectedBetweenThrowsTokenAndArrowToken: UnexpectedNodesSyntax? = nil, arrowToken: TokenSyntax, _ unexpectedAfterArrowToken: UnexpectedNodesSyntax? = nil) -> ArrowExprSyntax {
+  public static func makeArrowExpr(_ unexpectedBeforeEffectSpecifiers: UnexpectedNodesSyntax? = nil, effectSpecifiers: TypeEffectSpecifiersSyntax?, _ unexpectedBetweenEffectSpecifiersAndArrowToken: UnexpectedNodesSyntax? = nil, arrowToken: TokenSyntax, _ unexpectedAfterArrowToken: UnexpectedNodesSyntax? = nil) -> ArrowExprSyntax {
     let layout: [RawSyntax?] = [
-      unexpectedBeforeAsyncKeyword?.raw,
-      asyncKeyword?.raw,
-      unexpectedBetweenAsyncKeywordAndThrowsToken?.raw,
-      throwsToken?.raw,
-      unexpectedBetweenThrowsTokenAndArrowToken?.raw,
+      unexpectedBeforeEffectSpecifiers?.raw,
+      effectSpecifiers?.raw,
+      unexpectedBetweenEffectSpecifiersAndArrowToken?.raw,
       arrowToken.raw,
       unexpectedAfterArrowToken?.raw,
     ]
@@ -883,8 +943,6 @@ public enum SyntaxFactory {
     return withExtendedLifetime(SyntaxArena()) { arena in
       let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .arrowExpr,
         from: [
-        nil,
-        nil,
         nil,
         nil,
         nil,
@@ -1689,7 +1747,7 @@ public enum SyntaxFactory {
     }
   }
   @available(*, deprecated, message: "Use initializer on ClosureSignatureSyntax")
-  public static func makeClosureSignature(_ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax?, _ unexpectedBetweenAttributesAndCapture: UnexpectedNodesSyntax? = nil, capture: ClosureCaptureSignatureSyntax?, _ unexpectedBetweenCaptureAndInput: UnexpectedNodesSyntax? = nil, input: Syntax?, _ unexpectedBetweenInputAndAsyncKeyword: UnexpectedNodesSyntax? = nil, asyncKeyword: TokenSyntax?, _ unexpectedBetweenAsyncKeywordAndThrowsTok: UnexpectedNodesSyntax? = nil, throwsTok: TokenSyntax?, _ unexpectedBetweenThrowsTokAndOutput: UnexpectedNodesSyntax? = nil, output: ReturnClauseSyntax?, _ unexpectedBetweenOutputAndInTok: UnexpectedNodesSyntax? = nil, inTok: TokenSyntax, _ unexpectedAfterInTok: UnexpectedNodesSyntax? = nil) -> ClosureSignatureSyntax {
+  public static func makeClosureSignature(_ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax?, _ unexpectedBetweenAttributesAndCapture: UnexpectedNodesSyntax? = nil, capture: ClosureCaptureSignatureSyntax?, _ unexpectedBetweenCaptureAndInput: UnexpectedNodesSyntax? = nil, input: Syntax?, _ unexpectedBetweenInputAndEffectSpecifiers: UnexpectedNodesSyntax? = nil, effectSpecifiers: TypeEffectSpecifiersSyntax?, _ unexpectedBetweenEffectSpecifiersAndOutput: UnexpectedNodesSyntax? = nil, output: ReturnClauseSyntax?, _ unexpectedBetweenOutputAndInTok: UnexpectedNodesSyntax? = nil, inTok: TokenSyntax, _ unexpectedAfterInTok: UnexpectedNodesSyntax? = nil) -> ClosureSignatureSyntax {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
       attributes?.raw,
@@ -1697,11 +1755,9 @@ public enum SyntaxFactory {
       capture?.raw,
       unexpectedBetweenCaptureAndInput?.raw,
       input?.raw,
-      unexpectedBetweenInputAndAsyncKeyword?.raw,
-      asyncKeyword?.raw,
-      unexpectedBetweenAsyncKeywordAndThrowsTok?.raw,
-      throwsTok?.raw,
-      unexpectedBetweenThrowsTokAndOutput?.raw,
+      unexpectedBetweenInputAndEffectSpecifiers?.raw,
+      effectSpecifiers?.raw,
+      unexpectedBetweenEffectSpecifiersAndOutput?.raw,
       output?.raw,
       unexpectedBetweenOutputAndInTok?.raw,
       inTok.raw,
@@ -1720,8 +1776,6 @@ public enum SyntaxFactory {
     return withExtendedLifetime(SyntaxArena()) { arena in
       let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .closureSignature,
         from: [
-        nil,
-        nil,
         nil,
         nil,
         nil,
@@ -2785,15 +2839,13 @@ public enum SyntaxFactory {
     }
   }
   @available(*, deprecated, message: "Use initializer on FunctionSignatureSyntax")
-  public static func makeFunctionSignature(_ unexpectedBeforeInput: UnexpectedNodesSyntax? = nil, input: ParameterClauseSyntax, _ unexpectedBetweenInputAndAsyncOrReasyncKeyword: UnexpectedNodesSyntax? = nil, asyncOrReasyncKeyword: TokenSyntax?, _ unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword: UnexpectedNodesSyntax? = nil, throwsOrRethrowsKeyword: TokenSyntax?, _ unexpectedBetweenThrowsOrRethrowsKeywordAndOutput: UnexpectedNodesSyntax? = nil, output: ReturnClauseSyntax?, _ unexpectedAfterOutput: UnexpectedNodesSyntax? = nil) -> FunctionSignatureSyntax {
+  public static func makeFunctionSignature(_ unexpectedBeforeInput: UnexpectedNodesSyntax? = nil, input: ParameterClauseSyntax, _ unexpectedBetweenInputAndEffectSpecifiers: UnexpectedNodesSyntax? = nil, effectSpecifiers: DeclEffectSpecifiersSyntax?, _ unexpectedBetweenEffectSpecifiersAndOutput: UnexpectedNodesSyntax? = nil, output: ReturnClauseSyntax?, _ unexpectedAfterOutput: UnexpectedNodesSyntax? = nil) -> FunctionSignatureSyntax {
     let layout: [RawSyntax?] = [
       unexpectedBeforeInput?.raw,
       input.raw,
-      unexpectedBetweenInputAndAsyncOrReasyncKeyword?.raw,
-      asyncOrReasyncKeyword?.raw,
-      unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword?.raw,
-      throwsOrRethrowsKeyword?.raw,
-      unexpectedBetweenThrowsOrRethrowsKeywordAndOutput?.raw,
+      unexpectedBetweenInputAndEffectSpecifiers?.raw,
+      effectSpecifiers?.raw,
+      unexpectedBetweenEffectSpecifiersAndOutput?.raw,
       output?.raw,
       unexpectedAfterOutput?.raw,
     ]
@@ -2812,8 +2864,6 @@ public enum SyntaxFactory {
         from: [
         nil,
         RawSyntax.makeEmptyLayout(kind: SyntaxKind.parameterClause, arena: arena),
-        nil,
-        nil,
         nil,
         nil,
         nil,
@@ -4057,7 +4107,7 @@ public enum SyntaxFactory {
     }
   }
   @available(*, deprecated, message: "Use initializer on AccessorDeclSyntax")
-  public static func makeAccessorDecl(_ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax?, _ unexpectedBetweenAttributesAndModifier: UnexpectedNodesSyntax? = nil, modifier: DeclModifierSyntax?, _ unexpectedBetweenModifierAndAccessorKind: UnexpectedNodesSyntax? = nil, accessorKind: TokenSyntax, _ unexpectedBetweenAccessorKindAndParameter: UnexpectedNodesSyntax? = nil, parameter: AccessorParameterSyntax?, _ unexpectedBetweenParameterAndAsyncKeyword: UnexpectedNodesSyntax? = nil, asyncKeyword: TokenSyntax?, _ unexpectedBetweenAsyncKeywordAndThrowsKeyword: UnexpectedNodesSyntax? = nil, throwsKeyword: TokenSyntax?, _ unexpectedBetweenThrowsKeywordAndBody: UnexpectedNodesSyntax? = nil, body: CodeBlockSyntax?, _ unexpectedAfterBody: UnexpectedNodesSyntax? = nil) -> AccessorDeclSyntax {
+  public static func makeAccessorDecl(_ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax?, _ unexpectedBetweenAttributesAndModifier: UnexpectedNodesSyntax? = nil, modifier: DeclModifierSyntax?, _ unexpectedBetweenModifierAndAccessorKind: UnexpectedNodesSyntax? = nil, accessorKind: TokenSyntax, _ unexpectedBetweenAccessorKindAndParameter: UnexpectedNodesSyntax? = nil, parameter: AccessorParameterSyntax?, _ unexpectedBetweenParameterAndEffectSpecifiers: UnexpectedNodesSyntax? = nil, effectSpecifiers: DeclEffectSpecifiersSyntax?, _ unexpectedBetweenEffectSpecifiersAndBody: UnexpectedNodesSyntax? = nil, body: CodeBlockSyntax?, _ unexpectedAfterBody: UnexpectedNodesSyntax? = nil) -> AccessorDeclSyntax {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
       attributes?.raw,
@@ -4067,11 +4117,9 @@ public enum SyntaxFactory {
       accessorKind.raw,
       unexpectedBetweenAccessorKindAndParameter?.raw,
       parameter?.raw,
-      unexpectedBetweenParameterAndAsyncKeyword?.raw,
-      asyncKeyword?.raw,
-      unexpectedBetweenAsyncKeywordAndThrowsKeyword?.raw,
-      throwsKeyword?.raw,
-      unexpectedBetweenThrowsKeywordAndBody?.raw,
+      unexpectedBetweenParameterAndEffectSpecifiers?.raw,
+      effectSpecifiers?.raw,
+      unexpectedBetweenEffectSpecifiersAndBody?.raw,
       body?.raw,
       unexpectedAfterBody?.raw,
     ]
@@ -4094,8 +4142,6 @@ public enum SyntaxFactory {
         nil,
         nil,
         RawSyntax.makeMissingToken(kind: TokenKind.unknown(""), arena: arena),
-        nil,
-        nil,
         nil,
         nil,
         nil,
@@ -8050,7 +8096,7 @@ public enum SyntaxFactory {
     }
   }
   @available(*, deprecated, message: "Use initializer on FunctionTypeSyntax")
-  public static func makeFunctionType(_ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax, _ unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? = nil, arguments: TupleTypeElementListSyntax, _ unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax, _ unexpectedBetweenRightParenAndAsyncKeyword: UnexpectedNodesSyntax? = nil, asyncKeyword: TokenSyntax?, _ unexpectedBetweenAsyncKeywordAndThrowsOrRethrowsKeyword: UnexpectedNodesSyntax? = nil, throwsOrRethrowsKeyword: TokenSyntax?, _ unexpectedBetweenThrowsOrRethrowsKeywordAndArrow: UnexpectedNodesSyntax? = nil, arrow: TokenSyntax, _ unexpectedBetweenArrowAndReturnType: UnexpectedNodesSyntax? = nil, returnType: TypeSyntax, _ unexpectedAfterReturnType: UnexpectedNodesSyntax? = nil) -> FunctionTypeSyntax {
+  public static func makeFunctionType(_ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax, _ unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? = nil, arguments: TupleTypeElementListSyntax, _ unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax, _ unexpectedBetweenRightParenAndEffectSpecifiers: UnexpectedNodesSyntax? = nil, effectSpecifiers: TypeEffectSpecifiersSyntax?, _ unexpectedBetweenEffectSpecifiersAndOutput: UnexpectedNodesSyntax? = nil, output: ReturnClauseSyntax, _ unexpectedAfterOutput: UnexpectedNodesSyntax? = nil) -> FunctionTypeSyntax {
     let layout: [RawSyntax?] = [
       unexpectedBeforeLeftParen?.raw,
       leftParen.raw,
@@ -8058,15 +8104,11 @@ public enum SyntaxFactory {
       arguments.raw,
       unexpectedBetweenArgumentsAndRightParen?.raw,
       rightParen.raw,
-      unexpectedBetweenRightParenAndAsyncKeyword?.raw,
-      asyncKeyword?.raw,
-      unexpectedBetweenAsyncKeywordAndThrowsOrRethrowsKeyword?.raw,
-      throwsOrRethrowsKeyword?.raw,
-      unexpectedBetweenThrowsOrRethrowsKeywordAndArrow?.raw,
-      arrow.raw,
-      unexpectedBetweenArrowAndReturnType?.raw,
-      returnType.raw,
-      unexpectedAfterReturnType?.raw,
+      unexpectedBetweenRightParenAndEffectSpecifiers?.raw,
+      effectSpecifiers?.raw,
+      unexpectedBetweenEffectSpecifiersAndOutput?.raw,
+      output.raw,
+      unexpectedAfterOutput?.raw,
     ]
     return withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.functionType,
@@ -8090,11 +8132,7 @@ public enum SyntaxFactory {
         nil,
         nil,
         nil,
-        nil,
-        nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.arrow, arena: arena),
-        nil,
-        RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: arena),
+        RawSyntax.makeEmptyLayout(kind: SyntaxKind.returnClause, arena: arena),
         nil,
       ], arena: arena))
       return FunctionTypeSyntax(data)

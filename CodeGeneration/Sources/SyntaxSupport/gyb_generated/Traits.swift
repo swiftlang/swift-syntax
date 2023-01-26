@@ -69,4 +69,13 @@ public let TRAITS: [Trait] = [
           Child(name: "Statements", kind: "CodeBlockItemList"),
         ]
   ),
+  Trait(traitName: "EffectSpecifiers",
+        children: [
+          Child(name: "UnexpectedBeforeAsyncSpecifier", kind: "UnexpectedNodes", isOptional: true),
+          Child(name: "AsyncSpecifier", kind: "KeywordToken", isOptional: true),
+          Child(name: "UnexpectedBetweenAsyncSpecifierAndThrowsSpecifier", kind: "UnexpectedNodes", isOptional: true),
+          Child(name: "ThrowsSpecifier", kind: "KeywordToken", isOptional: true),
+          Child(name: "UnexpectedAfterThrowsSpecifier", kind: "UnexpectedNodes", isOptional: true),
+        ]
+  ),
 ]

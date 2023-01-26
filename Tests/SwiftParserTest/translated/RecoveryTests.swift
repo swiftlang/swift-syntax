@@ -1095,7 +1095,7 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected type in function type")
+        DiagnosticSpec(message: "expected return type in function type")
       ]
     )
   }

@@ -52,4 +52,12 @@ TRAITS = [
           children=[
               Child('Statements', kind='CodeBlockItemList'),
           ]),
+    Trait('EffectSpecifiers',
+          children=[
+             Child('UnexpectedBeforeAsyncSpecifier', kind='UnexpectedNodes', is_optional=True),
+             Child('AsyncSpecifier', kind='KeywordToken', is_optional=True),
+             Child('UnexpectedBetweenAsyncSpecifierAndThrowsSpecifier', kind='UnexpectedNodes', is_optional=True),
+             Child('ThrowsSpecifier', kind='KeywordToken', is_optional=True),
+             Child('UnexpectedAfterThrowsSpecifier', kind='UnexpectedNodes', is_optional=True),
+          ]),
 ]

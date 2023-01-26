@@ -345,40 +345,14 @@ extension Parser {
         return nil
       }
     case (.arrow, _)?, (.throwsKeyword, _)?:
-      var asyncKeyword = self.consume(if: .keyword(.async))
-
-      var throwsKeyword = self.consume(if: .keyword(.throws))
+      var effectSpecifiers = self.parseTypeEffectSpecifiers()
 
       let (unexpectedBeforeArrow, arrow) = self.expect(.arrow)
 
-      // Recover if effect modifiers are specified after '->' by eating them into
-      // unexpectedAfterArrow and inserting the corresponding effects modifier as
-      // missing into the ArrowExprSyntax. This reflect the semantics the user
-      // originally intended.
-      var effectModifiersAfterArrow: [RawTokenSyntax] = []
-      if let asyncAfterArrow = self.consume(if: .keyword(.async)) {
-        effectModifiersAfterArrow.append(asyncAfterArrow)
-        if asyncKeyword == nil {
-          asyncKeyword = missingToken(.keyword(.async), text: "async")
-        }
-      }
-      if let throwsAfterArrow = self.consume(if: .keyword(.throws)) {
-        effectModifiersAfterArrow.append(throwsAfterArrow)
-        if throwsKeyword == nil {
-          throwsKeyword = missingToken(.keyword(.throws), text: nil)
-        }
-      }
-      let unexpectedAfterArrow =
-        effectModifiersAfterArrow.isEmpty
-        ? nil
-        : RawUnexpectedNodesSyntax(
-          elements: effectModifiersAfterArrow.map { RawSyntax($0) },
-          arena: self.arena
-        )
+      let unexpectedAfterArrow = self.parseMisplacedEffectSpecifiers(&effectSpecifiers)
 
       let op = RawArrowExprSyntax(
-        asyncKeyword: asyncKeyword,
-        throwsToken: throwsKeyword,
+        effectSpecifiers: effectSpecifiers,
         unexpectedBeforeArrow,
         arrowToken: arrow,
         unexpectedAfterArrow,
@@ -1810,8 +1784,7 @@ extension Parser {
     }
 
     var input: RawClosureSignatureSyntax.Input?
-    var asyncKeyword: RawTokenSyntax? = nil
-    var throwsTok: RawTokenSyntax? = nil
+    var effectSpecifiers: RawTypeEffectSpecifiersSyntax?
     var output: RawReturnClauseSyntax? = nil
     if !self.at(.keyword(.in)) {
       if self.at(.leftParen) {
@@ -1847,19 +1820,10 @@ extension Parser {
         input = .simpleInput(RawClosureParamListSyntax(elements: params, arena: self.arena))
       }
 
-      asyncKeyword = self.parseEffectsSpecifier()
-      throwsTok = self.parseEffectsSpecifier()
+      effectSpecifiers = self.parseTypeEffectSpecifiers()
 
-      // Parse the optional explicit return type.
-      if let arrow = self.consume(if: .arrow) {
-        // Parse the type.
-        let returnTy = self.parseType()
-
-        output = RawReturnClauseSyntax(
-          arrow: arrow,
-          returnType: returnTy,
-          arena: self.arena
-        )
+      if self.at(.arrow) {
+        output = self.parseFunctionReturnClause(effectSpecifiers: &effectSpecifiers, allowNamedOpaqueResultType: false)
       }
     }
 
@@ -1869,8 +1833,7 @@ extension Parser {
       attributes: attrs,
       capture: captures,
       input: input,
-      asyncKeyword: asyncKeyword,
-      throwsTok: throwsTok,
+      effectSpecifiers: effectSpecifiers,
       output: output,
       unexpectedBeforeInTok,
       inTok: inTok,
@@ -2142,7 +2105,7 @@ extension Parser.Lookahead {
   // Consume 'async', 'throws', and 'rethrows', but in any order.
   mutating func consumeEffectsSpecifiers() {
     var loopProgress = LoopProgressCondition()
-    while let (_, handle) = self.at(anyIn: EffectsSpecifier.self),
+    while let (_, handle) = self.at(anyIn: EffectSpecifier.self),
       loopProgress.evaluate(currentToken)
     {
       self.eat(handle)

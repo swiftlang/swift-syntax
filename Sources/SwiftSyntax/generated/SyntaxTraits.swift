@@ -232,6 +232,56 @@ public extension SyntaxProtocol {
   }
 }
 
+// MARK: - EffectSpecifiersSyntax
+
+public protocol EffectSpecifiersSyntax: SyntaxProtocol {
+  var unexpectedBeforeAsyncSpecifier: UnexpectedNodesSyntax? { 
+    get 
+  }
+  
+  func withUnexpectedBeforeAsyncSpecifier(_ newChild: UnexpectedNodesSyntax?) -> Self
+  
+  var asyncSpecifier: TokenSyntax? { 
+    get 
+  }
+  
+  func withAsyncSpecifier(_ newChild: TokenSyntax?) -> Self
+  
+  var unexpectedBetweenAsyncSpecifierAndThrowsSpecifier: UnexpectedNodesSyntax? { 
+    get 
+  }
+  
+  func withUnexpectedBetweenAsyncSpecifierAndThrowsSpecifier(_ newChild: UnexpectedNodesSyntax?) -> Self
+  
+  var throwsSpecifier: TokenSyntax? { 
+    get 
+  }
+  
+  func withThrowsSpecifier(_ newChild: TokenSyntax?) -> Self
+  
+  var unexpectedAfterThrowsSpecifier: UnexpectedNodesSyntax? { 
+    get 
+  }
+  
+  func withUnexpectedAfterThrowsSpecifier(_ newChild: UnexpectedNodesSyntax?) -> Self
+}
+
+public extension SyntaxProtocol {
+  /// Check whether the non-type erased version of this syntax node conforms to
+  /// `EffectSpecifiersSyntax`.
+  /// Note that this will incur an existential conversion.
+  func isProtocol(_: EffectSpecifiersSyntax.Protocol) -> Bool {
+    return self.asProtocol(EffectSpecifiersSyntax.self) != nil
+  }
+  
+  /// Return the non-type erased version of this syntax node if it conforms to
+  /// `EffectSpecifiersSyntax`. Otherwise return `nil`.
+  /// Note that this will incur an existential conversion.
+  func asProtocol(_: EffectSpecifiersSyntax.Protocol) -> EffectSpecifiersSyntax? {
+    return Syntax(self).asProtocol(SyntaxProtocol.self) as? EffectSpecifiersSyntax
+  }
+}
+
 extension AccessorBlockSyntax: BracedSyntax {
 }
 
@@ -281,6 +331,9 @@ extension CodeBlockSyntax: BracedSyntax, WithStatementsSyntax {
 }
 
 extension ConditionElementSyntax: WithTrailingCommaSyntax {
+}
+
+extension DeclEffectSpecifiersSyntax: EffectSpecifiersSyntax {
 }
 
 extension DeclModifierDetailSyntax: ParenthesizedSyntax {
@@ -434,6 +487,9 @@ extension TupleTypeElementSyntax: WithTrailingCommaSyntax {
 }
 
 extension TupleTypeSyntax: ParenthesizedSyntax {
+}
+
+extension TypeEffectSpecifiersSyntax: EffectSpecifiersSyntax {
 }
 
 extension TypealiasDeclSyntax: IdentifiedDeclSyntax, AttributedSyntax {

@@ -143,11 +143,6 @@ public enum TokenPrecedence: Comparable {
     .rightAngle, .rightParen, .rightSquareBracket:
       self = .weakBracketClose
 
-    // MARK: Statement keyword punctuator
-    case  // #error, #warning is statement-like
-    .poundErrorKeyword, .poundWarningKeyword:
-      self = .stmtKeyword
-
     // MARK: Strong bracketet
     case .leftBrace:
       self = .openingBrace(closingDelimiter: .rightBrace)

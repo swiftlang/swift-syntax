@@ -764,7 +764,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if shouldSkip(node) {
       return .skipChildren
     }
-    if node.expression != nil {
+    if node.expression?.hasError == true {
       exchangeTokens(
         unexpected: node.unexpectedBeforeReturnKeyword,
         unexpectedTokenCondition: { $0.tokenKind == .keyword(.try) },
@@ -844,17 +844,35 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: SwitchStmtSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    if node.expression.hasError {
+      exchangeTokens(
+        unexpected: node.unexpectedBeforeSwitchKeyword,
+        unexpectedTokenCondition: { $0.tokenKind == .keyword(.try) },
+        correctTokens: [node.expression.as(TryExprSyntax.self)?.tryKeyword],
+        message: { _ in .tryMustBePlacedOnSwitchSubject },
+        moveFixIt: { MoveTokensAfterFixIt(movedTokens: $0, after: .keyword(.switch)) }
+      )
+    }
+    return .visitChildren
+  }
+
   public override func visit(_ node: ThrowStmtSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren
     }
-    exchangeTokens(
-      unexpected: node.unexpectedBeforeThrowKeyword,
-      unexpectedTokenCondition: { $0.tokenKind == .keyword(.try) },
-      correctTokens: [node.expression.as(TryExprSyntax.self)?.tryKeyword],
-      message: { _ in .tryMustBePlacedOnThrownExpr },
-      moveFixIt: { MoveTokensAfterFixIt(movedTokens: $0, after: .keyword(.throw)) }
-    )
+    if node.expression.hasError {
+      exchangeTokens(
+        unexpected: node.unexpectedBeforeThrowKeyword,
+        unexpectedTokenCondition: { $0.tokenKind == .keyword(.try) },
+        correctTokens: [node.expression.as(TryExprSyntax.self)?.tryKeyword],
+        message: { _ in .tryMustBePlacedOnThrownExpr },
+        moveFixIt: { MoveTokensAfterFixIt(movedTokens: $0, after: .keyword(.throw)) }
+      )
+    }
     return .visitChildren
   }
 

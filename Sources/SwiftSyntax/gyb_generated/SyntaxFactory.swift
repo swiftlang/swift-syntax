@@ -6446,9 +6446,11 @@ public enum SyntaxFactory {
     }
   }
   @available(*, deprecated, message: "Use initializer on YieldStmtSyntax")
-  public static func makeYieldStmt(_ unexpectedBeforeYieldKeyword: UnexpectedNodesSyntax? = nil, yieldKeyword: TokenSyntax, _ unexpectedBetweenYieldKeywordAndYields: UnexpectedNodesSyntax? = nil, yields: Syntax, _ unexpectedAfterYields: UnexpectedNodesSyntax? = nil) -> YieldStmtSyntax {
+  public static func makeYieldStmt(_ unexpectedBeforeTryKeyword: UnexpectedNodesSyntax? = nil, tryKeyword: TokenSyntax?, _ unexpectedBetweenTryKeywordAndYieldKeyword: UnexpectedNodesSyntax? = nil, yieldKeyword: TokenSyntax, _ unexpectedBetweenYieldKeywordAndYields: UnexpectedNodesSyntax? = nil, yields: Syntax, _ unexpectedAfterYields: UnexpectedNodesSyntax? = nil) -> YieldStmtSyntax {
     let layout: [RawSyntax?] = [
-      unexpectedBeforeYieldKeyword?.raw,
+      unexpectedBeforeTryKeyword?.raw,
+      tryKeyword?.raw,
+      unexpectedBetweenTryKeywordAndYieldKeyword?.raw,
       yieldKeyword.raw,
       unexpectedBetweenYieldKeywordAndYields?.raw,
       yields.raw,
@@ -6467,6 +6469,8 @@ public enum SyntaxFactory {
     return withExtendedLifetime(SyntaxArena()) { arena in
       let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .yieldStmt,
         from: [
+        nil,
+        nil,
         nil,
         RawSyntax.makeMissingToken(kind: TokenKind.keyword(.yield), arena: arena),
         nil,

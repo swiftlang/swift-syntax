@@ -310,6 +310,9 @@ public let STMT_NODES: [Node] = [
        nameForDiagnostics: "'yield' statement",
        kind: "Stmt",
        children: [
+         Child(name: "TryKeyword",
+               kind: "TryToken",
+               isOptional: true),
          Child(name: "YieldKeyword",
                kind: "KeywordToken",
                tokenChoices: [

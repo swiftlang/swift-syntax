@@ -3065,7 +3065,9 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 
   public init(
     leadingTrivia: Trivia? = nil,
-    _ unexpectedBeforeYieldKeyword: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBeforeTryKeyword: UnexpectedNodesSyntax? = nil,
+    tryKeyword: TokenSyntax? = nil,
+    _ unexpectedBetweenTryKeywordAndYieldKeyword: UnexpectedNodesSyntax? = nil,
     yieldKeyword: TokenSyntax = .keyword(.yield),
     _ unexpectedBetweenYieldKeywordAndYields: UnexpectedNodesSyntax? = nil,
     yields: Yields,
@@ -3074,9 +3076,11 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed 
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeYieldKeyword, yieldKeyword, unexpectedBetweenYieldKeywordAndYields, yields, unexpectedAfterYields))) { (arena, _) in
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeTryKeyword, tryKeyword, unexpectedBetweenTryKeywordAndYieldKeyword, yieldKeyword, unexpectedBetweenYieldKeywordAndYields, yields, unexpectedAfterYields))) { (arena, _) in
       let layout: [RawSyntax?] = [
-        unexpectedBeforeYieldKeyword?.raw,
+        unexpectedBeforeTryKeyword?.raw,
+        tryKeyword?.raw,
+        unexpectedBetweenTryKeywordAndYieldKeyword?.raw,
         yieldKeyword.raw,
         unexpectedBetweenYieldKeywordAndYields?.raw,
         yields.raw,
@@ -3090,30 +3094,72 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var unexpectedBeforeYieldKeyword: UnexpectedNodesSyntax? {
+  public var unexpectedBeforeTryKeyword: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBeforeYieldKeyword(value)
+      self = withUnexpectedBeforeTryKeyword(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `unexpectedBeforeYieldKeyword` replaced.
-  /// - param newChild: The new `unexpectedBeforeYieldKeyword` to replace the node's
-  ///                   current `unexpectedBeforeYieldKeyword`, if present.
-  public func withUnexpectedBeforeYieldKeyword(_ newChild: UnexpectedNodesSyntax?) -> YieldStmtSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeTryKeyword` replaced.
+  /// - param newChild: The new `unexpectedBeforeTryKeyword` to replace the node's
+  ///                   current `unexpectedBeforeTryKeyword`, if present.
+  public func withUnexpectedBeforeTryKeyword(_ newChild: UnexpectedNodesSyntax?) -> YieldStmtSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
     let newData = data.replacingChild(at: 0, with: raw, arena: arena)
     return YieldStmtSyntax(newData)
   }
 
-  public var yieldKeyword: TokenSyntax {
+  public var tryKeyword: TokenSyntax? {
     get {
       let childData = data.child(at: 1, parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withTryKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `tryKeyword` replaced.
+  /// - param newChild: The new `tryKeyword` to replace the node's
+  ///                   current `tryKeyword`, if present.
+  public func withTryKeyword(_ newChild: TokenSyntax?) -> YieldStmtSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
+    return YieldStmtSyntax(newData)
+  }
+
+  public var unexpectedBetweenTryKeywordAndYieldKeyword: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 2, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenTryKeywordAndYieldKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenTryKeywordAndYieldKeyword` replaced.
+  /// - param newChild: The new `unexpectedBetweenTryKeywordAndYieldKeyword` to replace the node's
+  ///                   current `unexpectedBetweenTryKeywordAndYieldKeyword`, if present.
+  public func withUnexpectedBetweenTryKeywordAndYieldKeyword(_ newChild: UnexpectedNodesSyntax?) -> YieldStmtSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
+    return YieldStmtSyntax(newData)
+  }
+
+  public var yieldKeyword: TokenSyntax {
+    get {
+      let childData = data.child(at: 3, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -3127,13 +3173,13 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public func withYieldKeyword(_ newChild: TokenSyntax) -> YieldStmtSyntax {
     let arena = SyntaxArena()
     let raw = newChild.raw
-    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
+    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return YieldStmtSyntax(newData)
   }
 
   public var unexpectedBetweenYieldKeywordAndYields: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
+      let childData = data.child(at: 4, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -3148,13 +3194,13 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenYieldKeywordAndYields(_ newChild: UnexpectedNodesSyntax?) -> YieldStmtSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
+    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
     return YieldStmtSyntax(newData)
   }
 
   public var yields: Yields {
     get {
-      let childData = data.child(at: 3, parent: Syntax(self))
+      let childData = data.child(at: 5, parent: Syntax(self))
       return Yields(childData!)
     }
     set(value) {
@@ -3168,13 +3214,13 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public func withYields(_ newChild: Yields) -> YieldStmtSyntax {
     let arena = SyntaxArena()
     let raw = newChild.raw
-    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
+    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return YieldStmtSyntax(newData)
   }
 
   public var unexpectedAfterYields: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 4, parent: Syntax(self))
+      let childData = data.child(at: 6, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -3189,13 +3235,15 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedAfterYields(_ newChild: UnexpectedNodesSyntax?) -> YieldStmtSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
+    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
     return YieldStmtSyntax(newData)
   }
 
   public static var structure: SyntaxNodeStructure {
     return .layout([
-      \Self.unexpectedBeforeYieldKeyword,
+      \Self.unexpectedBeforeTryKeyword,
+      \Self.tryKeyword,
+      \Self.unexpectedBetweenTryKeywordAndYieldKeyword,
       \Self.yieldKeyword,
       \Self.unexpectedBetweenYieldKeywordAndYields,
       \Self.yields,
@@ -3215,6 +3263,10 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       return nil
     case 4:
       return nil
+    case 5:
+      return nil
+    case 6:
+      return nil
     default:
       fatalError("Invalid index")
     }
@@ -3224,7 +3276,9 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 extension YieldStmtSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "unexpectedBeforeYieldKeyword": unexpectedBeforeYieldKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeTryKeyword": unexpectedBeforeTryKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "tryKeyword": tryKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenTryKeywordAndYieldKeyword": unexpectedBetweenTryKeywordAndYieldKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "yieldKeyword": Syntax(yieldKeyword).asProtocol(SyntaxProtocol.self),
       "unexpectedBetweenYieldKeywordAndYields": unexpectedBetweenYieldKeywordAndYields.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "yields": Syntax(yields).asProtocol(SyntaxProtocol.self),

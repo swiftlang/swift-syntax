@@ -898,7 +898,7 @@ DECL_NODES = [
 
     # e.g., "#embed("filename.txt")"
     Node('MacroExpansionDecl',
-         name_for_diagnostics="pound literal declaration", kind='Decl',
+         name_for_diagnostics="macro expansion", kind='Decl',
          traits=['FreestandingMacroExpansion'],
          children=[
              Child('PoundToken', kind='PoundToken',

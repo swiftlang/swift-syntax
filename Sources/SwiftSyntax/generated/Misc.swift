@@ -1120,9 +1120,9 @@ extension SyntaxKind {
     case .macroDecl: 
       return "macro"
     case .macroExpansionDecl: 
-      return "pound literal declaration"
+      return "macro expansion"
     case .macroExpansionExpr: 
-      return "pound literal expression"
+      return "macro expansion expression"
     case .matchingPatternCondition: 
       return "pattern matching"
     case .memberAccessExpr: 

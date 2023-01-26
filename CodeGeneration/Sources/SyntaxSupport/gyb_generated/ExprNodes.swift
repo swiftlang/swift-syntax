@@ -1160,7 +1160,7 @@ public let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "MacroExpansionExpr",
-       nameForDiagnostics: "pound literal expression",
+       nameForDiagnostics: "macro expansion expression",
        kind: "Expr",
        traits: [
          "FreestandingMacroExpansion"

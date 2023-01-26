@@ -38,7 +38,7 @@ final class PoundAssertTests: XCTestCase {
       """#,
       diagnostics: [
         DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: #"extraneous code ', "error message")' at top level"#)
+        DiagnosticSpec(locationMarker: "2️⃣", message: #"extraneous code ', "error message")' at top level"#),
       ]
     )
   }

@@ -24,11 +24,11 @@ struct ThrownErrorDiagnostic: DiagnosticMessage {
   }
 }
 
-extension MacroExpansionExprSyntax {
+extension MacroExpansionDeclSyntax {
   /// Macro expansion declarations are parsed in some positions where an
   /// expression is also warranted, so
-  func asMacroExpansionDecl() -> MacroExpansionDeclSyntax {
-    MacroExpansionDeclSyntax(
+  public func asMacroExpansionExpr() -> MacroExpansionExprSyntax {
+    MacroExpansionExprSyntax(
       unexpectedBeforePoundToken,
       poundToken: poundToken,
       unexpectedBetweenPoundTokenAndMacro,
@@ -47,7 +47,9 @@ extension MacroExpansionExprSyntax {
       unexpectedAfterAdditionalTrailingClosures
     )
   }
+}
 
+extension MacroExpansionExprSyntax {
   /// Evaluate the given macro for this syntax node, producing the expanded
   /// result and (possibly) some diagnostics.
   func evaluateMacro(

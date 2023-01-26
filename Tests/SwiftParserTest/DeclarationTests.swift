@@ -1176,6 +1176,18 @@ final class DeclarationTests: XCTestCase {
       }
       """
     )
+    AssertParse(
+      """
+      #expand
+      """,
+      substructure: Syntax(
+        SourceFileSyntax(
+          CodeBlockItemListSyntax {
+            MacroExpansionDeclSyntax(macro: "expand")
+          }
+        )
+      )
+    )
   }
 
   func testVariableDeclWithGetSetButNoBrace() {

@@ -32,9 +32,16 @@ extension TokenConsumer {
   mutating func atStartOfDeclaration(
     isAtTopLevel: Bool = false,
     allowInitDecl: Bool = true,
-    allowRecovery: Bool = false
+    allowRecovery: Bool = false,
+    preferPoundAsExpression: Bool = false
   ) -> Bool {
     if self.at(anyIn: PoundDeclarationStart.self) != nil {
+      // If we are in a context where we prefer # to be an expression,
+      // treat it as one if it's not at the start of the line.
+      if preferPoundAsExpression && self.at(.pound) && !self.currentToken.isAtStartOfLine {
+        return false
+      }
+
       return true
     }
 
@@ -192,14 +199,12 @@ extension Parser {
       return RawDeclSyntax(directive)
     case (.poundWarningKeyword, _)?, (.poundErrorKeyword, _)?:
       return self.parsePoundDiagnosticDeclaration()
-    case nil:
-      break
-    }
-
-    if (self.at(.pound)) {
+    case (.pound, _)?:
       // FIXME: If we can have attributes for macro expansions, handle this
       // via DeclarationStart.
       return RawDeclSyntax(self.parseMacroExpansionDeclaration())
+    case nil:
+      break
     }
 
     let attrs = DeclAttributes(

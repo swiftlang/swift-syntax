@@ -198,24 +198,6 @@ open class BasicFormat: SyntaxRewriter {
       return true
     case .arrow: 
       return true
-    case .poundKeyPathKeyword: 
-      return true
-    case .poundLineKeyword: 
-      return true
-    case .poundSelectorKeyword: 
-      return true
-    case .poundFileKeyword: 
-      return true
-    case .poundFileIDKeyword: 
-      return true
-    case .poundFilePathKeyword: 
-      return true
-    case .poundColumnKeyword: 
-      return true
-    case .poundFunctionKeyword: 
-      return true
-    case .poundDsohandleKeyword: 
-      return true
     case .poundAssertKeyword: 
       return true
     case .poundSourceLocationKeyword: 

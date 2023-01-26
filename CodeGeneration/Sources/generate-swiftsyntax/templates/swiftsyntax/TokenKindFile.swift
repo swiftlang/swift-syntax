@@ -35,24 +35,6 @@ let tokenKindFile = SourceFileSyntax {
       }
     }
     
-    InitializerDeclSyntax("""
-      /// Initializes a keyword token kind from its string representation. If the
-      /// given string is not a keyword, this function returns `nil`.
-      public init?(keyword: String)
-      """) {
-      SwitchStmtSyntax(expression: ExprSyntax("keyword")) {
-        for token in SYNTAX_TOKENS where token.isKeyword {
-          SwitchCaseSyntax("case \"\(raw: token.text!)\":") {
-            SequenceExprSyntax("self = .\(raw: token.swiftKind)")
-          }
-        }
-        
-        SwitchCaseSyntax("default:") {
-          ReturnStmtSyntax("return nil")
-        }
-      }
-    }
-    
     VariableDeclSyntax(
       leadingTrivia: .docBlockComment("/// The textual representation of this token kind.") + .newlines(1),
       attributes: [.attribute(AttributeSyntax(attributeName: TypeSyntax("_spi"), leftParen: .leftParenToken(), argument: .token(.identifier("Testing")), rightParen: .rightParenToken()))],
@@ -389,39 +371,6 @@ let tokenKindFile = SourceFileSyntax {
           SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
             ReturnStmtSyntax("return \(raw: type(of: token) == PunctuatorSpec.self)")
           }
-        }
-      }
-    }
-    
-    InitializerDeclSyntax("""
-      @_spi(RawSyntax)
-      public init?(keyword text: SyntaxText)
-      """) {
-      
-      let tokensByLength = Dictionary(
-        grouping: SYNTAX_TOKENS.filter { $0.isKeyword },
-        by: { $0.text!.count }
-      )
-      
-      SwitchStmtSyntax(expression: ExprSyntax("text.count")) {
-        for len in tokensByLength.keys.sorted() {
-          SwitchCaseSyntax("case \(raw: len):") {
-            SwitchStmtSyntax(expression: ExprSyntax("text")) {
-              for token in tokensByLength[len]! {
-                SwitchCaseSyntax("case \"\(raw: token.text!)\":") {
-                  SequenceExprSyntax("self = .\(raw: token.swiftKind)")
-                }
-              }
-              
-              SwitchCaseSyntax("default:") {
-                ReturnStmtSyntax("return nil")
-              }
-            }
-          }
-        }
-        
-        SwitchCaseSyntax("default:") {
-          ReturnStmtSyntax("return nil")
         }
       }
     }

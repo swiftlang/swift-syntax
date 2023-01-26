@@ -1846,9 +1846,7 @@ extension Lexer.Cursor {
     self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
 
     let text = tokStart.text(upTo: self)
-    if let keywordKind = RawTokenKind(keyword: text) {
-      return Lexer.Result(keywordKind)
-    } else if let keyword = Keyword(text), keyword.isLexerClassified {
+    if let keyword = Keyword(text), keyword.isLexerClassified {
       return Lexer.Result(.keyword(keyword))
     } else if text == "_" {
       return Lexer.Result(.wildcard)

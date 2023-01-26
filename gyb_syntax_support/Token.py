@@ -227,17 +227,6 @@ SYNTAX_TOKENS = [
     Punctuator('MultilineStringQuote', 'multiline_string_quote',
                text='\\\"\\\"\\\"', classification='StringLiteral'),
 
-    # Keywords prefixed with a '#'.
-
-    PoundKeyword('PoundKeyPath', 'keyPath', text='#keyPath'),
-    PoundKeyword('PoundLine', 'line', text='#line'),
-    PoundKeyword('PoundSelector', 'selector', text='#selector'),
-    PoundKeyword('PoundFile', 'file', text='#file'),
-    PoundKeyword('PoundFileID', 'fileID', text='#fileID'),
-    PoundKeyword('PoundFilePath', 'filePath', text='#filePath'),
-    PoundKeyword('PoundColumn', 'column', text='#column'),
-    PoundKeyword('PoundFunction', 'function', text='#function'),
-    PoundKeyword('PoundDsohandle', 'dsohandle', text='#dsohandle'),
     PoundKeyword('PoundAssert', 'assert', text='#assert'),
 
     PoundDirectiveKeyword('PoundSourceLocation', 'sourceLocation',

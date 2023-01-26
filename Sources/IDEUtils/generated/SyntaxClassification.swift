@@ -192,24 +192,6 @@ extension RawTokenKind {
       return .stringLiteral
     case .multilineStringQuote: 
       return .stringLiteral
-    case .poundKeyPathKeyword: 
-      return .keyword
-    case .poundLineKeyword: 
-      return .keyword
-    case .poundSelectorKeyword: 
-      return .keyword
-    case .poundFileKeyword: 
-      return .keyword
-    case .poundFileIDKeyword: 
-      return .keyword
-    case .poundFilePathKeyword: 
-      return .keyword
-    case .poundColumnKeyword: 
-      return .keyword
-    case .poundFunctionKeyword: 
-      return .keyword
-    case .poundDsohandleKeyword: 
-      return .keyword
     case .poundAssertKeyword: 
       return .keyword
     case .poundSourceLocationKeyword: 

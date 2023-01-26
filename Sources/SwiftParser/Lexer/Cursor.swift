@@ -674,62 +674,7 @@ extension Lexer.Cursor {
   ///    that case bytes are consumed until we reach the next start of a UTF-8
   ///    character.
   mutating func advanceValidatingUTF8Character() -> Unicode.Scalar? {
-    guard let curByte = self.advance() else {
-      return nil
-    }
-
-    if (curByte < 0x80) {
-      return Unicode.Scalar(curByte)
-    }
-
-    // Read the number of high bits set, which indicates the number of bytes in
-    // the character.
-    let encodedBytes = (~(UInt32(curByte) << 24)).leadingZeroBitCount
-
-    // If this is 0b10XXXXXX, then it is a continuation character.
-    if encodedBytes == 1 || !Unicode.Scalar(curByte).isStartOfUTF8Character {
-      // Skip until we get the start of another character.  This is guaranteed to
-      // at least stop at the nul at the end of the buffer.
-      self.advance(while: { !$0.isStartOfUTF8Character })
-      return nil
-    }
-
-    // Drop the high bits indicating the # bytes of the result.
-    var charValue = UInt32(curByte << encodedBytes) >> encodedBytes
-
-    // Read and validate the continuation bytes.
-    for _ in 1..<encodedBytes {
-      guard let curByte = self.peek() else {
-        return nil
-      }
-      // If the high bit isn't set or the second bit isn't clear, then this is not
-      // a continuation byte!
-      if (curByte < 0x80 || curByte >= 0xC0) {
-        return nil
-      }
-
-      // Accumulate our result.
-      charValue <<= 6
-      charValue |= UInt32(curByte & 0x3F)
-      _ = self.advance()
-    }
-
-    // UTF-16 surrogate pair values are not valid code points.
-    if (charValue >= 0xD800 && charValue <= 0xDFFF) {
-      return nil
-    }
-
-    // If we got here, we read the appropriate number of accumulated bytes.
-    // Verify that the encoding was actually minimal.
-    // Number of bits in the value, ignoring leading zeros.
-    let numBits = 32 - charValue.leadingZeroBitCount
-    if numBits <= 5 + 6 {
-      return encodedBytes == 2 ? Unicode.Scalar(charValue) : nil
-    }
-    if numBits <= 4 + 6 + 6 {
-      return encodedBytes == 3 ? Unicode.Scalar(charValue) : nil
-    }
-    return encodedBytes == 4 ? Unicode.Scalar(charValue) : nil
+    return Unicode.Scalar.lexing(advance: { self.advance() }, peek: { self.peek(at: 0) })
   }
 
   /// Rever the lexer by `offset` bytes. This should only be used by `resetForSplit`.

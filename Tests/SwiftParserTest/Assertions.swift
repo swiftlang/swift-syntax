@@ -143,7 +143,7 @@ private func AssertTokens(
       )
     case (let actualError?, let expectedError?):
       AssertStringsEqualWithDiff(
-        actualError.diagnostic(wholeText: actualLexeme.wholeText).message,
+        actualError.diagnostic(wholeTextBytes: Array(actualLexeme.wholeText)).message,
         expectedError,
         file: expectedLexeme.file,
         line: expectedLexeme.line

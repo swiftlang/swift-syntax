@@ -98,9 +98,11 @@ public extension SwiftSyntax.LexerError {
   /// `tokenText` is the entire text of the token in which the `LexerError`
   /// occurred, including trivia.
   @_spi(RawSyntax)
-  func diagnostic(wholeText: SyntaxText) -> DiagnosticMessage {
+  func diagnostic(wholeTextBytes: [UInt8]) -> DiagnosticMessage {
     var scalarAtErrorOffset: UnicodeScalar {
-      Unicode.Scalar(wholeText[Int(self.byteOffset)])
+      // Fall back to the Unicode replacement character U+FFFD in case we can't
+      // lex the unicode character at `byteOffset`. It's the best we can do
+      Unicode.Scalar.lexing(from: wholeTextBytes[Int(self.byteOffset)...]) ?? UnicodeScalar("�")
     }
 
     switch self.kind {
@@ -130,8 +132,6 @@ public extension SwiftSyntax.LexerError {
   }
 
   func diagnostic(in token: TokenSyntax) -> DiagnosticMessage {
-    return token.tokenView.wholeText { wholeText in
-      return self.diagnostic(wholeText: token.tokenView.rawText)
-    }
+    return self.diagnostic(wholeTextBytes: token.syntaxTextBytes)
   }
 }

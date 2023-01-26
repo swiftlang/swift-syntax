@@ -101,7 +101,7 @@ final class DiagnosticsFormatterTests: XCTestCase {
 
     let expectedOutput = """
       1 │ var foo = bar +
-        ∣                ╰─ \u{001B}[1;31mexpected expression in variable\u{001B}[0;0m
+        ∣                ╰─ \u{001B}[1;31merror: expected expression in variable\u{001B}[0;0m
 
       """
     AssertStringsEqualWithDiff(expectedOutput, annotate(source: source, colorize: true))
@@ -113,9 +113,9 @@ final class DiagnosticsFormatterTests: XCTestCase {
       """
     let expectedOutput = """
       1 │ foo.[].[].[]
-        ∣     │  │  ╰─ \u{001B}[1;31mexpected name in member access\u{001B}[0;0m
-        ∣     │  ╰─ \u{001B}[1;31mexpected name in member access\u{001B}[0;0m
-        ∣     ╰─ \u{001B}[1;31mexpected name in member access\u{001B}[0;0m
+        ∣     │  │  ╰─ \u{001B}[1;31merror: expected name in member access\u{001B}[0;0m
+        ∣     │  ╰─ \u{001B}[1;31merror: expected name in member access\u{001B}[0;0m
+        ∣     ╰─ \u{001B}[1;31merror: expected name in member access\u{001B}[0;0m
 
       """
     AssertStringsEqualWithDiff(expectedOutput, annotate(source: source, colorize: true))

@@ -198,7 +198,7 @@ class PrintDiags: ParsableCommand {
   @Flag(name: .long, help: "Perform sequence folding with the standard operators")
   var foldSequences: Bool = false
 
-  @Flag(name: .long, help: "Colorize output with ANSI color codes")
+  @Flag(name: .long, help: "Force output coloring with ANSI color codes")
   var colorize: Bool = false
 
   func run() throws {
@@ -206,9 +206,14 @@ class PrintDiags: ParsableCommand {
 
     source.withUnsafeBufferPointer { sourceBuffer in
       let tree = Parser.parse(source: sourceBuffer)
-
       var diags = ParseDiagnosticsGenerator.diagnostics(for: tree)
-      print(DiagnosticsFormatter.annotatedSource(tree: tree, diags: diags, colorize: colorize))
+      let annotatedSource = DiagnosticsFormatter.annotatedSource(
+        tree: tree,
+        diags: diags,
+        colorize: colorize || TerminalHelper.isConnectedToTerminal
+      )
+
+      print(annotatedSource)
 
       if foldSequences {
         diags += foldAllSequences(tree).1

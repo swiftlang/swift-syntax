@@ -241,8 +241,6 @@ SYNTAX_TOKENS = [
     PoundConfig('PoundAvailable', 'available', text='#available'),
     PoundConfig('PoundUnavailable', 'unavailable', text='#unavailable'),
 
-    PoundConfig('PoundHasSymbol', '_hasSymbol', text='#_hasSymbol'),
-
     Literal('IntegerLiteral', 'integer_literal', name_for_diagnostics='integer literal',
             classification='IntegerLiteral'),
     Literal('FloatingLiteral', 'floating_literal',

@@ -1465,7 +1465,6 @@ extension Lexer.Cursor {
     case "endif": kind = .poundEndifKeyword
     case "available": kind = .poundAvailableKeyword
     case "unavailable": kind = .poundUnavailableKeyword
-    case "_hasSymbol": kind = .poundHasSymbolKeyword
     default:
       // If we didn't find a match, then just return `.pound`.  This is highly
       // dubious in terms of error recovery, but is useful for code completion and

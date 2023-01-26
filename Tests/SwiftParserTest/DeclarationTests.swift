@@ -123,14 +123,14 @@ final class DeclarationTests: XCTestCase {
     AssertParse(
       "class T where t1️⃣",
       diagnostics: [
-        DiagnosticSpec(message: "expected '=' and right-hand type in same type requirement"),
+        DiagnosticSpec(message: "expected ':' or '==' to indicate a conformance or same-type requirement"),
         DiagnosticSpec(message: "expected member block in class"),
       ]
     )
     AssertParse(
       "class B<where g1️⃣",
       diagnostics: [
-        DiagnosticSpec(message: "expected '=' and right-hand type in same type requirement"),
+        DiagnosticSpec(message: "expected ':' or '==' to indicate a conformance or same-type requirement"),
         DiagnosticSpec(message: "expected '>' to end generic parameter clause"),
         DiagnosticSpec(message: "expected member block in class"),
       ]

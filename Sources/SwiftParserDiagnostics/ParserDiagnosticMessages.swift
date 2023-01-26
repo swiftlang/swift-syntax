@@ -149,6 +149,9 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var missingColonInTernaryExpr: Self {
     .init("expected ':' after '? ...' in ternary expression")
   }
+  public static var missingConformanceRequirement: Self {
+    .init("expected ':' or '==' to indicate a conformance or same-type requirement")
+  }
   public static var misspelledAsync: Self {
     .init("expected async specifier; did you mean 'async'?")
   }

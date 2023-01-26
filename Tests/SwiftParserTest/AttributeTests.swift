@@ -43,11 +43,11 @@ final class AttributeTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' and parameters in '@differentiable' argument", fixIts: ["insert ':' and parameters"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '=' and right-hand type in same type requirement", fixIts: ["insert '=' and right-hand type"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ':' or '==' to indicate a conformance or same-type requirement"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end attribute", fixIts: ["insert ')'"]),
       ],
       fixedSource: """
-        @differentiable(reverse wrt: <#identifier#>,where T = <#type#>)
+        @differentiable(reverse wrt: <#identifier#>,where T)
         func podcastPlaybackSpeed() {
         }
         """

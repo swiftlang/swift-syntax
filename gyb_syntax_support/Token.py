@@ -241,19 +241,6 @@ SYNTAX_TOKENS = [
     PoundConfig('PoundAvailable', 'available', text='#available'),
     PoundConfig('PoundUnavailable', 'unavailable', text='#unavailable'),
 
-    PoundObjectLiteral('PoundFileLiteral', 'fileLiteral',
-                       text='#fileLiteral',
-                       name_for_diagnostics='file reference',
-                       protocol='ExpressibleByFileReferenceLiteral'),
-    PoundObjectLiteral('PoundImageLiteral', 'imageLiteral',
-                       text='#imageLiteral',
-                       name_for_diagnostics='image',
-                       protocol='ExpressibleByImageLiteral'),
-    PoundObjectLiteral('PoundColorLiteral', 'colorLiteral',
-                       text='#colorLiteral',
-                       name_for_diagnostics='color',
-                       protocol='ExpressibleByColorLiteral'),
-
     PoundConfig('PoundHasSymbol', '_hasSymbol', text='#_hasSymbol'),
 
     Literal('IntegerLiteral', 'integer_literal', name_for_diagnostics='integer literal',

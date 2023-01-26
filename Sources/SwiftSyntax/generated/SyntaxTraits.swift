@@ -180,6 +180,74 @@ public extension SyntaxProtocol {
   }
 }
 
+// MARK: - FreestandingMacroExpansionSyntax
+
+public protocol FreestandingMacroExpansionSyntax: SyntaxProtocol {
+  var poundToken: TokenSyntax { 
+    get 
+  }
+  
+  func withPoundToken(_ newChild: TokenSyntax) -> Self
+  
+  var macro: TokenSyntax { 
+    get 
+  }
+  
+  func withMacro(_ newChild: TokenSyntax) -> Self
+  
+  var genericArguments: GenericArgumentClauseSyntax? { 
+    get 
+  }
+  
+  func withGenericArguments(_ newChild: GenericArgumentClauseSyntax?) -> Self
+  
+  var leftParen: TokenSyntax? { 
+    get 
+  }
+  
+  func withLeftParen(_ newChild: TokenSyntax?) -> Self
+  
+  var argumentList: TupleExprElementListSyntax { 
+    get 
+  }
+  
+  func withArgumentList(_ newChild: TupleExprElementListSyntax) -> Self
+  
+  var rightParen: TokenSyntax? { 
+    get 
+  }
+  
+  func withRightParen(_ newChild: TokenSyntax?) -> Self
+  
+  var trailingClosure: ClosureExprSyntax? { 
+    get 
+  }
+  
+  func withTrailingClosure(_ newChild: ClosureExprSyntax?) -> Self
+  
+  var additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? { 
+    get 
+  }
+  
+  func withAdditionalTrailingClosures(_ newChild: MultipleTrailingClosureElementListSyntax?) -> Self
+}
+
+public extension SyntaxProtocol {
+  /// Check whether the non-type erased version of this syntax node conforms to
+  /// `FreestandingMacroExpansionSyntax`.
+  /// Note that this will incur an existential conversion.
+  func isProtocol(_: FreestandingMacroExpansionSyntax.Protocol) -> Bool {
+    return self.asProtocol(FreestandingMacroExpansionSyntax.self) != nil
+  }
+  
+  /// Return the non-type erased version of this syntax node if it conforms to
+  /// `FreestandingMacroExpansionSyntax`. Otherwise return `nil`.
+  /// Note that this will incur an existential conversion.
+  func asProtocol(_: FreestandingMacroExpansionSyntax.Protocol) -> FreestandingMacroExpansionSyntax? {
+    return Syntax(self).asProtocol(SyntaxProtocol.self) as? FreestandingMacroExpansionSyntax
+  }
+}
+
 // MARK: - WithTrailingCommaSyntax
 
 public protocol WithTrailingCommaSyntax: SyntaxProtocol {
@@ -362,6 +430,12 @@ extension LabeledSpecializeEntrySyntax: WithTrailingCommaSyntax {
 }
 
 extension MacroDeclSyntax: IdentifiedDeclSyntax, AttributedSyntax {
+}
+
+extension MacroExpansionDeclSyntax: FreestandingMacroExpansionSyntax {
+}
+
+extension MacroExpansionExprSyntax: FreestandingMacroExpansionSyntax {
 }
 
 extension MemberDeclBlockSyntax: BracedSyntax {

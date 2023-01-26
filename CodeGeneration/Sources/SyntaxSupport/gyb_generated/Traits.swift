@@ -59,6 +59,18 @@ public let TRAITS: [Trait] = [
           Child(name: "RightParen", kind: "RightParenToken"),
         ]
   ),
+  Trait(traitName: "FreestandingMacroExpansion",
+        children: [
+          Child(name: "PoundToken", kind: "PoundToken"),
+          Child(name: "Macro", kind: "IdentifierToken"),
+          Child(name: "GenericArguments", kind: "GenericArgumentClause", isOptional: true),
+          Child(name: "LeftParen", kind: "LeftParenToken", isOptional: true),
+          Child(name: "ArgumentList", kind: "TupleExprElementList"),
+          Child(name: "RightParen", kind: "RightParenToken", isOptional: true),
+          Child(name: "TrailingClosure", kind: "ClosureExpr", isOptional: true),
+          Child(name: "AdditionalTrailingClosures", kind: "MultipleTrailingClosureElementList", isOptional: true),
+        ]
+  ),
   Trait(traitName: "WithTrailingComma",
         children: [
           Child(name: "TrailingComma", kind: "CommaToken", isOptional: true),

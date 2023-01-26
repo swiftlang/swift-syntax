@@ -433,6 +433,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/IdentifiedDeclSyntax>
 - <doc:SwiftSyntax/WithCodeBlockSyntax>
 - <doc:SwiftSyntax/ParenthesizedSyntax>
+- <doc:SwiftSyntax/FreestandingMacroExpansionSyntax>
 - <doc:SwiftSyntax/WithTrailingCommaSyntax>
 - <doc:SwiftSyntax/WithStatementsSyntax>
 

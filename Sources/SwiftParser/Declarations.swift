@@ -32,9 +32,16 @@ extension TokenConsumer {
   mutating func atStartOfDeclaration(
     isAtTopLevel: Bool = false,
     allowInitDecl: Bool = true,
-    allowRecovery: Bool = false
+    allowRecovery: Bool = false,
+    preferPoundAsExpression: Bool = false
   ) -> Bool {
     if self.at(anyIn: PoundDeclarationStart.self) != nil {
+      // If we are in a context where we prefer # to be an expression,
+      // treat it as one if it's not at the start of the line.
+      if preferPoundAsExpression && self.at(.pound) && !self.currentToken.isAtStartOfLine {
+        return false
+      }
+
       return true
     }
 

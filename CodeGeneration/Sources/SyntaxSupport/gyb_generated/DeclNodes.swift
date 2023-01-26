@@ -1602,6 +1602,9 @@ public let DECL_NODES: [Node] = [
   Node(name: "MacroExpansionDecl",
        nameForDiagnostics: "pound literal declaration",
        kind: "Decl",
+       traits: [
+         "FreestandingMacroExpansion"
+       ],
        children: [
          Child(name: "PoundToken",
                kind: "PoundToken",

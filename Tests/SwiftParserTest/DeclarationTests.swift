@@ -1371,6 +1371,17 @@ final class DeclarationTests: XCTestCase {
       )
     )
   }
+
+  func testAttributeInPoundIf() {
+    AssertParse(
+      """
+      #if hasAttribute(foo)
+      @foo
+      #endif
+      struct MyStruct {}
+      """
+    )
+  }
 }
 
 extension Parser.DeclAttributes {

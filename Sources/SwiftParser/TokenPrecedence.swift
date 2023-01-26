@@ -135,7 +135,7 @@ public enum TokenPrecedence: Comparable {
     case  // Chaining punctuators
     .infixQuestionMark, .period, .postfixQuestionMark, .exclamationMark,
       // Misc
-      .backslash, .backtick, .colon, .comma, .ellipsis, .equal, .prefixAmpersand:
+      .atSign, .backslash, .backtick, .colon, .comma, .ellipsis, .equal, .prefixAmpersand:
       self = .weakPunctuator
 
     // MARK: Weak bracket close
@@ -159,8 +159,6 @@ public enum TokenPrecedence: Comparable {
     .semicolon,
       // Arrow is a strong indicator in a function type that we are now in the return type
       .arrow,
-      // '@' typically occurs at the start of declarations
-      .atSign,
       // EOF is here because it is a very stong marker and doesn't belong anywhere else
       .eof:
       self = .strongPunctuator

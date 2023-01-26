@@ -16,7 +16,7 @@ import SwiftSyntaxBuilder
 
 final class InitializerDeclTests: XCTestCase {
   func testInitializerDecl() {
-    let builder = InitializerDeclSyntax(
+    let builder = DeclSyntax(
       """
       public init(errorCode: Int) {
         self.code = errorCode
@@ -35,7 +35,7 @@ final class InitializerDeclTests: XCTestCase {
   }
 
   func testFailableInitializerDecl() {
-    let builder = InitializerDeclSyntax(
+    let builder = DeclSyntax(
       """
       public init?(errorCode: Int) {
         guard errorCode > 0 else { return nil }
@@ -58,7 +58,7 @@ final class InitializerDeclTests: XCTestCase {
   }
 
   func testMultilineParameterList() {
-    let builder = InitializerDeclSyntax(
+    let builder = DeclSyntax(
       """
       init(
         _ p1: Int,

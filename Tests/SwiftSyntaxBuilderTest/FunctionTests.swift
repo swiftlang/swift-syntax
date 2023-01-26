@@ -17,11 +17,11 @@ import SwiftBasicFormat
 import _SwiftSyntaxTestSupport
 
 final class FunctionTests: XCTestCase {
-  func testFibonacci() {
-    let buildable = FunctionDeclSyntax("func fibonacci(_ n: Int) -> Int") {
-      IfStmtSyntax("if n <= 1 { return n }")
+  func testFibonacci() throws {
+    let buildable = try FunctionDeclSyntax("func fibonacci(_ n: Int) -> Int") {
+      StmtSyntax("if n <= 1 { return n }")
 
-      ReturnStmtSyntax("return fibonacci(n - 1) + self.fibonacci(n - 2)")
+      StmtSyntax("return fibonacci(n - 1) + self.fibonacci(n - 2)")
     }
 
     AssertBuildResult(
@@ -38,9 +38,9 @@ final class FunctionTests: XCTestCase {
   }
 
   func testFunctionDeclEnsurePropperSpacing() {
-    let testCases: [UInt: (FunctionDeclSyntax, String)] = [
+    let testCases: [UInt: (DeclSyntax, String)] = [
       #line: (
-        FunctionDeclSyntax(
+        DeclSyntax(
           """
           @available(*, deprecated, message: "Use function on Baz")
           private func visitChildren<SyntaxType: SyntaxProtocol>(_ node: SyntaxType) {
@@ -54,7 +54,7 @@ final class FunctionTests: XCTestCase {
         """
       ),
       #line: (
-        FunctionDeclSyntax(
+        DeclSyntax(
           """
           public static func == (lhs: String, rhs: String) -> Bool {
             return lhs < rhs
@@ -68,7 +68,7 @@ final class FunctionTests: XCTestCase {
         """
       ),
       #line: (
-        FunctionDeclSyntax(
+        DeclSyntax(
           """
           public static func == (lhs: String, rhs: String) -> Bool {
             return lhs > rhs
@@ -82,7 +82,7 @@ final class FunctionTests: XCTestCase {
         """
       ),
       #line: (
-        FunctionDeclSyntax(
+        DeclSyntax(
           """
           public static func == (lhs1: String, lhs2: String, rhs1: String, rhs2: String) -> Bool {
             return (lhs1, lhs2) > (rhs1, rhs2)
@@ -96,7 +96,7 @@ final class FunctionTests: XCTestCase {
         """
       ),
       #line: (
-        FunctionDeclSyntax(
+        DeclSyntax(
           """
           public func foo<Generic>(input: Bas) -> Foo<Generic> {
             return input as Foo<Generic>!
@@ -110,7 +110,7 @@ final class FunctionTests: XCTestCase {
         """
       ),
       #line: (
-        FunctionDeclSyntax(
+        DeclSyntax(
           """
           public func foo<Generic>(input: Bas) -> Foo<Generic?> {
             return input as Foo<Generic?>!
@@ -124,7 +124,7 @@ final class FunctionTests: XCTestCase {
         """
       ),
       #line: (
-        FunctionDeclSyntax(
+        DeclSyntax(
           """
           public func foo<Generic>(input: [Bar]) -> Foo<[Bar]> {
             return input
@@ -138,7 +138,7 @@ final class FunctionTests: XCTestCase {
         """
       ),
       #line: (
-        FunctionDeclSyntax(
+        DeclSyntax(
           """
           public func foo(myOptionalClosure: MyClosure?)  {
             myOptionalClosure!()
@@ -152,7 +152,7 @@ final class FunctionTests: XCTestCase {
         """
       ),
       #line: (
-        FunctionDeclSyntax(
+        DeclSyntax(
           """
           public func foo(myOptionalValue: String?, myOtherOptionalValue: [String?])  {
           }
@@ -164,31 +164,33 @@ final class FunctionTests: XCTestCase {
         """
       ),
       #line: (
-        FunctionDeclSyntax(
-          modifiers: [DeclModifierSyntax(name: .keyword(.public)), DeclModifierSyntax(name: .keyword(.static))],
-          identifier: TokenSyntax.identifier("=="),
-          signature: FunctionSignatureSyntax(
-            input: ParameterClauseSyntax(
-              parameterList: FunctionParameterListSyntax {
-                FunctionParameterSyntax(firstName: TokenSyntax.identifier("lhs"), colon: .colonToken(), type: SimpleTypeIdentifierSyntax("String"))
-                FunctionParameterSyntax(firstName: TokenSyntax.identifier("rhs"), colon: .colonToken(), type: SimpleTypeIdentifierSyntax("String"))
-              }
-            ),
-            output: ReturnClauseSyntax(
-              returnType: SimpleTypeIdentifierSyntax(name: TokenSyntax.identifier("Bool"))
-            )
-          ),
-          bodyBuilder: {
-            ReturnStmtSyntax(
-              expression: SequenceExprSyntax(
-                elements: ExprListSyntax {
-                  IdentifierExprSyntax(identifier: .identifier("lhs"))
-                  BinaryOperatorExprSyntax(operatorToken: .binaryOperator("<"))
-                  IdentifierExprSyntax(identifier: .identifier("rhs"))
+        DeclSyntax(
+          FunctionDeclSyntax(
+            modifiers: [DeclModifierSyntax(name: .keyword(.public)), DeclModifierSyntax(name: .keyword(.static))],
+            identifier: TokenSyntax.identifier("=="),
+            signature: FunctionSignatureSyntax(
+              input: ParameterClauseSyntax(
+                parameterList: FunctionParameterListSyntax {
+                  FunctionParameterSyntax(firstName: TokenSyntax.identifier("lhs"), colon: .colonToken(), type: TypeSyntax("String"))
+                  FunctionParameterSyntax(firstName: TokenSyntax.identifier("rhs"), colon: .colonToken(), type: TypeSyntax("String"))
                 }
+              ),
+              output: ReturnClauseSyntax(
+                returnType: SimpleTypeIdentifierSyntax(name: TokenSyntax.identifier("Bool"))
               )
-            )
-          }
+            ),
+            bodyBuilder: {
+              ReturnStmtSyntax(
+                expression: SequenceExprSyntax(
+                  elements: ExprListSyntax {
+                    IdentifierExprSyntax(identifier: .identifier("lhs"))
+                    BinaryOperatorExprSyntax(operatorToken: .binaryOperator("<"))
+                    IdentifierExprSyntax(identifier: .identifier("rhs"))
+                  }
+                )
+              )
+            }
+          )
         ),
         """
         public static func ==(lhs: String, rhs: String) -> Bool {
@@ -197,33 +199,35 @@ final class FunctionTests: XCTestCase {
         """
       ),
       #line: (
-        FunctionDeclSyntax(
-          modifiers: [DeclModifierSyntax(name: .keyword(.public)), DeclModifierSyntax(name: .keyword(.static))],
-          identifier: TokenSyntax.identifier("=="),
-          signature: FunctionSignatureSyntax(
-            input: ParameterClauseSyntax(
-              parameterList: FunctionParameterListSyntax {
-                FunctionParameterSyntax(firstName: TokenSyntax.identifier("lhs1"), colon: .colonToken(), type: SimpleTypeIdentifierSyntax("String"))
-                FunctionParameterSyntax(firstName: TokenSyntax.identifier("lhs2"), colon: .colonToken(), type: SimpleTypeIdentifierSyntax("String"))
-                FunctionParameterSyntax(firstName: TokenSyntax.identifier("rhs1"), colon: .colonToken(), type: SimpleTypeIdentifierSyntax("String"))
-                FunctionParameterSyntax(firstName: TokenSyntax.identifier("rhs2"), colon: .colonToken(), type: SimpleTypeIdentifierSyntax("String"))
-              }
-            ),
-            output: ReturnClauseSyntax(
-              returnType: SimpleTypeIdentifierSyntax(name: TokenSyntax.identifier("Bool"))
-            )
-          ),
-          bodyBuilder: {
-            ReturnStmtSyntax(
-              expression: SequenceExprSyntax(
-                elements: ExprListSyntax {
-                  ExprSyntax("(lhs1, lhs2)")
-                  BinaryOperatorExprSyntax(operatorToken: .binaryOperator("<"))
-                  ExprSyntax("(rhs1, rhs2)")
+        DeclSyntax(
+          FunctionDeclSyntax(
+            modifiers: [DeclModifierSyntax(name: .keyword(.public)), DeclModifierSyntax(name: .keyword(.static))],
+            identifier: TokenSyntax.identifier("=="),
+            signature: FunctionSignatureSyntax(
+              input: ParameterClauseSyntax(
+                parameterList: FunctionParameterListSyntax {
+                  FunctionParameterSyntax(firstName: TokenSyntax.identifier("lhs1"), colon: .colonToken(), type: TypeSyntax("String"))
+                  FunctionParameterSyntax(firstName: TokenSyntax.identifier("lhs2"), colon: .colonToken(), type: TypeSyntax("String"))
+                  FunctionParameterSyntax(firstName: TokenSyntax.identifier("rhs1"), colon: .colonToken(), type: TypeSyntax("String"))
+                  FunctionParameterSyntax(firstName: TokenSyntax.identifier("rhs2"), colon: .colonToken(), type: TypeSyntax("String"))
                 }
+              ),
+              output: ReturnClauseSyntax(
+                returnType: SimpleTypeIdentifierSyntax(name: TokenSyntax.identifier("Bool"))
               )
-            )
-          }
+            ),
+            bodyBuilder: {
+              ReturnStmtSyntax(
+                expression: SequenceExprSyntax(
+                  elements: ExprListSyntax {
+                    ExprSyntax("(lhs1, lhs2)")
+                    BinaryOperatorExprSyntax(operatorToken: .binaryOperator("<"))
+                    ExprSyntax("(rhs1, rhs2)")
+                  }
+                )
+              )
+            }
+          )
         ),
         """
         public static func ==(lhs1: String, lhs2: String, rhs1: String, rhs2: String) -> Bool {
@@ -249,7 +253,7 @@ final class FunctionTests: XCTestCase {
   }
 
   func testFunctionDeclBuilder() {
-    let builder = FunctionDeclSyntax(
+    let builder = DeclSyntax(
       """
       func test(_ p1: Int, p2: Int, _ p3: Int, p4: Int, _ p5: Int) -> Int {
           return p1 + p2 + p3 + p4 + p5
@@ -268,7 +272,7 @@ final class FunctionTests: XCTestCase {
   }
 
   func testMultilineFunctionParameterList() {
-    let builder = FunctionDeclSyntax(
+    let builder = DeclSyntax(
       """
       func test(
         _ p1: Int,
@@ -299,7 +303,7 @@ final class FunctionTests: XCTestCase {
   }
 
   func testMultilineFunctionCallExpr() {
-    let builder = FunctionCallExprSyntax(
+    let builder = ExprSyntax(
       """
       test(
       p1: value1,

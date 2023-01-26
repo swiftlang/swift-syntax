@@ -29,16 +29,16 @@ final class IfStmtTests: XCTestCase {
     )
   }
 
-  func testIfStmtyntax() {
+  func testIfStmtyntax() throws {
     let testCases: [UInt: (IfStmtSyntax, String)] = [
       #line: (
-        IfStmtSyntax(
+        StmtSyntax(
           """
           if foo == x {
             return foo
           }
           """
-        ),
+        ).cast(IfStmtSyntax.self),
         """
         if foo == x {
             return foo
@@ -46,7 +46,7 @@ final class IfStmtTests: XCTestCase {
         """
       ),
       #line: (
-        IfStmtSyntax("if foo == x") { ReturnStmtSyntax("return foo") },
+        try IfStmtSyntax("if foo == x") { StmtSyntax("return foo") },
         """
         if foo == x {
             return foo
@@ -54,10 +54,10 @@ final class IfStmtTests: XCTestCase {
         """
       ),
       #line: (
-        IfStmtSyntax("if foo == x") {
-          ReturnStmtSyntax("return foo")
+        try IfStmtSyntax("if foo == x") {
+          StmtSyntax("return foo")
         } else: {
-          ReturnStmtSyntax("return bar")
+          StmtSyntax("return bar")
         },
         """
         if foo == x {
@@ -68,7 +68,7 @@ final class IfStmtTests: XCTestCase {
         """
       ),
       #line: (
-        IfStmtSyntax("if foo == x", bodyBuilder: { ReturnStmtSyntax("return foo") }, elseIf: IfStmtSyntax("if foo == z") { ReturnStmtSyntax("return baz") }),
+        try IfStmtSyntax("if foo == x", bodyBuilder: { StmtSyntax("return foo") }, elseIf: IfStmtSyntax("if foo == z") { StmtSyntax("return baz") }),
         """
         if foo == x {
             return foo
@@ -95,12 +95,12 @@ final class IfStmtTests: XCTestCase {
         """
       ),
       #line: (
-        IfStmtSyntax(
+        StmtSyntax(
           """
           if !(false) {
           }
           """
-        ),
+        ).cast(IfStmtSyntax.self),
         """
         if !(false) {
         }

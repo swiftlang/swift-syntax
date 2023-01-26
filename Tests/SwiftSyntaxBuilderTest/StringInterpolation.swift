@@ -277,7 +277,7 @@ final class StringInterpolationTests: XCTestCase {
         """
       )
     }
-    let plusOne = FunctionDeclSyntax(
+    let plusOne = DeclSyntax(
       """
       func plusOne(base: Int) -> Int {
         switch base {
@@ -322,7 +322,7 @@ final class StringInterpolationTests: XCTestCase {
         """
       )
     }
-    let plusOne = FunctionDeclSyntax(
+    let plusOne = DeclSyntax(
       """
       func plusOne(base: Int) -> Int {
         switch base {
@@ -368,7 +368,7 @@ final class StringInterpolationTests: XCTestCase {
         """
       )
     }
-    let plusOne = FunctionDeclSyntax(
+    let plusOne = DeclSyntax(
       """
       func plusOne(base: Int) -> Int {
         switch base {
@@ -398,7 +398,7 @@ final class StringInterpolationTests: XCTestCase {
 
   func testStringInterpolationInBuilder() {
     let ext = ExtensionDeclSyntax(extendedType: TypeSyntax("MyType")) {
-      FunctionDeclSyntax(
+      DeclSyntax(
         """
         ///
         /// Satisfies conformance to `SyntaxBuildable`.

@@ -35,38 +35,8 @@ let syntaxExpressibleByStringInterpolationConformancesFile = SourceFileSyntax {
       """)
   }
   
-  for node in SYNTAX_NODES {
-    if node.isBase {
-      ExtensionDeclSyntax("extension \(raw: node.name)Protocol") {
-        InitializerDeclSyntax(
-          """
-          public init(stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
-            self = try performParse(source: stringInterpolation.sourceText, parse: { parser in
-              let node = \(raw: node.name).parse(from: &parser)
-              guard let result = node.as(Self.self) else {
-                throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualType: node.kind.syntaxNodeType)
-              }
-              return result
-            })
-          }
-          """)
-      }
-    }
-
-    if node.parserFunction != nil {
-      ExtensionDeclSyntax("extension \(raw: node.name): SyntaxExpressibleByStringInterpolation") {
-        InitializerDeclSyntax(
-          """
-          public init(stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
-            self = try performParse(source: stringInterpolation.sourceText, parse: { parser in
-              return Self.parse(from: &parser)
-            })
-          }
-          """)
-      }
-    } else if !node.isMissing && node.baseType.baseName != "Syntax" && node.baseType.baseName != "SyntaxCollection" {
-      ExtensionDeclSyntax("extension \(raw: node.name): SyntaxExpressibleByStringInterpolation { }")
-    }
+  for node in SYNTAX_NODES where node.parserFunction != nil {
+    ExtensionDeclSyntax("extension \(raw: node.name): SyntaxExpressibleByStringInterpolation {}")
   }
   
   FunctionDeclSyntax(

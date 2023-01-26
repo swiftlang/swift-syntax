@@ -54,13 +54,13 @@ final class TriviaTests: XCTestCase {
   }
 
   func testAttachedTrivia() {
-    let testCases: [UInt: (VariableDeclSyntax, String)] = [
+    let testCases: [UInt: (DeclSyntax, String)] = [
       #line: (
-        VariableDeclSyntax("let x: Int").with(\.leadingTrivia, .space),
+        DeclSyntax("let x: Int").with(\.leadingTrivia, .space),
         " let x: Int"
       ),
       #line: (
-        VariableDeclSyntax("let x: Int").with(\.trailingTrivia, .space),
+        DeclSyntax("let x: Int").with(\.trailingTrivia, .space),
         "let x: Int "
       ),
     ]

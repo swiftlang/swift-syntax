@@ -27,7 +27,7 @@ final class ExpressionTests: XCTestCase {
     AssertParse(
       "a ? b :1️⃣",
       diagnostics: [
-        DiagnosticSpec(message: "expected expression")
+        DiagnosticSpec(message: "expected expression after ternary operator")
       ]
     )
   }
@@ -788,7 +788,7 @@ final class ExpressionTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected expression in 'do' statement")
+        DiagnosticSpec(message: "expected expression after ternary operator")
       ]
     )
   }
@@ -1097,6 +1097,56 @@ final class ExpressionTests: XCTestCase {
           line 2
           """
         """#
+    )
+  }
+
+  func testMissingExpresssionInSequenceExpression() {
+    AssertParse(
+      """
+      a ? b :1️⃣
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected expression after ternary operator")
+      ],
+      fixedSource: """
+        a ? b : <#expression#>
+        """
+    )
+
+    AssertParse(
+      """
+      a +1️⃣
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected expression after operator")
+      ],
+      fixedSource: """
+        a + <#expression#>
+        """
+    )
+
+    AssertParse(
+      """
+      a as1️⃣
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected type after 'as'")
+      ],
+      fixedSource: """
+        a as <#type#>
+        """
+    )
+
+    AssertParse(
+      """
+      a is1️⃣
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected type after 'is'")
+      ],
+      fixedSource: """
+        a is <#type#>
+        """
     )
   }
 }

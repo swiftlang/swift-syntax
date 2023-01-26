@@ -87,7 +87,7 @@ final class ErrorsTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 3: expected expression after '? ... :' in ternary expression
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression in 'do' statement")
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression after ternary operator")
       ]
     )
   }

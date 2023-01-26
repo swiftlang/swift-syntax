@@ -197,7 +197,7 @@ public let EXPR_NODES: [Node] = [
        elementName: "Expression"),
 
   Node(name: "PrefixOperatorExpr",
-       nameForDiagnostics: "prefix operator expression",
+       nameForDiagnostics: "operator",
        kind: "Expr",
        children: [
          Child(name: "OperatorToken",
@@ -208,7 +208,7 @@ public let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "BinaryOperatorExpr",
-       nameForDiagnostics: nil,
+       nameForDiagnostics: "operator",
        kind: "Expr",
        children: [
          Child(name: "OperatorToken",
@@ -363,7 +363,7 @@ public let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "UnresolvedTernaryExpr",
-       nameForDiagnostics: nil,
+       nameForDiagnostics: "ternary operator",
        kind: "Expr",
        children: [
          Child(name: "QuestionMark",
@@ -407,7 +407,7 @@ public let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "UnresolvedIsExpr",
-       nameForDiagnostics: nil,
+       nameForDiagnostics: "'is'",
        kind: "Expr",
        children: [
          Child(name: "IsTok",
@@ -415,7 +415,7 @@ public let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "IsExpr",
-       nameForDiagnostics: "'is' expression",
+       nameForDiagnostics: "'is'",
        kind: "Expr",
        children: [
          Child(name: "Expression",
@@ -427,7 +427,7 @@ public let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "UnresolvedAsExpr",
-       nameForDiagnostics: nil,
+       nameForDiagnostics: "'as'",
        kind: "Expr",
        children: [
          Child(name: "AsTok",
@@ -438,7 +438,7 @@ public let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "AsExpr",
-       nameForDiagnostics: "'as' expression",
+       nameForDiagnostics: "'as'",
        kind: "Expr",
        children: [
          Child(name: "Expression",

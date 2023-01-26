@@ -82,7 +82,7 @@ final class ConflictMarkersTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 1: source control conflict marker in source file
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '<<<<<<< HEAD:conflict_markers.swift' before variable"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression in variable"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression after operator"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "'b' is not a valid digit in integer literal"),
         DiagnosticSpec(locationMarker: "4️⃣", message: "extraneous code at top level"),
       ]

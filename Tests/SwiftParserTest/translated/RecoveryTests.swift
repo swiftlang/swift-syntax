@@ -80,7 +80,7 @@ final class RecoveryTests: XCTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '>' to end generic argument clause"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code 'this greater: >' in subscript"),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "expected expression in function"),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "expected expression after operator"),
         DiagnosticSpec(locationMarker: "4️⃣", message: "unexpected code in function"),
       ]
     )

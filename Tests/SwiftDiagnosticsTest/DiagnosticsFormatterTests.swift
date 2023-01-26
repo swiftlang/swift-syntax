@@ -30,10 +30,10 @@ final class DiagnosticsFormatterTests: XCTestCase {
       """
     let expectedOutput = """
       1 │ var foo = bar +
-        ∣                ╰─ expected expression in variable
+        ∣                ╰─ expected expression after operator
 
       """
-    AssertStringsEqualWithDiff(expectedOutput, annotate(source: source))
+    AssertStringsEqualWithDiff(annotate(source: source), expectedOutput)
   }
 
   func testMultipleDiagnosticsInOneLine() {
@@ -47,7 +47,7 @@ final class DiagnosticsFormatterTests: XCTestCase {
         ∣     ╰─ expected name in member access
 
       """
-    AssertStringsEqualWithDiff(expectedOutput, annotate(source: source))
+    AssertStringsEqualWithDiff(annotate(source: source), expectedOutput)
   }
 
   func testLineSkipping() {
@@ -78,7 +78,7 @@ final class DiagnosticsFormatterTests: XCTestCase {
          ∣         ╰─ expected value and ')' to end function call
 
       """
-    AssertStringsEqualWithDiff(expectedOutput, annotate(source: source))
+    AssertStringsEqualWithDiff(annotate(source: source), expectedOutput)
   }
 
   func testTwoDiagnosticsAtSameLocation() throws {
@@ -91,7 +91,7 @@ final class DiagnosticsFormatterTests: XCTestCase {
 
       """
 
-    AssertStringsEqualWithDiff(expectedOutput, annotate(source: source))
+    AssertStringsEqualWithDiff(annotate(source: source), expectedOutput)
   }
 
   func testAddsColoringToSingleErrorDiagnostic() {
@@ -101,10 +101,10 @@ final class DiagnosticsFormatterTests: XCTestCase {
 
     let expectedOutput = """
       1 │ var foo = bar +
-        ∣                ╰─ \u{001B}[1;31merror: expected expression in variable\u{001B}[0;0m
+        ∣                ╰─ \u{001B}[1;31merror: expected expression after operator\u{001B}[0;0m
 
       """
-    AssertStringsEqualWithDiff(expectedOutput, annotate(source: source, colorize: true))
+    AssertStringsEqualWithDiff(annotate(source: source, colorize: true), expectedOutput)
   }
 
   func testAddsColoringToMultipleDiagnosticsInOneLine() {
@@ -118,6 +118,6 @@ final class DiagnosticsFormatterTests: XCTestCase {
         ∣     ╰─ \u{001B}[1;31merror: expected name in member access\u{001B}[0;0m
 
       """
-    AssertStringsEqualWithDiff(expectedOutput, annotate(source: source, colorize: true))
+    AssertStringsEqualWithDiff(annotate(source: source, colorize: true), expectedOutput)
   }
 }

@@ -154,7 +154,7 @@ EXPR_NODES = [
     # A prefix operator expression.
     # -x
     # !true
-    Node('PrefixOperatorExpr', name_for_diagnostics='prefix operator expression',
+    Node('PrefixOperatorExpr', name_for_diagnostics='operator',
          kind='Expr',
          children=[
              Child('OperatorToken', kind='PrefixOperatorToken',
@@ -164,7 +164,7 @@ EXPR_NODES = [
 
     # An operator like + or -.
     # NOTE: This appears only in SequenceExpr.
-    Node('BinaryOperatorExpr', name_for_diagnostics=None,
+    Node('BinaryOperatorExpr', name_for_diagnostics='operator',
          kind='Expr',
          children=[
              Child('OperatorToken', kind='BinaryOperatorToken'),
@@ -281,7 +281,7 @@ EXPR_NODES = [
     # ? expr :
     # Ternary expression without the condition and the second choice.
     # NOTE: This appears only in SequenceExpr.
-    Node('UnresolvedTernaryExpr', name_for_diagnostics=None, kind='Expr',
+    Node('UnresolvedTernaryExpr', name_for_diagnostics='ternary operator', kind='Expr',
          children=[
              Child("QuestionMark", kind='InfixQuestionMarkToken'),
              Child("FirstChoice", kind='Expr'),
@@ -318,7 +318,7 @@ EXPR_NODES = [
     # 'is'
     # "is" type casting ooperator without operands.
     # NOTE: This appears only in SequenceExpr.
-    Node('UnresolvedIsExpr', name_for_diagnostics=None, kind='Expr',
+    Node('UnresolvedIsExpr', name_for_diagnostics="'is'", kind='Expr',
          children=[
              Child("IsTok", kind='KeywordToken', token_choices=['KeywordToken|is']),
          ]),
@@ -327,7 +327,7 @@ EXPR_NODES = [
     # NOTE: This won't come directly out of the parser. Rather, it is the
     # result of "folding" a SequenceExpr based on knowing the precedence
     # relationships amongst the different infix operators.
-    Node('IsExpr', name_for_diagnostics="'is' expression", kind='Expr',
+    Node('IsExpr', name_for_diagnostics="'is'", kind='Expr',
          children=[
              Child("Expression", kind="Expr"),
              Child("IsTok", kind='KeywordToken', token_choices=['KeywordToken|is']),
@@ -337,7 +337,7 @@ EXPR_NODES = [
     # 'as' ('?'|'!')
     # "as" type casting ooperator without operands.
     # NOTE: This appears only in SequenceExpr.
-    Node('UnresolvedAsExpr', name_for_diagnostics=None, kind='Expr',
+    Node('UnresolvedAsExpr', name_for_diagnostics="'as'", kind='Expr',
          children=[
              Child("AsTok", kind='KeywordToken', token_choices=['KeywordToken|as']),
              Child("QuestionOrExclamationMark", kind='Token',
@@ -352,7 +352,7 @@ EXPR_NODES = [
     # NOTE: This won't come directly out of the parser. Rather, it is the
     # result of "folding" a SequenceExpr based on knowing the precedence
     # relationships amongst the different infix operators.
-    Node('AsExpr', name_for_diagnostics="'as' expression", kind='Expr',
+    Node('AsExpr', name_for_diagnostics="'as'", kind='Expr',
          children=[
              Child("Expression", kind="Expr"),
              Child("AsTok", kind='KeywordToken', token_choices=['KeywordToken|as']),

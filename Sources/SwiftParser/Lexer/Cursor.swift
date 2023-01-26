@@ -1458,7 +1458,6 @@ extension Lexer.Cursor {
 
     let kind: RawTokenKind
     switch literal {
-    case "assert": kind = .poundAssertKeyword
     case "sourceLocation": kind = .poundSourceLocationKeyword
     case "warning": kind = .poundWarningKeyword
     case "error": kind = .poundErrorKeyword

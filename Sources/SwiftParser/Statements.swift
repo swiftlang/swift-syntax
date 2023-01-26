@@ -121,8 +121,6 @@ extension Parser {
       return label(self.parseDeferStatement(deferHandle: handle), with: optLabel)
     case (.doKeyword, let handle)?:
       return label(self.parseDoStatement(doHandle: handle), with: optLabel)
-    case (.poundAssertKeyword, let handle)?:
-      return label(self.parsePoundAssertStatement(poundAssertHandle: handle), with: optLabel)
     case (.yield, let handle)?:
       return label(self.parseYieldStatement(yieldHandle: handle), with: optLabel)
     case nil:
@@ -1180,35 +1178,6 @@ extension Parser {
   }
 }
 
-extension Parser {
-  @_spi(RawSyntax)
-  public mutating func parsePoundAssertStatement(poundAssertHandle: RecoveryConsumptionHandle) -> RawPoundAssertStmtSyntax {
-    let (unexpectedBeforePoundAssert, poundAssert) = self.eat(poundAssertHandle)
-    let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
-    let condition = self.parseExpression()
-    let comma = self.consume(if: .comma)
-    let message: RawStringLiteralExprSyntax?
-    if comma != nil {
-      message = self.parseStringLiteral()
-    } else {
-      message = nil
-    }
-    let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
-    return RawPoundAssertStmtSyntax(
-      unexpectedBeforePoundAssert,
-      poundAssert: poundAssert,
-      unexpectedBeforeLParen,
-      leftParen: lparen,
-      condition: condition,
-      comma: comma,
-      message: message,
-      unexpectedBeforeRParen,
-      rightParen: rparen,
-      arena: self.arena
-    )
-  }
-}
-
 // MARK: Lookahead
 
 extension Parser.Lookahead {
@@ -1242,8 +1211,7 @@ extension Parser.Lookahead {
       .breakKeyword?,
       .continueKeyword?,
       .fallthroughKeyword?,
-      .switchKeyword?,
-      .poundAssertKeyword?:
+      .switchKeyword?:
       return true
     case .repeatKeyword?:
       // 'repeat' followed by anything other than a brace stmt

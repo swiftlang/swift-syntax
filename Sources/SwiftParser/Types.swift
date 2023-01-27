@@ -25,19 +25,20 @@ extension Parser {
   ///     type → opaque-type
   @_spi(RawSyntax)
   public mutating func parseType(misplacedSpecifiers: [RawTokenSyntax] = []) -> RawTypeSyntax {
-    // Parse pack expansion 'repeat T'.
-    if let repeatKeyword = self.consume(if: .keyword(.repeat)) {
-      let type = self.parseTypeScalar(misplacedSpecifiers: misplacedSpecifiers)
+    let type = self.parseTypeScalar(misplacedSpecifiers: misplacedSpecifiers)
+
+    // Parse pack expansion 'T...'.
+    if self.currentToken.isEllipsis {
+      let ellipsis = self.consumeAnyToken(remapping: .ellipsis)
       return RawTypeSyntax(
         RawPackExpansionTypeSyntax(
-          repeatKeyword: repeatKeyword,
           patternType: type,
+          ellipsis: ellipsis,
           arena: self.arena
         )
       )
     }
-
-    return self.parseTypeScalar(misplacedSpecifiers: misplacedSpecifiers)
+    return type
   }
 
   mutating func parseTypeScalar(misplacedSpecifiers: [RawTokenSyntax] = []) -> RawTypeSyntax {
@@ -671,9 +672,6 @@ extension Parser.Lookahead {
   }
 
   mutating func canParseTypeScalar() -> Bool {
-    // 'repeat' starts a pack expansion type
-    self.consume(if: .keyword(.repeat))
-
     self.skipTypeAttributeList()
 
     guard self.canParseSimpleOrCompositionType() else {
@@ -699,7 +697,11 @@ extension Parser.Lookahead {
   }
 
   mutating func canParseSimpleOrCompositionType() -> Bool {
-    if self.at(.keyword(.some)) || self.at(.keyword(.any)) || self.at(.keyword(.each)) {
+    if self.at(.keyword(.each)) {
+      return self.canParseSimpleType();
+    }
+
+    if self.at(.keyword(.some)) || self.at(.keyword(.any)) {
       self.consumeAnyToken()
     }
 
@@ -746,8 +748,6 @@ extension Parser.Lookahead {
       }
     case .wildcard:
       self.consumeAnyToken()
-    case .keyword(.repeat):
-      return true
     default:
       return false
     }

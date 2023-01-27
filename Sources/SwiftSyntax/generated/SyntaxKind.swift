@@ -377,8 +377,6 @@ public enum SyntaxKind {
   
   case packElementExpr
   
-  case packExpansionExpr
-  
   case packExpansionType
   
   case packReferenceType

@@ -116,7 +116,6 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/NilLiteralExprSyntax>
 - <doc:SwiftSyntax/DiscardAssignmentExprSyntax>
 - <doc:SwiftSyntax/AssignmentExprSyntax>
-- <doc:SwiftSyntax/PackExpansionExprSyntax>
 - <doc:SwiftSyntax/PackElementExprSyntax>
 - <doc:SwiftSyntax/SequenceExprSyntax>
 - <doc:SwiftSyntax/PrefixOperatorExprSyntax>

@@ -377,8 +377,6 @@ public enum SyntaxEnum {
   
   case packElementExpr(PackElementExprSyntax)
   
-  case packExpansionExpr(PackExpansionExprSyntax)
-  
   case packExpansionType(PackExpansionTypeSyntax)
   
   case packReferenceType(PackReferenceTypeSyntax)
@@ -910,8 +908,6 @@ public extension Syntax {
       return .originallyDefinedInArguments(OriginallyDefinedInArgumentsSyntax(self)!)
     case .packElementExpr: 
       return .packElementExpr(PackElementExprSyntax(self)!)
-    case .packExpansionExpr: 
-      return .packExpansionExpr(PackExpansionExprSyntax(self)!)
     case .packExpansionType: 
       return .packExpansionType(PackExpansionTypeSyntax(self)!)
     case .packReferenceType: 

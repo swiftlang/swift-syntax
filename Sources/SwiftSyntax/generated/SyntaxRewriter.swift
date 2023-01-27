@@ -1280,13 +1280,6 @@ open class SyntaxRewriter {
     return ExprSyntax(visitChildren(node))
   }
   
-  /// Visit a `PackExpansionExprSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: PackExpansionExprSyntax) -> ExprSyntax {
-    return ExprSyntax(visitChildren(node))
-  }
-  
   /// Visit a `PackExpansionTypeSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -4449,20 +4442,6 @@ open class SyntaxRewriter {
   }
   
   /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplPackExpansionExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = PackExpansionExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
-    }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplPackExpansionTypeSyntax(_ data: SyntaxData) -> Syntax {
     let node = PackExpansionTypeSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -6024,8 +6003,6 @@ open class SyntaxRewriter {
       return visitImplOriginallyDefinedInArgumentsSyntax
     case .packElementExpr: 
       return visitImplPackElementExprSyntax
-    case .packExpansionExpr: 
-      return visitImplPackExpansionExprSyntax
     case .packExpansionType: 
       return visitImplPackExpansionTypeSyntax
     case .packReferenceType: 
@@ -6560,8 +6537,6 @@ open class SyntaxRewriter {
       return visitImplOriginallyDefinedInArgumentsSyntax(data)
     case .packElementExpr: 
       return visitImplPackElementExprSyntax(data)
-    case .packExpansionExpr: 
-      return visitImplPackExpansionExprSyntax(data)
     case .packExpansionType: 
       return visitImplPackExpansionTypeSyntax(data)
     case .packReferenceType: 

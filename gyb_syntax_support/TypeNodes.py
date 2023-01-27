@@ -113,8 +113,8 @@ TYPE_NODES = [
     # pack-expansion-type -> type '...'
     Node('PackExpansionType', name_for_diagnostics='variadic expansion', kind='Type',
          children=[
-             Child('RepeatKeyword', kind='KeywordToken', text_choices=['repeat']),
-             Child('PatternType', kind='Type')
+             Child('PatternType', kind='Type'),
+             Child('Ellipsis', kind='EllipsisToken')
          ]),
 
     # pack-reference-type -> 'each' type

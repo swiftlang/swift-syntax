@@ -38,17 +38,6 @@ extension TokenConsumer {
         return true
       }
     }
-
-    // 'repeat' is the start of a pack expansion expression.
-    if (self.at(.keyword(.repeat))) {
-      // FIXME: 'repeat' followed by '{' could still be a pack
-      // expansion, but we need to do more lookahead to figure out
-      // whether the '{' is the start of a closure expression or a
-      // brace statement for 'repeat { ... } while'
-      let backtrack = self.lookahead()
-      return backtrack.peek().rawTokenKind != .leftBrace
-    }
-
     return false
   }
 }
@@ -476,14 +465,6 @@ extension Parser {
   ) -> RawExprSyntax {
     // First check to see if we have the start of a regex literal `/.../`.
     //    tryLexRegexLiteral(/*forUnappliedOperator*/ false)
-
-    // 'repeat' is the start of a pack expansion expression.
-    if (self.at(.keyword(.repeat))) {
-      return RawExprSyntax(
-        parsePackExpansionExpr(flavor, pattern: pattern)
-      )
-    }
-
     switch self.at(anyIn: ExpressionPrefixOperator.self) {
     case (.prefixAmpersand, let handle)?:
       let amp = self.eat(handle)
@@ -1156,7 +1137,7 @@ extension Parser {
         }
 
         if let each = self.consume(if: .keyword(.each)) {
-          let packRef = self.parseSequenceExpressionElement(flavor, pattern: pattern)
+          let packRef = self.parseExpression()
           return RawExprSyntax(
             RawPackElementExprSyntax(
               eachKeyword: each,
@@ -1337,31 +1318,6 @@ extension Parser {
       rightParen: rightParen,
       trailingClosure: trailingClosure,
       additionalTrailingClosures: additionalTrailingClosures,
-      arena: self.arena
-    )
-  }
-}
-
-extension Parser {
-  /// Parse a pack expansion as an expression.
-  ///
-  ///
-  /// Grammar
-  /// =======
-  ///
-  /// pack-expansion-expression → 'repeat' pattern-expression
-  /// pattern-expression → expression
-  @_spi(RawSyntax)
-  public mutating func parsePackExpansionExpr(
-    _ flavor: ExprFlavor,
-    pattern: PatternContext
-  ) -> RawPackExpansionExprSyntax {
-    let repeatKeyword = self.consumeAnyToken()
-    let patternExpr = self.parseExpression(flavor, pattern: pattern)
-
-    return RawPackExpansionExprSyntax(
-      repeatKeyword: repeatKeyword,
-      patternExpr: patternExpr,
       arena: self.arena
     )
   }

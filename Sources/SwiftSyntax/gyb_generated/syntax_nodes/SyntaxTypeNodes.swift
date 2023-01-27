@@ -1827,22 +1827,22 @@ public struct PackExpansionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 
   public init<P: TypeSyntaxProtocol>(
     leadingTrivia: Trivia? = nil,
-    _ unexpectedBeforeRepeatKeyword: UnexpectedNodesSyntax? = nil,
-    repeatKeyword: TokenSyntax = .keyword(.repeat),
-    _ unexpectedBetweenRepeatKeywordAndPatternType: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBeforePatternType: UnexpectedNodesSyntax? = nil,
     patternType: P,
-    _ unexpectedAfterPatternType: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenPatternTypeAndEllipsis: UnexpectedNodesSyntax? = nil,
+    ellipsis: TokenSyntax = .ellipsisToken(),
+    _ unexpectedAfterEllipsis: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed 
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeRepeatKeyword, repeatKeyword, unexpectedBetweenRepeatKeywordAndPatternType, patternType, unexpectedAfterPatternType))) { (arena, _) in
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforePatternType, patternType, unexpectedBetweenPatternTypeAndEllipsis, ellipsis, unexpectedAfterEllipsis))) { (arena, _) in
       let layout: [RawSyntax?] = [
-        unexpectedBeforeRepeatKeyword?.raw,
-        repeatKeyword.raw,
-        unexpectedBetweenRepeatKeywordAndPatternType?.raw,
+        unexpectedBeforePatternType?.raw,
         patternType.raw,
-        unexpectedAfterPatternType?.raw,
+        unexpectedBetweenPatternTypeAndEllipsis?.raw,
+        ellipsis.raw,
+        unexpectedAfterEllipsis?.raw,
       ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.packExpansionType, from: layout, arena: arena,
@@ -1852,7 +1852,7 @@ public struct PackExpansionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var unexpectedBeforeRepeatKeyword: UnexpectedNodesSyntax? {
+  public var unexpectedBeforePatternType: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
       if childData == nil { return nil }
@@ -1866,10 +1866,10 @@ public struct PackExpansionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     }
   }
 
-  public var repeatKeyword: TokenSyntax {
+  public var patternType: TypeSyntax {
     get {
       let childData = data.child(at: 1, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TypeSyntax(childData!)
     }
     set(value) {
       let arena = SyntaxArena()
@@ -1879,7 +1879,7 @@ public struct PackExpansionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     }
   }
 
-  public var unexpectedBetweenRepeatKeywordAndPatternType: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenPatternTypeAndEllipsis: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 2, parent: Syntax(self))
       if childData == nil { return nil }
@@ -1893,10 +1893,10 @@ public struct PackExpansionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     }
   }
 
-  public var patternType: TypeSyntax {
+  public var ellipsis: TokenSyntax {
     get {
       let childData = data.child(at: 3, parent: Syntax(self))
-      return TypeSyntax(childData!)
+      return TokenSyntax(childData!)
     }
     set(value) {
       let arena = SyntaxArena()
@@ -1906,7 +1906,7 @@ public struct PackExpansionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     }
   }
 
-  public var unexpectedAfterPatternType: UnexpectedNodesSyntax? {
+  public var unexpectedAfterEllipsis: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 4, parent: Syntax(self))
       if childData == nil { return nil }
@@ -1922,11 +1922,11 @@ public struct PackExpansionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 
   public static var structure: SyntaxNodeStructure {
     return .layout([
-      \Self.unexpectedBeforeRepeatKeyword,
-      \Self.repeatKeyword,
-      \Self.unexpectedBetweenRepeatKeywordAndPatternType,
+      \Self.unexpectedBeforePatternType,
       \Self.patternType,
-      \Self.unexpectedAfterPatternType,
+      \Self.unexpectedBetweenPatternTypeAndEllipsis,
+      \Self.ellipsis,
+      \Self.unexpectedAfterEllipsis,
     ])
   }
 
@@ -1951,11 +1951,11 @@ public struct PackExpansionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 extension PackExpansionTypeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "unexpectedBeforeRepeatKeyword": unexpectedBeforeRepeatKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "repeatKeyword": Syntax(repeatKeyword).asProtocol(SyntaxProtocol.self),
-      "unexpectedBetweenRepeatKeywordAndPatternType": unexpectedBetweenRepeatKeywordAndPatternType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforePatternType": unexpectedBeforePatternType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "patternType": Syntax(patternType).asProtocol(SyntaxProtocol.self),
-      "unexpectedAfterPatternType": unexpectedAfterPatternType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenPatternTypeAndEllipsis": unexpectedBetweenPatternTypeAndEllipsis.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "ellipsis": Syntax(ellipsis).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterEllipsis": unexpectedAfterEllipsis.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }

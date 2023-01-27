@@ -916,11 +916,6 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: PackElementExprSyntax) -> ResultType
   
-  /// Visiting `PackExpansionExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PackExpansionExprSyntax) -> ResultType
-  
   /// Visiting `PackExpansionTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -2595,13 +2590,6 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `PackExpansionExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: PackExpansionExprSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
   /// Visiting `PackExpansionTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -3544,8 +3532,6 @@ extension SyntaxTransformVisitor {
     case .originallyDefinedInArguments(let derived): 
       return visit(derived)
     case .packElementExpr(let derived): 
-      return visit(derived)
-    case .packExpansionExpr(let derived): 
       return visit(derived)
     case .packExpansionType(let derived): 
       return visit(derived)

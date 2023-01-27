@@ -776,6 +776,20 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: SameTypeRequirementSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    if node.equalityToken.presence == .missing && node.rightTypeIdentifier.isMissingAllTokens {
+      addDiagnostic(
+        node.equalityToken,
+        .missingConformanceRequirement,
+        handledNodes: [node.equalityToken.id, node.rightTypeIdentifier.id]
+      )
+    }
+    return .visitChildren
+  }
+
   public override func visit(_ node: SourceFileSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren

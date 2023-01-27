@@ -207,6 +207,9 @@ class PrintDiags: ParsableCommand {
     source.withUnsafeBufferPointer { sourceBuffer in
       let tree = Parser.parse(source: sourceBuffer)
       var diags = ParseDiagnosticsGenerator.diagnostics(for: tree)
+      if foldSequences {
+        diags += foldAllSequences(tree).1
+      }
       let annotatedSource = DiagnosticsFormatter.annotatedSource(
         tree: tree,
         diags: diags,
@@ -214,10 +217,6 @@ class PrintDiags: ParsableCommand {
       )
 
       print(annotatedSource)
-
-      if foldSequences {
-        diags += foldAllSequences(tree).1
-      }
 
       if diags.isEmpty {
         print("No diagnostics produced")

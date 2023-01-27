@@ -134,14 +134,18 @@ class VerifyRoundTrip: ParsableCommand {
   ) throws {
     let tree = Parser.parse(source: source)
 
-    _ = ParseDiagnosticsGenerator.diagnostics(for: tree)
+    var diags = ParseDiagnosticsGenerator.diagnostics(for: tree)
 
     let resultTree: Syntax
     if foldSequences {
-      resultTree = foldAllSequences(tree).0
+      let folded = foldAllSequences(tree)
+      resultTree = folded.0
+      diags += folded.1
     } else {
       resultTree = Syntax(tree)
     }
+
+    _ = DiagnosticsFormatter.annotatedSource(tree: tree, diags: diags)
 
     if resultTree.syntaxTextBytes != [UInt8](source) {
       throw Error.roundTripFailed

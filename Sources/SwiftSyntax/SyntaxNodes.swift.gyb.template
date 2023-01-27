@@ -187,21 +187,14 @@ public struct ${node.name}: ${base_type}Protocol, SyntaxHashable {
 %       end
   public var ${child.swift_name}: ${child_type}${optional_mark} {
     get {
-      let childData = data.child(at: ${idx}, parent: Syntax(self))
 %       if child.is_optional:
-      if childData == nil { return nil }
+      return data.child(at: ${idx}, parent: Syntax(self)).map(${child_type}.init)
+%       else:
+      return ${child_type}(data.child(at: ${idx}, parent: Syntax(self))!)
 %       end
-      return ${child_type}(childData!)
     }
     set(value) {
-      let arena = SyntaxArena()
-  %       if child.is_optional:
-      let raw = value?.raw
-  %       else:
-      let raw = value.raw
-  %       end
-      let newData = data.replacingChild(at: ${idx}, with: raw, arena: arena)
-      self = ${node.name}(newData)
+      self = ${node.name}(data.replacingChild(at: ${idx}, with: value${"?" if child.is_optional else ""}.raw, arena: SyntaxArena()))
     }
   }
 %

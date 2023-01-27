@@ -108,69 +108,46 @@ public struct IsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeIsKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = IsTypePatternSyntax(newData)
+      self = IsTypePatternSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var isKeyword: TokenSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = IsTypePatternSyntax(newData)
+      self = IsTypePatternSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenIsKeywordAndType: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = IsTypePatternSyntax(newData)
+      self = IsTypePatternSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var type: TypeSyntax {
     get {
-      let childData = data.child(at: 3, parent: Syntax(self))
-      return TypeSyntax(childData!)
+      return TypeSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-      self = IsTypePatternSyntax(newData)
+      self = IsTypePatternSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterType: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 4, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-      self = IsTypePatternSyntax(newData)
+      self = IsTypePatternSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -257,42 +234,28 @@ public struct IdentifierPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeIdentifier: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = IdentifierPatternSyntax(newData)
+      self = IdentifierPatternSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var identifier: TokenSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = IdentifierPatternSyntax(newData)
+      self = IdentifierPatternSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterIdentifier: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = IdentifierPatternSyntax(newData)
+      self = IdentifierPatternSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -379,55 +342,37 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeLeftParen: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = TuplePatternSyntax(newData)
+      self = TuplePatternSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var leftParen: TokenSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = TuplePatternSyntax(newData)
+      self = TuplePatternSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenLeftParenAndElements: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = TuplePatternSyntax(newData)
+      self = TuplePatternSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var elements: TuplePatternElementListSyntax {
     get {
-      let childData = data.child(at: 3, parent: Syntax(self))
-      return TuplePatternElementListSyntax(childData!)
+      return TuplePatternElementListSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-      self = TuplePatternSyntax(newData)
+      self = TuplePatternSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
     }
   }
 
@@ -452,42 +397,28 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBetweenElementsAndRightParen: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 4, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-      self = TuplePatternSyntax(newData)
+      self = TuplePatternSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var rightParen: TokenSyntax {
     get {
-      let childData = data.child(at: 5, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 5, with: raw, arena: arena)
-      self = TuplePatternSyntax(newData)
+      self = TuplePatternSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterRightParen: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 6, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 6, with: raw, arena: arena)
-      self = TuplePatternSyntax(newData)
+      self = TuplePatternSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -586,70 +517,46 @@ public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeWildcard: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = WildcardPatternSyntax(newData)
+      self = WildcardPatternSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var wildcard: TokenSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = WildcardPatternSyntax(newData)
+      self = WildcardPatternSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenWildcardAndTypeAnnotation: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = WildcardPatternSyntax(newData)
+      self = WildcardPatternSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var typeAnnotation: TypeAnnotationSyntax? {
     get {
-      let childData = data.child(at: 3, parent: Syntax(self))
-      if childData == nil { return nil }
-      return TypeAnnotationSyntax(childData!)
+      return data.child(at: 3, parent: Syntax(self)).map(TypeAnnotationSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-      self = WildcardPatternSyntax(newData)
+      self = WildcardPatternSyntax(data.replacingChild(at: 3, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterTypeAnnotation: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 4, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-      self = WildcardPatternSyntax(newData)
+      self = WildcardPatternSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -736,42 +643,28 @@ public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeExpression: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = ExpressionPatternSyntax(newData)
+      self = ExpressionPatternSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var expression: ExprSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return ExprSyntax(childData!)
+      return ExprSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = ExpressionPatternSyntax(newData)
+      self = ExpressionPatternSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterExpression: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = ExpressionPatternSyntax(newData)
+      self = ExpressionPatternSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -854,69 +747,46 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeLetOrVarKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-      self = ValueBindingPatternSyntax(newData)
+      self = ValueBindingPatternSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var letOrVarKeyword: TokenSyntax {
     get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-      self = ValueBindingPatternSyntax(newData)
+      self = ValueBindingPatternSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedBetweenLetOrVarKeywordAndValuePattern: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-      self = ValueBindingPatternSyntax(newData)
+      self = ValueBindingPatternSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public var valuePattern: PatternSyntax {
     get {
-      let childData = data.child(at: 3, parent: Syntax(self))
-      return PatternSyntax(childData!)
+      return PatternSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value.raw
-      let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-      self = ValueBindingPatternSyntax(newData)
+      self = ValueBindingPatternSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
     }
   }
 
   public var unexpectedAfterValuePattern: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 4, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      let arena = SyntaxArena()
-      let raw = value?.raw
-      let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-      self = ValueBindingPatternSyntax(newData)
+      self = ValueBindingPatternSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
     }
   }
 

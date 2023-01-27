@@ -139,10 +139,11 @@ public struct DiagnosticsFormatter {
     switch message.severity {
     case .error:
       let annotation = ANSIAnnotation(color: .red, trait: .bold)
-      return annotation.applied(to: message.message)
+      return annotation.applied(to: "error: \(message.message)")
     case .warning:
-      let annotation = ANSIAnnotation(color: .yellow)
-      return annotation.applied(to: message.message)
+      let color = ANSIAnnotation(color: .yellow)
+      let prefix = color.withTrait(.bold).applied(to: "warning: ")
+      return prefix + color.applied(to: message.message)
     case .note:
       return message.message
     }
@@ -179,6 +180,10 @@ struct ANSIAnnotation {
   init(color: Color, trait: Trait = .normal) {
     self.color = color
     self.trait = trait
+  }
+
+  func withTrait(_ trait: Trait) -> Self {
+    return ANSIAnnotation(color: self.color, trait: trait)
   }
 
   func applied(to message: String) -> String {

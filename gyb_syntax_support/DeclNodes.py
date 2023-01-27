@@ -121,24 +121,6 @@ DECL_NODES = [
                    classification='BuildConfigId'),
          ]),
 
-    Node('PoundErrorDecl', name_for_diagnostics="'#error' directive", kind='Decl',
-         traits=['Parenthesized'],
-         children=[
-             Child('PoundError', kind='PoundErrorToken'),
-             Child('LeftParen', kind='LeftParenToken'),
-             Child('Message', kind='StringLiteralExpr', name_for_diagnostics='message'),
-             Child('RightParen', kind='RightParenToken')
-         ]),
-
-    Node('PoundWarningDecl', name_for_diagnostics="'#warning' directive", kind='Decl',
-         traits=['Parenthesized'],
-         children=[
-             Child('PoundWarning', kind='PoundWarningToken'),
-             Child('LeftParen', kind='LeftParenToken'),
-             Child('Message', kind='StringLiteralExpr', name_for_diagnostics='message'),
-             Child('RightParen', kind='RightParenToken')
-         ]),
-
     Node('PoundSourceLocation', name_for_diagnostics="'#sourceLocation' directive",
          kind='Decl', traits=['Parenthesized'],
          children=[
@@ -916,7 +898,7 @@ DECL_NODES = [
 
     # e.g., "#embed("filename.txt")"
     Node('MacroExpansionDecl',
-         name_for_diagnostics="pound literal declaration", kind='Decl',
+         name_for_diagnostics="macro expansion", kind='Decl',
          traits=['FreestandingMacroExpansion'],
          children=[
              Child('PoundToken', kind='PoundToken',

@@ -257,8 +257,6 @@ public enum SyntaxKind {
   
   case guardStmt
   
-  case hasSymbolCondition
-  
   case identifierExpr
   
   case identifierPattern
@@ -393,15 +391,9 @@ public enum SyntaxKind {
   
   case postfixUnaryExpr
   
-  case poundAssertStmt
-  
-  case poundErrorDecl
-  
   case poundSourceLocationArgs
   
   case poundSourceLocation
-  
-  case poundWarningDecl
   
   case precedenceGroupAssignment
   

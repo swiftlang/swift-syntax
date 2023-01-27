@@ -227,12 +227,9 @@ SYNTAX_TOKENS = [
     Punctuator('MultilineStringQuote', 'multiline_string_quote',
                text='\\\"\\\"\\\"', classification='StringLiteral'),
 
-    PoundKeyword('PoundAssert', 'assert', text='#assert'),
-
+    # Keywords prefixed with a '#'.
     PoundDirectiveKeyword('PoundSourceLocation', 'sourceLocation',
                           text='#sourceLocation'),
-    PoundDirectiveKeyword('PoundWarning', 'warning', text='#warning'),
-    PoundDirectiveKeyword('PoundError', 'error', text='#error'),
 
     PoundConditionalDirectiveKeyword('PoundIf', 'if', text='#if'),
     PoundConditionalDirectiveKeyword('PoundElse', 'else', text='#else'),
@@ -243,21 +240,6 @@ SYNTAX_TOKENS = [
 
     PoundConfig('PoundAvailable', 'available', text='#available'),
     PoundConfig('PoundUnavailable', 'unavailable', text='#unavailable'),
-
-    PoundObjectLiteral('PoundFileLiteral', 'fileLiteral',
-                       text='#fileLiteral',
-                       name_for_diagnostics='file reference',
-                       protocol='ExpressibleByFileReferenceLiteral'),
-    PoundObjectLiteral('PoundImageLiteral', 'imageLiteral',
-                       text='#imageLiteral',
-                       name_for_diagnostics='image',
-                       protocol='ExpressibleByImageLiteral'),
-    PoundObjectLiteral('PoundColorLiteral', 'colorLiteral',
-                       text='#colorLiteral',
-                       name_for_diagnostics='color',
-                       protocol='ExpressibleByColorLiteral'),
-
-    PoundConfig('PoundHasSymbol', '_hasSymbol', text='#_hasSymbol'),
 
     Literal('IntegerLiteral', 'integer_literal', name_for_diagnostics='integer literal',
             classification='IntegerLiteral'),

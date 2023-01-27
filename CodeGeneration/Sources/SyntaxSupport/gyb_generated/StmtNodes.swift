@@ -408,9 +408,7 @@ public let STMT_NODES: [Node] = [
                  Child(name: "MatchingPattern",
                        kind: "MatchingPatternCondition"),
                  Child(name: "OptionalBinding",
-                       kind: "OptionalBindingCondition"),
-                 Child(name: "HasSymbol",
-                       kind: "HasSymbolCondition")
+                       kind: "OptionalBindingCondition")
                ]),
          Child(name: "TrailingComma",
                kind: "CommaToken",
@@ -487,26 +485,6 @@ public let STMT_NODES: [Node] = [
          Child(name: "Initializer",
                kind: "InitializerClause",
                isOptional: true)
-       ]),
-
-  Node(name: "HasSymbolCondition",
-       nameForDiagnostics: "'#_hasSymbol' condition",
-       kind: "Syntax",
-       children: [
-         Child(name: "HasSymbolKeyword",
-               kind: "HasSymbolToken"),
-         Child(name: "LeftParen",
-               kind: "LeftParenToken",
-               tokenChoices: [
-                 "LeftParen"
-               ]),
-         Child(name: "Expression",
-               kind: "Expr"),
-         Child(name: "RightParen",
-               kind: "RightParenToken",
-               tokenChoices: [
-                 "RightParen"
-               ])
        ]),
 
   Node(name: "ConditionElementList",
@@ -693,41 +671,6 @@ public let STMT_NODES: [Node] = [
                collectionElementName: "CatchItem"),
          Child(name: "Body",
                kind: "CodeBlock")
-       ]),
-
-  Node(name: "PoundAssertStmt",
-       nameForDiagnostics: "'#assert' directive",
-       kind: "Stmt",
-       children: [
-         Child(name: "PoundAssert",
-               kind: "PoundAssertToken",
-               tokenChoices: [
-                 "PoundAssert"
-               ]),
-         Child(name: "LeftParen",
-               kind: "LeftParenToken",
-               tokenChoices: [
-                 "LeftParen"
-               ]),
-         Child(name: "Condition",
-               kind: "Expr",
-               description: "The assertion condition."),
-         Child(name: "Comma",
-               kind: "CommaToken",
-               description: "The comma after the assertion condition.",
-               isOptional: true,
-               tokenChoices: [
-                 "Comma"
-               ]),
-         Child(name: "Message",
-               kind: "StringLiteralExpr",
-               description: "The assertion message.",
-               isOptional: true),
-         Child(name: "RightParen",
-               kind: "RightParenToken",
-               tokenChoices: [
-                 "RightParen"
-               ])
        ]),
 
 ]

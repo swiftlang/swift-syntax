@@ -860,13 +860,6 @@ open class SyntaxRewriter {
     return StmtSyntax(visitChildren(node))
   }
   
-  /// Visit a `HasSymbolConditionSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: HasSymbolConditionSyntax) -> HasSymbolConditionSyntax {
-    return Syntax(visitChildren(node)).cast(HasSymbolConditionSyntax.self)
-  }
-  
   /// Visit a `IdentifierExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -1336,20 +1329,6 @@ open class SyntaxRewriter {
     return ExprSyntax(visitChildren(node))
   }
   
-  /// Visit a `PoundAssertStmtSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: PoundAssertStmtSyntax) -> StmtSyntax {
-    return StmtSyntax(visitChildren(node))
-  }
-  
-  /// Visit a `PoundErrorDeclSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: PoundErrorDeclSyntax) -> DeclSyntax {
-    return DeclSyntax(visitChildren(node))
-  }
-  
   /// Visit a `PoundSourceLocationArgsSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -1361,13 +1340,6 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: PoundSourceLocationSyntax) -> DeclSyntax {
-    return DeclSyntax(visitChildren(node))
-  }
-  
-  /// Visit a `PoundWarningDeclSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: PoundWarningDeclSyntax) -> DeclSyntax {
     return DeclSyntax(visitChildren(node))
   }
   
@@ -3609,20 +3581,6 @@ open class SyntaxRewriter {
   }
   
   /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplHasSymbolConditionSyntax(_ data: SyntaxData) -> Syntax {
-    let node = HasSymbolConditionSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
-    }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplIdentifierExprSyntax(_ data: SyntaxData) -> Syntax {
     let node = IdentifierExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -4561,34 +4519,6 @@ open class SyntaxRewriter {
   }
   
   /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplPoundAssertStmtSyntax(_ data: SyntaxData) -> Syntax {
-    let node = PoundAssertStmtSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
-    }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplPoundErrorDeclSyntax(_ data: SyntaxData) -> Syntax {
-    let node = PoundErrorDeclSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
-    }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplPoundSourceLocationArgsSyntax(_ data: SyntaxData) -> Syntax {
     let node = PoundSourceLocationArgsSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -4605,20 +4535,6 @@ open class SyntaxRewriter {
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplPoundSourceLocationSyntax(_ data: SyntaxData) -> Syntax {
     let node = PoundSourceLocationSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
-    }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplPoundWarningDeclSyntax(_ data: SyntaxData) -> Syntax {
-    let node = PoundWarningDeclSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer { 
@@ -5904,8 +5820,6 @@ open class SyntaxRewriter {
       return visitImplGenericWhereClauseSyntax
     case .guardStmt: 
       return visitImplGuardStmtSyntax
-    case .hasSymbolCondition: 
-      return visitImplHasSymbolConditionSyntax
     case .identifierExpr: 
       return visitImplIdentifierExprSyntax
     case .identifierPattern: 
@@ -6040,16 +5954,10 @@ open class SyntaxRewriter {
       return visitImplPostfixIfConfigExprSyntax
     case .postfixUnaryExpr: 
       return visitImplPostfixUnaryExprSyntax
-    case .poundAssertStmt: 
-      return visitImplPoundAssertStmtSyntax
-    case .poundErrorDecl: 
-      return visitImplPoundErrorDeclSyntax
     case .poundSourceLocationArgs: 
       return visitImplPoundSourceLocationArgsSyntax
     case .poundSourceLocation: 
       return visitImplPoundSourceLocationSyntax
-    case .poundWarningDecl: 
-      return visitImplPoundWarningDeclSyntax
     case .precedenceGroupAssignment: 
       return visitImplPrecedenceGroupAssignmentSyntax
     case .precedenceGroupAssociativity: 
@@ -6440,8 +6348,6 @@ open class SyntaxRewriter {
       return visitImplGenericWhereClauseSyntax(data)
     case .guardStmt: 
       return visitImplGuardStmtSyntax(data)
-    case .hasSymbolCondition: 
-      return visitImplHasSymbolConditionSyntax(data)
     case .identifierExpr: 
       return visitImplIdentifierExprSyntax(data)
     case .identifierPattern: 
@@ -6576,16 +6482,10 @@ open class SyntaxRewriter {
       return visitImplPostfixIfConfigExprSyntax(data)
     case .postfixUnaryExpr: 
       return visitImplPostfixUnaryExprSyntax(data)
-    case .poundAssertStmt: 
-      return visitImplPoundAssertStmtSyntax(data)
-    case .poundErrorDecl: 
-      return visitImplPoundErrorDeclSyntax(data)
     case .poundSourceLocationArgs: 
       return visitImplPoundSourceLocationArgsSyntax(data)
     case .poundSourceLocation: 
       return visitImplPoundSourceLocationSyntax(data)
-    case .poundWarningDecl: 
-      return visitImplPoundWarningDeclSyntax(data)
     case .precedenceGroupAssignment: 
       return visitImplPrecedenceGroupAssignmentSyntax(data)
     case .precedenceGroupAssociativity: 

@@ -74,7 +74,7 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public init?<S: SyntaxProtocol>(_ node: S) {
     switch node.raw.kind {
-    case .accessorDecl, .actorDecl, .associatedtypeDecl, .classDecl, .deinitializerDecl, .editorPlaceholderDecl, .enumCaseDecl, .enumDecl, .extensionDecl, .functionDecl, .ifConfigDecl, .importDecl, .initializerDecl, .macroDecl, .macroExpansionDecl, .missingDecl, .operatorDecl, .poundErrorDecl, .poundSourceLocation, .poundWarningDecl, .precedenceGroupDecl, .protocolDecl, .structDecl, .subscriptDecl, .typealiasDecl, .variableDecl: 
+    case .accessorDecl, .actorDecl, .associatedtypeDecl, .classDecl, .deinitializerDecl, .editorPlaceholderDecl, .enumCaseDecl, .enumDecl, .extensionDecl, .functionDecl, .ifConfigDecl, .importDecl, .initializerDecl, .macroDecl, .macroExpansionDecl, .missingDecl, .operatorDecl, .poundSourceLocation, .precedenceGroupDecl, .protocolDecl, .structDecl, .subscriptDecl, .typealiasDecl, .variableDecl: 
       self._syntaxNode = node._syntaxNode
     default: 
       return nil
@@ -87,7 +87,7 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     #if DEBUG
     switch data.raw.kind {
-    case .accessorDecl, .actorDecl, .associatedtypeDecl, .classDecl, .deinitializerDecl, .editorPlaceholderDecl, .enumCaseDecl, .enumDecl, .extensionDecl, .functionDecl, .ifConfigDecl, .importDecl, .initializerDecl, .macroDecl, .macroExpansionDecl, .missingDecl, .operatorDecl, .poundErrorDecl, .poundSourceLocation, .poundWarningDecl, .precedenceGroupDecl, .protocolDecl, .structDecl, .subscriptDecl, .typealiasDecl, .variableDecl: 
+    case .accessorDecl, .actorDecl, .associatedtypeDecl, .classDecl, .deinitializerDecl, .editorPlaceholderDecl, .enumCaseDecl, .enumDecl, .extensionDecl, .functionDecl, .ifConfigDecl, .importDecl, .initializerDecl, .macroDecl, .macroExpansionDecl, .missingDecl, .operatorDecl, .poundSourceLocation, .precedenceGroupDecl, .protocolDecl, .structDecl, .subscriptDecl, .typealiasDecl, .variableDecl: 
       break 
     default: 
       fatalError("Unable to create DeclSyntax from \(data.raw.kind)")
@@ -140,9 +140,7 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         .node(MacroExpansionDeclSyntax.self), 
         .node(MissingDeclSyntax.self), 
         .node(OperatorDeclSyntax.self), 
-        .node(PoundErrorDeclSyntax.self), 
         .node(PoundSourceLocationSyntax.self), 
-        .node(PoundWarningDeclSyntax.self), 
         .node(PrecedenceGroupDeclSyntax.self), 
         .node(ProtocolDeclSyntax.self), 
         .node(StructDeclSyntax.self), 
@@ -525,7 +523,7 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   
   public init?<S: SyntaxProtocol>(_ node: S) {
     switch node.raw.kind {
-    case .breakStmt, .continueStmt, .deferStmt, .doStmt, .fallthroughStmt, .forInStmt, .guardStmt, .ifStmt, .labeledStmt, .missingStmt, .poundAssertStmt, .repeatWhileStmt, .returnStmt, .switchStmt, .throwStmt, .whileStmt, .yieldStmt: 
+    case .breakStmt, .continueStmt, .deferStmt, .doStmt, .fallthroughStmt, .forInStmt, .guardStmt, .ifStmt, .labeledStmt, .missingStmt, .repeatWhileStmt, .returnStmt, .switchStmt, .throwStmt, .whileStmt, .yieldStmt: 
       self._syntaxNode = node._syntaxNode
     default: 
       return nil
@@ -538,7 +536,7 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     #if DEBUG
     switch data.raw.kind {
-    case .breakStmt, .continueStmt, .deferStmt, .doStmt, .fallthroughStmt, .forInStmt, .guardStmt, .ifStmt, .labeledStmt, .missingStmt, .poundAssertStmt, .repeatWhileStmt, .returnStmt, .switchStmt, .throwStmt, .whileStmt, .yieldStmt: 
+    case .breakStmt, .continueStmt, .deferStmt, .doStmt, .fallthroughStmt, .forInStmt, .guardStmt, .ifStmt, .labeledStmt, .missingStmt, .repeatWhileStmt, .returnStmt, .switchStmt, .throwStmt, .whileStmt, .yieldStmt: 
       break 
     default: 
       fatalError("Unable to create StmtSyntax from \(data.raw.kind)")
@@ -584,7 +582,6 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
         .node(IfStmtSyntax.self), 
         .node(LabeledStmtSyntax.self), 
         .node(MissingStmtSyntax.self), 
-        .node(PoundAssertStmtSyntax.self), 
         .node(RepeatWhileStmtSyntax.self), 
         .node(ReturnStmtSyntax.self), 
         .node(SwitchStmtSyntax.self), 

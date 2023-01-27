@@ -19,11 +19,7 @@ final class PoundAssertTests: XCTestCase {
     AssertParse(
       """
       #assert(true, 1️⃣123)
-      """,
-      diagnostics: [
-        DiagnosticSpec(message: "expected string literal in '#assert' directive"),
-        DiagnosticSpec(message: "unexpected code '123' in '#assert' directive"),
-      ]
+      """
     )
   }
 
@@ -38,10 +34,11 @@ final class PoundAssertTests: XCTestCase {
   func testPoundAssert3() {
     AssertParse(
       #"""
-      #assert 1️⃣true, "error message")
+      #assert1️⃣ true2️⃣, "error message")
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "expected '(' in '#assert' directive")
+        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: #"extraneous code ', "error message")' at top level"#),
       ]
     )
   }
@@ -52,7 +49,7 @@ final class PoundAssertTests: XCTestCase {
       #assert(1️⃣, "error message")
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "expected condition in '#assert' directive")
+        DiagnosticSpec(message: "expected value in macro expansion")
       ]
     )
   }
@@ -66,7 +63,7 @@ final class PoundAssertTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(
-          message: "expected ')' to end '#assert' directive",
+          message: "expected ')' to end macro expansion",
           notes: [
             NoteSpec(message: "to match this opening '('")
           ]
@@ -84,7 +81,7 @@ final class PoundAssertTests: XCTestCase {
       """#,
       diagnostics: [
         DiagnosticSpec(
-          message: "expected ')' to end '#assert' directive",
+          message: "expected ')' to end macro expansion",
           notes: [
             NoteSpec(message: "to match this opening '('")
           ]

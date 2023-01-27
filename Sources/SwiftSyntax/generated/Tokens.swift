@@ -366,19 +366,6 @@ extension TokenSyntax {
     )
   }
   
-  public static func poundAssertKeyword(
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
-    presence: SourcePresence = .present
-  ) -> TokenSyntax {
-    return TokenSyntax(
-      .poundAssertKeyword, 
-      leadingTrivia: leadingTrivia, 
-      trailingTrivia: trailingTrivia, 
-      presence: presence
-    )
-  }
-  
   public static func poundSourceLocationKeyword(
     leadingTrivia: Trivia = [], 
     trailingTrivia: Trivia = [], 
@@ -386,32 +373,6 @@ extension TokenSyntax {
   ) -> TokenSyntax {
     return TokenSyntax(
       .poundSourceLocationKeyword, 
-      leadingTrivia: leadingTrivia, 
-      trailingTrivia: trailingTrivia, 
-      presence: presence
-    )
-  }
-  
-  public static func poundWarningKeyword(
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
-    presence: SourcePresence = .present
-  ) -> TokenSyntax {
-    return TokenSyntax(
-      .poundWarningKeyword, 
-      leadingTrivia: leadingTrivia, 
-      trailingTrivia: trailingTrivia, 
-      presence: presence
-    )
-  }
-  
-  public static func poundErrorKeyword(
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
-    presence: SourcePresence = .present
-  ) -> TokenSyntax {
-    return TokenSyntax(
-      .poundErrorKeyword, 
       leadingTrivia: leadingTrivia, 
       trailingTrivia: trailingTrivia, 
       presence: presence
@@ -490,58 +451,6 @@ extension TokenSyntax {
   ) -> TokenSyntax {
     return TokenSyntax(
       .poundUnavailableKeyword, 
-      leadingTrivia: leadingTrivia, 
-      trailingTrivia: trailingTrivia, 
-      presence: presence
-    )
-  }
-  
-  public static func poundFileLiteralKeyword(
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
-    presence: SourcePresence = .present
-  ) -> TokenSyntax {
-    return TokenSyntax(
-      .poundFileLiteralKeyword, 
-      leadingTrivia: leadingTrivia, 
-      trailingTrivia: trailingTrivia, 
-      presence: presence
-    )
-  }
-  
-  public static func poundImageLiteralKeyword(
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
-    presence: SourcePresence = .present
-  ) -> TokenSyntax {
-    return TokenSyntax(
-      .poundImageLiteralKeyword, 
-      leadingTrivia: leadingTrivia, 
-      trailingTrivia: trailingTrivia, 
-      presence: presence
-    )
-  }
-  
-  public static func poundColorLiteralKeyword(
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
-    presence: SourcePresence = .present
-  ) -> TokenSyntax {
-    return TokenSyntax(
-      .poundColorLiteralKeyword, 
-      leadingTrivia: leadingTrivia, 
-      trailingTrivia: trailingTrivia, 
-      presence: presence
-    )
-  }
-  
-  public static func poundHasSymbolKeyword(
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
-    presence: SourcePresence = .present
-  ) -> TokenSyntax {
-    return TokenSyntax(
-      .poundHasSymbolKeyword, 
       leadingTrivia: leadingTrivia, 
       trailingTrivia: trailingTrivia, 
       presence: presence

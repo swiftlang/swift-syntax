@@ -745,8 +745,8 @@ final class DeclarationTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'func' in function"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected identifier in pound literal declaration"),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "expected identifier in pound literal declaration"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected identifier in macro expansion"),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "expected identifier in macro expansion"),
         DiagnosticSpec(locationMarker: "5️⃣", message: #"unexpected code '25 "line-directive.swift"' in struct"#),
       ]
     )

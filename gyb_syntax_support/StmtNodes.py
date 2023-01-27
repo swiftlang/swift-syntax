@@ -185,7 +185,6 @@ STMT_NODES = [
                              kind='MatchingPatternCondition'),
                        Child('OptionalBinding',
                              kind='OptionalBindingCondition'),
-                       Child('HasSymbol', kind='HasSymbolCondition'),
                    ]),
              Child('TrailingComma', kind='CommaToken',
                    is_optional=True),
@@ -222,16 +221,6 @@ STMT_NODES = [
                    is_optional=True),
          ]),
 
-    # has-symbol-condition -> '#_hasSymbol' '(' expression ')'
-    Node('HasSymbolCondition', name_for_diagnostics="'#_hasSymbol' condition",
-         kind='Syntax',
-         children=[
-             Child('HasSymbolKeyword', kind='HasSymbolToken'),
-             Child('LeftParen', kind='LeftParenToken'),
-             Child('Expression', kind='Expr'),
-             Child('RightParen', kind='RightParenToken'),
-         ]),
-          
     # condition-list -> condition
     #                 | condition ','? condition-list
     Node('ConditionElementList', name_for_diagnostics=None, kind='SyntaxCollection',
@@ -327,19 +316,5 @@ STMT_NODES = [
              Child('CatchItems', kind='CatchItemList',
                    collection_element_name='CatchItem', is_optional=True),
              Child('Body', kind='CodeBlock'),
-         ]),
-
-    # e.g. #assert(1 == 2)
-    Node('PoundAssertStmt', name_for_diagnostics="'#assert' directive", kind='Stmt',
-         children=[
-             Child('PoundAssert', kind='PoundAssertToken'),
-             Child('LeftParen', kind='LeftParenToken'),
-             Child('Condition', kind='Expr', name_for_diagnostics='condition',
-                   description='The assertion condition.'),
-             Child('Comma', kind='CommaToken', is_optional=True,
-                   description='The comma after the assertion condition.'),
-             Child('Message', kind='StringLiteralExpr', name_for_diagnostics='message', is_optional=True,
-                   description='The assertion message.'),
-             Child('RightParen', kind='RightParenToken'),
          ]),
 ]

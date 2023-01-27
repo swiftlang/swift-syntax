@@ -104,7 +104,6 @@ enum CanBeStatementStart: RawTokenKindSubset {
   case forKeyword
   case guardKeyword
   case ifKeyword
-  case poundAssertKeyword
   case repeatKeyword
   case returnKeyword
   case switchKeyword
@@ -122,7 +121,6 @@ enum CanBeStatementStart: RawTokenKindSubset {
     case RawTokenKindMatch(.for): self = .forKeyword
     case RawTokenKindMatch(.guard): self = .guardKeyword
     case RawTokenKindMatch(.if): self = .ifKeyword
-    case RawTokenKindMatch(.poundAssertKeyword): self = .poundAssertKeyword
     case RawTokenKindMatch(.repeat): self = .repeatKeyword
     case RawTokenKindMatch(.return): self = .returnKeyword
     case RawTokenKindMatch(.switch): self = .switchKeyword
@@ -143,7 +141,6 @@ enum CanBeStatementStart: RawTokenKindSubset {
     case .forKeyword: return .keyword(.for)
     case .guardKeyword: return .keyword(.guard)
     case .ifKeyword: return .keyword(.if)
-    case .poundAssertKeyword: return .poundAssertKeyword
     case .repeatKeyword: return .keyword(.repeat)
     case .returnKeyword: return .keyword(.return)
     case .switchKeyword: return .keyword(.switch)
@@ -474,15 +471,11 @@ enum OperatorLike: RawTokenKindSubset {
 
 enum PoundDeclarationStart: RawTokenKindSubset {
   case poundIfKeyword
-  case poundWarningKeyword
-  case poundErrorKeyword
   case pound
 
   init?(lexeme: Lexer.Lexeme) {
     switch lexeme.rawTokenKind {
     case .poundIfKeyword: self = .poundIfKeyword
-    case .poundWarningKeyword: self = .poundWarningKeyword
-    case .poundErrorKeyword: self = .poundErrorKeyword
     case .pound: self = .pound
     default: return nil
     }
@@ -491,8 +484,6 @@ enum PoundDeclarationStart: RawTokenKindSubset {
   var rawTokenKind: RawTokenKind {
     switch self {
     case .poundIfKeyword: return .poundIfKeyword
-    case .poundWarningKeyword: return .poundWarningKeyword
-    case .poundErrorKeyword: return .poundErrorKeyword
     case .pound: return .pound
     }
   }

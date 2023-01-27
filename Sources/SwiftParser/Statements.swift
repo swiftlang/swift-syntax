@@ -121,8 +121,6 @@ extension Parser {
       return label(self.parseDeferStatement(deferHandle: handle), with: optLabel)
     case (.doKeyword, let handle)?:
       return label(self.parseDoStatement(doHandle: handle), with: optLabel)
-    case (.poundAssertKeyword, let handle)?:
-      return label(self.parsePoundAssertStatement(poundAssertHandle: handle), with: optLabel)
     case (.yield, let handle)?:
       return label(self.parseYieldStatement(yieldHandle: handle), with: optLabel)
     case nil:
@@ -254,11 +252,6 @@ extension Parser {
       return self.parsePoundAvailableConditionElement()
     }
 
-    // Parse a #_hasSymbol condition if present.
-    if self.at(.poundHasSymbolKeyword) {
-      return .hasSymbol(self.parsePoundHasSymbolConditionElement())
-    }
-
     // Parse the basic expression case.  If we have a leading let/var/case
     // keyword or an assignment, then we know this is a binding.
     guard self.at(any: [.keyword(.let), .keyword(.var), .keyword(.case)]) else {
@@ -375,30 +368,6 @@ extension Parser {
         rightParen: rparen,
         arena: self.arena
       )
-    )
-  }
-
-  /// Parse a `#_hasSymbol` condition.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     has-symbol-condition → '#_hasSymbol' '(' expr ')'
-  @_spi(RawSyntax)
-  public mutating func parsePoundHasSymbolConditionElement() -> RawHasSymbolConditionSyntax {
-    let (unexpectedBeforeKeyword, keyword) = self.expect(.poundHasSymbolKeyword)
-    let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
-    let expr = self.parseExpression()
-    let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
-    return RawHasSymbolConditionSyntax(
-      unexpectedBeforeKeyword,
-      hasSymbolKeyword: keyword,
-      unexpectedBeforeLParen,
-      leftParen: lparen,
-      expression: expr,
-      unexpectedBeforeRParen,
-      rightParen: rparen,
-      arena: self.arena
     )
   }
 }
@@ -987,8 +956,8 @@ extension Parser {
     let expr: RawExprSyntax?
     if !self.at(any: [
       .rightBrace, .keyword(.case), .keyword(.default), .semicolon, .eof,
-      .poundIfKeyword, .poundErrorKeyword, .poundWarningKeyword,
-      .poundEndifKeyword, .poundElseKeyword, .poundElseifKeyword,
+      .poundIfKeyword, .poundEndifKeyword, .poundElseKeyword,
+      .poundElseifKeyword,
     ])
       && !self.atStartOfStatement() && !self.atStartOfDeclaration(preferPoundAsExpression: true)
     {
@@ -1180,35 +1149,6 @@ extension Parser {
   }
 }
 
-extension Parser {
-  @_spi(RawSyntax)
-  public mutating func parsePoundAssertStatement(poundAssertHandle: RecoveryConsumptionHandle) -> RawPoundAssertStmtSyntax {
-    let (unexpectedBeforePoundAssert, poundAssert) = self.eat(poundAssertHandle)
-    let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
-    let condition = self.parseExpression()
-    let comma = self.consume(if: .comma)
-    let message: RawStringLiteralExprSyntax?
-    if comma != nil {
-      message = self.parseStringLiteral()
-    } else {
-      message = nil
-    }
-    let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
-    return RawPoundAssertStmtSyntax(
-      unexpectedBeforePoundAssert,
-      poundAssert: poundAssert,
-      unexpectedBeforeLParen,
-      leftParen: lparen,
-      condition: condition,
-      comma: comma,
-      message: message,
-      unexpectedBeforeRParen,
-      rightParen: rparen,
-      arena: self.arena
-    )
-  }
-}
-
 // MARK: Lookahead
 
 extension Parser.Lookahead {
@@ -1242,8 +1182,7 @@ extension Parser.Lookahead {
       .breakKeyword?,
       .continueKeyword?,
       .fallthroughKeyword?,
-      .switchKeyword?,
-      .poundAssertKeyword?:
+      .switchKeyword?:
       return true
     case .repeatKeyword?:
       // 'repeat' followed by anything other than a brace stmt

@@ -59,13 +59,7 @@ public enum TokenKind: Hashable {
   
   case multilineStringQuote
   
-  case poundAssertKeyword
-  
   case poundSourceLocationKeyword
-  
-  case poundWarningKeyword
-  
-  case poundErrorKeyword
   
   case poundIfKeyword
   
@@ -78,14 +72,6 @@ public enum TokenKind: Hashable {
   case poundAvailableKeyword
   
   case poundUnavailableKeyword
-  
-  case poundFileLiteralKeyword
-  
-  case poundImageLiteralKeyword
-  
-  case poundColorLiteralKeyword
-  
-  case poundHasSymbolKeyword
   
   case integerLiteral(String)
   
@@ -169,14 +155,8 @@ public enum TokenKind: Hashable {
       return #"'"#
     case .multilineStringQuote: 
       return #"""""#
-    case .poundAssertKeyword: 
-      return #"#assert"#
     case .poundSourceLocationKeyword: 
       return #"#sourceLocation"#
-    case .poundWarningKeyword: 
-      return #"#warning"#
-    case .poundErrorKeyword: 
-      return #"#error"#
     case .poundIfKeyword: 
       return #"#if"#
     case .poundElseKeyword: 
@@ -189,14 +169,6 @@ public enum TokenKind: Hashable {
       return #"#available"#
     case .poundUnavailableKeyword: 
       return #"#unavailable"#
-    case .poundFileLiteralKeyword: 
-      return #"#fileLiteral"#
-    case .poundImageLiteralKeyword: 
-      return #"#imageLiteral"#
-    case .poundColorLiteralKeyword: 
-      return #"#colorLiteral"#
-    case .poundHasSymbolKeyword: 
-      return #"#_hasSymbol"#
     case .integerLiteral(let text): 
       return text
     case .floatingLiteral(let text): 
@@ -284,14 +256,8 @@ public enum TokenKind: Hashable {
       return #"'"#
     case .multilineStringQuote: 
       return #"""""#
-    case .poundAssertKeyword: 
-      return #"#assert"#
     case .poundSourceLocationKeyword: 
       return #"#sourceLocation"#
-    case .poundWarningKeyword: 
-      return #"#warning"#
-    case .poundErrorKeyword: 
-      return #"#error"#
     case .poundIfKeyword: 
       return #"#if"#
     case .poundElseKeyword: 
@@ -304,14 +270,6 @@ public enum TokenKind: Hashable {
       return #"#available"#
     case .poundUnavailableKeyword: 
       return #"#unavailable"#
-    case .poundFileLiteralKeyword: 
-      return #"#fileLiteral"#
-    case .poundImageLiteralKeyword: 
-      return #"#imageLiteral"#
-    case .poundColorLiteralKeyword: 
-      return #"#colorLiteral"#
-    case .poundHasSymbolKeyword: 
-      return #"#_hasSymbol"#
     case .keyword(let assoc): 
       return assoc.defaultText
     case .eof: 
@@ -384,13 +342,7 @@ public enum TokenKind: Hashable {
       return false
     case .multilineStringQuote: 
       return false
-    case .poundAssertKeyword: 
-      return true
     case .poundSourceLocationKeyword: 
-      return true
-    case .poundWarningKeyword: 
-      return true
-    case .poundErrorKeyword: 
       return true
     case .poundIfKeyword: 
       return true
@@ -403,14 +355,6 @@ public enum TokenKind: Hashable {
     case .poundAvailableKeyword: 
       return true
     case .poundUnavailableKeyword: 
-      return true
-    case .poundFileLiteralKeyword: 
-      return true
-    case .poundImageLiteralKeyword: 
-      return true
-    case .poundColorLiteralKeyword: 
-      return true
-    case .poundHasSymbolKeyword: 
       return true
     case .integerLiteral: 
       return false
@@ -502,13 +446,7 @@ public enum TokenKind: Hashable {
       return true
     case .multilineStringQuote: 
       return true
-    case .poundAssertKeyword: 
-      return false
     case .poundSourceLocationKeyword: 
-      return false
-    case .poundWarningKeyword: 
-      return false
-    case .poundErrorKeyword: 
       return false
     case .poundIfKeyword: 
       return false
@@ -521,14 +459,6 @@ public enum TokenKind: Hashable {
     case .poundAvailableKeyword: 
       return false
     case .poundUnavailableKeyword: 
-      return false
-    case .poundFileLiteralKeyword: 
-      return false
-    case .poundImageLiteralKeyword: 
-      return false
-    case .poundColorLiteralKeyword: 
-      return false
-    case .poundHasSymbolKeyword: 
       return false
     case .integerLiteral: 
       return false
@@ -617,13 +547,7 @@ extension TokenKind: Equatable {
       return true
     case (.multilineStringQuote, .multilineStringQuote): 
       return true
-    case (.poundAssertKeyword, .poundAssertKeyword): 
-      return true
     case (.poundSourceLocationKeyword, .poundSourceLocationKeyword): 
-      return true
-    case (.poundWarningKeyword, .poundWarningKeyword): 
-      return true
-    case (.poundErrorKeyword, .poundErrorKeyword): 
       return true
     case (.poundIfKeyword, .poundIfKeyword): 
       return true
@@ -636,14 +560,6 @@ extension TokenKind: Equatable {
     case (.poundAvailableKeyword, .poundAvailableKeyword): 
       return true
     case (.poundUnavailableKeyword, .poundUnavailableKeyword): 
-      return true
-    case (.poundFileLiteralKeyword, .poundFileLiteralKeyword): 
-      return true
-    case (.poundImageLiteralKeyword, .poundImageLiteralKeyword): 
-      return true
-    case (.poundColorLiteralKeyword, .poundColorLiteralKeyword): 
-      return true
-    case (.poundHasSymbolKeyword, .poundHasSymbolKeyword): 
       return true
     case (.integerLiteral(let lhsText), .integerLiteral(let rhsText)): 
       return lhsText == rhsText
@@ -737,13 +653,7 @@ public enum RawTokenBaseKind: UInt8, Equatable, Hashable {
   
   case multilineStringQuote
   
-  case poundAssertKeyword
-  
   case poundSourceLocationKeyword
-  
-  case poundWarningKeyword
-  
-  case poundErrorKeyword
   
   case poundIfKeyword
   
@@ -756,14 +666,6 @@ public enum RawTokenBaseKind: UInt8, Equatable, Hashable {
   case poundAvailableKeyword
   
   case poundUnavailableKeyword
-  
-  case poundFileLiteralKeyword
-  
-  case poundImageLiteralKeyword
-  
-  case poundColorLiteralKeyword
-  
-  case poundHasSymbolKeyword
   
   case integerLiteral
   
@@ -938,20 +840,8 @@ public struct RawTokenKind: Equatable, Hashable {
     return RawTokenKind(base: .multilineStringQuote, keyword: .rawValueZero)
   }
   
-  public static var poundAssertKeyword: RawTokenKind {
-    return RawTokenKind(base: .poundAssertKeyword, keyword: .rawValueZero)
-  }
-  
   public static var poundSourceLocationKeyword: RawTokenKind {
     return RawTokenKind(base: .poundSourceLocationKeyword, keyword: .rawValueZero)
-  }
-  
-  public static var poundWarningKeyword: RawTokenKind {
-    return RawTokenKind(base: .poundWarningKeyword, keyword: .rawValueZero)
-  }
-  
-  public static var poundErrorKeyword: RawTokenKind {
-    return RawTokenKind(base: .poundErrorKeyword, keyword: .rawValueZero)
   }
   
   public static var poundIfKeyword: RawTokenKind {
@@ -976,22 +866,6 @@ public struct RawTokenKind: Equatable, Hashable {
   
   public static var poundUnavailableKeyword: RawTokenKind {
     return RawTokenKind(base: .poundUnavailableKeyword, keyword: .rawValueZero)
-  }
-  
-  public static var poundFileLiteralKeyword: RawTokenKind {
-    return RawTokenKind(base: .poundFileLiteralKeyword, keyword: .rawValueZero)
-  }
-  
-  public static var poundImageLiteralKeyword: RawTokenKind {
-    return RawTokenKind(base: .poundImageLiteralKeyword, keyword: .rawValueZero)
-  }
-  
-  public static var poundColorLiteralKeyword: RawTokenKind {
-    return RawTokenKind(base: .poundColorLiteralKeyword, keyword: .rawValueZero)
-  }
-  
-  public static var poundHasSymbolKeyword: RawTokenKind {
-    return RawTokenKind(base: .poundHasSymbolKeyword, keyword: .rawValueZero)
   }
   
   public static var integerLiteral: RawTokenKind {
@@ -1101,14 +975,8 @@ public struct RawTokenKind: Equatable, Hashable {
       return #"'"#
     case .multilineStringQuote: 
       return #"""""#
-    case .poundAssertKeyword: 
-      return #"#assert"#
     case .poundSourceLocationKeyword: 
       return #"#sourceLocation"#
-    case .poundWarningKeyword: 
-      return #"#warning"#
-    case .poundErrorKeyword: 
-      return #"#error"#
     case .poundIfKeyword: 
       return #"#if"#
     case .poundElseKeyword: 
@@ -1121,14 +989,6 @@ public struct RawTokenKind: Equatable, Hashable {
       return #"#available"#
     case .poundUnavailableKeyword: 
       return #"#unavailable"#
-    case .poundFileLiteralKeyword: 
-      return #"#fileLiteral"#
-    case .poundImageLiteralKeyword: 
-      return #"#imageLiteral"#
-    case .poundColorLiteralKeyword: 
-      return #"#colorLiteral"#
-    case .poundHasSymbolKeyword: 
-      return #"#_hasSymbol"#
     case .keyword: 
       return self.keyword.defaultText
     default: 
@@ -1194,14 +1054,8 @@ public struct RawTokenKind: Equatable, Hashable {
       return #"'"#
     case .multilineStringQuote: 
       return #"""""#
-    case .poundAssertKeyword: 
-      return #"#assert"#
     case .poundSourceLocationKeyword: 
       return #"#sourceLocation"#
-    case .poundWarningKeyword: 
-      return #"#warning"#
-    case .poundErrorKeyword: 
-      return #"#error"#
     case .poundIfKeyword: 
       return #"#if"#
     case .poundElseKeyword: 
@@ -1214,14 +1068,6 @@ public struct RawTokenKind: Equatable, Hashable {
       return #"#available"#
     case .poundUnavailableKeyword: 
       return #"#unavailable"#
-    case .poundFileLiteralKeyword: 
-      return #"file reference"#
-    case .poundImageLiteralKeyword: 
-      return #"image"#
-    case .poundColorLiteralKeyword: 
-      return #"color"#
-    case .poundHasSymbolKeyword: 
-      return #"#_hasSymbol"#
     case .integerLiteral: 
       return #"integer literal"#
     case .floatingLiteral: 
@@ -1312,13 +1158,7 @@ public struct RawTokenKind: Equatable, Hashable {
       return false
     case .multilineStringQuote: 
       return false
-    case .poundAssertKeyword: 
-      return true
     case .poundSourceLocationKeyword: 
-      return true
-    case .poundWarningKeyword: 
-      return true
-    case .poundErrorKeyword: 
       return true
     case .poundIfKeyword: 
       return true
@@ -1331,14 +1171,6 @@ public struct RawTokenKind: Equatable, Hashable {
     case .poundAvailableKeyword: 
       return true
     case .poundUnavailableKeyword: 
-      return true
-    case .poundFileLiteralKeyword: 
-      return true
-    case .poundImageLiteralKeyword: 
-      return true
-    case .poundColorLiteralKeyword: 
-      return true
-    case .poundHasSymbolKeyword: 
       return true
     case .integerLiteral: 
       return false
@@ -1430,13 +1262,7 @@ public struct RawTokenKind: Equatable, Hashable {
       return true
     case .multilineStringQuote: 
       return true
-    case .poundAssertKeyword: 
-      return false
     case .poundSourceLocationKeyword: 
-      return false
-    case .poundWarningKeyword: 
-      return false
-    case .poundErrorKeyword: 
       return false
     case .poundIfKeyword: 
       return false
@@ -1449,14 +1275,6 @@ public struct RawTokenKind: Equatable, Hashable {
     case .poundAvailableKeyword: 
       return false
     case .poundUnavailableKeyword: 
-      return false
-    case .poundFileLiteralKeyword: 
-      return false
-    case .poundImageLiteralKeyword: 
-      return false
-    case .poundColorLiteralKeyword: 
-      return false
-    case .poundHasSymbolKeyword: 
       return false
     case .integerLiteral: 
       return false
@@ -1574,18 +1392,9 @@ extension TokenKind {
     case .multilineStringQuote: 
       assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
       return .multilineStringQuote
-    case .poundAssertKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .poundAssertKeyword
     case .poundSourceLocationKeyword: 
       assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
       return .poundSourceLocationKeyword
-    case .poundWarningKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .poundWarningKeyword
-    case .poundErrorKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .poundErrorKeyword
     case .poundIfKeyword: 
       assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
       return .poundIfKeyword
@@ -1604,18 +1413,6 @@ extension TokenKind {
     case .poundUnavailableKeyword: 
       assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
       return .poundUnavailableKeyword
-    case .poundFileLiteralKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .poundFileLiteralKeyword
-    case .poundImageLiteralKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .poundImageLiteralKeyword
-    case .poundColorLiteralKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .poundColorLiteralKeyword
-    case .poundHasSymbolKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .poundHasSymbolKeyword
     case .integerLiteral: 
       return .integerLiteral(text)
     case .floatingLiteral: 
@@ -1705,14 +1502,8 @@ extension TokenKind {
       return (.singleQuote, nil)
     case .multilineStringQuote: 
       return (.multilineStringQuote, nil)
-    case .poundAssertKeyword: 
-      return (.poundAssertKeyword, nil)
     case .poundSourceLocationKeyword: 
       return (.poundSourceLocationKeyword, nil)
-    case .poundWarningKeyword: 
-      return (.poundWarningKeyword, nil)
-    case .poundErrorKeyword: 
-      return (.poundErrorKeyword, nil)
     case .poundIfKeyword: 
       return (.poundIfKeyword, nil)
     case .poundElseKeyword: 
@@ -1725,14 +1516,6 @@ extension TokenKind {
       return (.poundAvailableKeyword, nil)
     case .poundUnavailableKeyword: 
       return (.poundUnavailableKeyword, nil)
-    case .poundFileLiteralKeyword: 
-      return (.poundFileLiteralKeyword, nil)
-    case .poundImageLiteralKeyword: 
-      return (.poundImageLiteralKeyword, nil)
-    case .poundColorLiteralKeyword: 
-      return (.poundColorLiteralKeyword, nil)
-    case .poundHasSymbolKeyword: 
-      return (.poundHasSymbolKeyword, nil)
     case .integerLiteral(let str): 
       return (.integerLiteral, str)
     case .floatingLiteral(let str): 

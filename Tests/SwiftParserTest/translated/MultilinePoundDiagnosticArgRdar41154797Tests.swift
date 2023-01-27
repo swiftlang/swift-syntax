@@ -22,7 +22,7 @@ final class MultilinePoundDiagnosticArgRdar41154797Tests: XCTestCase {
       """##,
       diagnostics: [
         DiagnosticSpec(message: #"expected '"""' to end string literal"#),
-        DiagnosticSpec(message: "expected ')' to end '#error' directive"),
+        DiagnosticSpec(message: "expected ')' to end macro expansion"),
       ]
     )
   }

@@ -202,8 +202,6 @@ extension Parser {
         return .decls(RawMemberDeclListSyntax(elements: elements, arena: parser.arena))
       }
       return RawDeclSyntax(directive)
-    case (.poundWarningKeyword, _)?, (.poundErrorKeyword, _)?:
-      return self.parsePoundDiagnosticDeclaration()
     case (.pound, _)?:
       // FIXME: If we can have attributes for macro expansions, handle this
       // via DeclarationStart.
@@ -2062,76 +2060,6 @@ extension Parser {
 }
 
 extension Parser {
-  enum PoundDiagnosticKind {
-    case error(poundError: RawTokenSyntax)
-    case warning(poundWarning: RawTokenSyntax)
-  }
-
-  @_spi(RawSyntax)
-  public mutating func parsePoundDiagnosticDeclaration() -> RawDeclSyntax {
-    enum ExpectedTokenKind: RawTokenKindSubset {
-      case poundErrorKeyword
-      case poundWarningKeyword
-
-      init?(lexeme: Lexer.Lexeme) {
-        switch lexeme.rawTokenKind {
-        case .poundErrorKeyword: self = .poundErrorKeyword
-        case .poundWarningKeyword: self = .poundWarningKeyword
-        default: return nil
-        }
-      }
-
-      var rawTokenKind: RawTokenKind {
-        switch self {
-        case .poundErrorKeyword: return .poundErrorKeyword
-        case .poundWarningKeyword: return .poundWarningKeyword
-        }
-      }
-    }
-
-    let directive: PoundDiagnosticKind
-
-    switch self.at(anyIn: ExpectedTokenKind.self) {
-    case (.poundErrorKeyword, let handle)?:
-      directive = .error(poundError: self.eat(handle))
-    case (.poundWarningKeyword, let handle)?:
-      directive = .warning(poundWarning: self.eat(handle))
-    case nil:
-      directive = .error(poundError: RawTokenSyntax(missing: .poundErrorKeyword, arena: self.arena))
-    }
-
-    let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-    let stringLiteral = self.parseStringLiteral()
-    let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
-
-    switch directive {
-    case .error(let tok):
-      return RawDeclSyntax(
-        RawPoundErrorDeclSyntax(
-          poundError: tok,
-          unexpectedBeforeLeftParen,
-          leftParen: leftParen,
-          message: stringLiteral,
-          unexpectedBeforeRightParen,
-          rightParen: rightParen,
-          arena: self.arena
-        )
-      )
-    case .warning(let tok):
-      return RawDeclSyntax(
-        RawPoundWarningDeclSyntax(
-          poundWarning: tok,
-          unexpectedBeforeLeftParen,
-          leftParen: leftParen,
-          message: stringLiteral,
-          unexpectedBeforeRightParen,
-          rightParen: rightParen,
-          arena: self.arena
-        )
-      )
-    }
-  }
-
   /// Parse a macro declaration.
   mutating func parseMacroDeclaration(
     attrs: DeclAttributes,

@@ -2959,84 +2959,6 @@ public enum SyntaxFactory {
       return IfConfigDeclSyntax(data)
     }
   }
-  @available(*, deprecated, message: "Use initializer on PoundErrorDeclSyntax")
-  public static func makePoundErrorDecl(_ unexpectedBeforePoundError: UnexpectedNodesSyntax? = nil, poundError: TokenSyntax, _ unexpectedBetweenPoundErrorAndLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax, _ unexpectedBetweenLeftParenAndMessage: UnexpectedNodesSyntax? = nil, message: StringLiteralExprSyntax, _ unexpectedBetweenMessageAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax, _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil) -> PoundErrorDeclSyntax {
-    let layout: [RawSyntax?] = [
-      unexpectedBeforePoundError?.raw,
-      poundError.raw,
-      unexpectedBetweenPoundErrorAndLeftParen?.raw,
-      leftParen.raw,
-      unexpectedBetweenLeftParenAndMessage?.raw,
-      message.raw,
-      unexpectedBetweenMessageAndRightParen?.raw,
-      rightParen.raw,
-      unexpectedAfterRightParen?.raw,
-    ]
-    return withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.poundErrorDecl,
-        from: layout, arena: arena)
-      let data = SyntaxData.forRoot(raw)
-      return PoundErrorDeclSyntax(data)
-    }
-  }
-
-  @available(*, deprecated, message: "Use initializer on PoundErrorDeclSyntax")
-  public static func makeBlankPoundErrorDecl(presence: SourcePresence = .present) -> PoundErrorDeclSyntax {
-    return withExtendedLifetime(SyntaxArena()) { arena in
-      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .poundErrorDecl,
-        from: [
-        nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.poundErrorKeyword, arena: arena),
-        nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: arena),
-        nil,
-        RawSyntax.makeEmptyLayout(kind: SyntaxKind.stringLiteralExpr, arena: arena),
-        nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: arena),
-        nil,
-      ], arena: arena))
-      return PoundErrorDeclSyntax(data)
-    }
-  }
-  @available(*, deprecated, message: "Use initializer on PoundWarningDeclSyntax")
-  public static func makePoundWarningDecl(_ unexpectedBeforePoundWarning: UnexpectedNodesSyntax? = nil, poundWarning: TokenSyntax, _ unexpectedBetweenPoundWarningAndLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax, _ unexpectedBetweenLeftParenAndMessage: UnexpectedNodesSyntax? = nil, message: StringLiteralExprSyntax, _ unexpectedBetweenMessageAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax, _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil) -> PoundWarningDeclSyntax {
-    let layout: [RawSyntax?] = [
-      unexpectedBeforePoundWarning?.raw,
-      poundWarning.raw,
-      unexpectedBetweenPoundWarningAndLeftParen?.raw,
-      leftParen.raw,
-      unexpectedBetweenLeftParenAndMessage?.raw,
-      message.raw,
-      unexpectedBetweenMessageAndRightParen?.raw,
-      rightParen.raw,
-      unexpectedAfterRightParen?.raw,
-    ]
-    return withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.poundWarningDecl,
-        from: layout, arena: arena)
-      let data = SyntaxData.forRoot(raw)
-      return PoundWarningDeclSyntax(data)
-    }
-  }
-
-  @available(*, deprecated, message: "Use initializer on PoundWarningDeclSyntax")
-  public static func makeBlankPoundWarningDecl(presence: SourcePresence = .present) -> PoundWarningDeclSyntax {
-    return withExtendedLifetime(SyntaxArena()) { arena in
-      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .poundWarningDecl,
-        from: [
-        nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.poundWarningKeyword, arena: arena),
-        nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: arena),
-        nil,
-        RawSyntax.makeEmptyLayout(kind: SyntaxKind.stringLiteralExpr, arena: arena),
-        nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: arena),
-        nil,
-      ], arena: arena))
-      return PoundWarningDeclSyntax(data)
-    }
-  }
   @available(*, deprecated, message: "Use initializer on PoundSourceLocationSyntax")
   public static func makePoundSourceLocation(_ unexpectedBeforePoundSourceLocation: UnexpectedNodesSyntax? = nil, poundSourceLocation: TokenSyntax, _ unexpectedBetweenPoundSourceLocationAndLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax, _ unexpectedBetweenLeftParenAndArgs: UnexpectedNodesSyntax? = nil, args: PoundSourceLocationArgsSyntax?, _ unexpectedBetweenArgsAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax, _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil) -> PoundSourceLocationSyntax {
     let layout: [RawSyntax?] = [
@@ -6757,45 +6679,6 @@ public enum SyntaxFactory {
       return OptionalBindingConditionSyntax(data)
     }
   }
-  @available(*, deprecated, message: "Use initializer on HasSymbolConditionSyntax")
-  public static func makeHasSymbolCondition(_ unexpectedBeforeHasSymbolKeyword: UnexpectedNodesSyntax? = nil, hasSymbolKeyword: TokenSyntax, _ unexpectedBetweenHasSymbolKeywordAndLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax, _ unexpectedBetweenLeftParenAndExpression: UnexpectedNodesSyntax? = nil, expression: ExprSyntax, _ unexpectedBetweenExpressionAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax, _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil) -> HasSymbolConditionSyntax {
-    let layout: [RawSyntax?] = [
-      unexpectedBeforeHasSymbolKeyword?.raw,
-      hasSymbolKeyword.raw,
-      unexpectedBetweenHasSymbolKeywordAndLeftParen?.raw,
-      leftParen.raw,
-      unexpectedBetweenLeftParenAndExpression?.raw,
-      expression.raw,
-      unexpectedBetweenExpressionAndRightParen?.raw,
-      rightParen.raw,
-      unexpectedAfterRightParen?.raw,
-    ]
-    return withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.hasSymbolCondition,
-        from: layout, arena: arena)
-      let data = SyntaxData.forRoot(raw)
-      return HasSymbolConditionSyntax(data)
-    }
-  }
-
-  @available(*, deprecated, message: "Use initializer on HasSymbolConditionSyntax")
-  public static func makeBlankHasSymbolCondition(presence: SourcePresence = .present) -> HasSymbolConditionSyntax {
-    return withExtendedLifetime(SyntaxArena()) { arena in
-      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .hasSymbolCondition,
-        from: [
-        nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.unknown(""), arena: arena),
-        nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: arena),
-        nil,
-        RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: arena),
-        nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: arena),
-        nil,
-      ], arena: arena))
-      return HasSymbolConditionSyntax(data)
-    }
-  }
   @available(*, deprecated, message: "Use initializer on ConditionElementListSyntax")
   public static func makeConditionElementList(
     _ elements: [ConditionElementSyntax]) -> ConditionElementListSyntax {
@@ -7094,53 +6977,6 @@ public enum SyntaxFactory {
         nil,
       ], arena: arena))
       return CatchClauseSyntax(data)
-    }
-  }
-  @available(*, deprecated, message: "Use initializer on PoundAssertStmtSyntax")
-  public static func makePoundAssertStmt(_ unexpectedBeforePoundAssert: UnexpectedNodesSyntax? = nil, poundAssert: TokenSyntax, _ unexpectedBetweenPoundAssertAndLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax, _ unexpectedBetweenLeftParenAndCondition: UnexpectedNodesSyntax? = nil, condition: ExprSyntax, _ unexpectedBetweenConditionAndComma: UnexpectedNodesSyntax? = nil, comma: TokenSyntax?, _ unexpectedBetweenCommaAndMessage: UnexpectedNodesSyntax? = nil, message: StringLiteralExprSyntax?, _ unexpectedBetweenMessageAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax, _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil) -> PoundAssertStmtSyntax {
-    let layout: [RawSyntax?] = [
-      unexpectedBeforePoundAssert?.raw,
-      poundAssert.raw,
-      unexpectedBetweenPoundAssertAndLeftParen?.raw,
-      leftParen.raw,
-      unexpectedBetweenLeftParenAndCondition?.raw,
-      condition.raw,
-      unexpectedBetweenConditionAndComma?.raw,
-      comma?.raw,
-      unexpectedBetweenCommaAndMessage?.raw,
-      message?.raw,
-      unexpectedBetweenMessageAndRightParen?.raw,
-      rightParen.raw,
-      unexpectedAfterRightParen?.raw,
-    ]
-    return withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.poundAssertStmt,
-        from: layout, arena: arena)
-      let data = SyntaxData.forRoot(raw)
-      return PoundAssertStmtSyntax(data)
-    }
-  }
-
-  @available(*, deprecated, message: "Use initializer on PoundAssertStmtSyntax")
-  public static func makeBlankPoundAssertStmt(presence: SourcePresence = .present) -> PoundAssertStmtSyntax {
-    return withExtendedLifetime(SyntaxArena()) { arena in
-      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .poundAssertStmt,
-        from: [
-        nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.poundAssertKeyword, arena: arena),
-        nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: arena),
-        nil,
-        RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: arena),
-        nil,
-        nil,
-        nil,
-        nil,
-        nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: arena),
-        nil,
-      ], arena: arena))
-      return PoundAssertStmtSyntax(data)
     }
   }
   @available(*, deprecated, message: "Use initializer on GenericWhereClauseSyntax")
@@ -8961,39 +8797,12 @@ public enum SyntaxFactory {
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  @available(*, deprecated, message: "Use TokenSyntax.poundAssertKeywordKeyword instead")
-  public static func makePoundAssertKeyword(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
-  ) -> TokenSyntax {
-    return makeToken(.poundAssertKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
-  }
   @available(*, deprecated, message: "Use TokenSyntax.poundSourceLocationKeywordKeyword instead")
   public static func makePoundSourceLocationKeyword(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.poundSourceLocationKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
-  }
-  @available(*, deprecated, message: "Use TokenSyntax.poundWarningKeywordKeyword instead")
-  public static func makePoundWarningKeyword(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
-  ) -> TokenSyntax {
-    return makeToken(.poundWarningKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
-  }
-  @available(*, deprecated, message: "Use TokenSyntax.poundErrorKeywordKeyword instead")
-  public static func makePoundErrorKeyword(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
-  ) -> TokenSyntax {
-    return makeToken(.poundErrorKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
@@ -9048,42 +8857,6 @@ public enum SyntaxFactory {
     trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.poundUnavailableKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
-  }
-  @available(*, deprecated, message: "Use TokenSyntax.poundFileLiteralKeywordKeyword instead")
-  public static func makePoundFileLiteralKeyword(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
-  ) -> TokenSyntax {
-    return makeToken(.poundFileLiteralKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
-  }
-  @available(*, deprecated, message: "Use TokenSyntax.poundImageLiteralKeywordKeyword instead")
-  public static func makePoundImageLiteralKeyword(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
-  ) -> TokenSyntax {
-    return makeToken(.poundImageLiteralKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
-  }
-  @available(*, deprecated, message: "Use TokenSyntax.poundColorLiteralKeywordKeyword instead")
-  public static func makePoundColorLiteralKeyword(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
-  ) -> TokenSyntax {
-    return makeToken(.poundColorLiteralKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
-  }
-  @available(*, deprecated, message: "Use TokenSyntax.poundHasSymbolKeywordKeyword instead")
-  public static func makePoundHasSymbolKeyword(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
-  ) -> TokenSyntax {
-    return makeToken(.poundHasSymbolKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }

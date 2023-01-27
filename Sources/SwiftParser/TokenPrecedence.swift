@@ -108,7 +108,7 @@ public enum TokenPrecedence: Comparable {
     case  // Literals
     .floatingLiteral, .integerLiteral, .regexLiteral,
       // Pound literals
-      .poundAvailableKeyword, .poundColorLiteralKeyword, .poundFileLiteralKeyword, .poundImageLiteralKeyword, .poundSourceLocationKeyword, .poundUnavailableKeyword, .poundHasSymbolKeyword,
+      .poundAvailableKeyword, .poundSourceLocationKeyword, .poundUnavailableKeyword,
       // Identifiers
       .dollarIdentifier, .identifier,
       // '_' can occur in types to replace a type identifier
@@ -142,11 +142,6 @@ public enum TokenPrecedence: Comparable {
     case  // Weak brackets
     .rightAngle, .rightParen, .rightSquareBracket:
       self = .weakBracketClose
-
-    // MARK: Statement keyword punctuator
-    case  // #error, #warning and #assert are statement-like
-    .poundErrorKeyword, .poundWarningKeyword, .poundAssertKeyword:
-      self = .stmtKeyword
 
     // MARK: Strong bracketet
     case .leftBrace:

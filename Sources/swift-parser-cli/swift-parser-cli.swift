@@ -134,14 +134,18 @@ class VerifyRoundTrip: ParsableCommand {
   ) throws {
     let tree = Parser.parse(source: source)
 
-    _ = ParseDiagnosticsGenerator.diagnostics(for: tree)
+    var diags = ParseDiagnosticsGenerator.diagnostics(for: tree)
 
     let resultTree: Syntax
     if foldSequences {
-      resultTree = foldAllSequences(tree).0
+      let folded = foldAllSequences(tree)
+      resultTree = folded.0
+      diags += folded.1
     } else {
       resultTree = Syntax(tree)
     }
+
+    _ = DiagnosticsFormatter.annotatedSource(tree: tree, diags: diags)
 
     if resultTree.syntaxTextBytes != [UInt8](source) {
       throw Error.roundTripFailed
@@ -207,6 +211,9 @@ class PrintDiags: ParsableCommand {
     source.withUnsafeBufferPointer { sourceBuffer in
       let tree = Parser.parse(source: sourceBuffer)
       var diags = ParseDiagnosticsGenerator.diagnostics(for: tree)
+      if foldSequences {
+        diags += foldAllSequences(tree).1
+      }
       let annotatedSource = DiagnosticsFormatter.annotatedSource(
         tree: tree,
         diags: diags,
@@ -214,10 +221,6 @@ class PrintDiags: ParsableCommand {
       )
 
       print(annotatedSource)
-
-      if foldSequences {
-        diags += foldAllSequences(tree).1
-      }
 
       if diags.isEmpty {
         print("No diagnostics produced")
@@ -424,7 +427,7 @@ class Reduce: ParsableCommand {
     if verbose {
       printerr("Reduced from \(source.count) to \(reduced.count) characters in \(checks) iterations")
     }
-    let reducedString = String(decoding: reduced, as: UTF8.self)
-    print(reducedString)
+
+    FileHandle.standardOutput.write(Data(reduced))
   }
 }

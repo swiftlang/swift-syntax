@@ -138,7 +138,9 @@ public final class SourceLocationConverter {
   public init(file: String, source: String) {
     self.file = file
     self.source = Array(source.utf8)
-    (self.lines, endOfFile) = computeLines(source)
+    (self.lines, endOfFile) = self.source.withUnsafeBufferPointer { buf in
+      return computeLines(SyntaxText(buffer: buf))
+    }
     assert(source.utf8.count == endOfFile.utf8Offset)
   }
 
@@ -397,7 +399,7 @@ fileprivate func computeLines(
   return (lines, position)
 }
 
-fileprivate func computeLines(_ source: String) -> ([AbsolutePosition], AbsolutePosition) {
+fileprivate func computeLines(_ source: SyntaxText) -> ([AbsolutePosition], AbsolutePosition) {
   var lines: [AbsolutePosition] = []
   // First line starts from the beginning.
   lines.append(.startOfFile)
@@ -412,7 +414,7 @@ fileprivate func computeLines(_ source: String) -> ([AbsolutePosition], Absolute
   return (lines, position)
 }
 
-fileprivate extension String {
+fileprivate extension SyntaxText {
   /// Walks and passes to `body` the `SourceLength` for every detected line,
   /// with the newline character included.
   /// - Returns: The leftover `SourceLength` at the end of the walk.
@@ -420,18 +422,17 @@ fileprivate extension String {
     prefix: SourceLength = .zero,
     body: (SourceLength) -> ()
   ) -> SourceLength {
-    let utf8 = self.utf8
-    let startIndex = utf8.startIndex
-    let endIndex = utf8.endIndex
+    //    let startIndex = utf8.startIndex
+    //    let endIndex = utf8.endIndex
     var curIdx = startIndex
     var lineLength = prefix
     let advanceLengthByOne = { () -> () in
       lineLength += SourceLength(utf8Length: 1)
-      curIdx = utf8.index(after: curIdx)
+      curIdx = self.index(after: curIdx)
     }
 
     while curIdx < endIndex {
-      let char = utf8[curIdx]
+      let char = self[curIdx]
       advanceLengthByOne()
 
       /// From https://docs.swift.org/swift-book/ReferenceManual/LexicalStructure.html#grammar_line-break
@@ -441,7 +442,7 @@ fileprivate extension String {
       let isNewline = { () -> Bool in
         if char == 10 { return true }
         if char == 13 {
-          if curIdx < endIndex && utf8[curIdx] == 10 { advanceLengthByOne() }
+          if curIdx < endIndex && self[curIdx] == 10 { advanceLengthByOne() }
           return true
         }
         return false
@@ -456,11 +457,11 @@ fileprivate extension String {
   }
 
   func containsSwiftNewline() -> Bool {
-    return utf8.contains { $0 == 10 || $0 == 13 }
+    return self.contains { $0 == 10 || $0 == 13 }
   }
 }
 
-fileprivate extension TriviaPiece {
+fileprivate extension RawTriviaPiece {
   /// Walks and passes to `body` the `SourceLength` for every detected line,
   /// with the newline character included.
   /// - Returns: The leftover `SourceLength` at the end of the walk.
@@ -495,7 +496,7 @@ fileprivate extension TriviaPiece {
       let .docLineComment(text):
       // Line comments are not supposed to contain newlines.
       assert(!text.containsSwiftNewline(), "line comment created that contained a new-line character")
-      lineLength += SourceLength(utf8Length: text.utf8.count)
+      lineLength += SourceLength(utf8Length: text.count)
     case let .blockComment(text),
       let .docBlockComment(text),
       let .unexpectedText(text):
@@ -505,7 +506,7 @@ fileprivate extension TriviaPiece {
   }
 }
 
-fileprivate extension Trivia {
+fileprivate extension Array where Element == RawTriviaPiece {
   /// Walks and passes to `body` the `SourceLength` for every detected line,
   /// with the newline character included.
   /// - Returns: The leftover `SourceLength` at the end of the walk.
@@ -530,9 +531,9 @@ fileprivate extension TokenSyntax {
     body: (SourceLength) -> ()
   ) -> SourceLength {
     var curPrefix = prefix
-    curPrefix = self.leadingTrivia.forEachLineLength(prefix: curPrefix, body: body)
-    curPrefix = self.text.forEachLineLength(prefix: curPrefix, body: body)
-    curPrefix = self.trailingTrivia.forEachLineLength(prefix: curPrefix, body: body)
+    curPrefix = self.tokenView.leadingRawTriviaPieces.forEachLineLength(prefix: curPrefix, body: body)
+    curPrefix = self.tokenView.rawText.forEachLineLength(prefix: curPrefix, body: body)
+    curPrefix = self.tokenView.trailingRawTriviaPieces.forEachLineLength(prefix: curPrefix, body: body)
     return curPrefix
   }
 }

@@ -18,6 +18,6 @@ public protocol ExpressionMacro: FreestandingMacro {
   /// within the given context to produce a replacement expression.
   static func expansion(
     of node: MacroExpansionExprSyntax,
-    in context: inout MacroExpansionContext
+    in context: any MacroExpansionContext
   ) throws -> ExprSyntax
 }

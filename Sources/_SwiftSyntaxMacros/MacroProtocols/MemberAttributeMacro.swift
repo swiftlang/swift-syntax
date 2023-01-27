@@ -29,6 +29,6 @@ public protocol MemberAttributeMacro: AttachedMacro {
     of node: AttributeSyntax,
     attachedTo declaration: DeclSyntax,
     annotating member: DeclSyntax,
-    in context: inout MacroExpansionContext
+    in context: any MacroExpansionContext
   ) throws -> [AttributeSyntax]
 }

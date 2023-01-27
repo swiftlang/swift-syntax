@@ -26,7 +26,7 @@ public protocol MemberMacro: AttachedMacro {
   static func expansion(
     of node: AttributeSyntax,
     attachedTo declaration: DeclSyntax,
-    in context: inout MacroExpansionContext
+    in context: any MacroExpansionContext
   ) throws -> [DeclSyntax]
 }
 

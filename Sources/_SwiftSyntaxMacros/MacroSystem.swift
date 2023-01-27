@@ -84,7 +84,7 @@ class MacroApplication: SyntaxRewriter {
     if node.evaluatedMacroName != nil {
       return node.evaluateMacro(
         with: macroSystem,
-        context: &context
+        context: context
       )
     }
 
@@ -135,7 +135,7 @@ class MacroApplication: SyntaxRewriter {
           if let macro = macro as? DeclarationMacro.Type {
             let expandedItemList = try macro.expansion(
               of: declExpansion,
-              in: &context
+              in: context
             )
             newItems.append(
               contentsOf: expandedItemList.map {
@@ -145,7 +145,7 @@ class MacroApplication: SyntaxRewriter {
           } else if let macro = macro as? ExpressionMacro.Type {
             let expandedExpr = try macro.expansion(
               of: declExpansion.asMacroExpansionExpr(),
-              in: &context
+              in: context
             )
             newItems.append(CodeBlockItemSyntax(item: .init(expandedExpr)))
           }
@@ -191,7 +191,7 @@ class MacroApplication: SyntaxRewriter {
         do {
           let expandedList = try freestandingMacro.expansion(
             of: declExpansion,
-            in: &context
+            in: context
           )
 
           newItems.append(
@@ -305,7 +305,7 @@ class MacroApplication: SyntaxRewriter {
         let newAccessors = try accessorMacro.expansion(
           of: accessorAttr,
           attachedTo: DeclSyntax(visitedNode),
-          in: &context
+          in: context
         )
 
         accessors.append(contentsOf: newAccessors)
@@ -373,7 +373,7 @@ extension MacroApplication {
     let macroAttributes = getMacroAttributes(attachedTo: decl, ofType: PeerMacro.Type.self)
     for (attribute, peerMacro) in macroAttributes {
       do {
-        let newPeers = try peerMacro.expansion(of: attribute, attachedTo: decl, in: &context)
+        let newPeers = try peerMacro.expansion(of: attribute, attachedTo: decl, in: context)
         peers.append(contentsOf: newPeers)
       } catch {
         // Record the error
@@ -402,7 +402,7 @@ extension MacroApplication {
           contentsOf: memberMacro.expansion(
             of: attribute,
             attachedTo: DeclSyntax(decl),
-            in: &context
+            in: context
           )
         )
       } catch {
@@ -442,7 +442,7 @@ extension MacroApplication {
             of: attribute,
             attachedTo: DeclSyntax(decl),
             annotating: member.decl,
-            in: &context
+            in: context
           )
         )
       } catch {
@@ -470,7 +470,7 @@ extension SyntaxProtocol {
   /// node.
   public func expand(
     macros: [String: Macro.Type],
-    in context: inout MacroExpansionContext
+    in context: any MacroExpansionContext
   ) -> Syntax {
     // Build the macro system.
     var system = MacroSystem()
@@ -482,10 +482,6 @@ extension SyntaxProtocol {
       macroSystem: system,
       context: context
     )
-
-    defer {
-      context = applier.context
-    }
 
     return applier.visit(Syntax(self))
   }

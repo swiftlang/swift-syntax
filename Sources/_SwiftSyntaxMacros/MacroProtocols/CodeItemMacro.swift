@@ -15,6 +15,6 @@ public protocol CodeItemMacro: FreestandingMacro {
   /// declaration within the given context to produce a set of declarations.
   static func expansion(
     of node: MacroExpansionDeclSyntax,
-    in context: inout MacroExpansionContext
+    in context: any MacroExpansionContext
   ) throws -> [CodeBlockItemSyntax]
 }

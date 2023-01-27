@@ -49,12 +49,33 @@ extension MacroExpansionDeclSyntax {
   }
 }
 
+extension SyntaxProtocol {
+  /// Detach the current node and inform the macro expansion context,
+  /// if it needs to know.
+  fileprivate func detach(in context: MacroExpansionContext) -> Self {
+    let detached = detach()
+
+    // Testing contexts want to know where the detach occurred so they can
+    // track it.
+    //
+    // TODO: Should this be generalized?
+    if let testingContext = context as? TestingMacroExpansionContext,
+       let parentSourceFile = root.as(SourceFileSyntax.self) {
+      testingContext.addDisconnected(
+        Syntax(detached), at: position, in: parentSourceFile
+      )
+    }
+
+    return detached
+  }
+}
+
 extension MacroExpansionExprSyntax {
   /// Evaluate the given macro for this syntax node, producing the expanded
   /// result and (possibly) some diagnostics.
   func evaluateMacro(
     _ macro: Macro.Type,
-    in context: inout MacroExpansionContext
+    in context: any MacroExpansionContext
   ) -> ExprSyntax {
     guard let exprMacro = macro as? ExpressionMacro.Type else {
       return ExprSyntax(self)
@@ -62,7 +83,7 @@ extension MacroExpansionExprSyntax {
 
     // Handle the rewrite.
     do {
-      return try exprMacro.expansion(of: detach(), in: &context)
+      return try exprMacro.expansion(of: detach(in: context), in: context)
     } catch {
       // Record the error
       context.diagnose(
@@ -82,7 +103,7 @@ extension MacroExpansionDeclSyntax {
   /// result and (possibly) some diagnostics.
   func evaluateMacro(
     _ macro: Macro.Type,
-    in context: inout MacroExpansionContext
+    in context: any MacroExpansionContext
   ) -> Syntax {
     // TODO: declaration/statement macros
 
@@ -115,7 +136,7 @@ extension Syntax {
   /// some kind.
   func evaluateMacro(
     with macroSystem: MacroSystem,
-    context: inout MacroExpansionContext
+    context: any MacroExpansionContext
   ) -> Syntax {
     // If this isn't a macro evaluation node, do nothing.
     guard let macroName = evaluatedMacroName else {
@@ -129,11 +150,11 @@ extension Syntax {
 
     switch self.as(SyntaxEnum.self) {
     case .macroExpansionDecl(let expansion):
-      return expansion.evaluateMacro(macro, in: &context)
+      return expansion.evaluateMacro(macro, in: context)
 
     case .macroExpansionExpr(let expansion):
       return Syntax(
-        expansion.evaluateMacro(macro, in: &context)
+        expansion.evaluateMacro(macro, in: context)
       )
 
     default:

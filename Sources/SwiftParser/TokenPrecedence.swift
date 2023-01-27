@@ -108,7 +108,7 @@ public enum TokenPrecedence: Comparable {
     case  // Literals
     .floatingLiteral, .integerLiteral, .regexLiteral,
       // Pound literals
-      .poundAvailableKeyword,
+      .poundAvailableKeyword, .poundSourceLocationKeyword, .poundUnavailableKeyword,
       // Identifiers
       .dollarIdentifier, .identifier,
       // '_' can occur in types to replace a type identifier

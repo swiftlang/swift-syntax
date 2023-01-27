@@ -42,10 +42,6 @@ extension ConditionElementListBuilder {
   public static func buildExpression(_ expression: OptionalBindingConditionSyntax) -> Component {
     return buildExpression(ConditionElementSyntax(condition: .optionalBinding(expression)))
   }
-
-  public static func buildExpression(_ expression: HasSymbolConditionSyntax) -> Component {
-    return buildExpression(ConditionElementSyntax(condition: .hasSymbol(expression)))
-  }
 }
 
 extension MemberDeclListBuilder {

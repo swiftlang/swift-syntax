@@ -59,7 +59,7 @@ extension SyntaxProtocol {
     // track it.
     //
     // TODO: Should this be generalized?
-    if let testingContext = context as? TestingMacroExpansionContext,
+    if let testingContext = context as? BasicMacroExpansionContext,
        let parentSourceFile = root.as(SourceFileSyntax.self) {
       testingContext.addDisconnected(
         Syntax(detached), at: position, in: parentSourceFile

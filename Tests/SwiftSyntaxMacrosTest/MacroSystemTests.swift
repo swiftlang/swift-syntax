@@ -595,7 +595,7 @@ public func AssertMacroExpansion(
   let origSourceFile = Parser.parse(source: originalSource)
 
   // Expand all macros in the source.
-  let context = TestingMacroExpansionContext(
+  let context = BasicMacroExpansionContext(
     sourceFiles: [origSourceFile : .init(moduleName: testModuleName, fullFilePath: testFileName) ]
   )
   let expandedSourceFile = origSourceFile.expand(macros: macros, in: context)
@@ -685,7 +685,7 @@ final class MacroSystemTests: XCTestCase {
   }
 
   func testContextUniqueLocalNames() {
-    let context = TestingMacroExpansionContext()
+    let context = BasicMacroExpansionContext()
 
     let t1 = context.createUniqueName("mine")
     let t2 = context.createUniqueName("mine")

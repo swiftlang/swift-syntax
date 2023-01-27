@@ -18,6 +18,7 @@ add_swift_host_library(_SwiftSyntaxMacros
   MacroProtocols/MemberMacro.swift
   MacroProtocols/PeerMacro.swift
 
+  BasicMacroExpansionContext.swift
   MacroExpansionContext.swift
   MacroSystem.swift
   Syntax+MacroEvaluation.swift

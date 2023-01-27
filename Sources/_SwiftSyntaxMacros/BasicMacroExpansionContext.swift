@@ -15,7 +15,7 @@ import SwiftSyntax
 
 /// An implementation of the `MacroExpansionContext` protocol that is
 /// suitable for testing purposes.
-public class TestingMacroExpansionContext {
+public class BasicMacroExpansionContext {
   /// A single source file that is known to the macro expansion context.
   public struct KnownSourceFile {
     /// The name of the module in which this source file resides.
@@ -86,7 +86,7 @@ extension String {
   }
 
 }
-extension TestingMacroExpansionContext: MacroExpansionContext {
+extension BasicMacroExpansionContext: MacroExpansionContext {
   /// Generate a unique name for use in the macro.
   public func createUniqueName(_ providedName: String) -> TokenSyntax {
     // If provided with an empty name, substitute in something.

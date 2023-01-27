@@ -147,25 +147,20 @@ final class DirectiveTests: XCTestCase {
         public struct S2 { }
 
       #if hasAttribute(foo)
-        @foo1️⃣
+        @foo
       #endif
         @inlinable
         func f1() { }
 
       #if hasAttribute(foo)
-        @foo2️⃣
+        @foo
       #else
         @available(*, deprecated, message: "nope")
-        @frozen3️⃣
+        @frozen
       #endif
         public struct S3 { }
       }
-      """,
-      diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected declaration after attribute in conditional compilation clause"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected declaration after attribute in conditional compilation clause"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected declaration after attribute in conditional compilation clause"),
-      ]
+      """
     )
   }
 

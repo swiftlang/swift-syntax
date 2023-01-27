@@ -172,6 +172,11 @@ extension Parser {
   public mutating func parseDeclaration(inMemberDeclList: Bool = false) -> RawDeclSyntax {
     switch self.at(anyIn: PoundDeclarationStart.self) {
     case (.poundIfKeyword, _)?:
+      if self.withLookahead({ $0.consumeIfConfigOfAttributes() }) {
+        // If we are at a `#if` of attributes, the `#if` directive should be
+        // parsed when we're parsing the attributes.
+        break
+      }
       let directive = self.parsePoundIfDirective { parser in
         let parsedDecl = parser.parseDeclaration()
         let semicolon = parser.consume(if: .semicolon)

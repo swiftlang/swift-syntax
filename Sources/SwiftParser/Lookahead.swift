@@ -207,42 +207,37 @@ extension Parser.Lookahead {
     return true
   }
 
+  /// Tries consuming a `#if` directive that only contains attributes.
+  /// Returns `true` if that was successful and `false` if
+  ///  - we are not at a valid `#if` directive (e.g. `#endif` is missing)
+  ///  - the directive contained non-attributes
+  ///  - the directive did not contain any attributes
   mutating func consumeIfConfigOfAttributes() -> Bool {
-    while true {
-      // #if / #else / #elseif
+    assert(self.at(.poundIfKeyword))
+    var didSeeAnyAttributes = false
+    var poundIfLoopProgress = LoopProgressCondition()
+    repeat {
+      assert(self.at(any: [.poundIfKeyword, .poundElseKeyword, .poundElseifKeyword]))
       self.consumeAnyToken()
 
-      // <expression>
+      // <expression> after `#if` or `#elseif`
       self.skipUntilEndOfLine()
 
-      while true {
-        if self.at(.atSign) {
+      var attributesLoopProgress = LoopProgressCondition()
+      ATTRIBUTE_LOOP: while attributesLoopProgress.evaluate(self.currentToken) {
+        switch self.currentToken.rawTokenKind {
+        case .atSign:
+          didSeeAnyAttributes = true
           _ = self.consumeAttributeList()
-          continue
-        }
-
-        if self.at(.poundIfKeyword) {
+        case .poundIfKeyword:
           _ = self.consumeIfConfigOfAttributes()
-          continue
+        default:
+          break ATTRIBUTE_LOOP
         }
-
-        break
       }
+    } while self.at(any: [.poundElseifKeyword, .poundElseKeyword]) && poundIfLoopProgress.evaluate(self.currentToken)
 
-      guard self.at(any: [.poundElseifKeyword, .poundElseKeyword]) else {
-        break
-      }
-    }
-
-    // If we ran out of tokens, say we consumed the rest.
-    if self.at(.eof) {
-      return true
-    }
-
-    guard self.currentToken.isAtStartOfLine else {
-      return false
-    }
-    return self.consume(if: .poundEndifKeyword) != nil
+    return didSeeAnyAttributes && self.currentToken.isAtStartOfLine && self.consume(if: .poundEndifKeyword) != nil
   }
 }
 

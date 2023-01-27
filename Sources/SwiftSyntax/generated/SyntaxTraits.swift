@@ -591,13 +591,7 @@ extension ParameterClauseSyntax: ParenthesizedSyntax {
 extension PatternBindingSyntax: WithTrailingCommaSyntax {
 }
 
-extension PoundErrorDeclSyntax: ParenthesizedSyntax {
-}
-
 extension PoundSourceLocationSyntax: ParenthesizedSyntax {
-}
-
-extension PoundWarningDeclSyntax: ParenthesizedSyntax {
 }
 
 extension PrecedenceGroupDeclSyntax: IdentifiedDeclSyntax, AttributedSyntax {

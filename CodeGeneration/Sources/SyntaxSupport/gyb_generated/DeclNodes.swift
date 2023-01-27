@@ -213,58 +213,6 @@ public let DECL_NODES: [Node] = [
                classification: "BuildConfigId")
        ]),
 
-  Node(name: "PoundErrorDecl",
-       nameForDiagnostics: "'#error' directive",
-       kind: "Decl",
-       traits: [
-         "Parenthesized"
-       ],
-       children: [
-         Child(name: "PoundError",
-               kind: "PoundErrorToken",
-               tokenChoices: [
-                 "PoundError"
-               ]),
-         Child(name: "LeftParen",
-               kind: "LeftParenToken",
-               tokenChoices: [
-                 "LeftParen"
-               ]),
-         Child(name: "Message",
-               kind: "StringLiteralExpr"),
-         Child(name: "RightParen",
-               kind: "RightParenToken",
-               tokenChoices: [
-                 "RightParen"
-               ])
-       ]),
-
-  Node(name: "PoundWarningDecl",
-       nameForDiagnostics: "'#warning' directive",
-       kind: "Decl",
-       traits: [
-         "Parenthesized"
-       ],
-       children: [
-         Child(name: "PoundWarning",
-               kind: "PoundWarningToken",
-               tokenChoices: [
-                 "PoundWarning"
-               ]),
-         Child(name: "LeftParen",
-               kind: "LeftParenToken",
-               tokenChoices: [
-                 "LeftParen"
-               ]),
-         Child(name: "Message",
-               kind: "StringLiteralExpr"),
-         Child(name: "RightParen",
-               kind: "RightParenToken",
-               tokenChoices: [
-                 "RightParen"
-               ])
-       ]),
-
   Node(name: "PoundSourceLocation",
        nameForDiagnostics: "'#sourceLocation' directive",
        kind: "Decl",

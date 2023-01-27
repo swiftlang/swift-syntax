@@ -138,7 +138,6 @@ extension Syntax {
         .node(GenericRequirementSyntax.self), 
         .node(GenericWhereClauseSyntax.self), 
         .node(GuardStmtSyntax.self), 
-        .node(HasSymbolConditionSyntax.self), 
         .node(IdentifierExprSyntax.self), 
         .node(IdentifierPatternSyntax.self), 
         .node(IfConfigClauseListSyntax.self), 
@@ -206,11 +205,8 @@ extension Syntax {
         .node(PatternBindingSyntax.self), 
         .node(PostfixIfConfigExprSyntax.self), 
         .node(PostfixUnaryExprSyntax.self), 
-        .node(PoundAssertStmtSyntax.self), 
-        .node(PoundErrorDeclSyntax.self), 
         .node(PoundSourceLocationArgsSyntax.self), 
         .node(PoundSourceLocationSyntax.self), 
-        .node(PoundWarningDeclSyntax.self), 
         .node(PrecedenceGroupAssignmentSyntax.self), 
         .node(PrecedenceGroupAssociativitySyntax.self), 
         .node(PrecedenceGroupAttributeListSyntax.self), 
@@ -528,8 +524,6 @@ extension SyntaxKind {
       return GenericWhereClauseSyntax.self
     case .guardStmt: 
       return GuardStmtSyntax.self
-    case .hasSymbolCondition: 
-      return HasSymbolConditionSyntax.self
     case .identifierExpr: 
       return IdentifierExprSyntax.self
     case .identifierPattern: 
@@ -664,16 +658,10 @@ extension SyntaxKind {
       return PostfixIfConfigExprSyntax.self
     case .postfixUnaryExpr: 
       return PostfixUnaryExprSyntax.self
-    case .poundAssertStmt: 
-      return PoundAssertStmtSyntax.self
-    case .poundErrorDecl: 
-      return PoundErrorDeclSyntax.self
     case .poundSourceLocationArgs: 
       return PoundSourceLocationArgsSyntax.self
     case .poundSourceLocation: 
       return PoundSourceLocationSyntax.self
-    case .poundWarningDecl: 
-      return PoundWarningDeclSyntax.self
     case .precedenceGroupAssignment: 
       return PrecedenceGroupAssignmentSyntax.self
     case .precedenceGroupAssociativity: 
@@ -1061,8 +1049,6 @@ extension SyntaxKind {
       return "'where' clause"
     case .guardStmt: 
       return "'guard' statement"
-    case .hasSymbolCondition: 
-      return "'#_hasSymbol' condition"
     case .identifierExpr: 
       return nil
     case .identifierPattern: 
@@ -1197,16 +1183,10 @@ extension SyntaxKind {
       return nil
     case .postfixUnaryExpr: 
       return "postfix expression"
-    case .poundAssertStmt: 
-      return "'#assert' directive"
-    case .poundErrorDecl: 
-      return "'#error' directive"
     case .poundSourceLocationArgs: 
       return "'#sourceLocation' arguments"
     case .poundSourceLocation: 
       return "'#sourceLocation' directive"
-    case .poundWarningDecl: 
-      return "'#warning' directive"
     case .precedenceGroupAssignment: 
       return "'assignment' property of precedencegroup"
     case .precedenceGroupAssociativity: 

@@ -257,8 +257,6 @@ public enum SyntaxEnum {
   
   case guardStmt(GuardStmtSyntax)
   
-  case hasSymbolCondition(HasSymbolConditionSyntax)
-  
   case identifierExpr(IdentifierExprSyntax)
   
   case identifierPattern(IdentifierPatternSyntax)
@@ -393,15 +391,9 @@ public enum SyntaxEnum {
   
   case postfixUnaryExpr(PostfixUnaryExprSyntax)
   
-  case poundAssertStmt(PoundAssertStmtSyntax)
-  
-  case poundErrorDecl(PoundErrorDeclSyntax)
-  
   case poundSourceLocationArgs(PoundSourceLocationArgsSyntax)
   
   case poundSourceLocation(PoundSourceLocationSyntax)
-  
-  case poundWarningDecl(PoundWarningDeclSyntax)
   
   case precedenceGroupAssignment(PrecedenceGroupAssignmentSyntax)
   
@@ -790,8 +782,6 @@ public extension Syntax {
       return .genericWhereClause(GenericWhereClauseSyntax(self)!)
     case .guardStmt: 
       return .guardStmt(GuardStmtSyntax(self)!)
-    case .hasSymbolCondition: 
-      return .hasSymbolCondition(HasSymbolConditionSyntax(self)!)
     case .identifierExpr: 
       return .identifierExpr(IdentifierExprSyntax(self)!)
     case .identifierPattern: 
@@ -926,16 +916,10 @@ public extension Syntax {
       return .postfixIfConfigExpr(PostfixIfConfigExprSyntax(self)!)
     case .postfixUnaryExpr: 
       return .postfixUnaryExpr(PostfixUnaryExprSyntax(self)!)
-    case .poundAssertStmt: 
-      return .poundAssertStmt(PoundAssertStmtSyntax(self)!)
-    case .poundErrorDecl: 
-      return .poundErrorDecl(PoundErrorDeclSyntax(self)!)
     case .poundSourceLocationArgs: 
       return .poundSourceLocationArgs(PoundSourceLocationArgsSyntax(self)!)
     case .poundSourceLocation: 
       return .poundSourceLocation(PoundSourceLocationSyntax(self)!)
-    case .poundWarningDecl: 
-      return .poundWarningDecl(PoundWarningDeclSyntax(self)!)
     case .precedenceGroupAssignment: 
       return .precedenceGroupAssignment(PrecedenceGroupAssignmentSyntax(self)!)
     case .precedenceGroupAssociativity: 

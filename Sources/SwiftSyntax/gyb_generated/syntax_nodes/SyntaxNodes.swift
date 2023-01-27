@@ -13568,14 +13568,12 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable {
     case `availability`(AvailabilityConditionSyntax)
     case `matchingPattern`(MatchingPatternConditionSyntax)
     case `optionalBinding`(OptionalBindingConditionSyntax)
-    case `hasSymbol`(HasSymbolConditionSyntax)
     public var _syntaxNode: Syntax {
       switch self {
       case .expression(let node): return node._syntaxNode
       case .availability(let node): return node._syntaxNode
       case .matchingPattern(let node): return node._syntaxNode
       case .optionalBinding(let node): return node._syntaxNode
-      case .hasSymbol(let node): return node._syntaxNode
       }
     }
     init(_ data: SyntaxData) { self.init(Syntax(data))! }
@@ -13590,9 +13588,6 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable {
     }
     public init(_ node: OptionalBindingConditionSyntax) {
       self = .optionalBinding(node)
-    }
-    public init(_ node: HasSymbolConditionSyntax) {
-      self = .hasSymbol(node)
     }
     public init?<S: SyntaxProtocol>(_ node: S) {
       if let node = node.as(ExprSyntax.self) {
@@ -13611,10 +13606,6 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable {
         self = .optionalBinding(node)
         return
       }
-      if let node = node.as(HasSymbolConditionSyntax.self) {
-        self = .hasSymbol(node)
-        return
-      }
       return nil
     }
 
@@ -13624,7 +13615,6 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable {
         .node(AvailabilityConditionSyntax.self),
         .node(MatchingPatternConditionSyntax.self),
         .node(OptionalBindingConditionSyntax.self),
-        .node(HasSymbolConditionSyntax.self),
       ])
     }
   }
@@ -14341,196 +14331,6 @@ extension OptionalBindingConditionSyntax: CustomReflectable {
       "unexpectedBetweenTypeAnnotationAndInitializer": unexpectedBetweenTypeAnnotationAndInitializer.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "initializer": initializer.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "unexpectedAfterInitializer": unexpectedAfterInitializer.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-    ])
-  }
-}
-
-// MARK: - HasSymbolConditionSyntax
-
-public struct HasSymbolConditionSyntax: SyntaxProtocol, SyntaxHashable {
-  public let _syntaxNode: Syntax
-
-  public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .hasSymbolCondition else { return nil }
-    self._syntaxNode = node._syntaxNode
-  }
-
-  /// Creates a `HasSymbolConditionSyntax` node from the given `SyntaxData`. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
-  internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .hasSymbolCondition)
-    self._syntaxNode = Syntax(data)
-  }
-
-  public init<E: ExprSyntaxProtocol>(
-    leadingTrivia: Trivia? = nil,
-    _ unexpectedBeforeHasSymbolKeyword: UnexpectedNodesSyntax? = nil,
-    hasSymbolKeyword: TokenSyntax,
-    _ unexpectedBetweenHasSymbolKeywordAndLeftParen: UnexpectedNodesSyntax? = nil,
-    leftParen: TokenSyntax = .leftParenToken(),
-    _ unexpectedBetweenLeftParenAndExpression: UnexpectedNodesSyntax? = nil,
-    expression: E,
-    _ unexpectedBetweenExpressionAndRightParen: UnexpectedNodesSyntax? = nil,
-    rightParen: TokenSyntax = .rightParenToken(),
-    _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
-    trailingTrivia: Trivia? = nil
-  ) {
-    // Extend the lifetime of all parameters so their arenas don't get destroyed 
-    // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeHasSymbolKeyword, hasSymbolKeyword, unexpectedBetweenHasSymbolKeywordAndLeftParen, leftParen, unexpectedBetweenLeftParenAndExpression, expression, unexpectedBetweenExpressionAndRightParen, rightParen, unexpectedAfterRightParen))) { (arena, _) in
-      let layout: [RawSyntax?] = [
-        unexpectedBeforeHasSymbolKeyword?.raw,
-        hasSymbolKeyword.raw,
-        unexpectedBetweenHasSymbolKeywordAndLeftParen?.raw,
-        leftParen.raw,
-        unexpectedBetweenLeftParenAndExpression?.raw,
-        expression.raw,
-        unexpectedBetweenExpressionAndRightParen?.raw,
-        rightParen.raw,
-        unexpectedAfterRightParen?.raw,
-      ]
-      let raw = RawSyntax.makeLayout(
-        kind: SyntaxKind.hasSymbolCondition, from: layout, arena: arena,
-        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
-  }
-
-  public var unexpectedBeforeHasSymbolKeyword: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = HasSymbolConditionSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public var hasSymbolKeyword: TokenSyntax {
-    get {
-      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
-    }
-    set(value) {
-      self = HasSymbolConditionSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public var unexpectedBetweenHasSymbolKeywordAndLeftParen: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = HasSymbolConditionSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public var leftParen: TokenSyntax {
-    get {
-      return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
-    }
-    set(value) {
-      self = HasSymbolConditionSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public var unexpectedBetweenLeftParenAndExpression: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = HasSymbolConditionSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public var expression: ExprSyntax {
-    get {
-      return ExprSyntax(data.child(at: 5, parent: Syntax(self))!)
-    }
-    set(value) {
-      self = HasSymbolConditionSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public var unexpectedBetweenExpressionAndRightParen: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = HasSymbolConditionSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public var rightParen: TokenSyntax {
-    get {
-      return TokenSyntax(data.child(at: 7, parent: Syntax(self))!)
-    }
-    set(value) {
-      self = HasSymbolConditionSyntax(data.replacingChild(at: 7, with: value.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public var unexpectedAfterRightParen: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = HasSymbolConditionSyntax(data.replacingChild(at: 8, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-      \Self.unexpectedBeforeHasSymbolKeyword,
-      \Self.hasSymbolKeyword,
-      \Self.unexpectedBetweenHasSymbolKeywordAndLeftParen,
-      \Self.leftParen,
-      \Self.unexpectedBetweenLeftParenAndExpression,
-      \Self.expression,
-      \Self.unexpectedBetweenExpressionAndRightParen,
-      \Self.rightParen,
-      \Self.unexpectedAfterRightParen,
-    ])
-  }
-
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension HasSymbolConditionSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-      "unexpectedBeforeHasSymbolKeyword": unexpectedBeforeHasSymbolKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "hasSymbolKeyword": Syntax(hasSymbolKeyword).asProtocol(SyntaxProtocol.self),
-      "unexpectedBetweenHasSymbolKeywordAndLeftParen": unexpectedBetweenHasSymbolKeywordAndLeftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "leftParen": Syntax(leftParen).asProtocol(SyntaxProtocol.self),
-      "unexpectedBetweenLeftParenAndExpression": unexpectedBetweenLeftParenAndExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "expression": Syntax(expression).asProtocol(SyntaxProtocol.self),
-      "unexpectedBetweenExpressionAndRightParen": unexpectedBetweenExpressionAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "rightParen": Syntax(rightParen).asProtocol(SyntaxProtocol.self),
-      "unexpectedAfterRightParen": unexpectedAfterRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }

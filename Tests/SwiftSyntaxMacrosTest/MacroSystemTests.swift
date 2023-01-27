@@ -100,6 +100,25 @@ public struct ImageLiteralMacro: ExpressionMacro {
   }
 }
 
+public struct ColumnMacro: ExpressionMacro {
+  public static func expansion(
+    of macro: MacroExpansionExprSyntax,
+    in context: any MacroExpansionContext
+  ) throws -> ExprSyntax {
+    guard let sourceLoc = context.location(of: macro),
+          let column = sourceLoc.column else {
+      throw CustomError.message("can't find location for macro")
+    }
+
+
+    let fileLiteral: ExprSyntax = "\(literal: column)"
+    if let leadingTrivia = macro.leadingTrivia {
+      return fileLiteral.with(\.leadingTrivia, leadingTrivia)
+    }
+    return fileLiteral
+  }
+}
+
 public struct FileIDMacro: ExpressionMacro {
   public static func expansion(
     of macro: MacroExpansionExprSyntax,
@@ -602,6 +621,7 @@ public func AssertMacroExpansion(
 public let testMacros: [String: Macro.Type] = [
   "checkContext": CheckContextIndependenceMacro.self,
   "colorLiteral": ColorLiteralMacro.self,
+  "column": ColumnMacro.self,
   "fileID": FileIDMacro.self,
   "imageLiteral": ImageLiteralMacro.self,
   "stringify": StringifyMacro.self,
@@ -648,16 +668,18 @@ final class MacroSystemTests: XCTestCase {
     )
   }
 
-  func testFileExpansions() {
+  func testLocationExpansions() {
     AssertMacroExpansion(
       macros: testMacros,
       testModuleName: "MyModule",
       testFileName: "taylor.swift",
       """
       let b = #fileID
+      let c = #column
       """,
       """
       let b = "MyModule/taylor.swift"
+      let c = 9
       """
     )
   }

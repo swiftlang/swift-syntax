@@ -40,24 +40,24 @@ extension SyntaxStringInterpolation {
 public protocol HasTrailingCodeBlock {
   var body: CodeBlockSyntax { get set }
 
-  init(_ header: PartialSyntaxNodeString, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemListSyntax) throws
+  init(_ header: PartialSyntaxNodeString, @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax) throws
 }
 
 public extension HasTrailingCodeBlock where Self: StmtSyntaxProtocol {
-  init(_ header: PartialSyntaxNodeString, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemListSyntax) throws {
+  init(_ header: PartialSyntaxNodeString, @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax) throws {
     let stmt = StmtSyntax("\(header) {}")
     guard let castedStmt = stmt.as(Self.self) else {
       throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualNode: stmt)
     }
     self = castedStmt
-    self.body = CodeBlockSyntax(statements: bodyBuilder())
+    self.body = try CodeBlockSyntax(statements: bodyBuilder())
   }
 }
 
 extension CatchClauseSyntax: HasTrailingCodeBlock {
-  public init(_ header: PartialSyntaxNodeString, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemListSyntax) throws {
+  public init(_ header: PartialSyntaxNodeString, @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax) throws {
     self = CatchClauseSyntax("\(header) {}")
-    self.body = CodeBlockSyntax(statements: bodyBuilder())
+    self.body = try CodeBlockSyntax(statements: bodyBuilder())
   }
 }
 extension DeferStmtSyntax: HasTrailingCodeBlock {}
@@ -71,17 +71,17 @@ extension WhileStmtSyntax: HasTrailingCodeBlock {}
 public protocol HasTrailingOptionalCodeBlock {
   var body: CodeBlockSyntax? { get set }
 
-  init(_ header: PartialSyntaxNodeString, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemListSyntax) throws
+  init(_ header: PartialSyntaxNodeString, @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax) throws
 }
 
 public extension HasTrailingOptionalCodeBlock where Self: DeclSyntaxProtocol {
-  init(_ header: PartialSyntaxNodeString, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemListSyntax) throws {
+  init(_ header: PartialSyntaxNodeString, @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax) throws {
     let decl = DeclSyntax("\(header) {}")
     guard let castedDecl = decl.as(Self.self) else {
       throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualNode: decl)
     }
     self = castedDecl
-    self.body = CodeBlockSyntax(statements: bodyBuilder())
+    self.body = try CodeBlockSyntax(statements: bodyBuilder())
   }
 }
 
@@ -95,17 +95,17 @@ extension InitializerDeclSyntax: HasTrailingOptionalCodeBlock {}
 public protocol HasTrailingMemberDeclBlock {
   var members: MemberDeclBlockSyntax { get set }
 
-  init(_ header: PartialSyntaxNodeString, @MemberDeclListBuilder membersBuilder: () -> MemberDeclListSyntax) throws
+  init(_ header: PartialSyntaxNodeString, @MemberDeclListBuilder membersBuilder: () throws -> MemberDeclListSyntax) throws
 }
 
 public extension HasTrailingMemberDeclBlock where Self: DeclSyntaxProtocol {
-  init(_ header: PartialSyntaxNodeString, @MemberDeclListBuilder membersBuilder: () -> MemberDeclListSyntax) throws {
+  init(_ header: PartialSyntaxNodeString, @MemberDeclListBuilder membersBuilder: () throws -> MemberDeclListSyntax) throws {
     let decl = DeclSyntax("\(header) {}")
     guard let castedDecl = decl.as(Self.self) else {
       throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualNode: decl)
     }
     self = castedDecl
-    self.members = MemberDeclBlockSyntax(members: membersBuilder())
+    self.members = try MemberDeclBlockSyntax(members: membersBuilder())
   }
 }
 
@@ -121,14 +121,14 @@ extension StructDeclSyntax: HasTrailingMemberDeclBlock {}
 // So we cannot conform to `HasTrailingCodeBlock`
 
 public extension IfStmtSyntax {
-  init(_ header: PartialSyntaxNodeString, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemListSyntax, @CodeBlockItemListBuilder `else` elseBuilder: () -> CodeBlockItemListSyntax? = { nil }) throws {
+  init(_ header: PartialSyntaxNodeString, @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax, @CodeBlockItemListBuilder `else` elseBuilder: () throws -> CodeBlockItemListSyntax? = { nil }) throws {
     let stmt = StmtSyntax("\(header) {}")
     guard let ifStmt = stmt.as(IfStmtSyntax.self) else {
       throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualNode: stmt)
     }
     self = ifStmt
-    self.body = CodeBlockSyntax(statements: bodyBuilder())
-    self.elseBody = elseBuilder().map { .codeBlock(CodeBlockSyntax(statements: $0)) }
+    self.body = try CodeBlockSyntax(statements: bodyBuilder())
+    self.elseBody = try elseBuilder().map { .codeBlock(CodeBlockSyntax(statements: $0)) }
     self.elseKeyword = elseBody != nil ? .keyword(.else) : nil
   }
 
@@ -149,13 +149,13 @@ public extension IfStmtSyntax {
 // So we cannot conform to `HasTrailingCodeBlock` or `HasTrailingMemberDeclBlock`
 
 public extension SwitchStmtSyntax {
-  init(_ header: PartialSyntaxNodeString, @SwitchCaseListBuilder casesBuilder: () -> SwitchCaseListSyntax = { SwitchCaseListSyntax([]) }) throws {
+  init(_ header: PartialSyntaxNodeString, @SwitchCaseListBuilder casesBuilder: () throws -> SwitchCaseListSyntax = { SwitchCaseListSyntax([]) }) throws {
     let stmt = StmtSyntax("\(header) {}")
     guard let castedStmt = stmt.as(Self.self) else {
       throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualNode: stmt)
     }
     self = castedStmt
-    self.cases = casesBuilder()
+    self.cases = try casesBuilder()
   }
 }
 
@@ -164,7 +164,7 @@ public extension SwitchStmtSyntax {
 // So we cannot conform to `HasTrailingCodeBlock` or `HasTrailingMemberDeclBlock`
 
 public extension VariableDeclSyntax {
-  init(_ header: PartialSyntaxNodeString, @CodeBlockItemListBuilder accessor: () -> CodeBlockItemListSyntax) throws {
+  init(_ header: PartialSyntaxNodeString, @CodeBlockItemListBuilder accessor: () throws -> CodeBlockItemListSyntax) throws {
     let decl = DeclSyntax("\(header) {}")
     guard let castedDecl = decl.as(Self.self) else {
       throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualNode: decl)
@@ -172,7 +172,7 @@ public extension VariableDeclSyntax {
     self = castedDecl
     assert(self.bindings.count == 1)
     var binding: PatternBindingSyntax? = self.bindings.last
-    binding?.accessor = .getter(CodeBlockSyntax(statements: accessor()))
+    binding?.accessor = try .getter(CodeBlockSyntax(statements: accessor()))
     bindings = PatternBindingListSyntax([binding].compactMap { $0 })
   }
 }

@@ -75,7 +75,7 @@ private func createConvenienceInitializer(node: Node) -> InitializerDeclSyntax? 
         produceExpr = ExprSyntax(FunctionCallExprSyntax("\(raw: child.swiftName)Builder()"))
       }
       builderParameters.append(FunctionParameterSyntax(
-        "@\(builderInitializableType.resultBuilderBaseName) \(child.swiftName)Builder: () -> \(builderInitializableType.syntax)",
+        "@\(builderInitializableType.resultBuilderBaseName) \(child.swiftName)Builder: () throws-> \(builderInitializableType.syntax)",
         for: .functionParameters
       ))
     } else {
@@ -104,10 +104,10 @@ private func createConvenienceInitializer(node: Node) -> InitializerDeclSyntax? 
           param
         }
         FunctionParameterSyntax("trailingTrivia: Trivia? = nil", for: .functionParameters)
-      }
-    )
+      },
+      throwsOrRethrowsKeyword: .keyword(.rethrows))
   ) {
-    FunctionCallExprSyntax(callee: ExprSyntax("self.init")) {
+    FunctionCallExprSyntax(callee: ExprSyntax("try self.init")) {
       TupleExprElementSyntax(label: "leadingTrivia", expression: ExprSyntax("leadingTrivia"))
       for arg in delegatedInitArgs {
         arg

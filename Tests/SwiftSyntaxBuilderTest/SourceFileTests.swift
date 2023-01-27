@@ -17,13 +17,13 @@ import SwiftSyntaxBuilder
 final class SourceFileTests: XCTestCase {
   func testSourceFile() {
     let source = SourceFileSyntax {
-      ImportDeclSyntax("import Foundation")
-      ImportDeclSyntax("import UIKit")
+      DeclSyntax("import Foundation")
+      DeclSyntax("import UIKit")
       ClassDeclSyntax(
         classKeyword: .keyword(.class),
         identifier: "SomeViewController",
         membersBuilder: {
-          VariableDeclSyntax("let tableView: UITableView")
+          DeclSyntax("let tableView: UITableView")
         }
       )
     }

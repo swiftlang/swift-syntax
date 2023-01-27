@@ -17,7 +17,7 @@ import SwiftSyntaxBuilder
 final class ReturnStmtTests: XCTestCase {
 
   func testReturnStmt() {
-    let buildable = ReturnStmtSyntax("return Self.parse(from: &parser)")
+    let buildable = StmtSyntax("return Self.parse(from: &parser)")
 
     AssertBuildResult(
       buildable,
@@ -28,21 +28,21 @@ final class ReturnStmtTests: XCTestCase {
   }
 
   func testReturnStmtwithAsKeyword() {
-    let testCases: [UInt: (ReturnStmtSyntax, String)] = [
+    let testCases: [UInt: (StmtSyntax, String)] = [
       #line: (
-        ReturnStmtSyntax("return self.asProtocol(SyntaxProtocol.self) as? DeclSyntaxProtocol"),
+        StmtSyntax("return self.asProtocol(SyntaxProtocol.self) as? DeclSyntaxProtocol"),
         "return self.asProtocol(SyntaxProtocol.self) as? DeclSyntaxProtocol"
       ),
       #line: (
-        ReturnStmtSyntax("return 0 as! String"),
+        StmtSyntax("return 0 as! String"),
         "return 0 as! String"
       ),
       #line: (
-        ReturnStmtSyntax("return 0 as Double"),
+        StmtSyntax("return 0 as Double"),
         "return 0 as Double"
       ),
       #line: (
-        ReturnStmtSyntax("return !myBool"),
+        StmtSyntax("return !myBool"),
         "return !myBool"
       ),
     ]

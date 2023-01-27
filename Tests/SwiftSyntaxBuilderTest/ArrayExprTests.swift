@@ -25,7 +25,7 @@ final class ArrayExprTests: XCTestCase {
   }
 
   func testMultilineArrayLiteral() {
-    let builder = ArrayExprSyntax(
+    let builder = ExprSyntax(
       """
       [
         1,

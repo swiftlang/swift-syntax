@@ -48,9 +48,9 @@ struct Main {
     let source = SourceFileSyntax {
       StructDeclSyntax(identifier: "Person") {
         for (propertyName, propertyType) in properties {
-          VariableDeclSyntax("var \(raw: propertyName): \(raw: propertyType)")
+          DeclSyntax("var \(raw: propertyName): \(raw: propertyType)")
 
-          FunctionDeclSyntax("""
+          DeclSyntax("""
             func with\(raw: propertyName.withFirstLetterUppercased())(_ \(raw: propertyName): \(raw: propertyType)) -> Person {
               var result = self
               result.\(raw: propertyName) = \(raw: propertyName)

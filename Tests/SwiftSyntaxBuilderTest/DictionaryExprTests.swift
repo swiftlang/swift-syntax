@@ -30,7 +30,7 @@ final class DictionaryExprTests: XCTestCase {
   }
 
   func testMultilineDictionaryLiteral() {
-    let builder = DictionaryExprSyntax(
+    let builder = ExprSyntax(
       """
       [
         1:1,

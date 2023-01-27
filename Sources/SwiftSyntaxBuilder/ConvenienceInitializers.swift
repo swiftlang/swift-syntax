@@ -408,7 +408,7 @@ extension VariableDeclSyntax {
     attributes: AttributeListSyntax? = nil,
     modifiers: ModifierListSyntax? = nil,
     _ letOrVarKeyword: Keyword,
-    name: IdentifierPatternSyntax,
+    name: PatternSyntax,
     type: TypeAnnotationSyntax? = nil,
     initializer: InitializerClauseSyntax? = nil
   ) {
@@ -431,7 +431,7 @@ extension VariableDeclSyntax {
     leadingTrivia: Trivia = [],
     attributes: AttributeListSyntax? = nil,
     modifiers: ModifierListSyntax? = nil,
-    name: IdentifierPatternSyntax,
+    name: PatternSyntax,
     type: TypeAnnotationSyntax,
     @CodeBlockItemListBuilder accessor: () -> CodeBlockItemListSyntax
   ) {

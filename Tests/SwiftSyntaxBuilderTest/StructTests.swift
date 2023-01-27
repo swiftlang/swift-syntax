@@ -28,8 +28,8 @@ final class StructTests: XCTestCase {
     )
   }
 
-  func testNestedStruct() {
-    let nestedStruct = StructDeclSyntax(
+  func testNestedStruct() throws {
+    let nestedStruct = try StructDeclSyntax(
       """
       /// A nested struct
       /// with multi line comment
@@ -57,7 +57,7 @@ final class StructTests: XCTestCase {
       structKeyword: .keyword(.struct),
       identifier: "CarriageReturnFormFeedsStruct"
     )
-    let testStruct = StructDeclSyntax("public struct TestStruct") {
+    let testStruct = try StructDeclSyntax("public struct TestStruct") {
       nestedStruct
       carriateReturnsStruct
       carriageReturnFormFeedsStruct
@@ -90,7 +90,7 @@ final class StructTests: XCTestCase {
         if i.isMultiple(of: 2) {
           VariableDeclSyntax(letOrVarKeyword: .keyword(.let)) {
             PatternBindingSyntax(
-              pattern: IdentifierPatternSyntax("var\(raw: i)"),
+              pattern: PatternSyntax("var\(raw: i)"),
               typeAnnotation: TypeAnnotationSyntax(type: TypeSyntax("String"))
             )
           }

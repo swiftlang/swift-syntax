@@ -150,6 +150,10 @@ enum SyntaxStringInterpolationError: Error, CustomStringConvertible {
   case producedInvalidNodeType(expectedType: SyntaxProtocol.Type, actualType: SyntaxProtocol.Type)
   case diagnostics([Diagnostic], tree: Syntax)
 
+  static func producedInvalidNodeType<S: SyntaxProtocol>(expectedType: SyntaxProtocol.Type, actualNode: S) -> Self {
+    return .producedInvalidNodeType(expectedType: expectedType, actualType: type(of: actualNode))
+  }
+
   var description: String {
     switch self {
     case .producedInvalidNodeType(expectedType: let expectedType, actualType: let actualType):

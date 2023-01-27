@@ -20,6 +20,11 @@ extension TokenConsumer {
   /// - Seealso: ``Parser/parseStatement()``
   func atStartOfStatement(allowRecovery: Bool = false) -> Bool {
     var lookahead = self.lookahead()
+    if allowRecovery {
+      // Attributes are not allowed on statements. But for recovery, skip over
+      // misplaced attributes.
+      _ = lookahead.consumeAttributeList()
+    }
     return lookahead.isStartOfStatement(allowRecovery: allowRecovery)
   }
 }

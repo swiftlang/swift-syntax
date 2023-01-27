@@ -265,8 +265,8 @@ final class StatementTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '@s return' in function"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '@unknown return' in function"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '@s' before 'return' statement"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '@unknown' before 'return' statement"),
       ]
     )
   }

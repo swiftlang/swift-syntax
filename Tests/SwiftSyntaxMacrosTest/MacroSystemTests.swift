@@ -18,15 +18,28 @@ import _SwiftSyntaxMacros
 import _SwiftSyntaxTestSupport
 import XCTest
 
+enum CustomError: Error, CustomStringConvertible {
+  case message(String)
+
+  var description: String {
+    switch self {
+    case .message(let text):
+      return text
+    }
+  }
+}
+
 // MARK: Example macros
 public struct StringifyMacro: ExpressionMacro {
-  public static func expansion(
-    of macro: MacroExpansionExprSyntax,
-    in context: any MacroExpansionContext
-  ) -> ExprSyntax {
+  public static func expansion<
+    Node: FreestandingMacroExpansionSyntax,
+    Context: MacroExpansionContext
+  >(
+    of macro: Node,
+    in context: Context
+  ) throws -> ExprSyntax {
     guard let argument = macro.argumentList.first?.expression else {
-      // FIXME: Create a diagnostic for the missing argument?
-      return ExprSyntax(macro)
+      throw CustomError.message("missing argument")
     }
 
     return "(\(argument), \(StringLiteralExprSyntax(content: argument.description)))"
@@ -50,9 +63,12 @@ private func replaceFirstLabel(
 }
 
 public struct ColorLiteralMacro: ExpressionMacro {
-  public static func expansion(
-    of macro: MacroExpansionExprSyntax,
-    in context: any MacroExpansionContext
+  public static func expansion<
+    Node: FreestandingMacroExpansionSyntax,
+    Context: MacroExpansionContext
+  >(
+    of macro: Node,
+    in context: Context
   ) -> ExprSyntax {
     let argList = replaceFirstLabel(
       of: macro.argumentList,
@@ -67,9 +83,12 @@ public struct ColorLiteralMacro: ExpressionMacro {
 }
 
 public struct FileLiteralMacro: ExpressionMacro {
-  public static func expansion(
-    of macro: MacroExpansionExprSyntax,
-    in context: any MacroExpansionContext
+  public static func expansion<
+    Node: FreestandingMacroExpansionSyntax,
+    Context: MacroExpansionContext
+  >(
+    of macro: Node,
+    in context: Context
   ) -> ExprSyntax {
     let argList = replaceFirstLabel(
       of: macro.argumentList,
@@ -84,9 +103,12 @@ public struct FileLiteralMacro: ExpressionMacro {
 }
 
 public struct ImageLiteralMacro: ExpressionMacro {
-  public static func expansion(
-    of macro: MacroExpansionExprSyntax,
-    in context: any MacroExpansionContext
+  public static func expansion<
+    Node: FreestandingMacroExpansionSyntax,
+    Context: MacroExpansionContext
+  >(
+    of macro: Node,
+    in context: Context
   ) -> ExprSyntax {
     let argList = replaceFirstLabel(
       of: macro.argumentList,
@@ -101,9 +123,12 @@ public struct ImageLiteralMacro: ExpressionMacro {
 }
 
 public struct ColumnMacro: ExpressionMacro {
-  public static func expansion(
-    of macro: MacroExpansionExprSyntax,
-    in context: any MacroExpansionContext
+  public static func expansion<
+    Node: FreestandingMacroExpansionSyntax,
+    Context: MacroExpansionContext
+  >(
+    of macro: Node,
+    in context: Context
   ) throws -> ExprSyntax {
     guard let sourceLoc = context.location(of: macro),
           let column = sourceLoc.column else {
@@ -120,9 +145,12 @@ public struct ColumnMacro: ExpressionMacro {
 }
 
 public struct FileIDMacro: ExpressionMacro {
-  public static func expansion(
-    of macro: MacroExpansionExprSyntax,
-    in context: any MacroExpansionContext
+  public static func expansion<
+    Node: FreestandingMacroExpansionSyntax,
+    Context: MacroExpansionContext
+  >(
+    of macro: Node,
+    in context: Context
   ) throws -> ExprSyntax {
     guard let sourceLoc = context.location(of: macro),
           let fileID = sourceLoc.file else {
@@ -141,9 +169,12 @@ public struct FileIDMacro: ExpressionMacro {
 /// Macro whose only purpose is to ensure that we cannot see "out" of the
 /// macro expansion syntax node we were given.
 struct CheckContextIndependenceMacro: ExpressionMacro {
-  static func expansion(
-    of macro: MacroExpansionExprSyntax,
-    in context: any MacroExpansionContext
+  static func expansion<
+    Node: FreestandingMacroExpansionSyntax,
+    Context: MacroExpansionContext
+  >(
+    of macro: Node,
+    in context: Context
   ) -> ExprSyntax {
 
     // Should not have a parent.
@@ -152,18 +183,7 @@ struct CheckContextIndependenceMacro: ExpressionMacro {
     // Absolute starting position should be zero.
     XCTAssertEqual(macro.position.utf8Offset, 0)
 
-    return ExprSyntax(macro)
-  }
-}
-
-enum CustomError: Error, CustomStringConvertible {
-  case message(String)
-
-  var description: String {
-    switch self {
-    case .message(let text):
-      return text
-    }
+    return "()"
   }
 }
 
@@ -701,7 +721,7 @@ final class MacroSystemTests: XCTestCase {
       let b = #checkContext
       """,
       """
-      let b = #checkContext
+      let b = ()
       """
     )
   }

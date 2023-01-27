@@ -144,7 +144,7 @@ class MacroApplication: SyntaxRewriter {
             )
           } else if let macro = macro as? ExpressionMacro.Type {
             let expandedExpr = try macro.expansion(
-              of: declExpansion.asMacroExpansionExpr(),
+              of: declExpansion,
               in: context
             )
             newItems.append(CodeBlockItemSyntax(item: .init(expandedExpr)))

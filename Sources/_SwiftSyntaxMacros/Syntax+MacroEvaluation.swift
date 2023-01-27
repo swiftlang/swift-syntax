@@ -24,31 +24,6 @@ struct ThrownErrorDiagnostic: DiagnosticMessage {
   }
 }
 
-extension MacroExpansionDeclSyntax {
-  /// Macro expansion declarations are parsed in some positions where an
-  /// expression is also warranted, so
-  public func asMacroExpansionExpr() -> MacroExpansionExprSyntax {
-    MacroExpansionExprSyntax(
-      unexpectedBeforePoundToken,
-      poundToken: poundToken,
-      unexpectedBetweenPoundTokenAndMacro,
-      macro: macro,
-      genericArguments: genericArguments,
-      unexpectedBetweenGenericArgumentsAndLeftParen,
-      leftParen: leftParen,
-      unexpectedBetweenLeftParenAndArgumentList,
-      argumentList: argumentList,
-      unexpectedBetweenArgumentListAndRightParen,
-      rightParen: rightParen,
-      unexpectedBetweenRightParenAndTrailingClosure,
-      trailingClosure: trailingClosure,
-      unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures,
-      additionalTrailingClosures: additionalTrailingClosures,
-      unexpectedAfterAdditionalTrailingClosures
-    )
-  }
-}
-
 extension SyntaxProtocol {
   /// Detach the current node and inform the macro expansion context,
   /// if it needs to know.

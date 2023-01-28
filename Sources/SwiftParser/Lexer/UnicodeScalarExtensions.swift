@@ -157,3 +157,91 @@ extension Unicode.Scalar {
     return self.value <= 0x80 || (self.value >= 0xC2 && self.value < 0xF5)
   }
 }
+
+extension Unicode.Scalar {
+  /// Lex a single unicode scalar, which might consists of multiple bytes.
+  /// `advance` returns the current byte in the lexer and advances the lexer by
+  /// one byte.
+  /// `peek` returns the current byte in the lexer without advancing it.
+  @inline(__always)
+  static func lexing(advance: () -> UInt8?, peek: () -> UInt8?) -> Self? {
+    guard let curByte = advance() else {
+      return nil
+    }
+
+    if (curByte < 0x80) {
+      return Unicode.Scalar(curByte)
+    }
+
+    // Read the number of high bits set, which indicates the number of bytes in
+    // the character.
+    let encodedBytes = (~(UInt32(curByte) << 24)).leadingZeroBitCount
+
+    // If this is 0b10XXXXXX, then it is a continuation character.
+    if encodedBytes == 1 || !Unicode.Scalar(curByte).isStartOfUTF8Character {
+      // Skip until we get the start of another character.  This is guaranteed to
+      // at least stop at the nul at the end of the buffer.
+      while let peeked = peek(), Unicode.Scalar(peeked).isStartOfUTF8Character {
+        _ = advance()
+      }
+      return nil
+    }
+
+    // Drop the high bits indicating the # bytes of the result.
+    var charValue = UInt32(curByte << encodedBytes) >> encodedBytes
+
+    // Read and validate the continuation bytes.
+    for _ in 1..<encodedBytes {
+      guard let curByte = peek() else {
+        return nil
+      }
+      // If the high bit isn't set or the second bit isn't clear, then this is not
+      // a continuation byte!
+      if (curByte < 0x80 || curByte >= 0xC0) {
+        return nil
+      }
+
+      // Accumulate our result.
+      charValue <<= 6
+      charValue |= UInt32(curByte & 0x3F)
+      _ = advance()
+    }
+
+    // UTF-16 surrogate pair values are not valid code points.
+    if (charValue >= 0xD800 && charValue <= 0xDFFF) {
+      return nil
+    }
+
+    // If we got here, we read the appropriate number of accumulated bytes.
+    // Verify that the encoding was actually minimal.
+    // Number of bits in the value, ignoring leading zeros.
+    let numBits = 32 - charValue.leadingZeroBitCount
+    if numBits <= 5 + 6 {
+      return encodedBytes == 2 ? Unicode.Scalar(charValue) : nil
+    }
+    if numBits <= 4 + 6 + 6 {
+      return encodedBytes == 3 ? Unicode.Scalar(charValue) : nil
+    }
+    return encodedBytes == 4 ? Unicode.Scalar(charValue) : nil
+  }
+
+  /// Returns the first unicode scalar in `byteSequence`, which may span multiple bytes.
+  public static func lexing<S: Collection>(from byteSequence: S) -> Self? where S.Element == UInt8 {
+    var index = byteSequence.startIndex
+    let peek = { () -> UInt8? in
+      if index < byteSequence.endIndex {
+        return byteSequence[index]
+      } else {
+        return nil
+      }
+    }
+    let advance = { () -> UInt8? in
+      defer {
+        index = byteSequence.index(after: index)
+      }
+      return peek()
+    }
+
+    return self.lexing(advance: advance, peek: peek)
+  }
+}

@@ -757,6 +757,15 @@ public class LexerTests: XCTestCase {
     )
   }
 
+  func testInvalidCharacterSpanningMultipleBytes() {
+    AssertLexemes(
+      "121️⃣😡",
+      lexemes: [
+        LexemeSpec(.integerLiteral, text: "12😡", error: "'😡' is not a valid digit in integer literal")
+      ]
+    )
+  }
+
   func testBadNumericLiteralDigits() {
     AssertLexemes(
       "01️⃣a1234567",

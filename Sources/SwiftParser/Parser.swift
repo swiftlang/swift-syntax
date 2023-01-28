@@ -512,7 +512,7 @@ extension Parser {
 
     let endIndex = current.textRange.lowerBound.advanced(by: prefix.count)
     var lexerError = current.error
-    if let error = lexerError, error.byteOffset > prefix.count {
+    if let error = lexerError, error.byteOffset > prefix.count + current.leadingTriviaByteLength {
       // The lexer error isn't in the prefix. Drop it.
       lexerError = nil
     }

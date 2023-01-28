@@ -440,10 +440,13 @@ public struct AddCompletionHandler: PeerMacro {
 }
 
 public struct AddBackingStorage: MemberMacro {
-  public static func expansion(
+  public static func expansion<
+    Declaration: DeclGroupSyntax,
+    Context: MacroExpansionContext
+  >(
     of node: AttributeSyntax,
-    attachedTo decl: DeclSyntax,
-    in context: any MacroExpansionContext
+    attachedTo decl: Declaration,
+    in context: Context
   )
     throws -> [DeclSyntax]
   {
@@ -527,10 +530,13 @@ public struct WrapStoredProperties: MemberAttributeMacro {
 struct CustomTypeWrapperMacro {}
 
 extension CustomTypeWrapperMacro: MemberMacro {
-  static func expansion(
+  static func expansion<
+    Declaration: DeclGroupSyntax,
+    Context: MacroExpansionContext
+  >(
     of node: AttributeSyntax,
-    attachedTo declaration: DeclSyntax,
-    in context: any MacroExpansionContext
+    attachedTo declaration: Declaration,
+    in context: Context
   ) throws -> [DeclSyntax] {
     return [
       """

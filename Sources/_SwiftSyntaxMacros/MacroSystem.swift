@@ -401,7 +401,7 @@ extension MacroApplication {
         try newMembers.append(
           contentsOf: memberMacro.expansion(
             of: attribute,
-            attachedTo: DeclSyntax(decl),
+            attachedTo: decl,
             in: context
           )
         )
@@ -495,9 +495,9 @@ extension MacroApplication {
 extension SyntaxProtocol {
   /// Expand all uses of the given set of macros within this syntax
   /// node.
-  public func expand(
+  public func expand<Context: MacroExpansionContext>(
     macros: [String: Macro.Type],
-    in context: any MacroExpansionContext
+    in context: Context
   ) -> Syntax {
     // Build the macro system.
     var system = MacroSystem()

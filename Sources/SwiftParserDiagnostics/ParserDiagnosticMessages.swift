@@ -415,7 +415,7 @@ public struct StaticParserNote: NoteMessage {
 extension NoteMessage where Self == StaticParserNote {
   /// Please order alphabetically by property name.
   public static var shouldMatchIndentationOfClosingQuote: Self {
-    .init("should match indentation here"
+    .init("should match indentation here")
   }
 }
 

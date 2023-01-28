@@ -13,9 +13,11 @@ import SwiftSyntax
 public protocol DeclarationMacro: FreestandingMacro {
   /// Expand a macro described by the given freestanding macro expansion
   /// declaration within the given context to produce a set of declarations.
-  static func expansion(
+  static func expansion<
+    Context: MacroExpansionContext
+  >(
     of node: MacroExpansionDeclSyntax,
-    in context: any MacroExpansionContext
+    in context: Context
   ) throws -> [DeclSyntax]
 }
 

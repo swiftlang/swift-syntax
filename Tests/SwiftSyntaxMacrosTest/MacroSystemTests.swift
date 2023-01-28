@@ -198,9 +198,9 @@ extension SimpleDiagnosticMessage: FixItMessage {
 }
 
 public struct ErrorMacro: DeclarationMacro {
-  public static func expansion(
+  public static func expansion<Context: MacroExpansionContext>(
     of node: MacroExpansionDeclSyntax,
-    in context: any MacroExpansionContext
+    in context: Context
   ) throws -> [DeclSyntax] {
     guard let firstElement = node.argumentList.first,
       let stringLiteral = firstElement.expression
@@ -227,9 +227,9 @@ public struct ErrorMacro: DeclarationMacro {
 }
 
 struct DefineBitwidthNumberedStructsMacro: DeclarationMacro {
-  static func expansion(
+  static func expansion<Context: MacroExpansionContext>(
     of node: MacroExpansionDeclSyntax,
-    in context: any MacroExpansionContext
+    in context: Context
   ) throws -> [DeclSyntax] {
     guard let firstElement = node.argumentList.first,
       let stringLiteral = firstElement.expression

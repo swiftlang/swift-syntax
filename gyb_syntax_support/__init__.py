@@ -59,8 +59,11 @@ def make_missing_swift_child(child):
         token = child.main_token()
         tok_kind = token.swift_kind() if token else "unknown"
         if token and token.associated_value_class:
-            assert len(child.text_choices) >= 1, f"Can only create missing child if text is known (while creating {child.name} of type {child.syntax_kind})"
-            text_choice = child.text_choices[0]
+            if len(child.token_choices) >= 1 and child.token_choices[0][1] is not None:
+                text_choice = child.token_choices[0][1]
+            else:
+                assert False, f"Can only create missing child if text is known (while creating {child.name} of type {child.syntax_kind})"
+            
             if text_choice == "init":
                 text_choice = "`init`"
             tok_kind += f'(.{text_choice})'

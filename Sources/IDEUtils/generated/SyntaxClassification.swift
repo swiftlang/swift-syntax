@@ -91,8 +91,6 @@ extension SyntaxClassification {
       switch (parentKind, indexInParent) {
       case (.availabilityVersionRestriction, 1): 
         return (.keyword, false)
-      case (.constrainedSugarType, 1): 
-        return (.keyword, false)
       case (.declModifier, 1): 
         return (.attribute, false)
       case (.expressionSegment, 5): 

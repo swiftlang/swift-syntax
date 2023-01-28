@@ -229,8 +229,8 @@ ATTRIBUTE_NODES = [
          and an optional 'where' clause.
          ''',
          children=[
-             Child('DiffKind', kind='IdentifierToken',
-                   text_choices=['forward', 'reverse', 'linear'],
+             Child('DiffKind', kind='KeywordToken',
+                   token_choices=['KeywordToken|forward', 'KeywordToken|reverse', 'KeywordToken|linear'],
                    is_optional=True),
              Child('DiffKindComma', kind='CommaToken', description='''
                    The comma following the differentiability kind, if it exists.
@@ -250,8 +250,8 @@ ATTRIBUTE_NODES = [
          name_for_diagnostics="'@differentiable' argument", kind='Syntax',
          description='A clause containing differentiability parameters.',
          children=[
-             Child('WrtLabel', kind='IdentifierToken',
-                   text_choices=['wrt'], description='The "wrt" label.'),
+             Child('WrtLabel', kind='KeywordToken',
+                   token_choices=['KeywordToken|wrt'], description='The "wrt" label.'),
              Child('Colon', kind='ColonToken', description='''
                    The colon separating "wrt" and the parameter list.
                    '''),
@@ -308,7 +308,7 @@ ATTRIBUTE_NODES = [
          optional differentiability parameter list.
          ''',
          children=[
-             Child('OfLabel', kind='IdentifierToken', text_choices=['of'],
+             Child('OfLabel', kind='KeywordToken', token_choices=['KeywordToken|of'],
                    description='The "of" label.'),
              Child('Colon', kind='ColonToken', description='''
                    The colon separating the "of" label and the original
@@ -321,9 +321,9 @@ ATTRIBUTE_NODES = [
                    The period separating the original declaration name and the
                    accessor name.
                    ''', is_optional=True),
-             Child('AccessorKind', kind='IdentifierToken',
+             Child('AccessorKind', kind='KeywordToken',
                    description='The accessor name.',
-                   text_choices=['get', 'set'],
+                   token_choices=['KeywordToken|get', 'KeywordToken|set'],
                    is_optional=True),
              Child('Comma', kind='CommaToken', is_optional=True),
              Child('DiffParams', kind='DifferentiabilityParamsClause',
@@ -374,8 +374,8 @@ ATTRIBUTE_NODES = [
          A collection of arguments for the `@_backDeploy` attribute
          ''',
          children=[
-             Child('BeforeLabel', kind='IdentifierToken',
-                   text_choices=['before'], description='The "before" label.'),
+             Child('BeforeLabel', kind='KeywordToken',
+                   token_choices=['KeywordToken|before'], description='The "before" label.'),
              Child('Colon', kind='ColonToken', description='''
                    The colon separating "before" and the parameter list.
                    '''),
@@ -429,12 +429,12 @@ ATTRIBUTE_NODES = [
          The arguments for the '@convention(...)'.
          ''',
          children=[
-             Child('ConventionLabel', kind='IdentifierToken',
-                   text_choices=['block', 'c', 'objc_method', 'thin', 'thick'],
+             Child('ConventionLabel', kind='KeywordToken',
+                   token_choices=['KeywordToken|block', 'KeywordToken|c', 'KeywordToken|objc_method', 'KeywordToken|thin', 'KeywordToken|thick'],
                    description='The convention label.'),
              Child('Comma', kind='CommaToken', is_optional=True),
-             Child('CTypeLabel', kind='IdentifierToken',
-                   text_choices=['cType'], is_optional=True),
+             Child('CTypeLabel', kind='KeywordToken',
+                   token_choices=['KeywordToken|cType'], is_optional=True),
              Child('Colon', kind='ColonToken', is_optional=True),
              Child('CTypeString', kind='StringLiteralExpr', is_optional=True),
         ]),
@@ -469,7 +469,7 @@ ATTRIBUTE_NODES = [
          The arguments for the '@_originallyDefinedIn' attribute
          ''',
          children=[
-           Child('ModuleLabel', kind='IdentifierToken', text_choices=['module']),
+           Child('ModuleLabel', kind='KeywordToken', token_choices=['KeywordToken|module']),
            Child('Colon', kind='ColonToken'),
            Child('ModuleName', kind='StringLiteralExpr'),
            Child('Comma', kind='CommaToken'),
@@ -482,7 +482,7 @@ ATTRIBUTE_NODES = [
          The arguments for the '@_private' attribute
          ''',
          children=[
-           Child('SourceFileLabel', kind='IdentifierToken', text_choices=['sourceFile']),
+           Child('SourceFileLabel', kind='KeywordToken', token_choices=['KeywordToken|sourceFile']),
            Child('Colon', kind='ColonToken'),
            Child('Filename', kind='StringLiteralExpr'),
          ]),
@@ -493,7 +493,7 @@ ATTRIBUTE_NODES = [
          The arguments for the '@_dynamicReplacement' attribute
          ''',
          children=[
-           Child('ForLabel', kind='IdentifierToken', text_choices=['for']),
+           Child('ForLabel', kind='KeywordToken', token_choices=['KeywordToken|for']),
            Child('Colon', kind='ColonToken'),
            Child('Declname', kind='DeclName'),
          ]),
@@ -504,7 +504,7 @@ ATTRIBUTE_NODES = [
          The arguments for the '@_unavailableFromAsync' attribute
          ''',
          children=[
-           Child('MessageLabel', kind='IdentifierToken', text_choices=['message']),
+           Child('MessageLabel', kind='KeywordToken', token_choices=['KeywordToken|message']),
            Child('Colon', kind='ColonToken'),
            Child('Message', kind='StringLiteralExpr'),
          ]),
@@ -518,7 +518,7 @@ ATTRIBUTE_NODES = [
     Node('DocumentationAttributeArgument', name_for_diagnostics='@_documentation argument', kind='Syntax',
          traits=['WithTrailingComma'],
          children=[
-            Child('Label', kind='IdentifierToken', text_choices=['visibility', 'metadata'], name_for_diagnostics='label'),
+            Child('Label', kind='KeywordToken', token_choices=['KeywordToken|visibility', 'KeywordToken|metadata'], name_for_diagnostics='label'),
             Child('Colon', kind='ColonToken'),
             Child('Value', kind='Syntax', node_choices=[
                   Child('Token', kind='Token', token_choices=['IdentifierToken', 'KeywordToken']), # Keywords can be: public, internal, private, fileprivate, open

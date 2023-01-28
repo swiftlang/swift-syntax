@@ -13,7 +13,7 @@ PATTERN_NODES = [
     # is-type-pattern -> 'is' type
     Node('IsTypePattern', name_for_diagnostics="'is' pattern", kind='Pattern',
          children=[
-             Child('IsKeyword', kind='KeywordToken', text_choices=['is']),
+             Child('IsKeyword', kind='KeywordToken', token_choices=['KeywordToken|is']),
              Child('Type', kind='Type'),
          ]),
 
@@ -75,7 +75,7 @@ PATTERN_NODES = [
          kind='Pattern',
          children=[
              Child('LetOrVarKeyword', kind='KeywordToken',
-                   text_choices=['let', 'var']),
+                   token_choices=['KeywordToken|let', 'KeywordToken|var']),
              Child('ValuePattern', kind='Pattern'),
          ]),
 ]

@@ -55,11 +55,7 @@ def make_swift_child(child, spaces):
   parameter_spaces = 8
   parameters = ['name: "%s"' % child.name]
 
-  if child.text_choices:
-    mapped_choices = [f'.keyword(text: "{text}")' for text in child.text_choices]
-    joined_choices = ', '.join(mapped_choices)
-    kind = f'.token(choices: [{joined_choices}])'
-  elif child.token_choices:
+  if child.token_choices:
     mapped_choices = [f'.token(tokenKind: "{choice.name}Token")' for (choice, text) in child.token_choices if text is None]
     mapped_choices += [f'.keyword(text: "{text}")' for (choice, text) in child.token_choices if text is not None]
     joined_choices = ', '.join(mapped_choices)

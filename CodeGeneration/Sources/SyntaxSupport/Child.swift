@@ -27,7 +27,7 @@ public enum TokenChoice {
 public enum ChildKind {
   /// The child always contains a node of the given `kind`.
   case node(kind: String)
-  /// The child always contains a child that matches one of the `choices`.
+  /// The child always contains a node that matches one of the `choices`.
   case nodeChoices(choices: [Child])
   /// The child is a collection of `kind`.
   case collection(kind: String, collectionElementName: String)

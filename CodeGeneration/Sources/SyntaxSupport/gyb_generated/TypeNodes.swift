@@ -104,8 +104,7 @@ public let TYPE_NODES: [Node] = [
        kind: "Type",
        children: [
          Child(name: "SomeOrAnySpecifier",
-               kind: .token(choices: [.keyword(text: "some"), .keyword(text: "any")]),
-               classification: "Keyword"),
+               kind: .token(choices: [.keyword(text: "some"), .keyword(text: "any")])),
          Child(name: "BaseType",
                kind: .node(kind: "Type"))
        ]),
@@ -127,7 +126,7 @@ public let TYPE_NODES: [Node] = [
          Child(name: "Type",
                kind: .node(kind: "Type")),
          Child(name: "Ampersand",
-               kind: .token(choices: [.keyword(text: "&")]),
+               kind: .node(kind: "Token"),
                isOptional: true)
        ]),
   

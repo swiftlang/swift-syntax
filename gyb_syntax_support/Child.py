@@ -46,7 +46,7 @@ class Child(object):
         # A restricted set of token kinds that will be accepted for this
         # child.
         self.token_choices = []
-        if self.token:
+        if self.token and not token_choices:
             self.token_choices.append((self.token, None))
         for choice in token_choices or []:
             pipe_index = choice.find('|')
@@ -54,14 +54,9 @@ class Child(object):
             if pipe_index != -1:
                 full_choice = choice
                 choice = full_choice[:pipe_index]
-                choice_text = full_choice[pipe_index:]
+                choice_text = full_choice[(pipe_index+1):]
             token = SYNTAX_TOKEN_MAP[choice]
             self.token_choices.append((token, choice_text))
-
-        # A list of valid text for tokens, if specified.
-        # This will force validation logic to check the text passed into the
-        # token against the choices.
-        self.text_choices = text_choices or []
 
         # A list of valid choices for a child
         self.node_choices = node_choices or []
@@ -135,8 +130,10 @@ class Child(object):
         return f" = .{self.token.swift_kind()}()"
       if self.token.text:
         return f" = .{self.token.swift_kind()}Token()"
-      if self.text_choices and len(self.text_choices) == 1:
-        text_choice = self.text_choices[0]
+      text_choice = None
+      if self.token_choices and len(self.token_choices) == 1 and self.token_choices[0][1] is not None:
+        text_choice = self.token_choices[0][1]
+      if text_choice:
         if self.token.associated_value_class:
           if text_choice == "init":
             text_choice = "`init`"

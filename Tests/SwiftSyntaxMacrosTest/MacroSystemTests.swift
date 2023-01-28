@@ -285,10 +285,10 @@ extension PropertyWrapper: AccessorMacro {
 }
 
 extension PropertyWrapper: PeerMacro {
-  public static func expansion(
+  public static func expansion<Context: MacroExpansionContext>(
     of node: AttributeSyntax,
     attachedTo declaration: DeclSyntax,
-    in context: any MacroExpansionContext
+    in context: Context
   ) throws -> [SwiftSyntax.DeclSyntax] {
     guard let varDecl = declaration.as(VariableDeclSyntax.self),
       let binding = varDecl.bindings.first,
@@ -322,10 +322,10 @@ extension PropertyWrapper: PeerMacro {
 }
 
 public struct AddCompletionHandler: PeerMacro {
-  public static func expansion(
+  public static func expansion<Context: MacroExpansionContext>(
     of node: AttributeSyntax,
     attachedTo declaration: DeclSyntax,
-    in context: any MacroExpansionContext
+    in context: Context
   ) throws -> [DeclSyntax] {
     // Only on functions at the moment. We could handle initializers as well
     // with a bit of work.

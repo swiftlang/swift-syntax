@@ -46,6 +46,13 @@ class Node(object):
                     ))
                 else:
                     self.children.append(children[int((i - 1) / 2)])
+        elif kind != 'SyntaxCollection' and len(children) == 0:
+          self.children.append(Child(
+              'Unexpected',
+              kind='UnexpectedNodes',
+              collection_element_name='Unexpected',
+              is_optional=True
+          ))
 
         self.non_unexpected_children = \
             [child for child in children if not child.is_unexpected_nodes()]

@@ -504,4 +504,22 @@ final class StringInterpolationTests: XCTestCase {
       )
     }
   }
+
+  func testInvalidSyntax2() {
+    let invalid = StmtSyntax("struct Foo {}")
+    XCTAssert(invalid.hasError)
+
+    XCTAssertThrowsError(try StmtSyntax(validating: "struct Foo {}")) { error in
+      AssertStringsEqualWithDiff(
+        String(describing: error),
+        """
+
+        1 │ struct Foo {}
+          ∣ │            ╰─ expected statement
+          ∣ ╰─ unexpected code 'struct Foo {}' before statement
+
+        """
+      )
+    }
+  }
 }

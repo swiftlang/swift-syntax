@@ -41,12 +41,25 @@ public enum SyntaxFactory {
 
 
 
+  @available(*, deprecated, message: "Use initializer on MissingSyntax")
+  public static func makeMissing(_ unexpected: UnexpectedNodesSyntax? = nil) -> MissingSyntax {
+    let layout: [RawSyntax?] = [
+      unexpected?.raw,
+    ]
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.missing,
+        from: layout, arena: arena)
+      let data = SyntaxData.forRoot(raw)
+      return MissingSyntax(data)
+    }
+  }
 
   @available(*, deprecated, message: "Use initializer on MissingSyntax")
   public static func makeBlankMissing(presence: SourcePresence = .missing) -> MissingSyntax {
     return withExtendedLifetime(SyntaxArena()) { arena in
       let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .missing,
         from: [
+        nil,
       ], arena: arena))
       return MissingSyntax(data)
     }
@@ -82,14 +95,39 @@ public enum SyntaxFactory {
       return MissingDeclSyntax(data)
     }
   }
+  @available(*, deprecated, message: "Use initializer on MissingExprSyntax")
+  public static func makeMissingExpr(_ unexpected: UnexpectedNodesSyntax? = nil) -> MissingExprSyntax {
+    let layout: [RawSyntax?] = [
+      unexpected?.raw,
+    ]
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.missingExpr,
+        from: layout, arena: arena)
+      let data = SyntaxData.forRoot(raw)
+      return MissingExprSyntax(data)
+    }
+  }
 
   @available(*, deprecated, message: "Use initializer on MissingExprSyntax")
   public static func makeBlankMissingExpr(presence: SourcePresence = .missing) -> MissingExprSyntax {
     return withExtendedLifetime(SyntaxArena()) { arena in
       let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .missingExpr,
         from: [
+        nil,
       ], arena: arena))
       return MissingExprSyntax(data)
+    }
+  }
+  @available(*, deprecated, message: "Use initializer on MissingStmtSyntax")
+  public static func makeMissingStmt(_ unexpected: UnexpectedNodesSyntax? = nil) -> MissingStmtSyntax {
+    let layout: [RawSyntax?] = [
+      unexpected?.raw,
+    ]
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.missingStmt,
+        from: layout, arena: arena)
+      let data = SyntaxData.forRoot(raw)
+      return MissingStmtSyntax(data)
     }
   }
 
@@ -98,8 +136,21 @@ public enum SyntaxFactory {
     return withExtendedLifetime(SyntaxArena()) { arena in
       let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .missingStmt,
         from: [
+        nil,
       ], arena: arena))
       return MissingStmtSyntax(data)
+    }
+  }
+  @available(*, deprecated, message: "Use initializer on MissingTypeSyntax")
+  public static func makeMissingType(_ unexpected: UnexpectedNodesSyntax? = nil) -> MissingTypeSyntax {
+    let layout: [RawSyntax?] = [
+      unexpected?.raw,
+    ]
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.missingType,
+        from: layout, arena: arena)
+      let data = SyntaxData.forRoot(raw)
+      return MissingTypeSyntax(data)
     }
   }
 
@@ -108,8 +159,21 @@ public enum SyntaxFactory {
     return withExtendedLifetime(SyntaxArena()) { arena in
       let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .missingType,
         from: [
+        nil,
       ], arena: arena))
       return MissingTypeSyntax(data)
+    }
+  }
+  @available(*, deprecated, message: "Use initializer on MissingPatternSyntax")
+  public static func makeMissingPattern(_ unexpected: UnexpectedNodesSyntax? = nil) -> MissingPatternSyntax {
+    let layout: [RawSyntax?] = [
+      unexpected?.raw,
+    ]
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.missingPattern,
+        from: layout, arena: arena)
+      let data = SyntaxData.forRoot(raw)
+      return MissingPatternSyntax(data)
     }
   }
 
@@ -118,6 +182,7 @@ public enum SyntaxFactory {
     return withExtendedLifetime(SyntaxArena()) { arena in
       let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .missingPattern,
         from: [
+        nil,
       ], arena: arena))
       return MissingPatternSyntax(data)
     }

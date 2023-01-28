@@ -203,12 +203,20 @@ public struct RawMissingSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
+    _ unexpected: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
-    let raw = RawSyntax.makeEmptyLayout(kind: .missing, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .missing, uninitializedCount: 1, arena: arena) { layout in
+      layout.initialize(repeating: nil)
+      layout[0] = unexpected?.raw
+    }
     self.init(raw: raw)
   }
 
+  public var unexpected: RawUnexpectedNodesSyntax? {
+    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
 }
 
 @_spi(RawSyntax)
@@ -295,12 +303,20 @@ public struct RawMissingExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
+    _ unexpected: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
-    let raw = RawSyntax.makeEmptyLayout(kind: .missingExpr, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .missingExpr, uninitializedCount: 1, arena: arena) { layout in
+      layout.initialize(repeating: nil)
+      layout[0] = unexpected?.raw
+    }
     self.init(raw: raw)
   }
 
+  public var unexpected: RawUnexpectedNodesSyntax? {
+    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
 }
 
 @_spi(RawSyntax)
@@ -327,12 +343,20 @@ public struct RawMissingStmtSyntax: RawStmtSyntaxNodeProtocol {
   }
 
   public init(
+    _ unexpected: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
-    let raw = RawSyntax.makeEmptyLayout(kind: .missingStmt, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .missingStmt, uninitializedCount: 1, arena: arena) { layout in
+      layout.initialize(repeating: nil)
+      layout[0] = unexpected?.raw
+    }
     self.init(raw: raw)
   }
 
+  public var unexpected: RawUnexpectedNodesSyntax? {
+    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
 }
 
 @_spi(RawSyntax)
@@ -359,12 +383,20 @@ public struct RawMissingTypeSyntax: RawTypeSyntaxNodeProtocol {
   }
 
   public init(
+    _ unexpected: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
-    let raw = RawSyntax.makeEmptyLayout(kind: .missingType, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .missingType, uninitializedCount: 1, arena: arena) { layout in
+      layout.initialize(repeating: nil)
+      layout[0] = unexpected?.raw
+    }
     self.init(raw: raw)
   }
 
+  public var unexpected: RawUnexpectedNodesSyntax? {
+    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
 }
 
 @_spi(RawSyntax)
@@ -391,12 +423,20 @@ public struct RawMissingPatternSyntax: RawPatternSyntaxNodeProtocol {
   }
 
   public init(
+    _ unexpected: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
-    let raw = RawSyntax.makeEmptyLayout(kind: .missingPattern, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .missingPattern, uninitializedCount: 1, arena: arena) { layout in
+      layout.initialize(repeating: nil)
+      layout[0] = unexpected?.raw
+    }
     self.init(raw: raw)
   }
 
+  public var unexpected: RawUnexpectedNodesSyntax? {
+    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
 }
 
 @_spi(RawSyntax)

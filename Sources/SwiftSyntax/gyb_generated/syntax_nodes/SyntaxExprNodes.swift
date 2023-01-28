@@ -31,23 +31,44 @@ public struct MissingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
-  public init() {
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpected: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed 
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), ())) { (arena, _) in
-      let raw = RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: arena)
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpected))) { (arena, _) in
+      let layout: [RawSyntax?] = [
+        unexpected?.raw,
+      ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.missingExpr, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
 
+  public var unexpected: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = MissingExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
   public static var structure: SyntaxNodeStructure {
     return .layout([
+      \Self.unexpected,
     ])
   }
 
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
+    case 0:
+      return nil
     default:
       fatalError("Invalid index")
     }
@@ -57,6 +78,7 @@ public struct MissingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 extension MissingExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
+      "unexpected": unexpected.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }

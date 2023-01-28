@@ -28,7 +28,7 @@ public protocol MemberMacro: AttachedMacro {
     Context: MacroExpansionContext
   >(
     of node: AttributeSyntax,
-    attachedTo declaration: Declaration,
+    providingMembersOf declaration: Declaration,
     in context: Context
   ) throws -> [DeclSyntax]
 }

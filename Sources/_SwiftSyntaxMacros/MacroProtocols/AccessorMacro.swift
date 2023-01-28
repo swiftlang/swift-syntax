@@ -19,7 +19,7 @@ public protocol AccessorMacro: AttachedMacro {
     Declaration: DeclSyntaxProtocol
   >(
     of node: AttributeSyntax,
-    attachedTo declaration: Declaration,
+    providingAccessorsOf declaration: Declaration,
     in context: Context
   ) throws -> [AccessorDeclSyntax]
 }

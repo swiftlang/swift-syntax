@@ -304,7 +304,7 @@ class MacroApplication: SyntaxRewriter {
       do {
         let newAccessors = try accessorMacro.expansion(
           of: accessorAttr,
-          attachedTo: DeclSyntax(visitedNode),
+          providingAccessorsOf: visitedNode,
           in: context
         )
 
@@ -373,7 +373,7 @@ extension MacroApplication {
     let macroAttributes = getMacroAttributes(attachedTo: decl, ofType: PeerMacro.Type.self)
     for (attribute, peerMacro) in macroAttributes {
       do {
-        let newPeers = try peerMacro.expansion(of: attribute, attachedTo: decl, in: context)
+        let newPeers = try peerMacro.expansion(of: attribute, providingPeersOf: decl, in: context)
         peers.append(contentsOf: newPeers)
       } catch {
         // Record the error
@@ -401,7 +401,7 @@ extension MacroApplication {
         try newMembers.append(
           contentsOf: memberMacro.expansion(
             of: attribute,
-            attachedTo: decl,
+            providingMembersOf: decl,
             in: context
           )
         )
@@ -464,7 +464,7 @@ extension MacroApplication {
           return try attributeMacro.expansion(
             of: attribute,
             attachedTo: decl,
-            annotating: member.decl,
+            providingAttributesFor: member.decl,
             in: context
           )
         }

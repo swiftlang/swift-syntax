@@ -259,7 +259,7 @@ extension PropertyWrapper: AccessorMacro {
     Declaration: DeclSyntaxProtocol
   >(
     of node: AttributeSyntax,
-    attachedTo declaration: Declaration,
+    providingAccessorsOf declaration: Declaration,
     in context: Context
   ) throws -> [AccessorDeclSyntax] {
     guard let varDecl = declaration.as(VariableDeclSyntax.self),
@@ -290,7 +290,7 @@ extension PropertyWrapper: AccessorMacro {
 extension PropertyWrapper: PeerMacro {
   public static func expansion<Context: MacroExpansionContext>(
     of node: AttributeSyntax,
-    attachedTo declaration: DeclSyntax,
+    providingPeersOf declaration: DeclSyntax,
     in context: Context
   ) throws -> [SwiftSyntax.DeclSyntax] {
     guard let varDecl = declaration.as(VariableDeclSyntax.self),
@@ -327,7 +327,7 @@ extension PropertyWrapper: PeerMacro {
 public struct AddCompletionHandler: PeerMacro {
   public static func expansion<Context: MacroExpansionContext>(
     of node: AttributeSyntax,
-    attachedTo declaration: DeclSyntax,
+    providingPeersOf declaration: DeclSyntax,
     in context: Context
   ) throws -> [DeclSyntax] {
     // Only on functions at the moment. We could handle initializers as well
@@ -448,7 +448,7 @@ public struct AddBackingStorage: MemberMacro {
     Context: MacroExpansionContext
   >(
     of node: AttributeSyntax,
-    attachedTo decl: Declaration,
+    providingMembersOf decl: Declaration,
     in context: Context
   )
     throws -> [DeclSyntax]
@@ -467,7 +467,7 @@ public struct WrapAllProperties: MemberAttributeMacro {
   >(
     of node: AttributeSyntax,
     attachedTo decl: Declaration,
-    annotating member: DeclSyntax,
+    providingAttributesFor member: DeclSyntax,
     in context: Context
   ) throws -> [AttributeSyntax] {
     guard member.is(VariableDeclSyntax.self) else {
@@ -492,7 +492,7 @@ public struct WrapStoredProperties: MemberAttributeMacro {
   >(
     of node: AttributeSyntax,
     attachedTo decl: Declaration,
-    annotating member: DeclSyntax,
+    providingAttributesFor member: DeclSyntax,
     in context: Context
   ) throws -> [AttributeSyntax] {
     guard let property = member.as(VariableDeclSyntax.self),
@@ -538,7 +538,7 @@ extension CustomTypeWrapperMacro: MemberMacro {
     Context: MacroExpansionContext
   >(
     of node: AttributeSyntax,
-    attachedTo declaration: Declaration,
+    providingMembersOf declaration: Declaration,
     in context: Context
   ) throws -> [DeclSyntax] {
     return [
@@ -557,7 +557,7 @@ extension CustomTypeWrapperMacro: MemberAttributeMacro {
   >(
     of node: AttributeSyntax,
     attachedTo declaration: Declaration,
-    annotating member: DeclSyntax,
+    providingAttributesFor member: DeclSyntax,
     in context: Context
   ) throws -> [AttributeSyntax] {
     return [
@@ -577,7 +577,7 @@ extension CustomTypeWrapperMacro: AccessorMacro {
     Declaration: DeclSyntaxProtocol
   >(
     of node: AttributeSyntax,
-    attachedTo declaration: Declaration,
+    providingAccessorsOf declaration: Declaration,
     in context: Context
   ) throws -> [AccessorDeclSyntax] {
     guard let property = declaration.as(VariableDeclSyntax.self),

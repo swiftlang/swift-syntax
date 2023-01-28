@@ -31,7 +31,7 @@ public protocol MemberAttributeMacro: AttachedMacro {
   >(
     of node: AttributeSyntax,
     attachedTo declaration: Declaration,
-    annotating member: DeclSyntax,
+    providingAttributesFor member: DeclSyntax,
     in context: Context
   ) throws -> [AttributeSyntax]
 }

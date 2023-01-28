@@ -18,7 +18,7 @@ public protocol PeerMacro: AttachedMacro {
   /// the given declaration.
   static func expansion<Context: MacroExpansionContext>(
     of node: AttributeSyntax,
-    attachedTo declaration: DeclSyntax,
+    providingPeersOf declaration: DeclSyntax,
     in context: Context
   ) throws -> [DeclSyntax]
 }

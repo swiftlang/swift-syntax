@@ -19,6 +19,7 @@ public struct LexerError: Hashable {
 
     case expectedBinaryExponentInHexFloatLiteral
     case expectedDigitInFloatLiteral
+    case insufficientIndentationInMultilineStringLiteral
     case invalidBinaryDigitInIntegerLiteral
     case invalidDecimalDigitInIntegerLiteral
     case invalidFloatingPointCharacter

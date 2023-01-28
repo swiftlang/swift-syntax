@@ -34,53 +34,69 @@ final class MultilineErrorsTests: XCTestCase {
   }
 
   func testMultilineErrors3() {
+    // expecting at least 4 columns of leading indentation
     AssertParse(
       #"""
-      // expecting at least 4 columns of leading indentation
       _ = """
           Eleven
-        Mu
-          """
+        1️⃣Mu
+          ℹ️"""
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 4: insufficient indentation of line in multi-line string literal
-        // TODO: Old parser expected note on line 4: change indentation of this line to match closing delimiter, Fix-It replacements: 3 - 3 = '  '
-        // TODO: Old parser expected note on line 5: should match space here
-      ]
+        DiagnosticSpec(
+          message: "insufficient indentation of line in multi-line string literal",
+          notes: [NoteSpec(message: "should match indentation here")],
+          fixIts: ["change indentation of this line to match closing delimiter"]
+        )
+      ],
+      fixedSource: #"""
+        _ = """
+            Eleven
+            Mu
+            """
+        """#
     )
   }
 
   func testMultilineErrors4() {
+    // expecting at least 4 columns of leading indentation
     AssertParse(
       #"""
-      // expecting at least 4 columns of leading indentation
       _ = """
           Eleven
-         Mu
+         1️⃣Mu
           """
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 4: insufficient indentation of line in multi-line string literal
-        // TODO: Old parser expected note on line 4: change indentation of this line to match closing delimiter, Fix-It replacements: 4 - 4 = ' '
-        // TODO: Old parser expected note on line 5: should match space here
-      ]
+        DiagnosticSpec(message: "insufficient indentation of line in multi-line string literal")
+      ],
+      fixedSource: #"""
+        _ = """
+            Eleven
+            Mu
+            """
+        """#
     )
   }
 
   func testMultilineErrors5() {
+    // \t is not the same as an actual tab for de-indentation
     AssertParse(
       #"""
-      // \t is not the same as an actual tab for de-indentation
       _ = """
       	Twelve
-      \tNu
+      1️⃣\tNu
       	"""
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 4: insufficient indentation of line in multi-line string literal
-        // TODO: Old parser expected note on line 4: change indentation of this line to match closing delimiter, Fix-It replacements: 1 - 1 = '	'
-        // TODO: Old parser expected note on line 5: should match tab here
-      ]
+        DiagnosticSpec(message: "insufficient indentation of line in multi-line string literal")
+      ],
+      fixedSource: #"""
+        _ = """
+        	Twelve
+        	\tNu
+        	"""
+        """#
     )
   }
 
@@ -105,82 +121,97 @@ final class MultilineErrorsTests: XCTestCase {
       #"""
       _ = """
           Foo
-      \
+      1️⃣\
           Bar 
           """
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: insufficient indentation of line in multi-line string literal
-        // TODO: Old parser expected note on line 3: change indentation of this line to match closing delimiter, Fix-It replacements: 1 - 1 = '    '
-        // TODO: Old parser expected note on line 5: should match space here
-      ]
+        DiagnosticSpec(message: "insufficient indentation of line in multi-line string literal")
+      ],
+      fixedSource: #"""
+        _ = """
+            Foo
+            \
+            Bar
+            """
+        """#
     )
   }
 
   func testMultilineErrors8() {
+    // a tab is not the same as multiple spaces for de-indentation
     AssertParse(
       #"""
-      // a tab is not the same as multiple spaces for de-indentation
       _ = """
         Thirteen
-      	Xi
+      1️⃣	Xi
         """
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 4: unexpected tab in indentation of line in multi-line string literal
-        // TODO: Old parser expected note on line 4: change indentation of this line to match closing delimiter, Fix-It replacements: 1 - 2 = '  '
-        // TODO: Old parser expected note on line 5: should match space here
-      ]
+        DiagnosticSpec(message: "unexpected tab in indentation of line in multi-line string literal")
+      ],
+      fixedSource: #"""
+        _ = """
+          Thirteen
+          Xi
+          """
+        """#
     )
   }
 
   func testMultilineErrors9() {
+    // a tab is not the same as multiple spaces for de-indentation
     AssertParse(
       #"""
-      // a tab is not the same as multiple spaces for de-indentation
       _ = """
           Fourteen
-        	Pi
+        1️⃣	Pi
           """
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 4: unexpected tab in indentation of line in multi-line string literal
-        // TODO: Old parser expected note on line 4: change indentation of this line to match closing delimiter, Fix-It replacements: 3 - 4 = '  '
-        // TODO: Old parser expected note on line 5: should match space here
-      ]
+        DiagnosticSpec(message: "unexpected tab in indentation of line in multi-line string literal")
+      ],
+      fixedSource: #"""
+        _ = """
+            Fourteen
+            Pi
+            """
+        """#
     )
   }
 
   func testMultilineErrors10() {
+    // multiple spaces are not the same as a tab for de-indentation
     AssertParse(
       #"""
-      // multiple spaces are not the same as a tab for de-indentation
       _ = """
       	Thirteen 2
-        Xi 2
+      1️⃣  Xi 2
       	"""
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 4: unexpected space in indentation of line in multi-line string literal
-        // TODO: Old parser expected note on line 4: change indentation of this line to match closing delimiter, Fix-It replacements: 1 - 3 = '	'
-        // TODO: Old parser expected note on line 5: should match tab here
-      ]
+        DiagnosticSpec(message: "unexpected space in indentation of line in multi-line string literal")
+      ],
+      fixedSource: #"""
+        _ = """
+        	Thirteen 2
+        	Xi 2
+        	"""
+        """#
     )
   }
 
   func testMultilineErrors11() {
+    // multiple spaces are not the same as a tab for de-indentation
     AssertParse(
       #"""
-      // multiple spaces are not the same as a tab for de-indentation
       _ = """
       		Fourteen 2
-      	  Pi 2
+      	1️⃣  Pi 2
       		"""
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 4: unexpected space in indentation of line in multi-line string literal
-        // TODO: Old parser expected note on line 4: change indentation of this line to match closing delimiter, Fix-It replacements: 2 - 4 = '	'
-        // TODO: Old parser expected note on line 5: should match tab here
+        DiagnosticSpec(message: "unexpected space in indentation of line in multi-line string literal")
       ]
     )
   }
@@ -254,33 +285,37 @@ final class MultilineErrorsTests: XCTestCase {
   }
 
   func testMultilineErrors16() {
+    // two lines should get only one error
     AssertParse(
       #"""
-      // two lines should get only one error
       _ = """
-          Hello,
+      1️⃣    Hello,
               World!
       	"""
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: unexpected space in indentation of next 2 lines in multi-line string literal
-        // TODO: Old parser expected note on line 3: change indentation of these lines to match closing delimiter, Fix-It replacements: 1 - 5 = '	', 1 - 5 = '	'
-        // TODO: Old parser expected note on line 5: should match tab here
-      ]
+        DiagnosticSpec(message: "unexpected space in indentation of next 2 lines in multi-line string literal")
+      ],
+      fixedSource: #"""
+        _ = """
+        	Hello,
+        	World!
+        	"""
+        """#
     )
   }
 
-  func testMultilineErrors17() {
+  func testMultilineErrors17a() {
     AssertParse(
       #"""
       _ = """
-      Zero A
+      1️⃣Zero A
       Zero B
       	One A
       	One B
-        Two A
+      2️⃣  Two A
         Two B
-      Three A
+      3️⃣Three A
       Three B
       		Four A
       		Four B
@@ -290,15 +325,71 @@ final class MultilineErrorsTests: XCTestCase {
       """#,
       diagnostics: [
         // TODO: Old parser expected error on line 2: insufficient indentation of next 2 lines in multi-line string literal
-        // TODO: Old parser expected note on line 2: change indentation of these lines to match closing delimiter, Fix-It replacements: 1 - 1 = '		', 1 - 1 = '		'
-        // TODO: Old parser expected error on line 4: insufficient indentation of next 2 lines in multi-line string literal
-        // TODO: Old parser expected note on line 4: change indentation of these lines to match closing delimiter, Fix-It replacements: 2 - 2 = '	', 2 - 2 = '	'
-        // TODO: Old parser expected error on line 6: unexpected space in indentation of next 4 lines in multi-line string literal
-        // TODO: Old parser expected note on line 6: change indentation of these lines to match closing delimiter, Fix-It replacements: 1 - 1 = '		', 1 - 1 = '		', 1 - 1 = '		', 1 - 1 = '		'
-        // TODO: Old parser expected note on line 14: should match tab here
-        // TODO: Old parser expected note on line 14: should match tab here
-        // TODO: Old parser expected note on line 14: should match tab here
-      ]
+        DiagnosticSpec(locationMarker: "1️⃣", message: "insufficient indentation of next 4 lines in multi-line string literal"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected space in indentation of next 2 lines in multi-line string literal"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "insufficient indentation of next 2 lines in multi-line string literal"),
+      ],
+      fixedSource: #"""
+        _ = """
+        		Zero A
+        		Zero B
+        		One A
+        		One B
+        		Two A
+        		Two B
+        		Three A
+        		Three B
+        		Four A
+        		Four B
+        			Five A
+        			Five B
+        		"""
+        """#
+    )
+  }
+
+  func testMultilineErrors17b() {
+    AssertParse(
+      #"""
+      _ = """
+      1️⃣Zero A\(1)B
+      Zero B
+            X
+          """
+      """#,
+      diagnostics: [
+        DiagnosticSpec(message: "insufficient indentation of next 2 lines in multi-line string literal")
+      ],
+      fixedSource: #"""
+        _ = """
+            Zero A\(1)B
+            Zero B
+              X
+            """
+        """#
+    )
+  }
+
+  func testMultilineErrors17c() {
+    AssertParse(
+      #"""
+      _ = """
+      1️⃣Incorrect 1
+          Correct
+      2️⃣Incorrect 2
+          """
+      """#,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "insufficient indentation of line in multi-line string literal"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "insufficient indentation of line in multi-line string literal"),
+      ],
+      fixedSource: #"""
+        _ = """
+            Incorrect 1
+            Correct
+            Incorrect 2
+            """
+        """#
     )
   }
 
@@ -430,15 +521,18 @@ final class MultilineErrorsTests: XCTestCase {
     AssertParse(
       #"""
       _ = """
-      \
+      1️⃣\
         """
       """#,
       diagnostics: [
+        DiagnosticSpec(message: "insufficient indentation of line in multi-line string literal")
         // TODO: Old parser expected error on line 2: escaped newline at the last line is not allowed, Fix-It replacements: 1 - 2 = ''
-        // TODO: Old parser expected error on line 2: insufficient indentation of line in multi-line string literal
-        // TODO: Old parser expected note on line 2: change indentation of this line to match closing delimiter, Fix-It replacements: 1 - 1 = '  '
-        // TODO: Old parser expected note on line 3: should match space here
-      ]
+      ],
+      fixedSource: #"""
+        _ = """
+          \
+          """
+        """#
     )
   }
 

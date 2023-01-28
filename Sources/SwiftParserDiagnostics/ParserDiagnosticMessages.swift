@@ -273,6 +273,33 @@ public struct InvalidIdentifierError: ParserError {
   }
 }
 
+public struct InvalidIndentationInMultiLineStringLiteralError: ParserError {
+  public enum Kind {
+    case insufficientIdentation
+    case unexpectedSpace
+    case unexpectedTab
+
+    var message: String {
+      switch self {
+      case .insufficientIdentation: return "insufficient indentation"
+      case .unexpectedSpace: return "unexpected space in indentation"
+      case .unexpectedTab: return "unexpected tab in indentation"
+      }
+    }
+  }
+
+  public let kind: Kind
+  public let lines: Int
+
+  public var message: String {
+    if lines == 1 {
+      return "\(kind.message) of line in multi-line string literal"
+    } else {
+      return "\(kind.message) of next \(lines) lines in multi-line string literal"
+    }
+  }
+}
+
 public struct MissingAttributeArgument: ParserError {
   /// The name of the attribute that's missing the argument, without `@`.
   public let attributeName: TypeSyntax
@@ -364,6 +391,31 @@ public struct EffectSpecifierDeclaredHere: ParserNote {
   }
 }
 
+/// A parser fix-it with a static message.
+public struct StaticParserNote: NoteMessage {
+  public let message: String
+  private let messageID: String
+
+  /// This should only be called within a static var on FixItMessage, such
+  /// as the examples below. This allows us to pick up the messageID from the
+  /// var name.
+  fileprivate init(_ message: String, messageID: String = #function) {
+    self.message = message
+    self.messageID = messageID
+  }
+
+  public var fixItID: MessageID {
+    MessageID(domain: diagnosticDomain, id: "\(type(of: self)).\(messageID)")
+  }
+}
+
+extension NoteMessage where Self == StaticParserNote {
+  /// Please order alphabetically by property name.
+  public static var shouldMatchIndentationOfClosingQuote: Self {
+    .init("should match indentation here"
+  }
+}
+
 // MARK: - Fix-Its (please sort alphabetically)
 
 /// A parser fix-it with a static message.
@@ -386,6 +438,9 @@ public struct StaticParserFixIt: FixItMessage {
 
 extension FixItMessage where Self == StaticParserFixIt {
   /// Please order alphabetically by property name.
+  public static var changeIndentationToMatchClosingDelimiter: Self {
+    .init("change indentation of this line to match closing delimiter")
+  }
   public static var insertSemicolon: Self {
     .init("insert ';'")
   }

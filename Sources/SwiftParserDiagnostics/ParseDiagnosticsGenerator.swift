@@ -81,11 +81,20 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     fixIts: [FixIt] = [],
     handledNodes: [SyntaxIdentifier] = []
   ) {
+    let diagnostic = Diagnostic(node: Syntax(node), position: position, message: message, highlights: highlights, notes: notes, fixIts: fixIts)
+    addDiagnostic(diagnostic, handledNodes: handledNodes)
+  }
+
+  /// Produce a diagnostic.
+  func addDiagnostic(
+    _ diagnostic: Diagnostic,
+    handledNodes: [SyntaxIdentifier] = []
+  ) {
     if suppressRemainingDiagnostics {
       return
     }
     diagnostics.removeAll(where: { handledNodes.contains($0.node.id) })
-    diagnostics.append(Diagnostic(node: Syntax(node), position: position, message: message, highlights: highlights, notes: notes, fixIts: fixIts))
+    diagnostics.append(diagnostic)
     self.handledNodes.append(contentsOf: handledNodes)
   }
 
@@ -796,6 +805,16 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     }
     if let extraneous = node.unexpectedBetweenStatementsAndEOFToken, !extraneous.isEmpty {
       addDiagnostic(extraneous, ExtaneousCodeAtTopLevel(extraneousCode: extraneous), handledNodes: [extraneous.id])
+    }
+    return .visitChildren
+  }
+
+  public override func visit(_ node: StringLiteralExprSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    for (diagnostic, handledNodes) in MultiLineStringLiteralIndentatinDiagnosticsGenerator.diagnose(node) {
+      addDiagnostic(diagnostic, handledNodes: handledNodes)
     }
     return .visitChildren
   }

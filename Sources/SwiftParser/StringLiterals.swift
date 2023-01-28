@@ -162,41 +162,80 @@ extension Parser {
     // -------------------------------------------------------------------------
     // Check open quote followed by newline
 
+    // Condition for the loop below that indicates whether the segment we are
+    // iterating over is on a new line.
+    var isSegmentOnNewLine: Bool
+
     if firstSegment?.content.tokenText == "\n" {
       openQuote = openQuote.extendingTrailingTrivia(by: [.newlines(1)], arena: self.arena)
+      isSegmentOnNewLine = true
     } else {
       if let firstSegment = firstSegment {
         middleSegments.insert(.stringSegment(firstSegment), at: 0)
       }
+      isSegmentOnNewLine = false
       unexpectedBeforeOpenQuote = [openQuote]
       openQuote = RawTokenSyntax(missing: openQuote.tokenKind, trailingTriviaPieces: [.newlines(1)] + indentationTrivia, arena: self.arena)
     }
 
     // -------------------------------------------------------------------------
-    // Check indentation of segments
+    // Check indentation of segments and escaped newlines at end of segment
 
     for (index, segment) in middleSegments.enumerated() {
       switch segment {
       case .stringSegment(var segment):
-        assert(segment.unexpectedBeforeContent == nil, "Segment should not have unexpected before content")
-        assert(segment.content.leadingTriviaByteLength == 0, "Segment should not have leading trivia")
-        if segment.content.tokenText.hasPrefix(indentation) {
-          segment = RawStringSegmentSyntax(
-            content: segment.content.reclassifyAsLeadingTrivia(indentationTrivia, arena: self.arena),
-            arena: self.arena
-          )
-        } else {
-          // TODO: Diagnose
+        if segment.content.isMissing {
+          // Don't diagnose incorrect indentation for segments that we synthesized
+          break
         }
+        // We are not considering unexpected and leading trivia for indentation
+        // computation. If these assertions are violated, we can probably lift
+        // them but we would need to check the produce the expected results.
+        assert(segment.unexpectedBeforeContent == nil && segment.content.leadingTriviaByteLength == 0)
+
+        // Re-classify indentation as leading trivia
+        if isSegmentOnNewLine {
+          if segment.content.tokenText.hasPrefix(indentation) {
+            segment = RawStringSegmentSyntax(
+              segment.unexpectedBeforeContent,
+              content: segment.content.reclassifyAsLeadingTrivia(indentationTrivia, arena: self.arena),
+              segment.unexpectedAfterContent,
+              arena: self.arena
+            )
+          } else {
+            let actualIndentation = segment.content.tokenText.prefix(while: { $0 == UInt8(ascii: " ") || $0 == UInt8(ascii: "\t") })
+            let actualIndentationTriva = TriviaParser.parseTrivia(SyntaxText(rebasing: actualIndentation), position: .leading)
+            let content = segment.content.reclassifyAsLeadingTrivia(
+              actualIndentationTriva,
+              lexerError: LexerError(.insufficientIndentationInMultilineStringLiteral, byteOffset: 0),
+              arena: self.arena
+            )
+            segment = RawStringSegmentSyntax(
+              segment.unexpectedBeforeContent,
+              content: content,
+              segment.unexpectedAfterContent,
+              arena: self.arena
+            )
+          }
+        }
+
+        isSegmentOnNewLine = segment.content.tokenText.hasSuffix("\n")
+
+        // If the segment has a `\` in front of its trailing newline, that newline
+        // is not part of the reprsented string and should be trivia.
+
         if segment.content.tokenText.hasSuffix("\\\n") {
           // TODO: Add a backslash trivia kind
           segment = RawStringSegmentSyntax(
+            segment.unexpectedBeforeContent,
             content: segment.content.reclassifyAsTrailingTrivia([.unexpectedText("\\"), .newlines(1)], arena: self.arena),
+            segment.unexpectedAfterContent,
             arena: self.arena
           )
         }
         middleSegments[index] = .stringSegment(segment)
-      case .expressionSegment:
+      case .expressionSegment(let segment):
+        isSegmentOnNewLine = segment.rightParen.trailingTriviaPieces.contains(where: { $0.isNewline })
         // TODO: Check indentation
         break
       }

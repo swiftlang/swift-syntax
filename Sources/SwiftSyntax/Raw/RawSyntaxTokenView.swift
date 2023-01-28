@@ -154,6 +154,7 @@ public struct RawSyntaxTokenView {
         leadingTrivia: formLeadingTrivia(),
         trailingTrivia: formTrailingTrivia(),
         presence: presence,
+        lexerError: lexerError,
         arena: arena
       )
     case .materializedToken(var payload):
@@ -215,8 +216,8 @@ public struct RawSyntaxTokenView {
     switch raw.rawData.payload {
     case .parsedToken(let dat):
       return dat.lexerError
-    case .materializedToken(_):
-      return nil
+    case .materializedToken(let dat):
+      return dat.lexerError
     case .layout(_):
       preconditionFailure("'lexerError' is a token-only property")
     }

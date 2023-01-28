@@ -154,6 +154,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
     leadingTriviaPieces: [RawTriviaPiece] = [],
     trailingTriviaPieces: [RawTriviaPiece] = [],
     presence: SourcePresence,
+    lexerError: LexerError? = nil,
     arena: __shared SyntaxArena
   ) {
     if leadingTriviaPieces.isEmpty && trailingTriviaPieces.isEmpty {
@@ -163,7 +164,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
         wholeText: text,
         textRange: 0..<text.count,
         presence: presence,
-        lexerError: nil,
+        lexerError: lexerError,
         arena: arena
       )
     } else {
@@ -174,6 +175,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
         leadingTriviaPieces: leadingTriviaPieces,
         trailingTriviaPieces: trailingTriviaPieces,
         presence: presence,
+        lexerError: lexerError,
         arena: arena
       )
     }
@@ -186,6 +188,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
     leadingTriviaPieces: [RawTriviaPiece],
     trailingTriviaPieces: [RawTriviaPiece],
     presence: SourcePresence,
+    lexerError: LexerError?,
     arena: __shared SyntaxArena
   ) {
     let raw = RawSyntax.makeMaterializedToken(
@@ -194,6 +197,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
       leadingTriviaPieceCount: leadingTriviaPieces.count,
       trailingTriviaPieceCount: trailingTriviaPieces.count,
       presence: presence,
+      lexerError: lexerError,
       arena: arena,
       initializingLeadingTriviaWith: { buffer in
         _ = buffer.initialize(from: leadingTriviaPieces)
@@ -225,6 +229,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
       leadingTriviaPieces: leadingTriviaPieces,
       trailingTriviaPieces: trailingTriviaPieces,
       presence: .missing,
+      lexerError: nil,
       arena: arena
     )
   }
@@ -261,6 +266,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
         numLeadingTrivia: dat.numLeadingTrivia + UInt32(extendedTrivia.count),
         byteLength: dat.byteLength + UInt32(extendedTriviaByteLength),
         presence: dat.presence,
+        lexerError: dat.lexerError,
         arena: arena
       ).as(RawTokenSyntax.self)!
     case .layout(_):
@@ -300,6 +306,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
         numLeadingTrivia: dat.numLeadingTrivia,
         byteLength: dat.byteLength + UInt32(extendedTriviaByteLength),
         presence: dat.presence,
+        lexerError: dat.lexerError,
         arena: arena
       ).as(RawTokenSyntax.self)!
     case .layout(_):
@@ -310,7 +317,9 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
   /// Assuming that the tokens tet starts with text representing `reclassifiedTrivia`,
   /// re-classify those characters as no longer being part of the token's text
   /// but as part of the token's leading trivia.
-  public func reclassifyAsLeadingTrivia(_ reclassifiedTrivia: [RawTriviaPiece], arena: SyntaxArena) -> RawTokenSyntax {
+  /// If `error` is not `nil` and the token currently doesn't have a lexer error,
+  /// that error will be set as the lexer error.
+  public func reclassifyAsLeadingTrivia(_ reclassifiedTrivia: [RawTriviaPiece], lexerError: LexerError? = nil, arena: SyntaxArena) -> RawTokenSyntax {
     let reclassifiedTriviaByteLength = reclassifiedTrivia.reduce(0, { $0 + $1.byteLength })
     assert(String(syntaxText: SyntaxText(rebasing: self.tokenText[0..<reclassifiedTriviaByteLength])) == Trivia(pieces: reclassifiedTrivia.map(TriviaPiece.init)).description)
     switch raw.rawData.payload {
@@ -322,7 +331,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
         wholeText: dat.wholeText,
         textRange: textRange,
         presence: dat.presence,
-        lexerError: dat.lexerError,
+        lexerError: dat.lexerError ?? lexerError,
         arena: arena
       ).as(RawTokenSyntax.self)!
     case .materializedToken(let dat):
@@ -339,6 +348,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
         numLeadingTrivia: dat.numLeadingTrivia + UInt32(reclassifiedTrivia.count),
         byteLength: dat.byteLength,
         presence: dat.presence,
+        lexerError: dat.lexerError ?? lexerError,
         arena: arena
       ).as(RawTokenSyntax.self)!
     case .layout(_):
@@ -349,7 +359,9 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
   /// Assuming that the tokens tet ends with text representing `reclassifiedTrivia`,
   /// re-classify those characters as no longer being part of the token's text
   /// but as part of the token's trailing trivia.
-  public func reclassifyAsTrailingTrivia(_ reclassifiedTrivia: [RawTriviaPiece], arena: SyntaxArena) -> RawTokenSyntax {
+  /// If `error` is not `nil` and the token currently doesn't have a lexer error,
+  /// that error will be set as the lexer error.
+  public func reclassifyAsTrailingTrivia(_ reclassifiedTrivia: [RawTriviaPiece], lexerError: LexerError? = nil, arena: SyntaxArena) -> RawTokenSyntax {
     let reclassifiedTriviaByteLength = reclassifiedTrivia.reduce(0, { $0 + $1.byteLength })
     assert(String(syntaxText: SyntaxText(rebasing: self.tokenText[(self.tokenText.count - reclassifiedTriviaByteLength)...])) == Trivia(pieces: reclassifiedTrivia.map(TriviaPiece.init)).description)
     switch raw.rawData.payload {
@@ -360,7 +372,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
         wholeText: dat.wholeText,
         textRange: textRange,
         presence: dat.presence,
-        lexerError: dat.lexerError,
+        lexerError: dat.lexerError ?? lexerError,
         arena: arena
       ).as(RawTokenSyntax.self)!
     case .materializedToken(let dat):
@@ -376,6 +388,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
         numLeadingTrivia: dat.numLeadingTrivia,
         byteLength: dat.byteLength,
         presence: dat.presence,
+        lexerError: dat.lexerError ?? lexerError,
         arena: arena
       ).as(RawTokenSyntax.self)!
     case .layout(_):

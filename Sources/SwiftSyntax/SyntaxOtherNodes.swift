@@ -46,6 +46,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia,
         presence: presence,
+        lexerError: nil,
         arena: arena
       )
       return SyntaxData.forRoot(raw)

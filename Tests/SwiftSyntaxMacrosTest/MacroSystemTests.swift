@@ -131,10 +131,10 @@ public struct ColumnMacro: ExpressionMacro {
     in context: Context
   ) throws -> ExprSyntax {
     guard let sourceLoc = context.location(of: macro),
-          let column = sourceLoc.column else {
+      let column = sourceLoc.column
+    else {
       throw CustomError.message("can't find location for macro")
     }
-
 
     let fileLiteral: ExprSyntax = "\(literal: column)"
     if let leadingTrivia = macro.leadingTrivia {
@@ -153,10 +153,10 @@ public struct FileIDMacro: ExpressionMacro {
     in context: Context
   ) throws -> ExprSyntax {
     guard let sourceLoc = context.location(of: macro),
-          let fileID = sourceLoc.file else {
+      let fileID = sourceLoc.file
+    else {
       throw CustomError.message("can't find location for macro")
     }
-
 
     let fileLiteral: ExprSyntax = "\(literal: fileID)"
     if let leadingTrivia = macro.leadingTrivia {
@@ -637,7 +637,7 @@ public func AssertMacroExpansion(
 
   // Expand all macros in the source.
   let context = BasicMacroExpansionContext(
-    sourceFiles: [origSourceFile : .init(moduleName: testModuleName, fullFilePath: testFileName) ]
+    sourceFiles: [origSourceFile: .init(moduleName: testModuleName, fullFilePath: testFileName)]
   )
   let expandedSourceFile = origSourceFile.expand(macros: macros, in: context)
 

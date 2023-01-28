@@ -31,8 +31,10 @@ public class BasicMacroExpansionContext {
   }
 
   /// Create a new macro evaluation context.
-  public init(expansionDiscriminator: String = "__macro_local_",
-              sourceFiles: [SourceFileSyntax: KnownSourceFile] = [:]) {
+  public init(
+    expansionDiscriminator: String = "__macro_local_",
+    sourceFiles: [SourceFileSyntax: KnownSourceFile] = [:]
+  ) {
     self.expansionDiscriminator = expansionDiscriminator
     self.sourceFiles = sourceFiles
   }
@@ -120,7 +122,7 @@ extension BasicMacroExpansionContext: MacroExpansionContext {
     diagnostics.append(diagnostic)
   }
 
-  public func location<Node: SyntaxProtocol> (
+  public func location<Node: SyntaxProtocol>(
     of node: Node,
     at position: PositionInSyntaxNode,
     filePathMode: SourceLocationFilePathMode

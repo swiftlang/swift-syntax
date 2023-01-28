@@ -41,7 +41,7 @@ public protocol MacroExpansionContext: AnyObject {
   /// - Returns: the source location within the given node, or `nil` if the
   ///   given syntax node is not rooted in a source file that the macro
   ///   expansion context knows about.
-  func location<Node: SyntaxProtocol> (
+  func location<Node: SyntaxProtocol>(
     of node: Node,
     at position: PositionInSyntaxNode,
     filePathMode: SourceLocationFilePathMode
@@ -58,7 +58,7 @@ extension MacroExpansionContext {
   /// - Returns: the source location within the given node, or `nil` if the
   ///   given syntax node is not rooted in a source file that the macro
   ///   expansion context knows about.
-  public func location<Node: SyntaxProtocol> (
+  public func location<Node: SyntaxProtocol>(
     of node: Node
   ) -> SourceLocation? {
     return location(of: node, at: .afterLeadingTrivia, filePathMode: .fileID)

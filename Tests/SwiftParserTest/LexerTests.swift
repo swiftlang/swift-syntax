@@ -15,7 +15,7 @@ import XCTest
 @_spi(RawSyntax) import SwiftParser
 
 fileprivate func lex(_ sourceBytes: [UInt8]) -> [Lexer.Lexeme] {
-  return sourceBytes.withUnsafeBufferPointer { buf in
+  return sourceBytes.withUnsafeBufferPointer { (buf) -> [Lexer.Lexeme] in
     var lexemes = [Lexer.Lexeme]()
     for token in Lexer.tokenize(buf, from: 0) {
       lexemes.append(token)

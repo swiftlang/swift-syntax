@@ -64,6 +64,22 @@ extension RawSyntax: RawSyntaxNodeProtocol {
   }
 }
 
+#if swift(<5.8)
+// Cherry-pick this function from SE-0370
+extension Slice {
+  @inlinable
+  public func initialize<S>(
+    from source: S
+  ) -> (unwritten: S.Iterator, index: Index)
+  where S: Sequence, Base == UnsafeMutableBufferPointer<S.Element> {
+    let buffer = Base(rebasing: self)
+    let (iterator, index) = buffer.initialize(from: source)
+    let distance = buffer.distance(from: buffer.startIndex, to: index)
+    return (iterator, startIndex.advanced(by: distance))
+  }
+}
+#endif
+
 @_spi(RawSyntax)
 public struct RawTokenSyntax: RawSyntaxNodeProtocol {
   public typealias SyntaxType = TokenSyntax

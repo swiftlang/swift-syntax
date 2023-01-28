@@ -48,7 +48,7 @@ fileprivate class StringLiteralExpressionIndentationChecker {
       // Only checking tokens on a newline
       return nil
     }
-    let hasSufficientIndentation = token.tokenView.leadingTrivia { leadingTrivia in
+    let hasSufficientIndentation = token.tokenView.leadingTrivia { leadingTrivia -> Bool in
       let indentationStartIndex = leadingTrivia.lastIndex(where: { $0 == UInt8(ascii: "\n") || $0 == UInt8(ascii: "\r") })?.advanced(by: 1) ?? leadingTrivia.startIndex
       return SyntaxText(rebasing: leadingTrivia[indentationStartIndex...]).hasPrefix(expectedIndentation)
     }

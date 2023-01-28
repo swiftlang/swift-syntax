@@ -106,7 +106,7 @@ final class StringLiteralEofTests: XCTestCase {
             foo
             \(<#expression#>)"""
         """##
-        // FIXME: The closing delimiter should be put on the new line
+      // FIXME: The closing delimiter should be put on the new line
     )
   }
 

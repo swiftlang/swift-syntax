@@ -62,10 +62,21 @@ internal struct RawSyntaxData {
     private var lexerErrorByteOffset: UInt16
 
     var lexerError: LexerError? {
-      if let kind = lexerErrorKind {
-        return LexerError(kind, byteOffset: lexerErrorByteOffset)
-      } else {
-        return nil
+      get {
+        if let kind = lexerErrorKind {
+          return LexerError(kind, byteOffset: lexerErrorByteOffset)
+        } else {
+          return nil
+        }
+      }
+      set {
+        if let newValue = newValue {
+          self.lexerErrorKind = newValue.kind
+          self.lexerErrorByteOffset = newValue.byteOffset
+        } else {
+          self.lexerErrorKind = nil
+          self.lexerErrorByteOffset = 0
+        }
       }
     }
 
@@ -87,6 +98,41 @@ internal struct RawSyntaxData {
     var numLeadingTrivia: UInt32
     var byteLength: UInt32
     var presence: SourcePresence
+    /// Store the members of `LexerError` individually so the compiler can pack
+    /// `ParsedToken` more efficiently (saving 2 bytes)
+    /// `lexerErrorByteOffset` is ignored if `lexerErrorKind` is `nil`
+    private var lexerErrorKind: LexerError.Kind?
+    private var lexerErrorByteOffset: UInt16
+
+    init(tokenKind: RawTokenKind, tokenText: SyntaxText, triviaPieces: RawTriviaPieceBuffer, numLeadingTrivia: UInt32, byteLength: UInt32, presence: SourcePresence, lexerError: LexerError?) {
+      self.tokenKind = tokenKind
+      self.tokenText = tokenText
+      self.triviaPieces = triviaPieces
+      self.numLeadingTrivia = numLeadingTrivia
+      self.byteLength = byteLength
+      self.presence = presence
+      self.lexerErrorKind = lexerError?.kind
+      self.lexerErrorByteOffset = lexerError?.byteOffset ?? 0
+    }
+
+    var lexerError: LexerError? {
+      get {
+        if let kind = lexerErrorKind {
+          return LexerError(kind, byteOffset: lexerErrorByteOffset)
+        } else {
+          return nil
+        }
+      }
+      set {
+        if let newValue = newValue {
+          self.lexerErrorKind = newValue.kind
+          self.lexerErrorByteOffset = newValue.byteOffset
+        } else {
+          self.lexerErrorKind = nil
+          self.lexerErrorByteOffset = 0
+        }
+      }
+    }
   }
 
   /// Layout node including collections.
@@ -241,6 +287,7 @@ extension RawSyntax {
         leadingTrivia: leadingTrivia,
         trailingTrivia: tokenView.formTrailingTrivia(),
         presence: tokenView.presence,
+        lexerError: tokenView.lexerError,
         arena: arena
       )
     case .layout(let layoutView):
@@ -266,6 +313,7 @@ extension RawSyntax {
         leadingTrivia: tokenView.formLeadingTrivia(),
         trailingTrivia: trailingTrivia,
         presence: tokenView.presence,
+        lexerError: tokenView.lexerError,
         arena: arena
       )
     case .layout(let layoutView):
@@ -471,8 +519,8 @@ extension RawSyntax {
     wholeText: SyntaxText,
     textRange: Range<SyntaxText.Index>,
     presence: SourcePresence,
-    arena: __shared SyntaxArena,
-    lexerError: LexerError?
+    lexerError: LexerError?,
+    arena: __shared SyntaxArena
   ) -> RawSyntax {
     assert(
       arena.contains(text: wholeText),
@@ -513,6 +561,7 @@ extension RawSyntax {
     numLeadingTrivia: UInt32,
     byteLength: UInt32,
     presence: SourcePresence,
+    lexerError: LexerError?,
     arena: __shared SyntaxArena
   ) -> RawSyntax {
     let payload = RawSyntaxData.MaterializedToken(
@@ -521,7 +570,8 @@ extension RawSyntax {
       triviaPieces: triviaPieces,
       numLeadingTrivia: numLeadingTrivia,
       byteLength: byteLength,
-      presence: presence
+      presence: presence,
+      lexerError: lexerError
     )
     return RawSyntax(arena: arena, payload: .materializedToken(payload))
   }
@@ -543,6 +593,7 @@ extension RawSyntax {
     leadingTriviaPieceCount: Int,
     trailingTriviaPieceCount: Int,
     presence: SourcePresence,
+    lexerError: LexerError?,
     arena: __shared SyntaxArena,
     initializingLeadingTriviaWith: (UnsafeMutableBufferPointer<RawTriviaPiece>) -> Void,
     initializingTrailingTriviaWith: (UnsafeMutableBufferPointer<RawTriviaPiece>) -> Void
@@ -565,6 +616,7 @@ extension RawSyntax {
       numLeadingTrivia: numericCast(leadingTriviaPieceCount),
       byteLength: numericCast(byteLength),
       presence: presence,
+      lexerError: lexerError,
       arena: arena
     )
   }
@@ -582,6 +634,7 @@ extension RawSyntax {
     leadingTrivia: Trivia,
     trailingTrivia: Trivia,
     presence: SourcePresence,
+    lexerError: LexerError?,
     arena: __shared SyntaxArena
   ) -> RawSyntax {
     let decomposed = kind.decomposeToRaw()
@@ -594,6 +647,7 @@ extension RawSyntax {
       leadingTriviaPieceCount: leadingTrivia.count,
       trailingTriviaPieceCount: trailingTrivia.count,
       presence: presence,
+      lexerError: lexerError,
       arena: arena,
       initializingLeadingTriviaWith: { buffer in
         guard var ptr = buffer.baseAddress else { return }
@@ -624,6 +678,7 @@ extension RawSyntax {
       numLeadingTrivia: 0,
       byteLength: 0,
       presence: .missing,
+      lexerError: nil,
       arena: arena
     )
   }
@@ -764,7 +819,7 @@ extension RawSyntax: CustomDebugStringConvertible {
     case .parsedToken(let dat):
       target.write(".parsedToken(")
       target.write(String(describing: dat.tokenKind))
-      target.write(" wholeText=\(dat.tokenText.debugDescription)")
+      target.write(" wholeText=\(dat.wholeText.debugDescription)")
       target.write(" textRange=\(dat.textRange.description)")
     case .materializedToken(let dat):
       target.write(".materializedToken(")

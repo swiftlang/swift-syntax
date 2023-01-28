@@ -89,6 +89,9 @@ public struct TriviaParser {
           pieces.append(.shebang(start.text(upTo: cursor)))
           continue
         }
+        cursor.advance(while: { $0 == "#" })
+        pieces.append(.pounds(start.distance(to: cursor)))
+        continue
 
       case UInt8(ascii: "<"), UInt8(ascii: ">"):
         // SCM conflict markers.
@@ -96,6 +99,11 @@ public struct TriviaParser {
           pieces.append(.unexpectedText(start.text(upTo: cursor)))
           continue
         }
+
+      case UInt8(ascii: "\\"):
+        cursor.advance(while: { $0 == "\\" })
+        pieces.append(.backslashes(start.distance(to: cursor)))
+        continue
 
       default:
         break

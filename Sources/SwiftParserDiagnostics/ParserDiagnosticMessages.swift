@@ -122,6 +122,9 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var editorPlaceholderInSourceFile: Self {
     .init("editor placeholder in source file")
   }
+  public static var escapedNewlineAtLatlineOfMultiLineStringLiteralNotAllowed: Self {
+    .init("escaped newline at the last line of a multi-line string literal is not allowed")
+  }
   public static var expectedExpressionAfterTry: Self {
     .init("expected expression after 'try'")
   }
@@ -157,6 +160,12 @@ extension DiagnosticMessage where Self == StaticParserError {
   }
   public static var misspelledThrows: Self {
     .init("expected throwing specifier; did you mean 'throws'?")
+  }
+  public static var multiLineStringLiteralMustBeginOnNewLine: Self {
+    .init("multi-line string literal content must begin on a new line")
+  }
+  public static var multiLineStringLiteralMustHaveClosingDelimiterOnNewLine: Self {
+    .init("multi-line string literal closing delimiter must begin on a new line")
   }
   public static var operatorShouldBeDeclaredWithoutBody: Self {
     .init("operator should not be declared with body")
@@ -267,6 +276,33 @@ public struct InvalidIdentifierError: ParserError {
   }
 }
 
+public struct InvalidIndentationInMultiLineStringLiteralError: ParserError {
+  public enum Kind {
+    case insufficientIndentation
+    case unexpectedSpace
+    case unexpectedTab
+
+    var message: String {
+      switch self {
+      case .insufficientIndentation: return "insufficient indentation"
+      case .unexpectedSpace: return "unexpected space in indentation"
+      case .unexpectedTab: return "unexpected tab in indentation"
+      }
+    }
+  }
+
+  public let kind: Kind
+  public let lines: Int
+
+  public var message: String {
+    if lines == 1 {
+      return "\(kind.message) of line in multi-line string literal"
+    } else {
+      return "\(kind.message) of the next \(lines) lines in multi-line string literal"
+    }
+  }
+}
+
 public struct MissingAttributeArgument: ParserError {
   /// The name of the attribute that's missing the argument, without `@`.
   public let attributeName: TypeSyntax
@@ -358,6 +394,31 @@ public struct EffectSpecifierDeclaredHere: ParserNote {
   }
 }
 
+/// A parser fix-it with a static message.
+public struct StaticParserNote: NoteMessage {
+  public let message: String
+  private let messageID: String
+
+  /// This should only be called within a static var on FixItMessage, such
+  /// as the examples below. This allows us to pick up the messageID from the
+  /// var name.
+  fileprivate init(_ message: String, messageID: String = #function) {
+    self.message = message
+    self.messageID = messageID
+  }
+
+  public var fixItID: MessageID {
+    MessageID(domain: diagnosticDomain, id: "\(type(of: self)).\(messageID)")
+  }
+}
+
+extension NoteMessage where Self == StaticParserNote {
+  /// Please order alphabetically by property name.
+  public static var shouldMatchIndentationOfClosingQuote: Self {
+    .init("should match indentation here")
+  }
+}
+
 // MARK: - Fix-Its (please sort alphabetically)
 
 /// A parser fix-it with a static message.
@@ -380,17 +441,26 @@ public struct StaticParserFixIt: FixItMessage {
 
 extension FixItMessage where Self == StaticParserFixIt {
   /// Please order alphabetically by property name.
+  public static var changeIndentationToMatchClosingDelimiter: Self {
+    .init("change indentation of this line to match closing delimiter")
+  }
   public static var insertSemicolon: Self {
     .init("insert ';'")
   }
   public static var insertAttributeArguments: Self {
     .init("insert attribute argument")
   }
+  public static var insertNewline: Self {
+    .init("insert newline")
+  }
   public static var joinIdentifiers: Self {
     .init("join the identifiers together")
   }
   public static var joinIdentifiersWithCamelCase: Self {
     .init("join the identifiers together with camel-case")
+  }
+  public static var removeBackslash: Self {
+    .init("remove '\'")
   }
   public static var removeExtraneousDelimiters: Self {
     .init("remove extraneous delimiters")

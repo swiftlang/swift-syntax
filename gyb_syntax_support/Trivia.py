@@ -9,6 +9,10 @@ class Trivia(object):
         self.comment = comment
         self.characters = tuple(characters)
         self.lower_name = lowercase_first_word(name)
+        if name == "Backslash":
+            self.plural_name = "backslashes"
+        else:
+            self.plural_name = f"{lowercase_first_word(name)}s"
         self.is_new_line = is_new_line
         self.is_comment = is_comment
 
@@ -56,6 +60,8 @@ TRIVIAS = [
            'A documentation block comment, starting with \'/**\' and ending '
            'with \'*/\'.',
            is_comment=True),
+    Trivia('Backslash', 'A backslash that is at the end of a line in a multi-line string literal to escape the newline.', characters=['\\\\']),
+    Trivia('Pound', 'A \'#\' that is at the end of a line in a multi-line string literal to escape the newline.', characters=['#']),
     Trivia('UnexpectedText', 'Any skipped unexpected text.'),
     Trivia('Shebang', 'A script command, starting with \'#!\'.'),
 ]

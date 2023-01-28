@@ -52,7 +52,7 @@ final class HashbangLibraryTests: XCTestCase {
           eofToken: .eof()
         )
       ),
-      substructureCheckTrivia: true
+      options: [.substructureCheckTrivia]
     )
   }
 }

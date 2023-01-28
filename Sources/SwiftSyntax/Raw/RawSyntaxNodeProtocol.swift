@@ -64,6 +64,22 @@ extension RawSyntax: RawSyntaxNodeProtocol {
   }
 }
 
+#if swift(<5.8)
+// Cherry-pick this function from SE-0370
+extension Slice {
+  @inlinable
+  public func initialize<S>(
+    from source: S
+  ) -> (unwritten: S.Iterator, index: Index)
+  where S: Sequence, Base == UnsafeMutableBufferPointer<S.Element> {
+    let buffer = Base(rebasing: self)
+    let (iterator, index) = buffer.initialize(from: source)
+    let distance = buffer.distance(from: buffer.startIndex, to: index)
+    return (iterator, startIndex.advanced(by: distance))
+  }
+}
+#endif
+
 @_spi(RawSyntax)
 public struct RawTokenSyntax: RawSyntaxNodeProtocol {
   public typealias SyntaxType = TokenSyntax
@@ -140,8 +156,8 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
       wholeText: wholeText,
       textRange: textRange,
       presence: presence,
-      arena: arena,
-      lexerError: lexerError
+      lexerError: lexerError,
+      arena: arena
     )
     self = RawTokenSyntax(raw: raw)
   }
@@ -154,6 +170,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
     leadingTriviaPieces: [RawTriviaPiece] = [],
     trailingTriviaPieces: [RawTriviaPiece] = [],
     presence: SourcePresence,
+    lexerError: LexerError? = nil,
     arena: __shared SyntaxArena
   ) {
     if leadingTriviaPieces.isEmpty && trailingTriviaPieces.isEmpty {
@@ -163,7 +180,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
         wholeText: text,
         textRange: 0..<text.count,
         presence: presence,
-        lexerError: nil,
+        lexerError: lexerError,
         arena: arena
       )
     } else {
@@ -174,6 +191,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
         leadingTriviaPieces: leadingTriviaPieces,
         trailingTriviaPieces: trailingTriviaPieces,
         presence: presence,
+        lexerError: lexerError,
         arena: arena
       )
     }
@@ -186,6 +204,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
     leadingTriviaPieces: [RawTriviaPiece],
     trailingTriviaPieces: [RawTriviaPiece],
     presence: SourcePresence,
+    lexerError: LexerError?,
     arena: __shared SyntaxArena
   ) {
     let raw = RawSyntax.makeMaterializedToken(
@@ -194,6 +213,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
       leadingTriviaPieceCount: leadingTriviaPieces.count,
       trailingTriviaPieceCount: trailingTriviaPieces.count,
       presence: presence,
+      lexerError: lexerError,
       arena: arena,
       initializingLeadingTriviaWith: { buffer in
         _ = buffer.initialize(from: leadingTriviaPieces)
@@ -225,6 +245,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
       leadingTriviaPieces: leadingTriviaPieces,
       trailingTriviaPieces: trailingTriviaPieces,
       presence: .missing,
+      lexerError: nil,
       arena: arena
     )
   }

@@ -95,3 +95,12 @@ extension RawTokenKind {
     return kinds.contains(self)
   }
 }
+
+extension RawTriviaPiece {
+  var isIndentationWhitespace: Bool {
+    switch self {
+    case .spaces, .tabs: return true
+    default: return false
+    }
+  }
+}

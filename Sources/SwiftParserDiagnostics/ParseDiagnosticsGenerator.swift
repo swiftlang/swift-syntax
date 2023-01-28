@@ -81,11 +81,20 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     fixIts: [FixIt] = [],
     handledNodes: [SyntaxIdentifier] = []
   ) {
+    let diagnostic = Diagnostic(node: Syntax(node), position: position, message: message, highlights: highlights, notes: notes, fixIts: fixIts)
+    addDiagnostic(diagnostic, handledNodes: handledNodes)
+  }
+
+  /// Produce a diagnostic.
+  func addDiagnostic(
+    _ diagnostic: Diagnostic,
+    handledNodes: [SyntaxIdentifier] = []
+  ) {
     if suppressRemainingDiagnostics {
       return
     }
     diagnostics.removeAll(where: { handledNodes.contains($0.node.id) })
-    diagnostics.append(Diagnostic(node: Syntax(node), position: position, message: message, highlights: highlights, notes: notes, fixIts: fixIts))
+    diagnostics.append(diagnostic)
     self.handledNodes.append(contentsOf: handledNodes)
   }
 
@@ -800,6 +809,58 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: StringLiteralExprSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    if let singleQuote = node.unexpectedBetweenOpenDelimiterAndOpenQuote?.onlyToken(where: { $0.tokenKind == .singleQuote }) {
+      let fixIt = FixIt(
+        message: ReplaceTokensFixIt(replaceTokens: [singleQuote], replacement: node.openQuote),
+        changes: [
+          .makeMissing(singleQuote, transferTrivia: false),
+          .makePresent(node.openQuote, leadingTrivia: singleQuote.leadingTrivia ?? []),
+          .makeMissing(node.unexpectedBetweenSegmentsAndCloseQuote, transferTrivia: false),
+          .makePresent(node.closeQuote, trailingTrivia: node.unexpectedBetweenSegmentsAndCloseQuote?.trailingTrivia ?? []),
+        ]
+      )
+      addDiagnostic(
+        singleQuote,
+        .singleQuoteStringLiteral,
+        fixIts: [fixIt],
+        handledNodes: [
+          node.unexpectedBetweenOpenDelimiterAndOpenQuote?.id,
+          node.openQuote.id,
+          node.unexpectedBetweenSegmentsAndCloseQuote?.id,
+          node.closeQuote.id,
+        ].compactMap { $0 }
+      )
+    }
+    for (diagnostic, handledNodes) in MultiLineStringLiteralIndentatinDiagnosticsGenerator.diagnose(node) {
+      addDiagnostic(diagnostic, handledNodes: handledNodes)
+    }
+    if case .stringSegment(let segment) = node.segments.last {
+      if let invalidContent = segment.unexpectedBeforeContent?.onlyToken(where: { $0.trailingTrivia.contains(where: { $0.isBackslash }) }) {
+        let leadingTrivia = segment.content.leadingTrivia
+        let trailingTrivia = segment.content.trailingTrivia
+        let fixIt = FixIt(
+          message: .removeBackslash,
+          changes: [
+            .makePresent(segment.content, leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia),
+            .makeMissing(invalidContent, transferTrivia: false),
+          ]
+        )
+        addDiagnostic(
+          invalidContent,
+          position: invalidContent.endPositionBeforeTrailingTrivia,
+          .escapedNewlineAtLatlineOfMultiLineStringLiteralNotAllowed,
+          fixIts: [fixIt],
+          handledNodes: [segment.id]
+        )
+      }
+    }
+    return .visitChildren
+  }
+
   public override func visit(_ node: SubscriptDeclSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren
@@ -828,37 +889,6 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         handledNodes: [unexpected.id]
       )
     }
-    return .visitChildren
-  }
-
-  public override func visit(_ node: StringLiteralExprSyntax) -> SyntaxVisitorContinueKind {
-    if shouldSkip(node) {
-      return .skipChildren
-    }
-
-    if let singleQuote = node.unexpectedBetweenOpenDelimiterAndOpenQuote?.onlyToken(where: { $0.tokenKind == .singleQuote }) {
-      let fixIt = FixIt(
-        message: ReplaceTokensFixIt(replaceTokens: [singleQuote], replacement: node.openQuote),
-        changes: [
-          .makeMissing(singleQuote, transferTrivia: false),
-          .makePresent(node.openQuote, leadingTrivia: singleQuote.leadingTrivia ?? []),
-          .makeMissing(node.unexpectedBetweenSegmentsAndCloseQuote, transferTrivia: false),
-          .makePresent(node.closeQuote, trailingTrivia: node.unexpectedBetweenSegmentsAndCloseQuote?.trailingTrivia ?? []),
-        ]
-      )
-      addDiagnostic(
-        singleQuote,
-        .singleQuoteStringLiteral,
-        fixIts: [fixIt],
-        handledNodes: [
-          node.unexpectedBetweenOpenDelimiterAndOpenQuote?.id,
-          node.openQuote.id,
-          node.unexpectedBetweenSegmentsAndCloseQuote?.id,
-          node.closeQuote.id,
-        ].compactMap { $0 }
-      )
-    }
-
     return .visitChildren
   }
 

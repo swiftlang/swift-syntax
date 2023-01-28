@@ -101,7 +101,8 @@ extension FixIt.Changes {
       !firstToken.tokenKind.isPunctuation,
       !previousToken.tokenKind.isPunctuation,
       firstToken.leadingTrivia.isEmpty,
-      (previousToken.presence == .missing ? BasicFormat().visit(previousToken).trailingTrivia : previousToken.trailingTrivia).isEmpty
+      (previousToken.presence == .missing ? BasicFormat().visit(previousToken).trailingTrivia : previousToken.trailingTrivia).isEmpty,
+      leadingTrivia == nil
     {
       /// If neither this nor the previous token are punctionation make sure they
       /// are separated by a space.
@@ -173,6 +174,10 @@ extension Trivia {
         return Array(repeating: TriviaPiece.formfeeds(1), count: count)
       case .newlines(let count):
         return Array(repeating: TriviaPiece.newlines(1), count: count)
+      case .backslashes(let count):
+        return Array(repeating: TriviaPiece.backslashes(1), count: count)
+      case .pounds(let count):
+        return Array(repeating: TriviaPiece.pounds(1), count: count)
       case .carriageReturns(let count):
         return Array(repeating: TriviaPiece.carriageReturns(1), count: count)
       case .carriageReturnLineFeeds(let count):

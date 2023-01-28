@@ -15,7 +15,7 @@ import XCTest
 @_spi(RawSyntax) import SwiftParser
 
 fileprivate func lex(_ sourceBytes: [UInt8]) -> [Lexer.Lexeme] {
-  return sourceBytes.withUnsafeBufferPointer { buf in
+  return sourceBytes.withUnsafeBufferPointer { (buf) -> [Lexer.Lexeme] in
     var lexemes = [Lexer.Lexeme]()
     for token in Lexer.tokenize(buf, from: 0) {
       lexemes.append(token)
@@ -965,6 +965,40 @@ public class LexerTests: XCTestCase {
         LexemeSpec(.identifier, leading: "\n", text: "foo", flags: .isAtStartOfLine),
         LexemeSpec(.rightParen, text: ")"),
         LexemeSpec(.stringQuote, text: #"""#),
+      ]
+    )
+  }
+
+  func testMultilineStringLiteral() {
+    AssertLexemes(
+      #"""
+        """
+        line 1
+        line 2
+        """
+      """#,
+      lexemes: [
+        LexemeSpec(.multilineStringQuote, leading: "  ", text: #"""""#, trailing: "\n"),
+        LexemeSpec(.stringSegment, text: "  line 1\n"),
+        LexemeSpec(.stringSegment, text: "  line 2\n"),
+        LexemeSpec(.stringSegment, text: "  "),
+        LexemeSpec(.multilineStringQuote, text: #"""""#),
+      ]
+    )
+
+    AssertLexemes(
+      #"""
+        """
+        line 1 \
+        line 2
+        """
+      """#,
+      lexemes: [
+        LexemeSpec(.multilineStringQuote, leading: "  ", text: #"""""#, trailing: "\n"),
+        LexemeSpec(.stringSegment, text: "  line 1 ", trailing: "\\\n"),
+        LexemeSpec(.stringSegment, text: "  line 2\n"),
+        LexemeSpec(.stringSegment, text: "  "),
+        LexemeSpec(.multilineStringQuote, text: #"""""#),
       ]
     )
   }

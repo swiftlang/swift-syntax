@@ -62,7 +62,8 @@ final class TriviaParserTests: XCTestCase {
         position: .trailing
       ),
       [
-        .unexpectedText("#!/bin/env"),
+        .pounds(1),
+        .unexpectedText("!/bin/env"),
         .spaces(1),
         .unexpectedText("swift"),
       ]

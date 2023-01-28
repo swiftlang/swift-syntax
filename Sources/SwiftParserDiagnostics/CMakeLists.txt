@@ -11,6 +11,7 @@ add_swift_host_library(SwiftParserDiagnostics
   LexerDiagnosticMessages.swift
   MissingNodesError.swift
   MissingTokenError.swift
+  MultiLineStringLiteralDiagnoticsGenerator.swift
   ParserDiagnosticMessages.swift
   ParseDiagnosticsGenerator.swift
   PresenceUtils.swift

@@ -21,6 +21,18 @@ public class Trivia {
   public let isComment: Bool
   
   public var lowerName: String { lowercaseFirstWord(name: name) }
+
+  public var enumCaseName: String {
+    if self.isCollection {
+      if lowerName == "backslash" {
+        return "backslashes"
+      } else {
+        return "\(lowerName)s"
+      }
+    } else {
+      return lowerName
+    }
+  }
   
   public var charactersLen: Int { characters.count }
   
@@ -122,6 +134,22 @@ public let TRIVIAS: [Trivia] = [
   Trivia(name: "DocBlockComment",
          comment: #"A documentation block comment, starting with '/**' and ending with '*/'."#,
          isComment: true),
+  Trivia(name: "Backslash",
+         comment: #"A backslash that is at the end of a line in a multi-line string literal to escape the newline."#,
+         characters: [
+           Character("\\")
+         ],
+         swiftCharacters: [
+          Character("\\")
+        ]),
+  Trivia(name: "Pound",
+         comment: #"A '#' that is at the end of a line in a multi-line string literal to escape the newline."#,
+         characters: [
+           Character("#")
+         ],
+         swiftCharacters: [
+          Character("#")
+        ]),
   Trivia(name: "UnexpectedText",
          comment: #"Any skipped unexpected text."#),
   Trivia(name: "Shebang",

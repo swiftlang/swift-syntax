@@ -83,38 +83,56 @@ final class RawStringErrorsTests: XCTestCase {
   func testRawStringErrors6() {
     AssertParse(
       ###"""
-      let _ = ##"""aa
+      let _ = ##"""1️⃣aa
         foobar
-        aa"""##
+        aa2️⃣"""##
       """###,
       diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "multi-line string literal content must begin on a new line"),
         // TODO: Old parser expected error on line 1: multi-line string literal content must begin on a new line, Fix-It replacements: 14 - 14 = '\n'
-        // TODO: Old parser expected error on line 3: multi-line string literal closing delimiter must begin on a new line, Fix-It replacements: 5 - 5 = '\n'
-      ]
+        DiagnosticSpec(locationMarker: "2️⃣", message: "multi-line string literal closing delimiter must begin on a new line"),
+      ],
+      fixedSource: ###"""
+        let _ = ##"""
+          aa
+          foobar
+          aa
+          """##
+        """###
     )
   }
 
   func testRawStringErrors7() {
     AssertParse(
       ##"""
-      let _ = #""" foo "bar" #baz
+      let _ = #"""1️⃣ foo "bar" #baz
         """#
       """##,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: multi-line string literal content must begin on a new line, Fix-It replacements: 13 - 13 = '\n'
-      ]
+        DiagnosticSpec(message: "multi-line string literal content must begin on a new line")
+      ],
+      fixedSource: ##"""
+        let _ = #"""
+           foo "bar" #baz
+          """#
+        """##
     )
   }
 
   func testRawStringErrors8() {
     AssertParse(
       ####"""
-      let _ = ###""" "# "##
+      let _ = ###"""1️⃣ "# "##
         """###
       """####,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: multi-line string literal content must begin on a new line, Fix-It replacements: 15 - 15 = '\n'
-      ]
+        DiagnosticSpec(message: "multi-line string literal content must begin on a new line")
+      ],
+      fixedSource: ####"""
+        let _ = ###"""
+           "# "##
+          """###
+        """####
     )
   }
 

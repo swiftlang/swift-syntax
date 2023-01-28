@@ -38,13 +38,13 @@ let triviaFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCopyrig
       if trivia.isCollection {
         EnumCaseDeclSyntax("""
           /// \(raw: trivia.comment)
-          case \(raw: trivia.lowerName)s(Int)
+          case \(raw: trivia.enumCaseName)(Int)
           """)
 
       } else {
         EnumCaseDeclSyntax("""
           /// \(raw: trivia.comment)
-          case \(raw: trivia.lowerName)(String)
+          case \(raw: trivia.enumCaseName)(String)
           """)
       }
     }
@@ -67,11 +67,11 @@ let triviaFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCopyrig
         for trivia in TRIVIAS {
           if trivia.isCollection {
             let joined = trivia.characters.map { "\($0)" }.joined()
-            SwitchCaseSyntax("case let .\(raw: trivia.lowerName)s(count):") {
+            SwitchCaseSyntax("case let .\(raw: trivia.enumCaseName)(count):") {
               FunctionCallExprSyntax("printRepeated(\(literal: joined), count: count)")
             }
           } else {
-            SwitchCaseSyntax("case let .\(raw: trivia.lowerName)(text):") {
+            SwitchCaseSyntax("case let .\(raw: trivia.enumCaseName)(text):") {
               FunctionCallExprSyntax("target.write(text)")
             }
           }
@@ -89,12 +89,12 @@ let triviaFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCopyrig
         SwitchStmtSyntax(expression: ExprSyntax("self")) {
           for trivia in TRIVIAS {
             if trivia.isCollection {
-              SwitchCaseSyntax("case .\(raw: trivia.lowerName)s(let data):") {
-                ReturnStmtSyntax(#"return "\#(raw: trivia.lowerName)s(\(data))""#)
+              SwitchCaseSyntax("case .\(raw: trivia.enumCaseName)(let data):") {
+                ReturnStmtSyntax(#"return "\#(raw: trivia.enumCaseName)(\(data))""#)
               }
             } else {
-              SwitchCaseSyntax("case .\(raw: trivia.lowerName)(let name):") {
-                ReturnStmtSyntax(#"return "\#(raw: trivia.lowerName)(\(name.debugDescription))""#)
+              SwitchCaseSyntax("case .\(raw: trivia.enumCaseName)(let name):") {
+                ReturnStmtSyntax(#"return "\#(raw: trivia.enumCaseName)(\(name.debugDescription))""#)
               }
             }
           }
@@ -127,8 +127,8 @@ let triviaFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCopyrig
 
     InitializerDeclSyntax("""
       /// Creates Trivia with the provided underlying pieces.
-      public init(pieces: [TriviaPiece]) {
-        self.pieces = pieces
+      public init<S: Sequence>(pieces: S) where S.Element == TriviaPiece {
+        self.pieces = Array(pieces)
       }
       """)
 
@@ -173,15 +173,15 @@ let triviaFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCopyrig
         let joined = trivia.characters.map { "\($0)" }.joined()
         FunctionDeclSyntax("""
         /// Returns a piece of trivia for some number of \(literal: joined) characters.
-        public static func \(raw: trivia.lowerName)s(_ count: Int) -> Trivia {
-          return [.\(raw: trivia.lowerName)s(count)]
+        public static func \(raw: trivia.enumCaseName)(_ count: Int) -> Trivia {
+          return [.\(raw: trivia.enumCaseName)(count)]
         }
         """)
 
         VariableDeclSyntax("""
         /// Gets a piece of trivia for \(literal: joined) characters.
         public static var \(raw: trivia.lowerName): Trivia {
-          return .\(raw: trivia.lowerName)s(1)
+          return .\(raw: trivia.enumCaseName)(1)
         }
         """)
 
@@ -189,8 +189,8 @@ let triviaFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCopyrig
       } else {
         FunctionDeclSyntax("""
         /// Returns a piece of trivia for \(raw: trivia.name).
-        public static func \(raw: trivia.lowerName)(_ text: String) -> Trivia {
-          return [.\(raw: trivia.lowerName)(text)]
+        public static func \(raw: trivia.enumCaseName)(_ text: String) -> Trivia {
+          return [.\(raw: trivia.enumCaseName)(text)]
         }
         """)
       }
@@ -288,7 +288,7 @@ let triviaFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCopyrig
         SwitchStmtSyntax(expression: ExprSyntax("self")) {
           for trivia in TRIVIAS {
             if trivia.isCollection {
-              SwitchCaseSyntax("case let .\(raw: trivia.lowerName)s(count):") {
+              SwitchCaseSyntax("case let .\(raw: trivia.enumCaseName)(count):") {
                 if trivia.charactersLen != 1 {
                   ReturnStmtSyntax("return SourceLength(utf8Length: count * \(raw: trivia.charactersLen))")
                 } else {
@@ -296,7 +296,7 @@ let triviaFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCopyrig
                 }
               }
             } else {
-              SwitchCaseSyntax("case let .\(raw: trivia.lowerName)(text):") {
+              SwitchCaseSyntax("case let .\(raw: trivia.enumCaseName)(text):") {
                 ReturnStmtSyntax("return SourceLength(of: text)")
               }
             }
@@ -315,10 +315,10 @@ let triviaFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCopyrig
     """) {
     for trivia in TRIVIAS {
       if trivia.isCollection {
-        EnumCaseDeclSyntax(" case \(raw: trivia.lowerName)s(Int)")
+        EnumCaseDeclSyntax(" case \(raw: trivia.enumCaseName)(Int)")
 
       } else {
-        EnumCaseDeclSyntax("case \(raw: trivia.lowerName)(SyntaxText)")
+        EnumCaseDeclSyntax("case \(raw: trivia.enumCaseName)(SyntaxText)")
       }
     }
 
@@ -328,12 +328,12 @@ let triviaFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCopyrig
       SwitchStmtSyntax(expression: ExprSyntax("piece")) {
         for trivia in TRIVIAS {
           if trivia.isCollection {
-            SwitchCaseSyntax("case let .\(raw: trivia.lowerName)s(count):") {
-              ReturnStmtSyntax("return .\(raw: trivia.lowerName)s(count)")
+            SwitchCaseSyntax("case let .\(raw: trivia.enumCaseName)(count):") {
+              ReturnStmtSyntax("return .\(raw: trivia.enumCaseName)(count)")
             }
           } else {
-            SwitchCaseSyntax("case let .\(raw: trivia.lowerName)(text):") {
-              ReturnStmtSyntax("return .\(raw: trivia.lowerName)(arena.intern(text))")
+            SwitchCaseSyntax("case let .\(raw: trivia.enumCaseName)(text):") {
+              ReturnStmtSyntax("return .\(raw: trivia.enumCaseName)(arena.intern(text))")
             }
           }
         }
@@ -362,12 +362,12 @@ let triviaFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCopyrig
       SwitchStmtSyntax(expression: ExprSyntax("raw")) {
         for trivia in TRIVIAS {
           if trivia.isCollection {
-            SwitchCaseSyntax("case let .\(raw: trivia.lowerName)s(count):") {
-              ExprSyntax("self = .\(raw: trivia.lowerName)s(count)")
+            SwitchCaseSyntax("case let .\(raw: trivia.enumCaseName)(count):") {
+              ExprSyntax("self = .\(raw: trivia.enumCaseName)(count)")
             }
           } else {
-            SwitchCaseSyntax("case let .\(raw: trivia.lowerName)(text):") {
-              ExprSyntax("self = .\(raw: trivia.lowerName)(String(syntaxText: text))")
+            SwitchCaseSyntax("case let .\(raw: trivia.enumCaseName)(text):") {
+              ExprSyntax("self = .\(raw: trivia.enumCaseName)(String(syntaxText: text))")
             }
           }
         }
@@ -383,7 +383,7 @@ let triviaFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCopyrig
         SwitchStmtSyntax(expression: ExprSyntax("self")) {
           for trivia in TRIVIAS {
             if trivia.isCollection {
-              SwitchCaseSyntax("case let .\(raw: trivia.lowerName)s(count):") {
+              SwitchCaseSyntax("case let .\(raw: trivia.enumCaseName)(count):") {
                 if trivia.charactersLen != 1 {
                   ReturnStmtSyntax("return count * \(raw: trivia.charactersLen)")
                 } else {
@@ -391,7 +391,7 @@ let triviaFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCopyrig
                 }
               }
             } else {
-              SwitchCaseSyntax("case let .\(raw: trivia.lowerName)(text):") {
+              SwitchCaseSyntax("case let .\(raw: trivia.enumCaseName)(text):") {
                 ReturnStmtSyntax("return text.count")
               }
             }
@@ -405,11 +405,11 @@ let triviaFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCopyrig
         SwitchStmtSyntax(expression: ExprSyntax("self")) {
           for trivia in TRIVIAS {
             if trivia.isCollection {
-              SwitchCaseSyntax("case .\(raw: trivia.lowerName)s(_):") {
+              SwitchCaseSyntax("case .\(raw: trivia.enumCaseName)(_):") {
                 ReturnStmtSyntax("return nil")
               }
             } else {
-              SwitchCaseSyntax("case .\(raw: trivia.lowerName)(let text):") {
+              SwitchCaseSyntax("case .\(raw: trivia.enumCaseName)(let text):") {
                 ReturnStmtSyntax("return text")
               }
             }

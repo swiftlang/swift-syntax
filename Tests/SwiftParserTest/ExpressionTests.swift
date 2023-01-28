@@ -918,6 +918,27 @@ final class ExpressionTests: XCTestCase {
       ]
     )
   }
+
+  func testFoo() {
+    AssertParse(
+      """
+      "This is unterminated1️⃣
+      x
+      """,
+      substructure: Syntax(
+        StringLiteralExprSyntax(
+          openQuote: .stringQuoteToken(),
+          segments: StringLiteralSegmentsSyntax([
+            .stringSegment(StringSegmentSyntax(content: .stringSegment("This is unterminated")))
+          ]),
+          closeQuote: .stringQuoteToken(presence: .missing)
+        )
+      ),
+      diagnostics: [
+        DiagnosticSpec(message: #"expected '"' to end string literal"#)
+      ]
+    )
+  }
 }
 
 final class MemberExprTests: XCTestCase {

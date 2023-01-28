@@ -254,10 +254,13 @@ struct DefineBitwidthNumberedStructsMacro: DeclarationMacro {
 public struct PropertyWrapper {}
 
 extension PropertyWrapper: AccessorMacro {
-  public static func expansion(
+  public static func expansion<
+    Context: MacroExpansionContext,
+    Declaration: DeclSyntaxProtocol
+  >(
     of node: AttributeSyntax,
-    attachedTo declaration: DeclSyntax,
-    in context: any MacroExpansionContext
+    attachedTo declaration: Declaration,
+    in context: Context
   ) throws -> [AccessorDeclSyntax] {
     guard let varDecl = declaration.as(VariableDeclSyntax.self),
       let binding = varDecl.bindings.first,
@@ -569,10 +572,13 @@ extension CustomTypeWrapperMacro: MemberAttributeMacro {
 }
 
 extension CustomTypeWrapperMacro: AccessorMacro {
-  static func expansion(
+  static func expansion<
+    Context: MacroExpansionContext,
+    Declaration: DeclSyntaxProtocol
+  >(
     of node: AttributeSyntax,
-    attachedTo declaration: DeclSyntax,
-    in context: any MacroExpansionContext
+    attachedTo declaration: Declaration,
+    in context: Context
   ) throws -> [AccessorDeclSyntax] {
     guard let property = declaration.as(VariableDeclSyntax.self),
       let binding = property.bindings.first,

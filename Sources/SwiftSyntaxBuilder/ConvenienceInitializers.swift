@@ -176,7 +176,7 @@ extension FunctionParameterSyntax {
     _ source: String,
     for subject: Parser.ParameterSubject
   ) {
-    self = try! performParse(
+    self = performParse(
       source: Array(source.utf8),
       parse: {
         let raw = RawSyntax($0.parseFunctionParameter(for: subject))

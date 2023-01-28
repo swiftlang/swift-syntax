@@ -334,8 +334,6 @@ extension ParseDiagnosticsGenerator {
           break
         }
       }
-    } else {
-      missingNodes = []
     }
 
     let changes = missingNodes.enumerated().map { (index, missingNode) -> FixIt.Changes in

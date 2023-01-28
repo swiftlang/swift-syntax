@@ -40,7 +40,7 @@ let package = Package(
     .library(name: "SwiftSyntax", type: .static, targets: ["SwiftSyntax"]),
     .library(name: "SwiftSyntaxParser", type: .static, targets: ["SwiftSyntaxParser"]),
     .library(name: "SwiftSyntaxBuilder", type: .static, targets: ["SwiftSyntaxBuilder"]),
-    .library(name: "_SwiftSyntaxMacros", type: .static, targets: ["_SwiftSyntaxMacros"]),
+    .library(name: "SwiftSyntaxMacros", type: .static, targets: ["SwiftSyntaxMacros"]),
     .library(name: "SwiftRefactor", type: .static, targets: ["SwiftRefactor"]),
   ],
   targets: [
@@ -115,7 +115,7 @@ let package = Package(
       ]
     ),
     .target(
-      name: "_SwiftSyntaxMacros",
+      name: "SwiftSyntaxMacros",
       dependencies: [
         "SwiftSyntax", "SwiftSyntaxBuilder", "SwiftParser", "SwiftDiagnostics"
       ],
@@ -158,7 +158,7 @@ let package = Package(
       name: "SwiftSyntaxMacrosTest",
       dependencies: ["SwiftDiagnostics", "SwiftOperators", "SwiftParser",
                      "_SwiftSyntaxTestSupport", "SwiftSyntaxBuilder",
-                     "_SwiftSyntaxMacros"]
+                     "SwiftSyntaxMacros"]
     ),
     .testTarget(
       name: "PerformanceTest",

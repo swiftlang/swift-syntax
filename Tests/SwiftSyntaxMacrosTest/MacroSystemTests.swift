@@ -14,7 +14,7 @@ import SwiftDiagnostics
 import SwiftParser
 import SwiftSyntax
 import SwiftSyntaxBuilder
-import _SwiftSyntaxMacros
+import SwiftSyntaxMacros
 import _SwiftSyntaxTestSupport
 import XCTest
 

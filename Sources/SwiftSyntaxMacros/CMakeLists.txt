@@ -6,7 +6,7 @@
 # See http://swift.org/LICENSE.txt for license information
 # See http://swift.org/CONTRIBUTORS.txt for Swift project authors
 
-add_swift_host_library(_SwiftSyntaxMacros
+add_swift_host_library(SwiftSyntaxMacros
   MacroProtocols/AccessorMacro.swift
   MacroProtocols/AttachedMacro.swift
   MacroProtocols/CodeItemMacro.swift
@@ -24,7 +24,7 @@ add_swift_host_library(_SwiftSyntaxMacros
   Syntax+MacroEvaluation.swift
 )
 
-target_link_libraries(_SwiftSyntaxMacros PUBLIC
+target_link_libraries(SwiftSyntaxMacros PUBLIC
   SwiftParser
   SwiftSyntaxBuilder
   )

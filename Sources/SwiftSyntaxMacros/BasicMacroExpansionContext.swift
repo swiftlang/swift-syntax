@@ -65,14 +65,28 @@ public class BasicMacroExpansionContext {
   /// Used in conjunction with `expansionDiscriminator`.
   private var uniqueNames: [String: Int] = [:]
 
+}
+
+extension BasicMacroExpansionContext {
   /// Note that the given node that was at the given position in the provided
   /// source file has been disconnected and is now a new root.
-  internal func addDisconnected(
-    _ node: Syntax,
+  private func addDisconnected<Node: SyntaxProtocol>(
+    _ node: Node,
     at offset: AbsolutePosition,
     in sourceFile: SourceFileSyntax
   ) {
-    disconnectedNodes[node] = (sourceFile, offset.utf8Offset)
+    disconnectedNodes[Syntax(node)] = (sourceFile, offset.utf8Offset)
+  }
+
+  /// Detach the given node, and record where it came from.
+  public func detach<Node: SyntaxProtocol>(_ node: Node) -> Node {
+    let detached = node.detach()
+
+    if let rootSourceFile = node.root.as(SourceFileSyntax.self) {
+      addDisconnected(detached, at: node.position, in: rootSourceFile)
+    }
+
+    return detached
   }
 }
 

@@ -28,23 +28,11 @@ extension SyntaxProtocol {
   /// Detach the current node and inform the macro expansion context,
   /// if it needs to know.
   fileprivate func detach(in context: MacroExpansionContext) -> Self {
-    let detached = detach()
-
-    // Testing contexts want to know where the detach occurred so they can
-    // track it.
-    //
-    // TODO: Should this be generalized?
-    if let testingContext = context as? BasicMacroExpansionContext,
-      let parentSourceFile = root.as(SourceFileSyntax.self)
-    {
-      testingContext.addDisconnected(
-        Syntax(detached),
-        at: position,
-        in: parentSourceFile
-      )
+    if let basicContext = context as? BasicMacroExpansionContext {
+      return basicContext.detach(self)
     }
 
-    return detached
+    return self.detach()
   }
 }
 

@@ -570,12 +570,17 @@ final class ExpressionTests: XCTestCase {
       ]
     )
 
-    // FIXME: We currently don't enforce that multiline string literal
-    // contents must start on a new line
     AssertParse(
       ##"""
-      """"""1️⃣
-      """##
+      """1️⃣"""
+      """##,
+      diagnostics: [
+        DiagnosticSpec(message: "multi-line string literal content must begin on a new line")
+      ],
+      fixedSource: ##"""
+        """
+        """
+        """##
     )
 
     AssertParse(
@@ -919,7 +924,7 @@ final class ExpressionTests: XCTestCase {
     )
   }
 
-  func testFoo() {
+  func testUnterminatedStringLiteral() {
     AssertParse(
       """
       "This is unterminated1️⃣
@@ -937,6 +942,68 @@ final class ExpressionTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(message: #"expected '"' to end string literal"#)
       ]
+    )
+  }
+
+  func testPostProcessMultilineStringLiteral() {
+    AssertParse(
+      #"""
+        """
+        line 1
+        line 2
+        """
+      """#,
+      substructure: Syntax(
+        StringLiteralExprSyntax(
+          openQuote: .multilineStringQuoteToken(leadingTrivia: .spaces(2), trailingTrivia: .newline),
+          segments: StringLiteralSegmentsSyntax([
+            .stringSegment(StringSegmentSyntax(leadingTrivia: .spaces(2), content: .stringSegment("line 1\n"))),
+            .stringSegment(StringSegmentSyntax(leadingTrivia: .spaces(2), content: .stringSegment("line 2"), trailingTrivia: .newline)),
+          ]),
+          closeQuote: .multilineStringQuoteToken(leadingTrivia: .spaces(2))
+        )
+      ),
+      substructureCheckTrivia: true
+    )
+
+    AssertParse(
+      #"""
+        """
+        line 1 \
+        line 2
+        """
+      """#,
+      substructure: Syntax(
+        StringLiteralExprSyntax(
+          openQuote: .multilineStringQuoteToken(leadingTrivia: .spaces(2), trailingTrivia: .newline),
+          segments: StringLiteralSegmentsSyntax([
+            .stringSegment(StringSegmentSyntax(leadingTrivia: .spaces(2), content: .stringSegment("line 1 "), trailingTrivia: [.unexpectedText("\\"), .newlines(1)])),
+            .stringSegment(StringSegmentSyntax(leadingTrivia: .spaces(2), content: .stringSegment("line 2"), trailingTrivia: .newline)),
+          ]),
+          closeQuote: .multilineStringQuoteToken(leadingTrivia: .spaces(2))
+        )
+      ),
+      substructureCheckTrivia: true
+    )
+
+    AssertParse(
+      #"""
+        """
+        line 1
+        line 2 \
+        """
+      """#,
+      substructure: Syntax(
+        StringLiteralExprSyntax(
+          openQuote: .multilineStringQuoteToken(leadingTrivia: .spaces(2), trailingTrivia: .newline),
+          segments: StringLiteralSegmentsSyntax([
+            .stringSegment(StringSegmentSyntax(leadingTrivia: .spaces(2), content: .stringSegment("line 1\n"))),
+            .stringSegment(StringSegmentSyntax(leadingTrivia: .spaces(2), content: .stringSegment("line 2 \\"), trailingTrivia: .newline)),
+          ]),
+          closeQuote: .multilineStringQuoteToken(leadingTrivia: .spaces(2))
+        )
+      ),
+      substructureCheckTrivia: true
     )
   }
 }

@@ -53,7 +53,7 @@ class PresentMaker: SyntaxRewriter {
         presentToken = TokenSyntax(token.tokenKind, presence: .present)
       } else {
         let newKind = TokenKind.fromRaw(kind: rawKind, text: rawKind.defaultText.map(String.init) ?? "<#\(rawKind.nameForDiagnostics)#>")
-        presentToken = TokenSyntax(newKind, presence: .present)
+        presentToken = TokenSyntax(newKind, leadingTrivia: token.leadingTrivia, trailingTrivia: token.trailingTrivia, presence: .present)
       }
       return BasicFormat().visit(presentToken)
     } else {

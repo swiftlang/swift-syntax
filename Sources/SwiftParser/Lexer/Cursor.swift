@@ -1731,7 +1731,12 @@ extension Lexer.Cursor {
           )
         }
       case UInt8(ascii: "\r"), UInt8(ascii: "\n"):
-        if stringLiteralKind != .multiLine {
+        if stringLiteralKind == .multiLine {
+          // Make sure each line starts a new string segment so the parser can
+          // validate the multi-line string literal's indentation.
+          _ = self.advance()
+          return Lexer.Result(.stringSegment)
+        } else {
           // Single line literals cannot span multiple lines.
           // Terminate the string here and go back to normal lexing (instead of `afterStringLiteral`)
           // since we aren't looking for the closing quote anymore.
@@ -1750,8 +1755,15 @@ extension Lexer.Cursor {
       var clone = self
       let charValue = clone.lexCharacterInStringLiteral(stringLiteralKind: stringLiteralKind, delimiterLength: delimiterLength)
       switch charValue {
-      case .success, .validatedEscapeSequence:
+      case .success:
         self = clone
+      case .validatedEscapeSequence(let escapedCharacter):
+        self = clone
+        if escapedCharacter == "\n" || escapedCharacter == "\r" {
+          // Make sure each line starts a new string segment so the parser can
+          // validate the multi-line string literal's indentation.
+          return Lexer.Result(.stringSegment)
+        }
       case .error:
         // TODO: Diagnose error
         self = clone

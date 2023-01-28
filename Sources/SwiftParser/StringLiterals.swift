@@ -44,6 +44,176 @@ extension Parser {
     }
   }
 
+  /// If `text` only consists of indentation whitespace (space and tab), return
+  /// the trivia pieces that represent `text`, otherwise return `nil`.
+  private func parseIndentationTrivia(text: SyntaxText) -> [RawTriviaPiece]? {
+    let trivia = TriviaParser.parseTrivia(text, position: .leading)
+    if trivia.allSatisfy({ $0.isIndentationWhitespace }) {
+      return trivia
+    } else {
+      return nil
+    }
+  }
+
+  // FIXME: Handle \r and \r\n if needed in here
+  private func postProcessMultilineStringLiteral(
+    openQuote: RawTokenSyntax,
+    segments allSegments: [RawStringLiteralSegmentsSyntax.Element],
+    closeQuote: RawTokenSyntax
+  ) -> (
+    unexpectedBeforeOpenQuote: [RawTokenSyntax],
+    openQuote: RawTokenSyntax,
+    segments: [RawStringLiteralSegmentsSyntax.Element],
+    unexpectedBeforeCloseQuote: [RawTokenSyntax],
+    closeQuote: RawTokenSyntax
+  ) {
+    // -------------------------------------------------------------------------
+    // Precondition
+
+    assert(openQuote.trailingTriviaByteLength == 0, "Open quote produced by the lexer should not have trailing trivia because we would drop it during post-processing")
+    assert(closeQuote.leadingTriviaByteLength == 0, "Closing quote produced by the lexer should not have leading trivia because we would drop it during post-processing")
+    assert(
+      allSegments.allSatisfy {
+        if case .stringSegment(let segment) = $0 {
+          return segment.unexpectedBeforeContent == nil
+            && segment.unexpectedAfterContent == nil
+            && segment.content.leadingTriviaByteLength == 0
+            && segment.content.trailingTriviaByteLength == 0
+        } else {
+          return true
+        }
+      },
+      "String segement produced by the lexer should not have unexpected text or trivia because we would drop it during post-processing"
+    )
+
+    // -------------------------------------------------------------------------
+    // Variables
+
+    var middleSegments = allSegments
+    let lastSegment = !middleSegments.isEmpty ? middleSegments.removeLast().as(RawStringSegmentSyntax.self) : nil
+    let firstSegment = !middleSegments.isEmpty ? middleSegments.removeFirst().as(RawStringSegmentSyntax.self) : nil
+
+    let indentation: SyntaxText
+    let indentationTrivia: [RawTriviaPiece]
+
+    var unexpectedBeforeOpenQuote: [RawTokenSyntax] = []
+    var openQuote = openQuote
+    var unexpectedBeforeCloseQuote: [RawTokenSyntax] = []
+    var closeQuote = closeQuote
+
+    // -------------------------------------------------------------------------
+    // Check close quote is on new line
+
+    let closeDelimiterOnNewLine: Bool
+    switch middleSegments.last {
+    case .stringSegment(let lastMiddleSegment):
+      if lastMiddleSegment.content.tokenText.hasSuffix("\n") {
+        // The newline at the end of the last line in the string literal is not part of the represented string.
+        // Mark it as trivia.
+        middleSegments[middleSegments.count - 1] = .stringSegment(
+          RawStringSegmentSyntax(
+            content: lastMiddleSegment.content.reclassifyAsTrailingTrivia([.newlines(1)], arena: self.arena),
+            arena: self.arena
+          )
+        )
+        closeDelimiterOnNewLine = true
+      } else {
+        closeDelimiterOnNewLine = false
+      }
+    case .expressionSegment:
+      closeDelimiterOnNewLine = false
+    case nil:
+      closeDelimiterOnNewLine = firstSegment?.content.tokenText.hasSuffix("\n") ?? false
+    }
+
+    if !closeDelimiterOnNewLine {
+      unexpectedBeforeCloseQuote = [closeQuote]
+      closeQuote = RawTokenSyntax(missing: closeQuote.tokenKind, leadingTriviaPieces: [.newlines(1)], arena: self.arena)
+
+      // The closing delimiter doesn't start on a new line and thus it doesn't
+      // make sense to try and extract indentation from it.
+      return (unexpectedBeforeOpenQuote, openQuote, allSegments, unexpectedBeforeCloseQuote, closeQuote)
+    }
+
+    // -------------------------------------------------------------------------
+    // Parse indentation
+
+    if let lastSegment = lastSegment,
+      let parsedTrivia = parseIndentationTrivia(text: lastSegment.content.tokenText)
+    {
+      indentationTrivia = parsedTrivia
+      indentation = lastSegment.content.tokenText
+      closeQuote = closeQuote.extendingLeadingTrivia(by: parsedTrivia, arena: self.arena)
+    } else {
+      if let lastSegment = lastSegment {
+        indentationTrivia = TriviaParser.parseTrivia(lastSegment.content.tokenText, position: .leading).prefix(while: { $0.isIndentationWhitespace })
+        let indentationByteLength = indentationTrivia.reduce(0, { $0 + $1.byteLength })
+        indentation = SyntaxText(rebasing: lastSegment.content.tokenText[0..<indentationByteLength])
+        middleSegments.append(.stringSegment(lastSegment))
+      } else {
+        indentationTrivia = []
+        indentation = ""
+      }
+
+      unexpectedBeforeCloseQuote = [closeQuote]
+      closeQuote = RawTokenSyntax(missing: closeQuote.tokenKind, leadingTriviaPieces: [.newlines(1)] + indentationTrivia, arena: self.arena)
+    }
+
+    // -------------------------------------------------------------------------
+    // Check open quote followed by newline
+
+    if firstSegment?.content.tokenText == "\n" {
+      openQuote = openQuote.extendingTrailingTrivia(by: [.newlines(1)], arena: self.arena)
+    } else {
+      if let firstSegment = firstSegment {
+        middleSegments.insert(.stringSegment(firstSegment), at: 0)
+      }
+      unexpectedBeforeOpenQuote = [openQuote]
+      openQuote = RawTokenSyntax(missing: openQuote.tokenKind, trailingTriviaPieces: [.newlines(1)] + indentationTrivia, arena: self.arena)
+    }
+
+    // -------------------------------------------------------------------------
+    // Check indentation of segments
+
+    for (index, segment) in middleSegments.enumerated() {
+      switch segment {
+      case .stringSegment(var segment):
+        assert(segment.unexpectedBeforeContent == nil, "Segment should not have unexpected before content")
+        assert(segment.content.leadingTriviaByteLength == 0, "Segment should not have leading trivia")
+        if segment.content.tokenText.hasPrefix(indentation) {
+          segment = RawStringSegmentSyntax(
+            content: segment.content.reclassifyAsLeadingTrivia(indentationTrivia, arena: self.arena),
+            arena: self.arena
+          )
+        } else {
+          // TODO: Diagnose
+        }
+        if segment.content.tokenText.hasSuffix("\\\n") {
+          // TODO: Add a backslash trivia kind
+          segment = RawStringSegmentSyntax(
+            content: segment.content.reclassifyAsTrailingTrivia([.unexpectedText("\\"), .newlines(1)], arena: self.arena),
+            arena: self.arena
+          )
+        }
+        middleSegments[index] = .stringSegment(segment)
+      case .expressionSegment:
+        // TODO: Check indentation
+        break
+      }
+    }
+
+    // -------------------------------------------------------------------------
+    // Done
+
+    return (
+      unexpectedBeforeOpenQuote,
+      openQuote,
+      middleSegments,
+      unexpectedBeforeCloseQuote,
+      closeQuote
+    )
+  }
+
   /// Parse a string literal expression.
   @_spi(RawSyntax)
   public mutating func parseStringLiteral() -> RawStringLiteralExprSyntax {
@@ -114,26 +284,41 @@ extension Parser {
     let unexpectedBeforeCloseQuote: RawUnexpectedNodesSyntax?
     let closeQuote: RawTokenSyntax
     if openQuoteKind == .singleQuote {
-      let (unexpectedBeforeSingleQuote, singleQuote) = self.expect(.singleQuote)
-      unexpectedBeforeCloseQuote = RawUnexpectedNodesSyntax(combining: unexpectedBeforeSingleQuote, singleQuote, arena: self.arena)
+      let singleQuote = self.expectWithoutRecovery(.singleQuote)
+      unexpectedBeforeCloseQuote = RawUnexpectedNodesSyntax([singleQuote], arena: self.arena)
       closeQuote = missingToken(.stringQuote)
     } else {
-      (unexpectedBeforeCloseQuote, closeQuote) = self.expect(openQuote.tokenKind)
+      unexpectedBeforeCloseQuote = nil
+      closeQuote = self.expectWithoutRecovery(openQuote.tokenKind)
     }
 
     let (unexpectedBeforeCloseDelimiter, closeDelimiter) = self.parseStringDelimiter(openDelimiter: openDelimiter)
 
-    /// Construct the literal expression.
-    return RawStringLiteralExprSyntax(
-      openDelimiter: openDelimiter,
-      unexpectedBeforeOpenQuote,
-      openQuote: openQuote,
-      segments: RawStringLiteralSegmentsSyntax(elements: segments, arena: self.arena),
-      unexpectedBeforeCloseQuote,
-      closeQuote: closeQuote,
-      unexpectedBeforeCloseDelimiter,
-      closeDelimiter: closeDelimiter,
-      arena: self.arena
-    )
+    if openQuote.tokenKind == .multilineStringQuote, !openQuote.isMissing, !closeQuote.isMissing {
+      let postProcessed = postProcessMultilineStringLiteral(openQuote: openQuote, segments: segments, closeQuote: closeQuote)
+      return RawStringLiteralExprSyntax(
+        openDelimiter: openDelimiter,
+        RawUnexpectedNodesSyntax(combining: unexpectedBeforeOpenQuote, postProcessed.unexpectedBeforeOpenQuote, arena: self.arena),
+        openQuote: postProcessed.openQuote,
+        segments: RawStringLiteralSegmentsSyntax(elements: postProcessed.segments, arena: self.arena),
+        RawUnexpectedNodesSyntax(combining: postProcessed.unexpectedBeforeCloseQuote, unexpectedBeforeCloseQuote, arena: self.arena),
+        closeQuote: postProcessed.closeQuote,
+        unexpectedBeforeCloseDelimiter,
+        closeDelimiter: closeDelimiter,
+        arena: self.arena
+      )
+    } else {
+      return RawStringLiteralExprSyntax(
+        openDelimiter: openDelimiter,
+        unexpectedBeforeOpenQuote,
+        openQuote: openQuote,
+        segments: RawStringLiteralSegmentsSyntax(elements: segments, arena: self.arena),
+        unexpectedBeforeCloseQuote,
+        closeQuote: closeQuote,
+        unexpectedBeforeCloseDelimiter,
+        closeDelimiter: closeDelimiter,
+        arena: self.arena
+      )
+    }
   }
 }

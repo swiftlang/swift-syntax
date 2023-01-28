@@ -968,4 +968,40 @@ public class LexerTests: XCTestCase {
       ]
     )
   }
+
+  func testMultilineStringLiteral() {
+    AssertLexemes(
+      #"""
+        """
+        line 1
+        line 2
+        """
+      """#,
+      lexemes: [
+        LexemeSpec(.multilineStringQuote, leading: "  ", text: #"""""#),
+        LexemeSpec(.stringSegment, text: "\n"),
+        LexemeSpec(.stringSegment, text: "  line 1\n"),
+        LexemeSpec(.stringSegment, text: "  line 2\n"),
+        LexemeSpec(.stringSegment, text: "  "),
+        LexemeSpec(.multilineStringQuote, text: #"""""#),
+      ]
+    )
+
+    AssertLexemes(
+      #"""
+        """
+        line 1 \
+        line 2
+        """
+      """#,
+      lexemes: [
+        LexemeSpec(.multilineStringQuote, leading: "  ", text: #"""""#),
+        LexemeSpec(.stringSegment, text: "\n"),
+        LexemeSpec(.stringSegment, text: "  line 1 \\\n"),
+        LexemeSpec(.stringSegment, text: "  line 2\n"),
+        LexemeSpec(.stringSegment, text: "  "),
+        LexemeSpec(.multilineStringQuote, text: #"""""#),
+      ]
+    )
+  }
 }

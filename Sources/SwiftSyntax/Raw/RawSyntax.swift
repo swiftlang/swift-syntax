@@ -471,8 +471,8 @@ extension RawSyntax {
     wholeText: SyntaxText,
     textRange: Range<SyntaxText.Index>,
     presence: SourcePresence,
-    arena: __shared SyntaxArena,
-    lexerError: LexerError?
+    lexerError: LexerError?,
+    arena: __shared SyntaxArena
   ) -> RawSyntax {
     assert(
       arena.contains(text: wholeText),

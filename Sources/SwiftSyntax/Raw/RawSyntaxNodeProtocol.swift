@@ -140,8 +140,8 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
       wholeText: wholeText,
       textRange: textRange,
       presence: presence,
-      arena: arena,
-      lexerError: lexerError
+      lexerError: lexerError,
+      arena: arena
     )
     self = RawTokenSyntax(raw: raw)
   }
@@ -227,5 +227,159 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
       presence: .missing,
       arena: arena
     )
+  }
+
+  /// Assuming that text representing `extendedTrivia` preceeds this token,
+  /// return a token that has its leading trivia prepended by `extendedTrivia`.
+  /// This can be used to transfer trivia from a preceeding token to this token.
+  /// The caller is responsible to delete preceeding trivia from the tree to
+  /// maintain source-fidelity.
+  public func extendingLeadingTrivia(by extendedTrivia: [RawTriviaPiece], arena: SyntaxArena) -> RawTokenSyntax {
+    let extendedTriviaByteLength = extendedTrivia.reduce(0, { $0 + $1.byteLength })
+    switch raw.rawData.payload {
+    case .parsedToken(let dat):
+      assert(String(syntaxText: SyntaxText(baseAddress: dat.wholeText.baseAddress?.advanced(by: -extendedTriviaByteLength), count: extendedTriviaByteLength)) == Trivia(pieces: extendedTrivia.map(TriviaPiece.init)).description)
+      let wholeText = SyntaxText(baseAddress: dat.wholeText.baseAddress?.advanced(by: -extendedTriviaByteLength), count: dat.wholeText.count + extendedTriviaByteLength)
+      let textRange = (dat.textRange.lowerBound + extendedTriviaByteLength)..<(dat.textRange.upperBound + extendedTriviaByteLength)
+      return RawSyntax.parsedToken(
+        kind: dat.tokenKind,
+        wholeText: arena.intern(wholeText),
+        textRange: textRange,
+        presence: dat.presence,
+        lexerError: dat.lexerError,
+        arena: arena
+      ).as(RawTokenSyntax.self)!
+    case .materializedToken(let dat):
+      let triviaBuffer = arena.allocateRawTriviaPieceBuffer(count: dat.triviaPieces.count + extendedTrivia.count)
+      let (_, extenedTriviaEndIndex) = triviaBuffer.initialize(from: extendedTrivia)
+      let (_, triviaEndIndex) = triviaBuffer[extenedTriviaEndIndex...].initialize(from: dat.triviaPieces)
+      assert(triviaEndIndex == triviaBuffer.endIndex)
+      return RawSyntax.materializedToken(
+        kind: dat.tokenKind,
+        text: dat.tokenText,
+        triviaPieces: RawTriviaPieceBuffer(triviaBuffer),
+        numLeadingTrivia: dat.numLeadingTrivia + UInt32(extendedTrivia.count),
+        byteLength: dat.byteLength + UInt32(extendedTriviaByteLength),
+        presence: dat.presence,
+        arena: arena
+      ).as(RawTokenSyntax.self)!
+    case .layout(_):
+      preconditionFailure("Should be a token")
+    }
+  }
+
+  /// Assuming that text representing `extendedTrivia` comes after this token,
+  /// return a token that has its trailing trivia appended by `extendedTrivia`.
+  /// This can be used to transfer trivia from the next token to this token.
+  /// The caller is responsible to delete succeeding trivia from the tree to
+  /// maintain source-fidelity.
+  public func extendingTrailingTrivia(by extendedTrivia: [RawTriviaPiece], arena: SyntaxArena) -> RawTokenSyntax {
+    let extendedTriviaByteLength = extendedTrivia.reduce(0, { $0 + $1.byteLength })
+    switch raw.rawData.payload {
+    case .parsedToken(let dat):
+      // TODO: Can we write this assert easier using subscript slicing?
+      assert(String(syntaxText: SyntaxText(baseAddress: dat.wholeText.baseAddress?.advanced(by: dat.wholeText.count), count: extendedTriviaByteLength)) == Trivia(pieces: extendedTrivia.map(TriviaPiece.init)).description)
+      let wholeText = SyntaxText(baseAddress: dat.wholeText.baseAddress, count: dat.wholeText.count + extendedTriviaByteLength)
+      return RawSyntax.parsedToken(
+        kind: dat.tokenKind,
+        wholeText: arena.intern(wholeText),
+        textRange: dat.textRange,
+        presence: dat.presence,
+        lexerError: dat.lexerError,
+        arena: arena
+      ).as(RawTokenSyntax.self)!
+    case .materializedToken(let dat):
+      let triviaBuffer = arena.allocateRawTriviaPieceBuffer(count: dat.triviaPieces.count + extendedTrivia.count)
+      let (_, existingTriviaEndIndex) = triviaBuffer.initialize(from: dat.triviaPieces)
+      let (_, triviaEndIndex) = triviaBuffer[existingTriviaEndIndex...].initialize(from: extendedTrivia)
+      assert(triviaEndIndex == triviaBuffer.endIndex)
+      return RawSyntax.materializedToken(
+        kind: dat.tokenKind,
+        text: dat.tokenText,
+        triviaPieces: RawTriviaPieceBuffer(triviaBuffer),
+        numLeadingTrivia: dat.numLeadingTrivia,
+        byteLength: dat.byteLength + UInt32(extendedTriviaByteLength),
+        presence: dat.presence,
+        arena: arena
+      ).as(RawTokenSyntax.self)!
+    case .layout(_):
+      preconditionFailure("Should be a token")
+    }
+  }
+
+  /// Assuming that the tokens tet starts with text representing `reclassifiedTrivia`,
+  /// re-classify those characters as no longer being part of the token's text
+  /// but as part of the token's leading trivia.
+  public func reclassifyAsLeadingTrivia(_ reclassifiedTrivia: [RawTriviaPiece], arena: SyntaxArena) -> RawTokenSyntax {
+    let reclassifiedTriviaByteLength = reclassifiedTrivia.reduce(0, { $0 + $1.byteLength })
+    assert(String(syntaxText: SyntaxText(rebasing: self.tokenText[0..<reclassifiedTriviaByteLength])) == Trivia(pieces: reclassifiedTrivia.map(TriviaPiece.init)).description)
+    switch raw.rawData.payload {
+    case .parsedToken(let dat):
+      assert(String(syntaxText: SyntaxText(rebasing: dat.tokenText[0..<reclassifiedTriviaByteLength])) == Trivia(pieces: reclassifiedTrivia.map(TriviaPiece.init)).description)
+      let textRange = (dat.textRange.lowerBound + reclassifiedTriviaByteLength)..<dat.textRange.upperBound
+      return RawSyntax.parsedToken(
+        kind: dat.tokenKind,
+        wholeText: dat.wholeText,
+        textRange: textRange,
+        presence: dat.presence,
+        lexerError: dat.lexerError,
+        arena: arena
+      ).as(RawTokenSyntax.self)!
+    case .materializedToken(let dat):
+      assert(String(syntaxText: SyntaxText(rebasing: dat.tokenText[0..<reclassifiedTriviaByteLength])) == Trivia(pieces: reclassifiedTrivia.map(TriviaPiece.init)).description)
+      let triviaBuffer = arena.allocateRawTriviaPieceBuffer(count: dat.triviaPieces.count + reclassifiedTrivia.count)
+      let (_, existingLeadingTriviaEndIndex) = triviaBuffer.initialize(from: dat.leadingTrivia)
+      let (_, reclassifiedTriviaEndIndex) = triviaBuffer[existingLeadingTriviaEndIndex...].initialize(from: reclassifiedTrivia)
+      let (_, triviaEndIndex) = triviaBuffer[reclassifiedTriviaEndIndex...].initialize(from: dat.trailingTrivia)
+      assert(triviaEndIndex == triviaBuffer.endIndex)
+      return RawSyntax.materializedToken(
+        kind: dat.tokenKind,
+        text: SyntaxText(rebasing: dat.tokenText[reclassifiedTriviaByteLength...]),
+        triviaPieces: RawTriviaPieceBuffer(triviaBuffer),
+        numLeadingTrivia: dat.numLeadingTrivia + UInt32(reclassifiedTrivia.count),
+        byteLength: dat.byteLength,
+        presence: dat.presence,
+        arena: arena
+      ).as(RawTokenSyntax.self)!
+    case .layout(_):
+      preconditionFailure("Should be a token")
+    }
+  }
+
+  /// Assuming that the tokens tet ends with text representing `reclassifiedTrivia`,
+  /// re-classify those characters as no longer being part of the token's text
+  /// but as part of the token's trailing trivia.
+  public func reclassifyAsTrailingTrivia(_ reclassifiedTrivia: [RawTriviaPiece], arena: SyntaxArena) -> RawTokenSyntax {
+    let reclassifiedTriviaByteLength = reclassifiedTrivia.reduce(0, { $0 + $1.byteLength })
+    assert(String(syntaxText: SyntaxText(rebasing: self.tokenText[(self.tokenText.count - reclassifiedTriviaByteLength)...])) == Trivia(pieces: reclassifiedTrivia.map(TriviaPiece.init)).description)
+    switch raw.rawData.payload {
+    case .parsedToken(let dat):
+      let textRange = dat.textRange.lowerBound..<(dat.textRange.upperBound - reclassifiedTriviaByteLength)
+      return RawSyntax.parsedToken(
+        kind: dat.tokenKind,
+        wholeText: dat.wholeText,
+        textRange: textRange,
+        presence: dat.presence,
+        lexerError: dat.lexerError,
+        arena: arena
+      ).as(RawTokenSyntax.self)!
+    case .materializedToken(let dat):
+      let triviaBuffer = arena.allocateRawTriviaPieceBuffer(count: dat.triviaPieces.count + reclassifiedTrivia.count)
+      let (_, existingLeadingTriviaEndIndex) = triviaBuffer.initialize(from: dat.leadingTrivia)
+      let (_, reclassifiedTriviaEndIndex) = triviaBuffer[existingLeadingTriviaEndIndex...].initialize(from: reclassifiedTrivia)
+      let (_, triviaEndIndex) = triviaBuffer[reclassifiedTriviaEndIndex...].initialize(from: dat.trailingTrivia)
+      assert(triviaEndIndex == triviaBuffer.endIndex)
+      return RawSyntax.materializedToken(
+        kind: dat.tokenKind,
+        text: SyntaxText(rebasing: dat.tokenText[0..<(dat.tokenText.endIndex - reclassifiedTriviaByteLength)]),
+        triviaPieces: RawTriviaPieceBuffer(triviaBuffer),
+        numLeadingTrivia: dat.numLeadingTrivia,
+        byteLength: dat.byteLength,
+        presence: dat.presence,
+        arena: arena
+      ).as(RawTokenSyntax.self)!
+    case .layout(_):
+      preconditionFailure("Should be a token")
+    }
   }
 }

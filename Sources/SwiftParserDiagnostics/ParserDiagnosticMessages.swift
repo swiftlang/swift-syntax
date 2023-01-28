@@ -158,6 +158,12 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var misspelledThrows: Self {
     .init("expected throwing specifier; did you mean 'throws'?")
   }
+  public static var multiLineStringLiteralMustBeginOnNewLine: Self {
+    .init("multi-line string literal content must begin on a new line")
+  }
+  public static var multiLineStringLiteralMustHaveClosingDelimiterOnNewLine: Self {
+    .init("multi-line string literal closing delimiter must begin on a new line")
+  }
   public static var operatorShouldBeDeclaredWithoutBody: Self {
     .init("operator should not be declared with body")
   }
@@ -385,6 +391,9 @@ extension FixItMessage where Self == StaticParserFixIt {
   }
   public static var insertAttributeArguments: Self {
     .init("insert attribute argument")
+  }
+  public static var insertNewline: Self {
+    .init("insert newline")
   }
   public static var joinIdentifiers: Self {
     .init("join the identifiers together")

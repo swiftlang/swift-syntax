@@ -188,52 +188,68 @@ final class MultilineErrorsTests: XCTestCase {
   func testMultilineErrors12() {
     AssertParse(
       #"""
-      // newline currently required after opening """
-      _ = """Fourteen
+      _ = """1️⃣Fourteen
           Pi
           """
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: multi-line string literal content must begin on a new line, Fix-It replacements: 8 - 8 = '\n'
-      ]
+        DiagnosticSpec(message: "multi-line string literal content must begin on a new line", fixIts: ["insert newline"])
+      ],
+      fixedSource: #"""
+        _ = """
+            Fourteen
+            Pi
+            """
+        """#
     )
   }
 
   func testMultilineErrors13() {
     AssertParse(
       #"""
-      // newline currently required before closing """
       _ = """
           Fourteen
-          Pi"""
+          Pi1️⃣"""
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 4: multi-line string literal closing delimiter must begin on a new line, Fix-It replacements: 7 - 7 = '\n'
-      ]
+        DiagnosticSpec(message: "multi-line string literal closing delimiter must begin on a new line")
+      ],
+      fixedSource: #"""
+        _ = """
+            Fourteen
+            Pi
+            """
+        """#
     )
   }
 
   func testMultilineErrors14() {
     AssertParse(
       #"""
-      // newline currently required after opening """
-      _ = """"""
+      _ = """1️⃣"""
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: multi-line string literal content must begin on a new line, Fix-It replacements: 8 - 8 = '\n'
-      ]
+        DiagnosticSpec(message: "multi-line string literal closing delimiter must begin on a new line", fixIts: ["insert newline"])
+      ],
+      fixedSource: #"""
+        _ = """
+        """
+        """#
     )
   }
 
   func testMultilineErrors15() {
     AssertParse(
       #"""
-      // newline currently required after opening """
-      _ = """ """
+      _ = """ 1️⃣"""
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: multi-line string literal content must begin on a new line, Fix-It replacements: 8 - 8 = '\n'
-      ]
+        DiagnosticSpec(message: "multi-line string literal closing delimiter must begin on a new line", fixIts: ["insert newline"])
+      ],
+      fixedSource: #"""
+        _ = """
+        """
+        """#
     )
   }
 
@@ -410,17 +426,6 @@ final class MultilineErrorsTests: XCTestCase {
     )
   }
 
-  func testMultilineErrors27() {
-    AssertParse(
-      #"""
-      """ // OK because LF + CR is two new lines.1️⃣
-      """#,
-      diagnostics: [
-        DiagnosticSpec(message: #"expected '"""' to end string literal"#)
-      ]
-    )
-  }
-
   func testMultilineErrors28() {
     AssertParse(
       #"""
@@ -440,14 +445,17 @@ final class MultilineErrorsTests: XCTestCase {
   func testMultilineErrors29() {
     AssertParse(
       #"""
-      _ = """\
+      _ = """1️⃣\
         """
-        // FIXME: Bad diagnostics
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: multi-line string literal content must begin on a new line
-        // TODO: Old parser expected error on line 1: escaped newline at the last line is not allowed, Fix-It replacements: 8 - 9 = ''
-      ]
+        DiagnosticSpec(message: "multi-line string literal content must begin on a new line")
+      ],
+      fixedSource: #"""
+        _ = """
+          \
+          """
+        """#
     )
   }
 
@@ -491,6 +499,23 @@ final class MultilineErrorsTests: XCTestCase {
         DiagnosticSpec(locationMarker: "2️⃣", message: #"unexpected code 'baz' in string literal"#),
         DiagnosticSpec(locationMarker: "3️⃣", message: #"expected ')' in string literal"#, notes: [NoteSpec(message: "to match this opening '('")]),
       ]
+    )
+  }
+
+  func testMultilineEndsWithStringInterpolation() {
+    AssertParse(
+      #"""
+      _ = """
+      \(1)1️⃣"""
+      """#,
+      diagnostics: [
+        DiagnosticSpec(message: "multi-line string literal closing delimiter must begin on a new line")
+      ],
+      fixedSource: #"""
+        _ = """
+        \(1)
+        """
+        """#
     )
   }
 }

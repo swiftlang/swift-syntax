@@ -68,7 +68,7 @@ public class SyntaxArena {
   @_spi(RawSyntax)
   public func intern(_ value: SyntaxText) -> SyntaxText {
     // Return the passed-in value if it's already managed by this arena.
-    if (self.contains(text: value)) {
+    if self.contains(text: value) {
       return value
     }
 

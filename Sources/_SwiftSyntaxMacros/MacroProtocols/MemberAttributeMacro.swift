@@ -21,14 +21,17 @@ public protocol MemberAttributeMacro: AttachedMacro {
   /// - Parameters:
   ///   - node: The custom attribute describing the attached macro.
   ///   - declaration: The declaration the macro attribute is attached to.
-  ///   - member: The member delcaration to attach the resulting attributes to.
+  ///   - member: The member declaration to attach the resulting attributes to.
   ///   - context: The context in which to perform the macro expansion.
   ///
   /// - Returns: the set of attributes to apply to the given member.
-  static func expansion(
+  static func expansion<
+    Declaration: DeclGroupSyntax,
+    Context: MacroExpansionContext
+  >(
     of node: AttributeSyntax,
-    attachedTo declaration: DeclSyntax,
+    attachedTo declaration: Declaration,
     annotating member: DeclSyntax,
-    in context: any MacroExpansionContext
+    in context: Context
   ) throws -> [AttributeSyntax]
 }

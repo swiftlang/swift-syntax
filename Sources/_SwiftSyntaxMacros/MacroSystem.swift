@@ -425,6 +425,27 @@ extension MacroApplication {
     )
   }
 
+  private func expandMemberAttribute(
+    attribute: AttributeSyntax,
+    macro: MemberAttributeMacro.Type,
+    decl: DeclGroupSyntax,
+    member: DeclSyntax,
+    in context: MacroExpansionContext
+  ) throws -> [AttributeSyntax] {
+    #if false
+    _openExistential(decl) { d in
+      return try! macro.expansion(
+        of: attribute,
+        attachedTo: d,
+        annotating: member,
+        in: context
+      )
+    }
+    #else
+    return []
+    #endif
+  }
+
   private func expandAttributes(
     for macroAttributes: [(AttributeSyntax, MemberAttributeMacro.Type)],
     attachedTo decl: DeclSyntax,
@@ -437,13 +458,19 @@ extension MacroApplication {
     var attributes: [AttributeSyntax] = []
     for (attribute, attributeMacro) in macroAttributes {
       do {
-        try attributes.append(
-          contentsOf: attributeMacro.expansion(
+        let typedDecl = decl.asProtocol(DeclGroupSyntax.self)!
+
+        func expand<Decl: DeclGroupSyntax>(_ decl: Decl) throws -> [AttributeSyntax] {
+          return try attributeMacro.expansion(
             of: attribute,
-            attachedTo: DeclSyntax(decl),
+            attachedTo: decl,
             annotating: member.decl,
             in: context
           )
+        }
+
+        attributes.append(
+          contentsOf: try _openExistential(typedDecl, do: expand)
         )
       } catch {
         // Record the error

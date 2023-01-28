@@ -134,3 +134,12 @@ extension TokenKind {
     }
   }
 }
+
+public extension TriviaPiece {
+  var isBackslash: Bool {
+    switch self {
+    case .backslashes: return true
+    default: return false
+    }
+  }
+}

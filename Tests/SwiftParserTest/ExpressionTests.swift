@@ -1000,7 +1000,7 @@ final class ExpressionTests: XCTestCase {
             .stringSegment(StringSegmentSyntax(content: .stringSegment("line 1\n", leadingTrivia: .spaces(2)))),
             .stringSegment(
               StringSegmentSyntax(
-                UnexpectedNodesSyntax([Syntax(TokenSyntax.stringSegment("  line 2 \\", trailingTrivia: .newline))]),
+                UnexpectedNodesSyntax([Syntax(TokenSyntax.stringSegment("  line 2 ", trailingTrivia: [.backslashes(1), .newlines(1)]))]),
                 content: .stringSegment("line 2 ", leadingTrivia: .spaces(2), trailingTrivia: .newline, presence: .missing)
               )
             ),

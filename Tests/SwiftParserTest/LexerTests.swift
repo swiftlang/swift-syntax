@@ -978,8 +978,7 @@ public class LexerTests: XCTestCase {
         """
       """#,
       lexemes: [
-        LexemeSpec(.multilineStringQuote, leading: "  ", text: #"""""#),
-        LexemeSpec(.stringSegment, text: "\n"),
+        LexemeSpec(.multilineStringQuote, leading: "  ", text: #"""""#, trailing: "\n"),
         LexemeSpec(.stringSegment, text: "  line 1\n"),
         LexemeSpec(.stringSegment, text: "  line 2\n"),
         LexemeSpec(.stringSegment, text: "  "),
@@ -995,9 +994,8 @@ public class LexerTests: XCTestCase {
         """
       """#,
       lexemes: [
-        LexemeSpec(.multilineStringQuote, leading: "  ", text: #"""""#),
-        LexemeSpec(.stringSegment, text: "\n"),
-        LexemeSpec(.stringSegment, text: "  line 1 \\\n"),
+        LexemeSpec(.multilineStringQuote, leading: "  ", text: #"""""#, trailing: "\n"),
+        LexemeSpec(.stringSegment, text: "  line 1 ", trailing: "\\\n"),
         LexemeSpec(.stringSegment, text: "  line 2\n"),
         LexemeSpec(.stringSegment, text: "  "),
         LexemeSpec(.multilineStringQuote, text: #"""""#),

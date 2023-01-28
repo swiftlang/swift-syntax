@@ -817,7 +817,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       addDiagnostic(diagnostic, handledNodes: handledNodes)
     }
     if case .stringSegment(let segment) = node.segments.last {
-      if let invalidContent = segment.unexpectedBeforeContent?.onlyToken(where: { $0.text.hasSuffix("\\") }) {
+      if let invalidContent = segment.unexpectedBeforeContent?.onlyToken(where: { $0.trailingTrivia.contains(where: { $0.isBackslash }) }) {
         let leadingTrivia = segment.content.leadingTrivia
         let trailingTrivia = segment.content.trailingTrivia
         let fixIt = FixIt(
@@ -829,7 +829,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         )
         addDiagnostic(
           invalidContent,
-          position: invalidContent.endPositionBeforeTrailingTrivia.advanced(by: -1),
+          position: invalidContent.endPositionBeforeTrailingTrivia,
           .escapedNewlineAtLatlineOfMultiLineStringLiteralNotAllowed,
           fixIts: [fixIt],
           handledNodes: [segment.id]

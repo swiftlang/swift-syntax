@@ -511,12 +511,17 @@ final class MultilineErrorsTests: XCTestCase {
     AssertParseWithAllNewlineEndings(
       #"""
       _ = """
-        \\\	   
+        \\1️⃣\	   
         """
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: escaped newline at the last line is not allowed, Fix-It replacements: 5 - 10 = ''
-      ]
+        DiagnosticSpec(message: "escaped newline at the last line of a multi-line string literal is not allowed")
+      ],
+      fixedSource: #"""
+        _ = """
+          \\
+          """
+        """#
     )
   }
 
@@ -524,12 +529,17 @@ final class MultilineErrorsTests: XCTestCase {
     AssertParseWithAllNewlineEndings(
       #"""
       _ = """
-        \(42)\		
+        \(42)1️⃣\		
         """
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: escaped newline at the last line is not allowed, Fix-It replacements: 8 - 11 = ''
-      ]
+        DiagnosticSpec(message: "escaped newline at the last line of a multi-line string literal is not allowed")
+      ],
+      fixedSource: #"""
+        _ = """
+          \(42)
+          """
+        """#
     )
   }
 
@@ -607,11 +617,12 @@ final class MultilineErrorsTests: XCTestCase {
         """
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "multi-line string literal content must begin on a new line")
+        DiagnosticSpec(message: "multi-line string literal content must begin on a new line"),
+        DiagnosticSpec(message: "escaped newline at the last line of a multi-line string literal is not allowed"),
       ],
       fixedSource: #"""
         _ = """
-          \
+          
           """
         """#
     )

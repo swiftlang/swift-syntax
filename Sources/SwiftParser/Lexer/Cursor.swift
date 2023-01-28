@@ -259,17 +259,22 @@ extension Lexer {
     /// error occurred
     let error: (kind: LexerError.Kind, position: Lexer.Cursor)?
     let stateTransition: StateTransition?
+    /// If set, overritdes the trailing trivia lexing mode of the current state
+    /// for this lexeme.
+    let trailingTriviaLexingMode: Lexer.Cursor.TriviaLexingMode?
 
     init(
       _ tokenKind: RawTokenKind,
       flags: Lexer.Lexeme.Flags = [],
       error: (kind: LexerError.Kind, position: Cursor)? = nil,
-      stateTransition: StateTransition? = nil
+      stateTransition: StateTransition? = nil,
+      trailingTriviaLexingMode: Lexer.Cursor.TriviaLexingMode? = nil
     ) {
       self.tokenKind = tokenKind
       self.flags = flags
       self.error = error
       self.stateTransition = stateTransition
+      self.trailingTriviaLexingMode = trailingTriviaLexingMode
     }
   }
 }
@@ -317,16 +322,9 @@ extension Lexer.Cursor {
 
     // Trailing trivia.
     let trailingTriviaStart = self
-    let newlineInTrailingTrivia: NewlinePresence
-    if let trailingTriviaMode = currentState.trailingTriviaLexingMode(cursor: self) {
-      newlineInTrailingTrivia = self.lexTrivia(mode: trailingTriviaMode)
-    } else {
-      newlineInTrailingTrivia = .absent
+    if let trailingTriviaMode = result.trailingTriviaLexingMode ?? currentState.trailingTriviaLexingMode(cursor: self) {
+      _ = self.lexTrivia(mode: trailingTriviaMode)
     }
-    assert(
-      newlineInTrailingTrivia == .absent,
-      "trailingTrivia should not have a newline"
-    )
 
     if self.currentState.shouldPopStateWhenReachingNewlineInTrailingTrivia && self.is(at: "\r", "\n") {
       self.stateStack.perform(stateTransition: .pop, stateAllocator: stateAllocator)
@@ -853,7 +851,7 @@ extension Lexer.Cursor {
       UInt8(ascii: "9"):
       return self.lexNumber()
     case UInt8(ascii: #"'"#), UInt8(ascii: #"""#):
-      return self.lexStringQuote(leadingDelimiterLength: 0)
+      return self.lexStringQuote(isOpening: true, leadingDelimiterLength: 0)
 
     case UInt8(ascii: "`"):
       return self.lexEscapedIdentifier()
@@ -878,7 +876,7 @@ extension Lexer.Cursor {
   private mutating func lexAfterRawStringDelimiter(delimiterLength: Int) -> Lexer.Result {
     switch self.peek() {
     case UInt8(ascii: #"'"#), UInt8(ascii: #"""#):
-      return self.lexStringQuote(leadingDelimiterLength: delimiterLength)
+      return self.lexStringQuote(isOpening: true, leadingDelimiterLength: delimiterLength)
     case nil:
       return Lexer.Result(.eof)
     default:
@@ -889,7 +887,7 @@ extension Lexer.Cursor {
   private mutating func lexAfterStringLiteral() -> Lexer.Result {
     switch self.peek() {
     case UInt8(ascii: #"'"#), UInt8(ascii: #"""#):
-      return self.lexStringQuote(leadingDelimiterLength: 0)
+      return self.lexStringQuote(isOpening: false, leadingDelimiterLength: 0)
     case nil:
       return Lexer.Result(.eof)
     default:
@@ -984,9 +982,28 @@ extension Lexer.Cursor {
     case normal
     /// Don't lex newlines (`\r` and `\r`) as trivia
     case noNewlines
+    /// Lex the characters that escape a newline in a multi-line string literal
+    /// as trivia.
+    ///
+    /// Matches the following regex: `\\?#*[ \t]*(\r\n|\r|\n)
+    case escapedNewlineInMultiLineStringLiteral
   }
 
   fileprivate mutating func lexTrivia(mode: TriviaLexingMode) -> NewlinePresence {
+    if mode == .escapedNewlineInMultiLineStringLiteral {
+      _ = self.advance(matching: "\\")
+      self.advance(while: { $0 == "#" })
+      self.advance(while: { $0 == " " || $0 == "\t" })
+      if self.advance(matching: "\r") {
+        _ = self.advance(matching: "\n")
+        return .present
+      } else if self.advance(matching: "\n") {
+        return .present
+      } else {
+        return .absent
+      }
+    }
+
     var hasNewline = false
     while true {
       let start = self
@@ -1662,7 +1679,9 @@ extension Lexer.Cursor {
     }
   }
 
-  mutating func lexStringQuote(leadingDelimiterLength: Int) -> Lexer.Result {
+  /// `isOpening` is `true` if this string quote is the opening quote of a string
+  /// literal and `false` if we are lexing the closing quote of a string literal.
+  mutating func lexStringQuote(isOpening: Bool, leadingDelimiterLength: Int) -> Lexer.Result {
     if self.advance(matching: "'") {
       return Lexer.Result(.singleQuote, stateTransition: stateTransitionAfterLexingStringQuote(kind: .singleQuote))
     }
@@ -1696,7 +1715,20 @@ extension Lexer.Cursor {
       }
 
       self = lookingForMultilineString
-      return Lexer.Result(.multilineStringQuote, stateTransition: stateTransitionAfterLexingStringQuote(kind: .multiLine))
+      let trailingTriviaLexingMode: TriviaLexingMode?
+      if isOpening && self.is(at: "\n", "\r") {
+        // The opening quote of a multi-line string literal must be followed by
+        // a newline that's not part of the represented string.
+        trailingTriviaLexingMode = .escapedNewlineInMultiLineStringLiteral
+      } else {
+        trailingTriviaLexingMode = nil
+      }
+
+      return Lexer.Result(
+        .multilineStringQuote,
+        stateTransition: stateTransitionAfterLexingStringQuote(kind: .multiLine),
+        trailingTriviaLexingMode: trailingTriviaLexingMode
+      )
     } else {
       return Lexer.Result(.stringQuote, stateTransition: stateTransitionAfterLexingStringQuote(kind: .singleLine))
     }
@@ -1714,6 +1746,23 @@ extension Lexer.Cursor {
     return tmp.advanceIfStringDelimiter(delimiterLength: delimiterLength) && tmp.is(at: "(")
   }
 
+  /// Returns `true` if we are positioned at a backslash that escapes the newline
+  /// character in a multi-line string literal.
+  private func isAtEscapedNewline(delimiterLength: Int) -> Bool {
+    guard self.is(at: "\\") else {
+      return false
+    }
+
+    var tmp = self
+    let backslashConsumed = tmp.advance(matching: "\\")  // Skip over the '\' to look for '#' and '('
+    assert(backslashConsumed)
+    guard tmp.advanceIfStringDelimiter(delimiterLength: delimiterLength) else {
+      return false
+    }
+    tmp.advance(while: { $0 == " " || $0 == "\t" })
+    return tmp.is(at: "\r", "\n")
+  }
+
   mutating func lexInStringLiteral(stringLiteralKind: StringLiteralKind, delimiterLength: Int) -> Lexer.Result {
     /*
     if IsMultilineString && *CurPtr != '\n' && *CurPtr != '\r' {
@@ -1728,6 +1777,11 @@ extension Lexer.Cursor {
           return Lexer.Result(
             .stringSegment,
             stateTransition: .push(newState: .inStringInterpolationStart(stringLiteralKind: stringLiteralKind))
+          )
+        } else if self.isAtEscapedNewline(delimiterLength: delimiterLength) {
+          return Lexer.Result(
+            .stringSegment,
+            trailingTriviaLexingMode: .escapedNewlineInMultiLineStringLiteral
           )
         }
       case UInt8(ascii: "\r"), UInt8(ascii: "\n"):

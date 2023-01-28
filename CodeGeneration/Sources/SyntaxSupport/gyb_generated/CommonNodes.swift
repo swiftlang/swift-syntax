@@ -50,13 +50,11 @@ public let COMMON_NODES: [Node] = [
        ],
        children: [
          Child(name: "Attributes",
-               kind: "AttributeList",
-               isOptional: true,
-               collectionElementName: "Attribute"),
+               kind: .collection(kind: "AttributeList", collectionElementName: "Attribute"),
+               isOptional: true),
          Child(name: "Modifiers",
-               kind: "ModifierList",
-               isOptional: true,
-               collectionElementName: "Modifier")
+               kind: .collection(kind: "ModifierList", collectionElementName: "Modifier"),
+               isOptional: true)
        ]),
 
   Node(name: "MissingExpr",
@@ -81,23 +79,19 @@ public let COMMON_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "Item",
-               kind: "Syntax",
-               description: "The underlying node inside the code block.",
-               nodeChoices: [
+               kind: .nodeChoices(choices: [
                  Child(name: "Decl",
-                       kind: "Decl"),
+                       kind: .node(kind: "Decl")),
                  Child(name: "Stmt",
-                       kind: "Stmt"),
+                       kind: .node(kind: "Stmt")),
                  Child(name: "Expr",
-                       kind: "Expr")
+                       kind: .node(kind: "Expr"))
                ]),
+               description: "The underlying node inside the code block."),
          Child(name: "Semicolon",
-               kind: "SemicolonToken",
+               kind: .token(choices: [.token(tokenKind: "SemicolonToken")]),
                description: "If present, the trailing semicolon at the end of the item.",
-               isOptional: true,
-               tokenChoices: [
-                 "Semicolon"
-               ])
+               isOptional: true)
        ],
        omitWhenEmpty: true),
 
@@ -116,19 +110,12 @@ public let COMMON_NODES: [Node] = [
        ],
        children: [
          Child(name: "LeftBrace",
-               kind: "LeftBraceToken",
-               tokenChoices: [
-                 "LeftBrace"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "LeftBraceToken")])),
          Child(name: "Statements",
-               kind: "CodeBlockItemList",
-               collectionElementName: "Statement",
+               kind: .collection(kind: "CodeBlockItemList", collectionElementName: "Statement"),
                isIndented: true),
          Child(name: "RightBrace",
-               kind: "RightBraceToken",
-               tokenChoices: [
-                 "RightBrace"
-               ],
+               kind: .token(choices: [.token(tokenKind: "RightBraceToken")]),
                requiresLeadingNewline: true)
        ]),
 
@@ -140,25 +127,11 @@ public let COMMON_NODES: [Node] = [
        ],
        children: [
          Child(name: "AsyncSpecifier",
-               kind: "KeywordToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Keyword"
-               ],
-               textChoices: [
-                 "async",
-                 "reasync"
-               ]),
+               kind: .token(choices: [.keyword(text: "async"), .keyword(text: "reasync")]),
+               isOptional: true),
          Child(name: "ThrowsSpecifier",
-               kind: "KeywordToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Keyword"
-               ],
-               textChoices: [
-                 "throws",
-                 "rethrows"
-               ])
+               kind: .token(choices: [.keyword(text: "throws"), .keyword(text: "rethrows")]),
+               isOptional: true)
        ]),
 
   Node(name: "TypeEffectSpecifiers",
@@ -169,23 +142,11 @@ public let COMMON_NODES: [Node] = [
        ],
        children: [
          Child(name: "AsyncSpecifier",
-               kind: "KeywordToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Keyword"
-               ],
-               textChoices: [
-                 "async"
-               ]),
+               kind: .token(choices: [.keyword(text: "async")]),
+               isOptional: true),
          Child(name: "ThrowsSpecifier",
-               kind: "KeywordToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Keyword"
-               ],
-               textChoices: [
-                 "throws"
-               ])
+               kind: .token(choices: [.keyword(text: "throws")]),
+               isOptional: true)
        ]),
 
   Node(name: "UnexpectedNodes",

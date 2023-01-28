@@ -27,9 +27,10 @@ public extension Child {
   }
 
   var parameterBaseType: String {
-    if !self.nodeChoices.isEmpty {
+    switch kind {
+    case .nodeChoices:
       return self.name
-    } else {
+    default:
       return type.parameterBaseType
     }
   }
@@ -45,13 +46,18 @@ public extension Child {
   }
 
   var defaultInitialization: ExprSyntax? {
-    if self.textChoices.count == 1, let token = token, token.associatedValueClass != nil {
-      var textChoice = self.textChoices[0]
-      if textChoice == "init" {
-        textChoice = "`init`"
+    switch kind {
+    case .token(choices: let choices):
+      if choices.count == 1, case .keyword(text: let text) = choices.first {
+        var textChoice = text
+        if textChoice == "init" {
+          textChoice = "`init`"
+        }
+        return ExprSyntax(".keyword(.\(raw: textChoice))")
+      } else {
+        return type.defaultInitialization
       }
-      return ExprSyntax(".\(raw: token.swiftKind)(.\(raw: textChoice))")
-    } else {
+    default:
       return type.defaultInitialization
     }
   }
@@ -60,18 +66,28 @@ public extension Child {
   /// `assert` statement that verifies the variable with name var_name and of type
   /// `TokenSyntax` contains one of the supported text options. Otherwise return `nil`.
   func generateAssertStmtTextChoices(varName: String) -> FunctionCallExprSyntax? {
-    guard type.isToken else {
+    guard case .token(choices: let choices) = kind else {
       return nil
     }
 
-    let choices: [String]
-    if !textChoices.isEmpty {
-      choices = textChoices
-    } else if tokenCanContainArbitraryText {
+    let tokenCanContainArbitraryText = choices.contains {
+      switch $0 {
+      case .token(tokenKind: let tokenKind): return SYNTAX_TOKEN_MAP["\(tokenKind)Token"]?.text == nil
+      case .keyword: return false
+      }
+    }
+
+    let choicesTexts: [String]
+    if tokenCanContainArbitraryText {
       // Don't generate an assert statement if token can contain arbitrary text.
       return nil
-    } else if !tokenChoices.isEmpty {
-      choices = tokenChoices.compactMap(\.text)
+    } else if !choices.isEmpty {
+      choicesTexts = choices.compactMap {
+        switch $0 {
+        case .token(tokenKind: let tokenKind): return SYNTAX_TOKEN_MAP["\(tokenKind)Token"]?.text
+        case .keyword(text: let text): return text
+        }
+      }
     } else {
       return nil
     }
@@ -84,7 +100,7 @@ public extension Child {
         NilLiteralExprSyntax()
       }))
     }
-    for textChoice in choices {
+    for textChoice in choicesTexts {
       assertChoices.append(ExprSyntax(SequenceExprSyntax {
         MemberAccessExprSyntax(base: type.forceUnwrappedIfNeeded(expr: IdentifierExprSyntax(identifier: .identifier(varName))), name: "text")
         BinaryOperatorExprSyntax(text: "==")

@@ -18,12 +18,9 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "Ampersand",
-               kind: "PrefixAmpersandToken",
-               tokenChoices: [
-                 "PrefixAmpersand"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "PrefixAmpersandToken")])),
          Child(name: "Expression",
-               kind: "Expr")
+               kind: .node(kind: "Expr"))
        ]),
 
   Node(name: "TupleExprElementList",
@@ -53,22 +50,12 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "TryKeyword",
-               kind: "KeywordToken",
-               tokenChoices: [
-                 "Keyword"
-               ],
-               textChoices: [
-                 "try"
-               ]),
+               kind: .token(choices: [.keyword(text: "try")])),
          Child(name: "QuestionOrExclamationMark",
-               kind: "Token",
-               isOptional: true,
-               tokenChoices: [
-                 "PostfixQuestionMark",
-                 "ExclamationMark"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "PostfixQuestionMarkToken"), .token(tokenKind: "ExclamationMarkToken")]),
+               isOptional: true),
          Child(name: "Expression",
-               kind: "Expr")
+               kind: .node(kind: "Expr"))
        ]),
 
   Node(name: "AwaitExpr",
@@ -76,15 +63,9 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "AwaitKeyword",
-               kind: "KeywordToken",
-               tokenChoices: [
-                 "Keyword"
-               ],
-               textChoices: [
-                 "await"
-               ]),
+               kind: .token(choices: [.keyword(text: "await")])),
          Child(name: "Expression",
-               kind: "Expr")
+               kind: .node(kind: "Expr"))
        ]),
 
   Node(name: "MoveExpr",
@@ -92,15 +73,9 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "MoveKeyword",
-               kind: "KeywordToken",
-               tokenChoices: [
-                 "Keyword"
-               ],
-               textChoices: [
-                 "_move"
-               ]),
+               kind: .token(choices: [.keyword(text: "_move")])),
          Child(name: "Expression",
-               kind: "Expr")
+               kind: .node(kind: "Expr"))
        ]),
 
   Node(name: "BorrowExpr",
@@ -108,15 +83,9 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "BorrowKeyword",
-               kind: "KeywordToken",
-               tokenChoices: [
-                 "Keyword"
-               ],
-               textChoices: [
-                 "_borrow"
-               ]),
+               kind: .token(choices: [.keyword(text: "_borrow")])),
          Child(name: "Expression",
-               kind: "Expr")
+               kind: .node(kind: "Expr"))
        ]),
 
   Node(name: "DeclNameArgument",
@@ -124,12 +93,9 @@ public let EXPR_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "Name",
-               kind: "Token"),
+               kind: .node(kind: "Token")),
          Child(name: "Colon",
-               kind: "ColonToken",
-               tokenChoices: [
-                 "Colon"
-               ])
+               kind: .token(choices: [.token(tokenKind: "ColonToken")]))
        ]),
 
   Node(name: "DeclNameArgumentList",
@@ -145,18 +111,11 @@ public let EXPR_NODES: [Node] = [
        ],
        children: [
          Child(name: "LeftParen",
-               kind: "LeftParenToken",
-               tokenChoices: [
-                 "LeftParen"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "LeftParenToken")])),
          Child(name: "Arguments",
-               kind: "DeclNameArgumentList",
-               collectionElementName: "Argument"),
+               kind: .collection(kind: "DeclNameArgumentList", collectionElementName: "Argument")),
          Child(name: "RightParen",
-               kind: "RightParenToken",
-               tokenChoices: [
-                 "RightParen"
-               ])
+               kind: .token(choices: [.token(tokenKind: "RightParenToken")]))
        ]),
 
   Node(name: "IdentifierExpr",
@@ -164,15 +123,9 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "Identifier",
-               kind: "Token",
-               tokenChoices: [
-                 "Identifier",
-                 "Keyword",
-                 "DollarIdentifier",
-                 "BinaryOperator"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "KeywordToken"), .token(tokenKind: "DollarIdentifierToken"), .token(tokenKind: "BinaryOperatorToken")])),
          Child(name: "DeclNameArguments",
-               kind: "DeclNameArguments",
+               kind: .node(kind: "DeclNameArguments"),
                isOptional: true)
        ]),
 
@@ -181,13 +134,7 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "SuperKeyword",
-               kind: "KeywordToken",
-               tokenChoices: [
-                 "Keyword"
-               ],
-               textChoices: [
-                 "super"
-               ])
+               kind: .token(choices: [.keyword(text: "super")]))
        ]),
 
   Node(name: "NilLiteralExpr",
@@ -195,13 +142,7 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "NilKeyword",
-               kind: "KeywordToken",
-               tokenChoices: [
-                 "Keyword"
-               ],
-               textChoices: [
-                 "nil"
-               ])
+               kind: .token(choices: [.keyword(text: "nil")]))
        ]),
 
   Node(name: "DiscardAssignmentExpr",
@@ -209,10 +150,7 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "Wildcard",
-               kind: "WildcardToken",
-               tokenChoices: [
-                 "Wildcard"
-               ])
+               kind: .token(choices: [.token(tokenKind: "WildcardToken")]))
        ]),
 
   Node(name: "AssignmentExpr",
@@ -220,10 +158,7 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "AssignToken",
-               kind: "EqualToken",
-               tokenChoices: [
-                 "Equal"
-               ])
+               kind: .token(choices: [.token(tokenKind: "EqualToken")]))
        ]),
 
   Node(name: "PackExpansionExpr",
@@ -231,15 +166,9 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "RepeatKeyword",
-               kind: "KeywordToken",
-               tokenChoices: [
-                 "Keyword"
-               ],
-               textChoices: [
-                 "repeat"
-               ]),
+               kind: .token(choices: [.keyword(text: "repeat")])),
          Child(name: "PatternExpr",
-               kind: "Expr")
+               kind: .node(kind: "Expr"))
        ]),
 
   Node(name: "PackElementExpr",
@@ -247,15 +176,9 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "EachKeyword",
-               kind: "KeywordToken",
-               tokenChoices: [
-                 "Keyword"
-               ],
-               textChoices: [
-                 "each"
-               ]),
+               kind: .token(choices: [.keyword(text: "each")])),
          Child(name: "PackRefExpr",
-               kind: "Expr")
+               kind: .node(kind: "Expr"))
        ]),
 
   Node(name: "SequenceExpr",
@@ -263,8 +186,7 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "Elements",
-               kind: "ExprList",
-               collectionElementName: "Element")
+               kind: .collection(kind: "ExprList", collectionElementName: "Element"))
        ]),
 
   Node(name: "ExprList",
@@ -279,13 +201,10 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "OperatorToken",
-               kind: "PrefixOperatorToken",
-               isOptional: true,
-               tokenChoices: [
-                 "PrefixOperator"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "PrefixOperatorToken")]),
+               isOptional: true),
          Child(name: "PostfixExpression",
-               kind: "Expr")
+               kind: .node(kind: "Expr"))
        ]),
 
   Node(name: "BinaryOperatorExpr",
@@ -293,10 +212,7 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "OperatorToken",
-               kind: "BinaryOperatorToken",
-               tokenChoices: [
-                 "BinaryOperator"
-               ])
+               kind: .token(choices: [.token(tokenKind: "BinaryOperatorToken")]))
        ]),
 
   Node(name: "ArrowExpr",
@@ -304,13 +220,10 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "EffectSpecifiers",
-               kind: "TypeEffectSpecifiers",
+               kind: .node(kind: "TypeEffectSpecifiers"),
                isOptional: true),
          Child(name: "ArrowToken",
-               kind: "ArrowToken",
-               tokenChoices: [
-                 "Arrow"
-               ])
+               kind: .token(choices: [.token(tokenKind: "ArrowToken")]))
        ]),
 
   Node(name: "InfixOperatorExpr",
@@ -318,11 +231,11 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "LeftOperand",
-               kind: "Expr"),
+               kind: .node(kind: "Expr")),
          Child(name: "OperatorOperand",
-               kind: "Expr"),
+               kind: .node(kind: "Expr")),
          Child(name: "RightOperand",
-               kind: "Expr")
+               kind: .node(kind: "Expr"))
        ]),
 
   Node(name: "FloatLiteralExpr",
@@ -330,10 +243,7 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "FloatingDigits",
-               kind: "FloatingLiteralToken",
-               tokenChoices: [
-                 "FloatingLiteral"
-               ])
+               kind: .token(choices: [.token(tokenKind: "FloatingLiteralToken")]))
        ]),
 
   Node(name: "TupleExpr",
@@ -344,19 +254,12 @@ public let EXPR_NODES: [Node] = [
        ],
        children: [
          Child(name: "LeftParen",
-               kind: "LeftParenToken",
-               tokenChoices: [
-                 "LeftParen"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "LeftParenToken")])),
          Child(name: "ElementList",
-               kind: "TupleExprElementList",
-               collectionElementName: "Element",
+               kind: .collection(kind: "TupleExprElementList", collectionElementName: "Element"),
                isIndented: true),
          Child(name: "RightParen",
-               kind: "RightParenToken",
-               tokenChoices: [
-                 "RightParen"
-               ])
+               kind: .token(choices: [.token(tokenKind: "RightParenToken")]))
        ]),
 
   Node(name: "ArrayExpr",
@@ -364,19 +267,12 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "LeftSquare",
-               kind: "LeftSquareBracketToken",
-               tokenChoices: [
-                 "LeftSquareBracket"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "LeftSquareBracketToken")])),
          Child(name: "Elements",
-               kind: "ArrayElementList",
-               collectionElementName: "Element",
+               kind: .collection(kind: "ArrayElementList", collectionElementName: "Element"),
                isIndented: true),
          Child(name: "RightSquare",
-               kind: "RightSquareBracketToken",
-               tokenChoices: [
-                 "RightSquareBracket"
-               ])
+               kind: .token(choices: [.token(tokenKind: "RightSquareBracketToken")]))
        ]),
 
   Node(name: "DictionaryExpr",
@@ -384,27 +280,17 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "LeftSquare",
-               kind: "LeftSquareBracketToken",
-               tokenChoices: [
-                 "LeftSquareBracket"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "LeftSquareBracketToken")])),
          Child(name: "Content",
-               kind: "Syntax",
-               nodeChoices: [
+               kind: .nodeChoices(choices: [
                  Child(name: "Colon",
-                       kind: "ColonToken",
-                       tokenChoices: [
-                         "Colon"
-                       ]),
+                       kind: .token(choices: [.token(tokenKind: "ColonToken")])),
                  Child(name: "Elements",
-                       kind: "DictionaryElementList")
-               ],
+                       kind: .node(kind: "DictionaryElementList"))
+               ]),
                isIndented: true),
          Child(name: "RightSquare",
-               kind: "RightSquareBracketToken",
-               tokenChoices: [
-                 "RightSquareBracket"
-               ])
+               kind: .token(choices: [.token(tokenKind: "RightSquareBracketToken")]))
        ]),
 
   Node(name: "TupleExprElement",
@@ -415,26 +301,16 @@ public let EXPR_NODES: [Node] = [
        ],
        children: [
          Child(name: "Label",
-               kind: "Token",
-               isOptional: true,
-               tokenChoices: [
-                 "Identifier",
-                 "Wildcard"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "WildcardToken")]),
+               isOptional: true),
          Child(name: "Colon",
-               kind: "ColonToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Colon"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "ColonToken")]),
+               isOptional: true),
          Child(name: "Expression",
-               kind: "Expr"),
+               kind: .node(kind: "Expr")),
          Child(name: "TrailingComma",
-               kind: "CommaToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Comma"
-               ])
+               kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+               isOptional: true)
        ]),
 
   Node(name: "ArrayElement",
@@ -445,13 +321,10 @@ public let EXPR_NODES: [Node] = [
        ],
        children: [
          Child(name: "Expression",
-               kind: "Expr"),
+               kind: .node(kind: "Expr")),
          Child(name: "TrailingComma",
-               kind: "CommaToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Comma"
-               ])
+               kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+               isOptional: true)
        ]),
 
   Node(name: "DictionaryElement",
@@ -462,21 +335,15 @@ public let EXPR_NODES: [Node] = [
        ],
        children: [
          Child(name: "KeyExpression",
-               kind: "Expr"),
+               kind: .node(kind: "Expr")),
          Child(name: "Colon",
-               kind: "ColonToken",
-               tokenChoices: [
-                 "Colon"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "ColonToken")])),
          Child(name: "ValueExpression",
-               kind: "Expr",
+               kind: .node(kind: "Expr"),
                isIndented: true),
          Child(name: "TrailingComma",
-               kind: "CommaToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Comma"
-               ])
+               kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+               isOptional: true)
        ]),
 
   Node(name: "IntegerLiteralExpr",
@@ -484,10 +351,7 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "Digits",
-               kind: "IntegerLiteralToken",
-               tokenChoices: [
-                 "IntegerLiteral"
-               ])
+               kind: .token(choices: [.token(tokenKind: "IntegerLiteralToken")]))
        ]),
 
   Node(name: "BooleanLiteralExpr",
@@ -495,14 +359,7 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "BooleanLiteral",
-               kind: "KeywordToken",
-               tokenChoices: [
-                 "Keyword"
-               ],
-               textChoices: [
-                 "true",
-                 "false"
-               ])
+               kind: .token(choices: [.keyword(text: "true"), .keyword(text: "false")]))
        ]),
 
   Node(name: "UnresolvedTernaryExpr",
@@ -510,17 +367,11 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "QuestionMark",
-               kind: "InfixQuestionMarkToken",
-               tokenChoices: [
-                 "InfixQuestionMark"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "InfixQuestionMarkToken")])),
          Child(name: "FirstChoice",
-               kind: "Expr"),
+               kind: .node(kind: "Expr")),
          Child(name: "ColonMark",
-               kind: "ColonToken",
-               tokenChoices: [
-                 "Colon"
-               ])
+               kind: .token(choices: [.token(tokenKind: "ColonToken")]))
        ]),
 
   Node(name: "TernaryExpr",
@@ -528,21 +379,15 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "ConditionExpression",
-               kind: "Expr"),
+               kind: .node(kind: "Expr")),
          Child(name: "QuestionMark",
-               kind: "InfixQuestionMarkToken",
-               tokenChoices: [
-                 "InfixQuestionMark"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "InfixQuestionMarkToken")])),
          Child(name: "FirstChoice",
-               kind: "Expr"),
+               kind: .node(kind: "Expr")),
          Child(name: "ColonMark",
-               kind: "ColonToken",
-               tokenChoices: [
-                 "Colon"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "ColonToken")])),
          Child(name: "SecondChoice",
-               kind: "Expr")
+               kind: .node(kind: "Expr"))
        ]),
 
   Node(name: "MemberAccessExpr",
@@ -550,17 +395,14 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "Base",
-               kind: "Expr",
+               kind: .node(kind: "Expr"),
                isOptional: true),
          Child(name: "Dot",
-               kind: "PeriodToken",
-               tokenChoices: [
-                 "Period"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "PeriodToken")])),
          Child(name: "Name",
-               kind: "Token"),
+               kind: .node(kind: "Token")),
          Child(name: "DeclNameArguments",
-               kind: "DeclNameArguments",
+               kind: .node(kind: "DeclNameArguments"),
                isOptional: true)
        ]),
 
@@ -569,13 +411,7 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "IsTok",
-               kind: "KeywordToken",
-               tokenChoices: [
-                 "Keyword"
-               ],
-               textChoices: [
-                 "is"
-               ])
+               kind: .token(choices: [.keyword(text: "is")]))
        ]),
 
   Node(name: "IsExpr",
@@ -583,17 +419,11 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "Expression",
-               kind: "Expr"),
+               kind: .node(kind: "Expr")),
          Child(name: "IsTok",
-               kind: "KeywordToken",
-               tokenChoices: [
-                 "Keyword"
-               ],
-               textChoices: [
-                 "is"
-               ]),
+               kind: .token(choices: [.keyword(text: "is")])),
          Child(name: "TypeName",
-               kind: "Type")
+               kind: .node(kind: "Type"))
        ]),
 
   Node(name: "UnresolvedAsExpr",
@@ -601,20 +431,10 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "AsTok",
-               kind: "KeywordToken",
-               tokenChoices: [
-                 "Keyword"
-               ],
-               textChoices: [
-                 "as"
-               ]),
+               kind: .token(choices: [.keyword(text: "as")])),
          Child(name: "QuestionOrExclamationMark",
-               kind: "Token",
-               isOptional: true,
-               tokenChoices: [
-                 "PostfixQuestionMark",
-                 "ExclamationMark"
-               ])
+               kind: .token(choices: [.token(tokenKind: "PostfixQuestionMarkToken"), .token(tokenKind: "ExclamationMarkToken")]),
+               isOptional: true)
        ]),
 
   Node(name: "AsExpr",
@@ -622,24 +442,14 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "Expression",
-               kind: "Expr"),
+               kind: .node(kind: "Expr")),
          Child(name: "AsTok",
-               kind: "KeywordToken",
-               tokenChoices: [
-                 "Keyword"
-               ],
-               textChoices: [
-                 "as"
-               ]),
+               kind: .token(choices: [.keyword(text: "as")])),
          Child(name: "QuestionOrExclamationMark",
-               kind: "Token",
-               isOptional: true,
-               tokenChoices: [
-                 "PostfixQuestionMark",
-                 "ExclamationMark"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "PostfixQuestionMarkToken"), .token(tokenKind: "ExclamationMarkToken")]),
+               isOptional: true),
          Child(name: "TypeName",
-               kind: "Type")
+               kind: .node(kind: "Type"))
        ]),
 
   Node(name: "TypeExpr",
@@ -647,7 +457,7 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "Type",
-               kind: "Type")
+               kind: .node(kind: "Type"))
        ]),
 
   Node(name: "ClosureCaptureItemSpecifier",
@@ -655,30 +465,16 @@ public let EXPR_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "Specifier",
-               kind: "ContextualKeywordToken",
-               textChoices: [
-                 "weak",
-                 "unowned"
-               ]),
+               kind: .token(choices: [.keyword(text: "weak"), .keyword(text: "unowned")])),
          Child(name: "LeftParen",
-               kind: "LeftParenToken",
-               isOptional: true,
-               tokenChoices: [
-                 "LeftParen"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "LeftParenToken")]),
+               isOptional: true),
          Child(name: "Detail",
-               kind: "ContextualKeywordToken",
-               isOptional: true,
-               textChoices: [
-                 "safe",
-                 "unsafe"
-               ]),
+               kind: .token(choices: [.keyword(text: "safe"), .keyword(text: "unsafe")]),
+               isOptional: true),
          Child(name: "RightParen",
-               kind: "RightParenToken",
-               isOptional: true,
-               tokenChoices: [
-                 "RightParen"
-               ])
+               kind: .token(choices: [.token(tokenKind: "RightParenToken")]),
+               isOptional: true)
        ]),
 
   Node(name: "ClosureCaptureItem",
@@ -689,28 +485,19 @@ public let EXPR_NODES: [Node] = [
        ],
        children: [
          Child(name: "Specifier",
-               kind: "ClosureCaptureItemSpecifier",
+               kind: .node(kind: "ClosureCaptureItemSpecifier"),
                isOptional: true),
          Child(name: "Name",
-               kind: "IdentifierToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Identifier"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+               isOptional: true),
          Child(name: "AssignToken",
-               kind: "EqualToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Equal"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "EqualToken")]),
+               isOptional: true),
          Child(name: "Expression",
-               kind: "Expr"),
+               kind: .node(kind: "Expr")),
          Child(name: "TrailingComma",
-               kind: "CommaToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Comma"
-               ])
+               kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+               isOptional: true)
        ]),
 
   Node(name: "ClosureCaptureItemList",
@@ -723,19 +510,12 @@ public let EXPR_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "LeftSquare",
-               kind: "LeftSquareBracketToken",
-               tokenChoices: [
-                 "LeftSquareBracket"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "LeftSquareBracketToken")])),
          Child(name: "Items",
-               kind: "ClosureCaptureItemList",
-               isOptional: true,
-               collectionElementName: "Item"),
+               kind: .collection(kind: "ClosureCaptureItemList", collectionElementName: "Item"),
+               isOptional: true),
          Child(name: "RightSquare",
-               kind: "RightSquareBracketToken",
-               tokenChoices: [
-                 "RightSquareBracket"
-               ])
+               kind: .token(choices: [.token(tokenKind: "RightSquareBracketToken")]))
        ]),
 
   Node(name: "ClosureParam",
@@ -746,17 +526,10 @@ public let EXPR_NODES: [Node] = [
        ],
        children: [
          Child(name: "Name",
-               kind: "Token",
-               tokenChoices: [
-                 "Identifier",
-                 "Wildcard"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "WildcardToken")])),
          Child(name: "TrailingComma",
-               kind: "CommaToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Comma"
-               ])
+               kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+               isOptional: true)
        ]),
 
   Node(name: "ClosureParamList",
@@ -772,35 +545,27 @@ public let EXPR_NODES: [Node] = [
        ],
        children: [
          Child(name: "Attributes",
-               kind: "AttributeList",
-               isOptional: true,
-               collectionElementName: "Attribute"),
+               kind: .collection(kind: "AttributeList", collectionElementName: "Attribute"),
+               isOptional: true),
          Child(name: "Capture",
-               kind: "ClosureCaptureSignature",
+               kind: .node(kind: "ClosureCaptureSignature"),
                isOptional: true),
          Child(name: "Input",
-               kind: "Syntax",
-               isOptional: true,
-               nodeChoices: [
+               kind: .nodeChoices(choices: [
                  Child(name: "SimpleInput",
-                       kind: "ClosureParamList"),
+                       kind: .node(kind: "ClosureParamList")),
                  Child(name: "Input",
-                       kind: "ParameterClause")
+                       kind: .node(kind: "ParameterClause"))
                ]),
+               isOptional: true),
          Child(name: "EffectSpecifiers",
-               kind: "TypeEffectSpecifiers",
+               kind: .node(kind: "TypeEffectSpecifiers"),
                isOptional: true),
          Child(name: "Output",
-               kind: "ReturnClause",
+               kind: .node(kind: "ReturnClause"),
                isOptional: true),
          Child(name: "InTok",
-               kind: "KeywordToken",
-               tokenChoices: [
-                 "Keyword"
-               ],
-               textChoices: [
-                 "in"
-               ])
+               kind: .token(choices: [.keyword(text: "in")]))
        ]),
 
   Node(name: "ClosureExpr",
@@ -812,22 +577,15 @@ public let EXPR_NODES: [Node] = [
        ],
        children: [
          Child(name: "LeftBrace",
-               kind: "LeftBraceToken",
-               tokenChoices: [
-                 "LeftBrace"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "LeftBraceToken")])),
          Child(name: "Signature",
-               kind: "ClosureSignature",
+               kind: .node(kind: "ClosureSignature"),
                isOptional: true),
          Child(name: "Statements",
-               kind: "CodeBlockItemList",
-               collectionElementName: "Statement",
+               kind: .collection(kind: "CodeBlockItemList", collectionElementName: "Statement"),
                isIndented: true),
          Child(name: "RightBrace",
-               kind: "RightBraceToken",
-               tokenChoices: [
-                 "RightBrace"
-               ],
+               kind: .token(choices: [.token(tokenKind: "RightBraceToken")]),
                requiresLeadingNewline: true)
        ]),
 
@@ -836,7 +594,7 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "Pattern",
-               kind: "Pattern")
+               kind: .node(kind: "Pattern"))
        ]),
 
   Node(name: "MultipleTrailingClosureElement",
@@ -844,18 +602,11 @@ public let EXPR_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "Label",
-               kind: "Token",
-               tokenChoices: [
-                 "Identifier",
-                 "Wildcard"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "WildcardToken")])),
          Child(name: "Colon",
-               kind: "ColonToken",
-               tokenChoices: [
-                 "Colon"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "ColonToken")])),
          Child(name: "Closure",
-               kind: "ClosureExpr")
+               kind: .node(kind: "ClosureExpr"))
        ]),
 
   Node(name: "MultipleTrailingClosureElementList",
@@ -868,30 +619,22 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "CalledExpression",
-               kind: "Expr"),
+               kind: .node(kind: "Expr")),
          Child(name: "LeftParen",
-               kind: "LeftParenToken",
-               isOptional: true,
-               tokenChoices: [
-                 "LeftParen"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "LeftParenToken")]),
+               isOptional: true),
          Child(name: "ArgumentList",
-               kind: "TupleExprElementList",
-               collectionElementName: "Argument",
+               kind: .collection(kind: "TupleExprElementList", collectionElementName: "Argument"),
                isIndented: true),
          Child(name: "RightParen",
-               kind: "RightParenToken",
-               isOptional: true,
-               tokenChoices: [
-                 "RightParen"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "RightParenToken")]),
+               isOptional: true),
          Child(name: "TrailingClosure",
-               kind: "ClosureExpr",
+               kind: .node(kind: "ClosureExpr"),
                isOptional: true),
          Child(name: "AdditionalTrailingClosures",
-               kind: "MultipleTrailingClosureElementList",
-               isOptional: true,
-               collectionElementName: "AdditionalTrailingClosure")
+               kind: .collection(kind: "MultipleTrailingClosureElementList", collectionElementName: "AdditionalTrailingClosure"),
+               isOptional: true)
        ]),
 
   Node(name: "SubscriptExpr",
@@ -899,27 +642,19 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "CalledExpression",
-               kind: "Expr"),
+               kind: .node(kind: "Expr")),
          Child(name: "LeftBracket",
-               kind: "LeftSquareBracketToken",
-               tokenChoices: [
-                 "LeftSquareBracket"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "LeftSquareBracketToken")])),
          Child(name: "ArgumentList",
-               kind: "TupleExprElementList",
-               collectionElementName: "Argument"),
+               kind: .collection(kind: "TupleExprElementList", collectionElementName: "Argument")),
          Child(name: "RightBracket",
-               kind: "RightSquareBracketToken",
-               tokenChoices: [
-                 "RightSquareBracket"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "RightSquareBracketToken")])),
          Child(name: "TrailingClosure",
-               kind: "ClosureExpr",
+               kind: .node(kind: "ClosureExpr"),
                isOptional: true),
          Child(name: "AdditionalTrailingClosures",
-               kind: "MultipleTrailingClosureElementList",
-               isOptional: true,
-               collectionElementName: "AdditionalTrailingClosure")
+               kind: .collection(kind: "MultipleTrailingClosureElementList", collectionElementName: "AdditionalTrailingClosure"),
+               isOptional: true)
        ]),
 
   Node(name: "OptionalChainingExpr",
@@ -927,12 +662,9 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "Expression",
-               kind: "Expr"),
+               kind: .node(kind: "Expr")),
          Child(name: "QuestionMark",
-               kind: "PostfixQuestionMarkToken",
-               tokenChoices: [
-                 "PostfixQuestionMark"
-               ])
+               kind: .token(choices: [.token(tokenKind: "PostfixQuestionMarkToken")]))
        ]),
 
   Node(name: "ForcedValueExpr",
@@ -940,12 +672,9 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "Expression",
-               kind: "Expr"),
+               kind: .node(kind: "Expr")),
          Child(name: "ExclamationMark",
-               kind: "ExclamationMarkToken",
-               tokenChoices: [
-                 "ExclamationMark"
-               ])
+               kind: .token(choices: [.token(tokenKind: "ExclamationMarkToken")]))
        ]),
 
   Node(name: "PostfixUnaryExpr",
@@ -953,12 +682,9 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "Expression",
-               kind: "Expr"),
+               kind: .node(kind: "Expr")),
          Child(name: "OperatorToken",
-               kind: "PostfixOperatorToken",
-               tokenChoices: [
-                 "PostfixOperator"
-               ])
+               kind: .token(choices: [.token(tokenKind: "PostfixOperatorToken")]))
        ]),
 
   Node(name: "SpecializeExpr",
@@ -966,9 +692,9 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "Expression",
-               kind: "Expr"),
+               kind: .node(kind: "Expr")),
          Child(name: "GenericArgumentClause",
-               kind: "GenericArgumentClause")
+               kind: .node(kind: "GenericArgumentClause"))
        ]),
 
   Node(name: "StringSegment",
@@ -976,10 +702,7 @@ public let EXPR_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "Content",
-               kind: "StringSegmentToken",
-               tokenChoices: [
-                 "StringSegment"
-               ])
+               kind: .token(choices: [.token(tokenKind: "StringSegmentToken")]))
        ]),
 
   Node(name: "ExpressionSegment",
@@ -990,31 +713,18 @@ public let EXPR_NODES: [Node] = [
        ],
        children: [
          Child(name: "Backslash",
-               kind: "BackslashToken",
-               tokenChoices: [
-                 "Backslash"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "BackslashToken")])),
          Child(name: "Delimiter",
-               kind: "RawStringDelimiterToken",
-               isOptional: true,
-               tokenChoices: [
-                 "RawStringDelimiter"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "RawStringDelimiterToken")]),
+               isOptional: true),
          Child(name: "LeftParen",
-               kind: "LeftParenToken",
-               tokenChoices: [
-                 "LeftParen"
-               ],
+               kind: .token(choices: [.token(tokenKind: "LeftParenToken")]),
                classification: "StringInterpolationAnchor",
                forceClassification: true),
          Child(name: "Expressions",
-               kind: "TupleExprElementList",
-               collectionElementName: "Expression"),
+               kind: .collection(kind: "TupleExprElementList", collectionElementName: "Expression")),
          Child(name: "RightParen",
-               kind: "RightParenToken",
-               tokenChoices: [
-                 "RightParen"
-               ],
+               kind: .token(choices: [.token(tokenKind: "RightParenToken")]),
                classification: "StringInterpolationAnchor",
                forceClassification: true)
        ]),
@@ -1024,32 +734,17 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "OpenDelimiter",
-               kind: "RawStringDelimiterToken",
-               isOptional: true,
-               tokenChoices: [
-                 "RawStringDelimiter"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "RawStringDelimiterToken")]),
+               isOptional: true),
          Child(name: "OpenQuote",
-               kind: "Token",
-               tokenChoices: [
-                 "StringQuote",
-                 "MultilineStringQuote"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "StringQuoteToken"), .token(tokenKind: "MultilineStringQuoteToken")])),
          Child(name: "Segments",
-               kind: "StringLiteralSegments",
-               collectionElementName: "Segment"),
+               kind: .collection(kind: "StringLiteralSegments", collectionElementName: "Segment")),
          Child(name: "CloseQuote",
-               kind: "Token",
-               tokenChoices: [
-                 "StringQuote",
-                 "MultilineStringQuote"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "StringQuoteToken"), .token(tokenKind: "MultilineStringQuoteToken")])),
          Child(name: "CloseDelimiter",
-               kind: "RawStringDelimiterToken",
-               isOptional: true,
-               tokenChoices: [
-                 "RawStringDelimiter"
-               ])
+               kind: .token(choices: [.token(tokenKind: "RawStringDelimiterToken")]),
+               isOptional: true)
        ]),
 
   Node(name: "RegexLiteralExpr",
@@ -1057,10 +752,7 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "Regex",
-               kind: "RegexLiteralToken",
-               tokenChoices: [
-                 "RegexLiteral"
-               ])
+               kind: .token(choices: [.token(tokenKind: "RegexLiteralToken")]))
        ]),
 
   Node(name: "KeyPathExpr",
@@ -1068,16 +760,12 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "Backslash",
-               kind: "BackslashToken",
-               tokenChoices: [
-                 "Backslash"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "BackslashToken")])),
          Child(name: "Root",
-               kind: "Type",
+               kind: .node(kind: "Type"),
                isOptional: true),
          Child(name: "Components",
-               kind: "KeyPathComponentList",
-               collectionElementName: "KeyPathComponent")
+               kind: .collection(kind: "KeyPathComponentList", collectionElementName: "KeyPathComponent"))
        ]),
 
   Node(name: "KeyPathComponentList",
@@ -1090,21 +778,17 @@ public let EXPR_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "Period",
-               kind: "PeriodToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Period"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "PeriodToken")]),
+               isOptional: true),
          Child(name: "Component",
-               kind: "Syntax",
-               nodeChoices: [
+               kind: .nodeChoices(choices: [
                  Child(name: "Property",
-                       kind: "KeyPathPropertyComponent"),
+                       kind: .node(kind: "KeyPathPropertyComponent")),
                  Child(name: "Subscript",
-                       kind: "KeyPathSubscriptComponent"),
+                       kind: .node(kind: "KeyPathSubscriptComponent")),
                  Child(name: "Optional",
-                       kind: "KeyPathOptionalComponent")
-               ])
+                       kind: .node(kind: "KeyPathOptionalComponent"))
+               ]))
        ]),
 
   Node(name: "KeyPathPropertyComponent",
@@ -1112,19 +796,12 @@ public let EXPR_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "Identifier",
-               kind: "Token",
-               tokenChoices: [
-                 "Identifier",
-                 "Keyword",
-                 "DollarIdentifier",
-                 "BinaryOperator",
-                 "IntegerLiteral"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "KeywordToken"), .token(tokenKind: "DollarIdentifierToken"), .token(tokenKind: "BinaryOperatorToken"), .token(tokenKind: "IntegerLiteralToken")])),
          Child(name: "DeclNameArguments",
-               kind: "DeclNameArguments",
+               kind: .node(kind: "DeclNameArguments"),
                isOptional: true),
          Child(name: "GenericArgumentClause",
-               kind: "GenericArgumentClause",
+               kind: .node(kind: "GenericArgumentClause"),
                isOptional: true)
        ]),
 
@@ -1133,18 +810,11 @@ public let EXPR_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "LeftBracket",
-               kind: "LeftSquareBracketToken",
-               tokenChoices: [
-                 "LeftSquareBracket"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "LeftSquareBracketToken")])),
          Child(name: "ArgumentList",
-               kind: "TupleExprElementList",
-               collectionElementName: "Argument"),
+               kind: .collection(kind: "TupleExprElementList", collectionElementName: "Argument")),
          Child(name: "RightBracket",
-               kind: "RightSquareBracketToken",
-               tokenChoices: [
-                 "RightSquareBracket"
-               ])
+               kind: .token(choices: [.token(tokenKind: "RightSquareBracketToken")]))
        ]),
 
   Node(name: "KeyPathOptionalComponent",
@@ -1152,11 +822,7 @@ public let EXPR_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "QuestionOrExclamationMark",
-               kind: "Token",
-               tokenChoices: [
-                 "PostfixQuestionMark",
-                 "ExclamationMark"
-               ])
+               kind: .token(choices: [.token(tokenKind: "PostfixQuestionMarkToken"), .token(tokenKind: "ExclamationMarkToken")]))
        ]),
 
   Node(name: "MacroExpansionExpr",
@@ -1167,41 +833,27 @@ public let EXPR_NODES: [Node] = [
        ],
        children: [
          Child(name: "PoundToken",
-               kind: "PoundToken",
-               description: "The `#` sign.",
-               tokenChoices: [
-                 "Pound"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "PoundToken")]),
+               description: "The `#` sign."),
          Child(name: "Macro",
-               kind: "IdentifierToken",
-               tokenChoices: [
-                 "Identifier"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken")])),
          Child(name: "GenericArguments",
-               kind: "GenericArgumentClause",
+               kind: .node(kind: "GenericArgumentClause"),
                isOptional: true),
          Child(name: "LeftParen",
-               kind: "LeftParenToken",
-               isOptional: true,
-               tokenChoices: [
-                 "LeftParen"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "LeftParenToken")]),
+               isOptional: true),
          Child(name: "ArgumentList",
-               kind: "TupleExprElementList",
-               collectionElementName: "Argument"),
+               kind: .collection(kind: "TupleExprElementList", collectionElementName: "Argument")),
          Child(name: "RightParen",
-               kind: "RightParenToken",
-               isOptional: true,
-               tokenChoices: [
-                 "RightParen"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "RightParenToken")]),
+               isOptional: true),
          Child(name: "TrailingClosure",
-               kind: "ClosureExpr",
+               kind: .node(kind: "ClosureExpr"),
                isOptional: true),
          Child(name: "AdditionalTrailingClosures",
-               kind: "MultipleTrailingClosureElementList",
-               isOptional: true,
-               collectionElementName: "AdditionalTrailingClosure")
+               kind: .collection(kind: "MultipleTrailingClosureElementList", collectionElementName: "AdditionalTrailingClosure"),
+               isOptional: true)
        ]),
 
   Node(name: "PostfixIfConfigExpr",
@@ -1209,10 +861,10 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "Base",
-               kind: "Expr",
+               kind: .node(kind: "Expr"),
                isOptional: true),
          Child(name: "Config",
-               kind: "IfConfigDecl")
+               kind: .node(kind: "IfConfigDecl"))
        ]),
 
   Node(name: "EditorPlaceholderExpr",
@@ -1220,10 +872,7 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "Identifier",
-               kind: "IdentifierToken",
-               tokenChoices: [
-                 "Identifier"
-               ])
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken")]))
        ]),
 
   Node(name: "YieldExprList",
@@ -1237,13 +886,10 @@ public let EXPR_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "Expression",
-               kind: "Expr"),
+               kind: .node(kind: "Expr")),
          Child(name: "Comma",
-               kind: "CommaToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Comma"
-               ])
+               kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+               isOptional: true)
        ]),
 
 ]

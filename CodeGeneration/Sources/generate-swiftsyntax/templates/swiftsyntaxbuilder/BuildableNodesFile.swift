@@ -37,11 +37,12 @@ let buildableNodesFile = SourceFileSyntax {
 }
 
 private func convertFromSyntaxProtocolToSyntaxType(child: Child) -> ExprSyntax {
-  if child.type.isBaseType && child.nodeChoices.isEmpty {
-    return ExprSyntax("\(raw: child.type.syntaxBaseName)(fromProtocol: \(raw: child.swiftName))")
-  } else {
-    return ExprSyntax(IdentifierExprSyntax(identifier: .identifier(child.swiftName)))
+  if child.type.isBaseType {
+    if !child.kind.isNodeChoices {
+      return ExprSyntax("\(raw: child.type.syntaxBaseName)(fromProtocol: \(raw: child.swiftName))")
+    }
   }
+  return ExprSyntax(IdentifierExprSyntax(identifier: .identifier(child.swiftName)))
 }
 
 /// Create a builder-based convenience initializer, if needed.

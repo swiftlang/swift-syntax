@@ -47,10 +47,16 @@ class Child(object):
         # child.
         self.token_choices = []
         if self.token:
-            self.token_choices.append(self.token)
+            self.token_choices.append((self.token, None))
         for choice in token_choices or []:
+            pipe_index = choice.find('|')
+            choice_text = None
+            if pipe_index != -1:
+                full_choice = choice
+                choice = full_choice[:pipe_index]
+                choice_text = full_choice[pipe_index:]
             token = SYNTAX_TOKEN_MAP[choice]
-            self.token_choices.append(token)
+            self.token_choices.append((token, choice_text))
 
         # A list of valid text for tokens, if specified.
         # This will force validation logic to check the text passed into the
@@ -101,7 +107,7 @@ class Child(object):
         otherwise returns None.
         """
         if self.token_choices:
-            return self.token_choices[0]
+            return self.token_choices[0][0]
         return None
 
     def is_unexpected_nodes(self):

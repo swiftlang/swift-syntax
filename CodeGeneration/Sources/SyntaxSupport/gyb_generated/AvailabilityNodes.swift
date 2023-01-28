@@ -24,27 +24,19 @@ public let AVAILABILITY_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "Entry",
-               kind: "Syntax",
-               description: "The actual argument",
-               nodeChoices: [
+               kind: .nodeChoices(choices: [
                  Child(name: "Token",
-                       kind: "Token",
-                       tokenChoices: [
-                         "BinaryOperator",
-                         "Identifier"
-                       ]),
+                       kind: .token(choices: [.token(tokenKind: "BinaryOperatorToken"), .token(tokenKind: "IdentifierToken")])),
                  Child(name: "AvailabilityVersionRestriction",
-                       kind: "AvailabilityVersionRestriction"),
+                       kind: .node(kind: "AvailabilityVersionRestriction")),
                  Child(name: "AvailabilityLabeledArgument",
-                       kind: "AvailabilityLabeledArgument")
+                       kind: .node(kind: "AvailabilityLabeledArgument"))
                ]),
+               description: "The actual argument"),
          Child(name: "TrailingComma",
-               kind: "CommaToken",
+               kind: .token(choices: [.token(tokenKind: "CommaToken")]),
                description: "A trailing comma if the argument is followed by anotherargument",
-               isOptional: true,
-               tokenChoices: [
-                 "Comma"
-               ])
+               isOptional: true)
        ]),
 
   Node(name: "AvailabilityLabeledArgument",
@@ -53,26 +45,19 @@ public let AVAILABILITY_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "Label",
-               kind: "IdentifierToken",
-               description: "The label of the argument",
-               tokenChoices: [
-                 "Identifier"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+               description: "The label of the argument"),
          Child(name: "Colon",
-               kind: "ColonToken",
-               description: "The colon separating label and value",
-               tokenChoices: [
-                 "Colon"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "ColonToken")]),
+               description: "The colon separating label and value"),
          Child(name: "Value",
-               kind: "Syntax",
-               description: "The value of this labeled argument",
-               nodeChoices: [
+               kind: .nodeChoices(choices: [
                  Child(name: "String",
-                       kind: "StringLiteralExpr"),
+                       kind: .node(kind: "StringLiteralExpr")),
                  Child(name: "Version",
-                       kind: "VersionTuple")
-               ])
+                       kind: .node(kind: "VersionTuple"))
+               ]),
+               description: "The value of this labeled argument")
        ]),
 
   Node(name: "AvailabilityVersionRestriction",
@@ -81,14 +66,11 @@ public let AVAILABILITY_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "Platform",
-               kind: "IdentifierToken",
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
                description: "The name of the OS on which the availability should berestricted or 'swift' if the availability should berestricted based on a Swift version.",
-               tokenChoices: [
-                 "Identifier"
-               ],
                classification: "Keyword"),
          Child(name: "Version",
-               kind: "VersionTuple",
+               kind: .node(kind: "VersionTuple"),
                isOptional: true)
        ]),
 
@@ -98,26 +80,16 @@ public let AVAILABILITY_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "MajorMinor",
-               kind: "Token",
-               description: "In case the version consists only of the major version, aninteger literal that specifies the major version. In casethe version consists of major and minor version number, afloating literal in which the decimal part is interpretedas the minor version.",
-               tokenChoices: [
-                 "IntegerLiteral",
-                 "FloatingLiteral"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "IntegerLiteralToken"), .token(tokenKind: "FloatingLiteralToken")]),
+               description: "In case the version consists only of the major version, aninteger literal that specifies the major version. In casethe version consists of major and minor version number, afloating literal in which the decimal part is interpretedas the minor version."),
          Child(name: "PatchPeriod",
-               kind: "PeriodToken",
+               kind: .token(choices: [.token(tokenKind: "PeriodToken")]),
                description: "If the version contains a patch number, the periodseparating the minor from the patch number.",
-               isOptional: true,
-               tokenChoices: [
-                 "Period"
-               ]),
+               isOptional: true),
          Child(name: "PatchVersion",
-               kind: "IntegerLiteralToken",
+               kind: .token(choices: [.token(tokenKind: "IntegerLiteralToken")]),
                description: "The patch version if specified.",
-               isOptional: true,
-               tokenChoices: [
-                 "IntegerLiteral"
-               ])
+               isOptional: true)
        ]),
 
 ]

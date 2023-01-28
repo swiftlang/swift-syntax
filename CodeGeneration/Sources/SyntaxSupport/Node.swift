@@ -113,17 +113,15 @@ public class Node {
         return [
           Child(
             name: unexpectedName,
-            kind: "UnexpectedNodes",
-            isOptional: true,
-            collectionElementName: unexpectedName
+            kind: .collection(kind: "UnexpectedNodes", collectionElementName: unexpectedName),
+            isOptional: true
           ),
           child
         ]
-      } + (children.last != nil ? [Child(
+      } + (!children.isEmpty ? [Child(
         name: "UnexpectedAfter\(children.last!.name)",
-        kind: "UnexpectedNodes",
-        isOptional: true,
-        collectionElementName: "UnexpectedAfter\(children.last!.name)"
+        kind: .collection(kind: "UnexpectedNodes", collectionElementName: "UnexpectedAfter\(children.last!.name)"),
+        isOptional: true
       )] : [])
     }
 

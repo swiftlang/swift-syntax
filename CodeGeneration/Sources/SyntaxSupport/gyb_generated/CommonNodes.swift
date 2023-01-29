@@ -113,6 +113,7 @@ public let COMMON_NODES: [Node] = [
                kind: .token(choices: [.token(tokenKind: "LeftBraceToken")])),
          Child(name: "Statements",
                kind: .collection(kind: "CodeBlockItemList", collectionElementName: "Statement"),
+               nameForDiagnostics: "statements",
                isIndented: true),
          Child(name: "RightBrace",
                kind: .token(choices: [.token(tokenKind: "RightBraceToken")]),

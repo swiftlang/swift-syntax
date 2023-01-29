@@ -42,15 +42,6 @@ LIT_EXEC = os.path.join(LLVM_DIR, "utils", "lit", "lit.py")
 
 GROUP_INFO_PATH = os.path.join(PACKAGE_DIR, "utils", "group.json")
 
-BASE_KIND_FILES = {
-    "Decl": "SyntaxDeclNodes.swift",
-    "Expr": "SyntaxExprNodes.swift",
-    "Pattern": "SyntaxPatternNodes.swift",
-    "Stmt": "SyntaxStmtNodes.swift",
-    "Syntax": "SyntaxNodes.swift",
-    "Type": "SyntaxTypeNodes.swift",
-}
-
 
 def fail_for_called_process_error(
     succinct_description: str,
@@ -244,53 +235,6 @@ def generate_gyb_files_helper(
             pass
 
 
-# Generate the syntax node `.swift` files from `SyntaxNodes.swift.gyb.template`.
-# `destination_dir` is not `None`, the resulting files will be written to
-# `destination_dir/syntax_nodes`, otherwise they will be written to
-# `sources_dir/gyb_generated/syntax_nodes`.
-def generate_syntax_node_template_gyb_files(
-    destination_dir: Optional[str],
-    gyb_exec: str,
-    add_source_locations: bool,
-    verbose: bool
-) -> None:
-    temp_files_dir = tempfile.gettempdir()
-    make_dir_if_needed(temp_files_dir)
-
-    if destination_dir is None:
-        destination_dir = os.path.join(SWIFTSYNTAX_DIR, "gyb_generated")
-
-    template_destination = os.path.join(destination_dir, "syntax_nodes")
-
-    make_dir_if_needed(template_destination)
-    for previous_gyb_gen_file in os.listdir(template_destination):
-        if previous_gyb_gen_file.endswith(".swift"):
-            if previous_gyb_gen_file not in BASE_KIND_FILES.values():
-                check_call(
-                    ["rm", previous_gyb_gen_file],
-                    cwd=template_destination,
-                    verbose=verbose,
-                )
-
-    for base_kind in BASE_KIND_FILES:
-        output_file_name = BASE_KIND_FILES[base_kind]
-
-        gyb_file = os.path.join(
-            SWIFTSYNTAX_DIR, "SyntaxNodes.swift.gyb.template"
-        )
-
-        generate_single_gyb_file(
-            gyb_exec,
-            gyb_file,
-            output_file_name,
-            template_destination,
-            temp_files_dir,
-            add_source_locations,
-            additional_gyb_flags=["-DEMIT_KIND=%s" % base_kind],
-            verbose=verbose,
-        )
-
-
 # If `temp_directories` is True, creates a dictionary that maps every source dir in
 # `source_dirs` to a unique temporary directory.
 # If `temp_directories` is False, it maps each source dir to the corresponding
@@ -298,7 +242,6 @@ def generate_syntax_node_template_gyb_files(
 def gyb_dir_mapping(temp_directories: bool) -> Dict[str, str]:
     source_dirs = [
         SYNTAXSUPPORT_DIR,
-        SWIFTSYNTAX_DIR,
         os.path.join(SWIFTSYNTAX_DIR, "Raw"),
         SWIFTSYNTAX_DOCUMENTATION_DIR,
     ]
@@ -328,13 +271,6 @@ def generate_gyb_files(
             add_source_locations,
             verbose
         )
-        if source_dir == SWIFTSYNTAX_DIR:
-            generate_syntax_node_template_gyb_files(
-                destination_dir,
-                gyb_exec,
-                add_source_locations,
-                verbose
-            )
 
     print("** Done Generating gyb Files **")
 

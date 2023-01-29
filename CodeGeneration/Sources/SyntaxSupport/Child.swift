@@ -43,6 +43,14 @@ public enum ChildKind {
       return false
     }
   }
+
+  public var isNodeChoicesEmpty: Bool {
+    if case .nodeChoices(let nodeChoices) = self {
+      return nodeChoices.isEmpty
+    } else {
+      return true
+    }
+  }
 }
 
 /// A child of a node, that may be declared optional or a token with a
@@ -50,6 +58,7 @@ public enum ChildKind {
 public class Child {
   public let name: String
   public let kind: ChildKind
+  public let nameForDiagnostics: String?
   public let description: String?
   public let forceClassification: Bool
   public let isIndented: Bool
@@ -117,6 +126,25 @@ public class Child {
     syntaxKind == "UnexpectedNodes"
   }
 
+  /// Returns `true` if this child's type is one of the base syntax kinds and
+  /// it has no node choices.
+  public var hasBaseType: Bool {
+    switch kind {
+    case .nodeChoices(let choices):
+      return choices.isEmpty && SYNTAX_BASE_KINDS.contains(syntaxKind)
+    case .node,
+      .collection,
+      .token:
+      return SYNTAX_BASE_KINDS.contains(syntaxKind)
+    }
+  }
+
+  /// Returns `true` if this child's type is one of the base syntax kinds and
+  /// it's optional.
+  public var hasOptionalBaseType: Bool {
+    return hasBaseType && isOptional
+  }
+
   /// If a classification is passed, it specifies the color identifiers in
   /// that subtree should inherit for syntax coloring. Must be a member of
   /// SyntaxClassification in SyntaxClassifier.h.gyb
@@ -125,6 +153,7 @@ public class Child {
   init(
     name: String,
     kind: ChildKind,
+    nameForDiagnostics: String? = nil,
     description: String? = nil,
     isOptional: Bool = false,
     classification: String? = nil,
@@ -134,6 +163,7 @@ public class Child {
   ) {
     self.name = name
     self.kind = kind
+    self.nameForDiagnostics = nameForDiagnostics
     self.description = description
     self.classification = classificationByName(classification)
     self.forceClassification = forceClassification

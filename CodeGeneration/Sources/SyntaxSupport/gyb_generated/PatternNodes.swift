@@ -76,6 +76,7 @@ public let PATTERN_NODES: [Node] = [
        children: [
          Child(name: "LabelName",
                kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+               nameForDiagnostics: "label",
                isOptional: true),
          Child(name: "LabelColon",
                kind: .token(choices: [.token(tokenKind: "ColonToken")]),

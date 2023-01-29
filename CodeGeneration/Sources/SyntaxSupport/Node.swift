@@ -33,32 +33,32 @@ public class Node {
   public let elementsSeparatedByNewline: Bool
   public let collectionElement: String
 
-  /// Returns `True` if this node declares one of the base syntax kinds.
+  /// Returns `true` if this node declares one of the base syntax kinds.
   public var isBase: Bool {
     return SYNTAX_BASE_KINDS.contains(syntaxKind)
   }
 
-  /// Returns `True` if this node is a subclass of SyntaxCollection.
+  /// Returns `true` if this node is a subclass of SyntaxCollection.
   public var isSyntaxCollection: Bool {
     return baseKind == "SyntaxCollection"
   }
 
-  /// Returns `True` if this node should have a `validate` method associated.
+  /// Returns `true` if this node should have a `validate` method associated.
   public var requiresValidation: Bool {
     return isBuildable
   }
 
-  /// Returns `True` if this node is an `Unknown` syntax subclass.
+  /// Returns `true` if this node is an `Unknown` syntax subclass.
   public var isUnknown: Bool {
     return syntaxKind.contains("Unknown")
   }
 
-  /// Returns `True` if this node is an `Unknown` syntax subclass.
+  /// Returns `true` if this node is an `Unknown` syntax subclass.
   public var isMissing: Bool {
     return syntaxKind.contains("Missing")
   }
 
-  /// Returns `True` if this node should have a builder associated.
+  /// Returns `true` if this node should have a builder associated.
   public var isBuildable: Bool {
     return !isBase && !isUnknown && !isMissing && !isSyntaxCollection
   }
@@ -75,6 +75,16 @@ public class Node {
 
   public var isVisitable: Bool {
     return !isBase
+  }
+
+  public var hasOptionalBaseTypeChild: Bool {
+    return children.contains { child in
+      if child.hasOptionalBaseType {
+        return true
+      } else {
+        return false
+      }
+    }
   }
 
   init(
@@ -102,7 +112,7 @@ public class Node {
 
     if kind == "SyntaxCollection" {
       self.children = children
-    } else {
+    } else if children.count > 0 {
       // Add implicitly generated UnexpectedNodes children between
       // any two defined children
       self.children =
@@ -130,6 +140,10 @@ public class Node {
               isOptional: true
             )
           ] : [])
+    } else {
+      self.children = [
+        Child(name: "Unexpected", kind: .collection(kind: "UnexpectedNodes", collectionElementName: "Unexpected"), isOptional: true)
+      ]
     }
 
     self.nonUnexpectedChildren = children.filter { !$0.isUnexpectedNodes }

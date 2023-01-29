@@ -22,6 +22,14 @@ private let ideUtilsDir: String = "IDEUtils"
 private let swiftParserDir: String = "SwiftParser"
 private let swiftSyntaxDir: String = "SwiftSyntax"
 private let swiftSyntaxBuilderDir: String = "SwiftSyntaxBuilder"
+private let BASE_KIND_FILES = [
+  "Decl": "SyntaxDeclNodes.swift",
+  "Expr": "SyntaxExprNodes.swift",
+  "Pattern": "SyntaxPatternNodes.swift",
+  "Stmt": "SyntaxStmtNodes.swift",
+  "Syntax": "SyntaxNodes.swift",
+  "Type": "SyntaxTypeNodes.swift",
+]
 
 struct TemplateSpec {
   let sourceFileGenerator: () -> SourceFileSyntax
@@ -47,40 +55,44 @@ struct GenerateSwiftSyntax: ParsableCommand {
   var verbose: Bool = false
 
   func run() throws {
-    let templates: [TemplateSpec] = [
-      // SwiftBasicFormat
-      TemplateSpec(sourceFile: basicFormatFile, module: swiftBasicFormatDir, filename: "BasicFormat.swift"),
+    let templates: [TemplateSpec] =
+      [
+        // SwiftBasicFormat
+        TemplateSpec(sourceFile: basicFormatFile, module: swiftBasicFormatDir, filename: "BasicFormat.swift"),
 
-      // IDEUtils
-      TemplateSpec(sourceFile: syntaxClassificationFile, module: ideUtilsDir, filename: "SyntaxClassification.swift"),
+        // IDEUtils
+        TemplateSpec(sourceFile: syntaxClassificationFile, module: ideUtilsDir, filename: "SyntaxClassification.swift"),
 
-      // SwiftParser
-      TemplateSpec(sourceFile: declarationModifierFile, module: swiftParserDir, filename: "DeclarationModifier.swift"),
-      TemplateSpec(sourceFile: parserEntryFile, module: swiftParserDir, filename: "Parser+Entry.swift"),
-      TemplateSpec(sourceFile: typeAttributeFile, module: swiftParserDir, filename: "TypeAttribute.swift"),
+        // SwiftParser
+        TemplateSpec(sourceFile: declarationModifierFile, module: swiftParserDir, filename: "DeclarationModifier.swift"),
+        TemplateSpec(sourceFile: parserEntryFile, module: swiftParserDir, filename: "Parser+Entry.swift"),
+        TemplateSpec(sourceFile: typeAttributeFile, module: swiftParserDir, filename: "TypeAttribute.swift"),
 
-      // SwiftSyntax
-      TemplateSpec(sourceFile: keywordFile, module: swiftSyntaxDir, filename: "Keyword.swift"),
-      TemplateSpec(sourceFile: miscFile, module: swiftSyntaxDir, filename: "Misc.swift"),
-      TemplateSpec(sourceFile: syntaxAnyVisitorFile, module: swiftSyntaxDir, filename: "SyntaxAnyVisitor.swift"),
-      TemplateSpec(sourceFile: syntaxBaseNodesFile, module: swiftSyntaxDir, filename: "SyntaxBaseNodes.swift"),
-      TemplateSpec(sourceFile: syntaxCollectionsFile, module: swiftSyntaxDir, filename: "SyntaxCollections.swift"),
-      TemplateSpec(sourceFile: syntaxEnumFile, module: swiftSyntaxDir, filename: "SyntaxEnum.swift"),
-      TemplateSpec(sourceFile: syntaxKindFile, module: swiftSyntaxDir, filename: "SyntaxKind.swift"),
-      TemplateSpec(sourceFile: syntaxRewriterFile, module: swiftSyntaxDir, filename: "SyntaxRewriter.swift"),
-      TemplateSpec(sourceFile: syntaxTraitsFile, module: swiftSyntaxDir, filename: "SyntaxTraits.swift"),
-      TemplateSpec(sourceFile: syntaxTransformFile, module: swiftSyntaxDir, filename: "SyntaxTransform.swift"),
-      TemplateSpec(sourceFile: syntaxVisitorFile, module: swiftSyntaxDir, filename: "SyntaxVisitor.swift"),
-      TemplateSpec(sourceFile: tokenKindFile, module: swiftSyntaxDir, filename: "TokenKind.swift"),
-      TemplateSpec(sourceFile: tokensFile, module: swiftSyntaxDir, filename: "Tokens.swift"),
-      TemplateSpec(sourceFile: triviaFile, module: swiftSyntaxDir, filename: "Trivia.swift"),
+        // SwiftSyntax
+        TemplateSpec(sourceFile: keywordFile, module: swiftSyntaxDir, filename: "Keyword.swift"),
+        TemplateSpec(sourceFile: miscFile, module: swiftSyntaxDir, filename: "Misc.swift"),
+        TemplateSpec(sourceFile: syntaxAnyVisitorFile, module: swiftSyntaxDir, filename: "SyntaxAnyVisitor.swift"),
+        TemplateSpec(sourceFile: syntaxBaseNodesFile, module: swiftSyntaxDir, filename: "SyntaxBaseNodes.swift"),
+        TemplateSpec(sourceFile: syntaxCollectionsFile, module: swiftSyntaxDir, filename: "SyntaxCollections.swift"),
+        TemplateSpec(sourceFile: syntaxEnumFile, module: swiftSyntaxDir, filename: "SyntaxEnum.swift"),
+        TemplateSpec(sourceFile: syntaxKindFile, module: swiftSyntaxDir, filename: "SyntaxKind.swift"),
+        TemplateSpec(sourceFile: syntaxRewriterFile, module: swiftSyntaxDir, filename: "SyntaxRewriter.swift"),
+        TemplateSpec(sourceFile: syntaxTraitsFile, module: swiftSyntaxDir, filename: "SyntaxTraits.swift"),
+        TemplateSpec(sourceFile: syntaxTransformFile, module: swiftSyntaxDir, filename: "SyntaxTransform.swift"),
+        TemplateSpec(sourceFile: syntaxVisitorFile, module: swiftSyntaxDir, filename: "SyntaxVisitor.swift"),
+        TemplateSpec(sourceFile: tokenKindFile, module: swiftSyntaxDir, filename: "TokenKind.swift"),
+        TemplateSpec(sourceFile: tokensFile, module: swiftSyntaxDir, filename: "Tokens.swift"),
+        TemplateSpec(sourceFile: triviaFile, module: swiftSyntaxDir, filename: "Trivia.swift"),
 
-      // SwiftSyntaxBuilder
-      TemplateSpec(sourceFile: buildableCollectionNodesFile, module: swiftSyntaxBuilderDir, filename: "BuildableCollectionNodes.swift"),
-      TemplateSpec(sourceFile: buildableNodesFile, module: swiftSyntaxBuilderDir, filename: "BuildableNodes.swift"),
-      TemplateSpec(sourceFile: resultBuildersFile, module: swiftSyntaxBuilderDir, filename: "ResultBuilders.swift"),
-      TemplateSpec(sourceFile: syntaxExpressibleByStringInterpolationConformancesFile, module: swiftSyntaxBuilderDir, filename: "SyntaxExpressibleByStringInterpolationConformances.swift"),
-    ]
+        // SwiftSyntaxBuilder
+        TemplateSpec(sourceFile: buildableCollectionNodesFile, module: swiftSyntaxBuilderDir, filename: "BuildableCollectionNodes.swift"),
+        TemplateSpec(sourceFile: buildableNodesFile, module: swiftSyntaxBuilderDir, filename: "BuildableNodes.swift"),
+        TemplateSpec(sourceFile: resultBuildersFile, module: swiftSyntaxBuilderDir, filename: "ResultBuilders.swift"),
+        TemplateSpec(sourceFile: syntaxExpressibleByStringInterpolationConformancesFile, module: swiftSyntaxBuilderDir, filename: "SyntaxExpressibleByStringInterpolationConformances.swift"),
+      ]
+      + BASE_KIND_FILES.map { baseKind in
+        TemplateSpec(sourceFile: syntaxNode(emitKind: baseKind.key), module: swiftSyntaxDir, filename: "syntaxNodes/\(baseKind.value)")
+      }
 
     let modules = Set(templates.map(\.module))
 

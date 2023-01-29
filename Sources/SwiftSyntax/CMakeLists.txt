@@ -47,10 +47,10 @@ add_swift_host_library(SwiftSyntax
   generated/Tokens.swift
   generated/Trivia.swift
 
-  gyb_generated/syntax_nodes/SyntaxDeclNodes.swift
-  gyb_generated/syntax_nodes/SyntaxExprNodes.swift
-  gyb_generated/syntax_nodes/SyntaxNodes.swift
-  gyb_generated/syntax_nodes/SyntaxPatternNodes.swift
-  gyb_generated/syntax_nodes/SyntaxStmtNodes.swift
-  gyb_generated/syntax_nodes/SyntaxTypeNodes.swift
+  generated/syntaxNodes/SyntaxDeclNodes.swift
+  generated/syntaxNodes/SyntaxExprNodes.swift
+  generated/syntaxNodes/SyntaxNodes.swift
+  generated/syntaxNodes/SyntaxPatternNodes.swift
+  generated/syntaxNodes/SyntaxStmtNodes.swift
+  generated/syntaxNodes/SyntaxTypeNodes.swift
 )

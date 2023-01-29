@@ -45,7 +45,8 @@ final class StructTests: XCTestCase {
         .carriageReturns(1),
       ],
       structKeyword: .keyword(.struct),
-      identifier: "CarriateReturnsStruct"
+      identifier: "CarriateReturnsStruct",
+      members: MemberDeclBlockSyntax(members: [])
     )
     let carriageReturnFormFeedsStruct = StructDeclSyntax(
       leadingTrivia: [
@@ -55,7 +56,8 @@ final class StructTests: XCTestCase {
         .carriageReturnLineFeeds(1),
       ],
       structKeyword: .keyword(.struct),
-      identifier: "CarriageReturnFormFeedsStruct"
+      identifier: "CarriageReturnFormFeedsStruct",
+      members: MemberDeclBlockSyntax(members: [])
     )
     let testStruct = try StructDeclSyntax("public struct TestStruct") {
       nestedStruct

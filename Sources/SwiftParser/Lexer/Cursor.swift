@@ -1298,7 +1298,6 @@ extension Lexer.Cursor {
   }
 
   mutating func lexHexNumber() -> Lexer.Result {
-    let tokStart = self
     // We assume we're starting from the 'x' in a '0x...' floating-point literal.
     let zeroConsumed = self.advance(matching: "0")
     let xConsumed = self.advance(matching: "x")

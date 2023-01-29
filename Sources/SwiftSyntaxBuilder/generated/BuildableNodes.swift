@@ -17,397 +17,354 @@ import SwiftSyntax
 
 extension AccessorDeclSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax? = nil, unexpectedBetweenAttributesAndModifier: UnexpectedNodesSyntax? = nil, modifier: DeclModifierSyntax? = nil, unexpectedBetweenModifierAndAccessorKind: UnexpectedNodesSyntax? = nil, accessorKind: TokenSyntax, unexpectedBetweenAccessorKindAndParameter: UnexpectedNodesSyntax? = nil, parameter: AccessorParameterSyntax? = nil, unexpectedBetweenParameterAndEffectSpecifiers: UnexpectedNodesSyntax? = nil, effectSpecifiers: DeclEffectSpecifiersSyntax? = nil, unexpectedBetweenEffectSpecifiersAndBody: UnexpectedNodesSyntax? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemListSyntax? = {
-      nil
-    }, trailingTrivia: Trivia? = nil) {
+  
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax? = nil, unexpectedBetweenAttributesAndModifier: UnexpectedNodesSyntax? = nil, modifier: DeclModifierSyntax? = nil, unexpectedBetweenModifierAndAccessorKind: UnexpectedNodesSyntax? = nil, accessorKind: TokenSyntax, unexpectedBetweenAccessorKindAndParameter: UnexpectedNodesSyntax? = nil, parameter: AccessorParameterSyntax? = nil, unexpectedBetweenParameterAndEffectSpecifiers: UnexpectedNodesSyntax? = nil, effectSpecifiers: DeclEffectSpecifiersSyntax? = nil, unexpectedBetweenEffectSpecifiersAndBody: UnexpectedNodesSyntax? = nil, unexpectedAfterBody: UnexpectedNodesSyntax? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemListSyntax?, trailingTrivia: Trivia? = nil) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifier, modifier: modifier, unexpectedBetweenModifierAndAccessorKind, accessorKind: accessorKind, unexpectedBetweenAccessorKindAndParameter, parameter: parameter, unexpectedBetweenParameterAndEffectSpecifiers, effectSpecifiers: effectSpecifiers, unexpectedBetweenEffectSpecifiersAndBody, body: bodyBuilder().map { 
         CodeBlockSyntax(statements: $0) 
-      }, trailingTrivia: trailingTrivia)
+      }, unexpectedAfterBody, trailingTrivia: trailingTrivia)
   }
 }
 
 extension ActorDeclSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax? = nil, unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, modifiers: ModifierListSyntax? = nil, unexpectedBetweenModifiersAndActorKeyword: UnexpectedNodesSyntax? = nil, actorKeyword: TokenSyntax = .keyword(.actor), unexpectedBetweenActorKeywordAndIdentifier: UnexpectedNodesSyntax? = nil, identifier: TokenSyntax, unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? = nil, genericParameterClause: GenericParameterClauseSyntax? = nil, unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil, inheritanceClause: TypeInheritanceClauseSyntax? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax? = nil, unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil, @MemberDeclListBuilder membersBuilder: () -> MemberDeclListSyntax = {
-      MemberDeclListSyntax([])
-    }, trailingTrivia: Trivia? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndActorKeyword, actorKeyword: actorKeyword, unexpectedBetweenActorKeywordAndIdentifier, identifier: identifier, unexpectedBetweenIdentifierAndGenericParameterClause, genericParameterClause: genericParameterClause, unexpectedBetweenGenericParameterClauseAndInheritanceClause, inheritanceClause: inheritanceClause, unexpectedBetweenInheritanceClauseAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndMembers, members: MemberDeclBlockSyntax(members: membersBuilder()), trailingTrivia: trailingTrivia)
+  
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax? = nil, unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, modifiers: ModifierListSyntax? = nil, unexpectedBetweenModifiersAndActorKeyword: UnexpectedNodesSyntax? = nil, actorKeyword: TokenSyntax = .keyword(.actor), unexpectedBetweenActorKeywordAndIdentifier: UnexpectedNodesSyntax? = nil, identifier: TokenSyntax, unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? = nil, genericParameterClause: GenericParameterClauseSyntax? = nil, unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil, inheritanceClause: TypeInheritanceClauseSyntax? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax? = nil, unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil, unexpectedAfterMembers: UnexpectedNodesSyntax? = nil, @MemberDeclListBuilder membersBuilder: () -> MemberDeclListSyntax, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndActorKeyword, actorKeyword: actorKeyword, unexpectedBetweenActorKeywordAndIdentifier, identifier: identifier, unexpectedBetweenIdentifierAndGenericParameterClause, genericParameterClause: genericParameterClause, unexpectedBetweenGenericParameterClauseAndInheritanceClause, inheritanceClause: inheritanceClause, unexpectedBetweenInheritanceClauseAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndMembers, members: MemberDeclBlockSyntax(members: membersBuilder()), unexpectedAfterMembers, trailingTrivia: trailingTrivia)
   }
 }
 
 extension ArrayExprSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeLeftSquare: UnexpectedNodesSyntax? = nil, leftSquare: TokenSyntax = .leftSquareBracketToken(), unexpectedBetweenLeftSquareAndElements: UnexpectedNodesSyntax? = nil, unexpectedBetweenElementsAndRightSquare: UnexpectedNodesSyntax? = nil, rightSquare: TokenSyntax = .rightSquareBracketToken(), @ArrayElementListBuilder elementsBuilder: () -> ArrayElementListSyntax = {
-      ArrayElementListSyntax([])
-    }, trailingTrivia: Trivia? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftSquare, leftSquare: leftSquare, unexpectedBetweenLeftSquareAndElements, elements: elementsBuilder(), unexpectedBetweenElementsAndRightSquare, rightSquare: rightSquare, trailingTrivia: trailingTrivia)
+  
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeLeftSquare: UnexpectedNodesSyntax? = nil, leftSquare: TokenSyntax = .leftSquareBracketToken(), unexpectedBetweenLeftSquareAndElements: UnexpectedNodesSyntax? = nil, unexpectedBetweenElementsAndRightSquare: UnexpectedNodesSyntax? = nil, rightSquare: TokenSyntax = .rightSquareBracketToken(), unexpectedAfterRightSquare: UnexpectedNodesSyntax? = nil, @ArrayElementListBuilder elementsBuilder: () -> ArrayElementListSyntax, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftSquare, leftSquare: leftSquare, unexpectedBetweenLeftSquareAndElements, elements: elementsBuilder(), unexpectedBetweenElementsAndRightSquare, rightSquare: rightSquare, unexpectedAfterRightSquare, trailingTrivia: trailingTrivia)
   }
 }
 
 extension CatchClauseSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeCatchKeyword: UnexpectedNodesSyntax? = nil, catchKeyword: TokenSyntax = .keyword(.catch), unexpectedBetweenCatchKeywordAndCatchItems: UnexpectedNodesSyntax? = nil, catchItems: CatchItemListSyntax? = nil, unexpectedBetweenCatchItemsAndBody: UnexpectedNodesSyntax? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemListSyntax = {
-      CodeBlockItemListSyntax([])
-    }, trailingTrivia: Trivia? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeCatchKeyword, catchKeyword: catchKeyword, unexpectedBetweenCatchKeywordAndCatchItems, catchItems: catchItems, unexpectedBetweenCatchItemsAndBody, body: CodeBlockSyntax(statements: bodyBuilder()), trailingTrivia: trailingTrivia)
+  
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeCatchKeyword: UnexpectedNodesSyntax? = nil, catchKeyword: TokenSyntax = .keyword(.catch), unexpectedBetweenCatchKeywordAndCatchItems: UnexpectedNodesSyntax? = nil, catchItems: CatchItemListSyntax? = nil, unexpectedBetweenCatchItemsAndBody: UnexpectedNodesSyntax? = nil, unexpectedAfterBody: UnexpectedNodesSyntax? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemListSyntax, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeCatchKeyword, catchKeyword: catchKeyword, unexpectedBetweenCatchKeywordAndCatchItems, catchItems: catchItems, unexpectedBetweenCatchItemsAndBody, body: CodeBlockSyntax(statements: bodyBuilder()), unexpectedAfterBody, trailingTrivia: trailingTrivia)
   }
 }
 
 extension ClassDeclSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax? = nil, unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, modifiers: ModifierListSyntax? = nil, unexpectedBetweenModifiersAndClassKeyword: UnexpectedNodesSyntax? = nil, classKeyword: TokenSyntax = .keyword(.class), unexpectedBetweenClassKeywordAndIdentifier: UnexpectedNodesSyntax? = nil, identifier: TokenSyntax, unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? = nil, genericParameterClause: GenericParameterClauseSyntax? = nil, unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil, inheritanceClause: TypeInheritanceClauseSyntax? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax? = nil, unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil, @MemberDeclListBuilder membersBuilder: () -> MemberDeclListSyntax = {
-      MemberDeclListSyntax([])
-    }, trailingTrivia: Trivia? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndClassKeyword, classKeyword: classKeyword, unexpectedBetweenClassKeywordAndIdentifier, identifier: identifier, unexpectedBetweenIdentifierAndGenericParameterClause, genericParameterClause: genericParameterClause, unexpectedBetweenGenericParameterClauseAndInheritanceClause, inheritanceClause: inheritanceClause, unexpectedBetweenInheritanceClauseAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndMembers, members: MemberDeclBlockSyntax(members: membersBuilder()), trailingTrivia: trailingTrivia)
+  
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax? = nil, unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, modifiers: ModifierListSyntax? = nil, unexpectedBetweenModifiersAndClassKeyword: UnexpectedNodesSyntax? = nil, classKeyword: TokenSyntax = .keyword(.class), unexpectedBetweenClassKeywordAndIdentifier: UnexpectedNodesSyntax? = nil, identifier: TokenSyntax, unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? = nil, genericParameterClause: GenericParameterClauseSyntax? = nil, unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil, inheritanceClause: TypeInheritanceClauseSyntax? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax? = nil, unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil, unexpectedAfterMembers: UnexpectedNodesSyntax? = nil, @MemberDeclListBuilder membersBuilder: () -> MemberDeclListSyntax, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndClassKeyword, classKeyword: classKeyword, unexpectedBetweenClassKeywordAndIdentifier, identifier: identifier, unexpectedBetweenIdentifierAndGenericParameterClause, genericParameterClause: genericParameterClause, unexpectedBetweenGenericParameterClauseAndInheritanceClause, inheritanceClause: inheritanceClause, unexpectedBetweenInheritanceClauseAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndMembers, members: MemberDeclBlockSyntax(members: membersBuilder()), unexpectedAfterMembers, trailingTrivia: trailingTrivia)
   }
 }
 
 extension ClosureCaptureSignatureSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeLeftSquare: UnexpectedNodesSyntax? = nil, leftSquare: TokenSyntax = .leftSquareBracketToken(), unexpectedBetweenLeftSquareAndItems: UnexpectedNodesSyntax? = nil, unexpectedBetweenItemsAndRightSquare: UnexpectedNodesSyntax? = nil, rightSquare: TokenSyntax = .rightSquareBracketToken(), @ClosureCaptureItemListBuilder itemsBuilder: () -> ClosureCaptureItemListSyntax? = {
-      nil
-    }, trailingTrivia: Trivia? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftSquare, leftSquare: leftSquare, unexpectedBetweenLeftSquareAndItems, items: itemsBuilder(), unexpectedBetweenItemsAndRightSquare, rightSquare: rightSquare, trailingTrivia: trailingTrivia)
+  
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeLeftSquare: UnexpectedNodesSyntax? = nil, leftSquare: TokenSyntax = .leftSquareBracketToken(), unexpectedBetweenLeftSquareAndItems: UnexpectedNodesSyntax? = nil, unexpectedBetweenItemsAndRightSquare: UnexpectedNodesSyntax? = nil, rightSquare: TokenSyntax = .rightSquareBracketToken(), unexpectedAfterRightSquare: UnexpectedNodesSyntax? = nil, @ClosureCaptureItemListBuilder itemsBuilder: () -> ClosureCaptureItemListSyntax?, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftSquare, leftSquare: leftSquare, unexpectedBetweenLeftSquareAndItems, items: itemsBuilder(), unexpectedBetweenItemsAndRightSquare, rightSquare: rightSquare, unexpectedAfterRightSquare, trailingTrivia: trailingTrivia)
   }
 }
 
 extension ClosureExprSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeLeftBrace: UnexpectedNodesSyntax? = nil, leftBrace: TokenSyntax = .leftBraceToken(), unexpectedBetweenLeftBraceAndSignature: UnexpectedNodesSyntax? = nil, signature: ClosureSignatureSyntax? = nil, unexpectedBetweenSignatureAndStatements: UnexpectedNodesSyntax? = nil, unexpectedBetweenStatementsAndRightBrace: UnexpectedNodesSyntax? = nil, rightBrace: TokenSyntax = .rightBraceToken(), @CodeBlockItemListBuilder statementsBuilder: () -> CodeBlockItemListSyntax = {
-      CodeBlockItemListSyntax([])
-    }, trailingTrivia: Trivia? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftBrace, leftBrace: leftBrace, unexpectedBetweenLeftBraceAndSignature, signature: signature, unexpectedBetweenSignatureAndStatements, statements: statementsBuilder(), unexpectedBetweenStatementsAndRightBrace, rightBrace: rightBrace, trailingTrivia: trailingTrivia)
+  
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeLeftBrace: UnexpectedNodesSyntax? = nil, leftBrace: TokenSyntax = .leftBraceToken(), unexpectedBetweenLeftBraceAndSignature: UnexpectedNodesSyntax? = nil, signature: ClosureSignatureSyntax? = nil, unexpectedBetweenSignatureAndStatements: UnexpectedNodesSyntax? = nil, unexpectedBetweenStatementsAndRightBrace: UnexpectedNodesSyntax? = nil, rightBrace: TokenSyntax = .rightBraceToken(), unexpectedAfterRightBrace: UnexpectedNodesSyntax? = nil, @CodeBlockItemListBuilder statementsBuilder: () -> CodeBlockItemListSyntax, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftBrace, leftBrace: leftBrace, unexpectedBetweenLeftBraceAndSignature, signature: signature, unexpectedBetweenSignatureAndStatements, statements: statementsBuilder(), unexpectedBetweenStatementsAndRightBrace, rightBrace: rightBrace, unexpectedAfterRightBrace, trailingTrivia: trailingTrivia)
   }
 }
 
 extension CodeBlockSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeLeftBrace: UnexpectedNodesSyntax? = nil, leftBrace: TokenSyntax = .leftBraceToken(), unexpectedBetweenLeftBraceAndStatements: UnexpectedNodesSyntax? = nil, unexpectedBetweenStatementsAndRightBrace: UnexpectedNodesSyntax? = nil, rightBrace: TokenSyntax = .rightBraceToken(), @CodeBlockItemListBuilder statementsBuilder: () -> CodeBlockItemListSyntax = {
-      CodeBlockItemListSyntax([])
-    }, trailingTrivia: Trivia? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftBrace, leftBrace: leftBrace, unexpectedBetweenLeftBraceAndStatements, statements: statementsBuilder(), unexpectedBetweenStatementsAndRightBrace, rightBrace: rightBrace, trailingTrivia: trailingTrivia)
+  
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeLeftBrace: UnexpectedNodesSyntax? = nil, leftBrace: TokenSyntax = .leftBraceToken(), unexpectedBetweenLeftBraceAndStatements: UnexpectedNodesSyntax? = nil, unexpectedBetweenStatementsAndRightBrace: UnexpectedNodesSyntax? = nil, rightBrace: TokenSyntax = .rightBraceToken(), unexpectedAfterRightBrace: UnexpectedNodesSyntax? = nil, @CodeBlockItemListBuilder statementsBuilder: () -> CodeBlockItemListSyntax, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftBrace, leftBrace: leftBrace, unexpectedBetweenLeftBraceAndStatements, statements: statementsBuilder(), unexpectedBetweenStatementsAndRightBrace, rightBrace: rightBrace, unexpectedAfterRightBrace, trailingTrivia: trailingTrivia)
   }
 }
 
 extension DeferStmtSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeDeferKeyword: UnexpectedNodesSyntax? = nil, deferKeyword: TokenSyntax = .keyword(.defer), unexpectedBetweenDeferKeywordAndBody: UnexpectedNodesSyntax? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemListSyntax = {
-      CodeBlockItemListSyntax([])
-    }, trailingTrivia: Trivia? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeDeferKeyword, deferKeyword: deferKeyword, unexpectedBetweenDeferKeywordAndBody, body: CodeBlockSyntax(statements: bodyBuilder()), trailingTrivia: trailingTrivia)
+  
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeDeferKeyword: UnexpectedNodesSyntax? = nil, deferKeyword: TokenSyntax = .keyword(.defer), unexpectedBetweenDeferKeywordAndBody: UnexpectedNodesSyntax? = nil, unexpectedAfterBody: UnexpectedNodesSyntax? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemListSyntax, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeDeferKeyword, deferKeyword: deferKeyword, unexpectedBetweenDeferKeywordAndBody, body: CodeBlockSyntax(statements: bodyBuilder()), unexpectedAfterBody, trailingTrivia: trailingTrivia)
   }
 }
 
 extension DeinitializerDeclSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax? = nil, unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, modifiers: ModifierListSyntax? = nil, unexpectedBetweenModifiersAndDeinitKeyword: UnexpectedNodesSyntax? = nil, deinitKeyword: TokenSyntax = .keyword(.deinit), unexpectedBetweenDeinitKeywordAndBody: UnexpectedNodesSyntax? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemListSyntax? = {
-      nil
-    }, trailingTrivia: Trivia? = nil) {
+  
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax? = nil, unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, modifiers: ModifierListSyntax? = nil, unexpectedBetweenModifiersAndDeinitKeyword: UnexpectedNodesSyntax? = nil, deinitKeyword: TokenSyntax = .keyword(.deinit), unexpectedBetweenDeinitKeywordAndBody: UnexpectedNodesSyntax? = nil, unexpectedAfterBody: UnexpectedNodesSyntax? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemListSyntax?, trailingTrivia: Trivia? = nil) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndDeinitKeyword, deinitKeyword: deinitKeyword, unexpectedBetweenDeinitKeywordAndBody, body: bodyBuilder().map { 
         CodeBlockSyntax(statements: $0) 
-      }, trailingTrivia: trailingTrivia)
+      }, unexpectedAfterBody, trailingTrivia: trailingTrivia)
   }
 }
 
 extension DoStmtSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeDoKeyword: UnexpectedNodesSyntax? = nil, doKeyword: TokenSyntax = .keyword(.do), unexpectedBetweenDoKeywordAndBody: UnexpectedNodesSyntax? = nil, unexpectedBetweenBodyAndCatchClauses: UnexpectedNodesSyntax? = nil, catchClauses: CatchClauseListSyntax? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemListSyntax = {
-      CodeBlockItemListSyntax([])
-    }, trailingTrivia: Trivia? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeDoKeyword, doKeyword: doKeyword, unexpectedBetweenDoKeywordAndBody, body: CodeBlockSyntax(statements: bodyBuilder()), unexpectedBetweenBodyAndCatchClauses, catchClauses: catchClauses, trailingTrivia: trailingTrivia)
+  
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeDoKeyword: UnexpectedNodesSyntax? = nil, doKeyword: TokenSyntax = .keyword(.do), unexpectedBetweenDoKeywordAndBody: UnexpectedNodesSyntax? = nil, unexpectedBetweenBodyAndCatchClauses: UnexpectedNodesSyntax? = nil, catchClauses: CatchClauseListSyntax? = nil, unexpectedAfterCatchClauses: UnexpectedNodesSyntax? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemListSyntax, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeDoKeyword, doKeyword: doKeyword, unexpectedBetweenDoKeywordAndBody, body: CodeBlockSyntax(statements: bodyBuilder()), unexpectedBetweenBodyAndCatchClauses, catchClauses: catchClauses, unexpectedAfterCatchClauses, trailingTrivia: trailingTrivia)
   }
 }
 
 /// A `case` declaration of a Swift `enum`. It can have 1 or more`EnumCaseElement`s inside, each declaring a different case of theenum.
 extension EnumCaseDeclSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax? = nil, unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, modifiers: ModifierListSyntax? = nil, unexpectedBetweenModifiersAndCaseKeyword: UnexpectedNodesSyntax? = nil, caseKeyword: TokenSyntax = .keyword(.case), unexpectedBetweenCaseKeywordAndElements: UnexpectedNodesSyntax? = nil, @EnumCaseElementListBuilder elementsBuilder: () -> EnumCaseElementListSyntax = {
-      EnumCaseElementListSyntax([])
-    }, trailingTrivia: Trivia? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndCaseKeyword, caseKeyword: caseKeyword, unexpectedBetweenCaseKeywordAndElements, elements: elementsBuilder(), trailingTrivia: trailingTrivia)
+  
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax? = nil, unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, modifiers: ModifierListSyntax? = nil, unexpectedBetweenModifiersAndCaseKeyword: UnexpectedNodesSyntax? = nil, caseKeyword: TokenSyntax = .keyword(.case), unexpectedBetweenCaseKeywordAndElements: UnexpectedNodesSyntax? = nil, unexpectedAfterElements: UnexpectedNodesSyntax? = nil, @EnumCaseElementListBuilder elementsBuilder: () -> EnumCaseElementListSyntax, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndCaseKeyword, caseKeyword: caseKeyword, unexpectedBetweenCaseKeywordAndElements, elements: elementsBuilder(), unexpectedAfterElements, trailingTrivia: trailingTrivia)
   }
 }
 
 /// A Swift `enum` declaration.
 extension EnumDeclSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax? = nil, unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, modifiers: ModifierListSyntax? = nil, unexpectedBetweenModifiersAndEnumKeyword: UnexpectedNodesSyntax? = nil, enumKeyword: TokenSyntax = .keyword(.enum), unexpectedBetweenEnumKeywordAndIdentifier: UnexpectedNodesSyntax? = nil, identifier: TokenSyntax, unexpectedBetweenIdentifierAndGenericParameters: UnexpectedNodesSyntax? = nil, genericParameters: GenericParameterClauseSyntax? = nil, unexpectedBetweenGenericParametersAndInheritanceClause: UnexpectedNodesSyntax? = nil, inheritanceClause: TypeInheritanceClauseSyntax? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax? = nil, unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil, @MemberDeclListBuilder membersBuilder: () -> MemberDeclListSyntax = {
-      MemberDeclListSyntax([])
-    }, trailingTrivia: Trivia? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndEnumKeyword, enumKeyword: enumKeyword, unexpectedBetweenEnumKeywordAndIdentifier, identifier: identifier, unexpectedBetweenIdentifierAndGenericParameters, genericParameters: genericParameters, unexpectedBetweenGenericParametersAndInheritanceClause, inheritanceClause: inheritanceClause, unexpectedBetweenInheritanceClauseAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndMembers, members: MemberDeclBlockSyntax(members: membersBuilder()), trailingTrivia: trailingTrivia)
+  
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax? = nil, unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, modifiers: ModifierListSyntax? = nil, unexpectedBetweenModifiersAndEnumKeyword: UnexpectedNodesSyntax? = nil, enumKeyword: TokenSyntax = .keyword(.enum), unexpectedBetweenEnumKeywordAndIdentifier: UnexpectedNodesSyntax? = nil, identifier: TokenSyntax, unexpectedBetweenIdentifierAndGenericParameters: UnexpectedNodesSyntax? = nil, genericParameters: GenericParameterClauseSyntax? = nil, unexpectedBetweenGenericParametersAndInheritanceClause: UnexpectedNodesSyntax? = nil, inheritanceClause: TypeInheritanceClauseSyntax? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax? = nil, unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil, unexpectedAfterMembers: UnexpectedNodesSyntax? = nil, @MemberDeclListBuilder membersBuilder: () -> MemberDeclListSyntax, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndEnumKeyword, enumKeyword: enumKeyword, unexpectedBetweenEnumKeywordAndIdentifier, identifier: identifier, unexpectedBetweenIdentifierAndGenericParameters, genericParameters: genericParameters, unexpectedBetweenGenericParametersAndInheritanceClause, inheritanceClause: inheritanceClause, unexpectedBetweenInheritanceClauseAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndMembers, members: MemberDeclBlockSyntax(members: membersBuilder()), unexpectedAfterMembers, trailingTrivia: trailingTrivia)
   }
 }
 
 extension ExpressionSegmentSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeBackslash: UnexpectedNodesSyntax? = nil, backslash: TokenSyntax = .backslashToken(), unexpectedBetweenBackslashAndDelimiter: UnexpectedNodesSyntax? = nil, delimiter: TokenSyntax? = nil, unexpectedBetweenDelimiterAndLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax = .leftParenToken(), unexpectedBetweenLeftParenAndExpressions: UnexpectedNodesSyntax? = nil, unexpectedBetweenExpressionsAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax = .rightParenToken(), @TupleExprElementListBuilder expressionsBuilder: () -> TupleExprElementListSyntax = {
-      TupleExprElementListSyntax([])
-    }, trailingTrivia: Trivia? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeBackslash, backslash: backslash, unexpectedBetweenBackslashAndDelimiter, delimiter: delimiter, unexpectedBetweenDelimiterAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndExpressions, expressions: expressionsBuilder(), unexpectedBetweenExpressionsAndRightParen, rightParen: rightParen, trailingTrivia: trailingTrivia)
+  
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeBackslash: UnexpectedNodesSyntax? = nil, backslash: TokenSyntax = .backslashToken(), unexpectedBetweenBackslashAndDelimiter: UnexpectedNodesSyntax? = nil, delimiter: TokenSyntax? = nil, unexpectedBetweenDelimiterAndLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax = .leftParenToken(), unexpectedBetweenLeftParenAndExpressions: UnexpectedNodesSyntax? = nil, unexpectedBetweenExpressionsAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax = .rightParenToken(), unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil, @TupleExprElementListBuilder expressionsBuilder: () -> TupleExprElementListSyntax, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeBackslash, backslash: backslash, unexpectedBetweenBackslashAndDelimiter, delimiter: delimiter, unexpectedBetweenDelimiterAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndExpressions, expressions: expressionsBuilder(), unexpectedBetweenExpressionsAndRightParen, rightParen: rightParen, unexpectedAfterRightParen, trailingTrivia: trailingTrivia)
   }
 }
 
 extension ExtensionDeclSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax? = nil, unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, modifiers: ModifierListSyntax? = nil, unexpectedBetweenModifiersAndExtensionKeyword: UnexpectedNodesSyntax? = nil, extensionKeyword: TokenSyntax = .keyword(.extension), unexpectedBetweenExtensionKeywordAndExtendedType: UnexpectedNodesSyntax? = nil, extendedType: TypeSyntaxProtocol, unexpectedBetweenExtendedTypeAndInheritanceClause: UnexpectedNodesSyntax? = nil, inheritanceClause: TypeInheritanceClauseSyntax? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax? = nil, unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil, @MemberDeclListBuilder membersBuilder: () -> MemberDeclListSyntax = {
-      MemberDeclListSyntax([])
-    }, trailingTrivia: Trivia? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndExtensionKeyword, extensionKeyword: extensionKeyword, unexpectedBetweenExtensionKeywordAndExtendedType, extendedType: TypeSyntax(fromProtocol: extendedType), unexpectedBetweenExtendedTypeAndInheritanceClause, inheritanceClause: inheritanceClause, unexpectedBetweenInheritanceClauseAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndMembers, members: MemberDeclBlockSyntax(members: membersBuilder()), trailingTrivia: trailingTrivia)
+  
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax? = nil, unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, modifiers: ModifierListSyntax? = nil, unexpectedBetweenModifiersAndExtensionKeyword: UnexpectedNodesSyntax? = nil, extensionKeyword: TokenSyntax = .keyword(.extension), unexpectedBetweenExtensionKeywordAndExtendedType: UnexpectedNodesSyntax? = nil, extendedType: TypeSyntaxProtocol, unexpectedBetweenExtendedTypeAndInheritanceClause: UnexpectedNodesSyntax? = nil, inheritanceClause: TypeInheritanceClauseSyntax? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax? = nil, unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil, unexpectedAfterMembers: UnexpectedNodesSyntax? = nil, @MemberDeclListBuilder membersBuilder: () -> MemberDeclListSyntax, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndExtensionKeyword, extensionKeyword: extensionKeyword, unexpectedBetweenExtensionKeywordAndExtendedType, extendedType: TypeSyntax(fromProtocol: extendedType), unexpectedBetweenExtendedTypeAndInheritanceClause, inheritanceClause: inheritanceClause, unexpectedBetweenInheritanceClauseAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndMembers, members: MemberDeclBlockSyntax(members: membersBuilder()), unexpectedAfterMembers, trailingTrivia: trailingTrivia)
   }
 }
 
 extension ForInStmtSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeForKeyword: UnexpectedNodesSyntax? = nil, forKeyword: TokenSyntax = .keyword(.for), unexpectedBetweenForKeywordAndTryKeyword: UnexpectedNodesSyntax? = nil, tryKeyword: TokenSyntax? = nil, unexpectedBetweenTryKeywordAndAwaitKeyword: UnexpectedNodesSyntax? = nil, awaitKeyword: TokenSyntax? = nil, unexpectedBetweenAwaitKeywordAndCaseKeyword: UnexpectedNodesSyntax? = nil, caseKeyword: TokenSyntax? = nil, unexpectedBetweenCaseKeywordAndPattern: UnexpectedNodesSyntax? = nil, pattern: PatternSyntaxProtocol, unexpectedBetweenPatternAndTypeAnnotation: UnexpectedNodesSyntax? = nil, typeAnnotation: TypeAnnotationSyntax? = nil, unexpectedBetweenTypeAnnotationAndInKeyword: UnexpectedNodesSyntax? = nil, inKeyword: TokenSyntax = .keyword(.in), unexpectedBetweenInKeywordAndSequenceExpr: UnexpectedNodesSyntax? = nil, sequenceExpr: ExprSyntaxProtocol, unexpectedBetweenSequenceExprAndWhereClause: UnexpectedNodesSyntax? = nil, whereClause: WhereClauseSyntax? = nil, unexpectedBetweenWhereClauseAndBody: UnexpectedNodesSyntax? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemListSyntax = {
-      CodeBlockItemListSyntax([])
-    }, trailingTrivia: Trivia? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeForKeyword, forKeyword: forKeyword, unexpectedBetweenForKeywordAndTryKeyword, tryKeyword: tryKeyword, unexpectedBetweenTryKeywordAndAwaitKeyword, awaitKeyword: awaitKeyword, unexpectedBetweenAwaitKeywordAndCaseKeyword, caseKeyword: caseKeyword, unexpectedBetweenCaseKeywordAndPattern, pattern: PatternSyntax(fromProtocol: pattern), unexpectedBetweenPatternAndTypeAnnotation, typeAnnotation: typeAnnotation, unexpectedBetweenTypeAnnotationAndInKeyword, inKeyword: inKeyword, unexpectedBetweenInKeywordAndSequenceExpr, sequenceExpr: ExprSyntax(fromProtocol: sequenceExpr), unexpectedBetweenSequenceExprAndWhereClause, whereClause: whereClause, unexpectedBetweenWhereClauseAndBody, body: CodeBlockSyntax(statements: bodyBuilder()), trailingTrivia: trailingTrivia)
+  
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeForKeyword: UnexpectedNodesSyntax? = nil, forKeyword: TokenSyntax = .keyword(.for), unexpectedBetweenForKeywordAndTryKeyword: UnexpectedNodesSyntax? = nil, tryKeyword: TokenSyntax? = nil, unexpectedBetweenTryKeywordAndAwaitKeyword: UnexpectedNodesSyntax? = nil, awaitKeyword: TokenSyntax? = nil, unexpectedBetweenAwaitKeywordAndCaseKeyword: UnexpectedNodesSyntax? = nil, caseKeyword: TokenSyntax? = nil, unexpectedBetweenCaseKeywordAndPattern: UnexpectedNodesSyntax? = nil, pattern: PatternSyntaxProtocol, unexpectedBetweenPatternAndTypeAnnotation: UnexpectedNodesSyntax? = nil, typeAnnotation: TypeAnnotationSyntax? = nil, unexpectedBetweenTypeAnnotationAndInKeyword: UnexpectedNodesSyntax? = nil, inKeyword: TokenSyntax = .keyword(.in), unexpectedBetweenInKeywordAndSequenceExpr: UnexpectedNodesSyntax? = nil, sequenceExpr: ExprSyntaxProtocol, unexpectedBetweenSequenceExprAndWhereClause: UnexpectedNodesSyntax? = nil, whereClause: WhereClauseSyntax? = nil, unexpectedBetweenWhereClauseAndBody: UnexpectedNodesSyntax? = nil, unexpectedAfterBody: UnexpectedNodesSyntax? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemListSyntax, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeForKeyword, forKeyword: forKeyword, unexpectedBetweenForKeywordAndTryKeyword, tryKeyword: tryKeyword, unexpectedBetweenTryKeywordAndAwaitKeyword, awaitKeyword: awaitKeyword, unexpectedBetweenAwaitKeywordAndCaseKeyword, caseKeyword: caseKeyword, unexpectedBetweenCaseKeywordAndPattern, pattern: PatternSyntax(fromProtocol: pattern), unexpectedBetweenPatternAndTypeAnnotation, typeAnnotation: typeAnnotation, unexpectedBetweenTypeAnnotationAndInKeyword, inKeyword: inKeyword, unexpectedBetweenInKeywordAndSequenceExpr, sequenceExpr: ExprSyntax(fromProtocol: sequenceExpr), unexpectedBetweenSequenceExprAndWhereClause, whereClause: whereClause, unexpectedBetweenWhereClauseAndBody, body: CodeBlockSyntax(statements: bodyBuilder()), unexpectedAfterBody, trailingTrivia: trailingTrivia)
   }
 }
 
 extension FunctionCallExprSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeCalledExpression: UnexpectedNodesSyntax? = nil, calledExpression: ExprSyntaxProtocol, unexpectedBetweenCalledExpressionAndLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax? = nil, unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodesSyntax? = nil, unexpectedBetweenArgumentListAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax? = nil, unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil, trailingClosure: ClosureExprSyntax? = nil, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil, additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? = nil, @TupleExprElementListBuilder argumentListBuilder: () -> TupleExprElementListSyntax = {
-      TupleExprElementListSyntax([])
-    }, trailingTrivia: Trivia? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeCalledExpression, calledExpression: ExprSyntax(fromProtocol: calledExpression), unexpectedBetweenCalledExpressionAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndArgumentList, argumentList: argumentListBuilder(), unexpectedBetweenArgumentListAndRightParen, rightParen: rightParen, unexpectedBetweenRightParenAndTrailingClosure, trailingClosure: trailingClosure, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures, additionalTrailingClosures: additionalTrailingClosures, trailingTrivia: trailingTrivia)
+  
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeCalledExpression: UnexpectedNodesSyntax? = nil, calledExpression: ExprSyntaxProtocol, unexpectedBetweenCalledExpressionAndLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax? = nil, unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodesSyntax? = nil, unexpectedBetweenArgumentListAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax? = nil, unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil, trailingClosure: ClosureExprSyntax? = nil, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil, additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? = nil, unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil, @TupleExprElementListBuilder argumentListBuilder: () -> TupleExprElementListSyntax, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeCalledExpression, calledExpression: ExprSyntax(fromProtocol: calledExpression), unexpectedBetweenCalledExpressionAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndArgumentList, argumentList: argumentListBuilder(), unexpectedBetweenArgumentListAndRightParen, rightParen: rightParen, unexpectedBetweenRightParenAndTrailingClosure, trailingClosure: trailingClosure, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures, additionalTrailingClosures: additionalTrailingClosures, unexpectedAfterAdditionalTrailingClosures, trailingTrivia: trailingTrivia)
   }
 }
 
 extension FunctionDeclSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax? = nil, unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, modifiers: ModifierListSyntax? = nil, unexpectedBetweenModifiersAndFuncKeyword: UnexpectedNodesSyntax? = nil, funcKeyword: TokenSyntax = .keyword(.func), unexpectedBetweenFuncKeywordAndIdentifier: UnexpectedNodesSyntax? = nil, identifier: TokenSyntax, unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? = nil, genericParameterClause: GenericParameterClauseSyntax? = nil, unexpectedBetweenGenericParameterClauseAndSignature: UnexpectedNodesSyntax? = nil, signature: FunctionSignatureSyntax, unexpectedBetweenSignatureAndGenericWhereClause: UnexpectedNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax? = nil, unexpectedBetweenGenericWhereClauseAndBody: UnexpectedNodesSyntax? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemListSyntax? = {
-      nil
-    }, trailingTrivia: Trivia? = nil) {
+  
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax? = nil, unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, modifiers: ModifierListSyntax? = nil, unexpectedBetweenModifiersAndFuncKeyword: UnexpectedNodesSyntax? = nil, funcKeyword: TokenSyntax = .keyword(.func), unexpectedBetweenFuncKeywordAndIdentifier: UnexpectedNodesSyntax? = nil, identifier: TokenSyntax, unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? = nil, genericParameterClause: GenericParameterClauseSyntax? = nil, unexpectedBetweenGenericParameterClauseAndSignature: UnexpectedNodesSyntax? = nil, signature: FunctionSignatureSyntax, unexpectedBetweenSignatureAndGenericWhereClause: UnexpectedNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax? = nil, unexpectedBetweenGenericWhereClauseAndBody: UnexpectedNodesSyntax? = nil, unexpectedAfterBody: UnexpectedNodesSyntax? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemListSyntax?, trailingTrivia: Trivia? = nil) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndFuncKeyword, funcKeyword: funcKeyword, unexpectedBetweenFuncKeywordAndIdentifier, identifier: identifier, unexpectedBetweenIdentifierAndGenericParameterClause, genericParameterClause: genericParameterClause, unexpectedBetweenGenericParameterClauseAndSignature, signature: signature, unexpectedBetweenSignatureAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndBody, body: bodyBuilder().map { 
         CodeBlockSyntax(statements: $0) 
-      }, trailingTrivia: trailingTrivia)
+      }, unexpectedAfterBody, trailingTrivia: trailingTrivia)
   }
 }
 
 extension GenericArgumentClauseSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeLeftAngleBracket: UnexpectedNodesSyntax? = nil, leftAngleBracket: TokenSyntax = .leftAngleToken(), unexpectedBetweenLeftAngleBracketAndArguments: UnexpectedNodesSyntax? = nil, unexpectedBetweenArgumentsAndRightAngleBracket: UnexpectedNodesSyntax? = nil, rightAngleBracket: TokenSyntax = .rightAngleToken(), @GenericArgumentListBuilder argumentsBuilder: () -> GenericArgumentListSyntax = {
-      GenericArgumentListSyntax([])
-    }, trailingTrivia: Trivia? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftAngleBracket, leftAngleBracket: leftAngleBracket, unexpectedBetweenLeftAngleBracketAndArguments, arguments: argumentsBuilder(), unexpectedBetweenArgumentsAndRightAngleBracket, rightAngleBracket: rightAngleBracket, trailingTrivia: trailingTrivia)
+  
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeLeftAngleBracket: UnexpectedNodesSyntax? = nil, leftAngleBracket: TokenSyntax = .leftAngleToken(), unexpectedBetweenLeftAngleBracketAndArguments: UnexpectedNodesSyntax? = nil, unexpectedBetweenArgumentsAndRightAngleBracket: UnexpectedNodesSyntax? = nil, rightAngleBracket: TokenSyntax = .rightAngleToken(), unexpectedAfterRightAngleBracket: UnexpectedNodesSyntax? = nil, @GenericArgumentListBuilder argumentsBuilder: () -> GenericArgumentListSyntax, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftAngleBracket, leftAngleBracket: leftAngleBracket, unexpectedBetweenLeftAngleBracketAndArguments, arguments: argumentsBuilder(), unexpectedBetweenArgumentsAndRightAngleBracket, rightAngleBracket: rightAngleBracket, unexpectedAfterRightAngleBracket, trailingTrivia: trailingTrivia)
   }
 }
 
 extension GenericParameterClauseSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeLeftAngleBracket: UnexpectedNodesSyntax? = nil, leftAngleBracket: TokenSyntax = .leftAngleToken(), unexpectedBetweenLeftAngleBracketAndGenericParameterList: UnexpectedNodesSyntax? = nil, unexpectedBetweenGenericParameterListAndGenericWhereClause: UnexpectedNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax? = nil, unexpectedBetweenGenericWhereClauseAndRightAngleBracket: UnexpectedNodesSyntax? = nil, rightAngleBracket: TokenSyntax = .rightAngleToken(), @GenericParameterListBuilder genericParameterListBuilder: () -> GenericParameterListSyntax = {
-      GenericParameterListSyntax([])
-    }, trailingTrivia: Trivia? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftAngleBracket, leftAngleBracket: leftAngleBracket, unexpectedBetweenLeftAngleBracketAndGenericParameterList, genericParameterList: genericParameterListBuilder(), unexpectedBetweenGenericParameterListAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndRightAngleBracket, rightAngleBracket: rightAngleBracket, trailingTrivia: trailingTrivia)
+  
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeLeftAngleBracket: UnexpectedNodesSyntax? = nil, leftAngleBracket: TokenSyntax = .leftAngleToken(), unexpectedBetweenLeftAngleBracketAndGenericParameterList: UnexpectedNodesSyntax? = nil, unexpectedBetweenGenericParameterListAndGenericWhereClause: UnexpectedNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax? = nil, unexpectedBetweenGenericWhereClauseAndRightAngleBracket: UnexpectedNodesSyntax? = nil, rightAngleBracket: TokenSyntax = .rightAngleToken(), unexpectedAfterRightAngleBracket: UnexpectedNodesSyntax? = nil, @GenericParameterListBuilder genericParameterListBuilder: () -> GenericParameterListSyntax, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftAngleBracket, leftAngleBracket: leftAngleBracket, unexpectedBetweenLeftAngleBracketAndGenericParameterList, genericParameterList: genericParameterListBuilder(), unexpectedBetweenGenericParameterListAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndRightAngleBracket, rightAngleBracket: rightAngleBracket, unexpectedAfterRightAngleBracket, trailingTrivia: trailingTrivia)
   }
 }
 
 extension GenericWhereClauseSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeWhereKeyword: UnexpectedNodesSyntax? = nil, whereKeyword: TokenSyntax = .keyword(.where), unexpectedBetweenWhereKeywordAndRequirementList: UnexpectedNodesSyntax? = nil, @GenericRequirementListBuilder requirementListBuilder: () -> GenericRequirementListSyntax = {
-      GenericRequirementListSyntax([])
-    }, trailingTrivia: Trivia? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeWhereKeyword, whereKeyword: whereKeyword, unexpectedBetweenWhereKeywordAndRequirementList, requirementList: requirementListBuilder(), trailingTrivia: trailingTrivia)
+  
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeWhereKeyword: UnexpectedNodesSyntax? = nil, whereKeyword: TokenSyntax = .keyword(.where), unexpectedBetweenWhereKeywordAndRequirementList: UnexpectedNodesSyntax? = nil, unexpectedAfterRequirementList: UnexpectedNodesSyntax? = nil, @GenericRequirementListBuilder requirementListBuilder: () -> GenericRequirementListSyntax, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeWhereKeyword, whereKeyword: whereKeyword, unexpectedBetweenWhereKeywordAndRequirementList, requirementList: requirementListBuilder(), unexpectedAfterRequirementList, trailingTrivia: trailingTrivia)
   }
 }
 
 extension GuardStmtSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeGuardKeyword: UnexpectedNodesSyntax? = nil, guardKeyword: TokenSyntax = .keyword(.guard), unexpectedBetweenGuardKeywordAndConditions: UnexpectedNodesSyntax? = nil, conditions: ConditionElementListSyntax, unexpectedBetweenConditionsAndElseKeyword: UnexpectedNodesSyntax? = nil, elseKeyword: TokenSyntax = .keyword(.else), unexpectedBetweenElseKeywordAndBody: UnexpectedNodesSyntax? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemListSyntax = {
-      CodeBlockItemListSyntax([])
-    }, trailingTrivia: Trivia? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeGuardKeyword, guardKeyword: guardKeyword, unexpectedBetweenGuardKeywordAndConditions, conditions: conditions, unexpectedBetweenConditionsAndElseKeyword, elseKeyword: elseKeyword, unexpectedBetweenElseKeywordAndBody, body: CodeBlockSyntax(statements: bodyBuilder()), trailingTrivia: trailingTrivia)
+  
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeGuardKeyword: UnexpectedNodesSyntax? = nil, guardKeyword: TokenSyntax = .keyword(.guard), unexpectedBetweenGuardKeywordAndConditions: UnexpectedNodesSyntax? = nil, conditions: ConditionElementListSyntax, unexpectedBetweenConditionsAndElseKeyword: UnexpectedNodesSyntax? = nil, elseKeyword: TokenSyntax = .keyword(.else), unexpectedBetweenElseKeywordAndBody: UnexpectedNodesSyntax? = nil, unexpectedAfterBody: UnexpectedNodesSyntax? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemListSyntax, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeGuardKeyword, guardKeyword: guardKeyword, unexpectedBetweenGuardKeywordAndConditions, conditions: conditions, unexpectedBetweenConditionsAndElseKeyword, elseKeyword: elseKeyword, unexpectedBetweenElseKeywordAndBody, body: CodeBlockSyntax(statements: bodyBuilder()), unexpectedAfterBody, trailingTrivia: trailingTrivia)
   }
 }
 
 extension IfStmtSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeIfKeyword: UnexpectedNodesSyntax? = nil, ifKeyword: TokenSyntax = .keyword(.if), unexpectedBetweenIfKeywordAndConditions: UnexpectedNodesSyntax? = nil, conditions: ConditionElementListSyntax, unexpectedBetweenConditionsAndBody: UnexpectedNodesSyntax? = nil, unexpectedBetweenBodyAndElseKeyword: UnexpectedNodesSyntax? = nil, elseKeyword: TokenSyntax? = nil, unexpectedBetweenElseKeywordAndElseBody: UnexpectedNodesSyntax? = nil, elseBody: ElseBody? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemListSyntax = {
-      CodeBlockItemListSyntax([])
-    }, trailingTrivia: Trivia? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeIfKeyword, ifKeyword: ifKeyword, unexpectedBetweenIfKeywordAndConditions, conditions: conditions, unexpectedBetweenConditionsAndBody, body: CodeBlockSyntax(statements: bodyBuilder()), unexpectedBetweenBodyAndElseKeyword, elseKeyword: elseKeyword, unexpectedBetweenElseKeywordAndElseBody, elseBody: elseBody, trailingTrivia: trailingTrivia)
+  
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeIfKeyword: UnexpectedNodesSyntax? = nil, ifKeyword: TokenSyntax = .keyword(.if), unexpectedBetweenIfKeywordAndConditions: UnexpectedNodesSyntax? = nil, conditions: ConditionElementListSyntax, unexpectedBetweenConditionsAndBody: UnexpectedNodesSyntax? = nil, unexpectedBetweenBodyAndElseKeyword: UnexpectedNodesSyntax? = nil, elseKeyword: TokenSyntax? = nil, unexpectedBetweenElseKeywordAndElseBody: UnexpectedNodesSyntax? = nil, elseBody: ElseBody? = nil, unexpectedAfterElseBody: UnexpectedNodesSyntax? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemListSyntax, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeIfKeyword, ifKeyword: ifKeyword, unexpectedBetweenIfKeywordAndConditions, conditions: conditions, unexpectedBetweenConditionsAndBody, body: CodeBlockSyntax(statements: bodyBuilder()), unexpectedBetweenBodyAndElseKeyword, elseKeyword: elseKeyword, unexpectedBetweenElseKeywordAndElseBody, elseBody: elseBody, unexpectedAfterElseBody, trailingTrivia: trailingTrivia)
   }
 }
 
 extension InitializerDeclSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax? = nil, unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, modifiers: ModifierListSyntax? = nil, unexpectedBetweenModifiersAndInitKeyword: UnexpectedNodesSyntax? = nil, initKeyword: TokenSyntax = .keyword(.`init`), unexpectedBetweenInitKeywordAndOptionalMark: UnexpectedNodesSyntax? = nil, optionalMark: TokenSyntax? = nil, unexpectedBetweenOptionalMarkAndGenericParameterClause: UnexpectedNodesSyntax? = nil, genericParameterClause: GenericParameterClauseSyntax? = nil, unexpectedBetweenGenericParameterClauseAndSignature: UnexpectedNodesSyntax? = nil, signature: FunctionSignatureSyntax, unexpectedBetweenSignatureAndGenericWhereClause: UnexpectedNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax? = nil, unexpectedBetweenGenericWhereClauseAndBody: UnexpectedNodesSyntax? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemListSyntax? = {
-      nil
-    }, trailingTrivia: Trivia? = nil) {
+  
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax? = nil, unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, modifiers: ModifierListSyntax? = nil, unexpectedBetweenModifiersAndInitKeyword: UnexpectedNodesSyntax? = nil, initKeyword: TokenSyntax = .keyword(.`init`), unexpectedBetweenInitKeywordAndOptionalMark: UnexpectedNodesSyntax? = nil, optionalMark: TokenSyntax? = nil, unexpectedBetweenOptionalMarkAndGenericParameterClause: UnexpectedNodesSyntax? = nil, genericParameterClause: GenericParameterClauseSyntax? = nil, unexpectedBetweenGenericParameterClauseAndSignature: UnexpectedNodesSyntax? = nil, signature: FunctionSignatureSyntax, unexpectedBetweenSignatureAndGenericWhereClause: UnexpectedNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax? = nil, unexpectedBetweenGenericWhereClauseAndBody: UnexpectedNodesSyntax? = nil, unexpectedAfterBody: UnexpectedNodesSyntax? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemListSyntax?, trailingTrivia: Trivia? = nil) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndInitKeyword, initKeyword: initKeyword, unexpectedBetweenInitKeywordAndOptionalMark, optionalMark: optionalMark, unexpectedBetweenOptionalMarkAndGenericParameterClause, genericParameterClause: genericParameterClause, unexpectedBetweenGenericParameterClauseAndSignature, signature: signature, unexpectedBetweenSignatureAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndBody, body: bodyBuilder().map { 
         CodeBlockSyntax(statements: $0) 
-      }, trailingTrivia: trailingTrivia)
+      }, unexpectedAfterBody, trailingTrivia: trailingTrivia)
   }
 }
 
 extension KeyPathSubscriptComponentSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeLeftBracket: UnexpectedNodesSyntax? = nil, leftBracket: TokenSyntax = .leftSquareBracketToken(), unexpectedBetweenLeftBracketAndArgumentList: UnexpectedNodesSyntax? = nil, unexpectedBetweenArgumentListAndRightBracket: UnexpectedNodesSyntax? = nil, rightBracket: TokenSyntax = .rightSquareBracketToken(), @TupleExprElementListBuilder argumentListBuilder: () -> TupleExprElementListSyntax = {
-      TupleExprElementListSyntax([])
-    }, trailingTrivia: Trivia? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftBracket, leftBracket: leftBracket, unexpectedBetweenLeftBracketAndArgumentList, argumentList: argumentListBuilder(), unexpectedBetweenArgumentListAndRightBracket, rightBracket: rightBracket, trailingTrivia: trailingTrivia)
+  
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeLeftBracket: UnexpectedNodesSyntax? = nil, leftBracket: TokenSyntax = .leftSquareBracketToken(), unexpectedBetweenLeftBracketAndArgumentList: UnexpectedNodesSyntax? = nil, unexpectedBetweenArgumentListAndRightBracket: UnexpectedNodesSyntax? = nil, rightBracket: TokenSyntax = .rightSquareBracketToken(), unexpectedAfterRightBracket: UnexpectedNodesSyntax? = nil, @TupleExprElementListBuilder argumentListBuilder: () -> TupleExprElementListSyntax, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftBracket, leftBracket: leftBracket, unexpectedBetweenLeftBracketAndArgumentList, argumentList: argumentListBuilder(), unexpectedBetweenArgumentListAndRightBracket, rightBracket: rightBracket, unexpectedAfterRightBracket, trailingTrivia: trailingTrivia)
   }
 }
 
 extension MacroExpansionDeclSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforePoundToken: UnexpectedNodesSyntax? = nil, poundToken: TokenSyntax = .poundToken(), unexpectedBetweenPoundTokenAndMacro: UnexpectedNodesSyntax? = nil, macro: TokenSyntax, unexpectedBetweenMacroAndGenericArguments: UnexpectedNodesSyntax? = nil, genericArguments: GenericArgumentClauseSyntax? = nil, unexpectedBetweenGenericArgumentsAndLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax? = nil, unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodesSyntax? = nil, unexpectedBetweenArgumentListAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax? = nil, unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil, trailingClosure: ClosureExprSyntax? = nil, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil, additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? = nil, @TupleExprElementListBuilder argumentListBuilder: () -> TupleExprElementListSyntax = {
-      TupleExprElementListSyntax([])
-    }, trailingTrivia: Trivia? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforePoundToken, poundToken: poundToken, unexpectedBetweenPoundTokenAndMacro, macro: macro, unexpectedBetweenMacroAndGenericArguments, genericArguments: genericArguments, unexpectedBetweenGenericArgumentsAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndArgumentList, argumentList: argumentListBuilder(), unexpectedBetweenArgumentListAndRightParen, rightParen: rightParen, unexpectedBetweenRightParenAndTrailingClosure, trailingClosure: trailingClosure, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures, additionalTrailingClosures: additionalTrailingClosures, trailingTrivia: trailingTrivia)
+  
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforePoundToken: UnexpectedNodesSyntax? = nil, poundToken: TokenSyntax = .poundToken(), unexpectedBetweenPoundTokenAndMacro: UnexpectedNodesSyntax? = nil, macro: TokenSyntax, unexpectedBetweenMacroAndGenericArguments: UnexpectedNodesSyntax? = nil, genericArguments: GenericArgumentClauseSyntax? = nil, unexpectedBetweenGenericArgumentsAndLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax? = nil, unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodesSyntax? = nil, unexpectedBetweenArgumentListAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax? = nil, unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil, trailingClosure: ClosureExprSyntax? = nil, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil, additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? = nil, unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil, @TupleExprElementListBuilder argumentListBuilder: () -> TupleExprElementListSyntax, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforePoundToken, poundToken: poundToken, unexpectedBetweenPoundTokenAndMacro, macro: macro, unexpectedBetweenMacroAndGenericArguments, genericArguments: genericArguments, unexpectedBetweenGenericArgumentsAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndArgumentList, argumentList: argumentListBuilder(), unexpectedBetweenArgumentListAndRightParen, rightParen: rightParen, unexpectedBetweenRightParenAndTrailingClosure, trailingClosure: trailingClosure, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures, additionalTrailingClosures: additionalTrailingClosures, unexpectedAfterAdditionalTrailingClosures, trailingTrivia: trailingTrivia)
   }
 }
 
 extension MacroExpansionExprSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforePoundToken: UnexpectedNodesSyntax? = nil, poundToken: TokenSyntax = .poundToken(), unexpectedBetweenPoundTokenAndMacro: UnexpectedNodesSyntax? = nil, macro: TokenSyntax, unexpectedBetweenMacroAndGenericArguments: UnexpectedNodesSyntax? = nil, genericArguments: GenericArgumentClauseSyntax? = nil, unexpectedBetweenGenericArgumentsAndLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax? = nil, unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodesSyntax? = nil, unexpectedBetweenArgumentListAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax? = nil, unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil, trailingClosure: ClosureExprSyntax? = nil, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil, additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? = nil, @TupleExprElementListBuilder argumentListBuilder: () -> TupleExprElementListSyntax = {
-      TupleExprElementListSyntax([])
-    }, trailingTrivia: Trivia? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforePoundToken, poundToken: poundToken, unexpectedBetweenPoundTokenAndMacro, macro: macro, unexpectedBetweenMacroAndGenericArguments, genericArguments: genericArguments, unexpectedBetweenGenericArgumentsAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndArgumentList, argumentList: argumentListBuilder(), unexpectedBetweenArgumentListAndRightParen, rightParen: rightParen, unexpectedBetweenRightParenAndTrailingClosure, trailingClosure: trailingClosure, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures, additionalTrailingClosures: additionalTrailingClosures, trailingTrivia: trailingTrivia)
+  
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforePoundToken: UnexpectedNodesSyntax? = nil, poundToken: TokenSyntax = .poundToken(), unexpectedBetweenPoundTokenAndMacro: UnexpectedNodesSyntax? = nil, macro: TokenSyntax, unexpectedBetweenMacroAndGenericArguments: UnexpectedNodesSyntax? = nil, genericArguments: GenericArgumentClauseSyntax? = nil, unexpectedBetweenGenericArgumentsAndLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax? = nil, unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodesSyntax? = nil, unexpectedBetweenArgumentListAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax? = nil, unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil, trailingClosure: ClosureExprSyntax? = nil, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil, additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? = nil, unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil, @TupleExprElementListBuilder argumentListBuilder: () -> TupleExprElementListSyntax, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforePoundToken, poundToken: poundToken, unexpectedBetweenPoundTokenAndMacro, macro: macro, unexpectedBetweenMacroAndGenericArguments, genericArguments: genericArguments, unexpectedBetweenGenericArgumentsAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndArgumentList, argumentList: argumentListBuilder(), unexpectedBetweenArgumentListAndRightParen, rightParen: rightParen, unexpectedBetweenRightParenAndTrailingClosure, trailingClosure: trailingClosure, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures, additionalTrailingClosures: additionalTrailingClosures, unexpectedAfterAdditionalTrailingClosures, trailingTrivia: trailingTrivia)
   }
 }
 
 extension MemberDeclBlockSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeLeftBrace: UnexpectedNodesSyntax? = nil, leftBrace: TokenSyntax = .leftBraceToken(), unexpectedBetweenLeftBraceAndMembers: UnexpectedNodesSyntax? = nil, unexpectedBetweenMembersAndRightBrace: UnexpectedNodesSyntax? = nil, rightBrace: TokenSyntax = .rightBraceToken(), @MemberDeclListBuilder membersBuilder: () -> MemberDeclListSyntax = {
-      MemberDeclListSyntax([])
-    }, trailingTrivia: Trivia? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftBrace, leftBrace: leftBrace, unexpectedBetweenLeftBraceAndMembers, members: membersBuilder(), unexpectedBetweenMembersAndRightBrace, rightBrace: rightBrace, trailingTrivia: trailingTrivia)
+  
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeLeftBrace: UnexpectedNodesSyntax? = nil, leftBrace: TokenSyntax = .leftBraceToken(), unexpectedBetweenLeftBraceAndMembers: UnexpectedNodesSyntax? = nil, unexpectedBetweenMembersAndRightBrace: UnexpectedNodesSyntax? = nil, rightBrace: TokenSyntax = .rightBraceToken(), unexpectedAfterRightBrace: UnexpectedNodesSyntax? = nil, @MemberDeclListBuilder membersBuilder: () -> MemberDeclListSyntax, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftBrace, leftBrace: leftBrace, unexpectedBetweenLeftBraceAndMembers, members: membersBuilder(), unexpectedBetweenMembersAndRightBrace, rightBrace: rightBrace, unexpectedAfterRightBrace, trailingTrivia: trailingTrivia)
   }
 }
 
 extension ParameterClauseSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax = .leftParenToken(), unexpectedBetweenLeftParenAndParameterList: UnexpectedNodesSyntax? = nil, unexpectedBetweenParameterListAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax = .rightParenToken(), @FunctionParameterListBuilder parameterListBuilder: () -> FunctionParameterListSyntax = {
-      FunctionParameterListSyntax([])
-    }, trailingTrivia: Trivia? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndParameterList, parameterList: parameterListBuilder(), unexpectedBetweenParameterListAndRightParen, rightParen: rightParen, trailingTrivia: trailingTrivia)
+  
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax = .leftParenToken(), unexpectedBetweenLeftParenAndParameterList: UnexpectedNodesSyntax? = nil, unexpectedBetweenParameterListAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax = .rightParenToken(), unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil, @FunctionParameterListBuilder parameterListBuilder: () -> FunctionParameterListSyntax, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndParameterList, parameterList: parameterListBuilder(), unexpectedBetweenParameterListAndRightParen, rightParen: rightParen, unexpectedAfterRightParen, trailingTrivia: trailingTrivia)
   }
 }
 
 extension ProtocolDeclSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax? = nil, unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, modifiers: ModifierListSyntax? = nil, unexpectedBetweenModifiersAndProtocolKeyword: UnexpectedNodesSyntax? = nil, protocolKeyword: TokenSyntax = .keyword(.protocol), unexpectedBetweenProtocolKeywordAndIdentifier: UnexpectedNodesSyntax? = nil, identifier: TokenSyntax, unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause: UnexpectedNodesSyntax? = nil, primaryAssociatedTypeClause: PrimaryAssociatedTypeClauseSyntax? = nil, unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil, inheritanceClause: TypeInheritanceClauseSyntax? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax? = nil, unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil, @MemberDeclListBuilder membersBuilder: () -> MemberDeclListSyntax = {
-      MemberDeclListSyntax([])
-    }, trailingTrivia: Trivia? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndProtocolKeyword, protocolKeyword: protocolKeyword, unexpectedBetweenProtocolKeywordAndIdentifier, identifier: identifier, unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause, primaryAssociatedTypeClause: primaryAssociatedTypeClause, unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause, inheritanceClause: inheritanceClause, unexpectedBetweenInheritanceClauseAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndMembers, members: MemberDeclBlockSyntax(members: membersBuilder()), trailingTrivia: trailingTrivia)
+  
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax? = nil, unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, modifiers: ModifierListSyntax? = nil, unexpectedBetweenModifiersAndProtocolKeyword: UnexpectedNodesSyntax? = nil, protocolKeyword: TokenSyntax = .keyword(.protocol), unexpectedBetweenProtocolKeywordAndIdentifier: UnexpectedNodesSyntax? = nil, identifier: TokenSyntax, unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause: UnexpectedNodesSyntax? = nil, primaryAssociatedTypeClause: PrimaryAssociatedTypeClauseSyntax? = nil, unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil, inheritanceClause: TypeInheritanceClauseSyntax? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax? = nil, unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil, unexpectedAfterMembers: UnexpectedNodesSyntax? = nil, @MemberDeclListBuilder membersBuilder: () -> MemberDeclListSyntax, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndProtocolKeyword, protocolKeyword: protocolKeyword, unexpectedBetweenProtocolKeywordAndIdentifier, identifier: identifier, unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause, primaryAssociatedTypeClause: primaryAssociatedTypeClause, unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause, inheritanceClause: inheritanceClause, unexpectedBetweenInheritanceClauseAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndMembers, members: MemberDeclBlockSyntax(members: membersBuilder()), unexpectedAfterMembers, trailingTrivia: trailingTrivia)
   }
 }
 
 extension RepeatWhileStmtSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeRepeatKeyword: UnexpectedNodesSyntax? = nil, repeatKeyword: TokenSyntax = .keyword(.repeat), unexpectedBetweenRepeatKeywordAndBody: UnexpectedNodesSyntax? = nil, unexpectedBetweenBodyAndWhileKeyword: UnexpectedNodesSyntax? = nil, whileKeyword: TokenSyntax = .keyword(.while), unexpectedBetweenWhileKeywordAndCondition: UnexpectedNodesSyntax? = nil, condition: ExprSyntaxProtocol, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemListSyntax = {
-      CodeBlockItemListSyntax([])
-    }, trailingTrivia: Trivia? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeRepeatKeyword, repeatKeyword: repeatKeyword, unexpectedBetweenRepeatKeywordAndBody, body: CodeBlockSyntax(statements: bodyBuilder()), unexpectedBetweenBodyAndWhileKeyword, whileKeyword: whileKeyword, unexpectedBetweenWhileKeywordAndCondition, condition: ExprSyntax(fromProtocol: condition), trailingTrivia: trailingTrivia)
+  
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeRepeatKeyword: UnexpectedNodesSyntax? = nil, repeatKeyword: TokenSyntax = .keyword(.repeat), unexpectedBetweenRepeatKeywordAndBody: UnexpectedNodesSyntax? = nil, unexpectedBetweenBodyAndWhileKeyword: UnexpectedNodesSyntax? = nil, whileKeyword: TokenSyntax = .keyword(.while), unexpectedBetweenWhileKeywordAndCondition: UnexpectedNodesSyntax? = nil, condition: ExprSyntaxProtocol, unexpectedAfterCondition: UnexpectedNodesSyntax? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemListSyntax, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeRepeatKeyword, repeatKeyword: repeatKeyword, unexpectedBetweenRepeatKeywordAndBody, body: CodeBlockSyntax(statements: bodyBuilder()), unexpectedBetweenBodyAndWhileKeyword, whileKeyword: whileKeyword, unexpectedBetweenWhileKeywordAndCondition, condition: ExprSyntax(fromProtocol: condition), unexpectedAfterCondition, trailingTrivia: trailingTrivia)
   }
 }
 
 extension SequenceExprSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeElements: UnexpectedNodesSyntax? = nil, @ExprListBuilder elementsBuilder: () -> ExprListSyntax = {
-      ExprListSyntax([])
-    }, trailingTrivia: Trivia? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeElements, elements: elementsBuilder(), trailingTrivia: trailingTrivia)
+  
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeElements: UnexpectedNodesSyntax? = nil, unexpectedAfterElements: UnexpectedNodesSyntax? = nil, @ExprListBuilder elementsBuilder: () -> ExprListSyntax, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeElements, elements: elementsBuilder(), unexpectedAfterElements, trailingTrivia: trailingTrivia)
   }
 }
 
 extension SourceFileSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeStatements: UnexpectedNodesSyntax? = nil, unexpectedBetweenStatementsAndEOFToken: UnexpectedNodesSyntax? = nil, eofToken: TokenSyntax = .eof(), @CodeBlockItemListBuilder statementsBuilder: () -> CodeBlockItemListSyntax = {
-      CodeBlockItemListSyntax([])
-    }, trailingTrivia: Trivia? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeStatements, statements: statementsBuilder(), unexpectedBetweenStatementsAndEOFToken, eofToken: eofToken, trailingTrivia: trailingTrivia)
+  
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeStatements: UnexpectedNodesSyntax? = nil, unexpectedBetweenStatementsAndEOFToken: UnexpectedNodesSyntax? = nil, eofToken: TokenSyntax = .eof(), unexpectedAfterEOFToken: UnexpectedNodesSyntax? = nil, @CodeBlockItemListBuilder statementsBuilder: () -> CodeBlockItemListSyntax, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeStatements, statements: statementsBuilder(), unexpectedBetweenStatementsAndEOFToken, eofToken: eofToken, unexpectedAfterEOFToken, trailingTrivia: trailingTrivia)
   }
 }
 
 extension StructDeclSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax? = nil, unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, modifiers: ModifierListSyntax? = nil, unexpectedBetweenModifiersAndStructKeyword: UnexpectedNodesSyntax? = nil, structKeyword: TokenSyntax = .keyword(.struct), unexpectedBetweenStructKeywordAndIdentifier: UnexpectedNodesSyntax? = nil, identifier: TokenSyntax, unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? = nil, genericParameterClause: GenericParameterClauseSyntax? = nil, unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil, inheritanceClause: TypeInheritanceClauseSyntax? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax? = nil, unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil, @MemberDeclListBuilder membersBuilder: () -> MemberDeclListSyntax = {
-      MemberDeclListSyntax([])
-    }, trailingTrivia: Trivia? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndStructKeyword, structKeyword: structKeyword, unexpectedBetweenStructKeywordAndIdentifier, identifier: identifier, unexpectedBetweenIdentifierAndGenericParameterClause, genericParameterClause: genericParameterClause, unexpectedBetweenGenericParameterClauseAndInheritanceClause, inheritanceClause: inheritanceClause, unexpectedBetweenInheritanceClauseAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndMembers, members: MemberDeclBlockSyntax(members: membersBuilder()), trailingTrivia: trailingTrivia)
+  
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax? = nil, unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, modifiers: ModifierListSyntax? = nil, unexpectedBetweenModifiersAndStructKeyword: UnexpectedNodesSyntax? = nil, structKeyword: TokenSyntax = .keyword(.struct), unexpectedBetweenStructKeywordAndIdentifier: UnexpectedNodesSyntax? = nil, identifier: TokenSyntax, unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? = nil, genericParameterClause: GenericParameterClauseSyntax? = nil, unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil, inheritanceClause: TypeInheritanceClauseSyntax? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax? = nil, unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil, unexpectedAfterMembers: UnexpectedNodesSyntax? = nil, @MemberDeclListBuilder membersBuilder: () -> MemberDeclListSyntax, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndStructKeyword, structKeyword: structKeyword, unexpectedBetweenStructKeywordAndIdentifier, identifier: identifier, unexpectedBetweenIdentifierAndGenericParameterClause, genericParameterClause: genericParameterClause, unexpectedBetweenGenericParameterClauseAndInheritanceClause, inheritanceClause: inheritanceClause, unexpectedBetweenInheritanceClauseAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndMembers, members: MemberDeclBlockSyntax(members: membersBuilder()), unexpectedAfterMembers, trailingTrivia: trailingTrivia)
   }
 }
 
 extension SubscriptExprSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeCalledExpression: UnexpectedNodesSyntax? = nil, calledExpression: ExprSyntaxProtocol, unexpectedBetweenCalledExpressionAndLeftBracket: UnexpectedNodesSyntax? = nil, leftBracket: TokenSyntax = .leftSquareBracketToken(), unexpectedBetweenLeftBracketAndArgumentList: UnexpectedNodesSyntax? = nil, unexpectedBetweenArgumentListAndRightBracket: UnexpectedNodesSyntax? = nil, rightBracket: TokenSyntax = .rightSquareBracketToken(), unexpectedBetweenRightBracketAndTrailingClosure: UnexpectedNodesSyntax? = nil, trailingClosure: ClosureExprSyntax? = nil, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil, additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? = nil, @TupleExprElementListBuilder argumentListBuilder: () -> TupleExprElementListSyntax = {
-      TupleExprElementListSyntax([])
-    }, trailingTrivia: Trivia? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeCalledExpression, calledExpression: ExprSyntax(fromProtocol: calledExpression), unexpectedBetweenCalledExpressionAndLeftBracket, leftBracket: leftBracket, unexpectedBetweenLeftBracketAndArgumentList, argumentList: argumentListBuilder(), unexpectedBetweenArgumentListAndRightBracket, rightBracket: rightBracket, unexpectedBetweenRightBracketAndTrailingClosure, trailingClosure: trailingClosure, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures, additionalTrailingClosures: additionalTrailingClosures, trailingTrivia: trailingTrivia)
+  
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeCalledExpression: UnexpectedNodesSyntax? = nil, calledExpression: ExprSyntaxProtocol, unexpectedBetweenCalledExpressionAndLeftBracket: UnexpectedNodesSyntax? = nil, leftBracket: TokenSyntax = .leftSquareBracketToken(), unexpectedBetweenLeftBracketAndArgumentList: UnexpectedNodesSyntax? = nil, unexpectedBetweenArgumentListAndRightBracket: UnexpectedNodesSyntax? = nil, rightBracket: TokenSyntax = .rightSquareBracketToken(), unexpectedBetweenRightBracketAndTrailingClosure: UnexpectedNodesSyntax? = nil, trailingClosure: ClosureExprSyntax? = nil, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil, additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? = nil, unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil, @TupleExprElementListBuilder argumentListBuilder: () -> TupleExprElementListSyntax, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeCalledExpression, calledExpression: ExprSyntax(fromProtocol: calledExpression), unexpectedBetweenCalledExpressionAndLeftBracket, leftBracket: leftBracket, unexpectedBetweenLeftBracketAndArgumentList, argumentList: argumentListBuilder(), unexpectedBetweenArgumentListAndRightBracket, rightBracket: rightBracket, unexpectedBetweenRightBracketAndTrailingClosure, trailingClosure: trailingClosure, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures, additionalTrailingClosures: additionalTrailingClosures, unexpectedAfterAdditionalTrailingClosures, trailingTrivia: trailingTrivia)
   }
 }
 
 extension SwitchCaseLabelSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeCaseKeyword: UnexpectedNodesSyntax? = nil, caseKeyword: TokenSyntax = .keyword(.case), unexpectedBetweenCaseKeywordAndCaseItems: UnexpectedNodesSyntax? = nil, unexpectedBetweenCaseItemsAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax = .colonToken(), @CaseItemListBuilder caseItemsBuilder: () -> CaseItemListSyntax = {
-      CaseItemListSyntax([])
-    }, trailingTrivia: Trivia? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeCaseKeyword, caseKeyword: caseKeyword, unexpectedBetweenCaseKeywordAndCaseItems, caseItems: caseItemsBuilder(), unexpectedBetweenCaseItemsAndColon, colon: colon, trailingTrivia: trailingTrivia)
+  
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeCaseKeyword: UnexpectedNodesSyntax? = nil, caseKeyword: TokenSyntax = .keyword(.case), unexpectedBetweenCaseKeywordAndCaseItems: UnexpectedNodesSyntax? = nil, unexpectedBetweenCaseItemsAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax = .colonToken(), unexpectedAfterColon: UnexpectedNodesSyntax? = nil, @CaseItemListBuilder caseItemsBuilder: () -> CaseItemListSyntax, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeCaseKeyword, caseKeyword: caseKeyword, unexpectedBetweenCaseKeywordAndCaseItems, caseItems: caseItemsBuilder(), unexpectedBetweenCaseItemsAndColon, colon: colon, unexpectedAfterColon, trailingTrivia: trailingTrivia)
   }
 }
 
 extension SwitchCaseSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeUnknownAttr: UnexpectedNodesSyntax? = nil, unknownAttr: AttributeSyntax? = nil, unexpectedBetweenUnknownAttrAndLabel: UnexpectedNodesSyntax? = nil, label: Label, unexpectedBetweenLabelAndStatements: UnexpectedNodesSyntax? = nil, @CodeBlockItemListBuilder statementsBuilder: () -> CodeBlockItemListSyntax = {
-      CodeBlockItemListSyntax([])
-    }, trailingTrivia: Trivia? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeUnknownAttr, unknownAttr: unknownAttr, unexpectedBetweenUnknownAttrAndLabel, label: label, unexpectedBetweenLabelAndStatements, statements: statementsBuilder(), trailingTrivia: trailingTrivia)
+  
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeUnknownAttr: UnexpectedNodesSyntax? = nil, unknownAttr: AttributeSyntax? = nil, unexpectedBetweenUnknownAttrAndLabel: UnexpectedNodesSyntax? = nil, label: Label, unexpectedBetweenLabelAndStatements: UnexpectedNodesSyntax? = nil, unexpectedAfterStatements: UnexpectedNodesSyntax? = nil, @CodeBlockItemListBuilder statementsBuilder: () -> CodeBlockItemListSyntax, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeUnknownAttr, unknownAttr: unknownAttr, unexpectedBetweenUnknownAttrAndLabel, label: label, unexpectedBetweenLabelAndStatements, statements: statementsBuilder(), unexpectedAfterStatements, trailingTrivia: trailingTrivia)
   }
 }
 
 extension SwitchStmtSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeSwitchKeyword: UnexpectedNodesSyntax? = nil, switchKeyword: TokenSyntax = .keyword(.switch), unexpectedBetweenSwitchKeywordAndExpression: UnexpectedNodesSyntax? = nil, expression: ExprSyntaxProtocol, unexpectedBetweenExpressionAndLeftBrace: UnexpectedNodesSyntax? = nil, leftBrace: TokenSyntax = .leftBraceToken(), unexpectedBetweenLeftBraceAndCases: UnexpectedNodesSyntax? = nil, unexpectedBetweenCasesAndRightBrace: UnexpectedNodesSyntax? = nil, rightBrace: TokenSyntax = .rightBraceToken(), @SwitchCaseListBuilder casesBuilder: () -> SwitchCaseListSyntax = {
-      SwitchCaseListSyntax([])
-    }, trailingTrivia: Trivia? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeSwitchKeyword, switchKeyword: switchKeyword, unexpectedBetweenSwitchKeywordAndExpression, expression: ExprSyntax(fromProtocol: expression), unexpectedBetweenExpressionAndLeftBrace, leftBrace: leftBrace, unexpectedBetweenLeftBraceAndCases, cases: casesBuilder(), unexpectedBetweenCasesAndRightBrace, rightBrace: rightBrace, trailingTrivia: trailingTrivia)
+  
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeSwitchKeyword: UnexpectedNodesSyntax? = nil, switchKeyword: TokenSyntax = .keyword(.switch), unexpectedBetweenSwitchKeywordAndExpression: UnexpectedNodesSyntax? = nil, expression: ExprSyntaxProtocol, unexpectedBetweenExpressionAndLeftBrace: UnexpectedNodesSyntax? = nil, leftBrace: TokenSyntax = .leftBraceToken(), unexpectedBetweenLeftBraceAndCases: UnexpectedNodesSyntax? = nil, unexpectedBetweenCasesAndRightBrace: UnexpectedNodesSyntax? = nil, rightBrace: TokenSyntax = .rightBraceToken(), unexpectedAfterRightBrace: UnexpectedNodesSyntax? = nil, @SwitchCaseListBuilder casesBuilder: () -> SwitchCaseListSyntax, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeSwitchKeyword, switchKeyword: switchKeyword, unexpectedBetweenSwitchKeywordAndExpression, expression: ExprSyntax(fromProtocol: expression), unexpectedBetweenExpressionAndLeftBrace, leftBrace: leftBrace, unexpectedBetweenLeftBraceAndCases, cases: casesBuilder(), unexpectedBetweenCasesAndRightBrace, rightBrace: rightBrace, unexpectedAfterRightBrace, trailingTrivia: trailingTrivia)
   }
 }
 
 extension TupleExprSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax = .leftParenToken(), unexpectedBetweenLeftParenAndElementList: UnexpectedNodesSyntax? = nil, unexpectedBetweenElementListAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax = .rightParenToken(), @TupleExprElementListBuilder elementListBuilder: () -> TupleExprElementListSyntax = {
-      TupleExprElementListSyntax([])
-    }, trailingTrivia: Trivia? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndElementList, elementList: elementListBuilder(), unexpectedBetweenElementListAndRightParen, rightParen: rightParen, trailingTrivia: trailingTrivia)
+  
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax = .leftParenToken(), unexpectedBetweenLeftParenAndElementList: UnexpectedNodesSyntax? = nil, unexpectedBetweenElementListAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax = .rightParenToken(), unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil, @TupleExprElementListBuilder elementListBuilder: () -> TupleExprElementListSyntax, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndElementList, elementList: elementListBuilder(), unexpectedBetweenElementListAndRightParen, rightParen: rightParen, unexpectedAfterRightParen, trailingTrivia: trailingTrivia)
   }
 }
 
 extension TuplePatternSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax = .leftParenToken(), unexpectedBetweenLeftParenAndElements: UnexpectedNodesSyntax? = nil, unexpectedBetweenElementsAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax = .rightParenToken(), @TuplePatternElementListBuilder elementsBuilder: () -> TuplePatternElementListSyntax = {
-      TuplePatternElementListSyntax([])
-    }, trailingTrivia: Trivia? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndElements, elements: elementsBuilder(), unexpectedBetweenElementsAndRightParen, rightParen: rightParen, trailingTrivia: trailingTrivia)
+  
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax = .leftParenToken(), unexpectedBetweenLeftParenAndElements: UnexpectedNodesSyntax? = nil, unexpectedBetweenElementsAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax = .rightParenToken(), unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil, @TuplePatternElementListBuilder elementsBuilder: () -> TuplePatternElementListSyntax, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndElements, elements: elementsBuilder(), unexpectedBetweenElementsAndRightParen, rightParen: rightParen, unexpectedAfterRightParen, trailingTrivia: trailingTrivia)
   }
 }
 
 extension TypeInheritanceClauseSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax = .colonToken(), unexpectedBetweenColonAndInheritedTypeCollection: UnexpectedNodesSyntax? = nil, @InheritedTypeListBuilder inheritedTypeCollectionBuilder: () -> InheritedTypeListSyntax = {
-      InheritedTypeListSyntax([])
-    }, trailingTrivia: Trivia? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeColon, colon: colon, unexpectedBetweenColonAndInheritedTypeCollection, inheritedTypeCollection: inheritedTypeCollectionBuilder(), trailingTrivia: trailingTrivia)
+  
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax = .colonToken(), unexpectedBetweenColonAndInheritedTypeCollection: UnexpectedNodesSyntax? = nil, unexpectedAfterInheritedTypeCollection: UnexpectedNodesSyntax? = nil, @InheritedTypeListBuilder inheritedTypeCollectionBuilder: () -> InheritedTypeListSyntax, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeColon, colon: colon, unexpectedBetweenColonAndInheritedTypeCollection, inheritedTypeCollection: inheritedTypeCollectionBuilder(), unexpectedAfterInheritedTypeCollection, trailingTrivia: trailingTrivia)
   }
 }
 
 extension VariableDeclSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax? = nil, unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, modifiers: ModifierListSyntax? = nil, unexpectedBetweenModifiersAndLetOrVarKeyword: UnexpectedNodesSyntax? = nil, letOrVarKeyword: TokenSyntax, unexpectedBetweenLetOrVarKeywordAndBindings: UnexpectedNodesSyntax? = nil, @PatternBindingListBuilder bindingsBuilder: () -> PatternBindingListSyntax = {
-      PatternBindingListSyntax([])
-    }, trailingTrivia: Trivia? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndLetOrVarKeyword, letOrVarKeyword: letOrVarKeyword, unexpectedBetweenLetOrVarKeywordAndBindings, bindings: bindingsBuilder(), trailingTrivia: trailingTrivia)
+  
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax? = nil, unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, modifiers: ModifierListSyntax? = nil, unexpectedBetweenModifiersAndLetOrVarKeyword: UnexpectedNodesSyntax? = nil, letOrVarKeyword: TokenSyntax, unexpectedBetweenLetOrVarKeywordAndBindings: UnexpectedNodesSyntax? = nil, unexpectedAfterBindings: UnexpectedNodesSyntax? = nil, @PatternBindingListBuilder bindingsBuilder: () -> PatternBindingListSyntax, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndLetOrVarKeyword, letOrVarKeyword: letOrVarKeyword, unexpectedBetweenLetOrVarKeywordAndBindings, bindings: bindingsBuilder(), unexpectedAfterBindings, trailingTrivia: trailingTrivia)
   }
 }
 
 extension WhileStmtSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeWhileKeyword: UnexpectedNodesSyntax? = nil, whileKeyword: TokenSyntax = .keyword(.while), unexpectedBetweenWhileKeywordAndConditions: UnexpectedNodesSyntax? = nil, conditions: ConditionElementListSyntax, unexpectedBetweenConditionsAndBody: UnexpectedNodesSyntax? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemListSyntax = {
-      CodeBlockItemListSyntax([])
-    }, trailingTrivia: Trivia? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeWhileKeyword, whileKeyword: whileKeyword, unexpectedBetweenWhileKeywordAndConditions, conditions: conditions, unexpectedBetweenConditionsAndBody, body: CodeBlockSyntax(statements: bodyBuilder()), trailingTrivia: trailingTrivia)
+  
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeWhileKeyword: UnexpectedNodesSyntax? = nil, whileKeyword: TokenSyntax = .keyword(.while), unexpectedBetweenWhileKeywordAndConditions: UnexpectedNodesSyntax? = nil, conditions: ConditionElementListSyntax, unexpectedBetweenConditionsAndBody: UnexpectedNodesSyntax? = nil, unexpectedAfterBody: UnexpectedNodesSyntax? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemListSyntax, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeWhileKeyword, whileKeyword: whileKeyword, unexpectedBetweenWhileKeywordAndConditions, conditions: conditions, unexpectedBetweenConditionsAndBody, body: CodeBlockSyntax(statements: bodyBuilder()), unexpectedAfterBody, trailingTrivia: trailingTrivia)
   }
 }

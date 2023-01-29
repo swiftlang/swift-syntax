@@ -74,15 +74,8 @@ private func createConvenienceInitializer(node: Node) -> InitializerDeclSyntax? 
       } else {
         produceExpr = ExprSyntax(FunctionCallExprSyntax("\(raw: child.swiftName)Builder()"))
       }
-      let defaultArgument = ClosureExprSyntax {
-        if child.type.isOptional {
-          NilLiteralExprSyntax()
-        } else {
-          FunctionCallExprSyntax("\(builderInitializableType.syntax)([])")
-        }
-      }
       builderParameters.append(FunctionParameterSyntax(
-        "@\(builderInitializableType.resultBuilderBaseName) \(child.swiftName)Builder: () -> \(builderInitializableType.syntax) = \(defaultArgument)",
+        "@\(builderInitializableType.resultBuilderBaseName) \(child.swiftName)Builder: () -> \(builderInitializableType.syntax)",
         for: .functionParameters
       ))
     } else {
@@ -103,7 +96,7 @@ private func createConvenienceInitializer(node: Node) -> InitializerDeclSyntax? 
 
   return InitializerDeclSyntax(
     leadingTrivia: .docLineComment("/// A convenience initializer that allows initializing syntax collections using result builders") + .newline,
-    modifiers: [DeclModifierSyntax(name: .keyword(.public))],
+    modifiers: [DeclModifierSyntax(leadingTrivia: .newline, name: .keyword(.public))],
     signature: FunctionSignatureSyntax(
       input: ParameterClauseSyntax {
         FunctionParameterSyntax("leadingTrivia: Trivia? = nil", for: .functionParameters)

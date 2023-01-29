@@ -335,7 +335,7 @@ final class FunctionTests: XCTestCase {
   }
 
   func testParensEmittedForArgumentAndTrailingClosure() {
-    let buildable = FunctionCallExprSyntax(callee: ExprSyntax("test"), trailingClosure: ClosureExprSyntax()) {
+    let buildable = FunctionCallExprSyntax(callee: ExprSyntax("test"), trailingClosure: ClosureExprSyntax {}) {
       TupleExprElementSyntax(expression: ExprSyntax("42"))
     }
     AssertBuildResult(buildable, "test(42) {\n}")

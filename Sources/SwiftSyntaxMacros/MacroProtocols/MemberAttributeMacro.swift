@@ -12,23 +12,26 @@
 
 import SwiftSyntax
 
-/// Describes a macro that can add members to the declaration it's attached to.
-public protocol MemberMacro: AttachedMacro {
-  /// Expand an attached declaration macro to produce a set of members.
+/// Describes a macro that can add attributes to the members inside the
+/// declaration it's attached to.
+public protocol MemberAttributeMacro: AttachedMacro {
+  /// Expand an attached declaration macro to produce an attribute list for
+  /// a given member.
   ///
   /// - Parameters:
   ///   - node: The custom attribute describing the attached macro.
   ///   - declaration: The declaration the macro attribute is attached to.
+  ///   - member: The member declaration to attach the resulting attributes to.
   ///   - context: The context in which to perform the macro expansion.
   ///
-  /// - Returns: the set of member declarations introduced by this macro, which
-  /// are nested inside the `attachedTo` declaration.
-  static func expansion(
+  /// - Returns: the set of attributes to apply to the given member.
+  static func expansion<
+    Declaration: DeclGroupSyntax,
+    Context: MacroExpansionContext
+  >(
     of node: AttributeSyntax,
-    attachedTo declaration: DeclSyntax,
-    in context: inout MacroExpansionContext
-  ) throws -> [DeclSyntax]
+    attachedTo declaration: Declaration,
+    providingAttributesFor member: DeclSyntax,
+    in context: Context
+  ) throws -> [AttributeSyntax]
 }
-
-@available(*, deprecated, renamed: "MemberMacro")
-public typealias MemberDeclarationMacro = MemberMacro

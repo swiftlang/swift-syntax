@@ -14,10 +14,13 @@ public protocol AccessorMacro: AttachedMacro {
   /// Expand a macro that's expressed as a custom attribute attached to
   /// the given declaration. The result is a set of accessors for the
   /// declaration.
-  static func expansion(
+  static func expansion<
+    Context: MacroExpansionContext,
+    Declaration: DeclSyntaxProtocol
+  >(
     of node: AttributeSyntax,
-    attachedTo declaration: DeclSyntax,
-    in context: inout MacroExpansionContext
+    providingAccessorsOf declaration: Declaration,
+    in context: Context
   ) throws -> [AccessorDeclSyntax]
 }
 

@@ -14,19 +14,32 @@ import SwiftDiagnostics
 import SwiftParser
 import SwiftSyntax
 import SwiftSyntaxBuilder
-import _SwiftSyntaxMacros
+import SwiftSyntaxMacros
 import _SwiftSyntaxTestSupport
 import XCTest
 
+enum CustomError: Error, CustomStringConvertible {
+  case message(String)
+
+  var description: String {
+    switch self {
+    case .message(let text):
+      return text
+    }
+  }
+}
+
 // MARK: Example macros
 public struct StringifyMacro: ExpressionMacro {
-  public static func expansion(
-    of macro: MacroExpansionExprSyntax,
-    in context: inout MacroExpansionContext
-  ) -> ExprSyntax {
+  public static func expansion<
+    Node: FreestandingMacroExpansionSyntax,
+    Context: MacroExpansionContext
+  >(
+    of macro: Node,
+    in context: Context
+  ) throws -> ExprSyntax {
     guard let argument = macro.argumentList.first?.expression else {
-      // FIXME: Create a diagnostic for the missing argument?
-      return ExprSyntax(macro)
+      throw CustomError.message("missing argument")
     }
 
     return "(\(argument), \(StringLiteralExprSyntax(content: argument.description)))"
@@ -50,9 +63,12 @@ private func replaceFirstLabel(
 }
 
 public struct ColorLiteralMacro: ExpressionMacro {
-  public static func expansion(
-    of macro: MacroExpansionExprSyntax,
-    in context: inout MacroExpansionContext
+  public static func expansion<
+    Node: FreestandingMacroExpansionSyntax,
+    Context: MacroExpansionContext
+  >(
+    of macro: Node,
+    in context: Context
   ) -> ExprSyntax {
     let argList = replaceFirstLabel(
       of: macro.argumentList,
@@ -67,9 +83,12 @@ public struct ColorLiteralMacro: ExpressionMacro {
 }
 
 public struct FileLiteralMacro: ExpressionMacro {
-  public static func expansion(
-    of macro: MacroExpansionExprSyntax,
-    in context: inout MacroExpansionContext
+  public static func expansion<
+    Node: FreestandingMacroExpansionSyntax,
+    Context: MacroExpansionContext
+  >(
+    of macro: Node,
+    in context: Context
   ) -> ExprSyntax {
     let argList = replaceFirstLabel(
       of: macro.argumentList,
@@ -84,9 +103,12 @@ public struct FileLiteralMacro: ExpressionMacro {
 }
 
 public struct ImageLiteralMacro: ExpressionMacro {
-  public static func expansion(
-    of macro: MacroExpansionExprSyntax,
-    in context: inout MacroExpansionContext
+  public static func expansion<
+    Node: FreestandingMacroExpansionSyntax,
+    Context: MacroExpansionContext
+  >(
+    of macro: Node,
+    in context: Context
   ) -> ExprSyntax {
     let argList = replaceFirstLabel(
       of: macro.argumentList,
@@ -100,13 +122,42 @@ public struct ImageLiteralMacro: ExpressionMacro {
   }
 }
 
+public struct ColumnMacro: ExpressionMacro {
+  public static func expansion<
+    Node: FreestandingMacroExpansionSyntax,
+    Context: MacroExpansionContext
+  >(
+    of macro: Node,
+    in context: Context
+  ) throws -> ExprSyntax {
+    guard let sourceLoc = context.location(of: macro),
+      let column = sourceLoc.column
+    else {
+      throw CustomError.message("can't find location for macro")
+    }
+
+    let fileLiteral: ExprSyntax = "\(literal: column)"
+    if let leadingTrivia = macro.leadingTrivia {
+      return fileLiteral.with(\.leadingTrivia, leadingTrivia)
+    }
+    return fileLiteral
+  }
+}
+
 public struct FileIDMacro: ExpressionMacro {
-  public static func expansion(
-    of macro: MacroExpansionExprSyntax,
-    in context: inout MacroExpansionContext
-  ) -> ExprSyntax {
-    // FIXME: Compiler has more sophisticated file ID computation
-    let fileID = "\(context.moduleName)/\(context.fileName)"
+  public static func expansion<
+    Node: FreestandingMacroExpansionSyntax,
+    Context: MacroExpansionContext
+  >(
+    of macro: Node,
+    in context: Context
+  ) throws -> ExprSyntax {
+    guard let sourceLoc = context.location(of: macro),
+      let fileID = sourceLoc.file
+    else {
+      throw CustomError.message("can't find location for macro")
+    }
+
     let fileLiteral: ExprSyntax = "\(literal: fileID)"
     if let leadingTrivia = macro.leadingTrivia {
       return fileLiteral.with(\.leadingTrivia, leadingTrivia)
@@ -118,9 +169,12 @@ public struct FileIDMacro: ExpressionMacro {
 /// Macro whose only purpose is to ensure that we cannot see "out" of the
 /// macro expansion syntax node we were given.
 struct CheckContextIndependenceMacro: ExpressionMacro {
-  static func expansion(
-    of macro: MacroExpansionExprSyntax,
-    in context: inout MacroExpansionContext
+  static func expansion<
+    Node: FreestandingMacroExpansionSyntax,
+    Context: MacroExpansionContext
+  >(
+    of macro: Node,
+    in context: Context
   ) -> ExprSyntax {
 
     // Should not have a parent.
@@ -129,18 +183,7 @@ struct CheckContextIndependenceMacro: ExpressionMacro {
     // Absolute starting position should be zero.
     XCTAssertEqual(macro.position.utf8Offset, 0)
 
-    return ExprSyntax(macro)
-  }
-}
-
-enum CustomError: Error, CustomStringConvertible {
-  case message(String)
-
-  var description: String {
-    switch self {
-    case .message(let text):
-      return text
-    }
+    return "()"
   }
 }
 
@@ -155,9 +198,9 @@ extension SimpleDiagnosticMessage: FixItMessage {
 }
 
 public struct ErrorMacro: DeclarationMacro {
-  public static func expansion(
+  public static func expansion<Context: MacroExpansionContext>(
     of node: MacroExpansionDeclSyntax,
-    in context: inout MacroExpansionContext
+    in context: Context
   ) throws -> [DeclSyntax] {
     guard let firstElement = node.argumentList.first,
       let stringLiteral = firstElement.expression
@@ -184,9 +227,9 @@ public struct ErrorMacro: DeclarationMacro {
 }
 
 struct DefineBitwidthNumberedStructsMacro: DeclarationMacro {
-  static func expansion(
+  static func expansion<Context: MacroExpansionContext>(
     of node: MacroExpansionDeclSyntax,
-    in context: inout MacroExpansionContext
+    in context: Context
   ) throws -> [DeclSyntax] {
     guard let firstElement = node.argumentList.first,
       let stringLiteral = firstElement.expression
@@ -211,10 +254,13 @@ struct DefineBitwidthNumberedStructsMacro: DeclarationMacro {
 public struct PropertyWrapper {}
 
 extension PropertyWrapper: AccessorMacro {
-  public static func expansion(
+  public static func expansion<
+    Context: MacroExpansionContext,
+    Declaration: DeclSyntaxProtocol
+  >(
     of node: AttributeSyntax,
-    attachedTo declaration: DeclSyntax,
-    in context: inout MacroExpansionContext
+    providingAccessorsOf declaration: Declaration,
+    in context: Context
   ) throws -> [AccessorDeclSyntax] {
     guard let varDecl = declaration.as(VariableDeclSyntax.self),
       let binding = varDecl.bindings.first,
@@ -242,10 +288,10 @@ extension PropertyWrapper: AccessorMacro {
 }
 
 extension PropertyWrapper: PeerMacro {
-  public static func expansion(
+  public static func expansion<Context: MacroExpansionContext>(
     of node: AttributeSyntax,
-    attachedTo declaration: DeclSyntax,
-    in context: inout MacroExpansionContext
+    providingPeersOf declaration: DeclSyntax,
+    in context: Context
   ) throws -> [SwiftSyntax.DeclSyntax] {
     guard let varDecl = declaration.as(VariableDeclSyntax.self),
       let binding = varDecl.bindings.first,
@@ -279,10 +325,10 @@ extension PropertyWrapper: PeerMacro {
 }
 
 public struct AddCompletionHandler: PeerMacro {
-  public static func expansion(
+  public static func expansion<Context: MacroExpansionContext>(
     of node: AttributeSyntax,
-    attachedTo declaration: DeclSyntax,
-    in context: inout MacroExpansionContext
+    providingPeersOf declaration: DeclSyntax,
+    in context: Context
   ) throws -> [DeclSyntax] {
     // Only on functions at the moment. We could handle initializers as well
     // with a bit of work.
@@ -397,10 +443,13 @@ public struct AddCompletionHandler: PeerMacro {
 }
 
 public struct AddBackingStorage: MemberMacro {
-  public static func expansion(
+  public static func expansion<
+    Declaration: DeclGroupSyntax,
+    Context: MacroExpansionContext
+  >(
     of node: AttributeSyntax,
-    attachedTo decl: DeclSyntax,
-    in context: inout MacroExpansionContext
+    providingMembersOf decl: Declaration,
+    in context: Context
   )
     throws -> [DeclSyntax]
   {
@@ -412,11 +461,14 @@ public struct AddBackingStorage: MemberMacro {
 }
 
 public struct WrapAllProperties: MemberAttributeMacro {
-  public static func expansion(
+  public static func expansion<
+    Declaration: DeclGroupSyntax,
+    Context: MacroExpansionContext
+  >(
     of node: AttributeSyntax,
-    attachedTo decl: DeclSyntax,
-    annotating member: DeclSyntax,
-    in context: inout MacroExpansionContext
+    attachedTo decl: Declaration,
+    providingAttributesFor member: DeclSyntax,
+    in context: Context
   ) throws -> [AttributeSyntax] {
     guard member.is(VariableDeclSyntax.self) else {
       return []
@@ -434,11 +486,14 @@ public struct WrapAllProperties: MemberAttributeMacro {
 }
 
 public struct WrapStoredProperties: MemberAttributeMacro {
-  public static func expansion(
+  public static func expansion<
+    Declaration: DeclGroupSyntax,
+    Context: MacroExpansionContext
+  >(
     of node: AttributeSyntax,
-    attachedTo decl: DeclSyntax,
-    annotating member: DeclSyntax,
-    in context: inout MacroExpansionContext
+    attachedTo decl: Declaration,
+    providingAttributesFor member: DeclSyntax,
+    in context: Context
   ) throws -> [AttributeSyntax] {
     guard let property = member.as(VariableDeclSyntax.self),
       property.bindings.count == 1
@@ -478,10 +533,13 @@ public struct WrapStoredProperties: MemberAttributeMacro {
 struct CustomTypeWrapperMacro {}
 
 extension CustomTypeWrapperMacro: MemberMacro {
-  static func expansion(
+  static func expansion<
+    Declaration: DeclGroupSyntax,
+    Context: MacroExpansionContext
+  >(
     of node: AttributeSyntax,
-    attachedTo declaration: DeclSyntax,
-    in context: inout MacroExpansionContext
+    providingMembersOf declaration: Declaration,
+    in context: Context
   ) throws -> [DeclSyntax] {
     return [
       """
@@ -493,11 +551,14 @@ extension CustomTypeWrapperMacro: MemberMacro {
 }
 
 extension CustomTypeWrapperMacro: MemberAttributeMacro {
-  static func expansion(
+  static func expansion<
+    Declaration: DeclGroupSyntax,
+    Context: MacroExpansionContext
+  >(
     of node: AttributeSyntax,
-    attachedTo declaration: DeclSyntax,
-    annotating member: DeclSyntax,
-    in context: inout MacroExpansionContext
+    attachedTo declaration: Declaration,
+    providingAttributesFor member: DeclSyntax,
+    in context: Context
   ) throws -> [AttributeSyntax] {
     return [
       AttributeSyntax(
@@ -511,10 +572,13 @@ extension CustomTypeWrapperMacro: MemberAttributeMacro {
 }
 
 extension CustomTypeWrapperMacro: AccessorMacro {
-  static func expansion(
+  static func expansion<
+    Context: MacroExpansionContext,
+    Declaration: DeclSyntaxProtocol
+  >(
     of node: AttributeSyntax,
-    attachedTo declaration: DeclSyntax,
-    in context: inout MacroExpansionContext
+    providingAccessorsOf declaration: Declaration,
+    in context: Context
   ) throws -> [AccessorDeclSyntax] {
     guard let property = declaration.as(VariableDeclSyntax.self),
       let binding = property.bindings.first,
@@ -572,11 +636,10 @@ public func AssertMacroExpansion(
   let origSourceFile = Parser.parse(source: originalSource)
 
   // Expand all macros in the source.
-  var context = MacroExpansionContext(
-    moduleName: testModuleName,
-    fileName: testFileName
+  let context = BasicMacroExpansionContext(
+    sourceFiles: [origSourceFile: .init(moduleName: testModuleName, fullFilePath: testFileName)]
   )
-  let expandedSourceFile = origSourceFile.expand(macros: macros, in: &context)
+  let expandedSourceFile = origSourceFile.expand(macros: macros, in: context)
 
   AssertStringsEqualWithDiff(
     expandedSourceFile.description,
@@ -599,6 +662,7 @@ public func AssertMacroExpansion(
 public let testMacros: [String: Macro.Type] = [
   "checkContext": CheckContextIndependenceMacro.self,
   "colorLiteral": ColorLiteralMacro.self,
+  "column": ColumnMacro.self,
   "fileID": FileIDMacro.self,
   "imageLiteral": ImageLiteralMacro.self,
   "stringify": StringifyMacro.self,
@@ -645,30 +709,30 @@ final class MacroSystemTests: XCTestCase {
     )
   }
 
-  func testFileExpansions() {
+  func testLocationExpansions() {
     AssertMacroExpansion(
       macros: testMacros,
       testModuleName: "MyModule",
       testFileName: "taylor.swift",
       """
       let b = #fileID
+      let c = #column
       """,
       """
       let b = "MyModule/taylor.swift"
+      let c = 9
       """
     )
   }
 
   func testContextUniqueLocalNames() {
-    var context = MacroExpansionContext(
-      moduleName: "MyModule",
-      fileName: "taylor.swift"
-    )
+    let context = BasicMacroExpansionContext()
 
-    let t1 = context.createUniqueLocalName()
-    let t2 = context.createUniqueLocalName()
+    let t1 = context.createUniqueName("mine")
+    let t2 = context.createUniqueName("mine")
     XCTAssertNotEqual(t1.description, t2.description)
-    XCTAssertEqual(t1.description, "__macro_local_0")
+    XCTAssertEqual(t1.description, "__macro_local_4minefMu_")
+    XCTAssertEqual(t2.description, "__macro_local_4minefMu0")
   }
 
   func testContextIndependence() {
@@ -678,7 +742,7 @@ final class MacroSystemTests: XCTestCase {
       let b = #checkContext
       """,
       """
-      let b = #checkContext
+      let b = ()
       """
     )
   }

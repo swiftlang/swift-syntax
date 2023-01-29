@@ -60,9 +60,9 @@ struct MacroSystem {
 }
 
 /// Syntax rewriter that evaluates any macros encountered along the way.
-class MacroApplication: SyntaxRewriter {
+class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
   let macroSystem: MacroSystem
-  var context: MacroExpansionContext
+  var context: Context
   var skipNodes: Set<Syntax> = []
 
   /// A stack of member attribute macos to expand when iterating over a `MemberDeclListSyntax`.
@@ -70,7 +70,7 @@ class MacroApplication: SyntaxRewriter {
 
   init(
     macroSystem: MacroSystem,
-    context: MacroExpansionContext
+    context: Context
   ) {
     self.macroSystem = macroSystem
     self.context = context
@@ -84,7 +84,7 @@ class MacroApplication: SyntaxRewriter {
     if node.evaluatedMacroName != nil {
       return node.evaluateMacro(
         with: macroSystem,
-        context: &context
+        context: context
       )
     }
 
@@ -135,7 +135,7 @@ class MacroApplication: SyntaxRewriter {
           if let macro = macro as? DeclarationMacro.Type {
             let expandedItemList = try macro.expansion(
               of: declExpansion,
-              in: &context
+              in: context
             )
             newItems.append(
               contentsOf: expandedItemList.map {
@@ -144,8 +144,8 @@ class MacroApplication: SyntaxRewriter {
             )
           } else if let macro = macro as? ExpressionMacro.Type {
             let expandedExpr = try macro.expansion(
-              of: declExpansion.asMacroExpansionExpr(),
-              in: &context
+              of: declExpansion,
+              in: context
             )
             newItems.append(CodeBlockItemSyntax(item: .init(expandedExpr)))
           }
@@ -191,7 +191,7 @@ class MacroApplication: SyntaxRewriter {
         do {
           let expandedList = try freestandingMacro.expansion(
             of: declExpansion,
-            in: &context
+            in: context
           )
 
           newItems.append(
@@ -304,8 +304,8 @@ class MacroApplication: SyntaxRewriter {
       do {
         let newAccessors = try accessorMacro.expansion(
           of: accessorAttr,
-          attachedTo: DeclSyntax(visitedNode),
-          in: &context
+          providingAccessorsOf: visitedNode,
+          in: context
         )
 
         accessors.append(contentsOf: newAccessors)
@@ -373,7 +373,7 @@ extension MacroApplication {
     let macroAttributes = getMacroAttributes(attachedTo: decl, ofType: PeerMacro.Type.self)
     for (attribute, peerMacro) in macroAttributes {
       do {
-        let newPeers = try peerMacro.expansion(of: attribute, attachedTo: decl, in: &context)
+        let newPeers = try peerMacro.expansion(of: attribute, providingPeersOf: decl, in: context)
         peers.append(contentsOf: newPeers)
       } catch {
         // Record the error
@@ -401,8 +401,8 @@ extension MacroApplication {
         try newMembers.append(
           contentsOf: memberMacro.expansion(
             of: attribute,
-            attachedTo: DeclSyntax(decl),
-            in: &context
+            providingMembersOf: decl,
+            in: context
           )
         )
       } catch {
@@ -425,6 +425,27 @@ extension MacroApplication {
     )
   }
 
+  private func expandMemberAttribute(
+    attribute: AttributeSyntax,
+    macro: MemberAttributeMacro.Type,
+    decl: DeclGroupSyntax,
+    member: DeclSyntax,
+    in context: MacroExpansionContext
+  ) throws -> [AttributeSyntax] {
+    #if false
+    _openExistential(decl) { d in
+      return try! macro.expansion(
+        of: attribute,
+        attachedTo: d,
+        annotating: member,
+        in: context
+      )
+    }
+    #else
+    return []
+    #endif
+  }
+
   private func expandAttributes(
     for macroAttributes: [(AttributeSyntax, MemberAttributeMacro.Type)],
     attachedTo decl: DeclSyntax,
@@ -437,13 +458,19 @@ extension MacroApplication {
     var attributes: [AttributeSyntax] = []
     for (attribute, attributeMacro) in macroAttributes {
       do {
-        try attributes.append(
-          contentsOf: attributeMacro.expansion(
+        let typedDecl = decl.asProtocol(DeclGroupSyntax.self)!
+
+        func expand<Decl: DeclGroupSyntax>(_ decl: Decl) throws -> [AttributeSyntax] {
+          return try attributeMacro.expansion(
             of: attribute,
-            attachedTo: DeclSyntax(decl),
-            annotating: member.decl,
-            in: &context
+            attachedTo: decl,
+            providingAttributesFor: member.decl,
+            in: context
           )
+        }
+
+        attributes.append(
+          contentsOf: try _openExistential(typedDecl, do: expand)
         )
       } catch {
         // Record the error
@@ -468,9 +495,9 @@ extension MacroApplication {
 extension SyntaxProtocol {
   /// Expand all uses of the given set of macros within this syntax
   /// node.
-  public func expand(
+  public func expand<Context: MacroExpansionContext>(
     macros: [String: Macro.Type],
-    in context: inout MacroExpansionContext
+    in context: Context
   ) -> Syntax {
     // Build the macro system.
     var system = MacroSystem()
@@ -482,10 +509,6 @@ extension SyntaxProtocol {
       macroSystem: system,
       context: context
     )
-
-    defer {
-      context = applier.context
-    }
 
     return applier.visit(Syntax(self))
   }

@@ -24,37 +24,24 @@ struct ThrownErrorDiagnostic: DiagnosticMessage {
   }
 }
 
-extension MacroExpansionDeclSyntax {
-  /// Macro expansion declarations are parsed in some positions where an
-  /// expression is also warranted, so
-  public func asMacroExpansionExpr() -> MacroExpansionExprSyntax {
-    MacroExpansionExprSyntax(
-      unexpectedBeforePoundToken,
-      poundToken: poundToken,
-      unexpectedBetweenPoundTokenAndMacro,
-      macro: macro,
-      genericArguments: genericArguments,
-      unexpectedBetweenGenericArgumentsAndLeftParen,
-      leftParen: leftParen,
-      unexpectedBetweenLeftParenAndArgumentList,
-      argumentList: argumentList,
-      unexpectedBetweenArgumentListAndRightParen,
-      rightParen: rightParen,
-      unexpectedBetweenRightParenAndTrailingClosure,
-      trailingClosure: trailingClosure,
-      unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures,
-      additionalTrailingClosures: additionalTrailingClosures,
-      unexpectedAfterAdditionalTrailingClosures
-    )
+extension SyntaxProtocol {
+  /// Detach the current node and inform the macro expansion context,
+  /// if it needs to know.
+  fileprivate func detach(in context: MacroExpansionContext) -> Self {
+    if let basicContext = context as? BasicMacroExpansionContext {
+      return basicContext.detach(self)
+    }
+
+    return self.detach()
   }
 }
 
 extension MacroExpansionExprSyntax {
   /// Evaluate the given macro for this syntax node, producing the expanded
   /// result and (possibly) some diagnostics.
-  func evaluateMacro(
+  func evaluateMacro<Context: MacroExpansionContext>(
     _ macro: Macro.Type,
-    in context: inout MacroExpansionContext
+    in context: Context
   ) -> ExprSyntax {
     guard let exprMacro = macro as? ExpressionMacro.Type else {
       return ExprSyntax(self)
@@ -62,7 +49,7 @@ extension MacroExpansionExprSyntax {
 
     // Handle the rewrite.
     do {
-      return try exprMacro.expansion(of: detach(), in: &context)
+      return try exprMacro.expansion(of: detach(in: context), in: context)
     } catch {
       // Record the error
       context.diagnose(
@@ -80,9 +67,9 @@ extension MacroExpansionExprSyntax {
 extension MacroExpansionDeclSyntax {
   /// Evaluate the given macro for this syntax node, producing the expanded
   /// result and (possibly) some diagnostics.
-  func evaluateMacro(
+  func evaluateMacro<Context: MacroExpansionContext>(
     _ macro: Macro.Type,
-    in context: inout MacroExpansionContext
+    in context: Context
   ) -> Syntax {
     // TODO: declaration/statement macros
 
@@ -113,9 +100,9 @@ extension Syntax {
   /// This operation only makes sense when `evaluatedMacroName` produces a
   /// non-nil value, indicating that this syntax node is a macro evaluation of
   /// some kind.
-  func evaluateMacro(
+  func evaluateMacro<Context: MacroExpansionContext>(
     with macroSystem: MacroSystem,
-    context: inout MacroExpansionContext
+    context: Context
   ) -> Syntax {
     // If this isn't a macro evaluation node, do nothing.
     guard let macroName = evaluatedMacroName else {
@@ -129,11 +116,11 @@ extension Syntax {
 
     switch self.as(SyntaxEnum.self) {
     case .macroExpansionDecl(let expansion):
-      return expansion.evaluateMacro(macro, in: &context)
+      return expansion.evaluateMacro(macro, in: context)
 
     case .macroExpansionExpr(let expansion):
       return Syntax(
-        expansion.evaluateMacro(macro, in: &context)
+        expansion.evaluateMacro(macro, in: context)
       )
 
     default:

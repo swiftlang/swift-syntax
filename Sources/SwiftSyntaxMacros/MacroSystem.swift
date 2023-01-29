@@ -60,9 +60,9 @@ struct MacroSystem {
 }
 
 /// Syntax rewriter that evaluates any macros encountered along the way.
-class MacroApplication: SyntaxRewriter {
+class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
   let macroSystem: MacroSystem
-  var context: MacroExpansionContext
+  var context: Context
   var skipNodes: Set<Syntax> = []
 
   /// A stack of member attribute macos to expand when iterating over a `MemberDeclListSyntax`.
@@ -70,7 +70,7 @@ class MacroApplication: SyntaxRewriter {
 
   init(
     macroSystem: MacroSystem,
-    context: MacroExpansionContext
+    context: Context
   ) {
     self.macroSystem = macroSystem
     self.context = context

@@ -16,175 +16,154 @@ import SyntaxSupport
 import Utils
 
 let tokenKindFile = SourceFileSyntax {
-  EnumDeclSyntax("""
+  try! EnumDeclSyntax("""
     /// Enumerates the kinds of tokens in the Swift language.
     @frozen // FIXME: Not actually stable, works around a miscompile
     public enum TokenKind: Hashable
     """) {
-    EnumCaseDeclSyntax("case eof")
+    DeclSyntax("case eof")
     
     for token in SYNTAX_TOKENS {
       // Tokens that don't have a set text have an associated value that
       // contains their text.
       if let associatedValueClass = token.associatedValueClass {
-        EnumCaseDeclSyntax("case \(raw: token.swiftKind)(\(raw: associatedValueClass))")
+        DeclSyntax("case \(raw: token.swiftKind)(\(raw: associatedValueClass))")
       } else if token.text == nil {
-        EnumCaseDeclSyntax("case \(raw: token.swiftKind)(String)")
+        DeclSyntax("case \(raw: token.swiftKind)(String)")
       } else {
-        EnumCaseDeclSyntax("case \(raw: token.swiftKind)")
+        DeclSyntax("case \(raw: token.swiftKind)")
       }
     }
     
-    VariableDeclSyntax(
-      leadingTrivia: .docBlockComment("/// The textual representation of this token kind.") + .newlines(1),
-      attributes: [.attribute(AttributeSyntax(attributeName: TypeSyntax("_spi"), leftParen: .leftParenToken(), argument: .token(.identifier("Testing")), rightParen: .rightParenToken()))],
-      modifiers: [DeclModifierSyntax(leadingTrivia: .newline, name: .keyword(.public))],
-      name: IdentifierPatternSyntax("text"),
-      type: TypeAnnotationSyntax(type: TypeSyntax("String"))
-    ) {
-      SwitchStmtSyntax(expression: ExprSyntax("self")) {
+    try VariableDeclSyntax("""
+      /// The textual representation of this token kind.
+      @_spi(Testing)
+      public var text: String
+      """) {
+      try SwitchStmtSyntax("switch self") {
         for token in SYNTAX_TOKENS {
           if token.associatedValueClass != nil {
             SwitchCaseSyntax("case .\(raw: token.swiftKind)(let assoc):") {
-              ReturnStmtSyntax("return String(syntaxText: assoc.defaultText)")
+              StmtSyntax("return String(syntaxText: assoc.defaultText)")
             }
           } else if let text = token.text {
             SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
-              ReturnStmtSyntax("return #\"\(raw: text)\"#")
+              StmtSyntax("return #\"\(raw: text)\"#")
             }
           } else {
             SwitchCaseSyntax("case .\(raw: token.swiftKind)(let text):") {
-              ReturnStmtSyntax("return text")
+              StmtSyntax("return text")
             }
           }
         }
-        
+
         SwitchCaseSyntax("case .eof:") {
-          ReturnStmtSyntax(#"return """#)
+          StmtSyntax(#"return """#)
         }
       }
     }
 
-    VariableDeclSyntax(
-      leadingTrivia: .docBlockComment("/// If this token kind always has the same syntax text, that syntax text, otherwise `nil`.") + .newlines(1),
-      attributes: [.attribute(AttributeSyntax(attributeName: TypeSyntax("_spi"), leftParen: .leftParenToken(), argument: .token(.identifier("RawSyntax")), rightParen: .rightParenToken()))],
-      modifiers: [DeclModifierSyntax(leadingTrivia: .newline, name: .keyword(.public))],
-      name: IdentifierPatternSyntax("defaultText"),
-      type: TypeAnnotationSyntax(type: TypeSyntax("SyntaxText?"))
-    ) {
-      SwitchStmtSyntax(expression: ExprSyntax("self")) {
+    try VariableDeclSyntax("""
+      /// If this token kind always has the same syntax text, that syntax text, otherwise `nil`.
+      @_spi(RawSyntax)
+      public var defaultText: SyntaxText?
+      """) {
+      try SwitchStmtSyntax("switch self") {
         for token in SYNTAX_TOKENS {
           if token.associatedValueClass != nil {
             SwitchCaseSyntax("case .\(raw: token.swiftKind)(let assoc):") {
-              ReturnStmtSyntax("return assoc.defaultText")
+              StmtSyntax("return assoc.defaultText")
             }
           } else if let text = token.text {
             SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
-              ReturnStmtSyntax("return #\"\(raw: text)\"#")
+              StmtSyntax("return #\"\(raw: text)\"#")
             }
           }
         }
 
         SwitchCaseSyntax("case .eof:") {
-          ReturnStmtSyntax(#"return """#)
+          StmtSyntax(#"return """#)
         }
         SwitchCaseSyntax("default:") {
-          ReturnStmtSyntax(#"return """#)
+          StmtSyntax(#"return """#)
         }
       }
     }
-    
-    VariableDeclSyntax(
-      leadingTrivia:[
-        .docBlockComment("/// Returns `true` if the token is a Swift keyword."),
-        .newlines(1),
-        .docBlockComment("///"),
-        .newlines(1),
-        .docBlockComment("/// Keywords are reserved unconditionally for use by Swift and may not"),
-        .newlines(1),
-        .docBlockComment("/// appear as identifiers in any position without being escaped. For example,"),
-        .newlines(1),
-        .docBlockComment("/// `class`, `func`, or `import`."),
-        .newlines(1)
-      ],
-      modifiers: [DeclModifierSyntax(name: .keyword(.public))],
-      name: IdentifierPatternSyntax("isLexerClassifiedKeyword"),
-      type: TypeAnnotationSyntax(type: TypeSyntax("Bool"))
-    ) {
-      SwitchStmtSyntax(expression: ExprSyntax("self")) {
+
+    try VariableDeclSyntax("""
+      /// Returns `true` if the token is a Swift keyword.
+      ///
+      /// Keywords are reserved unconditionally for use by Swift and may not
+      /// appear as identifiers in any position without being escaped. For example,
+      /// `class`, `func`, or `import`.
+      public var isLexerClassifiedKeyword: Bool
+      """) {
+      try SwitchStmtSyntax("switch self") {
         SwitchCaseSyntax("case .eof:") {
-          ReturnStmtSyntax("return false")
+          StmtSyntax("return false")
         }
-        
+
         for token in SYNTAX_TOKENS where token.swiftKind != "keyword" {
           SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
-            ReturnStmtSyntax("return \(raw: token.isKeyword)")
+            StmtSyntax("return \(raw: token.isKeyword)")
           }
         }
+
         SwitchCaseSyntax("case .keyword(let keyword):") {
-          ReturnStmtSyntax("return keyword.isLexerClassified")
+          StmtSyntax("return keyword.isLexerClassified")
         }
       }
     }
-    
-    VariableDeclSyntax(
-      leadingTrivia: [
-        .docBlockComment("/// Returns `true` if the token is a Swift punctuator."),
-        .newlines(1),
-        .docBlockComment("///"),
-        .newlines(1),
-        .docBlockComment("/// Punctuation tokens generally separate identifiers from each other. For"),
-        .newlines(1),
-        .docBlockComment("/// example, the '<' and '>' characters in a generic parameter list, or the"),
-        .newlines(1),
-        .docBlockComment("/// quote characters in a string literal."),
-        .newlines(1)
-      ],
-      modifiers: [DeclModifierSyntax(name: .keyword(.public))],
-      name: IdentifierPatternSyntax("isPunctuation"),
-      type: TypeAnnotationSyntax(type: TypeSyntax("Bool"))
-    ) {
-      SwitchStmtSyntax(expression: ExprSyntax("self")) {
+
+    try VariableDeclSyntax("""
+      /// Returns `true` if the token is a Swift punctuator.
+      ///
+      /// Punctuation tokens generally separate identifiers from each other. For
+      /// example, the '<' and '>' characters in a generic parameter list, or the
+      /// quote characters in a string literal.
+      public var isPunctuation: Bool
+      """) {
+      try SwitchStmtSyntax("switch self") {
         SwitchCaseSyntax("case .eof:") {
-          ReturnStmtSyntax("return false")
+          StmtSyntax("return false")
         }
-        
+
         for token in SYNTAX_TOKENS {
           SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
-            ReturnStmtSyntax("return \(raw: type(of: token) == PunctuatorSpec.self)")
+            StmtSyntax("return \(raw: type(of: token) == PunctuatorSpec.self)")
           }
         }
       }
     }
   }
-  
-  ExtensionDeclSyntax("extension TokenKind: Equatable") {
-    FunctionDeclSyntax("public static func ==(lhs: TokenKind, rhs: TokenKind) -> Bool") {
-      SwitchStmtSyntax(expression: ExprSyntax("(lhs, rhs)")) {
+
+  try! ExtensionDeclSyntax("extension TokenKind: Equatable") {
+    try FunctionDeclSyntax("public static func ==(lhs: TokenKind, rhs: TokenKind) -> Bool") {
+      try SwitchStmtSyntax("switch (lhs, rhs)") {
         SwitchCaseSyntax("case (.eof, .eof):") {
-          ReturnStmtSyntax("return true")
+          StmtSyntax("return true")
         }
-        
+
         for token in SYNTAX_TOKENS {
           if token.text != nil {
             SwitchCaseSyntax("case (.\(raw: token.swiftKind), .\(raw: token.swiftKind)):") {
-              ReturnStmtSyntax("return true")
+              StmtSyntax("return true")
             }
           } else {
             SwitchCaseSyntax("case (.\(raw: token.swiftKind)(let lhsText), .\(raw: token.swiftKind)(let rhsText)):") {
-              ReturnStmtSyntax("return lhsText == rhsText")
+              StmtSyntax("return lhsText == rhsText")
             }
           }
         }
-        
+
         SwitchCaseSyntax("default:") {
-          ReturnStmtSyntax("return false")
+          StmtSyntax("return false")
         }
       }
     }
   }
-  
-  EnumDeclSyntax("""
+
+  try! EnumDeclSyntax("""
     // Note: It's important that this enum is marked as having a raw base kind
     // because it significantly improves performance when comparing two
     // `RawTokenBaseKind` for equality. With the raw value, it compiles down to
@@ -192,10 +171,10 @@ let tokenKindFile = SourceFileSyntax {
     @frozen // FIXME: Not actually stable, works around a miscompile
     public enum RawTokenBaseKind: UInt8, Equatable, Hashable
     """) {
-    EnumCaseDeclSyntax("case eof")
-    
+    DeclSyntax("case eof")
+
     for token in SYNTAX_TOKENS {
-      EnumCaseDeclSyntax("case \(raw: token.swiftKind)")
+      DeclSyntax("case \(raw: token.swiftKind)")
     }
   }
 
@@ -207,7 +186,7 @@ let tokenKindFile = SourceFileSyntax {
   }
   """)
 
-  StructDeclSyntax("""
+  try! StructDeclSyntax("""
     /// Similar to `TokenKind` but without a `String` associated value.
     /// Technically, this should be an enum like
     /// ```
@@ -247,11 +226,7 @@ let tokenKindFile = SourceFileSyntax {
     }
     """)
     for token in SYNTAX_TOKENS where token.swiftKind != "keyword" {
-      VariableDeclSyntax(
-        modifiers: [DeclModifierSyntax(leadingTrivia: .newline, name: .keyword(.public)), DeclModifierSyntax(name: .keyword(.static))],
-        name: IdentifierPatternSyntax("\(raw: token.swiftKind)"),
-        type: TypeAnnotationSyntax(type: TypeSyntax("RawTokenKind"))
-      ) {
+      try VariableDeclSyntax("public static var \(raw: token.swiftKind): RawTokenKind") {
         StmtSyntax("return RawTokenKind(base: .\(raw: token.swiftKind), keyword: .rawValueZero)")
       }
     }
@@ -261,175 +236,151 @@ let tokenKindFile = SourceFileSyntax {
       return RawTokenKind(base: .keyword, keyword: keyword)
     }
     """)
-    
-    VariableDeclSyntax(
-      attributes: [.attribute(AttributeSyntax(attributeName: TypeSyntax("_spi"), leftParen: .leftParenToken(), argument: .token(.identifier("RawSyntax")), rightParen: .rightParenToken()))],
-      modifiers: [DeclModifierSyntax(leadingTrivia: .newline, name: .keyword(.public))],
-      name: IdentifierPatternSyntax("defaultText"),
-      type: TypeAnnotationSyntax(type: OptionalTypeSyntax("SyntaxText?"))
-    ) {
-      SwitchStmtSyntax(expression: ExprSyntax("self.base")) {
+
+    try VariableDeclSyntax("""
+      @_spi(RawSyntax)
+      public var defaultText: SyntaxText?
+      """) {
+      try! SwitchStmtSyntax("switch self.base") {
         SwitchCaseSyntax("case .eof:") {
-          ReturnStmtSyntax(#"return """#)
+          StmtSyntax(#"return """#)
         }
 
         for token in SYNTAX_TOKENS {
           if token.swiftKind == "keyword" {
             SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
-              ReturnStmtSyntax("return self.keyword.defaultText")
+              StmtSyntax("return self.keyword.defaultText")
             }
           } else if let text = token.text {
             SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
-              ReturnStmtSyntax("return #\"\(raw: text)\"#")
+              StmtSyntax("return #\"\(raw: text)\"#")
             }
           }
         }
 
         SwitchCaseSyntax("default:") {
-          ReturnStmtSyntax("return nil")
+          StmtSyntax("return nil")
         }
       }
     }
 
-    VariableDeclSyntax(
-      modifiers: [DeclModifierSyntax(name: .keyword(.public))],
-      name: IdentifierPatternSyntax("nameForDiagnostics"),
-      type: TypeAnnotationSyntax(type: TypeSyntax("String"))
-    ) {
-      SwitchStmtSyntax(expression: ExprSyntax("self.base")) {
+    try! VariableDeclSyntax("public var nameForDiagnostics: String") {
+      try! SwitchStmtSyntax("switch self.base") {
         SwitchCaseSyntax("case .eof:") {
-          ReturnStmtSyntax(#"return "end of file""#)
+          StmtSyntax(#"return "end of file""#)
         }
 
         for token in SYNTAX_TOKENS where token.swiftKind != "keyword" {
           SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
-            ReturnStmtSyntax("return #\"\(raw: token.nameForDiagnostics)\"#")
+            StmtSyntax("return #\"\(raw: token.nameForDiagnostics)\"#")
           }
         }
         SwitchCaseSyntax("case .keyword:") {
-          ReturnStmtSyntax("return String(syntaxText: self.keyword.defaultText)")
+          StmtSyntax("return String(syntaxText: self.keyword.defaultText)")
         }
       }
     }
 
-    VariableDeclSyntax(
-      leadingTrivia: [
-        .docBlockComment("/// Returns `true` if the token is a Swift keyword."),
-        .newlines(1),
-        .docBlockComment("///"),
-        .newlines(1),
-        .docBlockComment("/// Keywords are reserved unconditionally for use by Swift and may not"),
-        .newlines(1),
-        .docBlockComment("/// appear as identifiers in any position without being escaped. For example,"),
-        .newlines(1),
-        .docBlockComment("/// `class`, `func`, or `import`."),
-        .newlines(1),
-      ],
-      modifiers: [DeclModifierSyntax(name: .keyword(.public))],
-      name: IdentifierPatternSyntax("isLexerClassifiedKeyword"),
-      type: TypeAnnotationSyntax(type: TypeSyntax("Bool"))
-    ) {
-      SwitchStmtSyntax(expression: ExprSyntax("self.base")) {
+    try! VariableDeclSyntax("""
+      /// Returns `true` if the token is a Swift keyword.
+      ///
+      /// Keywords are reserved unconditionally for use by Swift and may not
+      /// appear as identifiers in any position without being escaped. For example,
+      /// `class`, `func`, or `import`.
+      public var isLexerClassifiedKeyword: Bool
+      """) {
+      try! SwitchStmtSyntax("switch self.base") {
         SwitchCaseSyntax("case .eof:") {
-          ReturnStmtSyntax("return false")
+          StmtSyntax("return false")
         }
-        
+
         for token in SYNTAX_TOKENS where token.swiftKind != "keyword" {
           SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
-            ReturnStmtSyntax("return \(raw: token.isKeyword)")
+            StmtSyntax("return \(raw: token.isKeyword)")
           }
         }
         SwitchCaseSyntax("case .keyword:") {
-          ReturnStmtSyntax("return self.keyword.isLexerClassified")
+          StmtSyntax("return self.keyword.isLexerClassified")
         }
       }
     }
-    
-    VariableDeclSyntax(
-      leadingTrivia: [
-        .docBlockComment("/// Returns `true` if the token is a Swift punctuator."),
-        .newlines(1),
-        .docBlockComment("///"),
-        .newlines(1),
-        .docBlockComment("/// Punctuation tokens generally separate identifiers from each other. For"),
-        .newlines(1),
-        .docBlockComment("/// example, the '<' and '>' characters in a generic parameter list, or the"),
-        .newlines(1),
-        .docBlockComment("/// quote characters in a string literal."),
-            .newlines(1)
-      ],
-      modifiers: [DeclModifierSyntax(name: .keyword(.public))],
-      name: IdentifierPatternSyntax("isPunctuation"),
-      type: TypeAnnotationSyntax(type: TypeSyntax("Bool"))
-    ) {
-      SwitchStmtSyntax(expression: ExprSyntax("self.base")) {
+
+    try! VariableDeclSyntax("""
+      /// Returns `true` if the token is a Swift punctuator.
+      ///
+      /// Punctuation tokens generally separate identifiers from each other. For
+      /// example, the '<' and '>' characters in a generic parameter list, or the
+      /// quote characters in a string literal.
+      public var isPunctuation: Bool
+      """) {
+      try! SwitchStmtSyntax("switch self.base") {
         SwitchCaseSyntax("case .eof:") {
-          ReturnStmtSyntax("return false")
+          StmtSyntax("return false")
         }
-        
+
         for token in SYNTAX_TOKENS {
           SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
-            ReturnStmtSyntax("return \(raw: type(of: token) == PunctuatorSpec.self)")
+            StmtSyntax("return \(raw: type(of: token) == PunctuatorSpec.self)")
           }
         }
       }
     }
   }
-  
-  ExtensionDeclSyntax("extension TokenKind") {
-    FunctionDeclSyntax("""
+
+  try! ExtensionDeclSyntax("extension TokenKind") {
+    try! FunctionDeclSyntax("""
       /// If the `rawKind` has a `defaultText`, `text` can be empty.
       @_spi(RawSyntax)
       public static func fromRaw(kind rawKind: RawTokenKind, text: String) -> TokenKind
       """) {
-      SwitchStmtSyntax(expression: ExprSyntax("rawKind.base")) {
+      try! SwitchStmtSyntax("switch rawKind.base") {
         SwitchCaseSyntax("case .eof:") {
-          ReturnStmtSyntax("return .eof")
+          StmtSyntax("return .eof")
         }
 
         for token in SYNTAX_TOKENS {
           if token.swiftKind == "keyword" {
             SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
-              FunctionCallExprSyntax("assert(text.isEmpty || String(syntaxText: rawKind.keyword.defaultText) == text)")
-              ReturnStmtSyntax("return .keyword(rawKind.keyword)")
+              ExprSyntax("assert(text.isEmpty || String(syntaxText: rawKind.keyword.defaultText) == text)")
+              StmtSyntax("return .keyword(rawKind.keyword)")
             }
           } else if token.text != nil {
             SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
-              FunctionCallExprSyntax("assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)")
-              ReturnStmtSyntax("return .\(raw: token.swiftKind)")
+              ExprSyntax("assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)")
+              StmtSyntax("return .\(raw: token.swiftKind)")
             }
           } else {
             SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
-              ReturnStmtSyntax("return .\(raw: token.swiftKind)(text)")
+              StmtSyntax("return .\(raw: token.swiftKind)(text)")
             }
           }
         }
       }
     }
 
-    FunctionDeclSyntax("""
+    try! FunctionDeclSyntax("""
       /// Returns the `RawTokenKind` of this `TokenKind` and, if this `TokenKind`
       /// has associated text, the associated text, otherwise `nil`.
       @_spi(RawSyntax)
       public func decomposeToRaw() -> (rawKind: RawTokenKind, string: String?)
       """) {
-      SwitchStmtSyntax(expression: ExprSyntax("self")) {
+      try! SwitchStmtSyntax("switch self") {
         SwitchCaseSyntax("case .eof:") {
-          ReturnStmtSyntax("return (.eof, nil)")
+          StmtSyntax("return (.eof, nil)")
         }
-        
+
         for token in SYNTAX_TOKENS {
           if token.swiftKind == "keyword" {
             SwitchCaseSyntax("case .\(raw: token.swiftKind)(let keyword):") {
-              ReturnStmtSyntax("return (.\(raw: token.swiftKind)(keyword), nil)")
+              StmtSyntax("return (.\(raw: token.swiftKind)(keyword), nil)")
             }
           } else if token.text != nil {
             SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
-              ReturnStmtSyntax("return (.\(raw: token.swiftKind), nil)")
+              StmtSyntax("return (.\(raw: token.swiftKind), nil)")
             }
           } else {
             SwitchCaseSyntax("case .\(raw: token.swiftKind)(let str):") {
-              ReturnStmtSyntax("return (.\(raw: token.swiftKind), str)")
+              StmtSyntax("return (.\(raw: token.swiftKind), str)")
             }
           }
         }

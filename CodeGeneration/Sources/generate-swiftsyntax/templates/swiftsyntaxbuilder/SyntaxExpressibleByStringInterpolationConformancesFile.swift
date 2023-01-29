@@ -16,16 +16,16 @@ import SwiftSyntaxBuilder
 import Utils
 
 let syntaxExpressibleByStringInterpolationConformancesFile = SourceFileSyntax {
-  ImportDeclSyntax(
+  DeclSyntax(
     """
     \(raw: generateCopyrightHeader(for: "generate-swiftsyntaxbuilder"))
     import SwiftSyntax
     """)
-  ImportDeclSyntax("import SwiftParser")
-  ImportDeclSyntax("import SwiftParserDiagnostics")
+  DeclSyntax("import SwiftParser")
+  DeclSyntax("import SwiftParserDiagnostics")
   
-  ExtensionDeclSyntax("extension SyntaxParseable") {
-    InitializerDeclSyntax(
+  try! ExtensionDeclSyntax("extension SyntaxParseable") {
+    DeclSyntax(
       """
       public init(stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
         self = try performParse(source: stringInterpolation.sourceText, parse: { parser in
@@ -36,10 +36,10 @@ let syntaxExpressibleByStringInterpolationConformancesFile = SourceFileSyntax {
   }
   
   for node in SYNTAX_NODES where node.parserFunction != nil {
-    ExtensionDeclSyntax("extension \(raw: node.name): SyntaxExpressibleByStringInterpolation {}")
+    DeclSyntax("extension \(raw: node.name): SyntaxExpressibleByStringInterpolation {}")
   }
   
-  FunctionDeclSyntax(
+  DeclSyntax(
     """
     // TODO: This should be fileprivate, but is currently used in
     // `ConvenienceInitializers.swift`. See the corresponding TODO there.

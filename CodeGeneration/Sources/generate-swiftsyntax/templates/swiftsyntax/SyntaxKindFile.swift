@@ -16,54 +16,40 @@ import SyntaxSupport
 import Utils
 
 let syntaxKindFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCopyrightHeader(for: "generate-swiftsyntax"))) {
-  EnumDeclSyntax("""
+  try! EnumDeclSyntax("""
     /// Enumerates the known kinds of Syntax represented in the Syntax tree.
     @frozen // FIXME: Not actually stable, works around a miscompile
     public enum SyntaxKind
     """) {
-    EnumCaseDeclSyntax("case token")
+    DeclSyntax("case token")
     for node in NON_BASE_SYNTAX_NODES {
-      EnumCaseDeclSyntax("case \(raw: node.swiftSyntaxKind)")
+      DeclSyntax("case \(raw: node.swiftSyntaxKind)")
     }
     
-    VariableDeclSyntax(
-      modifiers: [DeclModifierSyntax(name: .keyword(.public))],
-      name: IdentifierPatternSyntax("isSyntaxCollection"),
-      type: TypeAnnotationSyntax(
-        colon: .colonToken(),
-        type: SimpleTypeIdentifierSyntax("Bool")
-      )
-    ) {
-      SwitchStmtSyntax(expression: ExprSyntax("self")) {
+    try VariableDeclSyntax("public var isSyntaxCollection: Bool") {
+      try SwitchStmtSyntax("switch self") {
         for node in SYNTAX_NODES where node.baseKind == "SyntaxCollection"{
           SwitchCaseSyntax("case .\(raw: node.swiftSyntaxKind):") {
-            ReturnStmtSyntax("return true")
+            StmtSyntax("return true")
           }
         }
         
         SwitchCaseSyntax("default:") {
-          ReturnStmtSyntax("return false")
+          StmtSyntax("return false")
         }
       }
     }
     
-    VariableDeclSyntax(
-      modifiers: [DeclModifierSyntax(name: .keyword(.public))],
-      name: IdentifierPatternSyntax("isMissing"),
-      type: TypeAnnotationSyntax(
-        colon: .colonToken(),
-        type: SimpleTypeIdentifierSyntax("Bool")
-      )
-    ) {
-      SwitchStmtSyntax(expression: ExprSyntax("self")) {
+    try VariableDeclSyntax("public var isMissing: Bool") {
+      try SwitchStmtSyntax("switch self") {
         for name in SYNTAX_BASE_KINDS where !["Syntax", "SyntaxCollection"].contains(name) {
           SwitchCaseSyntax("case .missing\(raw: name):") {
-            ReturnStmtSyntax("return true")
+            StmtSyntax("return true")
           }
         }
         
         SwitchCaseSyntax("default:") {
-          ReturnStmtSyntax("return false")
+          StmtSyntax("return false")
         }
       }
     }

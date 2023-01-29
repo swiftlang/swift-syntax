@@ -19,9 +19,9 @@ public class CodeGenerationFormat: BasicFormat {
 
   public func ensuringTwoLeadingNewlines<NodeType: SyntaxProtocol>(node: NodeType) -> NodeType {
     if node.leadingTrivia?.first?.isNewline ?? false {
-      return node.withLeadingTrivia(indentedNewline + (node.leadingTrivia ?? []))
+      return node.with(\.leadingTrivia, indentedNewline + (node.leadingTrivia ?? []))
     } else {
-      return node.withLeadingTrivia(indentedNewline + indentedNewline + (node.leadingTrivia ?? []))
+      return node.with(\.leadingTrivia, indentedNewline + indentedNewline + (node.leadingTrivia ?? []))
     }
   }
 

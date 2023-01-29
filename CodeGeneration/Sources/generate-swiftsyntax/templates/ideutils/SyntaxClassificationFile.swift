@@ -30,26 +30,22 @@ fileprivate var node_child_classifications: [ChildClassification] {
 }
 
 let syntaxClassificationFile = SourceFileSyntax {
-  ImportDeclSyntax(
-    """
+  DeclSyntax("""
     \(raw: generateCopyrightHeader(for: "generate-ideutils"))
     @_spi(RawSyntax) import SwiftSyntax
-    """
-  )
+    """)
   
-  EnumDeclSyntax("public enum SyntaxClassification") {
+  try! EnumDeclSyntax("public enum SyntaxClassification") {
     for classification in SYNTAX_CLASSIFICATIONS {
-      EnumCaseDeclSyntax(
-        """
+      DeclSyntax("""
         /// \(raw: classification.description)
         case \(raw: classification.swiftName)
-        """
-      )
+        """)
     }
   }
   
-  ExtensionDeclSyntax("extension SyntaxClassification") {
-    FunctionDeclSyntax(
+  try! ExtensionDeclSyntax("extension SyntaxClassification") {
+    try FunctionDeclSyntax(
         """
         /// Checks if a node has a classification attached via its syntax definition.
         /// - Parameters:
@@ -62,24 +58,24 @@ let syntaxClassificationFile = SourceFileSyntax {
             parentKind: SyntaxKind, indexInParent: Int, childKind: SyntaxKind
           ) -> (SyntaxClassification, Bool)?
         """) {
-          IfStmtSyntax("""
+          try IfStmtSyntax("""
             // Separate checks for token nodes (most common checks) versus checks for layout nodes.
             if childKind == .token
             """) {
-            SwitchStmtSyntax(expression: ExprSyntax("(parentKind, indexInParent)")) {
+            try SwitchStmtSyntax("switch (parentKind, indexInParent)") {
               for childClassification in node_child_classifications where childClassification.isToken {
                 SwitchCaseSyntax("case (.\(raw: childClassification.parent.swiftSyntaxKind), \(raw: childClassification.childIndex)):") {
-                  ReturnStmtSyntax("return (.\(raw: childClassification.classification!.swiftName), \(raw: childClassification.force))")
+                  StmtSyntax("return (.\(raw: childClassification.classification!.swiftName), \(raw: childClassification.force))")
                 }
               }
               
               SwitchCaseSyntax("default: return nil")
             }
           } else: {
-            SwitchStmtSyntax(expression: ExprSyntax("(parentKind, indexInParent)")) {
+            try SwitchStmtSyntax("switch (parentKind, indexInParent)") {
               for childClassification in node_child_classifications where !childClassification.isToken {
                 SwitchCaseSyntax("case (.\(raw: childClassification.parent.swiftSyntaxKind), \(raw: childClassification.childIndex)):") {
-                  ReturnStmtSyntax("return (.\(raw: childClassification.classification!.swiftName), \(raw: childClassification.force))")
+                  StmtSyntax("return (.\(raw: childClassification.classification!.swiftName), \(raw: childClassification.force))")
                 }
               }
               
@@ -89,23 +85,20 @@ let syntaxClassificationFile = SourceFileSyntax {
         }
   }
   
-  ExtensionDeclSyntax("extension RawTokenKind") {
-    VariableDeclSyntax(
-      modifiers: [DeclModifierSyntax(name: .keyword(.internal))],
-      name: IdentifierPatternSyntax("classification"),
-      type: TypeAnnotationSyntax(type: TypeSyntax("SyntaxClassification"))) {
-        SwitchStmtSyntax(expression: ExprSyntax("self.base")) {
+  try! ExtensionDeclSyntax("extension RawTokenKind") {
+    try VariableDeclSyntax("internal var classification: SyntaxClassification") {
+        try SwitchStmtSyntax("switch self.base") {
           for token in SYNTAX_TOKENS {
             SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
               if let classification = token.classification {
-                ReturnStmtSyntax("return .\(raw: classification.swiftName)")
+                StmtSyntax("return .\(raw: classification.swiftName)")
               } else {
-                ReturnStmtSyntax("return .none)")
+                StmtSyntax("return .none)")
               }
             }
           }
           SwitchCaseSyntax("case .eof:") {
-            ReturnStmtSyntax("return .none")
+            StmtSyntax("return .none")
           }
         }
       }

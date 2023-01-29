@@ -22,7 +22,7 @@ let lookupTable = ArrayExprSyntax(leftSquare: .leftSquareBracketToken(trailingTr
 }
 
 let keywordFile = SourceFileSyntax {
-  ExtensionDeclSyntax(
+  DeclSyntax(
     """
     \(raw: generateCopyrightHeader(for: "generate-swiftparser"))
 
@@ -35,19 +35,19 @@ let keywordFile = SourceFileSyntax {
     """
   )
 
-  EnumDeclSyntax("""
+  try! EnumDeclSyntax("""
     @frozen  // FIXME: Not actually stable, works around a miscompile
     public enum Keyword: UInt8, Hashable
     """) {
     for (index, keyword) in KEYWORDS.enumerated() {
-      EnumCaseDeclSyntax("case \(raw: keyword.escapedName)")
+      DeclSyntax("case \(raw: keyword.escapedName)")
     }
 
-    InitializerDeclSyntax("@_spi(RawSyntax) public init?(_ text: SyntaxText)") {
-      SwitchStmtSyntax(expression: ExprSyntax("text.count")) {
+    try! InitializerDeclSyntax("@_spi(RawSyntax) public init?(_ text: SyntaxText)") {
+      try! SwitchStmtSyntax("switch text.count") {
         for (length, keywords) in keywordsByLength() {
           SwitchCaseSyntax("case \(raw: length):") {
-            SwitchStmtSyntax(expression: ExprSyntax("text")) {
+            try! SwitchStmtSyntax("switch text") {
               for keyword in keywords {
                 SwitchCaseSyntax(#"case "\#(raw: keyword.name)":"#) {
                   ExprSyntax("self = .\(raw: keyword.escapedName)")
@@ -61,17 +61,12 @@ let keywordFile = SourceFileSyntax {
       }
     }
 
-    VariableDeclSyntax(
-      leadingTrivia: [
-        .docLineComment("/// Whether the token kind is switched from being an identifier to being an identifier to a keyword in the lexer."),
-        .newlines(1),
-        .docLineComment("/// This is true for keywords that used to be considered non-contextual."),
-        .newlines(1)
-      ],
-      modifiers: [DeclModifierSyntax(name: .keyword(.public))],
-      name: "isLexerClassified",
-      type: TypeAnnotationSyntax(type: TypeSyntax("Bool"))) {
-      SwitchStmtSyntax(expression: ExprSyntax("self")) {
+    try! VariableDeclSyntax("""
+      /// Whether the token kind is switched from being an identifier to being an identifier to a keyword in the lexer.
+      /// This is true for keywords that used to be considered non-contextual.
+      public var isLexerClassified: Bool
+      """) {
+      try! SwitchStmtSyntax("switch self") {
         for keyword in KEYWORDS {
           if keyword.isLexerClassified {
             SwitchCaseSyntax("case .\(raw: keyword.escapedName): return true")
@@ -81,22 +76,20 @@ let keywordFile = SourceFileSyntax {
       }
     }
 
-    VariableDeclSyntax("""
-    /// This is really unfortunate. Really, we should have a `switch` in
-    /// `Keyword.defaultText` to return the keyword's kind but the constant lookup
-    /// table is significantly faster. Ideally, we could also get the compiler to
-    /// constant-evaluate `Keyword.spi.defaultText` to a `SyntaxText` but I don't
-    /// see how that's possible right now.
-    private static let keywordTextLookupTable: [SyntaxText] = \(lookupTable)
-    """)
+    DeclSyntax("""
+      /// This is really unfortunate. Really, we should have a `switch` in
+      /// `Keyword.defaultText` to return the keyword's kind but the constant lookup
+      /// table is significantly faster. Ideally, we could also get the compiler to
+      /// constant-evaluate `Keyword.spi.defaultText` to a `SyntaxText` but I don't
+      /// see how that's possible right now.
+      private static let keywordTextLookupTable: [SyntaxText] = \(lookupTable)
+      """)
 
-    VariableDeclSyntax(
-      """
+    DeclSyntax("""
       @_spi(RawSyntax)
       public var defaultText: SyntaxText {
         return Keyword.keywordTextLookupTable[Int(self.rawValue)]
       }
-      """
-    )
+      """)
   }
 }

@@ -16,7 +16,7 @@ import SyntaxSupport
 import Utils
 
 let syntaxVisitorFile = SourceFileSyntax {
-  EnumDeclSyntax("""
+  DeclSyntax("""
     /// The enum describes how the SyntaxVistor should continue after visiting
     /// the current node.
     public enum SyntaxVisitorContinueKind {
@@ -27,23 +27,23 @@ let syntaxVisitorFile = SourceFileSyntax {
     }
     """)
   
-  ClassDeclSyntax("open class SyntaxVisitor") {
-    VariableDeclSyntax("public let viewMode: SyntaxTreeViewMode")
+  try! ClassDeclSyntax("open class SyntaxVisitor") {
+    DeclSyntax("public let viewMode: SyntaxTreeViewMode")
     
-    InitializerDeclSyntax("""
+    DeclSyntax("""
       @available(*, deprecated, message: "Use init(viewMode:) instead")
       public convenience init() {
         self.init(viewMode: .sourceAccurate)
       }
       """)
 
-    InitializerDeclSyntax("""
+    DeclSyntax("""
       public init(viewMode: SyntaxTreeViewMode) {
         self.viewMode = viewMode
       }
       """)
     
-    FunctionDeclSyntax("""
+    DeclSyntax("""
       /// Walk all nodes of the given syntax tree, calling the corresponding `visit`
       /// function for every node that is being visited.
       public func walk<SyntaxType: SyntaxProtocol>(_ node: SyntaxType) {
@@ -52,7 +52,7 @@ let syntaxVisitorFile = SourceFileSyntax {
       """)
 
     for node in SYNTAX_NODES where node.isVisitable {
-      FunctionDeclSyntax("""
+      DeclSyntax("""
         /// Visiting `\(raw: node.name)` specifically.
         ///   - Parameter node: the node we are visiting.
         ///   - Returns: how should we continue visiting.
@@ -61,14 +61,14 @@ let syntaxVisitorFile = SourceFileSyntax {
         }
         """)
 
-      FunctionDeclSyntax("""
+      DeclSyntax("""
         /// The function called after visiting `\(raw: node.name)` and its descendents.
         ///   - node: the node we just finished visiting.
         open func visitPost(_ node: \(raw: node.name)) {}
         """)
     }
 
-    FunctionDeclSyntax("""
+    DeclSyntax("""
       /// Visiting `TokenSyntax` specifically.
       ///   - Parameter node: the node we are visiting.
       ///   - Returns: how should we continue visiting.
@@ -77,14 +77,14 @@ let syntaxVisitorFile = SourceFileSyntax {
       }
       """)
 
-    FunctionDeclSyntax("""
+    DeclSyntax("""
       /// The function called after visiting the node and its descendents.
       ///   - node: the node we just finished visiting.
       open func visitPost(_ node: TokenSyntax) {}
       """)
 
     for node in NON_BASE_SYNTAX_NODES {
-      FunctionDeclSyntax("""
+      DeclSyntax("""
         /// Implementation detail of doVisit(_:_:). Do not call directly.
         private func visitImpl\(raw: node.name)(_ data: SyntaxData) {
           let node = \(raw: node.name)(data)
@@ -98,13 +98,13 @@ let syntaxVisitorFile = SourceFileSyntax {
         """)
     }
 
-    FunctionDeclSyntax("private func visit(_ data: SyntaxData)") {
-      SwitchStmtSyntax(expression: ExprSyntax("data.raw.kind")) {
+    try FunctionDeclSyntax("private func visit(_ data: SyntaxData)") {
+      try SwitchStmtSyntax("switch data.raw.kind") {
         SwitchCaseSyntax("case .token:") {
-          VariableDeclSyntax("let node = TokenSyntax(data)")
+          DeclSyntax("let node = TokenSyntax(data)")
 
           ExprSyntax("_ = visit(node)")
-          FunctionCallExprSyntax("""
+          ExprSyntax("""
             // No children to visit.
             visitPost(node)
             // The implementation of every generated case goes into its own function. This
@@ -113,15 +113,16 @@ let syntaxVisitorFile = SourceFileSyntax {
             // ~50KB per call to this function. rdar://55929175
             """)
         }
+
         for node in NON_BASE_SYNTAX_NODES {
           SwitchCaseSyntax("case .\(raw: node.swiftSyntaxKind):") {
-            FunctionCallExprSyntax("visitImpl\(raw: node.name)(data)")
+            ExprSyntax("visitImpl\(raw: node.name)(data)")
           }
         }
       }
     }
 
-    FunctionDeclSyntax("""
+    DeclSyntax("""
       private func visitChildren<SyntaxType: SyntaxProtocol>(_ node: SyntaxType) {
         let syntaxNode = Syntax(node)
         for childRaw in NonNilRawSyntaxChildren(syntaxNode, viewMode: viewMode) {

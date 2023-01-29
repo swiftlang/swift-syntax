@@ -17,19 +17,18 @@ import Utils
 
 let syntaxTraitsFile = SourceFileSyntax {
   for trait in TRAITS {
-    ProtocolDeclSyntax("""
+    try! ProtocolDeclSyntax("""
       // MARK: - \(raw: trait.traitName)Syntax
-      
+
       public protocol \(raw: trait.traitName)Syntax: SyntaxProtocol
       """) {
-      
       for child in trait.children {
-        VariableDeclSyntax("var \(raw: child.swiftName): \(raw: child.typeName)\(raw: child.isOptional ? "?" : "") { get set }")
+        DeclSyntax("var \(raw: child.swiftName): \(raw: child.typeName)\(raw: child.isOptional ? "?" : "") { get set }")
       }
     }
 
-    ExtensionDeclSyntax("public extension \(raw: trait.traitName)Syntax") {
-      FunctionDeclSyntax("""
+    try! ExtensionDeclSyntax("public extension \(raw: trait.traitName)Syntax") {
+      DeclSyntax("""
       /// Without this function, the `with` function defined on `SyntaxProtocol`
       /// does not work on existentials of this protocol type.
       @_disfavoredOverload
@@ -40,9 +39,9 @@ let syntaxTraitsFile = SourceFileSyntax {
       }
       """)
     }
-    
-    ExtensionDeclSyntax("public extension SyntaxProtocol") {
-      FunctionDeclSyntax("""
+
+    try! ExtensionDeclSyntax("public extension SyntaxProtocol") {
+      DeclSyntax("""
         /// Check whether the non-type erased version of this syntax node conforms to
         /// `\(raw: trait.traitName)Syntax`.
         /// Note that this will incur an existential conversion.
@@ -50,8 +49,8 @@ let syntaxTraitsFile = SourceFileSyntax {
           return self.asProtocol(\(raw: trait.traitName)Syntax.self) != nil
         }
         """)
-      
-      FunctionDeclSyntax("""
+
+      DeclSyntax("""
         /// Return the non-type erased version of this syntax node if it conforms to
         /// `\(raw: trait.traitName)Syntax`. Otherwise return `nil`.
         /// Note that this will incur an existential conversion.
@@ -61,8 +60,8 @@ let syntaxTraitsFile = SourceFileSyntax {
         """)
     }
   }
-  
+
   for node in SYNTAX_NODES where !node.isBase && !node.traits.isEmpty {
-    ExtensionDeclSyntax("extension \(raw: node.name): \(raw: node.traits.map { $0 + "Syntax" }.joined(separator: ", ")) {}")
+    DeclSyntax("extension \(raw: node.name): \(raw: node.traits.map { $0 + "Syntax" }.joined(separator: ", ")) {}")
   }
 }

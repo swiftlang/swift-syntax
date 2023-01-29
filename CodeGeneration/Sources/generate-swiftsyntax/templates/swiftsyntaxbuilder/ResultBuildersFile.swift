@@ -23,59 +23,50 @@ let resultBuildersFile = SourceFileSyntax {
   for node in SYNTAX_NODES where node.isSyntaxCollection {
     let type = SyntaxBuildableType(syntaxKind: node.syntaxKind)
     let elementType = node.collectionElementType
-    let expressionType: TypeSyntax = (node.collectionElementChoices?.isEmpty ?? true) ? elementType.parameterType : TypeSyntax(MemberTypeIdentifierSyntax("\(type.buildable).Element"))
+    let expressionType: TypeSyntax = (node.collectionElementChoices?.isEmpty ?? true) ? elementType.parameterType : TypeSyntax("\(type.buildable).Element")
 
-    StructDeclSyntax("""
+    try! StructDeclSyntax("""
       @resultBuilder
       public struct \(raw: type.syntaxKind)Builder
       """) {
-      TypealiasDeclSyntax(
-          """
-          /// The type of individual statement expressions in the transformed function,
-          /// which defaults to Component if buildExpression() is not provided.
-          public typealias Expression = \(expressionType)
-          """
-        )
+      DeclSyntax(
+        """
+        /// The type of individual statement expressions in the transformed function,
+        /// which defaults to Component if buildExpression() is not provided.
+        public typealias Expression = \(expressionType)
+        """)
 
-        TypealiasDeclSyntax(
+        DeclSyntax(
           """
           /// The type of a partial result, which will be carried through all of the
           /// build methods.
           public typealias Component = [Expression]
-          """
-        )
+          """)
 
-        TypealiasDeclSyntax(
-          """
+        DeclSyntax("""
           /// The type of the final returned result, which defaults to Component if
           /// buildFinalResult() is not provided.
           public typealias FinalResult = \(type.buildable)
-          """
-        )
+          """)
 
-        FunctionDeclSyntax(
-          """
+        DeclSyntax("""
           /// Required by every result builder to build combined results from
           /// statement blocks.
           public static func buildBlock(_ components: Self.Component...) -> Self.Component {
             return components.flatMap { $0 }
           }
-          """
-        )
+          """)
 
-        FunctionDeclSyntax(
-          """
+        DeclSyntax("""
           /// If declared, provides contextual type information for statement
           /// expressions to translate them into partial results.
           public static func buildExpression(_ expression: Self.Expression) -> Self.Component {
             return [expression]
           }
-          """
-        )
+          """)
 
         for elementChoice in node.collectionElementChoices ?? [] {
-          FunctionDeclSyntax(
-            """
+          DeclSyntax("""
             /// If declared, provides contextual type information for statement
             /// expressions to translate them into partial results.
             public static func buildExpression(_ expression: \(raw: elementChoice)Syntax) -> Self.Component {
@@ -85,95 +76,80 @@ let resultBuildersFile = SourceFileSyntax {
           )
         }
         
-        FunctionDeclSyntax(
-          """
+        DeclSyntax("""
           /// Add all the elements of `expression` to this result builder, effectively flattening them.
           public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
             return expression.map { $0 }
           }
-          """
-        )
+          """)
 
-        FunctionDeclSyntax(
-          """
+        DeclSyntax("""
           /// Enables support for `if` statements that do not have an `else`.
           public static func buildOptional(_ component: Self.Component?) -> Self.Component {
             return component ?? []
           }
-          """
-        )
+          """)
 
-        FunctionDeclSyntax(
-          """
+        DeclSyntax("""
           /// With buildEither(second:), enables support for 'if-else' and 'switch'
           /// statements by folding conditional results into a single result.
           public static func buildEither(first component: Self.Component) -> Self.Component {
             return component
           }
-          """
-        )
+          """)
 
-        FunctionDeclSyntax(
-          """
+        DeclSyntax("""
           /// With buildEither(first:), enables support for 'if-else' and 'switch'
           /// statements by folding conditional results into a single result.
           public static func buildEither(second component: Self.Component) -> Self.Component {
             return component
           }
-          """
-        )
+          """)
 
-        FunctionDeclSyntax(
-          """
+        DeclSyntax("""
           /// Enables support for 'for..in' loops by combining the
           /// results of all iterations into a single result.
           public static func buildArray(_ components: [Self.Component]) -> Self.Component {
             return components.flatMap { $0 }
           }
-          """
-        )
+          """)
 
-        FunctionDeclSyntax(
-          """
+        DeclSyntax("""
           /// If declared, this will be called on the partial result of an 'if'
           /// #available' block to allow the result builder to erase type
           /// information.
           public static func buildLimitedAvailability(_ component: Self.Component) -> Self.Component {
             return component
           }
-          """
-        )
+          """)
 
-        FunctionDeclSyntax("""
-          
+        try FunctionDeclSyntax("""
           /// If declared, this will be called on the partial result from the outermost
           /// block statement to produce the final returned result.
           public static func buildFinalResult(_ component: Component) -> FinalResult
           """) {
           if elementType.isToken {
-            ReturnStmtSyntax("return .init(component)")
+            StmtSyntax("return .init(component)")
           } else if elementType.hasWithTrailingCommaTrait {
-            VariableDeclSyntax("let lastIndex = component.count - 1")
+            DeclSyntax("let lastIndex = component.count - 1")
 
-            ReturnStmtSyntax("""
+            StmtSyntax("""
               return .init(component.enumerated().map { index, source in
                 return index < lastIndex ? source.ensuringTrailingComma() : source
               })
               """)
           } else {
-            ReturnStmtSyntax("return .init(component)")
+            StmtSyntax("return .init(component)")
           }
         }
       }
       
-    ExtensionDeclSyntax(
-      """
+    DeclSyntax("""
       public extension \(raw: type.syntaxBaseName) {
         init(@\(raw: type.resultBuilderBaseName) itemsBuilder: () -> \(raw: type.syntaxBaseName)) {
           self = itemsBuilder()
         }
       }
-      """
-    )
+      """)
   }
 }

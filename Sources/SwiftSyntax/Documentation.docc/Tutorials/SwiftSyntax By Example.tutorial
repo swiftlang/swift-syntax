@@ -171,7 +171,7 @@
       }
       
       @Step {
-        Then use the `withStatements` method to create a source file
+        Then use the `with*` method to create a source file
         that contains the extracted array of statements.
         
         The syntax tree is immutable. The result of calling `with*` methods is

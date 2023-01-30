@@ -28,7 +28,7 @@ let syntaxTraitsFile = SourceFileSyntax {
       }
     }
 
-    ExtensionDeclSyntax("public extension \(trait.traitName)Syntax") {
+    ExtensionDeclSyntax("public extension \(raw: trait.traitName)Syntax") {
       FunctionDeclSyntax("""
       /// Without this function, the `with` function defined on `SyntaxProtocol`
       /// does not work on existentials of this protocol type.

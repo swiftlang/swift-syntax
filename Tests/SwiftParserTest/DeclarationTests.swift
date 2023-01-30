@@ -1183,7 +1183,7 @@ final class DeclarationTests: XCTestCase {
       substructure: Syntax(
         SourceFileSyntax(
           CodeBlockItemListSyntax {
-            MacroExpansionDeclSyntax(macro: "expand")
+            MacroExpansionDeclSyntax(macro: "expand") {}
           }
         )
       )

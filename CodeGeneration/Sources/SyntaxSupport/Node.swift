@@ -117,9 +117,14 @@ public class Node {
             isOptional: true,
             collectionElementName: unexpectedName
           ),
-          child,
+          child
         ]
-      }
+      } + (children.last != nil ? [Child(
+        name: "UnexpectedAfter\(children.last!.name)",
+        kind: "UnexpectedNodes",
+        isOptional: true,
+        collectionElementName: "UnexpectedAfter\(children.last!.name)"
+      )] : [])
     }
 
     self.nonUnexpectedChildren = children.filter { !$0.isUnexpectedNodes }

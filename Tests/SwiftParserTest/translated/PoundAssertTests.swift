@@ -49,7 +49,7 @@ final class PoundAssertTests: XCTestCase {
       #assert(1️⃣, "error message")
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "expected value in macro expansion")
+        DiagnosticSpec(message: "expected value in macro expansion expression")
       ]
     )
   }
@@ -63,7 +63,7 @@ final class PoundAssertTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(
-          message: "expected ')' to end macro expansion",
+          message: "expected ')' to end macro expansion expression",
           notes: [
             NoteSpec(message: "to match this opening '('")
           ]
@@ -81,7 +81,7 @@ final class PoundAssertTests: XCTestCase {
       """#,
       diagnostics: [
         DiagnosticSpec(
-          message: "expected ')' to end macro expansion",
+          message: "expected ')' to end macro expansion expression",
           notes: [
             NoteSpec(message: "to match this opening '('")
           ]

@@ -749,7 +749,7 @@ final class ExpressionTests: XCTestCase {
       "#keyPath((b:1️⃣)2️⃣",
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected value in tuple"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end macro expansion"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end macro expansion expression"),
       ]
     )
   }
@@ -896,6 +896,10 @@ final class ExpressionTests: XCTestCase {
   }
 
   func testMacroExpansionExpression() {
+    AssertParse(
+      #"#file == $0.path"#
+    )
+
     AssertParse(
       #"let a = #embed("filename.txt")"#
     )

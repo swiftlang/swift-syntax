@@ -959,7 +959,7 @@ extension Parser {
       .poundIfKeyword, .poundEndifKeyword, .poundElseKeyword,
       .poundElseifKeyword,
     ])
-      && !self.atStartOfStatement() && !self.atStartOfDeclaration(preferPoundAsExpression: true)
+      && !self.atStartOfStatement() && !self.atStartOfDeclaration()
     {
       let parsedExpr = self.parseExpression()
       if hasMisplacedTry && !parsedExpr.is(RawTryExprSyntax.self) {

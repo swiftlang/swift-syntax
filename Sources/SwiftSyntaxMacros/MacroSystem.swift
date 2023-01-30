@@ -127,14 +127,14 @@ class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
     for item in node {
       // Expand declaration macros that were parsed as macro expansion
       // expressions in this context.
-      if case let .decl(declItem) = item.item,
-        let declExpansion = declItem.as(MacroExpansionDeclSyntax.self),
-        let macro = macroSystem.macros[declExpansion.macro.text]
+      if case let .expr(exprItem) = item.item,
+        let exprExpansion = exprItem.as(MacroExpansionExprSyntax.self),
+        let macro = macroSystem.macros[exprExpansion.macro.text]
       {
         do {
           if let macro = macro as? DeclarationMacro.Type {
             let expandedItemList = try macro.expansion(
-              of: declExpansion,
+              of: exprExpansion,
               in: context
             )
             newItems.append(
@@ -144,7 +144,7 @@ class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
             )
           } else if let macro = macro as? ExpressionMacro.Type {
             let expandedExpr = try macro.expansion(
-              of: declExpansion,
+              of: exprExpansion,
               in: context
             )
             newItems.append(CodeBlockItemSyntax(item: .init(expandedExpr)))

@@ -16,14 +16,14 @@ import SyntaxSupport
 import Utils
 
 let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: [.blockComment(generateCopyrightHeader(for: "generate-swiftsyntax"))]) {
-  ProtocolDeclSyntax("""
+  DeclSyntax("""
     public protocol SyntaxCollection: SyntaxProtocol, Sequence where Element: SyntaxProtocol {
       /// The number of elements, `present` or `missing`, in this collection.
       var count: Int { get }
     }
     """)
   
-  ExtensionDeclSyntax("""
+  DeclSyntax("""
     public extension SyntaxCollection {
       static var structure: SyntaxNodeStructure {
         return .collection(Element.self)
@@ -39,51 +39,44 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: [.blockComment(gener
       /// versions of the collection with different children.
       """
     
-    StructDeclSyntax("""
+    try! StructDeclSyntax("""
       \(raw: documentation)
       public struct \(raw: node.name): SyntaxCollection, SyntaxHashable
       """) {
       if let collectionElementChoices = node.collectionElementChoices, !collectionElementChoices.isEmpty {
-        EnumDeclSyntax("""
+        try EnumDeclSyntax("""
           @frozen // FIXME: Not actually stable, works around a miscompile
           public enum Element: SyntaxChildChoices
           """) {
           for choiceName in collectionElementChoices {
             let choice = SYNTAX_NODE_MAP[choiceName]!
-            EnumCaseDeclSyntax("case `\(raw: choice.swiftSyntaxKind)`(\(raw: choice.name))")
+            DeclSyntax("case `\(raw: choice.swiftSyntaxKind)`(\(raw: choice.name))")
           }
           
-          VariableDeclSyntax(
-            modifiers: [DeclModifierSyntax(name: .keyword(.public))],
-            name: IdentifierPatternSyntax("_syntaxNode"),
-            type: TypeAnnotationSyntax(
-              colon: .colonToken(),
-              type: TypeSyntax("Syntax")
-            )
-          ) {
+          try VariableDeclSyntax("public var _syntaxNode: Syntax") {
             SwitchStmtSyntax(switchKeyword: .keyword(.switch), expression: ExprSyntax("self")) {
               for choiceName in node.collectionElementChoices ?? [] {
                 let choice = SYNTAX_NODE_MAP[choiceName]!
                 SwitchCaseSyntax("case .\(raw: choice.swiftSyntaxKind)(let node):") {
-                  ReturnStmtSyntax("return node._syntaxNode")
+                  StmtSyntax("return node._syntaxNode")
                 }
               }
             }
           }
           
-          InitializerDeclSyntax("init(_ data: SyntaxData) { self.init(Syntax(data))! }")
+          DeclSyntax("init(_ data: SyntaxData) { self.init(Syntax(data))! }")
           
           for choiceName in node.collectionElementChoices ?? [] {
             let choiceNode = SYNTAX_NODE_MAP[choiceName]!
             if choiceNode.isBase {
-              InitializerDeclSyntax("""
+              DeclSyntax("""
                   public init<Node: \(raw: choiceNode.name)Protocol>(_ node: Node) {
                     self = .\(raw: choiceNode.swiftSyntaxKind)(\(raw: choiceNode.name)(node))
                   }
                   """)
 
             } else {
-              InitializerDeclSyntax("""
+              DeclSyntax("""
                   public init(_ node: \(raw: choiceNode.name)) {
                     self = .\(raw: choiceNode.swiftSyntaxKind)(node)
                   }
@@ -91,65 +84,59 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: [.blockComment(gener
             }
           }
 
-          InitializerDeclSyntax("public init?<S: SyntaxProtocol>(_ node: S)") {
+          try InitializerDeclSyntax("public init?<S: SyntaxProtocol>(_ node: S)") {
             for choiceName in node.collectionElementChoices ?? [] {
               let choiceNode = SYNTAX_NODE_MAP[choiceName]!
-              IfStmtSyntax("""
-                  if let node = node.as(\(raw: choiceNode.name).self) {
-                    self = .\(raw: choiceNode.swiftSyntaxKind)(node)
-                    return
-                  }
-                  """)
+              StmtSyntax("""
+                if let node = node.as(\(raw: choiceNode.name).self) {
+                  self = .\(raw: choiceNode.swiftSyntaxKind)(node)
+                  return
+                }
+                """)
             }
             
-            ReturnStmtSyntax("return nil")
+            StmtSyntax("return nil")
           }
           
-          VariableDeclSyntax(
-            modifiers: [DeclModifierSyntax(name: .keyword(.public)), DeclModifierSyntax(name: .keyword(.static))],
-            name: IdentifierPatternSyntax("structure"),
-            type: TypeAnnotationSyntax(
-              colon: .colonToken(),
-              type: TypeSyntax("SyntaxNodeStructure")
-            )
-          ) {
+          try VariableDeclSyntax("public static var structure: SyntaxNodeStructure") {
             ReturnStmtSyntax(
               expression: FunctionCallExprSyntax(
-                callee: MemberAccessExprSyntax(".choices")) {
+                callee: ExprSyntax(".choices")) {
                   TupleExprElementSyntax(
                     expression: ArrayExprSyntax {
                       for choiceName in node.collectionElementChoices ?? [] {
                         let choice = SYNTAX_NODE_MAP[choiceName]!
                         ArrayElementSyntax(
-                          expression: FunctionCallExprSyntax("\n.node(\(raw: choice.name).self)")
+                          expression: ExprSyntax( "\n.node(\(raw: choice.name).self)")
                         )
                       }
-                    })
+                    }
+                  )
                 }
             )
           }
         }
       } else {
-        TypealiasDeclSyntax("public typealias Element = \(raw: node.collectionElementType.syntaxBaseName)")
+        DeclSyntax("public typealias Element = \(raw: node.collectionElementType.syntaxBaseName)")
       }
       
-      VariableDeclSyntax("public let _syntaxNode: Syntax")
+      DeclSyntax("public let _syntaxNode: Syntax")
       
-      VariableDeclSyntax("""
+      DeclSyntax("""
         @_spi(RawSyntax)
         public var layoutView: RawSyntaxLayoutView {
           data.raw.layoutView!
         }
         """)
       
-      InitializerDeclSyntax("""
+      DeclSyntax("""
         public init?<S: SyntaxProtocol>(_ node: S) {
           guard node.raw.kind == .\(raw: node.swiftSyntaxKind) else { return nil }
           self._syntaxNode = node._syntaxNode
         }
         """)
       
-      InitializerDeclSyntax("""
+      DeclSyntax("""
         /// Creates a Syntax node from the provided root and data. This assumes
         /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
         /// is undefined.
@@ -159,7 +146,7 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: [.blockComment(gener
         }
         """)
       
-      InitializerDeclSyntax("""
+      DeclSyntax("""
         public init(_ children: [Element]) {
           let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
             let raw = RawSyntax.makeLayout(kind: SyntaxKind.\(raw: node.swiftSyntaxKind),
@@ -170,12 +157,12 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: [.blockComment(gener
         }
         """)
       
-      VariableDeclSyntax("""
+      DeclSyntax("""
         /// The number of elements, `present` or `missing`, in this collection.
         public var count: Int { return raw.layoutView!.children.count }
         """)
       
-      FunctionDeclSyntax("""
+      DeclSyntax("""
         /// Creates a new `\(raw: node.name)` by replacing the underlying layout with
         /// a different set of raw syntax nodes.
         ///
@@ -191,7 +178,7 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: [.blockComment(gener
           }
         """)
       
-      FunctionDeclSyntax("""
+      DeclSyntax("""
         /// Creates a new `\(raw: node.name)` by appending the provided syntax element
         /// to the children.
         ///
@@ -204,7 +191,7 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: [.blockComment(gener
         }
         """)
       
-      FunctionDeclSyntax("""
+      DeclSyntax("""
         /// Creates a new `\(raw: node.name)` by prepending the provided syntax element
         /// to the children.
         ///
@@ -216,7 +203,7 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: [.blockComment(gener
         }
         """)
 
-      FunctionDeclSyntax("""
+      DeclSyntax("""
         /// Creates a new `\(raw: node.name)` by inserting the provided syntax element
         /// at the provided index in the children.
         ///
@@ -235,7 +222,7 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: [.blockComment(gener
         }
         """)
 
-      FunctionDeclSyntax("""
+      DeclSyntax("""
         /// Creates a new `\(raw: node.name)` by replacing the syntax element
         /// at the provided index.
         ///
@@ -254,7 +241,7 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: [.blockComment(gener
         }
         """)
 
-      FunctionDeclSyntax("""
+      DeclSyntax("""
         /// Creates a new `\(raw: node.name)` by removing the syntax element at the
         /// provided index.
         ///
@@ -268,7 +255,7 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: [.blockComment(gener
         }
         """)
 
-      FunctionDeclSyntax("""
+      DeclSyntax("""
         /// Creates a new `\(raw: node.name)` by removing the first element.
         ///
         /// - Returns: A new `\(raw: node.name)` with the first element removed.
@@ -279,7 +266,7 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: [.blockComment(gener
         }
         """)
       
-      FunctionDeclSyntax("""
+      DeclSyntax("""
         /// Creates a new `\(raw: node.name)` by removing the last element.
         ///
         /// - Returns: A new `\(raw: node.name)` with the last element removed.
@@ -290,20 +277,20 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: [.blockComment(gener
         }
         """)
       
-      FunctionDeclSyntax("""
+      DeclSyntax("""
         public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
           return nil
         }
         """)
     }
     
-    ExtensionDeclSyntax("""
+    try! ExtensionDeclSyntax("""
       /// Conformance for `\(raw: node.name)` to the `BidirectionalCollection` protocol.
       extension \(raw: node.name): BidirectionalCollection
       """) {
-      TypealiasDeclSyntax("public typealias Index = SyntaxChildrenIndex")
+      DeclSyntax("public typealias Index = SyntaxChildrenIndex")
       
-      StructDeclSyntax("""
+      DeclSyntax("""
         public struct Iterator: IteratorProtocol {
           private let parent: Syntax
           private var iterator: RawSyntaxChildren.Iterator
@@ -324,13 +311,13 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: [.blockComment(gener
         }
         """)
       
-      FunctionDeclSyntax("""
+      DeclSyntax("""
         public func makeIterator() -> Iterator {
           return Iterator(parent: Syntax(self), rawChildren: rawChildren)
         }
         """)
       
-      VariableDeclSyntax("""
+      DeclSyntax("""
         private var rawChildren: RawSyntaxChildren {
           // We know children in a syntax collection cannot be missing. So we can
           // use the low-level and faster RawSyntaxChildren collection instead of
@@ -339,38 +326,38 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: [.blockComment(gener
         }
         """)
       
-      VariableDeclSyntax("""
+      DeclSyntax("""
         public var startIndex: SyntaxChildrenIndex {
           return rawChildren.startIndex
         }
         """)
       
-      VariableDeclSyntax("""
+      DeclSyntax("""
         public var endIndex: SyntaxChildrenIndex {
           return rawChildren.endIndex
         }
         """)
       
-      FunctionDeclSyntax("""
+      DeclSyntax("""
         public func index(after index: SyntaxChildrenIndex) -> SyntaxChildrenIndex {
           return rawChildren.index(after: index)
         }
         """)
       
-      FunctionDeclSyntax("""
+      DeclSyntax("""
         public func index(before index: SyntaxChildrenIndex) -> SyntaxChildrenIndex {
           return rawChildren.index(before: index)
         }
         """)
       
-      FunctionDeclSyntax("""
+      DeclSyntax("""
         public func distance(from start: SyntaxChildrenIndex, to end: SyntaxChildrenIndex)
         -> Int {
           return rawChildren.distance(from: start, to: end)
         }
         """)
       
-      SubscriptDeclSyntax("""
+      DeclSyntax("""
         public subscript(position: SyntaxChildrenIndex) -> Element {
           let (raw, info) = rawChildren[position]
           let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
@@ -382,7 +369,7 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: [.blockComment(gener
   }
   
   for node in SYNTAX_NODES where node.isSyntaxCollection{
-    ExtensionDeclSyntax("""
+    DeclSyntax("""
       extension \(raw: node.name): CustomReflectable {
         public var customMirror: Mirror {
           return Mirror(self, unlabeledChildren: self.map{ $0 })

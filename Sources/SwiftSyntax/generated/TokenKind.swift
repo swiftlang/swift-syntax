@@ -98,7 +98,7 @@ public enum TokenKind: Hashable {
   case stringSegment(String)
   
   /// The textual representation of this token kind.
-  @_spi(Testing) 
+  @_spi(Testing)
   public var text: String {
     switch self {
     case .wildcard: 
@@ -199,7 +199,7 @@ public enum TokenKind: Hashable {
   }
   
   /// If this token kind always has the same syntax text, that syntax text, otherwise `nil`.
-  @_spi(RawSyntax) 
+  @_spi(RawSyntax)
   public var defaultText: SyntaxText? {
     switch self {
     case .wildcard: 
@@ -916,7 +916,7 @@ public struct RawTokenKind: Equatable, Hashable {
     return RawTokenKind(base: .keyword, keyword: keyword)
   }
   
-  @_spi(RawSyntax) 
+  @_spi(RawSyntax)
   public var defaultText: SyntaxText? {
     switch self.base {
     case .eof: 

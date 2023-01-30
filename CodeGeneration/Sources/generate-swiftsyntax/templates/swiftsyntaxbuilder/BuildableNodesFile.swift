@@ -38,7 +38,7 @@ let buildableNodesFile = SourceFileSyntax {
 
 private func convertFromSyntaxProtocolToSyntaxType(child: Child) -> ExprSyntax {
   if child.type.isBaseType && child.nodeChoices.isEmpty {
-    return ExprSyntax(FunctionCallExprSyntax("\(raw: child.type.syntaxBaseName)(fromProtocol: \(raw: child.swiftName))"))
+    return ExprSyntax("\(raw: child.type.syntaxBaseName)(fromProtocol: \(raw: child.swiftName))")
   } else {
     return ExprSyntax(IdentifierExprSyntax(identifier: .identifier(child.swiftName)))
   }
@@ -67,12 +67,12 @@ private func createConvenienceInitializer(node: Node) -> InitializerDeclSyntax? 
       if child.type.builderInitializableType != child.type {
         let param = Node.from(type: child.type).singleNonDefaultedChild
         if child.isOptional {
-          produceExpr = ExprSyntax(FunctionCallExprSyntax("\(raw: child.swiftName)Builder().map { \(raw: child.type.syntaxBaseName)(\(raw: param.swiftName): $0) }"))
+          produceExpr = ExprSyntax("\(raw: child.swiftName)Builder().map { \(raw: child.type.syntaxBaseName)(\(raw: param.swiftName): $0) }")
         } else {
-          produceExpr = ExprSyntax(FunctionCallExprSyntax("\(raw: child.type.syntaxBaseName)(\(raw: param.swiftName): \(raw: child.swiftName)Builder())"))
+          produceExpr = ExprSyntax("\(raw: child.type.syntaxBaseName)(\(raw: param.swiftName): \(raw: child.swiftName)Builder())")
         }
       } else {
-        produceExpr = ExprSyntax(FunctionCallExprSyntax("\(raw: child.swiftName)Builder()"))
+        produceExpr = ExprSyntax("\(raw: child.swiftName)Builder()")
       }
       builderParameters.append(FunctionParameterSyntax(
         "@\(builderInitializableType.resultBuilderBaseName) \(child.swiftName)Builder: () throws-> \(builderInitializableType.syntax)",
@@ -105,7 +105,7 @@ private func createConvenienceInitializer(node: Node) -> InitializerDeclSyntax? 
         }
         FunctionParameterSyntax("trailingTrivia: Trivia? = nil", for: .functionParameters)
       },
-      throwsOrRethrowsKeyword: .keyword(.rethrows))
+      effectSpecifiers: DeclEffectSpecifiersSyntax(throwsSpecifier: .keyword(.rethrows)))
   ) {
     FunctionCallExprSyntax(callee: ExprSyntax("try self.init")) {
       TupleExprElementSyntax(label: "leadingTrivia", expression: ExprSyntax("leadingTrivia"))

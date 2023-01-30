@@ -897,6 +897,10 @@ final class ExpressionTests: XCTestCase {
 
   func testMacroExpansionExpression() {
     AssertParse(
+      #"#file == $0.path"#
+    )
+
+    AssertParse(
       #"let a = #embed("filename.txt")"#
     )
 

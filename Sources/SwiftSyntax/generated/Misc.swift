@@ -1108,7 +1108,7 @@ extension SyntaxKind {
     case .macroExpansionDecl: 
       return "macro expansion"
     case .macroExpansionExpr: 
-      return "macro expansion expression"
+      return "macro expansion"
     case .matchingPatternCondition: 
       return "pattern matching"
     case .memberAccessExpr: 

@@ -174,7 +174,7 @@
         Then use `with(\.statements, <#new statements#>)*` method to create a source file
         that contains the extracted array of statements.
         
-        The syntax tree is immutable. The result of calling `with*` methods is
+        The syntax tree is immutable. The result of calling `with` is
         always a copy of a syntax tree node with the specified child element
         changed.
         

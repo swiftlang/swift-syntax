@@ -14,7 +14,7 @@ import SwiftSyntax
 
 /// Describes a macro that is explicitly expanded as an expression.
 public protocol ExpressionMacro: FreestandingMacro {
-  /// Expand a macro described by the given macro expansion expression
+  /// Expand a macro described by the given freestanding macro expansion
   /// within the given context to produce a replacement expression.
   static func expansion<
     Node: FreestandingMacroExpansionSyntax,

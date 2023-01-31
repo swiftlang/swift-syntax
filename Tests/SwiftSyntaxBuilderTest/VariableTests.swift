@@ -175,9 +175,9 @@ final class VariableTests: XCTestCase {
   }
 
   func testComputedProperty() throws {
-    let testCases: [UInt: (VariableDeclSyntax, String)] = [
+    let testCases: [UInt: (VariableDeclSyntax, String)] = try [
       #line: (
-        VariableDeclSyntax(name: "test", type: TypeAnnotationSyntax(type: TypeSyntax("Int"))) {
+        VariableDeclSyntax("var test: Int") {
           SequenceExprSyntax {
             IntegerLiteralExprSyntax(4)
             BinaryOperatorExprSyntax(text: "+")
@@ -208,8 +208,8 @@ final class VariableTests: XCTestCase {
     }
   }
 
-  func testAccessorList() {
-    let buildable = VariableDeclSyntax(name: "test", type: TypeAnnotationSyntax(type: TypeSyntax("Int"))) {
+  func testAccessorList() throws {
+    let buildable = try VariableDeclSyntax("var test: Int") {
       AccessorDeclSyntax(accessorKind: .keyword(.get)) {
         SequenceExprSyntax {
           IntegerLiteralExprSyntax(4)
@@ -235,8 +235,8 @@ final class VariableTests: XCTestCase {
     )
   }
 
-  func testAttributedVariables() {
-    let testCases: [UInt: (VariableDeclSyntax, String)] = [
+  func testAttributedVariables() throws {
+    let testCases: [UInt: (VariableDeclSyntax, String)] = try [
       #line: (
         VariableDeclSyntax(
           attributes: AttributeListSyntax { AttributeSyntax(attributeName: TypeSyntax("Test")) },
@@ -249,11 +249,7 @@ final class VariableTests: XCTestCase {
         """
       ),
       #line: (
-        VariableDeclSyntax(
-          attributes: AttributeListSyntax { AttributeSyntax(attributeName: TypeSyntax("Test")) },
-          name: "y",
-          type: TypeAnnotationSyntax(type: TypeSyntax("String"))
-        ) {
+        VariableDeclSyntax("@Test var y: String") {
           StringLiteralExprSyntax(content: "Hello world!")
         },
         """
@@ -263,16 +259,7 @@ final class VariableTests: XCTestCase {
         """
       ),
       #line: (
-        VariableDeclSyntax(
-          attributes: AttributeListSyntax {
-            AttributeSyntax("WithArgs") {
-              TupleExprElementSyntax(expression: ExprSyntax("value1"))
-              TupleExprElementSyntax(label: "label", expression: ExprSyntax("value2"))
-            }
-          },
-          name: "z",
-          type: TypeAnnotationSyntax(type: TypeSyntax("Float"))
-        ) {
+        VariableDeclSyntax("@WithArgs(value1, label: value2) var z: Float") {
           FloatLiteralExprSyntax(0.0)
         },
         """

@@ -402,29 +402,6 @@ extension VariableDeclSyntax {
       )
     }
   }
-
-  /// Creates a computed property with the given accessor.
-  public init(
-    leadingTrivia: Trivia = [],
-    attributes: AttributeListSyntax? = nil,
-    modifiers: ModifierListSyntax? = nil,
-    name: PatternSyntax,
-    type: TypeAnnotationSyntax,
-    @CodeBlockItemListBuilder accessor: () -> CodeBlockItemListSyntax
-  ) {
-    self.init(
-      leadingTrivia: leadingTrivia,
-      attributes: attributes?.with(\.trailingTrivia, .space),
-      modifiers: modifiers,
-      letOrVarKeyword: .keyword(.var)
-    ) {
-      PatternBindingSyntax(
-        pattern: name,
-        typeAnnotation: type,
-        accessor: .getter(CodeBlockSyntax(statements: accessor()))
-      )
-    }
-  }
 }
 
 //==========================================================================//

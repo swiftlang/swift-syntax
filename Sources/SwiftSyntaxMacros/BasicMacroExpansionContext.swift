@@ -122,11 +122,10 @@ extension BasicMacroExpansionContext: MacroExpansionContext {
     resultString += "fMu"
 
     // Mangle the index.
-    if uniqueIndex == 0 {
-      resultString += "_"
-    } else {
+    if uniqueIndex > 0 {
       resultString += "\(uniqueIndex - 1)"
     }
+    resultString += "_"
 
     return TokenSyntax(.identifier(resultString), presence: .present)
   }

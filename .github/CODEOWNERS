@@ -11,7 +11,7 @@
 * @ahoppen
 
 # Macros
-/Sources/_SwiftSyntaxMacros @DougGregor
+/Sources/SwiftSyntaxMacros @DougGregor
 /Tests/SwiftSyntaxMacrosTest @DougGregor
 
 # SwiftOperators

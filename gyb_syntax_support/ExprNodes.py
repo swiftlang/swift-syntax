@@ -35,7 +35,8 @@ EXPR_NODES = [
                    token_choices=[
                        'PostfixQuestionMarkToken',
                        'ExclamationMarkToken',
-                   ]),
+                   ],
+                   requires_trailing_space=True),
              Child('Expression', kind='Expr'),
          ]),
 
@@ -222,7 +223,7 @@ EXPR_NODES = [
              Child('LeftSquare', kind='LeftSquareBracketToken'),
              Child('Content', kind='Syntax',
                    node_choices=[
-                       Child('Colon', kind='ColonToken'),
+                       Child('Colon', kind='ColonToken', requires_trailing_space=False),
                        Child('Elements', kind='DictionaryElementList'),
                    ], is_indented=True),
              Child('RightSquare', kind='RightSquareBracketToken'),

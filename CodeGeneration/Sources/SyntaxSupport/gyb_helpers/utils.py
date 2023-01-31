@@ -59,7 +59,13 @@ def make_swift_child(child, spaces):
     mapped_choices = [f'.token(tokenKind: "{choice.name}Token")' for (choice, text) in child.token_choices if text is None]
     mapped_choices += [f'.keyword(text: "{text}")' for (choice, text) in child.token_choices if text is not None]
     joined_choices = ', '.join(mapped_choices)
-    kind = f'.token(choices: [{joined_choices}])'
+    token_arguments = [f'choices: [{joined_choices}]']
+    if child.requires_leading_space is not None:
+      token_arguments += ['requiresLeadingSpace: ' + ('true' if child.requires_leading_space else 'false')]
+    if child.requires_trailing_space is not None:
+      token_arguments += ['requiresTrailingSpace: ' + ('true' if child.requires_trailing_space else 'false')]
+    arguments = ', '.join(token_arguments)
+    kind = f'.token({arguments})'
   elif child.collection_element_name:
     kind = f'.collection(kind: "{child.syntax_kind}", collectionElementName: "{child.collection_element_name}")'
   elif child.node_choices:

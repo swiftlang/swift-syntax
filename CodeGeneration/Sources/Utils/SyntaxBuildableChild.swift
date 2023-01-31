@@ -47,7 +47,7 @@ public extension Child {
 
   var defaultInitialization: ExprSyntax? {
     switch kind {
-    case .token(choices: let choices):
+    case .token(choices: let choices, requiresLeadingSpace: _, requiresTrailingSpace: _):
       if choices.count == 1, case .keyword(text: let text) = choices.first {
         var textChoice = text
         if textChoice == "init" {
@@ -66,7 +66,7 @@ public extension Child {
   /// `assert` statement that verifies the variable with name var_name and of type
   /// `TokenSyntax` contains one of the supported text options. Otherwise return `nil`.
   func generateAssertStmtTextChoices(varName: String) -> FunctionCallExprSyntax? {
-    guard case .token(choices: let choices) = kind else {
+    guard case .token(choices: let choices, requiresLeadingSpace: _, requiresTrailingSpace: _) = kind else {
       return nil
     }
 

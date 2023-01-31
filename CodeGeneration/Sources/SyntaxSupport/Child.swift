@@ -32,7 +32,9 @@ public enum ChildKind {
   /// The child is a collection of `kind`.
   case collection(kind: String, collectionElementName: String)
   /// The child is a token that matches one of the given `choices`.
-  case token(choices: [TokenChoice])
+  /// If `requiresLeadingSpace` or `requiresTrailingSpace` is not `nil`, it
+  /// overrides the default leading/trailing space behavior of the token.
+  case token(choices: [TokenChoice], requiresLeadingSpace: Bool? = nil, requiresTrailingSpace: Bool? = nil)
 
   public var isNodeChoices: Bool {
     if case .nodeChoices = self {
@@ -67,7 +69,7 @@ public class Child {
       return "syntax"
     case .collection(kind: let kind, collectionElementName: _):
       return kind
-    case .token(choices: let choices):
+    case .token(choices: let choices, requiresLeadingSpace: _, requiresTrailingSpace: _):
       if choices.count == 1 {
         switch choices.first! {
         case .keyword: return "KeywordToken"

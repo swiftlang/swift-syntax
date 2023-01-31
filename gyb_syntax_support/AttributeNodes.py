@@ -493,7 +493,8 @@ ATTRIBUTE_NODES = [
          The arguments for the '@_dynamicReplacement' attribute
          ''',
          children=[
-           Child('ForLabel', kind='KeywordToken', token_choices=['KeywordToken|for']),
+           Child('ForLabel', kind='KeywordToken', token_choices=['KeywordToken|for'],
+                 requires_trailing_space=False),
            Child('Colon', kind='ColonToken'),
            Child('Declname', kind='DeclName'),
          ]),

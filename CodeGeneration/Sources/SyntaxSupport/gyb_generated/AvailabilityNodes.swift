@@ -26,7 +26,7 @@ public let AVAILABILITY_NODES: [Node] = [
          Child(name: "Entry",
                kind: .nodeChoices(choices: [
                  Child(name: "Token",
-                       kind: .token(choices: [.token(tokenKind: "BinaryOperatorToken"), .token(tokenKind: "IdentifierToken")])),
+                       kind: .token(choices: [.token(tokenKind: "BinaryOperatorToken"), .token(tokenKind: "IdentifierToken")], requiresLeadingSpace: false, requiresTrailingSpace: false)),
                  Child(name: "AvailabilityVersionRestriction",
                        kind: .node(kind: "AvailabilityVersionRestriction")),
                  Child(name: "AvailabilityLabeledArgument",

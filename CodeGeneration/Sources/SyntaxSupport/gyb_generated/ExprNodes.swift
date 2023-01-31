@@ -52,7 +52,7 @@ public let EXPR_NODES: [Node] = [
          Child(name: "TryKeyword",
                kind: .token(choices: [.keyword(text: "try")])),
          Child(name: "QuestionOrExclamationMark",
-               kind: .token(choices: [.token(tokenKind: "PostfixQuestionMarkToken"), .token(tokenKind: "ExclamationMarkToken")]),
+               kind: .token(choices: [.token(tokenKind: "PostfixQuestionMarkToken"), .token(tokenKind: "ExclamationMarkToken")], requiresTrailingSpace: true),
                isOptional: true),
          Child(name: "Expression",
                kind: .node(kind: "Expr"))
@@ -284,7 +284,7 @@ public let EXPR_NODES: [Node] = [
          Child(name: "Content",
                kind: .nodeChoices(choices: [
                  Child(name: "Colon",
-                       kind: .token(choices: [.token(tokenKind: "ColonToken")])),
+                       kind: .token(choices: [.token(tokenKind: "ColonToken")], requiresTrailingSpace: false)),
                  Child(name: "Elements",
                        kind: .node(kind: "DictionaryElementList"))
                ]),

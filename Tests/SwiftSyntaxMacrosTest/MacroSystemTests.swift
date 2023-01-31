@@ -732,7 +732,7 @@ final class MacroSystemTests: XCTestCase {
     let t2 = context.createUniqueName("mine")
     XCTAssertNotEqual(t1.description, t2.description)
     XCTAssertEqual(t1.description, "__macro_local_4minefMu_")
-    XCTAssertEqual(t2.description, "__macro_local_4minefMu0")
+    XCTAssertEqual(t2.description, "__macro_local_4minefMu0_")
   }
 
   func testContextIndependence() {

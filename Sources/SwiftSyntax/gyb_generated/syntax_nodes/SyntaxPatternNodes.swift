@@ -13,55 +13,79 @@
 //===----------------------------------------------------------------------===//
 
 
-// MARK: - MissingPatternSyntax
+// MARK: - ExpressionPatternSyntax
 
-public struct MissingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
+public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .missingPattern else { return nil }
+    guard node.raw.kind == .expressionPattern else { return nil }
     self._syntaxNode = node._syntaxNode
   }
 
-  /// Creates a `MissingPatternSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a `ExpressionPatternSyntax` node from the given `SyntaxData`. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .missingPattern)
+    assert(data.raw.kind == .expressionPattern)
     self._syntaxNode = Syntax(data)
   }
 
-  public init(
+  public init<E: ExprSyntaxProtocol>(
     leadingTrivia: Trivia? = nil,
-    _ unexpected: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBeforeExpression: UnexpectedNodesSyntax? = nil,
+    expression: E,
+    _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed 
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpected))) { (arena, _) in
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeExpression, expression, unexpectedAfterExpression))) { (arena, _) in
       let layout: [RawSyntax?] = [
-        unexpected?.raw,
+        unexpectedBeforeExpression?.raw,
+        expression.raw,
+        unexpectedAfterExpression?.raw,
       ]
       let raw = RawSyntax.makeLayout(
-        kind: SyntaxKind.missingPattern, from: layout, arena: arena,
+        kind: SyntaxKind.expressionPattern, from: layout, arena: arena,
         leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
 
-  public var unexpected: UnexpectedNodesSyntax? {
+  public var unexpectedBeforeExpression: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = MissingPatternSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = ExpressionPatternSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var expression: ExprSyntax {
+    get {
+      return ExprSyntax(data.child(at: 1, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = ExpressionPatternSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var unexpectedAfterExpression: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = ExpressionPatternSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public static var structure: SyntaxNodeStructure {
     return .layout([
-      \Self.unexpected,
+      \Self.unexpectedBeforeExpression,
+      \Self.expression,
+      \Self.unexpectedAfterExpression,
     ])
   }
 
@@ -69,16 +93,122 @@ public struct MissingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     switch index.data?.indexInParent {
     case 0:
       return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
     default:
       fatalError("Invalid index")
     }
   }
 }
 
-extension MissingPatternSyntax: CustomReflectable {
+extension ExpressionPatternSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "unexpected": unexpected.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeExpression": unexpectedBeforeExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "expression": Syntax(expression).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterExpression": unexpectedAfterExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+    ])
+  }
+}
+
+// MARK: - IdentifierPatternSyntax
+
+public struct IdentifierPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .identifierPattern else { return nil }
+    self._syntaxNode = node._syntaxNode
+  }
+
+  /// Creates a `IdentifierPatternSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .identifierPattern)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeIdentifier: UnexpectedNodesSyntax? = nil,
+    identifier: TokenSyntax,
+    _ unexpectedAfterIdentifier: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed 
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeIdentifier, identifier, unexpectedAfterIdentifier))) { (arena, _) in
+      let layout: [RawSyntax?] = [
+        unexpectedBeforeIdentifier?.raw,
+        identifier.raw,
+        unexpectedAfterIdentifier?.raw,
+      ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.identifierPattern, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+
+  public var unexpectedBeforeIdentifier: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = IdentifierPatternSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var identifier: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = IdentifierPatternSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var unexpectedAfterIdentifier: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = IdentifierPatternSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeIdentifier,
+      \Self.identifier,
+      \Self.unexpectedAfterIdentifier,
+    ])
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
+}
+
+extension IdentifierPatternSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "unexpectedBeforeIdentifier": unexpectedBeforeIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "identifier": Syntax(identifier).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterIdentifier": unexpectedAfterIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -213,79 +343,55 @@ extension IsTypePatternSyntax: CustomReflectable {
   }
 }
 
-// MARK: - IdentifierPatternSyntax
+// MARK: - MissingPatternSyntax
 
-public struct IdentifierPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
+public struct MissingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .identifierPattern else { return nil }
+    guard node.raw.kind == .missingPattern else { return nil }
     self._syntaxNode = node._syntaxNode
   }
 
-  /// Creates a `IdentifierPatternSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a `MissingPatternSyntax` node from the given `SyntaxData`. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .identifierPattern)
+    assert(data.raw.kind == .missingPattern)
     self._syntaxNode = Syntax(data)
   }
 
   public init(
     leadingTrivia: Trivia? = nil,
-    _ unexpectedBeforeIdentifier: UnexpectedNodesSyntax? = nil,
-    identifier: TokenSyntax,
-    _ unexpectedAfterIdentifier: UnexpectedNodesSyntax? = nil,
+    _ unexpected: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed 
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeIdentifier, identifier, unexpectedAfterIdentifier))) { (arena, _) in
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpected))) { (arena, _) in
       let layout: [RawSyntax?] = [
-        unexpectedBeforeIdentifier?.raw,
-        identifier.raw,
-        unexpectedAfterIdentifier?.raw,
+        unexpected?.raw,
       ]
       let raw = RawSyntax.makeLayout(
-        kind: SyntaxKind.identifierPattern, from: layout, arena: arena,
+        kind: SyntaxKind.missingPattern, from: layout, arena: arena,
         leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
 
-  public var unexpectedBeforeIdentifier: UnexpectedNodesSyntax? {
+  public var unexpected: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = IdentifierPatternSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public var identifier: TokenSyntax {
-    get {
-      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
-    }
-    set(value) {
-      self = IdentifierPatternSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public var unexpectedAfterIdentifier: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = IdentifierPatternSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = MissingPatternSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
   public static var structure: SyntaxNodeStructure {
     return .layout([
-      \Self.unexpectedBeforeIdentifier,
-      \Self.identifier,
-      \Self.unexpectedAfterIdentifier,
+      \Self.unexpected,
     ])
   }
 
@@ -293,22 +399,16 @@ public struct IdentifierPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     switch index.data?.indexInParent {
     case 0:
       return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
     default:
       fatalError("Invalid index")
     }
   }
 }
 
-extension IdentifierPatternSyntax: CustomReflectable {
+extension MissingPatternSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "unexpectedBeforeIdentifier": unexpectedBeforeIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "identifier": Syntax(identifier).asProtocol(SyntaxProtocol.self),
-      "unexpectedAfterIdentifier": unexpectedAfterIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpected": unexpected.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -492,236 +592,6 @@ extension TuplePatternSyntax: CustomReflectable {
   }
 }
 
-// MARK: - WildcardPatternSyntax
-
-public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
-  public let _syntaxNode: Syntax
-
-  public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .wildcardPattern else { return nil }
-    self._syntaxNode = node._syntaxNode
-  }
-
-  /// Creates a `WildcardPatternSyntax` node from the given `SyntaxData`. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
-  internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .wildcardPattern)
-    self._syntaxNode = Syntax(data)
-  }
-
-  public init(
-    leadingTrivia: Trivia? = nil,
-    _ unexpectedBeforeWildcard: UnexpectedNodesSyntax? = nil,
-    wildcard: TokenSyntax = .wildcardToken(),
-    _ unexpectedBetweenWildcardAndTypeAnnotation: UnexpectedNodesSyntax? = nil,
-    typeAnnotation: TypeAnnotationSyntax? = nil,
-    _ unexpectedAfterTypeAnnotation: UnexpectedNodesSyntax? = nil,
-    trailingTrivia: Trivia? = nil
-  ) {
-    // Extend the lifetime of all parameters so their arenas don't get destroyed 
-    // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeWildcard, wildcard, unexpectedBetweenWildcardAndTypeAnnotation, typeAnnotation, unexpectedAfterTypeAnnotation))) { (arena, _) in
-      let layout: [RawSyntax?] = [
-        unexpectedBeforeWildcard?.raw,
-        wildcard.raw,
-        unexpectedBetweenWildcardAndTypeAnnotation?.raw,
-        typeAnnotation?.raw,
-        unexpectedAfterTypeAnnotation?.raw,
-      ]
-      let raw = RawSyntax.makeLayout(
-        kind: SyntaxKind.wildcardPattern, from: layout, arena: arena,
-        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
-  }
-
-  public var unexpectedBeforeWildcard: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = WildcardPatternSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public var wildcard: TokenSyntax {
-    get {
-      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
-    }
-    set(value) {
-      self = WildcardPatternSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public var unexpectedBetweenWildcardAndTypeAnnotation: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = WildcardPatternSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public var typeAnnotation: TypeAnnotationSyntax? {
-    get {
-      return data.child(at: 3, parent: Syntax(self)).map(TypeAnnotationSyntax.init)
-    }
-    set(value) {
-      self = WildcardPatternSyntax(data.replacingChild(at: 3, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public var unexpectedAfterTypeAnnotation: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = WildcardPatternSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-      \Self.unexpectedBeforeWildcard,
-      \Self.wildcard,
-      \Self.unexpectedBetweenWildcardAndTypeAnnotation,
-      \Self.typeAnnotation,
-      \Self.unexpectedAfterTypeAnnotation,
-    ])
-  }
-
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension WildcardPatternSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-      "unexpectedBeforeWildcard": unexpectedBeforeWildcard.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "wildcard": Syntax(wildcard).asProtocol(SyntaxProtocol.self),
-      "unexpectedBetweenWildcardAndTypeAnnotation": unexpectedBetweenWildcardAndTypeAnnotation.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "typeAnnotation": typeAnnotation.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "unexpectedAfterTypeAnnotation": unexpectedAfterTypeAnnotation.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-    ])
-  }
-}
-
-// MARK: - ExpressionPatternSyntax
-
-public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
-  public let _syntaxNode: Syntax
-
-  public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .expressionPattern else { return nil }
-    self._syntaxNode = node._syntaxNode
-  }
-
-  /// Creates a `ExpressionPatternSyntax` node from the given `SyntaxData`. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
-  internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .expressionPattern)
-    self._syntaxNode = Syntax(data)
-  }
-
-  public init<E: ExprSyntaxProtocol>(
-    leadingTrivia: Trivia? = nil,
-    _ unexpectedBeforeExpression: UnexpectedNodesSyntax? = nil,
-    expression: E,
-    _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,
-    trailingTrivia: Trivia? = nil
-  ) {
-    // Extend the lifetime of all parameters so their arenas don't get destroyed 
-    // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeExpression, expression, unexpectedAfterExpression))) { (arena, _) in
-      let layout: [RawSyntax?] = [
-        unexpectedBeforeExpression?.raw,
-        expression.raw,
-        unexpectedAfterExpression?.raw,
-      ]
-      let raw = RawSyntax.makeLayout(
-        kind: SyntaxKind.expressionPattern, from: layout, arena: arena,
-        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
-  }
-
-  public var unexpectedBeforeExpression: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = ExpressionPatternSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public var expression: ExprSyntax {
-    get {
-      return ExprSyntax(data.child(at: 1, parent: Syntax(self))!)
-    }
-    set(value) {
-      self = ExpressionPatternSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public var unexpectedAfterExpression: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = ExpressionPatternSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-      \Self.unexpectedBeforeExpression,
-      \Self.expression,
-      \Self.unexpectedAfterExpression,
-    ])
-  }
-
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension ExpressionPatternSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-      "unexpectedBeforeExpression": unexpectedBeforeExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "expression": Syntax(expression).asProtocol(SyntaxProtocol.self),
-      "unexpectedAfterExpression": unexpectedAfterExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-    ])
-  }
-}
-
 // MARK: - ValueBindingPatternSyntax
 
 public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
@@ -848,6 +718,136 @@ extension ValueBindingPatternSyntax: CustomReflectable {
       "unexpectedBetweenLetOrVarKeywordAndValuePattern": unexpectedBetweenLetOrVarKeywordAndValuePattern.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "valuePattern": Syntax(valuePattern).asProtocol(SyntaxProtocol.self),
       "unexpectedAfterValuePattern": unexpectedAfterValuePattern.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+    ])
+  }
+}
+
+// MARK: - WildcardPatternSyntax
+
+public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .wildcardPattern else { return nil }
+    self._syntaxNode = node._syntaxNode
+  }
+
+  /// Creates a `WildcardPatternSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .wildcardPattern)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeWildcard: UnexpectedNodesSyntax? = nil,
+    wildcard: TokenSyntax = .wildcardToken(),
+    _ unexpectedBetweenWildcardAndTypeAnnotation: UnexpectedNodesSyntax? = nil,
+    typeAnnotation: TypeAnnotationSyntax? = nil,
+    _ unexpectedAfterTypeAnnotation: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed 
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeWildcard, wildcard, unexpectedBetweenWildcardAndTypeAnnotation, typeAnnotation, unexpectedAfterTypeAnnotation))) { (arena, _) in
+      let layout: [RawSyntax?] = [
+        unexpectedBeforeWildcard?.raw,
+        wildcard.raw,
+        unexpectedBetweenWildcardAndTypeAnnotation?.raw,
+        typeAnnotation?.raw,
+        unexpectedAfterTypeAnnotation?.raw,
+      ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.wildcardPattern, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+
+  public var unexpectedBeforeWildcard: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = WildcardPatternSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var wildcard: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = WildcardPatternSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var unexpectedBetweenWildcardAndTypeAnnotation: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = WildcardPatternSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var typeAnnotation: TypeAnnotationSyntax? {
+    get {
+      return data.child(at: 3, parent: Syntax(self)).map(TypeAnnotationSyntax.init)
+    }
+    set(value) {
+      self = WildcardPatternSyntax(data.replacingChild(at: 3, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var unexpectedAfterTypeAnnotation: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = WildcardPatternSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeWildcard,
+      \Self.wildcard,
+      \Self.unexpectedBetweenWildcardAndTypeAnnotation,
+      \Self.typeAnnotation,
+      \Self.unexpectedAfterTypeAnnotation,
+    ])
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
+}
+
+extension WildcardPatternSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "unexpectedBeforeWildcard": unexpectedBeforeWildcard.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "wildcard": Syntax(wildcard).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenWildcardAndTypeAnnotation": unexpectedBetweenWildcardAndTypeAnnotation.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "typeAnnotation": typeAnnotation.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedAfterTypeAnnotation": unexpectedAfterTypeAnnotation.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }

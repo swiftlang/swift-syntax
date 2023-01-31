@@ -88,7 +88,8 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
   case .token:
     assertionFailure("validateLayout for .token kind is not supported")
   case .missing:
-    assert(layout.count == 0)
+    assert(layout.count == 1)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     break
   case .missingDecl:
     assert(layout.count == 5)
@@ -99,16 +100,20 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
     break
   case .missingExpr:
-    assert(layout.count == 0)
+    assert(layout.count == 1)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     break
   case .missingStmt:
-    assert(layout.count == 0)
+    assert(layout.count == 1)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     break
   case .missingType:
-    assert(layout.count == 0)
+    assert(layout.count == 1)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     break
   case .missingPattern:
-    assert(layout.count == 0)
+    assert(layout.count == 1)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     break
   case .codeBlockItem:
     assert(layout.count == 5)

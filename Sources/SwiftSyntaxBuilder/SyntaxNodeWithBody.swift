@@ -23,7 +23,7 @@ import SwiftSyntax
 public struct PartialSyntaxNodeString: SyntaxExpressibleByStringInterpolation {
   let sourceText: [UInt8]
 
-  public init(stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
+  public init(stringInterpolation: SyntaxStringInterpolation) {
     self.sourceText = stringInterpolation.sourceText
   }
 }

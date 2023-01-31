@@ -471,15 +471,34 @@ final class StringInterpolationTests: XCTestCase {
   }
 
   func testInvalidTrivia() {
-    var interpolation = String.StringInterpolation(literalCapacity: 1, interpolationCount: 0)
-    interpolation.appendLiteral("/*comment*/ invalid /*comm*/")
-    XCTAssertThrowsError(try Trivia(stringInterpolationOrThrow: interpolation)) { error in
+    let invalid = Trivia("/*comment*/ invalid /*comm*/")
+    XCTAssertEqual(invalid, [.blockComment("/*comment*/"), .spaces(1), .unexpectedText("invalid"), .spaces(1), .blockComment("/*comm*/")])
+
+    XCTAssertThrowsError(try Trivia(validating: "/*comment*/ invalid /*comm*/")) { error in
       AssertStringsEqualWithDiff(
         String(describing: error),
         """
 
         1 │ /*comment*/ invalid /*comm*/
           ∣             ╰─ unexpected trivia 'invalid'
+
+        """
+      )
+    }
+  }
+
+  func testInvalidSyntax() {
+    let invalid = DeclSyntax("return 1")
+    XCTAssert(invalid.hasError)
+
+    XCTAssertThrowsError(try DeclSyntax(validating: "return 1")) { error in
+      AssertStringsEqualWithDiff(
+        String(describing: error),
+        """
+
+        1 │ return 1
+          ∣ │       ╰─ expected declaration
+          ∣ ╰─ unexpected code 'return 1' before declaration
 
         """
       )

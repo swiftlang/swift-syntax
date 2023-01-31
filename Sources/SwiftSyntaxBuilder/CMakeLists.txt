@@ -12,6 +12,7 @@ add_swift_host_library(SwiftSyntaxBuilder
   ResultBuilderExtensions.swift
   Syntax+StringInterpolation.swift
   SyntaxNodeWithBody.swift
+  ValidatingSyntaxNodes.swift
   WithTrailingCommaSyntax+EnsuringTrailingComma.swift
 
 

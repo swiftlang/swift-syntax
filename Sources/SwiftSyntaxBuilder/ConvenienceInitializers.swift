@@ -221,20 +221,6 @@ extension IntegerLiteralExprSyntax: ExpressibleByIntegerLiteral {
   }
 }
 
-// MARK: - MemberAccessExpr
-
-extension MemberAccessExprSyntax {
-  /// Creates a `MemberAccessExpr` using the provided parameters.
-  public init(
-    base: ExprSyntax? = nil,
-    dot: TokenSyntax = .periodToken(),
-    name: String,
-    declNameArguments: DeclNameArgumentsSyntax? = nil
-  ) {
-    self.init(base: base, dot: dot, name: .identifier(name), declNameArguments: declNameArguments)
-  }
-}
-
 // MARK: - StringLiteralExpr
 
 extension String {

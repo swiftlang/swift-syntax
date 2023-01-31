@@ -74,7 +74,7 @@ private extension TriviaPiece {
       fatalError("Unknown associated value type")
     }
     return ExprSyntax(
-      FunctionCallExprSyntax(callee: MemberAccessExprSyntax(name: label!)) {
+      FunctionCallExprSyntax(callee: ExprSyntax(".\(raw: label!)")) {
         TupleExprElementSyntax(expression: arg)
       }
     )
@@ -137,7 +137,7 @@ extension SyntaxProtocol {
         tokenKindArgument = nil
       } else if case .keyword(let keyword) = tokenKind {
         tokenInitializerName = "keyword"
-        tokenKindArgument = ExprSyntax(MemberAccessExprSyntax(name: String(describing: keyword)))
+        tokenKindArgument = ExprSyntax(".\(raw: keyword)")
       } else if tokenKind.decomposeToRaw().rawKind.defaultText != nil {
         tokenInitializerName = "\(String(describing: tokenKind))Token"
         tokenKindArgument = nil
@@ -147,7 +147,7 @@ extension SyntaxProtocol {
         tokenKindArgument = ExprSyntax(StringLiteralExprSyntax(content: token.text))
       }
       return ExprSyntax(
-        FunctionCallExprSyntax(callee: MemberAccessExprSyntax(name: tokenInitializerName)) {
+        FunctionCallExprSyntax(callee: ExprSyntax(".\(raw: tokenInitializerName)")) {
           if let tokenKindArgument = tokenKindArgument {
             TupleExprElementSyntax(expression: tokenKindArgument)
           }

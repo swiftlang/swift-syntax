@@ -19,7 +19,7 @@ final class ExtensionDeclTests: XCTestCase {
     let keywords = ["associatedtype", "class"].map { keyword -> VariableDeclSyntax in
       // We need to use `CodeBlock` here to ensure there is braces around.
       let body = CodeBlockSyntax {
-        FunctionCallExprSyntax(callee: MemberAccessExprSyntax(base: "TokenSyntax", name: "\(keyword)Keyword"))
+        FunctionCallExprSyntax(callee: ExprSyntax("TokenSyntax.\(raw: keyword)Keyword"))
       }
 
       return VariableDeclSyntax(

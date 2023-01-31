@@ -35,11 +35,11 @@ final class DoStmtTests: XCTestCase {
           CatchItemListSyntax {
             CatchItemSyntax(
               pattern: PatternSyntax("Error3"),
-              whereClause: WhereClauseSyntax(guardResult: MemberAccessExprSyntax(base: "error", name: "isError4"))
+              whereClause: WhereClauseSyntax(guardResult: ExprSyntax("error.isError4"))
             )
           }
         ) {
-          ThrowStmtSyntax(expression: MemberAccessExprSyntax(base: "Error4", name: "error3"))
+          ThrowStmtSyntax(expression: ExprSyntax("Error4.error3"))
         },
         CatchClauseSyntax {
           FunctionCallExprSyntax(callee: ExprSyntax("print")) {
@@ -85,11 +85,11 @@ final class DoStmtTests: XCTestCase {
           CatchItemListSyntax {
             CatchItemSyntax(
               pattern: PatternSyntax("Error3"),
-              whereClause: WhereClauseSyntax(guardResult: MemberAccessExprSyntax(base: "error", name: "isError4"))
+              whereClause: WhereClauseSyntax(guardResult: ExprSyntax("error.isError4"))
             )
           }
         ) {
-          ThrowStmtSyntax(expression: MemberAccessExprSyntax(base: "Error4", name: "error3"))
+          ThrowStmtSyntax(expression: ExprSyntax("Error4.error3"))
         },
         CatchClauseSyntax {
           FunctionCallExprSyntax(callee: ExprSyntax("print")) {
@@ -135,11 +135,11 @@ final class DoStmtTests: XCTestCase {
           CatchItemListSyntax {
             CatchItemSyntax(
               pattern: PatternSyntax("Error3"),
-              whereClause: WhereClauseSyntax(guardResult: MemberAccessExprSyntax(base: "error", name: "isError4"))
+              whereClause: WhereClauseSyntax(guardResult: ExprSyntax("error.isError4"))
             )
           }
         ) {
-          ThrowStmtSyntax(expression: MemberAccessExprSyntax(base: "Error4", name: "error3"))
+          ThrowStmtSyntax(expression: ExprSyntax("Error4.error3"))
         },
         CatchClauseSyntax {
           FunctionCallExprSyntax(callee: ExprSyntax("print")) {

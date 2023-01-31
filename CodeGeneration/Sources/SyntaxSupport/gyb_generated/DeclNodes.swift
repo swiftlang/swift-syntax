@@ -444,7 +444,7 @@ public let DECL_NODES: [Node] = [
 
   Node(name: "MemberDeclListItem",
        nameForDiagnostics: nil,
-       description: "A member declaration of a type consisting of a declaration and anoptional semicolon;",
+       description: "A member declaration of a type consisting of a declaration and an optional semicolon;",
        kind: "Syntax",
        children: [
          Child(name: "Decl",
@@ -799,7 +799,7 @@ public let DECL_NODES: [Node] = [
 
   Node(name: "EnumCaseElement",
        nameForDiagnostics: nil,
-       description: "An element of an enum case, containing the name of the case and,optionally, either associated values or an assignment to a raw value.",
+       description: "An element of an enum case, containing the name of the case and, optionally, either associated values or an assignment to a raw value.",
        kind: "Syntax",
        traits: [
          "WithTrailingComma"
@@ -818,7 +818,7 @@ public let DECL_NODES: [Node] = [
                isOptional: true),
          Child(name: "TrailingComma",
                kind: .token(choices: [.token(tokenKind: "CommaToken")]),
-               description: "The trailing comma of this element, if the case hasmultiple elements.",
+               description: "The trailing comma of this element, if the case has multiple elements.",
                isOptional: true)
        ]),
 
@@ -830,7 +830,7 @@ public let DECL_NODES: [Node] = [
 
   Node(name: "EnumCaseDecl",
        nameForDiagnostics: "enum case",
-       description: "A `case` declaration of a Swift `enum`. It can have 1 or more`EnumCaseElement`s inside, each declaring a different case of theenum.",
+       description: "A `case` declaration of a Swift `enum`. It can have 1 or more `EnumCaseElement`s inside, each declaring a different case of the enum.",
        kind: "Decl",
        traits: [
          "Attributed"
@@ -882,11 +882,11 @@ public let DECL_NODES: [Node] = [
                isOptional: true),
          Child(name: "InheritanceClause",
                kind: .node(kind: "TypeInheritanceClause"),
-               description: "The inheritance clause describing conformances or rawvalues for this enum.",
+               description: "The inheritance clause describing conformances or raw values for this enum.",
                isOptional: true),
          Child(name: "GenericWhereClause",
                kind: .node(kind: "GenericWhereClause"),
-               description: "The `where` clause that applies to the generic parameters ofthis enum.",
+               description: "The `where` clause that applies to the generic parameters of this enum.",
                isOptional: true),
          Child(name: "Members",
                kind: .node(kind: "MemberDeclBlock"),
@@ -908,7 +908,7 @@ public let DECL_NODES: [Node] = [
                isOptional: true),
          Child(name: "Modifiers",
                kind: .collection(kind: "ModifierList", collectionElementName: "Modifier"),
-               description: "The declaration modifiers applied to the 'operator'declaration.",
+               description: "The declaration modifiers applied to the 'operator' declaration.",
                isOptional: true,
                classification: "Attribute"),
          Child(name: "OperatorKeyword",
@@ -967,7 +967,7 @@ public let DECL_NODES: [Node] = [
                isOptional: true),
          Child(name: "Modifiers",
                kind: .collection(kind: "ModifierList", collectionElementName: "Modifier"),
-               description: "The declaration modifiers applied to the 'precedencegroup'declaration.",
+               description: "The declaration modifiers applied to the 'precedencegroup' declaration.",
                isOptional: true),
          Child(name: "PrecedencegroupKeyword",
                kind: .token(choices: [.keyword(text: "precedencegroup")])),
@@ -992,7 +992,7 @@ public let DECL_NODES: [Node] = [
 
   Node(name: "PrecedenceGroupRelation",
        nameForDiagnostics: "'relation' property of precedencegroup",
-       description: "Specify the new precedence group's relation to existing precedencegroups.",
+       description: "Specify the new precedence group's relation to existing precedence groups.",
        kind: "Syntax",
        children: [
          Child(name: "HigherThanOrLowerThan",
@@ -1003,7 +1003,7 @@ public let DECL_NODES: [Node] = [
                kind: .token(choices: [.token(tokenKind: "ColonToken")])),
          Child(name: "OtherNames",
                kind: .collection(kind: "PrecedenceGroupNameList", collectionElementName: "OtherName"),
-               description: "The name of other precedence group to which this precedencegroup relates.")
+               description: "The name of other precedence group to which this precedence group relates.")
        ]),
 
   Node(name: "PrecedenceGroupNameList",
@@ -1024,7 +1024,7 @@ public let DECL_NODES: [Node] = [
 
   Node(name: "PrecedenceGroupAssignment",
        nameForDiagnostics: "'assignment' property of precedencegroup",
-       description: "Specifies the precedence of an operator when used in an operationthat includes optional chaining.",
+       description: "Specifies the precedence of an operator when used in an operation that includes optional chaining.",
        kind: "Syntax",
        children: [
          Child(name: "AssignmentKeyword",
@@ -1033,12 +1033,12 @@ public let DECL_NODES: [Node] = [
                kind: .token(choices: [.token(tokenKind: "ColonToken")])),
          Child(name: "Flag",
                kind: .token(choices: [.keyword(text: "true"), .keyword(text: "false")]),
-               description: "When true, an operator in the corresponding precedence groupuses the same grouping rules during optional chaining as theassignment operators from the standard library. Otherwise,operators in the precedence group follows the same optionalchaining rules as operators that don't perform assignment.")
+               description: "When true, an operator in the corresponding precedence group uses the same grouping rules during optional chaining as the assignment operators from the standard library. Otherwise, operators in the precedence group follows the same optional chaining rules as operators that don't perform assignment.")
        ]),
 
   Node(name: "PrecedenceGroupAssociativity",
        nameForDiagnostics: "'associativity' property of precedencegroup",
-       description: "Specifies how a sequence of operators with the same precedence levelare grouped together in the absence of grouping parentheses.",
+       description: "Specifies how a sequence of operators with the same precedence level are grouped together in the absence of grouping parentheses.",
        kind: "Syntax",
        children: [
          Child(name: "AssociativityKeyword",
@@ -1048,7 +1048,7 @@ public let DECL_NODES: [Node] = [
                kind: .token(choices: [.token(tokenKind: "ColonToken")])),
          Child(name: "Value",
                kind: .token(choices: [.keyword(text: "left"), .keyword(text: "right"), .keyword(text: "none")]),
-               description: "Operators that are `left`-associative group left-to-right.Operators that are `right`-associative group right-to-left.Operators that are specified with an associativity of `none`don't associate at all")
+               description: "Operators that are `left`-associative group left-to-right. Operators that are `right`-associative group right-to-left. Operators that are specified with an associativity of `none` don't associate at all")
        ]),
 
   Node(name: "MacroDecl",

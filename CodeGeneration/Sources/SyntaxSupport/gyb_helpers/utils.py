@@ -96,7 +96,7 @@ def flat_documentation(indented_documentation):
   """
   Creates a single-line documentation string from indented documentation as written in 'gyb_syntax_support'
   """
-  return "".join(dedented_lines(indented_documentation)).replace("\n", "").replace('"','\\"').strip()
+  return " ".join(dedented_lines(indented_documentation)).replace("\n", "").replace('"','\\"').strip()
 
 def make_swift_attribute(attr):
   """

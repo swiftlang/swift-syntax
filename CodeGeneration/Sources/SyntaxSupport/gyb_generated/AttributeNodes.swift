@@ -73,7 +73,7 @@ public let ATTRIBUTE_NODES: [Node] = [
                  Child(name: "DocumentationArguments",
                        kind: .node(kind: "DocumentationAttributeArguments"))
                ]),
-               description: "The arguments of the attribute. In case the attributetakes multiple arguments, they are gather in theappropriate takes first.",
+               description: "The arguments of the attribute. In case the attribute takes multiple arguments, they are gather in the appropriate takes first.",
                isOptional: true),
          Child(name: "RightParen",
                kind: .token(choices: [.token(tokenKind: "RightParenToken")]),
@@ -116,7 +116,7 @@ public let ATTRIBUTE_NODES: [Node] = [
 
   Node(name: "LabeledSpecializeEntry",
        nameForDiagnostics: "attribute argument",
-       description: "A labeled argument for the `@_specialize` attribute like`exported: true`",
+       description: "A labeled argument for the `@_specialize` attribute like `exported: true`",
        kind: "Syntax",
        traits: [
          "WithTrailingComma"
@@ -139,7 +139,7 @@ public let ATTRIBUTE_NODES: [Node] = [
 
   Node(name: "TargetFunctionEntry",
        nameForDiagnostics: "attribute argument",
-       description: "A labeled argument for the `@_specialize` attribute with a functiondecl value like`target: myFunc(_:)`",
+       description: "A labeled argument for the `@_specialize` attribute with a function decl value like `target: myFunc(_:)`",
        kind: "Syntax",
        traits: [
          "WithTrailingComma"
@@ -169,18 +169,18 @@ public let ATTRIBUTE_NODES: [Node] = [
                description: "The base name of the protocol's requirement."),
          Child(name: "DeclNameArguments",
                kind: .node(kind: "DeclNameArguments"),
-               description: "The argument labels of the protocol's requirement if itis a function requirement.",
+               description: "The argument labels of the protocol's requirement if it is a function requirement.",
                isOptional: true)
        ]),
 
   Node(name: "ImplementsAttributeArguments",
        nameForDiagnostics: "@_implements arguemnts",
-       description: "The arguments for the `@_implements` attribute of the form`Type, methodName(arg1Label:arg2Label:)`",
+       description: "The arguments for the `@_implements` attribute of the form `Type, methodName(arg1Label:arg2Label:)`",
        kind: "Syntax",
        children: [
          Child(name: "Type",
                kind: .node(kind: "Type"),
-               description: "The type for which the method with this attributeimplements a requirement."),
+               description: "The type for which the method with this attribute implements a requirement."),
          Child(name: "Comma",
                kind: .token(choices: [.token(tokenKind: "CommaToken")]),
                description: "The comma separating the type and method name"),
@@ -189,13 +189,13 @@ public let ATTRIBUTE_NODES: [Node] = [
                description: "The base name of the protocol's requirement."),
          Child(name: "DeclNameArguments",
                kind: .node(kind: "DeclNameArguments"),
-               description: "The argument labels of the protocol's requirement if itis a function requirement.",
+               description: "The argument labels of the protocol's requirement if it is a function requirement.",
                isOptional: true)
        ]),
 
   Node(name: "ObjCSelectorPiece",
        nameForDiagnostics: "Objective-C selector piece",
-       description: "A piece of an Objective-C selector. Either consisting of just anidentifier for a nullary selector, an identifier and a colon for alabeled argument or just a colon for an unlabeled argument",
+       description: "A piece of an Objective-C selector. Either consisting of just an identifier for a nullary selector, an identifier and a colon for a labeled argument or just a colon for an unlabeled argument",
        kind: "Syntax",
        children: [
          Child(name: "Name",
@@ -213,7 +213,7 @@ public let ATTRIBUTE_NODES: [Node] = [
 
   Node(name: "DifferentiableAttributeArguments",
        nameForDiagnostics: "'@differentiable' arguments",
-       description: "The arguments for the `@differentiable` attribute: an optionaldifferentiability kind, an optional differentiability parameter clause,and an optional 'where' clause.",
+       description: "The arguments for the `@differentiable` attribute: an optional differentiability kind, an optional differentiability parameter clause, and an optional 'where' clause.",
        kind: "Syntax",
        children: [
          Child(name: "DiffKind",
@@ -228,7 +228,7 @@ public let ATTRIBUTE_NODES: [Node] = [
                isOptional: true),
          Child(name: "DiffParamsComma",
                kind: .token(choices: [.token(tokenKind: "CommaToken")]),
-               description: "The comma following the differentiability parameters clause,if it exists.",
+               description: "The comma following the differentiability parameters clause, if it exists.",
                isOptional: true),
          Child(name: "WhereClause",
                kind: .node(kind: "GenericWhereClause"),
@@ -276,7 +276,7 @@ public let ATTRIBUTE_NODES: [Node] = [
 
   Node(name: "DifferentiabilityParam",
        nameForDiagnostics: "differentiability parameter",
-       description: "A differentiability parameter: either the \"self\" identifier, a functionparameter name, or a function parameter index.",
+       description: "A differentiability parameter: either the \"self\" identifier, a function parameter name, or a function parameter index.",
        kind: "Syntax",
        traits: [
          "WithTrailingComma"
@@ -291,7 +291,7 @@ public let ATTRIBUTE_NODES: [Node] = [
 
   Node(name: "DerivativeRegistrationAttributeArguments",
        nameForDiagnostics: "attribute arguments",
-       description: "The arguments for the '@derivative(of:)' and '@transpose(of:)'attributes: the 'of:' label, the original declaration name, and anoptional differentiability parameter list.",
+       description: "The arguments for the '@derivative(of:)' and '@transpose(of:)' attributes: the 'of:' label, the original declaration name, and an optional differentiability parameter list.",
        kind: "Syntax",
        children: [
          Child(name: "OfLabel",
@@ -299,13 +299,13 @@ public let ATTRIBUTE_NODES: [Node] = [
                description: "The \"of\" label."),
          Child(name: "Colon",
                kind: .token(choices: [.token(tokenKind: "ColonToken")]),
-               description: "The colon separating the \"of\" label and the originaldeclaration name."),
+               description: "The colon separating the \"of\" label and the original declaration name."),
          Child(name: "OriginalDeclName",
                kind: .node(kind: "QualifiedDeclName"),
                description: "The referenced original declaration name."),
          Child(name: "Period",
                kind: .token(choices: [.token(tokenKind: "PeriodToken")]),
-               description: "The period separating the original declaration name and theaccessor name.",
+               description: "The period separating the original declaration name and the accessor name.",
                isOptional: true),
          Child(name: "AccessorKind",
                kind: .token(choices: [.keyword(text: "get"), .keyword(text: "set")]),
@@ -321,7 +321,7 @@ public let ATTRIBUTE_NODES: [Node] = [
 
   Node(name: "QualifiedDeclName",
        nameForDiagnostics: "declaration name",
-       description: "An optionally qualified function declaration name (e.g. `+(_:_:)`,`A.B.C.foo(_:_:)`).",
+       description: "An optionally qualified function declaration name (e.g. `+(_:_:)`, `A.B.C.foo(_:_:)`).",
        kind: "Syntax",
        children: [
          Child(name: "BaseType",
@@ -336,7 +336,7 @@ public let ATTRIBUTE_NODES: [Node] = [
                description: "The base name of the referenced function."),
          Child(name: "Arguments",
                kind: .node(kind: "DeclNameArguments"),
-               description: "The argument labels of the referenced function, optionallyspecified.",
+               description: "The argument labels of the referenced function, optionally specified.",
                isOptional: true)
        ]),
 
@@ -353,7 +353,7 @@ public let ATTRIBUTE_NODES: [Node] = [
                description: "The colon separating \"before\" and the parameter list."),
          Child(name: "VersionList",
                kind: .collection(kind: "AvailabilityVersionRestrictionList", collectionElementName: "Availability"),
-               description: "The list of OS versions in which the declaration became ABIstable.")
+               description: "The list of OS versions in which the declaration became ABI stable.")
        ]),
 
   Node(name: "AvailabilityVersionRestrictionList",
@@ -371,7 +371,7 @@ public let ATTRIBUTE_NODES: [Node] = [
                classification: "Keyword"),
          Child(name: "TrailingComma",
                kind: .token(choices: [.token(tokenKind: "CommaToken")]),
-               description: "A trailing comma if the argument is followed by anotherargument",
+               description: "A trailing comma if the argument is followed by another argument",
                isOptional: true)
        ]),
 

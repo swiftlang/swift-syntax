@@ -4577,7 +4577,7 @@ extension EnumCaseElementListSyntax: BidirectionalCollection {
   }
 }
 
-/// A list of expressions connected by operators. This list is containedby a `SequenceExprSyntax`.
+/// A list of expressions connected by operators. This list is contained by a `SequenceExprSyntax`.
 public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = ExprSyntax
   
@@ -9516,7 +9516,7 @@ extension TupleTypeElementListSyntax: BidirectionalCollection {
   }
 }
 
-/// A collection of syntax nodes that occurred in the source code butcould not be used to form a valid syntax tree.
+/// A collection of syntax nodes that occurred in the source code but could not be used to form a valid syntax tree.
 public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = Syntax
   

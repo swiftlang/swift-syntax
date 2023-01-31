@@ -191,7 +191,7 @@ public let EXPR_NODES: [Node] = [
 
   Node(name: "ExprList",
        nameForDiagnostics: nil,
-       description: "A list of expressions connected by operators. This list is containedby a `SequenceExprSyntax`.",
+       description: "A list of expressions connected by operators. This list is contained by a `SequenceExprSyntax`.",
        kind: "SyntaxCollection",
        element: "Expr",
        elementName: "Expression"),

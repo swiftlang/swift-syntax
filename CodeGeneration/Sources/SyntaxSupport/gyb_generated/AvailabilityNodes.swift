@@ -20,7 +20,7 @@ public let AVAILABILITY_NODES: [Node] = [
 
   Node(name: "AvailabilityArgument",
        nameForDiagnostics: "availability argument",
-       description: "A single argument to an `@available` argument like `*`, `iOS 10.1`,or `message: \"This has been deprecated\"`.",
+       description: "A single argument to an `@available` argument like `*`, `iOS 10.1`, or `message: \"This has been deprecated\"`.",
        kind: "Syntax",
        children: [
          Child(name: "Entry",
@@ -35,13 +35,13 @@ public let AVAILABILITY_NODES: [Node] = [
                description: "The actual argument"),
          Child(name: "TrailingComma",
                kind: .token(choices: [.token(tokenKind: "CommaToken")]),
-               description: "A trailing comma if the argument is followed by anotherargument",
+               description: "A trailing comma if the argument is followed by another argument",
                isOptional: true)
        ]),
 
   Node(name: "AvailabilityLabeledArgument",
        nameForDiagnostics: "availability argument",
-       description: "A argument to an `@available` attribute that consists of a label anda value, e.g. `message: \"This has been deprecated\"`.",
+       description: "A argument to an `@available` attribute that consists of a label and a value, e.g. `message: \"This has been deprecated\"`.",
        kind: "Syntax",
        children: [
          Child(name: "Label",
@@ -62,12 +62,12 @@ public let AVAILABILITY_NODES: [Node] = [
 
   Node(name: "AvailabilityVersionRestriction",
        nameForDiagnostics: "version restriction",
-       description: "An argument to `@available` that restricts the availability on acertain platform to a version, e.g. `iOS 10` or `swift 3.4`.",
+       description: "An argument to `@available` that restricts the availability on a certain platform to a version, e.g. `iOS 10` or `swift 3.4`.",
        kind: "Syntax",
        children: [
          Child(name: "Platform",
                kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
-               description: "The name of the OS on which the availability should berestricted or 'swift' if the availability should berestricted based on a Swift version.",
+               description: "The name of the OS on which the availability should be restricted or 'swift' if the availability should be restricted based on a Swift version.",
                classification: "Keyword"),
          Child(name: "Version",
                kind: .node(kind: "VersionTuple"),
@@ -76,15 +76,15 @@ public let AVAILABILITY_NODES: [Node] = [
 
   Node(name: "VersionTuple",
        nameForDiagnostics: "version tuple",
-       description: "A version number of the form major.minor.patch in which the minorand patch part may be omitted.",
+       description: "A version number of the form major.minor.patch in which the minor and patch part may be omitted.",
        kind: "Syntax",
        children: [
          Child(name: "MajorMinor",
                kind: .token(choices: [.token(tokenKind: "IntegerLiteralToken"), .token(tokenKind: "FloatingLiteralToken")]),
-               description: "In case the version consists only of the major version, aninteger literal that specifies the major version. In casethe version consists of major and minor version number, afloating literal in which the decimal part is interpretedas the minor version."),
+               description: "In case the version consists only of the major version, an integer literal that specifies the major version. In case the version consists of major and minor version number, a floating literal in which the decimal part is interpreted as the minor version."),
          Child(name: "PatchPeriod",
                kind: .token(choices: [.token(tokenKind: "PeriodToken")]),
-               description: "If the version contains a patch number, the periodseparating the minor from the patch number.",
+               description: "If the version contains a patch number, the period separating the minor from the patch number.",
                isOptional: true),
          Child(name: "PatchVersion",
                kind: .token(choices: [.token(tokenKind: "IntegerLiteralToken")]),

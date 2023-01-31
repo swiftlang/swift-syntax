@@ -75,7 +75,7 @@ public let COMMON_NODES: [Node] = [
 
   Node(name: "CodeBlockItem",
        nameForDiagnostics: nil,
-       description: "A CodeBlockItem is any Syntax node that appears on its own line insidea CodeBlock.",
+       description: "A CodeBlockItem is any Syntax node that appears on its own line inside a CodeBlock.",
        kind: "Syntax",
        children: [
          Child(name: "Item",
@@ -151,7 +151,7 @@ public let COMMON_NODES: [Node] = [
 
   Node(name: "UnexpectedNodes",
        nameForDiagnostics: nil,
-       description: "A collection of syntax nodes that occurred in the source code butcould not be used to form a valid syntax tree.",
+       description: "A collection of syntax nodes that occurred in the source code but could not be used to form a valid syntax tree.",
        kind: "SyntaxCollection",
        element: "Syntax"),
 

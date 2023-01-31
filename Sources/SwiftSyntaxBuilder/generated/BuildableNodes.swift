@@ -107,7 +107,7 @@ extension DoStmtSyntax {
   }
 }
 
-/// A `case` declaration of a Swift `enum`. It can have 1 or more`EnumCaseElement`s inside, each declaring a different case of theenum.
+/// A `case` declaration of a Swift `enum`. It can have 1 or more `EnumCaseElement`s inside, each declaring a different case of the enum.
 extension EnumCaseDeclSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
   

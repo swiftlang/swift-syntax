@@ -13,6 +13,26 @@
 @_spi(RawSyntax) import SwiftParser
 @_spi(RawSyntax) import SwiftSyntax
 
+// MARK: - CustomAttribute
+
+extension AttributeSyntax {
+  /// A convenience initializer that allows passing in arguments using a result builder
+  /// and automatically adds parentheses as needed, similar to the convenience
+  /// initializer for ``FunctionCallExpr``.
+  public init(
+    _ attributeName: TypeSyntax,
+    @TupleExprElementListBuilder argumentList: () -> TupleExprElementListSyntax? = { nil }
+  ) {
+    let argumentList = argumentList()
+    self.init(
+      attributeName: attributeName,
+      leftParen: argumentList != nil ? .leftParenToken() : nil,
+      argument: argumentList.map(AttributeSyntax.Argument.argumentList),
+      rightParen: argumentList != nil ? .rightParenToken() : nil
+    )
+  }
+}
+
 // MARK: - BinaryOperatorExpr
 
 extension BinaryOperatorExprSyntax {
@@ -47,26 +67,6 @@ extension CatchClauseSyntax {
       catchKeyword: .keyword(.catch, trailingTrivia: catchItems.isEmpty ? [] : .space),
       catchItems: catchItems,
       body: CodeBlockSyntax(statements: bodyBuilder())
-    )
-  }
-}
-
-// MARK: - CustomAttribute
-
-extension AttributeSyntax {
-  /// A convenience initializer that allows passing in arguments using a result builder
-  /// and automatically adds parentheses as needed, similar to the convenience
-  /// initializer for ``FunctionCallExpr``.
-  public init(
-    _ attributeName: TypeSyntax,
-    @TupleExprElementListBuilder argumentList: () -> TupleExprElementListSyntax? = { nil }
-  ) {
-    let argumentList = argumentList()
-    self.init(
-      attributeName: attributeName,
-      leftParen: argumentList != nil ? .leftParenToken() : nil,
-      argument: argumentList.map(AttributeSyntax.Argument.argumentList),
-      rightParen: argumentList != nil ? .rightParenToken() : nil
     )
   }
 }

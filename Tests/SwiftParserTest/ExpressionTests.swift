@@ -803,3 +803,154 @@ final class ExpressionTests: XCTestCase {
     )
   }
 }
+
+final class StatementExpressionTests: XCTestCase {
+  func testIfExprInCoercion() {
+    AssertParse(
+      """
+      func foo() {
+        if .random() { 0 } else { 1 } as Int
+      }
+      """
+    )
+  }
+  func testSwitchExprInCoercion() {
+    AssertParse(
+      """
+      func foo() {
+        switch Bool.random() { case true: 0 case false: 1 } as Int
+      }
+      """
+    )
+  }
+  func testIfExprInReturn() {
+    AssertParse(
+      """
+      func foo() {
+        return if .random() { 0 } else { 1 }
+      }
+      """
+    )
+  }
+  func testSwitchExprInReturn() {
+    AssertParse(
+      """
+      func foo() {
+        return switch Bool.random() { case true: 0 case false: 1 }
+      }
+      """
+    )
+  }
+  func testTryIf1() {
+    AssertParse(
+      """
+      func foo() -> Int {
+        try if .random() { 0 } else { 1 }
+      }
+      """
+    )
+  }
+  func testTryIf2() {
+    AssertParse(
+      """
+      func foo() -> Int {
+        return try if .random() { 0 } else { 1 }
+      }
+      """
+    )
+  }
+  func testTryIf3() {
+    AssertParse(
+      """
+      func foo() -> Int {
+        let x = try if .random() { 0 } else { 1 }
+        return x
+      }
+      """
+    )
+  }
+  func testAwaitIf1() {
+    AssertParse(
+      """
+      func foo() async -> Int {
+        await if .random() { 0 } else { 1 }
+      }
+      """
+    )
+  }
+  func testAwaitIf2() {
+    AssertParse(
+      """
+      func foo() async -> Int {
+        return await if .random() { 0 } else { 1 }
+      }
+      """
+    )
+  }
+  func testAwaitIf3() {
+    AssertParse(
+      """
+      func foo() async -> Int {
+        let x = await if .random() { 0 } else { 1 }
+        return x
+      }
+      """
+    )
+  }
+  func testTrySwitch1() {
+    AssertParse(
+      """
+      func foo() -> Int {
+        try switch Bool.random() { case true: 0 case false: 1 }
+      }
+      """
+    )
+  }
+  func testTrySwitch2() {
+    AssertParse(
+      """
+      func foo() -> Int {
+        return try switch Bool.random() { case true: 0 case false: 1 }
+      }
+      """
+    )
+  }
+  func testTrySwitch3() {
+    AssertParse(
+      """
+      func foo() -> Int {
+        let x = try switch Bool.random() { case true: 0 case false: 1 }
+        return x
+      }
+      """
+    )
+  }
+  func testAwaitSwitch1() {
+    AssertParse(
+      """
+      func foo() async -> Int {
+        await switch Bool.random() { case true: 0 case false: 1 }
+      }
+      """
+    )
+  }
+  func testAwaitSwitch2() {
+    AssertParse(
+      """
+      func foo() async -> Int {
+        return await switch Bool.random() { case true: 0 case false: 1 }
+      }
+      """
+    )
+  }
+  func testAwaitSwitch3() {
+    AssertParse(
+      """
+      func foo() async -> Int {
+        let x = await switch Bool.random() { case true: 0 case false: 1 }
+        return x
+      }
+      """
+    )
+  }
+}

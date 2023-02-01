@@ -1158,7 +1158,7 @@ final class ExpressionTests: XCTestCase {
     AssertParse(
       "a 1️⃣\u{a0}+ 2",
       diagnostics: [
-        DiagnosticSpec(message: "non-breaking space (U+00A0) used instead of regular space", fixIts: ["replace non-breaking space by ' '"])
+        DiagnosticSpec(message: "non-breaking space (U+00A0) used instead of regular space", severity: .warning, fixIts: ["replace non-breaking space by ' '"])
       ],
       fixedSource: "a  + 2"
     )
@@ -1181,6 +1181,15 @@ final class ExpressionTests: XCTestCase {
       \#t aq
       \#t """
       """#
+    )
+  }
+
+  func testNulCharacterInSourceFile() {
+    AssertParse(
+      "let a = 1️⃣\u{0}1",
+      diagnostics: [
+        DiagnosticSpec(message: "nul character embedded in middle of file", severity: .warning)
+      ]
     )
   }
 }

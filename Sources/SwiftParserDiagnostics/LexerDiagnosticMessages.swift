@@ -49,8 +49,6 @@ public enum StaticLexerError: String, DiagnosticMessage {
   case invalidNumberOfHexDigitsInUnicodeEscape = #"\u{...} escape sequence expects between 1 and 8 hex digits"#
   case invalidUtf8 = "invalid UTF-8 found in source file"
   case lexerErrorOffsetOverflow = "the lexer dicovered an error in this token but was not able to represent its offset due to overflow; please split the token"
-  case nonBreakingSpace = "non-breaking space (U+00A0) used instead of regular space"
-  case nulCharacter = "nul character embedded in middle of file"
   case sourceConflictMarker = "source control conflict marker in source file"
   case unexpectedBlockCommentEnd = "unexpected end of block comment"
   case unicodeCurlyQuote = #"unicode curly quote found; use '"' instead"#
@@ -63,6 +61,20 @@ public enum StaticLexerError: String, DiagnosticMessage {
   }
 
   public var severity: DiagnosticSeverity { .error }
+}
+
+/// Please order the cases in this enum alphabetically by case name.
+public enum StaticLexerWarning: String, DiagnosticMessage {
+  case nonBreakingSpace = "non-breaking space (U+00A0) used instead of regular space"
+  case nulCharacter = "nul character embedded in middle of file"
+
+  public var message: String { self.rawValue }
+
+  public var diagnosticID: MessageID {
+    MessageID(domain: diagnosticDomain, id: "\(type(of: self)).\(self)")
+  }
+
+  public var severity: DiagnosticSeverity { .warning }
 }
 
 public struct InvalidFloatingPointExponentDigit: LexerError {
@@ -142,8 +154,8 @@ public extension SwiftSyntax.LexerError {
     case .invalidOctalDigitInIntegerLiteral: return InvalidDigitInIntegerLiteral(kind: .octal(scalarAtErrorOffset))
     case .invalidUtf8: return StaticLexerError.invalidUtf8
     case .lexerErrorOffsetOverflow: return StaticLexerError.lexerErrorOffsetOverflow
-    case .nonBreakingSpace: return StaticLexerError.nonBreakingSpace
-    case .nulCharacter: return StaticLexerError.nulCharacter
+    case .nonBreakingSpace: return StaticLexerWarning.nonBreakingSpace
+    case .nulCharacter: return StaticLexerWarning.nulCharacter
     case .sourceConflictMarker: return StaticLexerError.sourceConflictMarker
     case .unexpectedBlockCommentEnd: return StaticLexerError.unexpectedBlockCommentEnd
     case .unicodeCurlyQuote: return StaticLexerError.unicodeCurlyQuote

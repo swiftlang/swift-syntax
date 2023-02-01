@@ -2161,6 +2161,9 @@ extension Lexer.Cursor {
       // we have in the parser. Classify the entire curly string as an identifier
       // for best recovery.
       return .lexemeContents(Lexer.Result(.identifier, error: (.unicodeCurlyQuote, position: start)))
+    } else if codepoint.value == 0 {  // Nul character
+      self = tmp
+      return .trivia(error: (kind: .nulCharacter, position: start))
     }
 
     // TODO: Try map confusables to ASCII characters

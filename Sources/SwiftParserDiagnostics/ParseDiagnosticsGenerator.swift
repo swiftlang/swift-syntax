@@ -30,6 +30,19 @@ fileprivate extension TokenSyntax {
   }
 }
 
+fileprivate extension DiagnosticSeverity {
+  func matches(_ lexerErorSeverity: SwiftSyntax.LexerError.Severity) -> Bool {
+    switch (self, lexerErorSeverity) {
+    case (.error, .error):
+      return true
+    case (.warning, .warning):
+      return true
+    default:
+      return false
+    }
+  }
+}
+
 public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
   private var diagnostics: [Diagnostic] = []
 
@@ -101,7 +114,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
   /// Whether the node should be skipped for diagnostic emission.
   /// Every visit method must check this at the beginning.
   func shouldSkip<T: SyntaxProtocol>(_ node: T) -> Bool {
-    if !node.hasError {
+    if !node.hasError && !node.hasWarning {
       return true
     }
     return handledNodes.contains(node.id)
@@ -347,10 +360,12 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       handleMissingToken(token)
     } else {
       if let lexerError = token.lexerError {
+        let message = lexerError.diagnosticMessage(in: token)
+        assert(message.severity.matches(lexerError.severity))
         self.addDiagnostic(
           token,
           position: token.position.advanced(by: Int(lexerError.byteOffset)),
-          lexerError.diagnosticMessage(in: token),
+          message,
           fixIts: lexerError.fixIts(in: token)
         )
       }

@@ -234,6 +234,8 @@ struct DiagnosticSpec {
   let id: MessageID?
   /// If not `nil`, assert that the diagnostic has the given message.
   let message: String?
+  /// Assert that the diagnostic has the given severity.
+  let severity: DiagnosticSeverity
   /// If not `nil`, assert that the highlighted range has this content.
   let highlight: String?
   /// If not `nil`, assert that the diagnostic contains notes with these messages.
@@ -250,6 +252,7 @@ struct DiagnosticSpec {
     locationMarker: String = "1️⃣",
     id: MessageID? = nil,
     message: String?,
+    severity: DiagnosticSeverity = .error,
     highlight: String? = nil,
     notes: [NoteSpec]? = nil,
     fixIts: [String]? = nil,
@@ -259,6 +262,7 @@ struct DiagnosticSpec {
     self.locationMarker = locationMarker
     self.id = id
     self.message = message
+    self.severity = severity
     self.highlight = highlight
     self.notes = notes
     self.fixIts = fixIts
@@ -395,6 +399,7 @@ func AssertDiagnostic<T: SyntaxProtocol>(
   if let message = spec.message {
     AssertStringsEqualWithDiff(diag.message, message, file: file, line: line)
   }
+  XCTAssertEqual(spec.severity, diag.diagMessage.severity, file: file, line: line)
   if diag.message.contains("\n") {
     XCTFail(
       """

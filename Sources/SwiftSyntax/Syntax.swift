@@ -283,9 +283,18 @@ public extension SyntaxProtocol {
     return raw.kind.isSyntaxCollection
   }
 
-  /// Whether this tree contains a missing token or unexpected node.
+  /// Whether the tree contained by this layout has any
+  ///  - missing nodes or
+  ///  - unexpected nodes or
+  ///  - tokens with a `LexerError` of severity `error`
   var hasError: Bool {
     return raw.recursiveFlags.contains(.hasError)
+  }
+
+  /// Whether the tree contained by this layout has any tokens with a `LexerError`
+  /// of severity `warning`.
+  var hasWarning: Bool {
+    return raw.recursiveFlags.contains(.hasWarning)
   }
 
   /// Whether this tree contains a missing token or unexpected node.

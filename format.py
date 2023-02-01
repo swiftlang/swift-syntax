@@ -86,22 +86,21 @@ def find_swiftformat(swift_format: str) -> Path:
 
 def get_files_to_format() -> List[Path]:
     package_dir = Path(__file__).parent
-    files_to_format: List[Path] = []
-    for swift_file_path in (package_dir / "Sources").glob('**/*.swift'):
-        if swift_file_path.match('**/generated/**') or \
-           swift_file_path.match('**/gyb_generated/syntax_nodes/**') or \
-           swift_file_path.match('**/gyb_generated/**'):
-            # Don't format generated files
-            continue
-        files_to_format.append(swift_file_path)
+    files_to_format = set(package_dir.glob('**/*.swift'))
+    files_to_exclude = set()
 
-    for swift_file_path in (package_dir / "Tests").glob('**/*.swift'):
-        if swift_file_path.match('**/Inputs/**'):
-            # Don't format test input files
-            continue
-        files_to_format.append(swift_file_path)
+    # Don't format gyb_generated files
+    files_to_exclude.update(package_dir.glob('**/gyb_generated/**/*.swift'))
+    # Don't generate lit_tests files
+    files_to_exclude.update(package_dir.glob('**/lit_tests/**/*.swift'))
+    # Don't format generated files
+    files_to_exclude.update(package_dir.glob('**/generated/**/*.swift'))
+    # Don't format .build folder and content
+    files_to_exclude.update(package_dir.glob('**/.build/**/*.swift'))
+    # Don't format test input files
+    files_to_exclude.update(package_dir.glob('**/Inputs/**/*.swift'))
 
-    return files_to_format
+    return list(files_to_format.difference(files_to_exclude))
 
 
 def main() -> None:

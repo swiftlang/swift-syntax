@@ -20,10 +20,10 @@ let typeAttributeFile = SourceFileSyntax {
     """
     \(raw: generateCopyrightHeader(for: "generate-swiftparser"))
     @_spi(RawSyntax) import SwiftSyntax
-    
+
     """
   )
-  
+
   try! ExtensionDeclSyntax("extension Parser") {
     try EnumDeclSyntax("enum TypeAttribute: RawTokenKindSubset") {
       for attribute in TYPE_ATTR_KINDS {

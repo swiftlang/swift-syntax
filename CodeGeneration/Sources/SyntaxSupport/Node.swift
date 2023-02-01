@@ -76,19 +76,21 @@ public class Node {
   public var isVisitable: Bool {
     return !isBase
   }
-  
-  init(name: String,
-       nameForDiagnostics: String?,
-       description: String? = nil,
-       kind: String,
-       traits: [String] = [],
-       parserFunction: String? = nil,
-       children: [Child] = [],
-       element: String = "",
-       elementName: String? = nil,
-       elementChoices: [String]? = nil,
-       omitWhenEmpty: Bool = false,
-       elementsSeparatedByNewline: Bool = false) {
+
+  init(
+    name: String,
+    nameForDiagnostics: String?,
+    description: String? = nil,
+    kind: String,
+    traits: [String] = [],
+    parserFunction: String? = nil,
+    children: [Child] = [],
+    element: String = "",
+    elementName: String? = nil,
+    elementChoices: [String]? = nil,
+    omitWhenEmpty: Bool = false,
+    elementsSeparatedByNewline: Bool = false
+  ) {
     self.syntaxKind = name
     self.swiftSyntaxKind = lowercaseFirstWord(name: name)
     self.name = kindToType(kind: self.syntaxKind)
@@ -103,26 +105,31 @@ public class Node {
     } else {
       // Add implicitly generated UnexpectedNodes children between
       // any two defined children
-      self.children = children.enumerated().flatMap { (i, child) -> [Child] in
-        let unexpectedName: String
-        if i == 0 {
-          unexpectedName = "UnexpectedBefore\(child.name)"
-        } else {
-          unexpectedName = "UnexpectedBetween\(children[i - 1].name)And\(child.name)"
+      self.children =
+        children.enumerated().flatMap { (i, child) -> [Child] in
+          let unexpectedName: String
+          if i == 0 {
+            unexpectedName = "UnexpectedBefore\(child.name)"
+          } else {
+            unexpectedName = "UnexpectedBetween\(children[i - 1].name)And\(child.name)"
+          }
+          return [
+            Child(
+              name: unexpectedName,
+              kind: .collection(kind: "UnexpectedNodes", collectionElementName: unexpectedName),
+              isOptional: true
+            ),
+            child,
+          ]
         }
-        return [
-          Child(
-            name: unexpectedName,
-            kind: .collection(kind: "UnexpectedNodes", collectionElementName: unexpectedName),
-            isOptional: true
-          ),
-          child
-        ]
-      } + (!children.isEmpty ? [Child(
-        name: "UnexpectedAfter\(children.last!.name)",
-        kind: .collection(kind: "UnexpectedNodes", collectionElementName: "UnexpectedAfter\(children.last!.name)"),
-        isOptional: true
-      )] : [])
+        + (!children.isEmpty
+          ? [
+            Child(
+              name: "UnexpectedAfter\(children.last!.name)",
+              kind: .collection(kind: "UnexpectedNodes", collectionElementName: "UnexpectedAfter\(children.last!.name)"),
+              isOptional: true
+            )
+          ] : [])
     }
 
     self.nonUnexpectedChildren = children.filter { !$0.isUnexpectedNodes }
@@ -139,7 +146,7 @@ public class Node {
     self.collectionElementName = elementName ?? self.collectionElement
     self.collectionElementChoices = elementChoices ?? []
     self.elementsSeparatedByNewline = elementsSeparatedByNewline
-    
+
     // For SyntaxCollections make sure that the elementName is set.
     assert(!isSyntaxCollection || elementName != nil || element != "")
   }

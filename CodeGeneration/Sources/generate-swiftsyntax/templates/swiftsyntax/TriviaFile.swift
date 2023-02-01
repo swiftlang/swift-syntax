@@ -16,14 +16,17 @@ import SyntaxSupport
 import Utils
 
 let triviaFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCopyrightHeader(for: "generate-swiftsyntax"))) {
-  DeclSyntax("""
+  DeclSyntax(
+    """
     public enum TriviaPosition {
       case leading
       case trailing
     }
-    """)
+    """
+  )
 
-  try! EnumDeclSyntax("""
+  try! EnumDeclSyntax(
+    """
     /// A contiguous stretch of a single kind of trivia. The constituent part of
     /// a `Trivia` collection.
     ///
@@ -33,35 +36,44 @@ let triviaFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCopyrig
     /// In general, you should deal with the actual Trivia collection instead
     /// of individual pieces whenever possible.
     public enum TriviaPiece
-    """) {
+    """
+  ) {
     for trivia in TRIVIAS {
       if trivia.isCollection {
-        DeclSyntax("""
+        DeclSyntax(
+          """
           /// \(raw: trivia.comment)
           case \(raw: trivia.enumCaseName)(Int)
-          """)
+          """
+        )
 
       } else {
-        DeclSyntax("""
+        DeclSyntax(
+          """
           /// \(raw: trivia.comment)
           case \(raw: trivia.enumCaseName)(String)
-          """)
+          """
+        )
       }
     }
   }
 
   try! ExtensionDeclSyntax("extension TriviaPiece: TextOutputStreamable") {
-    try FunctionDeclSyntax("""
+    try FunctionDeclSyntax(
+      """
       /// Prints the provided trivia as they would be written in a source file.
       ///
       /// - Parameter stream: The stream to which to print the trivia.
       public func write<Target>(to target: inout Target) where Target: TextOutputStream
-      """) {
-      DeclSyntax("""
+      """
+    ) {
+      DeclSyntax(
+        """
         func printRepeated(_ character: String, count: Int) {
           for _ in 0..<count { target.write(character) }
         }
-        """)
+        """
+      )
 
       try SwitchStmtSyntax("switch self") {
         for trivia in TRIVIAS {
@@ -81,27 +93,30 @@ let triviaFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCopyrig
   }
 
   try! ExtensionDeclSyntax("extension TriviaPiece: CustomDebugStringConvertible") {
-    try VariableDeclSyntax("""
+    try VariableDeclSyntax(
+      """
       /// Returns a description used by dump.
       public var debugDescription: String
-      """) {
-        try SwitchStmtSyntax("switch self") {
-          for trivia in TRIVIAS {
-            if trivia.isCollection {
-              SwitchCaseSyntax("case .\(raw: trivia.enumCaseName)(let data):") {
-                StmtSyntax(#"return "\#(raw: trivia.enumCaseName)(\(data))""#)
-              }
-            } else {
-              SwitchCaseSyntax("case .\(raw: trivia.enumCaseName)(let name):") {
-                StmtSyntax(#"return "\#(raw: trivia.enumCaseName)(\(name.debugDescription))""#)
-              }
+      """
+    ) {
+      try SwitchStmtSyntax("switch self") {
+        for trivia in TRIVIAS {
+          if trivia.isCollection {
+            SwitchCaseSyntax("case .\(raw: trivia.enumCaseName)(let data):") {
+              StmtSyntax(#"return "\#(raw: trivia.enumCaseName)(\(data))""#)
+            }
+          } else {
+            SwitchCaseSyntax("case .\(raw: trivia.enumCaseName)(let name):") {
+              StmtSyntax(#"return "\#(raw: trivia.enumCaseName)(\(name.debugDescription))""#)
             }
           }
         }
       }
+    }
   }
 
-  DeclSyntax("""
+  DeclSyntax(
+    """
     extension TriviaPiece {
       /// Returns true if the trivia is `.newlines`, `.carriageReturns` or `.carriageReturnLineFeeds`
       public var isNewline: Bool {
@@ -115,88 +130,109 @@ let triviaFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCopyrig
         }
       }
     }
-    """)
+    """
+  )
 
-  try! StructDeclSyntax("""
+  try! StructDeclSyntax(
+    """
     /// A collection of leading or trailing trivia. This is the main data structure
     /// for thinking about trivia.
     public struct Trivia
-    """) {
+    """
+  ) {
     DeclSyntax("public let pieces: [TriviaPiece]")
 
-    DeclSyntax("""
+    DeclSyntax(
+      """
       /// Creates Trivia with the provided underlying pieces.
       public init<S: Sequence>(pieces: S) where S.Element == TriviaPiece {
         self.pieces = Array(pieces)
       }
-      """)
+      """
+    )
 
-    DeclSyntax("""
+    DeclSyntax(
+      """
       /// Creates Trivia with no pieces.
       public static var zero: Trivia {
         return Trivia(pieces: [])
       }
-      """)
+      """
+    )
 
-    DeclSyntax("""
+    DeclSyntax(
+      """
       /// Whether the Trivia contains no pieces.
       public var isEmpty: Bool {
         pieces.isEmpty
       }
-      """)
+      """
+    )
 
-    DeclSyntax("""
+    DeclSyntax(
+      """
       /// Creates a new `Trivia` by appending the provided `TriviaPiece` to the end.
       public func appending(_ piece: TriviaPiece) -> Trivia {
         var copy = pieces
         copy.append(piece)
         return Trivia(pieces: copy)
       }
-      """)
+      """
+    )
 
-    DeclSyntax("""
+    DeclSyntax(
+      """
       public var sourceLength: SourceLength {
         return pieces.map({ $0.sourceLength }).reduce(.zero, +)
       }
-      """)
+      """
+    )
 
-    DeclSyntax("""
+    DeclSyntax(
+      """
       /// Get the byteSize of this trivia
       public var byteSize: Int {
         return sourceLength.utf8Length
       }
-      """)
+      """
+    )
 
     for trivia in TRIVIAS {
       if trivia.isCollection {
         let joined = trivia.characters.map { "\($0)" }.joined()
-        DeclSyntax("""
-        /// Returns a piece of trivia for some number of \(literal: joined) characters.
-        public static func \(raw: trivia.enumCaseName)(_ count: Int) -> Trivia {
-          return [.\(raw: trivia.enumCaseName)(count)]
-        }
-        """)
+        DeclSyntax(
+          """
+          /// Returns a piece of trivia for some number of \(literal: joined) characters.
+          public static func \(raw: trivia.enumCaseName)(_ count: Int) -> Trivia {
+            return [.\(raw: trivia.enumCaseName)(count)]
+          }
+          """
+        )
 
-        DeclSyntax("""
-        /// Gets a piece of trivia for \(literal: joined) characters.
-        public static var \(raw: trivia.lowerName): Trivia {
-          return .\(raw: trivia.enumCaseName)(1)
-        }
-        """)
-
+        DeclSyntax(
+          """
+          /// Gets a piece of trivia for \(literal: joined) characters.
+          public static var \(raw: trivia.lowerName): Trivia {
+            return .\(raw: trivia.enumCaseName)(1)
+          }
+          """
+        )
 
       } else {
-        DeclSyntax("""
-        /// Returns a piece of trivia for \(raw: trivia.name).
-        public static func \(raw: trivia.enumCaseName)(_ text: String) -> Trivia {
-          return [.\(raw: trivia.enumCaseName)(text)]
-        }
-        """)
+        DeclSyntax(
+          """
+          /// Returns a piece of trivia for \(raw: trivia.name).
+          public static func \(raw: trivia.enumCaseName)(_ text: String) -> Trivia {
+            return [.\(raw: trivia.enumCaseName)(text)]
+          }
+          """
+        )
       }
     }
   }
 
-  DeclSyntax(#"""
+  DeclSyntax(
+    #"""
     extension Trivia: CustomDebugStringConvertible {
       public var debugDescription: String {
         if count == 1, let first = first {
@@ -205,11 +241,13 @@ let triviaFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCopyrig
         return "[" + map(\.debugDescription).joined(separator: ", ") + "]"
       }
     }
-    """#)
+    """#
+  )
 
   DeclSyntax("extension Trivia: Equatable {}")
 
-  DeclSyntax("""
+  DeclSyntax(
+    """
     /// Conformance for Trivia to the Collection protocol.
     extension Trivia: Collection {
       public var startIndex: Int {
@@ -228,18 +266,22 @@ let triviaFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCopyrig
         return pieces[index]
       }
     }
-    """)
+    """
+  )
 
-  DeclSyntax("""
+  DeclSyntax(
+    """
     extension Trivia: ExpressibleByArrayLiteral {
       /// Creates Trivia from the provided pieces.
       public init(arrayLiteral elements: TriviaPiece...) {
         self.pieces = elements
       }
     }
-    """)
+    """
+  )
 
-  DeclSyntax("""
+  DeclSyntax(
+    """
     extension Trivia: TextOutputStreamable {
       /// Prints the provided trivia as they would be written in a source file.
       ///
@@ -251,9 +293,11 @@ let triviaFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCopyrig
         }
       }
     }
-    """)
+    """
+  )
 
-  DeclSyntax("""
+  DeclSyntax(
+    """
     extension Trivia: CustomStringConvertible {
       public var description: String {
         var description = ""
@@ -261,9 +305,11 @@ let triviaFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCopyrig
         return description
       }
     }
-    """)
+    """
+  )
 
-  DeclSyntax("""
+  DeclSyntax(
+    """
     extension Trivia {
       /// Concatenates two collections of `Trivia` into one collection.
       public static func +(lhs: Trivia, rhs: Trivia) -> Trivia {
@@ -275,40 +321,43 @@ let triviaFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCopyrig
         lhs = lhs + rhs
       }
     }
-    """)
+    """
+  )
 
   DeclSyntax("extension TriviaPiece: Equatable {}")
 
   try! ExtensionDeclSyntax("extension TriviaPiece") {
     try VariableDeclSyntax("public var sourceLength: SourceLength") {
-        try SwitchStmtSyntax("switch self") {
-          for trivia in TRIVIAS {
-            if trivia.isCollection {
-              SwitchCaseSyntax("case let .\(raw: trivia.enumCaseName)(count):") {
-                if trivia.charactersLen != 1 {
-                  StmtSyntax("return SourceLength(utf8Length: count * \(raw: trivia.charactersLen))")
-                } else {
-                  StmtSyntax("return SourceLength(utf8Length: count)")
-                }
+      try SwitchStmtSyntax("switch self") {
+        for trivia in TRIVIAS {
+          if trivia.isCollection {
+            SwitchCaseSyntax("case let .\(raw: trivia.enumCaseName)(count):") {
+              if trivia.charactersLen != 1 {
+                StmtSyntax("return SourceLength(utf8Length: count * \(raw: trivia.charactersLen))")
+              } else {
+                StmtSyntax("return SourceLength(utf8Length: count)")
               }
-            } else {
-              SwitchCaseSyntax("case let .\(raw: trivia.enumCaseName)(text):") {
-                StmtSyntax("return SourceLength(of: text)")
-              }
+            }
+          } else {
+            SwitchCaseSyntax("case let .\(raw: trivia.enumCaseName)(text):") {
+              StmtSyntax("return SourceLength(of: text)")
             }
           }
         }
       }
+    }
   }
 
-  try! EnumDeclSyntax("""
+  try! EnumDeclSyntax(
+    """
     /// Trivia piece for token RawSyntax.
     ///
     /// In contrast to `TriviaPiece`, a `RawTriviaPiece` does not own the source
     /// text of a the trivia.
     @_spi(RawSyntax)
     public enum RawTriviaPiece: Equatable
-    """) {
+    """
+  ) {
     for trivia in TRIVIAS {
       if trivia.isCollection {
         DeclSyntax(" case \(raw: trivia.enumCaseName)(Int)")
@@ -318,9 +367,11 @@ let triviaFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCopyrig
       }
     }
 
-    try FunctionDeclSyntax("""
+    try FunctionDeclSyntax(
+      """
       static func make(_ piece: TriviaPiece, arena: SyntaxArena) -> RawTriviaPiece
-      """) {
+      """
+    ) {
       try SwitchStmtSyntax("switch piece") {
         for trivia in TRIVIAS {
           if trivia.isCollection {
@@ -337,21 +388,25 @@ let triviaFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCopyrig
     }
   }
 
-  DeclSyntax("""
+  DeclSyntax(
+    """
     extension RawTriviaPiece: TextOutputStreamable {
       public func write<Target: TextOutputStream>(to target: inout Target) {
         TriviaPiece(raw: self).write(to: &target)
       }
     }
-    """)
+    """
+  )
 
-  DeclSyntax("""
+  DeclSyntax(
+    """
     extension RawTriviaPiece: CustomDebugStringConvertible {
       public var debugDescription: String {
         TriviaPiece(raw: self).debugDescription
       }
     }
-    """)
+    """
+  )
 
   try! ExtensionDeclSyntax("extension TriviaPiece") {
     try InitializerDeclSyntax("@_spi(RawSyntax) public init(raw: RawTriviaPiece)") {
@@ -373,43 +428,44 @@ let triviaFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCopyrig
 
   try! ExtensionDeclSyntax("extension RawTriviaPiece") {
     try VariableDeclSyntax("public var byteLength: Int") {
-        try SwitchStmtSyntax("switch self") {
-          for trivia in TRIVIAS {
-            if trivia.isCollection {
-              SwitchCaseSyntax("case let .\(raw: trivia.enumCaseName)(count):") {
-                if trivia.charactersLen != 1 {
-                  StmtSyntax("return count * \(raw: trivia.charactersLen)")
-                } else {
-                  StmtSyntax("return count")
-                }
+      try SwitchStmtSyntax("switch self") {
+        for trivia in TRIVIAS {
+          if trivia.isCollection {
+            SwitchCaseSyntax("case let .\(raw: trivia.enumCaseName)(count):") {
+              if trivia.charactersLen != 1 {
+                StmtSyntax("return count * \(raw: trivia.charactersLen)")
+              } else {
+                StmtSyntax("return count")
               }
-            } else {
-              SwitchCaseSyntax("case let .\(raw: trivia.enumCaseName)(text):") {
-                StmtSyntax("return text.count")
-              }
+            }
+          } else {
+            SwitchCaseSyntax("case let .\(raw: trivia.enumCaseName)(text):") {
+              StmtSyntax("return text.count")
             }
           }
         }
       }
+    }
 
     try VariableDeclSyntax("var storedText: SyntaxText?") {
-        try SwitchStmtSyntax("switch self") {
-          for trivia in TRIVIAS {
-            if trivia.isCollection {
-              SwitchCaseSyntax("case .\(raw: trivia.enumCaseName)(_):") {
-                StmtSyntax("return nil")
-              }
-            } else {
-              SwitchCaseSyntax("case .\(raw: trivia.enumCaseName)(let text):") {
-                StmtSyntax("return text")
-              }
+      try SwitchStmtSyntax("switch self") {
+        for trivia in TRIVIAS {
+          if trivia.isCollection {
+            SwitchCaseSyntax("case .\(raw: trivia.enumCaseName)(_):") {
+              StmtSyntax("return nil")
+            }
+          } else {
+            SwitchCaseSyntax("case .\(raw: trivia.enumCaseName)(let text):") {
+              StmtSyntax("return text")
             }
           }
         }
       }
+    }
   }
 
-  DeclSyntax("""
+  DeclSyntax(
+    """
     extension RawTriviaPiece {
       /// Returns true if the trivia is `.newlines`, `.carriageReturns` or `.carriageReturnLineFeeds`
       public var isNewline: Bool {
@@ -423,5 +479,6 @@ let triviaFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCopyrig
         }
       }
     }
-    """)
+    """
+  )
 }

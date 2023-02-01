@@ -16,30 +16,32 @@ import SyntaxSupport
 import Utils
 
 let syntaxKindFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCopyrightHeader(for: "generate-swiftsyntax"))) {
-  try! EnumDeclSyntax("""
+  try! EnumDeclSyntax(
+    """
     /// Enumerates the known kinds of Syntax represented in the Syntax tree.
     @frozen // FIXME: Not actually stable, works around a miscompile
     public enum SyntaxKind
-    """) {
+    """
+  ) {
     DeclSyntax("case token")
     for node in NON_BASE_SYNTAX_NODES {
       DeclSyntax("case \(raw: node.swiftSyntaxKind)")
     }
-    
+
     try VariableDeclSyntax("public var isSyntaxCollection: Bool") {
       try SwitchStmtSyntax("switch self") {
-        for node in SYNTAX_NODES where node.baseKind == "SyntaxCollection"{
+        for node in SYNTAX_NODES where node.baseKind == "SyntaxCollection" {
           SwitchCaseSyntax("case .\(raw: node.swiftSyntaxKind):") {
             StmtSyntax("return true")
           }
         }
-        
+
         SwitchCaseSyntax("default:") {
           StmtSyntax("return false")
         }
       }
     }
-    
+
     try VariableDeclSyntax("public var isMissing: Bool") {
       try SwitchStmtSyntax("switch self") {
         for name in SYNTAX_BASE_KINDS where !["Syntax", "SyntaxCollection"].contains(name) {
@@ -47,7 +49,7 @@ let syntaxKindFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCop
             StmtSyntax("return true")
           }
         }
-        
+
         SwitchCaseSyntax("default:") {
           StmtSyntax("return false")
         }

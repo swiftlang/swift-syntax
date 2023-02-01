@@ -10,7 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-public let SYNTAX_NODES: [Node] = (COMMON_NODES
+public let SYNTAX_NODES: [Node] =
+  (COMMON_NODES
   + EXPR_NODES
   + DECL_NODES
   + ATTRIBUTE_NODES

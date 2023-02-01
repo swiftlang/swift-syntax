@@ -94,18 +94,26 @@ public extension Child {
 
     var assertChoices: [ExprSyntax] = []
     if type.isOptional {
-      assertChoices.append(ExprSyntax(SequenceExprSyntax {
-        IdentifierExprSyntax(identifier: .identifier(varName))
-        BinaryOperatorExprSyntax(text: "==")
-        NilLiteralExprSyntax()
-      }))
+      assertChoices.append(
+        ExprSyntax(
+          SequenceExprSyntax {
+            IdentifierExprSyntax(identifier: .identifier(varName))
+            BinaryOperatorExprSyntax(text: "==")
+            NilLiteralExprSyntax()
+          }
+        )
+      )
     }
     for textChoice in choicesTexts {
-      assertChoices.append(ExprSyntax(SequenceExprSyntax {
-        MemberAccessExprSyntax(base: type.forceUnwrappedIfNeeded(expr: IdentifierExprSyntax(identifier: .identifier(varName))), name: "text")
-        BinaryOperatorExprSyntax(text: "==")
-        StringLiteralExprSyntax(content: textChoice)
-      }))
+      assertChoices.append(
+        ExprSyntax(
+          SequenceExprSyntax {
+            MemberAccessExprSyntax(base: type.forceUnwrappedIfNeeded(expr: IdentifierExprSyntax(identifier: .identifier(varName))), name: "text")
+            BinaryOperatorExprSyntax(text: "==")
+            StringLiteralExprSyntax(content: textChoice)
+          }
+        )
+      )
     }
     let disjunction = ExprListSyntax(assertChoices.flatMap { [$0, ExprSyntax(BinaryOperatorExprSyntax(text: "||"))] }.dropLast())
     return FunctionCallExprSyntax(callee: ExprSyntax("assert")) {

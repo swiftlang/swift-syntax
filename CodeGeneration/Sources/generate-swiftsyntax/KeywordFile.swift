@@ -35,10 +35,12 @@ let keywordFile = SourceFileSyntax {
     """
   )
 
-  try! EnumDeclSyntax("""
+  try! EnumDeclSyntax(
+    """
     @frozen  // FIXME: Not actually stable, works around a miscompile
     public enum Keyword: UInt8, Hashable
-    """) {
+    """
+  ) {
     for (index, keyword) in KEYWORDS.enumerated() {
       DeclSyntax("case \(raw: keyword.escapedName)")
     }
@@ -61,11 +63,13 @@ let keywordFile = SourceFileSyntax {
       }
     }
 
-    try! VariableDeclSyntax("""
+    try! VariableDeclSyntax(
+      """
       /// Whether the token kind is switched from being an identifier to being an identifier to a keyword in the lexer.
       /// This is true for keywords that used to be considered non-contextual.
       public var isLexerClassified: Bool
-      """) {
+      """
+    ) {
       try! SwitchStmtSyntax("switch self") {
         for keyword in KEYWORDS {
           if keyword.isLexerClassified {
@@ -76,20 +80,24 @@ let keywordFile = SourceFileSyntax {
       }
     }
 
-    DeclSyntax("""
+    DeclSyntax(
+      """
       /// This is really unfortunate. Really, we should have a `switch` in
       /// `Keyword.defaultText` to return the keyword's kind but the constant lookup
       /// table is significantly faster. Ideally, we could also get the compiler to
       /// constant-evaluate `Keyword.spi.defaultText` to a `SyntaxText` but I don't
       /// see how that's possible right now.
       private static let keywordTextLookupTable: [SyntaxText] = \(lookupTable)
-      """)
+      """
+    )
 
-    DeclSyntax("""
+    DeclSyntax(
+      """
       @_spi(RawSyntax)
       public var defaultText: SyntaxText {
         return Keyword.keywordTextLookupTable[Int(self.rawValue)]
       }
-      """)
+      """
+    )
   }
 }

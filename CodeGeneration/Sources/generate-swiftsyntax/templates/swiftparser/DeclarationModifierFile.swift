@@ -20,10 +20,10 @@ let declarationModifierFile = SourceFileSyntax {
     """
     \(raw: generateCopyrightHeader(for: "generate-swiftparser"))
     @_spi(RawSyntax) import SwiftSyntax
-    
+
     """
   )
-  
+
   try! EnumDeclSyntax("enum DeclarationModifier: RawTokenKindSubset") {
     for attribute in DECL_MODIFIER_KINDS {
       DeclSyntax("case \(raw: attribute.swiftName)")
@@ -41,7 +41,7 @@ let declarationModifierFile = SourceFileSyntax {
         }
       }
     }
-    
+
     try VariableDeclSyntax("var rawTokenKind: RawTokenKind") {
       try SwitchStmtSyntax("switch self") {
         for attribute in DECL_MODIFIER_KINDS {

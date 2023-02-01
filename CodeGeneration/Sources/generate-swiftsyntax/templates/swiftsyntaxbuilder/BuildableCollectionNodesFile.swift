@@ -30,23 +30,29 @@ let buildableCollectionNodesFile = SourceFileSyntax {
     try! ExtensionDeclSyntax("\(raw: docComment)extension \(raw: node.type.syntaxBaseName): ExpressibleByArrayLiteral") {
       // Generate initializers
       if elementType.isBaseType && node.collectionElementChoices?.isEmpty ?? true {
-        DeclSyntax("""
+        DeclSyntax(
+          """
           public init(_ elements: \(ArrayTypeSyntax(elementType: elementType.parameterType))) {
             self = \(raw: node.type.syntaxBaseName)(elements.map { \(elementType.syntax)(fromProtocol: $0) })
           }
-          """)
+          """
+        )
 
-        DeclSyntax("""
+        DeclSyntax(
+          """
           public init(arrayLiteral elements: \(elementType.parameterType)...) {
             self.init(elements)
           }
-          """)
+          """
+        )
       } else {
-        DeclSyntax("""
+        DeclSyntax(
+          """
           public init(arrayLiteral elements: Element...) {
             self.init(elements)
           }
-          """)
+          """
+        )
       }
     }
   }

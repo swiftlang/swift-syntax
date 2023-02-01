@@ -38,7 +38,7 @@ extension SourceEditorExtension {
       guard let context = conformance.context, context.moduleDescriptor.isSwiftRefactorModule else {
         continue
       }
-      
+
       guard let typeMetadata = context.metadata(), let provider = typeMetadata as? any RefactoringProvider.Type else {
         continue
       }
@@ -145,11 +145,12 @@ struct ModuleContext {
     let typeDescriptor = self.raw.load(as: ModuleContextDescriptor.self)
     let start = self.raw + MemoryLayout<ModuleContextDescriptor>.offset(of: \.name)!
     let name = RelativeDirectPointer<CChar>(offset: typeDescriptor.name)
-    return name
+    return
+      name
       .address(from: start)
       .withMemoryRebound(to: CChar.self, capacity: 1) { pointer in
-      return String(cString: pointer)
-    }
+        return String(cString: pointer)
+      }
   }
 }
 

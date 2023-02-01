@@ -17,42 +17,51 @@ import Utils
 
 let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: [.blockComment(generateCopyrightHeader(for: "generate-swiftsyntax"))]) {
   for node in SYNTAX_NODES where node.isBase {
-    DeclSyntax("""
+    DeclSyntax(
+      """
       // MARK: - \(raw: node.name)
-      
+
       /// Protocol to which all `\(raw: node.name)` nodes conform. Extension point to add
       /// common methods to all `\(raw: node.name)` nodes.
       /// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
       public protocol \(raw: node.name)Protocol: \(raw: node.baseType.baseName)Protocol {}
-      """)
-    
+      """
+    )
+
     try! ExtensionDeclSyntax("public extension Syntax") {
-      DeclSyntax("""
+      DeclSyntax(
+        """
         /// Check whether the non-type erased version of this syntax node conforms to
         /// \(raw: node.name)Protocol.
         /// Note that this will incur an existential conversion.
         func isProtocol(_: \(raw: node.name)Protocol.Protocol) -> Bool {
           return self.asProtocol(\(raw: node.name)Protocol.self) != nil
         }
-        """)
-      
-      DeclSyntax("""
+        """
+      )
+
+      DeclSyntax(
+        """
         /// Return the non-type erased version of this syntax node if it conforms to
         /// \(raw: node.name)Protocol. Otherwise return nil.
         /// Note that this will incur an existential conversion.
         func asProtocol(_: \(raw: node.name)Protocol.Protocol) -> \(raw: node.name)Protocol? {
           return self.asProtocol(SyntaxProtocol.self) as? \(raw: node.name)Protocol
         }
-        """)
+        """
+      )
     }
-    
-    try! StructDeclSyntax("""
+
+    try! StructDeclSyntax(
+      """
       \(raw: node.description ?? "")
       public struct \(raw: node.name): \(raw: node.name)Protocol, SyntaxHashable
-      """) {
+      """
+    ) {
       DeclSyntax("public let _syntaxNode: Syntax")
-      
-      DeclSyntax("""
+
+      DeclSyntax(
+        """
         /// Create a `\(raw: node.name)` node from a specialized syntax node.
         public init<S: \(raw: node.name)Protocol>(_ syntax: S) {
           // We know this cast is going to succeed. Go through init(_: SyntaxData)
@@ -60,122 +69,147 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: [.blockComment(generat
           // maximum performance in release builds.
           self.init(syntax._syntaxNode.data)
         }
-        """)
-      
-      DeclSyntax("""
+        """
+      )
+
+      DeclSyntax(
+        """
         /// Create a `\(raw: node.name)` node from a specialized optional syntax node.
         public init?<S: \(raw: node.name)Protocol>(_ syntax: S?) {
           guard let syntax = syntax else { return nil }
           self.init(syntax)
         }
-        """)
-      
-      DeclSyntax("""
+        """
+      )
+
+      DeclSyntax(
+        """
         public init(fromProtocol syntax: \(raw: node.name)Protocol) {
           // We know this cast is going to succeed. Go through init(_: SyntaxData)
           // to do a sanity check and verify the kind matches in debug builds and get
           // maximum performance in release builds.
           self.init(syntax._syntaxNode.data)
         }
-        """)
-      
-      DeclSyntax("""
+        """
+      )
+
+      DeclSyntax(
+        """
         /// Create a `\(raw: node.name)` node from a specialized optional syntax node.
         public init?(fromProtocol syntax: \(raw: node.name)Protocol?) {
           guard let syntax = syntax else { return nil }
           self.init(fromProtocol: syntax)
         }
-        """)
-      
+        """
+      )
+
       try InitializerDeclSyntax("public init?<S: SyntaxProtocol>(_ node: S)") {
         try SwitchStmtSyntax("switch node.raw.kind") {
           SwitchCaseListSyntax {
             SwitchCaseSyntax(
-              label: .case(SwitchCaseLabelSyntax {
-                for childNode in SYNTAX_NODES where childNode.baseKind == node.syntaxKind {
+              label: .case(
+                SwitchCaseLabelSyntax {
+                  for childNode in SYNTAX_NODES where childNode.baseKind == node.syntaxKind {
                     CaseItemSyntax(
-                        pattern: ExpressionPatternSyntax(
-                            expression: MemberAccessExprSyntax(
-                                base: nil,
-                                dot: .periodToken(),
-                                name: .identifier(childNode.swiftSyntaxKind)
-                            )
+                      pattern: ExpressionPatternSyntax(
+                        expression: MemberAccessExprSyntax(
+                          base: nil,
+                          dot: .periodToken(),
+                          name: .identifier(childNode.swiftSyntaxKind)
                         )
+                      )
                     )
+                  }
                 }
-              })) {
-                ExprSyntax("self._syntaxNode = node._syntaxNode")
-              }
-            
+              )
+            ) {
+              ExprSyntax("self._syntaxNode = node._syntaxNode")
+            }
+
             SwitchCaseSyntax("default:") {
               StmtSyntax("return nil")
             }
           }
         }
       }
-      
-      try InitializerDeclSyntax("""
+
+      try InitializerDeclSyntax(
+        """
         /// Creates a `\(raw: node.name)` node from the given `SyntaxData`. This assumes
         /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
         /// is undefined.
         internal init(_ data: SyntaxData)
-        """) {
+        """
+      ) {
         IfConfigDeclSyntax(
           clauses: IfConfigClauseListSyntax {
             IfConfigClauseSyntax(
               poundKeyword: .poundIfKeyword(),
               condition: ExprSyntax("DEBUG"),
-              elements: IfConfigClauseSyntax.Elements.statements(CodeBlockItemListSyntax {
-                SwitchStmtSyntax(
-                  expression: ExprSyntax("data.raw.kind")) {
+              elements: IfConfigClauseSyntax.Elements.statements(
+                CodeBlockItemListSyntax {
+                  SwitchStmtSyntax(
+                    expression: ExprSyntax("data.raw.kind")
+                  ) {
                     SwitchCaseSyntax(
-                      label: .case(SwitchCaseLabelSyntax {
-                        for childNode in SYNTAX_NODES where childNode.baseKind == node.syntaxKind {
+                      label: .case(
+                        SwitchCaseLabelSyntax {
+                          for childNode in SYNTAX_NODES where childNode.baseKind == node.syntaxKind {
                             CaseItemSyntax(
-                                pattern: ExpressionPatternSyntax(
-                                    expression: MemberAccessExprSyntax(
-                                        base: nil,
-                                        dot: .periodToken(),
-                                        name: .identifier(childNode.swiftSyntaxKind)
-                                    )
+                              pattern: ExpressionPatternSyntax(
+                                expression: MemberAccessExprSyntax(
+                                  base: nil,
+                                  dot: .periodToken(),
+                                  name: .identifier(childNode.swiftSyntaxKind)
                                 )
+                              )
                             )
+                          }
                         }
-                      })) {
-                        BreakStmtSyntax()
-                      }
-                    
+                      )
+                    ) {
+                      BreakStmtSyntax()
+                    }
+
                     SwitchCaseSyntax("default:") {
                       ExprSyntax("fatalError(\"Unable to create \(raw: node.name) from \\(data.raw.kind)\")")
                     }
                   }
-              })
+                }
+              )
             )
           }
         )
-        
+
         ExprSyntax("self._syntaxNode = Syntax(data)")
       }
-      
-      DeclSyntax("""
+
+      DeclSyntax(
+        """
         public func `is`<S: \(raw: node.name)Protocol>(_ syntaxType: S.Type) -> Bool {
           return self.as(syntaxType) != nil
         }
-        """)
-      
-      DeclSyntax("""
+        """
+      )
+
+      DeclSyntax(
+        """
         public func `as`<S: \(raw: node.name)Protocol>(_ syntaxType: S.Type) -> S? {
           return S.init(self)
         }
-        """)
-      
-      DeclSyntax("""
+        """
+      )
+
+      DeclSyntax(
+        """
         public func cast<S: \(raw: node.name)Protocol>(_ syntaxType: S.Type) -> S {
           return self.as(S.self)!
         }
-        """)
-      
-      DeclSyntax("""
+        """
+      )
+
+      DeclSyntax(
+        """
         /// Syntax nodes always conform to `\(raw: node.name)Protocol`. This API is just
         /// added for consistency.
         /// Note that this will incur an existential conversion.
@@ -183,42 +217,48 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: [.blockComment(generat
         public func isProtocol(_: \(raw: node.name)Protocol.Protocol) -> Bool {
           return true
         }
-        """)
-      
-      DeclSyntax("""
+        """
+      )
+
+      DeclSyntax(
+        """
         /// Return the non-type erased version of this syntax node.
         /// Note that this will incur an existential conversion.
         public func asProtocol(_: \(raw: node.name)Protocol.Protocol) -> \(raw: node.name)Protocol {
           return Syntax(self).asProtocol(\(raw: node.name)Protocol.self)!
         }
-        """)
-      
-      
+        """
+      )
+
       try VariableDeclSyntax("public static var structure: SyntaxNodeStructure") {
         ReturnStmtSyntax(
           expression: FunctionCallExprSyntax(
-            callee: ExprSyntax(".choices")) {
-              TupleExprElementSyntax(
-                expression: ArrayExprSyntax {
-                  for childNode in SYNTAX_NODES where childNode.baseKind == node.syntaxKind {
-                    ArrayElementSyntax(
-                      expression: ExprSyntax("\n.node(\(raw: childNode.name).self)")
-                    )
-                  }
+            callee: ExprSyntax(".choices")
+          ) {
+            TupleExprElementSyntax(
+              expression: ArrayExprSyntax {
+                for childNode in SYNTAX_NODES where childNode.baseKind == node.syntaxKind {
+                  ArrayElementSyntax(
+                    expression: ExprSyntax("\n.node(\(raw: childNode.name).self)")
+                  )
                 }
-              )
-            }
+              }
+            )
+          }
         )
       }
-      
-      DeclSyntax("""
+
+      DeclSyntax(
+        """
         public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
           return Syntax(self).childNameForDiagnostics(index)
         }
-        """)
+        """
+      )
     }
-    
-    DeclSyntax("""
+
+    DeclSyntax(
+      """
       extension \(raw: node.name): CustomReflectable {
         /// Reconstructs the real syntax type for this type from the node's kind and
         /// provides a mirror that reflects this type.
@@ -226,7 +266,8 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: [.blockComment(generat
           return Mirror(reflecting: Syntax(self).asProtocol(SyntaxProtocol.self))
         }
       }
-      """)
-    
+      """
+    )
+
   }
 }

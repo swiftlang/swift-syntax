@@ -16,10 +16,12 @@ import SyntaxSupport
 import Utils
 
 let miscFile = SourceFileSyntax {
-  try! ExtensionDeclSyntax("""
+  try! ExtensionDeclSyntax(
+    """
     \(raw: generateCopyrightHeader(for: "generate-swiftsyntax"))
     extension Syntax
-    """) {
+    """
+  ) {
     try VariableDeclSyntax("public static var structure: SyntaxNodeStructure") {
       ReturnStmtSyntax(
         expression: FunctionCallExprSyntax(callee: ExprSyntax(".choices")) {
@@ -40,7 +42,7 @@ let miscFile = SourceFileSyntax {
       )
     }
   }
-  
+
   try! ExtensionDeclSyntax("extension SyntaxKind") {
     try VariableDeclSyntax("public var syntaxNodeType: SyntaxProtocol.Type") {
       try SwitchStmtSyntax("switch self") {
@@ -55,7 +57,7 @@ let miscFile = SourceFileSyntax {
         }
       }
     }
-    
+
     try VariableDeclSyntax("public var nameForDiagnostics: String?") {
       try SwitchStmtSyntax("switch self") {
         SwitchCaseSyntax("case .token:") {

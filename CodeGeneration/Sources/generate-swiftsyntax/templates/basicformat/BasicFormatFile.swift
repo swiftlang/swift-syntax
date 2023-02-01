@@ -16,10 +16,12 @@ import SyntaxSupport
 import Utils
 
 let basicFormatFile = SourceFileSyntax {
-  DeclSyntax("""
+  DeclSyntax(
+    """
     \(raw: generateCopyrightHeader(for: "generate-swiftbasicformat"))
     import SwiftSyntax
-    """)
+    """
+  )
 
   try! ClassDeclSyntax("open class BasicFormat: SyntaxRewriter") {
     DeclSyntax("public var indentationLevel: Int = 0")
@@ -28,7 +30,8 @@ let basicFormatFile = SourceFileSyntax {
     DeclSyntax("private var lastRewrittenToken: TokenSyntax?")
     DeclSyntax("private var putNextTokenOnNewLine: Bool = false")
 
-    DeclSyntax("""
+    DeclSyntax(
+      """
       open override func visitPre(_ node: Syntax) {
         if let keyPath = getKeyPath(node), shouldIndent(keyPath) {
           indentationLevel += 1
@@ -39,7 +42,8 @@ let basicFormatFile = SourceFileSyntax {
       }
       """
     )
-    DeclSyntax("""
+    DeclSyntax(
+      """
       open override func visitPost(_ node: Syntax) {
         if let keyPath = getKeyPath(node), shouldIndent(keyPath) {
           indentationLevel -= 1
@@ -48,7 +52,8 @@ let basicFormatFile = SourceFileSyntax {
       """
     )
 
-    DeclSyntax("""
+    DeclSyntax(
+      """
       open override func visit(_ node: TokenSyntax) -> TokenSyntax {
         var leadingTrivia = node.leadingTrivia
         var trailingTrivia = node.trailingTrivia
@@ -122,15 +127,17 @@ let basicFormatFile = SourceFileSyntax {
     }
 
     try FunctionDeclSyntax("open func requiresLeadingSpace(_ token: TokenSyntax) -> Bool") {
-      StmtSyntax("""
+      StmtSyntax(
+        """
         switch (token.previousToken(viewMode: .sourceAccurate)?.tokenKind, token.tokenKind) {
         case (.leftParen, .binaryOperator):  // Ensures there is no space in @available(*, deprecated)
           return false
         default:
           break
         }
-        """)
-      
+        """
+      )
+
       try SwitchStmtSyntax("switch token.tokenKind") {
         for token in SYNTAX_TOKENS {
           if token.requiresLeadingSpace {
@@ -151,7 +158,8 @@ let basicFormatFile = SourceFileSyntax {
     }
 
     try FunctionDeclSyntax("open func requiresTrailingSpace(_ token: TokenSyntax) -> Bool") {
-        StmtSyntax("""
+      StmtSyntax(
+        """
         switch (token.tokenKind, token.parent?.kind) {
         case (.colon, .dictionaryExpr): // Ensures there is not space in `[:]`
           return false
@@ -161,9 +169,11 @@ let basicFormatFile = SourceFileSyntax {
         default:
           break
         }
-        """)
+        """
+      )
 
-      StmtSyntax("""
+      StmtSyntax(
+        """
         switch (token.tokenKind, token.nextToken(viewMode: .sourceAccurate)?.tokenKind) {
         case (.keyword(.as), .exclamationMark), // Ensures there is not space in `as!`
              (.keyword(.as), .postfixQuestionMark), // Ensures there is not space in `as?`
@@ -181,7 +191,8 @@ let basicFormatFile = SourceFileSyntax {
         default:
           break
         }
-        """)
+        """
+      )
 
       try SwitchStmtSyntax("switch token.tokenKind") {
         for token in SYNTAX_TOKENS {
@@ -202,7 +213,8 @@ let basicFormatFile = SourceFileSyntax {
       }
     }
 
-    DeclSyntax("""
+    DeclSyntax(
+      """
       private func getKeyPath(_ node: Syntax) -> AnyKeyPath? {
         guard let parent = node.parent else {
           return nil

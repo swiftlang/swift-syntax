@@ -21,7 +21,7 @@ final class SourceEditorExtension: NSObject, XCSourceEditorExtension {
     }
   }
 
-  var commandDefinitions: [[XCSourceEditorCommandDefinitionKey : Any]] {
+  var commandDefinitions: [[XCSourceEditorCommandDefinitionKey: Any]] {
     return RefactoringRegistry.shared.providers.map { provider in
       return [
         .classNameKey: SourceEditorCommand.className(),

@@ -321,24 +321,6 @@ extension StringLiteralExprSyntax {
   }
 }
 
-// MARK: - TernaryExpr
-
-extension TernaryExprSyntax {
-  public init<C: ExprSyntaxProtocol, F: ExprSyntaxProtocol, S: ExprSyntaxProtocol>(
-    if condition: C,
-    then firstChoice: F,
-    else secondChoice: S
-  ) {
-    self.init(
-      conditionExpression: condition,
-      questionMark: .infixQuestionMarkToken(leadingTrivia: .space, trailingTrivia: .space),
-      firstChoice: firstChoice,
-      colonMark: .colonToken(leadingTrivia: .space),
-      secondChoice: secondChoice
-    )
-  }
-}
-
 // MARK: - TupleExprElement
 
 extension TupleExprElementSyntax {

@@ -42,12 +42,6 @@ STMT_NODES = [
              Child('Expression', kind='Expr'),
          ]),
 
-    # switch-case-list -> switch-case switch-case-list?
-    Node('SwitchCaseList', name_for_diagnostics=None, kind='SyntaxCollection',
-         element='Syntax', element_name='SwitchCase',
-         element_choices=['SwitchCase', 'IfConfigDecl'],
-         elements_separated_by_newline=True),
-
     # repeat-while-stmt -> label? ':'? 'repeat' code-block 'while' expr ';'?
     Node('RepeatWhileStmt', name_for_diagnostics="'repeat' statement", kind='Stmt',
          traits=['WithCodeBlock'],
@@ -97,20 +91,6 @@ STMT_NODES = [
              Child('WhereClause', kind='WhereClause',
                    is_optional=True),
              Child('Body', kind='CodeBlock', name_for_diagnostics='body'),
-         ]),
-
-    # switch-stmt -> identifier? ':'? 'switch' expr '{'
-    #   switch-case-list '}' ';'?
-    Node('SwitchStmt', name_for_diagnostics="'switch' statement", kind='Stmt',
-         traits=['Braced'],
-         children=[
-             Child('SwitchKeyword', kind='SwitchToken'),
-             Child('Expression', kind='Expr'),
-             Child('LeftBrace', kind='LeftBraceToken'),
-             Child('Cases', kind='SwitchCaseList',
-                   collection_element_name='Case'),
-             Child('RightBrace', kind='RightBraceToken',
-                   requires_leading_newline=True),
          ]),
 
     # catch-clause-list -> catch-clause catch-clause-list?
@@ -271,41 +251,6 @@ STMT_NODES = [
              Child('Expression', kind='Expr'),
          ]),
 
-    # switch-case -> unknown-attr? switch-case-label stmt-list
-    #              | unknown-attr? switch-default-label stmt-list
-    Node('SwitchCase', name_for_diagnostics='switch case', kind='Syntax',
-         traits=['WithStatements'],
-         parser_function='parseSwitchCase',
-         children=[
-             Child('UnknownAttr', kind='Attribute', is_optional=True),
-             Child('Label', kind='Syntax', name_for_diagnostics='label',
-                   node_choices=[
-                       Child('Default', kind='SwitchDefaultLabel'),
-                       Child('Case', kind='SwitchCaseLabel'),
-                   ]),
-             Child('Statements', kind='CodeBlockItemList',
-                   collection_element_name='Statement',
-                   is_indented=True),
-         ]),
-
-    # switch-default-label -> 'default' ':'
-    Node('SwitchDefaultLabel', name_for_diagnostics=None, kind='Syntax',
-         children=[
-             Child('DefaultKeyword', kind='DefaultToken'),
-             Child('Colon', kind='ColonToken'),
-         ]),
-
-    # case-item -> pattern where-clause? ','?
-    Node('CaseItem', name_for_diagnostics=None, kind='Syntax',
-         traits=['WithTrailingComma'],
-         children=[
-             Child('Pattern', kind='Pattern'),
-             Child('WhereClause', kind='WhereClause',
-                   is_optional=True),
-             Child('TrailingComma', kind='CommaToken',
-                   is_optional=True),
-         ]),
-
     # catch-item -> pattern? where-clause? ','?
     Node('CatchItem', name_for_diagnostics=None, kind='Syntax',
          traits=['WithTrailingComma'],
@@ -315,15 +260,6 @@ STMT_NODES = [
                    is_optional=True),
              Child('TrailingComma', kind='CommaToken',
                    is_optional=True),
-         ]),
-
-    # switch-case-label -> 'case' case-item-list ':'
-    Node('SwitchCaseLabel', name_for_diagnostics=None, kind='Syntax',
-         children=[
-             Child('CaseKeyword', kind='CaseToken'),
-             Child('CaseItems', kind='CaseItemList',
-                   collection_element_name='CaseItem'),
-             Child('Colon', kind='ColonToken'),
          ]),
 
     # catch-clause 'catch' case-item-list? code-block

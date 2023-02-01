@@ -267,7 +267,7 @@ public typealias IfConfigClause = IfConfigClauseSyntax
 
 public typealias IfConfigDecl = IfConfigDeclSyntax
 
-public typealias IfStmt = IfStmtSyntax
+public typealias IfExpr = IfExprSyntax
 
 public typealias ImplementsAttributeArguments = ImplementsAttributeArgumentsSyntax
 
@@ -465,7 +465,7 @@ public typealias SwitchCase = SwitchCaseSyntax
 
 public typealias SwitchDefaultLabel = SwitchDefaultLabelSyntax
 
-public typealias SwitchStmt = SwitchStmtSyntax
+public typealias SwitchExpr = SwitchExprSyntax
 
 public typealias SymbolicReferenceExpr = SymbolicReferenceExprSyntax
 

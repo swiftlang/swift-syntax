@@ -1041,11 +1041,11 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: IfStmtSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: IfExprSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: IfStmtSyntax) {
+  override open func visitPost(_ node: IfExprSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -1865,11 +1865,11 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: SwitchStmtSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: SwitchExprSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: SwitchStmtSyntax) {
+  override open func visitPost(_ node: SwitchExprSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   

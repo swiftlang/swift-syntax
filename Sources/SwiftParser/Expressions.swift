@@ -2571,18 +2571,20 @@ extension Parser {
   }
 }
 
-// MARK: Switch Statements
+// MARK: Switch Statements/Expressions
 
 extension Parser {
-  /// Parse a switch statement.
+  /// Parse a switch statement/expression.
   ///
   /// Grammar
   /// =======
   ///
-  ///     switch-statement → 'switch' expression '{' switch-cases? '}'
+  ///     switch-expression → 'switch' expression '{' switch-cases? '}'
   ///     switch-cases → switch-case switch-cases?
   @_spi(RawSyntax)
-  public mutating func parseSwitchStatement(switchHandle: RecoveryConsumptionHandle) -> RawSwitchStmtSyntax {
+  public mutating func parseSwitchExpression(
+    switchHandle: RecoveryConsumptionHandle
+  ) -> RawSwitchExprSyntax {
     let (unexpectedBeforeSwitchKeyword, switchKeyword) = self.eat(switchHandle)
 
     let subject = self.parseExpression(.basic)
@@ -2591,7 +2593,7 @@ extension Parser {
     let cases = self.parseSwitchCases(allowStandaloneStmtRecovery: !lbrace.isMissing)
 
     let (unexpectedBeforeRBrace, rbrace) = self.expectRightBrace(leftBrace: lbrace, introducer: switchKeyword)
-    return RawSwitchStmtSyntax(
+    return RawSwitchExprSyntax(
       unexpectedBeforeSwitchKeyword,
       switchKeyword: switchKeyword,
       expression: subject,

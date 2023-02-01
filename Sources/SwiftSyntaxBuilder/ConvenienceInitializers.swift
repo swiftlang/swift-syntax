@@ -173,11 +173,11 @@ extension FunctionCallExprSyntax {
 // strings, only literals.
 extension FunctionParameterSyntax {
   public init(
-    _ source: String,
+    _ source: PartialSyntaxNodeString,
     for subject: Parser.ParameterSubject
   ) {
     self = performParse(
-      source: Array(source.utf8),
+      source: source.sourceText,
       parse: {
         let raw = RawSyntax($0.parseFunctionParameter(for: subject))
         return Syntax(raw: raw).cast(FunctionParameterSyntax.self)

@@ -131,47 +131,6 @@ extension Parser {
 // MARK: Conditional Statements
 
 extension Parser {
-  /// Parse an if statement.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     if-statement → 'if' condition-list code-block else-clause?
-  ///     else-clause  → 'else' code-block | else if-statement
-  @_spi(RawSyntax)
-  public mutating func parseIfStatement(ifHandle: RecoveryConsumptionHandle) -> RawIfStmtSyntax {
-    let (unexpectedBeforeIfKeyword, ifKeyword) = self.eat(ifHandle)
-    // A scope encloses the condition and true branch for any variables bound
-    // by a conditional binding. The else branch does *not* see these variables.
-    let conditions = self.parseConditionList()
-    let body = self.parseCodeBlock(introducer: ifKeyword)
-
-    // The else branch, if any, is outside of the scope of the condition.
-    let elseKeyword = self.consume(if: .elseKeyword)
-    let elseBody: RawIfStmtSyntax.ElseBody?
-    if elseKeyword != nil {
-      if self.at(.ifKeyword) {
-        elseBody = .ifStmt(self.parseIfStatement(ifHandle: .constant(.ifKeyword)))
-      } else {
-        elseBody = .codeBlock(self.parseCodeBlock(introducer: ifKeyword))
-      }
-    } else {
-      elseBody = nil
-    }
-
-    return RawIfStmtSyntax(
-      unexpectedBeforeIfKeyword,
-      ifKeyword: ifKeyword,
-      conditions: conditions,
-      body: body,
-      elseKeyword: elseKeyword,
-      elseBody: elseBody,
-      arena: self.arena
-    )
-  }
-}
-
-extension Parser {
   /// Parse a guard statement.
   ///
   /// Grammar

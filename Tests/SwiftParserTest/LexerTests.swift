@@ -935,6 +935,55 @@ public class LexerTests: XCTestCase {
       ]
     )
   }
+
+  func testMultiDigitTupleAccess() {
+    var data = "x.13.1"
+    data.withUTF8 { buf in
+      let lexemes = Lexer.lex(buf)
+      AssertEqualTokens(
+        lexemes,
+        [
+          lexeme(.identifier, "x"),
+          lexeme(.period, "."),
+          lexeme(.integerLiteral, "13"),
+          lexeme(.period, "."),
+          lexeme(.integerLiteral, "1"),
+          lexeme(.eof, ""),
+        ]
+      )
+    }
+  }
+
+  func testFloatingPointNumberAfterRangeOperator() {
+    var data = "0.1...0.2"
+    data.withUTF8 { buf in
+      let lexemes = Lexer.lex(buf)
+      AssertEqualTokens(
+        lexemes,
+        [
+          lexeme(.floatingLiteral, "0.1"),
+          lexeme(.unspacedBinaryOperator, "..."),
+          lexeme(.floatingLiteral, "0.2"),
+          lexeme(.eof, ""),
+        ]
+      )
+    }
+  }
+
+  func testUnterminatedFloatLiteral() {
+    var data = "0."
+    data.withUTF8 { buf in
+      let lexemes = Lexer.lex(buf)
+      AssertEqualTokens(
+        lexemes,
+        [
+          lexeme(.integerLiteral, "0"),
+          lexeme(.unknown, "."),
+          lexeme(.eof, ""),
+        ]
+      )
+    }
+  }
 }
 
 extension Lexer {

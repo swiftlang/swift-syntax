@@ -358,15 +358,6 @@ extension StringLiteralExprSyntax {
   }
 }
 
-// MARK: - SwitchCase
-
-extension SwitchCaseSyntax {
-  public init(_ label: SwitchCaseSyntax, @CodeBlockItemListBuilder statementsBuilder: () -> CodeBlockItemListSyntax) {
-    self = label
-    self.statements = statementsBuilder()
-  }
-}
-
 // MARK: - TernaryExpr
 
 extension TernaryExprSyntax {

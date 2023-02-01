@@ -188,6 +188,22 @@ extension Lexer.Cursor {
       }
     }
   }
+
+  /// An error that was discovered in a lexeme while lexing it.
+  struct LexingError {
+    let kind: LexerError.Kind
+    /// The position in the token at which the error is.
+    let position: Lexer.Cursor
+
+    init(_ kind: LexerError.Kind, position: Lexer.Cursor) {
+      self.kind = kind
+      self.position = position
+    }
+
+    func lexerError(tokenStart: Lexer.Cursor) -> LexerError {
+      return LexerError(kind, byteOffset: tokenStart.distance(to: position))
+    }
+  }
 }
 
 extension Lexer {
@@ -259,7 +275,7 @@ extension Lexer {
     let flags: Lexer.Lexeme.Flags
     /// The error kind and the cursor pointing to the character at which the
     /// error occurred
-    let error: (kind: LexerError.Kind, position: Lexer.Cursor)?
+    let error: Cursor.LexingError?
     let stateTransition: StateTransition?
     /// If set, overritdes the trailing trivia lexing mode of the current state
     /// for this lexeme.
@@ -268,7 +284,7 @@ extension Lexer {
     init(
       _ tokenKind: RawTokenKind,
       flags: Lexer.Lexeme.Flags = [],
-      error: (kind: LexerError.Kind, position: Cursor)? = nil,
+      error: Cursor.LexingError? = nil,
       stateTransition: StateTransition? = nil,
       trailingTriviaLexingMode: Lexer.Cursor.TriviaLexingMode? = nil
     ) {
@@ -293,7 +309,7 @@ extension Lexer.Cursor {
     if let leadingTriviaMode = self.currentState.leadingTriviaLexingMode(cursor: self) {
       let triviaResult = self.lexTrivia(mode: leadingTriviaMode)
       newlineInLeadingTrivia = triviaResult.newlinePresence
-      error = error ?? triviaResult.error.map { LexerError($0.kind, byteOffset: cursor.distance(to: $0.position)) }
+      error = error ?? triviaResult.error?.lexerError(tokenStart: cursor)
     } else {
       newlineInLeadingTrivia = .absent
     }
@@ -329,7 +345,7 @@ extension Lexer.Cursor {
     let trailingTriviaStart = self
     if let trailingTriviaMode = result.trailingTriviaLexingMode ?? currentState.trailingTriviaLexingMode(cursor: self) {
       let triviaResult = self.lexTrivia(mode: trailingTriviaMode)
-      error = error ?? triviaResult.error.map { LexerError($0.kind, byteOffset: cursor.distance(to: $0.position)) }
+      error = error ?? triviaResult.error?.lexerError(tokenStart: cursor)
     }
 
     if self.currentState.shouldPopStateWhenReachingNewlineInTrailingTrivia && self.is(at: "\r", "\n") {
@@ -342,7 +358,7 @@ extension Lexer.Cursor {
     }
 
     self.previousTokenKind = result.tokenKind.base
-    error = error ?? result.error.map { LexerError($0.kind, byteOffset: cursor.distance(to: $0.position)) }
+    error = error ?? result.error?.lexerError(tokenStart: cursor)
 
     return .init(
       tokenKind: result.tokenKind,
@@ -880,7 +896,7 @@ extension Lexer.Cursor {
         return result
       case .trivia:
         assertionFailure("Invalid UTF-8 sequence should be eaten by lexTrivia as LeadingTrivia")
-        return Lexer.Result(.unknown, error: (.invalidUtf8, self))
+        return Lexer.Result(.unknown, error: LexingError(.invalidUtf8, position: self))
       }
     }
   }
@@ -1003,12 +1019,12 @@ extension Lexer.Cursor {
 
   fileprivate struct TriviaResult {
     let newlinePresence: NewlinePresence
-    let error: (kind: LexerError.Kind, position: Lexer.Cursor)?
+    let error: LexingError?
   }
 
   fileprivate mutating func lexTrivia(mode: TriviaLexingMode) -> TriviaResult {
     var newlinePresence = NewlinePresence.absent
-    var error: (kind: LexerError.Kind, position: Lexer.Cursor)? = nil
+    var error: LexingError? = nil
     if mode == .escapedNewlineInMultiLineStringLiteral {
       _ = self.advance(matching: "\\")
       self.advance(while: { $0 == "#" })
@@ -1071,7 +1087,7 @@ extension Lexer.Cursor {
         continue
       case UInt8(ascii: "<"), UInt8(ascii: ">"):
         if self.tryLexConflictMarker(start: start) {
-          error = (.sourceConflictMarker, start)
+          error = LexingError(.sourceConflictMarker, position: start)
           continue
         }
       // Start character of tokens.
@@ -1185,7 +1201,7 @@ extension Lexer.Cursor {
         self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
         return Lexer.Result(
           .integerLiteral,
-          error: (.invalidOctalDigitInIntegerLiteral, errorPos)
+          error: LexingError(.invalidOctalDigitInIntegerLiteral, position: errorPos)
         )
       }
 
@@ -1199,7 +1215,7 @@ extension Lexer.Cursor {
         self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
         return Lexer.Result(
           .integerLiteral,
-          error: (.invalidOctalDigitInIntegerLiteral, errorPos)
+          error: LexingError(.invalidOctalDigitInIntegerLiteral, position: errorPos)
         )
       }
 
@@ -1216,7 +1232,7 @@ extension Lexer.Cursor {
         self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
         return Lexer.Result(
           .integerLiteral,
-          error: (.invalidBinaryDigitInIntegerLiteral, errorPos)
+          error: LexingError(.invalidBinaryDigitInIntegerLiteral, position: errorPos)
         )
       }
 
@@ -1230,7 +1246,7 @@ extension Lexer.Cursor {
         self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
         return Lexer.Result(
           .integerLiteral,
-          error: (.invalidBinaryDigitInIntegerLiteral, errorPos)
+          error: LexingError(.invalidBinaryDigitInIntegerLiteral, position: errorPos)
         )
       }
 
@@ -1264,7 +1280,7 @@ extension Lexer.Cursor {
         self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
         return Lexer.Result(
           .integerLiteral,
-          error: (.invalidDecimalDigitInIntegerLiteral, errorPos)
+          error: LexingError(.invalidDecimalDigitInIntegerLiteral, position: errorPos)
         )
       }
 
@@ -1301,7 +1317,7 @@ extension Lexer.Cursor {
         self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
         return Lexer.Result(
           .floatingLiteral,
-          error: (errorKind, errorPos)
+          error: LexingError(errorKind, position: errorPos)
         )
       }
 
@@ -1313,7 +1329,7 @@ extension Lexer.Cursor {
         self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
         return Lexer.Result(
           .floatingLiteral,
-          error: (.invalidFloatingPointExponentDigit, errorPos)
+          error: LexingError(.invalidFloatingPointExponentDigit, position: errorPos)
         )
       }
     }
@@ -1329,16 +1345,16 @@ extension Lexer.Cursor {
 
     // 0x[0-9a-fA-F][0-9a-fA-F_]*
     guard let peeked = self.peek() else {
-      return Lexer.Result(.integerLiteral, error: (.expectedHexDigitInHexLiteral, self))
+      return Lexer.Result(.integerLiteral, error: LexingError(.expectedHexDigitInHexLiteral, position: self))
     }
 
     guard Unicode.Scalar(peeked).isHexDigit else {
       if Unicode.Scalar(peeked).isValidIdentifierContinuationCodePoint {
         let errorPos = self
         self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
-        return Lexer.Result(.integerLiteral, error: (.invalidHexDigitInIntegerLiteral, errorPos))
+        return Lexer.Result(.integerLiteral, error: LexingError(.invalidHexDigitInIntegerLiteral, position: errorPos))
       } else {
-        return Lexer.Result(.integerLiteral, error: (.expectedHexDigitInHexLiteral, self))
+        return Lexer.Result(.integerLiteral, error: LexingError(.expectedHexDigitInHexLiteral, position: self))
       }
     }
 
@@ -1351,7 +1367,7 @@ extension Lexer.Cursor {
         self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
         return Lexer.Result(
           .integerLiteral,
-          error: (.invalidHexDigitInIntegerLiteral, errorPos)
+          error: LexingError(.invalidHexDigitInIntegerLiteral, position: errorPos)
         )
       } else {
         return Lexer.Result(.integerLiteral)
@@ -1380,7 +1396,7 @@ extension Lexer.Cursor {
         }
         return Lexer.Result(
           .integerLiteral,
-          error: (.expectedBinaryExponentInHexFloatLiteral, self)
+          error: LexingError(.expectedBinaryExponentInHexFloatLiteral, position: self)
         )
       }
     } else {
@@ -1423,7 +1439,7 @@ extension Lexer.Cursor {
       self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
       return Lexer.Result(
         .floatingLiteral,
-        error: (errorKind, errorPos)
+        error: LexingError(errorKind, position: errorPos)
       )
     }
 
@@ -1435,7 +1451,7 @@ extension Lexer.Cursor {
       self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
       return Lexer.Result(
         .floatingLiteral,
-        error: (.invalidFloatingPointExponentDigit, errorPos)
+        error: LexingError(.invalidFloatingPointExponentDigit, position: errorPos)
       )
     }
     return Lexer.Result(.floatingLiteral)
@@ -1781,7 +1797,7 @@ extension Lexer.Cursor {
   }
 
   mutating func lexInStringLiteral(stringLiteralKind: StringLiteralKind, delimiterLength: Int) -> Lexer.Result {
-    var error: (LexerError.Kind, Lexer.Cursor)? = nil
+    var error: LexingError? = nil
 
     while true {
       switch self.peek() {
@@ -1837,7 +1853,7 @@ extension Lexer.Cursor {
           return Lexer.Result(.stringSegment, error: error)
         }
       case .error(let errorKind):
-        error = (errorKind, self)
+        error = LexingError(errorKind, position: self)
         self = clone
       case .endOfString:
         return Lexer.Result(
@@ -1997,7 +2013,7 @@ extension Lexer.Cursor {
       case (UInt8(ascii: "-"), UInt8(ascii: ">")):  // ->
         return Lexer.Result(.arrow)
       case (UInt8(ascii: "*"), UInt8(ascii: "/")):  // */
-        return Lexer.Result(.unknown, error: (.unexpectedBlockCommentEnd, tokStart))
+        return Lexer.Result(.unknown, error: LexingError(.unexpectedBlockCommentEnd, position: tokStart))
       default:
         break
       }
@@ -2005,7 +2021,7 @@ extension Lexer.Cursor {
       // Verify there is no "*/" in the middle of the identifier token, we reject
       // it as potentially ending a block comment.
       if tokStart.text(upTo: self).contains("*/") {
-        return Lexer.Result(.unknown, error: (.unexpectedBlockCommentEnd, tokStart))
+        return Lexer.Result(.unknown, error: LexingError(.unexpectedBlockCommentEnd, position: tokStart))
       }
     }
 
@@ -2111,7 +2127,7 @@ extension Lexer.Cursor {
 
   enum UnknownCharactersClassification {
     /// The characters consumed by `lexUnknown` should be classified as trivia
-    case trivia(error: (kind: LexerError.Kind, position: Lexer.Cursor))
+    case trivia(error: LexingError)
     /// The characters consumed by `lexUnknown` should be classified as the contents of a lexeme
     case lexemeContents(Lexer.Result)
   }
@@ -2128,13 +2144,13 @@ extension Lexer.Cursor {
       // start, attempt to recover by eating more continuation characters.
       tmp.advance(while: { Unicode.Scalar($0).isValidIdentifierContinuationCodePoint })
       self = tmp
-      return .lexemeContents(Lexer.Result(.identifier, error: (.invalidIdentifierStartCharacter, position: start)))
+      return .lexemeContents(Lexer.Result(.identifier, error: LexingError(.invalidIdentifierStartCharacter, position: start)))
     }
 
     // This character isn't allowed in Swift source.
     guard let codepoint = tmp.advanceValidatingUTF8Character() else {
       self = tmp
-      return .trivia(error: (kind: .invalidUtf8, position: start))
+      return .trivia(error: LexingError(.invalidUtf8, position: start))
     }
     if codepoint.value == 0xA0 {  // Non-breaking whitespace (U+00A0)
       while tmp.is(at: 0xC2) && tmp.is(offset: 1, at: 0xA0) {
@@ -2143,11 +2159,11 @@ extension Lexer.Cursor {
       }
 
       self = tmp
-      return .trivia(error: (kind: .nonBreakingSpace, position: start))
+      return .trivia(error: LexingError(.nonBreakingSpace, position: start))
     } else if codepoint.value == 0x201D {  // Closing curly quote (U+201D)
       // If this is an end curly quote, just diagnose it with a fixit hint.
       self = tmp
-      return .lexemeContents(Lexer.Result(.unknown, error: (.unicodeCurlyQuote, position: start)))
+      return .lexemeContents(Lexer.Result(.unknown, error: LexingError(.unicodeCurlyQuote, position: start)))
     } else if codepoint.value == 0x201C {  // Opening curly quote (U+201C)
       // If this is a start curly quote, do a fuzzy match of a string literal
       // to improve recovery.
@@ -2160,15 +2176,15 @@ extension Lexer.Cursor {
       // Identifiers are the closest representation of static string literals
       // we have in the parser. Classify the entire curly string as an identifier
       // for best recovery.
-      return .lexemeContents(Lexer.Result(.identifier, error: (.unicodeCurlyQuote, position: start)))
+      return .lexemeContents(Lexer.Result(.identifier, error: LexingError(.unicodeCurlyQuote, position: start)))
     } else if codepoint.value == 0 {  // Nul character
       self = tmp
-      return .trivia(error: (kind: .nulCharacter, position: start))
+      return .trivia(error: LexingError(.nulCharacter, position: start))
     }
 
     // TODO: Try map confusables to ASCII characters
     self = tmp
-    return .trivia(error: (kind: .invalidCharacter, position: start))
+    return .trivia(error: LexingError(.invalidCharacter, position: start))
   }
 
   enum ConflictMarker {

@@ -186,29 +186,6 @@ extension FunctionParameterSyntax {
   }
 }
 
-// MARK: - IfStmt
-
-extension IfStmtSyntax {
-  /// A convenience initializer that uses builder closures to express an
-  /// if body, potentially with a second trailing builder closure for an else
-  /// body.
-  public init(
-    leadingTrivia: Trivia = [],
-    conditions: ConditionElementListSyntax,
-    @CodeBlockItemListBuilder body: () -> CodeBlockItemListSyntax,
-    @CodeBlockItemListBuilder elseBody: () -> CodeBlockItemListSyntax? = { nil }
-  ) {
-    let generatedElseBody = elseBody()
-    self.init(
-      leadingTrivia: leadingTrivia,
-      conditions: conditions,
-      body: CodeBlockSyntax(statements: body()),
-      elseKeyword: generatedElseBody == nil ? nil : .keyword(.else, leadingTrivia: .space),
-      elseBody: generatedElseBody.map { .codeBlock(CodeBlockSyntax(statements: $0)) }
-    )
-  }
-}
-
 // MARK: - IntegerLiteralExpr
 
 extension IntegerLiteralExprSyntax: ExpressibleByIntegerLiteral {

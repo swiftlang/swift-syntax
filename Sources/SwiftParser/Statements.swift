@@ -97,7 +97,12 @@ extension Parser {
       return label(self.parseRepeatWhileStatement(repeatHandle: handle), with: optLabel)
 
     case (.ifKeyword, let handle)?:
-      return label(self.parseIfStatement(ifHandle: handle), with: optLabel)
+      let ifExpr = self.parseIfExpression(ifHandle: handle)
+      let ifStmt = RawExpressionStmtSyntax(
+        expression: RawExprSyntax(ifExpr),
+        arena: self.arena
+      )
+      return label(ifStmt, with: optLabel)
     case (.guardKeyword, let handle)?:
       return label(self.parseGuardStatement(guardHandle: handle), with: optLabel)
     case (.switchKeyword, let handle)?:

@@ -2524,16 +2524,20 @@ extension Parser.Lookahead {
   }
 }
 
+// MARK: Conditional Expressions
+
 extension Parser {
-  /// Parse an if statement.
+  /// Parse an if statement/expression.
   ///
   /// Grammar
   /// =======
   ///
-  ///     if-statement → 'if' condition-list code-block else-clause?
+  ///     if-expression → 'if' condition-list code-block else-clause?
   ///     else-clause  → 'else' code-block | else if-statement
   @_spi(RawSyntax)
-  public mutating func parseIfStatement(ifHandle: RecoveryConsumptionHandle) -> RawIfStmtSyntax {
+  public mutating func parseIfExpression(
+    ifHandle: RecoveryConsumptionHandle
+  ) -> RawIfExprSyntax {
     let (unexpectedBeforeIfKeyword, ifKeyword) = self.eat(ifHandle)
     // A scope encloses the condition and true branch for any variables bound
     // by a conditional binding. The else branch does *not* see these variables.
@@ -2542,10 +2546,12 @@ extension Parser {
 
     // The else branch, if any, is outside of the scope of the condition.
     let elseKeyword = self.consume(if: .elseKeyword)
-    let elseBody: RawIfStmtSyntax.ElseBody?
+    let elseBody: RawIfExprSyntax.ElseBody?
     if elseKeyword != nil {
       if self.at(.ifKeyword) {
-        elseBody = .ifStmt(self.parseIfStatement(ifHandle: .constant(.ifKeyword)))
+        elseBody = .ifExpr(
+          self.parseIfExpression(ifHandle: .constant(.ifKeyword))
+        )
       } else {
         elseBody = .codeBlock(self.parseCodeBlock(introducer: ifKeyword))
       }
@@ -2553,7 +2559,7 @@ extension Parser {
       elseBody = nil
     }
 
-    return RawIfStmtSyntax(
+    return RawIfExprSyntax(
       unexpectedBeforeIfKeyword,
       ifKeyword: ifKeyword,
       conditions: conditions,

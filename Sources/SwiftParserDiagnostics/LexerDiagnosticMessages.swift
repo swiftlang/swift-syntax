@@ -191,8 +191,8 @@ public extension SwiftSyntax.LexerError {
       }
       let replacedText =
         text
-        .replacingFirstOccurance(of: "“", with: #"""#)
-        .replacingLastOccurance(of: "”", with: #"""#)
+        .replacingFirstOccurence(of: "“", with: #"""#)
+        .replacingLastOccurence(of: "”", with: #"""#)
 
       let fixedToken = token.withKind(TokenKind.fromRaw(kind: rawKind, text: replacedText))
       return [

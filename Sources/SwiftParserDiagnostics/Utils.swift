@@ -19,14 +19,14 @@ extension String {
     }
   }
 
-  func replacingFirstOccurance(of character: Character, with replacement: Character) -> String {
+  func replacingFirstOccurence(of character: Character, with replacement: Character) -> String {
     guard let match = self.firstIndex(of: character) else {
       return self
     }
     return self[startIndex..<match] + String(replacement) + self[index(after: match)...]
   }
 
-  func replacingLastOccurance(of character: Character, with replacement: Character) -> String {
+  func replacingLastOccurence(of character: Character, with replacement: Character) -> String {
     guard let match = self.lastIndex(of: character) else {
       return self
     }

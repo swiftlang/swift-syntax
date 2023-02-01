@@ -271,25 +271,6 @@ STMT_NODES = [
              Child('Expression', kind='Expr'),
          ]),
 
-    # if-stmt -> identifier? ':'? 'if' condition-list code-block
-    #   else-clause ';'?
-    Node('IfStmt', name_for_diagnostics="'if' statement", kind='Stmt',
-         traits=['WithCodeBlock'],
-         children=[
-             Child('IfKeyword', kind='IfToken'),
-             Child('Conditions', kind='ConditionElementList',
-                   collection_element_name='Condition'),
-             Child('Body', kind='CodeBlock', name_for_diagnostics='body'),
-             Child('ElseKeyword', kind='ElseToken',
-                   is_optional=True),
-             Child('ElseBody', kind='Syntax', name_for_diagnostics='else body',
-                   node_choices=[
-                       Child('IfStmt', kind='IfStmt'),
-                       Child('CodeBlock', kind='CodeBlock'),
-                   ],
-                   is_optional=True),
-         ]),
-
     # switch-case -> unknown-attr? switch-case-label stmt-list
     #              | unknown-attr? switch-default-label stmt-list
     Node('SwitchCase', name_for_diagnostics='switch case', kind='Syntax',

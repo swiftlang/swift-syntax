@@ -1601,7 +1601,7 @@ extension Lexer.Cursor {
       }
       return cv
 
-    case UInt8(ascii: " "), UInt8(ascii: "\t"), UInt8(ascii: "\n"), UInt8(ascii: "\r"):
+    case UInt8(ascii: "\n"), UInt8(ascii: "\r"):
       if isMultilineString && self.maybeConsumeNewlineEscape() {
         return UInt32(UInt8(ascii: "\n"))
       }
@@ -1780,12 +1780,15 @@ extension Lexer.Cursor {
         .fixItInsert(Lexer::getSourceLoc(CurPtr), "\n")
     }
 */
+    var error: (LexerError.Kind, Lexer.Cursor)? = nil
+
     while true {
       switch self.peek() {
       case UInt8(ascii: "\\"):
         if self.isAtStringInterpolationAnchor(delimiterLength: delimiterLength) {
           return Lexer.Result(
             .stringSegment,
+            error: error,
             stateTransition: .push(newState: .inStringInterpolationStart(stringLiteralKind: stringLiteralKind))
           )
         } else if self.isAtEscapedNewline(delimiterLength: delimiterLength) {
@@ -1802,16 +1805,17 @@ extension Lexer.Cursor {
           if character == UInt8(ascii: "\r") {
             _ = self.advance(matching: "\n")
           }
-          return Lexer.Result(.stringSegment)
+          return Lexer.Result(.stringSegment, error: error)
         } else {
           // Single line literals cannot span multiple lines.
           // Terminate the string here and go back to normal lexing (instead of `afterStringLiteral`)
           // since we aren't looking for the closing quote anymore.
-          return Lexer.Result(.stringSegment, stateTransition: .pop)
+          return Lexer.Result(.stringSegment, error: error, stateTransition: .pop)
         }
       case nil:
         return Lexer.Result(
           .stringSegment,
+          error: error,
           stateTransition: .replace(newState: .afterStringLiteral(isRawString: delimiterLength > 0))
         )
       default:
@@ -1829,14 +1833,15 @@ extension Lexer.Cursor {
         if escapedCharacter == "\n" || escapedCharacter == "\r" {
           // Make sure each line starts a new string segment so the parser can
           // validate the multi-line string literal's indentation.
-          return Lexer.Result(.stringSegment)
+          return Lexer.Result(.stringSegment, error: error)
         }
       case .error:
-        // TODO: Diagnose error
+        error = (.invalidEscapeSequenceInStringLiteral, self)
         self = clone
       case .endOfString:
         return Lexer.Result(
           .stringSegment,
+          error: error,
           stateTransition: .replace(newState: .afterStringLiteral(isRawString: delimiterLength > 0))
         )
       }

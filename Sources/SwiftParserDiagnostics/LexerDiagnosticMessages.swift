@@ -40,6 +40,7 @@ public extension LexerError {
 public enum StaticLexerError: String, DiagnosticMessage {
   case expectedBinaryExponentInHexFloatLiteral = "hexadecimal floating point literal must end with an exponent"
   case expectedDigitInFloatLiteral = "expected a digit in floating point exponent"
+  case invalidEscapeSequenceInStringLiteral = "invalid escape sequence in literal"
   case lexerErrorOffsetOverflow = "the lexer dicovered an error in this token but was not able to represent its offset due to overflow; please split the token"
 
   public var message: String { self.rawValue }
@@ -119,10 +120,8 @@ public extension SwiftSyntax.LexerError {
       return InvalidDigitInIntegerLiteral(kind: .binary(scalarAtErrorOffset))
     case .invalidDecimalDigitInIntegerLiteral:
       return InvalidDigitInIntegerLiteral(kind: .decimal(scalarAtErrorOffset))
-    case .invalidFloatingPointCharacter:
-      fatalError()
-    case .invalidFloatingPointDigit:
-      fatalError()
+    case .invalidEscapeSequenceInStringLiteral:
+      return StaticLexerError.invalidEscapeSequenceInStringLiteral
     case .invalidFloatingPointExponentCharacter:
       return InvalidFloatingPointExponentDigit(kind: .character(scalarAtErrorOffset))
     case .invalidFloatingPointExponentDigit:

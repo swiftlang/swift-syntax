@@ -611,9 +611,10 @@ final class ExpressionTests: XCTestCase {
     )
 
     AssertParse(
-      ###""\1️⃣"###,
+      ###""1️⃣\2️⃣"###,
       diagnostics: [
-        DiagnosticSpec(message: #"expected '"' to end string literal"#)
+        DiagnosticSpec(locationMarker: "1️⃣", message: "invalid escape sequence in literal"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#),
       ]
     )
   }
@@ -699,9 +700,12 @@ final class ExpressionTests: XCTestCase {
   func testPoundsInStringInterpolationWhereNotNecessary() {
     AssertParse(
       ##"""
-      "\#(1)"
+      "1️⃣\#(1)"
       """##,
-      substructure: Syntax(StringSegmentSyntax(content: .stringSegment(##"\#(1)"##)))
+      substructure: Syntax(StringSegmentSyntax(content: .stringSegment(##"\#(1)"##))),
+      diagnostics: [
+        DiagnosticSpec(message: "invalid escape sequence in literal")
+      ]
     )
   }
 

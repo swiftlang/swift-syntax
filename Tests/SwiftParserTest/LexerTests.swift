@@ -130,12 +130,11 @@ public class LexerTests: XCTestCase {
 
     AssertLexemes(
       #"""
-      "\u{12341234}"
+      "1️⃣\u{12341234}"
       """#,
       lexemes: [
-        // FIXME: We should diagnose invalid unicode characters in string literals
         LexemeSpec(.stringQuote, text: #"""#),
-        LexemeSpec(.stringSegment, text: #"\u{12341234}"#),
+        LexemeSpec(.stringSegment, text: #"\u{12341234}"#, error: "invalid escape sequence in literal"),
         LexemeSpec(.stringQuote, text: #"""#),
       ]
     )

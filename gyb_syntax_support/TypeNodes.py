@@ -9,6 +9,7 @@ TYPE_NODES = [
                    token_choices=[
                        'IdentifierToken',
                        'KeywordToken',
+                       'WildcardToken',
                    ]),
              Child('GenericArgumentClause', kind='GenericArgumentClause',
                    is_optional=True),
@@ -187,7 +188,7 @@ TYPE_NODES = [
          traits=['Attributed'],
          children=[
              Child('Specifier', kind='Token',
-                   token_choices=['KeywordToken|inout', 'KeywordToken|__shared', 'KeywordToken|__owned'],
+                   token_choices=['KeywordToken|inout', 'KeywordToken|__shared', 'KeywordToken|__owned', 'KeywordToken|isolated', 'KeywordToken|_const'],
                    is_optional=True),
              Child('Attributes', kind='AttributeList',
                    collection_element_name='Attribute', is_optional=True),

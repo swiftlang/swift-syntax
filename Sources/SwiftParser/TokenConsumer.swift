@@ -162,9 +162,13 @@ extension TokenConsumer {
 
   /// Consumes and returns the current token is an operator with the given `name`.
   @_spi(RawSyntax)
-  public mutating func consumeIfContextualPunctuator(_ name: SyntaxText) -> Token? {
+  public mutating func consumeIfContextualPunctuator(_ name: SyntaxText, remapping: RawTokenKind? = nil) -> Token? {
     if self.atContextualPunctuator(name) {
-      return self.consumeAnyToken()
+      if let remapping = remapping {
+        return self.consumeAnyToken(remapping: remapping)
+      } else {
+        return self.consumeAnyToken()
+      }
     }
     return nil
   }

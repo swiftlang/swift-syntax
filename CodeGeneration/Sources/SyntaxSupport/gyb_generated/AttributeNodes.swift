@@ -103,7 +103,7 @@ public let ATTRIBUTE_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "Label",
-               kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+               kind: .token(choices: [.keyword(text: "availability")]),
                description: "The label of the argument"),
          Child(name: "Colon",
                kind: .token(choices: [.token(tokenKind: "ColonToken")]),
@@ -123,7 +123,7 @@ public let ATTRIBUTE_NODES: [Node] = [
        ],
        children: [
          Child(name: "Label",
-               kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .keyword(text: "available"), .keyword(text: "exported"), .keyword(text: "kind"), .keyword(text: "spi"), .keyword(text: "spiModule")]),
                description: "The label of the argument"),
          Child(name: "Colon",
                kind: .token(choices: [.token(tokenKind: "ColonToken")]),
@@ -146,7 +146,7 @@ public let ATTRIBUTE_NODES: [Node] = [
        ],
        children: [
          Child(name: "Label",
-               kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+               kind: .token(choices: [.keyword(text: "target")]),
                description: "The label of the argument"),
          Child(name: "Colon",
                kind: .token(choices: [.token(tokenKind: "ColonToken")]),
@@ -165,7 +165,7 @@ public let ATTRIBUTE_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "DeclBaseName",
-               kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "PrefixOperatorToken")]),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "PrefixOperatorToken"), .keyword(text: "init")]),
                description: "The base name of the protocol's requirement."),
          Child(name: "DeclNameArguments",
                kind: .node(kind: "DeclNameArguments"),
@@ -396,7 +396,7 @@ public let ATTRIBUTE_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "ConventionLabel",
-               kind: .token(choices: [.keyword(text: "block"), .keyword(text: "c"), .keyword(text: "objc_method"), .keyword(text: "thin"), .keyword(text: "thick")]),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
                description: "The convention label."),
          Child(name: "Comma",
                kind: .token(choices: [.token(tokenKind: "CommaToken")]),
@@ -418,7 +418,7 @@ public let ATTRIBUTE_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "WitnessMethodLabel",
-               kind: .token(choices: [.token(tokenKind: "IdentifierToken")])),
+               kind: .token(choices: [.keyword(text: "witness_method")])),
          Child(name: "Colon",
                kind: .token(choices: [.token(tokenKind: "ColonToken")])),
          Child(name: "ProtocolName",

@@ -505,6 +505,7 @@ public struct RawCodeBlockItemSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterSemicolon: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(semicolon == nil || semicolon?.tokenKind.base == .semicolon, "Received \(String(describing: semicolon?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .codeBlockItem, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -607,6 +608,8 @@ public struct RawCodeBlockSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterRightBrace: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(leftBrace.tokenKind.base == .leftBrace, "Received \(leftBrace.tokenKind)")
+    assert(rightBrace.tokenKind.base == .rightBrace, "Received \(rightBrace.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .codeBlock, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -835,6 +838,7 @@ public struct RawInOutExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedAfterExpression: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(ampersand.tokenKind.base == .prefixAmpersand, "Received \(ampersand.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .inOutExpr, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -1086,6 +1090,8 @@ public struct RawTryExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedAfterExpression: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(tryKeyword.tokenKind == .keyword(.try), "Received \(tryKeyword.tokenKind)")
+    assert(questionOrExclamationMark == nil || questionOrExclamationMark?.tokenKind.base == .postfixQuestionMark || questionOrExclamationMark?.tokenKind.base == .exclamationMark, "Received \(String(describing: questionOrExclamationMark?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .tryExpr, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -1154,6 +1160,7 @@ public struct RawAwaitExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedAfterExpression: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(awaitKeyword.tokenKind == .keyword(.await), "Received \(awaitKeyword.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .awaitExpr, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -1214,6 +1221,7 @@ public struct RawMoveExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedAfterExpression: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(moveKeyword.tokenKind == .keyword(._move), "Received \(moveKeyword.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .moveExpr, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -1274,6 +1282,7 @@ public struct RawBorrowExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedAfterExpression: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(borrowKeyword.tokenKind == .keyword(._borrow), "Received \(borrowKeyword.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .borrowExpr, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -1334,6 +1343,7 @@ public struct RawDeclNameArgumentSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterColon: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(colon.tokenKind.base == .colon, "Received \(colon.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .declNameArgument, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -1436,6 +1446,8 @@ public struct RawDeclNameArgumentsSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterRightParen: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(leftParen.tokenKind.base == .leftParen, "Received \(leftParen.tokenKind)")
+    assert(rightParen.tokenKind.base == .rightParen, "Received \(rightParen.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .declNameArguments, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -1504,6 +1516,7 @@ public struct RawIdentifierExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedAfterDeclNameArguments: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(identifier.tokenKind.base == .identifier || identifier.tokenKind.base == .keyword || identifier.tokenKind.base == .dollarIdentifier || identifier.tokenKind.base == .binaryOperator, "Received \(identifier.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .identifierExpr, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -1562,6 +1575,7 @@ public struct RawSuperRefExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedAfterSuperKeyword: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(superKeyword.tokenKind == .keyword(.super), "Received \(superKeyword.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .superRefExpr, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -1612,6 +1626,7 @@ public struct RawNilLiteralExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedAfterNilKeyword: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(nilKeyword.tokenKind == .keyword(.nil), "Received \(nilKeyword.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .nilLiteralExpr, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -1662,6 +1677,7 @@ public struct RawDiscardAssignmentExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedAfterWildcard: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(wildcard.tokenKind.base == .wildcard, "Received \(wildcard.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .discardAssignmentExpr, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -1712,6 +1728,7 @@ public struct RawAssignmentExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedAfterAssignToken: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(assignToken.tokenKind.base == .equal, "Received \(assignToken.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .assignmentExpr, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -1764,6 +1781,7 @@ public struct RawPackExpansionExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedAfterPatternExpr: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(repeatKeyword.tokenKind == .keyword(.repeat), "Received \(repeatKeyword.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .packExpansionExpr, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -1824,6 +1842,7 @@ public struct RawPackElementExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedAfterPackRefExpr: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(eachKeyword.tokenKind == .keyword(.each), "Received \(eachKeyword.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .packElementExpr, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -1974,6 +1993,7 @@ public struct RawPrefixOperatorExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedAfterPostfixExpression: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(operatorToken == nil || operatorToken?.tokenKind.base == .prefixOperator, "Received \(String(describing: operatorToken?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .prefixOperatorExpr, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -2032,6 +2052,7 @@ public struct RawBinaryOperatorExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedAfterOperatorToken: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(operatorToken.tokenKind.base == .binaryOperator, "Received \(operatorToken.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .binaryOperatorExpr, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -2084,6 +2105,7 @@ public struct RawArrowExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedAfterArrowToken: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(arrowToken.tokenKind.base == .arrow, "Received \(arrowToken.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .arrowExpr, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -2212,6 +2234,7 @@ public struct RawFloatLiteralExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedAfterFloatingDigits: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(floatingDigits.tokenKind.base == .floatingLiteral, "Received \(floatingDigits.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .floatLiteralExpr, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -2266,6 +2289,8 @@ public struct RawTupleExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedAfterRightParen: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(leftParen.tokenKind.base == .leftParen, "Received \(leftParen.tokenKind)")
+    assert(rightParen.tokenKind.base == .rightParen, "Received \(rightParen.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .tupleExpr, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -2336,6 +2361,8 @@ public struct RawArrayExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedAfterRightSquare: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(leftSquare.tokenKind.base == .leftSquareBracket, "Received \(leftSquare.tokenKind)")
+    assert(rightSquare.tokenKind.base == .rightSquareBracket, "Received \(rightSquare.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .arrayExpr, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -2435,6 +2462,8 @@ public struct RawDictionaryExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedAfterRightSquare: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(leftSquare.tokenKind.base == .leftSquareBracket, "Received \(leftSquare.tokenKind)")
+    assert(rightSquare.tokenKind.base == .rightSquareBracket, "Received \(rightSquare.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .dictionaryExpr, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -2507,6 +2536,9 @@ public struct RawTupleExprElementSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(label == nil || label?.tokenKind.base == .identifier || label?.tokenKind.base == .wildcard, "Received \(String(describing: label?.tokenKind))")
+    assert(colon == nil || colon?.tokenKind.base == .colon, "Received \(String(describing: colon?.tokenKind))")
+    assert(trailingComma == nil || trailingComma?.tokenKind.base == .comma, "Received \(String(describing: trailingComma?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .tupleExprElement, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -2583,6 +2615,7 @@ public struct RawArrayElementSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(trailingComma == nil || trailingComma?.tokenKind.base == .comma, "Received \(String(describing: trailingComma?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .arrayElement, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -2647,6 +2680,8 @@ public struct RawDictionaryElementSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(colon.tokenKind.base == .colon, "Received \(colon.tokenKind)")
+    assert(trailingComma == nil || trailingComma?.tokenKind.base == .comma, "Received \(String(describing: trailingComma?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .dictionaryElement, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -2721,6 +2756,7 @@ public struct RawIntegerLiteralExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedAfterDigits: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(digits.tokenKind.base == .integerLiteral, "Received \(digits.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .integerLiteralExpr, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -2771,6 +2807,7 @@ public struct RawBooleanLiteralExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedAfterBooleanLiteral: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(booleanLiteral.tokenKind == .keyword(.true) || booleanLiteral.tokenKind == .keyword(.false), "Received \(booleanLiteral.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .booleanLiteralExpr, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -2825,6 +2862,8 @@ public struct RawUnresolvedTernaryExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedAfterColonMark: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(questionMark.tokenKind.base == .infixQuestionMark, "Received \(questionMark.tokenKind)")
+    assert(colonMark.tokenKind.base == .colon, "Received \(colonMark.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .unresolvedTernaryExpr, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -2899,6 +2938,8 @@ public struct RawTernaryExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedAfterSecondChoice: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(questionMark.tokenKind.base == .infixQuestionMark, "Received \(questionMark.tokenKind)")
+    assert(colonMark.tokenKind.base == .colon, "Received \(colonMark.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .ternaryExpr, uninitializedCount: 11, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -2987,6 +3028,7 @@ public struct RawMemberAccessExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedAfterDeclNameArguments: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(dot.tokenKind.base == .period, "Received \(dot.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .memberAccessExpr, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -3061,6 +3103,7 @@ public struct RawUnresolvedIsExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedAfterIsTok: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(isTok.tokenKind == .keyword(.is), "Received \(isTok.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .unresolvedIsExpr, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -3115,6 +3158,7 @@ public struct RawIsExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedAfterTypeName: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(isTok.tokenKind == .keyword(.is), "Received \(isTok.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .isExpr, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -3183,6 +3227,8 @@ public struct RawUnresolvedAsExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedAfterQuestionOrExclamationMark: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(asTok.tokenKind == .keyword(.as), "Received \(asTok.tokenKind)")
+    assert(questionOrExclamationMark == nil || questionOrExclamationMark?.tokenKind.base == .postfixQuestionMark || questionOrExclamationMark?.tokenKind.base == .exclamationMark, "Received \(String(describing: questionOrExclamationMark?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .unresolvedAsExpr, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -3247,6 +3293,8 @@ public struct RawAsExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedAfterTypeName: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(asTok.tokenKind == .keyword(.as), "Received \(asTok.tokenKind)")
+    assert(questionOrExclamationMark == nil || questionOrExclamationMark?.tokenKind.base == .postfixQuestionMark || questionOrExclamationMark?.tokenKind.base == .exclamationMark, "Received \(String(describing: questionOrExclamationMark?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .asExpr, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -3377,6 +3425,10 @@ public struct RawClosureCaptureItemSpecifierSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterRightParen: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(specifier.tokenKind == .keyword(.weak) || specifier.tokenKind == .keyword(.unowned), "Received \(specifier.tokenKind)")
+    assert(leftParen == nil || leftParen?.tokenKind.base == .leftParen, "Received \(String(describing: leftParen?.tokenKind))")
+    assert(detail == nil || detail?.tokenKind == .keyword(.safe) || detail?.tokenKind == .keyword(.unsafe), "Received \(String(describing: detail?.tokenKind))")
+    assert(rightParen == nil || rightParen?.tokenKind.base == .rightParen, "Received \(String(describing: rightParen?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .closureCaptureItemSpecifier, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -3459,6 +3511,9 @@ public struct RawClosureCaptureItemSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(name == nil || name?.tokenKind.base == .identifier, "Received \(String(describing: name?.tokenKind))")
+    assert(assignToken == nil || assignToken?.tokenKind.base == .equal, "Received \(String(describing: assignToken?.tokenKind))")
+    assert(trailingComma == nil || trailingComma?.tokenKind.base == .comma, "Received \(String(describing: trailingComma?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .closureCaptureItem, uninitializedCount: 11, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -3585,6 +3640,8 @@ public struct RawClosureCaptureSignatureSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterRightSquare: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(leftSquare.tokenKind.base == .leftSquareBracket, "Received \(leftSquare.tokenKind)")
+    assert(rightSquare.tokenKind.base == .rightSquareBracket, "Received \(rightSquare.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .closureCaptureSignature, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -3653,6 +3710,8 @@ public struct RawClosureParamSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(name.tokenKind.base == .identifier || name.tokenKind.base == .wildcard, "Received \(name.tokenKind)")
+    assert(trailingComma == nil || trailingComma?.tokenKind.base == .comma, "Received \(String(describing: trailingComma?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .closureParam, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -3790,6 +3849,7 @@ public struct RawClosureSignatureSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterInTok: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(inTok.tokenKind == .keyword(.in), "Received \(inTok.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .closureSignature, uninitializedCount: 13, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -3886,6 +3946,8 @@ public struct RawClosureExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedAfterRightBrace: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(leftBrace.tokenKind.base == .leftBrace, "Received \(leftBrace.tokenKind)")
+    assert(rightBrace.tokenKind.base == .rightBrace, "Received \(rightBrace.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .closureExpr, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -4014,6 +4076,8 @@ public struct RawMultipleTrailingClosureElementSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterClosure: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(label.tokenKind.base == .identifier || label.tokenKind.base == .wildcard, "Received \(label.tokenKind)")
+    assert(colon.tokenKind.base == .colon, "Received \(colon.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .multipleTrailingClosureElement, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -4130,6 +4194,8 @@ public struct RawFunctionCallExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedAfterAdditionalTrailingClosures: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(leftParen == nil || leftParen?.tokenKind.base == .leftParen, "Received \(String(describing: leftParen?.tokenKind))")
+    assert(rightParen == nil || rightParen?.tokenKind.base == .rightParen, "Received \(String(describing: rightParen?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .functionCallExpr, uninitializedCount: 13, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -4230,6 +4296,8 @@ public struct RawSubscriptExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedAfterAdditionalTrailingClosures: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(leftBracket.tokenKind.base == .leftSquareBracket, "Received \(leftBracket.tokenKind)")
+    assert(rightBracket.tokenKind.base == .rightSquareBracket, "Received \(rightBracket.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .subscriptExpr, uninitializedCount: 13, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -4322,6 +4390,7 @@ public struct RawOptionalChainingExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedAfterQuestionMark: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(questionMark.tokenKind.base == .postfixQuestionMark, "Received \(questionMark.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .optionalChainingExpr, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -4382,6 +4451,7 @@ public struct RawForcedValueExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedAfterExclamationMark: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(exclamationMark.tokenKind.base == .exclamationMark, "Received \(exclamationMark.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .forcedValueExpr, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -4442,6 +4512,7 @@ public struct RawPostfixUnaryExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedAfterOperatorToken: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(operatorToken.tokenKind.base == .postfixOperator, "Received \(operatorToken.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .postfixUnaryExpr, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -4560,6 +4631,7 @@ public struct RawStringSegmentSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterContent: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(content.tokenKind.base == .stringSegment, "Received \(content.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .stringSegment, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -4618,6 +4690,10 @@ public struct RawExpressionSegmentSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterRightParen: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(backslash.tokenKind.base == .backslash, "Received \(backslash.tokenKind)")
+    assert(delimiter == nil || delimiter?.tokenKind.base == .rawStringDelimiter, "Received \(String(describing: delimiter?.tokenKind))")
+    assert(leftParen.tokenKind.base == .leftParen, "Received \(leftParen.tokenKind)")
+    assert(rightParen.tokenKind.base == .rightParen, "Received \(rightParen.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .expressionSegment, uninitializedCount: 11, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -4708,6 +4784,10 @@ public struct RawStringLiteralExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedAfterCloseDelimiter: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(openDelimiter == nil || openDelimiter?.tokenKind.base == .rawStringDelimiter, "Received \(String(describing: openDelimiter?.tokenKind))")
+    assert(openQuote.tokenKind.base == .stringQuote || openQuote.tokenKind.base == .multilineStringQuote || openQuote.tokenKind.base == .singleQuote, "Received \(openQuote.tokenKind)")
+    assert(closeQuote.tokenKind.base == .stringQuote || closeQuote.tokenKind.base == .multilineStringQuote || closeQuote.tokenKind.base == .singleQuote, "Received \(closeQuote.tokenKind)")
+    assert(closeDelimiter == nil || closeDelimiter?.tokenKind.base == .rawStringDelimiter, "Received \(String(describing: closeDelimiter?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .stringLiteralExpr, uninitializedCount: 11, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -4790,6 +4870,7 @@ public struct RawRegexLiteralExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedAfterRegex: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(regex.tokenKind.base == .regexLiteral, "Received \(regex.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .regexLiteralExpr, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -4844,6 +4925,7 @@ public struct RawKeyPathExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedAfterComponents: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(backslash.tokenKind.base == .backslash, "Received \(backslash.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .keyPathExpr, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -4987,6 +5069,7 @@ public struct RawKeyPathComponentSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterComponent: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(period == nil || period?.tokenKind.base == .period, "Received \(String(describing: period?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .keyPathComponent, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -5049,6 +5132,7 @@ public struct RawKeyPathPropertyComponentSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterGenericArgumentClause: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(identifier.tokenKind.base == .identifier || identifier.tokenKind.base == .keyword || identifier.tokenKind.base == .dollarIdentifier || identifier.tokenKind.base == .binaryOperator || identifier.tokenKind.base == .integerLiteral, "Received \(identifier.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .keyPathPropertyComponent, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -5119,6 +5203,8 @@ public struct RawKeyPathSubscriptComponentSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterRightBracket: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(leftBracket.tokenKind.base == .leftSquareBracket, "Received \(leftBracket.tokenKind)")
+    assert(rightBracket.tokenKind.base == .rightSquareBracket, "Received \(rightBracket.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .keyPathSubscriptComponent, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -5185,6 +5271,7 @@ public struct RawKeyPathOptionalComponentSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterQuestionOrExclamationMark: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(questionOrExclamationMark.tokenKind.base == .postfixQuestionMark || questionOrExclamationMark.tokenKind.base == .exclamationMark, "Received \(questionOrExclamationMark.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .keyPathOptionalComponent, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -5249,6 +5336,10 @@ public struct RawMacroExpansionExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedAfterAdditionalTrailingClosures: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(poundToken.tokenKind.base == .pound, "Received \(poundToken.tokenKind)")
+    assert(macro.tokenKind.base == .identifier, "Received \(macro.tokenKind)")
+    assert(leftParen == nil || leftParen?.tokenKind.base == .leftParen, "Received \(String(describing: leftParen?.tokenKind))")
+    assert(rightParen == nil || rightParen?.tokenKind.base == .rightParen, "Received \(String(describing: rightParen?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .macroExpansionExpr, uninitializedCount: 17, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -5415,6 +5506,7 @@ public struct RawEditorPlaceholderExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedAfterIdentifier: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(identifier.tokenKind.base == .identifier, "Received \(identifier.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .editorPlaceholderExpr, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -5507,6 +5599,7 @@ public struct RawYieldExprListElementSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterComma: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(comma == nil || comma?.tokenKind.base == .comma, "Received \(String(describing: comma?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .yieldExprListElement, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -5567,6 +5660,7 @@ public struct RawTypeInitializerClauseSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterValue: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(equal.tokenKind.base == .equal, "Received \(equal.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .typeInitializerClause, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -5637,6 +5731,8 @@ public struct RawTypealiasDeclSyntax: RawDeclSyntaxNodeProtocol {
     _ unexpectedAfterGenericWhereClause: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(typealiasKeyword.tokenKind == .keyword(.typealias), "Received \(typealiasKeyword.tokenKind)")
+    assert(identifier.tokenKind.base == .identifier, "Received \(identifier.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .typealiasDecl, uninitializedCount: 15, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -5747,6 +5843,8 @@ public struct RawAssociatedtypeDeclSyntax: RawDeclSyntaxNodeProtocol {
     _ unexpectedAfterGenericWhereClause: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(associatedtypeKeyword.tokenKind == .keyword(.associatedtype), "Received \(associatedtypeKeyword.tokenKind)")
+    assert(identifier.tokenKind.base == .identifier, "Received \(identifier.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .associatedtypeDecl, uninitializedCount: 15, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -5889,6 +5987,8 @@ public struct RawParameterClauseSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterRightParen: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(leftParen.tokenKind.base == .leftParen, "Received \(leftParen.tokenKind)")
+    assert(rightParen.tokenKind.base == .rightParen, "Received \(rightParen.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .parameterClause, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -5957,6 +6057,7 @@ public struct RawReturnClauseSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterReturnType: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(arrow.tokenKind.base == .arrow, "Received \(arrow.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .returnClause, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -6136,6 +6237,7 @@ public struct RawIfConfigClauseSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterElements: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(poundKeyword.tokenKind.base == .poundIfKeyword || poundKeyword.tokenKind.base == .poundElseifKeyword || poundKeyword.tokenKind.base == .poundElseKeyword, "Received \(poundKeyword.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .ifConfigClause, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -6244,6 +6346,7 @@ public struct RawIfConfigDeclSyntax: RawDeclSyntaxNodeProtocol {
     _ unexpectedAfterPoundEndif: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(poundEndif.tokenKind.base == .poundEndifKeyword, "Received \(poundEndif.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .ifConfigDecl, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -6308,6 +6411,9 @@ public struct RawPoundSourceLocationSyntax: RawDeclSyntaxNodeProtocol {
     _ unexpectedAfterRightParen: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(poundSourceLocation.tokenKind.base == .poundSourceLocationKeyword, "Received \(poundSourceLocation.tokenKind)")
+    assert(leftParen.tokenKind.base == .leftParen, "Received \(leftParen.tokenKind)")
+    assert(rightParen.tokenKind.base == .rightParen, "Received \(rightParen.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .poundSourceLocation, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -6394,6 +6500,12 @@ public struct RawPoundSourceLocationArgsSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterLineNumber: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(fileArgLabel.tokenKind == .keyword(.file), "Received \(fileArgLabel.tokenKind)")
+    assert(fileArgColon.tokenKind.base == .colon, "Received \(fileArgColon.tokenKind)")
+    assert(comma.tokenKind.base == .comma, "Received \(comma.tokenKind)")
+    assert(lineArgLabel.tokenKind == .keyword(.line), "Received \(lineArgLabel.tokenKind)")
+    assert(lineArgColon.tokenKind.base == .colon, "Received \(lineArgColon.tokenKind)")
+    assert(lineNumber.tokenKind.base == .integerLiteral, "Received \(lineNumber.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .poundSourceLocationArgs, uninitializedCount: 15, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -6496,6 +6608,9 @@ public struct RawDeclModifierDetailSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterRightParen: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(leftParen.tokenKind.base == .leftParen, "Received \(leftParen.tokenKind)")
+    assert(detail.tokenKind.base == .identifier || detail.tokenKind == .keyword(.set), "Received \(detail.tokenKind)")
+    assert(rightParen.tokenKind.base == .rightParen, "Received \(rightParen.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .declModifierDetail, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -6564,6 +6679,7 @@ public struct RawDeclModifierSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterDetail: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(name.tokenKind == .keyword(.class) || name.tokenKind == .keyword(.convenience) || name.tokenKind == .keyword(.dynamic) || name.tokenKind == .keyword(.final) || name.tokenKind == .keyword(.infix) || name.tokenKind == .keyword(.lazy) || name.tokenKind == .keyword(.optional) || name.tokenKind == .keyword(.override) || name.tokenKind == .keyword(.postfix) || name.tokenKind == .keyword(.prefix) || name.tokenKind == .keyword(.required) || name.tokenKind == .keyword(.static) || name.tokenKind == .keyword(.unowned) || name.tokenKind == .keyword(.weak) || name.tokenKind == .keyword(.private) || name.tokenKind == .keyword(.fileprivate) || name.tokenKind == .keyword(.internal) || name.tokenKind == .keyword(.public) || name.tokenKind == .keyword(.open) || name.tokenKind == .keyword(.mutating) || name.tokenKind == .keyword(.nonmutating) || name.tokenKind == .keyword(.indirect) || name.tokenKind == .keyword(.__consuming) || name.tokenKind == .keyword(.actor) || name.tokenKind == .keyword(.async) || name.tokenKind == .keyword(.distributed) || name.tokenKind == .keyword(.isolated) || name.tokenKind == .keyword(.nonisolated) || name.tokenKind == .keyword(._const) || name.tokenKind == .keyword(._local) || name.tokenKind == .keyword(.package), "Received \(name.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .declModifier, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -6624,6 +6740,7 @@ public struct RawInheritedTypeSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(trailingComma == nil || trailingComma?.tokenKind.base == .comma, "Received \(String(describing: trailingComma?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .inheritedType, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -6724,6 +6841,7 @@ public struct RawTypeInheritanceClauseSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterInheritedTypeCollection: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(colon.tokenKind.base == .colon, "Received \(colon.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .typeInheritanceClause, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -6796,6 +6914,8 @@ public struct RawClassDeclSyntax: RawDeclSyntaxNodeProtocol {
     _ unexpectedAfterMembers: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(classKeyword.tokenKind == .keyword(.class), "Received \(classKeyword.tokenKind)")
+    assert(identifier.tokenKind.base == .identifier, "Received \(identifier.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .classDecl, uninitializedCount: 17, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -6916,6 +7036,8 @@ public struct RawActorDeclSyntax: RawDeclSyntaxNodeProtocol {
     _ unexpectedAfterMembers: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(actorKeyword.tokenKind == .keyword(.actor), "Received \(actorKeyword.tokenKind)")
+    assert(identifier.tokenKind.base == .identifier, "Received \(identifier.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .actorDecl, uninitializedCount: 17, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -7036,6 +7158,8 @@ public struct RawStructDeclSyntax: RawDeclSyntaxNodeProtocol {
     _ unexpectedAfterMembers: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(structKeyword.tokenKind == .keyword(.struct), "Received \(structKeyword.tokenKind)")
+    assert(identifier.tokenKind.base == .identifier, "Received \(identifier.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .structDecl, uninitializedCount: 17, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -7156,6 +7280,8 @@ public struct RawProtocolDeclSyntax: RawDeclSyntaxNodeProtocol {
     _ unexpectedAfterMembers: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(protocolKeyword.tokenKind == .keyword(.protocol), "Received \(protocolKeyword.tokenKind)")
+    assert(identifier.tokenKind.base == .identifier, "Received \(identifier.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .protocolDecl, uninitializedCount: 17, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -7274,6 +7400,7 @@ public struct RawExtensionDeclSyntax: RawDeclSyntaxNodeProtocol {
     _ unexpectedAfterMembers: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(extensionKeyword.tokenKind == .keyword(.extension), "Received \(extensionKeyword.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .extensionDecl, uninitializedCount: 15, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -7376,6 +7503,8 @@ public struct RawMemberDeclBlockSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterRightBrace: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(leftBrace.tokenKind.base == .leftBrace, "Received \(leftBrace.tokenKind)")
+    assert(rightBrace.tokenKind.base == .rightBrace, "Received \(rightBrace.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .memberDeclBlock, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -7484,6 +7613,7 @@ public struct RawMemberDeclListItemSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterSemicolon: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(semicolon == nil || semicolon?.tokenKind.base == .semicolon, "Received \(String(describing: semicolon?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .memberDeclListItem, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -7604,6 +7734,7 @@ public struct RawInitializerClauseSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterValue: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(equal.tokenKind.base == .equal, "Received \(equal.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .initializerClause, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -7678,6 +7809,11 @@ public struct RawFunctionParameterSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(firstName == nil || firstName?.tokenKind.base == .identifier || firstName?.tokenKind.base == .wildcard, "Received \(String(describing: firstName?.tokenKind))")
+    assert(secondName == nil || secondName?.tokenKind.base == .identifier || secondName?.tokenKind.base == .wildcard, "Received \(String(describing: secondName?.tokenKind))")
+    assert(colon == nil || colon?.tokenKind.base == .colon, "Received \(String(describing: colon?.tokenKind))")
+    assert(ellipsis == nil || ellipsis?.tokenKind.base == .ellipsis, "Received \(String(describing: ellipsis?.tokenKind))")
+    assert(trailingComma == nil || trailingComma?.tokenKind.base == .comma, "Received \(String(describing: trailingComma?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .functionParameter, uninitializedCount: 19, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -7846,6 +7982,8 @@ public struct RawFunctionDeclSyntax: RawDeclSyntaxNodeProtocol {
     _ unexpectedAfterBody: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(funcKeyword.tokenKind == .keyword(.func), "Received \(funcKeyword.tokenKind)")
+    assert(identifier.tokenKind.base == .identifier || identifier.tokenKind.base == .binaryOperator || identifier.tokenKind.base == .prefixOperator || identifier.tokenKind.base == .postfixOperator, "Received \(identifier.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .functionDecl, uninitializedCount: 17, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -7966,6 +8104,8 @@ public struct RawInitializerDeclSyntax: RawDeclSyntaxNodeProtocol {
     _ unexpectedAfterBody: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(initKeyword.tokenKind == .keyword(.`init`), "Received \(initKeyword.tokenKind)")
+    assert(optionalMark == nil || optionalMark?.tokenKind.base == .postfixQuestionMark || optionalMark?.tokenKind.base == .infixQuestionMark || optionalMark?.tokenKind.base == .exclamationMark, "Received \(String(describing: optionalMark?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .initializerDecl, uninitializedCount: 17, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -8078,6 +8218,7 @@ public struct RawDeinitializerDeclSyntax: RawDeclSyntaxNodeProtocol {
     _ unexpectedAfterBody: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(deinitKeyword.tokenKind == .keyword(.deinit), "Received \(deinitKeyword.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .deinitializerDecl, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -8195,6 +8336,7 @@ public struct RawSubscriptDeclSyntax: RawDeclSyntaxNodeProtocol {
     _ unexpectedAfterAccessor: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(subscriptKeyword.tokenKind == .keyword(.subscript), "Received \(subscriptKeyword.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .subscriptDecl, uninitializedCount: 17, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -8303,6 +8445,8 @@ public struct RawAccessPathComponentSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterTrailingDot: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(name.tokenKind.base == .identifier, "Received \(name.tokenKind)")
+    assert(trailingDot == nil || trailingDot?.tokenKind.base == .period, "Received \(String(describing: trailingDot?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .accessPathComponent, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -8409,6 +8553,8 @@ public struct RawImportDeclSyntax: RawDeclSyntaxNodeProtocol {
     _ unexpectedAfterPath: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(importTok.tokenKind == .keyword(.import), "Received \(importTok.tokenKind)")
+    assert(importKind == nil || importKind?.tokenKind == .keyword(.typealias) || importKind?.tokenKind == .keyword(.struct) || importKind?.tokenKind == .keyword(.class) || importKind?.tokenKind == .keyword(.enum) || importKind?.tokenKind == .keyword(.protocol) || importKind?.tokenKind == .keyword(.var) || importKind?.tokenKind == .keyword(.let) || importKind?.tokenKind == .keyword(.func), "Received \(String(describing: importKind?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .importDecl, uninitializedCount: 11, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -8495,6 +8641,9 @@ public struct RawAccessorParameterSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterRightParen: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(leftParen.tokenKind.base == .leftParen, "Received \(leftParen.tokenKind)")
+    assert(name.tokenKind.base == .identifier, "Received \(name.tokenKind)")
+    assert(rightParen.tokenKind.base == .rightParen, "Received \(rightParen.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .accessorParameter, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -8571,6 +8720,7 @@ public struct RawAccessorDeclSyntax: RawDeclSyntaxNodeProtocol {
     _ unexpectedAfterBody: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(accessorKind.tokenKind == .keyword(.get) || accessorKind.tokenKind == .keyword(.set) || accessorKind.tokenKind == .keyword(.didSet) || accessorKind.tokenKind == .keyword(.willSet) || accessorKind.tokenKind == .keyword(.unsafeAddress) || accessorKind.tokenKind == .keyword(.addressWithOwner) || accessorKind.tokenKind == .keyword(.addressWithNativeOwner) || accessorKind.tokenKind == .keyword(.unsafeMutableAddress) || accessorKind.tokenKind == .keyword(.mutableAddressWithOwner) || accessorKind.tokenKind == .keyword(.mutableAddressWithNativeOwner) || accessorKind.tokenKind == .keyword(._read) || accessorKind.tokenKind == .keyword(._modify), "Received \(accessorKind.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .accessorDecl, uninitializedCount: 13, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -8705,6 +8855,8 @@ public struct RawAccessorBlockSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterRightBrace: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(leftBrace.tokenKind.base == .leftBrace, "Received \(leftBrace.tokenKind)")
+    assert(rightBrace.tokenKind.base == .rightBrace, "Received \(rightBrace.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .accessorBlock, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -8808,6 +8960,7 @@ public struct RawPatternBindingSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(trailingComma == nil || trailingComma?.tokenKind.base == .comma, "Received \(String(describing: trailingComma?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .patternBinding, uninitializedCount: 11, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -8936,6 +9089,7 @@ public struct RawVariableDeclSyntax: RawDeclSyntaxNodeProtocol {
     _ unexpectedAfterBindings: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(letOrVarKeyword.tokenKind == .keyword(.let) || letOrVarKeyword.tokenKind == .keyword(.var), "Received \(letOrVarKeyword.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .variableDecl, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -9016,6 +9170,8 @@ public struct RawEnumCaseElementSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(identifier.tokenKind.base == .identifier, "Received \(identifier.tokenKind)")
+    assert(trailingComma == nil || trailingComma?.tokenKind.base == .comma, "Received \(String(describing: trailingComma?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .enumCaseElement, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -9136,6 +9292,7 @@ public struct RawEnumCaseDeclSyntax: RawDeclSyntaxNodeProtocol {
     _ unexpectedAfterElements: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(caseKeyword.tokenKind == .keyword(.case), "Received \(caseKeyword.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .enumCaseDecl, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -9224,6 +9381,8 @@ public struct RawEnumDeclSyntax: RawDeclSyntaxNodeProtocol {
     _ unexpectedAfterMembers: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(enumKeyword.tokenKind == .keyword(.enum), "Received \(enumKeyword.tokenKind)")
+    assert(identifier.tokenKind.base == .identifier, "Received \(identifier.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .enumDecl, uninitializedCount: 17, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -9338,6 +9497,8 @@ public struct RawOperatorDeclSyntax: RawDeclSyntaxNodeProtocol {
     _ unexpectedAfterOperatorPrecedenceAndTypes: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(operatorKeyword.tokenKind == .keyword(.operator), "Received \(operatorKeyword.tokenKind)")
+    assert(identifier.tokenKind.base == .binaryOperator || identifier.tokenKind.base == .prefixOperator || identifier.tokenKind.base == .postfixOperator, "Received \(identifier.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .operatorDecl, uninitializedCount: 11, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -9462,6 +9623,7 @@ public struct RawDesignatedTypeElementSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterName: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(leadingComma.tokenKind.base == .comma, "Received \(leadingComma.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .designatedTypeElement, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -9524,6 +9686,8 @@ public struct RawOperatorPrecedenceAndTypesSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterDesignatedTypes: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(colon.tokenKind.base == .colon, "Received \(colon.tokenKind)")
+    assert(precedenceGroup.tokenKind.base == .identifier, "Received \(precedenceGroup.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .operatorPrecedenceAndTypes, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -9602,6 +9766,10 @@ public struct RawPrecedenceGroupDeclSyntax: RawDeclSyntaxNodeProtocol {
     _ unexpectedAfterRightBrace: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(precedencegroupKeyword.tokenKind == .keyword(.precedencegroup), "Received \(precedencegroupKeyword.tokenKind)")
+    assert(identifier.tokenKind.base == .identifier, "Received \(identifier.tokenKind)")
+    assert(leftBrace.tokenKind.base == .leftBrace, "Received \(leftBrace.tokenKind)")
+    assert(rightBrace.tokenKind.base == .rightBrace, "Received \(rightBrace.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .precedenceGroupDecl, uninitializedCount: 15, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -9779,6 +9947,8 @@ public struct RawPrecedenceGroupRelationSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterOtherNames: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(higherThanOrLowerThan.tokenKind == .keyword(.higherThan) || higherThanOrLowerThan.tokenKind == .keyword(.lowerThan), "Received \(higherThanOrLowerThan.tokenKind)")
+    assert(colon.tokenKind.base == .colon, "Received \(colon.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .precedenceGroupRelation, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -9887,6 +10057,8 @@ public struct RawPrecedenceGroupNameElementSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(name.tokenKind.base == .identifier, "Received \(name.tokenKind)")
+    assert(trailingComma == nil || trailingComma?.tokenKind.base == .comma, "Received \(String(describing: trailingComma?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .precedenceGroupNameElement, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -9949,6 +10121,9 @@ public struct RawPrecedenceGroupAssignmentSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterFlag: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(assignmentKeyword.tokenKind == .keyword(.assignment), "Received \(assignmentKeyword.tokenKind)")
+    assert(colon.tokenKind.base == .colon, "Received \(colon.tokenKind)")
+    assert(flag.tokenKind == .keyword(.true) || flag.tokenKind == .keyword(.false), "Received \(flag.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .precedenceGroupAssignment, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -10019,6 +10194,9 @@ public struct RawPrecedenceGroupAssociativitySyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterValue: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(associativityKeyword.tokenKind == .keyword(.associativity), "Received \(associativityKeyword.tokenKind)")
+    assert(colon.tokenKind.base == .colon, "Received \(colon.tokenKind)")
+    assert(value.tokenKind == .keyword(.left) || value.tokenKind == .keyword(.right) || value.tokenKind == .keyword(.none), "Received \(value.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .precedenceGroupAssociativity, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -10128,6 +10306,8 @@ public struct RawMacroDeclSyntax: RawDeclSyntaxNodeProtocol {
     _ unexpectedAfterGenericWhereClause: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(macroKeyword.tokenKind == .keyword(.macro), "Received \(macroKeyword.tokenKind)")
+    assert(identifier.tokenKind.base == .identifier, "Received \(identifier.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .macroDecl, uninitializedCount: 17, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -10248,6 +10428,10 @@ public struct RawMacroExpansionDeclSyntax: RawDeclSyntaxNodeProtocol {
     _ unexpectedAfterAdditionalTrailingClosures: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(poundToken.tokenKind.base == .pound, "Received \(poundToken.tokenKind)")
+    assert(macro.tokenKind.base == .identifier, "Received \(macro.tokenKind)")
+    assert(leftParen == nil || leftParen?.tokenKind.base == .leftParen, "Received \(String(describing: leftParen?.tokenKind))")
+    assert(rightParen == nil || rightParen?.tokenKind.base == .rightParen, "Received \(String(describing: rightParen?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .macroExpansionDecl, uninitializedCount: 17, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -10354,6 +10538,7 @@ public struct RawEditorPlaceholderDeclSyntax: RawDeclSyntaxNodeProtocol {
     _ unexpectedAfterIdentifier: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(identifier.tokenKind.base == .identifier, "Received \(identifier.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .editorPlaceholderDecl, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -10549,6 +10734,9 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterRightParen: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(atSignToken.tokenKind.base == .atSign, "Received \(atSignToken.tokenKind)")
+    assert(leftParen == nil || leftParen?.tokenKind.base == .leftParen, "Received \(String(describing: leftParen?.tokenKind))")
+    assert(rightParen == nil || rightParen?.tokenKind.base == .rightParen, "Received \(String(describing: rightParen?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .attribute, uninitializedCount: 11, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -10787,6 +10975,9 @@ public struct RawAvailabilityEntrySyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterSemicolon: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(label.tokenKind == .keyword(.availability), "Received \(label.tokenKind)")
+    assert(colon.tokenKind.base == .colon, "Received \(colon.tokenKind)")
+    assert(semicolon.tokenKind.base == .semicolon, "Received \(semicolon.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .availabilityEntry, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -10867,6 +11058,9 @@ public struct RawLabeledSpecializeEntrySyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(label.tokenKind == .keyword(.available) || label.tokenKind == .keyword(.exported) || label.tokenKind == .keyword(.kind) || label.tokenKind == .keyword(.spi) || label.tokenKind == .keyword(.spiModule) || label.tokenKind.base == .identifier, "Received \(label.tokenKind)")
+    assert(colon.tokenKind.base == .colon, "Received \(colon.tokenKind)")
+    assert(trailingComma == nil || trailingComma?.tokenKind.base == .comma, "Received \(String(describing: trailingComma?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .labeledSpecializeEntry, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -10947,6 +11141,9 @@ public struct RawTargetFunctionEntrySyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(label.tokenKind == .keyword(.target), "Received \(label.tokenKind)")
+    assert(colon.tokenKind.base == .colon, "Received \(colon.tokenKind)")
+    assert(trailingComma == nil || trailingComma?.tokenKind.base == .comma, "Received \(String(describing: trailingComma?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .targetFunctionEntry, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -11023,6 +11220,7 @@ public struct RawDeclNameSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterDeclNameArguments: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(declBaseName.tokenKind.base == .identifier || declBaseName.tokenKind.base == .prefixOperator || declBaseName.tokenKind == .keyword(.`init`), "Received \(declBaseName.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .declName, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -11087,6 +11285,7 @@ public struct RawImplementsAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterDeclNameArguments: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(comma.tokenKind.base == .comma, "Received \(comma.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .implementsAttributeArguments, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -11163,6 +11362,8 @@ public struct RawObjCSelectorPieceSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterColon: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(name == nil || name?.tokenKind.base == .identifier, "Received \(String(describing: name?.tokenKind))")
+    assert(colon == nil || colon?.tokenKind.base == .colon, "Received \(String(describing: colon?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .objCSelectorPiece, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -11269,6 +11470,9 @@ public struct RawDifferentiableAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterWhereClause: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(diffKind == nil || diffKind?.tokenKind == .keyword(.forward) || diffKind?.tokenKind == .keyword(.reverse) || diffKind?.tokenKind == .keyword(.linear), "Received \(String(describing: diffKind?.tokenKind))")
+    assert(diffKindComma == nil || diffKindComma?.tokenKind.base == .comma, "Received \(String(describing: diffKindComma?.tokenKind))")
+    assert(diffParamsComma == nil || diffParamsComma?.tokenKind.base == .comma, "Received \(String(describing: diffParamsComma?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .differentiableAttributeArguments, uninitializedCount: 11, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -11384,6 +11588,8 @@ public struct RawDifferentiabilityParamsClauseSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterParameters: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(wrtLabel.tokenKind == .keyword(.wrt), "Received \(wrtLabel.tokenKind)")
+    assert(colon.tokenKind.base == .colon, "Received \(colon.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .differentiabilityParamsClause, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -11454,6 +11660,8 @@ public struct RawDifferentiabilityParamsSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterRightParen: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(leftParen.tokenKind.base == .leftParen, "Received \(leftParen.tokenKind)")
+    assert(rightParen.tokenKind.base == .rightParen, "Received \(rightParen.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .differentiabilityParams, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -11562,6 +11770,8 @@ public struct RawDifferentiabilityParamSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(parameter.tokenKind.base == .identifier || parameter.tokenKind.base == .integerLiteral || parameter.tokenKind.base == .keyword, "Received \(parameter.tokenKind)")
+    assert(trailingComma == nil || trailingComma?.tokenKind.base == .comma, "Received \(String(describing: trailingComma?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .differentiabilityParam, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -11632,6 +11842,11 @@ public struct RawDerivativeRegistrationAttributeArgumentsSyntax: RawSyntaxNodePr
     _ unexpectedAfterDiffParams: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(ofLabel.tokenKind == .keyword(.of), "Received \(ofLabel.tokenKind)")
+    assert(colon.tokenKind.base == .colon, "Received \(colon.tokenKind)")
+    assert(period == nil || period?.tokenKind.base == .period, "Received \(String(describing: period?.tokenKind))")
+    assert(accessorKind == nil || accessorKind?.tokenKind == .keyword(.get) || accessorKind?.tokenKind == .keyword(.set), "Received \(String(describing: accessorKind?.tokenKind))")
+    assert(comma == nil || comma?.tokenKind.base == .comma, "Received \(String(describing: comma?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .derivativeRegistrationAttributeArguments, uninitializedCount: 15, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -11736,6 +11951,8 @@ public struct RawQualifiedDeclNameSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterArguments: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(dot == nil || dot?.tokenKind.base == .period, "Received \(String(describing: dot?.tokenKind))")
+    assert(name.tokenKind.base == .identifier || name.tokenKind.base == .binaryOperator || name.tokenKind.base == .prefixOperator || name.tokenKind.base == .postfixOperator, "Received \(name.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .qualifiedDeclName, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -11814,6 +12031,8 @@ public struct RawBackDeployAttributeSpecListSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterVersionList: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(beforeLabel.tokenKind == .keyword(.before), "Received \(beforeLabel.tokenKind)")
+    assert(colon.tokenKind.base == .colon, "Received \(colon.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .backDeployAttributeSpecList, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -11922,6 +12141,7 @@ public struct RawAvailabilityVersionRestrictionListEntrySyntax: RawSyntaxNodePro
     _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(trailingComma == nil || trailingComma?.tokenKind.base == .comma, "Received \(String(describing: trailingComma?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .availabilityVersionRestrictionListEntry, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -11984,6 +12204,8 @@ public struct RawOpaqueReturnTypeOfAttributeArgumentsSyntax: RawSyntaxNodeProtoc
     _ unexpectedAfterOrdinal: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(comma.tokenKind.base == .comma, "Received \(comma.tokenKind)")
+    assert(ordinal.tokenKind.base == .integerLiteral, "Received \(ordinal.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .opaqueReturnTypeOfAttributeArguments, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -12058,6 +12280,10 @@ public struct RawConventionAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterCTypeString: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(conventionLabel.tokenKind.base == .identifier, "Received \(conventionLabel.tokenKind)")
+    assert(comma == nil || comma?.tokenKind.base == .comma, "Received \(String(describing: comma?.tokenKind))")
+    assert(cTypeLabel == nil || cTypeLabel?.tokenKind == .keyword(.cType), "Received \(String(describing: cTypeLabel?.tokenKind))")
+    assert(colon == nil || colon?.tokenKind.base == .colon, "Received \(String(describing: colon?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .conventionAttributeArguments, uninitializedCount: 11, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -12144,6 +12370,9 @@ public struct RawConventionWitnessMethodAttributeArgumentsSyntax: RawSyntaxNodeP
     _ unexpectedAfterProtocolName: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(witnessMethodLabel.tokenKind == .keyword(.witness_method), "Received \(witnessMethodLabel.tokenKind)")
+    assert(colon.tokenKind.base == .colon, "Received \(colon.tokenKind)")
+    assert(protocolName.tokenKind.base == .identifier, "Received \(protocolName.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .conventionWitnessMethodAttributeArguments, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -12214,6 +12443,7 @@ public struct RawExposeAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterCxxName: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(comma == nil || comma?.tokenKind.base == .comma, "Received \(String(describing: comma?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .exposeAttributeArguments, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -12288,6 +12518,9 @@ public struct RawOriginallyDefinedInArgumentsSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterPlatforms: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(moduleLabel.tokenKind == .keyword(.module), "Received \(moduleLabel.tokenKind)")
+    assert(colon.tokenKind.base == .colon, "Received \(colon.tokenKind)")
+    assert(comma.tokenKind.base == .comma, "Received \(comma.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .originallyDefinedInArguments, uninitializedCount: 11, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -12374,6 +12607,8 @@ public struct RawUnderscorePrivateAttributeArgumentsSyntax: RawSyntaxNodeProtoco
     _ unexpectedAfterFilename: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(sourceFileLabel.tokenKind == .keyword(.sourceFile), "Received \(sourceFileLabel.tokenKind)")
+    assert(colon.tokenKind.base == .colon, "Received \(colon.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .underscorePrivateAttributeArguments, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -12444,6 +12679,8 @@ public struct RawDynamicReplacementArgumentsSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterDeclname: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(forLabel.tokenKind == .keyword(.for), "Received \(forLabel.tokenKind)")
+    assert(colon.tokenKind.base == .colon, "Received \(colon.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .dynamicReplacementArguments, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -12514,6 +12751,8 @@ public struct RawUnavailableFromAsyncArgumentsSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterMessage: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(messageLabel.tokenKind == .keyword(.message), "Received \(messageLabel.tokenKind)")
+    assert(colon.tokenKind.base == .colon, "Received \(colon.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .unavailableFromAsyncArguments, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -12655,6 +12894,9 @@ public struct RawDocumentationAttributeArgumentSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(label.tokenKind == .keyword(.visibility) || label.tokenKind == .keyword(.metadata), "Received \(label.tokenKind)")
+    assert(colon.tokenKind.base == .colon, "Received \(colon.tokenKind)")
+    assert(trailingComma == nil || trailingComma?.tokenKind.base == .comma, "Received \(String(describing: trailingComma?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .documentationAttributeArgument, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -12773,6 +13015,8 @@ public struct RawLabeledStmtSyntax: RawStmtSyntaxNodeProtocol {
     _ unexpectedAfterStatement: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(labelName.tokenKind.base == .identifier, "Received \(labelName.tokenKind)")
+    assert(labelColon.tokenKind.base == .colon, "Received \(labelColon.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .labeledStmt, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -12841,6 +13085,8 @@ public struct RawContinueStmtSyntax: RawStmtSyntaxNodeProtocol {
     _ unexpectedAfterLabel: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(continueKeyword.tokenKind == .keyword(.continue), "Received \(continueKeyword.tokenKind)")
+    assert(label == nil || label?.tokenKind.base == .identifier, "Received \(String(describing: label?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .continueStmt, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -12903,6 +13149,7 @@ public struct RawWhileStmtSyntax: RawStmtSyntaxNodeProtocol {
     _ unexpectedAfterBody: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(whileKeyword.tokenKind == .keyword(.while), "Received \(whileKeyword.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .whileStmt, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -12971,6 +13218,7 @@ public struct RawDeferStmtSyntax: RawStmtSyntaxNodeProtocol {
     _ unexpectedAfterBody: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(deferKeyword.tokenKind == .keyword(.defer), "Received \(deferKeyword.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .deferStmt, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -13104,6 +13352,8 @@ public struct RawRepeatWhileStmtSyntax: RawStmtSyntaxNodeProtocol {
     _ unexpectedAfterCondition: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(repeatKeyword.tokenKind == .keyword(.repeat), "Received \(repeatKeyword.tokenKind)")
+    assert(whileKeyword.tokenKind == .keyword(.while), "Received \(whileKeyword.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .repeatWhileStmt, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -13184,6 +13434,8 @@ public struct RawGuardStmtSyntax: RawStmtSyntaxNodeProtocol {
     _ unexpectedAfterBody: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(guardKeyword.tokenKind == .keyword(.guard), "Received \(guardKeyword.tokenKind)")
+    assert(elseKeyword.tokenKind == .keyword(.else), "Received \(elseKeyword.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .guardStmt, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -13260,6 +13512,7 @@ public struct RawWhereClauseSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterGuardResult: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(whereKeyword.tokenKind == .keyword(.where), "Received \(whereKeyword.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .whereClause, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -13336,6 +13589,9 @@ public struct RawForInStmtSyntax: RawStmtSyntaxNodeProtocol {
     _ unexpectedAfterBody: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(forKeyword.tokenKind == .keyword(.for), "Received \(forKeyword.tokenKind)")
+    assert(awaitKeyword == nil || awaitKeyword?.tokenKind == .keyword(.await), "Received \(String(describing: awaitKeyword?.tokenKind))")
+    assert(inKeyword.tokenKind == .keyword(.in), "Received \(inKeyword.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .forInStmt, uninitializedCount: 21, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -13466,6 +13722,9 @@ public struct RawSwitchStmtSyntax: RawStmtSyntaxNodeProtocol {
     _ unexpectedAfterRightBrace: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(switchKeyword.tokenKind == .keyword(.switch), "Received \(switchKeyword.tokenKind)")
+    assert(leftBrace.tokenKind.base == .leftBrace, "Received \(leftBrace.tokenKind)")
+    assert(rightBrace.tokenKind.base == .rightBrace, "Received \(rightBrace.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .switchStmt, uninitializedCount: 11, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -13592,6 +13851,7 @@ public struct RawDoStmtSyntax: RawStmtSyntaxNodeProtocol {
     _ unexpectedAfterCatchClauses: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(doKeyword.tokenKind == .keyword(.do), "Received \(doKeyword.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .doStmt, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -13660,6 +13920,7 @@ public struct RawReturnStmtSyntax: RawStmtSyntaxNodeProtocol {
     _ unexpectedAfterExpression: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(returnKeyword.tokenKind == .keyword(.return), "Received \(returnKeyword.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .returnStmt, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -13749,6 +14010,7 @@ public struct RawYieldStmtSyntax: RawStmtSyntaxNodeProtocol {
     _ unexpectedAfterYields: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(yieldKeyword.tokenKind == .keyword(.yield), "Received \(yieldKeyword.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .yieldStmt, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -13811,6 +14073,8 @@ public struct RawYieldListSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterRightParen: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(leftParen.tokenKind.base == .leftParen, "Received \(leftParen.tokenKind)")
+    assert(rightParen.tokenKind.base == .rightParen, "Received \(rightParen.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .yieldList, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -13877,6 +14141,7 @@ public struct RawFallthroughStmtSyntax: RawStmtSyntaxNodeProtocol {
     _ unexpectedAfterFallthroughKeyword: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(fallthroughKeyword.tokenKind == .keyword(.fallthrough), "Received \(fallthroughKeyword.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .fallthroughStmt, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -13929,6 +14194,8 @@ public struct RawBreakStmtSyntax: RawStmtSyntaxNodeProtocol {
     _ unexpectedAfterLabel: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(breakKeyword.tokenKind == .keyword(.break), "Received \(breakKeyword.tokenKind)")
+    assert(label == nil || label?.tokenKind.base == .identifier, "Received \(String(describing: label?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .breakStmt, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -14110,6 +14377,7 @@ public struct RawConditionElementSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(trailingComma == nil || trailingComma?.tokenKind.base == .comma, "Received \(String(describing: trailingComma?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .conditionElement, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -14174,6 +14442,9 @@ public struct RawAvailabilityConditionSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterRightParen: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(availabilityKeyword.tokenKind.base == .poundAvailableKeyword || availabilityKeyword.tokenKind.base == .poundUnavailableKeyword, "Received \(availabilityKeyword.tokenKind)")
+    assert(leftParen.tokenKind.base == .leftParen, "Received \(leftParen.tokenKind)")
+    assert(rightParen.tokenKind.base == .rightParen, "Received \(rightParen.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .availabilityCondition, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -14254,6 +14525,7 @@ public struct RawMatchingPatternConditionSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterInitializer: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(caseKeyword.tokenKind == .keyword(.case), "Received \(caseKeyword.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .matchingPatternCondition, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -14334,6 +14606,7 @@ public struct RawOptionalBindingConditionSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterInitializer: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(letOrVarKeyword.tokenKind == .keyword(.let) || letOrVarKeyword.tokenKind == .keyword(.var), "Received \(letOrVarKeyword.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .optionalBindingCondition, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -14545,6 +14818,7 @@ public struct RawIfStmtSyntax: RawStmtSyntaxNodeProtocol {
     _ unexpectedAfterElseBody: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(ifKeyword.tokenKind == .keyword(.if), "Received \(ifKeyword.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .ifStmt, uninitializedCount: 11, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -14728,6 +15002,8 @@ public struct RawSwitchDefaultLabelSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterColon: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(defaultKeyword.tokenKind == .keyword(.default), "Received \(defaultKeyword.tokenKind)")
+    assert(colon.tokenKind.base == .colon, "Received \(colon.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .switchDefaultLabel, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -14790,6 +15066,7 @@ public struct RawCaseItemSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(trailingComma == nil || trailingComma?.tokenKind.base == .comma, "Received \(String(describing: trailingComma?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .caseItem, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -14860,6 +15137,7 @@ public struct RawCatchItemSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(trailingComma == nil || trailingComma?.tokenKind.base == .comma, "Received \(String(describing: trailingComma?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .catchItem, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -14930,6 +15208,8 @@ public struct RawSwitchCaseLabelSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterColon: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(caseKeyword.tokenKind == .keyword(.case), "Received \(caseKeyword.tokenKind)")
+    assert(colon.tokenKind.base == .colon, "Received \(colon.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .switchCaseLabel, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -15000,6 +15280,7 @@ public struct RawCatchClauseSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterBody: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(catchKeyword.tokenKind == .keyword(.catch), "Received \(catchKeyword.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .catchClause, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -15068,6 +15349,7 @@ public struct RawGenericWhereClauseSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterRequirementList: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(whereKeyword.tokenKind == .keyword(.where), "Received \(whereKeyword.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .genericWhereClause, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -15203,6 +15485,7 @@ public struct RawGenericRequirementSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(trailingComma == nil || trailingComma?.tokenKind.base == .comma, "Received \(String(describing: trailingComma?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .genericRequirement, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -15265,6 +15548,7 @@ public struct RawSameTypeRequirementSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterRightTypeIdentifier: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(equalityToken.tokenKind.base == .binaryOperator || equalityToken.tokenKind.base == .prefixOperator || equalityToken.tokenKind.base == .postfixOperator, "Received \(equalityToken.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .sameTypeRequirement, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -15345,6 +15629,13 @@ public struct RawLayoutRequirementSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterRightParen: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(colon.tokenKind.base == .colon, "Received \(colon.tokenKind)")
+    assert(layoutConstraint.tokenKind == .keyword(._Trivial) || layoutConstraint.tokenKind == .keyword(._TrivialAtMost) || layoutConstraint.tokenKind == .keyword(._UnknownLayout) || layoutConstraint.tokenKind == .keyword(._RefCountedObject) || layoutConstraint.tokenKind == .keyword(._NativeRefCountedObject) || layoutConstraint.tokenKind == .keyword(._Class) || layoutConstraint.tokenKind == .keyword(._NativeClass), "Received \(layoutConstraint.tokenKind)")
+    assert(leftParen == nil || leftParen?.tokenKind.base == .leftParen, "Received \(String(describing: leftParen?.tokenKind))")
+    assert(size == nil || size?.tokenKind.base == .integerLiteral, "Received \(String(describing: size?.tokenKind))")
+    assert(comma == nil || comma?.tokenKind.base == .comma, "Received \(String(describing: comma?.tokenKind))")
+    assert(alignment == nil || alignment?.tokenKind.base == .integerLiteral, "Received \(String(describing: alignment?.tokenKind))")
+    assert(rightParen == nil || rightParen?.tokenKind.base == .rightParen, "Received \(String(describing: rightParen?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .layoutRequirement, uninitializedCount: 17, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -15501,6 +15792,10 @@ public struct RawGenericParameterSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(name.tokenKind.base == .identifier, "Received \(name.tokenKind)")
+    assert(ellipsis == nil || ellipsis?.tokenKind.base == .ellipsis, "Received \(String(describing: ellipsis?.tokenKind))")
+    assert(colon == nil || colon?.tokenKind.base == .colon, "Received \(String(describing: colon?.tokenKind))")
+    assert(trailingComma == nil || trailingComma?.tokenKind.base == .comma, "Received \(String(describing: trailingComma?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .genericParameter, uninitializedCount: 13, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -15633,6 +15928,8 @@ public struct RawPrimaryAssociatedTypeSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(name.tokenKind.base == .identifier, "Received \(name.tokenKind)")
+    assert(trailingComma == nil || trailingComma?.tokenKind.base == .comma, "Received \(String(describing: trailingComma?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .primaryAssociatedType, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -15697,6 +15994,8 @@ public struct RawGenericParameterClauseSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterRightAngleBracket: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(leftAngleBracket.tokenKind.base == .leftAngle, "Received \(leftAngleBracket.tokenKind)")
+    assert(rightAngleBracket.tokenKind.base == .rightAngle, "Received \(rightAngleBracket.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .genericParameterClause, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -15775,6 +16074,7 @@ public struct RawConformanceRequirementSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterRightTypeIdentifier: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(colon.tokenKind.base == .colon, "Received \(colon.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .conformanceRequirement, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -15845,6 +16145,8 @@ public struct RawPrimaryAssociatedTypeClauseSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterRightAngleBracket: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(leftAngleBracket.tokenKind.base == .leftAngle, "Received \(leftAngleBracket.tokenKind)")
+    assert(rightAngleBracket.tokenKind.base == .rightAngle, "Received \(rightAngleBracket.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .primaryAssociatedTypeClause, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -15913,6 +16215,7 @@ public struct RawSimpleTypeIdentifierSyntax: RawTypeSyntaxNodeProtocol {
     _ unexpectedAfterGenericArgumentClause: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(name.tokenKind.base == .identifier || name.tokenKind.base == .keyword || name.tokenKind.base == .wildcard, "Received \(name.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .simpleTypeIdentifier, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -15977,6 +16280,8 @@ public struct RawMemberTypeIdentifierSyntax: RawTypeSyntaxNodeProtocol {
     _ unexpectedAfterGenericArgumentClause: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(period.tokenKind.base == .period, "Received \(period.tokenKind)")
+    assert(name.tokenKind.base == .identifier || name.tokenKind.base == .keyword, "Received \(name.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .memberTypeIdentifier, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -16051,6 +16356,7 @@ public struct RawClassRestrictionTypeSyntax: RawTypeSyntaxNodeProtocol {
     _ unexpectedAfterClassKeyword: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(classKeyword.tokenKind == .keyword(.class), "Received \(classKeyword.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .classRestrictionType, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -16105,6 +16411,8 @@ public struct RawArrayTypeSyntax: RawTypeSyntaxNodeProtocol {
     _ unexpectedAfterRightSquareBracket: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(leftSquareBracket.tokenKind.base == .leftSquareBracket, "Received \(leftSquareBracket.tokenKind)")
+    assert(rightSquareBracket.tokenKind.base == .rightSquareBracket, "Received \(rightSquareBracket.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .arrayType, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -16179,6 +16487,9 @@ public struct RawDictionaryTypeSyntax: RawTypeSyntaxNodeProtocol {
     _ unexpectedAfterRightSquareBracket: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(leftSquareBracket.tokenKind.base == .leftSquareBracket, "Received \(leftSquareBracket.tokenKind)")
+    assert(colon.tokenKind.base == .colon, "Received \(colon.tokenKind)")
+    assert(rightSquareBracket.tokenKind.base == .rightSquareBracket, "Received \(rightSquareBracket.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .dictionaryType, uninitializedCount: 11, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -16265,6 +16576,8 @@ public struct RawMetatypeTypeSyntax: RawTypeSyntaxNodeProtocol {
     _ unexpectedAfterTypeOrProtocol: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(period.tokenKind.base == .period, "Received \(period.tokenKind)")
+    assert(typeOrProtocol.tokenKind == .keyword(.Type) || typeOrProtocol.tokenKind == .keyword(.Protocol), "Received \(typeOrProtocol.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .metatypeType, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -16333,6 +16646,7 @@ public struct RawOptionalTypeSyntax: RawTypeSyntaxNodeProtocol {
     _ unexpectedAfterQuestionMark: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(questionMark.tokenKind.base == .postfixQuestionMark, "Received \(questionMark.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .optionalType, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -16393,6 +16707,7 @@ public struct RawConstrainedSugarTypeSyntax: RawTypeSyntaxNodeProtocol {
     _ unexpectedAfterBaseType: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(someOrAnySpecifier.tokenKind == .keyword(.some) || someOrAnySpecifier.tokenKind == .keyword(.any), "Received \(someOrAnySpecifier.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .constrainedSugarType, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -16453,6 +16768,7 @@ public struct RawImplicitlyUnwrappedOptionalTypeSyntax: RawTypeSyntaxNodeProtoco
     _ unexpectedAfterExclamationMark: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(exclamationMark.tokenKind.base == .exclamationMark, "Received \(exclamationMark.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .implicitlyUnwrappedOptionalType, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -16663,6 +16979,7 @@ public struct RawPackExpansionTypeSyntax: RawTypeSyntaxNodeProtocol {
     _ unexpectedAfterPatternType: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(repeatKeyword.tokenKind == .keyword(.repeat), "Received \(repeatKeyword.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .packExpansionType, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -16723,6 +17040,7 @@ public struct RawPackReferenceTypeSyntax: RawTypeSyntaxNodeProtocol {
     _ unexpectedAfterPackType: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(eachKeyword.tokenKind == .keyword(.each), "Received \(eachKeyword.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .packReferenceType, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -16795,6 +17113,11 @@ public struct RawTupleTypeElementSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(name == nil || name?.tokenKind.base == .identifier || name?.tokenKind.base == .wildcard, "Received \(String(describing: name?.tokenKind))")
+    assert(secondName == nil || secondName?.tokenKind.base == .identifier || secondName?.tokenKind.base == .wildcard, "Received \(String(describing: secondName?.tokenKind))")
+    assert(colon == nil || colon?.tokenKind.base == .colon, "Received \(String(describing: colon?.tokenKind))")
+    assert(ellipsis == nil || ellipsis?.tokenKind.base == .ellipsis, "Received \(String(describing: ellipsis?.tokenKind))")
+    assert(trailingComma == nil || trailingComma?.tokenKind.base == .comma, "Received \(String(describing: trailingComma?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .tupleTypeElement, uninitializedCount: 17, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -16945,6 +17268,8 @@ public struct RawTupleTypeSyntax: RawTypeSyntaxNodeProtocol {
     _ unexpectedAfterRightParen: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(leftParen.tokenKind.base == .leftParen, "Received \(leftParen.tokenKind)")
+    assert(rightParen.tokenKind.base == .rightParen, "Received \(rightParen.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .tupleType, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -17019,6 +17344,8 @@ public struct RawFunctionTypeSyntax: RawTypeSyntaxNodeProtocol {
     _ unexpectedAfterOutput: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(leftParen.tokenKind.base == .leftParen, "Received \(leftParen.tokenKind)")
+    assert(rightParen.tokenKind.base == .rightParen, "Received \(rightParen.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .functionType, uninitializedCount: 11, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -17105,6 +17432,7 @@ public struct RawAttributedTypeSyntax: RawTypeSyntaxNodeProtocol {
     _ unexpectedAfterBaseType: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(specifier == nil || specifier?.tokenKind == .keyword(.inout) || specifier?.tokenKind == .keyword(.__shared) || specifier?.tokenKind == .keyword(.__owned) || specifier?.tokenKind == .keyword(.isolated) || specifier?.tokenKind == .keyword(._const), "Received \(String(describing: specifier?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .attributedType, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -17213,6 +17541,7 @@ public struct RawGenericArgumentSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(trailingComma == nil || trailingComma?.tokenKind.base == .comma, "Received \(String(describing: trailingComma?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .genericArgument, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -17275,6 +17604,8 @@ public struct RawGenericArgumentClauseSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterRightAngleBracket: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(leftAngleBracket.tokenKind.base == .leftAngle, "Received \(leftAngleBracket.tokenKind)")
+    assert(rightAngleBracket.tokenKind.base == .rightAngle, "Received \(rightAngleBracket.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .genericArgumentClause, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -17403,6 +17734,7 @@ public struct RawTypeAnnotationSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterType: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(colon.tokenKind.base == .colon, "Received \(colon.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .typeAnnotation, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -17463,6 +17795,7 @@ public struct RawIsTypePatternSyntax: RawPatternSyntaxNodeProtocol {
     _ unexpectedAfterType: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(isKeyword.tokenKind == .keyword(.is), "Received \(isKeyword.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .isTypePattern, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -17521,6 +17854,7 @@ public struct RawIdentifierPatternSyntax: RawPatternSyntaxNodeProtocol {
     _ unexpectedAfterIdentifier: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(identifier.tokenKind.base == .identifier || identifier.tokenKind.base == .keyword, "Received \(identifier.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .identifierPattern, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -17575,6 +17909,8 @@ public struct RawTuplePatternSyntax: RawPatternSyntaxNodeProtocol {
     _ unexpectedAfterRightParen: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(leftParen.tokenKind.base == .leftParen, "Received \(leftParen.tokenKind)")
+    assert(rightParen.tokenKind.base == .rightParen, "Received \(rightParen.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .tuplePattern, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -17643,6 +17979,7 @@ public struct RawWildcardPatternSyntax: RawPatternSyntaxNodeProtocol {
     _ unexpectedAfterTypeAnnotation: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(wildcard.tokenKind.base == .wildcard, "Received \(wildcard.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .wildcardPattern, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -17707,6 +18044,9 @@ public struct RawTuplePatternElementSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(labelName == nil || labelName?.tokenKind.base == .identifier, "Received \(String(describing: labelName?.tokenKind))")
+    assert(labelColon == nil || labelColon?.tokenKind.base == .colon, "Received \(String(describing: labelColon?.tokenKind))")
+    assert(trailingComma == nil || trailingComma?.tokenKind.base == .comma, "Received \(String(describing: trailingComma?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .tuplePatternElement, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -17873,6 +18213,7 @@ public struct RawValueBindingPatternSyntax: RawPatternSyntaxNodeProtocol {
     _ unexpectedAfterValuePattern: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(letOrVarKeyword.tokenKind == .keyword(.let) || letOrVarKeyword.tokenKind == .keyword(.var), "Received \(letOrVarKeyword.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .valueBindingPattern, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -18008,6 +18349,7 @@ public struct RawAvailabilityArgumentSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(trailingComma == nil || trailingComma?.tokenKind.base == .comma, "Received \(String(describing: trailingComma?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .availabilityArgument, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -18099,6 +18441,8 @@ public struct RawAvailabilityLabeledArgumentSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterValue: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(label.tokenKind == .keyword(.message) || label.tokenKind == .keyword(.renamed) || label.tokenKind == .keyword(.introduced) || label.tokenKind == .keyword(.obsoleted) || label.tokenKind == .keyword(.deprecated), "Received \(label.tokenKind)")
+    assert(colon.tokenKind.base == .colon, "Received \(colon.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .availabilityLabeledArgument, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -18167,6 +18511,7 @@ public struct RawAvailabilityVersionRestrictionSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterVersion: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(platform.tokenKind.base == .identifier, "Received \(platform.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .availabilityVersionRestriction, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
@@ -18229,6 +18574,9 @@ public struct RawVersionTupleSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterPatchVersion: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
+    assert(majorMinor.tokenKind.base == .integerLiteral || majorMinor.tokenKind.base == .floatingLiteral, "Received \(majorMinor.tokenKind)")
+    assert(patchPeriod == nil || patchPeriod?.tokenKind.base == .period, "Received \(String(describing: patchPeriod?.tokenKind))")
+    assert(patchVersion == nil || patchVersion?.tokenKind.base == .integerLiteral, "Received \(String(describing: patchVersion?.tokenKind))")
     let raw = RawSyntax.makeLayout(
       kind: .versionTuple, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)

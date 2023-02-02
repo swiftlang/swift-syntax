@@ -737,11 +737,11 @@ public let EXPR_NODES: [Node] = [
                kind: .token(choices: [.token(tokenKind: "RawStringDelimiterToken")]),
                isOptional: true),
          Child(name: "OpenQuote",
-               kind: .token(choices: [.token(tokenKind: "StringQuoteToken"), .token(tokenKind: "MultilineStringQuoteToken")])),
+               kind: .token(choices: [.token(tokenKind: "StringQuoteToken"), .token(tokenKind: "MultilineStringQuoteToken"), .token(tokenKind: "SingleQuoteToken")])),
          Child(name: "Segments",
                kind: .collection(kind: "StringLiteralSegments", collectionElementName: "Segment")),
          Child(name: "CloseQuote",
-               kind: .token(choices: [.token(tokenKind: "StringQuoteToken"), .token(tokenKind: "MultilineStringQuoteToken")])),
+               kind: .token(choices: [.token(tokenKind: "StringQuoteToken"), .token(tokenKind: "MultilineStringQuoteToken"), .token(tokenKind: "SingleQuoteToken")])),
          Child(name: "CloseDelimiter",
                kind: .token(choices: [.token(tokenKind: "RawStringDelimiterToken")]),
                isOptional: true)

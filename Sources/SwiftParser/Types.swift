@@ -548,7 +548,7 @@ extension Parser {
         }
         // Parse the type annotation.
         let type = self.parseType(misplacedSpecifiers: misplacedSpecifiers)
-        let ellipsis = self.currentToken.isEllipsis ? self.consumeAnyToken() : nil
+        let ellipsis = self.consumeIfContextualPunctuator("...", remapping: .ellipsis)
         var trailingComma = self.consume(if: .comma)
         if trailingComma == nil && self.withLookahead({ $0.canParseType() }) {
           // If the next token does not close the tuple, it is very likely the user forgot the comma.

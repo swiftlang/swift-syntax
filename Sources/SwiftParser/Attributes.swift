@@ -418,7 +418,7 @@ extension Parser {
   }
 
   mutating func parseDifferentiabilityParameters() -> RawDifferentiabilityParamsClauseSyntax {
-    let (unexpectedBeforeWrt, wrt) = self.expectIdentifier(keywordRecovery: true)
+    let (unexpectedBeforeWrt, wrt) = self.expect(.keyword(.wrt))
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
 
     guard let leftParen = self.consume(if: .leftParen) else {
@@ -879,21 +879,23 @@ extension Parser {
         )
       )
     } else {
-      let label = self.consumeAnyToken()
+      let (unexpectedBeforeLabel, label) = self.expect(.identifier)
       let unexpectedBeforeComma: RawUnexpectedNodesSyntax?
       let comma: RawTokenSyntax?
+      let unexpectedBeforeCTypeLabel: RawUnexpectedNodesSyntax?
       let cTypeLabel: RawTokenSyntax?
       let unexpectedBeforeColon: RawUnexpectedNodesSyntax?
       let colon: RawTokenSyntax?
       let cTypeString: RawStringLiteralExprSyntax?
       if self.at(.comma) {
         (unexpectedBeforeComma, comma) = self.expect(.comma)
-        cTypeLabel = self.consumeAnyToken()
+        (unexpectedBeforeCTypeLabel, cTypeLabel) = self.expect(.keyword(.cType))
         (unexpectedBeforeColon, colon) = self.expect(.colon)
         cTypeString = self.parseStringLiteral()
       } else {
         unexpectedBeforeComma = nil
         comma = nil
+        unexpectedBeforeCTypeLabel = nil
         cTypeLabel = nil
         unexpectedBeforeColon = nil
         colon = nil
@@ -901,9 +903,11 @@ extension Parser {
       }
       return .conventionArguments(
         RawConventionAttributeArgumentsSyntax(
+          unexpectedBeforeLabel,
           conventionLabel: label,
           unexpectedBeforeComma,
           comma: comma,
+          unexpectedBeforeCTypeLabel,
           cTypeLabel: cTypeLabel,
           unexpectedBeforeColon,
           colon: colon,
@@ -917,7 +921,7 @@ extension Parser {
 
 extension Parser {
   mutating func parseBackDeployArguments() -> RawBackDeployAttributeSpecListSyntax {
-    let (unexpectedBeforeLabel, label) = self.expect(.keyword(.before), remapping: .identifier)
+    let (unexpectedBeforeLabel, label) = self.expect(.keyword(.before))
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
     var elements: [RawAvailabilityVersionRestrictionListEntrySyntax] = []
     var keepGoing: RawTokenSyntax? = nil
@@ -974,7 +978,7 @@ extension Parser {
 
 extension Parser {
   mutating func parseOriginallyDefinedInArguments() -> RawOriginallyDefinedInArgumentsSyntax {
-    let (unexpectedBeforeModuleLabel, moduleLabel) = self.expect(.keyword(.module), remapping: .identifier)
+    let (unexpectedBeforeModuleLabel, moduleLabel) = self.expect(.keyword(.module))
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
     let moduleName = self.parseStringLiteral()
     let (unexpectedBeforeComma, comma) = self.expect(.comma)
@@ -1009,7 +1013,7 @@ extension Parser {
 
 extension Parser {
   mutating func parseUnderscorePrivateAttributeArguments() -> RawUnderscorePrivateAttributeArgumentsSyntax {
-    let (unexpectedBeforeLabel, label) = self.expect(.keyword(.sourceFile), remapping: .identifier)
+    let (unexpectedBeforeLabel, label) = self.expect(.keyword(.sourceFile))
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
     let filename = self.parseStringLiteral()
     return RawUnderscorePrivateAttributeArgumentsSyntax(
@@ -1025,7 +1029,7 @@ extension Parser {
 
 extension Parser {
   mutating func parseDynamicReplacementArguments() -> RawDynamicReplacementArgumentsSyntax {
-    let (unexpectedBeforeLabel, label) = self.expect(.keyword(.for), remapping: .identifier)
+    let (unexpectedBeforeLabel, label) = self.expect(.keyword(.for))
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
     let base: RawTokenSyntax
     let args: RawDeclNameArgumentsSyntax?
@@ -1051,7 +1055,7 @@ extension Parser {
 
 extension Parser {
   mutating func parseUnavailableFromAsyncArguments() -> RawUnavailableFromAsyncArgumentsSyntax {
-    let (unexpectedBeforeLabel, label) = self.expect(.keyword(.message), remapping: .identifier)
+    let (unexpectedBeforeLabel, label) = self.expect(.keyword(.message))
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
     let message = self.parseStringLiteral()
     return RawUnavailableFromAsyncArgumentsSyntax(

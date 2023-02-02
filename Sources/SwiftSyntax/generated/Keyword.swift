@@ -211,6 +211,8 @@ public enum Keyword: UInt8, Hashable {
   
   case `for`
   
+  case forward
+  
   case `func`
   
   case get
@@ -253,6 +255,8 @@ public enum Keyword: UInt8, Hashable {
   
   case line
   
+  case linear
+  
   case lowerThan
   
   case macro
@@ -276,6 +280,8 @@ public enum Keyword: UInt8, Hashable {
   case noDerivative
   
   case noescape
+  
+  case none
   
   case nonisolated
   
@@ -324,6 +330,8 @@ public enum Keyword: UInt8, Hashable {
   case `return`
   
   case reverse
+  
+  case right
   
   case safe
   
@@ -473,6 +481,8 @@ public enum Keyword: UInt8, Hashable {
         self = .left
       case "line": 
         self = .line
+      case "none": 
+        self = .none
       case "objc": 
         self = .objc
       case "open": 
@@ -530,6 +540,8 @@ public enum Keyword: UInt8, Hashable {
         self = .`inout`
       case "macro": 
         self = .macro
+      case "right": 
+        self = .right
       case "super": 
         self = .`super`
       case "swift": 
@@ -565,6 +577,8 @@ public enum Keyword: UInt8, Hashable {
         self = .`import`
       case "inline": 
         self = .inline
+      case "linear": 
+        self = .linear
       case "module": 
         self = .module
       case "prefix": 
@@ -606,6 +620,8 @@ public enum Keyword: UInt8, Hashable {
         self = .`default`
       case "dynamic": 
         self = .dynamic
+      case "forward": 
+        self = .forward
       case "message": 
         self = .message
       case "noasync": 
@@ -1113,6 +1129,7 @@ public enum Keyword: UInt8, Hashable {
     "fileprivate", 
     "final", 
     "for", 
+    "forward", 
     "func", 
     "get", 
     "guard", 
@@ -1134,6 +1151,7 @@ public enum Keyword: UInt8, Hashable {
     "left", 
     "let", 
     "line", 
+    "linear", 
     "lowerThan", 
     "macro", 
     "message", 
@@ -1146,6 +1164,7 @@ public enum Keyword: UInt8, Hashable {
     "noasync", 
     "noDerivative", 
     "noescape", 
+    "none", 
     "nonisolated", 
     "nonmutating", 
     "objc", 
@@ -1170,6 +1189,7 @@ public enum Keyword: UInt8, Hashable {
     "rethrows", 
     "return", 
     "reverse", 
+    "right", 
     "safe", 
     "self", 
     "Self", 

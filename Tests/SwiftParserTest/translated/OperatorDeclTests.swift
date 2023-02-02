@@ -366,9 +366,12 @@ final class OperatorDeclTests: XCTestCase {
     AssertParse(
       """
       precedencegroup C {
-        associativity: sinister
+        associativity: 1️⃣sinister
       }
-      """
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "Expected 'none', 'left', or 'right' after 'associativity'")
+      ]
     )
   }
 

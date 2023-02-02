@@ -107,7 +107,7 @@ ATTRIBUTE_NODES = [
          The availability argument for the _specialize attribute
          ''',
          children=[
-             Child('Label', kind='IdentifierToken', name_for_diagnostics='label',
+             Child('Label', kind='KeywordToken', token_choices=['KeywordToken|availability'], name_for_diagnostics='label',
                    description='The label of the argument'),
              Child('Colon', kind='ColonToken',
                    description='The colon separating the label and the value'),
@@ -126,7 +126,8 @@ ATTRIBUTE_NODES = [
          ''',
          traits=['WithTrailingComma'],
          children=[
-             Child('Label', kind='IdentifierToken', name_for_diagnostics='label',
+             Child('Label', kind='Token', name_for_diagnostics='label',
+                   token_choices=['KeywordToken|available', 'KeywordToken|exported', 'KeywordToken|kind', 'KeywordToken|spi', 'KeywordToken|spiModule', 'IdentifierToken'],
                    description='The label of the argument'),
              Child('Colon', kind='ColonToken',
                    description='The colon separating the label and the value'),
@@ -148,7 +149,7 @@ ATTRIBUTE_NODES = [
          ''',
          traits=['WithTrailingComma'],
          children=[
-             Child('Label', kind='IdentifierToken', name_for_diagnostics='label',
+             Child('Label', kind='KeywordToken', token_choices=['KeywordToken|target'], name_for_diagnostics='label',
                    description='The label of the argument'),
              Child('Colon', kind='ColonToken',
                    description='The colon separating the label and the value'),
@@ -162,7 +163,7 @@ ATTRIBUTE_NODES = [
 
     Node('DeclName', name_for_diagnostics='declaration name', kind='Syntax', children=[
          Child('DeclBaseName', kind='Token', name_for_diagnostics='base name', 
-               token_choices=['IdentifierToken', 'PrefixOperatorToken'],
+               token_choices=['IdentifierToken', 'PrefixOperatorToken', 'KeywordToken|init'],
                description='''
                The base name of the protocol\'s requirement.
                '''),
@@ -429,8 +430,7 @@ ATTRIBUTE_NODES = [
          The arguments for the '@convention(...)'.
          ''',
          children=[
-             Child('ConventionLabel', kind='KeywordToken',
-                   token_choices=['KeywordToken|block', 'KeywordToken|c', 'KeywordToken|objc_method', 'KeywordToken|thin', 'KeywordToken|thick'],
+             Child('ConventionLabel', kind='IdentifierToken',
                    description='The convention label.'),
              Child('Comma', kind='CommaToken', is_optional=True),
              Child('CTypeLabel', kind='KeywordToken',
@@ -447,7 +447,7 @@ ATTRIBUTE_NODES = [
          The arguments for the '@convention(witness_method: ...)'.
          ''',
          children=[
-             Child('WitnessMethodLabel', kind='IdentifierToken'),
+             Child('WitnessMethodLabel', kind='KeywordToken', token_choices=['KeywordToken|witness_method']),
              Child('Colon', kind='ColonToken'),
              Child('ProtocolName', kind='IdentifierToken'),
         ]),

@@ -216,7 +216,7 @@ public let DECL_NODES: [Node] = [
          Child(name: "LeftParen",
                kind: .token(choices: [.token(tokenKind: "LeftParenToken")])),
          Child(name: "Detail",
-               kind: .token(choices: [.token(tokenKind: "IdentifierToken")])),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .keyword(text: "set")])),
          Child(name: "RightParen",
                kind: .token(choices: [.token(tokenKind: "RightParenToken")]))
        ]),
@@ -226,7 +226,7 @@ public let DECL_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "Name",
-               kind: .token(choices: [.keyword(text: "class"), .keyword(text: "convenience"), .keyword(text: "dynamic"), .keyword(text: "final"), .keyword(text: "infix"), .keyword(text: "lazy"), .keyword(text: "optional"), .keyword(text: "override"), .keyword(text: "postfix"), .keyword(text: "prefix"), .keyword(text: "required"), .keyword(text: "static"), .keyword(text: "unowned"), .keyword(text: "weak"), .keyword(text: "private"), .keyword(text: "fileprivate"), .keyword(text: "internal"), .keyword(text: "public"), .keyword(text: "open"), .keyword(text: "mutating"), .keyword(text: "nonmutating"), .keyword(text: "indirect"), .keyword(text: "__consuming"), .keyword(text: "actor"), .keyword(text: "async"), .keyword(text: "distributed"), .keyword(text: "isolated"), .keyword(text: "nonisolated"), .keyword(text: "_const"), .keyword(text: "_local")]),
+               kind: .token(choices: [.keyword(text: "class"), .keyword(text: "convenience"), .keyword(text: "dynamic"), .keyword(text: "final"), .keyword(text: "infix"), .keyword(text: "lazy"), .keyword(text: "optional"), .keyword(text: "override"), .keyword(text: "postfix"), .keyword(text: "prefix"), .keyword(text: "required"), .keyword(text: "static"), .keyword(text: "unowned"), .keyword(text: "weak"), .keyword(text: "private"), .keyword(text: "fileprivate"), .keyword(text: "internal"), .keyword(text: "public"), .keyword(text: "open"), .keyword(text: "mutating"), .keyword(text: "nonmutating"), .keyword(text: "indirect"), .keyword(text: "__consuming"), .keyword(text: "actor"), .keyword(text: "async"), .keyword(text: "distributed"), .keyword(text: "isolated"), .keyword(text: "nonisolated"), .keyword(text: "_const"), .keyword(text: "_local"), .keyword(text: "package")]),
                classification: "Attribute"),
          Child(name: "Detail",
                kind: .node(kind: "DeclModifierDetail"),
@@ -934,7 +934,7 @@ public let DECL_NODES: [Node] = [
          Child(name: "LeadingComma",
                kind: .token(choices: [.token(tokenKind: "CommaToken")])),
          Child(name: "Name",
-               kind: .token(choices: [.token(tokenKind: "IdentifierToken")]))
+               kind: .node(kind: "Token"))
        ]),
 
   Node(name: "OperatorPrecedenceAndTypes",

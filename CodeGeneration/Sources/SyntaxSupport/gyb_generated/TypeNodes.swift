@@ -18,7 +18,7 @@ public let TYPE_NODES: [Node] = [
        kind: "Type",
        children: [
          Child(name: "Name",
-               kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "KeywordToken")]),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "KeywordToken"), .token(tokenKind: "WildcardToken")]),
                classification: "TypeIdentifier"),
          Child(name: "GenericArgumentClause",
                kind: .node(kind: "GenericArgumentClause"),
@@ -245,7 +245,7 @@ public let TYPE_NODES: [Node] = [
        ],
        children: [
          Child(name: "Specifier",
-               kind: .token(choices: [.keyword(text: "inout"), .keyword(text: "__shared"), .keyword(text: "__owned")]),
+               kind: .token(choices: [.keyword(text: "inout"), .keyword(text: "__shared"), .keyword(text: "__owned"), .keyword(text: "isolated"), .keyword(text: "_const")]),
                isOptional: true),
          Child(name: "Attributes",
                kind: .collection(kind: "AttributeList", collectionElementName: "Attribute"),

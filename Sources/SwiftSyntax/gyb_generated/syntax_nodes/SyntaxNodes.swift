@@ -8914,7 +8914,7 @@ public struct AvailabilityEntrySyntax: SyntaxProtocol, SyntaxHashable {
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeLabel: UnexpectedNodesSyntax? = nil,
-    label: TokenSyntax,
+    label: TokenSyntax = .keyword(.availability),
     _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax = .colonToken(),
     _ unexpectedBetweenColonAndAvailabilityList: UnexpectedNodesSyntax? = nil,
@@ -9330,7 +9330,7 @@ public struct TargetFunctionEntrySyntax: SyntaxProtocol, SyntaxHashable {
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeLabel: UnexpectedNodesSyntax? = nil,
-    label: TokenSyntax,
+    label: TokenSyntax = .keyword(.target),
     _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax = .colonToken(),
     _ unexpectedBetweenColonAndDeclname: UnexpectedNodesSyntax? = nil,
@@ -12011,7 +12011,7 @@ public struct ConventionWitnessMethodAttributeArgumentsSyntax: SyntaxProtocol, S
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeWitnessMethodLabel: UnexpectedNodesSyntax? = nil,
-    witnessMethodLabel: TokenSyntax,
+    witnessMethodLabel: TokenSyntax = .keyword(.witness_method),
     _ unexpectedBetweenWitnessMethodLabelAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax = .colonToken(),
     _ unexpectedBetweenColonAndProtocolName: UnexpectedNodesSyntax? = nil,

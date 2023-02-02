@@ -71,7 +71,7 @@ public let GENERIC_NODES: [Node] = [
          Child(name: "Colon",
                kind: .token(choices: [.token(tokenKind: "ColonToken")])),
          Child(name: "LayoutConstraint",
-               kind: .token(choices: [.token(tokenKind: "IdentifierToken")])),
+               kind: .token(choices: [.keyword(text: "_Trivial"), .keyword(text: "_TrivialAtMost"), .keyword(text: "_UnknownLayout"), .keyword(text: "_RefCountedObject"), .keyword(text: "_NativeRefCountedObject"), .keyword(text: "_Class"), .keyword(text: "_NativeClass")])),
          Child(name: "LeftParen",
                kind: .token(choices: [.token(tokenKind: "LeftParenToken")]),
                isOptional: true),

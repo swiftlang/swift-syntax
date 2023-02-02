@@ -581,6 +581,26 @@ enum AwaitTryMove: RawTokenKindSubset {
   }
 }
 
+enum IfOrSwitch: RawTokenKindSubset {
+  case ifKeyword
+  case switchKeyword
+
+  init?(lexeme: Lexer.Lexeme) {
+    switch lexeme {
+    case RawTokenKindMatch(.keyword(.if)): self = .ifKeyword
+    case RawTokenKindMatch(.keyword(.switch)): self = .switchKeyword
+    default: return nil
+    }
+  }
+
+  var rawTokenKind: RawTokenKind {
+    switch self {
+    case .ifKeyword: return .keyword(.if)
+    case .switchKeyword: return .keyword(.switch)
+    }
+  }
+}
+
 enum ExpressionPrefixOperator: RawTokenKindSubset {
   case backslash
   case prefixAmpersand

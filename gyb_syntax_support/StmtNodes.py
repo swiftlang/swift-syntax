@@ -10,6 +10,12 @@ STMT_NODES = [
              Child('Statement', kind='Stmt'),
          ]),
 
+    # expr-stmt -> expression ';'?
+    Node('ExpressionStmt', name_for_diagnostics='expression', kind='Stmt',
+         children=[
+             Child('Expression', kind='Expr'),
+         ]),
+
     # continue-stmt -> 'continue' label? ';'?
     Node('ContinueStmt', name_for_diagnostics="'continue' statement", kind='Stmt',
          children=[

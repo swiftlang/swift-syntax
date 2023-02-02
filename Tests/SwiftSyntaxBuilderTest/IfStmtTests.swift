@@ -114,30 +114,6 @@ final class IfStmtTests: XCTestCase {
     }
   }
 
-  func testIfElseStmt() {
-    // Use the convenience initializer from IfStmtConvenienceInitializers
-    // with an else branch expressed by a second trailing closure.
-    let buildable = IfStmtSyntax(conditions: ConditionElementListSyntax { BooleanLiteralExprSyntax(true) }) {
-      FunctionCallExprSyntax(callee: ExprSyntax("print")) {
-        TupleExprElementSyntax(expression: StringLiteralExprSyntax(content: "Hello from the if-branch!"))
-      }
-    } elseBody: {
-      FunctionCallExprSyntax(callee: ExprSyntax("print")) {
-        TupleExprElementSyntax(expression: StringLiteralExprSyntax(content: "Hello from the else-branch!"))
-      }
-    }
-    AssertBuildResult(
-      buildable,
-      """
-      if true {
-          print("Hello from the if-branch!")
-      } else {
-          print("Hello from the else-branch!")
-      }
-      """
-    )
-  }
-
   func testIfLetStmt() {
     let buildable = IfStmtSyntax(
       conditions: ConditionElementListSyntax {

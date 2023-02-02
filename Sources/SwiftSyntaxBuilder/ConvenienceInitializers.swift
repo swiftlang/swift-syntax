@@ -13,6 +13,26 @@
 @_spi(RawSyntax) import SwiftParser
 @_spi(RawSyntax) import SwiftSyntax
 
+// MARK: - CustomAttribute
+
+extension AttributeSyntax {
+  /// A convenience initializer that allows passing in arguments using a result builder
+  /// and automatically adds parentheses as needed, similar to the convenience
+  /// initializer for ``FunctionCallExpr``.
+  public init(
+    _ attributeName: TypeSyntax,
+    @TupleExprElementListBuilder argumentList: () -> TupleExprElementListSyntax? = { nil }
+  ) {
+    let argumentList = argumentList()
+    self.init(
+      attributeName: attributeName,
+      leftParen: argumentList != nil ? .leftParenToken() : nil,
+      argument: argumentList.map(AttributeSyntax.Argument.argumentList),
+      rightParen: argumentList != nil ? .rightParenToken() : nil
+    )
+  }
+}
+
 // MARK: - BinaryOperatorExpr
 
 extension BinaryOperatorExprSyntax {
@@ -47,26 +67,6 @@ extension CatchClauseSyntax {
       catchKeyword: .keyword(.catch, trailingTrivia: catchItems.isEmpty ? [] : .space),
       catchItems: catchItems,
       body: CodeBlockSyntax(statements: bodyBuilder())
-    )
-  }
-}
-
-// MARK: - CustomAttribute
-
-extension AttributeSyntax {
-  /// A convenience initializer that allows passing in arguments using a result builder
-  /// and automatically adds parentheses as needed, similar to the convenience
-  /// initializer for ``FunctionCallExpr``.
-  public init(
-    _ attributeName: TypeSyntax,
-    @TupleExprElementListBuilder argumentList: () -> TupleExprElementListSyntax? = { nil }
-  ) {
-    let argumentList = argumentList()
-    self.init(
-      attributeName: attributeName,
-      leftParen: argumentList != nil ? .leftParenToken() : nil,
-      argument: argumentList.map(AttributeSyntax.Argument.argumentList),
-      rightParen: argumentList != nil ? .rightParenToken() : nil
     )
   }
 }
@@ -173,38 +173,15 @@ extension FunctionCallExprSyntax {
 // strings, only literals.
 extension FunctionParameterSyntax {
   public init(
-    _ source: String,
+    _ source: PartialSyntaxNodeString,
     for subject: Parser.ParameterSubject
   ) {
     self = performParse(
-      source: Array(source.utf8),
+      source: source.sourceText,
       parse: {
         let raw = RawSyntax($0.parseFunctionParameter(for: subject))
         return Syntax(raw: raw).cast(FunctionParameterSyntax.self)
       }
-    )
-  }
-}
-
-// MARK: - IfStmt
-
-extension IfStmtSyntax {
-  /// A convenience initializer that uses builder closures to express an
-  /// if body, potentially with a second trailing builder closure for an else
-  /// body.
-  public init(
-    leadingTrivia: Trivia = [],
-    conditions: ConditionElementListSyntax,
-    @CodeBlockItemListBuilder body: () -> CodeBlockItemListSyntax,
-    @CodeBlockItemListBuilder elseBody: () -> CodeBlockItemListSyntax? = { nil }
-  ) {
-    let generatedElseBody = elseBody()
-    self.init(
-      leadingTrivia: leadingTrivia,
-      conditions: conditions,
-      body: CodeBlockSyntax(statements: body()),
-      elseKeyword: generatedElseBody == nil ? nil : .keyword(.else, leadingTrivia: .space),
-      elseBody: generatedElseBody.map { .codeBlock(CodeBlockSyntax(statements: $0)) }
     )
   }
 }
@@ -218,20 +195,6 @@ extension IntegerLiteralExprSyntax: ExpressibleByIntegerLiteral {
 
   public init(integerLiteral value: Int) {
     self.init(value)
-  }
-}
-
-// MARK: - MemberAccessExpr
-
-extension MemberAccessExprSyntax {
-  /// Creates a `MemberAccessExpr` using the provided parameters.
-  public init(
-    base: ExprSyntax? = nil,
-    dot: TokenSyntax = .periodToken(),
-    name: String,
-    declNameArguments: DeclNameArgumentsSyntax? = nil
-  ) {
-    self.init(base: base, dot: dot, name: .identifier(name), declNameArguments: declNameArguments)
   }
 }
 
@@ -358,33 +321,6 @@ extension StringLiteralExprSyntax {
   }
 }
 
-// MARK: - SwitchCase
-
-extension SwitchCaseSyntax {
-  public init(_ label: SwitchCaseSyntax, @CodeBlockItemListBuilder statementsBuilder: () -> CodeBlockItemListSyntax) {
-    self = label
-    self.statements = statementsBuilder()
-  }
-}
-
-// MARK: - TernaryExpr
-
-extension TernaryExprSyntax {
-  public init<C: ExprSyntaxProtocol, F: ExprSyntaxProtocol, S: ExprSyntaxProtocol>(
-    if condition: C,
-    then firstChoice: F,
-    else secondChoice: S
-  ) {
-    self.init(
-      conditionExpression: condition,
-      questionMark: .infixQuestionMarkToken(leadingTrivia: .space, trailingTrivia: .space),
-      firstChoice: firstChoice,
-      colonMark: .colonToken(leadingTrivia: .space),
-      secondChoice: secondChoice
-    )
-  }
-}
-
 // MARK: - TupleExprElement
 
 extension TupleExprElementSyntax {
@@ -422,29 +358,6 @@ extension VariableDeclSyntax {
         pattern: name,
         typeAnnotation: type,
         initializer: initializer
-      )
-    }
-  }
-
-  /// Creates a computed property with the given accessor.
-  public init(
-    leadingTrivia: Trivia = [],
-    attributes: AttributeListSyntax? = nil,
-    modifiers: ModifierListSyntax? = nil,
-    name: PatternSyntax,
-    type: TypeAnnotationSyntax,
-    @CodeBlockItemListBuilder accessor: () -> CodeBlockItemListSyntax
-  ) {
-    self.init(
-      leadingTrivia: leadingTrivia,
-      attributes: attributes?.with(\.trailingTrivia, .space),
-      modifiers: modifiers,
-      letOrVarKeyword: .keyword(.var)
-    ) {
-      PatternBindingSyntax(
-        pattern: name,
-        typeAnnotation: type,
-        accessor: .getter(CodeBlockSyntax(statements: accessor()))
       )
     }
   }

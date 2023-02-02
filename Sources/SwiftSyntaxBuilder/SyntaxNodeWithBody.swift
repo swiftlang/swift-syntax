@@ -144,6 +144,15 @@ public extension IfStmtSyntax {
   }
 }
 
+// MARK: - SwitchCase
+
+extension SwitchCaseSyntax {
+  public init(_ header: PartialSyntaxNodeString, @CodeBlockItemListBuilder statementsBuilder: () -> CodeBlockItemListSyntax) {
+    self = SwitchCaseSyntax("\(header)")
+    self.statements = statementsBuilder()
+  }
+}
+
 // MARK: - SwitchStmtSyntax
 // SwitchStmtSyntax is a special scenario as it don't have body or members
 // So we cannot conform to `HasTrailingCodeBlock` or `HasTrailingMemberDeclBlock`

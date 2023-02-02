@@ -197,8 +197,9 @@ extension Parser {
     // We could also achieve this by more eagerly attempting to parse an 'if'
     // or 'switch' as an expression when in statement position, but that
     // could result in less useful recovery behavior.
-    if at(.keyword(.as)), let stmtExpr = stmt.as(RawExpressionStmtSyntax.self) {
-      let expr = stmtExpr.expression
+    if at(.keyword(.as)),
+      let expr = stmt.as(RawExpressionStmtSyntax.self)?.expression
+    {
       if expr.is(RawIfExprSyntax.self) || expr.is(RawSwitchExprSyntax.self) {
         let (op, rhs) = parseUnresolvedAsExpr(
           handle: .init(tokenKind: .keyword(.as))

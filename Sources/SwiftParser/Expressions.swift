@@ -494,26 +494,25 @@ extension Parser {
     // First check to see if we have the start of a regex literal `/.../`.
     //    tryLexRegexLiteral(/*forUnappliedOperator*/ false)
 
-    // 'repeat' is the start of a pack expansion expression.
-    if (self.at(.keyword(.repeat))) {
-      return RawExprSyntax(
-        parsePackExpansionExpr(flavor, pattern: pattern)
-      )
-    }
+    switch self.currentToken.rawTokenKind {
+    case .keyword(.repeat):
+      // 'repeat' is the start of a pack expansion expression.
+      return RawExprSyntax(parsePackExpansionExpr(flavor, pattern: pattern))
 
     // Try parse an 'if' or 'switch' as an expression. Note we do this here in
     // parseUnaryExpression as we don't allow postfix syntax to hang off such
     // expressions to avoid ambiguities such as postfix '.member', which can
     // currently be parsed as a static dot member for a result builder.
-    if self.at(.keyword(.switch)) {
+    case .keyword(.switch):
       return RawExprSyntax(
         parseSwitchExpression(switchHandle: .constant(.keyword(.switch)))
       )
-    }
-    if self.at(.keyword(.if)) {
+    case .keyword(.if):
       return RawExprSyntax(
         parseIfExpression(ifHandle: .constant(.keyword(.if)))
       )
+    default:
+      break
     }
 
     switch self.at(anyIn: ExpressionPrefixOperator.self) {
@@ -2072,7 +2071,7 @@ extension Parser.Lookahead {
 
     // If this is the start of a switch body, this isn't a trailing closure.
     if self.peek().rawTokenKind == .keyword(.case) {
-      return false;
+      return false
     }
 
     // If this is a normal expression (not an expr-basic) then trailing closures

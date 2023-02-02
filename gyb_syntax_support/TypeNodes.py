@@ -31,7 +31,7 @@ TYPE_NODES = [
     # class-restriction-type -> 'class'
     Node('ClassRestrictionType', name_for_diagnostics=None, kind='Type',
          children=[
-             Child('ClassKeyword', kind='KeywordToken', text_choices=['class']),
+             Child('ClassKeyword', kind='KeywordToken', token_choices=['KeywordToken|class']),
          ]),
     # array-type -> '[' type ']'
     Node('ArrayType', name_for_diagnostics='array type', kind='Type',
@@ -57,10 +57,10 @@ TYPE_NODES = [
          children=[
              Child('BaseType', kind='Type', name_for_diagnostics='base type'),
              Child('Period', kind='PeriodToken'),
-             Child('TypeOrProtocol', kind='IdentifierToken',
-                   text_choices=[
-                       'Type',
-                       'Protocol',
+             Child('TypeOrProtocol', kind='KeywordToken',
+                   token_choices=[
+                       'KeywordToken|Type',
+                       'KeywordToken|Protocol',
                    ]),
          ]),
 
@@ -74,9 +74,8 @@ TYPE_NODES = [
     # constrained-sugar-type -> ('some'|'any') type
     Node('ConstrainedSugarType', name_for_diagnostics='type', kind='Type',
          children=[
-             Child('SomeOrAnySpecifier', kind='IdentifierToken',
-                   classification='Keyword',
-                   text_choices=['some', 'any']),
+             Child('SomeOrAnySpecifier', kind='KeywordToken',
+                   token_choices=['KeywordToken|some', 'KeywordToken|any']),
              Child('BaseType', kind='Type'),
          ]),
 
@@ -93,7 +92,6 @@ TYPE_NODES = [
          children=[
              Child('Type', kind='Type'),
              Child('Ampersand', kind='Token',
-                   text_choices=['&'],
                    is_optional=True),
          ]),
 
@@ -113,7 +111,7 @@ TYPE_NODES = [
     # pack-expansion-type -> type '...'
     Node('PackExpansionType', name_for_diagnostics='variadic expansion', kind='Type',
          children=[
-             Child('RepeatKeyword', kind='KeywordToken', text_choices=['repeat']),
+             Child('RepeatKeyword', kind='KeywordToken', token_choices=['KeywordToken|repeat']),
              Child('PatternType', kind='Type')
          ]),
 
@@ -121,7 +119,7 @@ TYPE_NODES = [
     Node('PackReferenceType', name_for_diagnostics='pack reference', kind='Type',
          children=[
              Child('EachKeyword', kind='KeyworkToken',
-                   text_choices=['each'], is_optional=False),
+                   token_choices=['KeywordToken|each'], is_optional=False),
              Child('PackType', kind='Type')
          ]),
 
@@ -189,7 +187,7 @@ TYPE_NODES = [
          traits=['Attributed'],
          children=[
              Child('Specifier', kind='Token',
-                   text_choices=['inout', '__shared', '__owned'],
+                   token_choices=['KeywordToken|inout', 'KeywordToken|__shared', 'KeywordToken|__owned'],
                    is_optional=True),
              Child('Attributes', kind='AttributeList',
                    collection_element_name='Attribute', is_optional=True),

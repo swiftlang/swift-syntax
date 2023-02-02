@@ -37,7 +37,12 @@ public let TRAITS: [Trait] = [
 %   for child in trait.children:
 %     is_optional = ", isOptional: true" if child.is_optional else ""
 %     description = ", description: %s" % child.description if child.description else ""
-          Child(name: "${child.name}", kind: "${child.syntax_kind}"${is_optional}${description}),
+%     if child.syntax_kind.endswith('Token'):
+%       kind = f'.token(choices: [.token(tokenKind: "{child.syntax_kind}")])'
+%     else:
+%       kind = f'.node(kind: "{child.syntax_kind}")'
+%     end
+          Child(name: "${child.name}", kind: ${kind}${is_optional}${description}),
 %   end
   ${"],\n description: %s" % trait.description if trait.description else "      ]"}
   ),

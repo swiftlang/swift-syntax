@@ -162,7 +162,7 @@ extension EnumCaseElementListSyntax: ExpressibleByArrayLiteral {
   }
 }
 
-/// A list of expressions connected by operators. This list is containedby a `SequenceExprSyntax`.
+/// A list of expressions connected by operators. This list is contained by a `SequenceExprSyntax`.
 extension ExprListSyntax: ExpressibleByArrayLiteral {
   public init(_ elements: [ExprSyntaxProtocol]) {
     self = ExprListSyntax(elements.map { 
@@ -322,7 +322,7 @@ extension TupleTypeElementListSyntax: ExpressibleByArrayLiteral {
   }
 }
 
-/// A collection of syntax nodes that occurred in the source code butcould not be used to form a valid syntax tree.
+/// A collection of syntax nodes that occurred in the source code but could not be used to form a valid syntax tree.
 extension UnexpectedNodesSyntax: ExpressibleByArrayLiteral {
   public init(_ elements: [SyntaxProtocol]) {
     self = UnexpectedNodesSyntax(elements.map { 

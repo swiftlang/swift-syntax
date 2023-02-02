@@ -20,75 +20,65 @@ public let ATTRIBUTE_NODES: [Node] = [
        parserFunction: "parseAttribute",
        children: [
          Child(name: "AtSignToken",
-               kind: "AtSignToken",
-               description: "The `@` sign.",
-               tokenChoices: [
-                 "AtSign"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "AtSignToken")]),
+               description: "The `@` sign."),
          Child(name: "AttributeName",
-               kind: "Type",
+               kind: .node(kind: "Type"),
                description: "The name of the attribute.",
                classification: "Attribute"),
          Child(name: "LeftParen",
-               kind: "LeftParenToken",
+               kind: .token(choices: [.token(tokenKind: "LeftParenToken")]),
                description: "If the attribute takes arguments, the opening parenthesis.",
-               isOptional: true,
-               tokenChoices: [
-                 "LeftParen"
-               ]),
+               isOptional: true),
          Child(name: "Argument",
-               kind: "Syntax",
-               description: "The arguments of the attribute. In case the attributetakes multiple arguments, they are gather in theappropriate takes first.",
-               isOptional: true,
-               nodeChoices: [
+               kind: .nodeChoices(choices: [
                  Child(name: "ArgumentList",
-                       kind: "TupleExprElementList"),
+                       kind: .node(kind: "TupleExprElementList")),
                  Child(name: "Token",
-                       kind: "Token"),
+                       kind: .node(kind: "Token")),
                  Child(name: "String",
-                       kind: "StringLiteralExpr"),
+                       kind: .node(kind: "StringLiteralExpr")),
                  Child(name: "Availability",
-                       kind: "AvailabilitySpecList"),
+                       kind: .node(kind: "AvailabilitySpecList")),
                  Child(name: "SpecializeArguments",
-                       kind: "SpecializeAttributeSpecList"),
+                       kind: .node(kind: "SpecializeAttributeSpecList")),
                  Child(name: "ObjCName",
-                       kind: "ObjCSelector"),
+                       kind: .node(kind: "ObjCSelector")),
                  Child(name: "ImplementsArguments",
-                       kind: "ImplementsAttributeArguments"),
+                       kind: .node(kind: "ImplementsAttributeArguments")),
                  Child(name: "DifferentiableArguments",
-                       kind: "DifferentiableAttributeArguments"),
+                       kind: .node(kind: "DifferentiableAttributeArguments")),
                  Child(name: "DerivativeRegistrationArguments",
-                       kind: "DerivativeRegistrationAttributeArguments"),
+                       kind: .node(kind: "DerivativeRegistrationAttributeArguments")),
                  Child(name: "BackDeployArguments",
-                       kind: "BackDeployAttributeSpecList"),
+                       kind: .node(kind: "BackDeployAttributeSpecList")),
                  Child(name: "ConventionArguments",
-                       kind: "ConventionAttributeArguments"),
+                       kind: .node(kind: "ConventionAttributeArguments")),
                  Child(name: "ConventionWitnessMethodArguments",
-                       kind: "ConventionWitnessMethodAttributeArguments"),
+                       kind: .node(kind: "ConventionWitnessMethodAttributeArguments")),
                  Child(name: "OpaqueReturnTypeOfAttributeArguments",
-                       kind: "OpaqueReturnTypeOfAttributeArguments"),
+                       kind: .node(kind: "OpaqueReturnTypeOfAttributeArguments")),
                  Child(name: "ExposeAttributeArguments",
-                       kind: "ExposeAttributeArguments"),
+                       kind: .node(kind: "ExposeAttributeArguments")),
                  Child(name: "OriginallyDefinedInArguments",
-                       kind: "OriginallyDefinedInArguments"),
+                       kind: .node(kind: "OriginallyDefinedInArguments")),
                  Child(name: "UnderscorePrivateAttributeArguments",
-                       kind: "UnderscorePrivateAttributeArguments"),
+                       kind: .node(kind: "UnderscorePrivateAttributeArguments")),
                  Child(name: "DynamicReplacementArguments",
-                       kind: "DynamicReplacementArguments"),
+                       kind: .node(kind: "DynamicReplacementArguments")),
                  Child(name: "UnavailableFromAsyncArguments",
-                       kind: "UnavailableFromAsyncArguments"),
+                       kind: .node(kind: "UnavailableFromAsyncArguments")),
                  Child(name: "EffectsArguments",
-                       kind: "EffectsArguments"),
+                       kind: .node(kind: "EffectsArguments")),
                  Child(name: "DocumentationArguments",
-                       kind: "DocumentationAttributeArguments")
+                       kind: .node(kind: "DocumentationAttributeArguments"))
                ]),
+               description: "The arguments of the attribute. In case the attribute takes multiple arguments, they are gather in the appropriate takes first.",
+               isOptional: true),
          Child(name: "RightParen",
-               kind: "RightParenToken",
+               kind: .token(choices: [.token(tokenKind: "RightParenToken")]),
                description: "If the attribute takes arguments, the closing parenthesis.",
-               isOptional: true,
-               tokenChoices: [
-                 "RightParen"
-               ])
+               isOptional: true)
        ]),
 
   Node(name: "AttributeList",
@@ -113,89 +103,61 @@ public let ATTRIBUTE_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "Label",
-               kind: "IdentifierToken",
-               description: "The label of the argument",
-               tokenChoices: [
-                 "Identifier"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+               description: "The label of the argument"),
          Child(name: "Colon",
-               kind: "ColonToken",
-               description: "The colon separating the label and the value",
-               tokenChoices: [
-                 "Colon"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "ColonToken")]),
+               description: "The colon separating the label and the value"),
          Child(name: "AvailabilityList",
-               kind: "AvailabilitySpecList",
-               collectionElementName: "Availability"),
+               kind: .collection(kind: "AvailabilitySpecList", collectionElementName: "Availability")),
          Child(name: "Semicolon",
-               kind: "SemicolonToken",
-               tokenChoices: [
-                 "Semicolon"
-               ])
+               kind: .token(choices: [.token(tokenKind: "SemicolonToken")]))
        ]),
 
   Node(name: "LabeledSpecializeEntry",
        nameForDiagnostics: "attribute argument",
-       description: "A labeled argument for the `@_specialize` attribute like`exported: true`",
+       description: "A labeled argument for the `@_specialize` attribute like `exported: true`",
        kind: "Syntax",
        traits: [
          "WithTrailingComma"
        ],
        children: [
          Child(name: "Label",
-               kind: "IdentifierToken",
-               description: "The label of the argument",
-               tokenChoices: [
-                 "Identifier"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+               description: "The label of the argument"),
          Child(name: "Colon",
-               kind: "ColonToken",
-               description: "The colon separating the label and the value",
-               tokenChoices: [
-                 "Colon"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "ColonToken")]),
+               description: "The colon separating the label and the value"),
          Child(name: "Value",
-               kind: "Token",
+               kind: .node(kind: "Token"),
                description: "The value for this argument"),
          Child(name: "TrailingComma",
-               kind: "CommaToken",
+               kind: .token(choices: [.token(tokenKind: "CommaToken")]),
                description: "A trailing comma if this argument is followed by another one",
-               isOptional: true,
-               tokenChoices: [
-                 "Comma"
-               ])
+               isOptional: true)
        ]),
 
   Node(name: "TargetFunctionEntry",
        nameForDiagnostics: "attribute argument",
-       description: "A labeled argument for the `@_specialize` attribute with a functiondecl value like`target: myFunc(_:)`",
+       description: "A labeled argument for the `@_specialize` attribute with a function decl value like `target: myFunc(_:)`",
        kind: "Syntax",
        traits: [
          "WithTrailingComma"
        ],
        children: [
          Child(name: "Label",
-               kind: "IdentifierToken",
-               description: "The label of the argument",
-               tokenChoices: [
-                 "Identifier"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+               description: "The label of the argument"),
          Child(name: "Colon",
-               kind: "ColonToken",
-               description: "The colon separating the label and the value",
-               tokenChoices: [
-                 "Colon"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "ColonToken")]),
+               description: "The colon separating the label and the value"),
          Child(name: "Declname",
-               kind: "DeclName",
+               kind: .node(kind: "DeclName"),
                description: "The value for this argument"),
          Child(name: "TrailingComma",
-               kind: "CommaToken",
+               kind: .token(choices: [.token(tokenKind: "CommaToken")]),
                description: "A trailing comma if this argument is followed by another one",
-               isOptional: true,
-               tokenChoices: [
-                 "Comma"
-               ])
+               isOptional: true)
        ]),
 
   Node(name: "DeclName",
@@ -203,58 +165,45 @@ public let ATTRIBUTE_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "DeclBaseName",
-               kind: "Token",
-               description: "The base name of the protocol's requirement.",
-               tokenChoices: [
-                 "Identifier",
-                 "PrefixOperator"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "PrefixOperatorToken")]),
+               description: "The base name of the protocol's requirement."),
          Child(name: "DeclNameArguments",
-               kind: "DeclNameArguments",
-               description: "The argument labels of the protocol's requirement if itis a function requirement.",
+               kind: .node(kind: "DeclNameArguments"),
+               description: "The argument labels of the protocol's requirement if it is a function requirement.",
                isOptional: true)
        ]),
 
   Node(name: "ImplementsAttributeArguments",
        nameForDiagnostics: "@_implements arguemnts",
-       description: "The arguments for the `@_implements` attribute of the form`Type, methodName(arg1Label:arg2Label:)`",
+       description: "The arguments for the `@_implements` attribute of the form `Type, methodName(arg1Label:arg2Label:)`",
        kind: "Syntax",
        children: [
          Child(name: "Type",
-               kind: "Type",
-               description: "The type for which the method with this attributeimplements a requirement."),
+               kind: .node(kind: "Type"),
+               description: "The type for which the method with this attribute implements a requirement."),
          Child(name: "Comma",
-               kind: "CommaToken",
-               description: "The comma separating the type and method name",
-               tokenChoices: [
-                 "Comma"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+               description: "The comma separating the type and method name"),
          Child(name: "DeclBaseName",
-               kind: "Token",
+               kind: .node(kind: "Token"),
                description: "The base name of the protocol's requirement."),
          Child(name: "DeclNameArguments",
-               kind: "DeclNameArguments",
-               description: "The argument labels of the protocol's requirement if itis a function requirement.",
+               kind: .node(kind: "DeclNameArguments"),
+               description: "The argument labels of the protocol's requirement if it is a function requirement.",
                isOptional: true)
        ]),
 
   Node(name: "ObjCSelectorPiece",
        nameForDiagnostics: "Objective-C selector piece",
-       description: "A piece of an Objective-C selector. Either consisting of just anidentifier for a nullary selector, an identifier and a colon for alabeled argument or just a colon for an unlabeled argument",
+       description: "A piece of an Objective-C selector. Either consisting of just an identifier for a nullary selector, an identifier and a colon for a labeled argument or just a colon for an unlabeled argument",
        kind: "Syntax",
        children: [
          Child(name: "Name",
-               kind: "IdentifierToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Identifier"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+               isOptional: true),
          Child(name: "Colon",
-               kind: "ColonToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Colon"
-               ])
+               kind: .token(choices: [.token(tokenKind: "ColonToken")]),
+               isOptional: true)
        ]),
 
   Node(name: "ObjCSelector",
@@ -264,39 +213,25 @@ public let ATTRIBUTE_NODES: [Node] = [
 
   Node(name: "DifferentiableAttributeArguments",
        nameForDiagnostics: "'@differentiable' arguments",
-       description: "The arguments for the `@differentiable` attribute: an optionaldifferentiability kind, an optional differentiability parameter clause,and an optional 'where' clause.",
+       description: "The arguments for the `@differentiable` attribute: an optional differentiability kind, an optional differentiability parameter clause, and an optional 'where' clause.",
        kind: "Syntax",
        children: [
          Child(name: "DiffKind",
-               kind: "IdentifierToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Identifier"
-               ],
-               textChoices: [
-                 "forward",
-                 "reverse",
-                 "linear"
-               ]),
+               kind: .token(choices: [.keyword(text: "forward"), .keyword(text: "reverse"), .keyword(text: "linear")]),
+               isOptional: true),
          Child(name: "DiffKindComma",
-               kind: "CommaToken",
+               kind: .token(choices: [.token(tokenKind: "CommaToken")]),
                description: "The comma following the differentiability kind, if it exists.",
-               isOptional: true,
-               tokenChoices: [
-                 "Comma"
-               ]),
+               isOptional: true),
          Child(name: "DiffParams",
-               kind: "DifferentiabilityParamsClause",
+               kind: .node(kind: "DifferentiabilityParamsClause"),
                isOptional: true),
          Child(name: "DiffParamsComma",
-               kind: "CommaToken",
-               description: "The comma following the differentiability parameters clause,if it exists.",
-               isOptional: true,
-               tokenChoices: [
-                 "Comma"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+               description: "The comma following the differentiability parameters clause, if it exists.",
+               isOptional: true),
          Child(name: "WhereClause",
-               kind: "GenericWhereClause",
+               kind: .node(kind: "GenericWhereClause"),
                isOptional: true)
        ]),
 
@@ -306,28 +241,18 @@ public let ATTRIBUTE_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "WrtLabel",
-               kind: "IdentifierToken",
-               description: "The \"wrt\" label.",
-               tokenChoices: [
-                 "Identifier"
-               ],
-               textChoices: [
-                 "wrt"
-               ]),
+               kind: .token(choices: [.keyword(text: "wrt")]),
+               description: "The \"wrt\" label."),
          Child(name: "Colon",
-               kind: "ColonToken",
-               description: "The colon separating \"wrt\" and the parameter list.",
-               tokenChoices: [
-                 "Colon"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "ColonToken")]),
+               description: "The colon separating \"wrt\" and the parameter list."),
          Child(name: "Parameters",
-               kind: "Syntax",
-               nodeChoices: [
+               kind: .nodeChoices(choices: [
                  Child(name: "Parameter",
-                       kind: "DifferentiabilityParam"),
+                       kind: .node(kind: "DifferentiabilityParam")),
                  Child(name: "ParameterList",
-                       kind: "DifferentiabilityParams")
-               ])
+                       kind: .node(kind: "DifferentiabilityParams"))
+               ]))
        ]),
 
   Node(name: "DifferentiabilityParams",
@@ -336,19 +261,12 @@ public let ATTRIBUTE_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "LeftParen",
-               kind: "LeftParenToken",
-               tokenChoices: [
-                 "LeftParen"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "LeftParenToken")])),
          Child(name: "DiffParams",
-               kind: "DifferentiabilityParamList",
-               description: "The parameters for differentiation.",
-               collectionElementName: "DifferentiabilityParam"),
+               kind: .collection(kind: "DifferentiabilityParamList", collectionElementName: "DifferentiabilityParam"),
+               description: "The parameters for differentiation."),
          Child(name: "RightParen",
-               kind: "RightParenToken",
-               tokenChoices: [
-                 "RightParen"
-               ])
+               kind: .token(choices: [.token(tokenKind: "RightParenToken")]))
        ]),
 
   Node(name: "DifferentiabilityParamList",
@@ -358,106 +276,67 @@ public let ATTRIBUTE_NODES: [Node] = [
 
   Node(name: "DifferentiabilityParam",
        nameForDiagnostics: "differentiability parameter",
-       description: "A differentiability parameter: either the \"self\" identifier, a functionparameter name, or a function parameter index.",
+       description: "A differentiability parameter: either the \"self\" identifier, a function parameter name, or a function parameter index.",
        kind: "Syntax",
        traits: [
          "WithTrailingComma"
        ],
        children: [
          Child(name: "Parameter",
-               kind: "Token",
-               tokenChoices: [
-                 "Identifier",
-                 "IntegerLiteral",
-                 "Keyword"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "IntegerLiteralToken"), .token(tokenKind: "KeywordToken")])),
          Child(name: "TrailingComma",
-               kind: "CommaToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Comma"
-               ])
+               kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+               isOptional: true)
        ]),
 
   Node(name: "DerivativeRegistrationAttributeArguments",
        nameForDiagnostics: "attribute arguments",
-       description: "The arguments for the '@derivative(of:)' and '@transpose(of:)'attributes: the 'of:' label, the original declaration name, and anoptional differentiability parameter list.",
+       description: "The arguments for the '@derivative(of:)' and '@transpose(of:)' attributes: the 'of:' label, the original declaration name, and an optional differentiability parameter list.",
        kind: "Syntax",
        children: [
          Child(name: "OfLabel",
-               kind: "IdentifierToken",
-               description: "The \"of\" label.",
-               tokenChoices: [
-                 "Identifier"
-               ],
-               textChoices: [
-                 "of"
-               ]),
+               kind: .token(choices: [.keyword(text: "of")]),
+               description: "The \"of\" label."),
          Child(name: "Colon",
-               kind: "ColonToken",
-               description: "The colon separating the \"of\" label and the originaldeclaration name.",
-               tokenChoices: [
-                 "Colon"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "ColonToken")]),
+               description: "The colon separating the \"of\" label and the original declaration name."),
          Child(name: "OriginalDeclName",
-               kind: "QualifiedDeclName",
+               kind: .node(kind: "QualifiedDeclName"),
                description: "The referenced original declaration name."),
          Child(name: "Period",
-               kind: "PeriodToken",
-               description: "The period separating the original declaration name and theaccessor name.",
-               isOptional: true,
-               tokenChoices: [
-                 "Period"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "PeriodToken")]),
+               description: "The period separating the original declaration name and the accessor name.",
+               isOptional: true),
          Child(name: "AccessorKind",
-               kind: "IdentifierToken",
+               kind: .token(choices: [.keyword(text: "get"), .keyword(text: "set")]),
                description: "The accessor name.",
-               isOptional: true,
-               tokenChoices: [
-                 "Identifier"
-               ],
-               textChoices: [
-                 "get",
-                 "set"
-               ]),
+               isOptional: true),
          Child(name: "Comma",
-               kind: "CommaToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Comma"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+               isOptional: true),
          Child(name: "DiffParams",
-               kind: "DifferentiabilityParamsClause",
+               kind: .node(kind: "DifferentiabilityParamsClause"),
                isOptional: true)
        ]),
 
   Node(name: "QualifiedDeclName",
        nameForDiagnostics: "declaration name",
-       description: "An optionally qualified function declaration name (e.g. `+(_:_:)`,`A.B.C.foo(_:_:)`).",
+       description: "An optionally qualified function declaration name (e.g. `+(_:_:)`, `A.B.C.foo(_:_:)`).",
        kind: "Syntax",
        children: [
          Child(name: "BaseType",
-               kind: "Type",
+               kind: .node(kind: "Type"),
                description: "The base type of the qualified name, optionally specified.",
                isOptional: true),
          Child(name: "Dot",
-               kind: "PeriodToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Period"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "PeriodToken")]),
+               isOptional: true),
          Child(name: "Name",
-               kind: "Token",
-               description: "The base name of the referenced function.",
-               tokenChoices: [
-                 "Identifier",
-                 "BinaryOperator",
-                 "PrefixOperator",
-                 "PostfixOperator"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "BinaryOperatorToken"), .token(tokenKind: "PrefixOperatorToken"), .token(tokenKind: "PostfixOperatorToken")]),
+               description: "The base name of the referenced function."),
          Child(name: "Arguments",
-               kind: "DeclNameArguments",
-               description: "The argument labels of the referenced function, optionallyspecified.",
+               kind: .node(kind: "DeclNameArguments"),
+               description: "The argument labels of the referenced function, optionally specified.",
                isOptional: true)
        ]),
 
@@ -467,24 +346,14 @@ public let ATTRIBUTE_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "BeforeLabel",
-               kind: "IdentifierToken",
-               description: "The \"before\" label.",
-               tokenChoices: [
-                 "Identifier"
-               ],
-               textChoices: [
-                 "before"
-               ]),
+               kind: .token(choices: [.keyword(text: "before")]),
+               description: "The \"before\" label."),
          Child(name: "Colon",
-               kind: "ColonToken",
-               description: "The colon separating \"before\" and the parameter list.",
-               tokenChoices: [
-                 "Colon"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "ColonToken")]),
+               description: "The colon separating \"before\" and the parameter list."),
          Child(name: "VersionList",
-               kind: "AvailabilityVersionRestrictionList",
-               description: "The list of OS versions in which the declaration became ABIstable.",
-               collectionElementName: "Availability")
+               kind: .collection(kind: "AvailabilityVersionRestrictionList", collectionElementName: "Availability"),
+               description: "The list of OS versions in which the declaration became ABI stable.")
        ]),
 
   Node(name: "AvailabilityVersionRestrictionList",
@@ -498,15 +367,12 @@ public let ATTRIBUTE_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "AvailabilityVersionRestriction",
-               kind: "AvailabilityVersionRestriction",
+               kind: .node(kind: "AvailabilityVersionRestriction"),
                classification: "Keyword"),
          Child(name: "TrailingComma",
-               kind: "CommaToken",
-               description: "A trailing comma if the argument is followed by anotherargument",
-               isOptional: true,
-               tokenChoices: [
-                 "Comma"
-               ])
+               kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+               description: "A trailing comma if the argument is followed by another argument",
+               isOptional: true)
        ]),
 
   Node(name: "OpaqueReturnTypeOfAttributeArguments",
@@ -515,19 +381,13 @@ public let ATTRIBUTE_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "MangledName",
-               kind: "StringLiteralExpr",
+               kind: .node(kind: "StringLiteralExpr"),
                description: "The mangled name of a declaration."),
          Child(name: "Comma",
-               kind: "CommaToken",
-               tokenChoices: [
-                 "Comma"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "CommaToken")])),
          Child(name: "Ordinal",
-               kind: "IntegerLiteralToken",
-               description: "The ordinal corresponding to the 'some' keyword that introduced this opaque type.",
-               tokenChoices: [
-                 "IntegerLiteral"
-               ])
+               kind: .token(choices: [.token(tokenKind: "IntegerLiteralToken")]),
+               description: "The ordinal corresponding to the 'some' keyword that introduced this opaque type.")
        ]),
 
   Node(name: "ConventionAttributeArguments",
@@ -536,41 +396,19 @@ public let ATTRIBUTE_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "ConventionLabel",
-               kind: "IdentifierToken",
-               description: "The convention label.",
-               tokenChoices: [
-                 "Identifier"
-               ],
-               textChoices: [
-                 "block",
-                 "c",
-                 "objc_method",
-                 "thin",
-                 "thick"
-               ]),
+               kind: .token(choices: [.keyword(text: "block"), .keyword(text: "c"), .keyword(text: "objc_method"), .keyword(text: "thin"), .keyword(text: "thick")]),
+               description: "The convention label."),
          Child(name: "Comma",
-               kind: "CommaToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Comma"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+               isOptional: true),
          Child(name: "CTypeLabel",
-               kind: "IdentifierToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Identifier"
-               ],
-               textChoices: [
-                 "cType"
-               ]),
+               kind: .token(choices: [.keyword(text: "cType")]),
+               isOptional: true),
          Child(name: "Colon",
-               kind: "ColonToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Colon"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "ColonToken")]),
+               isOptional: true),
          Child(name: "CTypeString",
-               kind: "StringLiteralExpr",
+               kind: .node(kind: "StringLiteralExpr"),
                isOptional: true)
        ]),
 
@@ -580,20 +418,11 @@ public let ATTRIBUTE_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "WitnessMethodLabel",
-               kind: "IdentifierToken",
-               tokenChoices: [
-                 "Identifier"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken")])),
          Child(name: "Colon",
-               kind: "ColonToken",
-               tokenChoices: [
-                 "Colon"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "ColonToken")])),
          Child(name: "ProtocolName",
-               kind: "IdentifierToken",
-               tokenChoices: [
-                 "Identifier"
-               ])
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken")]))
        ]),
 
   Node(name: "ExposeAttributeArguments",
@@ -602,15 +431,12 @@ public let ATTRIBUTE_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "Language",
-               kind: "Token"),
+               kind: .node(kind: "Token")),
          Child(name: "Comma",
-               kind: "CommaToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Comma"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+               isOptional: true),
          Child(name: "CxxName",
-               kind: "StringLiteralExpr",
+               kind: .node(kind: "StringLiteralExpr"),
                isOptional: true)
        ]),
 
@@ -620,28 +446,15 @@ public let ATTRIBUTE_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "ModuleLabel",
-               kind: "IdentifierToken",
-               tokenChoices: [
-                 "Identifier"
-               ],
-               textChoices: [
-                 "module"
-               ]),
+               kind: .token(choices: [.keyword(text: "module")])),
          Child(name: "Colon",
-               kind: "ColonToken",
-               tokenChoices: [
-                 "Colon"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "ColonToken")])),
          Child(name: "ModuleName",
-               kind: "StringLiteralExpr"),
+               kind: .node(kind: "StringLiteralExpr")),
          Child(name: "Comma",
-               kind: "CommaToken",
-               tokenChoices: [
-                 "Comma"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "CommaToken")])),
          Child(name: "Platforms",
-               kind: "AvailabilityVersionRestrictionList",
-               collectionElementName: "Platform")
+               kind: .collection(kind: "AvailabilityVersionRestrictionList", collectionElementName: "Platform"))
        ]),
 
   Node(name: "UnderscorePrivateAttributeArguments",
@@ -650,20 +463,11 @@ public let ATTRIBUTE_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "SourceFileLabel",
-               kind: "IdentifierToken",
-               tokenChoices: [
-                 "Identifier"
-               ],
-               textChoices: [
-                 "sourceFile"
-               ]),
+               kind: .token(choices: [.keyword(text: "sourceFile")])),
          Child(name: "Colon",
-               kind: "ColonToken",
-               tokenChoices: [
-                 "Colon"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "ColonToken")])),
          Child(name: "Filename",
-               kind: "StringLiteralExpr")
+               kind: .node(kind: "StringLiteralExpr"))
        ]),
 
   Node(name: "DynamicReplacementArguments",
@@ -672,20 +476,11 @@ public let ATTRIBUTE_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "ForLabel",
-               kind: "IdentifierToken",
-               tokenChoices: [
-                 "Identifier"
-               ],
-               textChoices: [
-                 "for"
-               ]),
+               kind: .token(choices: [.keyword(text: "for")])),
          Child(name: "Colon",
-               kind: "ColonToken",
-               tokenChoices: [
-                 "Colon"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "ColonToken")])),
          Child(name: "Declname",
-               kind: "DeclName")
+               kind: .node(kind: "DeclName"))
        ]),
 
   Node(name: "UnavailableFromAsyncArguments",
@@ -694,20 +489,11 @@ public let ATTRIBUTE_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "MessageLabel",
-               kind: "IdentifierToken",
-               tokenChoices: [
-                 "Identifier"
-               ],
-               textChoices: [
-                 "message"
-               ]),
+               kind: .token(choices: [.keyword(text: "message")])),
          Child(name: "Colon",
-               kind: "ColonToken",
-               tokenChoices: [
-                 "Colon"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "ColonToken")])),
          Child(name: "Message",
-               kind: "StringLiteralExpr")
+               kind: .node(kind: "StringLiteralExpr"))
        ]),
 
   Node(name: "EffectsArguments",
@@ -724,38 +510,20 @@ public let ATTRIBUTE_NODES: [Node] = [
        ],
        children: [
          Child(name: "Label",
-               kind: "IdentifierToken",
-               tokenChoices: [
-                 "Identifier"
-               ],
-               textChoices: [
-                 "visibility",
-                 "metadata"
-               ]),
+               kind: .token(choices: [.keyword(text: "visibility"), .keyword(text: "metadata")])),
          Child(name: "Colon",
-               kind: "ColonToken",
-               tokenChoices: [
-                 "Colon"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "ColonToken")])),
          Child(name: "Value",
-               kind: "Syntax",
-               nodeChoices: [
+               kind: .nodeChoices(choices: [
                  Child(name: "Token",
-                       kind: "Token",
-                       tokenChoices: [
-                         "Identifier",
-                         "Keyword"
-                       ]),
+                       kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "KeywordToken")])),
                  Child(name: "String",
-                       kind: "StringLiteralExpr")
-               ]),
+                       kind: .node(kind: "StringLiteralExpr"))
+               ])),
          Child(name: "TrailingComma",
-               kind: "CommaToken",
+               kind: .token(choices: [.token(tokenKind: "CommaToken")]),
                description: "A trailing comma if this argument is followed by another one",
-               isOptional: true,
-               tokenChoices: [
-                 "Comma"
-               ])
+               isOptional: true)
        ]),
 
   Node(name: "DocumentationAttributeArguments",

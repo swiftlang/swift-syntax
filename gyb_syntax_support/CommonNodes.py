@@ -69,10 +69,10 @@ COMMON_NODES = [
          traits=['EffectSpecifiers'],
          children=[
              Child('AsyncSpecifier', kind='KeywordToken',
-                   text_choices=['async', 'reasync'], is_optional=True),
+                   token_choices=['KeywordToken|async', 'KeywordToken|reasync'], is_optional=True),
              Child('ThrowsSpecifier', kind='KeywordToken',
                    is_optional=True,
-                   text_choices=['throws', 'rethrows']),
+                   token_choices=['KeywordToken|throws', 'KeywordToken|rethrows']),
          ]),
 
     # type-effect-specifiers -> async? throws?
@@ -80,8 +80,8 @@ COMMON_NODES = [
          traits=['EffectSpecifiers'],
          children=[
              Child('AsyncSpecifier', kind='KeywordToken',
-                   text_choices=['async'], is_optional=True),
-             Child('ThrowsSpecifier', kind='KeywordToken', text_choices=['throws'],
+                   token_choices=['KeywordToken|async'], is_optional=True),
+             Child('ThrowsSpecifier', kind='KeywordToken', token_choices=['KeywordToken|throws'],
                    is_optional=True),
          ]),
 

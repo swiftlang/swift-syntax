@@ -54,28 +54,27 @@ def make_swift_child(child, spaces):
   """
   parameter_spaces = 8
   parameters = ['name: "%s"' % child.name]
-  parameters += ['kind: "%s"' % child.syntax_kind]
+
+  if child.token_choices:
+    mapped_choices = [f'.token(tokenKind: "{choice.name}Token")' for (choice, text) in child.token_choices if text is None]
+    mapped_choices += [f'.keyword(text: "{text}")' for (choice, text) in child.token_choices if text is not None]
+    joined_choices = ', '.join(mapped_choices)
+    kind = f'.token(choices: [{joined_choices}])'
+  elif child.collection_element_name:
+    kind = f'.collection(kind: "{child.syntax_kind}", collectionElementName: "{child.collection_element_name}")'
+  elif child.node_choices:
+    mapped_node_choices = [make_swift_child(x, 17) for x in child.node_choices]
+    kind = f'.nodeChoices(choices: [\n%s\n' % (',\n').join(mapped_node_choices) + (' ' * (spaces + parameter_spaces - 2)) + '])'
+  else:
+    kind = f'.node(kind: "{child.syntax_kind}")'
+
+  parameters += ['kind: %s' % kind]
 
   if child.description:
     parameters += ['description: "%s"' % flat_documentation(child.description)]
 
   if child.is_optional:
     parameters += ['isOptional: true']
-
-  if child.token_choices:
-    mapped_token_choices = list(map(lambda x: (' ' * (spaces + parameter_spaces)) + '"%s"' % x.name, child.token_choices))
-    parameters += ['tokenChoices: [\n%s\n'  % ',\n'.join(mapped_token_choices) + (' ' * (spaces + parameter_spaces - 2)) + ']']
-
-  if child.text_choices:
-    mapped_text_choices = map(lambda x: (' ' * (spaces + parameter_spaces)) + '"%s"' % x, child.text_choices)
-    parameters += ['textChoices: [\n%s\n' % ',\n'.join(mapped_text_choices) + (' ' * (spaces + parameter_spaces - 2)) + ']']
-
-  if child.node_choices:
-    mapped_node_choices = map(lambda x: make_swift_child(x, 17), child.node_choices)
-    parameters += ['nodeChoices: [\n%s\n' % (',\n').join(mapped_node_choices) + (' ' * (spaces + parameter_spaces - 2)) + ']']
-
-  if child.collection_element_name:
-    parameters += ['collectionElementName: "%s"' % child.collection_element_name]
 
   if child.classification:
     parameters += ['classification: "%s"' % child.classification.name]
@@ -97,7 +96,7 @@ def flat_documentation(indented_documentation):
   """
   Creates a single-line documentation string from indented documentation as written in 'gyb_syntax_support'
   """
-  return "".join(dedented_lines(indented_documentation)).replace("\n", "").replace('"','\\"').strip()
+  return " ".join(dedented_lines(indented_documentation)).replace("\n", "").replace('"','\\"').strip()
 
 def make_swift_attribute(attr):
   """

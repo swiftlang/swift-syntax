@@ -4673,7 +4673,7 @@ public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeFileArgLabel: UnexpectedNodesSyntax? = nil,
-    fileArgLabel: TokenSyntax = .identifier("file"),
+    fileArgLabel: TokenSyntax = .keyword(.file),
     _ unexpectedBetweenFileArgLabelAndFileArgColon: UnexpectedNodesSyntax? = nil,
     fileArgColon: TokenSyntax = .colonToken(),
     _ unexpectedBetweenFileArgColonAndFileName: UnexpectedNodesSyntax? = nil,
@@ -4681,7 +4681,7 @@ public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenFileNameAndComma: UnexpectedNodesSyntax? = nil,
     comma: TokenSyntax = .commaToken(),
     _ unexpectedBetweenCommaAndLineArgLabel: UnexpectedNodesSyntax? = nil,
-    lineArgLabel: TokenSyntax = .identifier("line"),
+    lineArgLabel: TokenSyntax = .keyword(.line),
     _ unexpectedBetweenLineArgLabelAndLineArgColon: UnexpectedNodesSyntax? = nil,
     lineArgColon: TokenSyntax = .colonToken(),
     _ unexpectedBetweenLineArgColonAndLineNumber: UnexpectedNodesSyntax? = nil,
@@ -8122,7 +8122,7 @@ public struct PrecedenceGroupAssignmentSyntax: SyntaxProtocol, SyntaxHashable {
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeAssignmentKeyword: UnexpectedNodesSyntax? = nil,
-    assignmentKeyword: TokenSyntax = .identifier("assignment"),
+    assignmentKeyword: TokenSyntax = .keyword(.assignment),
     _ unexpectedBetweenAssignmentKeywordAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax = .colonToken(),
     _ unexpectedBetweenColonAndFlag: UnexpectedNodesSyntax? = nil,
@@ -8293,7 +8293,7 @@ public struct PrecedenceGroupAssociativitySyntax: SyntaxProtocol, SyntaxHashable
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeAssociativityKeyword: UnexpectedNodesSyntax? = nil,
-    associativityKeyword: TokenSyntax = .identifier("associativity"),
+    associativityKeyword: TokenSyntax = .keyword(.associativity),
     _ unexpectedBetweenAssociativityKeywordAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax = .colonToken(),
     _ unexpectedBetweenColonAndValue: UnexpectedNodesSyntax? = nil,
@@ -10275,7 +10275,7 @@ public struct DifferentiabilityParamsClauseSyntax: SyntaxProtocol, SyntaxHashabl
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeWrtLabel: UnexpectedNodesSyntax? = nil,
-    wrtLabel: TokenSyntax = .identifier("wrt"),
+    wrtLabel: TokenSyntax = .keyword(.wrt),
     _ unexpectedBetweenWrtLabelAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax = .colonToken(),
     _ unexpectedBetweenColonAndParameters: UnexpectedNodesSyntax? = nil,
@@ -10759,7 +10759,7 @@ public struct DerivativeRegistrationAttributeArgumentsSyntax: SyntaxProtocol, Sy
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeOfLabel: UnexpectedNodesSyntax? = nil,
-    ofLabel: TokenSyntax = .identifier("of"),
+    ofLabel: TokenSyntax = .keyword(.of),
     _ unexpectedBetweenOfLabelAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax = .colonToken(),
     _ unexpectedBetweenColonAndOriginalDeclName: UnexpectedNodesSyntax? = nil,
@@ -11295,7 +11295,7 @@ public struct BackDeployAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashable 
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeBeforeLabel: UnexpectedNodesSyntax? = nil,
-    beforeLabel: TokenSyntax = .identifier("before"),
+    beforeLabel: TokenSyntax = .keyword(.before),
     _ unexpectedBetweenBeforeLabelAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax = .colonToken(),
     _ unexpectedBetweenColonAndVersionList: UnexpectedNodesSyntax? = nil,
@@ -12337,7 +12337,7 @@ public struct OriginallyDefinedInArgumentsSyntax: SyntaxProtocol, SyntaxHashable
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeModuleLabel: UnexpectedNodesSyntax? = nil,
-    moduleLabel: TokenSyntax = .identifier("module"),
+    moduleLabel: TokenSyntax = .keyword(.module),
     _ unexpectedBetweenModuleLabelAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax = .colonToken(),
     _ unexpectedBetweenColonAndModuleName: UnexpectedNodesSyntax? = nil,
@@ -12579,7 +12579,7 @@ public struct UnderscorePrivateAttributeArgumentsSyntax: SyntaxProtocol, SyntaxH
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeSourceFileLabel: UnexpectedNodesSyntax? = nil,
-    sourceFileLabel: TokenSyntax = .identifier("sourceFile"),
+    sourceFileLabel: TokenSyntax = .keyword(.sourceFile),
     _ unexpectedBetweenSourceFileLabelAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax = .colonToken(),
     _ unexpectedBetweenColonAndFilename: UnexpectedNodesSyntax? = nil,
@@ -12742,7 +12742,7 @@ public struct DynamicReplacementArgumentsSyntax: SyntaxProtocol, SyntaxHashable 
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeForLabel: UnexpectedNodesSyntax? = nil,
-    forLabel: TokenSyntax = .identifier("for"),
+    forLabel: TokenSyntax = .keyword(.for),
     _ unexpectedBetweenForLabelAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax = .colonToken(),
     _ unexpectedBetweenColonAndDeclname: UnexpectedNodesSyntax? = nil,
@@ -12905,7 +12905,7 @@ public struct UnavailableFromAsyncArgumentsSyntax: SyntaxProtocol, SyntaxHashabl
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeMessageLabel: UnexpectedNodesSyntax? = nil,
-    messageLabel: TokenSyntax = .identifier("message"),
+    messageLabel: TokenSyntax = .keyword(.message),
     _ unexpectedBetweenMessageLabelAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax = .colonToken(),
     _ unexpectedBetweenColonAndMessage: UnexpectedNodesSyntax? = nil,

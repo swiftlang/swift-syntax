@@ -147,6 +147,8 @@ public enum Keyword: UInt8, Hashable {
   
   case before
   
+  case block
+  
   case `break`
   
   case `case`
@@ -160,6 +162,8 @@ public enum Keyword: UInt8, Hashable {
   case convenience
   
   case convention
+  
+  case cType
   
   case `default`
   
@@ -198,6 +202,8 @@ public enum Keyword: UInt8, Hashable {
   case `fallthrough`
   
   case `false`
+  
+  case file
   
   case `fileprivate`
   
@@ -241,7 +247,11 @@ public enum Keyword: UInt8, Hashable {
   
   case lazy
   
+  case left
+  
   case `let`
+  
+  case line
   
   case lowerThan
   
@@ -449,6 +459,8 @@ public enum Keyword: UInt8, Hashable {
         self = .`else`
       case "enum": 
         self = .`enum`
+      case "file": 
+        self = .file
       case "func": 
         self = .`func`
       case "init": 
@@ -457,6 +469,10 @@ public enum Keyword: UInt8, Hashable {
         self = .kind
       case "lazy": 
         self = .lazy
+      case "left": 
+        self = .left
+      case "line": 
+        self = .line
       case "objc": 
         self = .objc
       case "open": 
@@ -490,12 +506,16 @@ public enum Keyword: UInt8, Hashable {
         self = .async
       case "await": 
         self = .await
+      case "block": 
+        self = .block
       case "break": 
         self = .`break`
       case "catch": 
         self = .`catch`
       case "class": 
         self = .`class`
+      case "cType": 
+        self = .cType
       case "defer": 
         self = .`defer`
       case "false": 
@@ -1061,6 +1081,7 @@ public enum Keyword: UInt8, Hashable {
     "available", 
     "await", 
     "before", 
+    "block", 
     "break", 
     "case", 
     "catch", 
@@ -1068,6 +1089,7 @@ public enum Keyword: UInt8, Hashable {
     "continue", 
     "convenience", 
     "convention", 
+    "cType", 
     "default", 
     "defer", 
     "deinit", 
@@ -1087,6 +1109,7 @@ public enum Keyword: UInt8, Hashable {
     "extension", 
     "fallthrough", 
     "false", 
+    "file", 
     "fileprivate", 
     "final", 
     "for", 
@@ -1108,7 +1131,9 @@ public enum Keyword: UInt8, Hashable {
     "isolated", 
     "kind", 
     "lazy", 
+    "left", 
     "let", 
+    "line", 
     "lowerThan", 
     "macro", 
     "message", 

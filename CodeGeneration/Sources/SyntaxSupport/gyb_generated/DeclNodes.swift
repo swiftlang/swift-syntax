@@ -18,12 +18,9 @@ public let DECL_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "Equal",
-               kind: "EqualToken",
-               tokenChoices: [
-                 "Equal"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "EqualToken")])),
          Child(name: "Value",
-               kind: "Type")
+               kind: .node(kind: "Type"))
        ]),
 
   Node(name: "TypealiasDecl",
@@ -35,33 +32,22 @@ public let DECL_NODES: [Node] = [
        ],
        children: [
          Child(name: "Attributes",
-               kind: "AttributeList",
-               isOptional: true,
-               collectionElementName: "Attribute"),
+               kind: .collection(kind: "AttributeList", collectionElementName: "Attribute"),
+               isOptional: true),
          Child(name: "Modifiers",
-               kind: "ModifierList",
-               isOptional: true,
-               collectionElementName: "Modifier"),
+               kind: .collection(kind: "ModifierList", collectionElementName: "Modifier"),
+               isOptional: true),
          Child(name: "TypealiasKeyword",
-               kind: "KeywordToken",
-               tokenChoices: [
-                 "Keyword"
-               ],
-               textChoices: [
-                 "typealias"
-               ]),
+               kind: .token(choices: [.keyword(text: "typealias")])),
          Child(name: "Identifier",
-               kind: "IdentifierToken",
-               tokenChoices: [
-                 "Identifier"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken")])),
          Child(name: "GenericParameterClause",
-               kind: "GenericParameterClause",
+               kind: .node(kind: "GenericParameterClause"),
                isOptional: true),
          Child(name: "Initializer",
-               kind: "TypeInitializerClause"),
+               kind: .node(kind: "TypeInitializerClause")),
          Child(name: "GenericWhereClause",
-               kind: "GenericWhereClause",
+               kind: .node(kind: "GenericWhereClause"),
                isOptional: true)
        ]),
 
@@ -74,34 +60,23 @@ public let DECL_NODES: [Node] = [
        ],
        children: [
          Child(name: "Attributes",
-               kind: "AttributeList",
-               isOptional: true,
-               collectionElementName: "Attribute"),
+               kind: .collection(kind: "AttributeList", collectionElementName: "Attribute"),
+               isOptional: true),
          Child(name: "Modifiers",
-               kind: "ModifierList",
-               isOptional: true,
-               collectionElementName: "Modifier"),
+               kind: .collection(kind: "ModifierList", collectionElementName: "Modifier"),
+               isOptional: true),
          Child(name: "AssociatedtypeKeyword",
-               kind: "KeywordToken",
-               tokenChoices: [
-                 "Keyword"
-               ],
-               textChoices: [
-                 "associatedtype"
-               ]),
+               kind: .token(choices: [.keyword(text: "associatedtype")])),
          Child(name: "Identifier",
-               kind: "IdentifierToken",
-               tokenChoices: [
-                 "Identifier"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken")])),
          Child(name: "InheritanceClause",
-               kind: "TypeInheritanceClause",
+               kind: .node(kind: "TypeInheritanceClause"),
                isOptional: true),
          Child(name: "Initializer",
-               kind: "TypeInitializerClause",
+               kind: .node(kind: "TypeInitializerClause"),
                isOptional: true),
          Child(name: "GenericWhereClause",
-               kind: "GenericWhereClause",
+               kind: .node(kind: "GenericWhereClause"),
                isOptional: true)
        ]),
 
@@ -118,19 +93,12 @@ public let DECL_NODES: [Node] = [
        ],
        children: [
          Child(name: "LeftParen",
-               kind: "LeftParenToken",
-               tokenChoices: [
-                 "LeftParen"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "LeftParenToken")])),
          Child(name: "ParameterList",
-               kind: "FunctionParameterList",
-               collectionElementName: "Parameter",
+               kind: .collection(kind: "FunctionParameterList", collectionElementName: "Parameter"),
                isIndented: true),
          Child(name: "RightParen",
-               kind: "RightParenToken",
-               tokenChoices: [
-                 "RightParen"
-               ])
+               kind: .token(choices: [.token(tokenKind: "RightParenToken")]))
        ]),
 
   Node(name: "ReturnClause",
@@ -138,12 +106,9 @@ public let DECL_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "Arrow",
-               kind: "ArrowToken",
-               tokenChoices: [
-                 "Arrow"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "ArrowToken")])),
          Child(name: "ReturnType",
-               kind: "Type")
+               kind: .node(kind: "Type"))
        ]),
 
   Node(name: "FunctionSignature",
@@ -151,12 +116,12 @@ public let DECL_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "Input",
-               kind: "ParameterClause"),
+               kind: .node(kind: "ParameterClause")),
          Child(name: "EffectSpecifiers",
-               kind: "DeclEffectSpecifiers",
+               kind: .node(kind: "DeclEffectSpecifiers"),
                isOptional: true),
          Child(name: "Output",
-               kind: "ReturnClause",
+               kind: .node(kind: "ReturnClause"),
                isOptional: true)
        ]),
 
@@ -165,32 +130,26 @@ public let DECL_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "PoundKeyword",
-               kind: "Token",
-               tokenChoices: [
-                 "PoundIf",
-                 "PoundElseif",
-                 "PoundElse"
-               ],
+               kind: .token(choices: [.token(tokenKind: "PoundIfToken"), .token(tokenKind: "PoundElseifToken"), .token(tokenKind: "PoundElseToken")]),
                classification: "BuildConfigId"),
          Child(name: "Condition",
-               kind: "Expr",
+               kind: .node(kind: "Expr"),
                isOptional: true,
                classification: "BuildConfigId"),
          Child(name: "Elements",
-               kind: "Syntax",
-               isOptional: true,
-               nodeChoices: [
+               kind: .nodeChoices(choices: [
                  Child(name: "Statements",
-                       kind: "CodeBlockItemList"),
+                       kind: .node(kind: "CodeBlockItemList")),
                  Child(name: "SwitchCases",
-                       kind: "SwitchCaseList"),
+                       kind: .node(kind: "SwitchCaseList")),
                  Child(name: "Decls",
-                       kind: "MemberDeclList"),
+                       kind: .node(kind: "MemberDeclList")),
                  Child(name: "PostfixExpression",
-                       kind: "Expr"),
+                       kind: .node(kind: "Expr")),
                  Child(name: "Attributes",
-                       kind: "AttributeList")
-               ])
+                       kind: .node(kind: "AttributeList"))
+               ]),
+               isOptional: true)
        ]),
 
   Node(name: "IfConfigClauseList",
@@ -203,13 +162,9 @@ public let DECL_NODES: [Node] = [
        kind: "Decl",
        children: [
          Child(name: "Clauses",
-               kind: "IfConfigClauseList",
-               collectionElementName: "Clause"),
+               kind: .collection(kind: "IfConfigClauseList", collectionElementName: "Clause")),
          Child(name: "PoundEndif",
-               kind: "PoundEndifToken",
-               tokenChoices: [
-                 "PoundEndif"
-               ],
+               kind: .token(choices: [.token(tokenKind: "PoundEndifToken")]),
                classification: "BuildConfigId")
        ]),
 
@@ -221,23 +176,14 @@ public let DECL_NODES: [Node] = [
        ],
        children: [
          Child(name: "PoundSourceLocation",
-               kind: "PoundSourceLocationToken",
-               tokenChoices: [
-                 "PoundSourceLocation"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "PoundSourceLocationToken")])),
          Child(name: "LeftParen",
-               kind: "LeftParenToken",
-               tokenChoices: [
-                 "LeftParen"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "LeftParenToken")])),
          Child(name: "Args",
-               kind: "PoundSourceLocationArgs",
+               kind: .node(kind: "PoundSourceLocationArgs"),
                isOptional: true),
          Child(name: "RightParen",
-               kind: "RightParenToken",
-               tokenChoices: [
-                 "RightParen"
-               ])
+               kind: .token(choices: [.token(tokenKind: "RightParenToken")]))
        ]),
 
   Node(name: "PoundSourceLocationArgs",
@@ -245,43 +191,19 @@ public let DECL_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "FileArgLabel",
-               kind: "IdentifierToken",
-               tokenChoices: [
-                 "Identifier"
-               ],
-               textChoices: [
-                 "file"
-               ]),
+               kind: .token(choices: [.keyword(text: "file")])),
          Child(name: "FileArgColon",
-               kind: "ColonToken",
-               tokenChoices: [
-                 "Colon"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "ColonToken")])),
          Child(name: "FileName",
-               kind: "StringLiteralExpr"),
+               kind: .node(kind: "StringLiteralExpr")),
          Child(name: "Comma",
-               kind: "CommaToken",
-               tokenChoices: [
-                 "Comma"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "CommaToken")])),
          Child(name: "LineArgLabel",
-               kind: "IdentifierToken",
-               tokenChoices: [
-                 "Identifier"
-               ],
-               textChoices: [
-                 "line"
-               ]),
+               kind: .token(choices: [.keyword(text: "line")])),
          Child(name: "LineArgColon",
-               kind: "ColonToken",
-               tokenChoices: [
-                 "Colon"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "ColonToken")])),
          Child(name: "LineNumber",
-               kind: "IntegerLiteralToken",
-               tokenChoices: [
-                 "IntegerLiteral"
-               ])
+               kind: .token(choices: [.token(tokenKind: "IntegerLiteralToken")]))
        ]),
 
   Node(name: "DeclModifierDetail",
@@ -292,20 +214,11 @@ public let DECL_NODES: [Node] = [
        ],
        children: [
          Child(name: "LeftParen",
-               kind: "LeftParenToken",
-               tokenChoices: [
-                 "LeftParen"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "LeftParenToken")])),
          Child(name: "Detail",
-               kind: "IdentifierToken",
-               tokenChoices: [
-                 "Identifier"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken")])),
          Child(name: "RightParen",
-               kind: "RightParenToken",
-               tokenChoices: [
-                 "RightParen"
-               ])
+               kind: .token(choices: [.token(tokenKind: "RightParenToken")]))
        ]),
 
   Node(name: "DeclModifier",
@@ -313,42 +226,10 @@ public let DECL_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "Name",
-               kind: "Token",
-               textChoices: [
-                 "class",
-                 "convenience",
-                 "dynamic",
-                 "final",
-                 "infix",
-                 "lazy",
-                 "optional",
-                 "override",
-                 "postfix",
-                 "prefix",
-                 "required",
-                 "static",
-                 "unowned",
-                 "weak",
-                 "private",
-                 "fileprivate",
-                 "internal",
-                 "public",
-                 "open",
-                 "mutating",
-                 "nonmutating",
-                 "indirect",
-                 "__consuming",
-                 "actor",
-                 "async",
-                 "distributed",
-                 "isolated",
-                 "nonisolated",
-                 "_const",
-                 "_local"
-               ],
+               kind: .token(choices: [.keyword(text: "class"), .keyword(text: "convenience"), .keyword(text: "dynamic"), .keyword(text: "final"), .keyword(text: "infix"), .keyword(text: "lazy"), .keyword(text: "optional"), .keyword(text: "override"), .keyword(text: "postfix"), .keyword(text: "prefix"), .keyword(text: "required"), .keyword(text: "static"), .keyword(text: "unowned"), .keyword(text: "weak"), .keyword(text: "private"), .keyword(text: "fileprivate"), .keyword(text: "internal"), .keyword(text: "public"), .keyword(text: "open"), .keyword(text: "mutating"), .keyword(text: "nonmutating"), .keyword(text: "indirect"), .keyword(text: "__consuming"), .keyword(text: "actor"), .keyword(text: "async"), .keyword(text: "distributed"), .keyword(text: "isolated"), .keyword(text: "nonisolated"), .keyword(text: "_const"), .keyword(text: "_local")]),
                classification: "Attribute"),
          Child(name: "Detail",
-               kind: "DeclModifierDetail",
+               kind: .node(kind: "DeclModifierDetail"),
                isOptional: true)
        ]),
 
@@ -360,13 +241,10 @@ public let DECL_NODES: [Node] = [
        ],
        children: [
          Child(name: "TypeName",
-               kind: "Type"),
+               kind: .node(kind: "Type")),
          Child(name: "TrailingComma",
-               kind: "CommaToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Comma"
-               ])
+               kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+               isOptional: true)
        ]),
 
   Node(name: "InheritedTypeList",
@@ -379,13 +257,9 @@ public let DECL_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "Colon",
-               kind: "ColonToken",
-               tokenChoices: [
-                 "Colon"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "ColonToken")])),
          Child(name: "InheritedTypeCollection",
-               kind: "InheritedTypeList",
-               collectionElementName: "InheritedType")
+               kind: .collection(kind: "InheritedTypeList", collectionElementName: "InheritedType"))
        ]),
 
   Node(name: "ClassDecl",
@@ -398,37 +272,26 @@ public let DECL_NODES: [Node] = [
        ],
        children: [
          Child(name: "Attributes",
-               kind: "AttributeList",
-               isOptional: true,
-               collectionElementName: "Attribute"),
+               kind: .collection(kind: "AttributeList", collectionElementName: "Attribute"),
+               isOptional: true),
          Child(name: "Modifiers",
-               kind: "ModifierList",
-               isOptional: true,
-               collectionElementName: "Modifier"),
+               kind: .collection(kind: "ModifierList", collectionElementName: "Modifier"),
+               isOptional: true),
          Child(name: "ClassKeyword",
-               kind: "KeywordToken",
-               tokenChoices: [
-                 "Keyword"
-               ],
-               textChoices: [
-                 "class"
-               ]),
+               kind: .token(choices: [.keyword(text: "class")])),
          Child(name: "Identifier",
-               kind: "IdentifierToken",
-               tokenChoices: [
-                 "Identifier"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken")])),
          Child(name: "GenericParameterClause",
-               kind: "GenericParameterClause",
+               kind: .node(kind: "GenericParameterClause"),
                isOptional: true),
          Child(name: "InheritanceClause",
-               kind: "TypeInheritanceClause",
+               kind: .node(kind: "TypeInheritanceClause"),
                isOptional: true),
          Child(name: "GenericWhereClause",
-               kind: "GenericWhereClause",
+               kind: .node(kind: "GenericWhereClause"),
                isOptional: true),
          Child(name: "Members",
-               kind: "MemberDeclBlock")
+               kind: .node(kind: "MemberDeclBlock"))
        ]),
 
   Node(name: "ActorDecl",
@@ -441,37 +304,26 @@ public let DECL_NODES: [Node] = [
        ],
        children: [
          Child(name: "Attributes",
-               kind: "AttributeList",
-               isOptional: true,
-               collectionElementName: "Attribute"),
+               kind: .collection(kind: "AttributeList", collectionElementName: "Attribute"),
+               isOptional: true),
          Child(name: "Modifiers",
-               kind: "ModifierList",
-               isOptional: true,
-               collectionElementName: "Modifier"),
+               kind: .collection(kind: "ModifierList", collectionElementName: "Modifier"),
+               isOptional: true),
          Child(name: "ActorKeyword",
-               kind: "KeywordToken",
-               tokenChoices: [
-                 "Keyword"
-               ],
-               textChoices: [
-                 "actor"
-               ]),
+               kind: .token(choices: [.keyword(text: "actor")])),
          Child(name: "Identifier",
-               kind: "IdentifierToken",
-               tokenChoices: [
-                 "Identifier"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken")])),
          Child(name: "GenericParameterClause",
-               kind: "GenericParameterClause",
+               kind: .node(kind: "GenericParameterClause"),
                isOptional: true),
          Child(name: "InheritanceClause",
-               kind: "TypeInheritanceClause",
+               kind: .node(kind: "TypeInheritanceClause"),
                isOptional: true),
          Child(name: "GenericWhereClause",
-               kind: "GenericWhereClause",
+               kind: .node(kind: "GenericWhereClause"),
                isOptional: true),
          Child(name: "Members",
-               kind: "MemberDeclBlock")
+               kind: .node(kind: "MemberDeclBlock"))
        ]),
 
   Node(name: "StructDecl",
@@ -484,37 +336,26 @@ public let DECL_NODES: [Node] = [
        ],
        children: [
          Child(name: "Attributes",
-               kind: "AttributeList",
-               isOptional: true,
-               collectionElementName: "Attribute"),
+               kind: .collection(kind: "AttributeList", collectionElementName: "Attribute"),
+               isOptional: true),
          Child(name: "Modifiers",
-               kind: "ModifierList",
-               isOptional: true,
-               collectionElementName: "Modifier"),
+               kind: .collection(kind: "ModifierList", collectionElementName: "Modifier"),
+               isOptional: true),
          Child(name: "StructKeyword",
-               kind: "KeywordToken",
-               tokenChoices: [
-                 "Keyword"
-               ],
-               textChoices: [
-                 "struct"
-               ]),
+               kind: .token(choices: [.keyword(text: "struct")])),
          Child(name: "Identifier",
-               kind: "IdentifierToken",
-               tokenChoices: [
-                 "Identifier"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken")])),
          Child(name: "GenericParameterClause",
-               kind: "GenericParameterClause",
+               kind: .node(kind: "GenericParameterClause"),
                isOptional: true),
          Child(name: "InheritanceClause",
-               kind: "TypeInheritanceClause",
+               kind: .node(kind: "TypeInheritanceClause"),
                isOptional: true),
          Child(name: "GenericWhereClause",
-               kind: "GenericWhereClause",
+               kind: .node(kind: "GenericWhereClause"),
                isOptional: true),
          Child(name: "Members",
-               kind: "MemberDeclBlock")
+               kind: .node(kind: "MemberDeclBlock"))
        ]),
 
   Node(name: "ProtocolDecl",
@@ -527,37 +368,26 @@ public let DECL_NODES: [Node] = [
        ],
        children: [
          Child(name: "Attributes",
-               kind: "AttributeList",
-               isOptional: true,
-               collectionElementName: "Attribute"),
+               kind: .collection(kind: "AttributeList", collectionElementName: "Attribute"),
+               isOptional: true),
          Child(name: "Modifiers",
-               kind: "ModifierList",
-               isOptional: true,
-               collectionElementName: "Modifier"),
+               kind: .collection(kind: "ModifierList", collectionElementName: "Modifier"),
+               isOptional: true),
          Child(name: "ProtocolKeyword",
-               kind: "KeywordToken",
-               tokenChoices: [
-                 "Keyword"
-               ],
-               textChoices: [
-                 "protocol"
-               ]),
+               kind: .token(choices: [.keyword(text: "protocol")])),
          Child(name: "Identifier",
-               kind: "IdentifierToken",
-               tokenChoices: [
-                 "Identifier"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken")])),
          Child(name: "PrimaryAssociatedTypeClause",
-               kind: "PrimaryAssociatedTypeClause",
+               kind: .node(kind: "PrimaryAssociatedTypeClause"),
                isOptional: true),
          Child(name: "InheritanceClause",
-               kind: "TypeInheritanceClause",
+               kind: .node(kind: "TypeInheritanceClause"),
                isOptional: true),
          Child(name: "GenericWhereClause",
-               kind: "GenericWhereClause",
+               kind: .node(kind: "GenericWhereClause"),
                isOptional: true),
          Child(name: "Members",
-               kind: "MemberDeclBlock")
+               kind: .node(kind: "MemberDeclBlock"))
        ]),
 
   Node(name: "ExtensionDecl",
@@ -569,31 +399,23 @@ public let DECL_NODES: [Node] = [
        ],
        children: [
          Child(name: "Attributes",
-               kind: "AttributeList",
-               isOptional: true,
-               collectionElementName: "Attribute"),
+               kind: .collection(kind: "AttributeList", collectionElementName: "Attribute"),
+               isOptional: true),
          Child(name: "Modifiers",
-               kind: "ModifierList",
-               isOptional: true,
-               collectionElementName: "Modifier"),
+               kind: .collection(kind: "ModifierList", collectionElementName: "Modifier"),
+               isOptional: true),
          Child(name: "ExtensionKeyword",
-               kind: "KeywordToken",
-               tokenChoices: [
-                 "Keyword"
-               ],
-               textChoices: [
-                 "extension"
-               ]),
+               kind: .token(choices: [.keyword(text: "extension")])),
          Child(name: "ExtendedType",
-               kind: "Type"),
+               kind: .node(kind: "Type")),
          Child(name: "InheritanceClause",
-               kind: "TypeInheritanceClause",
+               kind: .node(kind: "TypeInheritanceClause"),
                isOptional: true),
          Child(name: "GenericWhereClause",
-               kind: "GenericWhereClause",
+               kind: .node(kind: "GenericWhereClause"),
                isOptional: true),
          Child(name: "Members",
-               kind: "MemberDeclBlock")
+               kind: .node(kind: "MemberDeclBlock"))
        ]),
 
   Node(name: "MemberDeclBlock",
@@ -605,19 +427,12 @@ public let DECL_NODES: [Node] = [
        parserFunction: "parseMemberDeclList",
        children: [
          Child(name: "LeftBrace",
-               kind: "LeftBraceToken",
-               tokenChoices: [
-                 "LeftBrace"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "LeftBraceToken")])),
          Child(name: "Members",
-               kind: "MemberDeclList",
-               collectionElementName: "Member",
+               kind: .collection(kind: "MemberDeclList", collectionElementName: "Member"),
                isIndented: true),
          Child(name: "RightBrace",
-               kind: "RightBraceToken",
-               tokenChoices: [
-                 "RightBrace"
-               ],
+               kind: .token(choices: [.token(tokenKind: "RightBraceToken")]),
                requiresLeadingNewline: true)
        ]),
 
@@ -629,19 +444,16 @@ public let DECL_NODES: [Node] = [
 
   Node(name: "MemberDeclListItem",
        nameForDiagnostics: nil,
-       description: "A member declaration of a type consisting of a declaration and anoptional semicolon;",
+       description: "A member declaration of a type consisting of a declaration and an optional semicolon;",
        kind: "Syntax",
        children: [
          Child(name: "Decl",
-               kind: "Decl",
+               kind: .node(kind: "Decl"),
                description: "The declaration of the type member."),
          Child(name: "Semicolon",
-               kind: "SemicolonToken",
+               kind: .token(choices: [.token(tokenKind: "SemicolonToken")]),
                description: "An optional trailing semicolon.",
-               isOptional: true,
-               tokenChoices: [
-                 "Semicolon"
-               ])
+               isOptional: true)
        ],
        omitWhenEmpty: true),
 
@@ -654,10 +466,9 @@ public let DECL_NODES: [Node] = [
        parserFunction: "parseSourceFile",
        children: [
          Child(name: "Statements",
-               kind: "CodeBlockItemList",
-               collectionElementName: "Statement"),
+               kind: .collection(kind: "CodeBlockItemList", collectionElementName: "Statement")),
          Child(name: "EOFToken",
-               kind: "EOFToken")
+               kind: .node(kind: "EOFToken"))
        ]),
 
   Node(name: "InitializerClause",
@@ -665,12 +476,9 @@ public let DECL_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "Equal",
-               kind: "EqualToken",
-               tokenChoices: [
-                 "Equal"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "EqualToken")])),
          Child(name: "Value",
-               kind: "Expr")
+               kind: .node(kind: "Expr"))
        ]),
 
   Node(name: "FunctionParameter",
@@ -682,51 +490,32 @@ public let DECL_NODES: [Node] = [
        ],
        children: [
          Child(name: "Attributes",
-               kind: "AttributeList",
-               isOptional: true,
-               collectionElementName: "Attribute"),
+               kind: .collection(kind: "AttributeList", collectionElementName: "Attribute"),
+               isOptional: true),
          Child(name: "Modifiers",
-               kind: "ModifierList",
-               isOptional: true,
-               collectionElementName: "Modifier"),
+               kind: .collection(kind: "ModifierList", collectionElementName: "Modifier"),
+               isOptional: true),
          Child(name: "FirstName",
-               kind: "Token",
-               isOptional: true,
-               tokenChoices: [
-                 "Identifier",
-                 "Wildcard"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "WildcardToken")]),
+               isOptional: true),
          Child(name: "SecondName",
-               kind: "Token",
-               isOptional: true,
-               tokenChoices: [
-                 "Identifier",
-                 "Wildcard"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "WildcardToken")]),
+               isOptional: true),
          Child(name: "Colon",
-               kind: "ColonToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Colon"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "ColonToken")]),
+               isOptional: true),
          Child(name: "Type",
-               kind: "Type",
+               kind: .node(kind: "Type"),
                isOptional: true),
          Child(name: "Ellipsis",
-               kind: "EllipsisToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Ellipsis"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "EllipsisToken")]),
+               isOptional: true),
          Child(name: "DefaultArgument",
-               kind: "InitializerClause",
+               kind: .node(kind: "InitializerClause"),
                isOptional: true),
          Child(name: "TrailingComma",
-               kind: "CommaToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Comma"
-               ])
+               kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+               isOptional: true)
        ]),
 
   Node(name: "ModifierList",
@@ -745,39 +534,25 @@ public let DECL_NODES: [Node] = [
        ],
        children: [
          Child(name: "Attributes",
-               kind: "AttributeList",
-               isOptional: true,
-               collectionElementName: "Attribute"),
+               kind: .collection(kind: "AttributeList", collectionElementName: "Attribute"),
+               isOptional: true),
          Child(name: "Modifiers",
-               kind: "ModifierList",
-               isOptional: true,
-               collectionElementName: "Modifier"),
+               kind: .collection(kind: "ModifierList", collectionElementName: "Modifier"),
+               isOptional: true),
          Child(name: "FuncKeyword",
-               kind: "KeywordToken",
-               tokenChoices: [
-                 "Keyword"
-               ],
-               textChoices: [
-                 "func"
-               ]),
+               kind: .token(choices: [.keyword(text: "func")])),
          Child(name: "Identifier",
-               kind: "Token",
-               tokenChoices: [
-                 "Identifier",
-                 "BinaryOperator",
-                 "PrefixOperator",
-                 "PostfixOperator"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "BinaryOperatorToken"), .token(tokenKind: "PrefixOperatorToken"), .token(tokenKind: "PostfixOperatorToken")])),
          Child(name: "GenericParameterClause",
-               kind: "GenericParameterClause",
+               kind: .node(kind: "GenericParameterClause"),
                isOptional: true),
          Child(name: "Signature",
-               kind: "FunctionSignature"),
+               kind: .node(kind: "FunctionSignature")),
          Child(name: "GenericWhereClause",
-               kind: "GenericWhereClause",
+               kind: .node(kind: "GenericWhereClause"),
                isOptional: true),
          Child(name: "Body",
-               kind: "CodeBlock",
+               kind: .node(kind: "CodeBlock"),
                isOptional: true)
        ]),
 
@@ -789,39 +564,26 @@ public let DECL_NODES: [Node] = [
        ],
        children: [
          Child(name: "Attributes",
-               kind: "AttributeList",
-               isOptional: true,
-               collectionElementName: "Attribute"),
+               kind: .collection(kind: "AttributeList", collectionElementName: "Attribute"),
+               isOptional: true),
          Child(name: "Modifiers",
-               kind: "ModifierList",
-               isOptional: true,
-               collectionElementName: "Modifier"),
+               kind: .collection(kind: "ModifierList", collectionElementName: "Modifier"),
+               isOptional: true),
          Child(name: "InitKeyword",
-               kind: "KeywordToken",
-               tokenChoices: [
-                 "Keyword"
-               ],
-               textChoices: [
-                 "init"
-               ]),
+               kind: .token(choices: [.keyword(text: "init")])),
          Child(name: "OptionalMark",
-               kind: "Token",
-               isOptional: true,
-               tokenChoices: [
-                 "PostfixQuestionMark",
-                 "InfixQuestionMark",
-                 "ExclamationMark"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "PostfixQuestionMarkToken"), .token(tokenKind: "InfixQuestionMarkToken"), .token(tokenKind: "ExclamationMarkToken")]),
+               isOptional: true),
          Child(name: "GenericParameterClause",
-               kind: "GenericParameterClause",
+               kind: .node(kind: "GenericParameterClause"),
                isOptional: true),
          Child(name: "Signature",
-               kind: "FunctionSignature"),
+               kind: .node(kind: "FunctionSignature")),
          Child(name: "GenericWhereClause",
-               kind: "GenericWhereClause",
+               kind: .node(kind: "GenericWhereClause"),
                isOptional: true),
          Child(name: "Body",
-               kind: "CodeBlock",
+               kind: .node(kind: "CodeBlock"),
                isOptional: true)
        ]),
 
@@ -833,23 +595,15 @@ public let DECL_NODES: [Node] = [
        ],
        children: [
          Child(name: "Attributes",
-               kind: "AttributeList",
-               isOptional: true,
-               collectionElementName: "Attribute"),
+               kind: .collection(kind: "AttributeList", collectionElementName: "Attribute"),
+               isOptional: true),
          Child(name: "Modifiers",
-               kind: "ModifierList",
-               isOptional: true,
-               collectionElementName: "Modifier"),
+               kind: .collection(kind: "ModifierList", collectionElementName: "Modifier"),
+               isOptional: true),
          Child(name: "DeinitKeyword",
-               kind: "KeywordToken",
-               tokenChoices: [
-                 "Keyword"
-               ],
-               textChoices: [
-                 "deinit"
-               ]),
+               kind: .token(choices: [.keyword(text: "deinit")])),
          Child(name: "Body",
-               kind: "CodeBlock",
+               kind: .node(kind: "CodeBlock"),
                isOptional: true)
        ]),
 
@@ -861,40 +615,31 @@ public let DECL_NODES: [Node] = [
        ],
        children: [
          Child(name: "Attributes",
-               kind: "AttributeList",
-               isOptional: true,
-               collectionElementName: "Attribute"),
+               kind: .collection(kind: "AttributeList", collectionElementName: "Attribute"),
+               isOptional: true),
          Child(name: "Modifiers",
-               kind: "ModifierList",
-               isOptional: true,
-               collectionElementName: "Modifier"),
+               kind: .collection(kind: "ModifierList", collectionElementName: "Modifier"),
+               isOptional: true),
          Child(name: "SubscriptKeyword",
-               kind: "KeywordToken",
-               tokenChoices: [
-                 "Keyword"
-               ],
-               textChoices: [
-                 "subscript"
-               ]),
+               kind: .token(choices: [.keyword(text: "subscript")])),
          Child(name: "GenericParameterClause",
-               kind: "GenericParameterClause",
+               kind: .node(kind: "GenericParameterClause"),
                isOptional: true),
          Child(name: "Indices",
-               kind: "ParameterClause"),
+               kind: .node(kind: "ParameterClause")),
          Child(name: "Result",
-               kind: "ReturnClause"),
+               kind: .node(kind: "ReturnClause")),
          Child(name: "GenericWhereClause",
-               kind: "GenericWhereClause",
+               kind: .node(kind: "GenericWhereClause"),
                isOptional: true),
          Child(name: "Accessor",
-               kind: "Syntax",
-               isOptional: true,
-               nodeChoices: [
+               kind: .nodeChoices(choices: [
                  Child(name: "Accessors",
-                       kind: "AccessorBlock"),
+                       kind: .node(kind: "AccessorBlock")),
                  Child(name: "Getter",
-                       kind: "CodeBlock")
-               ])
+                       kind: .node(kind: "CodeBlock"))
+               ]),
+               isOptional: true)
        ]),
 
   Node(name: "AccessPathComponent",
@@ -902,16 +647,10 @@ public let DECL_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "Name",
-               kind: "IdentifierToken",
-               tokenChoices: [
-                 "Identifier"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken")])),
          Child(name: "TrailingDot",
-               kind: "PeriodToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Period"
-               ])
+               kind: .token(choices: [.token(tokenKind: "PeriodToken")]),
+               isOptional: true)
        ]),
 
   Node(name: "AccessPath",
@@ -927,40 +666,18 @@ public let DECL_NODES: [Node] = [
        ],
        children: [
          Child(name: "Attributes",
-               kind: "AttributeList",
-               isOptional: true,
-               collectionElementName: "Attribute"),
+               kind: .collection(kind: "AttributeList", collectionElementName: "Attribute"),
+               isOptional: true),
          Child(name: "Modifiers",
-               kind: "ModifierList",
-               isOptional: true,
-               collectionElementName: "Modifier"),
+               kind: .collection(kind: "ModifierList", collectionElementName: "Modifier"),
+               isOptional: true),
          Child(name: "ImportTok",
-               kind: "KeywordToken",
-               tokenChoices: [
-                 "Keyword"
-               ],
-               textChoices: [
-                 "import"
-               ]),
+               kind: .token(choices: [.keyword(text: "import")])),
          Child(name: "ImportKind",
-               kind: "KeywordToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Keyword"
-               ],
-               textChoices: [
-                 "typealias",
-                 "struct",
-                 "class",
-                 "enum",
-                 "protocol",
-                 "var",
-                 "let",
-                 "func"
-               ]),
+               kind: .token(choices: [.keyword(text: "typealias"), .keyword(text: "struct"), .keyword(text: "class"), .keyword(text: "enum"), .keyword(text: "protocol"), .keyword(text: "var"), .keyword(text: "let"), .keyword(text: "func")]),
+               isOptional: true),
          Child(name: "Path",
-               kind: "AccessPath",
-               collectionElementName: "PathComponent")
+               kind: .collection(kind: "AccessPath", collectionElementName: "PathComponent"))
        ]),
 
   Node(name: "AccessorParameter",
@@ -971,20 +688,11 @@ public let DECL_NODES: [Node] = [
        ],
        children: [
          Child(name: "LeftParen",
-               kind: "LeftParenToken",
-               tokenChoices: [
-                 "LeftParen"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "LeftParenToken")])),
          Child(name: "Name",
-               kind: "IdentifierToken",
-               tokenChoices: [
-                 "Identifier"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken")])),
          Child(name: "RightParen",
-               kind: "RightParenToken",
-               tokenChoices: [
-                 "RightParen"
-               ])
+               kind: .token(choices: [.token(tokenKind: "RightParenToken")]))
        ]),
 
   Node(name: "AccessorDecl",
@@ -996,36 +704,21 @@ public let DECL_NODES: [Node] = [
        parserFunction: "parseAccessorDecl",
        children: [
          Child(name: "Attributes",
-               kind: "AttributeList",
-               isOptional: true,
-               collectionElementName: "Attribute"),
+               kind: .collection(kind: "AttributeList", collectionElementName: "Attribute"),
+               isOptional: true),
          Child(name: "Modifier",
-               kind: "DeclModifier",
+               kind: .node(kind: "DeclModifier"),
                isOptional: true),
          Child(name: "AccessorKind",
-               kind: "Token",
-               textChoices: [
-                 "get",
-                 "set",
-                 "didSet",
-                 "willSet",
-                 "unsafeAddress",
-                 "addressWithOwner",
-                 "addressWithNativeOwner",
-                 "unsafeMutableAddress",
-                 "mutableAddressWithOwner",
-                 "mutableAddressWithNativeOwner",
-                 "_read",
-                 "_modify"
-               ]),
+               kind: .token(choices: [.keyword(text: "get"), .keyword(text: "set"), .keyword(text: "didSet"), .keyword(text: "willSet"), .keyword(text: "unsafeAddress"), .keyword(text: "addressWithOwner"), .keyword(text: "addressWithNativeOwner"), .keyword(text: "unsafeMutableAddress"), .keyword(text: "mutableAddressWithOwner"), .keyword(text: "mutableAddressWithNativeOwner"), .keyword(text: "_read"), .keyword(text: "_modify")])),
          Child(name: "Parameter",
-               kind: "AccessorParameter",
+               kind: .node(kind: "AccessorParameter"),
                isOptional: true),
          Child(name: "EffectSpecifiers",
-               kind: "DeclEffectSpecifiers",
+               kind: .node(kind: "DeclEffectSpecifiers"),
                isOptional: true),
          Child(name: "Body",
-               kind: "CodeBlock",
+               kind: .node(kind: "CodeBlock"),
                isOptional: true)
        ]),
 
@@ -1043,19 +736,12 @@ public let DECL_NODES: [Node] = [
        ],
        children: [
          Child(name: "LeftBrace",
-               kind: "LeftBraceToken",
-               tokenChoices: [
-                 "LeftBrace"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "LeftBraceToken")])),
          Child(name: "Accessors",
-               kind: "AccessorList",
-               collectionElementName: "Accessor",
+               kind: .collection(kind: "AccessorList", collectionElementName: "Accessor"),
                isIndented: true),
          Child(name: "RightBrace",
-               kind: "RightBraceToken",
-               tokenChoices: [
-                 "RightBrace"
-               ],
+               kind: .token(choices: [.token(tokenKind: "RightBraceToken")]),
                requiresLeadingNewline: true)
        ]),
 
@@ -1067,28 +753,24 @@ public let DECL_NODES: [Node] = [
        ],
        children: [
          Child(name: "Pattern",
-               kind: "Pattern"),
+               kind: .node(kind: "Pattern")),
          Child(name: "TypeAnnotation",
-               kind: "TypeAnnotation",
+               kind: .node(kind: "TypeAnnotation"),
                isOptional: true),
          Child(name: "Initializer",
-               kind: "InitializerClause",
+               kind: .node(kind: "InitializerClause"),
                isOptional: true),
          Child(name: "Accessor",
-               kind: "Syntax",
-               isOptional: true,
-               nodeChoices: [
+               kind: .nodeChoices(choices: [
                  Child(name: "Accessors",
-                       kind: "AccessorBlock"),
+                       kind: .node(kind: "AccessorBlock")),
                  Child(name: "Getter",
-                       kind: "CodeBlock")
+                       kind: .node(kind: "CodeBlock"))
                ]),
+               isOptional: true),
          Child(name: "TrailingComma",
-               kind: "CommaToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Comma"
-               ])
+               kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+               isOptional: true)
        ]),
 
   Node(name: "PatternBindingList",
@@ -1104,56 +786,40 @@ public let DECL_NODES: [Node] = [
        ],
        children: [
          Child(name: "Attributes",
-               kind: "AttributeList",
-               isOptional: true,
-               collectionElementName: "Attribute"),
+               kind: .collection(kind: "AttributeList", collectionElementName: "Attribute"),
+               isOptional: true),
          Child(name: "Modifiers",
-               kind: "ModifierList",
-               isOptional: true,
-               collectionElementName: "Modifier"),
+               kind: .collection(kind: "ModifierList", collectionElementName: "Modifier"),
+               isOptional: true),
          Child(name: "LetOrVarKeyword",
-               kind: "KeywordToken",
-               tokenChoices: [
-                 "Keyword"
-               ],
-               textChoices: [
-                 "let",
-                 "var"
-               ]),
+               kind: .token(choices: [.keyword(text: "let"), .keyword(text: "var")])),
          Child(name: "Bindings",
-               kind: "PatternBindingList",
-               collectionElementName: "Binding")
+               kind: .collection(kind: "PatternBindingList", collectionElementName: "Binding"))
        ]),
 
   Node(name: "EnumCaseElement",
        nameForDiagnostics: nil,
-       description: "An element of an enum case, containing the name of the case and,optionally, either associated values or an assignment to a raw value.",
+       description: "An element of an enum case, containing the name of the case and, optionally, either associated values or an assignment to a raw value.",
        kind: "Syntax",
        traits: [
          "WithTrailingComma"
        ],
        children: [
          Child(name: "Identifier",
-               kind: "IdentifierToken",
-               description: "The name of this case.",
-               tokenChoices: [
-                 "Identifier"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+               description: "The name of this case."),
          Child(name: "AssociatedValue",
-               kind: "ParameterClause",
+               kind: .node(kind: "ParameterClause"),
                description: "The set of associated values of the case.",
                isOptional: true),
          Child(name: "RawValue",
-               kind: "InitializerClause",
+               kind: .node(kind: "InitializerClause"),
                description: "The raw value of this enum element, if present.",
                isOptional: true),
          Child(name: "TrailingComma",
-               kind: "CommaToken",
-               description: "The trailing comma of this element, if the case hasmultiple elements.",
-               isOptional: true,
-               tokenChoices: [
-                 "Comma"
-               ])
+               kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+               description: "The trailing comma of this element, if the case has multiple elements.",
+               isOptional: true)
        ]),
 
   Node(name: "EnumCaseElementList",
@@ -1164,35 +830,26 @@ public let DECL_NODES: [Node] = [
 
   Node(name: "EnumCaseDecl",
        nameForDiagnostics: "enum case",
-       description: "A `case` declaration of a Swift `enum`. It can have 1 or more`EnumCaseElement`s inside, each declaring a different case of theenum.",
+       description: "A `case` declaration of a Swift `enum`. It can have 1 or more `EnumCaseElement`s inside, each declaring a different case of the enum.",
        kind: "Decl",
        traits: [
          "Attributed"
        ],
        children: [
          Child(name: "Attributes",
-               kind: "AttributeList",
+               kind: .collection(kind: "AttributeList", collectionElementName: "Attribute"),
                description: "The attributes applied to the case declaration.",
-               isOptional: true,
-               collectionElementName: "Attribute"),
+               isOptional: true),
          Child(name: "Modifiers",
-               kind: "ModifierList",
+               kind: .collection(kind: "ModifierList", collectionElementName: "Modifier"),
                description: "The declaration modifiers applied to the case declaration.",
-               isOptional: true,
-               collectionElementName: "Modifier"),
+               isOptional: true),
          Child(name: "CaseKeyword",
-               kind: "KeywordToken",
-               description: "The `case` keyword for this case.",
-               tokenChoices: [
-                 "Keyword"
-               ],
-               textChoices: [
-                 "case"
-               ]),
+               kind: .token(choices: [.keyword(text: "case")]),
+               description: "The `case` keyword for this case."),
          Child(name: "Elements",
-               kind: "EnumCaseElementList",
-               description: "The elements this case declares.",
-               collectionElementName: "Element")
+               kind: .collection(kind: "EnumCaseElementList", collectionElementName: "Element"),
+               description: "The elements this case declares.")
        ]),
 
   Node(name: "EnumDecl",
@@ -1206,44 +863,33 @@ public let DECL_NODES: [Node] = [
        ],
        children: [
          Child(name: "Attributes",
-               kind: "AttributeList",
+               kind: .collection(kind: "AttributeList", collectionElementName: "Attribute"),
                description: "The attributes applied to the enum declaration.",
-               isOptional: true,
-               collectionElementName: "Attribute"),
+               isOptional: true),
          Child(name: "Modifiers",
-               kind: "ModifierList",
+               kind: .collection(kind: "ModifierList", collectionElementName: "Modifier"),
                description: "The declaration modifiers applied to the enum declaration.",
-               isOptional: true,
-               collectionElementName: "Modifier"),
+               isOptional: true),
          Child(name: "EnumKeyword",
-               kind: "KeywordToken",
-               description: "The `enum` keyword for this declaration.",
-               tokenChoices: [
-                 "Keyword"
-               ],
-               textChoices: [
-                 "enum"
-               ]),
+               kind: .token(choices: [.keyword(text: "enum")]),
+               description: "The `enum` keyword for this declaration."),
          Child(name: "Identifier",
-               kind: "IdentifierToken",
-               description: "The name of this enum.",
-               tokenChoices: [
-                 "Identifier"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+               description: "The name of this enum."),
          Child(name: "GenericParameters",
-               kind: "GenericParameterClause",
+               kind: .node(kind: "GenericParameterClause"),
                description: "The generic parameters, if any, for this enum.",
                isOptional: true),
          Child(name: "InheritanceClause",
-               kind: "TypeInheritanceClause",
-               description: "The inheritance clause describing conformances or rawvalues for this enum.",
+               kind: .node(kind: "TypeInheritanceClause"),
+               description: "The inheritance clause describing conformances or raw values for this enum.",
                isOptional: true),
          Child(name: "GenericWhereClause",
-               kind: "GenericWhereClause",
-               description: "The `where` clause that applies to the generic parameters ofthis enum.",
+               kind: .node(kind: "GenericWhereClause"),
+               description: "The `where` clause that applies to the generic parameters of this enum.",
                isOptional: true),
          Child(name: "Members",
-               kind: "MemberDeclBlock",
+               kind: .node(kind: "MemberDeclBlock"),
                description: "The cases and other members of this enum.")
        ]),
 
@@ -1257,34 +903,21 @@ public let DECL_NODES: [Node] = [
        ],
        children: [
          Child(name: "Attributes",
-               kind: "AttributeList",
+               kind: .collection(kind: "AttributeList", collectionElementName: "Attribute"),
                description: "The attributes applied to the 'operator' declaration.",
-               isOptional: true,
-               collectionElementName: "Attribute"),
+               isOptional: true),
          Child(name: "Modifiers",
-               kind: "ModifierList",
-               description: "The declaration modifiers applied to the 'operator'declaration.",
+               kind: .collection(kind: "ModifierList", collectionElementName: "Modifier"),
+               description: "The declaration modifiers applied to the 'operator' declaration.",
                isOptional: true,
-               collectionElementName: "Modifier",
                classification: "Attribute"),
          Child(name: "OperatorKeyword",
-               kind: "KeywordToken",
-               tokenChoices: [
-                 "Keyword"
-               ],
-               textChoices: [
-                 "operator"
-               ]),
+               kind: .token(choices: [.keyword(text: "operator")])),
          Child(name: "Identifier",
-               kind: "Token",
-               tokenChoices: [
-                 "BinaryOperator",
-                 "PrefixOperator",
-                 "PostfixOperator"
-               ],
+               kind: .token(choices: [.token(tokenKind: "BinaryOperatorToken"), .token(tokenKind: "PrefixOperatorToken"), .token(tokenKind: "PostfixOperatorToken")]),
                classification: "OperatorIdentifier"),
          Child(name: "OperatorPrecedenceAndTypes",
-               kind: "OperatorPrecedenceAndTypes",
+               kind: .node(kind: "OperatorPrecedenceAndTypes"),
                description: "Optionally specify a precedence group and designated types.",
                isOptional: true)
        ]),
@@ -1299,15 +932,9 @@ public let DECL_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "LeadingComma",
-               kind: "CommaToken",
-               tokenChoices: [
-                 "Comma"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "CommaToken")])),
          Child(name: "Name",
-               kind: "IdentifierToken",
-               tokenChoices: [
-                 "Identifier"
-               ])
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken")]))
        ]),
 
   Node(name: "OperatorPrecedenceAndTypes",
@@ -1316,20 +943,13 @@ public let DECL_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "Colon",
-               kind: "ColonToken",
-               tokenChoices: [
-                 "Colon"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "ColonToken")])),
          Child(name: "PrecedenceGroup",
-               kind: "IdentifierToken",
-               description: "The precedence group for this operator",
-               tokenChoices: [
-                 "Identifier"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+               description: "The precedence group for this operator"),
          Child(name: "DesignatedTypes",
-               kind: "DesignatedTypeList",
-               description: "The designated types associated with this operator.",
-               collectionElementName: "DesignatedTypeElement")
+               kind: .collection(kind: "DesignatedTypeList", collectionElementName: "DesignatedTypeElement"),
+               description: "The designated types associated with this operator.")
        ]),
 
   Node(name: "PrecedenceGroupDecl",
@@ -1342,43 +962,25 @@ public let DECL_NODES: [Node] = [
        ],
        children: [
          Child(name: "Attributes",
-               kind: "AttributeList",
+               kind: .collection(kind: "AttributeList", collectionElementName: "Attribute"),
                description: "The attributes applied to the 'precedencegroup' declaration.",
-               isOptional: true,
-               collectionElementName: "Attribute"),
+               isOptional: true),
          Child(name: "Modifiers",
-               kind: "ModifierList",
-               description: "The declaration modifiers applied to the 'precedencegroup'declaration.",
-               isOptional: true,
-               collectionElementName: "Modifier"),
+               kind: .collection(kind: "ModifierList", collectionElementName: "Modifier"),
+               description: "The declaration modifiers applied to the 'precedencegroup' declaration.",
+               isOptional: true),
          Child(name: "PrecedencegroupKeyword",
-               kind: "KeywordToken",
-               tokenChoices: [
-                 "Keyword"
-               ],
-               textChoices: [
-                 "precedencegroup"
-               ]),
+               kind: .token(choices: [.keyword(text: "precedencegroup")])),
          Child(name: "Identifier",
-               kind: "IdentifierToken",
-               description: "The name of this precedence group.",
-               tokenChoices: [
-                 "Identifier"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+               description: "The name of this precedence group."),
          Child(name: "LeftBrace",
-               kind: "LeftBraceToken",
-               tokenChoices: [
-                 "LeftBrace"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "LeftBraceToken")])),
          Child(name: "GroupAttributes",
-               kind: "PrecedenceGroupAttributeList",
-               description: "The characteristics of this precedence group.",
-               collectionElementName: "GroupAttribute"),
+               kind: .collection(kind: "PrecedenceGroupAttributeList", collectionElementName: "GroupAttribute"),
+               description: "The characteristics of this precedence group."),
          Child(name: "RightBrace",
-               kind: "RightBraceToken",
-               tokenChoices: [
-                 "RightBrace"
-               ])
+               kind: .token(choices: [.token(tokenKind: "RightBraceToken")]))
        ]),
 
   Node(name: "PrecedenceGroupAttributeList",
@@ -1390,29 +992,18 @@ public let DECL_NODES: [Node] = [
 
   Node(name: "PrecedenceGroupRelation",
        nameForDiagnostics: "'relation' property of precedencegroup",
-       description: "Specify the new precedence group's relation to existing precedencegroups.",
+       description: "Specify the new precedence group's relation to existing precedence groups.",
        kind: "Syntax",
        children: [
          Child(name: "HigherThanOrLowerThan",
-               kind: "IdentifierToken",
+               kind: .token(choices: [.keyword(text: "higherThan"), .keyword(text: "lowerThan")]),
                description: "The relation to specified other precedence groups.",
-               tokenChoices: [
-                 "Identifier"
-               ],
-               textChoices: [
-                 "higherThan",
-                 "lowerThan"
-               ],
                classification: "Keyword"),
          Child(name: "Colon",
-               kind: "ColonToken",
-               tokenChoices: [
-                 "Colon"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "ColonToken")])),
          Child(name: "OtherNames",
-               kind: "PrecedenceGroupNameList",
-               description: "The name of other precedence group to which this precedencegroup relates.",
-               collectionElementName: "OtherName")
+               kind: .collection(kind: "PrecedenceGroupNameList", collectionElementName: "OtherName"),
+               description: "The name of other precedence group to which this precedence group relates.")
        ]),
 
   Node(name: "PrecedenceGroupNameList",
@@ -1425,78 +1016,39 @@ public let DECL_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "Name",
-               kind: "IdentifierToken",
-               tokenChoices: [
-                 "Identifier"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken")])),
          Child(name: "TrailingComma",
-               kind: "CommaToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Comma"
-               ])
+               kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+               isOptional: true)
        ]),
 
   Node(name: "PrecedenceGroupAssignment",
        nameForDiagnostics: "'assignment' property of precedencegroup",
-       description: "Specifies the precedence of an operator when used in an operationthat includes optional chaining.",
+       description: "Specifies the precedence of an operator when used in an operation that includes optional chaining.",
        kind: "Syntax",
        children: [
          Child(name: "AssignmentKeyword",
-               kind: "IdentifierToken",
-               tokenChoices: [
-                 "Identifier"
-               ],
-               textChoices: [
-                 "assignment"
-               ]),
+               kind: .token(choices: [.keyword(text: "assignment")])),
          Child(name: "Colon",
-               kind: "ColonToken",
-               tokenChoices: [
-                 "Colon"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "ColonToken")])),
          Child(name: "Flag",
-               kind: "KeywordToken",
-               description: "When true, an operator in the corresponding precedence groupuses the same grouping rules during optional chaining as theassignment operators from the standard library. Otherwise,operators in the precedence group follows the same optionalchaining rules as operators that don't perform assignment.",
-               tokenChoices: [
-                 "Keyword"
-               ],
-               textChoices: [
-                 "true",
-                 "false"
-               ])
+               kind: .token(choices: [.keyword(text: "true"), .keyword(text: "false")]),
+               description: "When true, an operator in the corresponding precedence group uses the same grouping rules during optional chaining as the assignment operators from the standard library. Otherwise, operators in the precedence group follows the same optional chaining rules as operators that don't perform assignment.")
        ]),
 
   Node(name: "PrecedenceGroupAssociativity",
        nameForDiagnostics: "'associativity' property of precedencegroup",
-       description: "Specifies how a sequence of operators with the same precedence levelare grouped together in the absence of grouping parentheses.",
+       description: "Specifies how a sequence of operators with the same precedence level are grouped together in the absence of grouping parentheses.",
        kind: "Syntax",
        children: [
          Child(name: "AssociativityKeyword",
-               kind: "IdentifierToken",
-               tokenChoices: [
-                 "Identifier"
-               ],
-               textChoices: [
-                 "associativity"
-               ],
+               kind: .token(choices: [.keyword(text: "associativity")]),
                classification: "Keyword"),
          Child(name: "Colon",
-               kind: "ColonToken",
-               tokenChoices: [
-                 "Colon"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "ColonToken")])),
          Child(name: "Value",
-               kind: "IdentifierToken",
-               description: "Operators that are `left`-associative group left-to-right.Operators that are `right`-associative group right-to-left.Operators that are specified with an associativity of `none`don't associate at all",
-               tokenChoices: [
-                 "Identifier"
-               ],
-               textChoices: [
-                 "left",
-                 "right",
-                 "none"
-               ])
+               kind: .token(choices: [.keyword(text: "left"), .keyword(text: "right"), .keyword(text: "none")]),
+               description: "Operators that are `left`-associative group left-to-right. Operators that are `right`-associative group right-to-left. Operators that are specified with an associativity of `none` don't associate at all")
        ]),
 
   Node(name: "MacroDecl",
@@ -1508,42 +1060,30 @@ public let DECL_NODES: [Node] = [
        ],
        children: [
          Child(name: "Attributes",
-               kind: "AttributeList",
-               isOptional: true,
-               collectionElementName: "Attribute"),
+               kind: .collection(kind: "AttributeList", collectionElementName: "Attribute"),
+               isOptional: true),
          Child(name: "Modifiers",
-               kind: "ModifierList",
-               isOptional: true,
-               collectionElementName: "Modifier"),
+               kind: .collection(kind: "ModifierList", collectionElementName: "Modifier"),
+               isOptional: true),
          Child(name: "MacroKeyword",
-               kind: "KeywordToken",
-               tokenChoices: [
-                 "Keyword"
-               ],
-               textChoices: [
-                 "macro"
-               ]),
+               kind: .token(choices: [.keyword(text: "macro")])),
          Child(name: "Identifier",
-               kind: "IdentifierToken",
-               tokenChoices: [
-                 "Identifier"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken")])),
          Child(name: "GenericParameterClause",
-               kind: "GenericParameterClause",
+               kind: .node(kind: "GenericParameterClause"),
                isOptional: true),
          Child(name: "Signature",
-               kind: "Syntax",
-               nodeChoices: [
+               kind: .nodeChoices(choices: [
                  Child(name: "FunctionLike",
-                       kind: "FunctionSignature"),
+                       kind: .node(kind: "FunctionSignature")),
                  Child(name: "ValueLike",
-                       kind: "TypeAnnotation")
-               ]),
+                       kind: .node(kind: "TypeAnnotation"))
+               ])),
          Child(name: "Definition",
-               kind: "InitializerClause",
+               kind: .node(kind: "InitializerClause"),
                isOptional: true),
          Child(name: "GenericWhereClause",
-               kind: "GenericWhereClause",
+               kind: .node(kind: "GenericWhereClause"),
                isOptional: true)
        ]),
 
@@ -1555,41 +1095,27 @@ public let DECL_NODES: [Node] = [
        ],
        children: [
          Child(name: "PoundToken",
-               kind: "PoundToken",
-               description: "The `#` sign.",
-               tokenChoices: [
-                 "Pound"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "PoundToken")]),
+               description: "The `#` sign."),
          Child(name: "Macro",
-               kind: "IdentifierToken",
-               tokenChoices: [
-                 "Identifier"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken")])),
          Child(name: "GenericArguments",
-               kind: "GenericArgumentClause",
+               kind: .node(kind: "GenericArgumentClause"),
                isOptional: true),
          Child(name: "LeftParen",
-               kind: "LeftParenToken",
-               isOptional: true,
-               tokenChoices: [
-                 "LeftParen"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "LeftParenToken")]),
+               isOptional: true),
          Child(name: "ArgumentList",
-               kind: "TupleExprElementList",
-               collectionElementName: "Argument"),
+               kind: .collection(kind: "TupleExprElementList", collectionElementName: "Argument")),
          Child(name: "RightParen",
-               kind: "RightParenToken",
-               isOptional: true,
-               tokenChoices: [
-                 "RightParen"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "RightParenToken")]),
+               isOptional: true),
          Child(name: "TrailingClosure",
-               kind: "ClosureExpr",
+               kind: .node(kind: "ClosureExpr"),
                isOptional: true),
          Child(name: "AdditionalTrailingClosures",
-               kind: "MultipleTrailingClosureElementList",
-               isOptional: true,
-               collectionElementName: "AdditionalTrailingClosure")
+               kind: .collection(kind: "MultipleTrailingClosureElementList", collectionElementName: "AdditionalTrailingClosure"),
+               isOptional: true)
        ]),
 
   Node(name: "EditorPlaceholderDecl",
@@ -1597,10 +1123,7 @@ public let DECL_NODES: [Node] = [
        kind: "Decl",
        children: [
          Child(name: "Identifier",
-               kind: "IdentifierToken",
-               tokenChoices: [
-                 "Identifier"
-               ])
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken")]))
        ]),
 
 ]

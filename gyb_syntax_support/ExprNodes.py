@@ -29,7 +29,7 @@ EXPR_NODES = [
     # try! foo()
     Node('TryExpr', name_for_diagnostics="'try' expression", kind='Expr',
          children=[
-             Child('TryKeyword', kind='KeywordToken', text_choices=['try']),
+             Child('TryKeyword', kind='KeywordToken', token_choices=['KeywordToken|try']),
              Child('QuestionOrExclamationMark', kind='Token',
                    is_optional=True,
                    token_choices=[
@@ -44,7 +44,7 @@ EXPR_NODES = [
     Node('AwaitExpr', name_for_diagnostics="'await' expression", kind='Expr',
          children=[
              Child('AwaitKeyword', kind='KeywordToken',
-                   text_choices=['await']),
+                   token_choices=['KeywordToken|await']),
              Child('Expression', kind='Expr'),
          ]),
 
@@ -52,7 +52,7 @@ EXPR_NODES = [
     Node('MoveExpr', name_for_diagnostics="'_move' expression", kind='Expr',
          children=[
              Child('MoveKeyword', kind='KeywordToken',
-                   text_choices=['_move']),
+                   token_choices=['KeywordToken|_move']),
              Child('Expression', kind='Expr'),
          ]),
 
@@ -60,7 +60,7 @@ EXPR_NODES = [
     Node('BorrowExpr', name_for_diagnostics="'_borrow' expression", kind='Expr',
          children=[
              Child('BorrowKeyword', kind='KeywordToken',
-                   text_choices=['_borrow']),
+                   token_choices=['KeywordToken|_borrow']),
              Child('Expression', kind='Expr'),
          ]),
 
@@ -100,13 +100,13 @@ EXPR_NODES = [
     # An 'super' expression.
     Node('SuperRefExpr', name_for_diagnostics=None, kind='Expr',
          children=[
-             Child('SuperKeyword', kind='KeywordToken', text_choices=['super']),
+             Child('SuperKeyword', kind='KeywordToken', token_choices=['KeywordToken|super']),
          ]),
 
     # A nil expression.
     Node('NilLiteralExpr', name_for_diagnostics=None, kind='Expr',
          children=[
-             Child('NilKeyword', kind='KeywordToken', text_choices=['nil']),
+             Child('NilKeyword', kind='KeywordToken', token_choices=['KeywordToken|nil']),
          ]),
 
     # A _ expression.
@@ -124,7 +124,7 @@ EXPR_NODES = [
     # A pack expansion expr spelled with 'repeat'.
     Node('PackExpansionExpr', name_for_diagnostics=None, kind='Expr',
          children=[
-             Child('RepeatKeyword', kind='KeywordToken', text_choices=['repeat']),
+             Child('RepeatKeyword', kind='KeywordToken', token_choices=['KeywordToken|repeat']),
              Child('PatternExpr', kind='Expr'),
          ]),
 
@@ -132,7 +132,7 @@ EXPR_NODES = [
     Node('PackElementExpr', name_for_diagnostics=None, kind='Expr',
          children=[
              Child('EachKeyword', kind='KeywordToken',
-                   text_choices=['each']),
+                   token_choices=['KeywordToken|each']),
              Child('PackRefExpr', kind='Expr'),
          ]),
 
@@ -275,7 +275,7 @@ EXPR_NODES = [
     # true or false
     Node('BooleanLiteralExpr', name_for_diagnostics='bool literal', kind='Expr',
          children=[
-             Child("BooleanLiteral", kind='KeywordToken', text_choices=['true', 'false'])
+             Child("BooleanLiteral", kind='KeywordToken', token_choices=['KeywordToken|true', 'KeywordToken|false'])
          ]),
 
     # ? expr :
@@ -320,7 +320,7 @@ EXPR_NODES = [
     # NOTE: This appears only in SequenceExpr.
     Node('UnresolvedIsExpr', name_for_diagnostics=None, kind='Expr',
          children=[
-             Child("IsTok", kind='KeywordToken', text_choices=['is']),
+             Child("IsTok", kind='KeywordToken', token_choices=['KeywordToken|is']),
          ]),
 
     # expression is TypeName
@@ -330,7 +330,7 @@ EXPR_NODES = [
     Node('IsExpr', name_for_diagnostics="'is' expression", kind='Expr',
          children=[
              Child("Expression", kind="Expr"),
-             Child("IsTok", kind='KeywordToken', text_choices=['is']),
+             Child("IsTok", kind='KeywordToken', token_choices=['KeywordToken|is']),
              Child("TypeName", kind='Type')
          ]),
 
@@ -339,7 +339,7 @@ EXPR_NODES = [
     # NOTE: This appears only in SequenceExpr.
     Node('UnresolvedAsExpr', name_for_diagnostics=None, kind='Expr',
          children=[
-             Child("AsTok", kind='KeywordToken', text_choices=['as']),
+             Child("AsTok", kind='KeywordToken', token_choices=['KeywordToken|as']),
              Child("QuestionOrExclamationMark", kind='Token',
                    is_optional=True,
                    token_choices=[
@@ -355,7 +355,7 @@ EXPR_NODES = [
     Node('AsExpr', name_for_diagnostics="'as' expression", kind='Expr',
          children=[
              Child("Expression", kind="Expr"),
-             Child("AsTok", kind='KeywordToken', text_choices=['as']),
+             Child("AsTok", kind='KeywordToken', token_choices=['KeywordToken|as']),
              Child("QuestionOrExclamationMark", kind='Token',
                    is_optional=True,
                    token_choices=[
@@ -373,9 +373,9 @@ EXPR_NODES = [
 
     Node('ClosureCaptureItemSpecifier', name_for_diagnostics='closure capture specifier', kind='Syntax',
          children=[
-             Child('Specifier', kind='ContextualKeywordToken', text_choices=['weak', 'unowned']),
+             Child('Specifier', kind='KeywordToken', token_choices=['KeywordToken|weak', 'KeywordToken|unowned']),
              Child('LeftParen', kind='LeftParenToken', is_optional=True),
-             Child('Detail', kind='ContextualKeywordToken', is_optional=True, text_choices=['safe', 'unsafe']),
+             Child('Detail', kind='KeywordToken', is_optional=True, token_choices=['KeywordToken|safe', 'KeywordToken|unsafe']),
              Child('RightParen', kind='RightParenToken', is_optional=True),
          ]),
 
@@ -432,7 +432,7 @@ EXPR_NODES = [
              Child('EffectSpecifiers', kind='TypeEffectSpecifiers',
                    is_optional=True),
              Child('Output', kind='ReturnClause', is_optional=True),
-             Child('InTok', kind='KeywordToken', text_choices=['in']),
+             Child('InTok', kind='KeywordToken', token_choices=['KeywordToken|in']),
          ]),
 
     Node('ClosureExpr', name_for_diagnostics='closure', kind='Expr',

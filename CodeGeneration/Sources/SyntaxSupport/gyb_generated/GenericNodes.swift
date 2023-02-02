@@ -18,16 +18,9 @@ public let GENERIC_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "WhereKeyword",
-               kind: "KeywordToken",
-               tokenChoices: [
-                 "Keyword"
-               ],
-               textChoices: [
-                 "where"
-               ]),
+               kind: .token(choices: [.keyword(text: "where")])),
          Child(name: "RequirementList",
-               kind: "GenericRequirementList",
-               collectionElementName: "Requirement")
+               kind: .collection(kind: "GenericRequirementList", collectionElementName: "Requirement"))
        ]),
 
   Node(name: "GenericRequirementList",
@@ -44,21 +37,17 @@ public let GENERIC_NODES: [Node] = [
        ],
        children: [
          Child(name: "Body",
-               kind: "Syntax",
-               nodeChoices: [
+               kind: .nodeChoices(choices: [
                  Child(name: "SameTypeRequirement",
-                       kind: "SameTypeRequirement"),
+                       kind: .node(kind: "SameTypeRequirement")),
                  Child(name: "ConformanceRequirement",
-                       kind: "ConformanceRequirement"),
+                       kind: .node(kind: "ConformanceRequirement")),
                  Child(name: "LayoutRequirement",
-                       kind: "LayoutRequirement")
-               ]),
+                       kind: .node(kind: "LayoutRequirement"))
+               ])),
          Child(name: "TrailingComma",
-               kind: "CommaToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Comma"
-               ])
+               kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+               isOptional: true)
        ]),
 
   Node(name: "SameTypeRequirement",
@@ -66,16 +55,11 @@ public let GENERIC_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "LeftTypeIdentifier",
-               kind: "Type"),
+               kind: .node(kind: "Type")),
          Child(name: "EqualityToken",
-               kind: "Token",
-               tokenChoices: [
-                 "BinaryOperator",
-                 "PrefixOperator",
-                 "PostfixOperator"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "BinaryOperatorToken"), .token(tokenKind: "PrefixOperatorToken"), .token(tokenKind: "PostfixOperatorToken")])),
          Child(name: "RightTypeIdentifier",
-               kind: "Type")
+               kind: .node(kind: "Type"))
        ]),
 
   Node(name: "LayoutRequirement",
@@ -83,47 +67,26 @@ public let GENERIC_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "TypeIdentifier",
-               kind: "Type"),
+               kind: .node(kind: "Type")),
          Child(name: "Colon",
-               kind: "ColonToken",
-               tokenChoices: [
-                 "Colon"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "ColonToken")])),
          Child(name: "LayoutConstraint",
-               kind: "IdentifierToken",
-               tokenChoices: [
-                 "Identifier"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken")])),
          Child(name: "LeftParen",
-               kind: "LeftParenToken",
-               isOptional: true,
-               tokenChoices: [
-                 "LeftParen"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "LeftParenToken")]),
+               isOptional: true),
          Child(name: "Size",
-               kind: "IntegerLiteralToken",
-               isOptional: true,
-               tokenChoices: [
-                 "IntegerLiteral"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "IntegerLiteralToken")]),
+               isOptional: true),
          Child(name: "Comma",
-               kind: "CommaToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Comma"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+               isOptional: true),
          Child(name: "Alignment",
-               kind: "IntegerLiteralToken",
-               isOptional: true,
-               tokenChoices: [
-                 "IntegerLiteral"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "IntegerLiteralToken")]),
+               isOptional: true),
          Child(name: "RightParen",
-               kind: "RightParenToken",
-               isOptional: true,
-               tokenChoices: [
-                 "RightParen"
-               ])
+               kind: .token(choices: [.token(tokenKind: "RightParenToken")]),
+               isOptional: true)
        ]),
 
   Node(name: "GenericParameterList",
@@ -140,35 +103,22 @@ public let GENERIC_NODES: [Node] = [
        ],
        children: [
          Child(name: "Attributes",
-               kind: "AttributeList",
-               isOptional: true,
-               collectionElementName: "Attribute"),
+               kind: .collection(kind: "AttributeList", collectionElementName: "Attribute"),
+               isOptional: true),
          Child(name: "Name",
-               kind: "IdentifierToken",
-               tokenChoices: [
-                 "Identifier"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken")])),
          Child(name: "Ellipsis",
-               kind: "EllipsisToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Ellipsis"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "EllipsisToken")]),
+               isOptional: true),
          Child(name: "Colon",
-               kind: "ColonToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Colon"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "ColonToken")]),
+               isOptional: true),
          Child(name: "InheritedType",
-               kind: "Type",
+               kind: .node(kind: "Type"),
                isOptional: true),
          Child(name: "TrailingComma",
-               kind: "CommaToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Comma"
-               ])
+               kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+               isOptional: true)
        ]),
 
   Node(name: "PrimaryAssociatedTypeList",
@@ -184,16 +134,10 @@ public let GENERIC_NODES: [Node] = [
        ],
        children: [
          Child(name: "Name",
-               kind: "IdentifierToken",
-               tokenChoices: [
-                 "Identifier"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken")])),
          Child(name: "TrailingComma",
-               kind: "CommaToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Comma"
-               ])
+               kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+               isOptional: true)
        ]),
 
   Node(name: "GenericParameterClause",
@@ -202,21 +146,14 @@ public let GENERIC_NODES: [Node] = [
        parserFunction: "parseGenericParameters",
        children: [
          Child(name: "LeftAngleBracket",
-               kind: "LeftAngleToken",
-               tokenChoices: [
-                 "LeftAngle"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "LeftAngleToken")])),
          Child(name: "GenericParameterList",
-               kind: "GenericParameterList",
-               collectionElementName: "GenericParameter"),
+               kind: .collection(kind: "GenericParameterList", collectionElementName: "GenericParameter")),
          Child(name: "GenericWhereClause",
-               kind: "GenericWhereClause",
+               kind: .node(kind: "GenericWhereClause"),
                isOptional: true),
          Child(name: "RightAngleBracket",
-               kind: "RightAngleToken",
-               tokenChoices: [
-                 "RightAngle"
-               ])
+               kind: .token(choices: [.token(tokenKind: "RightAngleToken")]))
        ]),
 
   Node(name: "ConformanceRequirement",
@@ -224,14 +161,11 @@ public let GENERIC_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "LeftTypeIdentifier",
-               kind: "Type"),
+               kind: .node(kind: "Type")),
          Child(name: "Colon",
-               kind: "ColonToken",
-               tokenChoices: [
-                 "Colon"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "ColonToken")])),
          Child(name: "RightTypeIdentifier",
-               kind: "Type")
+               kind: .node(kind: "Type"))
        ]),
 
   Node(name: "PrimaryAssociatedTypeClause",
@@ -239,18 +173,11 @@ public let GENERIC_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "LeftAngleBracket",
-               kind: "LeftAngleToken",
-               tokenChoices: [
-                 "LeftAngle"
-               ]),
+               kind: .token(choices: [.token(tokenKind: "LeftAngleToken")])),
          Child(name: "PrimaryAssociatedTypeList",
-               kind: "PrimaryAssociatedTypeList",
-               collectionElementName: "PrimaryAssociatedType"),
+               kind: .collection(kind: "PrimaryAssociatedTypeList", collectionElementName: "PrimaryAssociatedType")),
          Child(name: "RightAngleBracket",
-               kind: "RightAngleToken",
-               tokenChoices: [
-                 "RightAngle"
-               ])
+               kind: .token(choices: [.token(tokenKind: "RightAngleToken")]))
        ]),
 
 ]

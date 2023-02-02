@@ -1002,4 +1002,38 @@ public class LexerTests: XCTestCase {
       ]
     )
   }
+
+  func testMultiDigitTupleAccess() {
+    AssertLexemes(
+      "x.13.1",
+      lexemes: [
+        LexemeSpec(.identifier, text: "x"),
+        LexemeSpec(.period, text: "."),
+        LexemeSpec(.integerLiteral, text: "13"),
+        LexemeSpec(.period, text: "."),
+        LexemeSpec(.integerLiteral, text: "1"),
+      ]
+    )
+  }
+
+  func testFloatingPointNumberAfterRangeOperator() {
+    AssertLexemes(
+      "0.1...0.2",
+      lexemes: [
+        LexemeSpec(.floatingLiteral, text: "0.1"),
+        LexemeSpec(.binaryOperator, text: "..."),
+        LexemeSpec(.floatingLiteral, text: "0.2"),
+      ]
+    )
+  }
+
+  func testUnterminatedFloatLiteral() {
+    AssertLexemes(
+      "0.",
+      lexemes: [
+        LexemeSpec(.integerLiteral, text: "0"),
+        LexemeSpec(.period, text: "."),
+      ]
+    )
+  }
 }

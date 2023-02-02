@@ -278,6 +278,28 @@ EXPR_NODES = [
              Child("BooleanLiteral", kind='KeywordToken', token_choices=['KeywordToken|true', 'KeywordToken|false'])
          ]),
 
+    # if-expr -> identifier? ':'? 'if' condition-list code-block
+    #   else-clause ';'?
+    #
+    # This node represents both an 'if' expression, as well as an 'if' statement
+    # when wrapped in a ExpressionStmt node.
+    Node('IfExpr', name_for_diagnostics="'if' statement", kind='Expr',
+         traits=['WithCodeBlock'],
+         children=[
+              Child('IfKeyword', kind='KeywordToken', token_choices=['KeywordToken|if']),
+             Child('Conditions', kind='ConditionElementList',
+                   collection_element_name='Condition'),
+             Child('Body', kind='CodeBlock', name_for_diagnostics='body'),
+             Child('ElseKeyword', kind='ElseToken',
+                   is_optional=True),
+             Child('ElseBody', kind='Syntax', name_for_diagnostics='else body',
+                   node_choices=[
+                       Child('IfExpr', kind='IfExpr'),
+                       Child('CodeBlock', kind='CodeBlock'),
+                   ],
+                   is_optional=True),
+         ]),
+
     # ? expr :
     # Ternary expression without the condition and the second choice.
     # NOTE: This appears only in SequenceExpr.

@@ -50,8 +50,8 @@ public let ATTRIBUTE_NODES: [Node] = [
                        kind: .node(kind: "DifferentiableAttributeArguments")),
                  Child(name: "DerivativeRegistrationArguments",
                        kind: .node(kind: "DerivativeRegistrationAttributeArguments")),
-                 Child(name: "BackDeployArguments",
-                       kind: .node(kind: "BackDeployAttributeSpecList")),
+                 Child(name: "BackDeployedArguments",
+                       kind: .node(kind: "BackDeployedAttributeSpecList")),
                  Child(name: "ConventionArguments",
                        kind: .node(kind: "ConventionAttributeArguments")),
                  Child(name: "ConventionWitnessMethodArguments",
@@ -340,9 +340,9 @@ public let ATTRIBUTE_NODES: [Node] = [
                isOptional: true)
        ]),
 
-  Node(name: "BackDeployAttributeSpecList",
-       nameForDiagnostics: "'@_backDeploy' arguments",
-       description: "A collection of arguments for the `@_backDeploy` attribute",
+  Node(name: "BackDeployedAttributeSpecList",
+       nameForDiagnostics: "'@backDeployed' arguments",
+       description: "A collection of arguments for the `@backDeployed` attribute",
        kind: "Syntax",
        children: [
          Child(name: "BeforeLabel",

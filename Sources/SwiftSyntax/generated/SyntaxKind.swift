@@ -73,7 +73,7 @@ public enum SyntaxKind {
   
   case awaitExpr
   
-  case backDeployAttributeSpecList
+  case backDeployedAttributeSpecList
   
   case binaryOperatorExpr
   

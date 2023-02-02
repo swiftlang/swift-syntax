@@ -46,7 +46,7 @@ extension Syntax {
         .node(AvailabilityVersionRestrictionListSyntax.self), 
         .node(AvailabilityVersionRestrictionSyntax.self), 
         .node(AwaitExprSyntax.self), 
-        .node(BackDeployAttributeSpecListSyntax.self), 
+        .node(BackDeployedAttributeSpecListSyntax.self), 
         .node(BinaryOperatorExprSyntax.self), 
         .node(BooleanLiteralExprSyntax.self), 
         .node(BorrowExprSyntax.self), 
@@ -340,8 +340,8 @@ extension SyntaxKind {
       return AvailabilityVersionRestrictionSyntax.self
     case .awaitExpr: 
       return AwaitExprSyntax.self
-    case .backDeployAttributeSpecList: 
-      return BackDeployAttributeSpecListSyntax.self
+    case .backDeployedAttributeSpecList: 
+      return BackDeployedAttributeSpecListSyntax.self
     case .binaryOperatorExpr: 
       return BinaryOperatorExprSyntax.self
     case .booleanLiteralExpr: 
@@ -865,8 +865,8 @@ extension SyntaxKind {
       return "version restriction"
     case .awaitExpr: 
       return "'await' expression"
-    case .backDeployAttributeSpecList: 
-      return "'@_backDeploy' arguments"
+    case .backDeployedAttributeSpecList: 
+      return "'@backDeployed' arguments"
     case .binaryOperatorExpr: 
       return "operator"
     case .booleanLiteralExpr: 

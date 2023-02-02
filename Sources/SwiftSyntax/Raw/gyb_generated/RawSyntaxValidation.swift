@@ -1736,7 +1736,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 7, verify(layout[7], as: RawDeclNameArgumentsSyntax?.self))
     assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
     break
-  case .backDeployAttributeSpecList:
+  case .backDeployedAttributeSpecList:
     assert(layout.count == 7)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self))

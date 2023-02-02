@@ -8454,7 +8454,7 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
     case `implementsArguments`(ImplementsAttributeArgumentsSyntax)
     case `differentiableArguments`(DifferentiableAttributeArgumentsSyntax)
     case `derivativeRegistrationArguments`(DerivativeRegistrationAttributeArgumentsSyntax)
-    case `backDeployArguments`(BackDeployAttributeSpecListSyntax)
+    case `backDeployedArguments`(BackDeployedAttributeSpecListSyntax)
     case `conventionArguments`(ConventionAttributeArgumentsSyntax)
     case `conventionWitnessMethodArguments`(ConventionWitnessMethodAttributeArgumentsSyntax)
     case `opaqueReturnTypeOfAttributeArguments`(OpaqueReturnTypeOfAttributeArgumentsSyntax)
@@ -8476,7 +8476,7 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
       case .implementsArguments(let node): return node._syntaxNode
       case .differentiableArguments(let node): return node._syntaxNode
       case .derivativeRegistrationArguments(let node): return node._syntaxNode
-      case .backDeployArguments(let node): return node._syntaxNode
+      case .backDeployedArguments(let node): return node._syntaxNode
       case .conventionArguments(let node): return node._syntaxNode
       case .conventionWitnessMethodArguments(let node): return node._syntaxNode
       case .opaqueReturnTypeOfAttributeArguments(let node): return node._syntaxNode
@@ -8517,8 +8517,8 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
     public init(_ node: DerivativeRegistrationAttributeArgumentsSyntax) {
       self = .derivativeRegistrationArguments(node)
     }
-    public init(_ node: BackDeployAttributeSpecListSyntax) {
-      self = .backDeployArguments(node)
+    public init(_ node: BackDeployedAttributeSpecListSyntax) {
+      self = .backDeployedArguments(node)
     }
     public init(_ node: ConventionAttributeArgumentsSyntax) {
       self = .conventionArguments(node)
@@ -8587,8 +8587,8 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
         self = .derivativeRegistrationArguments(node)
         return
       }
-      if let node = node.as(BackDeployAttributeSpecListSyntax.self) {
-        self = .backDeployArguments(node)
+      if let node = node.as(BackDeployedAttributeSpecListSyntax.self) {
+        self = .backDeployedArguments(node)
         return
       }
       if let node = node.as(ConventionAttributeArgumentsSyntax.self) {
@@ -8645,7 +8645,7 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
         .node(ImplementsAttributeArgumentsSyntax.self),
         .node(DifferentiableAttributeArgumentsSyntax.self),
         .node(DerivativeRegistrationAttributeArgumentsSyntax.self),
-        .node(BackDeployAttributeSpecListSyntax.self),
+        .node(BackDeployedAttributeSpecListSyntax.self),
         .node(ConventionAttributeArgumentsSyntax.self),
         .node(ConventionWitnessMethodAttributeArgumentsSyntax.self),
         .node(OpaqueReturnTypeOfAttributeArgumentsSyntax.self),
@@ -11271,24 +11271,24 @@ extension QualifiedDeclNameSyntax: CustomReflectable {
   }
 }
 
-// MARK: - BackDeployAttributeSpecListSyntax
+// MARK: - BackDeployedAttributeSpecListSyntax
 
 /// 
-/// A collection of arguments for the `@_backDeploy` attribute
+/// A collection of arguments for the `@backDeployed` attribute
 /// 
-public struct BackDeployAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashable {
+public struct BackDeployedAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .backDeployAttributeSpecList else { return nil }
+    guard node.raw.kind == .backDeployedAttributeSpecList else { return nil }
     self._syntaxNode = node._syntaxNode
   }
 
-  /// Creates a `BackDeployAttributeSpecListSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a `BackDeployedAttributeSpecListSyntax` node from the given `SyntaxData`. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .backDeployAttributeSpecList)
+    assert(data.raw.kind == .backDeployedAttributeSpecList)
     self._syntaxNode = Syntax(data)
   }
 
@@ -11316,7 +11316,7 @@ public struct BackDeployAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashable 
         unexpectedAfterVersionList?.raw,
       ]
       let raw = RawSyntax.makeLayout(
-        kind: SyntaxKind.backDeployAttributeSpecList, from: layout, arena: arena,
+        kind: SyntaxKind.backDeployedAttributeSpecList, from: layout, arena: arena,
         leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
       return SyntaxData.forRoot(raw)
     }
@@ -11328,7 +11328,7 @@ public struct BackDeployAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashable 
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = BackDeployAttributeSpecListSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = BackDeployedAttributeSpecListSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -11338,7 +11338,7 @@ public struct BackDeployAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashable 
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = BackDeployAttributeSpecListSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = BackDeployedAttributeSpecListSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
@@ -11347,7 +11347,7 @@ public struct BackDeployAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashable 
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = BackDeployAttributeSpecListSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = BackDeployedAttributeSpecListSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -11359,7 +11359,7 @@ public struct BackDeployAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashable 
       return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = BackDeployAttributeSpecListSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+      self = BackDeployedAttributeSpecListSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
     }
   }
 
@@ -11368,7 +11368,7 @@ public struct BackDeployAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashable 
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = BackDeployAttributeSpecListSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+      self = BackDeployedAttributeSpecListSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -11381,7 +11381,7 @@ public struct BackDeployAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashable 
       return AvailabilityVersionRestrictionListSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
-      self = BackDeployAttributeSpecListSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
+      self = BackDeployedAttributeSpecListSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
     }
   }
 
@@ -11391,7 +11391,7 @@ public struct BackDeployAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashable 
   ///                  `versionList` collection.
   /// - returns: A copy of the receiver with the provided `Availability`
   ///            appended to its `versionList` collection.
-  public func addAvailability(_ element: AvailabilityVersionRestrictionListEntrySyntax) -> BackDeployAttributeSpecListSyntax {
+  public func addAvailability(_ element: AvailabilityVersionRestrictionListEntrySyntax) -> BackDeployedAttributeSpecListSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
     if let col = raw.layoutView!.children[5] {
@@ -11401,7 +11401,7 @@ public struct BackDeployAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashable 
         from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(at: 5, with: collection, arena: arena)
-    return BackDeployAttributeSpecListSyntax(newData)
+    return BackDeployedAttributeSpecListSyntax(newData)
   }
 
   public var unexpectedAfterVersionList: UnexpectedNodesSyntax? {
@@ -11409,7 +11409,7 @@ public struct BackDeployAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashable 
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = BackDeployAttributeSpecListSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
+      self = BackDeployedAttributeSpecListSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -11447,7 +11447,7 @@ public struct BackDeployAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashable 
   }
 }
 
-extension BackDeployAttributeSpecListSyntax: CustomReflectable {
+extension BackDeployedAttributeSpecListSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
       "unexpectedBeforeBeforeLabel": unexpectedBeforeBeforeLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,

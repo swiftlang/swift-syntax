@@ -145,6 +145,8 @@ public enum Keyword: UInt8, Hashable {
   
   case await
   
+  case backDeployed
+  
   case before
   
   case block
@@ -789,6 +791,8 @@ public enum Keyword: UInt8, Hashable {
         self = ._silgen_name
       case "availability": 
         self = .availability
+      case "backDeployed": 
+        self = .backDeployed
       case "noDerivative": 
         self = .noDerivative
       default: 
@@ -1096,6 +1100,7 @@ public enum Keyword: UInt8, Hashable {
     "availability", 
     "available", 
     "await", 
+    "backDeployed", 
     "before", 
     "block", 
     "break", 

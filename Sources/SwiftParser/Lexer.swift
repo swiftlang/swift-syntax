@@ -214,6 +214,8 @@ extension Lexer {
   public struct Cursor: Equatable {
     var input: UnsafeBufferPointer<UInt8>
     var previous: UInt8
+    /// If we have already lexed a token, the kind of the previously lexed token
+    var previousTokenKind: RawTokenKind?
 
     @_spi(LexerDiagnostics)
     public init(input: UnsafeBufferPointer<UInt8>, previous: UInt8) {
@@ -338,6 +340,10 @@ extension Lexer.Cursor {
 }
 
 extension Lexer.Cursor {
+  /// Revert the lexer by `offset` bytes. This should only be used by `resetForSplit`.
+  /// This must not back up by more bytes than the last token because that would
+  /// require us to also update `previousTokenKind`, which we don't do in this
+  /// function
   fileprivate mutating func backUp(by offset: Int) {
     assert(!self.isAtStartOfFile)
     self.previous = self.input.baseAddress!.advanced(by: -(offset + 1)).pointee
@@ -796,6 +802,9 @@ extension Lexer.Cursor {
     if newlineInLeadingTrivia == .present {
       flags.insert(.isAtStartOfLine)
     }
+
+    self.previousTokenKind = kind
+
     return .init(
       tokenKind: kind,
       flags: flags,
@@ -1393,7 +1402,15 @@ extension Lexer.Cursor {
     if !self.isAtEndOfFile, self.peek() == UInt8(ascii: ".") {
       // NextToken is the soon to be previous token
       // Therefore: x.0.1 is sub-tuple access, not x.float_literal
-      if self.input.count > 1, !Unicode.Scalar(self.peek(at: 1)).isDigit || TokStart.previous == UInt8(ascii: ".") {
+      if self.input.count <= 1 {
+        // If there are no more digits following the '.', we don't have a float
+        // literal.
+        return (.integerLiteral, [])
+      } else if !Unicode.Scalar(self.peek(at: 1)).isDigit {
+        // ".a" is a member access and certainly not a float literal
+        return (.integerLiteral, [])
+      } else if self.previousTokenKind == .period {
+        // Lex x.0.1 as sub-tuple access, not x.float_literal.
         return (.integerLiteral, [])
       }
     } else {

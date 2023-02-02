@@ -1184,7 +1184,6 @@ extension Lexer.Cursor {
   ///                          (\.[0-9A-Fa-f][0-9A-Fa-f_]*)?[pP][+-]?[0-9][0-9_]*
   mutating func lexNumber() -> Lexer.Result {
     assert(self.peek().map(Unicode.Scalar.init)?.isDigit == true, "Unexpected start")
-    let tokenStart = self
 
     if self.is(at: "0") && self.is(offset: 1, at: "x") {
       return self.lexHexNumber()

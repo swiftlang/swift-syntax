@@ -565,12 +565,19 @@ public extension SyntaxProtocol {
     data.raw.write(to: &target)
   }
 
+  /// A copy of this node without the leading trivia of the first token in the
+  /// node and the trailing trivia of the last token in the node.
+  var trimmed: Self {
+    // TODO: Should only need one new node here
+    return self.with(\.leadingTrivia, []).with(\.trailingTrivia, [])
+  }
+
   /// The description of this node without the leading trivia of the first token
-  /// in the node and the trailing trivia of the last token in the node
+  /// in the node and the trailing trivia of the last token in the node.
   var trimmedDescription: String {
-    // TODO: We shouldn't need to create two intermediate nodes from the `with`
-    // functions just to get the description without trivia.
-    return self.with(\.leadingTrivia, []).with(\.trailingTrivia, []).description
+    // TODO: We shouldn't need to create to copies just to get the description
+    // without trivia.
+    return self.trimmed.description
   }
 }
 

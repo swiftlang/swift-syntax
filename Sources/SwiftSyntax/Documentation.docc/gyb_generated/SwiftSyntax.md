@@ -355,7 +355,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/DifferentiabilityParamSyntax>
 - <doc:SwiftSyntax/DerivativeRegistrationAttributeArgumentsSyntax>
 - <doc:SwiftSyntax/QualifiedDeclNameSyntax>
-- <doc:SwiftSyntax/BackDeployAttributeSpecListSyntax>
+- <doc:SwiftSyntax/BackDeployedAttributeSpecListSyntax>
 - <doc:SwiftSyntax/AvailabilityVersionRestrictionListSyntax>
 - <doc:SwiftSyntax/AvailabilityVersionRestrictionListEntrySyntax>
 - <doc:SwiftSyntax/OpaqueReturnTypeOfAttributeArgumentsSyntax>

@@ -216,11 +216,11 @@ open class SyntaxRewriter {
     return ExprSyntax(visitChildren(node))
   }
   
-  /// Visit a `BackDeployAttributeSpecListSyntax`.
+  /// Visit a `BackDeployedAttributeSpecListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: BackDeployAttributeSpecListSyntax) -> BackDeployAttributeSpecListSyntax {
-    return Syntax(visitChildren(node)).cast(BackDeployAttributeSpecListSyntax.self)
+  open func visit(_ node: BackDeployedAttributeSpecListSyntax) -> BackDeployedAttributeSpecListSyntax {
+    return Syntax(visitChildren(node)).cast(BackDeployedAttributeSpecListSyntax.self)
   }
   
   /// Visit a `BinaryOperatorExprSyntax`.
@@ -2293,8 +2293,8 @@ open class SyntaxRewriter {
   }
   
   /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplBackDeployAttributeSpecListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = BackDeployAttributeSpecListSyntax(data)
+  private func visitImplBackDeployedAttributeSpecListSyntax(_ data: SyntaxData) -> Syntax {
+    let node = BackDeployedAttributeSpecListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer { 
@@ -5636,8 +5636,8 @@ open class SyntaxRewriter {
       return visitImplAvailabilityVersionRestrictionSyntax
     case .awaitExpr: 
       return visitImplAwaitExprSyntax
-    case .backDeployAttributeSpecList: 
-      return visitImplBackDeployAttributeSpecListSyntax
+    case .backDeployedAttributeSpecList: 
+      return visitImplBackDeployedAttributeSpecListSyntax
     case .binaryOperatorExpr: 
       return visitImplBinaryOperatorExprSyntax
     case .booleanLiteralExpr: 
@@ -6164,8 +6164,8 @@ open class SyntaxRewriter {
       return visitImplAvailabilityVersionRestrictionSyntax(data)
     case .awaitExpr: 
       return visitImplAwaitExprSyntax(data)
-    case .backDeployAttributeSpecList: 
-      return visitImplBackDeployAttributeSpecListSyntax(data)
+    case .backDeployedAttributeSpecList: 
+      return visitImplBackDeployedAttributeSpecListSyntax(data)
     case .binaryOperatorExpr: 
       return visitImplBinaryOperatorExprSyntax(data)
     case .booleanLiteralExpr: 

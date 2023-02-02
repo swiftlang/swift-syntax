@@ -73,7 +73,7 @@ public enum SyntaxEnum {
   
   case awaitExpr(AwaitExprSyntax)
   
-  case backDeployAttributeSpecList(BackDeployAttributeSpecListSyntax)
+  case backDeployedAttributeSpecList(BackDeployedAttributeSpecListSyntax)
   
   case binaryOperatorExpr(BinaryOperatorExprSyntax)
   
@@ -598,8 +598,8 @@ public extension Syntax {
       return .availabilityVersionRestriction(AvailabilityVersionRestrictionSyntax(self)!)
     case .awaitExpr: 
       return .awaitExpr(AwaitExprSyntax(self)!)
-    case .backDeployAttributeSpecList: 
-      return .backDeployAttributeSpecList(BackDeployAttributeSpecListSyntax(self)!)
+    case .backDeployedAttributeSpecList: 
+      return .backDeployedAttributeSpecList(BackDeployedAttributeSpecListSyntax(self)!)
     case .binaryOperatorExpr: 
       return .binaryOperatorExpr(BinaryOperatorExprSyntax(self)!)
     case .booleanLiteralExpr: 

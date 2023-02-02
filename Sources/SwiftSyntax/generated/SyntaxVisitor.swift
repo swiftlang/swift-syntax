@@ -352,16 +352,16 @@ open class SyntaxVisitor {
   open func visitPost(_ node: AwaitExprSyntax) {
   }
   
-  /// Visiting `BackDeployAttributeSpecListSyntax` specifically.
+  /// Visiting `BackDeployedAttributeSpecListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: BackDeployAttributeSpecListSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: BackDeployedAttributeSpecListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `BackDeployAttributeSpecListSyntax` and its descendents.
+  /// The function called after visiting `BackDeployedAttributeSpecListSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: BackDeployAttributeSpecListSyntax) {
+  open func visitPost(_ node: BackDeployedAttributeSpecListSyntax) {
   }
   
   /// Visiting `BinaryOperatorExprSyntax` specifically.
@@ -3446,8 +3446,8 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplBackDeployAttributeSpecListSyntax(_ data: SyntaxData) {
-    let node = BackDeployAttributeSpecListSyntax(data)
+  private func visitImplBackDeployedAttributeSpecListSyntax(_ data: SyntaxData) {
+    let node = BackDeployedAttributeSpecListSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -6058,8 +6058,8 @@ open class SyntaxVisitor {
       visitImplAvailabilityVersionRestrictionSyntax(data)
     case .awaitExpr: 
       visitImplAwaitExprSyntax(data)
-    case .backDeployAttributeSpecList: 
-      visitImplBackDeployAttributeSpecListSyntax(data)
+    case .backDeployedAttributeSpecList: 
+      visitImplBackDeployedAttributeSpecListSyntax(data)
     case .binaryOperatorExpr: 
       visitImplBinaryOperatorExprSyntax(data)
     case .booleanLiteralExpr: 

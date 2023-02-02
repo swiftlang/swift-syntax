@@ -32,7 +32,6 @@ extension Parser {
   /// Compiler-known attributes that take arguments.
   enum DeclarationAttributeWithSpecialSyntax: RawTokenKindSubset {
     case _alignment
-    case _backDeploy
     case _cdecl
     case _documentation
     case _dynamicReplacement
@@ -56,6 +55,7 @@ extension Parser {
     case _unavailableFromAsync
     case `rethrows`
     case available
+    case backDeployed
     case derivative
     case differentiable
     case exclusivity
@@ -66,7 +66,7 @@ extension Parser {
     init?(lexeme: Lexer.Lexeme) {
       switch lexeme {
       case RawTokenKindMatch(._alignment): self = ._alignment
-      case RawTokenKindMatch(._backDeploy): self = ._backDeploy
+      case RawTokenKindMatch(._backDeploy): self = .backDeployed
       case RawTokenKindMatch(._cdecl): self = ._cdecl
       case RawTokenKindMatch(._documentation): self = ._documentation
       case RawTokenKindMatch(._dynamicReplacement): self = ._dynamicReplacement
@@ -90,6 +90,7 @@ extension Parser {
       case RawTokenKindMatch(._unavailableFromAsync): self = ._unavailableFromAsync
       case RawTokenKindMatch(.`rethrows`): self = .rethrows
       case RawTokenKindMatch(.available): self = .available
+      case RawTokenKindMatch(.backDeployed): self = .backDeployed
       case RawTokenKindMatch(.derivative): self = .derivative
       case RawTokenKindMatch(.differentiable): self = .differentiable
       case RawTokenKindMatch(.exclusivity): self = .exclusivity
@@ -104,7 +105,6 @@ extension Parser {
     var rawTokenKind: RawTokenKind {
       switch self {
       case ._alignment: return .keyword(._alignment)
-      case ._backDeploy: return .keyword(._backDeploy)
       case ._cdecl: return .keyword(._cdecl)
       case ._documentation: return .keyword(._documentation)
       case ._dynamicReplacement: return .keyword(._dynamicReplacement)
@@ -128,6 +128,7 @@ extension Parser {
       case ._unavailableFromAsync: return .keyword(._unavailableFromAsync)
       case .`rethrows`: return .keyword(.rethrows)
       case .available: return .keyword(.available)
+      case .backDeployed: return .keyword(.backDeployed)
       case .derivative: return .keyword(.derivative)
       case .differentiable: return .keyword(.differentiable)
       case .exclusivity: return .keyword(.exclusivity)
@@ -222,6 +223,10 @@ extension Parser {
       return parseAttribute(argumentMode: .required) { parser in
         return .availability(parser.parseAvailabilityArgumentSpecList())
       }
+    case .backDeployed:
+      return parseAttribute(argumentMode: .required) { parser in
+        return .backDeployedArguments(parser.parseBackDeployedArguments())
+      }
     case .differentiable:
       return parseAttribute(argumentMode: .required) { parser in
         return .differentiableArguments(parser.parseDifferentiableAttributeArguments())
@@ -293,10 +298,6 @@ extension Parser {
     case ._semantics:
       return parseAttribute(argumentMode: .required) { parser in
         return .string(parser.parseStringLiteral())
-      }
-    case ._backDeploy:
-      return parseAttribute(argumentMode: .required) { parser in
-        return .backDeployArguments(parser.parseBackDeployArguments())
       }
     case ._expose:
       return parseAttribute(argumentMode: .required) { parser in
@@ -920,7 +921,7 @@ extension Parser {
 }
 
 extension Parser {
-  mutating func parseBackDeployArguments() -> RawBackDeployAttributeSpecListSyntax {
+  mutating func parseBackDeployedArguments() -> RawBackDeployedAttributeSpecListSyntax {
     let (unexpectedBeforeLabel, label) = self.expect(.keyword(.before))
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
     var elements: [RawAvailabilityVersionRestrictionListEntrySyntax] = []
@@ -936,7 +937,7 @@ extension Parser {
         )
       )
     } while keepGoing != nil
-    return RawBackDeployAttributeSpecListSyntax(
+    return RawBackDeployedAttributeSpecListSyntax(
       unexpectedBeforeLabel,
       beforeLabel: label,
       unexpectedBeforeColon,

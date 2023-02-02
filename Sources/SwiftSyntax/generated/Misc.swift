@@ -117,6 +117,7 @@ extension Syntax {
         .node(ExprListSyntax.self), 
         .node(ExpressionPatternSyntax.self), 
         .node(ExpressionSegmentSyntax.self), 
+        .node(ExpressionStmtSyntax.self), 
         .node(ExtensionDeclSyntax.self), 
         .node(FallthroughStmtSyntax.self), 
         .node(FloatLiteralExprSyntax.self), 
@@ -143,7 +144,7 @@ extension Syntax {
         .node(IfConfigClauseListSyntax.self), 
         .node(IfConfigClauseSyntax.self), 
         .node(IfConfigDeclSyntax.self), 
-        .node(IfStmtSyntax.self), 
+        .node(IfExprSyntax.self), 
         .node(ImplementsAttributeArgumentsSyntax.self), 
         .node(ImplicitlyUnwrappedOptionalTypeSyntax.self), 
         .node(ImportDeclSyntax.self), 
@@ -241,7 +242,7 @@ extension Syntax {
         .node(SwitchCaseListSyntax.self), 
         .node(SwitchCaseSyntax.self), 
         .node(SwitchDefaultLabelSyntax.self), 
-        .node(SwitchStmtSyntax.self), 
+        .node(SwitchExprSyntax.self), 
         .node(TargetFunctionEntrySyntax.self), 
         .node(TernaryExprSyntax.self), 
         .node(ThrowStmtSyntax.self), 
@@ -482,6 +483,8 @@ extension SyntaxKind {
       return ExpressionPatternSyntax.self
     case .expressionSegment: 
       return ExpressionSegmentSyntax.self
+    case .expressionStmt: 
+      return ExpressionStmtSyntax.self
     case .extensionDecl: 
       return ExtensionDeclSyntax.self
     case .fallthroughStmt: 
@@ -534,8 +537,8 @@ extension SyntaxKind {
       return IfConfigClauseSyntax.self
     case .ifConfigDecl: 
       return IfConfigDeclSyntax.self
-    case .ifStmt: 
-      return IfStmtSyntax.self
+    case .ifExpr: 
+      return IfExprSyntax.self
     case .implementsAttributeArguments: 
       return ImplementsAttributeArgumentsSyntax.self
     case .implicitlyUnwrappedOptionalType: 
@@ -730,8 +733,8 @@ extension SyntaxKind {
       return SwitchCaseSyntax.self
     case .switchDefaultLabel: 
       return SwitchDefaultLabelSyntax.self
-    case .switchStmt: 
-      return SwitchStmtSyntax.self
+    case .switchExpr: 
+      return SwitchExprSyntax.self
     case .targetFunctionEntry: 
       return TargetFunctionEntrySyntax.self
     case .ternaryExpr: 
@@ -1007,6 +1010,8 @@ extension SyntaxKind {
       return "pattern"
     case .expressionSegment: 
       return nil
+    case .expressionStmt: 
+      return "expression"
     case .extensionDecl: 
       return "extension"
     case .fallthroughStmt: 
@@ -1059,7 +1064,7 @@ extension SyntaxKind {
       return "conditional compilation clause"
     case .ifConfigDecl: 
       return "conditional compilation block"
-    case .ifStmt: 
+    case .ifExpr: 
       return "'if' statement"
     case .implementsAttributeArguments: 
       return "@_implements arguemnts"
@@ -1255,7 +1260,7 @@ extension SyntaxKind {
       return "switch case"
     case .switchDefaultLabel: 
       return nil
-    case .switchStmt: 
+    case .switchExpr: 
       return "'switch' statement"
     case .targetFunctionEntry: 
       return "attribute argument"

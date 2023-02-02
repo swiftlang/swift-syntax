@@ -199,7 +199,7 @@ extension GuardStmtSyntax {
   }
 }
 
-extension IfStmtSyntax {
+extension IfExprSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
   
   public init(leadingTrivia: Trivia? = nil, unexpectedBeforeIfKeyword: UnexpectedNodesSyntax? = nil, ifKeyword: TokenSyntax = .keyword(.if), unexpectedBetweenIfKeywordAndConditions: UnexpectedNodesSyntax? = nil, conditions: ConditionElementListSyntax, unexpectedBetweenConditionsAndBody: UnexpectedNodesSyntax? = nil, unexpectedBetweenBodyAndElseKeyword: UnexpectedNodesSyntax? = nil, elseKeyword: TokenSyntax? = nil, unexpectedBetweenElseKeywordAndElseBody: UnexpectedNodesSyntax? = nil, elseBody: ElseBody? = nil, unexpectedAfterElseBody: UnexpectedNodesSyntax? = nil, @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax, trailingTrivia: Trivia? = nil)rethrows {
@@ -321,7 +321,7 @@ extension SwitchCaseSyntax {
   }
 }
 
-extension SwitchStmtSyntax {
+extension SwitchExprSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
   
   public init(leadingTrivia: Trivia? = nil, unexpectedBeforeSwitchKeyword: UnexpectedNodesSyntax? = nil, switchKeyword: TokenSyntax = .keyword(.switch), unexpectedBetweenSwitchKeywordAndExpression: UnexpectedNodesSyntax? = nil, expression: ExprSyntaxProtocol, unexpectedBetweenExpressionAndLeftBrace: UnexpectedNodesSyntax? = nil, leftBrace: TokenSyntax = .leftBraceToken(), unexpectedBetweenLeftBraceAndCases: UnexpectedNodesSyntax? = nil, unexpectedBetweenCasesAndRightBrace: UnexpectedNodesSyntax? = nil, rightBrace: TokenSyntax = .rightBraceToken(), unexpectedAfterRightBrace: UnexpectedNodesSyntax? = nil, @SwitchCaseListBuilder casesBuilder: () throws -> SwitchCaseListSyntax, trailingTrivia: Trivia? = nil)rethrows {

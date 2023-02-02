@@ -84,20 +84,19 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/StmtSyntax>
 - <doc:SwiftSyntax/StmtSyntaxProtocol>
 - <doc:SwiftSyntax/LabeledStmtSyntax>
+- <doc:SwiftSyntax/ExpressionStmtSyntax>
 - <doc:SwiftSyntax/ContinueStmtSyntax>
 - <doc:SwiftSyntax/WhileStmtSyntax>
 - <doc:SwiftSyntax/DeferStmtSyntax>
 - <doc:SwiftSyntax/RepeatWhileStmtSyntax>
 - <doc:SwiftSyntax/GuardStmtSyntax>
 - <doc:SwiftSyntax/ForInStmtSyntax>
-- <doc:SwiftSyntax/SwitchStmtSyntax>
 - <doc:SwiftSyntax/DoStmtSyntax>
 - <doc:SwiftSyntax/ReturnStmtSyntax>
 - <doc:SwiftSyntax/YieldStmtSyntax>
 - <doc:SwiftSyntax/FallthroughStmtSyntax>
 - <doc:SwiftSyntax/BreakStmtSyntax>
 - <doc:SwiftSyntax/ThrowStmtSyntax>
-- <doc:SwiftSyntax/IfStmtSyntax>
 
 ### Expressions
 
@@ -126,6 +125,8 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/DictionaryExprSyntax>
 - <doc:SwiftSyntax/IntegerLiteralExprSyntax>
 - <doc:SwiftSyntax/BooleanLiteralExprSyntax>
+- <doc:SwiftSyntax/IfExprSyntax>
+- <doc:SwiftSyntax/SwitchExprSyntax>
 - <doc:SwiftSyntax/UnresolvedTernaryExprSyntax>
 - <doc:SwiftSyntax/TernaryExprSyntax>
 - <doc:SwiftSyntax/MemberAccessExprSyntax>
@@ -282,6 +283,11 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/TupleExprElementSyntax>
 - <doc:SwiftSyntax/ArrayElementSyntax>
 - <doc:SwiftSyntax/DictionaryElementSyntax>
+- <doc:SwiftSyntax/SwitchCaseListSyntax>
+- <doc:SwiftSyntax/SwitchCaseSyntax>
+- <doc:SwiftSyntax/SwitchCaseLabelSyntax>
+- <doc:SwiftSyntax/SwitchDefaultLabelSyntax>
+- <doc:SwiftSyntax/CaseItemSyntax>
 - <doc:SwiftSyntax/ClosureCaptureItemSpecifierSyntax>
 - <doc:SwiftSyntax/ClosureCaptureItemSyntax>
 - <doc:SwiftSyntax/ClosureCaptureItemListSyntax>
@@ -369,7 +375,6 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/EffectsArgumentsSyntax>
 - <doc:SwiftSyntax/DocumentationAttributeArgumentSyntax>
 - <doc:SwiftSyntax/DocumentationAttributeArgumentsSyntax>
-- <doc:SwiftSyntax/SwitchCaseListSyntax>
 - <doc:SwiftSyntax/WhereClauseSyntax>
 - <doc:SwiftSyntax/CatchClauseListSyntax>
 - <doc:SwiftSyntax/YieldListSyntax>
@@ -380,11 +385,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/MatchingPatternConditionSyntax>
 - <doc:SwiftSyntax/OptionalBindingConditionSyntax>
 - <doc:SwiftSyntax/ConditionElementListSyntax>
-- <doc:SwiftSyntax/SwitchCaseSyntax>
-- <doc:SwiftSyntax/SwitchDefaultLabelSyntax>
-- <doc:SwiftSyntax/CaseItemSyntax>
 - <doc:SwiftSyntax/CatchItemSyntax>
-- <doc:SwiftSyntax/SwitchCaseLabelSyntax>
 - <doc:SwiftSyntax/CatchClauseSyntax>
 - <doc:SwiftSyntax/GenericWhereClauseSyntax>
 - <doc:SwiftSyntax/GenericRequirementListSyntax>

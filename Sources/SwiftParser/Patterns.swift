@@ -356,7 +356,9 @@ extension Parser.Lookahead {
   /// specifiers before checking whether this lookahead starts a parameter name.
   mutating func startsParameterName(isClosure: Bool, allowMisplacedSpecifierRecovery: Bool) -> Bool {
     if allowMisplacedSpecifierRecovery {
-      while self.consume(ifAnyIn: TypeSpecifier.self) != nil {}
+      while canHaveParameterSpecifier,
+        self.consume(ifAnyIn: TypeSpecifier.self) != nil
+      {}
     }
 
     // To have a parameter name here, we need a name.
@@ -372,12 +374,21 @@ extension Parser.Lookahead {
 
     // If the next token can be an argument label, we might have a name.
     if nextTok.canBeArgumentLabel(allowDollarIdentifier: true) {
-      // If the first name wasn't "isolated", we're done.
-      if !self.at(.keyword(.isolated)) && !self.at(.keyword(.some)) && !self.at(.keyword(.any)) && !self.at(.keyword(.each)) && !self.at(.keyword(.repeat)) {
+      // If the first name wasn't a contextual keyword, we're done.
+      if !self.at(.keyword(.isolated))
+        && !self.at(.keyword(.some))
+        && !self.at(.keyword(.any))
+        && !self.at(.keyword(.each))
+        && !self.at(.keyword(.repeat))
+        && !self.at(.keyword(.__shared))
+        && !self.at(.keyword(.__owned))
+        && !self.at(.keyword(.borrowing))
+        && !self.at(.keyword(.consuming))
+      {
         return true
       }
 
-      // "isolated" can be an argument label, but it's also a contextual keyword,
+      // Parameter specifiers can be an argument label, but it's also a contextual keyword,
       // so look ahead one more token (two total) see if we have a ':' that would
       // indicate that this is an argument label.
       do {

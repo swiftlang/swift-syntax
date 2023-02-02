@@ -467,12 +467,16 @@ public enum TypeSpecifier: TokenSpecSet {
   case inoutKeyword
   case owned
   case shared
+  case borrowing
+  case consuming
 
   init?(lexeme: Lexer.Lexeme) {
     switch PrepareForKeywordMatch(lexeme) {
     case TokenSpec(.inout): self = .inoutKeyword
     case TokenSpec(.__owned): self = .owned
     case TokenSpec(.__shared): self = .shared
+    case TokenSpec(.consuming): self = .consuming
+    case TokenSpec(.borrowing): self = .borrowing
     default: return nil
     }
   }
@@ -482,6 +486,8 @@ public enum TypeSpecifier: TokenSpecSet {
     case TokenSpec(.inout): self = .inoutKeyword
     case TokenSpec(.__owned): self = .owned
     case TokenSpec(.__shared): self = .shared
+    case TokenSpec(.consuming): self = .shared
+    case TokenSpec(.borrowing): self = .shared
     default: return nil
     }
   }
@@ -491,6 +497,8 @@ public enum TypeSpecifier: TokenSpecSet {
     case .inoutKeyword: return .keyword(.inout)
     case .owned: return .keyword(.__owned)
     case .shared: return .keyword(.__shared)
+    case .borrowing: return .keyword(.borrowing)
+    case .consuming: return .keyword(.consuming)
     }
   }
 }

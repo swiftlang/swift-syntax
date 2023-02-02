@@ -33,7 +33,7 @@ public let TYPE_NODES: [Node] = [
        ],
        children: [
          Child(name: "Specifier",
-               kind: .token(choices: [.keyword(text: "inout"), .keyword(text: "__shared"), .keyword(text: "__owned"), .keyword(text: "isolated"), .keyword(text: "_const")]),
+               kind: .token(choices: [.keyword(text: "inout"), .keyword(text: "__shared"), .keyword(text: "__owned"), .keyword(text: "isolated"), .keyword(text: "_const"), .keyword(text: "borrowing"), .keyword(text: "consuming")]),
                isOptional: true),
          Child(name: "Attributes",
                kind: .collection(kind: "AttributeList", collectionElementName: "Attribute"),

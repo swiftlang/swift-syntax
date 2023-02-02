@@ -495,7 +495,9 @@ extension Parser {
         let colon: RawTokenSyntax?
         var misplacedSpecifiers: [RawTokenSyntax] = []
         if self.withLookahead({ $0.startsParameterName(isClosure: false, allowMisplacedSpecifierRecovery: true) }) {
-          while let specifier = self.consume(ifAnyIn: TypeSpecifier.self) {
+          while canHaveParameterSpecifier,
+            let specifier = self.consume(ifAnyIn: TypeSpecifier.self)
+          {
             misplacedSpecifiers.append(specifier)
           }
           (unexpectedBeforeFirst, first) = self.parseArgumentLabel()
@@ -657,7 +659,8 @@ extension Parser.Lookahead {
   mutating func skipTypeAttributeList() {
     var specifierProgress = LoopProgressCondition()
     // TODO: Can we model isolated/_const so that they're specified in both canParse* and parse*?
-    while self.at(anyIn: TypeSpecifier.self) != nil || self.at(.keyword(.isolated)) || self.at(.keyword(._const)),
+    while canHaveParameterSpecifier,
+      self.at(anyIn: TypeSpecifier.self) != nil || self.at(.keyword(.isolated)) || self.at(.keyword(._const)),
       specifierProgress.evaluate(currentToken)
     {
       self.consumeAnyToken()
@@ -924,7 +927,10 @@ extension Parser {
   public mutating func parseTypeAttributeList(misplacedSpecifiers: [RawTokenSyntax] = []) -> (
     specifier: RawTokenSyntax?, unexpectedBeforeAttributes: RawUnexpectedNodesSyntax?, attributes: RawAttributeListSyntax?
   ) {
-    var specifier: RawTokenSyntax? = self.consume(ifAnyIn: TypeSpecifier.self)
+    var specifier: RawTokenSyntax? = nil
+    if canHaveParameterSpecifier {
+      specifier = self.consume(ifAnyIn: TypeSpecifier.self)
+    }
     // We can only stick one specifier on this type. Let's pick the first one
     if specifier == nil, let misplacedSpecifier = misplacedSpecifiers.first {
       specifier = missingToken(misplacedSpecifier.tokenKind, text: misplacedSpecifier.tokenText)
@@ -937,6 +943,8 @@ extension Parser {
       case __owned
       case isolated
       case _const
+      case consuming
+      case borrowing
 
       var spec: TokenSpec {
         switch self {
@@ -945,6 +953,8 @@ extension Parser {
         case .__owned: return .keyword(.__owned)
         case .isolated: return .keyword(.isolated)
         case ._const: return .keyword(._const)
+        case .consuming: return .keyword(.consuming)
+        case .borrowing: return .keyword(.borrowing)
         }
       }
 
@@ -955,12 +965,16 @@ extension Parser {
         case TokenSpec(.__owned): self = .__owned
         case TokenSpec(.isolated): self = .isolated
         case TokenSpec(._const): self = ._const
+        case TokenSpec(.consuming): self = .consuming
+        case TokenSpec(.borrowing): self = .borrowing
         default: return nil
         }
       }
     }
 
-    while let extraSpecifier = self.consume(ifAnyIn: ExtraneousSpecifier.self) {
+    while canHaveParameterSpecifier,
+      let extraSpecifier = self.consume(ifAnyIn: ExtraneousSpecifier.self)
+    {
       if specifier == nil {
         specifier = extraSpecifier
       } else {

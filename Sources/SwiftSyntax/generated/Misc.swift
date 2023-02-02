@@ -836,7 +836,7 @@ extension SyntaxKind {
     case .arrowExpr: 
       return nil
     case .asExpr: 
-      return "'as' expression"
+      return "'as'"
     case .assignmentExpr: 
       return nil
     case .associatedtypeDecl: 
@@ -868,7 +868,7 @@ extension SyntaxKind {
     case .backDeployAttributeSpecList: 
       return "'@_backDeploy' arguments"
     case .binaryOperatorExpr: 
-      return nil
+      return "operator"
     case .booleanLiteralExpr: 
       return "bool literal"
     case .borrowExpr: 
@@ -1082,7 +1082,7 @@ extension SyntaxKind {
     case .integerLiteralExpr: 
       return "integer literal"
     case .isExpr: 
-      return "'is' expression"
+      return "'is'"
     case .isTypePattern: 
       return "'is' pattern"
     case .keyPathComponentList: 
@@ -1202,7 +1202,7 @@ extension SyntaxKind {
     case .precedenceGroupRelation: 
       return "'relation' property of precedencegroup"
     case .prefixOperatorExpr: 
-      return "prefix operator expression"
+      return "operator"
     case .primaryAssociatedTypeClause: 
       return "primary associated type clause"
     case .primaryAssociatedTypeList: 
@@ -1302,13 +1302,13 @@ extension SyntaxKind {
     case .unexpectedNodes: 
       return nil
     case .unresolvedAsExpr: 
-      return nil
+      return "'as'"
     case .unresolvedIsExpr: 
-      return nil
+      return "'is'"
     case .unresolvedPatternExpr: 
       return nil
     case .unresolvedTernaryExpr: 
-      return nil
+      return "ternary operator"
     case .valueBindingPattern: 
       return "value binding pattern"
     case .variableDecl: 

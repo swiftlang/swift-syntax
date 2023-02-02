@@ -597,7 +597,7 @@ final class DeclarationTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected declaration after 'public' modifier in struct")
+        DiagnosticSpec(message: "expected declaration after 'public' modifier")
       ]
     )
   }
@@ -929,7 +929,7 @@ final class DeclarationTests: XCTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' in struct"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected condition in conditional compilation clause"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected name in attribute"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected declaration after attribute in conditional compilation clause"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected declaration after attribute"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected '#endif' in conditional compilation block"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected '}' to end struct"),
       ]
@@ -1392,6 +1392,20 @@ final class DeclarationTests: XCTestCase {
       #endif
       struct MyStruct {}
       """
+    )
+  }
+
+  func testMissingExpressionInVariableAssignment() {
+    AssertParse(
+      """
+      let a =1️⃣
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected expression in variable")
+      ],
+      fixedSource: """
+        let a = <#expression#>
+        """
     )
   }
 }

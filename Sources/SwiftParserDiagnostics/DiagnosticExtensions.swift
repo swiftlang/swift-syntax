@@ -96,12 +96,11 @@ extension FixIt.Changes {
         ),
         .replaceLeadingTrivia(token: nextToken, newTrivia: []),
       ]
-    } else if let firstToken = node.firstToken(viewMode: .all),
+    } else if node.leadingTrivia?.isEmpty ?? true,
       let previousToken = node.previousToken(viewMode: .fixedUp),
-      !firstToken.tokenKind.isPunctuation,
-      !previousToken.tokenKind.isPunctuation,
-      firstToken.leadingTrivia.isEmpty,
-      (previousToken.presence == .missing ? BasicFormat().visit(previousToken).trailingTrivia : previousToken.trailingTrivia).isEmpty,
+      previousToken.presence == .present,
+      previousToken.trailingTrivia.isEmpty,
+      BasicFormat().requiresTrailingSpace(previousToken),
       leadingTrivia == nil
     {
       /// If neither this nor the previous token are punctionation make sure they

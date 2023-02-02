@@ -16,7 +16,8 @@ import SyntaxSupport
 import Utils
 
 let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCopyrightHeader(for: "generate-swiftsyntax"))) {
-  try! ClassDeclSyntax("""
+  try! ClassDeclSyntax(
+    """
     //
     // This file defines the SyntaxRewriter, a class that performs a standard walk
     // and tree-rebuilding pattern.
@@ -25,49 +26,59 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: .docLineComment(generat
     // node and transform nodes however they like.
     //
     //===----------------------------------------------------------------------===//
-    
+
     open class SyntaxRewriter
-    """) {
+    """
+  ) {
     DeclSyntax("public init() {}")
-    
+
     for node in SYNTAX_NODES where node.isVisitable {
       if node.baseType.baseName == "Syntax" && node.name != "MissingSyntax" {
-        DeclSyntax("""
+        DeclSyntax(
+          """
           /// Visit a `\(raw: node.name)`.
           ///   - Parameter node: the node that is being visited
           ///   - Returns: the rewritten node
           open func visit(_ node: \(raw: node.name)) -> \(raw: node.name) {
             return Syntax(visitChildren(node)).cast(\(raw: node.name).self)
           }
-          """)
+          """
+        )
       } else {
-        DeclSyntax("""
+        DeclSyntax(
+          """
           /// Visit a `\(raw: node.name)`.
           ///   - Parameter node: the node that is being visited
           ///   - Returns: the rewritten node
           open func visit(_ node: \(raw: node.name)) -> \(raw: node.baseType.syntaxBaseName) {
             return \(raw: node.baseType.syntaxBaseName)(visitChildren(node))
           }
-          """)
+          """
+        )
       }
     }
-    
-    DeclSyntax("""
+
+    DeclSyntax(
+      """
       /// Visit a `TokenSyntax`.
       ///   - Parameter node: the node that is being visited
       ///   - Returns: the rewritten node
       open func visit(_ token: TokenSyntax) -> TokenSyntax {
         return token
       }
-      """)
-    
-    DeclSyntax("""
+      """
+    )
+
+    DeclSyntax(
+      """
       /// The function called before visiting the node and its descendents.
       ///   - node: the node we are about to visit.
       open func visitPre(_ node: Syntax) {}
-      """)
-    
-    DeclSyntax("""
+      """
+    )
+
+    DeclSyntax(
+      """
       /// Override point to choose custom visitation dispatch instead of the
       /// specialized `visit(_:)` methods. Use this instead of those methods if
       /// you intend to dynamically dispatch rewriting behavior.
@@ -78,42 +89,52 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: .docLineComment(generat
       open func visitAny(_ node: Syntax) -> Syntax? {
         return nil
       }
-      """)
-    
-    DeclSyntax("""
-    /// The function called after visiting the node and its descendents.
-    ///   - node: the node we just finished visiting.
-    open func visitPost(_ node: Syntax) {}
-    """)
-    
-    DeclSyntax("""
+      """
+    )
+
+    DeclSyntax(
+      """
+      /// The function called after visiting the node and its descendents.
+      ///   - node: the node we just finished visiting.
+      open func visitPost(_ node: Syntax) {}
+      """
+    )
+
+    DeclSyntax(
+      """
       /// Visit any Syntax node.
       ///   - Parameter node: the node that is being visited
       ///   - Returns: the rewritten node
       public func visit(_ node: Syntax) -> Syntax {
         return visit(node.data)
       }
-      """)
-    
-    DeclSyntax("""
+      """
+    )
+
+    DeclSyntax(
+      """
       public func visit<T: SyntaxChildChoices>(_ node: T) -> T {
         return visit(Syntax(node)).cast(T.self)
       }
-      """)
-    
+      """
+    )
+
     for baseKind in SYNTAX_BASE_KINDS.filter({ !["Syntax", "SyntaxCollection"].contains($0) }) {
-      DeclSyntax("""
+      DeclSyntax(
+        """
         /// Visit any \(raw: baseKind)Syntax node.
         ///   - Parameter node: the node that is being visited
         ///   - Returns: the rewritten node
         public func visit(_ node: \(raw: baseKind)Syntax) -> \(raw: baseKind)Syntax {
           return visit(node.data).cast(\(raw: baseKind)Syntax.self)
         }
-        """)
+        """
+      )
     }
-    
+
     for node in NON_BASE_SYNTAX_NODES {
-      DeclSyntax("""
+      DeclSyntax(
+        """
         /// Implementation detail of visit(_:). Do not call directly.
         private func visitImpl\(raw: node.name)(_ data: SyntaxData) -> Syntax {
           let node = \(raw: node.name)(data)
@@ -123,10 +144,12 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: .docLineComment(generat
           if let newNode = visitAny(node._syntaxNode) { return newNode }
           return Syntax(visit(node))
         }
-        """)
+        """
+      )
     }
-    
-    DeclSyntax("""
+
+    DeclSyntax(
+      """
       /// Implementation detail of visit(_:). Do not call directly.
       private func visitImplTokenSyntax(_ data: SyntaxData) -> Syntax {
         let node = TokenSyntax(data)
@@ -136,7 +159,8 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: .docLineComment(generat
         if let newNode = visitAny(node._syntaxNode) { return newNode }
         return Syntax(visit(node))
       }
-      """)
+      """
+    )
 
     IfConfigDeclSyntax(
       leadingTrivia: [
@@ -149,77 +173,86 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: .docLineComment(generat
         .blockComment("// use a less performant but also less stack-hungry version of SwiftSyntax's"),
         .newlines(1),
         .blockComment("// SyntaxRewriter in debug builds."),
-        .newlines(1)
+        .newlines(1),
       ],
       clauses: IfConfigClauseListSyntax {
         IfConfigClauseSyntax(
           poundKeyword: .poundIfKeyword(),
           condition: ExprSyntax("DEBUG"),
-          elements: .statements(CodeBlockItemListSyntax {
-            try! FunctionDeclSyntax("""
-              /// Implementation detail of visit(_:). Do not call directly.
-              ///
-              /// Returns the function that shall be called to visit a specific syntax node.
-              ///
-              /// To determine the correct specific visitation function for a syntax node,
-              /// we need to switch through a huge switch statement that covers all syntax
-              /// types. In debug builds, the cases of this switch statement do not share
-              /// stack space (rdar://55929175). Because of this, the switch statement
-              /// requires allocates about 15KB of stack space. In scenarios with reduced
-              /// stack size (in particular dispatch queues), this often results in a stack
-              /// overflow during syntax tree rewriting.
-              ///
-              /// To circumvent this problem, make calling the specific visitation function
-              /// a two-step process: First determine the function to call in this function
-              /// and return a reference to it, then call it. This way, the stack frame
-              /// that determines the correct visitiation function will be popped of the
-              /// stack before the function is being called, making the switch's stack
-              /// space transient instead of having it linger in the call stack.
-              private func visitationFunc(for data: SyntaxData) -> ((SyntaxData) -> Syntax)
-              """) {
-              try SwitchStmtSyntax("switch data.raw.kind") {
-                SwitchCaseSyntax("case .token:") {
-                  StmtSyntax("return visitImplTokenSyntax")
-                }
+          elements: .statements(
+            CodeBlockItemListSyntax {
+              try! FunctionDeclSyntax(
+                """
+                /// Implementation detail of visit(_:). Do not call directly.
+                ///
+                /// Returns the function that shall be called to visit a specific syntax node.
+                ///
+                /// To determine the correct specific visitation function for a syntax node,
+                /// we need to switch through a huge switch statement that covers all syntax
+                /// types. In debug builds, the cases of this switch statement do not share
+                /// stack space (rdar://55929175). Because of this, the switch statement
+                /// requires allocates about 15KB of stack space. In scenarios with reduced
+                /// stack size (in particular dispatch queues), this often results in a stack
+                /// overflow during syntax tree rewriting.
+                ///
+                /// To circumvent this problem, make calling the specific visitation function
+                /// a two-step process: First determine the function to call in this function
+                /// and return a reference to it, then call it. This way, the stack frame
+                /// that determines the correct visitiation function will be popped of the
+                /// stack before the function is being called, making the switch's stack
+                /// space transient instead of having it linger in the call stack.
+                private func visitationFunc(for data: SyntaxData) -> ((SyntaxData) -> Syntax)
+                """
+              ) {
+                try SwitchStmtSyntax("switch data.raw.kind") {
+                  SwitchCaseSyntax("case .token:") {
+                    StmtSyntax("return visitImplTokenSyntax")
+                  }
 
-                for node in NON_BASE_SYNTAX_NODES {
-                  SwitchCaseSyntax("case .\(raw: node.swiftSyntaxKind):") {
-                    StmtSyntax("return visitImpl\(raw: node.name)")
+                  for node in NON_BASE_SYNTAX_NODES {
+                    SwitchCaseSyntax("case .\(raw: node.swiftSyntaxKind):") {
+                      StmtSyntax("return visitImpl\(raw: node.name)")
+                    }
                   }
                 }
               }
+
+              DeclSyntax(
+                """
+                private func visit(_ data: SyntaxData) -> Syntax {
+                  return visitationFunc(for: data)(data)
+                }
+                """
+              )
             }
-            
-            DeclSyntax("""
-              private func visit(_ data: SyntaxData) -> Syntax {
-                return visitationFunc(for: data)(data)
-              }
-              """)
-          })
+          )
         )
         IfConfigClauseSyntax(
           poundKeyword: .poundElseKeyword(leadingTrivia: .newline),
-          elements: .statements(CodeBlockItemListSyntax {
-            try! FunctionDeclSyntax("private func visit(_ data: SyntaxData) -> Syntax") {
-              try SwitchStmtSyntax("switch data.raw.kind") {
-                SwitchCaseSyntax("case .token:") {
-                  StmtSyntax("return visitImplTokenSyntax(data)")
-                }
+          elements: .statements(
+            CodeBlockItemListSyntax {
+              try! FunctionDeclSyntax("private func visit(_ data: SyntaxData) -> Syntax") {
+                try SwitchStmtSyntax("switch data.raw.kind") {
+                  SwitchCaseSyntax("case .token:") {
+                    StmtSyntax("return visitImplTokenSyntax(data)")
+                  }
 
-                for node in NON_BASE_SYNTAX_NODES {
-                  SwitchCaseSyntax("case .\(raw: node.swiftSyntaxKind):") {
-                    StmtSyntax("return visitImpl\(raw: node.name)(data)")
+                  for node in NON_BASE_SYNTAX_NODES {
+                    SwitchCaseSyntax("case .\(raw: node.swiftSyntaxKind):") {
+                      StmtSyntax("return visitImpl\(raw: node.name)(data)")
+                    }
                   }
                 }
               }
             }
-          })
+          )
         )
       },
       poundEndif: .poundEndifKeyword(leadingTrivia: .newline)
     )
 
-    DeclSyntax("""
+    DeclSyntax(
+      """
       private func visitChildren<SyntaxType: SyntaxProtocol>(
         _ node: SyntaxType
       ) -> SyntaxType {
@@ -304,6 +337,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: .docLineComment(generat
           return node
         }
       }
-      """)
+      """
+    )
   }
 }

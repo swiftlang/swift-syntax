@@ -20,10 +20,11 @@ let syntaxExpressibleByStringInterpolationConformancesFile = SourceFileSyntax {
     """
     \(raw: generateCopyrightHeader(for: "generate-swiftsyntaxbuilder"))
     import SwiftSyntax
-    """)
+    """
+  )
   DeclSyntax("import SwiftParser")
   DeclSyntax("import SwiftParserDiagnostics")
-  
+
   try! ExtensionDeclSyntax("extension SyntaxParseable") {
     DeclSyntax("public typealias StringInterpolation = SyntaxStringInterpolation")
 
@@ -34,13 +35,14 @@ let syntaxExpressibleByStringInterpolationConformancesFile = SourceFileSyntax {
           return Self.parse(from: &parser)
         })
       }
-      """)
+      """
+    )
   }
-  
+
   for node in SYNTAX_NODES where node.parserFunction != nil {
     DeclSyntax("extension \(raw: node.name): SyntaxExpressibleByStringInterpolation {}")
   }
-  
+
   DeclSyntax(
     """
     // TODO: This should be inlined in SyntaxParseable.init(stringInterpolation:),
@@ -55,5 +57,6 @@ let syntaxExpressibleByStringInterpolationConformancesFile = SourceFileSyntax {
         return result
       }
     }
-    """)
+    """
+  )
 }

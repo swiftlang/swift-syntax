@@ -20,46 +20,53 @@ let parserEntryFile = SourceFileSyntax {
     """
     \(raw: generateCopyrightHeader(for: "generate-swiftparser"))
     @_spi(RawSyntax) import SwiftSyntax
-    
+
     """
   )
-  
+
   try! ExtensionDeclSyntax("extension Parser") {
-    DeclSyntax("""
-    /// Parse the source code in the given string as Swift source file. See
-    /// `Parser.init` for more details.
-    public static func parse(
-      source: String,
-      parseTransition: IncrementalParseTransition? = nil
-    ) -> SourceFileSyntax {
-      var parser = Parser(source)
-      return SourceFileSyntax.parse(from: &parser)
-    }
-    """)
-    
-    DeclSyntax("""
-    /// Parse the source code in the given string as Swift source file. See
-    /// `Parser.init` for more details.
-    public static func parse(
-      source: UnsafeBufferPointer<UInt8>,
-      maximumNestingLevel: Int? = nil,
-      parseTransition: IncrementalParseTransition? = nil
-    ) -> SourceFileSyntax {
-      var parser = Parser(source, maximumNestingLevel: maximumNestingLevel)
-      return SourceFileSyntax.parse(from: &parser)
-    }
-    """)
+    DeclSyntax(
+      """
+      /// Parse the source code in the given string as Swift source file. See
+      /// `Parser.init` for more details.
+      public static func parse(
+        source: String,
+        parseTransition: IncrementalParseTransition? = nil
+      ) -> SourceFileSyntax {
+        var parser = Parser(source)
+        return SourceFileSyntax.parse(from: &parser)
+      }
+      """
+    )
+
+    DeclSyntax(
+      """
+      /// Parse the source code in the given string as Swift source file. See
+      /// `Parser.init` for more details.
+      public static func parse(
+        source: UnsafeBufferPointer<UInt8>,
+        maximumNestingLevel: Int? = nil,
+        parseTransition: IncrementalParseTransition? = nil
+      ) -> SourceFileSyntax {
+        var parser = Parser(source, maximumNestingLevel: maximumNestingLevel)
+        return SourceFileSyntax.parse(from: &parser)
+      }
+      """
+    )
   }
-  
-  DeclSyntax("""
+
+  DeclSyntax(
+    """
     public protocol SyntaxParseable: SyntaxProtocol {
       static func parse(from parser: inout Parser) -> Self
     }
-    """)
+    """
+  )
 
   for node in SYNTAX_NODES {
     if let parserFunction = node.parserFunction {
-      DeclSyntax("""
+      DeclSyntax(
+        """
         extension \(raw: node.name): SyntaxParseable {
           public static func parse(from parser: inout Parser) -> Self {
             let node = parser.\(raw: parserFunction)()
@@ -67,12 +74,14 @@ let parserEntryFile = SourceFileSyntax {
             return Syntax(raw: raw).cast(Self.self)
           }
         }
-        """)
+        """
+      )
     }
   }
 
   try! ExtensionDeclSyntax("fileprivate extension Parser") {
-    DeclSyntax("""
+    DeclSyntax(
+      """
       mutating func parseRemainder<R: RawSyntaxNodeProtocol>(into: R) -> R {
         guard !into.raw.kind.isSyntaxCollection, let layout = into.raw.layoutView else {
           assertionFailure("Only support parsing of non-collection layout nodes")
@@ -88,6 +97,7 @@ let parserEntryFile = SourceFileSyntax {
         let withUnexpected = layout.replacingChild(at: layout.children.count - 1, with: unexpected.raw, arena: self.arena)
         return R.init(withUnexpected)!
       }
-      """)
+      """
+    )
   }
 }

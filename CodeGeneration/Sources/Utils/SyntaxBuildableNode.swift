@@ -27,7 +27,7 @@ public extension Node {
     } else {
       return SyntaxBuildableType(syntaxKind: baseKind)
     }
-    
+
   }
 
   /// If documentation exists for this node, return it as a single-line string.

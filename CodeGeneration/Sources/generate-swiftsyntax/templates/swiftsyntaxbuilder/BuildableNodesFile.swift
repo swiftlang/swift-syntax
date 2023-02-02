@@ -75,18 +75,22 @@ private func createConvenienceInitializer(node: Node) -> InitializerDeclSyntax? 
       } else {
         produceExpr = ExprSyntax("\(raw: child.swiftName)Builder()")
       }
-      builderParameters.append(FunctionParameterSyntax(
-        "@\(builderInitializableType.resultBuilderBaseName) \(child.swiftName)Builder: () throws-> \(builderInitializableType.syntax)",
-        for: .functionParameters
-      ))
+      builderParameters.append(
+        FunctionParameterSyntax(
+          "@\(builderInitializableType.resultBuilderBaseName) \(child.swiftName)Builder: () throws-> \(builderInitializableType.syntax)",
+          for: .functionParameters
+        )
+      )
     } else {
       produceExpr = convertFromSyntaxProtocolToSyntaxType(child: child)
-      normalParameters.append(FunctionParameterSyntax(
-        firstName: .identifier(child.swiftName),
-        colon: .colonToken(),
-        type: child.parameterType,
-        defaultArgument: child.defaultInitialization.map { InitializerClauseSyntax(value: $0) }
-      ))
+      normalParameters.append(
+        FunctionParameterSyntax(
+          firstName: .identifier(child.swiftName),
+          colon: .colonToken(),
+          type: child.parameterType,
+          defaultArgument: child.defaultInitialization.map { InitializerClauseSyntax(value: $0) }
+        )
+      )
     }
     delegatedInitArgs.append(TupleExprElementSyntax(label: child.isUnexpectedNodes ? nil : child.swiftName, expression: produceExpr))
   }
@@ -106,7 +110,8 @@ private func createConvenienceInitializer(node: Node) -> InitializerDeclSyntax? 
         }
         FunctionParameterSyntax("trailingTrivia: Trivia? = nil", for: .functionParameters)
       },
-      effectSpecifiers: DeclEffectSpecifiersSyntax(throwsSpecifier: .keyword(.rethrows)))
+      effectSpecifiers: DeclEffectSpecifiersSyntax(throwsSpecifier: .keyword(.rethrows))
+    )
   ) {
     FunctionCallExprSyntax(callee: ExprSyntax("try self.init")) {
       TupleExprElementSyntax(label: "leadingTrivia", expression: ExprSyntax("leadingTrivia"))
@@ -117,4 +122,3 @@ private func createConvenienceInitializer(node: Node) -> InitializerDeclSyntax? 
     }
   }
 }
-

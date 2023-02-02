@@ -5,10 +5,10 @@ import PackageDescription
 let package = Package(
   name: "CodeGeneration",
   platforms: [
-      .macOS(.v10_15),
-    ],
+    .macOS(.v10_15)
+  ],
   products: [
-    .executable(name: "generate-swiftsyntax", targets: ["generate-swiftsyntax"]),
+    .executable(name: "generate-swiftsyntax", targets: ["generate-swiftsyntax"])
   ],
   dependencies: [
     .package(url: "https://github.com/apple/swift-syntax.git", revision: "06de1fa52ab79fba2d540b6a62fa3c2a1e7133f5"),
@@ -22,7 +22,7 @@ let package = Package(
         .product(name: "SwiftSyntaxBuilder", package: "swift-syntax"),
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
         "SyntaxSupport",
-        "Utils"
+        "Utils",
       ]
     ),
     .target(
@@ -44,7 +44,7 @@ let package = Package(
         "TokenSpec.swift.gyb",
         "Traits.swift.gyb",
         "Trivia.swift.gyb",
-        "TypeNodes.swift.gyb"
+        "TypeNodes.swift.gyb",
       ]
     ),
     .target(
@@ -52,7 +52,7 @@ let package = Package(
       dependencies: [
         .product(name: "SwiftSyntax", package: "swift-syntax"),
         .product(name: "SwiftSyntaxBuilder", package: "swift-syntax"),
-        "SyntaxSupport"
+        "SyntaxSupport",
       ]
     ),
   ]

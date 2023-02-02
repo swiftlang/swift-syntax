@@ -33,7 +33,7 @@ public enum ChildKind {
   case collection(kind: String, collectionElementName: String)
   /// The child is a token that matches one of the given `choices`.
   case token(choices: [TokenChoice])
-  
+
   public var isNodeChoices: Bool {
     if case .nodeChoices = self {
       return true
@@ -120,14 +120,16 @@ public class Child {
   /// SyntaxClassification in SyntaxClassifier.h.gyb
   /// If force_classification is also set to true, all child nodes (not only
   /// identifiers) inherit the syntax classification.
-  init(name: String,
-       kind: ChildKind,
-       description: String? = nil,
-       isOptional: Bool = false,
-       classification: String? = nil,
-       forceClassification: Bool = false,
-       isIndented: Bool = false,
-       requiresLeadingNewline: Bool = false) {
+  init(
+    name: String,
+    kind: ChildKind,
+    description: String? = nil,
+    isOptional: Bool = false,
+    classification: String? = nil,
+    forceClassification: Bool = false,
+    isIndented: Bool = false,
+    requiresLeadingNewline: Bool = false
+  ) {
     self.name = name
     self.kind = kind
     self.description = description

@@ -59,4 +59,3 @@ final class SourceEditorCommand: NSObject, XCSourceEditorCommand {
     invocation.buffer.completeBuffer = transformedSource.description
   }
 }
-

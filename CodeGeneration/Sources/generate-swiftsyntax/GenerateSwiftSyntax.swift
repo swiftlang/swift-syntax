@@ -85,15 +85,17 @@ struct GenerateSwiftSyntax: ParsableCommand {
     let modules = Set(templates.map(\.module))
 
     let previouslyGeneratedFilesLock = NSLock()
-    var previouslyGeneratedFiles = Set(modules.flatMap { (module) -> [URL] in
-      let generatedDir = URL(fileURLWithPath: destination)
-        .appendingPathComponent(module)
-        .appendingPathComponent("generated")
-      return FileManager.default
-        .enumerator(at: generatedDir, includingPropertiesForKeys: nil)!
-        .compactMap { $0 as? URL}
-        .filter { $0.pathExtension == "swift" }
-    })
+    var previouslyGeneratedFiles = Set(
+      modules.flatMap { (module) -> [URL] in
+        let generatedDir = URL(fileURLWithPath: destination)
+          .appendingPathComponent(module)
+          .appendingPathComponent("generated")
+        return FileManager.default
+          .enumerator(at: generatedDir, includingPropertiesForKeys: nil)!
+          .compactMap { $0 as? URL }
+          .filter { $0.pathExtension == "swift" }
+      }
+    )
 
     var errors: [Error] = []
     DispatchQueue.concurrentPerform(iterations: templates.count) { index in
@@ -131,17 +133,18 @@ struct GenerateSwiftSyntax: ParsableCommand {
   private func generateTemplate(
     sourceFile: SourceFileSyntax,
     destination: URL,
-    verbose: Bool) throws {
-      try FileManager.default.createDirectory(
-        atPath: destination.deletingLastPathComponent().path,
-        withIntermediateDirectories: true,
-        attributes: nil
-      )
+    verbose: Bool
+  ) throws {
+    try FileManager.default.createDirectory(
+      atPath: destination.deletingLastPathComponent().path,
+      withIntermediateDirectories: true,
+      attributes: nil
+    )
 
-      if verbose {
-        print("Generating \(destination.path)...")
-      }
-      let syntax = sourceFile.formatted(using: CodeGenerationFormat())
-      try "\(syntax)\n".write(to: destination, atomically: true, encoding: .utf8)
+    if verbose {
+      print("Generating \(destination.path)...")
     }
+    let syntax = sourceFile.formatted(using: CodeGenerationFormat())
+    try "\(syntax)\n".write(to: destination, atomically: true, encoding: .utf8)
+  }
 }

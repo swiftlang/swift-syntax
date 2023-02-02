@@ -50,7 +50,8 @@ struct Main {
         for (propertyName, propertyType) in properties {
           DeclSyntax("var \(raw: propertyName): \(raw: propertyType)")
 
-          DeclSyntax("""
+          DeclSyntax(
+            """
             func with\(raw: propertyName.withFirstLetterUppercased())(_ \(raw: propertyName): \(raw: propertyType)) -> Person {
               var result = self
               result.\(raw: propertyName) = \(raw: propertyName)

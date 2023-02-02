@@ -16,11 +16,13 @@ import SyntaxSupport
 import Utils
 
 let tokensFile = SourceFileSyntax(
-  leadingTrivia: .docLineComment(generateCopyrightHeader(for: "generate-swiftsyntax"))) {
-    try! ExtensionDeclSyntax("extension TokenSyntax") {
-      for token in SYNTAX_TOKENS {
-        if token.isKeyword {
-          DeclSyntax("""
+  leadingTrivia: .docLineComment(generateCopyrightHeader(for: "generate-swiftsyntax"))
+) {
+  try! ExtensionDeclSyntax("extension TokenSyntax") {
+    for token in SYNTAX_TOKENS {
+      if token.isKeyword {
+        DeclSyntax(
+          """
           public static func \(raw: token.swiftKind)(
             leadingTrivia: Trivia = [],
             trailingTrivia: Trivia = [],
@@ -33,9 +35,11 @@ let tokensFile = SourceFileSyntax(
               presence: presence
             )
           }
-          """)
-        } else if let text = token.text {
-          DeclSyntax("""
+          """
+        )
+      } else if let text = token.text {
+        DeclSyntax(
+          """
           public static func \(raw: token.swiftKind)Token(
             leadingTrivia: Trivia = [],
             trailingTrivia: Trivia = [],
@@ -48,9 +52,11 @@ let tokensFile = SourceFileSyntax(
               presence: presence
             )
           }
-          """)
-        } else if let associatedValueClass = token.associatedValueClass {
-          DeclSyntax("""
+          """
+        )
+      } else if let associatedValueClass = token.associatedValueClass {
+        DeclSyntax(
+          """
           public static func \(raw: token.swiftKind)(
             _ value: \(raw: associatedValueClass),
             leadingTrivia: Trivia = [],
@@ -64,9 +70,11 @@ let tokensFile = SourceFileSyntax(
               presence: presence
             )
           }
-          """)
-        } else {
-          DeclSyntax("""
+          """
+        )
+      } else {
+        DeclSyntax(
+          """
           public static func \(raw: token.swiftKind)(
             _ text: String,
             leadingTrivia: Trivia = [],
@@ -80,11 +88,13 @@ let tokensFile = SourceFileSyntax(
               presence: presence
             )
           }
-          """)
-        }
+          """
+        )
       }
-      
-      DeclSyntax("""
+    }
+
+    DeclSyntax(
+      """
       public static func eof(
         leadingTrivia: Trivia = [],
         presence: SourcePresence = .present
@@ -96,6 +106,7 @@ let tokensFile = SourceFileSyntax(
           presence: presence
         )
       }
-      """)
-    }
+      """
+    )
   }
+}

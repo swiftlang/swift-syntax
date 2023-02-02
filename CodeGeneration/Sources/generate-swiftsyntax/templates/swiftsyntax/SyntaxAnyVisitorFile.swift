@@ -16,9 +16,10 @@ import SyntaxSupport
 import Utils
 
 let syntaxAnyVisitorFile = SourceFileSyntax {
-  try! ClassDeclSyntax("""
+  try! ClassDeclSyntax(
+    """
     \(raw: generateCopyrightHeader(for: "generate-swiftsyntax"))
-    
+
     /// A `SyntaxVisitor` that can visit the nodes as generic `Syntax` values.
     ///
     /// This subclass of `SyntaxVisitor` is slower than the type-specific visitation
@@ -41,45 +42,58 @@ let syntaxAnyVisitorFile = SourceFileSyntax {
     ///         visitAny(token)
     ///       }
     open class SyntaxAnyVisitor: SyntaxVisitor
-    """) {
-    DeclSyntax("""
+    """
+  ) {
+    DeclSyntax(
+      """
       open func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
         return .visitChildren
       }
-      """)
-    
-    DeclSyntax("""
+      """
+    )
+
+    DeclSyntax(
+      """
       /// The function called after visiting the node and its descendents.
       ///   - node: the node we just finished visiting.
       open func visitAnyPost(_ node: Syntax) {}
-      """)
-    
-    DeclSyntax("""
+      """
+    )
+
+    DeclSyntax(
+      """
       // MARK: Override type specific visit methods
 
       override open func visit(_ token: TokenSyntax) -> SyntaxVisitorContinueKind {
         return visitAny(token._syntaxNode)
       }
-      """)
+      """
+    )
 
-    DeclSyntax("""
+    DeclSyntax(
+      """
       override open func visitPost(_ node: TokenSyntax) {
         visitAnyPost(node._syntaxNode)
       }
-      """)
+      """
+    )
 
     for node in SYNTAX_NODES where node.isVisitable {
-      DeclSyntax("""
+      DeclSyntax(
+        """
         override open func visit(_ node: \(raw: node.name)) -> SyntaxVisitorContinueKind {
           return visitAny(node._syntaxNode)
         }
-        """)
-      
-      DeclSyntax("""
+        """
+      )
+
+      DeclSyntax(
+        """
         override open func visitPost(_ node: \(raw: node.name)) {
           visitAnyPost(node._syntaxNode)
         }
-        """)
+        """
+      )
     }
   }
 }

@@ -16,29 +16,35 @@ import SyntaxSupport
 import Utils
 
 let syntaxEnumFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCopyrightHeader(for: "generate-swiftsyntax"))) {
-  try! EnumDeclSyntax("""
+  try! EnumDeclSyntax(
+    """
     /// Enum to exhaustively switch over all different syntax nodes.
     @frozen // FIXME: Not actually stable, works around a miscompile
     public enum SyntaxEnum
-    """) {
+    """
+  ) {
     DeclSyntax("case token(TokenSyntax)")
     for node in NON_BASE_SYNTAX_NODES {
       DeclSyntax("case \(raw: node.swiftSyntaxKind)(\(raw: node.name))")
     }
   }
-  
-  try! ExtensionDeclSyntax("""
+
+  try! ExtensionDeclSyntax(
+    """
     public extension Syntax
-    """) {
-    try FunctionDeclSyntax("""
+    """
+  ) {
+    try FunctionDeclSyntax(
+      """
       /// Get an enum that can be used to exhaustively switch over all syntax nodes.
       func `as`(_: SyntaxEnum.Type) -> SyntaxEnum
-      """) {
+      """
+    ) {
       try SwitchStmtSyntax("switch raw.kind") {
         SwitchCaseSyntax("case .token:") {
           StmtSyntax("return .token(TokenSyntax(self)!)")
         }
-        
+
         for node in NON_BASE_SYNTAX_NODES {
           SwitchCaseSyntax("case .\(raw: node.swiftSyntaxKind):") {
             StmtSyntax("return .\(raw: node.swiftSyntaxKind)(\(raw: node.name)(self)!)")

@@ -36,7 +36,7 @@ public struct KeywordSpec {
 
 public let KEYWORDS: [KeywordSpec] = [
   // Please keep these sorted alphabetically
-  
+
   KeywordSpec("__consuming"),
   KeywordSpec("__owned"),
   KeywordSpec("__setter_access"),

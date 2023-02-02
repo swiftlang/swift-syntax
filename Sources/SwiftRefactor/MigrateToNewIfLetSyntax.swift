@@ -13,7 +13,7 @@
 import SwiftSyntax
 import SwiftParser
 
-/// ``MigrateToNewIfLetSyntax`` will visit each if statement in the Syntax tree, and
+/// ``MigrateToNewIfLetSyntax`` will visit each if expression in the Syntax tree, and
 /// checks if the there is an if condition which is of the pre Swift 5.7 "if-let-style"
 /// and rewrites it to the new one.
 ///
@@ -34,7 +34,7 @@ import SwiftParser
 ///   // ...
 /// }
 public struct MigrateToNewIfLetSyntax: RefactoringProvider {
-  public static func refactor(syntax node: IfStmtSyntax, in context: ()) -> StmtSyntax? {
+  public static func refactor(syntax node: IfExprSyntax, in context: ()) -> IfExprSyntax? {
     // Visit all conditions in the node.
     let newConditions = node.conditions.enumerated().map { (index, condition) -> ConditionElementListSyntax.Element in
       var conditionCopy = condition
@@ -57,6 +57,6 @@ public struct MigrateToNewIfLetSyntax: RefactoringProvider {
       }
       return conditionCopy
     }
-    return StmtSyntax(node.with(\.conditions, ConditionElementListSyntax(newConditions)))
+    return node.with(\.conditions, ConditionElementListSyntax(newConditions))
   }
 }

@@ -72,11 +72,11 @@ public enum SyntaxKind {
   
   case awaitExpr
   
-  case backDeployAttributeSpecList
-  
   case backDeployVersionArgument
   
   case backDeployVersionList
+  
+  case backDeployedAttributeSpecList
   
   case binaryOperatorExpr
   

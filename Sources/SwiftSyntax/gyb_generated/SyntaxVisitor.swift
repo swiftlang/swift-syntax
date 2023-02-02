@@ -1721,16 +1721,16 @@ open class SyntaxVisitor {
   /// The function called after visiting `FunctionDeclNameSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: FunctionDeclNameSyntax) {}
-  /// Visiting `BackDeployAttributeSpecListSyntax` specifically.
+  /// Visiting `BackDeployedAttributeSpecListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: BackDeployAttributeSpecListSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: BackDeployedAttributeSpecListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
 
-  /// The function called after visiting `BackDeployAttributeSpecListSyntax` and its descendents.
+  /// The function called after visiting `BackDeployedAttributeSpecListSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: BackDeployAttributeSpecListSyntax) {}
+  open func visitPost(_ node: BackDeployedAttributeSpecListSyntax) {}
   /// Visiting `BackDeployVersionListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -4532,8 +4532,8 @@ open class SyntaxVisitor {
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplBackDeployAttributeSpecListSyntax(_ data: SyntaxData) {
-    let node = BackDeployAttributeSpecListSyntax(data)
+  private func visitImplBackDeployedAttributeSpecListSyntax(_ data: SyntaxData) {
+    let node = BackDeployedAttributeSpecListSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -5924,8 +5924,8 @@ open class SyntaxVisitor {
       visitImplQualifiedDeclNameSyntax(data)
     case .functionDeclName:
       visitImplFunctionDeclNameSyntax(data)
-    case .backDeployAttributeSpecList:
-      visitImplBackDeployAttributeSpecListSyntax(data)
+    case .backDeployedAttributeSpecList:
+      visitImplBackDeployedAttributeSpecListSyntax(data)
     case .backDeployVersionList:
       visitImplBackDeployVersionListSyntax(data)
     case .backDeployVersionArgument:

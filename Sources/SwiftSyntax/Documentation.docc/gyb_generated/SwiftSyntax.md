@@ -358,7 +358,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/DerivativeRegistrationAttributeArgumentsSyntax>
 - <doc:SwiftSyntax/QualifiedDeclNameSyntax>
 - <doc:SwiftSyntax/FunctionDeclNameSyntax>
-- <doc:SwiftSyntax/BackDeployAttributeSpecListSyntax>
+- <doc:SwiftSyntax/BackDeployedAttributeSpecListSyntax>
 - <doc:SwiftSyntax/BackDeployVersionListSyntax>
 - <doc:SwiftSyntax/BackDeployVersionArgumentSyntax>
 - <doc:SwiftSyntax/OpaqueReturnTypeOfAttributeArgumentsSyntax>

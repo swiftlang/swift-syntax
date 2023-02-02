@@ -46,9 +46,9 @@ extension Syntax {
       .node(AvailabilitySpecListSyntax.self), 
       .node(AvailabilityVersionRestrictionSyntax.self), 
       .node(AwaitExprSyntax.self), 
-      .node(BackDeployAttributeSpecListSyntax.self), 
       .node(BackDeployVersionArgumentSyntax.self), 
       .node(BackDeployVersionListSyntax.self), 
+      .node(BackDeployedAttributeSpecListSyntax.self), 
       .node(BinaryOperatorExprSyntax.self), 
       .node(BooleanLiteralExprSyntax.self), 
       .node(BreakStmtSyntax.self), 
@@ -344,12 +344,12 @@ extension SyntaxKind {
       return AvailabilityVersionRestrictionSyntax.self
     case .awaitExpr: 
       return AwaitExprSyntax.self
-    case .backDeployAttributeSpecList: 
-      return BackDeployAttributeSpecListSyntax.self
     case .backDeployVersionArgument: 
       return BackDeployVersionArgumentSyntax.self
     case .backDeployVersionList: 
       return BackDeployVersionListSyntax.self
+    case .backDeployedAttributeSpecList: 
+      return BackDeployedAttributeSpecListSyntax.self
     case .binaryOperatorExpr: 
       return BinaryOperatorExprSyntax.self
     case .booleanLiteralExpr: 
@@ -877,12 +877,12 @@ extension SyntaxKind {
       return "'@available' argument"
     case .awaitExpr: 
       return "'await' expression"
-    case .backDeployAttributeSpecList: 
-      return "'@_backDeploy' arguments"
     case .backDeployVersionArgument: 
       return "version"
     case .backDeployVersionList: 
       return "version list"
+    case .backDeployedAttributeSpecList: 
+      return "'@backDeployed' arguments"
     case .binaryOperatorExpr: 
       return nil
     case .booleanLiteralExpr: 

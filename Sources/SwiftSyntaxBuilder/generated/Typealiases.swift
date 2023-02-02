@@ -71,11 +71,11 @@ public typealias AvailabilityVersionRestriction = AvailabilityVersionRestriction
 
 public typealias AwaitExpr = AwaitExprSyntax
 
-public typealias BackDeployAttributeSpecList = BackDeployAttributeSpecListSyntax
-
 public typealias BackDeployVersionArgument = BackDeployVersionArgumentSyntax
 
 public typealias BackDeployVersionList = BackDeployVersionListSyntax
+
+public typealias BackDeployedAttributeSpecList = BackDeployedAttributeSpecListSyntax
 
 public typealias BinaryOperatorExpr = BinaryOperatorExprSyntax
 

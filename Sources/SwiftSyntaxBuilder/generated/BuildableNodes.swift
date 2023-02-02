@@ -149,8 +149,8 @@ extension AwaitExpr {
   }
 }
 
-/// A collection of arguments for the `@_backDeploy` attribute
-extension BackDeployAttributeSpecList {
+/// A collection of arguments for the `@backDeployed` attribute
+extension BackDeployedAttributeSpecList {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings

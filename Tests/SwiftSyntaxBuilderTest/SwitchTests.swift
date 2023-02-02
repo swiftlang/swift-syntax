@@ -16,7 +16,7 @@ import SwiftSyntaxBuilder
 
 final class SwitchTests: XCTestCase {
   func testSwitch() {
-    let syntax = SwitchStmtSyntax(expression: ExprSyntax("count")) {
+    let syntax = SwitchExprSyntax(expression: ExprSyntax("count")) {
       for num in 1..<3 {
         SwitchCaseSyntax("case \(literal: num):") {
           ExprSyntax("print(count)")
@@ -43,7 +43,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitchStmtSyntaxWithStringParsing() throws {
-    let syntax = try SwitchStmtSyntax("switch count") {
+    let syntax = try SwitchExprSyntax("switch count") {
       for num in 1..<3 {
         SwitchCaseSyntax("case \(literal: num):") {
           ExprSyntax("print(count)")

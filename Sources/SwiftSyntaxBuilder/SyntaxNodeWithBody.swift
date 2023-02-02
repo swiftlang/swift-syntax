@@ -153,17 +153,17 @@ extension SwitchCaseSyntax {
   }
 }
 
-// MARK: - SwitchStmtSyntax
-// SwitchStmtSyntax is a special scenario as it don't have body or members
+// MARK: - SwitchExprSyntax
+// SwitchExprSyntax is a special scenario as it don't have body or members
 // So we cannot conform to `HasTrailingCodeBlock` or `HasTrailingMemberDeclBlock`
 
-public extension SwitchStmtSyntax {
+public extension SwitchExprSyntax {
   init(_ header: PartialSyntaxNodeString, @SwitchCaseListBuilder casesBuilder: () throws -> SwitchCaseListSyntax = { SwitchCaseListSyntax([]) }) throws {
-    let stmt = StmtSyntax("\(header) {}")
-    guard let castedStmt = stmt.as(Self.self) else {
-      throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualNode: stmt)
+    let expr = ExprSyntax("\(header) {}")
+    guard let switchExpr = expr.as(Self.self) else {
+      throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualNode: expr)
     }
-    self = castedStmt
+    self = switchExpr
     self.cases = try casesBuilder()
   }
 }

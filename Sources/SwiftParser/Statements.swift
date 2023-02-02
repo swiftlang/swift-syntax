@@ -111,7 +111,12 @@ extension Parser {
     case (.guardKeyword, let handle)?:
       return label(self.parseGuardStatement(guardHandle: handle), with: optLabel)
     case (.switchKeyword, let handle)?:
-      return label(self.parseSwitchStatement(switchHandle: handle), with: optLabel)
+      let switchExpr = self.parseSwitchExpression(switchHandle: handle)
+      let switchStmt = RawExpressionStmtSyntax(
+        expression: RawExprSyntax(switchExpr),
+        arena: self.arena
+      )
+      return label(switchStmt, with: optLabel)
     case (.breakKeyword, let handle)?:
       return label(self.parseBreakStatement(breakHandle: handle), with: optLabel)
     case (.continueKeyword, let handle)?:

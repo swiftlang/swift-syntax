@@ -18,14 +18,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-% for node in SYNTAX_NODES:
+% for node in sorted(SYNTAX_NODES, key=lambda x: x.name):
 %   if node.is_base():
 @_spi(RawSyntax)
 public protocol Raw${node.name}NodeProtocol: Raw${node.base_type}NodeProtocol {}
 %   end
 % end
 
-% for node in SYNTAX_NODES:
+% for node in sorted(SYNTAX_NODES, key=lambda x: x.name):
 
 @_spi(RawSyntax)
 public struct Raw${node.name}: Raw${node.name if node.is_base() else node.base_type}NodeProtocol {

@@ -332,7 +332,7 @@ public let ATTRIBUTE_NODES: [Node] = [
                kind: .token(choices: [.token(tokenKind: "PeriodToken")]),
                isOptional: true),
          Child(name: "Name",
-               kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "BinaryOperatorToken"), .token(tokenKind: "PrefixOperatorToken"), .token(tokenKind: "PostfixOperatorToken")]),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "BinaryOperatorToken"), .token(tokenKind: "PrefixOperatorToken"), .token(tokenKind: "PostfixOperatorToken"), .keyword(text: "init")]),
                description: "The base name of the referenced function."),
          Child(name: "Arguments",
                kind: .node(kind: "DeclNameArguments"),

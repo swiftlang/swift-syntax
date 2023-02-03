@@ -359,6 +359,7 @@ ATTRIBUTE_NODES = [
                        'BinaryOperatorToken',
                        'PrefixOperatorToken',
                        'PostfixOperatorToken',
+                       'KeywordToken|init',
                    ]),
              Child('Arguments', name_for_diagnostics='arguments', kind='DeclNameArguments',
                    is_optional=True, description='''

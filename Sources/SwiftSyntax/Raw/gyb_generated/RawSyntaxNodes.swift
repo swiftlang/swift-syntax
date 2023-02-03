@@ -11952,7 +11952,7 @@ public struct RawQualifiedDeclNameSyntax: RawSyntaxNodeProtocol {
     arena: __shared SyntaxArena
   ) {
     assert(dot == nil || dot?.tokenKind.base == .period, "Received \(String(describing: dot?.tokenKind))")
-    assert(name.tokenKind.base == .identifier || name.tokenKind.base == .binaryOperator || name.tokenKind.base == .prefixOperator || name.tokenKind.base == .postfixOperator, "Received \(name.tokenKind)")
+    assert(name.tokenKind.base == .identifier || name.tokenKind.base == .binaryOperator || name.tokenKind.base == .prefixOperator || name.tokenKind.base == .postfixOperator || name.tokenKind == .keyword(.`init`), "Received \(name.tokenKind)")
     let raw = RawSyntax.makeLayout(
       kind: .qualifiedDeclName, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)

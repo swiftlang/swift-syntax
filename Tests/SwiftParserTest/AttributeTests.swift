@@ -540,4 +540,31 @@ final class AttributeTests: XCTestCase {
     AssertParse("func takeRepeater(_ f: @MainActor @Sendable @escaping () -> Int) {}")
     AssertParse("takeRepesater { @MainActor @Sendable () -> Int in 0 }")
   }
+
+  func testDerivativeInit() {
+    AssertParse(
+      """
+      @derivative(of: init)
+      func foo() {}
+      """
+    )
+  }
+
+  func testDerivativeDeinit() {
+    AssertParse(
+      """
+      @derivative(of: deinit)
+      func foo() {}
+      """
+    )
+  }
+
+  func testDerivativeSubscript() {
+    AssertParse(
+      """
+      @derivative(of: subscript)
+      func foo() {}
+      """
+    )
+  }
 }

@@ -469,11 +469,12 @@ public struct AddBackingStorage: MemberMacro {
 public struct WrapAllProperties: MemberAttributeMacro {
   public static func expansion<
     Declaration: DeclGroupSyntax,
+    MemberDeclaration: DeclSyntaxProtocol,
     Context: MacroExpansionContext
   >(
     of node: AttributeSyntax,
     attachedTo decl: Declaration,
-    providingAttributesFor member: DeclSyntax,
+    providingAttributesFor member: MemberDeclaration,
     in context: Context
   ) throws -> [AttributeSyntax] {
     guard member.is(VariableDeclSyntax.self) else {
@@ -494,11 +495,12 @@ public struct WrapAllProperties: MemberAttributeMacro {
 public struct WrapStoredProperties: MemberAttributeMacro {
   public static func expansion<
     Declaration: DeclGroupSyntax,
+    MemberDeclaration: DeclSyntaxProtocol,
     Context: MacroExpansionContext
   >(
     of node: AttributeSyntax,
     attachedTo decl: Declaration,
-    providingAttributesFor member: DeclSyntax,
+    providingAttributesFor member: MemberDeclaration,
     in context: Context
   ) throws -> [AttributeSyntax] {
     guard let property = member.as(VariableDeclSyntax.self),
@@ -559,11 +561,12 @@ extension CustomTypeWrapperMacro: MemberMacro {
 extension CustomTypeWrapperMacro: MemberAttributeMacro {
   static func expansion<
     Declaration: DeclGroupSyntax,
+    MemberDeclaration: DeclSyntaxProtocol,
     Context: MacroExpansionContext
   >(
     of node: AttributeSyntax,
     attachedTo declaration: Declaration,
-    providingAttributesFor member: DeclSyntax,
+    providingAttributesFor member: MemberDeclaration,
     in context: Context
   ) throws -> [AttributeSyntax] {
     return [

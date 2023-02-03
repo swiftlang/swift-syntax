@@ -208,6 +208,8 @@ extension Parser {
     
     case exclusivity = "exclusivity"
     
+    case backDeployed = "backDeployed"
+    
     case _backDeploy = "_backDeploy"
     
     case _moveOnly = "_moveOnly"

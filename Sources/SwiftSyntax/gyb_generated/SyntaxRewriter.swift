@@ -1199,11 +1199,11 @@ open class SyntaxRewriter {
     return Syntax(visitChildren(node)).cast(FunctionDeclNameSyntax.self)
   }
 
-  /// Visit a `BackDeployAttributeSpecListSyntax`.
+  /// Visit a `BackDeployedAttributeSpecListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: BackDeployAttributeSpecListSyntax) -> BackDeployAttributeSpecListSyntax {
-    return Syntax(visitChildren(node)).cast(BackDeployAttributeSpecListSyntax.self)
+  open func visit(_ node: BackDeployedAttributeSpecListSyntax) -> BackDeployedAttributeSpecListSyntax {
+    return Syntax(visitChildren(node)).cast(BackDeployedAttributeSpecListSyntax.self)
   }
 
   /// Visit a `BackDeployVersionListSyntax`.
@@ -3619,8 +3619,8 @@ open class SyntaxRewriter {
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplBackDeployAttributeSpecListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = BackDeployAttributeSpecListSyntax(data)
+  private func visitImplBackDeployedAttributeSpecListSyntax(_ data: SyntaxData) -> Syntax {
+    let node = BackDeployedAttributeSpecListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer { visitPost(node._syntaxNode) }
@@ -4944,8 +4944,8 @@ open class SyntaxRewriter {
       return visitImplQualifiedDeclNameSyntax
     case .functionDeclName:
       return visitImplFunctionDeclNameSyntax
-    case .backDeployAttributeSpecList:
-      return visitImplBackDeployAttributeSpecListSyntax
+    case .backDeployedAttributeSpecList:
+      return visitImplBackDeployedAttributeSpecListSyntax
     case .backDeployVersionList:
       return visitImplBackDeployVersionListSyntax
     case .backDeployVersionArgument:
@@ -5483,8 +5483,8 @@ open class SyntaxRewriter {
       return visitImplQualifiedDeclNameSyntax(data)
     case .functionDeclName:
       return visitImplFunctionDeclNameSyntax(data)
-    case .backDeployAttributeSpecList:
-      return visitImplBackDeployAttributeSpecListSyntax(data)
+    case .backDeployedAttributeSpecList:
+      return visitImplBackDeployedAttributeSpecListSyntax(data)
     case .backDeployVersionList:
       return visitImplBackDeployVersionListSyntax(data)
     case .backDeployVersionArgument:

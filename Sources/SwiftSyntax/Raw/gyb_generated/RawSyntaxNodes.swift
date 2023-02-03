@@ -10540,14 +10540,14 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol {
     case `differentiableArguments`(RawDifferentiableAttributeArgumentsSyntax)
     case `derivativeRegistrationArguments`(RawDerivativeRegistrationAttributeArgumentsSyntax)
     case `namedAttributeString`(RawNamedAttributeStringArgumentSyntax)
-    case `backDeployArguments`(RawBackDeployAttributeSpecListSyntax)
+    case `backDeployedArguments`(RawBackDeployedAttributeSpecListSyntax)
     case `conventionArguments`(RawConventionAttributeArgumentsSyntax)
     case `conventionWitnessMethodArguments`(RawConventionWitnessMethodAttributeArgumentsSyntax)
     case `opaqueReturnTypeOfAttributeArguments`(RawOpaqueReturnTypeOfAttributeArgumentsSyntax)
     case `tokenList`(RawTokenListSyntax)
 
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
-      return RawTokenSyntax.isKindOf(raw) || RawStringLiteralExprSyntax.isKindOf(raw) || RawAvailabilitySpecListSyntax.isKindOf(raw) || RawSpecializeAttributeSpecListSyntax.isKindOf(raw) || RawObjCSelectorSyntax.isKindOf(raw) || RawImplementsAttributeArgumentsSyntax.isKindOf(raw) || RawDifferentiableAttributeArgumentsSyntax.isKindOf(raw) || RawDerivativeRegistrationAttributeArgumentsSyntax.isKindOf(raw) || RawNamedAttributeStringArgumentSyntax.isKindOf(raw) || RawBackDeployAttributeSpecListSyntax.isKindOf(raw) || RawConventionAttributeArgumentsSyntax.isKindOf(raw) || RawConventionWitnessMethodAttributeArgumentsSyntax.isKindOf(raw) || RawOpaqueReturnTypeOfAttributeArgumentsSyntax.isKindOf(raw) || RawTokenListSyntax.isKindOf(raw)
+      return RawTokenSyntax.isKindOf(raw) || RawStringLiteralExprSyntax.isKindOf(raw) || RawAvailabilitySpecListSyntax.isKindOf(raw) || RawSpecializeAttributeSpecListSyntax.isKindOf(raw) || RawObjCSelectorSyntax.isKindOf(raw) || RawImplementsAttributeArgumentsSyntax.isKindOf(raw) || RawDifferentiableAttributeArgumentsSyntax.isKindOf(raw) || RawDerivativeRegistrationAttributeArgumentsSyntax.isKindOf(raw) || RawNamedAttributeStringArgumentSyntax.isKindOf(raw) || RawBackDeployedAttributeSpecListSyntax.isKindOf(raw) || RawConventionAttributeArgumentsSyntax.isKindOf(raw) || RawConventionWitnessMethodAttributeArgumentsSyntax.isKindOf(raw) || RawOpaqueReturnTypeOfAttributeArgumentsSyntax.isKindOf(raw) || RawTokenListSyntax.isKindOf(raw)
     }
 
     public var raw: RawSyntax {
@@ -10561,7 +10561,7 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol {
       case .differentiableArguments(let node): return node.raw
       case .derivativeRegistrationArguments(let node): return node.raw
       case .namedAttributeString(let node): return node.raw
-      case .backDeployArguments(let node): return node.raw
+      case .backDeployedArguments(let node): return node.raw
       case .conventionArguments(let node): return node.raw
       case .conventionWitnessMethodArguments(let node): return node.raw
       case .opaqueReturnTypeOfAttributeArguments(let node): return node.raw
@@ -10606,8 +10606,8 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol {
         self = .namedAttributeString(node)
         return
       }
-      if let node = RawBackDeployAttributeSpecListSyntax(other) {
-        self = .backDeployArguments(node)
+      if let node = RawBackDeployedAttributeSpecListSyntax(other) {
+        self = .backDeployedArguments(node)
         return
       }
       if let node = RawConventionAttributeArgumentsSyntax(other) {
@@ -12073,7 +12073,7 @@ public struct RawFunctionDeclNameSyntax: RawSyntaxNodeProtocol {
 }
 
 @_spi(RawSyntax)
-public struct RawBackDeployAttributeSpecListSyntax: RawSyntaxNodeProtocol {
+public struct RawBackDeployedAttributeSpecListSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -12081,7 +12081,7 @@ public struct RawBackDeployAttributeSpecListSyntax: RawSyntaxNodeProtocol {
   }
 
   public static func isKindOf(_ raw: RawSyntax) -> Bool {
-    return raw.kind == .backDeployAttributeSpecList
+    return raw.kind == .backDeployedAttributeSpecList
   }
 
   public var raw: RawSyntax
@@ -12106,7 +12106,7 @@ public struct RawBackDeployAttributeSpecListSyntax: RawSyntaxNodeProtocol {
     arena: __shared SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
-      kind: .backDeployAttributeSpecList, uninitializedCount: 7, arena: arena) { layout in
+      kind: .backDeployedAttributeSpecList, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeBeforeLabel?.raw
       layout[1] = beforeLabel.raw

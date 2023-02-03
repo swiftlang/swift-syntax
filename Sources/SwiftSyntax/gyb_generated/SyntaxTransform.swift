@@ -691,10 +691,10 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: FunctionDeclNameSyntax) -> ResultType
-  /// Visiting `BackDeployAttributeSpecListSyntax` specifically.
+  /// Visiting `BackDeployedAttributeSpecListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: BackDeployAttributeSpecListSyntax) -> ResultType
+  func visit(_ node: BackDeployedAttributeSpecListSyntax) -> ResultType
   /// Visiting `BackDeployVersionListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -2086,10 +2086,10 @@ extension SyntaxTransformVisitor {
   public func visit(_ node: FunctionDeclNameSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
-  /// Visiting `BackDeployAttributeSpecListSyntax` specifically.
+  /// Visiting `BackDeployedAttributeSpecListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: BackDeployAttributeSpecListSyntax) -> ResultType {
+  public func visit(_ node: BackDeployedAttributeSpecListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   /// Visiting `BackDeployVersionListSyntax` specifically.
@@ -2997,7 +2997,7 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .functionDeclName(let derived):
       return visit(derived)
-    case .backDeployAttributeSpecList(let derived):
+    case .backDeployedAttributeSpecList(let derived):
       return visit(derived)
     case .backDeployVersionList(let derived):
       return visit(derived)

@@ -5603,8 +5603,8 @@ public enum SyntaxFactory {
       return FunctionDeclNameSyntax(data)
     }
   }
-  @available(*, deprecated, message: "Use initializer on BackDeployAttributeSpecListSyntax")
-  public static func makeBackDeployAttributeSpecList(_ unexpectedBeforeBeforeLabel: UnexpectedNodesSyntax? = nil, beforeLabel: TokenSyntax, _ unexpectedBetweenBeforeLabelAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndVersionList: UnexpectedNodesSyntax? = nil, versionList: BackDeployVersionListSyntax, _ unexpectedAfterVersionList: UnexpectedNodesSyntax? = nil) -> BackDeployAttributeSpecListSyntax {
+  @available(*, deprecated, message: "Use initializer on BackDeployedAttributeSpecListSyntax")
+  public static func makeBackDeployedAttributeSpecList(_ unexpectedBeforeBeforeLabel: UnexpectedNodesSyntax? = nil, beforeLabel: TokenSyntax, _ unexpectedBetweenBeforeLabelAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndVersionList: UnexpectedNodesSyntax? = nil, versionList: BackDeployVersionListSyntax, _ unexpectedAfterVersionList: UnexpectedNodesSyntax? = nil) -> BackDeployedAttributeSpecListSyntax {
     let layout: [RawSyntax?] = [
       unexpectedBeforeBeforeLabel?.raw,
       beforeLabel.raw,
@@ -5615,17 +5615,17 @@ public enum SyntaxFactory {
       unexpectedAfterVersionList?.raw,
     ]
     return withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.backDeployAttributeSpecList,
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.backDeployedAttributeSpecList,
         from: layout, arena: arena)
       let data = SyntaxData.forRoot(raw)
-      return BackDeployAttributeSpecListSyntax(data)
+      return BackDeployedAttributeSpecListSyntax(data)
     }
   }
 
-  @available(*, deprecated, message: "Use initializer on BackDeployAttributeSpecListSyntax")
-  public static func makeBlankBackDeployAttributeSpecList(presence: SourcePresence = .present) -> BackDeployAttributeSpecListSyntax {
+  @available(*, deprecated, message: "Use initializer on BackDeployedAttributeSpecListSyntax")
+  public static func makeBlankBackDeployedAttributeSpecList(presence: SourcePresence = .present) -> BackDeployedAttributeSpecListSyntax {
     return withExtendedLifetime(SyntaxArena()) { arena in
-      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .backDeployAttributeSpecList,
+      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .backDeployedAttributeSpecList,
         from: [
         nil,
         RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena),
@@ -5635,7 +5635,7 @@ public enum SyntaxFactory {
         RawSyntax.makeEmptyLayout(kind: SyntaxKind.backDeployVersionList, arena: arena),
         nil,
       ], arena: arena))
-      return BackDeployAttributeSpecListSyntax(data)
+      return BackDeployedAttributeSpecListSyntax(data)
     }
   }
   @available(*, deprecated, message: "Use initializer on BackDeployVersionListSyntax")

@@ -69,8 +69,8 @@ ATTRIBUTE_NODES = [
                              kind='DerivativeRegistrationAttributeArguments'),
                        Child('NamedAttributeString',
                              kind='NamedAttributeStringArgument'),
-                       Child('BackDeployArguments',
-                             kind='BackDeployAttributeSpecList'),
+                       Child('BackDeployedArguments',
+                             kind='BackDeployedAttributeSpecList'),
                        Child('ConventionArguments',
                              kind='ConventionAttributeArguments'),
                        Child('ConventionWitnessMethodArguments',
@@ -430,12 +430,12 @@ ATTRIBUTE_NODES = [
                    '''),
          ]),
 
-    # The arguments of '@_backDeploy(...)'
-    # back-deploy-attr-spec-list -> 'before' ':' back-deploy-version-list
-    Node('BackDeployAttributeSpecList', kind='Syntax',
-         name_for_diagnostics="'@_backDeploy' arguments",
+    # The arguments of '@backDeployed(...)'
+    # back-deployed-attr-spec-list -> 'before' ':' back-deployed-version-list
+    Node('BackDeployedAttributeSpecList', kind='Syntax',
+         name_for_diagnostics="'@backDeployed' arguments",
          description='''
-         A collection of arguments for the `@_backDeploy` attribute
+         A collection of arguments for the `@backDeployed` attribute
          ''',
          children=[
              Child('BeforeLabel', kind='IdentifierToken',

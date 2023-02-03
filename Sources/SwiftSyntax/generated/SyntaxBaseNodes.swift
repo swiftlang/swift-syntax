@@ -222,7 +222,7 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public init?<S: SyntaxProtocol>(_ node: S) {
     switch node.raw.kind {
-    case .arrayExpr, .arrowExpr, .asExpr, .assignmentExpr, .awaitExpr, .binaryOperatorExpr, .booleanLiteralExpr, .borrowExpr, .closureExpr, .dictionaryExpr, .discardAssignmentExpr, .editorPlaceholderExpr, .floatLiteralExpr, .forcedValueExpr, .functionCallExpr, .identifierExpr, .inOutExpr, .infixOperatorExpr, .integerLiteralExpr, .isExpr, .keyPathExpr, .macroExpansionExpr, .memberAccessExpr, .missingExpr, .moveExpr, .nilLiteralExpr, .optionalChainingExpr, .packElementExpr, .packExpansionExpr, .postfixIfConfigExpr, .postfixUnaryExpr, .prefixOperatorExpr, .regexLiteralExpr, .sequenceExpr, .specializeExpr, .stringLiteralExpr, .subscriptExpr, .superRefExpr, .ternaryExpr, .tryExpr, .tupleExpr, .typeExpr, .unresolvedAsExpr, .unresolvedIsExpr, .unresolvedPatternExpr, .unresolvedTernaryExpr: 
+    case .arrayExpr, .arrowExpr, .asExpr, .assignmentExpr, .awaitExpr, .binaryOperatorExpr, .booleanLiteralExpr, .borrowExpr, .closureExpr, .dictionaryExpr, .discardAssignmentExpr, .editorPlaceholderExpr, .floatLiteralExpr, .forcedValueExpr, .functionCallExpr, .identifierExpr, .ifExpr, .inOutExpr, .infixOperatorExpr, .integerLiteralExpr, .isExpr, .keyPathExpr, .macroExpansionExpr, .memberAccessExpr, .missingExpr, .moveExpr, .nilLiteralExpr, .optionalChainingExpr, .packElementExpr, .packExpansionExpr, .postfixIfConfigExpr, .postfixUnaryExpr, .prefixOperatorExpr, .regexLiteralExpr, .sequenceExpr, .specializeExpr, .stringLiteralExpr, .subscriptExpr, .superRefExpr, .switchExpr, .ternaryExpr, .tryExpr, .tupleExpr, .typeExpr, .unresolvedAsExpr, .unresolvedIsExpr, .unresolvedPatternExpr, .unresolvedTernaryExpr: 
       self._syntaxNode = node._syntaxNode
     default: 
       return nil
@@ -235,7 +235,7 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     #if DEBUG
     switch data.raw.kind {
-    case .arrayExpr, .arrowExpr, .asExpr, .assignmentExpr, .awaitExpr, .binaryOperatorExpr, .booleanLiteralExpr, .borrowExpr, .closureExpr, .dictionaryExpr, .discardAssignmentExpr, .editorPlaceholderExpr, .floatLiteralExpr, .forcedValueExpr, .functionCallExpr, .identifierExpr, .inOutExpr, .infixOperatorExpr, .integerLiteralExpr, .isExpr, .keyPathExpr, .macroExpansionExpr, .memberAccessExpr, .missingExpr, .moveExpr, .nilLiteralExpr, .optionalChainingExpr, .packElementExpr, .packExpansionExpr, .postfixIfConfigExpr, .postfixUnaryExpr, .prefixOperatorExpr, .regexLiteralExpr, .sequenceExpr, .specializeExpr, .stringLiteralExpr, .subscriptExpr, .superRefExpr, .ternaryExpr, .tryExpr, .tupleExpr, .typeExpr, .unresolvedAsExpr, .unresolvedIsExpr, .unresolvedPatternExpr, .unresolvedTernaryExpr: 
+    case .arrayExpr, .arrowExpr, .asExpr, .assignmentExpr, .awaitExpr, .binaryOperatorExpr, .booleanLiteralExpr, .borrowExpr, .closureExpr, .dictionaryExpr, .discardAssignmentExpr, .editorPlaceholderExpr, .floatLiteralExpr, .forcedValueExpr, .functionCallExpr, .identifierExpr, .ifExpr, .inOutExpr, .infixOperatorExpr, .integerLiteralExpr, .isExpr, .keyPathExpr, .macroExpansionExpr, .memberAccessExpr, .missingExpr, .moveExpr, .nilLiteralExpr, .optionalChainingExpr, .packElementExpr, .packExpansionExpr, .postfixIfConfigExpr, .postfixUnaryExpr, .prefixOperatorExpr, .regexLiteralExpr, .sequenceExpr, .specializeExpr, .stringLiteralExpr, .subscriptExpr, .superRefExpr, .switchExpr, .ternaryExpr, .tryExpr, .tupleExpr, .typeExpr, .unresolvedAsExpr, .unresolvedIsExpr, .unresolvedPatternExpr, .unresolvedTernaryExpr: 
       break 
     default: 
       fatalError("Unable to create ExprSyntax from \(data.raw.kind)")
@@ -287,6 +287,7 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         .node(ForcedValueExprSyntax.self), 
         .node(FunctionCallExprSyntax.self), 
         .node(IdentifierExprSyntax.self), 
+        .node(IfExprSyntax.self), 
         .node(InOutExprSyntax.self), 
         .node(InfixOperatorExprSyntax.self), 
         .node(IntegerLiteralExprSyntax.self), 
@@ -309,6 +310,7 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         .node(StringLiteralExprSyntax.self), 
         .node(SubscriptExprSyntax.self), 
         .node(SuperRefExprSyntax.self), 
+        .node(SwitchExprSyntax.self), 
         .node(TernaryExprSyntax.self), 
         .node(TryExprSyntax.self), 
         .node(TupleExprSyntax.self), 
@@ -523,7 +525,7 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   
   public init?<S: SyntaxProtocol>(_ node: S) {
     switch node.raw.kind {
-    case .breakStmt, .continueStmt, .deferStmt, .doStmt, .fallthroughStmt, .forInStmt, .guardStmt, .ifStmt, .labeledStmt, .missingStmt, .repeatWhileStmt, .returnStmt, .switchStmt, .throwStmt, .whileStmt, .yieldStmt: 
+    case .breakStmt, .continueStmt, .deferStmt, .doStmt, .expressionStmt, .fallthroughStmt, .forInStmt, .guardStmt, .labeledStmt, .missingStmt, .repeatWhileStmt, .returnStmt, .throwStmt, .whileStmt, .yieldStmt: 
       self._syntaxNode = node._syntaxNode
     default: 
       return nil
@@ -536,7 +538,7 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     #if DEBUG
     switch data.raw.kind {
-    case .breakStmt, .continueStmt, .deferStmt, .doStmt, .fallthroughStmt, .forInStmt, .guardStmt, .ifStmt, .labeledStmt, .missingStmt, .repeatWhileStmt, .returnStmt, .switchStmt, .throwStmt, .whileStmt, .yieldStmt: 
+    case .breakStmt, .continueStmt, .deferStmt, .doStmt, .expressionStmt, .fallthroughStmt, .forInStmt, .guardStmt, .labeledStmt, .missingStmt, .repeatWhileStmt, .returnStmt, .throwStmt, .whileStmt, .yieldStmt: 
       break 
     default: 
       fatalError("Unable to create StmtSyntax from \(data.raw.kind)")
@@ -576,15 +578,14 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
         .node(ContinueStmtSyntax.self), 
         .node(DeferStmtSyntax.self), 
         .node(DoStmtSyntax.self), 
+        .node(ExpressionStmtSyntax.self), 
         .node(FallthroughStmtSyntax.self), 
         .node(ForInStmtSyntax.self), 
         .node(GuardStmtSyntax.self), 
-        .node(IfStmtSyntax.self), 
         .node(LabeledStmtSyntax.self), 
         .node(MissingStmtSyntax.self), 
         .node(RepeatWhileStmtSyntax.self), 
         .node(ReturnStmtSyntax.self), 
-        .node(SwitchStmtSyntax.self), 
         .node(ThrowStmtSyntax.self), 
         .node(WhileStmtSyntax.self), 
         .node(YieldStmtSyntax.self)])

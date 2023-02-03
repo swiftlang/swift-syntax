@@ -1347,6 +1347,248 @@ public enum SyntaxFactory {
       return BooleanLiteralExprSyntax(data)
     }
   }
+  @available(*, deprecated, message: "Use initializer on IfExprSyntax")
+  public static func makeIfExpr(_ unexpectedBeforeIfKeyword: UnexpectedNodesSyntax? = nil, ifKeyword: TokenSyntax, _ unexpectedBetweenIfKeywordAndConditions: UnexpectedNodesSyntax? = nil, conditions: ConditionElementListSyntax, _ unexpectedBetweenConditionsAndBody: UnexpectedNodesSyntax? = nil, body: CodeBlockSyntax, _ unexpectedBetweenBodyAndElseKeyword: UnexpectedNodesSyntax? = nil, elseKeyword: TokenSyntax?, _ unexpectedBetweenElseKeywordAndElseBody: UnexpectedNodesSyntax? = nil, elseBody: Syntax?, _ unexpectedAfterElseBody: UnexpectedNodesSyntax? = nil) -> IfExprSyntax {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeIfKeyword?.raw,
+      ifKeyword.raw,
+      unexpectedBetweenIfKeywordAndConditions?.raw,
+      conditions.raw,
+      unexpectedBetweenConditionsAndBody?.raw,
+      body.raw,
+      unexpectedBetweenBodyAndElseKeyword?.raw,
+      elseKeyword?.raw,
+      unexpectedBetweenElseKeywordAndElseBody?.raw,
+      elseBody?.raw,
+      unexpectedAfterElseBody?.raw,
+    ]
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.ifExpr,
+        from: layout, arena: arena)
+      let data = SyntaxData.forRoot(raw)
+      return IfExprSyntax(data)
+    }
+  }
+
+  @available(*, deprecated, message: "Use initializer on IfExprSyntax")
+  public static func makeBlankIfExpr(presence: SourcePresence = .present) -> IfExprSyntax {
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .ifExpr,
+        from: [
+        nil,
+        RawSyntax.makeMissingToken(kind: TokenKind.keyword(.if), arena: arena),
+        nil,
+        RawSyntax.makeEmptyLayout(kind: SyntaxKind.conditionElementList, arena: arena),
+        nil,
+        RawSyntax.makeEmptyLayout(kind: SyntaxKind.codeBlock, arena: arena),
+        nil,
+        nil,
+        nil,
+        nil,
+        nil,
+      ], arena: arena))
+      return IfExprSyntax(data)
+    }
+  }
+  @available(*, deprecated, message: "Use initializer on SwitchExprSyntax")
+  public static func makeSwitchExpr(_ unexpectedBeforeSwitchKeyword: UnexpectedNodesSyntax? = nil, switchKeyword: TokenSyntax, _ unexpectedBetweenSwitchKeywordAndExpression: UnexpectedNodesSyntax? = nil, expression: ExprSyntax, _ unexpectedBetweenExpressionAndLeftBrace: UnexpectedNodesSyntax? = nil, leftBrace: TokenSyntax, _ unexpectedBetweenLeftBraceAndCases: UnexpectedNodesSyntax? = nil, cases: SwitchCaseListSyntax, _ unexpectedBetweenCasesAndRightBrace: UnexpectedNodesSyntax? = nil, rightBrace: TokenSyntax, _ unexpectedAfterRightBrace: UnexpectedNodesSyntax? = nil) -> SwitchExprSyntax {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeSwitchKeyword?.raw,
+      switchKeyword.raw,
+      unexpectedBetweenSwitchKeywordAndExpression?.raw,
+      expression.raw,
+      unexpectedBetweenExpressionAndLeftBrace?.raw,
+      leftBrace.raw,
+      unexpectedBetweenLeftBraceAndCases?.raw,
+      cases.raw,
+      unexpectedBetweenCasesAndRightBrace?.raw,
+      rightBrace.raw,
+      unexpectedAfterRightBrace?.raw,
+    ]
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.switchExpr,
+        from: layout, arena: arena)
+      let data = SyntaxData.forRoot(raw)
+      return SwitchExprSyntax(data)
+    }
+  }
+
+  @available(*, deprecated, message: "Use initializer on SwitchExprSyntax")
+  public static func makeBlankSwitchExpr(presence: SourcePresence = .present) -> SwitchExprSyntax {
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .switchExpr,
+        from: [
+        nil,
+        RawSyntax.makeMissingToken(kind: TokenKind.keyword(.switch), arena: arena),
+        nil,
+        RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: arena),
+        nil,
+        RawSyntax.makeMissingToken(kind: TokenKind.leftBrace, arena: arena),
+        nil,
+        RawSyntax.makeEmptyLayout(kind: SyntaxKind.switchCaseList, arena: arena),
+        nil,
+        RawSyntax.makeMissingToken(kind: TokenKind.rightBrace, arena: arena),
+        nil,
+      ], arena: arena))
+      return SwitchExprSyntax(data)
+    }
+  }
+  @available(*, deprecated, message: "Use initializer on SwitchCaseListSyntax")
+  public static func makeSwitchCaseList(
+    _ elements: [Syntax]) -> SwitchCaseListSyntax {
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.switchCaseList,
+        from: elements.map { $0.raw }, arena: arena)
+      let data = SyntaxData.forRoot(raw)
+      return SwitchCaseListSyntax(data)
+    }
+  }
+
+  @available(*, deprecated, message: "Use initializer on SwitchCaseListSyntax")
+  public static func makeBlankSwitchCaseList(presence: SourcePresence = .present) -> SwitchCaseListSyntax {
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .switchCaseList,
+        from: [
+      ], arena: arena))
+      return SwitchCaseListSyntax(data)
+    }
+  }
+  @available(*, deprecated, message: "Use initializer on SwitchCaseSyntax")
+  public static func makeSwitchCase(_ unexpectedBeforeUnknownAttr: UnexpectedNodesSyntax? = nil, unknownAttr: AttributeSyntax?, _ unexpectedBetweenUnknownAttrAndLabel: UnexpectedNodesSyntax? = nil, label: Syntax, _ unexpectedBetweenLabelAndStatements: UnexpectedNodesSyntax? = nil, statements: CodeBlockItemListSyntax, _ unexpectedAfterStatements: UnexpectedNodesSyntax? = nil) -> SwitchCaseSyntax {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeUnknownAttr?.raw,
+      unknownAttr?.raw,
+      unexpectedBetweenUnknownAttrAndLabel?.raw,
+      label.raw,
+      unexpectedBetweenLabelAndStatements?.raw,
+      statements.raw,
+      unexpectedAfterStatements?.raw,
+    ]
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.switchCase,
+        from: layout, arena: arena)
+      let data = SyntaxData.forRoot(raw)
+      return SwitchCaseSyntax(data)
+    }
+  }
+
+  @available(*, deprecated, message: "Use initializer on SwitchCaseSyntax")
+  public static func makeBlankSwitchCase(presence: SourcePresence = .present) -> SwitchCaseSyntax {
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .switchCase,
+        from: [
+        nil,
+        nil,
+        nil,
+        RawSyntax.makeEmptyLayout(kind: SyntaxKind.missing, arena: arena),
+        nil,
+        RawSyntax.makeEmptyLayout(kind: SyntaxKind.codeBlockItemList, arena: arena),
+        nil,
+      ], arena: arena))
+      return SwitchCaseSyntax(data)
+    }
+  }
+  @available(*, deprecated, message: "Use initializer on SwitchCaseLabelSyntax")
+  public static func makeSwitchCaseLabel(_ unexpectedBeforeCaseKeyword: UnexpectedNodesSyntax? = nil, caseKeyword: TokenSyntax, _ unexpectedBetweenCaseKeywordAndCaseItems: UnexpectedNodesSyntax? = nil, caseItems: CaseItemListSyntax, _ unexpectedBetweenCaseItemsAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedAfterColon: UnexpectedNodesSyntax? = nil) -> SwitchCaseLabelSyntax {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeCaseKeyword?.raw,
+      caseKeyword.raw,
+      unexpectedBetweenCaseKeywordAndCaseItems?.raw,
+      caseItems.raw,
+      unexpectedBetweenCaseItemsAndColon?.raw,
+      colon.raw,
+      unexpectedAfterColon?.raw,
+    ]
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.switchCaseLabel,
+        from: layout, arena: arena)
+      let data = SyntaxData.forRoot(raw)
+      return SwitchCaseLabelSyntax(data)
+    }
+  }
+
+  @available(*, deprecated, message: "Use initializer on SwitchCaseLabelSyntax")
+  public static func makeBlankSwitchCaseLabel(presence: SourcePresence = .present) -> SwitchCaseLabelSyntax {
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .switchCaseLabel,
+        from: [
+        nil,
+        RawSyntax.makeMissingToken(kind: TokenKind.keyword(.case), arena: arena),
+        nil,
+        RawSyntax.makeEmptyLayout(kind: SyntaxKind.caseItemList, arena: arena),
+        nil,
+        RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena),
+        nil,
+      ], arena: arena))
+      return SwitchCaseLabelSyntax(data)
+    }
+  }
+  @available(*, deprecated, message: "Use initializer on SwitchDefaultLabelSyntax")
+  public static func makeSwitchDefaultLabel(_ unexpectedBeforeDefaultKeyword: UnexpectedNodesSyntax? = nil, defaultKeyword: TokenSyntax, _ unexpectedBetweenDefaultKeywordAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedAfterColon: UnexpectedNodesSyntax? = nil) -> SwitchDefaultLabelSyntax {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeDefaultKeyword?.raw,
+      defaultKeyword.raw,
+      unexpectedBetweenDefaultKeywordAndColon?.raw,
+      colon.raw,
+      unexpectedAfterColon?.raw,
+    ]
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.switchDefaultLabel,
+        from: layout, arena: arena)
+      let data = SyntaxData.forRoot(raw)
+      return SwitchDefaultLabelSyntax(data)
+    }
+  }
+
+  @available(*, deprecated, message: "Use initializer on SwitchDefaultLabelSyntax")
+  public static func makeBlankSwitchDefaultLabel(presence: SourcePresence = .present) -> SwitchDefaultLabelSyntax {
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .switchDefaultLabel,
+        from: [
+        nil,
+        RawSyntax.makeMissingToken(kind: TokenKind.keyword(.default), arena: arena),
+        nil,
+        RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena),
+        nil,
+      ], arena: arena))
+      return SwitchDefaultLabelSyntax(data)
+    }
+  }
+  @available(*, deprecated, message: "Use initializer on CaseItemSyntax")
+  public static func makeCaseItem(_ unexpectedBeforePattern: UnexpectedNodesSyntax? = nil, pattern: PatternSyntax, _ unexpectedBetweenPatternAndWhereClause: UnexpectedNodesSyntax? = nil, whereClause: WhereClauseSyntax?, _ unexpectedBetweenWhereClauseAndTrailingComma: UnexpectedNodesSyntax? = nil, trailingComma: TokenSyntax?, _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil) -> CaseItemSyntax {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforePattern?.raw,
+      pattern.raw,
+      unexpectedBetweenPatternAndWhereClause?.raw,
+      whereClause?.raw,
+      unexpectedBetweenWhereClauseAndTrailingComma?.raw,
+      trailingComma?.raw,
+      unexpectedAfterTrailingComma?.raw,
+    ]
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.caseItem,
+        from: layout, arena: arena)
+      let data = SyntaxData.forRoot(raw)
+      return CaseItemSyntax(data)
+    }
+  }
+
+  @available(*, deprecated, message: "Use initializer on CaseItemSyntax")
+  public static func makeBlankCaseItem(presence: SourcePresence = .present) -> CaseItemSyntax {
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .caseItem,
+        from: [
+        nil,
+        RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingPattern, arena: arena),
+        nil,
+        nil,
+        nil,
+        nil,
+        nil,
+      ], arena: arena))
+      return CaseItemSyntax(data)
+    }
+  }
   @available(*, deprecated, message: "Use initializer on UnresolvedTernaryExprSyntax")
   public static func makeUnresolvedTernaryExpr(_ unexpectedBeforeQuestionMark: UnexpectedNodesSyntax? = nil, questionMark: TokenSyntax, _ unexpectedBetweenQuestionMarkAndFirstChoice: UnexpectedNodesSyntax? = nil, firstChoice: ExprSyntax, _ unexpectedBetweenFirstChoiceAndColonMark: UnexpectedNodesSyntax? = nil, colonMark: TokenSyntax, _ unexpectedAfterColonMark: UnexpectedNodesSyntax? = nil) -> UnresolvedTernaryExprSyntax {
     let layout: [RawSyntax?] = [
@@ -6014,6 +6256,33 @@ public enum SyntaxFactory {
       return LabeledStmtSyntax(data)
     }
   }
+  @available(*, deprecated, message: "Use initializer on ExpressionStmtSyntax")
+  public static func makeExpressionStmt(_ unexpectedBeforeExpression: UnexpectedNodesSyntax? = nil, expression: ExprSyntax, _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil) -> ExpressionStmtSyntax {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeExpression?.raw,
+      expression.raw,
+      unexpectedAfterExpression?.raw,
+    ]
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.expressionStmt,
+        from: layout, arena: arena)
+      let data = SyntaxData.forRoot(raw)
+      return ExpressionStmtSyntax(data)
+    }
+  }
+
+  @available(*, deprecated, message: "Use initializer on ExpressionStmtSyntax")
+  public static func makeBlankExpressionStmt(presence: SourcePresence = .present) -> ExpressionStmtSyntax {
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .expressionStmt,
+        from: [
+        nil,
+        RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: arena),
+        nil,
+      ], arena: arena))
+      return ExpressionStmtSyntax(data)
+    }
+  }
   @available(*, deprecated, message: "Use initializer on ContinueStmtSyntax")
   public static func makeContinueStmt(_ unexpectedBeforeContinueKeyword: UnexpectedNodesSyntax? = nil, continueKeyword: TokenSyntax, _ unexpectedBetweenContinueKeywordAndLabel: UnexpectedNodesSyntax? = nil, label: TokenSyntax?, _ unexpectedAfterLabel: UnexpectedNodesSyntax? = nil) -> ContinueStmtSyntax {
     let layout: [RawSyntax?] = [
@@ -6109,26 +6378,6 @@ public enum SyntaxFactory {
         nil,
       ], arena: arena))
       return DeferStmtSyntax(data)
-    }
-  }
-  @available(*, deprecated, message: "Use initializer on SwitchCaseListSyntax")
-  public static func makeSwitchCaseList(
-    _ elements: [Syntax]) -> SwitchCaseListSyntax {
-    return withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.switchCaseList,
-        from: elements.map { $0.raw }, arena: arena)
-      let data = SyntaxData.forRoot(raw)
-      return SwitchCaseListSyntax(data)
-    }
-  }
-
-  @available(*, deprecated, message: "Use initializer on SwitchCaseListSyntax")
-  public static func makeBlankSwitchCaseList(presence: SourcePresence = .present) -> SwitchCaseListSyntax {
-    return withExtendedLifetime(SyntaxArena()) { arena in
-      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .switchCaseList,
-        from: [
-      ], arena: arena))
-      return SwitchCaseListSyntax(data)
     }
   }
   @available(*, deprecated, message: "Use initializer on RepeatWhileStmtSyntax")
@@ -6301,49 +6550,6 @@ public enum SyntaxFactory {
         nil,
       ], arena: arena))
       return ForInStmtSyntax(data)
-    }
-  }
-  @available(*, deprecated, message: "Use initializer on SwitchStmtSyntax")
-  public static func makeSwitchStmt(_ unexpectedBeforeSwitchKeyword: UnexpectedNodesSyntax? = nil, switchKeyword: TokenSyntax, _ unexpectedBetweenSwitchKeywordAndExpression: UnexpectedNodesSyntax? = nil, expression: ExprSyntax, _ unexpectedBetweenExpressionAndLeftBrace: UnexpectedNodesSyntax? = nil, leftBrace: TokenSyntax, _ unexpectedBetweenLeftBraceAndCases: UnexpectedNodesSyntax? = nil, cases: SwitchCaseListSyntax, _ unexpectedBetweenCasesAndRightBrace: UnexpectedNodesSyntax? = nil, rightBrace: TokenSyntax, _ unexpectedAfterRightBrace: UnexpectedNodesSyntax? = nil) -> SwitchStmtSyntax {
-    let layout: [RawSyntax?] = [
-      unexpectedBeforeSwitchKeyword?.raw,
-      switchKeyword.raw,
-      unexpectedBetweenSwitchKeywordAndExpression?.raw,
-      expression.raw,
-      unexpectedBetweenExpressionAndLeftBrace?.raw,
-      leftBrace.raw,
-      unexpectedBetweenLeftBraceAndCases?.raw,
-      cases.raw,
-      unexpectedBetweenCasesAndRightBrace?.raw,
-      rightBrace.raw,
-      unexpectedAfterRightBrace?.raw,
-    ]
-    return withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.switchStmt,
-        from: layout, arena: arena)
-      let data = SyntaxData.forRoot(raw)
-      return SwitchStmtSyntax(data)
-    }
-  }
-
-  @available(*, deprecated, message: "Use initializer on SwitchStmtSyntax")
-  public static func makeBlankSwitchStmt(presence: SourcePresence = .present) -> SwitchStmtSyntax {
-    return withExtendedLifetime(SyntaxArena()) { arena in
-      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .switchStmt,
-        from: [
-        nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.keyword(.switch), arena: arena),
-        nil,
-        RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: arena),
-        nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.leftBrace, arena: arena),
-        nil,
-        RawSyntax.makeEmptyLayout(kind: SyntaxKind.switchCaseList, arena: arena),
-        nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.rightBrace, arena: arena),
-        nil,
-      ], arena: arena))
-      return SwitchStmtSyntax(data)
     }
   }
   @available(*, deprecated, message: "Use initializer on CatchClauseListSyntax")
@@ -6795,150 +7001,6 @@ public enum SyntaxFactory {
       return ThrowStmtSyntax(data)
     }
   }
-  @available(*, deprecated, message: "Use initializer on IfStmtSyntax")
-  public static func makeIfStmt(_ unexpectedBeforeIfKeyword: UnexpectedNodesSyntax? = nil, ifKeyword: TokenSyntax, _ unexpectedBetweenIfKeywordAndConditions: UnexpectedNodesSyntax? = nil, conditions: ConditionElementListSyntax, _ unexpectedBetweenConditionsAndBody: UnexpectedNodesSyntax? = nil, body: CodeBlockSyntax, _ unexpectedBetweenBodyAndElseKeyword: UnexpectedNodesSyntax? = nil, elseKeyword: TokenSyntax?, _ unexpectedBetweenElseKeywordAndElseBody: UnexpectedNodesSyntax? = nil, elseBody: Syntax?, _ unexpectedAfterElseBody: UnexpectedNodesSyntax? = nil) -> IfStmtSyntax {
-    let layout: [RawSyntax?] = [
-      unexpectedBeforeIfKeyword?.raw,
-      ifKeyword.raw,
-      unexpectedBetweenIfKeywordAndConditions?.raw,
-      conditions.raw,
-      unexpectedBetweenConditionsAndBody?.raw,
-      body.raw,
-      unexpectedBetweenBodyAndElseKeyword?.raw,
-      elseKeyword?.raw,
-      unexpectedBetweenElseKeywordAndElseBody?.raw,
-      elseBody?.raw,
-      unexpectedAfterElseBody?.raw,
-    ]
-    return withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.ifStmt,
-        from: layout, arena: arena)
-      let data = SyntaxData.forRoot(raw)
-      return IfStmtSyntax(data)
-    }
-  }
-
-  @available(*, deprecated, message: "Use initializer on IfStmtSyntax")
-  public static func makeBlankIfStmt(presence: SourcePresence = .present) -> IfStmtSyntax {
-    return withExtendedLifetime(SyntaxArena()) { arena in
-      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .ifStmt,
-        from: [
-        nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.keyword(.if), arena: arena),
-        nil,
-        RawSyntax.makeEmptyLayout(kind: SyntaxKind.conditionElementList, arena: arena),
-        nil,
-        RawSyntax.makeEmptyLayout(kind: SyntaxKind.codeBlock, arena: arena),
-        nil,
-        nil,
-        nil,
-        nil,
-        nil,
-      ], arena: arena))
-      return IfStmtSyntax(data)
-    }
-  }
-  @available(*, deprecated, message: "Use initializer on SwitchCaseSyntax")
-  public static func makeSwitchCase(_ unexpectedBeforeUnknownAttr: UnexpectedNodesSyntax? = nil, unknownAttr: AttributeSyntax?, _ unexpectedBetweenUnknownAttrAndLabel: UnexpectedNodesSyntax? = nil, label: Syntax, _ unexpectedBetweenLabelAndStatements: UnexpectedNodesSyntax? = nil, statements: CodeBlockItemListSyntax, _ unexpectedAfterStatements: UnexpectedNodesSyntax? = nil) -> SwitchCaseSyntax {
-    let layout: [RawSyntax?] = [
-      unexpectedBeforeUnknownAttr?.raw,
-      unknownAttr?.raw,
-      unexpectedBetweenUnknownAttrAndLabel?.raw,
-      label.raw,
-      unexpectedBetweenLabelAndStatements?.raw,
-      statements.raw,
-      unexpectedAfterStatements?.raw,
-    ]
-    return withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.switchCase,
-        from: layout, arena: arena)
-      let data = SyntaxData.forRoot(raw)
-      return SwitchCaseSyntax(data)
-    }
-  }
-
-  @available(*, deprecated, message: "Use initializer on SwitchCaseSyntax")
-  public static func makeBlankSwitchCase(presence: SourcePresence = .present) -> SwitchCaseSyntax {
-    return withExtendedLifetime(SyntaxArena()) { arena in
-      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .switchCase,
-        from: [
-        nil,
-        nil,
-        nil,
-        RawSyntax.makeEmptyLayout(kind: SyntaxKind.missing, arena: arena),
-        nil,
-        RawSyntax.makeEmptyLayout(kind: SyntaxKind.codeBlockItemList, arena: arena),
-        nil,
-      ], arena: arena))
-      return SwitchCaseSyntax(data)
-    }
-  }
-  @available(*, deprecated, message: "Use initializer on SwitchDefaultLabelSyntax")
-  public static func makeSwitchDefaultLabel(_ unexpectedBeforeDefaultKeyword: UnexpectedNodesSyntax? = nil, defaultKeyword: TokenSyntax, _ unexpectedBetweenDefaultKeywordAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedAfterColon: UnexpectedNodesSyntax? = nil) -> SwitchDefaultLabelSyntax {
-    let layout: [RawSyntax?] = [
-      unexpectedBeforeDefaultKeyword?.raw,
-      defaultKeyword.raw,
-      unexpectedBetweenDefaultKeywordAndColon?.raw,
-      colon.raw,
-      unexpectedAfterColon?.raw,
-    ]
-    return withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.switchDefaultLabel,
-        from: layout, arena: arena)
-      let data = SyntaxData.forRoot(raw)
-      return SwitchDefaultLabelSyntax(data)
-    }
-  }
-
-  @available(*, deprecated, message: "Use initializer on SwitchDefaultLabelSyntax")
-  public static func makeBlankSwitchDefaultLabel(presence: SourcePresence = .present) -> SwitchDefaultLabelSyntax {
-    return withExtendedLifetime(SyntaxArena()) { arena in
-      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .switchDefaultLabel,
-        from: [
-        nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.keyword(.default), arena: arena),
-        nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena),
-        nil,
-      ], arena: arena))
-      return SwitchDefaultLabelSyntax(data)
-    }
-  }
-  @available(*, deprecated, message: "Use initializer on CaseItemSyntax")
-  public static func makeCaseItem(_ unexpectedBeforePattern: UnexpectedNodesSyntax? = nil, pattern: PatternSyntax, _ unexpectedBetweenPatternAndWhereClause: UnexpectedNodesSyntax? = nil, whereClause: WhereClauseSyntax?, _ unexpectedBetweenWhereClauseAndTrailingComma: UnexpectedNodesSyntax? = nil, trailingComma: TokenSyntax?, _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil) -> CaseItemSyntax {
-    let layout: [RawSyntax?] = [
-      unexpectedBeforePattern?.raw,
-      pattern.raw,
-      unexpectedBetweenPatternAndWhereClause?.raw,
-      whereClause?.raw,
-      unexpectedBetweenWhereClauseAndTrailingComma?.raw,
-      trailingComma?.raw,
-      unexpectedAfterTrailingComma?.raw,
-    ]
-    return withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.caseItem,
-        from: layout, arena: arena)
-      let data = SyntaxData.forRoot(raw)
-      return CaseItemSyntax(data)
-    }
-  }
-
-  @available(*, deprecated, message: "Use initializer on CaseItemSyntax")
-  public static func makeBlankCaseItem(presence: SourcePresence = .present) -> CaseItemSyntax {
-    return withExtendedLifetime(SyntaxArena()) { arena in
-      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .caseItem,
-        from: [
-        nil,
-        RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingPattern, arena: arena),
-        nil,
-        nil,
-        nil,
-        nil,
-        nil,
-      ], arena: arena))
-      return CaseItemSyntax(data)
-    }
-  }
   @available(*, deprecated, message: "Use initializer on CatchItemSyntax")
   public static func makeCatchItem(_ unexpectedBeforePattern: UnexpectedNodesSyntax? = nil, pattern: PatternSyntax?, _ unexpectedBetweenPatternAndWhereClause: UnexpectedNodesSyntax? = nil, whereClause: WhereClauseSyntax?, _ unexpectedBetweenWhereClauseAndTrailingComma: UnexpectedNodesSyntax? = nil, trailingComma: TokenSyntax?, _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil) -> CatchItemSyntax {
     let layout: [RawSyntax?] = [
@@ -6972,41 +7034,6 @@ public enum SyntaxFactory {
         nil,
       ], arena: arena))
       return CatchItemSyntax(data)
-    }
-  }
-  @available(*, deprecated, message: "Use initializer on SwitchCaseLabelSyntax")
-  public static func makeSwitchCaseLabel(_ unexpectedBeforeCaseKeyword: UnexpectedNodesSyntax? = nil, caseKeyword: TokenSyntax, _ unexpectedBetweenCaseKeywordAndCaseItems: UnexpectedNodesSyntax? = nil, caseItems: CaseItemListSyntax, _ unexpectedBetweenCaseItemsAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedAfterColon: UnexpectedNodesSyntax? = nil) -> SwitchCaseLabelSyntax {
-    let layout: [RawSyntax?] = [
-      unexpectedBeforeCaseKeyword?.raw,
-      caseKeyword.raw,
-      unexpectedBetweenCaseKeywordAndCaseItems?.raw,
-      caseItems.raw,
-      unexpectedBetweenCaseItemsAndColon?.raw,
-      colon.raw,
-      unexpectedAfterColon?.raw,
-    ]
-    return withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.switchCaseLabel,
-        from: layout, arena: arena)
-      let data = SyntaxData.forRoot(raw)
-      return SwitchCaseLabelSyntax(data)
-    }
-  }
-
-  @available(*, deprecated, message: "Use initializer on SwitchCaseLabelSyntax")
-  public static func makeBlankSwitchCaseLabel(presence: SourcePresence = .present) -> SwitchCaseLabelSyntax {
-    return withExtendedLifetime(SyntaxArena()) { arena in
-      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .switchCaseLabel,
-        from: [
-        nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.keyword(.case), arena: arena),
-        nil,
-        RawSyntax.makeEmptyLayout(kind: SyntaxKind.caseItemList, arena: arena),
-        nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena),
-        nil,
-      ], arena: arena))
-      return SwitchCaseLabelSyntax(data)
     }
   }
   @available(*, deprecated, message: "Use initializer on CatchClauseSyntax")

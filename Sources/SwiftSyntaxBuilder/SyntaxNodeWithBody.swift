@@ -116,30 +116,30 @@ extension ExtensionDeclSyntax: HasTrailingMemberDeclBlock {}
 extension ProtocolDeclSyntax: HasTrailingMemberDeclBlock {}
 extension StructDeclSyntax: HasTrailingMemberDeclBlock {}
 
-// MARK: - IfStmtSyntax
-// IfStmtSyntax is a special scenario as we also have the `else` body or an if-else
+// MARK: - IfExprSyntax
+// IfExprSyntax is a special scenario as we also have the `else` body or an if-else
 // So we cannot conform to `HasTrailingCodeBlock`
 
-public extension IfStmtSyntax {
+public extension IfExprSyntax {
   init(_ header: PartialSyntaxNodeString, @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax, @CodeBlockItemListBuilder `else` elseBuilder: () throws -> CodeBlockItemListSyntax? = { nil }) throws {
-    let stmt = StmtSyntax("\(header) {}")
-    guard let ifStmt = stmt.as(IfStmtSyntax.self) else {
-      throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualNode: stmt)
+    let expr = ExprSyntax("\(header) {}")
+    guard let ifExpr = expr.as(Self.self) else {
+      throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualNode: expr)
     }
-    self = ifStmt
+    self = ifExpr
     self.body = try CodeBlockSyntax(statements: bodyBuilder())
     self.elseBody = try elseBuilder().map { .codeBlock(CodeBlockSyntax(statements: $0)) }
     self.elseKeyword = elseBody != nil ? .keyword(.else) : nil
   }
 
-  init(_ header: PartialSyntaxNodeString, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemListSyntax, elseIf: IfStmtSyntax) throws {
-    let stmt = StmtSyntax("\(header) {}")
-    guard let ifStmt = stmt.as(IfStmtSyntax.self) else {
-      throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualNode: stmt)
+  init(_ header: PartialSyntaxNodeString, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemListSyntax, elseIf: IfExprSyntax) throws {
+    let expr = ExprSyntax("\(header) {}")
+    guard let ifExpr = expr.as(Self.self) else {
+      throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualNode: expr)
     }
-    self = ifStmt
+    self = ifExpr
     self.body = CodeBlockSyntax(statements: bodyBuilder())
-    self.elseBody = .ifStmt(elseIf)
+    self.elseBody = .ifExpr(elseIf)
     self.elseKeyword = elseBody != nil ? .keyword(.else) : nil
   }
 }
@@ -153,17 +153,17 @@ extension SwitchCaseSyntax {
   }
 }
 
-// MARK: - SwitchStmtSyntax
-// SwitchStmtSyntax is a special scenario as it don't have body or members
+// MARK: - SwitchExprSyntax
+// SwitchExprSyntax is a special scenario as it don't have body or members
 // So we cannot conform to `HasTrailingCodeBlock` or `HasTrailingMemberDeclBlock`
 
-public extension SwitchStmtSyntax {
+public extension SwitchExprSyntax {
   init(_ header: PartialSyntaxNodeString, @SwitchCaseListBuilder casesBuilder: () throws -> SwitchCaseListSyntax = { SwitchCaseListSyntax([]) }) throws {
-    let stmt = StmtSyntax("\(header) {}")
-    guard let castedStmt = stmt.as(Self.self) else {
-      throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualNode: stmt)
+    let expr = ExprSyntax("\(header) {}")
+    guard let switchExpr = expr.as(Self.self) else {
+      throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualNode: expr)
     }
-    self = castedStmt
+    self = switchExpr
     self.cases = try casesBuilder()
   }
 }

@@ -362,6 +362,122 @@ public let EXPR_NODES: [Node] = [
                kind: .token(choices: [.keyword(text: "true"), .keyword(text: "false")]))
        ]),
 
+  Node(name: "IfExpr",
+       nameForDiagnostics: "'if' statement",
+       kind: "Expr",
+       traits: [
+         "WithCodeBlock"
+       ],
+       children: [
+         Child(name: "IfKeyword",
+               kind: .token(choices: [.keyword(text: "if")])),
+         Child(name: "Conditions",
+               kind: .collection(kind: "ConditionElementList", collectionElementName: "Condition")),
+         Child(name: "Body",
+               kind: .node(kind: "CodeBlock")),
+         Child(name: "ElseKeyword",
+               kind: .node(kind: "ElseToken"),
+               isOptional: true),
+         Child(name: "ElseBody",
+               kind: .nodeChoices(choices: [
+                 Child(name: "IfExpr",
+                       kind: .node(kind: "IfExpr")),
+                 Child(name: "CodeBlock",
+                       kind: .node(kind: "CodeBlock"))
+               ]),
+               isOptional: true)
+       ]),
+
+  Node(name: "SwitchExpr",
+       nameForDiagnostics: "'switch' statement",
+       kind: "Expr",
+       traits: [
+         "Braced"
+       ],
+       children: [
+         Child(name: "SwitchKeyword",
+               kind: .token(choices: [.keyword(text: "switch")])),
+         Child(name: "Expression",
+               kind: .node(kind: "Expr")),
+         Child(name: "LeftBrace",
+               kind: .token(choices: [.token(tokenKind: "LeftBraceToken")])),
+         Child(name: "Cases",
+               kind: .collection(kind: "SwitchCaseList", collectionElementName: "Case")),
+         Child(name: "RightBrace",
+               kind: .token(choices: [.token(tokenKind: "RightBraceToken")]),
+               requiresLeadingNewline: true)
+       ]),
+
+  Node(name: "SwitchCaseList",
+       nameForDiagnostics: nil,
+       kind: "SyntaxCollection",
+       element: "Syntax",
+       elementName: "SwitchCase",
+       elementChoices: ["SwitchCase", "IfConfigDecl"],
+       elementsSeparatedByNewline: true),
+
+  Node(name: "SwitchCase",
+       nameForDiagnostics: "switch case",
+       kind: "Syntax",
+       traits: [
+         "WithStatements"
+       ],
+       parserFunction: "parseSwitchCase",
+       children: [
+         Child(name: "UnknownAttr",
+               kind: .node(kind: "Attribute"),
+               isOptional: true),
+         Child(name: "Label",
+               kind: .nodeChoices(choices: [
+                 Child(name: "Default",
+                       kind: .node(kind: "SwitchDefaultLabel")),
+                 Child(name: "Case",
+                       kind: .node(kind: "SwitchCaseLabel"))
+               ])),
+         Child(name: "Statements",
+               kind: .collection(kind: "CodeBlockItemList", collectionElementName: "Statement"),
+               isIndented: true)
+       ]),
+
+  Node(name: "SwitchCaseLabel",
+       nameForDiagnostics: nil,
+       kind: "Syntax",
+       children: [
+         Child(name: "CaseKeyword",
+               kind: .token(choices: [.keyword(text: "case")])),
+         Child(name: "CaseItems",
+               kind: .collection(kind: "CaseItemList", collectionElementName: "CaseItem")),
+         Child(name: "Colon",
+               kind: .token(choices: [.token(tokenKind: "ColonToken")]))
+       ]),
+
+  Node(name: "SwitchDefaultLabel",
+       nameForDiagnostics: nil,
+       kind: "Syntax",
+       children: [
+         Child(name: "DefaultKeyword",
+               kind: .token(choices: [.keyword(text: "default")])),
+         Child(name: "Colon",
+               kind: .token(choices: [.token(tokenKind: "ColonToken")]))
+       ]),
+
+  Node(name: "CaseItem",
+       nameForDiagnostics: nil,
+       kind: "Syntax",
+       traits: [
+         "WithTrailingComma"
+       ],
+       children: [
+         Child(name: "Pattern",
+               kind: .node(kind: "Pattern")),
+         Child(name: "WhereClause",
+               kind: .node(kind: "WhereClause"),
+               isOptional: true),
+         Child(name: "TrailingComma",
+               kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+               isOptional: true)
+       ]),
+
   Node(name: "UnresolvedTernaryExpr",
        nameForDiagnostics: "ternary operator",
        kind: "Expr",

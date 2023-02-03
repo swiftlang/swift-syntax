@@ -1525,6 +1525,690 @@ extension DictionaryElementSyntax: CustomReflectable {
   }
 }
 
+// MARK: - SwitchCaseSyntax
+
+public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
+  public enum Label: SyntaxChildChoices {
+    case `default`(SwitchDefaultLabelSyntax)
+    case `case`(SwitchCaseLabelSyntax)
+    public var _syntaxNode: Syntax {
+      switch self {
+      case .default(let node): return node._syntaxNode
+      case .case(let node): return node._syntaxNode
+      }
+    }
+    init(_ data: SyntaxData) { self.init(Syntax(data))! }
+    public init(_ node: SwitchDefaultLabelSyntax) {
+      self = .default(node)
+    }
+    public init(_ node: SwitchCaseLabelSyntax) {
+      self = .case(node)
+    }
+    public init?<S: SyntaxProtocol>(_ node: S) {
+      if let node = node.as(SwitchDefaultLabelSyntax.self) {
+        self = .default(node)
+        return
+      }
+      if let node = node.as(SwitchCaseLabelSyntax.self) {
+        self = .case(node)
+        return
+      }
+      return nil
+    }
+
+    public static var structure: SyntaxNodeStructure {
+      return .choices([
+        .node(SwitchDefaultLabelSyntax.self),
+        .node(SwitchCaseLabelSyntax.self),
+      ])
+    }
+  }
+
+  public let _syntaxNode: Syntax
+
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .switchCase else { return nil }
+    self._syntaxNode = node._syntaxNode
+  }
+
+  /// Creates a `SwitchCaseSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .switchCase)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeUnknownAttr: UnexpectedNodesSyntax? = nil,
+    unknownAttr: AttributeSyntax? = nil,
+    _ unexpectedBetweenUnknownAttrAndLabel: UnexpectedNodesSyntax? = nil,
+    label: Label,
+    _ unexpectedBetweenLabelAndStatements: UnexpectedNodesSyntax? = nil,
+    statements: CodeBlockItemListSyntax,
+    _ unexpectedAfterStatements: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed 
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeUnknownAttr, unknownAttr, unexpectedBetweenUnknownAttrAndLabel, label, unexpectedBetweenLabelAndStatements, statements, unexpectedAfterStatements))) { (arena, _) in
+      let layout: [RawSyntax?] = [
+        unexpectedBeforeUnknownAttr?.raw,
+        unknownAttr?.raw,
+        unexpectedBetweenUnknownAttrAndLabel?.raw,
+        label.raw,
+        unexpectedBetweenLabelAndStatements?.raw,
+        statements.raw,
+        unexpectedAfterStatements?.raw,
+      ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.switchCase, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+
+  public var unexpectedBeforeUnknownAttr: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = SwitchCaseSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var unknownAttr: AttributeSyntax? {
+    get {
+      return data.child(at: 1, parent: Syntax(self)).map(AttributeSyntax.init)
+    }
+    set(value) {
+      self = SwitchCaseSyntax(data.replacingChild(at: 1, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var unexpectedBetweenUnknownAttrAndLabel: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = SwitchCaseSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var label: Label {
+    get {
+      return Label(data.child(at: 3, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = SwitchCaseSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var unexpectedBetweenLabelAndStatements: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = SwitchCaseSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var statements: CodeBlockItemListSyntax {
+    get {
+      return CodeBlockItemListSyntax(data.child(at: 5, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = SwitchCaseSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+
+  /// Adds the provided `Statement` to the node's `statements`
+  /// collection.
+  /// - param element: The new `Statement` to add to the node's
+  ///                  `statements` collection.
+  /// - returns: A copy of the receiver with the provided `Statement`
+  ///            appended to its `statements` collection.
+  public func addStatement(_ element: CodeBlockItemSyntax) -> SwitchCaseSyntax {
+    var collection: RawSyntax
+    let arena = SyntaxArena()
+    if let col = raw.layoutView!.children[5] {
+      collection = col.layoutView!.appending(element.raw, arena: arena)
+    } else {
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.codeBlockItemList,
+        from: [element.raw], arena: arena)
+    }
+    let newData = data.replacingChild(at: 5, with: collection, arena: arena)
+    return SwitchCaseSyntax(newData)
+  }
+
+  public var unexpectedAfterStatements: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = SwitchCaseSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeUnknownAttr,
+      \Self.unknownAttr,
+      \Self.unexpectedBetweenUnknownAttrAndLabel,
+      \Self.label,
+      \Self.unexpectedBetweenLabelAndStatements,
+      \Self.statements,
+      \Self.unexpectedAfterStatements,
+    ])
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return "label"
+    case 4:
+      return nil
+    case 5:
+      return nil
+    case 6:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
+}
+
+extension SwitchCaseSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "unexpectedBeforeUnknownAttr": unexpectedBeforeUnknownAttr.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unknownAttr": unknownAttr.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenUnknownAttrAndLabel": unexpectedBetweenUnknownAttrAndLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "label": Syntax(label).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenLabelAndStatements": unexpectedBetweenLabelAndStatements.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "statements": Syntax(statements).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterStatements": unexpectedAfterStatements.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+    ])
+  }
+}
+
+// MARK: - SwitchCaseLabelSyntax
+
+public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .switchCaseLabel else { return nil }
+    self._syntaxNode = node._syntaxNode
+  }
+
+  /// Creates a `SwitchCaseLabelSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .switchCaseLabel)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeCaseKeyword: UnexpectedNodesSyntax? = nil,
+    caseKeyword: TokenSyntax = .keyword(.case),
+    _ unexpectedBetweenCaseKeywordAndCaseItems: UnexpectedNodesSyntax? = nil,
+    caseItems: CaseItemListSyntax,
+    _ unexpectedBetweenCaseItemsAndColon: UnexpectedNodesSyntax? = nil,
+    colon: TokenSyntax = .colonToken(),
+    _ unexpectedAfterColon: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed 
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeCaseKeyword, caseKeyword, unexpectedBetweenCaseKeywordAndCaseItems, caseItems, unexpectedBetweenCaseItemsAndColon, colon, unexpectedAfterColon))) { (arena, _) in
+      let layout: [RawSyntax?] = [
+        unexpectedBeforeCaseKeyword?.raw,
+        caseKeyword.raw,
+        unexpectedBetweenCaseKeywordAndCaseItems?.raw,
+        caseItems.raw,
+        unexpectedBetweenCaseItemsAndColon?.raw,
+        colon.raw,
+        unexpectedAfterColon?.raw,
+      ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.switchCaseLabel, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+
+  public var unexpectedBeforeCaseKeyword: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = SwitchCaseLabelSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var caseKeyword: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = SwitchCaseLabelSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var unexpectedBetweenCaseKeywordAndCaseItems: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = SwitchCaseLabelSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var caseItems: CaseItemListSyntax {
+    get {
+      return CaseItemListSyntax(data.child(at: 3, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = SwitchCaseLabelSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+
+  /// Adds the provided `CaseItem` to the node's `caseItems`
+  /// collection.
+  /// - param element: The new `CaseItem` to add to the node's
+  ///                  `caseItems` collection.
+  /// - returns: A copy of the receiver with the provided `CaseItem`
+  ///            appended to its `caseItems` collection.
+  public func addCaseItem(_ element: CaseItemSyntax) -> SwitchCaseLabelSyntax {
+    var collection: RawSyntax
+    let arena = SyntaxArena()
+    if let col = raw.layoutView!.children[3] {
+      collection = col.layoutView!.appending(element.raw, arena: arena)
+    } else {
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.caseItemList,
+        from: [element.raw], arena: arena)
+    }
+    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
+    return SwitchCaseLabelSyntax(newData)
+  }
+
+  public var unexpectedBetweenCaseItemsAndColon: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = SwitchCaseLabelSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var colon: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = SwitchCaseLabelSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var unexpectedAfterColon: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = SwitchCaseLabelSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeCaseKeyword,
+      \Self.caseKeyword,
+      \Self.unexpectedBetweenCaseKeywordAndCaseItems,
+      \Self.caseItems,
+      \Self.unexpectedBetweenCaseItemsAndColon,
+      \Self.colon,
+      \Self.unexpectedAfterColon,
+    ])
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    case 5:
+      return nil
+    case 6:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
+}
+
+extension SwitchCaseLabelSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "unexpectedBeforeCaseKeyword": unexpectedBeforeCaseKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "caseKeyword": Syntax(caseKeyword).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenCaseKeywordAndCaseItems": unexpectedBetweenCaseKeywordAndCaseItems.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "caseItems": Syntax(caseItems).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenCaseItemsAndColon": unexpectedBetweenCaseItemsAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "colon": Syntax(colon).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterColon": unexpectedAfterColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+    ])
+  }
+}
+
+// MARK: - SwitchDefaultLabelSyntax
+
+public struct SwitchDefaultLabelSyntax: SyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .switchDefaultLabel else { return nil }
+    self._syntaxNode = node._syntaxNode
+  }
+
+  /// Creates a `SwitchDefaultLabelSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .switchDefaultLabel)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeDefaultKeyword: UnexpectedNodesSyntax? = nil,
+    defaultKeyword: TokenSyntax = .keyword(.default),
+    _ unexpectedBetweenDefaultKeywordAndColon: UnexpectedNodesSyntax? = nil,
+    colon: TokenSyntax = .colonToken(),
+    _ unexpectedAfterColon: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed 
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeDefaultKeyword, defaultKeyword, unexpectedBetweenDefaultKeywordAndColon, colon, unexpectedAfterColon))) { (arena, _) in
+      let layout: [RawSyntax?] = [
+        unexpectedBeforeDefaultKeyword?.raw,
+        defaultKeyword.raw,
+        unexpectedBetweenDefaultKeywordAndColon?.raw,
+        colon.raw,
+        unexpectedAfterColon?.raw,
+      ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.switchDefaultLabel, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+
+  public var unexpectedBeforeDefaultKeyword: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = SwitchDefaultLabelSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var defaultKeyword: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = SwitchDefaultLabelSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var unexpectedBetweenDefaultKeywordAndColon: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = SwitchDefaultLabelSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var colon: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = SwitchDefaultLabelSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var unexpectedAfterColon: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = SwitchDefaultLabelSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeDefaultKeyword,
+      \Self.defaultKeyword,
+      \Self.unexpectedBetweenDefaultKeywordAndColon,
+      \Self.colon,
+      \Self.unexpectedAfterColon,
+    ])
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
+}
+
+extension SwitchDefaultLabelSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "unexpectedBeforeDefaultKeyword": unexpectedBeforeDefaultKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "defaultKeyword": Syntax(defaultKeyword).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenDefaultKeywordAndColon": unexpectedBetweenDefaultKeywordAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "colon": Syntax(colon).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterColon": unexpectedAfterColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+    ])
+  }
+}
+
+// MARK: - CaseItemSyntax
+
+public struct CaseItemSyntax: SyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .caseItem else { return nil }
+    self._syntaxNode = node._syntaxNode
+  }
+
+  /// Creates a `CaseItemSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .caseItem)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public init<P: PatternSyntaxProtocol>(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforePattern: UnexpectedNodesSyntax? = nil,
+    pattern: P,
+    _ unexpectedBetweenPatternAndWhereClause: UnexpectedNodesSyntax? = nil,
+    whereClause: WhereClauseSyntax? = nil,
+    _ unexpectedBetweenWhereClauseAndTrailingComma: UnexpectedNodesSyntax? = nil,
+    trailingComma: TokenSyntax? = nil,
+    _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed 
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforePattern, pattern, unexpectedBetweenPatternAndWhereClause, whereClause, unexpectedBetweenWhereClauseAndTrailingComma, trailingComma, unexpectedAfterTrailingComma))) { (arena, _) in
+      let layout: [RawSyntax?] = [
+        unexpectedBeforePattern?.raw,
+        pattern.raw,
+        unexpectedBetweenPatternAndWhereClause?.raw,
+        whereClause?.raw,
+        unexpectedBetweenWhereClauseAndTrailingComma?.raw,
+        trailingComma?.raw,
+        unexpectedAfterTrailingComma?.raw,
+      ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.caseItem, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+
+  public var unexpectedBeforePattern: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = CaseItemSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var pattern: PatternSyntax {
+    get {
+      return PatternSyntax(data.child(at: 1, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = CaseItemSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var unexpectedBetweenPatternAndWhereClause: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = CaseItemSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var whereClause: WhereClauseSyntax? {
+    get {
+      return data.child(at: 3, parent: Syntax(self)).map(WhereClauseSyntax.init)
+    }
+    set(value) {
+      self = CaseItemSyntax(data.replacingChild(at: 3, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var unexpectedBetweenWhereClauseAndTrailingComma: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = CaseItemSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var trailingComma: TokenSyntax? {
+    get {
+      return data.child(at: 5, parent: Syntax(self)).map(TokenSyntax.init)
+    }
+    set(value) {
+      self = CaseItemSyntax(data.replacingChild(at: 5, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var unexpectedAfterTrailingComma: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = CaseItemSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforePattern,
+      \Self.pattern,
+      \Self.unexpectedBetweenPatternAndWhereClause,
+      \Self.whereClause,
+      \Self.unexpectedBetweenWhereClauseAndTrailingComma,
+      \Self.trailingComma,
+      \Self.unexpectedAfterTrailingComma,
+    ])
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    case 5:
+      return nil
+    case 6:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
+}
+
+extension CaseItemSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "unexpectedBeforePattern": unexpectedBeforePattern.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "pattern": Syntax(pattern).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenPatternAndWhereClause": unexpectedBetweenPatternAndWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "whereClause": whereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenWhereClauseAndTrailingComma": unexpectedBetweenWhereClauseAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "trailingComma": trailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedAfterTrailingComma": unexpectedAfterTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+    ])
+  }
+}
+
 // MARK: - ClosureCaptureItemSpecifierSyntax
 
 public struct ClosureCaptureItemSpecifierSyntax: SyntaxProtocol, SyntaxHashable {
@@ -14357,511 +15041,6 @@ extension OptionalBindingConditionSyntax: CustomReflectable {
   }
 }
 
-// MARK: - SwitchCaseSyntax
-
-public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
-  public enum Label: SyntaxChildChoices {
-    case `default`(SwitchDefaultLabelSyntax)
-    case `case`(SwitchCaseLabelSyntax)
-    public var _syntaxNode: Syntax {
-      switch self {
-      case .default(let node): return node._syntaxNode
-      case .case(let node): return node._syntaxNode
-      }
-    }
-    init(_ data: SyntaxData) { self.init(Syntax(data))! }
-    public init(_ node: SwitchDefaultLabelSyntax) {
-      self = .default(node)
-    }
-    public init(_ node: SwitchCaseLabelSyntax) {
-      self = .case(node)
-    }
-    public init?<S: SyntaxProtocol>(_ node: S) {
-      if let node = node.as(SwitchDefaultLabelSyntax.self) {
-        self = .default(node)
-        return
-      }
-      if let node = node.as(SwitchCaseLabelSyntax.self) {
-        self = .case(node)
-        return
-      }
-      return nil
-    }
-
-    public static var structure: SyntaxNodeStructure {
-      return .choices([
-        .node(SwitchDefaultLabelSyntax.self),
-        .node(SwitchCaseLabelSyntax.self),
-      ])
-    }
-  }
-
-  public let _syntaxNode: Syntax
-
-  public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .switchCase else { return nil }
-    self._syntaxNode = node._syntaxNode
-  }
-
-  /// Creates a `SwitchCaseSyntax` node from the given `SyntaxData`. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
-  internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .switchCase)
-    self._syntaxNode = Syntax(data)
-  }
-
-  public init(
-    leadingTrivia: Trivia? = nil,
-    _ unexpectedBeforeUnknownAttr: UnexpectedNodesSyntax? = nil,
-    unknownAttr: AttributeSyntax? = nil,
-    _ unexpectedBetweenUnknownAttrAndLabel: UnexpectedNodesSyntax? = nil,
-    label: Label,
-    _ unexpectedBetweenLabelAndStatements: UnexpectedNodesSyntax? = nil,
-    statements: CodeBlockItemListSyntax,
-    _ unexpectedAfterStatements: UnexpectedNodesSyntax? = nil,
-    trailingTrivia: Trivia? = nil
-  ) {
-    // Extend the lifetime of all parameters so their arenas don't get destroyed 
-    // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeUnknownAttr, unknownAttr, unexpectedBetweenUnknownAttrAndLabel, label, unexpectedBetweenLabelAndStatements, statements, unexpectedAfterStatements))) { (arena, _) in
-      let layout: [RawSyntax?] = [
-        unexpectedBeforeUnknownAttr?.raw,
-        unknownAttr?.raw,
-        unexpectedBetweenUnknownAttrAndLabel?.raw,
-        label.raw,
-        unexpectedBetweenLabelAndStatements?.raw,
-        statements.raw,
-        unexpectedAfterStatements?.raw,
-      ]
-      let raw = RawSyntax.makeLayout(
-        kind: SyntaxKind.switchCase, from: layout, arena: arena,
-        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
-  }
-
-  public var unexpectedBeforeUnknownAttr: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = SwitchCaseSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public var unknownAttr: AttributeSyntax? {
-    get {
-      return data.child(at: 1, parent: Syntax(self)).map(AttributeSyntax.init)
-    }
-    set(value) {
-      self = SwitchCaseSyntax(data.replacingChild(at: 1, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public var unexpectedBetweenUnknownAttrAndLabel: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = SwitchCaseSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public var label: Label {
-    get {
-      return Label(data.child(at: 3, parent: Syntax(self))!)
-    }
-    set(value) {
-      self = SwitchCaseSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public var unexpectedBetweenLabelAndStatements: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = SwitchCaseSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public var statements: CodeBlockItemListSyntax {
-    get {
-      return CodeBlockItemListSyntax(data.child(at: 5, parent: Syntax(self))!)
-    }
-    set(value) {
-      self = SwitchCaseSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
-    }
-  }
-
-  /// Adds the provided `Statement` to the node's `statements`
-  /// collection.
-  /// - param element: The new `Statement` to add to the node's
-  ///                  `statements` collection.
-  /// - returns: A copy of the receiver with the provided `Statement`
-  ///            appended to its `statements` collection.
-  public func addStatement(_ element: CodeBlockItemSyntax) -> SwitchCaseSyntax {
-    var collection: RawSyntax
-    let arena = SyntaxArena()
-    if let col = raw.layoutView!.children[5] {
-      collection = col.layoutView!.appending(element.raw, arena: arena)
-    } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.codeBlockItemList,
-        from: [element.raw], arena: arena)
-    }
-    let newData = data.replacingChild(at: 5, with: collection, arena: arena)
-    return SwitchCaseSyntax(newData)
-  }
-
-  public var unexpectedAfterStatements: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = SwitchCaseSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-      \Self.unexpectedBeforeUnknownAttr,
-      \Self.unknownAttr,
-      \Self.unexpectedBetweenUnknownAttrAndLabel,
-      \Self.label,
-      \Self.unexpectedBetweenLabelAndStatements,
-      \Self.statements,
-      \Self.unexpectedAfterStatements,
-    ])
-  }
-
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return "label"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension SwitchCaseSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-      "unexpectedBeforeUnknownAttr": unexpectedBeforeUnknownAttr.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "unknownAttr": unknownAttr.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "unexpectedBetweenUnknownAttrAndLabel": unexpectedBetweenUnknownAttrAndLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "label": Syntax(label).asProtocol(SyntaxProtocol.self),
-      "unexpectedBetweenLabelAndStatements": unexpectedBetweenLabelAndStatements.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "statements": Syntax(statements).asProtocol(SyntaxProtocol.self),
-      "unexpectedAfterStatements": unexpectedAfterStatements.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-    ])
-  }
-}
-
-// MARK: - SwitchDefaultLabelSyntax
-
-public struct SwitchDefaultLabelSyntax: SyntaxProtocol, SyntaxHashable {
-  public let _syntaxNode: Syntax
-
-  public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .switchDefaultLabel else { return nil }
-    self._syntaxNode = node._syntaxNode
-  }
-
-  /// Creates a `SwitchDefaultLabelSyntax` node from the given `SyntaxData`. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
-  internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .switchDefaultLabel)
-    self._syntaxNode = Syntax(data)
-  }
-
-  public init(
-    leadingTrivia: Trivia? = nil,
-    _ unexpectedBeforeDefaultKeyword: UnexpectedNodesSyntax? = nil,
-    defaultKeyword: TokenSyntax = .keyword(.default),
-    _ unexpectedBetweenDefaultKeywordAndColon: UnexpectedNodesSyntax? = nil,
-    colon: TokenSyntax = .colonToken(),
-    _ unexpectedAfterColon: UnexpectedNodesSyntax? = nil,
-    trailingTrivia: Trivia? = nil
-  ) {
-    // Extend the lifetime of all parameters so their arenas don't get destroyed 
-    // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeDefaultKeyword, defaultKeyword, unexpectedBetweenDefaultKeywordAndColon, colon, unexpectedAfterColon))) { (arena, _) in
-      let layout: [RawSyntax?] = [
-        unexpectedBeforeDefaultKeyword?.raw,
-        defaultKeyword.raw,
-        unexpectedBetweenDefaultKeywordAndColon?.raw,
-        colon.raw,
-        unexpectedAfterColon?.raw,
-      ]
-      let raw = RawSyntax.makeLayout(
-        kind: SyntaxKind.switchDefaultLabel, from: layout, arena: arena,
-        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
-  }
-
-  public var unexpectedBeforeDefaultKeyword: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = SwitchDefaultLabelSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public var defaultKeyword: TokenSyntax {
-    get {
-      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
-    }
-    set(value) {
-      self = SwitchDefaultLabelSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public var unexpectedBetweenDefaultKeywordAndColon: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = SwitchDefaultLabelSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public var colon: TokenSyntax {
-    get {
-      return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
-    }
-    set(value) {
-      self = SwitchDefaultLabelSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public var unexpectedAfterColon: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = SwitchDefaultLabelSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-      \Self.unexpectedBeforeDefaultKeyword,
-      \Self.defaultKeyword,
-      \Self.unexpectedBetweenDefaultKeywordAndColon,
-      \Self.colon,
-      \Self.unexpectedAfterColon,
-    ])
-  }
-
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension SwitchDefaultLabelSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-      "unexpectedBeforeDefaultKeyword": unexpectedBeforeDefaultKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "defaultKeyword": Syntax(defaultKeyword).asProtocol(SyntaxProtocol.self),
-      "unexpectedBetweenDefaultKeywordAndColon": unexpectedBetweenDefaultKeywordAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "colon": Syntax(colon).asProtocol(SyntaxProtocol.self),
-      "unexpectedAfterColon": unexpectedAfterColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-    ])
-  }
-}
-
-// MARK: - CaseItemSyntax
-
-public struct CaseItemSyntax: SyntaxProtocol, SyntaxHashable {
-  public let _syntaxNode: Syntax
-
-  public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .caseItem else { return nil }
-    self._syntaxNode = node._syntaxNode
-  }
-
-  /// Creates a `CaseItemSyntax` node from the given `SyntaxData`. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
-  internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .caseItem)
-    self._syntaxNode = Syntax(data)
-  }
-
-  public init<P: PatternSyntaxProtocol>(
-    leadingTrivia: Trivia? = nil,
-    _ unexpectedBeforePattern: UnexpectedNodesSyntax? = nil,
-    pattern: P,
-    _ unexpectedBetweenPatternAndWhereClause: UnexpectedNodesSyntax? = nil,
-    whereClause: WhereClauseSyntax? = nil,
-    _ unexpectedBetweenWhereClauseAndTrailingComma: UnexpectedNodesSyntax? = nil,
-    trailingComma: TokenSyntax? = nil,
-    _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
-    trailingTrivia: Trivia? = nil
-  ) {
-    // Extend the lifetime of all parameters so their arenas don't get destroyed 
-    // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforePattern, pattern, unexpectedBetweenPatternAndWhereClause, whereClause, unexpectedBetweenWhereClauseAndTrailingComma, trailingComma, unexpectedAfterTrailingComma))) { (arena, _) in
-      let layout: [RawSyntax?] = [
-        unexpectedBeforePattern?.raw,
-        pattern.raw,
-        unexpectedBetweenPatternAndWhereClause?.raw,
-        whereClause?.raw,
-        unexpectedBetweenWhereClauseAndTrailingComma?.raw,
-        trailingComma?.raw,
-        unexpectedAfterTrailingComma?.raw,
-      ]
-      let raw = RawSyntax.makeLayout(
-        kind: SyntaxKind.caseItem, from: layout, arena: arena,
-        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
-  }
-
-  public var unexpectedBeforePattern: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = CaseItemSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public var pattern: PatternSyntax {
-    get {
-      return PatternSyntax(data.child(at: 1, parent: Syntax(self))!)
-    }
-    set(value) {
-      self = CaseItemSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public var unexpectedBetweenPatternAndWhereClause: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = CaseItemSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public var whereClause: WhereClauseSyntax? {
-    get {
-      return data.child(at: 3, parent: Syntax(self)).map(WhereClauseSyntax.init)
-    }
-    set(value) {
-      self = CaseItemSyntax(data.replacingChild(at: 3, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public var unexpectedBetweenWhereClauseAndTrailingComma: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = CaseItemSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public var trailingComma: TokenSyntax? {
-    get {
-      return data.child(at: 5, parent: Syntax(self)).map(TokenSyntax.init)
-    }
-    set(value) {
-      self = CaseItemSyntax(data.replacingChild(at: 5, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public var unexpectedAfterTrailingComma: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = CaseItemSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-      \Self.unexpectedBeforePattern,
-      \Self.pattern,
-      \Self.unexpectedBetweenPatternAndWhereClause,
-      \Self.whereClause,
-      \Self.unexpectedBetweenWhereClauseAndTrailingComma,
-      \Self.trailingComma,
-      \Self.unexpectedAfterTrailingComma,
-    ])
-  }
-
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension CaseItemSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-      "unexpectedBeforePattern": unexpectedBeforePattern.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "pattern": Syntax(pattern).asProtocol(SyntaxProtocol.self),
-      "unexpectedBetweenPatternAndWhereClause": unexpectedBetweenPatternAndWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "whereClause": whereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "unexpectedBetweenWhereClauseAndTrailingComma": unexpectedBetweenWhereClauseAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "trailingComma": trailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "unexpectedAfterTrailingComma": unexpectedAfterTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-    ])
-  }
-}
-
 // MARK: - CatchItemSyntax
 
 public struct CatchItemSyntax: SyntaxProtocol, SyntaxHashable {
@@ -15052,185 +15231,6 @@ extension CatchItemSyntax: CustomReflectable {
       "unexpectedBetweenWhereClauseAndTrailingComma": unexpectedBetweenWhereClauseAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "trailingComma": trailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "unexpectedAfterTrailingComma": unexpectedAfterTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-    ])
-  }
-}
-
-// MARK: - SwitchCaseLabelSyntax
-
-public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable {
-  public let _syntaxNode: Syntax
-
-  public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .switchCaseLabel else { return nil }
-    self._syntaxNode = node._syntaxNode
-  }
-
-  /// Creates a `SwitchCaseLabelSyntax` node from the given `SyntaxData`. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
-  internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .switchCaseLabel)
-    self._syntaxNode = Syntax(data)
-  }
-
-  public init(
-    leadingTrivia: Trivia? = nil,
-    _ unexpectedBeforeCaseKeyword: UnexpectedNodesSyntax? = nil,
-    caseKeyword: TokenSyntax = .keyword(.case),
-    _ unexpectedBetweenCaseKeywordAndCaseItems: UnexpectedNodesSyntax? = nil,
-    caseItems: CaseItemListSyntax,
-    _ unexpectedBetweenCaseItemsAndColon: UnexpectedNodesSyntax? = nil,
-    colon: TokenSyntax = .colonToken(),
-    _ unexpectedAfterColon: UnexpectedNodesSyntax? = nil,
-    trailingTrivia: Trivia? = nil
-  ) {
-    // Extend the lifetime of all parameters so their arenas don't get destroyed 
-    // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeCaseKeyword, caseKeyword, unexpectedBetweenCaseKeywordAndCaseItems, caseItems, unexpectedBetweenCaseItemsAndColon, colon, unexpectedAfterColon))) { (arena, _) in
-      let layout: [RawSyntax?] = [
-        unexpectedBeforeCaseKeyword?.raw,
-        caseKeyword.raw,
-        unexpectedBetweenCaseKeywordAndCaseItems?.raw,
-        caseItems.raw,
-        unexpectedBetweenCaseItemsAndColon?.raw,
-        colon.raw,
-        unexpectedAfterColon?.raw,
-      ]
-      let raw = RawSyntax.makeLayout(
-        kind: SyntaxKind.switchCaseLabel, from: layout, arena: arena,
-        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
-  }
-
-  public var unexpectedBeforeCaseKeyword: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = SwitchCaseLabelSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public var caseKeyword: TokenSyntax {
-    get {
-      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
-    }
-    set(value) {
-      self = SwitchCaseLabelSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public var unexpectedBetweenCaseKeywordAndCaseItems: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = SwitchCaseLabelSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public var caseItems: CaseItemListSyntax {
-    get {
-      return CaseItemListSyntax(data.child(at: 3, parent: Syntax(self))!)
-    }
-    set(value) {
-      self = SwitchCaseLabelSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
-    }
-  }
-
-  /// Adds the provided `CaseItem` to the node's `caseItems`
-  /// collection.
-  /// - param element: The new `CaseItem` to add to the node's
-  ///                  `caseItems` collection.
-  /// - returns: A copy of the receiver with the provided `CaseItem`
-  ///            appended to its `caseItems` collection.
-  public func addCaseItem(_ element: CaseItemSyntax) -> SwitchCaseLabelSyntax {
-    var collection: RawSyntax
-    let arena = SyntaxArena()
-    if let col = raw.layoutView!.children[3] {
-      collection = col.layoutView!.appending(element.raw, arena: arena)
-    } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.caseItemList,
-        from: [element.raw], arena: arena)
-    }
-    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
-    return SwitchCaseLabelSyntax(newData)
-  }
-
-  public var unexpectedBetweenCaseItemsAndColon: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = SwitchCaseLabelSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public var colon: TokenSyntax {
-    get {
-      return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
-    }
-    set(value) {
-      self = SwitchCaseLabelSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public var unexpectedAfterColon: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = SwitchCaseLabelSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-      \Self.unexpectedBeforeCaseKeyword,
-      \Self.caseKeyword,
-      \Self.unexpectedBetweenCaseKeywordAndCaseItems,
-      \Self.caseItems,
-      \Self.unexpectedBetweenCaseItemsAndColon,
-      \Self.colon,
-      \Self.unexpectedAfterColon,
-    ])
-  }
-
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension SwitchCaseLabelSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-      "unexpectedBeforeCaseKeyword": unexpectedBeforeCaseKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "caseKeyword": Syntax(caseKeyword).asProtocol(SyntaxProtocol.self),
-      "unexpectedBetweenCaseKeywordAndCaseItems": unexpectedBetweenCaseKeywordAndCaseItems.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "caseItems": Syntax(caseItems).asProtocol(SyntaxProtocol.self),
-      "unexpectedBetweenCaseItemsAndColon": unexpectedBetweenCaseItemsAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "colon": Syntax(colon).asProtocol(SyntaxProtocol.self),
-      "unexpectedAfterColon": unexpectedAfterColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }

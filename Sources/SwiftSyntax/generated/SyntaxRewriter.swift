@@ -713,6 +713,13 @@ open class SyntaxRewriter {
     return Syntax(visitChildren(node)).cast(ExpressionSegmentSyntax.self)
   }
   
+  /// Visit a `ExpressionStmtSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: ExpressionStmtSyntax) -> StmtSyntax {
+    return StmtSyntax(visitChildren(node))
+  }
+  
   /// Visit a `ExtensionDeclSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -895,11 +902,11 @@ open class SyntaxRewriter {
     return DeclSyntax(visitChildren(node))
   }
   
-  /// Visit a `IfStmtSyntax`.
+  /// Visit a `IfExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: IfStmtSyntax) -> StmtSyntax {
-    return StmtSyntax(visitChildren(node))
+  open func visit(_ node: IfExprSyntax) -> ExprSyntax {
+    return ExprSyntax(visitChildren(node))
   }
   
   /// Visit a `ImplementsAttributeArgumentsSyntax`.
@@ -1581,11 +1588,11 @@ open class SyntaxRewriter {
     return Syntax(visitChildren(node)).cast(SwitchDefaultLabelSyntax.self)
   }
   
-  /// Visit a `SwitchStmtSyntax`.
+  /// Visit a `SwitchExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: SwitchStmtSyntax) -> StmtSyntax {
-    return StmtSyntax(visitChildren(node))
+  open func visit(_ node: SwitchExprSyntax) -> ExprSyntax {
+    return ExprSyntax(visitChildren(node))
   }
   
   /// Visit a `TargetFunctionEntrySyntax`.
@@ -3287,6 +3294,20 @@ open class SyntaxRewriter {
   }
   
   /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplExpressionStmtSyntax(_ data: SyntaxData) -> Syntax {
+    let node = ExpressionStmtSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { 
+      visitPost(node._syntaxNode) 
+    }
+    if let newNode = visitAny(node._syntaxNode) { 
+      return newNode 
+    }
+    return Syntax(visit(node))
+  }
+  
+  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplExtensionDeclSyntax(_ data: SyntaxData) -> Syntax {
     let node = ExtensionDeclSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -3651,8 +3672,8 @@ open class SyntaxRewriter {
   }
   
   /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplIfStmtSyntax(_ data: SyntaxData) -> Syntax {
-    let node = IfStmtSyntax(data)
+  private func visitImplIfExprSyntax(_ data: SyntaxData) -> Syntax {
+    let node = IfExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer { 
@@ -5023,8 +5044,8 @@ open class SyntaxRewriter {
   }
   
   /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplSwitchStmtSyntax(_ data: SyntaxData) -> Syntax {
-    let node = SwitchStmtSyntax(data)
+  private func visitImplSwitchExprSyntax(_ data: SyntaxData) -> Syntax {
+    let node = SwitchExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer { 
@@ -5778,6 +5799,8 @@ open class SyntaxRewriter {
       return visitImplExpressionPatternSyntax
     case .expressionSegment: 
       return visitImplExpressionSegmentSyntax
+    case .expressionStmt: 
+      return visitImplExpressionStmtSyntax
     case .extensionDecl: 
       return visitImplExtensionDeclSyntax
     case .fallthroughStmt: 
@@ -5830,8 +5853,8 @@ open class SyntaxRewriter {
       return visitImplIfConfigClauseSyntax
     case .ifConfigDecl: 
       return visitImplIfConfigDeclSyntax
-    case .ifStmt: 
-      return visitImplIfStmtSyntax
+    case .ifExpr: 
+      return visitImplIfExprSyntax
     case .implementsAttributeArguments: 
       return visitImplImplementsAttributeArgumentsSyntax
     case .implicitlyUnwrappedOptionalType: 
@@ -6026,8 +6049,8 @@ open class SyntaxRewriter {
       return visitImplSwitchCaseSyntax
     case .switchDefaultLabel: 
       return visitImplSwitchDefaultLabelSyntax
-    case .switchStmt: 
-      return visitImplSwitchStmtSyntax
+    case .switchExpr: 
+      return visitImplSwitchExprSyntax
     case .targetFunctionEntry: 
       return visitImplTargetFunctionEntrySyntax
     case .ternaryExpr: 
@@ -6306,6 +6329,8 @@ open class SyntaxRewriter {
       return visitImplExpressionPatternSyntax(data)
     case .expressionSegment: 
       return visitImplExpressionSegmentSyntax(data)
+    case .expressionStmt: 
+      return visitImplExpressionStmtSyntax(data)
     case .extensionDecl: 
       return visitImplExtensionDeclSyntax(data)
     case .fallthroughStmt: 
@@ -6358,8 +6383,8 @@ open class SyntaxRewriter {
       return visitImplIfConfigClauseSyntax(data)
     case .ifConfigDecl: 
       return visitImplIfConfigDeclSyntax(data)
-    case .ifStmt: 
-      return visitImplIfStmtSyntax(data)
+    case .ifExpr: 
+      return visitImplIfExprSyntax(data)
     case .implementsAttributeArguments: 
       return visitImplImplementsAttributeArgumentsSyntax(data)
     case .implicitlyUnwrappedOptionalType: 
@@ -6554,8 +6579,8 @@ open class SyntaxRewriter {
       return visitImplSwitchCaseSyntax(data)
     case .switchDefaultLabel: 
       return visitImplSwitchDefaultLabelSyntax(data)
-    case .switchStmt: 
-      return visitImplSwitchStmtSyntax(data)
+    case .switchExpr: 
+      return visitImplSwitchExprSyntax(data)
     case .targetFunctionEntry: 
       return visitImplTargetFunctionEntrySyntax(data)
     case .ternaryExpr: 

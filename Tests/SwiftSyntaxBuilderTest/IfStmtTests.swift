@@ -15,11 +15,11 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 
 final class IfStmtTests: XCTestCase {
-  func testEmptyIfStmt() {
+  func testEmptyIfExpr() {
     // Use the convenience initializer from IfStmtConvenienceInitializers. This is
     // disambiguated by the absence of a labelName parameter and the use of a
     // trailing closure.
-    let buildable = IfStmtSyntax(conditions: ConditionElementListSyntax { BooleanLiteralExprSyntax(false) }) {}
+    let buildable = IfExprSyntax(conditions: ConditionElementListSyntax { BooleanLiteralExprSyntax(false) }) {}
     AssertBuildResult(
       buildable,
       """
@@ -29,16 +29,16 @@ final class IfStmtTests: XCTestCase {
     )
   }
 
-  func testIfStmtyntax() throws {
-    let testCases: [UInt: (IfStmtSyntax, String)] = [
+  func testIfStmtSyntax() throws {
+    let testCases: [UInt: (IfExprSyntax, String)] = [
       #line: (
-        StmtSyntax(
+        ExprSyntax(
           """
           if foo == x {
             return foo
           }
           """
-        ).cast(IfStmtSyntax.self),
+        ).cast(IfExprSyntax.self),
         """
         if foo == x {
             return foo
@@ -46,7 +46,7 @@ final class IfStmtTests: XCTestCase {
         """
       ),
       #line: (
-        try IfStmtSyntax("if foo == x") { StmtSyntax("return foo") },
+        try IfExprSyntax("if foo == x") { StmtSyntax("return foo") },
         """
         if foo == x {
             return foo
@@ -54,7 +54,7 @@ final class IfStmtTests: XCTestCase {
         """
       ),
       #line: (
-        try IfStmtSyntax("if foo == x") {
+        try IfExprSyntax("if foo == x") {
           StmtSyntax("return foo")
         } else: {
           StmtSyntax("return bar")
@@ -68,7 +68,7 @@ final class IfStmtTests: XCTestCase {
         """
       ),
       #line: (
-        try IfStmtSyntax("if foo == x", bodyBuilder: { StmtSyntax("return foo") }, elseIf: IfStmtSyntax("if foo == z") { StmtSyntax("return baz") }),
+        try IfExprSyntax("if foo == x", bodyBuilder: { StmtSyntax("return foo") }, elseIf: IfExprSyntax("if foo == z") { StmtSyntax("return baz") }),
         """
         if foo == x {
             return foo
@@ -86,21 +86,21 @@ final class IfStmtTests: XCTestCase {
   }
 
   func testIfStmtSpacing() {
-    let testCases: [UInt: (IfStmtSyntax, String)] = [
+    let testCases: [UInt: (IfExprSyntax, String)] = [
       #line: (
-        IfStmtSyntax(conditions: ConditionElementListSyntax { ExprSyntax("!(true)") }) {},
+        IfExprSyntax(conditions: ConditionElementListSyntax { ExprSyntax("!(true)") }) {},
         """
         if !(true) {
         }
         """
       ),
       #line: (
-        StmtSyntax(
+        ExprSyntax(
           """
           if !(false) {
           }
           """
-        ).cast(IfStmtSyntax.self),
+        ).cast(IfExprSyntax.self),
         """
         if !(false) {
         }
@@ -115,7 +115,7 @@ final class IfStmtTests: XCTestCase {
   }
 
   func testIfLetStmt() {
-    let buildable = IfStmtSyntax(
+    let buildable = IfExprSyntax(
       conditions: ConditionElementListSyntax {
         OptionalBindingConditionSyntax(
           letOrVarKeyword: .keyword(.let),
@@ -134,7 +134,7 @@ final class IfStmtTests: XCTestCase {
   }
 
   func testIfCaseStmt() {
-    let buildable = IfStmtSyntax(
+    let buildable = IfExprSyntax(
       conditions: ConditionElementListSyntax {
         MatchingPatternConditionSyntax(
           pattern: ExpressionPatternSyntax(expression: MemberAccessExprSyntax(name: "x")),

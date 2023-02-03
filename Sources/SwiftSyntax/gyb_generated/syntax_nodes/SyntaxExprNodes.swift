@@ -3046,6 +3046,520 @@ extension BooleanLiteralExprSyntax: CustomReflectable {
   }
 }
 
+// MARK: - IfExprSyntax
+
+public struct IfExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
+  public enum ElseBody: SyntaxChildChoices {
+    case `ifExpr`(IfExprSyntax)
+    case `codeBlock`(CodeBlockSyntax)
+    public var _syntaxNode: Syntax {
+      switch self {
+      case .ifExpr(let node): return node._syntaxNode
+      case .codeBlock(let node): return node._syntaxNode
+      }
+    }
+    init(_ data: SyntaxData) { self.init(Syntax(data))! }
+    public init(_ node: IfExprSyntax) {
+      self = .ifExpr(node)
+    }
+    public init(_ node: CodeBlockSyntax) {
+      self = .codeBlock(node)
+    }
+    public init?<S: SyntaxProtocol>(_ node: S) {
+      if let node = node.as(IfExprSyntax.self) {
+        self = .ifExpr(node)
+        return
+      }
+      if let node = node.as(CodeBlockSyntax.self) {
+        self = .codeBlock(node)
+        return
+      }
+      return nil
+    }
+
+    public static var structure: SyntaxNodeStructure {
+      return .choices([
+        .node(IfExprSyntax.self),
+        .node(CodeBlockSyntax.self),
+      ])
+    }
+  }
+
+  public let _syntaxNode: Syntax
+
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .ifExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
+  }
+
+  /// Creates a `IfExprSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .ifExpr)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeIfKeyword: UnexpectedNodesSyntax? = nil,
+    ifKeyword: TokenSyntax = .keyword(.if),
+    _ unexpectedBetweenIfKeywordAndConditions: UnexpectedNodesSyntax? = nil,
+    conditions: ConditionElementListSyntax,
+    _ unexpectedBetweenConditionsAndBody: UnexpectedNodesSyntax? = nil,
+    body: CodeBlockSyntax,
+    _ unexpectedBetweenBodyAndElseKeyword: UnexpectedNodesSyntax? = nil,
+    elseKeyword: TokenSyntax? = nil,
+    _ unexpectedBetweenElseKeywordAndElseBody: UnexpectedNodesSyntax? = nil,
+    elseBody: ElseBody? = nil,
+    _ unexpectedAfterElseBody: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed 
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeIfKeyword, ifKeyword, unexpectedBetweenIfKeywordAndConditions, conditions, unexpectedBetweenConditionsAndBody, body, unexpectedBetweenBodyAndElseKeyword, elseKeyword, unexpectedBetweenElseKeywordAndElseBody, elseBody, unexpectedAfterElseBody))) { (arena, _) in
+      let layout: [RawSyntax?] = [
+        unexpectedBeforeIfKeyword?.raw,
+        ifKeyword.raw,
+        unexpectedBetweenIfKeywordAndConditions?.raw,
+        conditions.raw,
+        unexpectedBetweenConditionsAndBody?.raw,
+        body.raw,
+        unexpectedBetweenBodyAndElseKeyword?.raw,
+        elseKeyword?.raw,
+        unexpectedBetweenElseKeywordAndElseBody?.raw,
+        elseBody?.raw,
+        unexpectedAfterElseBody?.raw,
+      ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.ifExpr, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+
+  public var unexpectedBeforeIfKeyword: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = IfExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var ifKeyword: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = IfExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var unexpectedBetweenIfKeywordAndConditions: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = IfExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var conditions: ConditionElementListSyntax {
+    get {
+      return ConditionElementListSyntax(data.child(at: 3, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = IfExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+
+  /// Adds the provided `Condition` to the node's `conditions`
+  /// collection.
+  /// - param element: The new `Condition` to add to the node's
+  ///                  `conditions` collection.
+  /// - returns: A copy of the receiver with the provided `Condition`
+  ///            appended to its `conditions` collection.
+  public func addCondition(_ element: ConditionElementSyntax) -> IfExprSyntax {
+    var collection: RawSyntax
+    let arena = SyntaxArena()
+    if let col = raw.layoutView!.children[3] {
+      collection = col.layoutView!.appending(element.raw, arena: arena)
+    } else {
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.conditionElementList,
+        from: [element.raw], arena: arena)
+    }
+    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
+    return IfExprSyntax(newData)
+  }
+
+  public var unexpectedBetweenConditionsAndBody: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = IfExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var body: CodeBlockSyntax {
+    get {
+      return CodeBlockSyntax(data.child(at: 5, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = IfExprSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var unexpectedBetweenBodyAndElseKeyword: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = IfExprSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var elseKeyword: TokenSyntax? {
+    get {
+      return data.child(at: 7, parent: Syntax(self)).map(TokenSyntax.init)
+    }
+    set(value) {
+      self = IfExprSyntax(data.replacingChild(at: 7, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var unexpectedBetweenElseKeywordAndElseBody: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = IfExprSyntax(data.replacingChild(at: 8, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var elseBody: ElseBody? {
+    get {
+      return data.child(at: 9, parent: Syntax(self)).map(ElseBody.init)
+    }
+    set(value) {
+      self = IfExprSyntax(data.replacingChild(at: 9, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var unexpectedAfterElseBody: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 10, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = IfExprSyntax(data.replacingChild(at: 10, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeIfKeyword,
+      \Self.ifKeyword,
+      \Self.unexpectedBetweenIfKeywordAndConditions,
+      \Self.conditions,
+      \Self.unexpectedBetweenConditionsAndBody,
+      \Self.body,
+      \Self.unexpectedBetweenBodyAndElseKeyword,
+      \Self.elseKeyword,
+      \Self.unexpectedBetweenElseKeywordAndElseBody,
+      \Self.elseBody,
+      \Self.unexpectedAfterElseBody,
+    ])
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    case 5:
+      return "body"
+    case 6:
+      return nil
+    case 7:
+      return nil
+    case 8:
+      return nil
+    case 9:
+      return "else body"
+    case 10:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
+}
+
+extension IfExprSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "unexpectedBeforeIfKeyword": unexpectedBeforeIfKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "ifKeyword": Syntax(ifKeyword).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenIfKeywordAndConditions": unexpectedBetweenIfKeywordAndConditions.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "conditions": Syntax(conditions).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenConditionsAndBody": unexpectedBetweenConditionsAndBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "body": Syntax(body).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenBodyAndElseKeyword": unexpectedBetweenBodyAndElseKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "elseKeyword": elseKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenElseKeywordAndElseBody": unexpectedBetweenElseKeywordAndElseBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "elseBody": elseBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedAfterElseBody": unexpectedAfterElseBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+    ])
+  }
+}
+
+// MARK: - SwitchExprSyntax
+
+public struct SwitchExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .switchExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
+  }
+
+  /// Creates a `SwitchExprSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .switchExpr)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public init<E: ExprSyntaxProtocol>(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeSwitchKeyword: UnexpectedNodesSyntax? = nil,
+    switchKeyword: TokenSyntax = .keyword(.switch),
+    _ unexpectedBetweenSwitchKeywordAndExpression: UnexpectedNodesSyntax? = nil,
+    expression: E,
+    _ unexpectedBetweenExpressionAndLeftBrace: UnexpectedNodesSyntax? = nil,
+    leftBrace: TokenSyntax = .leftBraceToken(),
+    _ unexpectedBetweenLeftBraceAndCases: UnexpectedNodesSyntax? = nil,
+    cases: SwitchCaseListSyntax,
+    _ unexpectedBetweenCasesAndRightBrace: UnexpectedNodesSyntax? = nil,
+    rightBrace: TokenSyntax = .rightBraceToken(),
+    _ unexpectedAfterRightBrace: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed 
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeSwitchKeyword, switchKeyword, unexpectedBetweenSwitchKeywordAndExpression, expression, unexpectedBetweenExpressionAndLeftBrace, leftBrace, unexpectedBetweenLeftBraceAndCases, cases, unexpectedBetweenCasesAndRightBrace, rightBrace, unexpectedAfterRightBrace))) { (arena, _) in
+      let layout: [RawSyntax?] = [
+        unexpectedBeforeSwitchKeyword?.raw,
+        switchKeyword.raw,
+        unexpectedBetweenSwitchKeywordAndExpression?.raw,
+        expression.raw,
+        unexpectedBetweenExpressionAndLeftBrace?.raw,
+        leftBrace.raw,
+        unexpectedBetweenLeftBraceAndCases?.raw,
+        cases.raw,
+        unexpectedBetweenCasesAndRightBrace?.raw,
+        rightBrace.raw,
+        unexpectedAfterRightBrace?.raw,
+      ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.switchExpr, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+
+  public var unexpectedBeforeSwitchKeyword: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = SwitchExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var switchKeyword: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = SwitchExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var unexpectedBetweenSwitchKeywordAndExpression: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = SwitchExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var expression: ExprSyntax {
+    get {
+      return ExprSyntax(data.child(at: 3, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = SwitchExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var unexpectedBetweenExpressionAndLeftBrace: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = SwitchExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var leftBrace: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = SwitchExprSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var unexpectedBetweenLeftBraceAndCases: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = SwitchExprSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var cases: SwitchCaseListSyntax {
+    get {
+      return SwitchCaseListSyntax(data.child(at: 7, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = SwitchExprSyntax(data.replacingChild(at: 7, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+
+  /// Adds the provided `Case` to the node's `cases`
+  /// collection.
+  /// - param element: The new `Case` to add to the node's
+  ///                  `cases` collection.
+  /// - returns: A copy of the receiver with the provided `Case`
+  ///            appended to its `cases` collection.
+  public func addCase(_ element: Syntax) -> SwitchExprSyntax {
+    var collection: RawSyntax
+    let arena = SyntaxArena()
+    if let col = raw.layoutView!.children[7] {
+      collection = col.layoutView!.appending(element.raw, arena: arena)
+    } else {
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.switchCaseList,
+        from: [element.raw], arena: arena)
+    }
+    let newData = data.replacingChild(at: 7, with: collection, arena: arena)
+    return SwitchExprSyntax(newData)
+  }
+
+  public var unexpectedBetweenCasesAndRightBrace: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = SwitchExprSyntax(data.replacingChild(at: 8, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var rightBrace: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 9, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = SwitchExprSyntax(data.replacingChild(at: 9, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var unexpectedAfterRightBrace: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 10, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = SwitchExprSyntax(data.replacingChild(at: 10, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeSwitchKeyword,
+      \Self.switchKeyword,
+      \Self.unexpectedBetweenSwitchKeywordAndExpression,
+      \Self.expression,
+      \Self.unexpectedBetweenExpressionAndLeftBrace,
+      \Self.leftBrace,
+      \Self.unexpectedBetweenLeftBraceAndCases,
+      \Self.cases,
+      \Self.unexpectedBetweenCasesAndRightBrace,
+      \Self.rightBrace,
+      \Self.unexpectedAfterRightBrace,
+    ])
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    case 5:
+      return nil
+    case 6:
+      return nil
+    case 7:
+      return nil
+    case 8:
+      return nil
+    case 9:
+      return nil
+    case 10:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
+}
+
+extension SwitchExprSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "unexpectedBeforeSwitchKeyword": unexpectedBeforeSwitchKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "switchKeyword": Syntax(switchKeyword).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenSwitchKeywordAndExpression": unexpectedBetweenSwitchKeywordAndExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "expression": Syntax(expression).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenExpressionAndLeftBrace": unexpectedBetweenExpressionAndLeftBrace.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "leftBrace": Syntax(leftBrace).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenLeftBraceAndCases": unexpectedBetweenLeftBraceAndCases.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "cases": Syntax(cases).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenCasesAndRightBrace": unexpectedBetweenCasesAndRightBrace.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "rightBrace": Syntax(rightBrace).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterRightBrace": unexpectedAfterRightBrace.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+    ])
+  }
+}
+
 // MARK: - UnresolvedTernaryExprSyntax
 
 public struct UnresolvedTernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {

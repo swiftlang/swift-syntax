@@ -581,6 +581,26 @@ enum AwaitTryMove: RawTokenKindSubset {
   }
 }
 
+enum IfOrSwitch: RawTokenKindSubset {
+  case ifKeyword
+  case switchKeyword
+
+  init?(lexeme: Lexer.Lexeme) {
+    switch lexeme {
+    case RawTokenKindMatch(.if): self = .ifKeyword
+    case RawTokenKindMatch(.switch): self = .switchKeyword
+    default: return nil
+    }
+  }
+
+  var rawTokenKind: RawTokenKind {
+    switch self {
+    case .ifKeyword: return .keyword(.if)
+    case .switchKeyword: return .keyword(.switch)
+    }
+  }
+}
+
 enum ExpressionPrefixOperator: RawTokenKindSubset {
   case backslash
   case prefixAmpersand
@@ -746,6 +766,7 @@ enum ExpressionStart: RawTokenKindSubset {
   case expressionPrefixOperator(ExpressionPrefixOperator)
   case matchingPatternStart(MatchingPatternStart)
   case primaryExpressionStart(PrimaryExpressionStart)
+  case ifOrSwitch(IfOrSwitch)
 
   init?(lexeme: Lexer.Lexeme) {
     if let subset = AwaitTryMove(lexeme: lexeme) {
@@ -756,6 +777,8 @@ enum ExpressionStart: RawTokenKindSubset {
       self = .matchingPatternStart(subset)
     } else if let subset = PrimaryExpressionStart(lexeme: lexeme) {
       self = .primaryExpressionStart(subset)
+    } else if let subset = IfOrSwitch(lexeme: lexeme) {
+      self = .ifOrSwitch(subset)
     } else {
       return nil
     }
@@ -766,6 +789,7 @@ enum ExpressionStart: RawTokenKindSubset {
       + ExpressionPrefixOperator.allCases.map(Self.expressionPrefixOperator)
       + MatchingPatternStart.allCases.map(Self.matchingPatternStart)
       + PrimaryExpressionStart.allCases.map(Self.primaryExpressionStart)
+      + IfOrSwitch.allCases.map(Self.ifOrSwitch)
   }
 
   var rawTokenKind: RawTokenKind {
@@ -774,6 +798,7 @@ enum ExpressionStart: RawTokenKindSubset {
     case .expressionPrefixOperator(let underlyingKind): return underlyingKind.rawTokenKind
     case .matchingPatternStart(let underlyingKind): return underlyingKind.rawTokenKind
     case .primaryExpressionStart(let underlyingKind): return underlyingKind.rawTokenKind
+    case .ifOrSwitch(let underlyingKind): return underlyingKind.rawTokenKind
     }
   }
 }

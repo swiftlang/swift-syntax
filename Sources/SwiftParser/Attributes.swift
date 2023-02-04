@@ -888,11 +888,12 @@ extension Parser {
       if self.at(any: [.keyword(.from), .keyword(.branch), .keyword(.revision)]) {
         (unexpectedBeforeRequirementLabel, requirementLabel) = self.expectAny([.keyword(.from), .keyword(.branch), .keyword(.revision)], default: .keyword(.from))
         (unexpectedBeforeRequirementColon, requirementColon) = self.expect(.colon)
+        requirement = self.parseStringLiteral().as(RawExprSyntax.self)
       } else {
         (unexpectedBeforeRequirementLabel, requirementLabel) = (nil, nil)
         (unexpectedBeforeRequirementColon, requirementColon) = (nil, nil)
+        requirement = self.parseExpression()
       }
-      requirement = self.parseExpression()
     } else {
       (unexpectedBeforeRequirementComma, requirementComma) = (nil, nil)
       (unexpectedBeforeRequirementLabel, requirementLabel) = (nil, nil)

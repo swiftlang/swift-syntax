@@ -10573,17 +10573,17 @@ public struct PackageAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
     locationColon: TokenSyntax = .colonToken(),
     _ unexpectedBetweenLocationColonAndLocation: UnexpectedNodesSyntax? = nil,
     location: StringLiteralExprSyntax,
-    _ unexpectedBetweenLocationAndLocReqComma: UnexpectedNodesSyntax? = nil,
-    locReqComma: TokenSyntax? = nil,
-    _ unexpectedBetweenLocReqCommaAndRequirementLabel: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenLocationAndRequirementComma: UnexpectedNodesSyntax? = nil,
+    requirementComma: TokenSyntax? = nil,
+    _ unexpectedBetweenRequirementCommaAndRequirementLabel: UnexpectedNodesSyntax? = nil,
     requirementLabel: TokenSyntax? = nil,
     _ unexpectedBetweenRequirementLabelAndRequirementColon: UnexpectedNodesSyntax? = nil,
     requirementColon: TokenSyntax? = nil,
     _ unexpectedBetweenRequirementColonAndRequirement: UnexpectedNodesSyntax? = nil,
     requirement: R? = nil,
-    _ unexpectedBetweenRequirementAndReqProdComma: UnexpectedNodesSyntax? = nil,
-    reqProdComma: TokenSyntax? = nil,
-    _ unexpectedBetweenReqProdCommaAndProductLabel: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenRequirementAndProductComma: UnexpectedNodesSyntax? = nil,
+    productComma: TokenSyntax? = nil,
+    _ unexpectedBetweenProductCommaAndProductLabel: UnexpectedNodesSyntax? = nil,
     productLabel: TokenSyntax? = nil,
     _ unexpectedBetweenProductLabelAndProductColon: UnexpectedNodesSyntax? = nil,
     productColon: TokenSyntax? = nil,
@@ -10594,7 +10594,7 @@ public struct PackageAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed 
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeLocationLabel, locationLabel, unexpectedBetweenLocationLabelAndLocationColon, locationColon, unexpectedBetweenLocationColonAndLocation, location, unexpectedBetweenLocationAndLocReqComma, locReqComma, unexpectedBetweenLocReqCommaAndRequirementLabel, requirementLabel, unexpectedBetweenRequirementLabelAndRequirementColon, requirementColon, unexpectedBetweenRequirementColonAndRequirement, requirement, unexpectedBetweenRequirementAndReqProdComma, reqProdComma, unexpectedBetweenReqProdCommaAndProductLabel, productLabel, unexpectedBetweenProductLabelAndProductColon, productColon, unexpectedBetweenProductColonAndProductName, productName, unexpectedAfterProductName))) { (arena, _) in
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeLocationLabel, locationLabel, unexpectedBetweenLocationLabelAndLocationColon, locationColon, unexpectedBetweenLocationColonAndLocation, location, unexpectedBetweenLocationAndRequirementComma, requirementComma, unexpectedBetweenRequirementCommaAndRequirementLabel, requirementLabel, unexpectedBetweenRequirementLabelAndRequirementColon, requirementColon, unexpectedBetweenRequirementColonAndRequirement, requirement, unexpectedBetweenRequirementAndProductComma, productComma, unexpectedBetweenProductCommaAndProductLabel, productLabel, unexpectedBetweenProductLabelAndProductColon, productColon, unexpectedBetweenProductColonAndProductName, productName, unexpectedAfterProductName))) { (arena, _) in
       let layout: [RawSyntax?] = [
         unexpectedBeforeLocationLabel?.raw,
         locationLabel.raw,
@@ -10602,17 +10602,17 @@ public struct PackageAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
         locationColon.raw,
         unexpectedBetweenLocationColonAndLocation?.raw,
         location.raw,
-        unexpectedBetweenLocationAndLocReqComma?.raw,
-        locReqComma?.raw,
-        unexpectedBetweenLocReqCommaAndRequirementLabel?.raw,
+        unexpectedBetweenLocationAndRequirementComma?.raw,
+        requirementComma?.raw,
+        unexpectedBetweenRequirementCommaAndRequirementLabel?.raw,
         requirementLabel?.raw,
         unexpectedBetweenRequirementLabelAndRequirementColon?.raw,
         requirementColon?.raw,
         unexpectedBetweenRequirementColonAndRequirement?.raw,
         requirement?.raw,
-        unexpectedBetweenRequirementAndReqProdComma?.raw,
-        reqProdComma?.raw,
-        unexpectedBetweenReqProdCommaAndProductLabel?.raw,
+        unexpectedBetweenRequirementAndProductComma?.raw,
+        productComma?.raw,
+        unexpectedBetweenProductCommaAndProductLabel?.raw,
         productLabel?.raw,
         unexpectedBetweenProductLabelAndProductColon?.raw,
         productColon?.raw,
@@ -10646,17 +10646,17 @@ public struct PackageAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
     locationColon: TokenSyntax = .colonToken(),
     _ unexpectedBetweenLocationColonAndLocation: UnexpectedNodesSyntax? = nil,
     location: StringLiteralExprSyntax,
-    _ unexpectedBetweenLocationAndLocReqComma: UnexpectedNodesSyntax? = nil,
-    locReqComma: TokenSyntax? = nil,
-    _ unexpectedBetweenLocReqCommaAndRequirementLabel: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenLocationAndRequirementComma: UnexpectedNodesSyntax? = nil,
+    requirementComma: TokenSyntax? = nil,
+    _ unexpectedBetweenRequirementCommaAndRequirementLabel: UnexpectedNodesSyntax? = nil,
     requirementLabel: TokenSyntax? = nil,
     _ unexpectedBetweenRequirementLabelAndRequirementColon: UnexpectedNodesSyntax? = nil,
     requirementColon: TokenSyntax? = nil,
     _ unexpectedBetweenRequirementColonAndRequirement: UnexpectedNodesSyntax? = nil,
     requirement: MissingExprSyntax? = nil,
-    _ unexpectedBetweenRequirementAndReqProdComma: UnexpectedNodesSyntax? = nil,
-    reqProdComma: TokenSyntax? = nil,
-    _ unexpectedBetweenReqProdCommaAndProductLabel: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenRequirementAndProductComma: UnexpectedNodesSyntax? = nil,
+    productComma: TokenSyntax? = nil,
+    _ unexpectedBetweenProductCommaAndProductLabel: UnexpectedNodesSyntax? = nil,
     productLabel: TokenSyntax? = nil,
     _ unexpectedBetweenProductLabelAndProductColon: UnexpectedNodesSyntax? = nil,
     productColon: TokenSyntax? = nil,
@@ -10673,17 +10673,17 @@ public struct PackageAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
       locationColon: locationColon,
       unexpectedBetweenLocationColonAndLocation,
       location: location,
-      unexpectedBetweenLocationAndLocReqComma,
-      locReqComma: locReqComma,
-      unexpectedBetweenLocReqCommaAndRequirementLabel,
+      unexpectedBetweenLocationAndRequirementComma,
+      requirementComma: requirementComma,
+      unexpectedBetweenRequirementCommaAndRequirementLabel,
       requirementLabel: requirementLabel,
       unexpectedBetweenRequirementLabelAndRequirementColon,
       requirementColon: requirementColon,
       unexpectedBetweenRequirementColonAndRequirement,
       requirement: Optional<ExprSyntax>.none,
-      unexpectedBetweenRequirementAndReqProdComma,
-      reqProdComma: reqProdComma,
-      unexpectedBetweenReqProdCommaAndProductLabel,
+      unexpectedBetweenRequirementAndProductComma,
+      productComma: productComma,
+      unexpectedBetweenProductCommaAndProductLabel,
       productLabel: productLabel,
       unexpectedBetweenProductLabelAndProductColon,
       productColon: productColon,
@@ -10750,7 +10750,7 @@ public struct PackageAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
 
-  public var unexpectedBetweenLocationAndLocReqComma: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenLocationAndRequirementComma: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -10760,9 +10760,9 @@ public struct PackageAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   /// 
-  /// The comma separating the location and requirement
+  /// The comma before the package requirement, if it exists.
   /// 
-  public var locReqComma: TokenSyntax? {
+  public var requirementComma: TokenSyntax? {
     get {
       return data.child(at: 7, parent: Syntax(self)).map(TokenSyntax.init)
     }
@@ -10771,7 +10771,7 @@ public struct PackageAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
 
-  public var unexpectedBetweenLocReqCommaAndRequirementLabel: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenRequirementCommaAndRequirementLabel: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -10827,7 +10827,7 @@ public struct PackageAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
 
-  public var unexpectedBetweenRequirementAndReqProdComma: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenRequirementAndProductComma: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 14, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -10837,9 +10837,9 @@ public struct PackageAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   /// 
-  /// The comma separating the requirement and product name
+  /// The comma before the package product, if it exists.
   /// 
-  public var reqProdComma: TokenSyntax? {
+  public var productComma: TokenSyntax? {
     get {
       return data.child(at: 15, parent: Syntax(self)).map(TokenSyntax.init)
     }
@@ -10848,7 +10848,7 @@ public struct PackageAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
 
-  public var unexpectedBetweenReqProdCommaAndProductLabel: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenProductCommaAndProductLabel: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 16, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -10923,17 +10923,17 @@ public struct PackageAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
       \Self.locationColon,
       \Self.unexpectedBetweenLocationColonAndLocation,
       \Self.location,
-      \Self.unexpectedBetweenLocationAndLocReqComma,
-      \Self.locReqComma,
-      \Self.unexpectedBetweenLocReqCommaAndRequirementLabel,
+      \Self.unexpectedBetweenLocationAndRequirementComma,
+      \Self.requirementComma,
+      \Self.unexpectedBetweenRequirementCommaAndRequirementLabel,
       \Self.requirementLabel,
       \Self.unexpectedBetweenRequirementLabelAndRequirementColon,
       \Self.requirementColon,
       \Self.unexpectedBetweenRequirementColonAndRequirement,
       \Self.requirement,
-      \Self.unexpectedBetweenRequirementAndReqProdComma,
-      \Self.reqProdComma,
-      \Self.unexpectedBetweenReqProdCommaAndProductLabel,
+      \Self.unexpectedBetweenRequirementAndProductComma,
+      \Self.productComma,
+      \Self.unexpectedBetweenProductCommaAndProductLabel,
       \Self.productLabel,
       \Self.unexpectedBetweenProductLabelAndProductColon,
       \Self.productColon,
@@ -11006,17 +11006,17 @@ extension PackageAttributeArgumentsSyntax: CustomReflectable {
       "locationColon": Syntax(locationColon).asProtocol(SyntaxProtocol.self),
       "unexpectedBetweenLocationColonAndLocation": unexpectedBetweenLocationColonAndLocation.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "location": Syntax(location).asProtocol(SyntaxProtocol.self),
-      "unexpectedBetweenLocationAndLocReqComma": unexpectedBetweenLocationAndLocReqComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "locReqComma": locReqComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "unexpectedBetweenLocReqCommaAndRequirementLabel": unexpectedBetweenLocReqCommaAndRequirementLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenLocationAndRequirementComma": unexpectedBetweenLocationAndRequirementComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "requirementComma": requirementComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenRequirementCommaAndRequirementLabel": unexpectedBetweenRequirementCommaAndRequirementLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "requirementLabel": requirementLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "unexpectedBetweenRequirementLabelAndRequirementColon": unexpectedBetweenRequirementLabelAndRequirementColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "requirementColon": requirementColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "unexpectedBetweenRequirementColonAndRequirement": unexpectedBetweenRequirementColonAndRequirement.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "requirement": requirement.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "unexpectedBetweenRequirementAndReqProdComma": unexpectedBetweenRequirementAndReqProdComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "reqProdComma": reqProdComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "unexpectedBetweenReqProdCommaAndProductLabel": unexpectedBetweenReqProdCommaAndProductLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenRequirementAndProductComma": unexpectedBetweenRequirementAndProductComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "productComma": productComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenProductCommaAndProductLabel": unexpectedBetweenProductCommaAndProductLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "productLabel": productLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "unexpectedBetweenProductLabelAndProductColon": unexpectedBetweenProductLabelAndProductColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "productColon": productColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,

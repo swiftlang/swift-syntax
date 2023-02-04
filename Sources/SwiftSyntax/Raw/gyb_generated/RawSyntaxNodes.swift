@@ -11745,17 +11745,17 @@ public struct RawPackageAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
     locationColon: RawTokenSyntax,
     _ unexpectedBetweenLocationColonAndLocation: RawUnexpectedNodesSyntax? = nil,
     location: RawStringLiteralExprSyntax,
-    _ unexpectedBetweenLocationAndLocReqComma: RawUnexpectedNodesSyntax? = nil,
-    locReqComma: RawTokenSyntax?,
-    _ unexpectedBetweenLocReqCommaAndRequirementLabel: RawUnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenLocationAndRequirementComma: RawUnexpectedNodesSyntax? = nil,
+    requirementComma: RawTokenSyntax?,
+    _ unexpectedBetweenRequirementCommaAndRequirementLabel: RawUnexpectedNodesSyntax? = nil,
     requirementLabel: RawTokenSyntax?,
     _ unexpectedBetweenRequirementLabelAndRequirementColon: RawUnexpectedNodesSyntax? = nil,
     requirementColon: RawTokenSyntax?,
     _ unexpectedBetweenRequirementColonAndRequirement: RawUnexpectedNodesSyntax? = nil,
     requirement: RawExprSyntax?,
-    _ unexpectedBetweenRequirementAndReqProdComma: RawUnexpectedNodesSyntax? = nil,
-    reqProdComma: RawTokenSyntax?,
-    _ unexpectedBetweenReqProdCommaAndProductLabel: RawUnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenRequirementAndProductComma: RawUnexpectedNodesSyntax? = nil,
+    productComma: RawTokenSyntax?,
+    _ unexpectedBetweenProductCommaAndProductLabel: RawUnexpectedNodesSyntax? = nil,
     productLabel: RawTokenSyntax?,
     _ unexpectedBetweenProductLabelAndProductColon: RawUnexpectedNodesSyntax? = nil,
     productColon: RawTokenSyntax?,
@@ -11773,17 +11773,17 @@ public struct RawPackageAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
       layout[3] = locationColon.raw
       layout[4] = unexpectedBetweenLocationColonAndLocation?.raw
       layout[5] = location.raw
-      layout[6] = unexpectedBetweenLocationAndLocReqComma?.raw
-      layout[7] = locReqComma?.raw
-      layout[8] = unexpectedBetweenLocReqCommaAndRequirementLabel?.raw
+      layout[6] = unexpectedBetweenLocationAndRequirementComma?.raw
+      layout[7] = requirementComma?.raw
+      layout[8] = unexpectedBetweenRequirementCommaAndRequirementLabel?.raw
       layout[9] = requirementLabel?.raw
       layout[10] = unexpectedBetweenRequirementLabelAndRequirementColon?.raw
       layout[11] = requirementColon?.raw
       layout[12] = unexpectedBetweenRequirementColonAndRequirement?.raw
       layout[13] = requirement?.raw
-      layout[14] = unexpectedBetweenRequirementAndReqProdComma?.raw
-      layout[15] = reqProdComma?.raw
-      layout[16] = unexpectedBetweenReqProdCommaAndProductLabel?.raw
+      layout[14] = unexpectedBetweenRequirementAndProductComma?.raw
+      layout[15] = productComma?.raw
+      layout[16] = unexpectedBetweenProductCommaAndProductLabel?.raw
       layout[17] = productLabel?.raw
       layout[18] = unexpectedBetweenProductLabelAndProductColon?.raw
       layout[19] = productColon?.raw
@@ -11812,13 +11812,13 @@ public struct RawPackageAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
   public var location: RawStringLiteralExprSyntax {
     layoutView.children[5].map(RawStringLiteralExprSyntax.init(raw:))!
   }
-  public var unexpectedBetweenLocationAndLocReqComma: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenLocationAndRequirementComma: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public var locReqComma: RawTokenSyntax? {
+  public var requirementComma: RawTokenSyntax? {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))
   }
-  public var unexpectedBetweenLocReqCommaAndRequirementLabel: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenRequirementCommaAndRequirementLabel: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var requirementLabel: RawTokenSyntax? {
@@ -11836,13 +11836,13 @@ public struct RawPackageAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
   public var requirement: RawExprSyntax? {
     layoutView.children[13].map(RawExprSyntax.init(raw:))
   }
-  public var unexpectedBetweenRequirementAndReqProdComma: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenRequirementAndProductComma: RawUnexpectedNodesSyntax? {
     layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public var reqProdComma: RawTokenSyntax? {
+  public var productComma: RawTokenSyntax? {
     layoutView.children[15].map(RawTokenSyntax.init(raw:))
   }
-  public var unexpectedBetweenReqProdCommaAndProductLabel: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenProductCommaAndProductLabel: RawUnexpectedNodesSyntax? {
     layoutView.children[16].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var productLabel: RawTokenSyntax? {

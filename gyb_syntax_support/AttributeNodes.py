@@ -219,9 +219,9 @@ ATTRIBUTE_NODES = [
              Child('LocationColon', kind='ColonToken'),
              Child('Location', kind='StringLiteralExpr',
                    description='The location/identifier of package.'),
-             Child('LocReqComma', kind='CommaToken',
+             Child('RequirementComma', kind='CommaToken',
                    is_optional=True, description='''
-                   The comma separating the location and requirement
+                   The comma before the package requirement, if it exists.
                    '''),
              Child('RequirementLabel', kind='IdentifierToken',
                    token_choices=['KeywordToken|branch', 'KeywordToken|from', 'KeywordToken|revision'],
@@ -229,9 +229,9 @@ ATTRIBUTE_NODES = [
              Child('RequirementColon', kind='ColonToken', is_optional=True),
              Child('Requirement', kind='Expr',
                    description='The version requirement of package.', is_optional=True),
-             Child('ReqProdComma', kind='CommaToken',
+             Child('ProductComma', kind='CommaToken',
                    is_optional=True, description='''
-                   The comma separating the requirement and product name
+                   The comma before the package product, if it exists.
                    '''),
              Child('ProductLabel', kind='IdentifierToken',
                    token_choices=['KeywordToken|product'], is_optional=True,

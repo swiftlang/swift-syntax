@@ -873,86 +873,20 @@ extension Parser {
 }
 
 extension Parser {
-  mutating func parsePackageAttribute() -> RawAttributeSyntax {
-    let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-    let (unexpectedBeforePackageToken, packageToken) = self.expect(.keyword(._package))
-    let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-    let arguments = self.parsePackageAttributeArguments()
-    let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
-    return RawAttributeSyntax(
-      unexpectedBeforeAtSign,
-      atSignToken: atSign,
-      unexpectedBeforePackageToken,
-      attributeName: RawTypeSyntax(RawSimpleTypeIdentifierSyntax(name: packageToken, genericArgumentClause: nil, arena: self.arena)),
-      unexpectedBeforeLeftParen,
-      leftParen: leftParen,
-      argument: .packageAttributeArguments(arguments),
-      unexpectedBeforeRightParen,
-      rightParen: rightParen,
-      arena: self.arena
-    )
-  }
-
-  enum PackageLocationLabel: RawTokenKindSubset {
-    case id
-    case path
-    case url
-
-    init?(lexeme: Lexer.Lexeme) {
-      switch lexeme {
-      case RawTokenKindMatch(.id): self = .id
-      case RawTokenKindMatch(.path): self = .path
-      case RawTokenKindMatch(.url): self = .url
-      default: return nil
-      }
-    }
-
-    var rawTokenKind: RawTokenKind {
-      switch self {
-      case .id: return .keyword(.id)
-      case .path: return .keyword(.path)
-      case .url: return .keyword(.url)
-      }
-    }
-  }
-
-  enum PackageRequirementLabel: RawTokenKindSubset {
-    case branch
-    case from
-    case revision
-
-    init?(lexeme: Lexer.Lexeme) {
-      switch lexeme {
-      case RawTokenKindMatch(.branch): self = .branch
-      case RawTokenKindMatch(.from): self = .from
-      case RawTokenKindMatch(.revision): self = .revision
-      default: return nil
-      }
-    }
-
-    var rawTokenKind: RawTokenKind {
-      switch self {
-      case .branch: return .keyword(.branch)
-      case .from: return .keyword(.from)
-      case .revision: return .keyword(.revision)
-      }
-    }
-  }
-
   mutating func parsePackageAttributeArguments() -> RawPackageAttributeArgumentsSyntax {
     // Parsing package location.
-    let locationLabel = self.consume(ifAnyIn: PackageLocationLabel.self) ?? missingToken(.identifier)
+    let (unexpectedBeforeLocationLabel, locationLabel) = self.expectAny([.keyword(.id), .keyword(.path), .keyword(.url)], default: .keyword(.id))
     let (unexpectedBeforeLocationColon, locationColon) = self.expect(.colon)
     let location = self.parseStringLiteral()
     // Parsing package requirement.
-    let (unexpectedBeforeLocReqComma, locReqComma): (RawUnexpectedNodesSyntax?, RawTokenSyntax?)
+    let (unexpectedBeforeRequirementComma, requirementComma): (RawUnexpectedNodesSyntax?, RawTokenSyntax?)
     let (unexpectedBeforeRequirementLabel, requirementLabel): (RawUnexpectedNodesSyntax?, RawTokenSyntax?)
     let (unexpectedBeforeRequirementColon, requirementColon): (RawUnexpectedNodesSyntax?, RawTokenSyntax?)
     let requirement: RawExprSyntax?
     if locationLabel.tokenKind != .keyword(.path) {
-      (unexpectedBeforeLocReqComma, locReqComma) = self.expect(.comma)
-      if let label = self.consume(ifAnyIn: PackageRequirementLabel.self) {
-        (unexpectedBeforeRequirementLabel, requirementLabel) = (nil, label)
+      (unexpectedBeforeRequirementComma, requirementComma) = self.expect(.comma)
+      if self.at(any: [.keyword(.from), .keyword(.branch), .keyword(.revision)]) {
+        (unexpectedBeforeRequirementLabel, requirementLabel) = self.expectAny([.keyword(.from), .keyword(.branch), .keyword(.revision)], default: .keyword(.from))
         (unexpectedBeforeRequirementColon, requirementColon) = self.expect(.colon)
       } else {
         (unexpectedBeforeRequirementLabel, requirementLabel) = (nil, nil)
@@ -960,56 +894,45 @@ extension Parser {
       }
       requirement = self.parseExpression()
     } else {
-      (unexpectedBeforeLocReqComma, locReqComma) = (nil, nil)
+      (unexpectedBeforeRequirementComma, requirementComma) = (nil, nil)
       (unexpectedBeforeRequirementLabel, requirementLabel) = (nil, nil)
       (unexpectedBeforeRequirementColon, requirementColon) = (nil, nil)
       requirement = nil
     }
-    guard self.at(.comma) else {
-      return RawPackageAttributeArgumentsSyntax(
-        locationLabel: locationLabel,
-        unexpectedBeforeLocationColon,
-        locationColon: locationColon,
-        location: location,
-        unexpectedBeforeLocReqComma,
-        locReqComma: locReqComma,
-        unexpectedBeforeRequirementLabel,
-        requirementLabel: requirementLabel,
-        unexpectedBeforeRequirementColon,
-        requirementColon: requirementColon,
-        requirement: requirement,
-        reqProdComma: nil,
-        productLabel: nil,
-        productColon: nil,
-        productName: nil,
-        self.remainingTokensIfMaximumNestingLevelReached(),
-        arena: self.arena
-      )
+    // Parsing package requirement.
+    let productComma = self.consume(if: .comma)
+    let (unexpectedBeforeProductLabel, productLabel): (RawUnexpectedNodesSyntax?, RawTokenSyntax?)
+    let (unexpectedBeforeProductColon, productColon): (RawUnexpectedNodesSyntax?, RawTokenSyntax?)
+    let productName: RawStringLiteralExprSyntax?
+    if productComma != nil {
+      (unexpectedBeforeProductLabel, productLabel) = self.expect(.keyword(.product))
+      (unexpectedBeforeProductColon, productColon) = self.expect(.colon)
+      productName = self.parseStringLiteral()
+    } else {
+      (unexpectedBeforeProductLabel, productLabel) = (nil, nil)
+      (unexpectedBeforeProductColon, productColon) = (nil, nil)
+      productName = nil
     }
-    let (unexpectedBeforeReqProdComma, reqProdComma) = self.expect(.comma)
-    let (unexpectedBeforeProductLabel, productLabel) = self.expect(.keyword(.product))
-    let (unexpectedBeforeProductColon, productColon) = self.expect(.colon)
-    let productName = self.parseStringLiteral()
+    // Returning @_package argument list
     return RawPackageAttributeArgumentsSyntax(
+      unexpectedBeforeLocationLabel,
       locationLabel: locationLabel,
       unexpectedBeforeLocationColon,
       locationColon: locationColon,
       location: location,
-      unexpectedBeforeLocReqComma,
-      locReqComma: locReqComma,
+      unexpectedBeforeRequirementComma,
+      requirementComma: requirementComma,
       unexpectedBeforeRequirementLabel,
       requirementLabel: requirementLabel,
       unexpectedBeforeRequirementColon,
       requirementColon: requirementColon,
       requirement: requirement,
-      unexpectedBeforeReqProdComma,
-      reqProdComma: reqProdComma,
+      productComma: productComma,
       unexpectedBeforeProductLabel,
       productLabel: productLabel,
       unexpectedBeforeProductColon,
       productColon: productColon,
       productName: productName,
-      self.remainingTokensIfMaximumNestingLevelReached(),
       arena: self.arena
     )
   }

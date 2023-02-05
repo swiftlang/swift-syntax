@@ -213,7 +213,7 @@ public let ATTRIBUTE_NODES: [Node] = [
                description: "The comma before the package requirement, if it exists.",
                isOptional: true),
          Child(name: "RequirementLabel",
-               kind: .token(choices: [.keyword(text: "branch"), .keyword(text: "from"), .keyword(text: "revision")]),
+               kind: .token(choices: [.keyword(text: "branch"), .keyword(text: "exact"), .keyword(text: "from"), .keyword(text: "revision")]),
                description: "The requirement label.",
                isOptional: true),
          Child(name: "RequirementColon",

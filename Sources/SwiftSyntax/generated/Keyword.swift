@@ -199,6 +199,8 @@ public enum Keyword: UInt8, Hashable {
   
   case escaping
   
+  case exact
+  
   case exclusivity
   
   case exported
@@ -554,6 +556,8 @@ public enum Keyword: UInt8, Hashable {
         self = .cType
       case "defer": 
         self = .`defer`
+      case "exact": 
+        self = .exact
       case "false": 
         self = .`false`
       case "final": 
@@ -1159,6 +1163,7 @@ public enum Keyword: UInt8, Hashable {
     "else", 
     "enum", 
     "escaping", 
+    "exact", 
     "exclusivity", 
     "exported", 
     "extension", 

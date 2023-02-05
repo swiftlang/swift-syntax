@@ -224,7 +224,7 @@ ATTRIBUTE_NODES = [
                    The comma before the package requirement, if it exists.
                    '''),
              Child('RequirementLabel', kind='IdentifierToken',
-                   token_choices=['KeywordToken|branch', 'KeywordToken|from', 'KeywordToken|revision'],
+                   token_choices=['KeywordToken|branch', 'KeywordToken|exact', 'KeywordToken|from', 'KeywordToken|revision'],
                    description='The requirement label.', is_optional=True),
              Child('RequirementColon', kind='ColonToken', is_optional=True),
              Child('Requirement', kind='Expr',

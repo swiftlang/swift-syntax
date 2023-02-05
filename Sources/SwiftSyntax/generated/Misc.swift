@@ -1182,7 +1182,7 @@ extension SyntaxKind {
     case .packReferenceType: 
       return "pack reference"
     case .packageAttributeArguments: 
-      return "@_package arguemnts"
+      return "@_package arguments"
     case .parameterClause: 
       return "parameter clause"
     case .patternBindingList: 

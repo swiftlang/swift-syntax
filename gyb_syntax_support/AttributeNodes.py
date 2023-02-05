@@ -207,13 +207,13 @@ ATTRIBUTE_NODES = [
     # package-attr-arguments -> package-location-label ':' package-location
     #                           ( ',' package-requirement-label? ':'? package-requirement )?
     #                           ( ',' 'product' ':' package-product-name )?
-    Node('PackageAttributeArguments', name_for_diagnostics='@_package arguemnts',
+    Node('PackageAttributeArguments', name_for_diagnostics='@_package arguments',
          kind='Syntax',
          description='''
          The arguments for the `@_package` attribute imitating `PackageDescription`
          ''',
          children=[
-             Child('LocationLabel', kind='IdentifierToken',
+             Child('LocationLabel', kind='KeywordToken',
                    token_choices=['KeywordToken|id', 'KeywordToken|path', 'KeywordToken|url'],
                    description='The location label.'),
              Child('LocationColon', kind='ColonToken'),
@@ -223,7 +223,7 @@ ATTRIBUTE_NODES = [
                    is_optional=True, description='''
                    The comma before the package requirement, if it exists.
                    '''),
-             Child('RequirementLabel', kind='IdentifierToken',
+             Child('RequirementLabel', kind='KeywordToken',
                    token_choices=['KeywordToken|branch', 'KeywordToken|exact', 'KeywordToken|from', 'KeywordToken|revision'],
                    description='The requirement label.', is_optional=True),
              Child('RequirementColon', kind='ColonToken', is_optional=True),

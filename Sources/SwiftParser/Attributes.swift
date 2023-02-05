@@ -885,7 +885,7 @@ extension Parser {
     let requirement: RawExprSyntax?
     if locationLabel.tokenKind != .keyword(.path) {
       (unexpectedBeforeRequirementComma, requirementComma) = self.expect(.comma)
-      if self.at(any: [.keyword(.from), .keyword(.exact), .keyword(.branch), .keyword(.revision)]) {
+      if self.at(any: [.colon, .keyword(.from), .keyword(.exact), .keyword(.branch), .keyword(.revision)]) {
         (unexpectedBeforeRequirementLabel, requirementLabel) = self.expectAny([.keyword(.from), .keyword(.exact), .keyword(.branch), .keyword(.revision)], default: .keyword(.from))
         (unexpectedBeforeRequirementColon, requirementColon) = self.expect(.colon)
         requirement = self.parseStringLiteral().as(RawExprSyntax.self)

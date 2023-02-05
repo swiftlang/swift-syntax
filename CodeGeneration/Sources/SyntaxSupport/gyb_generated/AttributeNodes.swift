@@ -196,7 +196,7 @@ public let ATTRIBUTE_NODES: [Node] = [
        ]),
 
   Node(name: "PackageAttributeArguments",
-       nameForDiagnostics: "@_package arguemnts",
+       nameForDiagnostics: "@_package arguments",
        description: "The arguments for the `@_package` attribute imitating `PackageDescription`",
        kind: "Syntax",
        children: [

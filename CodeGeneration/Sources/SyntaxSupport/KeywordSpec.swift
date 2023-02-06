@@ -141,7 +141,7 @@ public let KEYWORDS: [KeywordSpec] = [
   KeywordSpec("in", isLexerClassified: true, requiresLeadingSpace: true, requiresTrailingSpace: true),
   KeywordSpec("indirect"),
   KeywordSpec("infix"),
-  KeywordSpec("init", isLexerClassified: true, requiresTrailingSpace: true),
+  KeywordSpec("init", isLexerClassified: true),
   KeywordSpec("inline"),
   KeywordSpec("inout", isLexerClassified: true, requiresTrailingSpace: true),
   KeywordSpec("internal", isLexerClassified: true, requiresTrailingSpace: true),

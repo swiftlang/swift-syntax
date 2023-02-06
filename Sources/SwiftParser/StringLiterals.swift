@@ -465,7 +465,7 @@ extension Parser {
     let openDelimiter = self.consume(if: .rawStringDelimiter)
 
     /// Parse open quote.
-    var (unexpectedBeforeOpenQuote, openQuote) = self.expectAny([.stringQuote, .multilineStringQuote], default: .stringQuote)
+    var (unexpectedBeforeOpenQuote, openQuote) = self.expect(.stringQuote, .multilineStringQuote, default: .stringQuote)
     var openQuoteKind: RawTokenKind = openQuote.tokenKind
     if openQuote.isMissing, let singleQuote = self.consume(if: .singleQuote) {
       unexpectedBeforeOpenQuote = RawUnexpectedNodesSyntax(combining: unexpectedBeforeOpenQuote, singleQuote, arena: self.arena)
@@ -487,7 +487,7 @@ extension Parser {
         // This allows us to skip over extraneous identifiers etc. in an unterminated string interpolation.
         var unexpectedBeforeRightParen: [RawTokenSyntax] = []
         var unexpectedProgress = LoopProgressCondition()
-        while !self.at(any: [.rightParen, .stringSegment, .backslash, openQuoteKind, .eof]) && unexpectedProgress.evaluate(self.currentToken) {
+        while !self.at(.rightParen, .stringSegment, .backslash) && !self.at(openQuoteKind, .eof) && unexpectedProgress.evaluate(self.currentToken) {
           unexpectedBeforeRightParen.append(self.consumeAnyToken())
         }
         let rightParen = self.expectWithoutRecovery(.rightParen)

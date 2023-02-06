@@ -103,7 +103,7 @@ extension Parser.Lookahead {
       return
     }
     var lookahead = self.lookahead()
-    if lookahead.canRecoverTo([kind]) != nil {
+    if lookahead.canRecoverTo(kind) != nil {
       for _ in 0..<lookahead.tokensConsumed {
         self.consumeAnyToken()
       }
@@ -138,7 +138,7 @@ extension Parser.Lookahead {
 extension Parser.Lookahead {
   mutating func skipTypeAttribute() {
     // These are keywords that we accept as attribute names.
-    guard self.at(.identifier) || self.at(any: [.keyword(.in), .keyword(.inout)]) else {
+    guard self.at(.identifier) || self.at(.keyword(.in), .keyword(.inout)) else {
       return
     }
 
@@ -169,7 +169,7 @@ extension Parser.Lookahead {
         backtrack.skipSingle()
         // If we found '->', or 'throws' after paren, it's likely a parameter
         // of function type.
-        guard backtrack.at(any: [.arrow, .keyword(.throws), .keyword(.rethrows), .keyword(.throw)]) else {
+        guard backtrack.at(.arrow) || backtrack.at(.keyword(.throws), .keyword(.rethrows), .keyword(.throw)) else {
           self.skipSingle()
           return
         }
@@ -198,7 +198,7 @@ extension Parser.Lookahead {
       } while self.consume(if: .period) != nil
 
       if self.consume(if: .leftParen) != nil {
-        while !self.at(any: [.eof, .rightParen, .poundEndifKeyword]) {
+        while !self.at(.eof, .rightParen, .poundEndifKeyword) {
           self.skipSingle()
         }
         self.consume(if: .rightParen)
@@ -217,7 +217,7 @@ extension Parser.Lookahead {
     var didSeeAnyAttributes = false
     var poundIfLoopProgress = LoopProgressCondition()
     repeat {
-      assert(self.at(any: [.poundIfKeyword, .poundElseKeyword, .poundElseifKeyword]))
+      assert(self.at(.poundIfKeyword, .poundElseKeyword, .poundElseifKeyword))
       self.consumeAnyToken()
 
       // <expression> after `#if` or `#elseif`
@@ -235,7 +235,7 @@ extension Parser.Lookahead {
           break ATTRIBUTE_LOOP
         }
       }
-    } while self.at(any: [.poundElseifKeyword, .poundElseKeyword]) && poundIfLoopProgress.evaluate(self.currentToken)
+    } while self.at(.poundElseifKeyword, .poundElseKeyword) && poundIfLoopProgress.evaluate(self.currentToken)
 
     return didSeeAnyAttributes && self.currentToken.isAtStartOfLine && self.consume(if: .poundEndifKeyword) != nil
   }
@@ -281,7 +281,7 @@ extension Parser.Lookahead {
     }
 
     // Check if we have 'didSet'/'willSet' after attributes.
-    return lookahead.at(any: [.keyword(.didSet), .keyword(.willSet)])
+    return lookahead.at(.keyword(.didSet), .keyword(.willSet))
   }
 }
 
@@ -387,7 +387,7 @@ extension Parser.Lookahead {
         case .leftSquareBracket:
           self.consume(if: .rightSquareBracket)
         case .poundIfKeyword, .poundElseKeyword, .poundElseifKeyword:
-          if self.at(any: [.poundElseKeyword, .poundElseifKeyword]) {
+          if self.at(.poundElseKeyword, .poundElseifKeyword) {
             stack += [.skipSingle]
           } else {
             self.consume(if: .poundElseifKeyword)
@@ -395,7 +395,7 @@ extension Parser.Lookahead {
           return
         }
       case .skipUntil(let t1, let t2):
-        if !self.at(any: [.eof, t1, t2, .poundEndifKeyword, .poundElseKeyword, .poundElseifKeyword]) {
+        if !self.at(.eof, t1, t2) && !self.at(.poundEndifKeyword, .poundElseKeyword, .poundElseifKeyword) {
           stack += [.skipUntil(t1, t2), .skipSingle]
         }
       }

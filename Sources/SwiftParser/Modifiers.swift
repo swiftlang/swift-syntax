@@ -150,9 +150,35 @@ extension Parser {
   }
 
   mutating func parseAccessLevelModifier() -> RawDeclModifierSyntax {
-    let (unexpectedBeforeName, name) = expectAny(
-      [.keyword(.private), .keyword(.fileprivate), .keyword(.internal), .keyword(.public)],
-      default: .keyword(.internal)
+    enum AccessLevelModifier: RawTokenKindSubset {
+      case `private`
+      case `fileprivate`
+      case `internal`
+      case `public`
+
+      var rawTokenKind: RawTokenKind {
+        switch self {
+        case .private: return .keyword(.private)
+        case .fileprivate: return .keyword(.fileprivate)
+        case .internal: return .keyword(.internal)
+        case .public: return .keyword(.public)
+        }
+      }
+
+      init?(lexeme: Lexer.Lexeme) {
+        switch lexeme {
+        case RawTokenKindMatch(.private): self = .private
+        case RawTokenKindMatch(.fileprivate): self = .fileprivate
+        case RawTokenKindMatch(.internal): self = .internal
+        case RawTokenKindMatch(.public): self = .public
+        default: return nil
+        }
+      }
+    }
+
+    let (unexpectedBeforeName, name) = expect(
+      anyIn: AccessLevelModifier.self,
+      default: .internal
     )
     let details = self.parseAccessModifierDetails()
     return RawDeclModifierSyntax(

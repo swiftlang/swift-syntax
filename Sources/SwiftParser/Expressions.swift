@@ -217,7 +217,7 @@ extension Parser {
     handle: TokenConsumptionHandle
   ) -> (operator: RawExprSyntax, rhs: RawExprSyntax) {
     let asKeyword = self.eat(handle)
-    let failable = self.consume(ifAny: [.postfixQuestionMark, .exclamationMark])
+    let failable = self.consume(if: .postfixQuestionMark, .exclamationMark)
     let op = RawUnresolvedAsExprSyntax(
       asTok: asKeyword,
       questionOrExclamationMark: failable,
@@ -398,7 +398,7 @@ extension Parser {
     pattern: PatternContext = .none
   ) -> RawExprSyntax {
     // Try to parse '@' sign or 'inout' as a attributed typerepr.
-    if self.at(any: [.atSign, .keyword(.inout)]) {
+    if self.at(.atSign, .keyword(.inout)) {
       var backtrack = self.lookahead()
       if backtrack.canParseType() {
         let type = self.parseType()
@@ -428,7 +428,7 @@ extension Parser {
       )
     case (.tryKeyword, let handle)?:
       let tryKeyword = self.eat(handle)
-      let mark = self.consume(ifAny: [.exclamationMark, .postfixQuestionMark])
+      let mark = self.consume(if: .exclamationMark, .postfixQuestionMark)
 
       let expression = self.parseSequenceExpressionElement(
         flavor,
@@ -1046,11 +1046,7 @@ extension Parser {
 
       // Check for an operator starting with '.' that contains only
       // periods, '?'s, and '!'s. Expand that into key path components.
-      if self.at(any: [
-        .postfixOperator, .postfixQuestionMark,
-        .exclamationMark, .prefixOperator,
-        .binaryOperator,
-      ]),
+      if self.at(.prefixOperator, .binaryOperator, .postfixOperator) || self.at(.postfixQuestionMark, .exclamationMark),
         let numComponents = getNumOptionalKeyPathPostfixComponents(
           self.currentToken.tokenText
         )
@@ -1584,19 +1580,19 @@ extension Parser {
         // If we saw a comma, that's a strong indicator we have more elements
         // to process. If that's not the case, we have to do some legwork to
         // determine if we should bail out.
-        guard comma == nil || self.at(any: [.rightSquareBracket, .eof]) else {
+        guard comma == nil || self.at(.rightSquareBracket, .eof) else {
           continue
         }
 
         // If we found EOF or the closing square bracket, bailout.
-        if self.at(any: [.rightSquareBracket, .eof]) {
+        if self.at(.rightSquareBracket, .eof) {
           break
         }
 
         // If The next token is at the beginning of a new line and can never start
         // an element, break.
         if self.currentToken.isAtStartOfLine
-          && (self.at(any: [.rightBrace, .poundEndifKeyword]) || self.atStartOfDeclaration() || self.atStartOfStatement())
+          && (self.at(.rightBrace, .poundEndifKeyword) || self.atStartOfDeclaration() || self.atStartOfStatement())
         {
           break
         }
@@ -1732,10 +1728,7 @@ extension Parser {
   public mutating func parseClosureSignatureIfPresent() -> RawClosureSignatureSyntax? {
     // If we have a leading token that may be part of the closure signature, do a
     // speculative parse to validate it and look for 'in'.
-    guard
-      self.at(any: [.atSign, .leftParen, .leftSquareBracket, .wildcard])
-        || self.at(.identifier)
-    else {
+    guard self.at(.atSign, .leftParen, .leftSquareBracket) || self.at(.wildcard, .identifier) else {
       // No closure signature.
       return nil
     }
@@ -1886,7 +1879,7 @@ extension Parser {
       )
     } else if let unownedContextualKeyword = self.consume(if: .keyword(.unowned)) {
       if let lparen = self.consume(if: .leftParen) {
-        let (unexpectedBeforeDetail, detail) = self.expectAny([.keyword(.safe), .keyword(.unsafe)], default: .keyword(.safe))
+        let (unexpectedBeforeDetail, detail) = self.expect(.keyword(.safe), .keyword(.unsafe), default: .keyword(.safe))
         let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
         return RawClosureCaptureItemSpecifierSyntax(
           specifier: unownedContextualKeyword,
@@ -2103,7 +2096,7 @@ extension Parser.Lookahead {
     var backtrack = self.lookahead()
     backtrack.eat(.leftBrace)
     var loopProgress = LoopProgressCondition()
-    while !backtrack.at(any: [.eof, .rightBrace, .poundEndifKeyword, .poundElseKeyword, .poundElseifKeyword]) && loopProgress.evaluate(backtrack.currentToken) {
+    while !backtrack.at(.eof, .rightBrace) && !backtrack.at(.poundEndifKeyword, .poundElseKeyword, .poundElseifKeyword) && loopProgress.evaluate(backtrack.currentToken) {
       backtrack.skipSingle()
     }
 
@@ -2501,7 +2494,7 @@ extension Parser.Lookahead {
 
       // While we don't have '->' or ')', eat balanced tokens.
       var skipProgress = LoopProgressCondition()
-      while !lookahead.at(any: [.eof, .rightParen]) && skipProgress.evaluate(lookahead.currentToken) {
+      while !lookahead.at(.eof, .rightParen) && skipProgress.evaluate(lookahead.currentToken) {
         lookahead.skipSingle()
       }
 

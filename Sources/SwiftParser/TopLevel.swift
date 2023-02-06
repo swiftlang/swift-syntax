@@ -157,7 +157,7 @@ extension Parser {
         arena: self.arena
       )
     }
-    if self.at(any: [.keyword(.case), .keyword(.default)]) {
+    if self.at(.keyword(.case), .keyword(.default)) {
       // 'case' and 'default' are invalid in code block items.
       // Parse them and put them in their own CodeBlockItem but as an unexpected node.
       let switchCase = self.parseSwitchCase()

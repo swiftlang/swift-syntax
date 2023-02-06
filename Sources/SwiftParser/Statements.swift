@@ -217,13 +217,13 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseConditionElement() -> RawConditionElementSyntax.Condition {
     // Parse a leading #available/#unavailable condition if present.
-    if self.at(any: [.poundAvailableKeyword, .poundUnavailableKeyword]) {
+    if self.at(.poundAvailableKeyword, .poundUnavailableKeyword) {
       return self.parsePoundAvailableConditionElement()
     }
 
     // Parse the basic expression case.  If we have a leading let/var/case
     // keyword or an assignment, then we know this is a binding.
-    guard self.at(any: [.keyword(.let), .keyword(.var), .keyword(.case)]) else {
+    guard self.at(.keyword(.let), .keyword(.var), .keyword(.case)) else {
       // If we lack it, then this is theoretically a boolean condition.
       // However, we also need to handle migrating from Swift 2 syntax, in
       // which a comma followed by an expression could actually be a pattern
@@ -240,7 +240,7 @@ extension Parser {
     }
 
     // We're parsing a conditional binding.
-    assert(self.at(any: [.keyword(.let), .keyword(.var), .keyword(.case)]))
+    assert(self.at(.keyword(.let), .keyword(.var), .keyword(.case)))
     enum BindingKind {
       case pattern(RawTokenSyntax, RawPatternSyntax)
       case optional(RawTokenSyntax, RawPatternSyntax)
@@ -322,7 +322,7 @@ extension Parser {
   ///     availability-condition → '#unavailable' '(' availability-arguments ')'
   @_spi(RawSyntax)
   public mutating func parsePoundAvailableConditionElement() -> RawConditionElementSyntax.Condition {
-    assert(self.at(any: [.poundAvailableKeyword, .poundUnavailableKeyword]))
+    assert(self.at(.poundAvailableKeyword, .poundUnavailableKeyword))
     let keyword = self.consumeAnyToken()
     let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
     let spec = self.parseAvailabilitySpecList()
@@ -479,7 +479,7 @@ extension Parser {
     // If this is a 'catch' clause and we have "catch {" or "catch where...",
     // then we get an implicit "let error" pattern.
     let pattern: RawPatternSyntax?
-    if self.at(any: [.leftBrace, .keyword(.where)]) {
+    if self.at(.leftBrace, .keyword(.where)) {
       pattern = nil
     } else {
       pattern = self.parseMatchingPattern(context: .matching)
@@ -707,7 +707,7 @@ extension Parser {
         var keepGoing = true
         var elementList = [RawYieldExprListElementSyntax]()
         var loopProgress = LoopProgressCondition()
-        while !self.at(any: [.eof, .rightParen]) && keepGoing && loopProgress.evaluate(currentToken) {
+        while !self.at(.eof, .rightParen) && keepGoing && loopProgress.evaluate(currentToken) {
           let expr = self.parseExpression()
           let comma = self.consume(if: .comma)
           elementList.append(
@@ -959,7 +959,7 @@ extension Parser.Lookahead {
       lookahead.consumeAnyToken()
       // just find the end of the line
       lookahead.skipUntilEndOfLine()
-    } while lookahead.at(any: [.poundIfKeyword, .poundElseifKeyword, .poundElseKeyword]) && loopProgress.evaluate(lookahead.currentToken)
+    } while lookahead.at(.poundIfKeyword, .poundElseifKeyword, .poundElseKeyword) && loopProgress.evaluate(lookahead.currentToken)
     return lookahead.isAtStartOfSwitchCase()
   }
 }

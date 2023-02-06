@@ -14,8 +14,8 @@ import XCTest
 @_spi(RawSyntax) import SwiftSyntax
 @_spi(RawSyntax) import SwiftParser
 
-fileprivate func lex(_ sourceBytes: [UInt8]) -> [Lexer.Lexeme] {
-  return sourceBytes.withUnsafeBufferPointer { (buf) -> [Lexer.Lexeme] in
+fileprivate func lex(_ sourceBytes: [UInt8], body: ([Lexer.Lexeme]) throws -> Void) rethrows {
+  try sourceBytes.withUnsafeBufferPointer { (buf) in
     var lexemes = [Lexer.Lexeme]()
     for token in Lexer.tokenize(buf, from: 0) {
       lexemes.append(token)
@@ -24,7 +24,7 @@ fileprivate func lex(_ sourceBytes: [UInt8]) -> [Lexer.Lexeme] {
         break
       }
     }
-    return lexemes
+    try body(lexemes)
   }
 }
 
@@ -38,6 +38,7 @@ fileprivate func AssertRawBytesLexeme(
   leadingTrivia: [UInt8] = [],
   text: [UInt8],
   trailingTrivia: [UInt8] = [],
+  error: SwiftSyntax.LexerError? = nil,
   file: StaticString = #file,
   line: UInt = #line
 ) {
@@ -51,6 +52,7 @@ fileprivate func AssertRawBytesLexeme(
   trailingTrivia.withUnsafeBufferPointer { trailingTrivia in
     XCTAssertEqual(lexeme.trailingTriviaText, SyntaxText(buffer: trailingTrivia), file: file, line: line)
   }
+  XCTAssertEqual(lexeme.error, error, file: file, line: line)
 }
 
 public class LexerTests: XCTestCase {
@@ -130,12 +132,11 @@ public class LexerTests: XCTestCase {
 
     AssertLexemes(
       #"""
-      "\u{12341234}"
+      "1️⃣\u{12341234}"
       """#,
       lexemes: [
-        // FIXME: We should diagnose invalid unicode characters in string literals
         LexemeSpec(.stringQuote, text: #"""#),
-        LexemeSpec(.stringSegment, text: #"\u{12341234}"#),
+        LexemeSpec(.stringSegment, text: #"\u{12341234}"#, error: "invalid escape sequence in literal"),
         LexemeSpec(.stringQuote, text: #"""#),
       ]
     )
@@ -425,10 +426,10 @@ public class LexerTests: XCTestCase {
 
   func testUnexpectedLexing() {
     AssertLexemes(
-      "static func �() {}",
+      "static func 1️⃣�() {}",
       lexemes: [
         LexemeSpec(.keyword(.static), text: "static", trailing: " "),
-        LexemeSpec(.keyword(.func), text: "func", trailing: " �"),
+        LexemeSpec(.keyword(.func), text: "func", trailing: " �", error: "invalid character in source file"),
         LexemeSpec(.leftParen, text: "("),
         LexemeSpec(.rightParen, text: ")", trailing: " "),
         LexemeSpec(.leftBrace, text: "{"),
@@ -452,7 +453,7 @@ public class LexerTests: XCTestCase {
       """
       // diff3-style conflict markers
 
-      <<<<<<< HEAD:conflict_markers.swift // expected-error {{source control conflict marker in source file}}
+      1️⃣<<<<<<< HEAD:conflict_markers.swift // expected-error {{source control conflict marker in source file}}
       var a : String = "A"
       var b : String = "b"
       =======
@@ -476,6 +477,7 @@ public class LexerTests: XCTestCase {
             >>>>>>> 18844bc65229786b96b89a9fc7739c0fc897905e:conflict_markers.swift
             """,
           text: "",
+          error: "source control conflict marker in source file",
           flags: [.isAtStartOfLine]
         )
       ]
@@ -485,7 +487,7 @@ public class LexerTests: XCTestCase {
       """
       // Perforce-style conflict markers
 
-      >>>> ORIGINAL
+      1️⃣>>>> ORIGINAL
       var a : String = "A"
       var b : String = "B"
       ==== THEIRS
@@ -517,6 +519,7 @@ public class LexerTests: XCTestCase {
 
             """,
           text: "",
+          error: "source control conflict marker in source file",
           flags: [.isAtStartOfLine]
         )
       ]
@@ -634,9 +637,9 @@ public class LexerTests: XCTestCase {
     )
 
     AssertLexemes(
-      "y\u{fffe} + z",
+      "y1️⃣\u{fffe} + z",
       lexemes: [
-        LexemeSpec(.identifier, text: "y", trailing: "\u{fffe} "),
+        LexemeSpec(.identifier, text: "y", trailing: "\u{fffe} ", error: "invalid character in source file"),
         LexemeSpec(.binaryOperator, text: "+", trailing: " "),
         LexemeSpec(.identifier, text: "z"),
       ]
@@ -804,79 +807,83 @@ public class LexerTests: XCTestCase {
 
   func testBOMAtStartOfFile() throws {
     let sourceBytes: [UInt8] = [0xef, 0xbb, 0xbf]
-    let lexemes = lex(sourceBytes)
+    lex(sourceBytes) { lexemes in
+      guard lexemes.count == 1 else {
+        return XCTFail("Expected 1 lexeme, got \(lexemes.count)")
+      }
 
-    guard lexemes.count == 1 else {
-      return XCTFail("Expected 1 lexeme, got \(lexemes.count)")
+      AssertRawBytesLexeme(
+        lexemes[0],
+        kind: .eof,
+        leadingTrivia: sourceBytes,
+        text: []
+      )
     }
-
-    AssertRawBytesLexeme(
-      lexemes[0],
-      kind: .eof,
-      leadingTrivia: sourceBytes,
-      text: []
-    )
   }
 
   func testBOMInTheMiddleOfIdentifier() throws {
     let sourceBytes: [UInt8] = [UInt8(ascii: "a"), 0xef, 0xbb, 0xbf, UInt8(ascii: "b")]
-    let lexemes = lex(sourceBytes)
+    lex(sourceBytes) { lexemes in
+      guard lexemes.count == 2 else {
+        return XCTFail("Expected 2 lexemes, got \(lexemes.count)")
+      }
 
-    guard lexemes.count == 2 else {
-      return XCTFail("Expected 2 lexemes, got \(lexemes.count)")
+      AssertRawBytesLexeme(
+        lexemes[0],
+        kind: .identifier,
+        text: sourceBytes
+      )
     }
-
-    AssertRawBytesLexeme(
-      lexemes[0],
-      kind: .identifier,
-      text: sourceBytes
-    )
   }
 
   func testBOMAsLeadingTriviaInSourceFile() throws {
     let sourceBytes: [UInt8] = [UInt8(ascii: "1"), UInt8(ascii: " "), UInt8(ascii: "+"), UInt8(ascii: " "), 0xef, 0xbb, 0xbf, UInt8(ascii: "2")]
-    let lexemes = lex(sourceBytes)
+    lex(sourceBytes) { lexemes in
+      guard lexemes.count == 4 else {
+        return XCTFail("Expected 4 lexemes, got \(lexemes.count)")
+      }
 
-    guard lexemes.count == 4 else {
-      return XCTFail("Expected 4 lexemes, got \(lexemes.count)")
+      AssertRawBytesLexeme(
+        lexemes[1],
+        kind: .binaryOperator,
+        text: [UInt8(ascii: "+")],
+        trailingTrivia: [UInt8(ascii: " "), 0xef, 0xbb, 0xbf]
+      )
     }
-
-    AssertRawBytesLexeme(
-      lexemes[1],
-      kind: .binaryOperator,
-      text: [UInt8(ascii: "+")],
-      trailingTrivia: [UInt8(ascii: " "), 0xef, 0xbb, 0xbf]
-    )
   }
 
   func testInvalidUtf8() {
     let sourceBytes: [UInt8] = [0xef, 0xfb, 0xbd, 0x0a]
 
-    let lexemes = lex(sourceBytes)
-    guard lexemes.count == 1 else {
-      return XCTFail("Expected 1 lexeme, got \(lexemes.count)")
+    lex(sourceBytes) { lexemes in
+      guard lexemes.count == 1 else {
+        return XCTFail("Expected 1 lexeme, got \(lexemes.count)")
+      }
+      AssertRawBytesLexeme(
+        lexemes[0],
+        kind: .eof,
+        leadingTrivia: sourceBytes,
+        text: [],
+        error: LexerError(.invalidUtf8, byteOffset: 0)
+      )
     }
-    AssertRawBytesLexeme(
-      lexemes[0],
-      kind: .eof,
-      leadingTrivia: sourceBytes,
-      text: []
-    )
   }
 
   func testInvalidUtf8_2() {
     let sourceBytes: [UInt8] = [0xfd]
 
-    let lexemes = lex(sourceBytes)
-    guard lexemes.count == 1 else {
-      return XCTFail("Expected 1 lexeme, got \(lexemes.count)")
+    lex(sourceBytes) { lexemes in
+      guard lexemes.count == 1 else {
+        return XCTFail("Expected 1 lexeme, got \(lexemes.count)")
+      }
+      AssertRawBytesLexeme(
+        lexemes[0],
+        kind: .eof,
+        leadingTrivia: sourceBytes,
+        text: [],
+        error: LexerError(.invalidUtf8, byteOffset: 0)
+      )
     }
-    AssertRawBytesLexeme(
-      lexemes[0],
-      kind: .eof,
-      leadingTrivia: sourceBytes,
-      text: []
-    )
   }
 
   func testInterpolatedString() {
@@ -1033,6 +1040,201 @@ public class LexerTests: XCTestCase {
       lexemes: [
         LexemeSpec(.integerLiteral, text: "0"),
         LexemeSpec(.period, text: "."),
+      ]
+    )
+  }
+
+  func testNullCharacterInStringLiteral() {
+    AssertLexemes(
+      """
+      "1️⃣\0"
+      """,
+      lexemes: [
+        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringSegment, text: "\0", error: "nul character embedded in middle of file"),
+        LexemeSpec(.stringQuote, text: #"""#),
+      ]
+    )
+  }
+
+  func testInvalidUtf8InStringLiteral() {
+    lex([UInt8(ascii: #"""#), 0xef, UInt8(ascii: #"""#)]) { lexemes in
+      guard lexemes.count == 4 else {
+        return XCTFail("Expected 4 lexemes")
+      }
+
+      AssertRawBytesLexeme(
+        lexemes[1],
+        kind: .stringSegment,
+        text: [0xef],
+        error: LexerError(.invalidUtf8, byteOffset: 0)
+      )
+    }
+  }
+
+  func testInvalidUnicodeEscapeSequence() {
+    AssertLexemes(
+      #"""
+      "1️⃣\u"
+      """#,
+      lexemes: [
+        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringSegment, text: #"\u"#, error: #"expected hexadecimal code in \u{...} escape sequence"#),
+        LexemeSpec(.stringQuote, text: #"""#),
+      ]
+    )
+
+    AssertLexemes(
+      #"""
+      "1️⃣\u{"
+      """#,
+      lexemes: [
+        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringSegment, text: #"\u{"#, error: #"expected '}' in \u{...} escape sequence"#),
+        LexemeSpec(.stringQuote, text: #"""#),
+      ]
+    )
+
+    AssertLexemes(
+      #"""
+      "1️⃣\u{12"
+      """#,
+      lexemes: [
+        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringSegment, text: #"\u{12"#, error: #"expected '}' in \u{...} escape sequence"#),
+        LexemeSpec(.stringQuote, text: #"""#),
+      ]
+    )
+
+    AssertLexemes(
+      #"""
+      "1️⃣\u{}"
+      """#,
+      lexemes: [
+        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringSegment, text: #"\u{}"#, error: #"\u{...} escape sequence expects between 1 and 8 hex digits"#),
+        LexemeSpec(.stringQuote, text: #"""#),
+      ]
+    )
+
+    AssertLexemes(
+      #"""
+      "1️⃣\u{hello}"
+      """#,
+      lexemes: [
+        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringSegment, text: #"\u{hello}"#, error: #"expected '}' in \u{...} escape sequence"#),
+        LexemeSpec(.stringQuote, text: #"""#),
+      ]
+    )
+
+    AssertLexemes(
+      #"""
+      "1️⃣\u{fffffffff}"
+      """#,
+      lexemes: [
+        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringSegment, text: #"\u{fffffffff}"#, error: #"\u{...} escape sequence expects between 1 and 8 hex digits"#),
+        LexemeSpec(.stringQuote, text: #"""#),
+      ]
+    )
+  }
+
+  func testCloseBlockCommentWithoutOpen() {
+    AssertLexemes(
+      """
+      1️⃣*/
+      """,
+      lexemes: [
+        LexemeSpec(.unknown, text: "*/", error: "unexpected end of block comment")
+      ]
+    )
+
+    AssertLexemes(
+      """
+      /**/1️⃣*/
+      """,
+      lexemes: [
+        LexemeSpec(.unknown, leading: "/**/", text: "*/", error: "unexpected end of block comment")
+      ]
+    )
+
+    AssertLexemes(
+      """
+      /**/a1️⃣*/
+      """,
+      lexemes: [
+        LexemeSpec(.identifier, leading: "/**/", text: "a"),
+        LexemeSpec(.unknown, text: "*/", error: "unexpected end of block comment"),
+      ]
+    )
+  }
+
+  func testCurlyQuotes() {
+    AssertLexemes(
+      """
+      a 1️⃣“curly string” b
+      """,
+      lexemes: [
+        LexemeSpec(.identifier, text: "a", trailing: " "),
+        LexemeSpec(.identifier, text: "“curly string”", trailing: " ", error: #"unicode curly quote found; use '"' instead"#),
+        LexemeSpec(.identifier, text: "b"),
+      ]
+    )
+  }
+
+  func testInvalidIdentifierStart() {
+    // Verify that U+0330 (combining tilde below) is a valid identifier continuation
+    AssertLexemes(
+      "a\u{0330}",
+      lexemes: [
+        LexemeSpec(.identifier, text: "a\u{0330}")
+      ]
+    )
+
+    AssertLexemes(
+      "\u{0330}",
+      lexemes: [
+        LexemeSpec(.identifier, text: "\u{0330}", errorLocationMarker: "START", error: "an identifier cannot begin with this character")
+      ]
+    )
+  }
+
+  func testNonBreakingSpace() {
+    AssertLexemes(
+      "a 1️⃣\u{a0} b",
+      lexemes: [
+        LexemeSpec(.identifier, text: "a", trailing: " \u{a0} ", error: "non-breaking space (U+00A0) used instead of regular space"),
+        LexemeSpec(.identifier, text: "b"),
+      ]
+    )
+  }
+
+  func testHexLiteralWithoutNumbers() {
+    AssertLexemes(
+      "0x1️⃣",
+      lexemes: [
+        LexemeSpec(.integerLiteral, text: "0x", error: "expected hexadecimal digit (0-9, A-F) in integer literal")
+      ]
+    )
+
+    AssertLexemes(
+      "0x1️⃣ ",
+      lexemes: [
+        LexemeSpec(.integerLiteral, text: "0x", trailing: " ", error: "expected hexadecimal digit (0-9, A-F) in integer literal")
+      ]
+    )
+  }
+
+  func testUnprintableAsciiCharactersInStringLiteral() {
+    AssertLexemes(
+      """
+      "1️⃣\u{7}"
+      """,
+      lexemes: [
+        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringSegment, text: "\u{7}", error: "unprintable ASCII character found in source file"),
+        LexemeSpec(.stringQuote, text: #"""#),
       ]
     )
   }

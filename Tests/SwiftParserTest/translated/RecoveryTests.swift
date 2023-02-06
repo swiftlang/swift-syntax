@@ -1920,17 +1920,17 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery158() {
+    // <rdar://problem/16990885> support curly quotes for string literals
     AssertParse(
       """
-      // <rdar://problem/16990885> support curly quotes for string literals
       let curlyQuotes1 = 1️⃣“hello world!”
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: unicode curly quote found, replace with '"', Fix-It replacements: 35 - 38 = '"'
-        // TODO: Old parser expected error on line 2: unicode curly quote found, replace with '"', Fix-It replacements: 20 - 23 = '"'
-        DiagnosticSpec(message: "expected expression in variable"),
-        DiagnosticSpec(message: "extraneous code '“hello world!”' at top level"),
-      ]
+        DiagnosticSpec(message: #"unicode curly quote found; use '"' instead"#)
+      ],
+      fixedSource: """
+        let curlyQuotes1 = "hello world!"
+        """
     )
   }
 
@@ -1940,21 +1940,22 @@ final class RecoveryTests: XCTestCase {
       let curlyQuotes2 = 1️⃣“hello world!"
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: unicode curly quote found, replace with '"', Fix-It replacements: 20 - 23 = '"'
-        DiagnosticSpec(message: "expected expression in variable"),
-        DiagnosticSpec(message: #"extraneous code '“hello world!"' at top level"#),
-      ]
+        DiagnosticSpec(message: #"unicode curly quote found; use '"' instead"#)
+      ],
+      fixedSource: #"""
+        let curlyQuotes2 = "hello world!"
+        """#
     )
   }
 
   func testRecovery160() {
+    // <rdar://problem/21196171> compiler should recover better from "unicode Specials" characters
     AssertParse(
       #"""
-      // <rdar://problem/21196171> compiler should recover better from "unicode Specials" characters
-      let ￼tryx  = 123
+      let 1️⃣￼tryx  = 123
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: invalid character in source file, Fix-It replacements: 5 - 8 = ' '
+        DiagnosticSpec(message: "invalid character in source file")
       ]
     )
   }

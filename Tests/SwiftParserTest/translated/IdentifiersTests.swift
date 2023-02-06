@@ -68,13 +68,13 @@ final class IdentifiersTests: XCTestCase {
   }
 
   func testIdentifiers6() {
+    // Private-use characters aren't valid in Swift source.
     AssertParse(
       """
-      // Private-use characters aren't valid in Swift source.
-      ()
+      1️⃣()
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: invalid character in source file, Fix-It replacements: 1 - 4 = ' '
+        DiagnosticSpec(message: "invalid character in source file")
       ]
     )
   }

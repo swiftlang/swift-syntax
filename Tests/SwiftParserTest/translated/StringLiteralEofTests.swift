@@ -52,11 +52,11 @@ final class StringLiteralEofTests: XCTestCase {
   func testStringLiteralEof3() {
     AssertParse(
       ##"""
-      _ = "foo \1️⃣
+      _ = "foo 1️⃣\2️⃣
       """##,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: invalid escape sequence in literal
-        DiagnosticSpec(message: #"expected '"' to end string literal"#)
+        DiagnosticSpec(locationMarker: "1️⃣", message: "invalid escape sequence in literal"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#),
       ]
     )
   }
@@ -65,12 +65,11 @@ final class StringLiteralEofTests: XCTestCase {
     AssertParse(
       ##"""
       // NOTE: DO NOT add a newline at EOF.
-      _ = "foo \1️⃣
+      _ = "foo 1️⃣\2️⃣
       """##,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: unterminated string literal
-        // TODO: Old parser expected error on line 2: invalid escape sequence in literal
-        DiagnosticSpec(message: #"expected '"' to end string literal"#)
+        DiagnosticSpec(locationMarker: "1️⃣", message: "invalid escape sequence in literal"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#),
       ]
     )
   }

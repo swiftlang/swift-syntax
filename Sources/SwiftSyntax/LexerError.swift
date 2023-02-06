@@ -14,22 +14,39 @@
 /// `lexerErrorOffset` in the token will specify at which offset the error
 /// occurred.
 public struct LexerError: Hashable {
+  public enum Severity {
+    case error
+    case warning
+  }
+
   public enum Kind {
     // Please order these alphabetically
 
     case expectedBinaryExponentInHexFloatLiteral
+    case expectedClosingBraceInUnicodeEscape
     case expectedDigitInFloatLiteral
+    case expectedHexCodeInUnicodeEscape
+    case expectedHexDigitInHexLiteral
     case insufficientIndentationInMultilineStringLiteral
     case invalidBinaryDigitInIntegerLiteral
+    case invalidCharacter
     case invalidDecimalDigitInIntegerLiteral
-    case invalidFloatingPointCharacter
-    case invalidFloatingPointDigit
+    case invalidEscapeSequenceInStringLiteral
     case invalidFloatingPointExponentCharacter
     case invalidFloatingPointExponentDigit
     case invalidHexDigitInIntegerLiteral
+    case invalidIdentifierStartCharacter
+    case invalidNumberOfHexDigitsInUnicodeEscape
     case invalidOctalDigitInIntegerLiteral
+    case invalidUtf8
     /// The lexer dicovered an error but was not able to represent the offset of the error because it would overflow `LexerErrorOffset`.
     case lexerErrorOffsetOverflow
+    case nonBreakingSpace
+    case nulCharacter
+    case sourceConflictMarker
+    case unexpectedBlockCommentEnd
+    case unicodeCurlyQuote
+    case unprintableAsciiCharacter
   }
 
   public let kind: Kind
@@ -52,6 +69,35 @@ public struct LexerError: Hashable {
     } else {
       self.kind = kind
       self.byteOffset = UInt16(byteOffset)
+    }
+  }
+
+  public var severity: Severity {
+    switch kind {
+    case .expectedBinaryExponentInHexFloatLiteral: return .error
+    case .expectedClosingBraceInUnicodeEscape: return .error
+    case .expectedDigitInFloatLiteral: return .error
+    case .expectedHexCodeInUnicodeEscape: return .error
+    case .expectedHexDigitInHexLiteral: return .error
+    case .insufficientIndentationInMultilineStringLiteral: return .error
+    case .invalidBinaryDigitInIntegerLiteral: return .error
+    case .invalidCharacter: return .error
+    case .invalidDecimalDigitInIntegerLiteral: return .error
+    case .invalidEscapeSequenceInStringLiteral: return .error
+    case .invalidFloatingPointExponentCharacter: return .error
+    case .invalidFloatingPointExponentDigit: return .error
+    case .invalidHexDigitInIntegerLiteral: return .error
+    case .invalidIdentifierStartCharacter: return .error
+    case .invalidNumberOfHexDigitsInUnicodeEscape: return .error
+    case .invalidOctalDigitInIntegerLiteral: return .error
+    case .invalidUtf8: return .error
+    case .lexerErrorOffsetOverflow: return .error
+    case .nonBreakingSpace: return .warning
+    case .nulCharacter: return .warning
+    case .sourceConflictMarker: return .error
+    case .unexpectedBlockCommentEnd: return .error
+    case .unicodeCurlyQuote: return .error
+    case .unprintableAsciiCharacter: return .error
     }
   }
 }

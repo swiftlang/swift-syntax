@@ -110,7 +110,7 @@ public let KEYWORDS: [KeywordSpec] = [
   KeywordSpec("cType"),
   KeywordSpec("default", isLexerClassified: true),
   KeywordSpec("defer", isLexerClassified: true, requiresTrailingSpace: true),
-  KeywordSpec("deinit", isLexerClassified: true, requiresTrailingSpace: true),
+  KeywordSpec("deinit", isLexerClassified: true),
   KeywordSpec("deprecated"),
   KeywordSpec("derivative"),
   KeywordSpec("didSet"),

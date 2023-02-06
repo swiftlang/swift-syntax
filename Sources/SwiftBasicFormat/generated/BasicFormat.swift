@@ -249,8 +249,6 @@ open class BasicFormat: SyntaxRewriter {
       return true
     case .keyword(.`defer`): 
       return true
-    case .keyword(.`deinit`): 
-      return true
     case .keyword(.`else`): 
       return true
     case .keyword(.`enum`): 

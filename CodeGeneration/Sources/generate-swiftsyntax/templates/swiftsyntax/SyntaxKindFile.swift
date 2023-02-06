@@ -29,7 +29,7 @@ let syntaxKindFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCop
     }
 
     try VariableDeclSyntax("public var isSyntaxCollection: Bool") {
-      try SwitchStmtSyntax("switch self") {
+      try SwitchExprSyntax("switch self") {
         for node in SYNTAX_NODES where node.baseKind == "SyntaxCollection" {
           SwitchCaseSyntax("case .\(raw: node.swiftSyntaxKind):") {
             StmtSyntax("return true")
@@ -43,7 +43,7 @@ let syntaxKindFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCop
     }
 
     try VariableDeclSyntax("public var isMissing: Bool") {
-      try SwitchStmtSyntax("switch self") {
+      try SwitchExprSyntax("switch self") {
         for name in SYNTAX_BASE_KINDS where !["Syntax", "SyntaxCollection"].contains(name) {
           SwitchCaseSyntax("case .missing\(raw: name):") {
             StmtSyntax("return true")

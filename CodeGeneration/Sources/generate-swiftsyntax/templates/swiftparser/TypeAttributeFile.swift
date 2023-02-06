@@ -31,7 +31,7 @@ let typeAttributeFile = SourceFileSyntax {
       }
 
       try InitializerDeclSyntax("init?(lexeme: Lexer.Lexeme)") {
-        SwitchStmtSyntax(switchKeyword: .keyword(.switch), expression: ExprSyntax("lexeme")) {
+        SwitchExprSyntax(switchKeyword: .keyword(.switch), expression: ExprSyntax("lexeme")) {
           for attribute in TYPE_ATTR_KINDS {
             SwitchCaseSyntax("case RawTokenKindMatch(.\(raw: attribute.name)):") {
               ExprSyntax("self = .\(raw: attribute.swiftName)")
@@ -44,7 +44,7 @@ let typeAttributeFile = SourceFileSyntax {
       }
 
       try VariableDeclSyntax("var rawTokenKind: RawTokenKind") {
-        SwitchStmtSyntax(switchKeyword: .keyword(.switch), expression: ExprSyntax("self")) {
+        SwitchExprSyntax(switchKeyword: .keyword(.switch), expression: ExprSyntax("self")) {
           for attribute in TYPE_ATTR_KINDS {
             SwitchCaseSyntax("case .\(raw: attribute.swiftName):") {
               StmtSyntax("return .keyword(.\(raw: attribute.name))")

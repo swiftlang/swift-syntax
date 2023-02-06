@@ -46,10 +46,10 @@ let keywordFile = SourceFileSyntax {
     }
 
     try! InitializerDeclSyntax("@_spi(RawSyntax) public init?(_ text: SyntaxText)") {
-      try! SwitchStmtSyntax("switch text.count") {
+      try! SwitchExprSyntax("switch text.count") {
         for (length, keywords) in keywordsByLength() {
           SwitchCaseSyntax("case \(raw: length):") {
-            try! SwitchStmtSyntax("switch text") {
+            try! SwitchExprSyntax("switch text") {
               for keyword in keywords {
                 SwitchCaseSyntax(#"case "\#(raw: keyword.name)":"#) {
                   ExprSyntax("self = .\(raw: keyword.escapedName)")
@@ -70,7 +70,7 @@ let keywordFile = SourceFileSyntax {
       public var isLexerClassified: Bool
       """
     ) {
-      try! SwitchStmtSyntax("switch self") {
+      try! SwitchExprSyntax("switch self") {
         for keyword in KEYWORDS {
           if keyword.isLexerClassified {
             SwitchCaseSyntax("case .\(raw: keyword.escapedName): return true")

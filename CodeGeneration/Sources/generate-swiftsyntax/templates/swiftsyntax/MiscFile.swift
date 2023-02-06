@@ -23,29 +23,27 @@ let miscFile = SourceFileSyntax {
     """
   ) {
     try VariableDeclSyntax("public static var structure: SyntaxNodeStructure") {
-      ReturnStmtSyntax(
-        expression: FunctionCallExprSyntax(callee: ExprSyntax(".choices")) {
-          TupleExprElementSyntax(
-            expression: ArrayExprSyntax {
-              ArrayElementSyntax(
-                expression: ExprSyntax("\n.node(TokenSyntax.self)")
-              )
+      let choices = ArrayExprSyntax {
+        ArrayElementSyntax(
+          leadingTrivia: .newline,
+          expression: ExprSyntax(".node(TokenSyntax.self)")
+        )
 
-              for node in NON_BASE_SYNTAX_NODES {
-                ArrayElementSyntax(
-                  expression: ExprSyntax("\n.node(\(raw: node.name).self)")
-                )
-              }
-            }
+        for node in NON_BASE_SYNTAX_NODES {
+          ArrayElementSyntax(
+            leadingTrivia: .newline,
+            expression: ExprSyntax(".node(\(raw: node.name).self)")
           )
         }
-      )
+      }
+
+      StmtSyntax("return .choices(\(choices))")
     }
   }
 
   try! ExtensionDeclSyntax("extension SyntaxKind") {
     try VariableDeclSyntax("public var syntaxNodeType: SyntaxProtocol.Type") {
-      try SwitchStmtSyntax("switch self") {
+      try SwitchExprSyntax("switch self") {
         SwitchCaseSyntax("case .token:") {
           StmtSyntax("return TokenSyntax.self")
         }
@@ -59,7 +57,7 @@ let miscFile = SourceFileSyntax {
     }
 
     try VariableDeclSyntax("public var nameForDiagnostics: String?") {
-      try SwitchStmtSyntax("switch self") {
+      try SwitchExprSyntax("switch self") {
         SwitchCaseSyntax("case .token:") {
           StmtSyntax(#"return "token""#)
         }

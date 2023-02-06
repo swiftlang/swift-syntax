@@ -104,7 +104,7 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: [.blockComment(generat
       )
 
       try InitializerDeclSyntax("public init?<S: SyntaxProtocol>(_ node: S)") {
-        try SwitchStmtSyntax("switch node.raw.kind") {
+        try SwitchExprSyntax("switch node.raw.kind") {
           SwitchCaseListSyntax {
             SwitchCaseSyntax(
               label: .case(
@@ -112,11 +112,7 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: [.blockComment(generat
                   for childNode in SYNTAX_NODES where childNode.baseKind == node.syntaxKind {
                     CaseItemSyntax(
                       pattern: ExpressionPatternSyntax(
-                        expression: MemberAccessExprSyntax(
-                          base: nil,
-                          dot: .periodToken(),
-                          name: .identifier(childNode.swiftSyntaxKind)
-                        )
+                        expression: ExprSyntax(".\(raw: childNode.swiftSyntaxKind)")
                       )
                     )
                   }
@@ -148,20 +144,14 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: [.blockComment(generat
               condition: ExprSyntax("DEBUG"),
               elements: IfConfigClauseSyntax.Elements.statements(
                 CodeBlockItemListSyntax {
-                  SwitchStmtSyntax(
-                    expression: ExprSyntax("data.raw.kind")
-                  ) {
+                  try! SwitchExprSyntax("switch data.raw.kind") {
                     SwitchCaseSyntax(
                       label: .case(
                         SwitchCaseLabelSyntax {
                           for childNode in SYNTAX_NODES where childNode.baseKind == node.syntaxKind {
                             CaseItemSyntax(
                               pattern: ExpressionPatternSyntax(
-                                expression: MemberAccessExprSyntax(
-                                  base: nil,
-                                  dot: .periodToken(),
-                                  name: .identifier(childNode.swiftSyntaxKind)
-                                )
+                                expression: ExprSyntax(".\(raw: childNode.swiftSyntaxKind)")
                               )
                             )
                           }
@@ -231,21 +221,16 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: [.blockComment(generat
       )
 
       try VariableDeclSyntax("public static var structure: SyntaxNodeStructure") {
-        ReturnStmtSyntax(
-          expression: FunctionCallExprSyntax(
-            callee: ExprSyntax(".choices")
-          ) {
-            TupleExprElementSyntax(
-              expression: ArrayExprSyntax {
-                for childNode in SYNTAX_NODES where childNode.baseKind == node.syntaxKind {
-                  ArrayElementSyntax(
-                    expression: ExprSyntax("\n.node(\(raw: childNode.name).self)")
-                  )
-                }
-              }
+        let choices = ArrayExprSyntax {
+          for childNode in SYNTAX_NODES where childNode.baseKind == node.syntaxKind {
+            ArrayElementSyntax(
+              leadingTrivia: .newline,
+              expression: ExprSyntax(".node(\(raw: childNode.name).self)")
             )
           }
-        )
+        }
+
+        StmtSyntax("return .choices(\(choices))")
       }
 
       DeclSyntax(
@@ -268,6 +253,5 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: [.blockComment(generat
       }
       """
     )
-
   }
 }

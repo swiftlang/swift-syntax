@@ -40,7 +40,7 @@ let syntaxEnumFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCop
       func `as`(_: SyntaxEnum.Type) -> SyntaxEnum
       """
     ) {
-      try SwitchStmtSyntax("switch raw.kind") {
+      try SwitchExprSyntax("switch raw.kind") {
         SwitchCaseSyntax("case .token:") {
           StmtSyntax("return .token(TokenSyntax(self)!)")
         }

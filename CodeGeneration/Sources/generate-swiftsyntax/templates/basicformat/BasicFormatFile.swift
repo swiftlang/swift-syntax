@@ -18,9 +18,9 @@ import Utils
 extension Child {
   var requiresLeadingSpace: Bool? {
     switch self.kind {
-    case .token(choices: _, requiresLeadingSpace: let requiresLeadingSpace, requiresTrailingSpace: _):
+    case .token(_, let requiresLeadingSpace, _):
       return requiresLeadingSpace
-    case .nodeChoices(choices: let choices):
+    case .nodeChoices(let choices):
       for choice in choices {
         if let requiresLeadingSpace = choice.requiresLeadingSpace {
           return requiresLeadingSpace
@@ -34,9 +34,9 @@ extension Child {
 
   var requiresTrailingSpace: Bool? {
     switch self.kind {
-    case .token(choices: _, requiresLeadingSpace: _, requiresTrailingSpace: let requiresTrailingSpace):
+    case .token(choices: _, _, let requiresTrailingSpace):
       return requiresTrailingSpace
-    case .nodeChoices(choices: let choices):
+    case .nodeChoices(let choices):
       for choice in choices {
         if let requiresTrailingSpace = choice.requiresTrailingSpace {
           return requiresTrailingSpace
@@ -116,7 +116,7 @@ let basicFormatFile = SourceFileSyntax {
     )
 
     try FunctionDeclSyntax("open func shouldIndent(_ keyPath: AnyKeyPath) -> Bool") {
-      try SwitchStmtSyntax("switch keyPath") {
+      try SwitchExprSyntax("switch keyPath") {
         for node in SYNTAX_NODES where !node.isBase {
           for child in node.children where child.isIndented {
             SwitchCaseSyntax("case \\\(raw: node.type.syntaxBaseName).\(raw: child.swiftName):") {
@@ -131,7 +131,7 @@ let basicFormatFile = SourceFileSyntax {
     }
 
     try FunctionDeclSyntax("open func requiresLeadingNewline(_ keyPath: AnyKeyPath) -> Bool") {
-      try SwitchStmtSyntax("switch keyPath") {
+      try SwitchExprSyntax("switch keyPath") {
         for node in SYNTAX_NODES where !node.isBase {
           for child in node.children where child.requiresLeadingNewline {
             SwitchCaseSyntax("case \\\(raw: node.type.syntaxBaseName).\(raw: child.swiftName):") {
@@ -146,7 +146,7 @@ let basicFormatFile = SourceFileSyntax {
     }
 
     try FunctionDeclSyntax("open func childrenSeparatedByNewline(_ node: Syntax) -> Bool") {
-      try SwitchStmtSyntax("switch node.as(SyntaxEnum.self)") {
+      try SwitchExprSyntax("switch node.as(SyntaxEnum.self)") {
         for node in SYNTAX_NODES where !node.isBase {
           if node.elementsSeparatedByNewline {
             SwitchCaseSyntax("case .\(raw: node.swiftSyntaxKind):") {
@@ -167,7 +167,7 @@ let basicFormatFile = SourceFileSyntax {
       open func requiresLeadingSpace(_ keyPath: AnyKeyPath) -> Bool?
       """
     ) {
-      try SwitchStmtSyntax("switch keyPath") {
+      try SwitchExprSyntax("switch keyPath") {
         for node in SYNTAX_NODES where !node.isBase {
           for child in node.children {
             if let requiresLeadingSpace = child.requiresLeadingSpace {
@@ -192,7 +192,7 @@ let basicFormatFile = SourceFileSyntax {
         """
       )
 
-      try SwitchStmtSyntax("switch token.tokenKind") {
+      try SwitchExprSyntax("switch token.tokenKind") {
         for token in SYNTAX_TOKENS {
           if token.requiresLeadingSpace {
             SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
@@ -218,7 +218,7 @@ let basicFormatFile = SourceFileSyntax {
       open func requiresTrailingSpace(_ keyPath: AnyKeyPath) -> Bool?
       """
     ) {
-      try SwitchStmtSyntax("switch keyPath") {
+      try SwitchExprSyntax("switch keyPath") {
         for node in SYNTAX_NODES where !node.isBase {
           for child in node.children {
             if let requiresTrailingSpace = child.requiresTrailingSpace {
@@ -262,7 +262,7 @@ let basicFormatFile = SourceFileSyntax {
         """
       )
 
-      try SwitchStmtSyntax("switch token.tokenKind") {
+      try SwitchExprSyntax("switch token.tokenKind") {
         for token in SYNTAX_TOKENS {
           if token.requiresTrailingSpace {
             SwitchCaseSyntax("case .\(raw: token.swiftKind):") {

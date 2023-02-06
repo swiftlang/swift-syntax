@@ -64,7 +64,7 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: [.blockComment(gener
           }
 
           try VariableDeclSyntax("public var _syntaxNode: Syntax") {
-            SwitchStmtSyntax(switchKeyword: .keyword(.switch), expression: ExprSyntax("self")) {
+            SwitchExprSyntax(switchKeyword: .keyword(.switch), expression: ExprSyntax("self")) {
               for choiceName in node.collectionElementChoices ?? [] {
                 let choice = SYNTAX_NODE_MAP[choiceName]!
                 SwitchCaseSyntax("case .\(raw: choice.swiftSyntaxKind)(let node):") {
@@ -115,22 +115,17 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: [.blockComment(gener
           }
 
           try VariableDeclSyntax("public static var structure: SyntaxNodeStructure") {
-            ReturnStmtSyntax(
-              expression: FunctionCallExprSyntax(
-                callee: ExprSyntax(".choices")
-              ) {
-                TupleExprElementSyntax(
-                  expression: ArrayExprSyntax {
-                    for choiceName in node.collectionElementChoices ?? [] {
-                      let choice = SYNTAX_NODE_MAP[choiceName]!
-                      ArrayElementSyntax(
-                        expression: ExprSyntax("\n.node(\(raw: choice.name).self)")
-                      )
-                    }
-                  }
+            let choices = ArrayExprSyntax {
+              for choiceName in node.collectionElementChoices ?? [] {
+                let choice = SYNTAX_NODE_MAP[choiceName]!
+                ArrayElementSyntax(
+                  leadingTrivia: .newline,
+                  expression: ExprSyntax(".node(\(raw: choice.name).self)")
                 )
               }
-            )
+            }
+
+            StmtSyntax("return .choices(\(choices))")
           }
         }
       } else {

@@ -117,7 +117,7 @@ let syntaxVisitorFile = SourceFileSyntax {
     }
 
     try FunctionDeclSyntax("private func visit(_ data: SyntaxData)") {
-      try SwitchStmtSyntax("switch data.raw.kind") {
+      try SwitchExprSyntax("switch data.raw.kind") {
         SwitchCaseSyntax("case .token:") {
           DeclSyntax("let node = TokenSyntax(data)")
 

@@ -71,6 +71,7 @@ struct GenerateSwiftSyntax: ParsableCommand {
         // SwiftSyntax
         TemplateSpec(sourceFile: keywordFile, module: swiftSyntaxDir, filename: "Keyword.swift"),
         TemplateSpec(sourceFile: miscFile, module: swiftSyntaxDir, filename: "Misc.swift"),
+        TemplateSpec(sourceFile: rawSyntaxNodesFile, module: swiftSyntaxDir, filename: "raw/RawSyntaxNodes.swift"),
         TemplateSpec(sourceFile: syntaxAnyVisitorFile, module: swiftSyntaxDir, filename: "SyntaxAnyVisitor.swift"),
         TemplateSpec(sourceFile: syntaxBaseNodesFile, module: swiftSyntaxDir, filename: "SyntaxBaseNodes.swift"),
         TemplateSpec(sourceFile: syntaxCollectionsFile, module: swiftSyntaxDir, filename: "SyntaxCollections.swift"),

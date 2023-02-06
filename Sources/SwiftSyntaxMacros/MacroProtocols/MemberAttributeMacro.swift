@@ -27,11 +27,12 @@ public protocol MemberAttributeMacro: AttachedMacro {
   /// - Returns: the set of attributes to apply to the given member.
   static func expansion<
     Declaration: DeclGroupSyntax,
+    MemberDeclaration: DeclSyntaxProtocol,
     Context: MacroExpansionContext
   >(
     of node: AttributeSyntax,
     attachedTo declaration: Declaration,
-    providingAttributesFor member: DeclSyntax,
+    providingAttributesFor member: MemberDeclaration,
     in context: Context
   ) throws -> [AttributeSyntax]
 }

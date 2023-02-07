@@ -281,13 +281,13 @@ public extension SyntaxProtocol {
   /// Whether the tree contained by this layout has any
   ///  - missing nodes or
   ///  - unexpected nodes or
-  ///  - tokens with a `LexerError` of severity `error`
+  ///  - tokens with a `TokenDiagnostic` of severity `error`
   var hasError: Bool {
     return raw.recursiveFlags.contains(.hasError)
   }
 
-  /// Whether the tree contained by this layout has any tokens with a `LexerError`
-  /// of severity `warning`.
+  /// Whether the tree contained by this layout has any tokens with a
+  /// `TokenDiagnostic` of severity `warning`.
   var hasWarning: Bool {
     return raw.recursiveFlags.contains(.hasWarning)
   }

@@ -11,7 +11,6 @@ add_swift_host_library(SwiftSyntax
   BumpPtrAllocator.swift
   CommonAncestor.swift
   IncrementalParseTransition.swift
-  LexerError.swift
   SourceLength.swift
   SourceLocation.swift
   SourcePresence.swift
@@ -22,6 +21,7 @@ add_swift_host_library(SwiftSyntax
   SyntaxOtherNodes.swift
   SyntaxText.swift
   SyntaxTreeViewMode.swift
+  TokenDiagnostic.swift
   Utils.swift
 
   Raw/RawSyntax.swift

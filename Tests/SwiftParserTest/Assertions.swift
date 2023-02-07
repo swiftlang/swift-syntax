@@ -25,7 +25,7 @@ struct LexemeSpec {
   let tokenText: SyntaxText
   let trailingTrivia: SyntaxText
   let errorLocationMarker: String
-  let error: String?
+  let diagnostic: String?
   let flags: Lexer.Lexeme.Flags
 
   /// The file and line at which this `LexemeSpec` was created, so that assertion failures can be reported at its location.
@@ -38,7 +38,7 @@ struct LexemeSpec {
     text: SyntaxText,
     trailing: SyntaxText = "",
     errorLocationMarker: String = "1️⃣",
-    error: String? = nil,
+    diagnostic: String? = nil,
     flags: Lexer.Lexeme.Flags = [],
     file: StaticString = #file,
     line: UInt = #line
@@ -48,7 +48,7 @@ struct LexemeSpec {
     self.tokenText = text
     self.trailingTrivia = trailing
     self.errorLocationMarker = errorLocationMarker
-    self.error = error
+    self.diagnostic = diagnostic
     self.flags = flags
     self.file = file
     self.line = line
@@ -127,7 +127,7 @@ private func AssertTokens(
       )
     }
 
-    switch (actualLexeme.error, expectedLexeme.error) {
+    switch (actualLexeme.diagnostic, expectedLexeme.diagnostic) {
     case (nil, nil): break
     case (nil, .some):
       XCTFail(

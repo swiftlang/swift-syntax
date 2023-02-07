@@ -52,7 +52,7 @@
   ],
   "Parse": [
     "IncrementalParseTransition.swift",
-    "LexerError.swift",
+    "TokenDiagnostic.swift",
   ],
   "Internal": [
     "SyntaxArena.swift",

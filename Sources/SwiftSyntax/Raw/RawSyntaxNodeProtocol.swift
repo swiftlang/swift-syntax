@@ -148,7 +148,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
     wholeText: SyntaxText,
     textRange: Range<SyntaxText.Index>,
     presence: SourcePresence,
-    lexerError: LexerError?,
+    tokenDiagnostic: TokenDiagnostic?,
     arena: __shared SyntaxArena
   ) {
     let raw = RawSyntax.parsedToken(
@@ -156,7 +156,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
       wholeText: wholeText,
       textRange: textRange,
       presence: presence,
-      lexerError: lexerError,
+      tokenDiagnostic: tokenDiagnostic,
       arena: arena
     )
     self = RawTokenSyntax(raw: raw)
@@ -170,7 +170,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
     leadingTriviaPieces: [RawTriviaPiece] = [],
     trailingTriviaPieces: [RawTriviaPiece] = [],
     presence: SourcePresence,
-    lexerError: LexerError? = nil,
+    tokenDiagnostic: TokenDiagnostic? = nil,
     arena: __shared SyntaxArena
   ) {
     if leadingTriviaPieces.isEmpty && trailingTriviaPieces.isEmpty {
@@ -180,7 +180,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
         wholeText: text,
         textRange: 0..<text.count,
         presence: presence,
-        lexerError: lexerError,
+        tokenDiagnostic: tokenDiagnostic,
         arena: arena
       )
     } else {
@@ -191,7 +191,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
         leadingTriviaPieces: leadingTriviaPieces,
         trailingTriviaPieces: trailingTriviaPieces,
         presence: presence,
-        lexerError: lexerError,
+        tokenDiagnostic: tokenDiagnostic,
         arena: arena
       )
     }
@@ -204,7 +204,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
     leadingTriviaPieces: [RawTriviaPiece],
     trailingTriviaPieces: [RawTriviaPiece],
     presence: SourcePresence,
-    lexerError: LexerError?,
+    tokenDiagnostic: TokenDiagnostic?,
     arena: __shared SyntaxArena
   ) {
     let raw = RawSyntax.makeMaterializedToken(
@@ -213,7 +213,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
       leadingTriviaPieceCount: leadingTriviaPieces.count,
       trailingTriviaPieceCount: trailingTriviaPieces.count,
       presence: presence,
-      lexerError: lexerError,
+      tokenDiagnostic: tokenDiagnostic,
       arena: arena,
       initializingLeadingTriviaWith: { buffer in
         _ = buffer.initialize(from: leadingTriviaPieces)
@@ -245,7 +245,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
       leadingTriviaPieces: leadingTriviaPieces,
       trailingTriviaPieces: trailingTriviaPieces,
       presence: .missing,
-      lexerError: nil,
+      tokenDiagnostic: nil,
       arena: arena
     )
   }

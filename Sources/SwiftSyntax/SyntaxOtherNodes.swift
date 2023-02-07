@@ -46,7 +46,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia,
         presence: presence,
-        lexerError: nil,
+        tokenDiagnostic: nil,
         arena: arena
       )
       return SyntaxData.forRoot(raw)
@@ -139,8 +139,8 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   /// If the token has a lexical error, the type of the error.
-  public var lexerError: LexerError? {
-    return tokenView.lexerError
+  public var tokenDiagnostic: TokenDiagnostic? {
+    return tokenView.tokenDiagnostic
   }
 }
 

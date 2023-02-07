@@ -18,29 +18,6 @@ import Foundation
 @_spi(RawSyntax) import SwiftSyntax
 @_implementationOnly import SwiftParser
 
-/// A list of possible errors that could be encountered while parsing a
-/// Syntax tree.
-@available(*, deprecated, message: "The Swift parser does not throw errors")
-public enum ParserError: Error, CustomStringConvertible {
-  /// Parser created an invalid syntax data. That should never occur under
-  /// normal circumstances, and it should be reported as a bug.
-  case invalidSyntaxData
-
-  /// The SwiftSyntax parser library isn't compatible with this SwiftSyntax version.
-  ///
-  /// This can never happen, because there is no SwiftSyntax library any more.
-  case parserCompatibilityCheckFailed
-
-  public var description: String {
-    switch self {
-    case .invalidSyntaxData:
-      return "parser created invalid syntax data"
-    case .parserCompatibilityCheckFailed:
-      return "Incompatible nonexistent library"
-    }
-  }
-}
-
 /// Namespace for functions to parse swift source and retrieve a syntax tree.
 public enum SyntaxParser {
   /// Parses the string into a full-fidelity Syntax tree.

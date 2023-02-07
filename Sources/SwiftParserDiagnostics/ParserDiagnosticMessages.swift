@@ -475,10 +475,10 @@ extension FixItMessage where Self == StaticParserFixIt {
     .init("remove operator body")
   }
   public static var replaceCurlyQuoteByNormalQuote: Self {
-    .init(#"replace curly quotes by '"'"#)
+    .init(#"replace curly quotes with '"'"#)
   }
   public static var replaceNonBreakingSpaceBySpace: Self {
-    .init("replace non-breaking space by ' '")
+    .init("replace non-breaking space with ' '")
   }
   public static var wrapInBackticks: Self {
     .init("if this name is unavoidable, use backticks to escape it")
@@ -548,6 +548,6 @@ public struct ReplaceTokensFixIt: ParserFixIt {
   public let replacement: TokenSyntax
 
   public var message: String {
-    "replace \(nodesDescription(replaceTokens, format: false)) by '\(replacement.text)'"
+    "replace \(nodesDescription(replaceTokens, format: false)) with '\(replacement.text)'"
   }
 }

@@ -113,7 +113,7 @@ final class TypealiasTests: XCTestCase {
       typealias Recovery2 1️⃣:2️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '=' in typealias declaration", fixIts: ["replace ':' by '='"]),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '=' in typealias declaration", fixIts: ["replace ':' with '='"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected type in typealias declaration"),
       ]
     )
@@ -136,7 +136,7 @@ final class TypealiasTests: XCTestCase {
       typealias Recovery4 1️⃣: Int
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '=' in typealias declaration", fixIts: ["replace ':' by '='"])
+        DiagnosticSpec(message: "expected '=' in typealias declaration", fixIts: ["replace ':' with '='"])
       ]
     )
   }
@@ -147,7 +147,7 @@ final class TypealiasTests: XCTestCase {
       typealias Recovery5 1️⃣: Int2️⃣, Float
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '=' in typealias declaration", fixIts: ["replace ':' by '='"]),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '=' in typealias declaration", fixIts: ["replace ':' with '='"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code ', Float' at top level"),
       ]
     )

@@ -525,7 +525,7 @@ final class InvalidTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'class' constraint can only appear on protocol declarations", fixIts: ["replace 'class' by 'AnyObject'"])
+        DiagnosticSpec(message: "'class' constraint can only appear on protocol declarations", fixIts: ["replace 'class' with 'AnyObject'"])
       ],
       fixedSource: """
         struct Weak<T: AnyObject> {

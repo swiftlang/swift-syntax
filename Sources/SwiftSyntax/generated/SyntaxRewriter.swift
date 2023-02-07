@@ -1322,6 +1322,13 @@ open class SyntaxRewriter {
     return Syntax(visitChildren(node)).cast(PackageProductSyntax.self)
   }
   
+  /// Visit a `PackageVersionRangeSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: PackageVersionRangeSyntax) -> PackageVersionRangeSyntax {
+    return Syntax(visitChildren(node)).cast(PackageVersionRangeSyntax.self)
+  }
+  
   /// Visit a `ParameterClauseSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -4561,6 +4568,20 @@ open class SyntaxRewriter {
   }
   
   /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplPackageVersionRangeSyntax(_ data: SyntaxData) -> Syntax {
+    let node = PackageVersionRangeSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { 
+      visitPost(node._syntaxNode) 
+    }
+    if let newNode = visitAny(node._syntaxNode) { 
+      return newNode 
+    }
+    return Syntax(visit(node))
+  }
+  
+  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplParameterClauseSyntax(_ data: SyntaxData) -> Syntax {
     let node = ParameterClauseSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -6120,6 +6141,8 @@ open class SyntaxRewriter {
       return visitImplPackageAttributeArgumentsSyntax
     case .packageProduct: 
       return visitImplPackageProductSyntax
+    case .packageVersionRange: 
+      return visitImplPackageVersionRangeSyntax
     case .parameterClause: 
       return visitImplParameterClauseSyntax
     case .patternBindingList: 
@@ -6664,6 +6687,8 @@ open class SyntaxRewriter {
       return visitImplPackageAttributeArgumentsSyntax(data)
     case .packageProduct: 
       return visitImplPackageProductSyntax(data)
+    case .packageVersionRange: 
+      return visitImplPackageVersionRangeSyntax(data)
     case .parameterClause: 
       return visitImplParameterClauseSyntax(data)
     case .patternBindingList: 

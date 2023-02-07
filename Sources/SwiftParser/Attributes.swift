@@ -910,8 +910,8 @@ extension Parser {
           )
         )
       } else {
-        let requirement = self.parseExpression()
-        registryRequirement = .range(requirement)
+        let range = self.parsePackageVersionRange()
+        registryRequirement = .range(range)
       }
       packageDescription = .registry(
         RawRegistryPackageDescriptionSyntax(
@@ -947,8 +947,8 @@ extension Parser {
           )
         )
       } else {
-        let requirement = self.parseExpression()
-        sourceControlRequirement = .range(requirement)
+        let range = self.parsePackageVersionRange()
+        sourceControlRequirement = .range(range)
       }
       packageDescription = .sourceControl(
         RawSourceControlPackageDescriptionSyntax(
@@ -987,6 +987,26 @@ extension Parser {
       description: packageDescription,
       comma: comma,
       product: packageProduct,
+      arena: self.arena
+    )
+  }
+
+  /// Parse a range of package version literals.
+  ///
+  /// Grammar
+  /// =======
+  ///
+  ///     version-range → string-literal '..<' string-literal
+  ///     version-range → string-literal '...' string-literal
+  mutating func parsePackageVersionRange() -> RawPackageVersionRangeSyntax {
+    let fromVersion = self.parseStringLiteral()
+    let (unexpectedBeforeOperatorToken, operatorToken) = self.expect(.binaryOperator)
+    let toVersion = self.parseStringLiteral()
+    return RawPackageVersionRangeSyntax(
+      fromVersion: fromVersion,
+      unexpectedBeforeOperatorToken,
+      operatorToken: operatorToken,
+      toVersion: toVersion,
       arena: self.arena
     )
   }

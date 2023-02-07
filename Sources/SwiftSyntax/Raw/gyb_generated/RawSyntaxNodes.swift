@@ -11965,10 +11965,10 @@ public struct RawSourceControlPackageDescriptionSyntax: RawSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Requirement: RawSyntaxNodeProtocol {
     case `labeled`(RawSourceControlRequirementSyntax)
-    case `range`(RawExprSyntax)
+    case `range`(RawPackageVersionRangeSyntax)
 
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
-      return RawSourceControlRequirementSyntax.isKindOf(raw) || RawExprSyntax.isKindOf(raw)
+      return RawSourceControlRequirementSyntax.isKindOf(raw) || RawPackageVersionRangeSyntax.isKindOf(raw)
     }
 
     public var raw: RawSyntax {
@@ -11983,7 +11983,7 @@ public struct RawSourceControlPackageDescriptionSyntax: RawSyntaxNodeProtocol {
         self = .labeled(node)
         return
       }
-      if let node = RawExprSyntax(other) {
+      if let node = RawPackageVersionRangeSyntax(other) {
         self = .range(node)
         return
       }
@@ -12084,10 +12084,10 @@ public struct RawRegistryPackageDescriptionSyntax: RawSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Requirement: RawSyntaxNodeProtocol {
     case `labeled`(RawRegistryRequirementSyntax)
-    case `range`(RawExprSyntax)
+    case `range`(RawPackageVersionRangeSyntax)
 
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
-      return RawRegistryRequirementSyntax.isKindOf(raw) || RawExprSyntax.isKindOf(raw)
+      return RawRegistryRequirementSyntax.isKindOf(raw) || RawPackageVersionRangeSyntax.isKindOf(raw)
     }
 
     public var raw: RawSyntax {
@@ -12102,7 +12102,7 @@ public struct RawRegistryPackageDescriptionSyntax: RawSyntaxNodeProtocol {
         self = .labeled(node)
         return
       }
-      if let node = RawExprSyntax(other) {
+      if let node = RawPackageVersionRangeSyntax(other) {
         self = .range(node)
         return
       }
@@ -12334,6 +12334,76 @@ public struct RawRegistryRequirementSyntax: RawSyntaxNodeProtocol {
     layoutView.children[5].map(RawStringLiteralExprSyntax.init(raw:))!
   }
   public var unexpectedAfterRequirement: RawUnexpectedNodesSyntax? {
+    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+}
+
+@_spi(RawSyntax)
+public struct RawPackageVersionRangeSyntax: RawSyntaxNodeProtocol {
+
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
+    return raw.layoutView!
+  }
+
+  public static func isKindOf(_ raw: RawSyntax) -> Bool {
+    return raw.kind == .packageVersionRange
+  }
+
+  public var raw: RawSyntax
+  init(raw: RawSyntax) {
+    assert(Self.isKindOf(raw))
+    self.raw = raw
+  }
+
+  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+    guard Self.isKindOf(other.raw) else { return nil }
+    self.init(raw: other.raw)
+  }
+
+  public init(
+    _ unexpectedBeforeFromVersion: RawUnexpectedNodesSyntax? = nil,
+    fromVersion: RawStringLiteralExprSyntax,
+    _ unexpectedBetweenFromVersionAndOperatorToken: RawUnexpectedNodesSyntax? = nil,
+    operatorToken: RawTokenSyntax,
+    _ unexpectedBetweenOperatorTokenAndToVersion: RawUnexpectedNodesSyntax? = nil,
+    toVersion: RawStringLiteralExprSyntax,
+    _ unexpectedAfterToVersion: RawUnexpectedNodesSyntax? = nil,
+    arena: __shared SyntaxArena
+  ) {
+    let raw = RawSyntax.makeLayout(
+      kind: .packageVersionRange, uninitializedCount: 7, arena: arena) { layout in
+      layout.initialize(repeating: nil)
+      layout[0] = unexpectedBeforeFromVersion?.raw
+      layout[1] = fromVersion.raw
+      layout[2] = unexpectedBetweenFromVersionAndOperatorToken?.raw
+      layout[3] = operatorToken.raw
+      layout[4] = unexpectedBetweenOperatorTokenAndToVersion?.raw
+      layout[5] = toVersion.raw
+      layout[6] = unexpectedAfterToVersion?.raw
+    }
+    self.init(raw: raw)
+  }
+
+  public var unexpectedBeforeFromVersion: RawUnexpectedNodesSyntax? {
+    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  public var fromVersion: RawStringLiteralExprSyntax {
+    layoutView.children[1].map(RawStringLiteralExprSyntax.init(raw:))!
+  }
+  public var unexpectedBetweenFromVersionAndOperatorToken: RawUnexpectedNodesSyntax? {
+    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  public var operatorToken: RawTokenSyntax {
+    layoutView.children[3].map(RawTokenSyntax.init(raw:))!
+  }
+  public var unexpectedBetweenOperatorTokenAndToVersion: RawUnexpectedNodesSyntax? {
+    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  public var toVersion: RawStringLiteralExprSyntax {
+    layoutView.children[5].map(RawStringLiteralExprSyntax.init(raw:))!
+  }
+  public var unexpectedAfterToVersion: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }

@@ -11105,7 +11105,7 @@ extension FileSystemPackageDescriptionSyntax: CustomReflectable {
 public struct SourceControlPackageDescriptionSyntax: SyntaxProtocol, SyntaxHashable {
   public enum Requirement: SyntaxChildChoices {
     case `labeled`(SourceControlRequirementSyntax)
-    case `range`(ExprSyntax)
+    case `range`(PackageVersionRangeSyntax)
     public var _syntaxNode: Syntax {
       switch self {
       case .labeled(let node): return node._syntaxNode
@@ -11116,15 +11116,15 @@ public struct SourceControlPackageDescriptionSyntax: SyntaxProtocol, SyntaxHasha
     public init(_ node: SourceControlRequirementSyntax) {
       self = .labeled(node)
     }
-    public init<Node: ExprSyntaxProtocol>(_ node: Node) {
-      self = .range(ExprSyntax(node))
+    public init(_ node: PackageVersionRangeSyntax) {
+      self = .range(node)
     }
     public init?<S: SyntaxProtocol>(_ node: S) {
       if let node = node.as(SourceControlRequirementSyntax.self) {
         self = .labeled(node)
         return
       }
-      if let node = node.as(ExprSyntax.self) {
+      if let node = node.as(PackageVersionRangeSyntax.self) {
         self = .range(node)
         return
       }
@@ -11134,7 +11134,7 @@ public struct SourceControlPackageDescriptionSyntax: SyntaxProtocol, SyntaxHasha
     public static var structure: SyntaxNodeStructure {
       return .choices([
         .node(SourceControlRequirementSyntax.self),
-        .node(ExprSyntax.self),
+        .node(PackageVersionRangeSyntax.self),
       ])
     }
   }
@@ -11203,7 +11203,7 @@ public struct SourceControlPackageDescriptionSyntax: SyntaxProtocol, SyntaxHasha
   }
 
   /// 
-  /// The URL label
+  /// The label of the package URL
   /// 
   public var label: TokenSyntax {
     get {
@@ -11242,7 +11242,7 @@ public struct SourceControlPackageDescriptionSyntax: SyntaxProtocol, SyntaxHasha
   }
 
   /// 
-  /// The Git URL of package
+  /// The URL of package
   /// 
   public var url: StringLiteralExprSyntax {
     get {
@@ -11376,7 +11376,7 @@ extension SourceControlPackageDescriptionSyntax: CustomReflectable {
 public struct RegistryPackageDescriptionSyntax: SyntaxProtocol, SyntaxHashable {
   public enum Requirement: SyntaxChildChoices {
     case `labeled`(RegistryRequirementSyntax)
-    case `range`(ExprSyntax)
+    case `range`(PackageVersionRangeSyntax)
     public var _syntaxNode: Syntax {
       switch self {
       case .labeled(let node): return node._syntaxNode
@@ -11387,15 +11387,15 @@ public struct RegistryPackageDescriptionSyntax: SyntaxProtocol, SyntaxHashable {
     public init(_ node: RegistryRequirementSyntax) {
       self = .labeled(node)
     }
-    public init<Node: ExprSyntaxProtocol>(_ node: Node) {
-      self = .range(ExprSyntax(node))
+    public init(_ node: PackageVersionRangeSyntax) {
+      self = .range(node)
     }
     public init?<S: SyntaxProtocol>(_ node: S) {
       if let node = node.as(RegistryRequirementSyntax.self) {
         self = .labeled(node)
         return
       }
-      if let node = node.as(ExprSyntax.self) {
+      if let node = node.as(PackageVersionRangeSyntax.self) {
         self = .range(node)
         return
       }
@@ -11405,7 +11405,7 @@ public struct RegistryPackageDescriptionSyntax: SyntaxProtocol, SyntaxHashable {
     public static var structure: SyntaxNodeStructure {
       return .choices([
         .node(RegistryRequirementSyntax.self),
-        .node(ExprSyntax.self),
+        .node(PackageVersionRangeSyntax.self),
       ])
     }
   }
@@ -11474,7 +11474,7 @@ public struct RegistryPackageDescriptionSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   /// 
-  /// The ID label
+  /// The label of the package ID
   /// 
   public var label: TokenSyntax {
     get {
@@ -11973,6 +11973,169 @@ extension RegistryRequirementSyntax: CustomReflectable {
       "unexpectedBetweenColonAndRequirement": unexpectedBetweenColonAndRequirement.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "requirement": Syntax(requirement).asProtocol(SyntaxProtocol.self),
       "unexpectedAfterRequirement": unexpectedAfterRequirement.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+    ])
+  }
+}
+
+// MARK: - PackageVersionRangeSyntax
+
+/// 
+/// Open or closed range of dependent package versions
+/// 
+public struct PackageVersionRangeSyntax: SyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .packageVersionRange else { return nil }
+    self._syntaxNode = node._syntaxNode
+  }
+
+  /// Creates a `PackageVersionRangeSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .packageVersionRange)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeFromVersion: UnexpectedNodesSyntax? = nil,
+    fromVersion: StringLiteralExprSyntax,
+    _ unexpectedBetweenFromVersionAndOperatorToken: UnexpectedNodesSyntax? = nil,
+    operatorToken: TokenSyntax,
+    _ unexpectedBetweenOperatorTokenAndToVersion: UnexpectedNodesSyntax? = nil,
+    toVersion: StringLiteralExprSyntax,
+    _ unexpectedAfterToVersion: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed 
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeFromVersion, fromVersion, unexpectedBetweenFromVersionAndOperatorToken, operatorToken, unexpectedBetweenOperatorTokenAndToVersion, toVersion, unexpectedAfterToVersion))) { (arena, _) in
+      let layout: [RawSyntax?] = [
+        unexpectedBeforeFromVersion?.raw,
+        fromVersion.raw,
+        unexpectedBetweenFromVersionAndOperatorToken?.raw,
+        operatorToken.raw,
+        unexpectedBetweenOperatorTokenAndToVersion?.raw,
+        toVersion.raw,
+        unexpectedAfterToVersion?.raw,
+      ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.packageVersionRange, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+
+  public var unexpectedBeforeFromVersion: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = PackageVersionRangeSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var fromVersion: StringLiteralExprSyntax {
+    get {
+      return StringLiteralExprSyntax(data.child(at: 1, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = PackageVersionRangeSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var unexpectedBetweenFromVersionAndOperatorToken: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = PackageVersionRangeSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var operatorToken: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = PackageVersionRangeSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var unexpectedBetweenOperatorTokenAndToVersion: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = PackageVersionRangeSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var toVersion: StringLiteralExprSyntax {
+    get {
+      return StringLiteralExprSyntax(data.child(at: 5, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = PackageVersionRangeSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var unexpectedAfterToVersion: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = PackageVersionRangeSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeFromVersion,
+      \Self.fromVersion,
+      \Self.unexpectedBetweenFromVersionAndOperatorToken,
+      \Self.operatorToken,
+      \Self.unexpectedBetweenOperatorTokenAndToVersion,
+      \Self.toVersion,
+      \Self.unexpectedAfterToVersion,
+    ])
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    case 5:
+      return nil
+    case 6:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
+}
+
+extension PackageVersionRangeSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "unexpectedBeforeFromVersion": unexpectedBeforeFromVersion.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "fromVersion": Syntax(fromVersion).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenFromVersionAndOperatorToken": unexpectedBetweenFromVersionAndOperatorToken.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "operatorToken": Syntax(operatorToken).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenOperatorTokenAndToVersion": unexpectedBetweenOperatorTokenAndToVersion.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "toVersion": Syntax(toVersion).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterToVersion": unexpectedAfterToVersion.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }

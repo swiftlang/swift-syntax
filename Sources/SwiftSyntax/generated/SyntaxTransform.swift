@@ -946,6 +946,11 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: PackageProductSyntax) -> ResultType
   
+  /// Visiting `PackageVersionRangeSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: PackageVersionRangeSyntax) -> ResultType
+  
   /// Visiting `ParameterClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -2657,6 +2662,13 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
+  /// Visiting `PackageVersionRangeSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: PackageVersionRangeSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
   /// Visiting `ParameterClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -3604,6 +3616,8 @@ extension SyntaxTransformVisitor {
     case .packageAttributeArguments(let derived): 
       return visit(derived)
     case .packageProduct(let derived): 
+      return visit(derived)
+    case .packageVersionRange(let derived): 
       return visit(derived)
     case .parameterClause(let derived): 
       return visit(derived)

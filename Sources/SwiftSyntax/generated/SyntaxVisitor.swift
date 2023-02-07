@@ -2243,6 +2243,18 @@ open class SyntaxVisitor {
   open func visitPost(_ node: PackageProductSyntax) {
   }
   
+  /// Visiting `PackageVersionRangeSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: PackageVersionRangeSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting `PackageVersionRangeSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: PackageVersionRangeSyntax) {
+  }
+  
   /// Visiting `ParameterClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -5275,6 +5287,17 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplPackageVersionRangeSyntax(_ data: SyntaxData) {
+    let node = PackageVersionRangeSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplParameterClauseSyntax(_ data: SyntaxData) {
     let node = ParameterClauseSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -6553,6 +6576,8 @@ open class SyntaxVisitor {
       visitImplPackageAttributeArgumentsSyntax(data)
     case .packageProduct: 
       visitImplPackageProductSyntax(data)
+    case .packageVersionRange: 
+      visitImplPackageVersionRangeSyntax(data)
     case .parameterClause: 
       visitImplParameterClauseSyntax(data)
     case .patternBindingList: 

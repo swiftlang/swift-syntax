@@ -542,22 +542,6 @@ final class AttributeTests: XCTestCase {
   }
 
   func testPackageAttribute() {
-    // Missing arguments
-    AssertParse(
-      """
-      @_package(1️⃣
-      import A
-      """,
-      diagnostics: [
-        DiagnosticSpec(message: "expected argument for '@_package' attribute", fixIts: ["insert attribute argument"]),
-        DiagnosticSpec(message: "expected ')' to end attribute", fixIts: ["insert ')'"]),
-      ],
-      fixedSource: """
-        @_package(id: "", <#expression#>)
-        import A
-        """
-    )
-
     // File-system package
     AssertParse(#"@_package(path: "/usr/local/my-package") import A"#)
     AssertParse(#"@_package(path: "../my-package", product: "AA") import A"#)

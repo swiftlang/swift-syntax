@@ -256,12 +256,12 @@ public let ATTRIBUTE_NODES: [Node] = [
        children: [
          Child(name: "Label",
                kind: .token(choices: [.keyword(text: "url")]),
-               description: "The URL label"),
+               description: "The label of the package URL"),
          Child(name: "Colon",
                kind: .token(choices: [.token(tokenKind: "ColonToken")])),
          Child(name: "URL",
                kind: .node(kind: "StringLiteralExpr"),
-               description: "The Git URL of package"),
+               description: "The URL of package"),
          Child(name: "Comma",
                kind: .token(choices: [.token(tokenKind: "CommaToken")]),
                description: "The comma between the package URL and requirement"),
@@ -270,7 +270,7 @@ public let ATTRIBUTE_NODES: [Node] = [
                  Child(name: "Labeled",
                        kind: .node(kind: "SourceControlRequirement")),
                  Child(name: "Range",
-                       kind: .node(kind: "Expr"))
+                       kind: .node(kind: "PackageVersionRange"))
                ]),
                description: "Version requirement of the remote package")
        ]),
@@ -282,7 +282,7 @@ public let ATTRIBUTE_NODES: [Node] = [
        children: [
          Child(name: "Label",
                kind: .token(choices: [.keyword(text: "id")]),
-               description: "The ID label"),
+               description: "The label of the package ID"),
          Child(name: "Colon",
                kind: .token(choices: [.token(tokenKind: "ColonToken")])),
          Child(name: "Identifier",
@@ -296,7 +296,7 @@ public let ATTRIBUTE_NODES: [Node] = [
                  Child(name: "Labeled",
                        kind: .node(kind: "RegistryRequirement")),
                  Child(name: "Range",
-                       kind: .node(kind: "Expr"))
+                       kind: .node(kind: "PackageVersionRange"))
                ]),
                description: "Version requirement of the remote package")
        ]),
@@ -333,6 +333,19 @@ public let ATTRIBUTE_NODES: [Node] = [
          Child(name: "Requirement",
                kind: .node(kind: "StringLiteralExpr"),
                description: "Requirement description of remote package")
+       ]),
+
+  Node(name: "PackageVersionRange",
+       nameForDiagnostics: "range of package version",
+       description: "Open or closed range of dependent package versions",
+       kind: "Syntax",
+       children: [
+         Child(name: "FromVersion",
+               kind: .node(kind: "StringLiteralExpr")),
+         Child(name: "OperatorToken",
+               kind: .token(choices: [.token(tokenKind: "BinaryOperatorToken")])),
+         Child(name: "ToVersion",
+               kind: .node(kind: "StringLiteralExpr"))
        ]),
 
   Node(name: "ObjCSelectorPiece",

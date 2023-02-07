@@ -267,7 +267,7 @@ ATTRIBUTE_NODES = [
                   '''),
          ]),
 
-    # source-control-package-desc -> 'url' ':' url ',' requirement-label? ':'? requirement
+    # source-control-package-desc -> 'url' ':' url ',' ( source-control-requirement | version-range )
     Node('SourceControlPackageDescription', name_for_diagnostics='remote package description (source control)',
          kind='Syntax',
          description='''
@@ -277,12 +277,12 @@ ATTRIBUTE_NODES = [
              Child('Label', kind='KeywordToken',
                    token_choices=['KeywordToken|url'],
                    description='''
-                   The URL label
+                   The label of the package URL
                    '''),
              Child('Colon', kind='ColonToken'),
              Child('URL', kind='StringLiteralExpr',
                    description='''
-                   The Git URL of package
+                   The URL of package
                    '''),
              Child('Comma', kind='CommaToken',
                    description='''
@@ -291,14 +291,14 @@ ATTRIBUTE_NODES = [
              Child('Requirement', kind='Syntax',
                    node_choices=[
                        Child('Labeled', kind='SourceControlRequirement', name_for_diagnostics='source control requirement'),
-                       Child('Range', kind='Expr', name_for_diagnostics='package version range'),
+                       Child('Range', kind='PackageVersionRange', name_for_diagnostics='package version range'),
                    ],
                    description='''
                    Version requirement of the remote package
                    '''),
          ]),
 
-    # registry-package-desc -> 'id' ':' id ',' requirement-label? ':'? requirement
+    # registry-package-desc -> 'id' ':' identifier ',' ( registry-requirement | package-version-range )
     Node('RegistryPackageDescription', name_for_diagnostics='remote package description',
          kind='Syntax',
          description='''
@@ -308,7 +308,7 @@ ATTRIBUTE_NODES = [
              Child('Label', kind='KeywordToken',
                    token_choices=['KeywordToken|id'],
                    description='''
-                   The ID label
+                   The label of the package ID
                    '''),
              Child('Colon', kind='ColonToken'),
              Child('Identifier', kind='StringLiteralExpr',
@@ -322,7 +322,7 @@ ATTRIBUTE_NODES = [
              Child('Requirement', kind='Syntax',
                    node_choices=[
                        Child('Labeled', kind='RegistryRequirement', name_for_diagnostics='labeled package requirement (registry)'),
-                       Child('Range', kind='Expr', name_for_diagnostics='package version range'),
+                       Child('Range', kind='PackageVersionRange', name_for_diagnostics='package version range'),
                    ],
                    description='''
                    Version requirement of the remote package
@@ -365,6 +365,18 @@ ATTRIBUTE_NODES = [
                    description='''
                    Requirement description of remote package
                    '''),
+         ]),
+
+    # package-version-range -> from-version ( '..<' | '...' ) to-version
+    Node('PackageVersionRange', name_for_diagnostics='range of package version',
+         kind='Syntax',
+         description='''
+         Open or closed range of dependent package versions
+         ''',
+         children=[
+             Child('FromVersion', kind='StringLiteralExpr'),
+             Child('OperatorToken', kind='BinaryOperatorToken'),
+             Child('ToVersion', kind='StringLiteralExpr'),
          ]),
 
     # objc-selector-piece -> identifier? ':'?

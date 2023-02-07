@@ -389,6 +389,8 @@ public enum SyntaxEnum {
   
   case packageProduct(PackageProductSyntax)
   
+  case packageVersionRange(PackageVersionRangeSyntax)
+  
   case parameterClause(ParameterClauseSyntax)
   
   case patternBindingList(PatternBindingListSyntax)
@@ -930,6 +932,8 @@ public extension Syntax {
       return .packageAttributeArguments(PackageAttributeArgumentsSyntax(self)!)
     case .packageProduct: 
       return .packageProduct(PackageProductSyntax(self)!)
+    case .packageVersionRange: 
+      return .packageVersionRange(PackageVersionRangeSyntax(self)!)
     case .parameterClause: 
       return .parameterClause(ParameterClauseSyntax(self)!)
     case .patternBindingList: 

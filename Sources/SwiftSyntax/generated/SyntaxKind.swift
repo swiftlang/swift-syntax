@@ -389,6 +389,8 @@ public enum SyntaxKind {
   
   case packageProduct
   
+  case packageVersionRange
+  
   case parameterClause
   
   case patternBindingList

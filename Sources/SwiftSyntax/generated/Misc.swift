@@ -204,6 +204,7 @@ extension Syntax {
         .node(PackReferenceTypeSyntax.self), 
         .node(PackageAttributeArgumentsSyntax.self), 
         .node(PackageProductSyntax.self), 
+        .node(PackageVersionRangeSyntax.self), 
         .node(ParameterClauseSyntax.self), 
         .node(PatternBindingListSyntax.self), 
         .node(PatternBindingSyntax.self), 
@@ -664,6 +665,8 @@ extension SyntaxKind {
       return PackageAttributeArgumentsSyntax.self
     case .packageProduct: 
       return PackageProductSyntax.self
+    case .packageVersionRange: 
+      return PackageVersionRangeSyntax.self
     case .parameterClause: 
       return ParameterClauseSyntax.self
     case .patternBindingList: 
@@ -1205,6 +1208,8 @@ extension SyntaxKind {
       return "@_package arguments"
     case .packageProduct: 
       return "package product"
+    case .packageVersionRange: 
+      return "range of package version"
     case .parameterClause: 
       return "parameter clause"
     case .patternBindingList: 

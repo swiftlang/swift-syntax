@@ -359,6 +359,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/RegistryPackageDescriptionSyntax>
 - <doc:SwiftSyntax/SourceControlRequirementSyntax>
 - <doc:SwiftSyntax/RegistryRequirementSyntax>
+- <doc:SwiftSyntax/PackageVersionRangeSyntax>
 - <doc:SwiftSyntax/ObjCSelectorPieceSyntax>
 - <doc:SwiftSyntax/ObjCSelectorSyntax>
 - <doc:SwiftSyntax/DifferentiableAttributeArgumentsSyntax>

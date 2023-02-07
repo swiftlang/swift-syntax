@@ -16,9 +16,12 @@ public protocol PeerMacro: AttachedMacro {
   ///
   /// The macro expansion can introduce "peer" declarations that sit alongside
   /// the given declaration.
-  static func expansion<Context: MacroExpansionContext>(
+  static func expansion<
+    Context: MacroExpansionContext,
+    Declaration: DeclSyntaxProtocol
+  >(
     of node: AttributeSyntax,
-    providingPeersOf declaration: DeclSyntax,
+    providingPeersOf declaration: Declaration,
     in context: Context
   ) throws -> [DeclSyntax]
 }

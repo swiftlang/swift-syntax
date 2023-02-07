@@ -14,9 +14,9 @@
 /// surrounding structure, this defines the type of the error.
 /// `byteOffset` specifies at which offset the error occurred.
 public struct TokenDiagnostic: Hashable {
-  public enum Severity {
-    case error
+  public enum Severity: Comparable {
     case warning
+    case error
   }
 
   public enum Kind {
@@ -69,6 +69,26 @@ public struct TokenDiagnostic: Hashable {
     } else {
       self.kind = kind
       self.byteOffset = UInt16(byteOffset)
+    }
+  }
+
+  /// Picks the more severe error of `lhs` and `rhs`, preferring `lhs` if they
+  /// have the same severity.
+  public init?(combining lhs: TokenDiagnostic?, _ rhs: TokenDiagnostic?) {
+    switch (lhs, rhs) {
+    case (let lhs?, let rhs?):
+      if rhs.severity > lhs.severity {
+        // Prefer the rhs if it is more severe, otherwise continue using lhs.
+        self = rhs
+      } else {
+        self = lhs
+      }
+    case (let lhs?, nil):
+      self = lhs
+    case (nil, let rhs?):
+      self = rhs
+    case (nil, nil):
+      return nil
     }
   }
 

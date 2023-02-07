@@ -542,14 +542,44 @@ final class AttributeTests: XCTestCase {
   }
 
   func testPackageAttribute() {
-    AssertParse(#"@_package(path: "../my-package", product: "AA") import A"#)
-    AssertParse(#"@_package(url: "https://example.com/package.git", from: "0.0.1") import A"#)
-    AssertParse(#"@_package(url: "https://example.com/package.git", .upToNextMinor(from: "0.1.0")) import A"#)
-    AssertParse(#"@_package(id: "Example.MyPackage", exact: "1.0.0") import A"#)
-    AssertParse(#"@_package(id: "Example.MyPackage", "0.1.0"..<"0.3.0") import A"#)
+    // Missing arguments
     AssertParse(
       """
-      @_package(url: "https://example.com/package.git", from: "0.0.1", product: "AA")
+      @_package(1️⃣
+      import A
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected argument for '@_package' attribute", fixIts: ["insert attribute argument"]),
+        DiagnosticSpec(message: "expected ')' to end attribute", fixIts: ["insert ')'"]),
+      ],
+      fixedSource: """
+        @_package(id: "", <#expression#>)
+        import A
+        """
+    )
+
+    // File-system package
+    AssertParse(#"@_package(path: "/usr/local/my-package") import A"#)
+    AssertParse(#"@_package(path: "../my-package", product: "AA") import A"#)
+
+    // Source-control package
+    AssertParse(#"@_package(url: "https://example.com/package.git", from: "1.0.0") import A"#)
+    AssertParse(#"@_package(url: "https://example.com/package.git", exact: "0.1.0") import A"#)
+    AssertParse(#"@_package(url: "https://example.com/package.git", branch: "main") import A"#)
+    AssertParse(#"@_package(url: "https://example.com/package.git", "0.1.0"..<"0.2.0") import A"#)
+    AssertParse(
+      """
+      @_package(url: "https://example.com/package.git", revision: "af2977a84bf1037ed5180019a6f6ae0cb8a0d7d3")
+      import A
+      """
+    )
+
+    // Registry package
+    AssertParse(#"@_package(id: "Example.MyPackage", exact: "1.0.0") import A"#)
+    AssertParse(#"@_package(id: "Example.MyPackage", "0.1.0" ... "0.2.3") import A"#)
+    AssertParse(
+      """
+      @_package(id: "Example.MyPackage", from: "0.0.1", product: "AA")
       @_exported import A
       """
     )

@@ -163,6 +163,7 @@ extension Syntax {
         .node(KeyPathOptionalComponentSyntax.self), 
         .node(KeyPathPropertyComponentSyntax.self), 
         .node(KeyPathSubscriptComponentSyntax.self), 
+        .node(LabeledPackageRequirementSyntax.self), 
         .node(LabeledSpecializeEntrySyntax.self), 
         .node(LabeledStmtSyntax.self), 
         .node(LayoutRequirementSyntax.self), 
@@ -579,6 +580,8 @@ extension SyntaxKind {
       return KeyPathPropertyComponentSyntax.self
     case .keyPathSubscriptComponent: 
       return KeyPathSubscriptComponentSyntax.self
+    case .labeledPackageRequirement: 
+      return LabeledPackageRequirementSyntax.self
     case .labeledSpecializeEntry: 
       return LabeledSpecializeEntrySyntax.self
     case .labeledStmt: 
@@ -1114,6 +1117,8 @@ extension SyntaxKind {
       return "key path property component"
     case .keyPathSubscriptComponent: 
       return "key path subscript component"
+    case .labeledPackageRequirement: 
+      return "labeled package requirement"
     case .labeledSpecializeEntry: 
       return "attribute argument"
     case .labeledStmt: 

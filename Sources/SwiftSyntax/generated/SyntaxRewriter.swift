@@ -1035,6 +1035,13 @@ open class SyntaxRewriter {
     return Syntax(visitChildren(node)).cast(KeyPathSubscriptComponentSyntax.self)
   }
   
+  /// Visit a `LabeledPackageRequirementSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: LabeledPackageRequirementSyntax) -> LabeledPackageRequirementSyntax {
+    return Syntax(visitChildren(node)).cast(LabeledPackageRequirementSyntax.self)
+  }
+  
   /// Visit a `LabeledSpecializeEntrySyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -3966,6 +3973,20 @@ open class SyntaxRewriter {
   }
   
   /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplLabeledPackageRequirementSyntax(_ data: SyntaxData) -> Syntax {
+    let node = LabeledPackageRequirementSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { 
+      visitPost(node._syntaxNode) 
+    }
+    if let newNode = visitAny(node._syntaxNode) { 
+      return newNode 
+    }
+    return Syntax(visit(node))
+  }
+  
+  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplLabeledSpecializeEntrySyntax(_ data: SyntaxData) -> Syntax {
     let node = LabeledSpecializeEntrySyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -5975,6 +5996,8 @@ open class SyntaxRewriter {
       return visitImplKeyPathPropertyComponentSyntax
     case .keyPathSubscriptComponent: 
       return visitImplKeyPathSubscriptComponentSyntax
+    case .labeledPackageRequirement: 
+      return visitImplLabeledPackageRequirementSyntax
     case .labeledSpecializeEntry: 
       return visitImplLabeledSpecializeEntrySyntax
     case .labeledStmt: 
@@ -6513,6 +6536,8 @@ open class SyntaxRewriter {
       return visitImplKeyPathPropertyComponentSyntax(data)
     case .keyPathSubscriptComponent: 
       return visitImplKeyPathSubscriptComponentSyntax(data)
+    case .labeledPackageRequirement: 
+      return visitImplLabeledPackageRequirementSyntax(data)
     case .labeledSpecializeEntry: 
       return visitImplLabeledSpecializeEntrySyntax(data)
     case .labeledStmt: 

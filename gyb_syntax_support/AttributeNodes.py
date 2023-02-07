@@ -284,15 +284,32 @@ ATTRIBUTE_NODES = [
                    description='''
                    The comma between the package location and requirement
                    '''),
-             Child('RequirementLabel', kind='KeywordToken',
+             Child('Requirement', kind='Syntax',
+                   node_choices=[
+                       Child('Labeled', kind='LabeledPackageRequirement', name_for_diagnostics='labeled package requirement'),
+                       Child('Wildcard', kind='Expr', name_for_diagnostics='wildcard package requirement'),
+                    ],
+                   description='''
+                   Version requirement of remote package
+                   '''),
+         ]),
+
+    # labeled-package-requirement -> label ':' requirement
+    Node('LabeledPackageRequirement', name_for_diagnostics='labeled package requirement',
+         kind='Syntax',
+         description='''
+         Labeled requirement of a remote package
+         ''',
+         children=[
+             Child('Label', kind='KeywordToken',
                    token_choices=['KeywordToken|branch', 'KeywordToken|exact', 'KeywordToken|from', 'KeywordToken|revision'],
                    description='''
                    The requirement label
                    ''', is_optional=True),
-             Child('RequirementColon', kind='ColonToken', is_optional=True),
-             Child('Requirement', kind='Expr',
+             Child('Colon', kind='ColonToken', is_optional=True),
+             Child('Requirement', kind='StringLiteralExpr',
                    description='''
-                   Version requirement of remote package
+                   Requirement description of remote package
                    '''),
          ]),
 

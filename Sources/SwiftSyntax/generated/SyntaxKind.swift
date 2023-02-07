@@ -307,6 +307,8 @@ public enum SyntaxKind {
   
   case keyPathSubscriptComponent
   
+  case labeledPackageRequirement
+  
   case labeledSpecializeEntry
   
   case labeledStmt

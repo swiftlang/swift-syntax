@@ -5561,7 +5561,7 @@ public enum SyntaxFactory {
     }
   }
   @available(*, deprecated, message: "Use initializer on RemotePackageDescriptionSyntax")
-  public static func makeRemotePackageDescription(_ unexpectedBeforeLocationLabel: UnexpectedNodesSyntax? = nil, locationLabel: TokenSyntax, _ unexpectedBetweenLocationLabelAndLocationColon: UnexpectedNodesSyntax? = nil, locationColon: TokenSyntax, _ unexpectedBetweenLocationColonAndLocation: UnexpectedNodesSyntax? = nil, location: StringLiteralExprSyntax, _ unexpectedBetweenLocationAndComma: UnexpectedNodesSyntax? = nil, comma: TokenSyntax, _ unexpectedBetweenCommaAndRequirementLabel: UnexpectedNodesSyntax? = nil, requirementLabel: TokenSyntax?, _ unexpectedBetweenRequirementLabelAndRequirementColon: UnexpectedNodesSyntax? = nil, requirementColon: TokenSyntax?, _ unexpectedBetweenRequirementColonAndRequirement: UnexpectedNodesSyntax? = nil, requirement: ExprSyntax, _ unexpectedAfterRequirement: UnexpectedNodesSyntax? = nil) -> RemotePackageDescriptionSyntax {
+  public static func makeRemotePackageDescription(_ unexpectedBeforeLocationLabel: UnexpectedNodesSyntax? = nil, locationLabel: TokenSyntax, _ unexpectedBetweenLocationLabelAndLocationColon: UnexpectedNodesSyntax? = nil, locationColon: TokenSyntax, _ unexpectedBetweenLocationColonAndLocation: UnexpectedNodesSyntax? = nil, location: StringLiteralExprSyntax, _ unexpectedBetweenLocationAndComma: UnexpectedNodesSyntax? = nil, comma: TokenSyntax, _ unexpectedBetweenCommaAndRequirement: UnexpectedNodesSyntax? = nil, requirement: Syntax, _ unexpectedAfterRequirement: UnexpectedNodesSyntax? = nil) -> RemotePackageDescriptionSyntax {
     let layout: [RawSyntax?] = [
       unexpectedBeforeLocationLabel?.raw,
       locationLabel.raw,
@@ -5571,11 +5571,7 @@ public enum SyntaxFactory {
       location.raw,
       unexpectedBetweenLocationAndComma?.raw,
       comma.raw,
-      unexpectedBetweenCommaAndRequirementLabel?.raw,
-      requirementLabel?.raw,
-      unexpectedBetweenRequirementLabelAndRequirementColon?.raw,
-      requirementColon?.raw,
-      unexpectedBetweenRequirementColonAndRequirement?.raw,
+      unexpectedBetweenCommaAndRequirement?.raw,
       requirement.raw,
       unexpectedAfterRequirement?.raw,
     ]
@@ -5601,14 +5597,45 @@ public enum SyntaxFactory {
         nil,
         RawSyntax.makeMissingToken(kind: TokenKind.comma, arena: arena),
         nil,
-        nil,
-        nil,
-        nil,
-        nil,
-        RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: arena),
+        RawSyntax.makeEmptyLayout(kind: SyntaxKind.missing, arena: arena),
         nil,
       ], arena: arena))
       return RemotePackageDescriptionSyntax(data)
+    }
+  }
+  @available(*, deprecated, message: "Use initializer on LabeledPackageRequirementSyntax")
+  public static func makeLabeledPackageRequirement(_ unexpectedBeforeLabel: UnexpectedNodesSyntax? = nil, label: TokenSyntax?, _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax?, _ unexpectedBetweenColonAndRequirement: UnexpectedNodesSyntax? = nil, requirement: StringLiteralExprSyntax, _ unexpectedAfterRequirement: UnexpectedNodesSyntax? = nil) -> LabeledPackageRequirementSyntax {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeLabel?.raw,
+      label?.raw,
+      unexpectedBetweenLabelAndColon?.raw,
+      colon?.raw,
+      unexpectedBetweenColonAndRequirement?.raw,
+      requirement.raw,
+      unexpectedAfterRequirement?.raw,
+    ]
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.labeledPackageRequirement,
+        from: layout, arena: arena)
+      let data = SyntaxData.forRoot(raw)
+      return LabeledPackageRequirementSyntax(data)
+    }
+  }
+
+  @available(*, deprecated, message: "Use initializer on LabeledPackageRequirementSyntax")
+  public static func makeBlankLabeledPackageRequirement(presence: SourcePresence = .present) -> LabeledPackageRequirementSyntax {
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .labeledPackageRequirement,
+        from: [
+        nil,
+        nil,
+        nil,
+        nil,
+        nil,
+        RawSyntax.makeEmptyLayout(kind: SyntaxKind.stringLiteralExpr, arena: arena),
+        nil,
+      ], arena: arena))
+      return LabeledPackageRequirementSyntax(data)
     }
   }
   @available(*, deprecated, message: "Use initializer on ObjCSelectorPieceSyntax")

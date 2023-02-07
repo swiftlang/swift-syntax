@@ -741,6 +741,11 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: KeyPathSubscriptComponentSyntax) -> ResultType
   
+  /// Visiting `LabeledPackageRequirementSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: LabeledPackageRequirementSyntax) -> ResultType
+  
   /// Visiting `LabeledSpecializeEntrySyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -2355,6 +2360,13 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
+  /// Visiting `LabeledPackageRequirementSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: LabeledPackageRequirementSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
   /// Visiting `LabeledSpecializeEntrySyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -3486,6 +3498,8 @@ extension SyntaxTransformVisitor {
     case .keyPathPropertyComponent(let derived): 
       return visit(derived)
     case .keyPathSubscriptComponent(let derived): 
+      return visit(derived)
+    case .labeledPackageRequirement(let derived): 
       return visit(derived)
     case .labeledSpecializeEntry(let derived): 
       return visit(derived)

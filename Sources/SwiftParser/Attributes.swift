@@ -892,45 +892,39 @@ extension Parser {
       )
     } else {
       let (unexpectedBeforeRequirementComma, requirementComma) = self.expect(.comma)
+      // Parsing package requirement
+      let packageRequirement: RawRemotePackageDescriptionSyntax.Requirement
       if self.at(any: [.colon, .keyword(.from), .keyword(.exact), .keyword(.branch), .keyword(.revision)]) {
         let (unexpectedBeforeRequirementLabel, requirementLabel) = self.expectAny([.keyword(.from), .keyword(.exact), .keyword(.branch), .keyword(.revision)], default: .keyword(.from))
         let (unexpectedBeforeRequirementColon, requirementColon) = self.expect(.colon)
-        let requirement = self.parseStringLiteral().as(RawExprSyntax.self)!
-        packageDescription = .remote(
-          RawRemotePackageDescriptionSyntax(
-            unexpectedBeforeLocationLabel,
-            locationLabel: locationLabel,
-            unexpectedBeforeLocationColon,
-            locationColon: locationColon,
-            location: location,
-            unexpectedBeforeRequirementComma,
-            comma: requirementComma,
+        let requirement = self.parseStringLiteral()
+        packageRequirement = .labeled(
+          RawLabeledPackageRequirementSyntax(
             unexpectedBeforeRequirementLabel,
-            requirementLabel: requirementLabel,
+            label: requirementLabel,
             unexpectedBeforeRequirementColon,
-            requirementColon: requirementColon,
+            colon: requirementColon,
             requirement: requirement,
             arena: self.arena
           )
         )
       } else {
         let requirement = self.parseExpression()
-        packageDescription = .remote(
-          RawRemotePackageDescriptionSyntax(
-            unexpectedBeforeLocationLabel,
-            locationLabel: locationLabel,
-            unexpectedBeforeLocationColon,
-            locationColon: locationColon,
-            location: location,
-            unexpectedBeforeRequirementComma,
-            comma: requirementComma,
-            requirementLabel: nil,
-            requirementColon: nil,
-            requirement: requirement,
-            arena: self.arena
-          )
-        )
+        packageRequirement = .wildcard(requirement)
       }
+      packageDescription = .remote(
+        RawRemotePackageDescriptionSyntax(
+          unexpectedBeforeLocationLabel,
+          locationLabel: locationLabel,
+          unexpectedBeforeLocationColon,
+          locationColon: locationColon,
+          location: location,
+          unexpectedBeforeRequirementComma,
+          comma: requirementComma,
+          requirement: packageRequirement,
+          arena: self.arena
+        )
+      )
     }
     // Parsing package product
     let comma = self.consume(if: .comma)

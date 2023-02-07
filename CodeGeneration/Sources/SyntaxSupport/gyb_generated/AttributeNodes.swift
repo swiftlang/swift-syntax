@@ -263,16 +263,31 @@ public let ATTRIBUTE_NODES: [Node] = [
          Child(name: "Comma",
                kind: .token(choices: [.token(tokenKind: "CommaToken")]),
                description: "The comma between the package location and requirement"),
-         Child(name: "RequirementLabel",
+         Child(name: "Requirement",
+               kind: .nodeChoices(choices: [
+                 Child(name: "Labeled",
+                       kind: .node(kind: "LabeledPackageRequirement")),
+                 Child(name: "Wildcard",
+                       kind: .node(kind: "Expr"))
+               ]),
+               description: "Version requirement of remote package")
+       ]),
+
+  Node(name: "LabeledPackageRequirement",
+       nameForDiagnostics: "labeled package requirement",
+       description: "Labeled requirement of a remote package",
+       kind: "Syntax",
+       children: [
+         Child(name: "Label",
                kind: .token(choices: [.keyword(text: "branch"), .keyword(text: "exact"), .keyword(text: "from"), .keyword(text: "revision")]),
                description: "The requirement label",
                isOptional: true),
-         Child(name: "RequirementColon",
+         Child(name: "Colon",
                kind: .token(choices: [.token(tokenKind: "ColonToken")]),
                isOptional: true),
          Child(name: "Requirement",
-               kind: .node(kind: "Expr"),
-               description: "Version requirement of remote package")
+               kind: .node(kind: "StringLiteralExpr"),
+               description: "Requirement description of remote package")
        ]),
 
   Node(name: "ObjCSelectorPiece",

@@ -17,7 +17,7 @@ import Utils
 
 let lookupTable = ArrayExprSyntax(leftSquare: .leftSquareBracketToken(trailingTrivia: .newline)) {
   for keyword in KEYWORDS {
-    ArrayElementSyntax(expression: ExprSyntax("\(literal: keyword.name)"), trailingComma: .commaToken(), trailingTrivia: .newline)
+    ArrayElementSyntax(expression: ExprSyntax("\(literal: keyword.name)"), trailingComma: .commaToken())
   }
 }
 

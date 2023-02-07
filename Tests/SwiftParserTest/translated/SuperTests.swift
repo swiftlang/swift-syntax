@@ -22,8 +22,8 @@ final class SuperTests: XCTestCase {
       class B {
         var foo: Int
         func bar() {}
-        init() {} 
-        init(x: Int) {} 
+        init() {}
+        init(x: Int) {}
         subscript(x: Int) -> Int {
           get {}
           set {}
@@ -174,21 +174,21 @@ final class SuperTests: XCTestCase {
       class Closures : B {
         func captureWeak() {
           let g = { [weak self] () -> Void in // expected-note * {{'self' explicitly captured here}}
-            super.foo() 
+            super.foo()
           }
           g()
         }
         func captureUnowned() {
           let g = { [unowned self] () -> Void in // expected-note * {{'self' explicitly captured here}}
-            super.foo() 
+            super.foo()
           }
           g()
         }
         func nestedInner() {
           let g = { () -> Void in
             let h = { [weak self] () -> Void in // expected-note * {{'self' explicitly captured here}}
-              super.foo() 
-              nil ?? super.foo() 
+              super.foo()
+              nil ?? super.foo()
             }
             h()
           }
@@ -197,8 +197,8 @@ final class SuperTests: XCTestCase {
         func nestedOuter() {
           let g = { [weak self] () -> Void in // expected-note * {{'self' explicitly captured here}}
             let h = { () -> Void in
-              super.foo() 
-              nil ?? super.foo() 
+              super.foo()
+              nil ?? super.foo()
             }
             h()
           }

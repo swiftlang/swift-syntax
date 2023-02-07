@@ -32,9 +32,9 @@ final class EnumElementPatternSwift4Tests: XCTestCase {
         case A, B, C, D
         static func testE(e: E) {
           switch e {
-          case A<UndefinedTy>(): 
+          case A<UndefinedTy>():
             break
-          case B<Int>(): 
+          case B<Int>():
             break
           default:
             break;
@@ -50,21 +50,21 @@ final class EnumElementPatternSwift4Tests: XCTestCase {
       """
       func testE(e: E) {
         switch e {
-        case E.A<UndefinedTy>(): 
+        case E.A<UndefinedTy>():
           break
-        case E.B<Int>(): 
+        case E.B<Int>():
           break
-        case .C(): 
+        case .C():
           break
-        case .D(let payload): 
+        case .D(let payload):
           let _: () = payload
           break
         default:
           break
         }
         guard
-          case .C() = e, 
-          case .D(let payload) = e 
+          case .C() = e,
+          case .D(let payload) = e
         else { return }
       }
       """
@@ -87,9 +87,9 @@ final class EnumElementPatternSwift4Tests: XCTestCase {
       """
       do {
         try canThrow()
-      } catch E.A() { 
+      } catch E.A() {
         // ..
-      } catch E.B(let payload) { 
+      } catch E.B(let payload) {
         let _: () = payload
       }
       """

@@ -59,7 +59,7 @@ final class TryTests: XCTestCase {
       var x = try foo() + bar()
       x = try foo() + bar()
       x += try foo() + bar()
-      x += try foo() %%%% bar() 
+      x += try foo() %%%% bar()
       x += try foo() %%% bar()
       x = foo() + try bar()
       """
@@ -81,7 +81,7 @@ final class TryTests: XCTestCase {
       var a = try! foo() + bar()
       a = try! foo() + bar()
       a += try! foo() + bar()
-      a += try! foo() %%%% bar() 
+      a += try! foo() %%%% bar()
       a += try! foo() %%% bar()
       a = foo() + try! bar()
       """
@@ -112,14 +112,14 @@ final class TryTests: XCTestCase {
     AssertParse(
       """
       var i = try? foo() + bar()
-      let _: Double = i 
+      let _: Double = i
       i = try? foo() + bar()
       i ?+= try? foo() + bar()
-      i ?+= try? foo() %%%% bar() 
+      i ?+= try? foo() %%%% bar()
       i ?+= try? foo() %%% bar()
-      _ = foo() == try? bar() 
-      _ = (try? foo()) == bar() 
-      _ = foo() == (try? bar()) 
+      _ = foo() == try? bar()
+      _ = (try? foo()) == bar()
+      _ = foo() == (try? bar())
       _ = (try? foo()) == (try? bar())
       """
     )
@@ -332,7 +332,7 @@ final class TryTests: XCTestCase {
       // Test operators.
       func *(a : String, b : String) throws -> Int { return 42 }
       let _ = "foo"
-              *  
+              *
               "bar"
       let _ = try! "foo"*"bar"
       let _ = try? "foo"*"bar"
@@ -347,7 +347,7 @@ final class TryTests: XCTestCase {
       // <rdar://problem/21414023> Assertion failure when compiling function that takes throwing functions and rethrows
       func rethrowsDispatchError(handleError: ((Error) throws -> ()), body: () throws -> ()) rethrows {
         do {
-          body()   
+          body()
         } catch {
         }
       }
@@ -362,7 +362,7 @@ final class TryTests: XCTestCase {
       struct r21432429 {
         func x(_ f: () throws -> ()) rethrows {}
         func y(_ f: () throws -> ()) rethrows {
-          x(f)  
+          x(f)
         }
       }
       """
@@ -374,7 +374,7 @@ final class TryTests: XCTestCase {
       """
       // <rdar://problem/21427855> Swift 2: Omitting try from call to throwing closure in rethrowing function crashes compiler
       func callThrowingClosureWithoutTry(closure: (Int) throws -> Int) rethrows {
-        closure(0)  
+        closure(0)
       }
       """
     )
@@ -430,7 +430,7 @@ final class TryTests: XCTestCase {
   func testTry22() {
     AssertParse(
       """
-      if try? maybeThrow() { 
+      if try? maybeThrow() {
       }
       let _: Int = try? foo()
       """
@@ -472,7 +472,7 @@ final class TryTests: XCTestCase {
     AssertParse(
       #"""
       _ = try "a\()b"
-      _ = "a\()b" 
+      _ = "a\()b"
       _ = try "\() \(1)"
       """#
     )
@@ -482,7 +482,7 @@ final class TryTests: XCTestCase {
     AssertParse(
       """
       func testGenericOptionalTry<T>(_ call: () throws -> T ) {
-        let _: String = try? call() 
+        let _: String = try? call()
       }
       """
     )
@@ -530,9 +530,9 @@ final class TryTests: XCTestCase {
   func testTry32() {
     AssertParse(
       """
-      let _: Int? = try? produceAny() as? Int 
+      let _: Int? = try? produceAny() as? Int
       let _: Int?? = (try? produceAny()) as? Int // good
-      let _: String = try? produceAny() as? Int 
+      let _: String = try? produceAny() as? Int
       let _: String = (try? produceAny()) as? Int
       """
     )
@@ -556,9 +556,9 @@ final class TryTests: XCTestCase {
     AssertParse(
       """
       let optProducer: ThingProducer? = ThingProducer()
-      let _: Int? = try? optProducer?.produceInt() 
-      let _: Int = try? optProducer?.produceInt() 
-      let _: String = try? optProducer?.produceInt() 
+      let _: Int? = try? optProducer?.produceInt()
+      let _: Int = try? optProducer?.produceInt()
+      let _: String = try? optProducer?.produceInt()
       let _: Int?? = try? optProducer?.produceInt() // good
       """
     )
@@ -567,7 +567,7 @@ final class TryTests: XCTestCase {
   func testTry35() {
     AssertParse(
       """
-      let _: Int? = try? optProducer?.produceIntNoThrowing() 
+      let _: Int? = try? optProducer?.produceIntNoThrowing()
       let _: Int?? = try? optProducer?.produceIntNoThrowing()
       """
     )
@@ -577,7 +577,7 @@ final class TryTests: XCTestCase {
     AssertParse(
       """
       let _: Int? = (try? optProducer?.produceAny()) as? Int // good
-      let _: Int? = try? optProducer?.produceAny() as? Int 
+      let _: Int? = try? optProducer?.produceAny() as? Int
       let _: Int?? = try? optProducer?.produceAny() as? Int // good
       let _: String = try? optProducer?.produceAny() as? Int
       """
@@ -603,9 +603,9 @@ final class TryTests: XCTestCase {
   func testTry39() {
     AssertParse(
       """
-      let _: Int = try? producer.produceDoubleOptionalInt() 
-      let _: Int? = try? producer.produceDoubleOptionalInt() 
-      let _: Int?? = try? producer.produceDoubleOptionalInt() 
+      let _: Int = try? producer.produceDoubleOptionalInt()
+      let _: Int? = try? producer.produceDoubleOptionalInt()
+      let _: Int?? = try? producer.produceDoubleOptionalInt()
       let _: Int??? = try? producer.produceDoubleOptionalInt() // good
       let _: String = try? producer.produceDoubleOptionalInt()
       """

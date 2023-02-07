@@ -112,7 +112,7 @@ final class AsyncTests: XCTestCase {
           get {
             return 0
           }
-          set async { 
+          set async {
           }
         }
       }

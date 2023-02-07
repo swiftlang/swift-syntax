@@ -171,7 +171,7 @@ final class MultilineErrorsTests: XCTestCase {
       _ = """
           Foo
       1️⃣\
-          Bar 
+          Bar
           """
       """#,
       diagnostics: [
@@ -511,7 +511,7 @@ final class MultilineErrorsTests: XCTestCase {
     AssertParseWithAllNewlineEndings(
       #"""
       _ = """
-        \\1️⃣\	   
+        \\1️⃣\	  \#u{20}
         """
       """#,
       diagnostics: [
@@ -529,7 +529,7 @@ final class MultilineErrorsTests: XCTestCase {
     AssertParseWithAllNewlineEndings(
       #"""
       _ = """
-        \(42)1️⃣\		
+        \(42)1️⃣\	\#t
         """
       """#,
       diagnostics: [
@@ -604,7 +604,7 @@ final class MultilineErrorsTests: XCTestCase {
       ],
       fixedSource: #"""
         _ = """
-          
+         \#u{20}
           """
         """#
     )
@@ -622,7 +622,7 @@ final class MultilineErrorsTests: XCTestCase {
       ],
       fixedSource: #"""
         _ = """
-          
+         \#u{20}
           """
         """#
     )

@@ -72,9 +72,9 @@ final class OptionalChainLvaluesTests: XCTestCase {
     AssertParse(
       """
       mutT?.mutateT()
-      immT?.mutateT() 
+      immT?.mutateT()
       mutT?.mutS?.mutateS()
-      mutT?.immS?.mutateS() 
+      mutT?.immS?.mutateS()
       mutT?.mutS?.x += 1
       mutT?.mutS?.y++
       """
@@ -85,7 +85,7 @@ final class OptionalChainLvaluesTests: XCTestCase {
     AssertParse(
       """
       // Prefix operators don't chain
-      ++mutT?.mutS?.x 
+      ++mutT?.mutS?.x
       ++mutT?.mutS?.y
       """
     )
@@ -98,11 +98,11 @@ final class OptionalChainLvaluesTests: XCTestCase {
       mutT?.mutS = S()
       mutT?.mutS? = S()
       mutT?.mutS?.x += 0
-      _ = mutT?.mutS?.x + 0 
-      mutT?.mutS?.y -= 0 
-      mutT?.immS = S() 
-      mutT?.immS? = S() 
-      mutT?.immS?.x += 0 
+      _ = mutT?.mutS?.x + 0
+      mutT?.mutS?.y -= 0
+      mutT?.immS = S()
+      mutT?.immS? = S()
+      mutT?.immS?.x += 0
       mutT?.immS?.y -= 0
       """
     )

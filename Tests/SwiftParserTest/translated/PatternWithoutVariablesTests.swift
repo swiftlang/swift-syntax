@@ -37,8 +37,8 @@ final class PatternWithoutVariablesTests: XCTestCase {
     AssertParse(
       """
       struct Foo {
-        let _ = 1 
-        var (_, _) = (1, 2) 
+        let _ = 1
+        var (_, _) = (1, 2)
         func foo() {
           let _ = 1 // OK
         }
@@ -61,18 +61,18 @@ final class PatternWithoutVariablesTests: XCTestCase {
       #"""
       func testVarLetPattern(a : SimpleEnum) {
         switch a {
-        case let .Bar: break      
+        case let .Bar: break
         }
         switch a {
         case let x: _ = x; break         // Ok.
         }
         switch a {
-        case let _: break         
+        case let _: break
         }
         switch (a, 42) {
         case let (_, x): _ = x; break    // ok
         }
-        if case let _ = "str" {}  
+        if case let _ = "str" {}
       }
       """#
     )
@@ -83,7 +83,7 @@ final class PatternWithoutVariablesTests: XCTestCase {
       """
       // https://github.com/apple/swift/issues/53293
       class C_53293 {
-        static var _: Int { 0 } 
+        static var _: Int { 0 }
       }
       """
     )

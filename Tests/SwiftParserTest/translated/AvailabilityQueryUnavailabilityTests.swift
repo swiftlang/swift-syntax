@@ -29,7 +29,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
     AssertParse(
       """
       // Disallow explicit wildcards.
-      if #unavailable(OSX 10.51, *) {} 
+      if #unavailable(OSX 10.51, *) {}
       // Disallow use as an expression.
       if (1️⃣#unavailable(OSX 10.51)) {}
       let x = 2️⃣#unavailable(OSX 10.51)
@@ -74,7 +74,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   func testAvailabilityQueryUnavailability3() {
     AssertParse(
       """
-      if #unavailable(OSX 10.51) 1️⃣&& #unavailable(OSX 10.52) { 
+      if #unavailable(OSX 10.51) 1️⃣&& #unavailable(OSX 10.52) {
       }
       """,
       diagnostics: [
@@ -141,7 +141,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   func testAvailabilityQueryUnavailability8() {
     AssertParse(
       """
-      if #unavailable(OSX) { 
+      if #unavailable(OSX) {
       }
       """,
       diagnostics: [
@@ -170,7 +170,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   func testAvailabilityQueryUnavailability10() {
     AssertParse(
       """
-      if #unavailable(iDishwasherOS 10.51) { 
+      if #unavailable(iDishwasherOS 10.51) {
       }
       """
     )
@@ -179,7 +179,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   func testAvailabilityQueryUnavailability11() {
     AssertParse(
       """
-      if #unavailable(iDishwasherOS 10.51) { 
+      if #unavailable(iDishwasherOS 10.51) {
       }
       """
     )
@@ -188,7 +188,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   func testAvailabilityQueryUnavailability12() {
     AssertParse(
       """
-      if #unavailable(macos 10.51) { 
+      if #unavailable(macos 10.51) {
       }
       """
     )
@@ -197,7 +197,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   func testAvailabilityQueryUnavailability13() {
     AssertParse(
       """
-      if #unavailable(mscos 10.51) { 
+      if #unavailable(mscos 10.51) {
       }
       """
     )
@@ -206,7 +206,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   func testAvailabilityQueryUnavailability14() {
     AssertParse(
       """
-      if #unavailable(macoss 10.51) { 
+      if #unavailable(macoss 10.51) {
       }
       """
     )
@@ -215,7 +215,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   func testAvailabilityQueryUnavailability15() {
     AssertParse(
       """
-      if #unavailable(mac 10.51) { 
+      if #unavailable(mac 10.51) {
       }
       """
     )
@@ -224,7 +224,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   func testAvailabilityQueryUnavailability16() {
     AssertParse(
       """
-      if #unavailable(OSX 10.51, OSX 10.52) {  
+      if #unavailable(OSX 10.51, OSX 10.52) {
       }
       """
     )
@@ -233,7 +233,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   func testAvailabilityQueryUnavailability17() {
     AssertParse(
       """
-      if #unavailable(OSX 10.51, iOS 8.0, *) { }  
+      if #unavailable(OSX 10.51, iOS 8.0, *) { }
       if #unavailable(iOS 8.0) {
       }
       """
@@ -335,7 +335,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   func testAvailabilityQueryUnavailability25() {
     AssertParse(
       """
-      if #unavailable(OSX 10.51, iOS 8.0, iDishwasherOS 10.51) { 
+      if #unavailable(OSX 10.51, iOS 8.0, iDishwasherOS 10.51) {
       }
       """
     )
@@ -344,7 +344,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   func testAvailabilityQueryUnavailability26() {
     AssertParse(
       """
-      if #unavailable(iDishwasherOS 10.51, OSX 10.51) { 
+      if #unavailable(iDishwasherOS 10.51, OSX 10.51) {
       }
       """,
       diagnostics: [
@@ -369,7 +369,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
     AssertParse(
       """
       // Emit Fix-It removing un-needed >=, for the moment.
-      if #unavailable(OSX 1️⃣>= 10.51) { 
+      if #unavailable(OSX 1️⃣>= 10.51) {
       }
       """,
       diagnostics: [
@@ -412,17 +412,17 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
     AssertParse(
       """
       // Prevent availability and unavailability being present in the same statement.
-      if #unavailable(macOS 10.51), #available(macOS 10.52, *) { 
+      if #unavailable(macOS 10.51), #available(macOS 10.52, *) {
       }
-      if #available(macOS 10.51, *), #unavailable(macOS 10.52) { 
+      if #available(macOS 10.51, *), #unavailable(macOS 10.52) {
       }
-      if #available(macOS 10.51, *), #available(macOS 10.55, *), #unavailable(macOS 10.53) { 
+      if #available(macOS 10.51, *), #available(macOS 10.55, *), #unavailable(macOS 10.53) {
       }
-      if #unavailable(macOS 10.51), #unavailable(macOS 10.55), #available(macOS 10.53, *) { 
+      if #unavailable(macOS 10.51), #unavailable(macOS 10.55), #available(macOS 10.53, *) {
       }
-      if case 42 = 42, #available(macOS 10.51, *), #unavailable(macOS 10.52) { 
+      if case 42 = 42, #available(macOS 10.51, *), #unavailable(macOS 10.52) {
       }
-      if #available(macOS 10.51, *), case 42 = 42, #unavailable(macOS 10.52) { 
+      if #available(macOS 10.51, *), case 42 = 42, #unavailable(macOS 10.52) {
       }
       """,
       diagnostics: [

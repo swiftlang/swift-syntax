@@ -18,7 +18,7 @@ final class OriginalDefinedInAttrTests: XCTestCase {
   func testOriginalDefinedInAttr1() {
     AssertParse(
       #"""
-      @_originallyDefinedIn(module: "foo", OSX 13.13) 
+      @_originallyDefinedIn(module: "foo", OSX 13.13)
       public func foo() {}
       """#,
       diagnostics: [
@@ -43,7 +43,7 @@ final class OriginalDefinedInAttrTests: XCTestCase {
   func testOriginalDefinedInAttr3() {
     AssertParse(
       #"""
-      @_originallyDefinedIn(module: "foo", OSX 13.13.3) 
+      @_originallyDefinedIn(module: "foo", OSX 13.13.3)
       public class ToplevelClass {}
       """#,
       diagnostics: [
@@ -94,7 +94,7 @@ final class OriginalDefinedInAttrTests: XCTestCase {
     AssertParse(
       #"""
       @available(OSX 13.10, *)
-      @_originallyDefinedIn(module: "foo", * 13.13) 
+      @_originallyDefinedIn(module: "foo", * 13.13)
       public class ToplevelClass4 {}
       """#
     )
@@ -132,7 +132,7 @@ final class OriginalDefinedInAttrTests: XCTestCase {
     AssertParse(
       #"""
       @available(OSX 13.10, *)
-      @_originallyDefinedIn(module: "foo", OSX 13.13) 
+      @_originallyDefinedIn(module: "foo", OSX 13.13)
       @_originallyDefinedIn(module: "foo", iOS 7.0)
       internal class ToplevelClass5 {}
       """#,
@@ -146,7 +146,7 @@ final class OriginalDefinedInAttrTests: XCTestCase {
     AssertParse(
       #"""
       @available(OSX 13.10, *)
-      @_originallyDefinedIn(module: "foo", OSX 13.13) 
+      @_originallyDefinedIn(module: "foo", OSX 13.13)
       @_originallyDefinedIn(module: "foo", iOS 7.0)
       private class ToplevelClass6 {}
       """#,
@@ -160,7 +160,7 @@ final class OriginalDefinedInAttrTests: XCTestCase {
     AssertParse(
       #"""
       @available(OSX 13.10, *)
-      @_originallyDefinedIn(module: "foo", OSX 13.13) 
+      @_originallyDefinedIn(module: "foo", OSX 13.13)
       @_originallyDefinedIn(module: "foo", iOS 7.0)
       fileprivate class ToplevelClass7 {}
       """#,
@@ -174,7 +174,7 @@ final class OriginalDefinedInAttrTests: XCTestCase {
     AssertParse(
       #"""
       @available(OSX 13.10, *)
-      @_originallyDefinedIn(module: "foo", OSX 13.13, iOS 7.0) 
+      @_originallyDefinedIn(module: "foo", OSX 13.13, iOS 7.0)
       internal class ToplevelClass8 {}
       """#,
       diagnostics: [

@@ -134,7 +134,7 @@ final class TrailingClosuresTests: XCTestCase {
   func testTrailingClosures10() {
     AssertParse(
       """
-      func multiple_trailing_with_defaults( 
+      func multiple_trailing_with_defaults(
         duration: Int,
         animations: (() -> Void)? = nil,
         completion: (() -> Void)? = nil) {}
@@ -202,7 +202,7 @@ final class TrailingClosuresTests: XCTestCase {
   func testTrailingClosures14() {
     AssertParse(
       """
-      func produce(fn: () -> Int?, default d: () -> Int) -> Int { 
+      func produce(fn: () -> Int?, default d: () -> Int) -> Int {
         return fn() ?? d()
       }
       // TODO: The diagnostics here are perhaps a little overboard.
@@ -227,10 +227,10 @@ final class TrailingClosuresTests: XCTestCase {
   func testTrailingClosures16() {
     AssertParse(
       """
-      // This should be interpreted as a trailing closure, instead of being 
+      // This should be interpreted as a trailing closure, instead of being
       // interpreted as a computed property with undesired initial value.
       struct TrickyTest {
-          var x : Int = f () { 
+          var x : Int = f () {
               3
           }
       }

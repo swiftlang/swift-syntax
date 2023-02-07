@@ -54,14 +54,14 @@ final class ForeachAsyncTests: XCTestCase {
   func testForeachAsync4() {
     AssertParse(
       """
-      func for_each(r: AsyncRange<Int>, iir: AsyncIntRange<Int>) async { 
+      func for_each(r: AsyncRange<Int>, iir: AsyncIntRange<Int>) async {
         var sum = 0
         // Simple foreach loop, using the variable in the body
         for await i in r {
           sum = sum + i
         }
         // Check scoping of variable introduced with foreach loop
-        i = 0 
+        i = 0
         // For-each loops with two variables and varying degrees of typedness
         for await (i, j) in iir {
           sum = sum + i + j
@@ -73,8 +73,8 @@ final class ForeachAsyncTests: XCTestCase {
           sum = sum + i + j
         }
         // Parse errors
-        for await i 1️⃣r { 
-        }         
+        for await i 1️⃣r {
+        }
         for await i in r 2️⃣sum = sum + i;3️⃣
       }
       """,

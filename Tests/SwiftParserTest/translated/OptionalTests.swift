@@ -41,7 +41,7 @@ final class OptionalTests: XCTestCase {
   func testOptional3a() {
     AssertParse(
       """
-      var c = a?  
+      var c = a?
       """,
       substructure: Syntax(
         OptionalChainingExprSyntax(

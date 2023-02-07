@@ -245,7 +245,7 @@ final class MultilineStringTests: XCTestCase {
         \("""
           substring1 \
           \("""
-            substring2 \          
+            substring2 \         \#u{20}
             substring3
             """)
           """) \
@@ -260,7 +260,7 @@ final class MultilineStringTests: XCTestCase {
     AssertParse(
       #"""
       _ = """
-          foo\ 
+          foo
 
           bar
           """
@@ -273,8 +273,8 @@ final class MultilineStringTests: XCTestCase {
     AssertParse(
       #"""
       _ = """
-          foo\ 
-          
+          foo\\#u{20}
+         \#u{20}
           bar
           """
       """#

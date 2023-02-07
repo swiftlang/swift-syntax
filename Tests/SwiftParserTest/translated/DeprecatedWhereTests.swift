@@ -40,7 +40,7 @@ final class DeprecatedWhereTests: XCTestCase {
       // 1: Inherited constraint
       func f2<T: Mashable>(x: T) {} // no-warning
       // 2: Non-trailing where
-      func f3<T where T: Womparable>(x: T) {} 
+      func f3<T where T: Womparable>(x: T) {}
       // 3: Has return type
       func f4<T>(x: T) -> Int { return 2 } // no-warning
       // 4: Trailing where
@@ -57,15 +57,15 @@ final class DeprecatedWhereTests: XCTestCase {
       """
       // FuncDecl: Choose 2
       // 1,2
-      func f12<T: Mashable where T: Womparable>(x: T) {} 
+      func f12<T: Mashable where T: Womparable>(x: T) {}
       // 1,3
       func f13<T: Mashable>(x: T) -> Int { return 2 } // no-warning
       // 1,4
       func f14<T: Mashable>(x: T) where T: Equatable {} // no-warning
       // 2,3
-      func f23<T where T: Womparable>(x: T) -> Int { return 2 } 
+      func f23<T where T: Womparable>(x: T) -> Int { return 2 }
       // 2,4
-      func f24<T where T: Womparable>(x: T) where T: Equatable {} 
+      func f24<T where T: Womparable>(x: T) where T: Equatable {}
       // 3,4
       func f34<T>(x: T) -> Int where T: Equatable { return 2 } // no-warning
       """,
@@ -82,9 +82,9 @@ final class DeprecatedWhereTests: XCTestCase {
       """
       // FuncDecl: Choose 3
       // 1,2,3
-      func f123<T: Mashable where T: Womparable>(x: T) -> Int { return 2 } 
+      func f123<T: Mashable where T: Womparable>(x: T) -> Int { return 2 }
       // 1,2,4
-      func f124<T: Mashable where T: Womparable>(x: T) where T: Equatable {} 
+      func f124<T: Mashable where T: Womparable>(x: T) where T: Equatable {}
       // 2,3,4
       func f234<T where T: Womparable>(x: T) -> Int where T: Equatable { return 2 }
       """,
@@ -125,7 +125,7 @@ final class DeprecatedWhereTests: XCTestCase {
       // 1: Inherited constraint
       struct S1<T: Mashable> {} // no-warning
       // 2: Non-trailing where
-      struct S2<T where T: Womparable> {} 
+      struct S2<T where T: Womparable> {}
       // 3: Trailing where
       struct S3<T> where T : Equatable {} // no-warning
       """,
@@ -140,7 +140,7 @@ final class DeprecatedWhereTests: XCTestCase {
       """
       // NominalTypeDecl: Choose 2
       // 1,2
-      struct S12<T: Mashable where T: Womparable> {} 
+      struct S12<T: Mashable where T: Womparable> {}
       // 1,3
       struct S13<T: Mashable> where T: Equatable {} // no-warning
       // 2,3
@@ -173,7 +173,7 @@ final class DeprecatedWhereTests: XCTestCase {
       protocol ProtoB {}
       protocol ProtoC {}
       protocol ProtoD {}
-      func testCombinedConstraints<T: ProtoA & ProtoB where T: ProtoC>(x: T) {} 
+      func testCombinedConstraints<T: ProtoA & ProtoB where T: ProtoC>(x: T) {}
       func testCombinedConstraints<T: ProtoA & ProtoB where T: ProtoC>(x: T) where T: ProtoD {}
       """,
       diagnostics: [

@@ -31,14 +31,14 @@ final class ForeachTests: XCTestCase {
   func testForeach2() {
     AssertParse(
       """
-      func for_each(r: Range<Int>, iir: IntRange<Int>) { 
+      func for_each(r: Range<Int>, iir: IntRange<Int>) {
         var sum = 0
         // Simple foreach loop, using the variable in the body
         for i in r {
           sum = sum + i
         }
         // Check scoping of variable introduced with foreach loop
-        i = 0 
+        i = 0
         // For-each loops with two variables and varying degrees of typedness
         for (i, j) in iir {
           sum = sum + i + j
@@ -50,8 +50,8 @@ final class ForeachTests: XCTestCase {
           sum = sum + i + j
         }
         // Parse errors
-        for i 1️⃣r { 
-        }         
+        for i 1️⃣r {
+        }
         for i in r 2️⃣sum = sum + i;3️⃣
       }
       """,

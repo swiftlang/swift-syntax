@@ -35,9 +35,9 @@ final class ImplicitGetterIncompleteTests: XCTestCase {
     AssertParse(
       #"""
       // Would trigger assertion when AST verifier checks source ranges ("child source range not contained within its parent")
-      func test2() { 
-        var a : Int { 
-          switch i { 
+      func test2() {
+        var a : Int {
+          switch i {
       }1️⃣
       """#,
       diagnostics: [

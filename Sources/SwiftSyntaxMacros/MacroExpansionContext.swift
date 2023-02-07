@@ -88,12 +88,12 @@ extension MacroExpansionContext {
       )
       return
     }
-    
+
     let providedDiagnostics = diagnosticsProvider.diagnostics
     for diagnostic in providedDiagnostics {
       diagnose(diagnostic)
     }
-    
+
     // handle possibility that none of the diagnostics was an error
     if !providedDiagnostics.contains(
       where: { $0.diagMessage.severity == .error }

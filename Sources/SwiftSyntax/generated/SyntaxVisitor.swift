@@ -1240,6 +1240,18 @@ open class SyntaxVisitor {
   open func visitPost(_ node: FallthroughStmtSyntax) {
   }
   
+  /// Visiting `FileSystemPackageDescriptionSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: FileSystemPackageDescriptionSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting `FileSystemPackageDescriptionSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: FileSystemPackageDescriptionSyntax) {
+  }
+  
   /// Visiting `FloatLiteralExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -1756,18 +1768,6 @@ open class SyntaxVisitor {
   open func visitPost(_ node: KeyPathSubscriptComponentSyntax) {
   }
   
-  /// Visiting `LabeledPackageRequirementSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: LabeledPackageRequirementSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting `LabeledPackageRequirementSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: LabeledPackageRequirementSyntax) {
-  }
-  
   /// Visiting `LabeledSpecializeEntrySyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -1802,18 +1802,6 @@ open class SyntaxVisitor {
   /// The function called after visiting `LayoutRequirementSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: LayoutRequirementSyntax) {
-  }
-  
-  /// Visiting `LocalPackageDescriptionSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: LocalPackageDescriptionSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting `LocalPackageDescriptionSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: LocalPackageDescriptionSyntax) {
   }
   
   /// Visiting `MacroDeclSyntax` specifically.
@@ -2512,16 +2500,28 @@ open class SyntaxVisitor {
   open func visitPost(_ node: RegexLiteralExprSyntax) {
   }
   
-  /// Visiting `RemotePackageDescriptionSyntax` specifically.
+  /// Visiting `RegistryPackageDescriptionSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: RemotePackageDescriptionSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: RegistryPackageDescriptionSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `RemotePackageDescriptionSyntax` and its descendents.
+  /// The function called after visiting `RegistryPackageDescriptionSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: RemotePackageDescriptionSyntax) {
+  open func visitPost(_ node: RegistryPackageDescriptionSyntax) {
+  }
+  
+  /// Visiting `RegistryRequirementSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: RegistryRequirementSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting `RegistryRequirementSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: RegistryRequirementSyntax) {
   }
   
   /// Visiting `RepeatWhileStmtSyntax` specifically.
@@ -2594,6 +2594,30 @@ open class SyntaxVisitor {
   /// The function called after visiting `SimpleTypeIdentifierSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: SimpleTypeIdentifierSyntax) {
+  }
+  
+  /// Visiting `SourceControlPackageDescriptionSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: SourceControlPackageDescriptionSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting `SourceControlPackageDescriptionSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: SourceControlPackageDescriptionSyntax) {
+  }
+  
+  /// Visiting `SourceControlRequirementSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: SourceControlRequirementSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting `SourceControlRequirementSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: SourceControlRequirementSyntax) {
   }
   
   /// Visiting `SourceFileSyntax` specifically.
@@ -4332,6 +4356,17 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplFileSystemPackageDescriptionSyntax(_ data: SyntaxData) {
+    let node = FileSystemPackageDescriptionSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplFloatLiteralExprSyntax(_ data: SyntaxData) {
     let node = FloatLiteralExprSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -4805,17 +4840,6 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplLabeledPackageRequirementSyntax(_ data: SyntaxData) {
-    let node = LabeledPackageRequirementSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplLabeledSpecializeEntrySyntax(_ data: SyntaxData) {
     let node = LabeledSpecializeEntrySyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -4840,17 +4864,6 @@ open class SyntaxVisitor {
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplLayoutRequirementSyntax(_ data: SyntaxData) {
     let node = LayoutRequirementSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplLocalPackageDescriptionSyntax(_ data: SyntaxData) {
-    let node = LocalPackageDescriptionSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -5498,8 +5511,19 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplRemotePackageDescriptionSyntax(_ data: SyntaxData) {
-    let node = RemotePackageDescriptionSyntax(data)
+  private func visitImplRegistryPackageDescriptionSyntax(_ data: SyntaxData) {
+    let node = RegistryPackageDescriptionSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplRegistryRequirementSyntax(_ data: SyntaxData) {
+    let node = RegistryRequirementSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -5566,6 +5590,28 @@ open class SyntaxVisitor {
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplSimpleTypeIdentifierSyntax(_ data: SyntaxData) {
     let node = SimpleTypeIdentifierSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplSourceControlPackageDescriptionSyntax(_ data: SyntaxData) {
+    let node = SourceControlPackageDescriptionSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplSourceControlRequirementSyntax(_ data: SyntaxData) {
+    let node = SourceControlRequirementSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -6344,6 +6390,8 @@ open class SyntaxVisitor {
       visitImplExtensionDeclSyntax(data)
     case .fallthroughStmt: 
       visitImplFallthroughStmtSyntax(data)
+    case .fileSystemPackageDescription: 
+      visitImplFileSystemPackageDescriptionSyntax(data)
     case .floatLiteralExpr: 
       visitImplFloatLiteralExprSyntax(data)
     case .forInStmt: 
@@ -6430,16 +6478,12 @@ open class SyntaxVisitor {
       visitImplKeyPathPropertyComponentSyntax(data)
     case .keyPathSubscriptComponent: 
       visitImplKeyPathSubscriptComponentSyntax(data)
-    case .labeledPackageRequirement: 
-      visitImplLabeledPackageRequirementSyntax(data)
     case .labeledSpecializeEntry: 
       visitImplLabeledSpecializeEntrySyntax(data)
     case .labeledStmt: 
       visitImplLabeledStmtSyntax(data)
     case .layoutRequirement: 
       visitImplLayoutRequirementSyntax(data)
-    case .localPackageDescription: 
-      visitImplLocalPackageDescriptionSyntax(data)
     case .macroDecl: 
       visitImplMacroDeclSyntax(data)
     case .macroExpansionDecl: 
@@ -6556,8 +6600,10 @@ open class SyntaxVisitor {
       visitImplQualifiedDeclNameSyntax(data)
     case .regexLiteralExpr: 
       visitImplRegexLiteralExprSyntax(data)
-    case .remotePackageDescription: 
-      visitImplRemotePackageDescriptionSyntax(data)
+    case .registryPackageDescription: 
+      visitImplRegistryPackageDescriptionSyntax(data)
+    case .registryRequirement: 
+      visitImplRegistryRequirementSyntax(data)
     case .repeatWhileStmt: 
       visitImplRepeatWhileStmtSyntax(data)
     case .returnClause: 
@@ -6570,6 +6616,10 @@ open class SyntaxVisitor {
       visitImplSequenceExprSyntax(data)
     case .simpleTypeIdentifier: 
       visitImplSimpleTypeIdentifierSyntax(data)
+    case .sourceControlPackageDescription: 
+      visitImplSourceControlPackageDescriptionSyntax(data)
+    case .sourceControlRequirement: 
+      visitImplSourceControlRequirementSyntax(data)
     case .sourceFile: 
       visitImplSourceFileSyntax(data)
     case .specializeAttributeSpecList: 

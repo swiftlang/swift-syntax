@@ -526,6 +526,11 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: FallthroughStmtSyntax) -> ResultType
   
+  /// Visiting `FileSystemPackageDescriptionSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: FileSystemPackageDescriptionSyntax) -> ResultType
+  
   /// Visiting `FloatLiteralExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -741,11 +746,6 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: KeyPathSubscriptComponentSyntax) -> ResultType
   
-  /// Visiting `LabeledPackageRequirementSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: LabeledPackageRequirementSyntax) -> ResultType
-  
   /// Visiting `LabeledSpecializeEntrySyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -760,11 +760,6 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: LayoutRequirementSyntax) -> ResultType
-  
-  /// Visiting `LocalPackageDescriptionSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: LocalPackageDescriptionSyntax) -> ResultType
   
   /// Visiting `MacroDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -1056,10 +1051,15 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: RegexLiteralExprSyntax) -> ResultType
   
-  /// Visiting `RemotePackageDescriptionSyntax` specifically.
+  /// Visiting `RegistryPackageDescriptionSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: RemotePackageDescriptionSyntax) -> ResultType
+  func visit(_ node: RegistryPackageDescriptionSyntax) -> ResultType
+  
+  /// Visiting `RegistryRequirementSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: RegistryRequirementSyntax) -> ResultType
   
   /// Visiting `RepeatWhileStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -1090,6 +1090,16 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: SimpleTypeIdentifierSyntax) -> ResultType
+  
+  /// Visiting `SourceControlPackageDescriptionSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: SourceControlPackageDescriptionSyntax) -> ResultType
+  
+  /// Visiting `SourceControlRequirementSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: SourceControlRequirementSyntax) -> ResultType
   
   /// Visiting `SourceFileSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -2059,6 +2069,13 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
+  /// Visiting `FileSystemPackageDescriptionSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: FileSystemPackageDescriptionSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
   /// Visiting `FloatLiteralExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -2360,13 +2377,6 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `LabeledPackageRequirementSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: LabeledPackageRequirementSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
   /// Visiting `LabeledSpecializeEntrySyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -2385,13 +2395,6 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: LayoutRequirementSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
-  /// Visiting `LocalPackageDescriptionSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: LocalPackageDescriptionSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -2801,10 +2804,17 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `RemotePackageDescriptionSyntax` specifically.
+  /// Visiting `RegistryPackageDescriptionSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: RemotePackageDescriptionSyntax) -> ResultType {
+  public func visit(_ node: RegistryPackageDescriptionSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting `RegistryRequirementSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: RegistryRequirementSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -2847,6 +2857,20 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: SimpleTypeIdentifierSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting `SourceControlPackageDescriptionSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: SourceControlPackageDescriptionSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting `SourceControlRequirementSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: SourceControlRequirementSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -3413,6 +3437,8 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .fallthroughStmt(let derived): 
       return visit(derived)
+    case .fileSystemPackageDescription(let derived): 
+      return visit(derived)
     case .floatLiteralExpr(let derived): 
       return visit(derived)
     case .forInStmt(let derived): 
@@ -3499,15 +3525,11 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .keyPathSubscriptComponent(let derived): 
       return visit(derived)
-    case .labeledPackageRequirement(let derived): 
-      return visit(derived)
     case .labeledSpecializeEntry(let derived): 
       return visit(derived)
     case .labeledStmt(let derived): 
       return visit(derived)
     case .layoutRequirement(let derived): 
-      return visit(derived)
-    case .localPackageDescription(let derived): 
       return visit(derived)
     case .macroDecl(let derived): 
       return visit(derived)
@@ -3625,7 +3647,9 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .regexLiteralExpr(let derived): 
       return visit(derived)
-    case .remotePackageDescription(let derived): 
+    case .registryPackageDescription(let derived): 
+      return visit(derived)
+    case .registryRequirement(let derived): 
       return visit(derived)
     case .repeatWhileStmt(let derived): 
       return visit(derived)
@@ -3638,6 +3662,10 @@ extension SyntaxTransformVisitor {
     case .sequenceExpr(let derived): 
       return visit(derived)
     case .simpleTypeIdentifier(let derived): 
+      return visit(derived)
+    case .sourceControlPackageDescription(let derived): 
+      return visit(derived)
+    case .sourceControlRequirement(let derived): 
       return visit(derived)
     case .sourceFile(let derived): 
       return visit(derived)

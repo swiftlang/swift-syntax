@@ -879,9 +879,11 @@ extension Parser {
     let (unexpectedBeforeLocationColon, locationColon) = self.expect(.colon)
     let location = self.parseStringLiteral()
     let packageDescription: RawPackageAttributeArgumentsSyntax.Description
-    if locationLabel.tokenKind == .keyword(.path) {
-      packageDescription = .local(
-        RawLocalPackageDescriptionSyntax(
+    // Parsing package requirement
+    switch locationLabel.tokenKind {
+    case .keyword(.path):
+      packageDescription = .fileSystem(
+        RawFileSystemPackageDescriptionSyntax(
           unexpectedBeforeLocationLabel,
           label: locationLabel,
           unexpectedBeforeLocationColon,
@@ -890,16 +892,15 @@ extension Parser {
           arena: self.arena
         )
       )
-    } else {
+    case .keyword(.id):
       let (unexpectedBeforeRequirementComma, requirementComma) = self.expect(.comma)
-      // Parsing package requirement
-      let packageRequirement: RawRemotePackageDescriptionSyntax.Requirement
-      if self.at(any: [.colon, .keyword(.from), .keyword(.exact), .keyword(.branch), .keyword(.revision)]) {
-        let (unexpectedBeforeRequirementLabel, requirementLabel) = self.expectAny([.keyword(.from), .keyword(.exact), .keyword(.branch), .keyword(.revision)], default: .keyword(.from))
+      let registryRequirement: RawRegistryPackageDescriptionSyntax.Requirement
+      if self.at(any: [.colon, .keyword(.exact), .keyword(.from)]) {
+        let (unexpectedBeforeRequirementLabel, requirementLabel) = self.expectAny([.keyword(.from), .keyword(.exact)], default: .keyword(.from))
         let (unexpectedBeforeRequirementColon, requirementColon) = self.expect(.colon)
         let requirement = self.parseStringLiteral()
-        packageRequirement = .labeled(
-          RawLabeledPackageRequirementSyntax(
+        registryRequirement = .labeled(
+          RawRegistryRequirementSyntax(
             unexpectedBeforeRequirementLabel,
             label: requirementLabel,
             unexpectedBeforeRequirementColon,
@@ -910,18 +911,55 @@ extension Parser {
         )
       } else {
         let requirement = self.parseExpression()
-        packageRequirement = .wildcard(requirement)
+        registryRequirement = .range(requirement)
       }
-      packageDescription = .remote(
-        RawRemotePackageDescriptionSyntax(
+      packageDescription = .registry(
+        RawRegistryPackageDescriptionSyntax(
           unexpectedBeforeLocationLabel,
-          locationLabel: locationLabel,
+          label: locationLabel,
           unexpectedBeforeLocationColon,
-          locationColon: locationColon,
-          location: location,
+          colon: locationColon,
+          identifier: location,
           unexpectedBeforeRequirementComma,
           comma: requirementComma,
-          requirement: packageRequirement,
+          requirement: registryRequirement,
+          arena: self.arena
+        )
+      )
+    case .keyword(.url):
+      // FIXME: Default to handling as source-control for now
+      fallthrough
+    default:
+      let (unexpectedBeforeRequirementComma, requirementComma) = self.expect(.comma)
+      let sourceControlRequirement: RawSourceControlPackageDescriptionSyntax.Requirement
+      if self.at(any: [.colon, .keyword(.branch), .keyword(.exact), .keyword(.from), .keyword(.revision)]) {
+        let (unexpectedBeforeRequirementLabel, requirementLabel) = self.expectAny([.keyword(.branch), .keyword(.exact), .keyword(.from), .keyword(.revision)], default: .keyword(.from))
+        let (unexpectedBeforeRequirementColon, requirementColon) = self.expect(.colon)
+        let requirement = self.parseStringLiteral()
+        sourceControlRequirement = .labeled(
+          RawSourceControlRequirementSyntax(
+            unexpectedBeforeRequirementLabel,
+            label: requirementLabel,
+            unexpectedBeforeRequirementColon,
+            colon: requirementColon,
+            requirement: requirement,
+            arena: self.arena
+          )
+        )
+      } else {
+        let requirement = self.parseExpression()
+        sourceControlRequirement = .range(requirement)
+      }
+      packageDescription = .sourceControl(
+        RawSourceControlPackageDescriptionSyntax(
+          unexpectedBeforeLocationLabel,
+          label: locationLabel,
+          unexpectedBeforeLocationColon,
+          colon: locationColon,
+          url: location,
+          unexpectedBeforeRequirementComma,
+          comma: requirementComma,
+          requirement: sourceControlRequirement,
           arena: self.arena
         )
       )

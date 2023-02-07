@@ -221,6 +221,8 @@ public enum SyntaxKind {
   
   case fallthroughStmt
   
+  case fileSystemPackageDescription
+  
   case floatLiteralExpr
   
   case forInStmt
@@ -307,15 +309,11 @@ public enum SyntaxKind {
   
   case keyPathSubscriptComponent
   
-  case labeledPackageRequirement
-  
   case labeledSpecializeEntry
   
   case labeledStmt
   
   case layoutRequirement
-  
-  case localPackageDescription
   
   case macroDecl
   
@@ -433,7 +431,9 @@ public enum SyntaxKind {
   
   case regexLiteralExpr
   
-  case remotePackageDescription
+  case registryPackageDescription
+  
+  case registryRequirement
   
   case repeatWhileStmt
   
@@ -446,6 +446,10 @@ public enum SyntaxKind {
   case sequenceExpr
   
   case simpleTypeIdentifier
+  
+  case sourceControlPackageDescription
+  
+  case sourceControlRequirement
   
   case sourceFile
   

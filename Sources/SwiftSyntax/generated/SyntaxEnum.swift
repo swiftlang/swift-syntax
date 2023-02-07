@@ -221,6 +221,8 @@ public enum SyntaxEnum {
   
   case fallthroughStmt(FallthroughStmtSyntax)
   
+  case fileSystemPackageDescription(FileSystemPackageDescriptionSyntax)
+  
   case floatLiteralExpr(FloatLiteralExprSyntax)
   
   case forInStmt(ForInStmtSyntax)
@@ -307,15 +309,11 @@ public enum SyntaxEnum {
   
   case keyPathSubscriptComponent(KeyPathSubscriptComponentSyntax)
   
-  case labeledPackageRequirement(LabeledPackageRequirementSyntax)
-  
   case labeledSpecializeEntry(LabeledSpecializeEntrySyntax)
   
   case labeledStmt(LabeledStmtSyntax)
   
   case layoutRequirement(LayoutRequirementSyntax)
-  
-  case localPackageDescription(LocalPackageDescriptionSyntax)
   
   case macroDecl(MacroDeclSyntax)
   
@@ -433,7 +431,9 @@ public enum SyntaxEnum {
   
   case regexLiteralExpr(RegexLiteralExprSyntax)
   
-  case remotePackageDescription(RemotePackageDescriptionSyntax)
+  case registryPackageDescription(RegistryPackageDescriptionSyntax)
+  
+  case registryRequirement(RegistryRequirementSyntax)
   
   case repeatWhileStmt(RepeatWhileStmtSyntax)
   
@@ -446,6 +446,10 @@ public enum SyntaxEnum {
   case sequenceExpr(SequenceExprSyntax)
   
   case simpleTypeIdentifier(SimpleTypeIdentifierSyntax)
+  
+  case sourceControlPackageDescription(SourceControlPackageDescriptionSyntax)
+  
+  case sourceControlRequirement(SourceControlRequirementSyntax)
   
   case sourceFile(SourceFileSyntax)
   
@@ -758,6 +762,8 @@ public extension Syntax {
       return .extensionDecl(ExtensionDeclSyntax(self)!)
     case .fallthroughStmt: 
       return .fallthroughStmt(FallthroughStmtSyntax(self)!)
+    case .fileSystemPackageDescription: 
+      return .fileSystemPackageDescription(FileSystemPackageDescriptionSyntax(self)!)
     case .floatLiteralExpr: 
       return .floatLiteralExpr(FloatLiteralExprSyntax(self)!)
     case .forInStmt: 
@@ -844,16 +850,12 @@ public extension Syntax {
       return .keyPathPropertyComponent(KeyPathPropertyComponentSyntax(self)!)
     case .keyPathSubscriptComponent: 
       return .keyPathSubscriptComponent(KeyPathSubscriptComponentSyntax(self)!)
-    case .labeledPackageRequirement: 
-      return .labeledPackageRequirement(LabeledPackageRequirementSyntax(self)!)
     case .labeledSpecializeEntry: 
       return .labeledSpecializeEntry(LabeledSpecializeEntrySyntax(self)!)
     case .labeledStmt: 
       return .labeledStmt(LabeledStmtSyntax(self)!)
     case .layoutRequirement: 
       return .layoutRequirement(LayoutRequirementSyntax(self)!)
-    case .localPackageDescription: 
-      return .localPackageDescription(LocalPackageDescriptionSyntax(self)!)
     case .macroDecl: 
       return .macroDecl(MacroDeclSyntax(self)!)
     case .macroExpansionDecl: 
@@ -970,8 +972,10 @@ public extension Syntax {
       return .qualifiedDeclName(QualifiedDeclNameSyntax(self)!)
     case .regexLiteralExpr: 
       return .regexLiteralExpr(RegexLiteralExprSyntax(self)!)
-    case .remotePackageDescription: 
-      return .remotePackageDescription(RemotePackageDescriptionSyntax(self)!)
+    case .registryPackageDescription: 
+      return .registryPackageDescription(RegistryPackageDescriptionSyntax(self)!)
+    case .registryRequirement: 
+      return .registryRequirement(RegistryRequirementSyntax(self)!)
     case .repeatWhileStmt: 
       return .repeatWhileStmt(RepeatWhileStmtSyntax(self)!)
     case .returnClause: 
@@ -984,6 +988,10 @@ public extension Syntax {
       return .sequenceExpr(SequenceExprSyntax(self)!)
     case .simpleTypeIdentifier: 
       return .simpleTypeIdentifier(SimpleTypeIdentifierSyntax(self)!)
+    case .sourceControlPackageDescription: 
+      return .sourceControlPackageDescription(SourceControlPackageDescriptionSyntax(self)!)
+    case .sourceControlRequirement: 
+      return .sourceControlRequirement(SourceControlRequirementSyntax(self)!)
     case .sourceFile: 
       return .sourceFile(SourceFileSyntax(self)!)
     case .specializeAttributeSpecList: 

@@ -120,6 +120,7 @@ extension Syntax {
         .node(ExpressionStmtSyntax.self), 
         .node(ExtensionDeclSyntax.self), 
         .node(FallthroughStmtSyntax.self), 
+        .node(FileSystemPackageDescriptionSyntax.self), 
         .node(FloatLiteralExprSyntax.self), 
         .node(ForInStmtSyntax.self), 
         .node(ForcedValueExprSyntax.self), 
@@ -163,11 +164,9 @@ extension Syntax {
         .node(KeyPathOptionalComponentSyntax.self), 
         .node(KeyPathPropertyComponentSyntax.self), 
         .node(KeyPathSubscriptComponentSyntax.self), 
-        .node(LabeledPackageRequirementSyntax.self), 
         .node(LabeledSpecializeEntrySyntax.self), 
         .node(LabeledStmtSyntax.self), 
         .node(LayoutRequirementSyntax.self), 
-        .node(LocalPackageDescriptionSyntax.self), 
         .node(MacroDeclSyntax.self), 
         .node(MacroExpansionDeclSyntax.self), 
         .node(MacroExpansionExprSyntax.self), 
@@ -226,13 +225,16 @@ extension Syntax {
         .node(ProtocolDeclSyntax.self), 
         .node(QualifiedDeclNameSyntax.self), 
         .node(RegexLiteralExprSyntax.self), 
-        .node(RemotePackageDescriptionSyntax.self), 
+        .node(RegistryPackageDescriptionSyntax.self), 
+        .node(RegistryRequirementSyntax.self), 
         .node(RepeatWhileStmtSyntax.self), 
         .node(ReturnClauseSyntax.self), 
         .node(ReturnStmtSyntax.self), 
         .node(SameTypeRequirementSyntax.self), 
         .node(SequenceExprSyntax.self), 
         .node(SimpleTypeIdentifierSyntax.self), 
+        .node(SourceControlPackageDescriptionSyntax.self), 
+        .node(SourceControlRequirementSyntax.self), 
         .node(SourceFileSyntax.self), 
         .node(SpecializeAttributeSpecListSyntax.self), 
         .node(SpecializeExprSyntax.self), 
@@ -494,6 +496,8 @@ extension SyntaxKind {
       return ExtensionDeclSyntax.self
     case .fallthroughStmt: 
       return FallthroughStmtSyntax.self
+    case .fileSystemPackageDescription: 
+      return FileSystemPackageDescriptionSyntax.self
     case .floatLiteralExpr: 
       return FloatLiteralExprSyntax.self
     case .forInStmt: 
@@ -580,16 +584,12 @@ extension SyntaxKind {
       return KeyPathPropertyComponentSyntax.self
     case .keyPathSubscriptComponent: 
       return KeyPathSubscriptComponentSyntax.self
-    case .labeledPackageRequirement: 
-      return LabeledPackageRequirementSyntax.self
     case .labeledSpecializeEntry: 
       return LabeledSpecializeEntrySyntax.self
     case .labeledStmt: 
       return LabeledStmtSyntax.self
     case .layoutRequirement: 
       return LayoutRequirementSyntax.self
-    case .localPackageDescription: 
-      return LocalPackageDescriptionSyntax.self
     case .macroDecl: 
       return MacroDeclSyntax.self
     case .macroExpansionDecl: 
@@ -706,8 +706,10 @@ extension SyntaxKind {
       return QualifiedDeclNameSyntax.self
     case .regexLiteralExpr: 
       return RegexLiteralExprSyntax.self
-    case .remotePackageDescription: 
-      return RemotePackageDescriptionSyntax.self
+    case .registryPackageDescription: 
+      return RegistryPackageDescriptionSyntax.self
+    case .registryRequirement: 
+      return RegistryRequirementSyntax.self
     case .repeatWhileStmt: 
       return RepeatWhileStmtSyntax.self
     case .returnClause: 
@@ -720,6 +722,10 @@ extension SyntaxKind {
       return SequenceExprSyntax.self
     case .simpleTypeIdentifier: 
       return SimpleTypeIdentifierSyntax.self
+    case .sourceControlPackageDescription: 
+      return SourceControlPackageDescriptionSyntax.self
+    case .sourceControlRequirement: 
+      return SourceControlRequirementSyntax.self
     case .sourceFile: 
       return SourceFileSyntax.self
     case .specializeAttributeSpecList: 
@@ -1031,6 +1037,8 @@ extension SyntaxKind {
       return "extension"
     case .fallthroughStmt: 
       return "'fallthrough' statement"
+    case .fileSystemPackageDescription: 
+      return "local package description"
     case .floatLiteralExpr: 
       return "floating literal"
     case .forInStmt: 
@@ -1117,16 +1125,12 @@ extension SyntaxKind {
       return "key path property component"
     case .keyPathSubscriptComponent: 
       return "key path subscript component"
-    case .labeledPackageRequirement: 
-      return "labeled package requirement"
     case .labeledSpecializeEntry: 
       return "attribute argument"
     case .labeledStmt: 
       return "labeled statement"
     case .layoutRequirement: 
       return "layout requirement"
-    case .localPackageDescription: 
-      return "local package description"
     case .macroDecl: 
       return "macro"
     case .macroExpansionDecl: 
@@ -1243,8 +1247,10 @@ extension SyntaxKind {
       return "declaration name"
     case .regexLiteralExpr: 
       return "regex literal"
-    case .remotePackageDescription: 
+    case .registryPackageDescription: 
       return "remote package description"
+    case .registryRequirement: 
+      return "labeled package requirement (registry)"
     case .repeatWhileStmt: 
       return "'repeat' statement"
     case .returnClause: 
@@ -1257,6 +1263,10 @@ extension SyntaxKind {
       return nil
     case .simpleTypeIdentifier: 
       return "type"
+    case .sourceControlPackageDescription: 
+      return "remote package description (source control)"
+    case .sourceControlRequirement: 
+      return "labeled package requirement (source control)"
     case .sourceFile: 
       return "source file"
     case .specializeAttributeSpecList: 

@@ -203,7 +203,8 @@ ATTRIBUTE_NODES = [
                    '''),
          ]),
 
-    # package-attr-arguments -> ( remote-package-desc | local-package-desc ) ','? package-product?
+    # package-attr-arguments -> ( file-system-package-desc | source-control-package-desc | registry-package-desc )
+    #                           ','? package-product?
     Node('PackageAttributeArguments', name_for_diagnostics='@_package arguments',
          kind='Syntax',
          description='''
@@ -212,8 +213,11 @@ ATTRIBUTE_NODES = [
          children=[
              Child('Description', kind='Syntax',
                    node_choices=[
-                       Child('Remote', kind='RemotePackageDescription', name_for_diagnostics='remote package'),
-                       Child('Local', kind='LocalPackageDescription', name_for_diagnostics='local package'),
+                       Child('FileSystem', kind='FileSystemPackageDescription', name_for_diagnostics='local package'),
+                       Child('SourceControl', kind='SourceControlPackageDescription',
+                             name_for_diagnostics='remote package (source control)'),
+                       Child('Registry', kind='RegistryPackageDescription',
+                             name_for_diagnostics='remote package (registry)'),
                    ]),
              Child('Comma', kind='CommaToken',
                    is_optional=True, description='''
@@ -244,8 +248,8 @@ ATTRIBUTE_NODES = [
                    '''),
          ]),
 
-    # local-package-desc -> 'path' ':' package-path
-    Node('LocalPackageDescription', name_for_diagnostics='local package description',
+    # file-system-package-desc -> 'path' ':' package-path
+    Node('FileSystemPackageDescription', name_for_diagnostics='local package description',
          kind='Syntax',
          description='''
          The description of a local package
@@ -263,46 +267,96 @@ ATTRIBUTE_NODES = [
                   '''),
          ]),
 
-    # remote-package-desc -> location-label ':' location ',' requirement-label? ':'? requirement
-    Node('RemotePackageDescription', name_for_diagnostics='remote package description',
+    # source-control-package-desc -> 'url' ':' url ',' requirement-label? ':'? requirement
+    Node('SourceControlPackageDescription', name_for_diagnostics='remote package description (source control)',
+         kind='Syntax',
+         description='''
+         The description of a remote package using source control
+         ''',
+         children=[
+             Child('Label', kind='KeywordToken',
+                   token_choices=['KeywordToken|url'],
+                   description='''
+                   The URL label
+                   '''),
+             Child('Colon', kind='ColonToken'),
+             Child('URL', kind='StringLiteralExpr',
+                   description='''
+                   The Git URL of package
+                   '''),
+             Child('Comma', kind='CommaToken',
+                   description='''
+                   The comma between the package URL and requirement
+                   '''),
+             Child('Requirement', kind='Syntax',
+                   node_choices=[
+                       Child('Labeled', kind='SourceControlRequirement', name_for_diagnostics='source control requirement'),
+                       Child('Range', kind='Expr', name_for_diagnostics='package version range'),
+                   ],
+                   description='''
+                   Version requirement of the remote package
+                   '''),
+         ]),
+
+    # registry-package-desc -> 'id' ':' id ',' requirement-label? ':'? requirement
+    Node('RegistryPackageDescription', name_for_diagnostics='remote package description',
          kind='Syntax',
          description='''
          The description of a remote package
          ''',
          children=[
-             Child('LocationLabel', kind='KeywordToken',
-                   token_choices=['KeywordToken|id', 'KeywordToken|url'],
+             Child('Label', kind='KeywordToken',
+                   token_choices=['KeywordToken|id'],
                    description='''
-                   The location label.
+                   The ID label
                    '''),
-             Child('LocationColon', kind='ColonToken'),
-             Child('Location', kind='StringLiteralExpr',
+             Child('Colon', kind='ColonToken'),
+             Child('Identifier', kind='StringLiteralExpr',
                    description='''
-                   The URL or identifier of package.
+                   The identifier of package
                    '''),
              Child('Comma', kind='CommaToken',
                    description='''
-                   The comma between the package location and requirement
+                   The comma between the package identifier and requirement
                    '''),
              Child('Requirement', kind='Syntax',
                    node_choices=[
-                       Child('Labeled', kind='LabeledPackageRequirement', name_for_diagnostics='labeled package requirement'),
-                       Child('Wildcard', kind='Expr', name_for_diagnostics='wildcard package requirement'),
-                    ],
+                       Child('Labeled', kind='RegistryRequirement', name_for_diagnostics='labeled package requirement (registry)'),
+                       Child('Range', kind='Expr', name_for_diagnostics='package version range'),
+                   ],
                    description='''
-                   Version requirement of remote package
+                   Version requirement of the remote package
                    '''),
          ]),
 
-    # labeled-package-requirement -> label ':' requirement
-    Node('LabeledPackageRequirement', name_for_diagnostics='labeled package requirement',
+    # source-control-requirement -> label ':' requirement
+    Node('SourceControlRequirement', name_for_diagnostics='labeled package requirement (source control)',
          kind='Syntax',
          description='''
-         Labeled requirement of a remote package
+         Labeled requirement of a source-control package
          ''',
          children=[
              Child('Label', kind='KeywordToken',
                    token_choices=['KeywordToken|branch', 'KeywordToken|exact', 'KeywordToken|from', 'KeywordToken|revision'],
+                   description='''
+                   The requirement label
+                   ''', is_optional=True),
+             Child('Colon', kind='ColonToken', is_optional=True),
+             Child('Requirement', kind='StringLiteralExpr',
+                   description='''
+                   Requirement description of remote package
+                   '''),
+         ]),
+
+    # registry-requirement -> label ':' requirement
+    Node('RegistryRequirement', name_for_diagnostics='labeled package requirement (registry)',
+         kind='Syntax',
+         description='''
+         Labeled requirement of a registry package
+         ''',
+         children=[
+             Child('Label', kind='KeywordToken',
+                   token_choices=['KeywordToken|exact', 'KeywordToken|from'],
                    description='''
                    The requirement label
                    ''', is_optional=True),

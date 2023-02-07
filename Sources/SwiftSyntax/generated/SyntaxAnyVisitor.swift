@@ -865,6 +865,14 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
+  override open func visit(_ node: FileSystemPackageDescriptionSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: FileSystemPackageDescriptionSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
   override open func visit(_ node: FloatLiteralExprSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
@@ -1209,14 +1217,6 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: LabeledPackageRequirementSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-  
-  override open func visitPost(_ node: LabeledPackageRequirementSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  
   override open func visit(_ node: LabeledSpecializeEntrySyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
@@ -1238,14 +1238,6 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   }
   
   override open func visitPost(_ node: LayoutRequirementSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  
-  override open func visit(_ node: LocalPackageDescriptionSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-  
-  override open func visitPost(_ node: LocalPackageDescriptionSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -1713,11 +1705,19 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: RemotePackageDescriptionSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: RegistryPackageDescriptionSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: RemotePackageDescriptionSyntax) {
+  override open func visitPost(_ node: RegistryPackageDescriptionSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
+  override open func visit(_ node: RegistryRequirementSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: RegistryRequirementSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -1766,6 +1766,22 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   }
   
   override open func visitPost(_ node: SimpleTypeIdentifierSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
+  override open func visit(_ node: SourceControlPackageDescriptionSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: SourceControlPackageDescriptionSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
+  override open func visit(_ node: SourceControlRequirementSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: SourceControlRequirementSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   

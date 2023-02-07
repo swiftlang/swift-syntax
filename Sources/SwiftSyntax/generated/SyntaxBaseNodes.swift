@@ -42,7 +42,7 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   /// Create a `DeclSyntax` node from a specialized syntax node.
-  public init <S: DeclSyntaxProtocol>(_ syntax: S) {
+  public init<S: DeclSyntaxProtocol>(_ syntax: S) {
     // We know this cast is going to succeed. Go through init(_: SyntaxData)
     // to do a sanity check and verify the kind matches in debug builds and get
     // maximum performance in release builds.
@@ -190,7 +190,7 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   /// Create a `ExprSyntax` node from a specialized syntax node.
-  public init <S: ExprSyntaxProtocol>(_ syntax: S) {
+  public init<S: ExprSyntaxProtocol>(_ syntax: S) {
     // We know this cast is going to succeed. Go through init(_: SyntaxData)
     // to do a sanity check and verify the kind matches in debug builds and get
     // maximum performance in release builds.
@@ -362,7 +362,7 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   /// Create a `PatternSyntax` node from a specialized syntax node.
-  public init <S: PatternSyntaxProtocol>(_ syntax: S) {
+  public init<S: PatternSyntaxProtocol>(_ syntax: S) {
     // We know this cast is going to succeed. Go through init(_: SyntaxData)
     // to do a sanity check and verify the kind matches in debug builds and get
     // maximum performance in release builds.
@@ -493,7 +493,7 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   /// Create a `StmtSyntax` node from a specialized syntax node.
-  public init <S: StmtSyntaxProtocol>(_ syntax: S) {
+  public init<S: StmtSyntaxProtocol>(_ syntax: S) {
     // We know this cast is going to succeed. Go through init(_: SyntaxData)
     // to do a sanity check and verify the kind matches in debug builds and get
     // maximum performance in release builds.
@@ -632,7 +632,7 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   /// Create a `TypeSyntax` node from a specialized syntax node.
-  public init <S: TypeSyntaxProtocol>(_ syntax: S) {
+  public init<S: TypeSyntaxProtocol>(_ syntax: S) {
     // We know this cast is going to succeed. Go through init(_: SyntaxData)
     // to do a sanity check and verify the kind matches in debug builds and get
     // maximum performance in release builds.

@@ -63,13 +63,13 @@ let syntaxClassificationFile = SourceFileSyntax {
         ) -> (SyntaxClassification, Bool)?
       """
     ) {
-      try IfStmtSyntax(
+      try IfExprSyntax(
         """
         // Separate checks for token nodes (most common checks) versus checks for layout nodes.
         if childKind == .token
         """
       ) {
-        try SwitchStmtSyntax("switch (parentKind, indexInParent)") {
+        try SwitchExprSyntax("switch (parentKind, indexInParent)") {
           for childClassification in node_child_classifications where childClassification.isToken {
             SwitchCaseSyntax("case (.\(raw: childClassification.parent.swiftSyntaxKind), \(raw: childClassification.childIndex)):") {
               StmtSyntax("return (.\(raw: childClassification.classification!.swiftName), \(raw: childClassification.force))")
@@ -79,7 +79,7 @@ let syntaxClassificationFile = SourceFileSyntax {
           SwitchCaseSyntax("default: return nil")
         }
       } else: {
-        try SwitchStmtSyntax("switch (parentKind, indexInParent)") {
+        try SwitchExprSyntax("switch (parentKind, indexInParent)") {
           for childClassification in node_child_classifications where !childClassification.isToken {
             SwitchCaseSyntax("case (.\(raw: childClassification.parent.swiftSyntaxKind), \(raw: childClassification.childIndex)):") {
               StmtSyntax("return (.\(raw: childClassification.classification!.swiftName), \(raw: childClassification.force))")
@@ -94,7 +94,7 @@ let syntaxClassificationFile = SourceFileSyntax {
 
   try! ExtensionDeclSyntax("extension RawTokenKind") {
     try VariableDeclSyntax("internal var classification: SyntaxClassification") {
-      try SwitchStmtSyntax("switch self.base") {
+      try SwitchExprSyntax("switch self.base") {
         for token in SYNTAX_TOKENS {
           SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
             if let classification = token.classification {

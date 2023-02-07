@@ -44,7 +44,7 @@ let tokenKindFile = SourceFileSyntax {
       public var text: String
       """
     ) {
-      try SwitchStmtSyntax("switch self") {
+      try SwitchExprSyntax("switch self") {
         for token in SYNTAX_TOKENS {
           if token.associatedValueClass != nil {
             SwitchCaseSyntax("case .\(raw: token.swiftKind)(let assoc):") {
@@ -74,7 +74,7 @@ let tokenKindFile = SourceFileSyntax {
       public var defaultText: SyntaxText?
       """
     ) {
-      try SwitchStmtSyntax("switch self") {
+      try SwitchExprSyntax("switch self") {
         for token in SYNTAX_TOKENS {
           if token.associatedValueClass != nil {
             SwitchCaseSyntax("case .\(raw: token.swiftKind)(let assoc):") {
@@ -106,7 +106,7 @@ let tokenKindFile = SourceFileSyntax {
       public var isLexerClassifiedKeyword: Bool
       """
     ) {
-      try SwitchStmtSyntax("switch self") {
+      try SwitchExprSyntax("switch self") {
         SwitchCaseSyntax("case .eof:") {
           StmtSyntax("return false")
         }
@@ -133,7 +133,7 @@ let tokenKindFile = SourceFileSyntax {
       public var isPunctuation: Bool
       """
     ) {
-      try SwitchStmtSyntax("switch self") {
+      try SwitchExprSyntax("switch self") {
         SwitchCaseSyntax("case .eof:") {
           StmtSyntax("return false")
         }
@@ -149,7 +149,7 @@ let tokenKindFile = SourceFileSyntax {
 
   try! ExtensionDeclSyntax("extension TokenKind: Equatable") {
     try FunctionDeclSyntax("public static func ==(lhs: TokenKind, rhs: TokenKind) -> Bool") {
-      try SwitchStmtSyntax("switch (lhs, rhs)") {
+      try SwitchExprSyntax("switch (lhs, rhs)") {
         SwitchCaseSyntax("case (.eof, .eof):") {
           StmtSyntax("return true")
         }
@@ -264,7 +264,7 @@ let tokenKindFile = SourceFileSyntax {
       public var defaultText: SyntaxText?
       """
     ) {
-      try! SwitchStmtSyntax("switch self.base") {
+      try! SwitchExprSyntax("switch self.base") {
         SwitchCaseSyntax("case .eof:") {
           StmtSyntax(#"return """#)
         }
@@ -288,7 +288,7 @@ let tokenKindFile = SourceFileSyntax {
     }
 
     try! VariableDeclSyntax("public var nameForDiagnostics: String") {
-      try! SwitchStmtSyntax("switch self.base") {
+      try! SwitchExprSyntax("switch self.base") {
         SwitchCaseSyntax("case .eof:") {
           StmtSyntax(#"return "end of file""#)
         }
@@ -314,7 +314,7 @@ let tokenKindFile = SourceFileSyntax {
       public var isLexerClassifiedKeyword: Bool
       """
     ) {
-      try! SwitchStmtSyntax("switch self.base") {
+      try! SwitchExprSyntax("switch self.base") {
         SwitchCaseSyntax("case .eof:") {
           StmtSyntax("return false")
         }
@@ -340,7 +340,7 @@ let tokenKindFile = SourceFileSyntax {
       public var isPunctuation: Bool
       """
     ) {
-      try! SwitchStmtSyntax("switch self.base") {
+      try! SwitchExprSyntax("switch self.base") {
         SwitchCaseSyntax("case .eof:") {
           StmtSyntax("return false")
         }
@@ -362,7 +362,7 @@ let tokenKindFile = SourceFileSyntax {
       public static func fromRaw(kind rawKind: RawTokenKind, text: String) -> TokenKind
       """
     ) {
-      try! SwitchStmtSyntax("switch rawKind.base") {
+      try! SwitchExprSyntax("switch rawKind.base") {
         SwitchCaseSyntax("case .eof:") {
           StmtSyntax("return .eof")
         }
@@ -395,7 +395,7 @@ let tokenKindFile = SourceFileSyntax {
       public func decomposeToRaw() -> (rawKind: RawTokenKind, string: String?)
       """
     ) {
-      try! SwitchStmtSyntax("switch self") {
+      try! SwitchExprSyntax("switch self") {
         SwitchCaseSyntax("case .eof:") {
           StmtSyntax("return (.eof, nil)")
         }

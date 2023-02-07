@@ -1312,106 +1312,106 @@ extension TokenKind {
     case .eof: 
       return .eof
     case .wildcard: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .wildcard
     case .leftParen: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .leftParen
     case .rightParen: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .rightParen
     case .leftBrace: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .leftBrace
     case .rightBrace: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .rightBrace
     case .leftSquareBracket: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .leftSquareBracket
     case .rightSquareBracket: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .rightSquareBracket
     case .leftAngle: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .leftAngle
     case .rightAngle: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .rightAngle
     case .period: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .period
     case .comma: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .comma
     case .ellipsis: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .ellipsis
     case .colon: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .colon
     case .semicolon: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .semicolon
     case .equal: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .equal
     case .atSign: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .atSign
     case .pound: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .pound
     case .prefixAmpersand: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .prefixAmpersand
     case .arrow: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .arrow
     case .backtick: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .backtick
     case .backslash: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .backslash
     case .exclamationMark: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .exclamationMark
     case .postfixQuestionMark: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .postfixQuestionMark
     case .infixQuestionMark: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .infixQuestionMark
     case .stringQuote: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .stringQuote
     case .singleQuote: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .singleQuote
     case .multilineStringQuote: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .multilineStringQuote
     case .poundSourceLocationKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .poundSourceLocationKeyword
     case .poundIfKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .poundIfKeyword
     case .poundElseKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .poundElseKeyword
     case .poundElseifKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .poundElseifKeyword
     case .poundEndifKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .poundEndifKeyword
     case .poundAvailableKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .poundAvailableKeyword
     case .poundUnavailableKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .poundUnavailableKeyword
     case .integerLiteral: 
       return .integerLiteral(text)

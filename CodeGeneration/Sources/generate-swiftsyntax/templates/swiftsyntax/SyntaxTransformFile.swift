@@ -58,7 +58,7 @@ let syntaxTransformFile = SourceFileSyntax(leadingTrivia: .docLineComment(genera
     }
 
     try FunctionDeclSyntax("public func visit(_ node: Syntax) -> ResultType") {
-      try SwitchStmtSyntax("switch node.as(SyntaxEnum.self)") {
+      try SwitchExprSyntax("switch node.as(SyntaxEnum.self)") {
         SwitchCaseSyntax("case .token(let node):") {
           StmtSyntax("return visit(node)")
         }

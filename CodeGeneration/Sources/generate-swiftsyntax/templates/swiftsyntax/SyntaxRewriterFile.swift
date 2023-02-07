@@ -163,18 +163,15 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: .docLineComment(generat
     )
 
     IfConfigDeclSyntax(
-      leadingTrivia: [
-        .blockComment("// SwiftSyntax requires a lot of stack space in debug builds for syntax tree"),
-        .newlines(1),
-        .blockComment("// rewriting. In scenarios with reduced stack space (in particular dispatch"),
-        .newlines(1),
-        .blockComment("// queues), this easily results in a stack overflow. To work around this issue,"),
-        .newlines(1),
-        .blockComment("// use a less performant but also less stack-hungry version of SwiftSyntax's"),
-        .newlines(1),
-        .blockComment("// SyntaxRewriter in debug builds."),
-        .newlines(1),
-      ],
+      leadingTrivia:
+        """
+        // SwiftSyntax requires a lot of stack space in debug builds for syntax tree
+        // rewriting. In scenarios with reduced stack space (in particular dispatch
+        // queues), this easily results in a stack overflow. To work around this issue,
+        // use a less performant but also less stack-hungry version of SwiftSyntax's
+        // SyntaxRewriter in debug builds.
+
+        """,
       clauses: IfConfigClauseListSyntax {
         IfConfigClauseSyntax(
           poundKeyword: .poundIfKeyword(),
@@ -204,7 +201,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: .docLineComment(generat
                 private func visitationFunc(for data: SyntaxData) -> ((SyntaxData) -> Syntax)
                 """
               ) {
-                try SwitchStmtSyntax("switch data.raw.kind") {
+                try SwitchExprSyntax("switch data.raw.kind") {
                   SwitchCaseSyntax("case .token:") {
                     StmtSyntax("return visitImplTokenSyntax")
                   }
@@ -232,7 +229,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: .docLineComment(generat
           elements: .statements(
             CodeBlockItemListSyntax {
               try! FunctionDeclSyntax("private func visit(_ data: SyntaxData) -> Syntax") {
-                try SwitchStmtSyntax("switch data.raw.kind") {
+                try SwitchExprSyntax("switch data.raw.kind") {
                   SwitchCaseSyntax("case .token:") {
                     StmtSyntax("return visitImplTokenSyntax(data)")
                   }

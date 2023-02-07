@@ -30,7 +30,7 @@ let declarationModifierFile = SourceFileSyntax {
     }
 
     try InitializerDeclSyntax("init?(lexeme: Lexer.Lexeme)") {
-      try SwitchStmtSyntax("switch lexeme") {
+      try SwitchExprSyntax("switch lexeme") {
         for attribute in DECL_MODIFIER_KINDS {
           SwitchCaseSyntax("case RawTokenKindMatch(.\(raw: attribute.swiftName)):") {
             ExprSyntax("self = .\(raw: attribute.swiftName)")
@@ -43,7 +43,7 @@ let declarationModifierFile = SourceFileSyntax {
     }
 
     try VariableDeclSyntax("var rawTokenKind: RawTokenKind") {
-      try SwitchStmtSyntax("switch self") {
+      try SwitchExprSyntax("switch self") {
         for attribute in DECL_MODIFIER_KINDS {
           SwitchCaseSyntax("case .\(raw: attribute.swiftName):") {
             if attribute.swiftName.hasSuffix("Keyword") {

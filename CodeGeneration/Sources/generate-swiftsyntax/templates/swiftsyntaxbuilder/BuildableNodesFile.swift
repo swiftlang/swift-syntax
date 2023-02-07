@@ -24,7 +24,7 @@ let buildableNodesFile = SourceFileSyntax {
   for node in SYNTAX_NODES where node.isBuildable {
     let type = node.type
 
-    if let convenienceInit = createConvenienceInitializer(node: node) {
+    if let convenienceInit = try! createConvenienceInitializer(node: node) {
       let docComment: SwiftSyntax.Trivia = node.documentation.isEmpty ? [] : .docLineComment("/// \(node.documentation)") + .newline
       ExtensionDeclSyntax(
         leadingTrivia: docComment,
@@ -37,16 +37,14 @@ let buildableNodesFile = SourceFileSyntax {
 }
 
 private func convertFromSyntaxProtocolToSyntaxType(child: Child) -> ExprSyntax {
-  if child.type.isBaseType {
-    if !child.kind.isNodeChoices {
-      return ExprSyntax("\(raw: child.type.syntaxBaseName)(fromProtocol: \(raw: child.swiftName))")
-    }
+  if child.type.isBaseType && !child.kind.isNodeChoices {
+    return ExprSyntax("\(raw: child.type.syntaxBaseName)(fromProtocol: \(raw: child.swiftName))")
   }
-  return ExprSyntax(IdentifierExprSyntax(identifier: .identifier(child.swiftName)))
+  return ExprSyntax("\(raw: child.swiftName)")
 }
 
 /// Create a builder-based convenience initializer, if needed.
-private func createConvenienceInitializer(node: Node) -> InitializerDeclSyntax? {
+private func createConvenienceInitializer(node: Node) throws -> InitializerDeclSyntax? {
   // Only create the convenience initializer if at least one parameter
   // is different than in the default initializer generated above.
   var shouldCreateInitializer = false
@@ -77,7 +75,7 @@ private func createConvenienceInitializer(node: Node) -> InitializerDeclSyntax? 
       }
       builderParameters.append(
         FunctionParameterSyntax(
-          "@\(builderInitializableType.resultBuilderBaseName) \(child.swiftName)Builder: () throws-> \(builderInitializableType.syntax)",
+          "@\(raw: builderInitializableType.resultBuilderBaseName) \(raw: child.swiftName)Builder: () throws-> \(raw: builderInitializableType.syntax)",
           for: .functionParameters
         )
       )
@@ -99,19 +97,19 @@ private func createConvenienceInitializer(node: Node) -> InitializerDeclSyntax? 
     return nil
   }
 
-  return InitializerDeclSyntax(
-    leadingTrivia: .docLineComment("/// A convenience initializer that allows initializing syntax collections using result builders") + .newline,
-    modifiers: [DeclModifierSyntax(leadingTrivia: .newline, name: .keyword(.public))],
-    signature: FunctionSignatureSyntax(
-      input: ParameterClauseSyntax {
-        FunctionParameterSyntax("leadingTrivia: Trivia? = nil", for: .functionParameters)
-        for param in normalParameters + builderParameters {
-          param
-        }
-        FunctionParameterSyntax("trailingTrivia: Trivia? = nil", for: .functionParameters)
-      },
-      effectSpecifiers: DeclEffectSpecifiersSyntax(throwsSpecifier: .keyword(.rethrows))
-    )
+  let params = ParameterClauseSyntax {
+    FunctionParameterSyntax("leadingTrivia: Trivia? = nil", for: .functionParameters)
+    for param in normalParameters + builderParameters {
+      param
+    }
+    FunctionParameterSyntax("trailingTrivia: Trivia? = nil", for: .functionParameters)
+  }
+
+  return try InitializerDeclSyntax(
+    """
+    /// A convenience initializer that allows initializing syntax collections using result builders
+    public init\(params) rethrows
+    """
   ) {
     FunctionCallExprSyntax(callee: ExprSyntax("try self.init")) {
       TupleExprElementSyntax(label: "leadingTrivia", expression: ExprSyntax("leadingTrivia"))

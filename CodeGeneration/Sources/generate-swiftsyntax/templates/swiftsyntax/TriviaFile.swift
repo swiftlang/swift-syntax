@@ -75,7 +75,7 @@ let triviaFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCopyrig
         """
       )
 
-      try SwitchStmtSyntax("switch self") {
+      try SwitchExprSyntax("switch self") {
         for trivia in TRIVIAS {
           if trivia.isCollection {
             let joined = trivia.characters.map { "\($0)" }.joined()
@@ -99,7 +99,7 @@ let triviaFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCopyrig
       public var debugDescription: String
       """
     ) {
-      try SwitchStmtSyntax("switch self") {
+      try SwitchExprSyntax("switch self") {
         for trivia in TRIVIAS {
           if trivia.isCollection {
             SwitchCaseSyntax("case .\(raw: trivia.enumCaseName)(let data):") {
@@ -328,7 +328,7 @@ let triviaFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCopyrig
 
   try! ExtensionDeclSyntax("extension TriviaPiece") {
     try VariableDeclSyntax("public var sourceLength: SourceLength") {
-      try SwitchStmtSyntax("switch self") {
+      try SwitchExprSyntax("switch self") {
         for trivia in TRIVIAS {
           if trivia.isCollection {
             SwitchCaseSyntax("case let .\(raw: trivia.enumCaseName)(count):") {
@@ -372,7 +372,7 @@ let triviaFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCopyrig
       static func make(_ piece: TriviaPiece, arena: SyntaxArena) -> RawTriviaPiece
       """
     ) {
-      try SwitchStmtSyntax("switch piece") {
+      try SwitchExprSyntax("switch piece") {
         for trivia in TRIVIAS {
           if trivia.isCollection {
             SwitchCaseSyntax("case let .\(raw: trivia.enumCaseName)(count):") {
@@ -410,7 +410,7 @@ let triviaFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCopyrig
 
   try! ExtensionDeclSyntax("extension TriviaPiece") {
     try InitializerDeclSyntax("@_spi(RawSyntax) public init(raw: RawTriviaPiece)") {
-      try SwitchStmtSyntax("switch raw") {
+      try SwitchExprSyntax("switch raw") {
         for trivia in TRIVIAS {
           if trivia.isCollection {
             SwitchCaseSyntax("case let .\(raw: trivia.enumCaseName)(count):") {
@@ -428,7 +428,7 @@ let triviaFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCopyrig
 
   try! ExtensionDeclSyntax("extension RawTriviaPiece") {
     try VariableDeclSyntax("public var byteLength: Int") {
-      try SwitchStmtSyntax("switch self") {
+      try SwitchExprSyntax("switch self") {
         for trivia in TRIVIAS {
           if trivia.isCollection {
             SwitchCaseSyntax("case let .\(raw: trivia.enumCaseName)(count):") {
@@ -448,7 +448,7 @@ let triviaFile = SourceFileSyntax(leadingTrivia: .docLineComment(generateCopyrig
     }
 
     try VariableDeclSyntax("var storedText: SyntaxText?") {
-      try SwitchStmtSyntax("switch self") {
+      try SwitchExprSyntax("switch self") {
         for trivia in TRIVIAS {
           if trivia.isCollection {
             SwitchCaseSyntax("case .\(raw: trivia.enumCaseName)(_):") {

@@ -188,7 +188,7 @@ extension FunctionParameter {
 
 // MARK: - IfStmt
 
-extension IfStmt {
+extension IfExprSyntax {
   /// A convenience initializer that uses builder closures to express an
   /// if body, potentially with a second trailing builder closure for an else
   /// body.

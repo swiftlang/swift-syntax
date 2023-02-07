@@ -217,7 +217,7 @@ extension IdentifierPatternSyntax: SyntaxExpressibleByStringInterpolation {
 extension IfConfigDeclSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
-extension IfStmtSyntax: SyntaxExpressibleByStringInterpolation { 
+extension IfExprSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
 extension ImplicitlyUnwrappedOptionalTypeSyntax: SyntaxExpressibleByStringInterpolation { 
@@ -425,7 +425,7 @@ extension SwitchCaseSyntax: SyntaxExpressibleByStringInterpolation {
   }
 }
 
-extension SwitchStmtSyntax: SyntaxExpressibleByStringInterpolation { 
+extension SwitchExprSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
 extension SymbolicReferenceExprSyntax: SyntaxExpressibleByStringInterpolation { 

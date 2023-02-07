@@ -493,6 +493,158 @@ public let EXPR_NODES: [Node] = [
                ])
        ]),
 
+  Node(name: "IfExpr",
+       nameForDiagnostics: "'if' statement",
+       kind: "Expr",
+       traits: [
+         "WithCodeBlock"
+       ],
+       children: [
+         Child(name: "IfKeyword",
+               kind: "IfToken",
+               tokenChoices: [
+                 "If"
+               ]),
+         Child(name: "Conditions",
+               kind: "ConditionElementList",
+               collectionElementName: "Condition"),
+         Child(name: "Body",
+               kind: "CodeBlock"),
+         Child(name: "ElseKeyword",
+               kind: "ElseToken",
+               isOptional: true,
+               tokenChoices: [
+                 "Else"
+               ]),
+         Child(name: "ElseBody",
+               kind: "Syntax",
+               isOptional: true,
+               nodeChoices: [
+                 Child(name: "IfExpr",
+                       kind: "IfExpr"),
+                 Child(name: "CodeBlock",
+                       kind: "CodeBlock")
+               ])
+       ]),
+
+  Node(name: "SwitchExpr",
+       nameForDiagnostics: "'switch' statement",
+       kind: "Expr",
+       traits: [
+         "Braced"
+       ],
+       children: [
+         Child(name: "SwitchKeyword",
+               kind: "SwitchToken",
+               tokenChoices: [
+                 "Switch"
+               ]),
+         Child(name: "Expression",
+               kind: "Expr"),
+         Child(name: "LeftBrace",
+               kind: "LeftBraceToken",
+               tokenChoices: [
+                 "LeftBrace"
+               ]),
+         Child(name: "Cases",
+               kind: "SwitchCaseList",
+               collectionElementName: "Case"),
+         Child(name: "RightBrace",
+               kind: "RightBraceToken",
+               tokenChoices: [
+                 "RightBrace"
+               ],
+               requiresLeadingNewline: true)
+       ]),
+
+  Node(name: "SwitchCaseList",
+       nameForDiagnostics: nil,
+       kind: "SyntaxCollection",
+       element: "Syntax",
+       elementName: "SwitchCase",
+       elementChoices: ["SwitchCase", "IfConfigDecl"],
+       elementsSeparatedByNewline: true),
+
+  Node(name: "SwitchCase",
+       nameForDiagnostics: "switch case",
+       kind: "Syntax",
+       traits: [
+         "WithStatements"
+       ],
+       parserFunction: "parseSwitchCase",
+       children: [
+         Child(name: "UnknownAttr",
+               kind: "Attribute",
+               isOptional: true),
+         Child(name: "Label",
+               kind: "Syntax",
+               nodeChoices: [
+                 Child(name: "Default",
+                       kind: "SwitchDefaultLabel"),
+                 Child(name: "Case",
+                       kind: "SwitchCaseLabel")
+               ]),
+         Child(name: "Statements",
+               kind: "CodeBlockItemList",
+               collectionElementName: "Statement",
+               isIndented: true)
+       ]),
+
+  Node(name: "SwitchCaseLabel",
+       nameForDiagnostics: nil,
+       kind: "Syntax",
+       children: [
+         Child(name: "CaseKeyword",
+               kind: "CaseToken",
+               tokenChoices: [
+                 "Case"
+               ]),
+         Child(name: "CaseItems",
+               kind: "CaseItemList",
+               collectionElementName: "CaseItem"),
+         Child(name: "Colon",
+               kind: "ColonToken",
+               tokenChoices: [
+                 "Colon"
+               ])
+       ]),
+
+  Node(name: "SwitchDefaultLabel",
+       nameForDiagnostics: nil,
+       kind: "Syntax",
+       children: [
+         Child(name: "DefaultKeyword",
+               kind: "DefaultToken",
+               tokenChoices: [
+                 "Default"
+               ]),
+         Child(name: "Colon",
+               kind: "ColonToken",
+               tokenChoices: [
+                 "Colon"
+               ])
+       ]),
+
+  Node(name: "CaseItem",
+       nameForDiagnostics: nil,
+       kind: "Syntax",
+       traits: [
+         "WithTrailingComma"
+       ],
+       children: [
+         Child(name: "Pattern",
+               kind: "Pattern"),
+         Child(name: "WhereClause",
+               kind: "WhereClause",
+               isOptional: true),
+         Child(name: "TrailingComma",
+               kind: "CommaToken",
+               isOptional: true,
+               tokenChoices: [
+                 "Comma"
+               ])
+       ]),
+
   Node(name: "UnresolvedTernaryExpr",
        nameForDiagnostics: nil,
        kind: "Expr",

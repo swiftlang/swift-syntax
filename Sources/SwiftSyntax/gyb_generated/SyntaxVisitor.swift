@@ -481,6 +481,76 @@ open class SyntaxVisitor {
   /// The function called after visiting `BooleanLiteralExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: BooleanLiteralExprSyntax) {}
+  /// Visiting `IfExprSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: IfExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `IfExprSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: IfExprSyntax) {}
+  /// Visiting `SwitchExprSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: SwitchExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `SwitchExprSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: SwitchExprSyntax) {}
+  /// Visiting `SwitchCaseListSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: SwitchCaseListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `SwitchCaseListSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: SwitchCaseListSyntax) {}
+  /// Visiting `SwitchCaseSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: SwitchCaseSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `SwitchCaseSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: SwitchCaseSyntax) {}
+  /// Visiting `SwitchCaseLabelSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: SwitchCaseLabelSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `SwitchCaseLabelSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: SwitchCaseLabelSyntax) {}
+  /// Visiting `SwitchDefaultLabelSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: SwitchDefaultLabelSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `SwitchDefaultLabelSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: SwitchDefaultLabelSyntax) {}
+  /// Visiting `CaseItemSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: CaseItemSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `CaseItemSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: CaseItemSyntax) {}
   /// Visiting `UnresolvedTernaryExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -1831,16 +1901,6 @@ open class SyntaxVisitor {
   /// The function called after visiting `ExpressionStmtSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ExpressionStmtSyntax) {}
-  /// Visiting `SwitchCaseListSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: SwitchCaseListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-
-  /// The function called after visiting `SwitchCaseListSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: SwitchCaseListSyntax) {}
   /// Visiting `RepeatWhileStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -1881,16 +1941,6 @@ open class SyntaxVisitor {
   /// The function called after visiting `ForInStmtSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ForInStmtSyntax) {}
-  /// Visiting `SwitchStmtSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: SwitchStmtSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-
-  /// The function called after visiting `SwitchStmtSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: SwitchStmtSyntax) {}
   /// Visiting `CatchClauseListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -2071,46 +2121,6 @@ open class SyntaxVisitor {
   /// The function called after visiting `ThrowStmtSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ThrowStmtSyntax) {}
-  /// Visiting `IfStmtSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: IfStmtSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-
-  /// The function called after visiting `IfStmtSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: IfStmtSyntax) {}
-  /// Visiting `SwitchCaseSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: SwitchCaseSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-
-  /// The function called after visiting `SwitchCaseSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: SwitchCaseSyntax) {}
-  /// Visiting `SwitchDefaultLabelSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: SwitchDefaultLabelSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-
-  /// The function called after visiting `SwitchDefaultLabelSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: SwitchDefaultLabelSyntax) {}
-  /// Visiting `CaseItemSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: CaseItemSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-
-  /// The function called after visiting `CaseItemSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: CaseItemSyntax) {}
   /// Visiting `CatchItemSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -2121,16 +2131,6 @@ open class SyntaxVisitor {
   /// The function called after visiting `CatchItemSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: CatchItemSyntax) {}
-  /// Visiting `SwitchCaseLabelSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: SwitchCaseLabelSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-
-  /// The function called after visiting `SwitchCaseLabelSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: SwitchCaseLabelSyntax) {}
   /// Visiting `CatchClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -3159,6 +3159,83 @@ open class SyntaxVisitor {
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplBooleanLiteralExprSyntax(_ data: SyntaxData) {
     let node = BooleanLiteralExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplIfExprSyntax(_ data: SyntaxData) {
+    let node = IfExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplSwitchExprSyntax(_ data: SyntaxData) {
+    let node = SwitchExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplSwitchCaseListSyntax(_ data: SyntaxData) {
+    let node = SwitchCaseListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplSwitchCaseSyntax(_ data: SyntaxData) {
+    let node = SwitchCaseSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplSwitchCaseLabelSyntax(_ data: SyntaxData) {
+    let node = SwitchCaseLabelSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplSwitchDefaultLabelSyntax(_ data: SyntaxData) {
+    let node = SwitchDefaultLabelSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplCaseItemSyntax(_ data: SyntaxData) {
+    let node = CaseItemSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -4653,17 +4730,6 @@ open class SyntaxVisitor {
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplSwitchCaseListSyntax(_ data: SyntaxData) {
-    let node = SwitchCaseListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplRepeatWhileStmtSyntax(_ data: SyntaxData) {
     let node = RepeatWhileStmtSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -4699,17 +4765,6 @@ open class SyntaxVisitor {
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplForInStmtSyntax(_ data: SyntaxData) {
     let node = ForInStmtSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplSwitchStmtSyntax(_ data: SyntaxData) {
-    let node = SwitchStmtSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -4917,63 +4972,8 @@ open class SyntaxVisitor {
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplIfStmtSyntax(_ data: SyntaxData) {
-    let node = IfStmtSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplSwitchCaseSyntax(_ data: SyntaxData) {
-    let node = SwitchCaseSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplSwitchDefaultLabelSyntax(_ data: SyntaxData) {
-    let node = SwitchDefaultLabelSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplCaseItemSyntax(_ data: SyntaxData) {
-    let node = CaseItemSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplCatchItemSyntax(_ data: SyntaxData) {
     let node = CatchItemSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplSwitchCaseLabelSyntax(_ data: SyntaxData) {
-    let node = SwitchCaseLabelSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -5676,6 +5676,20 @@ open class SyntaxVisitor {
       visitImplIntegerLiteralExprSyntax(data)
     case .booleanLiteralExpr:
       visitImplBooleanLiteralExprSyntax(data)
+    case .ifExpr:
+      visitImplIfExprSyntax(data)
+    case .switchExpr:
+      visitImplSwitchExprSyntax(data)
+    case .switchCaseList:
+      visitImplSwitchCaseListSyntax(data)
+    case .switchCase:
+      visitImplSwitchCaseSyntax(data)
+    case .switchCaseLabel:
+      visitImplSwitchCaseLabelSyntax(data)
+    case .switchDefaultLabel:
+      visitImplSwitchDefaultLabelSyntax(data)
+    case .caseItem:
+      visitImplCaseItemSyntax(data)
     case .unresolvedTernaryExpr:
       visitImplUnresolvedTernaryExprSyntax(data)
     case .ternaryExpr:
@@ -5946,8 +5960,6 @@ open class SyntaxVisitor {
       visitImplDeferStmtSyntax(data)
     case .expressionStmt:
       visitImplExpressionStmtSyntax(data)
-    case .switchCaseList:
-      visitImplSwitchCaseListSyntax(data)
     case .repeatWhileStmt:
       visitImplRepeatWhileStmtSyntax(data)
     case .guardStmt:
@@ -5956,8 +5968,6 @@ open class SyntaxVisitor {
       visitImplWhereClauseSyntax(data)
     case .forInStmt:
       visitImplForInStmtSyntax(data)
-    case .switchStmt:
-      visitImplSwitchStmtSyntax(data)
     case .catchClauseList:
       visitImplCatchClauseListSyntax(data)
     case .doStmt:
@@ -5994,18 +6004,8 @@ open class SyntaxVisitor {
       visitImplDeclarationStmtSyntax(data)
     case .throwStmt:
       visitImplThrowStmtSyntax(data)
-    case .ifStmt:
-      visitImplIfStmtSyntax(data)
-    case .switchCase:
-      visitImplSwitchCaseSyntax(data)
-    case .switchDefaultLabel:
-      visitImplSwitchDefaultLabelSyntax(data)
-    case .caseItem:
-      visitImplCaseItemSyntax(data)
     case .catchItem:
       visitImplCatchItemSyntax(data)
-    case .switchCaseLabel:
-      visitImplSwitchCaseLabelSyntax(data)
     case .catchClause:
       visitImplCatchClauseSyntax(data)
     case .poundAssertStmt:

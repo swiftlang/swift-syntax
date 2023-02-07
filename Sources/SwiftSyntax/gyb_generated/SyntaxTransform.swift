@@ -195,6 +195,34 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: BooleanLiteralExprSyntax) -> ResultType
+  /// Visiting `IfExprSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: IfExprSyntax) -> ResultType
+  /// Visiting `SwitchExprSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: SwitchExprSyntax) -> ResultType
+  /// Visiting `SwitchCaseListSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: SwitchCaseListSyntax) -> ResultType
+  /// Visiting `SwitchCaseSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: SwitchCaseSyntax) -> ResultType
+  /// Visiting `SwitchCaseLabelSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: SwitchCaseLabelSyntax) -> ResultType
+  /// Visiting `SwitchDefaultLabelSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: SwitchDefaultLabelSyntax) -> ResultType
+  /// Visiting `CaseItemSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: CaseItemSyntax) -> ResultType
   /// Visiting `UnresolvedTernaryExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -735,10 +763,6 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ExpressionStmtSyntax) -> ResultType
-  /// Visiting `SwitchCaseListSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: SwitchCaseListSyntax) -> ResultType
   /// Visiting `RepeatWhileStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -755,10 +779,6 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ForInStmtSyntax) -> ResultType
-  /// Visiting `SwitchStmtSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: SwitchStmtSyntax) -> ResultType
   /// Visiting `CatchClauseListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -831,30 +851,10 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ThrowStmtSyntax) -> ResultType
-  /// Visiting `IfStmtSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: IfStmtSyntax) -> ResultType
-  /// Visiting `SwitchCaseSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: SwitchCaseSyntax) -> ResultType
-  /// Visiting `SwitchDefaultLabelSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: SwitchDefaultLabelSyntax) -> ResultType
-  /// Visiting `CaseItemSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: CaseItemSyntax) -> ResultType
   /// Visiting `CatchItemSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: CatchItemSyntax) -> ResultType
-  /// Visiting `SwitchCaseLabelSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: SwitchCaseLabelSyntax) -> ResultType
   /// Visiting `CatchClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -1340,6 +1340,48 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: BooleanLiteralExprSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  /// Visiting `IfExprSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: IfExprSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  /// Visiting `SwitchExprSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: SwitchExprSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  /// Visiting `SwitchCaseListSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: SwitchCaseListSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  /// Visiting `SwitchCaseSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: SwitchCaseSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  /// Visiting `SwitchCaseLabelSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: SwitchCaseLabelSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  /// Visiting `SwitchDefaultLabelSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: SwitchDefaultLabelSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  /// Visiting `CaseItemSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: CaseItemSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   /// Visiting `UnresolvedTernaryExprSyntax` specifically.
@@ -2152,12 +2194,6 @@ extension SyntaxTransformVisitor {
   public func visit(_ node: ExpressionStmtSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
-  /// Visiting `SwitchCaseListSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: SwitchCaseListSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
   /// Visiting `RepeatWhileStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -2180,12 +2216,6 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ForInStmtSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  /// Visiting `SwitchStmtSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: SwitchStmtSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   /// Visiting `CatchClauseListSyntax` specifically.
@@ -2296,40 +2326,10 @@ extension SyntaxTransformVisitor {
   public func visit(_ node: ThrowStmtSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
-  /// Visiting `IfStmtSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: IfStmtSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  /// Visiting `SwitchCaseSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: SwitchCaseSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  /// Visiting `SwitchDefaultLabelSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: SwitchDefaultLabelSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  /// Visiting `CaseItemSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: CaseItemSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
   /// Visiting `CatchItemSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: CatchItemSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  /// Visiting `SwitchCaseLabelSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: SwitchCaseLabelSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   /// Visiting `CatchClauseSyntax` specifically.
@@ -2749,6 +2749,20 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .booleanLiteralExpr(let derived):
       return visit(derived)
+    case .ifExpr(let derived):
+      return visit(derived)
+    case .switchExpr(let derived):
+      return visit(derived)
+    case .switchCaseList(let derived):
+      return visit(derived)
+    case .switchCase(let derived):
+      return visit(derived)
+    case .switchCaseLabel(let derived):
+      return visit(derived)
+    case .switchDefaultLabel(let derived):
+      return visit(derived)
+    case .caseItem(let derived):
+      return visit(derived)
     case .unresolvedTernaryExpr(let derived):
       return visit(derived)
     case .ternaryExpr(let derived):
@@ -3019,8 +3033,6 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .expressionStmt(let derived):
       return visit(derived)
-    case .switchCaseList(let derived):
-      return visit(derived)
     case .repeatWhileStmt(let derived):
       return visit(derived)
     case .guardStmt(let derived):
@@ -3028,8 +3040,6 @@ extension SyntaxTransformVisitor {
     case .whereClause(let derived):
       return visit(derived)
     case .forInStmt(let derived):
-      return visit(derived)
-    case .switchStmt(let derived):
       return visit(derived)
     case .catchClauseList(let derived):
       return visit(derived)
@@ -3067,17 +3077,7 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .throwStmt(let derived):
       return visit(derived)
-    case .ifStmt(let derived):
-      return visit(derived)
-    case .switchCase(let derived):
-      return visit(derived)
-    case .switchDefaultLabel(let derived):
-      return visit(derived)
-    case .caseItem(let derived):
-      return visit(derived)
     case .catchItem(let derived):
-      return visit(derived)
-    case .switchCaseLabel(let derived):
       return visit(derived)
     case .catchClause(let derived):
       return visit(derived)

@@ -264,7 +264,7 @@ public enum SyntaxEnum {
   
   case ifConfigDecl(IfConfigDeclSyntax)
   
-  case ifStmt(IfStmtSyntax)
+  case ifExpr(IfExprSyntax)
   
   case implementsAttributeArguments(ImplementsAttributeArgumentsSyntax)
   
@@ -470,7 +470,7 @@ public enum SyntaxEnum {
   
   case switchDefaultLabel(SwitchDefaultLabelSyntax)
   
-  case switchStmt(SwitchStmtSyntax)
+  case switchExpr(SwitchExprSyntax)
   
   case symbolicReferenceExpr(SymbolicReferenceExprSyntax)
   
@@ -797,8 +797,8 @@ public extension Syntax {
       return .ifConfigClause(IfConfigClauseSyntax(self)!)
     case .ifConfigDecl: 
       return .ifConfigDecl(IfConfigDeclSyntax(self)!)
-    case .ifStmt: 
-      return .ifStmt(IfStmtSyntax(self)!)
+    case .ifExpr: 
+      return .ifExpr(IfExprSyntax(self)!)
     case .implementsAttributeArguments: 
       return .implementsAttributeArguments(ImplementsAttributeArgumentsSyntax(self)!)
     case .implicitlyUnwrappedOptionalType: 
@@ -1003,8 +1003,8 @@ public extension Syntax {
       return .switchCase(SwitchCaseSyntax(self)!)
     case .switchDefaultLabel: 
       return .switchDefaultLabel(SwitchDefaultLabelSyntax(self)!)
-    case .switchStmt: 
-      return .switchStmt(SwitchStmtSyntax(self)!)
+    case .switchExpr: 
+      return .switchExpr(SwitchExprSyntax(self)!)
     case .symbolicReferenceExpr: 
       return .symbolicReferenceExpr(SymbolicReferenceExprSyntax(self)!)
     case .targetFunctionEntry: 

@@ -542,7 +542,16 @@ final class AttributeTests: XCTestCase {
   }
 
   func testPackageAttribute() {
-    AssertParse(#"@_package(path: "../my-package") import A"#)
-    AssertParse(#"@_package(url: "https://example.com/package.git", from: "0.0.1") @_exported import A"#)
+    AssertParse(#"@_package(path: "../my-package", product: "AA") import A"#)
+    AssertParse(#"@_package(url: "https://example.com/package.git", from: "0.0.1") import A"#)
+    AssertParse(#"@_package(url: "https://example.com/package.git", .upToNextMinor(from: "0.1.0")) import A"#)
+    AssertParse(#"@_package(id: "Example.MyPackage", exact: "1.0.0") import A"#)
+    AssertParse(#"@_package(id: "Example.MyPackage", "0.1.0"..<"0.3.0") import A"#)
+    AssertParse(
+      """
+      @_package(url: "https://example.com/package.git", from: "0.0.1", product: "AA")
+      @_exported import A
+      """
+    )
   }
 }

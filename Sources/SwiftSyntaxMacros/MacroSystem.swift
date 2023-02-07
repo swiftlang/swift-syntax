@@ -150,13 +150,7 @@ class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
             newItems.append(CodeBlockItemSyntax(item: .init(expandedExpr)))
           }
         } catch {
-          // Record the error
-          context.diagnose(
-            Diagnostic(
-              node: Syntax(node),
-              message: ThrownErrorDiagnostic(message: String(describing: error))
-            )
-          )
+          context.addDiagnostics(from: error, node: node)
         }
 
         continue
@@ -200,13 +194,7 @@ class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
             }
           )
         } catch {
-          // Record the error
-          context.diagnose(
-            Diagnostic(
-              node: Syntax(node),
-              message: ThrownErrorDiagnostic(message: String(describing: error))
-            )
-          )
+          context.addDiagnostics(from: error, node: node)
         }
 
         continue
@@ -376,13 +364,7 @@ extension MacroApplication {
         let newPeers = try peerMacro.expansion(of: attribute, providingPeersOf: decl, in: context)
         peers.append(contentsOf: newPeers)
       } catch {
-        // Record the error
-        context.diagnose(
-          Diagnostic(
-            node: Syntax(attribute),
-            message: ThrownErrorDiagnostic(message: String(describing: error))
-          )
-        )
+        context.addDiagnostics(from: error, node: attribute)
       }
     }
 
@@ -406,13 +388,7 @@ extension MacroApplication {
           )
         )
       } catch {
-        // Record the error
-        context.diagnose(
-          Diagnostic(
-            node: Syntax(attribute),
-            message: ThrownErrorDiagnostic(message: String(describing: error))
-          )
-        )
+        context.addDiagnostics(from: error, node: attribute)
       }
     }
 
@@ -473,13 +449,7 @@ extension MacroApplication {
           contentsOf: try _openExistential(typedDecl, do: expand)
         )
       } catch {
-        // Record the error
-        context.diagnose(
-          Diagnostic(
-            node: Syntax(attribute),
-            message: ThrownErrorDiagnostic(message: String(describing: error))
-          )
-        )
+        context.addDiagnostics(from: error, node: attribute)
       }
     }
 

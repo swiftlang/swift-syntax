@@ -65,6 +65,51 @@ extension MacroExpansionContext {
   }
 }
 
+/// Diagnostic message used for thrown errors.
+private struct ThrownErrorDiagnostic: DiagnosticMessage {
+  let message: String
+
+  var severity: DiagnosticSeverity { .error }
+
+  var diagnosticID: MessageID {
+    .init(domain: "SwiftSyntaxMacros", id: "ThrownErrorDiagnostic")
+  }
+}
+
+extension MacroExpansionContext {
+  /// Add diagnostics from the error thrown during macro expansion.
+  public func addDiagnostics<S: SyntaxProtocol>(from error: Error, node: S) {
+    guard let diagnosticsProvider = error as? DiagnosticsProviding else {
+      diagnose(
+        Diagnostic(
+          node: Syntax(node),
+          message: ThrownErrorDiagnostic(message: String(describing: error))
+        )
+      )
+      return
+    }
+    
+    let providedDiagnostics = diagnosticsProvider.diagnostics
+    for diagnostic in providedDiagnostics {
+      diagnose(diagnostic)
+    }
+    
+    // handle possibility that none of the diagnostics was an error
+    if !providedDiagnostics.contains(
+      where: { $0.diagMessage.severity == .error }
+    ) {
+      diagnose(
+        Diagnostic(
+          node: Syntax(node),
+          message: ThrownErrorDiagnostic(
+            message: "macro expansion failed without generating an error"
+          )
+        )
+      )
+    }
+  }
+}
+
 /// Describe the position within a syntax node that can be used to compute
 /// source locations.
 public enum PositionInSyntaxNode {

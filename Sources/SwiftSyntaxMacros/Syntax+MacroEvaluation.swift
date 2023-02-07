@@ -13,17 +13,6 @@
 import SwiftDiagnostics
 import SwiftSyntax
 
-/// Diagnostic message used for thrown errors.
-struct ThrownErrorDiagnostic: DiagnosticMessage {
-  let message: String
-
-  var severity: DiagnosticSeverity { .error }
-
-  var diagnosticID: MessageID {
-    .init(domain: "SwiftSyntaxMacros", id: "ThrownErrorDiagnostic")
-  }
-}
-
 extension SyntaxProtocol {
   /// Detach the current node and inform the macro expansion context,
   /// if it needs to know.
@@ -51,14 +40,7 @@ extension MacroExpansionExprSyntax {
     do {
       return try exprMacro.expansion(of: detach(in: context), in: context)
     } catch {
-      // Record the error
-      context.diagnose(
-        Diagnostic(
-          node: Syntax(self),
-          message: ThrownErrorDiagnostic(message: String(describing: error))
-        )
-      )
-
+      context.addDiagnostics(from: error, node: self)
       return ExprSyntax(self)
     }
   }

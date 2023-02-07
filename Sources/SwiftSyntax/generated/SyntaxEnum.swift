@@ -313,6 +313,8 @@ public enum SyntaxEnum {
   
   case layoutRequirement(LayoutRequirementSyntax)
   
+  case localPackageDescription(LocalPackageDescriptionSyntax)
+  
   case macroDecl(MacroDeclSyntax)
   
   case macroExpansionDecl(MacroExpansionDeclSyntax)
@@ -385,6 +387,8 @@ public enum SyntaxEnum {
   
   case packageAttributeArguments(PackageAttributeArgumentsSyntax)
   
+  case packageProduct(PackageProductSyntax)
+  
   case parameterClause(ParameterClauseSyntax)
   
   case patternBindingList(PatternBindingListSyntax)
@@ -426,6 +430,8 @@ public enum SyntaxEnum {
   case qualifiedDeclName(QualifiedDeclNameSyntax)
   
   case regexLiteralExpr(RegexLiteralExprSyntax)
+  
+  case remotePackageDescription(RemotePackageDescriptionSyntax)
   
   case repeatWhileStmt(RepeatWhileStmtSyntax)
   
@@ -842,6 +848,8 @@ public extension Syntax {
       return .labeledStmt(LabeledStmtSyntax(self)!)
     case .layoutRequirement: 
       return .layoutRequirement(LayoutRequirementSyntax(self)!)
+    case .localPackageDescription: 
+      return .localPackageDescription(LocalPackageDescriptionSyntax(self)!)
     case .macroDecl: 
       return .macroDecl(MacroDeclSyntax(self)!)
     case .macroExpansionDecl: 
@@ -914,6 +922,8 @@ public extension Syntax {
       return .packReferenceType(PackReferenceTypeSyntax(self)!)
     case .packageAttributeArguments: 
       return .packageAttributeArguments(PackageAttributeArgumentsSyntax(self)!)
+    case .packageProduct: 
+      return .packageProduct(PackageProductSyntax(self)!)
     case .parameterClause: 
       return .parameterClause(ParameterClauseSyntax(self)!)
     case .patternBindingList: 
@@ -956,6 +966,8 @@ public extension Syntax {
       return .qualifiedDeclName(QualifiedDeclNameSyntax(self)!)
     case .regexLiteralExpr: 
       return .regexLiteralExpr(RegexLiteralExprSyntax(self)!)
+    case .remotePackageDescription: 
+      return .remotePackageDescription(RemotePackageDescriptionSyntax(self)!)
     case .repeatWhileStmt: 
       return .repeatWhileStmt(RepeatWhileStmtSyntax(self)!)
     case .returnClause: 

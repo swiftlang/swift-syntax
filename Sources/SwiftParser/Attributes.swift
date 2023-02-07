@@ -874,66 +874,87 @@ extension Parser {
 
 extension Parser {
   mutating func parsePackageAttributeArguments() -> RawPackageAttributeArgumentsSyntax {
-    // Parsing package location.
+    // Parsing package description
     let (unexpectedBeforeLocationLabel, locationLabel) = self.expectAny([.keyword(.id), .keyword(.path), .keyword(.url)], default: .keyword(.id))
     let (unexpectedBeforeLocationColon, locationColon) = self.expect(.colon)
     let location = self.parseStringLiteral()
-    // Parsing package requirement.
-    let (unexpectedBeforeRequirementComma, requirementComma): (RawUnexpectedNodesSyntax?, RawTokenSyntax?)
-    let (unexpectedBeforeRequirementLabel, requirementLabel): (RawUnexpectedNodesSyntax?, RawTokenSyntax?)
-    let (unexpectedBeforeRequirementColon, requirementColon): (RawUnexpectedNodesSyntax?, RawTokenSyntax?)
-    let requirement: RawExprSyntax?
-    if locationLabel.tokenKind != .keyword(.path) {
-      (unexpectedBeforeRequirementComma, requirementComma) = self.expect(.comma)
+    let packageDescription: RawPackageAttributeArgumentsSyntax.Description
+    if locationLabel.tokenKind == .keyword(.path) {
+      packageDescription = .local(
+        RawLocalPackageDescriptionSyntax(
+          unexpectedBeforeLocationLabel,
+          label: locationLabel,
+          unexpectedBeforeLocationColon,
+          colon: locationColon,
+          path: location,
+          arena: self.arena
+        )
+      )
+    } else {
+      let (unexpectedBeforeRequirementComma, requirementComma) = self.expect(.comma)
       if self.at(any: [.colon, .keyword(.from), .keyword(.exact), .keyword(.branch), .keyword(.revision)]) {
-        (unexpectedBeforeRequirementLabel, requirementLabel) = self.expectAny([.keyword(.from), .keyword(.exact), .keyword(.branch), .keyword(.revision)], default: .keyword(.from))
-        (unexpectedBeforeRequirementColon, requirementColon) = self.expect(.colon)
-        requirement = self.parseStringLiteral().as(RawExprSyntax.self)
+        let (unexpectedBeforeRequirementLabel, requirementLabel) = self.expectAny([.keyword(.from), .keyword(.exact), .keyword(.branch), .keyword(.revision)], default: .keyword(.from))
+        let (unexpectedBeforeRequirementColon, requirementColon) = self.expect(.colon)
+        let requirement = self.parseStringLiteral().as(RawExprSyntax.self)!
+        packageDescription = .remote(
+          RawRemotePackageDescriptionSyntax(
+            unexpectedBeforeLocationLabel,
+            locationLabel: locationLabel,
+            unexpectedBeforeLocationColon,
+            locationColon: locationColon,
+            location: location,
+            unexpectedBeforeRequirementComma,
+            comma: requirementComma,
+            unexpectedBeforeRequirementLabel,
+            requirementLabel: requirementLabel,
+            unexpectedBeforeRequirementColon,
+            requirementColon: requirementColon,
+            requirement: requirement,
+            arena: self.arena
+          )
+        )
       } else {
-        (unexpectedBeforeRequirementLabel, requirementLabel) = (nil, nil)
-        (unexpectedBeforeRequirementColon, requirementColon) = (nil, nil)
-        requirement = self.parseExpression()
+        let requirement = self.parseExpression()
+        packageDescription = .remote(
+          RawRemotePackageDescriptionSyntax(
+            unexpectedBeforeLocationLabel,
+            locationLabel: locationLabel,
+            unexpectedBeforeLocationColon,
+            locationColon: locationColon,
+            location: location,
+            unexpectedBeforeRequirementComma,
+            comma: requirementComma,
+            requirementLabel: nil,
+            requirementColon: nil,
+            requirement: requirement,
+            arena: self.arena
+          )
+        )
       }
-    } else {
-      (unexpectedBeforeRequirementComma, requirementComma) = (nil, nil)
-      (unexpectedBeforeRequirementLabel, requirementLabel) = (nil, nil)
-      (unexpectedBeforeRequirementColon, requirementColon) = (nil, nil)
-      requirement = nil
     }
-    // Parsing package requirement.
-    let productComma = self.consume(if: .comma)
-    let (unexpectedBeforeProductLabel, productLabel): (RawUnexpectedNodesSyntax?, RawTokenSyntax?)
-    let (unexpectedBeforeProductColon, productColon): (RawUnexpectedNodesSyntax?, RawTokenSyntax?)
-    let productName: RawStringLiteralExprSyntax?
-    if productComma != nil {
-      (unexpectedBeforeProductLabel, productLabel) = self.expect(.keyword(.product))
-      (unexpectedBeforeProductColon, productColon) = self.expect(.colon)
-      productName = self.parseStringLiteral()
+    // Parsing package product
+    let comma = self.consume(if: .comma)
+    let packageProduct: RawPackageProductSyntax?
+    if comma != nil {
+      let (unexpectedBeforeProductLabel, productLabel) = self.expect(.keyword(.product))
+      let (unexpectedBeforeProductColon, productColon) = self.expect(.colon)
+      let productName = self.parseStringLiteral()
+      packageProduct = RawPackageProductSyntax(
+        unexpectedBeforeProductLabel,
+        label: productLabel,
+        unexpectedBeforeProductColon,
+        colon: productColon,
+        name: productName,
+        arena: self.arena
+      )
     } else {
-      (unexpectedBeforeProductLabel, productLabel) = (nil, nil)
-      (unexpectedBeforeProductColon, productColon) = (nil, nil)
-      productName = nil
+      packageProduct = nil
     }
     // Returning @_package argument list
     return RawPackageAttributeArgumentsSyntax(
-      unexpectedBeforeLocationLabel,
-      locationLabel: locationLabel,
-      unexpectedBeforeLocationColon,
-      locationColon: locationColon,
-      location: location,
-      unexpectedBeforeRequirementComma,
-      requirementComma: requirementComma,
-      unexpectedBeforeRequirementLabel,
-      requirementLabel: requirementLabel,
-      unexpectedBeforeRequirementColon,
-      requirementColon: requirementColon,
-      requirement: requirement,
-      productComma: productComma,
-      unexpectedBeforeProductLabel,
-      productLabel: productLabel,
-      unexpectedBeforeProductColon,
-      productColon: productColon,
-      productName: productName,
+      description: packageDescription,
+      comma: comma,
+      product: packageProduct,
       arena: self.arena
     )
   }

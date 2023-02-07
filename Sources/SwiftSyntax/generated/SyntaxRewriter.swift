@@ -1056,6 +1056,13 @@ open class SyntaxRewriter {
     return Syntax(visitChildren(node)).cast(LayoutRequirementSyntax.self)
   }
   
+  /// Visit a `LocalPackageDescriptionSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: LocalPackageDescriptionSyntax) -> LocalPackageDescriptionSyntax {
+    return Syntax(visitChildren(node)).cast(LocalPackageDescriptionSyntax.self)
+  }
+  
   /// Visit a `MacroDeclSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -1308,6 +1315,13 @@ open class SyntaxRewriter {
     return Syntax(visitChildren(node)).cast(PackageAttributeArgumentsSyntax.self)
   }
   
+  /// Visit a `PackageProductSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: PackageProductSyntax) -> PackageProductSyntax {
+    return Syntax(visitChildren(node)).cast(PackageProductSyntax.self)
+  }
+  
   /// Visit a `ParameterClauseSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -1453,6 +1467,13 @@ open class SyntaxRewriter {
   ///   - Returns: the rewritten node
   open func visit(_ node: RegexLiteralExprSyntax) -> ExprSyntax {
     return ExprSyntax(visitChildren(node))
+  }
+  
+  /// Visit a `RemotePackageDescriptionSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: RemotePackageDescriptionSyntax) -> RemotePackageDescriptionSyntax {
+    return Syntax(visitChildren(node)).cast(RemotePackageDescriptionSyntax.self)
   }
   
   /// Visit a `RepeatWhileStmtSyntax`.
@@ -3987,6 +4008,20 @@ open class SyntaxRewriter {
   }
   
   /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplLocalPackageDescriptionSyntax(_ data: SyntaxData) -> Syntax {
+    let node = LocalPackageDescriptionSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { 
+      visitPost(node._syntaxNode) 
+    }
+    if let newNode = visitAny(node._syntaxNode) { 
+      return newNode 
+    }
+    return Syntax(visit(node))
+  }
+  
+  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplMacroDeclSyntax(_ data: SyntaxData) -> Syntax {
     let node = MacroDeclSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -4491,6 +4526,20 @@ open class SyntaxRewriter {
   }
   
   /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplPackageProductSyntax(_ data: SyntaxData) -> Syntax {
+    let node = PackageProductSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { 
+      visitPost(node._syntaxNode) 
+    }
+    if let newNode = visitAny(node._syntaxNode) { 
+      return newNode 
+    }
+    return Syntax(visit(node))
+  }
+  
+  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplParameterClauseSyntax(_ data: SyntaxData) -> Syntax {
     let node = ParameterClauseSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -4773,6 +4822,20 @@ open class SyntaxRewriter {
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplRegexLiteralExprSyntax(_ data: SyntaxData) -> Syntax {
     let node = RegexLiteralExprSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { 
+      visitPost(node._syntaxNode) 
+    }
+    if let newNode = visitAny(node._syntaxNode) { 
+      return newNode 
+    }
+    return Syntax(visit(node))
+  }
+  
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplRemotePackageDescriptionSyntax(_ data: SyntaxData) -> Syntax {
+    let node = RemotePackageDescriptionSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer { 
@@ -5918,6 +5981,8 @@ open class SyntaxRewriter {
       return visitImplLabeledStmtSyntax
     case .layoutRequirement: 
       return visitImplLayoutRequirementSyntax
+    case .localPackageDescription: 
+      return visitImplLocalPackageDescriptionSyntax
     case .macroDecl: 
       return visitImplMacroDeclSyntax
     case .macroExpansionDecl: 
@@ -5990,6 +6055,8 @@ open class SyntaxRewriter {
       return visitImplPackReferenceTypeSyntax
     case .packageAttributeArguments: 
       return visitImplPackageAttributeArgumentsSyntax
+    case .packageProduct: 
+      return visitImplPackageProductSyntax
     case .parameterClause: 
       return visitImplParameterClauseSyntax
     case .patternBindingList: 
@@ -6032,6 +6099,8 @@ open class SyntaxRewriter {
       return visitImplQualifiedDeclNameSyntax
     case .regexLiteralExpr: 
       return visitImplRegexLiteralExprSyntax
+    case .remotePackageDescription: 
+      return visitImplRemotePackageDescriptionSyntax
     case .repeatWhileStmt: 
       return visitImplRepeatWhileStmtSyntax
     case .returnClause: 
@@ -6450,6 +6519,8 @@ open class SyntaxRewriter {
       return visitImplLabeledStmtSyntax(data)
     case .layoutRequirement: 
       return visitImplLayoutRequirementSyntax(data)
+    case .localPackageDescription: 
+      return visitImplLocalPackageDescriptionSyntax(data)
     case .macroDecl: 
       return visitImplMacroDeclSyntax(data)
     case .macroExpansionDecl: 
@@ -6522,6 +6593,8 @@ open class SyntaxRewriter {
       return visitImplPackReferenceTypeSyntax(data)
     case .packageAttributeArguments: 
       return visitImplPackageAttributeArgumentsSyntax(data)
+    case .packageProduct: 
+      return visitImplPackageProductSyntax(data)
     case .parameterClause: 
       return visitImplParameterClauseSyntax(data)
     case .patternBindingList: 
@@ -6564,6 +6637,8 @@ open class SyntaxRewriter {
       return visitImplQualifiedDeclNameSyntax(data)
     case .regexLiteralExpr: 
       return visitImplRegexLiteralExprSyntax(data)
+    case .remotePackageDescription: 
+      return visitImplRemotePackageDescriptionSyntax(data)
     case .repeatWhileStmt: 
       return visitImplRepeatWhileStmtSyntax(data)
     case .returnClause: 

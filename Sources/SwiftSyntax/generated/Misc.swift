@@ -166,6 +166,7 @@ extension Syntax {
         .node(LabeledSpecializeEntrySyntax.self), 
         .node(LabeledStmtSyntax.self), 
         .node(LayoutRequirementSyntax.self), 
+        .node(LocalPackageDescriptionSyntax.self), 
         .node(MacroDeclSyntax.self), 
         .node(MacroExpansionDeclSyntax.self), 
         .node(MacroExpansionExprSyntax.self), 
@@ -202,6 +203,7 @@ extension Syntax {
         .node(PackExpansionTypeSyntax.self), 
         .node(PackReferenceTypeSyntax.self), 
         .node(PackageAttributeArgumentsSyntax.self), 
+        .node(PackageProductSyntax.self), 
         .node(ParameterClauseSyntax.self), 
         .node(PatternBindingListSyntax.self), 
         .node(PatternBindingSyntax.self), 
@@ -223,6 +225,7 @@ extension Syntax {
         .node(ProtocolDeclSyntax.self), 
         .node(QualifiedDeclNameSyntax.self), 
         .node(RegexLiteralExprSyntax.self), 
+        .node(RemotePackageDescriptionSyntax.self), 
         .node(RepeatWhileStmtSyntax.self), 
         .node(ReturnClauseSyntax.self), 
         .node(ReturnStmtSyntax.self), 
@@ -582,6 +585,8 @@ extension SyntaxKind {
       return LabeledStmtSyntax.self
     case .layoutRequirement: 
       return LayoutRequirementSyntax.self
+    case .localPackageDescription: 
+      return LocalPackageDescriptionSyntax.self
     case .macroDecl: 
       return MacroDeclSyntax.self
     case .macroExpansionDecl: 
@@ -654,6 +659,8 @@ extension SyntaxKind {
       return PackReferenceTypeSyntax.self
     case .packageAttributeArguments: 
       return PackageAttributeArgumentsSyntax.self
+    case .packageProduct: 
+      return PackageProductSyntax.self
     case .parameterClause: 
       return ParameterClauseSyntax.self
     case .patternBindingList: 
@@ -696,6 +703,8 @@ extension SyntaxKind {
       return QualifiedDeclNameSyntax.self
     case .regexLiteralExpr: 
       return RegexLiteralExprSyntax.self
+    case .remotePackageDescription: 
+      return RemotePackageDescriptionSyntax.self
     case .repeatWhileStmt: 
       return RepeatWhileStmtSyntax.self
     case .returnClause: 
@@ -1111,6 +1120,8 @@ extension SyntaxKind {
       return "labeled statement"
     case .layoutRequirement: 
       return "layout requirement"
+    case .localPackageDescription: 
+      return "local package description"
     case .macroDecl: 
       return "macro"
     case .macroExpansionDecl: 
@@ -1183,6 +1194,8 @@ extension SyntaxKind {
       return "pack reference"
     case .packageAttributeArguments: 
       return "@_package arguments"
+    case .packageProduct: 
+      return "package product"
     case .parameterClause: 
       return "parameter clause"
     case .patternBindingList: 
@@ -1225,6 +1238,8 @@ extension SyntaxKind {
       return "declaration name"
     case .regexLiteralExpr: 
       return "regex literal"
+    case .remotePackageDescription: 
+      return "remote package description"
     case .repeatWhileStmt: 
       return "'repeat' statement"
     case .returnClause: 

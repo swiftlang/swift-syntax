@@ -1792,6 +1792,18 @@ open class SyntaxVisitor {
   open func visitPost(_ node: LayoutRequirementSyntax) {
   }
   
+  /// Visiting `LocalPackageDescriptionSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: LocalPackageDescriptionSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting `LocalPackageDescriptionSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: LocalPackageDescriptionSyntax) {
+  }
+  
   /// Visiting `MacroDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -2224,6 +2236,18 @@ open class SyntaxVisitor {
   open func visitPost(_ node: PackageAttributeArgumentsSyntax) {
   }
   
+  /// Visiting `PackageProductSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: PackageProductSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting `PackageProductSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: PackageProductSyntax) {
+  }
+  
   /// Visiting `ParameterClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -2474,6 +2498,18 @@ open class SyntaxVisitor {
   /// The function called after visiting `RegexLiteralExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: RegexLiteralExprSyntax) {
+  }
+  
+  /// Visiting `RemotePackageDescriptionSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: RemotePackageDescriptionSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting `RemotePackageDescriptionSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: RemotePackageDescriptionSyntax) {
   }
   
   /// Visiting `RepeatWhileStmtSyntax` specifically.
@@ -4790,6 +4826,17 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplLocalPackageDescriptionSyntax(_ data: SyntaxData) {
+    let node = LocalPackageDescriptionSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplMacroDeclSyntax(_ data: SyntaxData) {
     let node = MacroDeclSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -5186,6 +5233,17 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplPackageProductSyntax(_ data: SyntaxData) {
+    let node = PackageProductSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplParameterClauseSyntax(_ data: SyntaxData) {
     let node = ParameterClauseSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -5408,6 +5466,17 @@ open class SyntaxVisitor {
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplRegexLiteralExprSyntax(_ data: SyntaxData) {
     let node = RegexLiteralExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplRemotePackageDescriptionSyntax(_ data: SyntaxData) {
+    let node = RemotePackageDescriptionSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -6344,6 +6413,8 @@ open class SyntaxVisitor {
       visitImplLabeledStmtSyntax(data)
     case .layoutRequirement: 
       visitImplLayoutRequirementSyntax(data)
+    case .localPackageDescription: 
+      visitImplLocalPackageDescriptionSyntax(data)
     case .macroDecl: 
       visitImplMacroDeclSyntax(data)
     case .macroExpansionDecl: 
@@ -6416,6 +6487,8 @@ open class SyntaxVisitor {
       visitImplPackReferenceTypeSyntax(data)
     case .packageAttributeArguments: 
       visitImplPackageAttributeArgumentsSyntax(data)
+    case .packageProduct: 
+      visitImplPackageProductSyntax(data)
     case .parameterClause: 
       visitImplParameterClauseSyntax(data)
     case .patternBindingList: 
@@ -6458,6 +6531,8 @@ open class SyntaxVisitor {
       visitImplQualifiedDeclNameSyntax(data)
     case .regexLiteralExpr: 
       visitImplRegexLiteralExprSyntax(data)
+    case .remotePackageDescription: 
+      visitImplRemotePackageDescriptionSyntax(data)
     case .repeatWhileStmt: 
       visitImplRepeatWhileStmtSyntax(data)
     case .returnClause: 

@@ -203,43 +203,96 @@ ATTRIBUTE_NODES = [
                    '''),
          ]),
 
-    # The argument of '@_package(...)'
-    # package-attr-arguments -> package-location-label ':' package-location
-    #                           ( ',' package-requirement-label? ':'? package-requirement )?
-    #                           ( ',' 'product' ':' package-product-name )?
+    # package-attr-arguments -> ( remote-package-desc | local-package-desc ) ','? package-product?
     Node('PackageAttributeArguments', name_for_diagnostics='@_package arguments',
          kind='Syntax',
          description='''
          The arguments for the `@_package` attribute imitating `PackageDescription`
          ''',
          children=[
+             Child('Description', kind='Syntax',
+                   node_choices=[
+                       Child('Remote', kind='RemotePackageDescription', name_for_diagnostics='remote package'),
+                       Child('Local', kind='LocalPackageDescription', name_for_diagnostics='local package'),
+                   ]),
+             Child('Comma', kind='CommaToken',
+                   is_optional=True, description='''
+                   The comma between the package description and product, if it exists
+                   '''),
+             Child('Product', kind='PackageProduct',
+                   is_optional=True, description='''
+                   Explicit product declaration of package.
+                   '''),
+         ]),
+
+    # package-product -> 'product' ':' product-name
+    Node('PackageProduct', name_for_diagnostics='package product',
+         kind='Syntax',
+         description='''
+         Explicit package product declaration
+         ''',
+         children=[
+            Child('Label', kind='IdentifierToken',
+                   token_choices=['KeywordToken|product'],
+                   description='''
+                   The product label
+                   '''),
+             Child('Colon', kind='ColonToken'),
+             Child('Name', kind='StringLiteralExpr',
+                   description='''
+                   The exact product name from package
+                   '''),
+         ]),
+
+    # local-package-desc -> 'path' ':' package-path
+    Node('LocalPackageDescription', name_for_diagnostics='local package description',
+         kind='Syntax',
+         description='''
+         The description of a local package
+         ''',
+         children=[
+             Child('Label', kind='KeywordToken',
+                   token_choices=['KeywordToken|path'],
+                   description='''
+                   The path label
+                   '''),
+             Child('Colon', kind='ColonToken'),
+             Child('Path', kind='StringLiteralExpr',
+                  description='''
+                  The package path
+                  '''),
+         ]),
+
+    # remote-package-desc -> location-label ':' location ',' requirement-label? ':'? requirement
+    Node('RemotePackageDescription', name_for_diagnostics='remote package description',
+         kind='Syntax',
+         description='''
+         The description of a remote package
+         ''',
+         children=[
              Child('LocationLabel', kind='KeywordToken',
-                   token_choices=['KeywordToken|id', 'KeywordToken|path', 'KeywordToken|url'],
-                   description='The location label.'),
+                   token_choices=['KeywordToken|id', 'KeywordToken|url'],
+                   description='''
+                   The location label.
+                   '''),
              Child('LocationColon', kind='ColonToken'),
              Child('Location', kind='StringLiteralExpr',
-                   description='The location/identifier of package.'),
-             Child('RequirementComma', kind='CommaToken',
-                   is_optional=True, description='''
-                   The comma before the package requirement, if it exists.
+                   description='''
+                   The URL or identifier of package.
+                   '''),
+             Child('Comma', kind='CommaToken',
+                   description='''
+                   The comma between the package location and requirement
                    '''),
              Child('RequirementLabel', kind='KeywordToken',
                    token_choices=['KeywordToken|branch', 'KeywordToken|exact', 'KeywordToken|from', 'KeywordToken|revision'],
-                   description='The requirement label.', is_optional=True),
+                   description='''
+                   The requirement label
+                   ''', is_optional=True),
              Child('RequirementColon', kind='ColonToken', is_optional=True),
              Child('Requirement', kind='Expr',
-                   description='The version requirement of package.', is_optional=True),
-             Child('ProductComma', kind='CommaToken',
-                   is_optional=True, description='''
-                   The comma before the package product, if it exists.
-                   '''),
-             Child('ProductLabel', kind='IdentifierToken',
-                   token_choices=['KeywordToken|product'], is_optional=True,
-                   description='The product label.'),
-             Child('ProductColon', kind='ColonToken', is_optional=True),
-             Child('ProductName', kind='StringLiteralExpr',
-                   is_optional=True, description='''
-                   The exact product name from package
+                   description='''
+                   Version requirement of remote package
                    '''),
          ]),
 

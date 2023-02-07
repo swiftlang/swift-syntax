@@ -756,6 +756,11 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: LayoutRequirementSyntax) -> ResultType
   
+  /// Visiting `LocalPackageDescriptionSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: LocalPackageDescriptionSyntax) -> ResultType
+  
   /// Visiting `MacroDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -936,6 +941,11 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: PackageAttributeArgumentsSyntax) -> ResultType
   
+  /// Visiting `PackageProductSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: PackageProductSyntax) -> ResultType
+  
   /// Visiting `ParameterClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -1040,6 +1050,11 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: RegexLiteralExprSyntax) -> ResultType
+  
+  /// Visiting `RemotePackageDescriptionSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: RemotePackageDescriptionSyntax) -> ResultType
   
   /// Visiting `RepeatWhileStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -2361,6 +2376,13 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
+  /// Visiting `LocalPackageDescriptionSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: LocalPackageDescriptionSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
   /// Visiting `MacroDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -2613,6 +2635,13 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
+  /// Visiting `PackageProductSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: PackageProductSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
   /// Visiting `ParameterClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -2757,6 +2786,13 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: RegexLiteralExprSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting `RemotePackageDescriptionSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: RemotePackageDescriptionSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -3457,6 +3493,8 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .layoutRequirement(let derived): 
       return visit(derived)
+    case .localPackageDescription(let derived): 
+      return visit(derived)
     case .macroDecl(let derived): 
       return visit(derived)
     case .macroExpansionDecl(let derived): 
@@ -3529,6 +3567,8 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .packageAttributeArguments(let derived): 
       return visit(derived)
+    case .packageProduct(let derived): 
+      return visit(derived)
     case .parameterClause(let derived): 
       return visit(derived)
     case .patternBindingList(let derived): 
@@ -3570,6 +3610,8 @@ extension SyntaxTransformVisitor {
     case .qualifiedDeclName(let derived): 
       return visit(derived)
     case .regexLiteralExpr(let derived): 
+      return visit(derived)
+    case .remotePackageDescription(let derived): 
       return visit(derived)
     case .repeatWhileStmt(let derived): 
       return visit(derived)

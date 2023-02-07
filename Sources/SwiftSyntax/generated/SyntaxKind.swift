@@ -313,6 +313,8 @@ public enum SyntaxKind {
   
   case layoutRequirement
   
+  case localPackageDescription
+  
   case macroDecl
   
   case macroExpansionDecl
@@ -385,6 +387,8 @@ public enum SyntaxKind {
   
   case packageAttributeArguments
   
+  case packageProduct
+  
   case parameterClause
   
   case patternBindingList
@@ -426,6 +430,8 @@ public enum SyntaxKind {
   case qualifiedDeclName
   
   case regexLiteralExpr
+  
+  case remotePackageDescription
   
   case repeatWhileStmt
   

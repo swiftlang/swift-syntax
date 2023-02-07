@@ -10550,6 +10550,42 @@ extension ImplementsAttributeArgumentsSyntax: CustomReflectable {
 /// The arguments for the `@_package` attribute imitating `PackageDescription`
 /// 
 public struct PackageAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
+  public enum Description: SyntaxChildChoices {
+    case `remote`(RemotePackageDescriptionSyntax)
+    case `local`(LocalPackageDescriptionSyntax)
+    public var _syntaxNode: Syntax {
+      switch self {
+      case .remote(let node): return node._syntaxNode
+      case .local(let node): return node._syntaxNode
+      }
+    }
+    init(_ data: SyntaxData) { self.init(Syntax(data))! }
+    public init(_ node: RemotePackageDescriptionSyntax) {
+      self = .remote(node)
+    }
+    public init(_ node: LocalPackageDescriptionSyntax) {
+      self = .local(node)
+    }
+    public init?<S: SyntaxProtocol>(_ node: S) {
+      if let node = node.as(RemotePackageDescriptionSyntax.self) {
+        self = .remote(node)
+        return
+      }
+      if let node = node.as(LocalPackageDescriptionSyntax.self) {
+        self = .local(node)
+        return
+      }
+      return nil
+    }
+
+    public static var structure: SyntaxNodeStructure {
+      return .choices([
+        .node(RemotePackageDescriptionSyntax.self),
+        .node(LocalPackageDescriptionSyntax.self),
+      ])
+    }
+  }
+
   public let _syntaxNode: Syntax
 
   public init?<S: SyntaxProtocol>(_ node: S) {
@@ -10565,60 +10601,28 @@ public struct PackageAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
-  public init<R: ExprSyntaxProtocol>(
+  public init(
     leadingTrivia: Trivia? = nil,
-    _ unexpectedBeforeLocationLabel: UnexpectedNodesSyntax? = nil,
-    locationLabel: TokenSyntax,
-    _ unexpectedBetweenLocationLabelAndLocationColon: UnexpectedNodesSyntax? = nil,
-    locationColon: TokenSyntax = .colonToken(),
-    _ unexpectedBetweenLocationColonAndLocation: UnexpectedNodesSyntax? = nil,
-    location: StringLiteralExprSyntax,
-    _ unexpectedBetweenLocationAndRequirementComma: UnexpectedNodesSyntax? = nil,
-    requirementComma: TokenSyntax? = nil,
-    _ unexpectedBetweenRequirementCommaAndRequirementLabel: UnexpectedNodesSyntax? = nil,
-    requirementLabel: TokenSyntax? = nil,
-    _ unexpectedBetweenRequirementLabelAndRequirementColon: UnexpectedNodesSyntax? = nil,
-    requirementColon: TokenSyntax? = nil,
-    _ unexpectedBetweenRequirementColonAndRequirement: UnexpectedNodesSyntax? = nil,
-    requirement: R? = nil,
-    _ unexpectedBetweenRequirementAndProductComma: UnexpectedNodesSyntax? = nil,
-    productComma: TokenSyntax? = nil,
-    _ unexpectedBetweenProductCommaAndProductLabel: UnexpectedNodesSyntax? = nil,
-    productLabel: TokenSyntax? = nil,
-    _ unexpectedBetweenProductLabelAndProductColon: UnexpectedNodesSyntax? = nil,
-    productColon: TokenSyntax? = nil,
-    _ unexpectedBetweenProductColonAndProductName: UnexpectedNodesSyntax? = nil,
-    productName: StringLiteralExprSyntax? = nil,
-    _ unexpectedAfterProductName: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBeforeDescription: UnexpectedNodesSyntax? = nil,
+    description: Description,
+    _ unexpectedBetweenDescriptionAndComma: UnexpectedNodesSyntax? = nil,
+    comma: TokenSyntax? = nil,
+    _ unexpectedBetweenCommaAndProduct: UnexpectedNodesSyntax? = nil,
+    product: PackageProductSyntax? = nil,
+    _ unexpectedAfterProduct: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed 
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeLocationLabel, locationLabel, unexpectedBetweenLocationLabelAndLocationColon, locationColon, unexpectedBetweenLocationColonAndLocation, location, unexpectedBetweenLocationAndRequirementComma, requirementComma, unexpectedBetweenRequirementCommaAndRequirementLabel, requirementLabel, unexpectedBetweenRequirementLabelAndRequirementColon, requirementColon, unexpectedBetweenRequirementColonAndRequirement, requirement, unexpectedBetweenRequirementAndProductComma, productComma, unexpectedBetweenProductCommaAndProductLabel, productLabel, unexpectedBetweenProductLabelAndProductColon, productColon, unexpectedBetweenProductColonAndProductName, productName, unexpectedAfterProductName))) { (arena, _) in
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeDescription, description, unexpectedBetweenDescriptionAndComma, comma, unexpectedBetweenCommaAndProduct, product, unexpectedAfterProduct))) { (arena, _) in
       let layout: [RawSyntax?] = [
-        unexpectedBeforeLocationLabel?.raw,
-        locationLabel.raw,
-        unexpectedBetweenLocationLabelAndLocationColon?.raw,
-        locationColon.raw,
-        unexpectedBetweenLocationColonAndLocation?.raw,
-        location.raw,
-        unexpectedBetweenLocationAndRequirementComma?.raw,
-        requirementComma?.raw,
-        unexpectedBetweenRequirementCommaAndRequirementLabel?.raw,
-        requirementLabel?.raw,
-        unexpectedBetweenRequirementLabelAndRequirementColon?.raw,
-        requirementColon?.raw,
-        unexpectedBetweenRequirementColonAndRequirement?.raw,
-        requirement?.raw,
-        unexpectedBetweenRequirementAndProductComma?.raw,
-        productComma?.raw,
-        unexpectedBetweenProductCommaAndProductLabel?.raw,
-        productLabel?.raw,
-        unexpectedBetweenProductLabelAndProductColon?.raw,
-        productColon?.raw,
-        unexpectedBetweenProductColonAndProductName?.raw,
-        productName?.raw,
-        unexpectedAfterProductName?.raw,
+        unexpectedBeforeDescription?.raw,
+        description.raw,
+        unexpectedBetweenDescriptionAndComma?.raw,
+        comma?.raw,
+        unexpectedBetweenCommaAndProduct?.raw,
+        product?.raw,
+        unexpectedAfterProduct?.raw,
       ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.packageAttributeArguments, from: layout, arena: arena,
@@ -10628,73 +10632,7 @@ public struct PackageAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  /// This initializer exists solely because Swift 5.6 does not support
-  /// `Optional<ConcreteType>.none` as a default value of a generic parameter.
-  /// The above initializer thus defaults to `nil` instead, but that means it
-  /// is not actually callable when either not passing the defaulted parameter,
-  /// or passing `nil`.
-  ///
-  /// Hack around that limitation using this initializer, which takes a
-  /// `Missing*` syntax node instead. `Missing*` is used over the base type as
-  /// the base type would allow implicit conversion from a string literal,
-  /// which the above initializer doesn't support.
-  public init(
-    leadingTrivia: Trivia? = nil,
-    _ unexpectedBeforeLocationLabel: UnexpectedNodesSyntax? = nil,
-    locationLabel: TokenSyntax,
-    _ unexpectedBetweenLocationLabelAndLocationColon: UnexpectedNodesSyntax? = nil,
-    locationColon: TokenSyntax = .colonToken(),
-    _ unexpectedBetweenLocationColonAndLocation: UnexpectedNodesSyntax? = nil,
-    location: StringLiteralExprSyntax,
-    _ unexpectedBetweenLocationAndRequirementComma: UnexpectedNodesSyntax? = nil,
-    requirementComma: TokenSyntax? = nil,
-    _ unexpectedBetweenRequirementCommaAndRequirementLabel: UnexpectedNodesSyntax? = nil,
-    requirementLabel: TokenSyntax? = nil,
-    _ unexpectedBetweenRequirementLabelAndRequirementColon: UnexpectedNodesSyntax? = nil,
-    requirementColon: TokenSyntax? = nil,
-    _ unexpectedBetweenRequirementColonAndRequirement: UnexpectedNodesSyntax? = nil,
-    requirement: MissingExprSyntax? = nil,
-    _ unexpectedBetweenRequirementAndProductComma: UnexpectedNodesSyntax? = nil,
-    productComma: TokenSyntax? = nil,
-    _ unexpectedBetweenProductCommaAndProductLabel: UnexpectedNodesSyntax? = nil,
-    productLabel: TokenSyntax? = nil,
-    _ unexpectedBetweenProductLabelAndProductColon: UnexpectedNodesSyntax? = nil,
-    productColon: TokenSyntax? = nil,
-    _ unexpectedBetweenProductColonAndProductName: UnexpectedNodesSyntax? = nil,
-    productName: StringLiteralExprSyntax? = nil,
-    _ unexpectedAfterProductName: UnexpectedNodesSyntax? = nil,
-    trailingTrivia: Trivia? = nil
-  ) {
-    self.init(
-      leadingTrivia: leadingTrivia,
-      unexpectedBeforeLocationLabel,
-      locationLabel: locationLabel,
-      unexpectedBetweenLocationLabelAndLocationColon,
-      locationColon: locationColon,
-      unexpectedBetweenLocationColonAndLocation,
-      location: location,
-      unexpectedBetweenLocationAndRequirementComma,
-      requirementComma: requirementComma,
-      unexpectedBetweenRequirementCommaAndRequirementLabel,
-      requirementLabel: requirementLabel,
-      unexpectedBetweenRequirementLabelAndRequirementColon,
-      requirementColon: requirementColon,
-      unexpectedBetweenRequirementColonAndRequirement,
-      requirement: Optional<ExprSyntax>.none,
-      unexpectedBetweenRequirementAndProductComma,
-      productComma: productComma,
-      unexpectedBetweenProductCommaAndProductLabel,
-      productLabel: productLabel,
-      unexpectedBetweenProductLabelAndProductColon,
-      productColon: productColon,
-      unexpectedBetweenProductColonAndProductName,
-      productName: productName,
-      unexpectedAfterProductName,
-      trailingTrivia: trailingTrivia
-    )
-  }
-
-  public var unexpectedBeforeLocationLabel: UnexpectedNodesSyntax? {
+  public var unexpectedBeforeDescription: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -10703,17 +10641,16 @@ public struct PackageAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
 
-  /// The location label.
-  public var locationLabel: TokenSyntax {
+  public var description: Description {
     get {
-      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+      return Description(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
       self = PackageAttributeArgumentsSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
 
-  public var unexpectedBetweenLocationLabelAndLocationColon: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenDescriptionAndComma: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -10722,16 +10659,19 @@ public struct PackageAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
 
-  public var locationColon: TokenSyntax {
+  /// 
+  /// The comma between the package description and product, if it exists
+  /// 
+  public var comma: TokenSyntax? {
     get {
-      return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
+      return data.child(at: 3, parent: Syntax(self)).map(TokenSyntax.init)
     }
     set(value) {
-      self = PackageAttributeArgumentsSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+      self = PackageAttributeArgumentsSyntax(data.replacingChild(at: 3, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
-  public var unexpectedBetweenLocationColonAndLocation: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenCommaAndProduct: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -10740,17 +10680,19 @@ public struct PackageAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
 
-  /// The location/identifier of package.
-  public var location: StringLiteralExprSyntax {
+  /// 
+  /// Explicit product declaration of package.
+  /// 
+  public var product: PackageProductSyntax? {
     get {
-      return StringLiteralExprSyntax(data.child(at: 5, parent: Syntax(self))!)
+      return data.child(at: 5, parent: Syntax(self)).map(PackageProductSyntax.init)
     }
     set(value) {
-      self = PackageAttributeArgumentsSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
+      self = PackageAttributeArgumentsSyntax(data.replacingChild(at: 5, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
-  public var unexpectedBetweenLocationAndRequirementComma: UnexpectedNodesSyntax? {
+  public var unexpectedAfterProduct: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -10759,34 +10701,559 @@ public struct PackageAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
 
-  /// 
-  /// The comma before the package requirement, if it exists.
-  /// 
-  public var requirementComma: TokenSyntax? {
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeDescription,
+      \Self.description,
+      \Self.unexpectedBetweenDescriptionAndComma,
+      \Self.comma,
+      \Self.unexpectedBetweenCommaAndProduct,
+      \Self.product,
+      \Self.unexpectedAfterProduct,
+    ])
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    case 5:
+      return nil
+    case 6:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
+}
+
+extension PackageAttributeArgumentsSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "unexpectedBeforeDescription": unexpectedBeforeDescription.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "description": Syntax(description).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenDescriptionAndComma": unexpectedBetweenDescriptionAndComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "comma": comma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenCommaAndProduct": unexpectedBetweenCommaAndProduct.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "product": product.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedAfterProduct": unexpectedAfterProduct.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+    ])
+  }
+}
+
+// MARK: - PackageProductSyntax
+
+/// 
+/// Explicit package product declaration
+/// 
+public struct PackageProductSyntax: SyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .packageProduct else { return nil }
+    self._syntaxNode = node._syntaxNode
+  }
+
+  /// Creates a `PackageProductSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .packageProduct)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeLabel: UnexpectedNodesSyntax? = nil,
+    label: TokenSyntax = .identifier("product"),
+    _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil,
+    colon: TokenSyntax = .colonToken(),
+    _ unexpectedBetweenColonAndName: UnexpectedNodesSyntax? = nil,
+    name: StringLiteralExprSyntax,
+    _ unexpectedAfterName: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed 
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeLabel, label, unexpectedBetweenLabelAndColon, colon, unexpectedBetweenColonAndName, name, unexpectedAfterName))) { (arena, _) in
+      let layout: [RawSyntax?] = [
+        unexpectedBeforeLabel?.raw,
+        label.raw,
+        unexpectedBetweenLabelAndColon?.raw,
+        colon.raw,
+        unexpectedBetweenColonAndName?.raw,
+        name.raw,
+        unexpectedAfterName?.raw,
+      ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.packageProduct, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+
+  public var unexpectedBeforeLabel: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 7, parent: Syntax(self)).map(TokenSyntax.init)
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = PackageAttributeArgumentsSyntax(data.replacingChild(at: 7, with: value?.raw, arena: SyntaxArena()))
+      self = PackageProductSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
-  public var unexpectedBetweenRequirementCommaAndRequirementLabel: UnexpectedNodesSyntax? {
+  /// 
+  /// The product label
+  /// 
+  public var label: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = PackageProductSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = PackageProductSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var colon: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = PackageProductSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var unexpectedBetweenColonAndName: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = PackageProductSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  /// 
+  /// The exact product name from package
+  /// 
+  public var name: StringLiteralExprSyntax {
+    get {
+      return StringLiteralExprSyntax(data.child(at: 5, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = PackageProductSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var unexpectedAfterName: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = PackageProductSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeLabel,
+      \Self.label,
+      \Self.unexpectedBetweenLabelAndColon,
+      \Self.colon,
+      \Self.unexpectedBetweenColonAndName,
+      \Self.name,
+      \Self.unexpectedAfterName,
+    ])
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    case 5:
+      return nil
+    case 6:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
+}
+
+extension PackageProductSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "unexpectedBeforeLabel": unexpectedBeforeLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "label": Syntax(label).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenLabelAndColon": unexpectedBetweenLabelAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "colon": Syntax(colon).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenColonAndName": unexpectedBetweenColonAndName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "name": Syntax(name).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterName": unexpectedAfterName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+    ])
+  }
+}
+
+// MARK: - LocalPackageDescriptionSyntax
+
+/// 
+/// The description of a local package
+/// 
+public struct LocalPackageDescriptionSyntax: SyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .localPackageDescription else { return nil }
+    self._syntaxNode = node._syntaxNode
+  }
+
+  /// Creates a `LocalPackageDescriptionSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .localPackageDescription)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeLabel: UnexpectedNodesSyntax? = nil,
+    label: TokenSyntax = .keyword(.path),
+    _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil,
+    colon: TokenSyntax = .colonToken(),
+    _ unexpectedBetweenColonAndPath: UnexpectedNodesSyntax? = nil,
+    path: StringLiteralExprSyntax,
+    _ unexpectedAfterPath: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed 
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeLabel, label, unexpectedBetweenLabelAndColon, colon, unexpectedBetweenColonAndPath, path, unexpectedAfterPath))) { (arena, _) in
+      let layout: [RawSyntax?] = [
+        unexpectedBeforeLabel?.raw,
+        label.raw,
+        unexpectedBetweenLabelAndColon?.raw,
+        colon.raw,
+        unexpectedBetweenColonAndPath?.raw,
+        path.raw,
+        unexpectedAfterPath?.raw,
+      ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.localPackageDescription, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+
+  public var unexpectedBeforeLabel: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = LocalPackageDescriptionSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  /// 
+  /// The path label
+  /// 
+  public var label: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = LocalPackageDescriptionSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = LocalPackageDescriptionSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var colon: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = LocalPackageDescriptionSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var unexpectedBetweenColonAndPath: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = LocalPackageDescriptionSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  /// 
+  /// The package path
+  /// 
+  public var path: StringLiteralExprSyntax {
+    get {
+      return StringLiteralExprSyntax(data.child(at: 5, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = LocalPackageDescriptionSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var unexpectedAfterPath: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = LocalPackageDescriptionSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeLabel,
+      \Self.label,
+      \Self.unexpectedBetweenLabelAndColon,
+      \Self.colon,
+      \Self.unexpectedBetweenColonAndPath,
+      \Self.path,
+      \Self.unexpectedAfterPath,
+    ])
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    case 5:
+      return nil
+    case 6:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
+}
+
+extension LocalPackageDescriptionSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "unexpectedBeforeLabel": unexpectedBeforeLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "label": Syntax(label).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenLabelAndColon": unexpectedBetweenLabelAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "colon": Syntax(colon).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenColonAndPath": unexpectedBetweenColonAndPath.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "path": Syntax(path).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterPath": unexpectedAfterPath.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+    ])
+  }
+}
+
+// MARK: - RemotePackageDescriptionSyntax
+
+/// 
+/// The description of a remote package
+/// 
+public struct RemotePackageDescriptionSyntax: SyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .remotePackageDescription else { return nil }
+    self._syntaxNode = node._syntaxNode
+  }
+
+  /// Creates a `RemotePackageDescriptionSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .remotePackageDescription)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public init<R: ExprSyntaxProtocol>(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeLocationLabel: UnexpectedNodesSyntax? = nil,
+    locationLabel: TokenSyntax,
+    _ unexpectedBetweenLocationLabelAndLocationColon: UnexpectedNodesSyntax? = nil,
+    locationColon: TokenSyntax = .colonToken(),
+    _ unexpectedBetweenLocationColonAndLocation: UnexpectedNodesSyntax? = nil,
+    location: StringLiteralExprSyntax,
+    _ unexpectedBetweenLocationAndComma: UnexpectedNodesSyntax? = nil,
+    comma: TokenSyntax = .commaToken(),
+    _ unexpectedBetweenCommaAndRequirementLabel: UnexpectedNodesSyntax? = nil,
+    requirementLabel: TokenSyntax? = nil,
+    _ unexpectedBetweenRequirementLabelAndRequirementColon: UnexpectedNodesSyntax? = nil,
+    requirementColon: TokenSyntax? = nil,
+    _ unexpectedBetweenRequirementColonAndRequirement: UnexpectedNodesSyntax? = nil,
+    requirement: R,
+    _ unexpectedAfterRequirement: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed 
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeLocationLabel, locationLabel, unexpectedBetweenLocationLabelAndLocationColon, locationColon, unexpectedBetweenLocationColonAndLocation, location, unexpectedBetweenLocationAndComma, comma, unexpectedBetweenCommaAndRequirementLabel, requirementLabel, unexpectedBetweenRequirementLabelAndRequirementColon, requirementColon, unexpectedBetweenRequirementColonAndRequirement, requirement, unexpectedAfterRequirement))) { (arena, _) in
+      let layout: [RawSyntax?] = [
+        unexpectedBeforeLocationLabel?.raw,
+        locationLabel.raw,
+        unexpectedBetweenLocationLabelAndLocationColon?.raw,
+        locationColon.raw,
+        unexpectedBetweenLocationColonAndLocation?.raw,
+        location.raw,
+        unexpectedBetweenLocationAndComma?.raw,
+        comma.raw,
+        unexpectedBetweenCommaAndRequirementLabel?.raw,
+        requirementLabel?.raw,
+        unexpectedBetweenRequirementLabelAndRequirementColon?.raw,
+        requirementColon?.raw,
+        unexpectedBetweenRequirementColonAndRequirement?.raw,
+        requirement.raw,
+        unexpectedAfterRequirement?.raw,
+      ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.remotePackageDescription, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+
+  public var unexpectedBeforeLocationLabel: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = RemotePackageDescriptionSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  /// 
+  /// The location label.
+  /// 
+  public var locationLabel: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = RemotePackageDescriptionSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var unexpectedBetweenLocationLabelAndLocationColon: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = RemotePackageDescriptionSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var locationColon: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = RemotePackageDescriptionSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var unexpectedBetweenLocationColonAndLocation: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = RemotePackageDescriptionSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  /// 
+  /// The URL or identifier of package.
+  /// 
+  public var location: StringLiteralExprSyntax {
+    get {
+      return StringLiteralExprSyntax(data.child(at: 5, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = RemotePackageDescriptionSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var unexpectedBetweenLocationAndComma: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = RemotePackageDescriptionSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+
+  /// 
+  /// The comma between the package location and requirement
+  /// 
+  public var comma: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 7, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = RemotePackageDescriptionSyntax(data.replacingChild(at: 7, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+
+  public var unexpectedBetweenCommaAndRequirementLabel: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = PackageAttributeArgumentsSyntax(data.replacingChild(at: 8, with: value?.raw, arena: SyntaxArena()))
+      self = RemotePackageDescriptionSyntax(data.replacingChild(at: 8, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
-  /// The requirement label.
+  /// 
+  /// The requirement label
+  /// 
   public var requirementLabel: TokenSyntax? {
     get {
       return data.child(at: 9, parent: Syntax(self)).map(TokenSyntax.init)
     }
     set(value) {
-      self = PackageAttributeArgumentsSyntax(data.replacingChild(at: 9, with: value?.raw, arena: SyntaxArena()))
+      self = RemotePackageDescriptionSyntax(data.replacingChild(at: 9, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -10795,7 +11262,7 @@ public struct PackageAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
       return data.child(at: 10, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = PackageAttributeArgumentsSyntax(data.replacingChild(at: 10, with: value?.raw, arena: SyntaxArena()))
+      self = RemotePackageDescriptionSyntax(data.replacingChild(at: 10, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -10804,7 +11271,7 @@ public struct PackageAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
       return data.child(at: 11, parent: Syntax(self)).map(TokenSyntax.init)
     }
     set(value) {
-      self = PackageAttributeArgumentsSyntax(data.replacingChild(at: 11, with: value?.raw, arena: SyntaxArena()))
+      self = RemotePackageDescriptionSyntax(data.replacingChild(at: 11, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -10813,105 +11280,28 @@ public struct PackageAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
       return data.child(at: 12, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = PackageAttributeArgumentsSyntax(data.replacingChild(at: 12, with: value?.raw, arena: SyntaxArena()))
+      self = RemotePackageDescriptionSyntax(data.replacingChild(at: 12, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
-  /// The version requirement of package.
-  public var requirement: ExprSyntax? {
+  /// 
+  /// Version requirement of remote package
+  /// 
+  public var requirement: ExprSyntax {
     get {
-      return data.child(at: 13, parent: Syntax(self)).map(ExprSyntax.init)
+      return ExprSyntax(data.child(at: 13, parent: Syntax(self))!)
     }
     set(value) {
-      self = PackageAttributeArgumentsSyntax(data.replacingChild(at: 13, with: value?.raw, arena: SyntaxArena()))
+      self = RemotePackageDescriptionSyntax(data.replacingChild(at: 13, with: value.raw, arena: SyntaxArena()))
     }
   }
 
-  public var unexpectedBetweenRequirementAndProductComma: UnexpectedNodesSyntax? {
+  public var unexpectedAfterRequirement: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 14, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = PackageAttributeArgumentsSyntax(data.replacingChild(at: 14, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-
-  /// 
-  /// The comma before the package product, if it exists.
-  /// 
-  public var productComma: TokenSyntax? {
-    get {
-      return data.child(at: 15, parent: Syntax(self)).map(TokenSyntax.init)
-    }
-    set(value) {
-      self = PackageAttributeArgumentsSyntax(data.replacingChild(at: 15, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public var unexpectedBetweenProductCommaAndProductLabel: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 16, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = PackageAttributeArgumentsSyntax(data.replacingChild(at: 16, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-
-  /// The product label.
-  public var productLabel: TokenSyntax? {
-    get {
-      return data.child(at: 17, parent: Syntax(self)).map(TokenSyntax.init)
-    }
-    set(value) {
-      self = PackageAttributeArgumentsSyntax(data.replacingChild(at: 17, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public var unexpectedBetweenProductLabelAndProductColon: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 18, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = PackageAttributeArgumentsSyntax(data.replacingChild(at: 18, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public var productColon: TokenSyntax? {
-    get {
-      return data.child(at: 19, parent: Syntax(self)).map(TokenSyntax.init)
-    }
-    set(value) {
-      self = PackageAttributeArgumentsSyntax(data.replacingChild(at: 19, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public var unexpectedBetweenProductColonAndProductName: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 20, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = PackageAttributeArgumentsSyntax(data.replacingChild(at: 20, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-
-  /// 
-  /// The exact product name from package
-  /// 
-  public var productName: StringLiteralExprSyntax? {
-    get {
-      return data.child(at: 21, parent: Syntax(self)).map(StringLiteralExprSyntax.init)
-    }
-    set(value) {
-      self = PackageAttributeArgumentsSyntax(data.replacingChild(at: 21, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-
-  public var unexpectedAfterProductName: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 22, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = PackageAttributeArgumentsSyntax(data.replacingChild(at: 22, with: value?.raw, arena: SyntaxArena()))
+      self = RemotePackageDescriptionSyntax(data.replacingChild(at: 14, with: value?.raw, arena: SyntaxArena()))
     }
   }
 
@@ -10923,23 +11313,15 @@ public struct PackageAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
       \Self.locationColon,
       \Self.unexpectedBetweenLocationColonAndLocation,
       \Self.location,
-      \Self.unexpectedBetweenLocationAndRequirementComma,
-      \Self.requirementComma,
-      \Self.unexpectedBetweenRequirementCommaAndRequirementLabel,
+      \Self.unexpectedBetweenLocationAndComma,
+      \Self.comma,
+      \Self.unexpectedBetweenCommaAndRequirementLabel,
       \Self.requirementLabel,
       \Self.unexpectedBetweenRequirementLabelAndRequirementColon,
       \Self.requirementColon,
       \Self.unexpectedBetweenRequirementColonAndRequirement,
       \Self.requirement,
-      \Self.unexpectedBetweenRequirementAndProductComma,
-      \Self.productComma,
-      \Self.unexpectedBetweenProductCommaAndProductLabel,
-      \Self.productLabel,
-      \Self.unexpectedBetweenProductLabelAndProductColon,
-      \Self.productColon,
-      \Self.unexpectedBetweenProductColonAndProductName,
-      \Self.productName,
-      \Self.unexpectedAfterProductName,
+      \Self.unexpectedAfterRequirement,
     ])
   }
 
@@ -10975,29 +11357,13 @@ public struct PackageAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
       return nil
     case 14:
       return nil
-    case 15:
-      return nil
-    case 16:
-      return nil
-    case 17:
-      return nil
-    case 18:
-      return nil
-    case 19:
-      return nil
-    case 20:
-      return nil
-    case 21:
-      return nil
-    case 22:
-      return nil
     default:
       fatalError("Invalid index")
     }
   }
 }
 
-extension PackageAttributeArgumentsSyntax: CustomReflectable {
+extension RemotePackageDescriptionSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
       "unexpectedBeforeLocationLabel": unexpectedBeforeLocationLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
@@ -11006,23 +11372,15 @@ extension PackageAttributeArgumentsSyntax: CustomReflectable {
       "locationColon": Syntax(locationColon).asProtocol(SyntaxProtocol.self),
       "unexpectedBetweenLocationColonAndLocation": unexpectedBetweenLocationColonAndLocation.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "location": Syntax(location).asProtocol(SyntaxProtocol.self),
-      "unexpectedBetweenLocationAndRequirementComma": unexpectedBetweenLocationAndRequirementComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "requirementComma": requirementComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "unexpectedBetweenRequirementCommaAndRequirementLabel": unexpectedBetweenRequirementCommaAndRequirementLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenLocationAndComma": unexpectedBetweenLocationAndComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "comma": Syntax(comma).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenCommaAndRequirementLabel": unexpectedBetweenCommaAndRequirementLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "requirementLabel": requirementLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "unexpectedBetweenRequirementLabelAndRequirementColon": unexpectedBetweenRequirementLabelAndRequirementColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "requirementColon": requirementColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "unexpectedBetweenRequirementColonAndRequirement": unexpectedBetweenRequirementColonAndRequirement.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "requirement": requirement.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "unexpectedBetweenRequirementAndProductComma": unexpectedBetweenRequirementAndProductComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "productComma": productComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "unexpectedBetweenProductCommaAndProductLabel": unexpectedBetweenProductCommaAndProductLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "productLabel": productLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "unexpectedBetweenProductLabelAndProductColon": unexpectedBetweenProductLabelAndProductColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "productColon": productColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "unexpectedBetweenProductColonAndProductName": unexpectedBetweenProductColonAndProductName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "productName": productName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "unexpectedAfterProductName": unexpectedAfterProductName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "requirement": Syntax(requirement).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterRequirement": unexpectedAfterRequirement.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }

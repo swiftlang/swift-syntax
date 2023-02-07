@@ -5456,31 +5456,15 @@ public enum SyntaxFactory {
     }
   }
   @available(*, deprecated, message: "Use initializer on PackageAttributeArgumentsSyntax")
-  public static func makePackageAttributeArguments(_ unexpectedBeforeLocationLabel: UnexpectedNodesSyntax? = nil, locationLabel: TokenSyntax, _ unexpectedBetweenLocationLabelAndLocationColon: UnexpectedNodesSyntax? = nil, locationColon: TokenSyntax, _ unexpectedBetweenLocationColonAndLocation: UnexpectedNodesSyntax? = nil, location: StringLiteralExprSyntax, _ unexpectedBetweenLocationAndRequirementComma: UnexpectedNodesSyntax? = nil, requirementComma: TokenSyntax?, _ unexpectedBetweenRequirementCommaAndRequirementLabel: UnexpectedNodesSyntax? = nil, requirementLabel: TokenSyntax?, _ unexpectedBetweenRequirementLabelAndRequirementColon: UnexpectedNodesSyntax? = nil, requirementColon: TokenSyntax?, _ unexpectedBetweenRequirementColonAndRequirement: UnexpectedNodesSyntax? = nil, requirement: ExprSyntax?, _ unexpectedBetweenRequirementAndProductComma: UnexpectedNodesSyntax? = nil, productComma: TokenSyntax?, _ unexpectedBetweenProductCommaAndProductLabel: UnexpectedNodesSyntax? = nil, productLabel: TokenSyntax?, _ unexpectedBetweenProductLabelAndProductColon: UnexpectedNodesSyntax? = nil, productColon: TokenSyntax?, _ unexpectedBetweenProductColonAndProductName: UnexpectedNodesSyntax? = nil, productName: StringLiteralExprSyntax?, _ unexpectedAfterProductName: UnexpectedNodesSyntax? = nil) -> PackageAttributeArgumentsSyntax {
+  public static func makePackageAttributeArguments(_ unexpectedBeforeDescription: UnexpectedNodesSyntax? = nil, description: Syntax, _ unexpectedBetweenDescriptionAndComma: UnexpectedNodesSyntax? = nil, comma: TokenSyntax?, _ unexpectedBetweenCommaAndProduct: UnexpectedNodesSyntax? = nil, product: PackageProductSyntax?, _ unexpectedAfterProduct: UnexpectedNodesSyntax? = nil) -> PackageAttributeArgumentsSyntax {
     let layout: [RawSyntax?] = [
-      unexpectedBeforeLocationLabel?.raw,
-      locationLabel.raw,
-      unexpectedBetweenLocationLabelAndLocationColon?.raw,
-      locationColon.raw,
-      unexpectedBetweenLocationColonAndLocation?.raw,
-      location.raw,
-      unexpectedBetweenLocationAndRequirementComma?.raw,
-      requirementComma?.raw,
-      unexpectedBetweenRequirementCommaAndRequirementLabel?.raw,
-      requirementLabel?.raw,
-      unexpectedBetweenRequirementLabelAndRequirementColon?.raw,
-      requirementColon?.raw,
-      unexpectedBetweenRequirementColonAndRequirement?.raw,
-      requirement?.raw,
-      unexpectedBetweenRequirementAndProductComma?.raw,
-      productComma?.raw,
-      unexpectedBetweenProductCommaAndProductLabel?.raw,
-      productLabel?.raw,
-      unexpectedBetweenProductLabelAndProductColon?.raw,
-      productColon?.raw,
-      unexpectedBetweenProductColonAndProductName?.raw,
-      productName?.raw,
-      unexpectedAfterProductName?.raw,
+      unexpectedBeforeDescription?.raw,
+      description.raw,
+      unexpectedBetweenDescriptionAndComma?.raw,
+      comma?.raw,
+      unexpectedBetweenCommaAndProduct?.raw,
+      product?.raw,
+      unexpectedAfterProduct?.raw,
     ]
     return withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.packageAttributeArguments,
@@ -5496,23 +5480,7 @@ public enum SyntaxFactory {
       let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .packageAttributeArguments,
         from: [
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.keyword(.id), arena: arena),
-        nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena),
-        nil,
-        RawSyntax.makeEmptyLayout(kind: SyntaxKind.stringLiteralExpr, arena: arena),
-        nil,
-        nil,
-        nil,
-        nil,
-        nil,
-        nil,
-        nil,
-        nil,
-        nil,
-        nil,
-        nil,
-        nil,
+        RawSyntax.makeEmptyLayout(kind: SyntaxKind.missing, arena: arena),
         nil,
         nil,
         nil,
@@ -5520,6 +5488,127 @@ public enum SyntaxFactory {
         nil,
       ], arena: arena))
       return PackageAttributeArgumentsSyntax(data)
+    }
+  }
+  @available(*, deprecated, message: "Use initializer on PackageProductSyntax")
+  public static func makePackageProduct(_ unexpectedBeforeLabel: UnexpectedNodesSyntax? = nil, label: TokenSyntax, _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndName: UnexpectedNodesSyntax? = nil, name: StringLiteralExprSyntax, _ unexpectedAfterName: UnexpectedNodesSyntax? = nil) -> PackageProductSyntax {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeLabel?.raw,
+      label.raw,
+      unexpectedBetweenLabelAndColon?.raw,
+      colon.raw,
+      unexpectedBetweenColonAndName?.raw,
+      name.raw,
+      unexpectedAfterName?.raw,
+    ]
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.packageProduct,
+        from: layout, arena: arena)
+      let data = SyntaxData.forRoot(raw)
+      return PackageProductSyntax(data)
+    }
+  }
+
+  @available(*, deprecated, message: "Use initializer on PackageProductSyntax")
+  public static func makeBlankPackageProduct(presence: SourcePresence = .present) -> PackageProductSyntax {
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .packageProduct,
+        from: [
+        nil,
+        RawSyntax.makeMissingToken(kind: TokenKind.keyword(.product), arena: arena),
+        nil,
+        RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena),
+        nil,
+        RawSyntax.makeEmptyLayout(kind: SyntaxKind.stringLiteralExpr, arena: arena),
+        nil,
+      ], arena: arena))
+      return PackageProductSyntax(data)
+    }
+  }
+  @available(*, deprecated, message: "Use initializer on LocalPackageDescriptionSyntax")
+  public static func makeLocalPackageDescription(_ unexpectedBeforeLabel: UnexpectedNodesSyntax? = nil, label: TokenSyntax, _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndPath: UnexpectedNodesSyntax? = nil, path: StringLiteralExprSyntax, _ unexpectedAfterPath: UnexpectedNodesSyntax? = nil) -> LocalPackageDescriptionSyntax {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeLabel?.raw,
+      label.raw,
+      unexpectedBetweenLabelAndColon?.raw,
+      colon.raw,
+      unexpectedBetweenColonAndPath?.raw,
+      path.raw,
+      unexpectedAfterPath?.raw,
+    ]
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.localPackageDescription,
+        from: layout, arena: arena)
+      let data = SyntaxData.forRoot(raw)
+      return LocalPackageDescriptionSyntax(data)
+    }
+  }
+
+  @available(*, deprecated, message: "Use initializer on LocalPackageDescriptionSyntax")
+  public static func makeBlankLocalPackageDescription(presence: SourcePresence = .present) -> LocalPackageDescriptionSyntax {
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .localPackageDescription,
+        from: [
+        nil,
+        RawSyntax.makeMissingToken(kind: TokenKind.keyword(.path), arena: arena),
+        nil,
+        RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena),
+        nil,
+        RawSyntax.makeEmptyLayout(kind: SyntaxKind.stringLiteralExpr, arena: arena),
+        nil,
+      ], arena: arena))
+      return LocalPackageDescriptionSyntax(data)
+    }
+  }
+  @available(*, deprecated, message: "Use initializer on RemotePackageDescriptionSyntax")
+  public static func makeRemotePackageDescription(_ unexpectedBeforeLocationLabel: UnexpectedNodesSyntax? = nil, locationLabel: TokenSyntax, _ unexpectedBetweenLocationLabelAndLocationColon: UnexpectedNodesSyntax? = nil, locationColon: TokenSyntax, _ unexpectedBetweenLocationColonAndLocation: UnexpectedNodesSyntax? = nil, location: StringLiteralExprSyntax, _ unexpectedBetweenLocationAndComma: UnexpectedNodesSyntax? = nil, comma: TokenSyntax, _ unexpectedBetweenCommaAndRequirementLabel: UnexpectedNodesSyntax? = nil, requirementLabel: TokenSyntax?, _ unexpectedBetweenRequirementLabelAndRequirementColon: UnexpectedNodesSyntax? = nil, requirementColon: TokenSyntax?, _ unexpectedBetweenRequirementColonAndRequirement: UnexpectedNodesSyntax? = nil, requirement: ExprSyntax, _ unexpectedAfterRequirement: UnexpectedNodesSyntax? = nil) -> RemotePackageDescriptionSyntax {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeLocationLabel?.raw,
+      locationLabel.raw,
+      unexpectedBetweenLocationLabelAndLocationColon?.raw,
+      locationColon.raw,
+      unexpectedBetweenLocationColonAndLocation?.raw,
+      location.raw,
+      unexpectedBetweenLocationAndComma?.raw,
+      comma.raw,
+      unexpectedBetweenCommaAndRequirementLabel?.raw,
+      requirementLabel?.raw,
+      unexpectedBetweenRequirementLabelAndRequirementColon?.raw,
+      requirementColon?.raw,
+      unexpectedBetweenRequirementColonAndRequirement?.raw,
+      requirement.raw,
+      unexpectedAfterRequirement?.raw,
+    ]
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.remotePackageDescription,
+        from: layout, arena: arena)
+      let data = SyntaxData.forRoot(raw)
+      return RemotePackageDescriptionSyntax(data)
+    }
+  }
+
+  @available(*, deprecated, message: "Use initializer on RemotePackageDescriptionSyntax")
+  public static func makeBlankRemotePackageDescription(presence: SourcePresence = .present) -> RemotePackageDescriptionSyntax {
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .remotePackageDescription,
+        from: [
+        nil,
+        RawSyntax.makeMissingToken(kind: TokenKind.keyword(.id), arena: arena),
+        nil,
+        RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena),
+        nil,
+        RawSyntax.makeEmptyLayout(kind: SyntaxKind.stringLiteralExpr, arena: arena),
+        nil,
+        RawSyntax.makeMissingToken(kind: TokenKind.comma, arena: arena),
+        nil,
+        nil,
+        nil,
+        nil,
+        nil,
+        RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: arena),
+        nil,
+      ], arena: arena))
+      return RemotePackageDescriptionSyntax(data)
     }
   }
   @available(*, deprecated, message: "Use initializer on ObjCSelectorPieceSyntax")

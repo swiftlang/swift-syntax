@@ -353,6 +353,9 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/DeclNameSyntax>
 - <doc:SwiftSyntax/ImplementsAttributeArgumentsSyntax>
 - <doc:SwiftSyntax/PackageAttributeArgumentsSyntax>
+- <doc:SwiftSyntax/PackageProductSyntax>
+- <doc:SwiftSyntax/LocalPackageDescriptionSyntax>
+- <doc:SwiftSyntax/RemotePackageDescriptionSyntax>
 - <doc:SwiftSyntax/ObjCSelectorPieceSyntax>
 - <doc:SwiftSyntax/ObjCSelectorSyntax>
 - <doc:SwiftSyntax/DifferentiableAttributeArgumentsSyntax>

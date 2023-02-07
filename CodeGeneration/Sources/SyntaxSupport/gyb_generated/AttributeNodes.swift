@@ -71,7 +71,9 @@ public let ATTRIBUTE_NODES: [Node] = [
                  Child(name: "EffectsArguments",
                        kind: .node(kind: "EffectsArguments")),
                  Child(name: "DocumentationArguments",
-                       kind: .node(kind: "DocumentationAttributeArguments"))
+                       kind: .node(kind: "DocumentationAttributeArguments")),
+                 Child(name: "PackageAttributeArguments",
+                       kind: .node(kind: "PackageAttributeArguments"))
                ]),
                description: "The arguments of the attribute. In case the attribute takes multiple arguments, they are gather in the appropriate takes first.",
                isOptional: true),
@@ -191,6 +193,159 @@ public let ATTRIBUTE_NODES: [Node] = [
                kind: .node(kind: "DeclNameArguments"),
                description: "The argument labels of the protocol's requirement if it is a function requirement.",
                isOptional: true)
+       ]),
+
+  Node(name: "PackageAttributeArguments",
+       nameForDiagnostics: "@_package arguments",
+       description: "The arguments for the `@_package` attribute imitating `PackageDescription`",
+       kind: "Syntax",
+       children: [
+         Child(name: "Description",
+               kind: .nodeChoices(choices: [
+                 Child(name: "FileSystem",
+                       kind: .node(kind: "FileSystemPackageDescription")),
+                 Child(name: "SourceControl",
+                       kind: .node(kind: "SourceControlPackageDescription")),
+                 Child(name: "Registry",
+                       kind: .node(kind: "RegistryPackageDescription"))
+               ])),
+         Child(name: "Comma",
+               kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+               description: "The comma between the package description and product, if it exists",
+               isOptional: true),
+         Child(name: "Product",
+               kind: .node(kind: "PackageProduct"),
+               description: "Explicit product declaration of package.",
+               isOptional: true)
+       ]),
+
+  Node(name: "PackageProduct",
+       nameForDiagnostics: "package product",
+       description: "Explicit package product declaration",
+       kind: "Syntax",
+       children: [
+         Child(name: "Label",
+               kind: .token(choices: [.keyword(text: "product")]),
+               description: "The product label"),
+         Child(name: "Colon",
+               kind: .token(choices: [.token(tokenKind: "ColonToken")])),
+         Child(name: "Name",
+               kind: .node(kind: "StringLiteralExpr"),
+               description: "The exact product name from package")
+       ]),
+
+  Node(name: "FileSystemPackageDescription",
+       nameForDiagnostics: "local package description",
+       description: "The description of a local package",
+       kind: "Syntax",
+       children: [
+         Child(name: "Label",
+               kind: .token(choices: [.keyword(text: "path")]),
+               description: "The path label"),
+         Child(name: "Colon",
+               kind: .token(choices: [.token(tokenKind: "ColonToken")])),
+         Child(name: "Path",
+               kind: .node(kind: "StringLiteralExpr"),
+               description: "The package path")
+       ]),
+
+  Node(name: "SourceControlPackageDescription",
+       nameForDiagnostics: "remote package description (source control)",
+       description: "The description of a remote package using source control",
+       kind: "Syntax",
+       children: [
+         Child(name: "Label",
+               kind: .token(choices: [.keyword(text: "url")]),
+               description: "The label of the package URL"),
+         Child(name: "Colon",
+               kind: .token(choices: [.token(tokenKind: "ColonToken")])),
+         Child(name: "URL",
+               kind: .node(kind: "StringLiteralExpr"),
+               description: "The URL of package"),
+         Child(name: "Comma",
+               kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+               description: "The comma between the package URL and requirement"),
+         Child(name: "Requirement",
+               kind: .nodeChoices(choices: [
+                 Child(name: "Labeled",
+                       kind: .node(kind: "SourceControlRequirement")),
+                 Child(name: "Range",
+                       kind: .node(kind: "PackageVersionRange"))
+               ]),
+               description: "Version requirement of the remote package")
+       ]),
+
+  Node(name: "RegistryPackageDescription",
+       nameForDiagnostics: "remote package description",
+       description: "The description of a remote package",
+       kind: "Syntax",
+       children: [
+         Child(name: "Label",
+               kind: .token(choices: [.keyword(text: "id")]),
+               description: "The label of the package ID"),
+         Child(name: "Colon",
+               kind: .token(choices: [.token(tokenKind: "ColonToken")])),
+         Child(name: "Identifier",
+               kind: .node(kind: "StringLiteralExpr"),
+               description: "The identifier of package"),
+         Child(name: "Comma",
+               kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+               description: "The comma between the package identifier and requirement"),
+         Child(name: "Requirement",
+               kind: .nodeChoices(choices: [
+                 Child(name: "Labeled",
+                       kind: .node(kind: "RegistryRequirement")),
+                 Child(name: "Range",
+                       kind: .node(kind: "PackageVersionRange"))
+               ]),
+               description: "Version requirement of the remote package")
+       ]),
+
+  Node(name: "SourceControlRequirement",
+       nameForDiagnostics: "labeled package requirement (source control)",
+       description: "Labeled requirement of a source-control package",
+       kind: "Syntax",
+       children: [
+         Child(name: "Label",
+               kind: .token(choices: [.keyword(text: "branch"), .keyword(text: "exact"), .keyword(text: "from"), .keyword(text: "revision")]),
+               description: "The requirement label",
+               isOptional: true),
+         Child(name: "Colon",
+               kind: .token(choices: [.token(tokenKind: "ColonToken")]),
+               isOptional: true),
+         Child(name: "Requirement",
+               kind: .node(kind: "StringLiteralExpr"),
+               description: "Requirement description of remote package")
+       ]),
+
+  Node(name: "RegistryRequirement",
+       nameForDiagnostics: "labeled package requirement (registry)",
+       description: "Labeled requirement of a registry package",
+       kind: "Syntax",
+       children: [
+         Child(name: "Label",
+               kind: .token(choices: [.keyword(text: "exact"), .keyword(text: "from")]),
+               description: "The requirement label",
+               isOptional: true),
+         Child(name: "Colon",
+               kind: .token(choices: [.token(tokenKind: "ColonToken")]),
+               isOptional: true),
+         Child(name: "Requirement",
+               kind: .node(kind: "StringLiteralExpr"),
+               description: "Requirement description of remote package")
+       ]),
+
+  Node(name: "PackageVersionRange",
+       nameForDiagnostics: "range of package version",
+       description: "Open or closed range of dependent package versions",
+       kind: "Syntax",
+       children: [
+         Child(name: "FromVersion",
+               kind: .node(kind: "StringLiteralExpr")),
+         Child(name: "OperatorToken",
+               kind: .token(choices: [.token(tokenKind: "BinaryOperatorToken")])),
+         Child(name: "ToVersion",
+               kind: .node(kind: "StringLiteralExpr"))
        ]),
 
   Node(name: "ObjCSelectorPiece",

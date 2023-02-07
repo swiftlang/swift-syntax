@@ -43,6 +43,7 @@ extension Parser {
     case _objcRuntimeName
     case _optimize
     case _originallyDefinedIn
+    case _package
     case _private
     case _projectedValueProperty
     case _semantics
@@ -78,6 +79,7 @@ extension Parser {
       case RawTokenKindMatch(._objcRuntimeName): self = ._objcRuntimeName
       case RawTokenKindMatch(._optimize): self = ._optimize
       case RawTokenKindMatch(._originallyDefinedIn): self = ._originallyDefinedIn
+      case RawTokenKindMatch(._package): self = ._package
       case RawTokenKindMatch(._private): self = ._private
       case RawTokenKindMatch(._projectedValueProperty): self = ._projectedValueProperty
       case RawTokenKindMatch(._semantics): self = ._semantics
@@ -116,6 +118,7 @@ extension Parser {
       case ._objcRuntimeName: return .keyword(._objcRuntimeName)
       case ._optimize: return .keyword(._optimize)
       case ._originallyDefinedIn: return .keyword(._originallyDefinedIn)
+      case ._package: return .keyword(._package)
       case ._private: return .keyword(._private)
       case ._projectedValueProperty: return .keyword(._projectedValueProperty)
       case ._semantics: return .keyword(._semantics)
@@ -242,6 +245,10 @@ extension Parser {
     case ._specialize:
       return parseAttribute(argumentMode: .required) { parser in
         return .specializeArguments(parser.parseSpecializeAttributeSpecList())
+      }
+    case ._package:
+      return parseAttribute(argumentMode: .required) { parser in
+        return .packageAttributeArguments(parser.parsePackageAttributeArguments())
       }
     case ._private:
       return parseAttribute(argumentMode: .required) { parser in
@@ -860,6 +867,146 @@ extension Parser {
       comma: comma,
       unexpectedBeforeOrdinal,
       ordinal: ordinal,
+      arena: self.arena
+    )
+  }
+}
+
+extension Parser {
+  mutating func parsePackageAttributeArguments() -> RawPackageAttributeArgumentsSyntax {
+    // Parsing package location
+    let (unexpectedBeforeLocationLabel, locationLabel) = self.expectAny([.keyword(.id), .keyword(.path), .keyword(.url)], default: .keyword(.id))
+    let (unexpectedBeforeLocationColon, locationColon) = self.expect(.colon)
+    let location = self.parseStringLiteral()
+    let packageDescription: RawPackageAttributeArgumentsSyntax.Description
+    // Parsing package requirement
+    switch locationLabel.tokenKind {
+    case .keyword(.path):
+      packageDescription = .fileSystem(
+        RawFileSystemPackageDescriptionSyntax(
+          unexpectedBeforeLocationLabel,
+          label: locationLabel,
+          unexpectedBeforeLocationColon,
+          colon: locationColon,
+          path: location,
+          arena: self.arena
+        )
+      )
+    case .keyword(.id):
+      let (unexpectedBeforeRequirementComma, requirementComma) = self.expect(.comma)
+      let registryRequirement: RawRegistryPackageDescriptionSyntax.Requirement
+      if self.at(any: [.colon, .keyword(.exact), .keyword(.from)]) {
+        let (unexpectedBeforeRequirementLabel, requirementLabel) = self.expectAny([.keyword(.from), .keyword(.exact)], default: .keyword(.from))
+        let (unexpectedBeforeRequirementColon, requirementColon) = self.expect(.colon)
+        let requirement = self.parseStringLiteral()
+        registryRequirement = .labeled(
+          RawRegistryRequirementSyntax(
+            unexpectedBeforeRequirementLabel,
+            label: requirementLabel,
+            unexpectedBeforeRequirementColon,
+            colon: requirementColon,
+            requirement: requirement,
+            arena: self.arena
+          )
+        )
+      } else {
+        let range = self.parsePackageVersionRange()
+        registryRequirement = .range(range)
+      }
+      packageDescription = .registry(
+        RawRegistryPackageDescriptionSyntax(
+          unexpectedBeforeLocationLabel,
+          label: locationLabel,
+          unexpectedBeforeLocationColon,
+          colon: locationColon,
+          identifier: location,
+          unexpectedBeforeRequirementComma,
+          comma: requirementComma,
+          requirement: registryRequirement,
+          arena: self.arena
+        )
+      )
+    case .keyword(.url):
+      // FIXME: Default to handling as source-control for now
+      fallthrough
+    default:
+      let (unexpectedBeforeRequirementComma, requirementComma) = self.expect(.comma)
+      let sourceControlRequirement: RawSourceControlPackageDescriptionSyntax.Requirement
+      if self.at(any: [.colon, .keyword(.branch), .keyword(.exact), .keyword(.from), .keyword(.revision)]) {
+        let (unexpectedBeforeRequirementLabel, requirementLabel) = self.expectAny([.keyword(.branch), .keyword(.exact), .keyword(.from), .keyword(.revision)], default: .keyword(.from))
+        let (unexpectedBeforeRequirementColon, requirementColon) = self.expect(.colon)
+        let requirement = self.parseStringLiteral()
+        sourceControlRequirement = .labeled(
+          RawSourceControlRequirementSyntax(
+            unexpectedBeforeRequirementLabel,
+            label: requirementLabel,
+            unexpectedBeforeRequirementColon,
+            colon: requirementColon,
+            requirement: requirement,
+            arena: self.arena
+          )
+        )
+      } else {
+        let range = self.parsePackageVersionRange()
+        sourceControlRequirement = .range(range)
+      }
+      packageDescription = .sourceControl(
+        RawSourceControlPackageDescriptionSyntax(
+          unexpectedBeforeLocationLabel,
+          label: locationLabel,
+          unexpectedBeforeLocationColon,
+          colon: locationColon,
+          url: location,
+          unexpectedBeforeRequirementComma,
+          comma: requirementComma,
+          requirement: sourceControlRequirement,
+          arena: self.arena
+        )
+      )
+    }
+    // Parsing package product
+    let comma = self.consume(if: .comma)
+    let packageProduct: RawPackageProductSyntax?
+    if comma != nil {
+      let (unexpectedBeforeProductLabel, productLabel) = self.expect(.keyword(.product))
+      let (unexpectedBeforeProductColon, productColon) = self.expect(.colon)
+      let productName = self.parseStringLiteral()
+      packageProduct = RawPackageProductSyntax(
+        unexpectedBeforeProductLabel,
+        label: productLabel,
+        unexpectedBeforeProductColon,
+        colon: productColon,
+        name: productName,
+        arena: self.arena
+      )
+    } else {
+      packageProduct = nil
+    }
+    // Returning @_package argument list
+    return RawPackageAttributeArgumentsSyntax(
+      description: packageDescription,
+      comma: comma,
+      product: packageProduct,
+      arena: self.arena
+    )
+  }
+
+  /// Parse a range of package version literals.
+  ///
+  /// Grammar
+  /// =======
+  ///
+  ///     version-range → string-literal '..<' string-literal
+  ///     version-range → string-literal '...' string-literal
+  mutating func parsePackageVersionRange() -> RawPackageVersionRangeSyntax {
+    let fromVersion = self.parseStringLiteral()
+    let (unexpectedBeforeOperatorToken, operatorToken) = self.expect(.binaryOperator)
+    let toVersion = self.parseStringLiteral()
+    return RawPackageVersionRangeSyntax(
+      fromVersion: fromVersion,
+      unexpectedBeforeOperatorToken,
+      operatorToken: operatorToken,
+      toVersion: toVersion,
       arena: self.arena
     )
   }

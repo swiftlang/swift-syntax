@@ -734,6 +734,13 @@ open class SyntaxRewriter {
     return StmtSyntax(visitChildren(node))
   }
   
+  /// Visit a `FileSystemPackageDescriptionSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: FileSystemPackageDescriptionSyntax) -> FileSystemPackageDescriptionSyntax {
+    return Syntax(visitChildren(node)).cast(FileSystemPackageDescriptionSyntax.self)
+  }
+  
   /// Visit a `FloatLiteralExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -1301,6 +1308,27 @@ open class SyntaxRewriter {
     return TypeSyntax(visitChildren(node))
   }
   
+  /// Visit a `PackageAttributeArgumentsSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: PackageAttributeArgumentsSyntax) -> PackageAttributeArgumentsSyntax {
+    return Syntax(visitChildren(node)).cast(PackageAttributeArgumentsSyntax.self)
+  }
+  
+  /// Visit a `PackageProductSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: PackageProductSyntax) -> PackageProductSyntax {
+    return Syntax(visitChildren(node)).cast(PackageProductSyntax.self)
+  }
+  
+  /// Visit a `PackageVersionRangeSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: PackageVersionRangeSyntax) -> PackageVersionRangeSyntax {
+    return Syntax(visitChildren(node)).cast(PackageVersionRangeSyntax.self)
+  }
+  
   /// Visit a `ParameterClauseSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -1448,6 +1476,20 @@ open class SyntaxRewriter {
     return ExprSyntax(visitChildren(node))
   }
   
+  /// Visit a `RegistryPackageDescriptionSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: RegistryPackageDescriptionSyntax) -> RegistryPackageDescriptionSyntax {
+    return Syntax(visitChildren(node)).cast(RegistryPackageDescriptionSyntax.self)
+  }
+  
+  /// Visit a `RegistryRequirementSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: RegistryRequirementSyntax) -> RegistryRequirementSyntax {
+    return Syntax(visitChildren(node)).cast(RegistryRequirementSyntax.self)
+  }
+  
   /// Visit a `RepeatWhileStmtSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -1488,6 +1530,20 @@ open class SyntaxRewriter {
   ///   - Returns: the rewritten node
   open func visit(_ node: SimpleTypeIdentifierSyntax) -> TypeSyntax {
     return TypeSyntax(visitChildren(node))
+  }
+  
+  /// Visit a `SourceControlPackageDescriptionSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: SourceControlPackageDescriptionSyntax) -> SourceControlPackageDescriptionSyntax {
+    return Syntax(visitChildren(node)).cast(SourceControlPackageDescriptionSyntax.self)
+  }
+  
+  /// Visit a `SourceControlRequirementSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: SourceControlRequirementSyntax) -> SourceControlRequirementSyntax {
+    return Syntax(visitChildren(node)).cast(SourceControlRequirementSyntax.self)
   }
   
   /// Visit a `SourceFileSyntax`.
@@ -3336,6 +3392,20 @@ open class SyntaxRewriter {
   }
   
   /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplFileSystemPackageDescriptionSyntax(_ data: SyntaxData) -> Syntax {
+    let node = FileSystemPackageDescriptionSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { 
+      visitPost(node._syntaxNode) 
+    }
+    if let newNode = visitAny(node._syntaxNode) { 
+      return newNode 
+    }
+    return Syntax(visit(node))
+  }
+  
+  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplFloatLiteralExprSyntax(_ data: SyntaxData) -> Syntax {
     let node = FloatLiteralExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -4470,6 +4540,48 @@ open class SyntaxRewriter {
   }
   
   /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplPackageAttributeArgumentsSyntax(_ data: SyntaxData) -> Syntax {
+    let node = PackageAttributeArgumentsSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { 
+      visitPost(node._syntaxNode) 
+    }
+    if let newNode = visitAny(node._syntaxNode) { 
+      return newNode 
+    }
+    return Syntax(visit(node))
+  }
+  
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplPackageProductSyntax(_ data: SyntaxData) -> Syntax {
+    let node = PackageProductSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { 
+      visitPost(node._syntaxNode) 
+    }
+    if let newNode = visitAny(node._syntaxNode) { 
+      return newNode 
+    }
+    return Syntax(visit(node))
+  }
+  
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplPackageVersionRangeSyntax(_ data: SyntaxData) -> Syntax {
+    let node = PackageVersionRangeSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { 
+      visitPost(node._syntaxNode) 
+    }
+    if let newNode = visitAny(node._syntaxNode) { 
+      return newNode 
+    }
+    return Syntax(visit(node))
+  }
+  
+  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplParameterClauseSyntax(_ data: SyntaxData) -> Syntax {
     let node = ParameterClauseSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -4764,6 +4876,34 @@ open class SyntaxRewriter {
   }
   
   /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplRegistryPackageDescriptionSyntax(_ data: SyntaxData) -> Syntax {
+    let node = RegistryPackageDescriptionSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { 
+      visitPost(node._syntaxNode) 
+    }
+    if let newNode = visitAny(node._syntaxNode) { 
+      return newNode 
+    }
+    return Syntax(visit(node))
+  }
+  
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplRegistryRequirementSyntax(_ data: SyntaxData) -> Syntax {
+    let node = RegistryRequirementSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { 
+      visitPost(node._syntaxNode) 
+    }
+    if let newNode = visitAny(node._syntaxNode) { 
+      return newNode 
+    }
+    return Syntax(visit(node))
+  }
+  
+  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplRepeatWhileStmtSyntax(_ data: SyntaxData) -> Syntax {
     let node = RepeatWhileStmtSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -4836,6 +4976,34 @@ open class SyntaxRewriter {
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplSimpleTypeIdentifierSyntax(_ data: SyntaxData) -> Syntax {
     let node = SimpleTypeIdentifierSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { 
+      visitPost(node._syntaxNode) 
+    }
+    if let newNode = visitAny(node._syntaxNode) { 
+      return newNode 
+    }
+    return Syntax(visit(node))
+  }
+  
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplSourceControlPackageDescriptionSyntax(_ data: SyntaxData) -> Syntax {
+    let node = SourceControlPackageDescriptionSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { 
+      visitPost(node._syntaxNode) 
+    }
+    if let newNode = visitAny(node._syntaxNode) { 
+      return newNode 
+    }
+    return Syntax(visit(node))
+  }
+  
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplSourceControlRequirementSyntax(_ data: SyntaxData) -> Syntax {
+    let node = SourceControlRequirementSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer { 
@@ -5805,6 +5973,8 @@ open class SyntaxRewriter {
       return visitImplExtensionDeclSyntax
     case .fallthroughStmt: 
       return visitImplFallthroughStmtSyntax
+    case .fileSystemPackageDescription: 
+      return visitImplFileSystemPackageDescriptionSyntax
     case .floatLiteralExpr: 
       return visitImplFloatLiteralExprSyntax
     case .forInStmt: 
@@ -5967,6 +6137,12 @@ open class SyntaxRewriter {
       return visitImplPackExpansionTypeSyntax
     case .packReferenceType: 
       return visitImplPackReferenceTypeSyntax
+    case .packageAttributeArguments: 
+      return visitImplPackageAttributeArgumentsSyntax
+    case .packageProduct: 
+      return visitImplPackageProductSyntax
+    case .packageVersionRange: 
+      return visitImplPackageVersionRangeSyntax
     case .parameterClause: 
       return visitImplParameterClauseSyntax
     case .patternBindingList: 
@@ -6009,6 +6185,10 @@ open class SyntaxRewriter {
       return visitImplQualifiedDeclNameSyntax
     case .regexLiteralExpr: 
       return visitImplRegexLiteralExprSyntax
+    case .registryPackageDescription: 
+      return visitImplRegistryPackageDescriptionSyntax
+    case .registryRequirement: 
+      return visitImplRegistryRequirementSyntax
     case .repeatWhileStmt: 
       return visitImplRepeatWhileStmtSyntax
     case .returnClause: 
@@ -6021,6 +6201,10 @@ open class SyntaxRewriter {
       return visitImplSequenceExprSyntax
     case .simpleTypeIdentifier: 
       return visitImplSimpleTypeIdentifierSyntax
+    case .sourceControlPackageDescription: 
+      return visitImplSourceControlPackageDescriptionSyntax
+    case .sourceControlRequirement: 
+      return visitImplSourceControlRequirementSyntax
     case .sourceFile: 
       return visitImplSourceFileSyntax
     case .specializeAttributeSpecList: 
@@ -6335,6 +6519,8 @@ open class SyntaxRewriter {
       return visitImplExtensionDeclSyntax(data)
     case .fallthroughStmt: 
       return visitImplFallthroughStmtSyntax(data)
+    case .fileSystemPackageDescription: 
+      return visitImplFileSystemPackageDescriptionSyntax(data)
     case .floatLiteralExpr: 
       return visitImplFloatLiteralExprSyntax(data)
     case .forInStmt: 
@@ -6497,6 +6683,12 @@ open class SyntaxRewriter {
       return visitImplPackExpansionTypeSyntax(data)
     case .packReferenceType: 
       return visitImplPackReferenceTypeSyntax(data)
+    case .packageAttributeArguments: 
+      return visitImplPackageAttributeArgumentsSyntax(data)
+    case .packageProduct: 
+      return visitImplPackageProductSyntax(data)
+    case .packageVersionRange: 
+      return visitImplPackageVersionRangeSyntax(data)
     case .parameterClause: 
       return visitImplParameterClauseSyntax(data)
     case .patternBindingList: 
@@ -6539,6 +6731,10 @@ open class SyntaxRewriter {
       return visitImplQualifiedDeclNameSyntax(data)
     case .regexLiteralExpr: 
       return visitImplRegexLiteralExprSyntax(data)
+    case .registryPackageDescription: 
+      return visitImplRegistryPackageDescriptionSyntax(data)
+    case .registryRequirement: 
+      return visitImplRegistryRequirementSyntax(data)
     case .repeatWhileStmt: 
       return visitImplRepeatWhileStmtSyntax(data)
     case .returnClause: 
@@ -6551,6 +6747,10 @@ open class SyntaxRewriter {
       return visitImplSequenceExprSyntax(data)
     case .simpleTypeIdentifier: 
       return visitImplSimpleTypeIdentifierSyntax(data)
+    case .sourceControlPackageDescription: 
+      return visitImplSourceControlPackageDescriptionSyntax(data)
+    case .sourceControlRequirement: 
+      return visitImplSourceControlRequirementSyntax(data)
     case .sourceFile: 
       return visitImplSourceFileSyntax(data)
     case .specializeAttributeSpecList: 

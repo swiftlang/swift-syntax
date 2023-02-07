@@ -1235,6 +1235,18 @@ open class SyntaxVisitor {
   open func visitPost(_ node: FallthroughStmtSyntax) {
   }
   
+  /// Visiting `FileSystemPackageDescriptionSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: FileSystemPackageDescriptionSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting `FileSystemPackageDescriptionSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: FileSystemPackageDescriptionSyntax) {
+  }
+  
   /// Visiting `FloatLiteralExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -2207,6 +2219,42 @@ open class SyntaxVisitor {
   open func visitPost(_ node: PackReferenceTypeSyntax) {
   }
   
+  /// Visiting `PackageAttributeArgumentsSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: PackageAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting `PackageAttributeArgumentsSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: PackageAttributeArgumentsSyntax) {
+  }
+  
+  /// Visiting `PackageProductSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: PackageProductSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting `PackageProductSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: PackageProductSyntax) {
+  }
+  
+  /// Visiting `PackageVersionRangeSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: PackageVersionRangeSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting `PackageVersionRangeSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: PackageVersionRangeSyntax) {
+  }
+  
   /// Visiting `ParameterClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -2459,6 +2507,30 @@ open class SyntaxVisitor {
   open func visitPost(_ node: RegexLiteralExprSyntax) {
   }
   
+  /// Visiting `RegistryPackageDescriptionSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: RegistryPackageDescriptionSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting `RegistryPackageDescriptionSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: RegistryPackageDescriptionSyntax) {
+  }
+  
+  /// Visiting `RegistryRequirementSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: RegistryRequirementSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting `RegistryRequirementSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: RegistryRequirementSyntax) {
+  }
+  
   /// Visiting `RepeatWhileStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -2529,6 +2601,30 @@ open class SyntaxVisitor {
   /// The function called after visiting `SimpleTypeIdentifierSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: SimpleTypeIdentifierSyntax) {
+  }
+  
+  /// Visiting `SourceControlPackageDescriptionSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: SourceControlPackageDescriptionSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting `SourceControlPackageDescriptionSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: SourceControlPackageDescriptionSyntax) {
+  }
+  
+  /// Visiting `SourceControlRequirementSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: SourceControlRequirementSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting `SourceControlRequirementSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: SourceControlRequirementSyntax) {
   }
   
   /// Visiting `SourceFileSyntax` specifically.
@@ -4267,6 +4363,17 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplFileSystemPackageDescriptionSyntax(_ data: SyntaxData) {
+    let node = FileSystemPackageDescriptionSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplFloatLiteralExprSyntax(_ data: SyntaxData) {
     let node = FloatLiteralExprSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -5158,6 +5265,39 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplPackageAttributeArgumentsSyntax(_ data: SyntaxData) {
+    let node = PackageAttributeArgumentsSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplPackageProductSyntax(_ data: SyntaxData) {
+    let node = PackageProductSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplPackageVersionRangeSyntax(_ data: SyntaxData) {
+    let node = PackageVersionRangeSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplParameterClauseSyntax(_ data: SyntaxData) {
     let node = ParameterClauseSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -5389,6 +5529,28 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplRegistryPackageDescriptionSyntax(_ data: SyntaxData) {
+    let node = RegistryPackageDescriptionSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplRegistryRequirementSyntax(_ data: SyntaxData) {
+    let node = RegistryRequirementSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplRepeatWhileStmtSyntax(_ data: SyntaxData) {
     let node = RepeatWhileStmtSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -5446,6 +5608,28 @@ open class SyntaxVisitor {
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplSimpleTypeIdentifierSyntax(_ data: SyntaxData) {
     let node = SimpleTypeIdentifierSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplSourceControlPackageDescriptionSyntax(_ data: SyntaxData) {
+    let node = SourceControlPackageDescriptionSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplSourceControlRequirementSyntax(_ data: SyntaxData) {
+    let node = SourceControlRequirementSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -6224,6 +6408,8 @@ open class SyntaxVisitor {
       visitImplExtensionDeclSyntax(data)
     case .fallthroughStmt: 
       visitImplFallthroughStmtSyntax(data)
+    case .fileSystemPackageDescription: 
+      visitImplFileSystemPackageDescriptionSyntax(data)
     case .floatLiteralExpr: 
       visitImplFloatLiteralExprSyntax(data)
     case .forInStmt: 
@@ -6386,6 +6572,12 @@ open class SyntaxVisitor {
       visitImplPackExpansionTypeSyntax(data)
     case .packReferenceType: 
       visitImplPackReferenceTypeSyntax(data)
+    case .packageAttributeArguments: 
+      visitImplPackageAttributeArgumentsSyntax(data)
+    case .packageProduct: 
+      visitImplPackageProductSyntax(data)
+    case .packageVersionRange: 
+      visitImplPackageVersionRangeSyntax(data)
     case .parameterClause: 
       visitImplParameterClauseSyntax(data)
     case .patternBindingList: 
@@ -6428,6 +6620,10 @@ open class SyntaxVisitor {
       visitImplQualifiedDeclNameSyntax(data)
     case .regexLiteralExpr: 
       visitImplRegexLiteralExprSyntax(data)
+    case .registryPackageDescription: 
+      visitImplRegistryPackageDescriptionSyntax(data)
+    case .registryRequirement: 
+      visitImplRegistryRequirementSyntax(data)
     case .repeatWhileStmt: 
       visitImplRepeatWhileStmtSyntax(data)
     case .returnClause: 
@@ -6440,6 +6636,10 @@ open class SyntaxVisitor {
       visitImplSequenceExprSyntax(data)
     case .simpleTypeIdentifier: 
       visitImplSimpleTypeIdentifierSyntax(data)
+    case .sourceControlPackageDescription: 
+      visitImplSourceControlPackageDescriptionSyntax(data)
+    case .sourceControlRequirement: 
+      visitImplSourceControlRequirementSyntax(data)
     case .sourceFile: 
       visitImplSourceFileSyntax(data)
     case .specializeAttributeSpecList: 

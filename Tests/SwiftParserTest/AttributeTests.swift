@@ -540,4 +540,32 @@ final class AttributeTests: XCTestCase {
     AssertParse("func takeRepeater(_ f: @MainActor @Sendable @escaping () -> Int) {}")
     AssertParse("takeRepesater { @MainActor @Sendable () -> Int in 0 }")
   }
+
+  func testPackageAttribute() {
+    // File-system package
+    AssertParse(#"@_package(path: "/usr/local/my-package") import A"#)
+    AssertParse(#"@_package(path: "../my-package", product: "AA") import A"#)
+
+    // Source-control package
+    AssertParse(#"@_package(url: "https://example.com/package.git", from: "1.0.0") import A"#)
+    AssertParse(#"@_package(url: "https://example.com/package.git", exact: "0.1.0") import A"#)
+    AssertParse(#"@_package(url: "https://example.com/package.git", branch: "main") import A"#)
+    AssertParse(#"@_package(url: "https://example.com/package.git", "0.1.0"..<"0.2.0") import A"#)
+    AssertParse(
+      """
+      @_package(url: "https://example.com/package.git", revision: "af2977a84bf1037ed5180019a6f6ae0cb8a0d7d3")
+      import A
+      """
+    )
+
+    // Registry package
+    AssertParse(#"@_package(id: "Example.MyPackage", exact: "1.0.0") import A"#)
+    AssertParse(#"@_package(id: "Example.MyPackage", "0.1.0" ... "0.2.3") import A"#)
+    AssertParse(
+      """
+      @_package(id: "Example.MyPackage", from: "0.0.1", product: "AA")
+      @_exported import A
+      """
+    )
+  }
 }

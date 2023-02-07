@@ -120,6 +120,7 @@ extension Syntax {
         .node(ExpressionStmtSyntax.self), 
         .node(ExtensionDeclSyntax.self), 
         .node(FallthroughStmtSyntax.self), 
+        .node(FileSystemPackageDescriptionSyntax.self), 
         .node(FloatLiteralExprSyntax.self), 
         .node(ForInStmtSyntax.self), 
         .node(ForcedValueExprSyntax.self), 
@@ -201,6 +202,9 @@ extension Syntax {
         .node(PackExpansionExprSyntax.self), 
         .node(PackExpansionTypeSyntax.self), 
         .node(PackReferenceTypeSyntax.self), 
+        .node(PackageAttributeArgumentsSyntax.self), 
+        .node(PackageProductSyntax.self), 
+        .node(PackageVersionRangeSyntax.self), 
         .node(ParameterClauseSyntax.self), 
         .node(PatternBindingListSyntax.self), 
         .node(PatternBindingSyntax.self), 
@@ -222,12 +226,16 @@ extension Syntax {
         .node(ProtocolDeclSyntax.self), 
         .node(QualifiedDeclNameSyntax.self), 
         .node(RegexLiteralExprSyntax.self), 
+        .node(RegistryPackageDescriptionSyntax.self), 
+        .node(RegistryRequirementSyntax.self), 
         .node(RepeatWhileStmtSyntax.self), 
         .node(ReturnClauseSyntax.self), 
         .node(ReturnStmtSyntax.self), 
         .node(SameTypeRequirementSyntax.self), 
         .node(SequenceExprSyntax.self), 
         .node(SimpleTypeIdentifierSyntax.self), 
+        .node(SourceControlPackageDescriptionSyntax.self), 
+        .node(SourceControlRequirementSyntax.self), 
         .node(SourceFileSyntax.self), 
         .node(SpecializeAttributeSpecListSyntax.self), 
         .node(SpecializeExprSyntax.self), 
@@ -489,6 +497,8 @@ extension SyntaxKind {
       return ExtensionDeclSyntax.self
     case .fallthroughStmt: 
       return FallthroughStmtSyntax.self
+    case .fileSystemPackageDescription: 
+      return FileSystemPackageDescriptionSyntax.self
     case .floatLiteralExpr: 
       return FloatLiteralExprSyntax.self
     case .forInStmt: 
@@ -651,6 +661,12 @@ extension SyntaxKind {
       return PackExpansionTypeSyntax.self
     case .packReferenceType: 
       return PackReferenceTypeSyntax.self
+    case .packageAttributeArguments: 
+      return PackageAttributeArgumentsSyntax.self
+    case .packageProduct: 
+      return PackageProductSyntax.self
+    case .packageVersionRange: 
+      return PackageVersionRangeSyntax.self
     case .parameterClause: 
       return ParameterClauseSyntax.self
     case .patternBindingList: 
@@ -693,6 +709,10 @@ extension SyntaxKind {
       return QualifiedDeclNameSyntax.self
     case .regexLiteralExpr: 
       return RegexLiteralExprSyntax.self
+    case .registryPackageDescription: 
+      return RegistryPackageDescriptionSyntax.self
+    case .registryRequirement: 
+      return RegistryRequirementSyntax.self
     case .repeatWhileStmt: 
       return RepeatWhileStmtSyntax.self
     case .returnClause: 
@@ -705,6 +725,10 @@ extension SyntaxKind {
       return SequenceExprSyntax.self
     case .simpleTypeIdentifier: 
       return SimpleTypeIdentifierSyntax.self
+    case .sourceControlPackageDescription: 
+      return SourceControlPackageDescriptionSyntax.self
+    case .sourceControlRequirement: 
+      return SourceControlRequirementSyntax.self
     case .sourceFile: 
       return SourceFileSyntax.self
     case .specializeAttributeSpecList: 
@@ -1016,6 +1040,8 @@ extension SyntaxKind {
       return "extension"
     case .fallthroughStmt: 
       return "'fallthrough' statement"
+    case .fileSystemPackageDescription: 
+      return "local package description"
     case .floatLiteralExpr: 
       return "floating literal"
     case .forInStmt: 
@@ -1178,6 +1204,12 @@ extension SyntaxKind {
       return "variadic expansion"
     case .packReferenceType: 
       return "pack reference"
+    case .packageAttributeArguments: 
+      return "@_package arguments"
+    case .packageProduct: 
+      return "package product"
+    case .packageVersionRange: 
+      return "range of package version"
     case .parameterClause: 
       return "parameter clause"
     case .patternBindingList: 
@@ -1220,6 +1252,10 @@ extension SyntaxKind {
       return "declaration name"
     case .regexLiteralExpr: 
       return "regex literal"
+    case .registryPackageDescription: 
+      return "remote package description"
+    case .registryRequirement: 
+      return "labeled package requirement (registry)"
     case .repeatWhileStmt: 
       return "'repeat' statement"
     case .returnClause: 
@@ -1232,6 +1268,10 @@ extension SyntaxKind {
       return nil
     case .simpleTypeIdentifier: 
       return "type"
+    case .sourceControlPackageDescription: 
+      return "remote package description (source control)"
+    case .sourceControlRequirement: 
+      return "labeled package requirement (source control)"
     case .sourceFile: 
       return "source file"
     case .specializeAttributeSpecList: 

@@ -26,4 +26,22 @@ final class ImportTests: XCTestCase {
 
     AssertBuildResult(importDecl, "␣import SwiftSyntax")
   }
+
+  func testPackageAttribute() {
+    let builder = DeclSyntax(
+      """
+      @_package(url: "https://github.com/apple/swift-log.git", "1.0.0"..<"2.0.0")
+      import Logging
+      """
+    )
+    XCTAssertTrue(builder.is(ImportDeclSyntax.self))
+
+    AssertBuildResult(
+      builder,
+      """
+      @_package(url: "https://github.com/apple/swift-log.git", "1.0.0" ..< "2.0.0")
+      import Logging
+      """
+    )
+  }
 }

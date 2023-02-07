@@ -61,10 +61,11 @@ open class BasicFormat: SyntaxRewriter {
     leadingTrivia = leadingTrivia.indented(indentation: indentation)
     trailingTrivia = trailingTrivia.indented(indentation: indentation)
     let rewritten = TokenSyntax(
-      node.tokenKind, 
-      leadingTrivia: leadingTrivia, 
-      trailingTrivia: trailingTrivia, 
-      presence: node.presence
+        node.tokenKind, 
+        leadingTrivia: leadingTrivia, 
+        trailingTrivia: trailingTrivia, 
+        presence: node.presence
+      
     )
     lastRewrittenToken = rewritten
     putNextTokenOnNewLine = false

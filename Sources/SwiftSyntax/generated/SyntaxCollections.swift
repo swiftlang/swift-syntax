@@ -8138,10 +8138,11 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
     
     public static var structure: SyntaxNodeStructure {
       return .choices([
-          .node(LabeledSpecializeEntrySyntax.self), 
-          .node(AvailabilityEntrySyntax.self), 
-          .node(TargetFunctionEntrySyntax.self), 
-          .node(GenericWhereClauseSyntax.self)])
+            .node(LabeledSpecializeEntrySyntax.self), 
+            .node(AvailabilityEntrySyntax.self), 
+            .node(TargetFunctionEntrySyntax.self), 
+            .node(GenericWhereClauseSyntax.self)
+          ])
     }
   }
   

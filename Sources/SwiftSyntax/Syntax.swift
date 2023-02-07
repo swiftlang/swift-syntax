@@ -255,11 +255,6 @@ extension SyntaxProtocol {
 }
 
 public extension SyntaxProtocol {
-  @available(*, deprecated, message: "Use children(viewMode:) instead")
-  var children: SyntaxChildren {
-    return children(viewMode: .sourceAccurate)
-  }
-
   /// A sequence over the `present` children of this node.
   func children(viewMode: SyntaxTreeViewMode) -> SyntaxChildren {
     return SyntaxChildren(_syntaxNode, viewMode: viewMode)
@@ -283,9 +278,18 @@ public extension SyntaxProtocol {
     return raw.kind.isSyntaxCollection
   }
 
-  /// Whether this tree contains a missing token or unexpected node.
+  /// Whether the tree contained by this layout has any
+  ///  - missing nodes or
+  ///  - unexpected nodes or
+  ///  - tokens with a `LexerError` of severity `error`
   var hasError: Bool {
     return raw.recursiveFlags.contains(.hasError)
+  }
+
+  /// Whether the tree contained by this layout has any tokens with a `LexerError`
+  /// of severity `warning`.
+  var hasWarning: Bool {
+    return raw.recursiveFlags.contains(.hasWarning)
   }
 
   /// Whether this tree contains a missing token or unexpected node.
@@ -521,12 +525,6 @@ public extension SyntaxProtocol {
       this = parent
     }
     return this
-  }
-
-  /// Sequence of tokens that are part of this Syntax node.
-  @available(*, deprecated, message: "Use tokens(viewMode:) instead")
-  var tokens: TokenSequence {
-    return tokens(viewMode: .sourceAccurate)
   }
 
   /// Sequence of tokens that are part of this Syntax node.

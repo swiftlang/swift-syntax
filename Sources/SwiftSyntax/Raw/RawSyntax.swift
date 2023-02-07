@@ -23,10 +23,16 @@ fileprivate extension SyntaxKind {
 struct RecursiveRawSyntaxFlags: OptionSet {
   let rawValue: UInt8
 
-  /// Whether the tree contained by this layout has any missing or unexpected nodes.
+  /// Whether the tree contained by this layout has any
+  ///  - missing nodes or
+  ///  - unexpected nodes or
+  ///  - tokens with a `LexerError` of severity `error`
   static let hasError = RecursiveRawSyntaxFlags(rawValue: 1 << 0)
-  static let hasSequenceExpr = RecursiveRawSyntaxFlags(rawValue: 1 << 1)
-  static let hasMaximumNestingLevelOverflow = RecursiveRawSyntaxFlags(rawValue: 1 << 2)
+  /// Whether the tree contained by this layout has any tokens with a `LexerError`
+  /// of severity `warning`.
+  static let hasWarning = RecursiveRawSyntaxFlags(rawValue: 1 << 1)
+  static let hasSequenceExpr = RecursiveRawSyntaxFlags(rawValue: 1 << 2)
+  static let hasMaximumNestingLevelOverflow = RecursiveRawSyntaxFlags(rawValue: 1 << 3)
 }
 
 /// Node data for RawSyntax tree. Tagged union plus common data.
@@ -227,8 +233,16 @@ extension RawSyntax {
     switch view {
     case .token(let tokenView):
       var recursiveFlags: RecursiveRawSyntaxFlags = []
-      if tokenView.lexerError != nil || tokenView.presence == .missing {
+      if tokenView.presence == .missing {
         recursiveFlags.insert(.hasError)
+      }
+      switch tokenView.lexerError?.severity {
+      case .error:
+        recursiveFlags.insert(.hasError)
+      case .warning:
+        recursiveFlags.insert(.hasWarning)
+      case nil:
+        break
       }
       return recursiveFlags
     case .layout(let layoutView):

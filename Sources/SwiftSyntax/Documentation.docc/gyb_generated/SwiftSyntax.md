@@ -467,7 +467,6 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/SyntaxProtocol>
 - <doc:SwiftSyntax/SyntaxArena>
 - <doc:SwiftSyntax/SyntaxEnum>
-- <doc:SwiftSyntax/SyntaxFactory>
 - <doc:SwiftSyntax/SyntaxHashable>
 - <doc:SwiftSyntax/SyntaxIdentifier>
 - <doc:SwiftSyntax/RawTokenKind>

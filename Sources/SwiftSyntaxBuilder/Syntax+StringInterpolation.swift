@@ -84,17 +84,6 @@ extension SyntaxStringInterpolation: StringInterpolationProtocol {
     self.lastIndentation = nil
   }
 
-  // Append a value of any CustomStringConvertible type as source text.
-  // Deprecated because this can cause code injection bugs (and we want the
-  // error message to tell users what to do instead).
-  @available(*, deprecated, renamed: "appendInterpolation(raw:)", message: "use '\\(raw: <value>)' to interpolate a plain string directly into Swift code, or use '\\(literal: <value>)' to add it in a literal")
-  public mutating func appendInterpolation<T: CustomStringConvertible>(
-    _ value: T
-  ) {
-    sourceText.append(contentsOf: value.description.utf8)
-    self.lastIndentation = nil
-  }
-
   public mutating func appendInterpolation<T>(raw value: T) {
     sourceText.append(contentsOf: String(describing: value).utf8)
     self.lastIndentation = nil

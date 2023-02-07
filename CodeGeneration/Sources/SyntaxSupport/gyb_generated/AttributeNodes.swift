@@ -618,7 +618,7 @@ public let ATTRIBUTE_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "ForLabel",
-               kind: .token(choices: [.keyword(text: "for")])),
+               kind: .token(choices: [.keyword(text: "for")], requiresTrailingSpace: false)),
          Child(name: "Colon",
                kind: .token(choices: [.token(tokenKind: "ColonToken")])),
          Child(name: "Declname",

@@ -13,11 +13,6 @@ public enum SyntaxVisitorContinueKind {
 open class SyntaxVisitor {
   public let viewMode: SyntaxTreeViewMode
   
-  @available(*, deprecated, message: "Use init(viewMode:) instead")
-  public convenience init() {
-    self.init(viewMode: .sourceAccurate)
-  }
-  
   public init(viewMode: SyntaxTreeViewMode) {
     self.viewMode = viewMode
   }

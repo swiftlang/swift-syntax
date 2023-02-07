@@ -15,7 +15,6 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 
 final class CollectionNodeFlatteningTests: XCTestCase {
-
   func test_FlattenCodeBlockItemListWithBuilder() {
     let leadingTrivia = Trivia.unexpectedText("␣")
 

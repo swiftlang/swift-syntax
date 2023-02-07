@@ -15,6 +15,40 @@ import SwiftSyntaxBuilder
 import SyntaxSupport
 import Utils
 
+extension Child {
+  var requiresLeadingSpace: Bool? {
+    switch self.kind {
+    case .token(choices: _, requiresLeadingSpace: let requiresLeadingSpace, requiresTrailingSpace: _):
+      return requiresLeadingSpace
+    case .nodeChoices(choices: let choices):
+      for choice in choices {
+        if let requiresLeadingSpace = choice.requiresLeadingSpace {
+          return requiresLeadingSpace
+        }
+      }
+    default:
+      break
+    }
+    return nil
+  }
+
+  var requiresTrailingSpace: Bool? {
+    switch self.kind {
+    case .token(choices: _, requiresLeadingSpace: _, requiresTrailingSpace: let requiresTrailingSpace):
+      return requiresTrailingSpace
+    case .nodeChoices(choices: let choices):
+      for choice in choices {
+        if let requiresTrailingSpace = choice.requiresTrailingSpace {
+          return requiresTrailingSpace
+        }
+      }
+    default:
+      break
+    }
+    return nil
+  }
+}
+
 let basicFormatFile = SourceFileSyntax {
   DeclSyntax(
     """
@@ -126,14 +160,34 @@ let basicFormatFile = SourceFileSyntax {
       }
     }
 
+    try FunctionDeclSyntax(
+      """
+      /// If this returns a value that is not `nil`, it overrides the default
+      /// leading space behavior of a token.
+      open func requiresLeadingSpace(_ keyPath: AnyKeyPath) -> Bool?
+      """
+    ) {
+      try SwitchStmtSyntax("switch keyPath") {
+        for node in SYNTAX_NODES where !node.isBase {
+          for child in node.children {
+            if let requiresLeadingSpace = child.requiresLeadingSpace {
+              SwitchCaseSyntax("case \\\(raw: node.type.syntaxBaseName).\(raw: child.swiftName):") {
+                StmtSyntax("return \(literal: requiresLeadingSpace)")
+              }
+            }
+          }
+        }
+        SwitchCaseSyntax("default:") {
+          StmtSyntax("return nil")
+        }
+      }
+    }
+
     try FunctionDeclSyntax("open func requiresLeadingSpace(_ token: TokenSyntax) -> Bool") {
       StmtSyntax(
         """
-        switch (token.previousToken(viewMode: .sourceAccurate)?.tokenKind, token.tokenKind) {
-        case (.leftParen, .binaryOperator):  // Ensures there is no space in @available(*, deprecated)
-          return false
-        default:
-          break
+        if let keyPath = getKeyPath(token), let requiresLeadingSpace = requiresLeadingSpace(keyPath) {
+          return requiresLeadingSpace
         }
         """
       )
@@ -157,17 +211,34 @@ let basicFormatFile = SourceFileSyntax {
       }
     }
 
+    try FunctionDeclSyntax(
+      """
+      /// If this returns a value that is not `nil`, it overrides the default
+      /// trailing space behavior of a token.
+      open func requiresTrailingSpace(_ keyPath: AnyKeyPath) -> Bool?
+      """
+    ) {
+      try SwitchStmtSyntax("switch keyPath") {
+        for node in SYNTAX_NODES where !node.isBase {
+          for child in node.children {
+            if let requiresTrailingSpace = child.requiresTrailingSpace {
+              SwitchCaseSyntax("case \\\(raw: node.type.syntaxBaseName).\(raw: child.swiftName):") {
+                StmtSyntax("return \(literal: requiresTrailingSpace)")
+              }
+            }
+          }
+        }
+        SwitchCaseSyntax("default:") {
+          StmtSyntax("return nil")
+        }
+      }
+    }
+
     try FunctionDeclSyntax("open func requiresTrailingSpace(_ token: TokenSyntax) -> Bool") {
       StmtSyntax(
         """
-        switch (token.tokenKind, token.parent?.kind) {
-        case (.colon, .dictionaryExpr): // Ensures there is not space in `[:]`
-          return false
-        case (.exclamationMark, .tryExpr), // Ensures there is a space in `try! foo`
-             (.postfixQuestionMark, .tryExpr): // Ensures there is a space in `try? foo`
-          return true
-        default:
-          break
+        if let keyPath = getKeyPath(token), let requiresTrailingSpace = requiresTrailingSpace(keyPath) {
+          return requiresTrailingSpace
         }
         """
       )
@@ -179,14 +250,11 @@ let basicFormatFile = SourceFileSyntax {
              (.keyword(.as), .postfixQuestionMark), // Ensures there is not space in `as?`
              (.exclamationMark, .leftParen), // Ensures there is not space in `myOptionalClosure!()`
              (.exclamationMark, .period), // Ensures there is not space in `myOptionalBar!.foo()`
-             (.keyword(.`init`), .leftParen), // Ensures there is not space in `init()`
-             (.keyword(.`init`), .postfixQuestionMark), // Ensures there is not space in `init?`
-             (.postfixQuestionMark, .leftParen), // Ensures there is not space in `init?()`
+             (.postfixQuestionMark, .leftParen), // Ensures there is not space in `init?()` or `myOptionalClosure?()`s
              (.postfixQuestionMark, .rightAngle), // Ensures there is not space in `ContiguousArray<RawSyntax?>`
              (.postfixQuestionMark, .rightParen), // Ensures there is not space in `myOptionalClosure?()`
              (.keyword(.try), .exclamationMark), // Ensures there is not space in `try!`
-             (.keyword(.try), .postfixQuestionMark), // Ensures there is not space in `try?`
-             (.binaryOperator, .comma): // Ensures there is no space in `@available(*, deprecated)`
+             (.keyword(.try), .postfixQuestionMark): // Ensures there is not space in `try?`:
           return false
         default:
           break
@@ -215,7 +283,7 @@ let basicFormatFile = SourceFileSyntax {
 
     DeclSyntax(
       """
-      private func getKeyPath(_ node: Syntax) -> AnyKeyPath? {
+      private func getKeyPath<T: SyntaxProtocol>(_ node: T) -> AnyKeyPath? {
         guard let parent = node.parent else {
           return nil
         }

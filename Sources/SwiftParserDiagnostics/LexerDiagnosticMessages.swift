@@ -39,8 +39,20 @@ public extension LexerError {
 /// Please order the cases in this enum alphabetically by case name.
 public enum StaticLexerError: String, DiagnosticMessage {
   case expectedBinaryExponentInHexFloatLiteral = "hexadecimal floating point literal must end with an exponent"
+  case expectedClosingBraceInUnicodeEscape = #"expected '}' in \u{...} escape sequence"#
   case expectedDigitInFloatLiteral = "expected a digit in floating point exponent"
+  case expectedHexCodeInUnicodeEscape = #"expected hexadecimal code in \u{...} escape sequence"#
+  case expectedHexDigitInHexLiteral = "expected hexadecimal digit (0-9, A-F) in integer literal"
+  case invalidCharacter = "invalid character in source file"
+  case invalidEscapeSequenceInStringLiteral = "invalid escape sequence in literal"
+  case invalidIdentifierStartCharacter = "an identifier cannot begin with this character"
+  case invalidNumberOfHexDigitsInUnicodeEscape = #"\u{...} escape sequence expects between 1 and 8 hex digits"#
+  case invalidUtf8 = "invalid UTF-8 found in source file"
   case lexerErrorOffsetOverflow = "the lexer dicovered an error in this token but was not able to represent its offset due to overflow; please split the token"
+  case sourceConflictMarker = "source control conflict marker in source file"
+  case unexpectedBlockCommentEnd = "unexpected end of block comment"
+  case unicodeCurlyQuote = #"unicode curly quote found; use '"' instead"#
+  case unprintableAsciiCharacter = "unprintable ASCII character found in source file"
 
   public var message: String { self.rawValue }
 
@@ -49,6 +61,20 @@ public enum StaticLexerError: String, DiagnosticMessage {
   }
 
   public var severity: DiagnosticSeverity { .error }
+}
+
+/// Please order the cases in this enum alphabetically by case name.
+public enum StaticLexerWarning: String, DiagnosticMessage {
+  case nonBreakingSpace = "non-breaking space (U+00A0) used instead of regular space"
+  case nulCharacter = "nul character embedded in middle of file"
+
+  public var message: String { self.rawValue }
+
+  public var diagnosticID: MessageID {
+    MessageID(domain: diagnosticDomain, id: "\(type(of: self)).\(self)")
+  }
+
+  public var severity: DiagnosticSeverity { .warning }
 }
 
 public struct InvalidFloatingPointExponentDigit: LexerError {
@@ -98,7 +124,7 @@ public extension SwiftSyntax.LexerError {
   /// `tokenText` is the entire text of the token in which the `LexerError`
   /// occurred, including trivia.
   @_spi(RawSyntax)
-  func diagnostic(wholeTextBytes: [UInt8]) -> DiagnosticMessage {
+  func diagnosticMessage(wholeTextBytes: [UInt8]) -> DiagnosticMessage {
     var scalarAtErrorOffset: UnicodeScalar {
       // Fall back to the Unicode replacement character U+FFFD in case we can't
       // lex the unicode character at `byteOffset`. It's the best we can do
@@ -106,37 +132,74 @@ public extension SwiftSyntax.LexerError {
     }
 
     switch self.kind {
-    case .expectedBinaryExponentInHexFloatLiteral:
-      return StaticLexerError.expectedBinaryExponentInHexFloatLiteral
-    case .expectedDigitInFloatLiteral:
-      return StaticLexerError.expectedDigitInFloatLiteral
+    case .expectedBinaryExponentInHexFloatLiteral: return StaticLexerError.expectedBinaryExponentInHexFloatLiteral
+    case .expectedClosingBraceInUnicodeEscape: return StaticLexerError.expectedClosingBraceInUnicodeEscape
+    case .expectedDigitInFloatLiteral: return StaticLexerError.expectedDigitInFloatLiteral
+    case .expectedHexCodeInUnicodeEscape: return StaticLexerError.expectedHexCodeInUnicodeEscape
+    case .expectedHexDigitInHexLiteral: return StaticLexerError.expectedHexDigitInHexLiteral
     case .insufficientIndentationInMultilineStringLiteral:
       // This should be diagnosed when visiting the `StringLiteralExprSyntax`
       // inside `ParseDiagnosticsGenerator` but fall back to an error message
       // here in case the error is not diagnosed.
       return InvalidIndentationInMultiLineStringLiteralError(kind: .insufficientIndentation, lines: 1)
-    case .invalidBinaryDigitInIntegerLiteral:
-      return InvalidDigitInIntegerLiteral(kind: .binary(scalarAtErrorOffset))
-    case .invalidDecimalDigitInIntegerLiteral:
-      return InvalidDigitInIntegerLiteral(kind: .decimal(scalarAtErrorOffset))
-    case .invalidFloatingPointCharacter:
-      fatalError()
-    case .invalidFloatingPointDigit:
-      fatalError()
-    case .invalidFloatingPointExponentCharacter:
-      return InvalidFloatingPointExponentDigit(kind: .character(scalarAtErrorOffset))
-    case .invalidFloatingPointExponentDigit:
-      return InvalidFloatingPointExponentDigit(kind: .digit(scalarAtErrorOffset))
-    case .invalidHexDigitInIntegerLiteral:
-      return InvalidDigitInIntegerLiteral(kind: .hex(scalarAtErrorOffset))
-    case .invalidOctalDigitInIntegerLiteral:
-      return InvalidDigitInIntegerLiteral(kind: .octal(scalarAtErrorOffset))
-    case .lexerErrorOffsetOverflow:
-      return StaticLexerError.lexerErrorOffsetOverflow
+    case .invalidBinaryDigitInIntegerLiteral: return InvalidDigitInIntegerLiteral(kind: .binary(scalarAtErrorOffset))
+    case .invalidCharacter: return StaticLexerError.invalidCharacter
+    case .invalidDecimalDigitInIntegerLiteral: return InvalidDigitInIntegerLiteral(kind: .decimal(scalarAtErrorOffset))
+    case .invalidEscapeSequenceInStringLiteral: return StaticLexerError.invalidEscapeSequenceInStringLiteral
+    case .invalidFloatingPointExponentCharacter: return InvalidFloatingPointExponentDigit(kind: .character(scalarAtErrorOffset))
+    case .invalidFloatingPointExponentDigit: return InvalidFloatingPointExponentDigit(kind: .digit(scalarAtErrorOffset))
+    case .invalidHexDigitInIntegerLiteral: return InvalidDigitInIntegerLiteral(kind: .hex(scalarAtErrorOffset))
+    case .invalidIdentifierStartCharacter: return StaticLexerError.invalidIdentifierStartCharacter
+    case .invalidNumberOfHexDigitsInUnicodeEscape: return StaticLexerError.invalidNumberOfHexDigitsInUnicodeEscape
+    case .invalidOctalDigitInIntegerLiteral: return InvalidDigitInIntegerLiteral(kind: .octal(scalarAtErrorOffset))
+    case .invalidUtf8: return StaticLexerError.invalidUtf8
+    case .lexerErrorOffsetOverflow: return StaticLexerError.lexerErrorOffsetOverflow
+    case .nonBreakingSpace: return StaticLexerWarning.nonBreakingSpace
+    case .nulCharacter: return StaticLexerWarning.nulCharacter
+    case .sourceConflictMarker: return StaticLexerError.sourceConflictMarker
+    case .unexpectedBlockCommentEnd: return StaticLexerError.unexpectedBlockCommentEnd
+    case .unicodeCurlyQuote: return StaticLexerError.unicodeCurlyQuote
+    case .unprintableAsciiCharacter: return StaticLexerError.unprintableAsciiCharacter
     }
   }
 
-  func diagnostic(in token: TokenSyntax) -> DiagnosticMessage {
-    return self.diagnostic(wholeTextBytes: token.syntaxTextBytes)
+  func diagnosticMessage(in token: TokenSyntax) -> DiagnosticMessage {
+    return self.diagnosticMessage(wholeTextBytes: token.syntaxTextBytes)
+  }
+
+  func fixIts(in token: TokenSyntax) -> [FixIt] {
+    switch self.kind {
+    case .nonBreakingSpace:
+      let replaceNonBreakingSpace = { (piece: TriviaPiece) -> TriviaPiece in
+        if piece == .unexpectedText("\u{a0}") {
+          return .spaces(1)
+        } else {
+          return piece
+        }
+      }
+      let fixedToken =
+        token
+        .with(\.leadingTrivia, Trivia(pieces: token.leadingTrivia.map(replaceNonBreakingSpace)))
+        .with(\.trailingTrivia, Trivia(pieces: token.trailingTrivia.map(replaceNonBreakingSpace)))
+      return [
+        FixIt(message: .replaceNonBreakingSpaceBySpace, changes: [[.replace(oldNode: Syntax(token), newNode: Syntax(fixedToken))]])
+      ]
+    case .unicodeCurlyQuote:
+      let (rawKind, text) = token.tokenKind.decomposeToRaw()
+      guard let text = text else {
+        return []
+      }
+      let replacedText =
+        text
+        .replacingFirstOccurence(of: "“", with: #"""#)
+        .replacingLastOccurence(of: "”", with: #"""#)
+
+      let fixedToken = token.withKind(TokenKind.fromRaw(kind: rawKind, text: replacedText))
+      return [
+        FixIt(message: .replaceCurlyQuoteByNormalQuote, changes: [[.replace(oldNode: Syntax(token), newNode: Syntax(fixedToken))]])
+      ]
+    default:
+      return []
+    }
   }
 }

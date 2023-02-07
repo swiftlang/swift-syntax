@@ -136,12 +136,20 @@ open class BasicFormat: SyntaxRewriter {
     }
   }
   
-  open func requiresLeadingSpace(_ token: TokenSyntax) -> Bool {
-    switch (token.previousToken(viewMode: .sourceAccurate)?.tokenKind, token.tokenKind) {
-    case (.leftParen, .binaryOperator):  // Ensures there is no space in @available(*, deprecated)
+  /// If this returns a value that is not `nil`, it overrides the default
+  /// leading space behavior of a token.
+  open func requiresLeadingSpace(_ keyPath: AnyKeyPath) -> Bool? {
+    switch keyPath {
+    case \AvailabilityArgumentSyntax.entry: 
       return false
     default: 
-      break 
+      return nil
+    }
+  }
+  
+  open func requiresLeadingSpace(_ token: TokenSyntax) -> Bool {
+    if let keyPath = getKeyPath(token), let requiresLeadingSpace = requiresLeadingSpace(keyPath) {
+      return requiresLeadingSpace
     }
     switch token.tokenKind {
     case .leftBrace: 
@@ -163,29 +171,37 @@ open class BasicFormat: SyntaxRewriter {
     }
   }
   
-  open func requiresTrailingSpace(_ token: TokenSyntax) -> Bool {
-    switch (token.tokenKind, token.parent?.kind) {
-    case (.colon, .dictionaryExpr): // Ensures there is not space in `[:]`
+  /// If this returns a value that is not `nil`, it overrides the default
+  /// trailing space behavior of a token.
+  open func requiresTrailingSpace(_ keyPath: AnyKeyPath) -> Bool? {
+    switch keyPath {
+    case \AvailabilityArgumentSyntax.entry: 
       return false
-    case (.exclamationMark, .tryExpr), // Ensures there is a space in `try! foo`
-     (.postfixQuestionMark, .tryExpr): // Ensures there is a space in `try? foo`
+    case \DictionaryExprSyntax.content: 
+      return false
+    case \DynamicReplacementArgumentsSyntax.forLabel: 
+      return false
+    case \TryExprSyntax.questionOrExclamationMark: 
       return true
     default: 
-      break 
+      return nil
+    }
+  }
+  
+  open func requiresTrailingSpace(_ token: TokenSyntax) -> Bool {
+    if let keyPath = getKeyPath(token), let requiresTrailingSpace = requiresTrailingSpace(keyPath) {
+      return requiresTrailingSpace
     }
     switch (token.tokenKind, token.nextToken(viewMode: .sourceAccurate)?.tokenKind) {
     case (.keyword(.as), .exclamationMark), // Ensures there is not space in `as!`
      (.keyword(.as), .postfixQuestionMark), // Ensures there is not space in `as?`
      (.exclamationMark, .leftParen), // Ensures there is not space in `myOptionalClosure!()`
      (.exclamationMark, .period), // Ensures there is not space in `myOptionalBar!.foo()`
-     (.keyword(.`init`), .leftParen), // Ensures there is not space in `init()`
-     (.keyword(.`init`), .postfixQuestionMark), // Ensures there is not space in `init?`
-     (.postfixQuestionMark, .leftParen), // Ensures there is not space in `init?()`
+     (.postfixQuestionMark, .leftParen), // Ensures there is not space in `init?()` or `myOptionalClosure?()`s
      (.postfixQuestionMark, .rightAngle), // Ensures there is not space in `ContiguousArray<RawSyntax?>`
      (.postfixQuestionMark, .rightParen), // Ensures there is not space in `myOptionalClosure?()`
      (.keyword(.try), .exclamationMark), // Ensures there is not space in `try!`
-     (.keyword(.try), .postfixQuestionMark), // Ensures there is not space in `try?`
-     (.binaryOperator, .comma): // Ensures there is no space in `@available(*, deprecated)`
+     (.keyword(.try), .postfixQuestionMark): // Ensures there is not space in `try?`:
       return false
     default: 
       break 
@@ -233,8 +249,6 @@ open class BasicFormat: SyntaxRewriter {
       return true
     case .keyword(.`defer`): 
       return true
-    case .keyword(.`deinit`): 
-      return true
     case .keyword(.`else`): 
       return true
     case .keyword(.`enum`): 
@@ -256,8 +270,6 @@ open class BasicFormat: SyntaxRewriter {
     case .keyword(.`import`): 
       return true
     case .keyword(.`in`): 
-      return true
-    case .keyword(.`init`): 
       return true
     case .keyword(.`inout`): 
       return true
@@ -310,7 +322,7 @@ open class BasicFormat: SyntaxRewriter {
     }
   }
   
-  private func getKeyPath(_ node: Syntax) -> AnyKeyPath? {
+  private func getKeyPath<T: SyntaxProtocol>(_ node: T) -> AnyKeyPath? {
     guard let parent = node.parent else {
       return nil
     }

@@ -13,7 +13,9 @@ class Child(object):
                  token_choices=None, text_choices=None, node_choices=None,
                  collection_element_name=None,
                  classification=None, force_classification=False,
-                 is_indented=False, requires_leading_newline=False):
+                 is_indented=False, requires_leading_newline=False,
+                 requires_leading_space=None,
+                 requires_trailing_space=None):
         """
         If a classification is passed, it specifies the color identifiers in
         that subtree should inherit for syntax coloring. Must be a member of
@@ -33,6 +35,8 @@ class Child(object):
         self.force_classification = force_classification
         self.is_indented = is_indented
         self.requires_leading_newline = requires_leading_newline
+        self.requires_leading_space = requires_leading_space
+        self.requires_trailing_space = requires_trailing_space
 
         # If the child ends with "token" in the kind, it's considered
         # a token node. Grab the existing reference to that token from the

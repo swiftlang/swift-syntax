@@ -874,7 +874,7 @@ extension Parser {
 
 extension Parser {
   mutating func parsePackageAttributeArguments() -> RawPackageAttributeArgumentsSyntax {
-    // Parsing package description
+    // Parsing package location
     let (unexpectedBeforeLocationLabel, locationLabel) = self.expectAny([.keyword(.id), .keyword(.path), .keyword(.url)], default: .keyword(.id))
     let (unexpectedBeforeLocationColon, locationColon) = self.expect(.colon)
     let location = self.parseStringLiteral()

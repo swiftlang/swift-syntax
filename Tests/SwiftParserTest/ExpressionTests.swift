@@ -611,9 +611,10 @@ final class ExpressionTests: XCTestCase {
     )
 
     AssertParse(
-      ###""\1️⃣"###,
+      ###""1️⃣\2️⃣"###,
       diagnostics: [
-        DiagnosticSpec(message: #"expected '"' to end string literal"#)
+        DiagnosticSpec(locationMarker: "1️⃣", message: "invalid escape sequence in literal"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#),
       ]
     )
   }
@@ -699,9 +700,12 @@ final class ExpressionTests: XCTestCase {
   func testPoundsInStringInterpolationWhereNotNecessary() {
     AssertParse(
       ##"""
-      "\#(1)"
+      "1️⃣\#(1)"
       """##,
-      substructure: Syntax(StringSegmentSyntax(content: .stringSegment(##"\#(1)"##)))
+      substructure: Syntax(StringSegmentSyntax(content: .stringSegment(##"\#(1)"##))),
+      diagnostics: [
+        DiagnosticSpec(message: "invalid escape sequence in literal")
+      ]
     )
   }
 
@@ -1147,6 +1151,45 @@ final class ExpressionTests: XCTestCase {
       fixedSource: """
         a is <#type#>
         """
+    )
+  }
+
+  func testNonBreakingSpace() {
+    AssertParse(
+      "a 1️⃣\u{a0}+ 2",
+      diagnostics: [
+        DiagnosticSpec(message: "non-breaking space (U+00A0) used instead of regular space", severity: .warning, fixIts: ["replace non-breaking space by ' '"])
+      ],
+      fixedSource: "a  + 2"
+    )
+  }
+
+  func testTabsIndentationInMultilineStringLiteral() {
+    AssertParse(
+      #"""
+      _ = """
+      \#taq
+      \#t"""
+      """#
+    )
+  }
+
+  func testMixedIndentationInMultilineStringLiteral() {
+    AssertParse(
+      #"""
+      _ = """
+      \#t aq
+      \#t """
+      """#
+    )
+  }
+
+  func testNulCharacterInSourceFile() {
+    AssertParse(
+      "let a = 1️⃣\u{0}1",
+      diagnostics: [
+        DiagnosticSpec(message: "nul character embedded in middle of file", severity: .warning)
+      ]
     )
   }
 }

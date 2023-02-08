@@ -71,3 +71,9 @@ public struct Diagnostic: CustomDebugStringConvertible {
     return "\(location): \(message)"
   }
 }
+
+public protocol DiagnosticsProviding: Error {
+  /// The diagnostics provided by this error.
+  /// At least one diagnostic should have `severity == .error`.
+  var diagnostics: [Diagnostic] { get }
+}

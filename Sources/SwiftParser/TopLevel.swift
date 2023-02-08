@@ -202,7 +202,7 @@ extension Parser {
     {
       if expr.is(RawIfExprSyntax.self) || expr.is(RawSwitchExprSyntax.self) {
         let (op, rhs) = parseUnresolvedAsExpr(
-          handle: .init(tokenKind: .keyword(.as))
+          handle: .init(spec: .keyword(.as))
         )
         let sequence = RawExprSyntax(
           RawSequenceExprSyntax(

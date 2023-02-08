@@ -931,14 +931,14 @@ extension Parser {
     }
     var extraneousSpecifiers: [RawTokenSyntax] = []
 
-    enum ExtraneousSpecifier: RawTokenKindSubset {
+    enum ExtraneousSpecifier: TokenSpecSet {
       case `inout`
       case __shared
       case __owned
       case isolated
       case _const
 
-      var rawTokenKind: RawTokenKind {
+      var spec: TokenSpec {
         switch self {
         case .inout: return .keyword(.inout)
         case .__shared: return .keyword(.__shared)
@@ -950,11 +950,11 @@ extension Parser {
 
       init?(lexeme: Lexer.Lexeme) {
         switch lexeme {
-        case RawTokenKindMatch(.inout): self = .inout
-        case RawTokenKindMatch(.__shared): self = .__shared
-        case RawTokenKindMatch(.__owned): self = .__owned
-        case RawTokenKindMatch(.isolated): self = .isolated
-        case RawTokenKindMatch(._const): self = ._const
+        case TokenSpec(.inout): self = .inout
+        case TokenSpec(.__shared): self = .__shared
+        case TokenSpec(.__owned): self = .__owned
+        case TokenSpec(.isolated): self = .isolated
+        case TokenSpec(._const): self = ._const
         default: return nil
         }
       }

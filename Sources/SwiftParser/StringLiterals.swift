@@ -533,7 +533,7 @@ extension Parser {
       closeQuote = missingToken(.stringQuote)
     } else {
       unexpectedBeforeCloseQuote = nil
-      closeQuote = self.expectWithoutRecovery(openQuote.tokenKind)
+      closeQuote = self.expectWithoutRecovery(TokenSpec(openQuote.tokenKind))
     }
 
     let (unexpectedBeforeCloseDelimiter, closeDelimiter) = self.parseStringDelimiter(openDelimiter: openDelimiter)

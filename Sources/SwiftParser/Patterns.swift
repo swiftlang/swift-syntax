@@ -46,7 +46,7 @@ extension Parser {
   ///     expression-pattern → expression
   @_spi(RawSyntax)
   public mutating func parsePattern() -> RawPatternSyntax {
-    enum ExpectedTokens: RawTokenKindSubset {
+    enum ExpectedTokens: TokenSpecSet {
       case leftParen
       case wildcard
       case identifier
@@ -66,7 +66,7 @@ extension Parser {
         }
       }
 
-      var rawTokenKind: RawTokenKind {
+      var spec: TokenSpec {
         switch self {
         case .leftParen: return .leftParen
         case .wildcard: return .wildcard
@@ -288,7 +288,7 @@ extension Parser.Lookahead {
   ///   pattern ::= 'var' pattern
   ///   pattern ::= 'let' pattern
   mutating func canParsePattern() -> Bool {
-    enum PatternStartTokens: RawTokenKindSubset {
+    enum PatternStartTokens: TokenSpecSet {
       case identifier
       case wildcard
       case letKeyword
@@ -306,7 +306,7 @@ extension Parser.Lookahead {
         }
       }
 
-      var rawTokenKind: RawTokenKind {
+      var spec: TokenSpec {
         switch self {
         case .identifier: return .identifier
         case .wildcard: return .wildcard

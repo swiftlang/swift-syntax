@@ -24,7 +24,7 @@ let declarationModifierFile = SourceFileSyntax {
     """
   )
 
-  try! EnumDeclSyntax("enum DeclarationModifier: RawTokenKindSubset") {
+  try! EnumDeclSyntax("enum DeclarationModifier: TokenSpecSet") {
     for attribute in DECL_MODIFIER_KINDS {
       DeclSyntax("case \(raw: attribute.swiftName)")
     }
@@ -32,7 +32,7 @@ let declarationModifierFile = SourceFileSyntax {
     try InitializerDeclSyntax("init?(lexeme: Lexer.Lexeme)") {
       try SwitchExprSyntax("switch lexeme") {
         for attribute in DECL_MODIFIER_KINDS {
-          SwitchCaseSyntax("case RawTokenKindMatch(.\(raw: attribute.swiftName)):") {
+          SwitchCaseSyntax("case TokenSpec(.\(raw: attribute.swiftName)):") {
             ExprSyntax("self = .\(raw: attribute.swiftName)")
           }
         }
@@ -42,7 +42,7 @@ let declarationModifierFile = SourceFileSyntax {
       }
     }
 
-    try VariableDeclSyntax("var rawTokenKind: RawTokenKind") {
+    try VariableDeclSyntax("var spec: TokenSpec") {
       try SwitchExprSyntax("switch self") {
         for attribute in DECL_MODIFIER_KINDS {
           SwitchCaseSyntax("case .\(raw: attribute.swiftName):") {

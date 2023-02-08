@@ -30,7 +30,7 @@ extension Parser {
 
 extension Parser {
   /// Compiler-known attributes that take arguments.
-  enum DeclarationAttributeWithSpecialSyntax: RawTokenKindSubset {
+  enum DeclarationAttributeWithSpecialSyntax: TokenSpecSet {
     case _alignment
     case _cdecl
     case _documentation
@@ -65,44 +65,44 @@ extension Parser {
 
     init?(lexeme: Lexer.Lexeme) {
       switch lexeme {
-      case RawTokenKindMatch(._alignment): self = ._alignment
-      case RawTokenKindMatch(._backDeploy): self = .backDeployed
-      case RawTokenKindMatch(._cdecl): self = ._cdecl
-      case RawTokenKindMatch(._documentation): self = ._documentation
-      case RawTokenKindMatch(._dynamicReplacement): self = ._dynamicReplacement
-      case RawTokenKindMatch(._effects): self = ._effects
-      case RawTokenKindMatch(._expose): self = ._expose
-      case RawTokenKindMatch(._implements): self = ._implements
-      case RawTokenKindMatch(._nonSendable): self = ._nonSendable
-      case RawTokenKindMatch(._objcImplementation): self = ._objcImplementation
-      case RawTokenKindMatch(._objcRuntimeName): self = ._objcRuntimeName
-      case RawTokenKindMatch(._optimize): self = ._optimize
-      case RawTokenKindMatch(._originallyDefinedIn): self = ._originallyDefinedIn
-      case RawTokenKindMatch(._private): self = ._private
-      case RawTokenKindMatch(._projectedValueProperty): self = ._projectedValueProperty
-      case RawTokenKindMatch(._semantics): self = ._semantics
-      case RawTokenKindMatch(._silgen_name): self = ._silgen_name
-      case RawTokenKindMatch(._specialize): self = ._specialize
-      case RawTokenKindMatch(._spi): self = ._spi
-      case RawTokenKindMatch(._spi_available): self = ._spi_available
-      case RawTokenKindMatch(._swift_native_objc_runtime_base): self = ._swift_native_objc_runtime_base
-      case RawTokenKindMatch(._typeEraser): self = ._typeEraser
-      case RawTokenKindMatch(._unavailableFromAsync): self = ._unavailableFromAsync
-      case RawTokenKindMatch(.`rethrows`): self = .rethrows
-      case RawTokenKindMatch(.available): self = .available
-      case RawTokenKindMatch(.backDeployed): self = .backDeployed
-      case RawTokenKindMatch(.derivative): self = .derivative
-      case RawTokenKindMatch(.differentiable): self = .differentiable
-      case RawTokenKindMatch(.exclusivity): self = .exclusivity
-      case RawTokenKindMatch(.inline): self = .inline
-      case RawTokenKindMatch(.objc): self = .objc
-      case RawTokenKindMatch(.transpose): self = .transpose
+      case TokenSpec(._alignment): self = ._alignment
+      case TokenSpec(._backDeploy): self = .backDeployed
+      case TokenSpec(._cdecl): self = ._cdecl
+      case TokenSpec(._documentation): self = ._documentation
+      case TokenSpec(._dynamicReplacement): self = ._dynamicReplacement
+      case TokenSpec(._effects): self = ._effects
+      case TokenSpec(._expose): self = ._expose
+      case TokenSpec(._implements): self = ._implements
+      case TokenSpec(._nonSendable): self = ._nonSendable
+      case TokenSpec(._objcImplementation): self = ._objcImplementation
+      case TokenSpec(._objcRuntimeName): self = ._objcRuntimeName
+      case TokenSpec(._optimize): self = ._optimize
+      case TokenSpec(._originallyDefinedIn): self = ._originallyDefinedIn
+      case TokenSpec(._private): self = ._private
+      case TokenSpec(._projectedValueProperty): self = ._projectedValueProperty
+      case TokenSpec(._semantics): self = ._semantics
+      case TokenSpec(._silgen_name): self = ._silgen_name
+      case TokenSpec(._specialize): self = ._specialize
+      case TokenSpec(._spi): self = ._spi
+      case TokenSpec(._spi_available): self = ._spi_available
+      case TokenSpec(._swift_native_objc_runtime_base): self = ._swift_native_objc_runtime_base
+      case TokenSpec(._typeEraser): self = ._typeEraser
+      case TokenSpec(._unavailableFromAsync): self = ._unavailableFromAsync
+      case TokenSpec(.`rethrows`): self = .rethrows
+      case TokenSpec(.available): self = .available
+      case TokenSpec(.backDeployed): self = .backDeployed
+      case TokenSpec(.derivative): self = .derivative
+      case TokenSpec(.differentiable): self = .differentiable
+      case TokenSpec(.exclusivity): self = .exclusivity
+      case TokenSpec(.inline): self = .inline
+      case TokenSpec(.objc): self = .objc
+      case TokenSpec(.transpose): self = .transpose
       default:
         return nil
       }
     }
 
-    var rawTokenKind: RawTokenKind {
+    var spec: TokenSpec {
       switch self {
       case ._alignment: return .keyword(._alignment)
       case ._cdecl: return .keyword(._cdecl)
@@ -171,7 +171,7 @@ extension Parser {
     case .required:
       shouldParseArgument = true
     case .customAttribute:
-      shouldParseArgument = self.withLookahead { $0.isCustomAttributeArgument() } && self.at(.leftParen, allowTokenAtStartOfLine: false)
+      shouldParseArgument = self.withLookahead { $0.isCustomAttributeArgument() } && self.at(TokenSpec(.leftParen, allowAtStartOfLine: false))
     case .optional:
       shouldParseArgument = self.at(.leftParen)
     }
@@ -313,7 +313,7 @@ extension Parser {
       }
     case .rethrows:
       let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-      let (unexpectedBeforeAttributeName, attributeName) = self.expect(.keyword(.rethrows), remapping: .identifier)
+      let (unexpectedBeforeAttributeName, attributeName) = self.expect(TokenSpec(.keyword(.rethrows), remapping: .identifier))
       return .attribute(
         RawAttributeSyntax(
           unexpectedBeforeAtSign,
@@ -358,21 +358,21 @@ extension Parser {
     )
   }
 
-  enum DifferentiabilityKind: RawTokenKindSubset {
+  enum DifferentiabilityKind: TokenSpecSet {
     case reverse
     case linear
     case forward
 
     init?(lexeme: Lexer.Lexeme) {
       switch lexeme {
-      case RawTokenKindMatch(.reverse): self = .reverse
-      case RawTokenKindMatch(._linear): self = .linear
-      case RawTokenKindMatch(._forward): self = .forward
+      case TokenSpec(.reverse): self = .reverse
+      case TokenSpec(._linear): self = .linear
+      case TokenSpec(._forward): self = .forward
       default: return nil
       }
     }
 
-    var rawTokenKind: RawTokenKind {
+    var spec: TokenSpec {
       switch self {
       case .reverse: return .keyword(.reverse)
       case .linear: return .keyword(._linear)
@@ -469,21 +469,21 @@ extension Parser {
   }
 
   mutating func parseDifferentiabilityParameter() -> RawDifferentiabilityParamSyntax? {
-    enum ExpectedTokenKind: RawTokenKindSubset {
+    enum ExpectedTokenKind: TokenSpecSet {
       case identifier
       case integerLiteral
       case selfKeyword
 
       init?(lexeme: Lexer.Lexeme) {
         switch lexeme {
-        case RawTokenKindMatch(.identifier): self = .identifier
-        case RawTokenKindMatch(.integerLiteral): self = .integerLiteral
-        case RawTokenKindMatch(.self): self = .selfKeyword
+        case TokenSpec(.identifier): self = .identifier
+        case TokenSpec(.integerLiteral): self = .integerLiteral
+        case TokenSpec(.self): self = .selfKeyword
         default: return nil
         }
       }
 
-      var rawTokenKind: RawTokenKind {
+      var spec: TokenSpec {
         switch self {
         case .identifier: return .identifier
         case .integerLiteral: return .integerLiteral
@@ -649,7 +649,7 @@ extension Parser {
 }
 
 extension Parser {
-  enum SpecializeParameter: RawTokenKindSubset {
+  enum SpecializeParameter: TokenSpecSet {
     case target
     case availability
     case exported
@@ -660,18 +660,18 @@ extension Parser {
 
     init?(lexeme: Lexer.Lexeme) {
       switch lexeme {
-      case RawTokenKindMatch(.target): self = .target
-      case RawTokenKindMatch(.availability): self = .availability
-      case RawTokenKindMatch(.exported): self = .exported
-      case RawTokenKindMatch(.kind): self = .kind
-      case RawTokenKindMatch(.spi): self = .spi
-      case RawTokenKindMatch(.spiModule): self = .spiModule
-      case RawTokenKindMatch(.available): self = .available
+      case TokenSpec(.target): self = .target
+      case TokenSpec(.availability): self = .availability
+      case TokenSpec(.exported): self = .exported
+      case TokenSpec(.kind): self = .kind
+      case TokenSpec(.spi): self = .spi
+      case TokenSpec(.spiModule): self = .spiModule
+      case TokenSpec(.available): self = .available
       default: return nil
       }
     }
 
-    var rawTokenKind: RawTokenKind {
+    var spec: TokenSpec {
       switch self {
       case .target: return .keyword(.target)
       case .availability: return .keyword(.availability)
@@ -1082,14 +1082,14 @@ extension Parser {
       let value: RawDocumentationAttributeArgumentSyntax.Value
       switch label.tokenText {
       case "visibility":
-        enum AccessLevelModifier: RawTokenKindSubset {
+        enum AccessLevelModifier: TokenSpecSet {
           case `private`
           case `fileprivate`
           case `internal`
           case `public`
           case `open`
 
-          var rawTokenKind: RawTokenKind {
+          var spec: TokenSpec {
             switch self {
             case .private: return .keyword(.private)
             case .fileprivate: return .keyword(.fileprivate)
@@ -1101,11 +1101,11 @@ extension Parser {
 
           init?(lexeme: Lexer.Lexeme) {
             switch lexeme {
-            case RawTokenKindMatch(.private): self = .private
-            case RawTokenKindMatch(.fileprivate): self = .fileprivate
-            case RawTokenKindMatch(.internal): self = .internal
-            case RawTokenKindMatch(.public): self = .public
-            case RawTokenKindMatch(.open): self = .open
+            case TokenSpec(.private): self = .private
+            case TokenSpec(.fileprivate): self = .fileprivate
+            case TokenSpec(.internal): self = .internal
+            case TokenSpec(.public): self = .public
+            case TokenSpec(.open): self = .open
             default: return nil
             }
           }
@@ -1180,7 +1180,7 @@ extension Parser.Lookahead {
       return false
     }
 
-    if self.at(.leftParen, allowTokenAtStartOfLine: false) && self.withLookahead({ $0.isCustomAttributeArgument() }) {
+    if self.at(TokenSpec(.leftParen, allowAtStartOfLine: false)) && self.withLookahead({ $0.isCustomAttributeArgument() }) {
       self.skipSingle()
     }
 

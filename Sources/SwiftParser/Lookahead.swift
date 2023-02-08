@@ -60,16 +60,15 @@ extension Parser {
 
 @_spi(RawSyntax)
 extension Parser.Lookahead: TokenConsumer {
-  /// Consumes the current token, and asserts that the kind of token that was
-  /// consumed matches the given kind.
+  /// Consumes the current token, and asserts that it matches `spec`.
   ///
   /// If the token kind did not match, this function will abort. It is useful
   /// to insert structural invariants during parsing.
   ///
   /// - Parameter kind: The kind of token to consume.
   /// - Returns: A token of the given kind.
-  public mutating func eat(_ kind: RawTokenKind) -> Token {
-    return self.consume(if: kind)!
+  mutating func eat(_ spec: TokenSpec) -> Token {
+    return self.consume(if: spec)!
   }
 }
 
@@ -95,15 +94,14 @@ extension Parser.Lookahead {
     self.consumeAnyToken()
   }
 
-  /// Consume tokens of lower precedence than `kind` until reaching a token of that kind.
-  /// The token of `kind` is also consumed.
-  @_spi(RawSyntax)
-  public mutating func consume(to kind: RawTokenKind) {
-    if self.consume(if: kind) != nil {
+  /// Consume tokens of lower precedence than `spec` until reaching a token that
+  /// matches that `spec`. The token that matches `spec` is also consumed.
+  mutating func consume(to spec: TokenSpec) {
+    if self.consume(if: spec) != nil {
       return
     }
     var lookahead = self.lookahead()
-    if lookahead.canRecoverTo(kind) != nil {
+    if lookahead.canRecoverTo(spec) != nil {
       for _ in 0..<lookahead.tokensConsumed {
         self.consumeAnyToken()
       }
@@ -256,7 +254,7 @@ extension Parser.Lookahead {
     // If we have a 'didSet' or a 'willSet' label, disambiguate immediately as
     // an accessor block.
     let nextToken = self.peek()
-    if RawTokenKindMatch(.keyword(.didSet)) ~= nextToken || RawTokenKindMatch(.keyword(.willSet)) ~= nextToken {
+    if TokenSpec(.keyword(.didSet)) ~= nextToken || TokenSpec(.keyword(.willSet)) ~= nextToken {
       return true
     }
 
@@ -309,7 +307,7 @@ extension Parser.Lookahead {
   //    automatically skip over those as individual tokens
   //  - String interpolation contains parentheses, so it automatically skips
   //    until the closing parenthesis.
-  private enum BracketedTokens: RawTokenKindSubset {
+  private enum BracketedTokens: TokenSpecSet {
     case leftParen
     case leftBrace
     case leftSquareBracket
@@ -329,7 +327,7 @@ extension Parser.Lookahead {
       }
     }
 
-    var rawTokenKind: RawTokenKind {
+    var spec: TokenSpec {
       switch self {
       case .leftParen: return .leftParen
       case .leftBrace: return .leftBrace

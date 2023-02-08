@@ -19,8 +19,7 @@
 /// Protocol to which all `DeclSyntax` nodes conform. Extension point to add
 /// common methods to all `DeclSyntax` nodes.
 /// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
-public protocol DeclSyntaxProtocol: SyntaxProtocol {
-}
+public protocol DeclSyntaxProtocol: SyntaxProtocol {}
 
 public extension Syntax {
   /// Check whether the non-type erased version of this syntax node conforms to
@@ -168,8 +167,7 @@ extension DeclSyntax: CustomReflectable {
 /// Protocol to which all `ExprSyntax` nodes conform. Extension point to add
 /// common methods to all `ExprSyntax` nodes.
 /// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
-public protocol ExprSyntaxProtocol: SyntaxProtocol {
-}
+public protocol ExprSyntaxProtocol: SyntaxProtocol {}
 
 public extension Syntax {
   /// Check whether the non-type erased version of this syntax node conforms to
@@ -341,8 +339,7 @@ extension ExprSyntax: CustomReflectable {
 /// Protocol to which all `PatternSyntax` nodes conform. Extension point to add
 /// common methods to all `PatternSyntax` nodes.
 /// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
-public protocol PatternSyntaxProtocol: SyntaxProtocol {
-}
+public protocol PatternSyntaxProtocol: SyntaxProtocol {}
 
 public extension Syntax {
   /// Check whether the non-type erased version of this syntax node conforms to
@@ -473,8 +470,7 @@ extension PatternSyntax: CustomReflectable {
 /// Protocol to which all `StmtSyntax` nodes conform. Extension point to add
 /// common methods to all `StmtSyntax` nodes.
 /// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
-public protocol StmtSyntaxProtocol: SyntaxProtocol {
-}
+public protocol StmtSyntaxProtocol: SyntaxProtocol {}
 
 public extension Syntax {
   /// Check whether the non-type erased version of this syntax node conforms to
@@ -613,8 +609,7 @@ extension StmtSyntax: CustomReflectable {
 /// Protocol to which all `TypeSyntax` nodes conform. Extension point to add
 /// common methods to all `TypeSyntax` nodes.
 /// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
-public protocol TypeSyntaxProtocol: SyntaxProtocol {
-}
+public protocol TypeSyntaxProtocol: SyntaxProtocol {}
 
 public extension Syntax {
   /// Check whether the non-type erased version of this syntax node conforms to

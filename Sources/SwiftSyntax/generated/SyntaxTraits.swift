@@ -435,221 +435,148 @@ public extension SyntaxProtocol {
   }
 }
 
-extension AccessorBlockSyntax: BracedSyntax {
-}
+extension AccessorBlockSyntax: BracedSyntax {}
 
-extension AccessorDeclSyntax: AttributedSyntax {
-}
+extension AccessorDeclSyntax: AttributedSyntax {}
 
-extension AccessorParameterSyntax: ParenthesizedSyntax {
-}
+extension AccessorParameterSyntax: ParenthesizedSyntax {}
 
-extension ActorDeclSyntax: DeclGroupSyntax, IdentifiedDeclSyntax, AttributedSyntax {
-}
+extension ActorDeclSyntax: DeclGroupSyntax, IdentifiedDeclSyntax, AttributedSyntax {}
 
-extension ArrayElementSyntax: WithTrailingCommaSyntax {
-}
+extension ArrayElementSyntax: WithTrailingCommaSyntax {}
 
-extension AssociatedtypeDeclSyntax: IdentifiedDeclSyntax, AttributedSyntax {
-}
+extension AssociatedtypeDeclSyntax: IdentifiedDeclSyntax, AttributedSyntax {}
 
-extension AttributedTypeSyntax: AttributedSyntax {
-}
+extension AttributedTypeSyntax: AttributedSyntax {}
 
-extension CaseItemSyntax: WithTrailingCommaSyntax {
-}
+extension CaseItemSyntax: WithTrailingCommaSyntax {}
 
-extension CatchClauseSyntax: WithCodeBlockSyntax {
-}
+extension CatchClauseSyntax: WithCodeBlockSyntax {}
 
-extension CatchItemSyntax: WithTrailingCommaSyntax {
-}
+extension CatchItemSyntax: WithTrailingCommaSyntax {}
 
-extension ClassDeclSyntax: DeclGroupSyntax, IdentifiedDeclSyntax, AttributedSyntax {
-}
+extension ClassDeclSyntax: DeclGroupSyntax, IdentifiedDeclSyntax, AttributedSyntax {}
 
-extension ClosureCaptureItemSyntax: WithTrailingCommaSyntax {
-}
+extension ClosureCaptureItemSyntax: WithTrailingCommaSyntax {}
 
-extension ClosureExprSyntax: BracedSyntax, WithStatementsSyntax {
-}
+extension ClosureExprSyntax: BracedSyntax, WithStatementsSyntax {}
 
-extension ClosureParamSyntax: WithTrailingCommaSyntax {
-}
+extension ClosureParamSyntax: WithTrailingCommaSyntax {}
 
-extension ClosureSignatureSyntax: AttributedSyntax {
-}
+extension ClosureSignatureSyntax: AttributedSyntax {}
 
-extension CodeBlockSyntax: BracedSyntax, WithStatementsSyntax {
-}
+extension CodeBlockSyntax: BracedSyntax, WithStatementsSyntax {}
 
-extension ConditionElementSyntax: WithTrailingCommaSyntax {
-}
+extension ConditionElementSyntax: WithTrailingCommaSyntax {}
 
-extension DeclEffectSpecifiersSyntax: EffectSpecifiersSyntax {
-}
+extension DeclEffectSpecifiersSyntax: EffectSpecifiersSyntax {}
 
-extension DeclModifierDetailSyntax: ParenthesizedSyntax {
-}
+extension DeclModifierDetailSyntax: ParenthesizedSyntax {}
 
-extension DeclNameArgumentsSyntax: ParenthesizedSyntax {
-}
+extension DeclNameArgumentsSyntax: ParenthesizedSyntax {}
 
-extension DeferStmtSyntax: WithCodeBlockSyntax {
-}
+extension DeferStmtSyntax: WithCodeBlockSyntax {}
 
-extension DeinitializerDeclSyntax: AttributedSyntax {
-}
+extension DeinitializerDeclSyntax: AttributedSyntax {}
 
-extension DictionaryElementSyntax: WithTrailingCommaSyntax {
-}
+extension DictionaryElementSyntax: WithTrailingCommaSyntax {}
 
-extension DifferentiabilityParamSyntax: WithTrailingCommaSyntax {
-}
+extension DifferentiabilityParamSyntax: WithTrailingCommaSyntax {}
 
-extension DoStmtSyntax: WithCodeBlockSyntax {
-}
+extension DoStmtSyntax: WithCodeBlockSyntax {}
 
-extension DocumentationAttributeArgumentSyntax: WithTrailingCommaSyntax {
-}
+extension DocumentationAttributeArgumentSyntax: WithTrailingCommaSyntax {}
 
-extension EnumCaseDeclSyntax: AttributedSyntax {
-}
+extension EnumCaseDeclSyntax: AttributedSyntax {}
 
-extension EnumCaseElementSyntax: WithTrailingCommaSyntax {
-}
+extension EnumCaseElementSyntax: WithTrailingCommaSyntax {}
 
-extension EnumDeclSyntax: DeclGroupSyntax, IdentifiedDeclSyntax, AttributedSyntax {
-}
+extension EnumDeclSyntax: DeclGroupSyntax, IdentifiedDeclSyntax, AttributedSyntax {}
 
-extension ExpressionSegmentSyntax: ParenthesizedSyntax {
-}
+extension ExpressionSegmentSyntax: ParenthesizedSyntax {}
 
-extension ExtensionDeclSyntax: DeclGroupSyntax, AttributedSyntax {
-}
+extension ExtensionDeclSyntax: DeclGroupSyntax, AttributedSyntax {}
 
-extension ForInStmtSyntax: WithCodeBlockSyntax {
-}
+extension ForInStmtSyntax: WithCodeBlockSyntax {}
 
-extension FunctionDeclSyntax: IdentifiedDeclSyntax, AttributedSyntax {
-}
+extension FunctionDeclSyntax: IdentifiedDeclSyntax, AttributedSyntax {}
 
-extension FunctionParameterSyntax: WithTrailingCommaSyntax, AttributedSyntax {
-}
+extension FunctionParameterSyntax: WithTrailingCommaSyntax, AttributedSyntax {}
 
-extension FunctionTypeSyntax: ParenthesizedSyntax {
-}
+extension FunctionTypeSyntax: ParenthesizedSyntax {}
 
-extension GenericArgumentSyntax: WithTrailingCommaSyntax {
-}
+extension GenericArgumentSyntax: WithTrailingCommaSyntax {}
 
-extension GenericParameterSyntax: WithTrailingCommaSyntax, AttributedSyntax {
-}
+extension GenericParameterSyntax: WithTrailingCommaSyntax, AttributedSyntax {}
 
-extension GenericRequirementSyntax: WithTrailingCommaSyntax {
-}
+extension GenericRequirementSyntax: WithTrailingCommaSyntax {}
 
-extension GuardStmtSyntax: WithCodeBlockSyntax {
-}
+extension GuardStmtSyntax: WithCodeBlockSyntax {}
 
-extension IfExprSyntax: WithCodeBlockSyntax {
-}
+extension IfExprSyntax: WithCodeBlockSyntax {}
 
-extension ImportDeclSyntax: AttributedSyntax {
-}
+extension ImportDeclSyntax: AttributedSyntax {}
 
-extension InheritedTypeSyntax: WithTrailingCommaSyntax {
-}
+extension InheritedTypeSyntax: WithTrailingCommaSyntax {}
 
-extension InitializerDeclSyntax: AttributedSyntax {
-}
+extension InitializerDeclSyntax: AttributedSyntax {}
 
-extension LabeledSpecializeEntrySyntax: WithTrailingCommaSyntax {
-}
+extension LabeledSpecializeEntrySyntax: WithTrailingCommaSyntax {}
 
-extension MacroDeclSyntax: IdentifiedDeclSyntax, AttributedSyntax {
-}
+extension MacroDeclSyntax: IdentifiedDeclSyntax, AttributedSyntax {}
 
-extension MacroExpansionDeclSyntax: FreestandingMacroExpansionSyntax {
-}
+extension MacroExpansionDeclSyntax: FreestandingMacroExpansionSyntax {}
 
-extension MacroExpansionExprSyntax: FreestandingMacroExpansionSyntax {
-}
+extension MacroExpansionExprSyntax: FreestandingMacroExpansionSyntax {}
 
-extension MemberDeclBlockSyntax: BracedSyntax {
-}
+extension MemberDeclBlockSyntax: BracedSyntax {}
 
-extension MissingDeclSyntax: AttributedSyntax {
-}
+extension MissingDeclSyntax: AttributedSyntax {}
 
-extension OperatorDeclSyntax: IdentifiedDeclSyntax, AttributedSyntax {
-}
+extension OperatorDeclSyntax: IdentifiedDeclSyntax, AttributedSyntax {}
 
-extension ParameterClauseSyntax: ParenthesizedSyntax {
-}
+extension ParameterClauseSyntax: ParenthesizedSyntax {}
 
-extension PatternBindingSyntax: WithTrailingCommaSyntax {
-}
+extension PatternBindingSyntax: WithTrailingCommaSyntax {}
 
-extension PoundSourceLocationSyntax: ParenthesizedSyntax {
-}
+extension PoundSourceLocationSyntax: ParenthesizedSyntax {}
 
-extension PrecedenceGroupDeclSyntax: IdentifiedDeclSyntax, AttributedSyntax {
-}
+extension PrecedenceGroupDeclSyntax: IdentifiedDeclSyntax, AttributedSyntax {}
 
-extension PrimaryAssociatedTypeSyntax: WithTrailingCommaSyntax {
-}
+extension PrimaryAssociatedTypeSyntax: WithTrailingCommaSyntax {}
 
-extension ProtocolDeclSyntax: DeclGroupSyntax, IdentifiedDeclSyntax, AttributedSyntax {
-}
+extension ProtocolDeclSyntax: DeclGroupSyntax, IdentifiedDeclSyntax, AttributedSyntax {}
 
-extension RepeatWhileStmtSyntax: WithCodeBlockSyntax {
-}
+extension RepeatWhileStmtSyntax: WithCodeBlockSyntax {}
 
-extension SourceFileSyntax: WithStatementsSyntax {
-}
+extension SourceFileSyntax: WithStatementsSyntax {}
 
-extension StructDeclSyntax: DeclGroupSyntax, IdentifiedDeclSyntax, AttributedSyntax {
-}
+extension StructDeclSyntax: DeclGroupSyntax, IdentifiedDeclSyntax, AttributedSyntax {}
 
-extension SubscriptDeclSyntax: AttributedSyntax {
-}
+extension SubscriptDeclSyntax: AttributedSyntax {}
 
-extension SwitchCaseSyntax: WithStatementsSyntax {
-}
+extension SwitchCaseSyntax: WithStatementsSyntax {}
 
-extension SwitchExprSyntax: BracedSyntax {
-}
+extension SwitchExprSyntax: BracedSyntax {}
 
-extension TargetFunctionEntrySyntax: WithTrailingCommaSyntax {
-}
+extension TargetFunctionEntrySyntax: WithTrailingCommaSyntax {}
 
-extension TupleExprElementSyntax: WithTrailingCommaSyntax {
-}
+extension TupleExprElementSyntax: WithTrailingCommaSyntax {}
 
-extension TupleExprSyntax: ParenthesizedSyntax {
-}
+extension TupleExprSyntax: ParenthesizedSyntax {}
 
-extension TuplePatternElementSyntax: WithTrailingCommaSyntax {
-}
+extension TuplePatternElementSyntax: WithTrailingCommaSyntax {}
 
-extension TuplePatternSyntax: ParenthesizedSyntax {
-}
+extension TuplePatternSyntax: ParenthesizedSyntax {}
 
-extension TupleTypeElementSyntax: WithTrailingCommaSyntax {
-}
+extension TupleTypeElementSyntax: WithTrailingCommaSyntax {}
 
-extension TupleTypeSyntax: ParenthesizedSyntax {
-}
+extension TupleTypeSyntax: ParenthesizedSyntax {}
 
-extension TypeEffectSpecifiersSyntax: EffectSpecifiersSyntax {
-}
+extension TypeEffectSpecifiersSyntax: EffectSpecifiersSyntax {}
 
-extension TypealiasDeclSyntax: IdentifiedDeclSyntax, AttributedSyntax {
-}
+extension TypealiasDeclSyntax: IdentifiedDeclSyntax, AttributedSyntax {}
 
-extension VariableDeclSyntax: AttributedSyntax {
-}
+extension VariableDeclSyntax: AttributedSyntax {}
 
-extension WhileStmtSyntax: WithCodeBlockSyntax {
-}
+extension WhileStmtSyntax: WithCodeBlockSyntax {}

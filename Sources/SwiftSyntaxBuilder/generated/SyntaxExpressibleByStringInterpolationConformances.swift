@@ -28,41 +28,29 @@ extension SyntaxParseable {
   }
 }
 
-extension AccessorDeclSyntax: SyntaxExpressibleByStringInterpolation {
-}
+extension AccessorDeclSyntax: SyntaxExpressibleByStringInterpolation {}
 
-extension AttributeSyntax: SyntaxExpressibleByStringInterpolation {
-}
+extension AttributeSyntax: SyntaxExpressibleByStringInterpolation {}
 
-extension CatchClauseSyntax: SyntaxExpressibleByStringInterpolation {
-}
+extension CatchClauseSyntax: SyntaxExpressibleByStringInterpolation {}
 
-extension DeclSyntax: SyntaxExpressibleByStringInterpolation {
-}
+extension DeclSyntax: SyntaxExpressibleByStringInterpolation {}
 
-extension ExprSyntax: SyntaxExpressibleByStringInterpolation {
-}
+extension ExprSyntax: SyntaxExpressibleByStringInterpolation {}
 
-extension GenericParameterClauseSyntax: SyntaxExpressibleByStringInterpolation {
-}
+extension GenericParameterClauseSyntax: SyntaxExpressibleByStringInterpolation {}
 
-extension MemberDeclBlockSyntax: SyntaxExpressibleByStringInterpolation {
-}
+extension MemberDeclBlockSyntax: SyntaxExpressibleByStringInterpolation {}
 
-extension PatternSyntax: SyntaxExpressibleByStringInterpolation {
-}
+extension PatternSyntax: SyntaxExpressibleByStringInterpolation {}
 
-extension SourceFileSyntax: SyntaxExpressibleByStringInterpolation {
-}
+extension SourceFileSyntax: SyntaxExpressibleByStringInterpolation {}
 
-extension StmtSyntax: SyntaxExpressibleByStringInterpolation {
-}
+extension StmtSyntax: SyntaxExpressibleByStringInterpolation {}
 
-extension SwitchCaseSyntax: SyntaxExpressibleByStringInterpolation {
-}
+extension SwitchCaseSyntax: SyntaxExpressibleByStringInterpolation {}
 
-extension TypeSyntax: SyntaxExpressibleByStringInterpolation {
-}
+extension TypeSyntax: SyntaxExpressibleByStringInterpolation {}
 
 // TODO: This should be inlined in SyntaxParseable.init(stringInterpolation:),
 // but is currently used in `ConvenienceInitializers.swift`.

@@ -13,6 +13,29 @@
 @_spi(RawSyntax) import SwiftSyntax
 
 extension Parser {
+  private enum IfConfigClauseStartKeyword: RawTokenKindSubset {
+    case poundIfKeyword
+    case poundElseifKeyword
+    case poundElseKeyword
+
+    var rawTokenKind: RawTokenKind {
+      switch self {
+      case .poundIfKeyword: return .poundIfKeyword
+      case .poundElseifKeyword: return .poundElseifKeyword
+      case .poundElseKeyword: return .poundElseKeyword
+      }
+    }
+
+    init?(lexeme: Lexer.Lexeme) {
+      switch lexeme {
+      case RawTokenKindMatch(.poundIfKeyword): self = .poundIfKeyword
+      case RawTokenKindMatch(.poundElseifKeyword): self = .poundElseifKeyword
+      case RawTokenKindMatch(.poundElseKeyword): self = .poundElseKeyword
+      default: return nil
+      }
+    }
+  }
+
   /// Parse a conditional compilation block.
   ///
   /// This function should be used to parse conditional compilation statements,
@@ -83,7 +106,7 @@ extension Parser {
     do {
       var firstIteration = true
       var loopProgress = LoopProgressCondition()
-      while let poundIfHandle = self.canRecoverTo(any: firstIteration ? [.poundIfKeyword] : [.poundIfKeyword, .poundElseifKeyword, .poundElseKeyword]),
+      while let poundIfHandle = firstIteration ? self.canRecoverTo(.poundIfKeyword) : self.canRecoverTo(anyIn: IfConfigClauseStartKeyword.self)?.handle,
         loopProgress.evaluate(self.currentToken)
       {
         let (unexpectedBeforePoundIf, poundIf) = self.eat(poundIfHandle)
@@ -102,7 +125,7 @@ extension Parser {
         var elements = [Element]()
         do {
           var elementsProgress = LoopProgressCondition()
-          while !self.at(any: [.eof, .poundElseKeyword, .poundElseifKeyword, .poundEndifKeyword]) && elementsProgress.evaluate(currentToken) {
+          while !self.at(.eof) && !self.at(.poundElseKeyword, .poundElseifKeyword, .poundEndifKeyword) && elementsProgress.evaluate(currentToken) {
             let newItemAtStartOfLine = self.currentToken.isAtStartOfLine
             guard let element = parseElement(&self), !element.isEmpty else {
               break

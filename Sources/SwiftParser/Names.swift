@@ -64,7 +64,7 @@ extension Parser {
   mutating func parseDeclNameRef(_ flags: DeclNameOptions = []) -> (RawTokenSyntax, RawDeclNameArgumentsSyntax?) {
     // Consume the base name.
     let ident: RawTokenSyntax
-    if self.at(.identifier) || self.at(any: [.keyword(.self), .keyword(.Self), .keyword(.`init`)]) {
+    if self.at(.identifier) || self.at(.keyword(.self), .keyword(.Self), .keyword(.`init`)) {
       ident = self.expectIdentifierWithoutRecovery()
     } else if flags.contains(.operators), let (_, _) = self.at(anyIn: Operator.self) {
       ident = self.consumeAnyToken(remapping: .binaryOperator)
@@ -113,7 +113,7 @@ extension Parser {
     var elements = [RawDeclNameArgumentSyntax]()
     do {
       var loopProgress = LoopProgressCondition()
-      while !self.at(any: [.eof, .rightParen]) && loopProgress.evaluate(currentToken) {
+      while !self.at(.eof, .rightParen) && loopProgress.evaluate(currentToken) {
         // Check to see if there is an argument label.
         assert(self.currentToken.canBeArgumentLabel() && self.peek().rawTokenKind == .colon)
         let name = self.consumeAnyToken()
@@ -237,7 +237,7 @@ extension Parser.Lookahead {
     }
 
     var loopProgress = LoopProgressCondition()
-    while !lookahead.at(any: [.eof, .rightParen]) && loopProgress.evaluate(lookahead.currentToken) {
+    while !lookahead.at(.eof, .rightParen) && loopProgress.evaluate(lookahead.currentToken) {
       // Check to see if there is an argument label.
       guard lookahead.currentToken.canBeArgumentLabel() && lookahead.peek().rawTokenKind == .colon else {
         return false

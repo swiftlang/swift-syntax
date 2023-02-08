@@ -14,7 +14,7 @@
 
 extension Parser {
   mutating func parseAttributeList() -> RawAttributeListSyntax? {
-    guard self.at(any: [.atSign, .poundIfKeyword]) else {
+    guard self.at(.atSign, .poundIfKeyword) else {
       return nil
     }
 
@@ -23,7 +23,7 @@ extension Parser {
     repeat {
       let attribute = self.parseAttribute()
       elements.append(attribute)
-    } while self.at(any: [.atSign, .poundIfKeyword]) && loopProgress.evaluate(currentToken)
+    } while self.at(.atSign, .poundIfKeyword) && loopProgress.evaluate(currentToken)
     return RawAttributeListSyntax(elements: elements, arena: self.arena)
   }
 }
@@ -282,7 +282,7 @@ extension Parser {
         // The contents of the @_effects attribute are parsed in SIL, we just
         // represent the contents as a list of tokens in SwiftSyntax.
         var tokens: [RawTokenSyntax] = []
-        while !parser.at(any: [.rightParen, .eof]) {
+        while !parser.at(.rightParen, .eof) {
           tokens.append(parser.consumeAnyToken())
         }
         return .effectsArguments(RawEffectsArgumentsSyntax(elements: tokens, arena: parser.arena))
@@ -443,7 +443,7 @@ extension Parser {
 
     var elements = [RawDifferentiabilityParamSyntax]()
     var loopProgress = LoopProgressCondition()
-    while !self.at(any: [.eof, .rightParen]) && loopProgress.evaluate(currentToken) {
+    while !self.at(.eof, .rightParen) && loopProgress.evaluate(currentToken) {
       guard let param = self.parseDifferentiabilityParameter() else {
         break
       }
@@ -605,7 +605,7 @@ extension Parser {
   mutating func parseObjectiveCSelector() -> RawObjCSelectorSyntax {
     var elements = [RawObjCSelectorPieceSyntax]()
     var loopProgress = LoopProgressCondition()
-    while !self.at(any: [.eof, .rightParen]) && loopProgress.evaluate(currentToken) {
+    while !self.at(.eof, .rightParen) && loopProgress.evaluate(currentToken) {
       // Empty selector piece.
       if let colon = self.consume(if: .colon) {
         elements.append(
@@ -687,7 +687,7 @@ extension Parser {
     var elements = [RawSpecializeAttributeSpecListSyntax.Element]()
     // Parse optional "exported" and "kind" labeled parameters.
     var loopProgress = LoopProgressCondition()
-    while !self.at(any: [.eof, .rightParen, .keyword(.where)]) && loopProgress.evaluate(currentToken) {
+    while !self.at(.eof, .rightParen, .keyword(.where)) && loopProgress.evaluate(currentToken) {
       switch self.at(anyIn: SpecializeParameter.self) {
       case (.target, let handle)?:
         let ident = self.eat(handle)
@@ -751,7 +751,7 @@ extension Parser {
       case (.exported, let handle)?:
         let ident = self.eat(handle)
         let (unexpectedBeforeColon, colon) = self.expect(.colon)
-        let (unexpectedBeforeValue, value) = self.expectAny([.keyword(.true), .keyword(.false)], default: .keyword(.false))
+        let (unexpectedBeforeValue, value) = self.expect(.keyword(.true), .keyword(.false), default: .keyword(.false))
         let comma = self.consume(if: .comma)
         elements.append(
           .labeledSpecializeEntry(
@@ -951,7 +951,7 @@ extension Parser {
 extension Parser {
   mutating func parseExposeArguments() -> RawExposeAttributeArgumentsSyntax {
     let language: RawTokenSyntax
-    if !self.at(any: [.rightParen, .comma]) {
+    if !self.at(.rightParen, .comma) {
       language = self.consumeAnyToken()
     } else {
       language = missingToken(.identifier)
@@ -1076,13 +1076,42 @@ extension Parser {
 
     var keepGoing: RawTokenSyntax? = nil
     repeat {
-      let (unexpectedBeforeLabel, label) = self.expectAny([.keyword(.visibility), .keyword(.metadata)], default: .keyword(.visibility))
+      let (unexpectedBeforeLabel, label) = self.expect(.keyword(.visibility), .keyword(.metadata), default: .keyword(.visibility))
       let (unexpectedBeforeColon, colon) = self.expect(.colon)
       let unexpectedBeforeValue: RawUnexpectedNodesSyntax?
       let value: RawDocumentationAttributeArgumentSyntax.Value
       switch label.tokenText {
       case "visibility":
-        let (unexpected, token) = self.expectAny([.keyword(.open), .keyword(.public), .keyword(.internal), .keyword(.fileprivate), .keyword(.private)], default: .keyword(.internal))
+        enum AccessLevelModifier: RawTokenKindSubset {
+          case `private`
+          case `fileprivate`
+          case `internal`
+          case `public`
+          case `open`
+
+          var rawTokenKind: RawTokenKind {
+            switch self {
+            case .private: return .keyword(.private)
+            case .fileprivate: return .keyword(.fileprivate)
+            case .internal: return .keyword(.internal)
+            case .public: return .keyword(.public)
+            case .open: return .keyword(.open)
+            }
+          }
+
+          init?(lexeme: Lexer.Lexeme) {
+            switch lexeme {
+            case RawTokenKindMatch(.private): self = .private
+            case RawTokenKindMatch(.fileprivate): self = .fileprivate
+            case RawTokenKindMatch(.internal): self = .internal
+            case RawTokenKindMatch(.public): self = .public
+            case RawTokenKindMatch(.open): self = .open
+            default: return nil
+            }
+          }
+        }
+
+        let (unexpected, token) = self.expect(anyIn: AccessLevelModifier.self, default: .internal)
         unexpectedBeforeValue = unexpected
         value = .token(token)
       case "metadata":

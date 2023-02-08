@@ -251,32 +251,7 @@ extension Parser {
       )
     }
     var lookahead = self.lookahead()
-    return lookahead.canRecoverTo([kind], recoveryPrecedence: recoveryPrecedence)
-  }
-
-  /// Checks if it can reach a token whose kind is in `kinds` by skipping
-  /// unexpected tokens that have lower ``TokenPrecedence`` than `precedence`.
-  @_spi(RawSyntax)
-  public mutating func canRecoverTo(
-    any kinds: [RawTokenKind]
-  ) -> RecoveryConsumptionHandle? {
-    if let matchedKind = kinds.filter({ RawTokenKindMatch($0) ~= self.currentToken }).first {
-      let remapKind: RawTokenKind?
-      if matchedKind.base == .keyword {
-        remapKind = matchedKind
-      } else {
-        remapKind = nil
-      }
-      return RecoveryConsumptionHandle(
-        unexpectedTokens: 0,
-        tokenConsumptionHandle: TokenConsumptionHandle(
-          tokenKind: self.currentToken.rawTokenKind,
-          remappedKind: remapKind
-        )
-      )
-    }
-    var lookahead = self.lookahead()
-    return lookahead.canRecoverTo(kinds)
+    return lookahead.canRecoverTo(kind, recoveryPrecedence: recoveryPrecedence)
   }
 
   /// Checks if we can reach a token in `subset` by skipping tokens that have
@@ -287,7 +262,7 @@ extension Parser {
   mutating func canRecoverTo<Subset: RawTokenKindSubset>(
     anyIn subset: Subset.Type,
     recoveryPrecedence: TokenPrecedence? = nil
-  ) -> (Subset, RecoveryConsumptionHandle)? {
+  ) -> (matchedKind: Subset, handle: RecoveryConsumptionHandle)? {
     if let (kind, handle) = self.at(anyIn: subset) {
       return (kind, RecoveryConsumptionHandle(unexpectedTokens: 0, tokenConsumptionHandle: handle))
     }
@@ -345,7 +320,7 @@ extension Parser {
   ) -> (unexpected: RawUnexpectedNodesSyntax?, token: RawTokenSyntax) {
     return expectImpl(
       consume: { $0.consume(if: kind, remapping: remapping) },
-      canRecoverTo: { $0.canRecoverTo([kind]) },
+      canRecoverTo: { $0.canRecoverTo(kind) },
       makeMissing: {
         if let remapping = remapping {
           return $0.missingToken(remapping, text: kind.defaultText)
@@ -356,7 +331,7 @@ extension Parser {
     )
   }
 
-  /// Attempts to consume a token whose kind is in `kinds`.
+  /// Attempts to consume a token whose kind is `kind1` or `kind2`.
   /// If it cannot be found, the parser tries
   ///  1. To eat unexpected tokens that have lower ``TokenPrecedence`` than the
   ///     lowest precedence of the expected token kinds and see if a token of
@@ -364,14 +339,61 @@ extension Parser {
   ///  2. If the token couldn't be found after skipping unexpected, it synthesizes
   ///     a missing token of `defaultKind`.
   @_spi(RawSyntax)
-  public mutating func expectAny(
-    _ kinds: [RawTokenKind],
-    default defaultKind: RawTokenKind
+  public mutating func expect(
+    _ kind1: RawTokenKind,
+    _ kind2: RawTokenKind,
+    default defaultKind: RawTokenKind,
+    remapping: RawTokenKind? = nil
   ) -> (unexpected: RawUnexpectedNodesSyntax?, token: RawTokenSyntax) {
     return expectImpl(
-      consume: { $0.consume(ifAny: kinds) },
-      canRecoverTo: { $0.canRecoverTo(kinds) },
-      makeMissing: { $0.missingToken(defaultKind) }
+      consume: { $0.consume(if: kind1, kind2) },
+      canRecoverTo: { $0.canRecoverTo(kind1, kind2) },
+      makeMissing: {
+        if let remapping = remapping {
+          return $0.missingToken(remapping, text: defaultKind.defaultText)
+        } else {
+          return $0.missingToken(defaultKind)
+        }
+      }
+    )
+  }
+
+  /// Attempts to consume a token whose kind is `kind1`, `kind2` or `kind3`.
+  /// If it cannot be found, the parser tries
+  ///  1. To eat unexpected tokens that have lower ``TokenPrecedence`` than the
+  ///     lowest precedence of the expected token kinds and see if a token of
+  ///     the requested kinds occurs after the unexpected.
+  ///  2. If the token couldn't be found after skipping unexpected, it synthesizes
+  ///     a missing token of `defaultKind`.
+  @_spi(RawSyntax)
+  public mutating func expect(
+    _ kind1: RawTokenKind,
+    _ kind2: RawTokenKind,
+    _ kind3: RawTokenKind,
+    default defaultKind: RawTokenKind,
+    remapping: RawTokenKind? = nil
+  ) -> (unexpected: RawUnexpectedNodesSyntax?, token: RawTokenSyntax) {
+    return expectImpl(
+      consume: { $0.consume(if: kind1, kind2, kind3) },
+      canRecoverTo: { $0.canRecoverTo(kind1, kind2, kind3) },
+      makeMissing: {
+        if let remapping = remapping {
+          return $0.missingToken(remapping, text: defaultKind.defaultText)
+        } else {
+          return $0.missingToken(defaultKind)
+        }
+      }
+    )
+  }
+
+  mutating func expect<Subset: RawTokenKindSubset>(
+    anyIn subset: Subset.Type,
+    default defaultKind: Subset
+  ) -> (unexpected: RawUnexpectedNodesSyntax?, token: RawTokenSyntax) {
+    return expectImpl(
+      consume: { $0.consume(ifAnyIn: subset) },
+      canRecoverTo: { $0.canRecoverTo(anyIn: subset)?.1 },
+      makeMissing: { $0.missingToken(defaultKind.rawTokenKind) }
     )
   }
 
@@ -398,7 +420,7 @@ extension Parser {
         self.missingToken(.identifier)
       )
     }
-    if let number = self.consume(ifAny: [.integerLiteral, .floatingLiteral, .dollarIdentifier]) {
+    if let number = self.consume(if: .integerLiteral, .floatingLiteral, .dollarIdentifier) {
       return (
         RawUnexpectedNodesSyntax(elements: [RawSyntax(number)], arena: self.arena),
         self.missingToken(.identifier, text: nil)
@@ -466,7 +488,7 @@ extension Parser {
     }
 
     var lookahead = self.lookahead()
-    guard let recoveryHandle = lookahead.canRecoverTo([.rightBrace]) else {
+    guard let recoveryHandle = lookahead.canRecoverTo(.rightBrace) else {
       // We can't recover to '}'. Synthesize it.
       return (nil, self.missingToken(.rightBrace, text: nil))
     }

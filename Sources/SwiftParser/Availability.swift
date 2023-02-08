@@ -219,7 +219,7 @@ extension Parser {
     }
 
     let version: RawVersionTupleSyntax?
-    if self.at(any: [.integerLiteral, .floatingLiteral]) {
+    if self.at(.integerLiteral, .floatingLiteral) {
       version = self.parseVersionTuple()
     } else {
       version = nil
@@ -242,7 +242,7 @@ extension Parser {
   ///     platform-version → decimal-digits '.' decimal-digits
   ///     platform-version → decimal-digits '.' decimal-digits '.' decimal-digits
   mutating func parseVersionTuple() -> RawVersionTupleSyntax {
-    let (unexpectedBeforeMajorMinor, majorMinor) = self.expectAny([.integerLiteral, .floatingLiteral], default: .integerLiteral)
+    let (unexpectedBeforeMajorMinor, majorMinor) = self.expect(.integerLiteral, .floatingLiteral, default: .integerLiteral)
     let patchPeriod: RawTokenSyntax?
     let unexpectedBeforePatch: RawUnexpectedNodesSyntax?
     let patch: RawTokenSyntax?

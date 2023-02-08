@@ -140,7 +140,7 @@ extension Parser {
       )
     }
 
-    let someOrAny = self.consume(ifAny: [.keyword(.some), .keyword(.any)])
+    let someOrAny = self.consume(if: .keyword(.some), .keyword(.any))
 
     var base = self.parseSimpleType()
     guard self.atContextualPunctuator("&") else {
@@ -486,7 +486,7 @@ extension Parser {
     do {
       var keepGoing = true
       var loopProgress = LoopProgressCondition()
-      while !self.at(any: [.eof, .rightParen]) && keepGoing && loopProgress.evaluate(currentToken) {
+      while !self.at(.eof, .rightParen) && keepGoing && loopProgress.evaluate(currentToken) {
         let unexpectedBeforeFirst: RawUnexpectedNodesSyntax?
         let first: RawTokenSyntax?
         let unexpectedBeforeSecond: RawUnexpectedNodesSyntax?
@@ -783,7 +783,7 @@ extension Parser.Lookahead {
 
   mutating func canParseTupleBodyType() -> Bool {
     guard
-      !self.at(any: [.rightParen, .rightBrace]) && !self.atContextualPunctuator("...") && !self.atStartOfDeclaration()
+      !self.at(.rightParen, .rightBrace) && !self.atContextualPunctuator("...") && !self.atStartOfDeclaration()
     else {
       return self.consume(if: .rightParen) != nil
     }
@@ -814,7 +814,8 @@ extension Parser.Lookahead {
         // better if we skip over them.
         if self.consume(if: .equal) != nil {
           var skipProgress = LoopProgressCondition()
-          while !self.at(any: [.eof, .rightParen, .rightBrace, .comma])
+          while !self.at(.eof)
+            && !self.at(.rightParen, .rightBrace, .comma)
             && !self.atContextualPunctuator("...")
             && !self.atStartOfDeclaration()
             && skipProgress.evaluate(currentToken)
@@ -929,7 +930,37 @@ extension Parser {
       specifier = missingToken(misplacedSpecifier.tokenKind, text: misplacedSpecifier.tokenText)
     }
     var extraneousSpecifiers: [RawTokenSyntax] = []
-    while let extraSpecifier = self.consume(ifAny: [.keyword(.inout), .keyword(.__shared), .keyword(.__owned), .keyword(.isolated), .keyword(._const)]) {
+
+    enum ExtraneousSpecifier: RawTokenKindSubset {
+      case `inout`
+      case __shared
+      case __owned
+      case isolated
+      case _const
+
+      var rawTokenKind: RawTokenKind {
+        switch self {
+        case .inout: return .keyword(.inout)
+        case .__shared: return .keyword(.__shared)
+        case .__owned: return .keyword(.__owned)
+        case .isolated: return .keyword(.isolated)
+        case ._const: return .keyword(._const)
+        }
+      }
+
+      init?(lexeme: Lexer.Lexeme) {
+        switch lexeme {
+        case RawTokenKindMatch(.inout): self = .inout
+        case RawTokenKindMatch(.__shared): self = .__shared
+        case RawTokenKindMatch(.__owned): self = .__owned
+        case RawTokenKindMatch(.isolated): self = .isolated
+        case RawTokenKindMatch(._const): self = ._const
+        default: return nil
+        }
+      }
+    }
+
+    while let extraSpecifier = self.consume(ifAnyIn: ExtraneousSpecifier.self) {
       if specifier == nil {
         specifier = extraSpecifier
       } else {

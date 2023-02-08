@@ -91,8 +91,12 @@ extension SyntaxText {
 }
 
 extension RawTokenKind {
-  func `is`(any kinds: [RawTokenKind]) -> Bool {
-    return kinds.contains(self)
+  func `is`(_ kind1: RawTokenKind, _ kind2: RawTokenKind) -> Bool {
+    return self == kind1 || self == kind2
+  }
+
+  func `is`(_ kind1: RawTokenKind, _ kind2: RawTokenKind, _ kind3: RawTokenKind) -> Bool {
+    return self == kind1 || self == kind2 || self == kind3
   }
 }
 

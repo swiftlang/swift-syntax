@@ -42,28 +42,56 @@ public struct RecoveryConsumptionHandle {
 }
 
 extension Parser.Lookahead {
-  /// Tries eating tokens until it finds a token whose kind is in `kinds`
+  /// See `canRecoverTo` that takes 3 kinds.
+  mutating func canRecoverTo(
+    _ kind1: RawTokenKind,
+    recoveryPrecedence: TokenPrecedence? = nil
+  ) -> RecoveryConsumptionHandle? {
+    return canRecoverTo(kind1, kind1, kind1, recoveryPrecedence: recoveryPrecedence)
+  }
+
+  /// See `canRecoverTo` that takes 3 kinds.
+  mutating func canRecoverTo(
+    _ kind1: RawTokenKind,
+    _ kind2: RawTokenKind,
+    recoveryPrecedence: TokenPrecedence? = nil
+  ) -> RecoveryConsumptionHandle? {
+    return canRecoverTo(kind1, kind2, kind1, recoveryPrecedence: recoveryPrecedence)
+  }
+
+  /// Tries eating tokens until it finds a token whose kind is `kind1`, `kind2` or `kind3`
   /// without skipping tokens that have a precedence that's higher than the
-  /// lowest precedence in `kinds`. If it found a token of `kind` in this way,
+  /// lowest precedence in the expected kinds. If it found a token of `kind` in this way,
   /// returns `true`, otherwise `false`.
   /// If this method returns `true`, the parser probably wants to consume the
   /// tokens this lookahead skipped over to find `kind` by consuming
   /// `lookahead.tokensConsumed` as unexpected.
   mutating func canRecoverTo(
-    _ kinds: [RawTokenKind],
+    _ kind1: RawTokenKind,
+    _ kind2: RawTokenKind,
+    _ kind3: RawTokenKind,
     recoveryPrecedence: TokenPrecedence? = nil
   ) -> RecoveryConsumptionHandle? {
     let initialTokensConsumed = self.tokensConsumed
 
-    let recoveryPrecedence = recoveryPrecedence ?? kinds.map(TokenPrecedence.init).min()!
+    let recoveryPrecedence = recoveryPrecedence ?? min(TokenPrecedence(kind1), TokenPrecedence(kind2), TokenPrecedence(kind3))
 
     while !self.at(.eof) {
-      if !recoveryPrecedence.shouldSkipOverNewlines,
-        self.currentToken.isAtStartOfLine
-      {
+      if !recoveryPrecedence.shouldSkipOverNewlines, self.currentToken.isAtStartOfLine {
         break
       }
-      if let matchedKind = kinds.filter({ RawTokenKindMatch($0) ~= self.currentToken }).first {
+      let matchedKind: RawTokenKind?
+      switch self.currentToken {
+      case RawTokenKindMatch(kind1):
+        matchedKind = kind1
+      case RawTokenKindMatch(kind2):
+        matchedKind = kind2
+      case RawTokenKindMatch(kind3):
+        matchedKind = kind3
+      default:
+        matchedKind = nil
+      }
+      if let matchedKind = matchedKind {
         let remapKind: RawTokenKind?
         if matchedKind.base == .keyword {
           remapKind = matchedKind
@@ -84,7 +112,7 @@ extension Parser.Lookahead {
       }
       self.consumeAnyToken()
       if let closingDelimiter = currentTokenPrecedence.closingTokenKind {
-        guard self.canRecoverTo([closingDelimiter]) != nil else {
+        guard self.canRecoverTo(closingDelimiter) != nil else {
           break
         }
         self.eat(closingDelimiter)
@@ -102,7 +130,7 @@ extension Parser.Lookahead {
   mutating func canRecoverTo<Subset: RawTokenKindSubset>(
     anyIn subset: Subset.Type,
     recoveryPrecedence: TokenPrecedence? = nil
-  ) -> (Subset, RecoveryConsumptionHandle)? {
+  ) -> (matchedKind: Subset, handle: RecoveryConsumptionHandle)? {
     let initialTokensConsumed = self.tokensConsumed
 
     assert(!subset.allCases.isEmpty, "Subset must have at least one case")
@@ -136,7 +164,7 @@ extension Parser.Lookahead {
       }
       self.consumeAnyToken()
       if let closingDelimiter = currentTokenPrecedence.closingTokenKind {
-        guard self.canRecoverTo([closingDelimiter]) != nil else {
+        guard self.canRecoverTo(closingDelimiter) != nil else {
           break
         }
         self.eat(closingDelimiter)

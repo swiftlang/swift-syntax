@@ -50,13 +50,9 @@ struct TokenConsumptionHandle {
 }
 
 extension TokenConsumer {
-  /// Returns whether the the current token is of kind `kind` and satisfies
-  /// `condition`.
-  ///
-  /// - Parameter kind: The kind to test for.
-  /// - Parameter condition: An additional condition that must be satisfied for
-  ///                        this function to return `true`.
-  /// - Returns: `true` if the given `kind` matches the current token's kind.
+  /// Returns whether the the current token is one of the specified kinds, and,
+  /// in case `allowTokenAtStartOfLine` is false, whether the current token is
+  /// not on a newline.
   public mutating func at(
     _ kind: RawTokenKind,
     allowTokenAtStartOfLine: Bool = true
@@ -65,6 +61,44 @@ extension TokenConsumer {
       return false
     }
     return RawTokenKindMatch(kind) ~= self.currentToken
+  }
+
+  /// Returns whether the the current token is one of the specified kinds, and,
+  /// in case `allowTokenAtStartOfLine` is false, whether the current token is
+  /// not on a newline.
+  public mutating func at(
+    _ kind1: RawTokenKind,
+    _ kind2: RawTokenKind,
+    allowTokenAtStartOfLine: Bool = true
+  ) -> Bool {
+    if !allowTokenAtStartOfLine && self.currentToken.isAtStartOfLine {
+      return false
+    }
+    switch self.currentToken {
+    case RawTokenKindMatch(kind1): return true
+    case RawTokenKindMatch(kind2): return true
+    default: return false
+    }
+  }
+
+  /// Returns whether the the current token is one of the specified kinds, and,
+  /// in case `allowTokenAtStartOfLine` is false, whether the current token is
+  /// not on a newline.
+  public mutating func at(
+    _ kind1: RawTokenKind,
+    _ kind2: RawTokenKind,
+    _ kind3: RawTokenKind,
+    allowTokenAtStartOfLine: Bool = true
+  ) -> Bool {
+    if !allowTokenAtStartOfLine && self.currentToken.isAtStartOfLine {
+      return false
+    }
+    switch self.currentToken {
+    case RawTokenKindMatch(kind1): return true
+    case RawTokenKindMatch(kind2): return true
+    case RawTokenKindMatch(kind3): return true
+    default: return false
+    }
   }
 
   /// Returns whether the current token is an operator with the given `name`.
@@ -133,14 +167,10 @@ extension TokenConsumer {
 // MARK: Consuming tokens (`consume`)
 
 extension TokenConsumer {
-  /// Examines the current token and consumes it if its kind matches the
-  /// given `TokenKind` and additionally satisfies `condition`. If a token was
-  /// consumed, the result is that token, else the result is `nil`.
-  ///
-  /// - Parameter kind: The kind of token to consume.
-  /// - Parameter condition: An additional condition that must be satisfied for
-  ///                        the token to be consumed.
-  /// - Returns: A token of the given kind if one was consumed, else `nil`.
+  /// If the current token is of the given kind and, if `allowTokenAtStartOfLine`
+  /// is `false`, if the token is not at the start of a line, consume the token
+  /// and return it. Otherwise return `nil`. If `remapping` is not `nil`, the
+  /// returned token's kind will be changed to `remapping`.
   @_spi(RawSyntax)
   public mutating func consume(
     if kind: RawTokenKind,
@@ -148,16 +178,60 @@ extension TokenConsumer {
     allowTokenAtStartOfLine: Bool = true
   ) -> Token? {
     if self.at(kind, allowTokenAtStartOfLine: allowTokenAtStartOfLine) {
-      if let remapping = remapping {
-        return self.consumeAnyToken(remapping: remapping)
-      } else if kind.base == .keyword {
-        // We support remapping identifiers to contextual keywords
-        return self.consumeAnyToken(remapping: kind)
-      } else {
-        return self.consumeAnyToken()
+      if case RawTokenKindMatch(kind) = self.currentToken {
+        if let remapping = remapping {
+          return self.consumeAnyToken(remapping: remapping)
+        } else if kind.base == .keyword {
+          return self.consumeAnyToken(remapping: kind)
+        } else {
+          return self.consumeAnyToken()
+        }
       }
     }
     return nil
+  }
+
+  /// If the current token is of the given kind and, if `allowTokenAtStartOfLine`
+  /// is `false`, if the token is not at the start of a line, consume the token
+  /// and return it. Otherwise return `nil`. If `remapping` is not `nil`, the
+  /// returned token's kind will be changed to `remapping`.
+  @_spi(RawSyntax)
+  public mutating func consume(
+    if kind1: RawTokenKind,
+    _ kind2: RawTokenKind,
+    remapping: RawTokenKind? = nil,
+    allowTokenAtStartOfLine: Bool = true
+  ) -> Token? {
+    if let token = consume(if: kind1, remapping: remapping, allowTokenAtStartOfLine: allowTokenAtStartOfLine) {
+      return token
+    } else if let token = consume(if: kind2, remapping: remapping, allowTokenAtStartOfLine: allowTokenAtStartOfLine) {
+      return token
+    } else {
+      return nil
+    }
+  }
+
+  /// If the current token is of the given kind and, if `allowTokenAtStartOfLine`
+  /// is `false`, if the token is not at the start of a line, consume the token
+  /// and return it. Otherwise return `nil`. If `remapping` is not `nil`, the
+  /// returned token's kind will be changed to `remapping`.
+  @_spi(RawSyntax)
+  public mutating func consume(
+    if kind1: RawTokenKind,
+    _ kind2: RawTokenKind,
+    _ kind3: RawTokenKind,
+    remapping: RawTokenKind? = nil,
+    allowTokenAtStartOfLine: Bool = true
+  ) -> Token? {
+    if let token = consume(if: kind1, remapping: remapping, allowTokenAtStartOfLine: allowTokenAtStartOfLine) {
+      return token
+    } else if let token = consume(if: kind2, remapping: remapping, allowTokenAtStartOfLine: allowTokenAtStartOfLine) {
+      return token
+    } else if let token = consume(if: kind3, remapping: remapping, allowTokenAtStartOfLine: allowTokenAtStartOfLine) {
+      return token
+    } else {
+      return nil
+    }
   }
 
   /// Consumes and returns the current token is an operator with the given `name`.
@@ -168,33 +242,6 @@ extension TokenConsumer {
         return self.consumeAnyToken(remapping: remapping)
       } else {
         return self.consumeAnyToken()
-      }
-    }
-    return nil
-  }
-
-  /// Examines the current token and consumes it if is any of the given
-  /// kinds and additionally satisfies `condition`.
-  ///
-  /// - Parameter kind: The kinds of token to consume.
-  /// - Parameter condition: An additional condition that must be satisfied for
-  ///                        the token to be consumed.
-  /// - Returns: A token of the given kind if one was consumed, else `nil`.
-  @_spi(RawSyntax)
-  public mutating func consume(
-    ifAny kinds: [RawTokenKind],
-    allowTokenAtStartOfLine: Bool = true
-  ) -> Token? {
-    if !allowTokenAtStartOfLine && self.currentToken.isAtStartOfLine {
-      return nil
-    }
-    for kind in kinds {
-      if case RawTokenKindMatch(kind) = self.currentToken {
-        if kind.base == .keyword {
-          return self.consumeAnyToken(remapping: kind)
-        } else {
-          return self.consumeAnyToken()
-        }
       }
     }
     return nil

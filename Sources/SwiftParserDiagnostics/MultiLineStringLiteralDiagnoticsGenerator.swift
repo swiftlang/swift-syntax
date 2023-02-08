@@ -144,7 +144,7 @@ final class MultiLineStringLiteralIndentatinDiagnosticsGenerator: SyntaxVisitor 
       return .visitChildren
     }
 
-    if token.lexerError?.kind == .insufficientIndentationInMultilineStringLiteral {
+    if token.tokenDiagnostic?.kind == .insufficientIndentationInMultilineStringLiteral {
       addIncorrectlyIndentedToken(token: token)
     } else {
       finishInProgressDiagnostic()

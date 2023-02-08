@@ -16,11 +16,11 @@ import SwiftDiagnostics
 fileprivate let diagnosticDomain: String = "SwiftLexer"
 
 /// A error diagnostic whose ID is determined by the diagnostic's type.
-public protocol LexerError: DiagnosticMessage {
+public protocol TokenError: DiagnosticMessage {
   var diagnosticID: MessageID { get }
 }
 
-public extension LexerError {
+public extension TokenError {
   static var diagnosticID: MessageID {
     return MessageID(domain: diagnosticDomain, id: "\(self)")
   }
@@ -37,7 +37,7 @@ public extension LexerError {
 // MARK: - Errors (please sort alphabetically)
 
 /// Please order the cases in this enum alphabetically by case name.
-public enum StaticLexerError: String, DiagnosticMessage {
+public enum StaticTokenError: String, DiagnosticMessage {
   case expectedBinaryExponentInHexFloatLiteral = "hexadecimal floating point literal must end with an exponent"
   case expectedClosingBraceInUnicodeEscape = #"expected '}' in \u{...} escape sequence"#
   case expectedDigitInFloatLiteral = "expected a digit in floating point exponent"
@@ -48,7 +48,7 @@ public enum StaticLexerError: String, DiagnosticMessage {
   case invalidIdentifierStartCharacter = "an identifier cannot begin with this character"
   case invalidNumberOfHexDigitsInUnicodeEscape = #"\u{...} escape sequence expects between 1 and 8 hex digits"#
   case invalidUtf8 = "invalid UTF-8 found in source file"
-  case lexerErrorOffsetOverflow = "the lexer dicovered an error in this token but was not able to represent its offset due to overflow; please split the token"
+  case tokenDiagnosticOffsetOverflow = "the lexer dicovered an error in this token but was not able to represent its offset due to overflow; please split the token"
   case sourceConflictMarker = "source control conflict marker in source file"
   case unexpectedBlockCommentEnd = "unexpected end of block comment"
   case unicodeCurlyQuote = #"unicode curly quote found; use '"' instead"#
@@ -64,7 +64,7 @@ public enum StaticLexerError: String, DiagnosticMessage {
 }
 
 /// Please order the cases in this enum alphabetically by case name.
-public enum StaticLexerWarning: String, DiagnosticMessage {
+public enum StaticTokenWarning: String, DiagnosticMessage {
   case nonBreakingSpace = "non-breaking space (U+00A0) used instead of regular space"
   case nulCharacter = "nul character embedded in middle of file"
 
@@ -77,7 +77,7 @@ public enum StaticLexerWarning: String, DiagnosticMessage {
   public var severity: DiagnosticSeverity { .warning }
 }
 
-public struct InvalidFloatingPointExponentDigit: LexerError {
+public struct InvalidFloatingPointExponentDigit: TokenError {
   public enum Kind {
     case digit(Unicode.Scalar)
     case character(Unicode.Scalar)
@@ -94,7 +94,7 @@ public struct InvalidFloatingPointExponentDigit: LexerError {
   }
 }
 
-public struct InvalidDigitInIntegerLiteral: LexerError {
+public struct InvalidDigitInIntegerLiteral: TokenError {
   public enum Kind {
     case binary(Unicode.Scalar)
     case octal(Unicode.Scalar)
@@ -118,10 +118,10 @@ public struct InvalidDigitInIntegerLiteral: LexerError {
   }
 }
 
-// MARK: - Convert LexerError from SwiftSyntax to error messages
+// MARK: - Convert TokenDiagnostic from SwiftSyntax to error messages
 
-public extension SwiftSyntax.LexerError {
-  /// `tokenText` is the entire text of the token in which the `LexerError`
+public extension SwiftSyntax.TokenDiagnostic {
+  /// `tokenText` is the entire text of the token in which the `TokenDiagnostic`
   /// occurred, including trivia.
   @_spi(RawSyntax)
   func diagnosticMessage(wholeTextBytes: [UInt8]) -> DiagnosticMessage {
@@ -132,34 +132,34 @@ public extension SwiftSyntax.LexerError {
     }
 
     switch self.kind {
-    case .expectedBinaryExponentInHexFloatLiteral: return StaticLexerError.expectedBinaryExponentInHexFloatLiteral
-    case .expectedClosingBraceInUnicodeEscape: return StaticLexerError.expectedClosingBraceInUnicodeEscape
-    case .expectedDigitInFloatLiteral: return StaticLexerError.expectedDigitInFloatLiteral
-    case .expectedHexCodeInUnicodeEscape: return StaticLexerError.expectedHexCodeInUnicodeEscape
-    case .expectedHexDigitInHexLiteral: return StaticLexerError.expectedHexDigitInHexLiteral
+    case .expectedBinaryExponentInHexFloatLiteral: return StaticTokenError.expectedBinaryExponentInHexFloatLiteral
+    case .expectedClosingBraceInUnicodeEscape: return StaticTokenError.expectedClosingBraceInUnicodeEscape
+    case .expectedDigitInFloatLiteral: return StaticTokenError.expectedDigitInFloatLiteral
+    case .expectedHexCodeInUnicodeEscape: return StaticTokenError.expectedHexCodeInUnicodeEscape
+    case .expectedHexDigitInHexLiteral: return StaticTokenError.expectedHexDigitInHexLiteral
     case .insufficientIndentationInMultilineStringLiteral:
       // This should be diagnosed when visiting the `StringLiteralExprSyntax`
       // inside `ParseDiagnosticsGenerator` but fall back to an error message
       // here in case the error is not diagnosed.
       return InvalidIndentationInMultiLineStringLiteralError(kind: .insufficientIndentation, lines: 1)
     case .invalidBinaryDigitInIntegerLiteral: return InvalidDigitInIntegerLiteral(kind: .binary(scalarAtErrorOffset))
-    case .invalidCharacter: return StaticLexerError.invalidCharacter
+    case .invalidCharacter: return StaticTokenError.invalidCharacter
     case .invalidDecimalDigitInIntegerLiteral: return InvalidDigitInIntegerLiteral(kind: .decimal(scalarAtErrorOffset))
-    case .invalidEscapeSequenceInStringLiteral: return StaticLexerError.invalidEscapeSequenceInStringLiteral
+    case .invalidEscapeSequenceInStringLiteral: return StaticTokenError.invalidEscapeSequenceInStringLiteral
     case .invalidFloatingPointExponentCharacter: return InvalidFloatingPointExponentDigit(kind: .character(scalarAtErrorOffset))
     case .invalidFloatingPointExponentDigit: return InvalidFloatingPointExponentDigit(kind: .digit(scalarAtErrorOffset))
     case .invalidHexDigitInIntegerLiteral: return InvalidDigitInIntegerLiteral(kind: .hex(scalarAtErrorOffset))
-    case .invalidIdentifierStartCharacter: return StaticLexerError.invalidIdentifierStartCharacter
-    case .invalidNumberOfHexDigitsInUnicodeEscape: return StaticLexerError.invalidNumberOfHexDigitsInUnicodeEscape
+    case .invalidIdentifierStartCharacter: return StaticTokenError.invalidIdentifierStartCharacter
+    case .invalidNumberOfHexDigitsInUnicodeEscape: return StaticTokenError.invalidNumberOfHexDigitsInUnicodeEscape
     case .invalidOctalDigitInIntegerLiteral: return InvalidDigitInIntegerLiteral(kind: .octal(scalarAtErrorOffset))
-    case .invalidUtf8: return StaticLexerError.invalidUtf8
-    case .lexerErrorOffsetOverflow: return StaticLexerError.lexerErrorOffsetOverflow
-    case .nonBreakingSpace: return StaticLexerWarning.nonBreakingSpace
-    case .nulCharacter: return StaticLexerWarning.nulCharacter
-    case .sourceConflictMarker: return StaticLexerError.sourceConflictMarker
-    case .unexpectedBlockCommentEnd: return StaticLexerError.unexpectedBlockCommentEnd
-    case .unicodeCurlyQuote: return StaticLexerError.unicodeCurlyQuote
-    case .unprintableAsciiCharacter: return StaticLexerError.unprintableAsciiCharacter
+    case .invalidUtf8: return StaticTokenError.invalidUtf8
+    case .tokenDiagnosticOffsetOverflow: return StaticTokenError.tokenDiagnosticOffsetOverflow
+    case .nonBreakingSpace: return StaticTokenWarning.nonBreakingSpace
+    case .nulCharacter: return StaticTokenWarning.nulCharacter
+    case .sourceConflictMarker: return StaticTokenError.sourceConflictMarker
+    case .unexpectedBlockCommentEnd: return StaticTokenError.unexpectedBlockCommentEnd
+    case .unicodeCurlyQuote: return StaticTokenError.unicodeCurlyQuote
+    case .unprintableAsciiCharacter: return StaticTokenError.unprintableAsciiCharacter
     }
   }
 

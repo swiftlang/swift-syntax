@@ -182,7 +182,7 @@ public struct RawSyntaxTokenView {
         leadingTrivia: formLeadingTrivia(),
         trailingTrivia: formTrailingTrivia(),
         presence: presence,
-        lexerError: lexerError,
+        tokenDiagnostic: tokenDiagnostic,
         arena: arena
       )
     case .materializedToken(var payload):
@@ -241,28 +241,28 @@ public struct RawSyntaxTokenView {
   }
 
   @_spi(RawSyntax)
-  public var lexerError: LexerError? {
+  public var tokenDiagnostic: TokenDiagnostic? {
     switch raw.rawData.payload {
     case .parsedToken(let dat):
-      return dat.lexerError
+      return dat.tokenDiagnostic
     case .materializedToken(let dat):
-      return dat.lexerError
+      return dat.tokenDiagnostic
     case .layout(_):
-      preconditionFailure("'lexerError' is not available for non-token node")
+      preconditionFailure("'tokenDiagnostic' is not available for non-token node")
     }
   }
 
   @_spi(RawSyntax)
-  public func withLexerError(lexerError: LexerError?, arena: SyntaxArena) -> RawSyntax {
+  public func withTokenDiagnostic(tokenDiagnostic: TokenDiagnostic?, arena: SyntaxArena) -> RawSyntax {
     switch raw.rawData.payload {
     case .parsedToken(var dat):
-      dat.lexerError = lexerError
+      dat.tokenDiagnostic = tokenDiagnostic
       return RawSyntax(arena: arena, payload: .parsedToken(dat))
     case .materializedToken(var dat):
-      dat.lexerError = lexerError
+      dat.tokenDiagnostic = tokenDiagnostic
       return RawSyntax(arena: arena, payload: .materializedToken(dat))
     default:
-      preconditionFailure("'withLexerError' is not available for non-token node")
+      preconditionFailure("'withTokenDiagnostic' is not available for non-token node")
     }
   }
 }

@@ -40,7 +40,7 @@ extension Lexer {
     @_spi(RawSyntax)
     public var rawTokenKind: RawTokenKind
     public var flags: Lexeme.Flags
-    public var error: LexerError?
+    public var diagnostic: TokenDiagnostic?
     var start: UnsafePointer<UInt8>
     public var leadingTriviaByteLength: Int
     public var textByteLength: Int
@@ -60,7 +60,7 @@ extension Lexer {
     init(
       tokenKind: RawTokenKind,
       flags: Flags,
-      error: LexerError?,
+      diagnostic: TokenDiagnostic?,
       start: UnsafePointer<UInt8>,
       leadingTriviaLength: Int,
       textLength: Int,
@@ -69,7 +69,7 @@ extension Lexer {
     ) {
       self.rawTokenKind = tokenKind
       self.flags = flags
-      self.error = error
+      self.diagnostic = diagnostic
       self.start = start
       self.leadingTriviaByteLength = leadingTriviaLength
       self.textByteLength = textLength

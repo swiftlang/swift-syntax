@@ -130,7 +130,7 @@ final class RawSyntaxTests: XCTestCase {
         wholeText: arena.intern("\nfoo "),
         textRange: 1..<4,
         presence: .present,
-        lexerError: nil,
+        tokenDiagnostic: nil,
         arena: arena
       )
 

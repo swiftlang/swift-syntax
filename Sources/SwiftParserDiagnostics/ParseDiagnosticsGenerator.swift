@@ -31,7 +31,7 @@ fileprivate extension TokenSyntax {
 }
 
 fileprivate extension DiagnosticSeverity {
-  func matches(_ lexerErorSeverity: SwiftSyntax.LexerError.Severity) -> Bool {
+  func matches(_ lexerErorSeverity: SwiftSyntax.TokenDiagnostic.Severity) -> Bool {
     switch (self, lexerErorSeverity) {
     case (.error, .error):
       return true
@@ -359,14 +359,14 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if token.presence == .missing {
       handleMissingToken(token)
     } else {
-      if let lexerError = token.lexerError {
-        let message = lexerError.diagnosticMessage(in: token)
-        assert(message.severity.matches(lexerError.severity))
+      if let tokenDiagnostic = token.tokenDiagnostic {
+        let message = tokenDiagnostic.diagnosticMessage(in: token)
+        assert(message.severity.matches(tokenDiagnostic.severity))
         self.addDiagnostic(
           token,
-          position: token.position.advanced(by: Int(lexerError.byteOffset)),
+          position: token.position.advanced(by: Int(tokenDiagnostic.byteOffset)),
           message,
-          fixIts: lexerError.fixIts(in: token)
+          fixIts: tokenDiagnostic.fixIts(in: token)
         )
       }
     }

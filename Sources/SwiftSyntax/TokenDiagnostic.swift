@@ -10,10 +10,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-/// If the token has a lexical error, this defines the type of the error.
-/// `lexerErrorOffset` in the token will specify at which offset the error
-/// occurred.
-public struct LexerError: Hashable {
+/// If the token has an error that's inherent to the token itself and not its
+/// surrounding structure, this defines the type of the error.
+/// `byteOffset` specifies at which offset the error occurred.
+public struct TokenDiagnostic: Hashable {
   public enum Severity {
     case error
     case warning
@@ -40,7 +40,7 @@ public struct LexerError: Hashable {
     case invalidOctalDigitInIntegerLiteral
     case invalidUtf8
     /// The lexer dicovered an error but was not able to represent the offset of the error because it would overflow `LexerErrorOffset`.
-    case lexerErrorOffsetOverflow
+    case tokenDiagnosticOffsetOverflow
     case nonBreakingSpace
     case nulCharacter
     case sourceConflictMarker
@@ -64,7 +64,7 @@ public struct LexerError: Hashable {
     assert(byteOffset >= 0)
     // `type(of: self.byteOffset).max` gets optimized to a constant
     if byteOffset > type(of: self.byteOffset).max {
-      self.kind = .lexerErrorOffsetOverflow
+      self.kind = .tokenDiagnosticOffsetOverflow
       self.byteOffset = 0
     } else {
       self.kind = kind
@@ -91,7 +91,7 @@ public struct LexerError: Hashable {
     case .invalidNumberOfHexDigitsInUnicodeEscape: return .error
     case .invalidOctalDigitInIntegerLiteral: return .error
     case .invalidUtf8: return .error
-    case .lexerErrorOffsetOverflow: return .error
+    case .tokenDiagnosticOffsetOverflow: return .error
     case .nonBreakingSpace: return .warning
     case .nulCharacter: return .warning
     case .sourceConflictMarker: return .error

@@ -47,7 +47,7 @@ extension Lexer {
           self.nextToken = Lexeme(
             tokenKind: .eof,
             flags: [],
-            error: nil,
+            diagnostic: nil,
             start: self.cursor.pointer,
             leadingTriviaLength: 0,
             textLength: 0,

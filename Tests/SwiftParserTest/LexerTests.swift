@@ -38,7 +38,7 @@ fileprivate func AssertRawBytesLexeme(
   leadingTrivia: [UInt8] = [],
   text: [UInt8],
   trailingTrivia: [UInt8] = [],
-  error: SwiftSyntax.LexerError? = nil,
+  error: SwiftSyntax.TokenDiagnostic? = nil,
   file: StaticString = #file,
   line: UInt = #line
 ) {
@@ -52,7 +52,7 @@ fileprivate func AssertRawBytesLexeme(
   trailingTrivia.withUnsafeBufferPointer { trailingTrivia in
     XCTAssertEqual(lexeme.trailingTriviaText, SyntaxText(buffer: trailingTrivia), file: file, line: line)
   }
-  XCTAssertEqual(lexeme.error, error, file: file, line: line)
+  XCTAssertEqual(lexeme.diagnostic, error, file: file, line: line)
 }
 
 public class LexerTests: XCTestCase {
@@ -136,7 +136,7 @@ public class LexerTests: XCTestCase {
       """#,
       lexemes: [
         LexemeSpec(.stringQuote, text: #"""#),
-        LexemeSpec(.stringSegment, text: #"\u{12341234}"#, error: "invalid escape sequence in literal"),
+        LexemeSpec(.stringSegment, text: #"\u{12341234}"#, diagnostic: "invalid escape sequence in literal"),
         LexemeSpec(.stringQuote, text: #"""#),
       ]
     )
@@ -429,7 +429,7 @@ public class LexerTests: XCTestCase {
       "static func 1️⃣�() {}",
       lexemes: [
         LexemeSpec(.keyword(.static), text: "static", trailing: " "),
-        LexemeSpec(.keyword(.func), text: "func", trailing: " �", error: "invalid character in source file"),
+        LexemeSpec(.keyword(.func), text: "func", trailing: " �", diagnostic: "invalid character in source file"),
         LexemeSpec(.leftParen, text: "("),
         LexemeSpec(.rightParen, text: ")", trailing: " "),
         LexemeSpec(.leftBrace, text: "{"),
@@ -477,7 +477,7 @@ public class LexerTests: XCTestCase {
             >>>>>>> 18844bc65229786b96b89a9fc7739c0fc897905e:conflict_markers.swift
             """,
           text: "",
-          error: "source control conflict marker in source file",
+          diagnostic: "source control conflict marker in source file",
           flags: [.isAtStartOfLine]
         )
       ]
@@ -519,7 +519,7 @@ public class LexerTests: XCTestCase {
 
             """,
           text: "",
-          error: "source control conflict marker in source file",
+          diagnostic: "source control conflict marker in source file",
           flags: [.isAtStartOfLine]
         )
       ]
@@ -639,7 +639,7 @@ public class LexerTests: XCTestCase {
     AssertLexemes(
       "y1️⃣\u{fffe} + z",
       lexemes: [
-        LexemeSpec(.identifier, text: "y", trailing: "\u{fffe} ", error: "invalid character in source file"),
+        LexemeSpec(.identifier, text: "y", trailing: "\u{fffe} ", diagnostic: "invalid character in source file"),
         LexemeSpec(.binaryOperator, text: "+", trailing: " "),
         LexemeSpec(.identifier, text: "z"),
       ]
@@ -728,35 +728,35 @@ public class LexerTests: XCTestCase {
   func testNumericLiteralDiagnostics() {
     AssertLexemes(
       " 0x1.01️⃣",
-      lexemes: [LexemeSpec(.integerLiteral, leading: " ", text: "0x1.0", error: "hexadecimal floating point literal must end with an exponent")]
+      lexemes: [LexemeSpec(.integerLiteral, leading: " ", text: "0x1.0", diagnostic: "hexadecimal floating point literal must end with an exponent")]
     )
     AssertLexemes(
       " 0x1p1️⃣_",
-      lexemes: [LexemeSpec(.floatingLiteral, leading: " ", text: "0x1p_", error: "'_' is not a valid first character in floating point exponent")]
+      lexemes: [LexemeSpec(.floatingLiteral, leading: " ", text: "0x1p_", diagnostic: "'_' is not a valid first character in floating point exponent")]
     )
     AssertLexemes(
       "01️⃣QWERTY",
-      lexemes: [LexemeSpec(.integerLiteral, text: "0QWERTY", error: "'Q' is not a valid digit in integer literal")]
+      lexemes: [LexemeSpec(.integerLiteral, text: "0QWERTY", diagnostic: "'Q' is not a valid digit in integer literal")]
     )
     AssertLexemes(
       "0b1️⃣QWERTY",
-      lexemes: [LexemeSpec(.integerLiteral, text: "0bQWERTY", error: "'Q' is not a valid binary digit (0 or 1) in integer literal")]
+      lexemes: [LexemeSpec(.integerLiteral, text: "0bQWERTY", diagnostic: "'Q' is not a valid binary digit (0 or 1) in integer literal")]
     )
     AssertLexemes(
       "0x1️⃣QWERTY",
-      lexemes: [LexemeSpec(.integerLiteral, text: "0xQWERTY", error: "'Q' is not a valid hexadecimal digit (0-9, A-F) in integer literal")]
+      lexemes: [LexemeSpec(.integerLiteral, text: "0xQWERTY", diagnostic: "'Q' is not a valid hexadecimal digit (0-9, A-F) in integer literal")]
     )
     AssertLexemes(
       "0o1️⃣QWERTY",
-      lexemes: [LexemeSpec(.integerLiteral, text: "0oQWERTY", error: "'Q' is not a valid octal digit (0-7) in integer literal")]
+      lexemes: [LexemeSpec(.integerLiteral, text: "0oQWERTY", diagnostic: "'Q' is not a valid octal digit (0-7) in integer literal")]
     )
     AssertLexemes(
       "1.0e+1️⃣QWERTY",
-      lexemes: [LexemeSpec(.floatingLiteral, text: "1.0e+QWERTY", error: "'Q' is not a valid digit in floating point exponent")]
+      lexemes: [LexemeSpec(.floatingLiteral, text: "1.0e+QWERTY", diagnostic: "'Q' is not a valid digit in floating point exponent")]
     )
     AssertLexemes(
       "0x1p+1️⃣QWERTY",
-      lexemes: [LexemeSpec(.floatingLiteral, text: "0x1p+QWERTY", error: "'Q' is not a valid digit in floating point exponent")]
+      lexemes: [LexemeSpec(.floatingLiteral, text: "0x1p+QWERTY", diagnostic: "'Q' is not a valid digit in floating point exponent")]
     )
   }
 
@@ -764,7 +764,7 @@ public class LexerTests: XCTestCase {
     AssertLexemes(
       "121️⃣😡",
       lexemes: [
-        LexemeSpec(.integerLiteral, text: "12😡", error: "'😡' is not a valid digit in integer literal")
+        LexemeSpec(.integerLiteral, text: "12😡", diagnostic: "'😡' is not a valid digit in integer literal")
       ]
     )
   }
@@ -772,23 +772,23 @@ public class LexerTests: XCTestCase {
   func testBadNumericLiteralDigits() {
     AssertLexemes(
       "01️⃣a1234567",
-      lexemes: [LexemeSpec(.integerLiteral, text: "0a1234567", error: "'a' is not a valid digit in integer literal")]
+      lexemes: [LexemeSpec(.integerLiteral, text: "0a1234567", diagnostic: "'a' is not a valid digit in integer literal")]
     )
     AssertLexemes(
       "01231️⃣A5678",
-      lexemes: [LexemeSpec(.integerLiteral, text: "0123A5678", error: "'A' is not a valid digit in integer literal")]
+      lexemes: [LexemeSpec(.integerLiteral, text: "0123A5678", diagnostic: "'A' is not a valid digit in integer literal")]
     )
     AssertLexemes(
       "0b101️⃣20101",
-      lexemes: [LexemeSpec(.integerLiteral, text: "0b1020101", error: "'2' is not a valid binary digit (0 or 1) in integer literal")]
+      lexemes: [LexemeSpec(.integerLiteral, text: "0b1020101", diagnostic: "'2' is not a valid binary digit (0 or 1) in integer literal")]
     )
     AssertLexemes(
       "0o13571️⃣864",
-      lexemes: [LexemeSpec(.integerLiteral, text: "0o1357864", error: "'8' is not a valid octal digit (0-7) in integer literal")]
+      lexemes: [LexemeSpec(.integerLiteral, text: "0o1357864", diagnostic: "'8' is not a valid octal digit (0-7) in integer literal")]
     )
     AssertLexemes(
       "0x147AD1️⃣G0",
-      lexemes: [LexemeSpec(.integerLiteral, text: "0x147ADG0", error: "'G' is not a valid hexadecimal digit (0-9, A-F) in integer literal")]
+      lexemes: [LexemeSpec(.integerLiteral, text: "0x147ADG0", diagnostic: "'G' is not a valid hexadecimal digit (0-9, A-F) in integer literal")]
     )
   }
 
@@ -864,7 +864,7 @@ public class LexerTests: XCTestCase {
         kind: .eof,
         leadingTrivia: sourceBytes,
         text: [],
-        error: LexerError(.invalidUtf8, byteOffset: 0)
+        error: TokenDiagnostic(.invalidUtf8, byteOffset: 0)
       )
     }
   }
@@ -881,7 +881,7 @@ public class LexerTests: XCTestCase {
         kind: .eof,
         leadingTrivia: sourceBytes,
         text: [],
-        error: LexerError(.invalidUtf8, byteOffset: 0)
+        error: TokenDiagnostic(.invalidUtf8, byteOffset: 0)
       )
     }
   }
@@ -1051,7 +1051,7 @@ public class LexerTests: XCTestCase {
       """,
       lexemes: [
         LexemeSpec(.stringQuote, text: #"""#),
-        LexemeSpec(.stringSegment, text: "\0", error: "nul character embedded in middle of file"),
+        LexemeSpec(.stringSegment, text: "\0", diagnostic: "nul character embedded in middle of file"),
         LexemeSpec(.stringQuote, text: #"""#),
       ]
     )
@@ -1067,7 +1067,7 @@ public class LexerTests: XCTestCase {
         lexemes[1],
         kind: .stringSegment,
         text: [0xef],
-        error: LexerError(.invalidUtf8, byteOffset: 0)
+        error: TokenDiagnostic(.invalidUtf8, byteOffset: 0)
       )
     }
   }
@@ -1079,7 +1079,7 @@ public class LexerTests: XCTestCase {
       """#,
       lexemes: [
         LexemeSpec(.stringQuote, text: #"""#),
-        LexemeSpec(.stringSegment, text: #"\u"#, error: #"expected hexadecimal code in \u{...} escape sequence"#),
+        LexemeSpec(.stringSegment, text: #"\u"#, diagnostic: #"expected hexadecimal code in \u{...} escape sequence"#),
         LexemeSpec(.stringQuote, text: #"""#),
       ]
     )
@@ -1090,7 +1090,7 @@ public class LexerTests: XCTestCase {
       """#,
       lexemes: [
         LexemeSpec(.stringQuote, text: #"""#),
-        LexemeSpec(.stringSegment, text: #"\u{"#, error: #"expected '}' in \u{...} escape sequence"#),
+        LexemeSpec(.stringSegment, text: #"\u{"#, diagnostic: #"expected '}' in \u{...} escape sequence"#),
         LexemeSpec(.stringQuote, text: #"""#),
       ]
     )
@@ -1101,7 +1101,7 @@ public class LexerTests: XCTestCase {
       """#,
       lexemes: [
         LexemeSpec(.stringQuote, text: #"""#),
-        LexemeSpec(.stringSegment, text: #"\u{12"#, error: #"expected '}' in \u{...} escape sequence"#),
+        LexemeSpec(.stringSegment, text: #"\u{12"#, diagnostic: #"expected '}' in \u{...} escape sequence"#),
         LexemeSpec(.stringQuote, text: #"""#),
       ]
     )
@@ -1112,7 +1112,7 @@ public class LexerTests: XCTestCase {
       """#,
       lexemes: [
         LexemeSpec(.stringQuote, text: #"""#),
-        LexemeSpec(.stringSegment, text: #"\u{}"#, error: #"\u{...} escape sequence expects between 1 and 8 hex digits"#),
+        LexemeSpec(.stringSegment, text: #"\u{}"#, diagnostic: #"\u{...} escape sequence expects between 1 and 8 hex digits"#),
         LexemeSpec(.stringQuote, text: #"""#),
       ]
     )
@@ -1123,7 +1123,7 @@ public class LexerTests: XCTestCase {
       """#,
       lexemes: [
         LexemeSpec(.stringQuote, text: #"""#),
-        LexemeSpec(.stringSegment, text: #"\u{hello}"#, error: #"expected '}' in \u{...} escape sequence"#),
+        LexemeSpec(.stringSegment, text: #"\u{hello}"#, diagnostic: #"expected '}' in \u{...} escape sequence"#),
         LexemeSpec(.stringQuote, text: #"""#),
       ]
     )
@@ -1134,7 +1134,7 @@ public class LexerTests: XCTestCase {
       """#,
       lexemes: [
         LexemeSpec(.stringQuote, text: #"""#),
-        LexemeSpec(.stringSegment, text: #"\u{fffffffff}"#, error: #"\u{...} escape sequence expects between 1 and 8 hex digits"#),
+        LexemeSpec(.stringSegment, text: #"\u{fffffffff}"#, diagnostic: #"\u{...} escape sequence expects between 1 and 8 hex digits"#),
         LexemeSpec(.stringQuote, text: #"""#),
       ]
     )
@@ -1146,7 +1146,7 @@ public class LexerTests: XCTestCase {
       1️⃣*/
       """,
       lexemes: [
-        LexemeSpec(.unknown, text: "*/", error: "unexpected end of block comment")
+        LexemeSpec(.unknown, text: "*/", diagnostic: "unexpected end of block comment")
       ]
     )
 
@@ -1155,7 +1155,7 @@ public class LexerTests: XCTestCase {
       /**/1️⃣*/
       """,
       lexemes: [
-        LexemeSpec(.unknown, leading: "/**/", text: "*/", error: "unexpected end of block comment")
+        LexemeSpec(.unknown, leading: "/**/", text: "*/", diagnostic: "unexpected end of block comment")
       ]
     )
 
@@ -1165,7 +1165,7 @@ public class LexerTests: XCTestCase {
       """,
       lexemes: [
         LexemeSpec(.identifier, leading: "/**/", text: "a"),
-        LexemeSpec(.unknown, text: "*/", error: "unexpected end of block comment"),
+        LexemeSpec(.unknown, text: "*/", diagnostic: "unexpected end of block comment"),
       ]
     )
   }
@@ -1177,7 +1177,7 @@ public class LexerTests: XCTestCase {
       """,
       lexemes: [
         LexemeSpec(.identifier, text: "a", trailing: " "),
-        LexemeSpec(.identifier, text: "“curly string”", trailing: " ", error: #"unicode curly quote found; use '"' instead"#),
+        LexemeSpec(.identifier, text: "“curly string”", trailing: " ", diagnostic: #"unicode curly quote found; use '"' instead"#),
         LexemeSpec(.identifier, text: "b"),
       ]
     )
@@ -1195,7 +1195,7 @@ public class LexerTests: XCTestCase {
     AssertLexemes(
       "\u{0330}",
       lexemes: [
-        LexemeSpec(.identifier, text: "\u{0330}", errorLocationMarker: "START", error: "an identifier cannot begin with this character")
+        LexemeSpec(.identifier, text: "\u{0330}", errorLocationMarker: "START", diagnostic: "an identifier cannot begin with this character")
       ]
     )
   }
@@ -1204,7 +1204,7 @@ public class LexerTests: XCTestCase {
     AssertLexemes(
       "a 1️⃣\u{a0} b",
       lexemes: [
-        LexemeSpec(.identifier, text: "a", trailing: " \u{a0} ", error: "non-breaking space (U+00A0) used instead of regular space"),
+        LexemeSpec(.identifier, text: "a", trailing: " \u{a0} ", diagnostic: "non-breaking space (U+00A0) used instead of regular space"),
         LexemeSpec(.identifier, text: "b"),
       ]
     )
@@ -1214,14 +1214,14 @@ public class LexerTests: XCTestCase {
     AssertLexemes(
       "0x1️⃣",
       lexemes: [
-        LexemeSpec(.integerLiteral, text: "0x", error: "expected hexadecimal digit (0-9, A-F) in integer literal")
+        LexemeSpec(.integerLiteral, text: "0x", diagnostic: "expected hexadecimal digit (0-9, A-F) in integer literal")
       ]
     )
 
     AssertLexemes(
       "0x1️⃣ ",
       lexemes: [
-        LexemeSpec(.integerLiteral, text: "0x", trailing: " ", error: "expected hexadecimal digit (0-9, A-F) in integer literal")
+        LexemeSpec(.integerLiteral, text: "0x", trailing: " ", diagnostic: "expected hexadecimal digit (0-9, A-F) in integer literal")
       ]
     )
   }
@@ -1233,7 +1233,7 @@ public class LexerTests: XCTestCase {
       """,
       lexemes: [
         LexemeSpec(.stringQuote, text: #"""#),
-        LexemeSpec(.stringSegment, text: "\u{7}", error: "unprintable ASCII character found in source file"),
+        LexemeSpec(.stringSegment, text: "\u{7}", diagnostic: "unprintable ASCII character found in source file"),
         LexemeSpec(.stringQuote, text: #"""#),
       ]
     )

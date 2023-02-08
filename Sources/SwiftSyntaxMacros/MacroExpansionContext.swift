@@ -79,7 +79,7 @@ private struct ThrownErrorDiagnostic: DiagnosticMessage {
 extension MacroExpansionContext {
   /// Add diagnostics from the error thrown during macro expansion.
   public func addDiagnostics<S: SyntaxProtocol>(from error: Error, node: S) {
-    guard let diagnosticsProvider = error as? DiagnosticsProviding else {
+    guard let diagnosticsError = error as? DiagnosticsError else {
       diagnose(
         Diagnostic(
           node: Syntax(node),
@@ -89,13 +89,12 @@ extension MacroExpansionContext {
       return
     }
 
-    let providedDiagnostics = diagnosticsProvider.diagnostics
-    for diagnostic in providedDiagnostics {
+    for diagnostic in diagnosticsError.diagnostics {
       diagnose(diagnostic)
     }
 
     // handle possibility that none of the diagnostics was an error
-    if !providedDiagnostics.contains(
+    if !diagnosticsError.diagnostics.contains(
       where: { $0.diagMessage.severity == .error }
     ) {
       diagnose(

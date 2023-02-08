@@ -340,8 +340,7 @@ extension Trivia: CustomDebugStringConvertible {
   }
 }
 
-extension Trivia: Equatable {
-}
+extension Trivia: Equatable {}
 
 /// Conformance for Trivia to the Collection protocol.
 extension Trivia: Collection {
@@ -405,8 +404,7 @@ extension Trivia {
   }
 }
 
-extension TriviaPiece: Equatable {
-}
+extension TriviaPiece: Equatable {}
 
 extension TriviaPiece {
   public var sourceLength: SourceLength {

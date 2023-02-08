@@ -27,6 +27,14 @@ public class CodeGenerationFormat: BasicFormat {
     }
   }
 
+  public override func visit(_ node: MemberDeclBlockSyntax) -> MemberDeclBlockSyntax {
+    if node.members.count == 0 {
+      return node.with(\.leftBrace, .leftBraceToken())
+    } else {
+      return super.visit(node)
+    }
+  }
+
   public override func visit(_ node: CodeBlockItemSyntax) -> CodeBlockItemSyntax {
     if node.parent?.parent?.is(SourceFileSyntax.self) == true, !node.item.is(ImportDeclSyntax.self) {
       let formatted = super.visit(node)

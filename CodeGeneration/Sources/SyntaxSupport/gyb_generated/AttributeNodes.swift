@@ -24,6 +24,7 @@ public let ATTRIBUTE_NODES: [Node] = [
                description: "The `@` sign."),
          Child(name: "AttributeName",
                kind: .node(kind: "Type"),
+               nameForDiagnostics: "name",
                description: "The name of the attribute.",
                classification: "Attribute"),
          Child(name: "LeftParen",
@@ -104,6 +105,7 @@ public let ATTRIBUTE_NODES: [Node] = [
        children: [
          Child(name: "Label",
                kind: .token(choices: [.keyword(text: "availability")]),
+               nameForDiagnostics: "label",
                description: "The label of the argument"),
          Child(name: "Colon",
                kind: .token(choices: [.token(tokenKind: "ColonToken")]),
@@ -124,12 +126,14 @@ public let ATTRIBUTE_NODES: [Node] = [
        children: [
          Child(name: "Label",
                kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .keyword(text: "available"), .keyword(text: "exported"), .keyword(text: "kind"), .keyword(text: "spi"), .keyword(text: "spiModule")]),
+               nameForDiagnostics: "label",
                description: "The label of the argument"),
          Child(name: "Colon",
                kind: .token(choices: [.token(tokenKind: "ColonToken")]),
                description: "The colon separating the label and the value"),
          Child(name: "Value",
                kind: .node(kind: "Token"),
+               nameForDiagnostics: "value",
                description: "The value for this argument"),
          Child(name: "TrailingComma",
                kind: .token(choices: [.token(tokenKind: "CommaToken")]),
@@ -147,12 +151,14 @@ public let ATTRIBUTE_NODES: [Node] = [
        children: [
          Child(name: "Label",
                kind: .token(choices: [.keyword(text: "target")]),
+               nameForDiagnostics: "label",
                description: "The label of the argument"),
          Child(name: "Colon",
                kind: .token(choices: [.token(tokenKind: "ColonToken")]),
                description: "The colon separating the label and the value"),
          Child(name: "Declname",
                kind: .node(kind: "DeclName"),
+               nameForDiagnostics: "declaration name",
                description: "The value for this argument"),
          Child(name: "TrailingComma",
                kind: .token(choices: [.token(tokenKind: "CommaToken")]),
@@ -166,9 +172,11 @@ public let ATTRIBUTE_NODES: [Node] = [
        children: [
          Child(name: "DeclBaseName",
                kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "PrefixOperatorToken"), .keyword(text: "init")]),
+               nameForDiagnostics: "base name",
                description: "The base name of the protocol's requirement."),
          Child(name: "DeclNameArguments",
                kind: .node(kind: "DeclNameArguments"),
+               nameForDiagnostics: "arguments",
                description: "The argument labels of the protocol's requirement if it is a function requirement.",
                isOptional: true)
        ]),
@@ -180,15 +188,18 @@ public let ATTRIBUTE_NODES: [Node] = [
        children: [
          Child(name: "Type",
                kind: .node(kind: "Type"),
+               nameForDiagnostics: "type",
                description: "The type for which the method with this attribute implements a requirement."),
          Child(name: "Comma",
                kind: .token(choices: [.token(tokenKind: "CommaToken")]),
                description: "The comma separating the type and method name"),
          Child(name: "DeclBaseName",
                kind: .node(kind: "Token"),
+               nameForDiagnostics: "declaration base name",
                description: "The base name of the protocol's requirement."),
          Child(name: "DeclNameArguments",
                kind: .node(kind: "DeclNameArguments"),
+               nameForDiagnostics: "declaration name arguments",
                description: "The argument labels of the protocol's requirement if it is a function requirement.",
                isOptional: true)
        ]),
@@ -200,6 +211,7 @@ public let ATTRIBUTE_NODES: [Node] = [
        children: [
          Child(name: "Name",
                kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+               nameForDiagnostics: "name",
                isOptional: true),
          Child(name: "Colon",
                kind: .token(choices: [.token(tokenKind: "ColonToken")]),
@@ -252,7 +264,8 @@ public let ATTRIBUTE_NODES: [Node] = [
                        kind: .node(kind: "DifferentiabilityParam")),
                  Child(name: "ParameterList",
                        kind: .node(kind: "DifferentiabilityParams"))
-               ]))
+               ]),
+               nameForDiagnostics: "parameters")
        ]),
 
   Node(name: "DifferentiabilityParams",
@@ -326,6 +339,7 @@ public let ATTRIBUTE_NODES: [Node] = [
        children: [
          Child(name: "BaseType",
                kind: .node(kind: "Type"),
+               nameForDiagnostics: "base type",
                description: "The base type of the qualified name, optionally specified.",
                isOptional: true),
          Child(name: "Dot",
@@ -333,9 +347,11 @@ public let ATTRIBUTE_NODES: [Node] = [
                isOptional: true),
          Child(name: "Name",
                kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "BinaryOperatorToken"), .token(tokenKind: "PrefixOperatorToken"), .token(tokenKind: "PostfixOperatorToken")]),
+               nameForDiagnostics: "base name",
                description: "The base name of the referenced function."),
          Child(name: "Arguments",
                kind: .node(kind: "DeclNameArguments"),
+               nameForDiagnostics: "arguments",
                description: "The argument labels of the referenced function, optionally specified.",
                isOptional: true)
        ]),
@@ -510,7 +526,8 @@ public let ATTRIBUTE_NODES: [Node] = [
        ],
        children: [
          Child(name: "Label",
-               kind: .token(choices: [.keyword(text: "visibility"), .keyword(text: "metadata")])),
+               kind: .token(choices: [.keyword(text: "visibility"), .keyword(text: "metadata")]),
+               nameForDiagnostics: "label"),
          Child(name: "Colon",
                kind: .token(choices: [.token(tokenKind: "ColonToken")])),
          Child(name: "Value",

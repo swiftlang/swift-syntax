@@ -76,6 +76,9 @@ def make_swift_child(child, spaces):
 
   parameters += ['kind: %s' % kind]
 
+  if child.name_for_diagnostics:
+    parameters += [f'nameForDiagnostics: "{child.name_for_diagnostics}"']
+
   if child.description:
     parameters += ['description: "%s"' % flat_documentation(child.description)]
 

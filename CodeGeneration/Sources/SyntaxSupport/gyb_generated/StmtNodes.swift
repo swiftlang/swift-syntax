@@ -18,7 +18,8 @@ public let STMT_NODES: [Node] = [
        kind: "Stmt",
        children: [
          Child(name: "LabelName",
-               kind: .token(choices: [.token(tokenKind: "IdentifierToken")])),
+               kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+               nameForDiagnostics: "label name"),
          Child(name: "LabelColon",
                kind: .token(choices: [.token(tokenKind: "ColonToken")])),
          Child(name: "Statement",
@@ -41,6 +42,7 @@ public let STMT_NODES: [Node] = [
                kind: .token(choices: [.keyword(text: "continue")])),
          Child(name: "Label",
                kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+               nameForDiagnostics: "label",
                isOptional: true)
        ]),
 
@@ -82,11 +84,13 @@ public let STMT_NODES: [Node] = [
          Child(name: "RepeatKeyword",
                kind: .token(choices: [.keyword(text: "repeat")])),
          Child(name: "Body",
-               kind: .node(kind: "CodeBlock")),
+               kind: .node(kind: "CodeBlock"),
+               nameForDiagnostics: "body"),
          Child(name: "WhileKeyword",
                kind: .token(choices: [.keyword(text: "while")])),
          Child(name: "Condition",
-               kind: .node(kind: "Expr"))
+               kind: .node(kind: "Expr"),
+               nameForDiagnostics: "condition")
        ]),
 
   Node(name: "GuardStmt",
@@ -99,11 +103,13 @@ public let STMT_NODES: [Node] = [
          Child(name: "GuardKeyword",
                kind: .token(choices: [.keyword(text: "guard")])),
          Child(name: "Conditions",
-               kind: .collection(kind: "ConditionElementList", collectionElementName: "Condition")),
+               kind: .collection(kind: "ConditionElementList", collectionElementName: "Condition"),
+               nameForDiagnostics: "condition"),
          Child(name: "ElseKeyword",
                kind: .token(choices: [.keyword(text: "else")])),
          Child(name: "Body",
-               kind: .node(kind: "CodeBlock"))
+               kind: .node(kind: "CodeBlock"),
+               nameForDiagnostics: "body")
        ]),
 
   Node(name: "WhereClause",
@@ -148,7 +154,8 @@ public let STMT_NODES: [Node] = [
                kind: .node(kind: "WhereClause"),
                isOptional: true),
          Child(name: "Body",
-               kind: .node(kind: "CodeBlock"))
+               kind: .node(kind: "CodeBlock"),
+               nameForDiagnostics: "body")
        ]),
 
   Node(name: "CatchClauseList",
@@ -166,7 +173,8 @@ public let STMT_NODES: [Node] = [
          Child(name: "DoKeyword",
                kind: .token(choices: [.keyword(text: "do")])),
          Child(name: "Body",
-               kind: .node(kind: "CodeBlock")),
+               kind: .node(kind: "CodeBlock"),
+               nameForDiagnostics: "body"),
          Child(name: "CatchClauses",
                kind: .collection(kind: "CatchClauseList", collectionElementName: "CatchClause"),
                isOptional: true)
@@ -226,6 +234,7 @@ public let STMT_NODES: [Node] = [
                kind: .token(choices: [.keyword(text: "break")])),
          Child(name: "Label",
                kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+               nameForDiagnostics: "label",
                isOptional: true)
        ]),
 

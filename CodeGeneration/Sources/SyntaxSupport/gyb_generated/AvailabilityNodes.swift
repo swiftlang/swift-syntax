@@ -46,6 +46,7 @@ public let AVAILABILITY_NODES: [Node] = [
        children: [
          Child(name: "Label",
                kind: .token(choices: [.keyword(text: "message"), .keyword(text: "renamed"), .keyword(text: "introduced"), .keyword(text: "obsoleted"), .keyword(text: "deprecated")]),
+               nameForDiagnostics: "label",
                description: "The label of the argument"),
          Child(name: "Colon",
                kind: .token(choices: [.token(tokenKind: "ColonToken")]),
@@ -57,6 +58,7 @@ public let AVAILABILITY_NODES: [Node] = [
                  Child(name: "Version",
                        kind: .node(kind: "VersionTuple"))
                ]),
+               nameForDiagnostics: "value",
                description: "The value of this labeled argument")
        ]),
 
@@ -67,10 +69,12 @@ public let AVAILABILITY_NODES: [Node] = [
        children: [
          Child(name: "Platform",
                kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+               nameForDiagnostics: "platform",
                description: "The name of the OS on which the availability should be restricted or 'swift' if the availability should be restricted based on a Swift version.",
                classification: "Keyword"),
          Child(name: "Version",
                kind: .node(kind: "VersionTuple"),
+               nameForDiagnostics: "version",
                isOptional: true)
        ]),
 

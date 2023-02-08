@@ -323,7 +323,7 @@ final class ErrorsTests: XCTestCase {
       func fixitThrow0() 1️⃣throw {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected throwing specifier; did you mean 'throws'?", fixIts: ["replace 'throw' by 'throws'"])
+        DiagnosticSpec(message: "expected throwing specifier; did you mean 'throws'?", fixIts: ["replace 'throw' with 'throws'"])
       ],
       fixedSource: """
         func fixitThrow0() throws {}
@@ -442,7 +442,7 @@ final class ErrorsTests: XCTestCase {
       func fixitAwait0() 1️⃣await { }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected async specifier; did you mean 'async'?", fixIts: ["replace 'await' by 'async'"])
+        DiagnosticSpec(message: "expected async specifier; did you mean 'async'?", fixIts: ["replace 'await' with 'async'"])
       ],
       fixedSource: """
         func fixitAwait0() async { }

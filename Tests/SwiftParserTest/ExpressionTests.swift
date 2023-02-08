@@ -641,7 +641,7 @@ final class ExpressionTests: XCTestCase {
       1️⃣'red'
       """#,
       diagnostics: [
-        DiagnosticSpec(message: #"Single-quoted string literal found, use '"'"#, fixIts: [#"replace ''' by '"'"#])
+        DiagnosticSpec(message: #"Single-quoted string literal found, use '"'"#, fixIts: [#"replace ''' with '"'"#])
       ],
       fixedSource: """
         "red"
@@ -653,7 +653,7 @@ final class ExpressionTests: XCTestCase {
        1️⃣' red ' + 1
       """#,
       diagnostics: [
-        DiagnosticSpec(message: #"Single-quoted string literal found, use '"'"#, fixIts: [#"replace ''' by '"'"#])
+        DiagnosticSpec(message: #"Single-quoted string literal found, use '"'"#, fixIts: [#"replace ''' with '"'"#])
       ],
       fixedSource: """
          " red " + 1
@@ -1158,7 +1158,7 @@ final class ExpressionTests: XCTestCase {
     AssertParse(
       "a 1️⃣\u{a0}+ 2",
       diagnostics: [
-        DiagnosticSpec(message: "non-breaking space (U+00A0) used instead of regular space", severity: .warning, fixIts: ["replace non-breaking space by ' '"])
+        DiagnosticSpec(message: "non-breaking space (U+00A0) used instead of regular space", severity: .warning, fixIts: ["replace non-breaking space with ' '"])
       ],
       fixedSource: "a  + 2"
     )

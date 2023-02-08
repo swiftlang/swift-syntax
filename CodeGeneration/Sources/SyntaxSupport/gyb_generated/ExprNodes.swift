@@ -95,7 +95,7 @@ public let EXPR_NODES: [Node] = [
          Child(name: "Name",
                kind: .node(kind: "Token")),
          Child(name: "Colon",
-               kind: .token(choices: [.token(tokenKind: "ColonToken")]))
+               kind: .token(choices: [.token(tokenKind: "ColonToken")], requiresTrailingSpace: false))
        ]),
 
   Node(name: "DeclNameArgumentList",

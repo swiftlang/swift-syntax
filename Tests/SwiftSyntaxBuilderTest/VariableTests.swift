@@ -89,6 +89,22 @@ final class VariableTests: XCTestCase {
         let bar = try! !functionThatThrows()
         """
       ),
+      #line: (
+        DeclSyntax("var bar: Foo { bar.map(Foo.init(raw:)) }"),
+        """
+        var bar: Foo {
+            bar.map(Foo.init(raw:))
+        }
+        """
+      ),
+      #line: (
+        DeclSyntax("var bar: Foo { bar.map(Foo.init(raw:otherParam:)) }"),
+        """
+        var bar: Foo {
+            bar.map(Foo.init(raw:otherParam:))
+        }
+        """
+      ),
     ]
 
     for (line, testCase) in testCases {

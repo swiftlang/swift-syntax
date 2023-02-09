@@ -186,6 +186,10 @@ open class BasicFormat: SyntaxRewriter {
       return false
     case \DynamicReplacementArgumentsSyntax.forLabel: 
       return false
+    case \SwitchCaseLabelSyntax.colon: 
+      return false
+    case \SwitchDefaultLabelSyntax.colon: 
+      return false
     case \TryExprSyntax.questionOrExclamationMark: 
       return true
     default: 

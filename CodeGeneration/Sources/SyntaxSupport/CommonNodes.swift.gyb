@@ -19,7 +19,7 @@
 //===----------------------------------------------------------------------===//
 
 public let COMMON_NODES: [Node] = [
-% for node in COMMON_NODES:
+% for node in sorted(COMMON_NODES, key=lambda x: x.name):
   ${make_swift_node(node)},
 
 % end

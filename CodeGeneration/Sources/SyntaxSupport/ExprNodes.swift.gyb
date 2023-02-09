@@ -19,7 +19,7 @@
 //===----------------------------------------------------------------------===//
 
 public let EXPR_NODES: [Node] = [
-% for node in EXPR_NODES:
+% for node in sorted(EXPR_NODES, key=lambda x: x.name):
   ${make_swift_node(node)},
 
 % end

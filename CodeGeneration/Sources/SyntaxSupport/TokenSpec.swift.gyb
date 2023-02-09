@@ -175,7 +175,7 @@ public class LiteralSpec: TokenSpec { }
 public class MiscSpec: TokenSpec { }
 
 public let SYNTAX_TOKENS: [TokenSpec] = [
-% for token in SYNTAX_TOKENS:
+% for token in sorted(SYNTAX_TOKENS, key=lambda x: x.name):
 %   class_name = type(token).__name__
 %   classification = "classification: \"%s\"" % token.classification.name if token.classification.name not in ['None', 'Keyword', 'ObjectLiteral', 'PoundDirectiveKeyword'] or class_name == 'Misc' and token.classification.name != 'None' else None
 %   parameters = ["name: \"%s\"" % token.name]

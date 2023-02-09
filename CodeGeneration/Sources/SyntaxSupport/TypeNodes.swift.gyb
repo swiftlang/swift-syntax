@@ -19,7 +19,7 @@
 //===----------------------------------------------------------------------===//
 
 public let TYPE_NODES: [Node] = [
-% for node in TYPE_NODES:
+% for node in sorted(TYPE_NODES, key=lambda x: x.name):
   ${make_swift_node(node)},
   
 % end

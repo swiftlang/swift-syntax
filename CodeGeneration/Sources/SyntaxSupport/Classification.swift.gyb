@@ -52,7 +52,7 @@ public class ChildClassification {
 
 
 public let SYNTAX_CLASSIFICATIONS: [SyntaxClassification] = [
-% for syntaxClassification in SYNTAX_CLASSIFICATIONS:
+% for syntaxClassification in sorted(SYNTAX_CLASSIFICATIONS, key=lambda x: x.name):
   SyntaxClassification(name: "${syntaxClassification.name}", description: "${syntaxClassification.description.strip()}"),
 % end
 ]

@@ -17,62 +17,62 @@
 @_spi(RawSyntax) import SwiftSyntax
 
 public enum SyntaxClassification {
-  /// The token should not receive syntax coloring.
-  case none
-  
-  /// A Swift keyword, including contextual keywords.
-  case keyword
-  
-  /// A generic identifier.
-  case identifier
-  
-  /// An identifier referring to a type.
-  case typeIdentifier
-  
-  /// An identifier referring to an operator.
-  case operatorIdentifier
-  
-  /// An identifier starting with `$` like `$0`.
-  case dollarIdentifier
-  
-  /// An integer literal.
-  case integerLiteral
-  
-  /// A floating point literal.
-  case floatingLiteral
-  
-  /// A string literal including multiline string literals.
-  case stringLiteral
-  
-  /// The opening and closing parenthesis of string interpolation.
-  case stringInterpolationAnchor
-  
-  /// A `#` keyword like `#warning`.
-  case poundDirectiveKeyword
-  
-  /// A build configuration directive like `#if`, `#elseif`, `#else`.
-  case buildConfigId
-  
   /// An attribute starting with an `@`.
   case attribute
-  
-  /// An image, color, etc. literal.
-  case objectLiteral
-  
-  /// An editor placeholder of the form `<#content#>`
-  case editorPlaceholder
-  
-  /// A line comment starting with `//`.
-  case lineComment
-  
-  /// A doc line comment starting with `///`.
-  case docLineComment
   
   /// A block comment starting with `/**` and ending with `*/.
   case blockComment
   
+  /// A build configuration directive like `#if`, `#elseif`, `#else`.
+  case buildConfigId
+  
   /// A doc block comment starting with `/**` and ending with `*/.
   case docBlockComment
+  
+  /// A doc line comment starting with `///`.
+  case docLineComment
+  
+  /// An identifier starting with `$` like `$0`.
+  case dollarIdentifier
+  
+  /// An editor placeholder of the form `<#content#>`
+  case editorPlaceholder
+  
+  /// A floating point literal.
+  case floatingLiteral
+  
+  /// A generic identifier.
+  case identifier
+  
+  /// An integer literal.
+  case integerLiteral
+  
+  /// A Swift keyword, including contextual keywords.
+  case keyword
+  
+  /// A line comment starting with `//`.
+  case lineComment
+  
+  /// The token should not receive syntax coloring.
+  case none
+  
+  /// An image, color, etc. literal.
+  case objectLiteral
+  
+  /// An identifier referring to an operator.
+  case operatorIdentifier
+  
+  /// A `#` keyword like `#warning`.
+  case poundDirectiveKeyword
+  
+  /// The opening and closing parenthesis of string interpolation.
+  case stringInterpolationAnchor
+  
+  /// A string literal including multiline string literals.
+  case stringLiteral
+  
+  /// An identifier referring to a type.
+  case typeIdentifier
 }
 
 extension SyntaxClassification {
@@ -136,98 +136,98 @@ extension SyntaxClassification {
 extension RawTokenKind {
   internal var classification: SyntaxClassification {
     switch self {
-    case .wildcard:
-      return .none
-    case .leftParen:
-      return .none
-    case .rightParen:
-      return .none
-    case .leftBrace:
-      return .none
-    case .rightBrace:
-      return .none
-    case .leftSquareBracket:
-      return .none
-    case .rightSquareBracket:
-      return .none
-    case .leftAngle:
-      return .none
-    case .rightAngle:
-      return .none
-    case .period:
-      return .none
-    case .comma:
-      return .none
-    case .ellipsis:
-      return .none
-    case .colon:
-      return .none
-    case .semicolon:
-      return .none
-    case .equal:
+    case .arrow:
       return .none
     case .atSign:
       return .attribute
-    case .pound:
-      return .none
-    case .prefixAmpersand:
-      return .none
-    case .arrow:
+    case .backslash:
       return .none
     case .backtick:
       return .none
-    case .backslash:
+    case .binaryOperator:
+      return .operatorIdentifier
+    case .colon:
+      return .none
+    case .comma:
+      return .none
+    case .dollarIdentifier:
+      return .dollarIdentifier
+    case .ellipsis:
+      return .none
+    case .equal:
       return .none
     case .exclamationMark:
       return .none
-    case .postfixQuestionMark:
-      return .none
+    case .floatingLiteral:
+      return .floatingLiteral
+    case .identifier:
+      return .identifier
     case .infixQuestionMark:
       return .none
-    case .stringQuote:
-      return .stringLiteral
-    case .singleQuote:
-      return .stringLiteral
+    case .integerLiteral:
+      return .integerLiteral
+    case .keyword:
+      return .keyword
+    case .leftAngle:
+      return .none
+    case .leftBrace:
+      return .none
+    case .leftParen:
+      return .none
+    case .leftSquareBracket:
+      return .none
     case .multilineStringQuote:
       return .stringLiteral
-    case .poundSourceLocationKeyword:
-      return .poundDirectiveKeyword
-    case .poundIfKeyword:
-      return .poundDirectiveKeyword
+    case .period:
+      return .none
+    case .postfixOperator:
+      return .operatorIdentifier
+    case .postfixQuestionMark:
+      return .none
+    case .pound:
+      return .none
+    case .poundAvailableKeyword:
+      return .keyword
     case .poundElseKeyword:
       return .poundDirectiveKeyword
     case .poundElseifKeyword:
       return .poundDirectiveKeyword
     case .poundEndifKeyword:
       return .poundDirectiveKeyword
-    case .poundAvailableKeyword:
-      return .keyword
+    case .poundIfKeyword:
+      return .poundDirectiveKeyword
+    case .poundSourceLocationKeyword:
+      return .poundDirectiveKeyword
     case .poundUnavailableKeyword:
       return .keyword
-    case .integerLiteral:
-      return .integerLiteral
-    case .floatingLiteral:
-      return .floatingLiteral
-    case .regexLiteral:
+    case .prefixAmpersand:
       return .none
-    case .unknown:
-      return .none
-    case .identifier:
-      return .identifier
-    case .binaryOperator:
-      return .operatorIdentifier
-    case .postfixOperator:
-      return .operatorIdentifier
     case .prefixOperator:
       return .operatorIdentifier
-    case .dollarIdentifier:
-      return .dollarIdentifier
-    case .keyword:
-      return .keyword
     case .rawStringDelimiter:
       return .none
+    case .regexLiteral:
+      return .none
+    case .rightAngle:
+      return .none
+    case .rightBrace:
+      return .none
+    case .rightParen:
+      return .none
+    case .rightSquareBracket:
+      return .none
+    case .semicolon:
+      return .none
+    case .singleQuote:
+      return .stringLiteral
+    case .stringQuote:
+      return .stringLiteral
     case .stringSegment:
       return .stringLiteral
+    case .unknown:
+      return .none
+    case .wildcard:
+      return .none
     case .eof:
       return .none
     }

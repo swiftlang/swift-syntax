@@ -31,7 +31,7 @@ public class Trait {
 }
 
 public let TRAITS: [Trait] = [
-% for trait in TRAITS:
+% for trait in sorted(TRAITS, key=lambda x: x.trait_name):
   Trait(traitName: "${trait.trait_name}",
         children: [
 %   for child in trait.children:

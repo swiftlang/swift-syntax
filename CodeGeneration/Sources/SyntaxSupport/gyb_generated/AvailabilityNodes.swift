@@ -13,11 +13,6 @@
 //===----------------------------------------------------------------------===//
 
 public let AVAILABILITY_NODES: [Node] = [
-  Node(name: "AvailabilitySpecList",
-       nameForDiagnostics: "'@availability' arguments",
-       kind: "SyntaxCollection",
-       element: "AvailabilityArgument"),
-
   Node(name: "AvailabilityArgument",
        nameForDiagnostics: "availability argument",
        description: "A single argument to an `@available` argument like `*`, `iOS 10.1`, or `message: \"This has been deprecated\"`.",
@@ -61,6 +56,11 @@ public let AVAILABILITY_NODES: [Node] = [
                nameForDiagnostics: "value",
                description: "The value of this labeled argument")
        ]),
+
+  Node(name: "AvailabilitySpecList",
+       nameForDiagnostics: "'@availability' arguments",
+       kind: "SyntaxCollection",
+       element: "AvailabilityArgument"),
 
   Node(name: "AvailabilityVersionRestriction",
        nameForDiagnostics: "version restriction",

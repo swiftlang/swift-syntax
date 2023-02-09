@@ -159,13 +159,13 @@ open class BasicFormat: SyntaxRewriter {
       break
     }
     switch token.tokenKind {
-    case .leftBrace:
-      return true
-    case .equal:
-      return true
     case .arrow:
       return true
     case .binaryOperator:
+      return true
+    case .equal:
+      return true
+    case .leftBrace:
       return true
     case .keyword(.`catch`):
       return true
@@ -222,17 +222,17 @@ open class BasicFormat: SyntaxRewriter {
       break
     }
     switch token.tokenKind {
-    case .comma:
+    case .arrow:
+      return true
+    case .binaryOperator:
       return true
     case .colon:
       return true
+    case .comma:
+      return true
     case .equal:
       return true
-    case .arrow:
-      return true
-    case .poundSourceLocationKeyword:
-      return true
-    case .poundIfKeyword:
+    case .poundAvailableKeyword:
       return true
     case .poundElseKeyword:
       return true
@@ -240,11 +240,11 @@ open class BasicFormat: SyntaxRewriter {
       return true
     case .poundEndifKeyword:
       return true
-    case .poundAvailableKeyword:
+    case .poundIfKeyword:
+      return true
+    case .poundSourceLocationKeyword:
       return true
     case .poundUnavailableKeyword:
-      return true
-    case .binaryOperator:
       return true
     case .keyword(.`Any`):
       return true

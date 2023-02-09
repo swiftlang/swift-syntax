@@ -19,7 +19,7 @@
 //===----------------------------------------------------------------------===//
 
 public let GENERIC_NODES: [Node] = [
-% for node in GENERIC_NODES:
+% for node in sorted(GENERIC_NODES, key=lambda x: x.name):
   ${make_swift_node(node)},
 
 % end

@@ -143,7 +143,7 @@ STMT_NODES = [
     # break-stmt -> 'break' identifier? ';'?
     Node('BreakStmt', name_for_diagnostics="'break' statement", kind='Stmt',
          children=[
-             Child('BreakKeyword', kind='KeywordToken', token_choices=['KeywordToken|break']),
+             Child('BreakKeyword', kind='KeywordToken', token_choices=['KeywordToken|break'], requires_trailing_space=False),
              Child('Label', kind='IdentifierToken', name_for_diagnostics='label',
                    is_optional=True),
          ]),

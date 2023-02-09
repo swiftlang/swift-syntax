@@ -231,7 +231,7 @@ public let STMT_NODES: [Node] = [
        kind: "Stmt",
        children: [
          Child(name: "BreakKeyword",
-               kind: .token(choices: [.keyword(text: "break")])),
+               kind: .token(choices: [.keyword(text: "break")], requiresTrailingSpace: false)),
          Child(name: "Label",
                kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
                nameForDiagnostics: "label",

@@ -75,7 +75,7 @@ public class Child {
     case .node(kind: let kind):
       return kind
     case .nodeChoices:
-      return "syntax"
+      return "Syntax"
     case .collection(kind: let kind, collectionElementName: _):
       return kind
     case .token(choices: let choices, requiresLeadingSpace: _, requiresTrailingSpace: _):

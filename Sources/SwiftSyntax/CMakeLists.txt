@@ -29,7 +29,7 @@ add_swift_host_library(SwiftSyntax
   Raw/RawSyntaxNodeProtocol.swift
   Raw/RawSyntaxTokenView.swift
 
-  Raw/gyb_generated/RawSyntaxNodes.swift
+  generated/raw/RawSyntaxNodes.swift
   Raw/gyb_generated/RawSyntaxValidation.swift
 
   generated/Keyword.swift

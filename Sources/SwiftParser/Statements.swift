@@ -629,11 +629,48 @@ extension Parser {
 
 extension Parser {
   private mutating func isStartOfReturnExpr() -> Bool {
-    if self.at(any: [
-      .rightBrace, .keyword(.case), .keyword(.default), .semicolon, .eof,
-      .poundIfKeyword, .poundEndifKeyword, .poundElseKeyword,
-      .poundElseifKeyword,
-    ]) {
+    enum NotReturnExprStart: TokenSpecSet {
+      case rightBrace
+      case `case`
+      case `default`
+      case semicolon
+      case poundIfKeyword
+      case poundEndifKeyword
+      case poundElseKeyword
+      case poundElseifKeyword
+      case eof
+
+      init?(lexeme: Lexer.Lexeme) {
+        switch lexeme {
+        case TokenSpec(.rightBrace): self = .rightBrace
+        case TokenSpec(.case): self = .case
+        case TokenSpec(.default): self = .default
+        case TokenSpec(.semicolon): self = .semicolon
+        case TokenSpec(.poundIfKeyword): self = .poundIfKeyword
+        case TokenSpec(.poundEndifKeyword): self = .poundEndifKeyword
+        case TokenSpec(.poundElseKeyword): self = .poundElseKeyword
+        case TokenSpec(.poundElseifKeyword): self = .poundElseifKeyword
+        case TokenSpec(.eof): self = .eof
+        default: return nil
+        }
+      }
+
+      var spec: TokenSpec {
+        switch self {
+        case .rightBrace: return .rightBrace
+        case .case: return .keyword(.case)
+        case .default: return .keyword(.default)
+        case .semicolon: return .semicolon
+        case .poundIfKeyword: return .poundIfKeyword
+        case .poundEndifKeyword: return .poundEndifKeyword
+        case .poundElseKeyword: return .poundElseKeyword
+        case .poundElseifKeyword: return .poundElseifKeyword
+        case .eof: return .eof
+        }
+      }
+    }
+
+    if self.at(anyIn: NotReturnExprStart.self) != nil {
       return false
     }
     // Allowed for if/switch expressions.

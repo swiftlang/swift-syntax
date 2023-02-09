@@ -2225,7 +2225,7 @@ extension Parser {
   public mutating func parseSwitchCases(allowStandaloneStmtRecovery: Bool) -> RawSwitchCaseListSyntax {
     var elements = [RawSwitchCaseListSyntax.Element]()
     var elementsProgress = LoopProgressCondition()
-    while !self.at(any: [.eof, .rightBrace, .poundEndifKeyword, .poundElseifKeyword, .poundElseKeyword])
+    while !self.at(.eof, .rightBrace) && !self.at(.poundEndifKeyword, .poundElseifKeyword, .poundElseKeyword)
       && elementsProgress.evaluate(currentToken)
     {
       if self.withLookahead({ $0.isAtStartOfSwitchCase(allowRecovery: false) }) {
@@ -2294,7 +2294,7 @@ extension Parser {
   mutating func parseSwitchCaseBody() -> RawCodeBlockItemListSyntax {
     var items = [RawCodeBlockItemSyntax]()
     var loopProgress = LoopProgressCondition()
-    while !self.at(any: [.rightBrace, .poundEndifKeyword, .poundElseifKeyword, .poundElseKeyword])
+    while !self.at(.rightBrace) && !self.at(.poundEndifKeyword, .poundElseifKeyword, .poundElseKeyword)
       && !self.withLookahead({ $0.isStartOfConditionalSwitchCases() }),
       let newItem = self.parseCodeBlockItem(),
       loopProgress.evaluate(currentToken)

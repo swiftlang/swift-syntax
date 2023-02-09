@@ -88,18 +88,6 @@ extension TokenConsumer {
     return self.currentToken.isContextualPunctuator(name)
   }
 
-  /// Returns whether the kind of the current token is any of the given
-  /// kinds and additionally satisfies `condition`.
-  ///
-  /// - Parameter kinds: The kinds to test for.
-  /// - Parameter condition: An additional condition that must be satisfied for
-  ///                        this function to return `true`.
-  /// - Returns: `true` if the current token's kind is in `kinds`.
-  @inline(__always)
-  mutating func at(any kinds: [RawTokenKind]) -> Bool {
-    return kinds.contains(where: { TokenSpec($0) ~= self.currentToken })
-  }
-
   /// Checks whether the parser is currently positioned at any token in `Subset`.
   /// If this is the case, return the `Subset` case that the parser is positioned in
   /// as well as a handle to consume that token.

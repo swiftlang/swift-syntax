@@ -347,14 +347,14 @@ EXPR_NODES = [
              Child('CaseKeyword', kind='KeywordToken', token_choices=['KeywordToken|case']),
              Child('CaseItems', kind='CaseItemList',
                    collection_element_name='CaseItem'),
-             Child('Colon', kind='ColonToken'),
+             Child('Colon', kind='ColonToken', requires_trailing_space=False),
          ]),
 
     # switch-default-label -> 'default' ':'
     Node('SwitchDefaultLabel', name_for_diagnostics=None, kind='Syntax',
          children=[
              Child('DefaultKeyword', kind='KeywordToken', token_choices=['KeywordToken|default']),
-             Child('Colon', kind='ColonToken'),
+             Child('Colon', kind='ColonToken', requires_trailing_space=False),
          ]),
 
     # case-item -> pattern where-clause? ','?

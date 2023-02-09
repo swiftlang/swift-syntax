@@ -456,7 +456,7 @@ public let EXPR_NODES: [Node] = [
          Child(name: "CaseItems",
                kind: .collection(kind: "CaseItemList", collectionElementName: "CaseItem")),
          Child(name: "Colon",
-               kind: .token(choices: [.token(tokenKind: "ColonToken")]))
+               kind: .token(choices: [.token(tokenKind: "ColonToken")], requiresTrailingSpace: false))
        ]),
 
   Node(name: "SwitchDefaultLabel",
@@ -466,7 +466,7 @@ public let EXPR_NODES: [Node] = [
          Child(name: "DefaultKeyword",
                kind: .token(choices: [.keyword(text: "default")])),
          Child(name: "Colon",
-               kind: .token(choices: [.token(tokenKind: "ColonToken")]))
+               kind: .token(choices: [.token(tokenKind: "ColonToken")], requiresTrailingSpace: false))
        ]),
 
   Node(name: "CaseItem",

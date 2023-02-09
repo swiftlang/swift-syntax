@@ -93,7 +93,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
   switch kind {
   case .token:
     assertionFailure("validateLayout for .token kind is not supported")
-% for node in NON_BASE_SYNTAX_NODES:
+% for node in sorted(NON_BASE_SYNTAX_NODES, key=lambda x: x.name):
   case .${node.swift_syntax_kind}:
 %   if node.is_buildable() or node.is_missing():
     assert(layout.count == ${len(node.children)})

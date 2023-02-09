@@ -105,13 +105,13 @@ final class SelfRebindingTests: XCTestCase {
     AssertParse(
       """
       struct TypeWithSelfMethod {
-          let property = self 
+          let property = self
           // Existing warning expected, not confusable
-          let property2 = self() 
+          let property2 = self()
           let propertyFromClosure: () = {
-              print(self) 
+              print(self)
           }()
-          let propertyFromFunc = funcThatReturnsSomething(self) 
+          let propertyFromFunc = funcThatReturnsSomething(self)
           let propertyFromFunc2 = funcThatReturnsSomething(TypeWithSelfMethod.self) // OK
           func `self`() {
           }
@@ -126,11 +126,11 @@ final class SelfRebindingTests: XCTestCase {
       /// Test fix_unqualified_access_member_named_self doesn't appear for computed var called `self`
       /// it can't currently be referenced as a static member -- unlike a method with the same name
       struct TypeWithSelfComputedVar {
-          let property = self 
+          let property = self
           let propertyFromClosure: () = {
-              print(self) 
+              print(self)
           }()
-          let propertyFromFunc = funcThatReturnsSomething(self) 
+          let propertyFromFunc = funcThatReturnsSomething(self)
           var `self`: () {
               ()
           }
@@ -145,11 +145,11 @@ final class SelfRebindingTests: XCTestCase {
       /// Test fix_unqualified_access_member_named_self doesn't appear for property called `self`
       /// it can't currently be referenced as a static member -- unlike a method with the same name
       struct TypeWithSelfProperty {
-          let property = self 
+          let property = self
           let propertyFromClosure: () = {
-              print(self) 
+              print(self)
           }()
-          let propertyFromFunc = funcThatReturnsSomething(self) 
+          let propertyFromFunc = funcThatReturnsSomething(self)
           let `self`: () = ()
       }
       """

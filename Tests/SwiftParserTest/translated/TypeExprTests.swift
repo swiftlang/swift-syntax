@@ -44,8 +44,8 @@ final class TypeExprTests: XCTestCase {
         associatedtype Zang
         init()
         // TODO class var prop: Int { get }
-        static func meth() {} 
-        func instMeth() {} 
+        static func meth() {}
+        func instMeth() {}
       }
       """
     )
@@ -55,7 +55,7 @@ final class TypeExprTests: XCTestCase {
     AssertParse(
       """
       protocol Bad {
-        init() {} 
+        init() {}
       }
       """
     )
@@ -91,9 +91,9 @@ final class TypeExprTests: XCTestCase {
         _ = Foo.meth
         let _ : () = Foo.meth()
         _ = Foo.instMeth
-        _ = Foo 
-        _ = Foo.dynamicType 
-        _ = Bad 
+        _ = Foo
+        _ = Foo.dynamicType
+        _ = Bad
       }
       """
     )
@@ -105,13 +105,13 @@ final class TypeExprTests: XCTestCase {
       func qualifiedType() {
         _ = Foo.Bar.self
         let _ : Foo.Bar.Type = Foo.Bar.self
-        let _ : Foo.Protocol = Foo.self 
+        let _ : Foo.Protocol = Foo.self
         _ = Foo.Bar()
         _ = Foo.Bar.prop
         _ = Foo.Bar.meth
         let _ : () = Foo.Bar.meth()
         _ = Foo.Bar.instMeth
-        _ = Foo.Bar 
+        _ = Foo.Bar
         _ = Foo.Bar.dynamicType
       }
       """
@@ -129,8 +129,8 @@ final class TypeExprTests: XCTestCase {
       func metaType() {
         let _ = Foo.Type.self
         let _ = Foo.Type.self
-        let _ = Foo.Type 
-        let _ = type(of: Foo.Type) 
+        let _ = Foo.Type
+        let _ = type(of: Foo.Type)
       }
       """
     )
@@ -170,7 +170,7 @@ final class TypeExprTests: XCTestCase {
         _ = Gen<Foo>.Bar.meth
         let _ : () = Gen<Foo>.Bar.meth()
         _ = Gen<Foo>.Bar.instMeth
-        _ = Gen<Foo>.Bar 
+        _ = Gen<Foo>.Bar
         _ = Gen<Foo>.Bar.dynamicType
 
         _ = (G<X>).Y.self
@@ -196,7 +196,7 @@ final class TypeExprTests: XCTestCase {
       """
       func typeOfShadowing() {
         // Try to shadow type(of:)
-        func type<T>(of t: T.Type, flag: Bool) -> T.Type { 
+        func type<T>(of t: T.Type, flag: Bool) -> T.Type {
           return t
         }
         func type<T, U>(of t: T.Type, _ : U) -> T.Type {
@@ -208,8 +208,8 @@ final class TypeExprTests: XCTestCase {
         func type<T>(fo t: T.Type) -> T.Type {
           return t
         }
-        _ = type(of: Gen<Foo>.Bar) 
-        _ = type(Gen<Foo>.Bar) 
+        _ = type(of: Gen<Foo>.Bar)
+        _ = type(Gen<Foo>.Bar)
         _ = type(of: Gen<Foo>.Bar.self, flag: false) // No error here.
         _ = type(fo: Foo.Bar.self) // No error here.
         _ = type(of: Foo.Bar.self, [1, 2, 3]) // No error here.
@@ -227,7 +227,7 @@ final class TypeExprTests: XCTestCase {
         // TODO let prop = T.prop
         _ = T.meth
         let _ : () = T.meth()
-        _ = T 
+        _ = T
       }
       """
     )
@@ -242,7 +242,7 @@ final class TypeExprTests: XCTestCase {
         // TODO _ = T.Zang.prop
         _ = T.Zang.meth
         let _ : () = T.Zang.meth()
-        _ = T.Zang 
+        _ = T.Zang
       }
       """
     )
@@ -271,8 +271,8 @@ final class TypeExprTests: XCTestCase {
         let _: D.Type = D.self
         _ = D.derivedMethod
         let _ : () = D.derivedMethod()
-        let _: B.Type = D 
-        let _: D.Type = D 
+        let _: B.Type = D
+        let _: D.Type = D
       }
       """
     )
@@ -284,9 +284,9 @@ final class TypeExprTests: XCTestCase {
       // Referencing a nonexistent member or constructor should not trigger errors
       // about the type expression.
       func nonexistentMember() {
-        let cons = Foo("this constructor does not exist") 
-        let prop = Foo.nonexistent 
-        let meth = Foo.nonexistent() 
+        let cons = Foo("this constructor does not exist")
+        let prop = Foo.nonexistent
+        let meth = Foo.nonexistent()
       }
       """#
     )
@@ -307,7 +307,7 @@ final class TypeExprTests: XCTestCase {
         let _: P.Protocol = P.self
         _ = P.Type.self
         _ = P.Protocol.self
-        _ = P.Protocol.Protocol.self 
+        _ = P.Protocol.Protocol.self
         _ = P.Protocol.Type.self
         _ = B.Type.self
       }
@@ -329,7 +329,7 @@ final class TypeExprTests: XCTestCase {
     AssertParse(
       """
       func inAccessibleInit() {
-        _ = E 
+        _ = E
       }
       """
     )
@@ -359,8 +359,8 @@ final class TypeExprTests: XCTestCase {
     AssertParse(
       """
       func implicitInit() {
-        _ = F 
-        _ = G 
+        _ = F
+        _ = G
       }
       """
     )
@@ -727,7 +727,7 @@ final class TypeExprTests: XCTestCase {
         takesOneArg(Swift.Int)
         takesTwoArgs(Int, 0)
         takesTwoArgs(Swift.Int, 0)
-        Swift.Int 
+        Swift.Int
         _ = Swift.Int
       }
       """

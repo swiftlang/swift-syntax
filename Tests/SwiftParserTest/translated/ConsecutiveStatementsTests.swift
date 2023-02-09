@@ -33,13 +33,13 @@ final class ConsecutiveStatementsTests: XCTestCase {
         f = { (x : Int) -> () in }
         f(0)
         f (0)
-        f 
-        (0) 
+        f
+        (0)
         var a = [1,2,3]
         a[0] = 1
         a [0] = 1
-        a 
-        [0, 1, 2] 
+        a
+        [0, 1, 2]
       }
       """
     )

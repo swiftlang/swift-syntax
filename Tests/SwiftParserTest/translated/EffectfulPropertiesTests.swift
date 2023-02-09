@@ -84,7 +84,7 @@ final class EffectfulPropertiesTests: XCTestCase {
       struct BadSubscript1 {
         subscript(_ i : Int) -> Int {
             get async throws {}
-            set {} 
+            set {}
           }
       }
       """,
@@ -117,7 +117,7 @@ final class EffectfulPropertiesTests: XCTestCase {
       struct S {
         var prop2 : Int {
           mutating get async throws { 0 }
-          nonmutating set {} 
+          nonmutating set {}
         }
       }
       """,
@@ -134,8 +134,8 @@ final class EffectfulPropertiesTests: XCTestCase {
         _read { yield prop3 }
         // expected-note@+1 2 {{previous definition of getter here}}
         get throws { false }
-        get async { true } 
-        get {} 
+        get async { true }
+        get {}
       }
       """,
       diagnostics: [
@@ -153,7 +153,7 @@ final class EffectfulPropertiesTests: XCTestCase {
       """
       enum E {
         private(set) var prop4 : Double {
-          set {} 
+          set {}
           get async throws { 1.1 }
           _modify { yield &prop4 }
         }
@@ -172,12 +172,12 @@ final class EffectfulPropertiesTests: XCTestCase {
       protocol P {
         associatedtype T
         var prop1 : T { get async throws }
-        var prop2 : T { get async throws set } 
-        var prop3 : T { get throws set } 
+        var prop2 : T { get async throws set }
+        var prop3 : T { get throws set }
         var prop4 : T { get async }
         var prop5 : T { mutating get async throws }
         var prop6 : T { mutating get throws }
-        var prop7 : T { mutating get async nonmutating set } 
+        var prop7 : T { mutating get async nonmutating set }
       }
       """,
       diagnostics: [
@@ -201,8 +201,8 @@ final class EffectfulPropertiesTests: XCTestCase {
     AssertParse(
       """
       var bad1 : Int {
-        get rethrows { 0 }  
-        set rethrows { }   
+        get rethrows { 0 }
+        set rethrows { }
       }
       """,
       diagnostics: [
@@ -217,7 +217,7 @@ final class EffectfulPropertiesTests: XCTestCase {
     AssertParse(
       """
       var bad2 : Int {
-        get reasync { 0 }  
+        get reasync { 0 }
         set reasync { }
       }
       """,
@@ -273,7 +273,7 @@ final class EffectfulPropertiesTests: XCTestCase {
     AssertParse(
       """
       var bad5 : Int {
-        get 1️⃣bogus rethrows {} 
+        get 1️⃣bogus rethrows {}
       }
       """,
       diagnostics: [
@@ -301,7 +301,7 @@ final class EffectfulPropertiesTests: XCTestCase {
     AssertParse(
       """
       var bad7 : Double {
-        get throws 1️⃣async { 3.14 } 
+        get throws 1️⃣async { 3.14 }
       }
       """,
       diagnostics: [
@@ -328,10 +328,10 @@ final class EffectfulPropertiesTests: XCTestCase {
     AssertParse(
       """
       protocol BadP {
-        var prop2 : Int { get 1️⃣bogus rethrows set } 
+        var prop2 : Int { get 1️⃣bogus rethrows set }
         var prop3 : Int { get rethrows 2️⃣bogus set }
         var prop4 : Int { get reasync 3️⃣bogus set }
-        var prop5 : Int { get throws 4️⃣async } 
+        var prop5 : Int { get throws 4️⃣async }
       }
       """,
       diagnostics: [

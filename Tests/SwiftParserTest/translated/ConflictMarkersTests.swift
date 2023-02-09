@@ -70,7 +70,7 @@ final class ConflictMarkersTests: XCTestCase {
   func testConflictMarkers7() {
     AssertParse(
       #"""
-      1️⃣<<<<<<< HEAD:conflict_markers.swift 
+      1️⃣<<<<<<< HEAD:conflict_markers.swift
       var a : String = "A"
       var b : String = "b"
       =======
@@ -88,8 +88,8 @@ final class ConflictMarkersTests: XCTestCase {
   func testConflictMarkers8() {
     AssertParse(
       #"""
-      1️⃣<<<<<<< HEAD:conflict_markers.swift 
-      ======= 
+      1️⃣<<<<<<< HEAD:conflict_markers.swift
+      =======
       var d : String = "D"
       >>>>>>> 18844bc65229786b96b89a9fc7739c0fc897905e:conflict_markers.swift
       print(d)
@@ -143,7 +143,7 @@ final class ConflictMarkersTests: XCTestCase {
       _ = {
       // Conflict marker.
       let a = "a", b = "b"
-      a 
+      a
       1️⃣<<<<<<< b
       a
       >>>>>>> b
@@ -171,7 +171,7 @@ final class ConflictMarkersTests: XCTestCase {
   func testConflictMarkers14() {
     AssertParse(
       #"""
-      1️⃣>>>> ORIGINAL 
+      1️⃣>>>> ORIGINAL
       var a : String = "A"
       var b : String = "B"
       ==== THEIRS
@@ -192,7 +192,7 @@ final class ConflictMarkersTests: XCTestCase {
   func testConflictMarkers15() {
     AssertParse(
       #"""
-      1️⃣>>>> ORIGINAL 
+      1️⃣>>>> ORIGINAL
       ==== THEIRS
       ==== YOURS
       var d : String = "D"

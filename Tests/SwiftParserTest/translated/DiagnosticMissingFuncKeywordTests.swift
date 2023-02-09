@@ -267,7 +267,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
     AssertParse(
       """
       class C1 {
-        class classMethod1️⃣() {} 
+        class classMethod1️⃣() {}
       }
       """,
       diagnostics: [
@@ -280,7 +280,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
     AssertParse(
       """
       class C2 {
-        class classProperty: Int { 1️⃣0 } 
+        class classProperty: Int { 1️⃣0 }
       }
       """,
       diagnostics: [

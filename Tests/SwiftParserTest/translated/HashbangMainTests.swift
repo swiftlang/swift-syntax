@@ -20,7 +20,7 @@ final class HashbangMainTests: XCTestCase {
       """
       #!/usr/bin/swift
       let x = 42
-      x + x 
+      x + x
       // Check that we skip the hashbang at the beginning of the file.
       """
     )

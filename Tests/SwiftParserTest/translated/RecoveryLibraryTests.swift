@@ -19,17 +19,17 @@ final class RecoveryLibraryTests: XCTestCase {
     AssertParse(
       """
       // Check that we handle multiple consecutive right braces.
-      1️⃣} 
-      } 
+      1️⃣}
+      }
       func foo() {}
       // Check that we handle multiple consecutive right braces.
-      2️⃣} 
-      } 
+      2️⃣}
+      }
       func bar() {}
       //===--- Recovery for extra braces at top level.
       //===--- Keep this test the last one in the file.
       // Check that we handle multiple consecutive right braces.
-      3️⃣} 
+      3️⃣}
       }
       """,
       diagnostics: [

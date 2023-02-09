@@ -32,8 +32,8 @@ final class RecoveryTests: XCTestCase {
       #"""
       func garbage() -> () {
         var a : Int
-        1️⃣) this line is invalid, but we will stop at the keyword below... 
-        return a + "a" 
+        1️⃣) this line is invalid, but we will stop at the keyword below...
+        return a + "a"
       }
       """#,
       diagnostics: [
@@ -46,9 +46,9 @@ final class RecoveryTests: XCTestCase {
     AssertParse(
       #"""
       func moreGarbage() -> () {
-        1️⃣) this line is invalid, but we will stop at the declaration... 
+        1️⃣) this line is invalid, but we will stop at the declaration...
         func a() -> Int { return 4 }
-        return a() + "a" 
+        return a() + "a"
       }
       """#,
       diagnostics: [
@@ -71,7 +71,7 @@ final class RecoveryTests: XCTestCase {
     AssertParse(
       """
       func useContainer() -> () {
-        var a : Container<not 1️⃣a2️⃣ type [skip 3️⃣this greater: >] >4️⃣, b : Int 
+        var a : Container<not 1️⃣a2️⃣ type [skip 3️⃣this greater: >] >4️⃣, b : Int
         b = 5 // no-warning
         a.exists()
       }
@@ -89,7 +89,7 @@ final class RecoveryTests: XCTestCase {
   func testRecovery8() {
     AssertParse(
       """
-      @xyz class BadAttributes { 
+      @xyz class BadAttributes {
         func exists() -> Bool { return true }
       }
       """
@@ -137,8 +137,8 @@ final class RecoveryTests: XCTestCase {
     AssertParse(
       """
       func braceStmt3() {
-        {  
-          undefinedIdentifier {} 
+        {
+          undefinedIdentifier {}
         }
       }
       """
@@ -149,13 +149,13 @@ final class RecoveryTests: XCTestCase {
     AssertParse(
       """
       //===--- Recovery for misplaced 'static'.
-      static func toplevelStaticFunc() {} 
-      static struct StaticStruct {} 
-      static class StaticClass {} 
-      static protocol StaticProtocol {} 
-      static typealias StaticTypealias = Int 
+      static func toplevelStaticFunc() {}
+      static struct StaticStruct {}
+      static class StaticClass {}
+      static protocol StaticProtocol {}
+      static typealias StaticTypealias = Int
       class ClassWithStaticDecls {
-        class var a = 42 
+        class var a = 42
       }
       """
     )
@@ -175,7 +175,7 @@ final class RecoveryTests: XCTestCase {
   func testRecovery14() {
     AssertParse(
       """
-      if { 
+      if {
         }1️⃣
       """,
       diagnostics: [
@@ -188,7 +188,7 @@ final class RecoveryTests: XCTestCase {
   func testRecovery15() {
     AssertParse(
       """
-      if 
+      if
         {
         }1️⃣
       """,
@@ -203,7 +203,7 @@ final class RecoveryTests: XCTestCase {
     AssertParse(
       """
       if true {
-        } else if { 
+        } else if {
         }1️⃣
       """,
       diagnostics: [
@@ -218,7 +218,7 @@ final class RecoveryTests: XCTestCase {
       """
       // It is debatable if we should do recovery here and parse { true } as the
         // body, but the error message should be sensible.
-        if { true } { 
+        if { true } {
         }
       """,
       diagnostics: [
@@ -272,7 +272,7 @@ final class RecoveryTests: XCTestCase {
   func testRecovery21() {
     AssertParse(
       """
-      while { 
+      while {
         }1️⃣
       """,
       diagnostics: [
@@ -285,7 +285,7 @@ final class RecoveryTests: XCTestCase {
   func testRecovery22() {
     AssertParse(
       """
-      while 
+      while
         {
         }1️⃣
       """,
@@ -356,7 +356,7 @@ final class RecoveryTests: XCTestCase {
   func testRecovery27() {
     AssertParse(
       """
-      { 
+      {
         missingControllingExprInRepeatWhile();
       }
       """,
@@ -410,8 +410,8 @@ final class RecoveryTests: XCTestCase {
   func testRecovery31() {
     AssertParse(
       """
-      for 1️⃣; 
-        { 
+      for 1️⃣;
+        {
         }
       """,
       diagnostics: [
@@ -424,7 +424,7 @@ final class RecoveryTests: XCTestCase {
   func testRecovery32() {
     AssertParse(
       """
-      for 1️⃣; true { 
+      for 1️⃣; true {
       }
       """,
       diagnostics: [
@@ -437,7 +437,7 @@ final class RecoveryTests: XCTestCase {
   func testRecovery33() {
     AssertParse(
       """
-      for var i 1️⃣= 0; true { 
+      for var i 1️⃣= 0; true {
         i += 1
       }
       """,
@@ -562,7 +562,7 @@ final class RecoveryTests: XCTestCase {
   func testRecovery42() {
     AssertParse(
       """
-      for i in { 
+      for i in {
       }1️⃣
       """,
       diagnostics: [
@@ -601,7 +601,7 @@ final class RecoveryTests: XCTestCase {
     AssertParse(
       """
       for 1️⃣
-        2️⃣; 
+        2️⃣;
       }
       """,
       diagnostics: [
@@ -626,7 +626,7 @@ final class RecoveryTests: XCTestCase {
   func testRecovery46() {
     AssertParse(
       """
-      switch { 
+      switch {
       }1️⃣
       """,
       diagnostics: [
@@ -640,7 +640,7 @@ final class RecoveryTests: XCTestCase {
   func testRecovery47() {
     AssertParse(
       """
-      switch 
+      switch
       {
       }1️⃣
       """,
@@ -655,7 +655,7 @@ final class RecoveryTests: XCTestCase {
   func testRecovery48() {
     AssertParse(
       """
-      switch { 
+      switch {
         1️⃣case _: return
       }2️⃣
       """,
@@ -670,7 +670,7 @@ final class RecoveryTests: XCTestCase {
   func testRecovery49() {
     AssertParse(
       """
-      switch { 
+      switch {
         1️⃣case Int: return
         2️⃣case _: return
       }3️⃣
@@ -688,7 +688,7 @@ final class RecoveryTests: XCTestCase {
   func testRecovery50() {
     AssertParse(
       """
-      switch { 42 } { 
+      switch { 42 } {
         case _: return
       }
       """
@@ -720,9 +720,9 @@ final class RecoveryTests: XCTestCase {
   func testRecovery55() {
     AssertParse(
       """
-      enum NoBracesUnion11️⃣() 
-      class NoBracesClass12️⃣() 
-      protocol NoBracesProtocol13️⃣() 
+      enum NoBracesUnion11️⃣()
+      class NoBracesClass12️⃣()
+      protocol NoBracesProtocol13️⃣()
       extension NoBracesStruct14️⃣()
       """,
       diagnostics: [
@@ -899,7 +899,7 @@ final class RecoveryTests: XCTestCase {
     AssertParse(
       """
       struct ErrorTypeInVarDecl4 {
-        var v1 : Int<1️⃣, 
+        var v1 : Int<1️⃣,
         var v2 : Int
       }
       """,
@@ -970,8 +970,8 @@ final class RecoveryTests: XCTestCase {
   func testRecovery84() {
     AssertParse(
       """
-      struct ErrorTypeInVarDecl13 { 
-        var v1 : 1️⃣& FooProtocol 
+      struct ErrorTypeInVarDecl13 {
+        var v1 : 1️⃣& FooProtocol
         var v2 : Int
       }
       """,
@@ -1191,10 +1191,10 @@ final class RecoveryTests: XCTestCase {
     AssertParse(
       """
       struct ErrorTypeInVarDeclDictionaryType {
-        let a1: String1️⃣: 
-        let a2: String2️⃣: Int] 
-        let a3: String3️⃣: [Int] 
-        let a4: String4️⃣: Int 
+        let a1: String1️⃣:
+        let a2: String2️⃣: Int]
+        let a3: String3️⃣: [Int]
+        let a4: String4️⃣: Int
       }
       """,
       diagnostics: [
@@ -1216,10 +1216,10 @@ final class RecoveryTests: XCTestCase {
     AssertParse(
       """
       struct ErrorInFunctionSignatureResultArrayType1 {
-        func foo() -> Int1️⃣[ { 
+        func foo() -> Int1️⃣[ {
           return [0]
         }  2️⃣
-        func bar() -> Int3️⃣] { 
+        func bar() -> Int3️⃣] {
           return [0]
         }
       }
@@ -1240,8 +1240,8 @@ final class RecoveryTests: XCTestCase {
     AssertParse(
       """
       struct ErrorInFunctionSignatureResultArrayType2 {
-        func foo() -> Int1️⃣[0 { 
-          return [0]  
+        func foo() -> Int1️⃣[0 {
+          return [0]
         }2️⃣
       3️⃣}
       """,
@@ -1259,7 +1259,7 @@ final class RecoveryTests: XCTestCase {
     AssertParse(
       """
       struct ErrorInFunctionSignatureResultArrayType3 {
-        func foo() -> Int1️⃣[0] { 
+        func foo() -> Int1️⃣[0] {
           return [0]
         }
       }
@@ -1275,7 +1275,7 @@ final class RecoveryTests: XCTestCase {
     AssertParse(
       """
       struct ErrorInFunctionSignatureResultArrayType4 {
-        func foo() -> Int1️⃣[0_1] { 
+        func foo() -> Int1️⃣[0_1] {
           return [0]
         }
       }
@@ -1291,7 +1291,7 @@ final class RecoveryTests: XCTestCase {
     AssertParse(
       """
       struct ErrorInFunctionSignatureResultArrayType5 {
-        func foo() -> Int1️⃣[0b1] { 
+        func foo() -> Int1️⃣[0b1] {
           return [0]
         }
       }
@@ -1306,8 +1306,8 @@ final class RecoveryTests: XCTestCase {
   func testRecovery105() {
     AssertParse(
       """
-      struct ErrorInFunctionSignatureResultArrayType11 { 
-        func foo() -> Int1️⃣[(a){a++}] { 
+      struct ErrorInFunctionSignatureResultArrayType11 {
+        func foo() -> Int1️⃣[(a){a++}] {
         }
       2️⃣}
       """,
@@ -1371,7 +1371,7 @@ final class RecoveryTests: XCTestCase {
     AssertParse(
       """
       func exprPostfix2() {
-        _ = .1️⃣42 
+        _ = .1️⃣42
       }
       """,
       diagnostics: [
@@ -1402,7 +1402,7 @@ final class RecoveryTests: XCTestCase {
       """
       class ExprSuper1 {
         init() {
-          super 
+          super
         }
       }
       """
@@ -1435,8 +1435,8 @@ final class RecoveryTests: XCTestCase {
   func testRecovery116() {
     AssertParse(
       """
-      struct BracesInsideNominalDecl1 { 
-        1️⃣{ 
+      struct BracesInsideNominalDecl1 {
+        1️⃣{
           aaa
         }
         typealias A = Int
@@ -1464,7 +1464,7 @@ final class RecoveryTests: XCTestCase {
       #"""
       // https://github.com/apple/swift/issues/43383
       class С_43383 {
-          1️⃣print(2️⃣"No one else was in the room where it happened") 
+          1️⃣print(2️⃣"No one else was in the room where it happened")
       }
       """#,
       diagnostics: [
@@ -1504,7 +1504,7 @@ final class RecoveryTests: XCTestCase {
     AssertParse(
       """
       class WrongDeclIntroducerKeyword1 {
-        1️⃣notAKeyword() {} 
+        1️⃣notAKeyword() {}
         func foo() {}
         class func bar() {}
       }
@@ -1649,7 +1649,7 @@ final class RecoveryTests: XCTestCase {
       #"""
       // <rdar://problem/18634543> Parser hangs at swift::Parser::parseType
       public enum TestA {
-        public static func convertFromExtenndition( 
+        public static func convertFromExtenndition(
           s._core.count 1️⃣!= 0, "Can't form a Character from an empty String")
       }
       """#,
@@ -1666,7 +1666,7 @@ final class RecoveryTests: XCTestCase {
     AssertParse(
       #"""
       public enum TestB {
-        public static func convertFromExtenndition( 
+        public static func convertFromExtenndition(
           s._core.count 1️⃣?= 0, "Can't form a Character from an empty String")
       }
       """#,
@@ -1736,7 +1736,7 @@ final class RecoveryTests: XCTestCase {
       #if true
       // rdar://19605164
       struct Foo19605164 {
-      func a(s: S1️⃣[{{g2️⃣) -> Int {} 
+      func a(s: S1️⃣[{{g2️⃣) -> Int {}
       }}3️⃣}
       #endif
       """,
@@ -1871,7 +1871,7 @@ final class RecoveryTests: XCTestCase {
   func testRecovery153() {
     AssertParse(
       """
-      if var y = x, z = x { 
+      if var y = x, z = x {
         z = y; y = z
       }
       """,
@@ -1896,7 +1896,7 @@ final class RecoveryTests: XCTestCase {
       // rdar://20866942
       func testRefutableLet() {
         var e : Int?
-        let x1️⃣? = e  
+        let x1️⃣? = e
       }
       """,
       diagnostics: [
@@ -1964,9 +1964,9 @@ final class RecoveryTests: XCTestCase {
     AssertParse(
       """
       // <rdar://problem/21369926> Malformed Swift Enums crash playground service
-      enum Rank: Int {  
+      enum Rank: Int {
         case Ace = 1
-        case Two = 2.1  
+        case Two = 2.1
       }
       """
     )
@@ -1978,7 +1978,7 @@ final class RecoveryTests: XCTestCase {
       // rdar://22240342 - Crash in diagRecursivePropertyAccess
       class r22240342 {
         lazy var xx: Int = {
-          foo {  
+          foo {
             let issueView = 42
             issueView.delegate = 12
           }
@@ -1994,8 +1994,8 @@ final class RecoveryTests: XCTestCase {
       """
       // <rdar://problem/22387625> QoI: Common errors: 'let x= 5' and 'let x =5' could use Fix-its
       func r22387625() {
-        let _= 5 
-        let _ =5 
+        let _= 5
+        let _ =5
       }
       """,
       diagnostics: [
@@ -2010,8 +2010,8 @@ final class RecoveryTests: XCTestCase {
       """
       // https://github.com/apple/swift/issues/45723
       do {
-        let _: Int= 5 
-        let _: Array<Int>= [] 
+        let _: Int= 5
+        let _: Array<Int>= []
       }
       """,
       diagnostics: [
@@ -2060,7 +2060,7 @@ final class RecoveryTests: XCTestCase {
       // and `ss + s` becomes ambiguous. Disambiguation is provided with the unavailable overload
       // in order to produce a meaningful diagnostics. (Related: <rdar://problem/31763930>)
       func test23550816(ss: [String], s: String) {
-        print(ss + s)  
+        print(ss + s)
       }
       """#
     )
@@ -2072,7 +2072,7 @@ final class RecoveryTests: XCTestCase {
       // <rdar://problem/23719432> [practicalswift] Compiler crashes on &(Int:_)
       func test23719432() {
         var x = 42
-          &(Int:x) 
+          &(Int:x)
       }
       """,
       diagnostics: [
@@ -2130,7 +2130,7 @@ final class RecoveryTests: XCTestCase {
         let a = s.startIndex..<s.startIndex
         _ = a
         // The specific errors produced don't actually matter, but we need to reject this.
-        return "\(s[a1️⃣)"  
+        return "\(s[a1️⃣)"
       }
       """#,
       diagnostics: [
@@ -2203,7 +2203,7 @@ final class RecoveryTests: XCTestCase {
     AssertParse(
       """
       func testSkipUnbalancedParen() {1️⃣
-        2️⃣?( 
+        2️⃣?(
       }
       """,
       diagnostics: [
@@ -2232,7 +2232,7 @@ final class RecoveryTests: XCTestCase {
     AssertParse(
       """
       func testSkipToFindOpenBrace2() {
-        do { if true {} else 1️⃣false } 
+        do { if true {} else 1️⃣false }
       }2️⃣
       """,
       diagnostics: [

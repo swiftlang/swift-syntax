@@ -125,7 +125,7 @@ final class EnumTests: XCTestCase {
     AssertParse(
       """
       struct SomeStruct {
-        case StructCase 
+        case StructCase
       }
       """
     )
@@ -135,7 +135,7 @@ final class EnumTests: XCTestCase {
     AssertParse(
       """
       class SomeClass {
-        case ClassCase 
+        case ClassCase
       }
       """
     )
@@ -148,7 +148,7 @@ final class EnumTests: XCTestCase {
         case A1
       }
       extension EnumWithExtension1 {
-        case A2 
+        case A2
       }
       """
     )
@@ -166,7 +166,7 @@ final class EnumTests: XCTestCase {
     AssertParse(
       """
       enum EnumCaseAttributes {
-        @xyz case EmptyAttributes  
+        @xyz case EmptyAttributes
       }
       """
     )
@@ -327,7 +327,7 @@ final class EnumTests: XCTestCase {
       enum ImproperlyHasIVars {
         case Flopsy
         case Mopsy
-        var ivar : Int 
+        var ivar : Int
       }
       """
     )
@@ -339,7 +339,7 @@ final class EnumTests: XCTestCase {
       // We used to crash on this.  rdar://14678675
       enum rdar14678675 {
         case U1, 1️⃣
-        case U2 
+        case U2
         case U3
       }
       """,
@@ -353,7 +353,7 @@ final class EnumTests: XCTestCase {
     AssertParse(
       """
       enum Recovery1 {
-        case1️⃣: 
+        case1️⃣:
       }
       """,
       diagnostics: [
@@ -457,7 +457,7 @@ final class EnumTests: XCTestCase {
   func testEnum24() {
     AssertParse(
       """
-      enum MultiRawType : Int64, Int32 { 
+      enum MultiRawType : Int64, Int32 {
         case Couch, Davis
       }
       """
@@ -468,7 +468,7 @@ final class EnumTests: XCTestCase {
     AssertParse(
       """
       protocol RawTypeNotFirstProtocol {}
-      enum RawTypeNotFirst : RawTypeNotFirstProtocol, Int { 
+      enum RawTypeNotFirst : RawTypeNotFirstProtocol, Int {
         case E
       }
       """
@@ -478,7 +478,7 @@ final class EnumTests: XCTestCase {
   func testEnum26() {
     AssertParse(
       """
-      enum ExpressibleByRawTypeNotLiteral : Array<Int> { 
+      enum ExpressibleByRawTypeNotLiteral : Array<Int> {
         case Ladd, Elliott, Sixteenth, Harrison
       }
       """
@@ -488,7 +488,7 @@ final class EnumTests: XCTestCase {
   func testEnum27() {
     AssertParse(
       """
-      enum RawTypeCircularityA : RawTypeCircularityB, ExpressibleByIntegerLiteral { 
+      enum RawTypeCircularityA : RawTypeCircularityB, ExpressibleByIntegerLiteral {
         case Morrison, Belmont, Madison, Hawthorne
         init(integerLiteral value: Int) {
           self = .Morrison
@@ -501,9 +501,9 @@ final class EnumTests: XCTestCase {
   func testEnum28() {
     AssertParse(
       """
-      enum RawTypeCircularityB : RawTypeCircularityA, ExpressibleByIntegerLiteral { 
+      enum RawTypeCircularityB : RawTypeCircularityA, ExpressibleByIntegerLiteral {
         case Willamette, Columbia, Sandy, Multnomah
-        init(integerLiteral value: Int) { 
+        init(integerLiteral value: Int) {
           self = .Willamette
         }
       }
@@ -517,8 +517,8 @@ final class EnumTests: XCTestCase {
       struct ExpressibleByFloatLiteralOnly : ExpressibleByFloatLiteral {
           init(floatLiteral: Double) {}
       }
-      enum ExpressibleByRawTypeNotIntegerLiteral : ExpressibleByFloatLiteralOnly { 
-        case Everett 
+      enum ExpressibleByRawTypeNotIntegerLiteral : ExpressibleByFloatLiteralOnly {
+        case Everett
         case Flanders
       }
       """
@@ -549,9 +549,9 @@ final class EnumTests: XCTestCase {
   func testEnum32() {
     AssertParse(
       #"""
-      enum RawTypeWithUnicodeScalarValues : UnicodeScalar { 
+      enum RawTypeWithUnicodeScalarValues : UnicodeScalar {
         case Kearney = "K"
-        case Lovejoy 
+        case Lovejoy
         case Marshall = "M"
       }
       """#
@@ -561,9 +561,9 @@ final class EnumTests: XCTestCase {
   func testEnum33() {
     AssertParse(
       #"""
-      enum RawTypeWithCharacterValues : Character { 
+      enum RawTypeWithCharacterValues : Character {
         case First = "い"
-        case Second 
+        case Second
         case Third = "は"
       }
       """#
@@ -586,8 +586,8 @@ final class EnumTests: XCTestCase {
   func testEnum35() {
     AssertParse(
       #"""
-      enum RawTypeWithCharacterValues_Error1 : Character { 
-        case First = "abc" 
+      enum RawTypeWithCharacterValues_Error1 : Character {
+        case First = "abc"
       }
       """#
     )
@@ -596,9 +596,9 @@ final class EnumTests: XCTestCase {
   func testEnum36() {
     AssertParse(
       """
-      enum RawTypeWithFloatValues : Float { 
+      enum RawTypeWithFloatValues : Float {
         case Northrup = 1.5
-        case Overton 
+        case Overton
         case Pettygrove = 2.25
       }
       """
@@ -622,7 +622,7 @@ final class EnumTests: XCTestCase {
     AssertParse(
       """
       enum RawValuesWithoutRawType {
-        case Upshur = 22 
+        case Upshur = 22
       }
       """
     )
@@ -632,8 +632,8 @@ final class EnumTests: XCTestCase {
     AssertParse(
       """
       enum RawTypeWithRepeatValues : Int {
-        case Vaughn = 22 
-        case Wilson = 22 
+        case Vaughn = 22
+        case Wilson = 22
       }
       """
     )
@@ -643,8 +643,8 @@ final class EnumTests: XCTestCase {
     AssertParse(
       """
       enum RawTypeWithRepeatValues2 : Double {
-        case Vaughn = 22   
-        case Wilson = 22.0 
+        case Vaughn = 22
+        case Wilson = 22.0
       }
       """
     )
@@ -655,8 +655,8 @@ final class EnumTests: XCTestCase {
       """
       enum RawTypeWithRepeatValues3 : Double {
         // 2^63-1
-        case Vaughn = 9223372036854775807   
-        case Wilson = 9223372036854775807.0 
+        case Vaughn = 9223372036854775807
+        case Wilson = 9223372036854775807.0
       }
       """
     )
@@ -667,8 +667,8 @@ final class EnumTests: XCTestCase {
       """
       enum RawTypeWithRepeatValues4 : Double {
         // 2^64-1
-        case Vaughn = 18446744073709551615   
-        case Wilson = 18446744073709551615.0 
+        case Vaughn = 18446744073709551615
+        case Wilson = 18446744073709551615.0
       }
       """
     )
@@ -717,8 +717,8 @@ final class EnumTests: XCTestCase {
     AssertParse(
       #"""
       enum RawTypeWithRepeatValues8 : String {
-        case Vaughn = "XYZ" 
-        case Wilson = "XYZ" 
+        case Vaughn = "XYZ"
+        case Wilson = "XYZ"
       }
       """#
     )
@@ -741,9 +741,9 @@ final class EnumTests: XCTestCase {
     AssertParse(
       """
       enum RawTypeWithRepeatValuesAutoInc : Double {
-        case Vaughn = 22 
-        case Wilson    
-        case Yeon = 23 
+        case Vaughn = 22
+        case Wilson
+        case Yeon = 23
       }
       """
     )
@@ -753,9 +753,9 @@ final class EnumTests: XCTestCase {
     AssertParse(
       """
       enum RawTypeWithRepeatValuesAutoInc2 : Double {
-        case Vaughn = 23 
-        case Wilson = 22 
-        case Yeon 
+        case Vaughn = 23
+        case Wilson = 22
+        case Yeon
       }
       """
     )
@@ -765,9 +765,9 @@ final class EnumTests: XCTestCase {
     AssertParse(
       """
       enum RawTypeWithRepeatValuesAutoInc3 : Double {
-        case Vaughn 
-        case Wilson 
-        case Yeon = 1 
+        case Vaughn
+        case Wilson
+        case Yeon = 1
       }
       """
     )
@@ -777,8 +777,8 @@ final class EnumTests: XCTestCase {
     AssertParse(
       #"""
       enum RawTypeWithRepeatValuesAutoInc4 : String {
-        case A = "B" 
-        case B 
+        case A = "B"
+        case B
       }
       """#
     )
@@ -788,8 +788,8 @@ final class EnumTests: XCTestCase {
     AssertParse(
       #"""
       enum RawTypeWithRepeatValuesAutoInc5 : String {
-        case A 
-        case B = "A" 
+        case A
+        case B = "A"
       }
       """#
     )
@@ -800,8 +800,8 @@ final class EnumTests: XCTestCase {
       #"""
       enum RawTypeWithRepeatValuesAutoInc6 : String {
         case A
-        case B 
-        case C = "B" 
+        case B
+        case C = "B"
       }
       """#
     )
@@ -811,7 +811,7 @@ final class EnumTests: XCTestCase {
     AssertParse(
       """
       enum NonliteralRawValue : Int {
-        case Yeon = 100 + 20 + 3 
+        case Yeon = 100 + 20 + 3
       }
       """
     )
@@ -820,9 +820,9 @@ final class EnumTests: XCTestCase {
   func testEnum55() {
     AssertParse(
       """
-      enum RawTypeWithPayload : Int { 
-        case Powell(Int) 
-        case Terwilliger(Int) = 17 
+      enum RawTypeWithPayload : Int {
+        case Powell(Int)
+        case Terwilliger(Int) = 17
       }
       """
     )
@@ -831,8 +831,8 @@ final class EnumTests: XCTestCase {
   func testEnum56() {
     AssertParse(
       #"""
-      enum RawTypeMismatch : Int { 
-        case Barbur = "foo" 
+      enum RawTypeMismatch : Int {
+        case Barbur = "foo"
       }
       """#
     )
@@ -842,8 +842,8 @@ final class EnumTests: XCTestCase {
     AssertParse(
       """
       enum DuplicateMembers1 {
-        case Foo 
-        case Foo 
+        case Foo
+        case Foo
       }
       """
     )
@@ -853,9 +853,9 @@ final class EnumTests: XCTestCase {
     AssertParse(
       """
       enum DuplicateMembers2 {
-        case Foo, Bar 
-        case Foo 
-        case Bar 
+        case Foo, Bar
+        case Foo
+        case Bar
       }
       """
     )
@@ -865,8 +865,8 @@ final class EnumTests: XCTestCase {
     AssertParse(
       """
       enum DuplicateMembers3 {
-        case Foo 
-        case Foo(Int) 
+        case Foo
+        case Foo(Int)
       }
       """
     )
@@ -875,9 +875,9 @@ final class EnumTests: XCTestCase {
   func testEnum60() {
     AssertParse(
       """
-      enum DuplicateMembers4 : Int { 
-        case Foo = 1 
-        case Foo = 2 
+      enum DuplicateMembers4 : Int {
+        case Foo = 1
+        case Foo = 2
       }
       """
     )
@@ -886,9 +886,9 @@ final class EnumTests: XCTestCase {
   func testEnum61() {
     AssertParse(
       """
-      enum DuplicateMembers5 : Int { 
-        case Foo = 1 
-        case Foo = 1 + 1 
+      enum DuplicateMembers5 : Int {
+        case Foo = 1
+        case Foo = 1 + 1
       }
       """
     )
@@ -899,8 +899,8 @@ final class EnumTests: XCTestCase {
       """
       enum DuplicateMembers6 {
         case Foo // expected-note 2{{'Foo' previously declared here}}
-        case Foo 
-        case Foo 
+        case Foo
+        case Foo
       }
       """
     )
@@ -909,9 +909,9 @@ final class EnumTests: XCTestCase {
   func testEnum63() {
     AssertParse(
       #"""
-      enum DuplicateMembers7 : String { 
-        case Foo 
-        case Foo = "Bar" 
+      enum DuplicateMembers7 : String {
+        case Foo
+        case Foo = "Bar"
       }
       """#
     )
@@ -923,7 +923,7 @@ final class EnumTests: XCTestCase {
       // Refs to duplicated enum cases shouldn't crash the compiler.
       // rdar://problem/20922401
       func check20922401() -> String {
-        let x: DuplicateMembers1 = .Foo 
+        let x: DuplicateMembers1 = .Foo
         switch x {
           case .Foo:
             return "Foo"
@@ -979,8 +979,8 @@ final class EnumTests: XCTestCase {
     AssertParse(
       """
       enum ManyLiteralA : ManyLiteralable {
-        case A 
-        case B = 0 
+        case A
+        case B = 0
       }
       """
     )
@@ -989,9 +989,9 @@ final class EnumTests: XCTestCase {
   func testEnum68() {
     AssertParse(
       #"""
-      enum ManyLiteralB : ManyLiteralable { 
+      enum ManyLiteralB : ManyLiteralable {
         case A = "abc"
-        case B 
+        case B
       }
       """#
     )
@@ -1054,8 +1054,8 @@ final class EnumTests: XCTestCase {
   func testEnum74() {
     AssertParse(
       """
-      enum foo : String { 
-        case bar = nil 
+      enum foo : String {
+        case bar = nil
       }
       """
     )
@@ -1083,7 +1083,7 @@ final class EnumTests: XCTestCase {
       enum EnumWithStaticMember {
         static let staticVar = EmptyStruct()
         func foo() {
-          let _ = staticVar 
+          let _ = staticVar
         }
       }
       """
@@ -1119,8 +1119,8 @@ final class EnumTests: XCTestCase {
           _ = SE0036.A
         }
         func staticReferenceInInstanceMethod() {
-          _ = A 
-          _ = self.A 
+          _ = A
+          _ = self.A
           _ = SE0036.A
         }
         static func staticReferenceInSwitchInStaticMethod() {
@@ -1132,9 +1132,9 @@ final class EnumTests: XCTestCase {
         }
         func staticReferenceInSwitchInInstanceMethod() {
           switch self {
-          case A: break 
-          case B(_): break 
-          case C(let x): _ = x; break 
+          case A: break
+          case B(_): break
+          case C(let x): _ = x; break
           }
         }
         func explicitReferenceInSwitch() {
@@ -1160,10 +1160,10 @@ final class EnumTests: XCTestCase {
         }
         init() {
           self = .A
-          self = A 
+          self = A
           self = SE0036.A
           self = .B(SE0036_Auxiliary())
-          self = B(SE0036_Auxiliary()) 
+          self = B(SE0036_Auxiliary())
           self = SE0036.B(SE0036_Auxiliary())
         }
       }
@@ -1178,7 +1178,7 @@ final class EnumTests: XCTestCase {
         case A(x: T)
         func foo() {
           switch self {
-          case A(_): break 
+          case A(_): break
           }
           switch self {
           case .A(let a): print(a)
@@ -1217,7 +1217,7 @@ final class EnumTests: XCTestCase {
     AssertParse(
       """
       enum SE0155 {
-        case emptyArgs() 
+        case emptyArgs()
       }
       """
     )
@@ -1236,7 +1236,7 @@ final class EnumTests: XCTestCase {
       """
       enum E_53662 {
         case identifier
-        case 1️⃣operator 
+        case 1️⃣operator
         case identifier2
       }
       """,
@@ -1266,7 +1266,7 @@ final class EnumTests: XCTestCase {
       """
       enum E_53662_underscore {
         case identifier
-        case 1️⃣_ 
+        case 1️⃣_
         case identifier2
       }
       """,
@@ -1296,7 +1296,7 @@ final class EnumTests: XCTestCase {
         case identifier1
         case identifier2
         case 1️⃣
-        case identifier 
+        case identifier
       }
       """,
       diagnostics: [
@@ -1310,7 +1310,7 @@ final class EnumTests: XCTestCase {
       """
       enum E_53662_Newline2 {
         case 1️⃣
-        func foo() {} 
+        func foo() {}
       }
       """,
       diagnostics: [
@@ -1323,7 +1323,7 @@ final class EnumTests: XCTestCase {
     AssertParse(
       """
       enum E_53662_PatternMatching {
-        case 1️⃣let 2️⃣.foo(x, y): 
+        case 1️⃣let 2️⃣.foo(x, y):
       }
       """,
       diagnostics: [

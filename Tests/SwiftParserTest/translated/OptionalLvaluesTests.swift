@@ -63,10 +63,10 @@ final class OptionalLvaluesTests: XCTestCase {
       mutT!.mutS = S()
       mutT!.mutS! = S()
       mutT!.mutS!.x = 0
-      mutT!.mutS!.y = 0 
-      mutT!.immS = S() 
-      mutT!.immS! = S() 
-      mutT!.immS!.x = 0 
+      mutT!.mutS!.y = 0
+      mutT!.immS = S()
+      mutT!.immS! = S()
+      mutT!.immS!.x = 0
       mutT!.immS!.y = 0
       """
     )
@@ -75,14 +75,14 @@ final class OptionalLvaluesTests: XCTestCase {
   func testOptionalLvalues6() {
     AssertParse(
       """
-      immT! = T() 
-      immT!.mutS = S() 
-      immT!.mutS! = S() 
-      immT!.mutS!.x = 0 
-      immT!.mutS!.y = 0 
-      immT!.immS = S() 
-      immT!.immS! = S() 
-      immT!.immS!.x = 0 
+      immT! = T()
+      immT!.mutS = S()
+      immT!.mutS! = S()
+      immT!.mutS!.x = 0
+      immT!.mutS!.y = 0
+      immT!.immS = S()
+      immT!.immS! = S()
+      immT!.immS!.x = 0
       immT!.immS!.y = 0
       """
     )
@@ -101,8 +101,8 @@ final class OptionalLvaluesTests: XCTestCase {
     AssertParse(
       """
       mutIUO!.mutS = S()
-      mutIUO!.immS = S() 
-      immIUO!.mutS = S() 
+      mutIUO!.immS = S()
+      immIUO!.mutS = S()
       immIUO!.immS = S()
       """
     )
@@ -112,8 +112,8 @@ final class OptionalLvaluesTests: XCTestCase {
     AssertParse(
       """
       mutIUO.mutS = S()
-      mutIUO.immS = S() 
-      immIUO.mutS = S() 
+      mutIUO.immS = S()
+      immIUO.mutS = S()
       immIUO.immS = S()
       """
     )
@@ -131,7 +131,7 @@ final class OptionalLvaluesTests: XCTestCase {
     AssertParse(
       """
       var nonOptional: S = S()
-      _ = nonOptional! 
+      _ = nonOptional!
       _ = nonOptional!.x
       """
     )

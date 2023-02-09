@@ -34,7 +34,7 @@ final class InitDeinitTests: XCTestCase {
     AssertParse(
       """
       struct FooStructConstructorB {
-        init() 
+        init()
       }
       """
     )
@@ -44,7 +44,7 @@ final class InitDeinitTests: XCTestCase {
     AssertParse(
       """
       struct FooStructConstructorC {
-        init 1️⃣{} 
+        init 1️⃣{}
       }
       """,
       diagnostics: [
@@ -143,7 +143,7 @@ final class InitDeinitTests: XCTestCase {
     AssertParse(
       """
       struct FooStructDeinitializerB {
-        deinit 
+        deinit
       }
       """
     )
@@ -153,7 +153,7 @@ final class InitDeinitTests: XCTestCase {
     AssertParse(
       """
       struct FooStructDeinitializerC {
-        deinit {} 
+        deinit {}
       }
       """
     )
@@ -163,7 +163,7 @@ final class InitDeinitTests: XCTestCase {
     AssertParse(
       """
       class FooClassDeinitializerA {
-        deinit1️⃣(a : Int) {} 
+        deinit1️⃣(a : Int) {}
       }
       """,
       diagnostics: [
@@ -209,8 +209,8 @@ final class InitDeinitTests: XCTestCase {
   func testInitDeinit11() {
     AssertParse(
       """
-      init 1️⃣{} 
-      init() 
+      init 1️⃣{}
+      init()
       init() {}
       """,
       diagnostics: [
@@ -222,8 +222,8 @@ final class InitDeinitTests: XCTestCase {
   func testInitDeinit12() {
     AssertParse(
       """
-      deinit {} 
-      deinit 
+      deinit {}
+      deinit
       deinit {}
       """
     )
@@ -234,7 +234,7 @@ final class InitDeinitTests: XCTestCase {
       """
       struct BarStruct {
         init() {}
-        deinit {} 
+        deinit {}
       }
       """
     )
@@ -246,7 +246,7 @@ final class InitDeinitTests: XCTestCase {
       extension BarStruct {
         init(x : Int) {}
         // When/if we allow 'var' in extensions, then we should also allow dtors
-        deinit {} 
+        deinit {}
       }
       """
     )
@@ -257,7 +257,7 @@ final class InitDeinitTests: XCTestCase {
       """
       enum BarUnion {
         init() {}
-        deinit {} 
+        deinit {}
       }
       """
     )
@@ -268,7 +268,7 @@ final class InitDeinitTests: XCTestCase {
       """
       extension BarUnion {
         init(x : Int) {}
-        deinit {} 
+        deinit {}
       }
       """
     )
@@ -290,7 +290,7 @@ final class InitDeinitTests: XCTestCase {
       """
       extension BarClass {
         convenience init(x : Int) { self.init() }
-        deinit {} 
+        deinit {}
       }
       """
     )
@@ -300,8 +300,8 @@ final class InitDeinitTests: XCTestCase {
     AssertParse(
       """
       protocol BarProtocol {
-        init() {} 
-        deinit {} 
+        init() {}
+        deinit {}
       }
       """
     )
@@ -312,7 +312,7 @@ final class InitDeinitTests: XCTestCase {
       """
       extension BarProtocol {
         init(x : Int) {}
-        deinit {} 
+        deinit {}
       }
       """
     )
@@ -322,8 +322,8 @@ final class InitDeinitTests: XCTestCase {
     AssertParse(
       """
       func fooFunc() {
-        init() {} 
-        deinit {} 
+        init() {}
+        deinit {}
       }
       """
     )
@@ -334,11 +334,11 @@ final class InitDeinitTests: XCTestCase {
       """
       func barFunc() {
         var x : () = { () -> () in
-          init() {} 
+          init() {}
           return
         } ()
         var y : () = { () -> () in
-          deinit {} 
+          deinit {}
           return
         } ()
       }

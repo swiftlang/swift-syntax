@@ -18,7 +18,7 @@ final class DelayedExtensionTests: XCTestCase {
   func testDelayedExtension1() {
     AssertParse(
       """
-      extension X { } 
+      extension X { }
       _ = 1
       f()
       """

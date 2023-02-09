@@ -63,7 +63,7 @@ final class IfconfigExprTests: XCTestCase {
       func testBasic(baseExpr: MyStruct) {
           baseExpr
       #if CONDITION_1
-            .methodOne() 
+            .methodOne()
       #else
             .methodTwo()
       #endif
@@ -77,7 +77,7 @@ final class IfconfigExprTests: XCTestCase {
       """
       MyStruct()
       #if CONDITION_1
-        .methodOne() 
+        .methodOne()
       #else
         .methodTwo()
       #endif
@@ -89,18 +89,18 @@ final class IfconfigExprTests: XCTestCase {
     AssertParse(
       #"""
       func testInvalidContent(baseExpr: MyStruct, otherExpr: Int) {
-        baseExpr      
+        baseExpr
       #if CONDITION_1
-          { $0 + 1  } 
-      #endif
-        baseExpr      
-      #if CONDITION_1
-          1️⃣+ otherExpr 
+          { $0 + 1  }
       #endif
         baseExpr
       #if CONDITION_1
-          .methodOne() 
-        2️⃣print("debug") 
+          1️⃣+ otherExpr
+      #endif
+        baseExpr
+      #if CONDITION_1
+          .methodOne()
+        2️⃣print("debug")
       #endif
       }
       """#,
@@ -117,7 +117,7 @@ final class IfconfigExprTests: XCTestCase {
       func testExprKind(baseExpr: MyStruct, idx: Int) {
         baseExpr
       #if CONDITION_1
-        .optionalMember?.optionalMethod()![idx]++ 
+        .optionalMember?.optionalMethod()![idx]++
       #else
         .otherMethod(arg) {
           //...
@@ -125,7 +125,7 @@ final class IfconfigExprTests: XCTestCase {
       #endif
         baseExpr
       #if CONDITION_1
-        .methodOne() 1️⃣+ 12 
+        .methodOne() 1️⃣+ 12
       #endif
       }
       """,
@@ -141,13 +141,13 @@ final class IfconfigExprTests: XCTestCase {
       func emptyElse(baseExpr: MyStruct) {
         baseExpr
       #if CONDITION_1
-          .methodOne() 
+          .methodOne()
       #elseif CONDITION_2
           // OK. Do nothing.
       #endif
         baseExpr
       #if CONDITION_1
-          .methodOne() 
+          .methodOne()
       #elseif CONDITION_2
         1️⃣return
       #endif
@@ -170,7 +170,7 @@ final class IfconfigExprTests: XCTestCase {
       #if CONDITION_2
         .methodTwo()
       #endif
-        .unknownMethod() 
+        .unknownMethod()
       }
       """
     )
@@ -186,7 +186,7 @@ final class IfconfigExprTests: XCTestCase {
           .methodOne()
         #endif
         #if CONDITION_1
-          .methodTwo() 
+          .methodTwo()
         #endif
       #else
         .unknownMethod1()
@@ -203,7 +203,7 @@ final class IfconfigExprTests: XCTestCase {
     AssertParse(
       """
       func ifconfigExprInExpr(baseExpr: MyStruct) {
-        globalFunc( 
+        globalFunc(
           baseExpr
       #if CONDITION_1
             .methodOne()

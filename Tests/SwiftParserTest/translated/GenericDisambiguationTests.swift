@@ -20,7 +20,7 @@ final class GenericDisambiguationTests: XCTestCase {
   func testGenericDisambiguation1() {
     AssertParse(
       """
-      struct A<B> { 
+      struct A<B> {
         init(x:Int) {}
         static func c() {}
         struct C<D> {
@@ -244,7 +244,7 @@ final class GenericDisambiguationTests: XCTestCase {
   func testGenericDisambiguation17() {
     AssertParse(
       """
-      A<B?>(x: 0) // parses as type 
+      A<B?>(x: 0) // parses as type
       _ = a < b ? c : d
       """
     )

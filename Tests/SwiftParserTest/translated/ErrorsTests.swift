@@ -47,7 +47,7 @@ final class ErrorsTests: XCTestCase {
         } catch _ {
         }
         do {
-        } catch { 
+        } catch {
           let error2 = error
         }
         do {
@@ -58,12 +58,12 @@ final class ErrorsTests: XCTestCase {
         // <rdar://problem/20985280> QoI: improve diagnostic on improper pattern match on type
         do {
           throw opaque_error()
-        } catch MSV { 
+        } catch MSV {
         } catch {
         }
         do {
           throw opaque_error()
-        } catch is Error {  
+        } catch is Error {
         }
         func foo() throws {}
         do {
@@ -80,7 +80,7 @@ final class ErrorsTests: XCTestCase {
         }
         do {
           throw opaque_error()
-        } catch MSV.Foo, MSV.CarriesInt(let num) { 
+        } catch MSV.Foo, MSV.CarriesInt(let num) {
         } catch {
         }
       }
@@ -114,17 +114,17 @@ final class ErrorsTests: XCTestCase {
     AssertParse(
       """
       func testAutoclosures() throws {
-        takesAutoclosure(genError()) 
+        takesAutoclosure(genError())
         takesAutoclosure(genNoError())
-        try takesAutoclosure(genError()) 
-        try takesAutoclosure(genNoError()) 
-        takesAutoclosure(try genError()) 
-        takesAutoclosure(try genNoError()) 
+        try takesAutoclosure(genError())
+        try takesAutoclosure(genNoError())
+        takesAutoclosure(try genError())
+        takesAutoclosure(try genNoError())
         takesThrowingAutoclosure(try genError())
-        takesThrowingAutoclosure(try genNoError()) 
+        takesThrowingAutoclosure(try genNoError())
         try takesThrowingAutoclosure(genError())
-        try takesThrowingAutoclosure(genNoError()) 
-        takesThrowingAutoclosure(genError()) 
+        try takesThrowingAutoclosure(genNoError())
+        takesThrowingAutoclosure(genError())
         takesThrowingAutoclosure(genNoError())
       }
       """
@@ -137,7 +137,7 @@ final class ErrorsTests: XCTestCase {
       func illformed() throws {
           do {
             _ = try genError()
-          } catch MSV.CarriesInt(let i) where i == genError()1️⃣) { 
+          } catch MSV.CarriesInt(let i) where i == genError()1️⃣) {
           }
       }
       """,
@@ -151,7 +151,7 @@ final class ErrorsTests: XCTestCase {
   func testErrors8() {
     AssertParse(
       """
-      func postThrows() -> Int 1️⃣throws { 
+      func postThrows() -> Int 1️⃣throws {
         return 5
       }
       """,
@@ -169,7 +169,7 @@ final class ErrorsTests: XCTestCase {
   func testErrors9() {
     AssertParse(
       """
-      func postThrows2() -> 1️⃣throws Int { 
+      func postThrows2() -> 1️⃣throws Int {
         return try postThrows()
       }
       """,
@@ -182,7 +182,7 @@ final class ErrorsTests: XCTestCase {
   func testErrors10() {
     AssertParse(
       """
-      func postRethrows(_ f: () throws -> Int) -> Int 1️⃣rethrows { 
+      func postRethrows(_ f: () throws -> Int) -> Int 1️⃣rethrows {
         return try f()
       }
       """,
@@ -214,7 +214,7 @@ final class ErrorsTests: XCTestCase {
     AssertParse(
       """
       func postThrows3() {
-        _ = { () -> Int 1️⃣throws in } 
+        _ = { () -> Int 1️⃣throws in }
       }
       """,
       diagnostics: [
@@ -351,7 +351,7 @@ final class ErrorsTests: XCTestCase {
       func fixitThrow2() throws {
         var _: (Int)
         throw MSV.Foo
-        var _: (Int) 1️⃣throw -> Int 
+        var _: (Int) 1️⃣throw -> Int
       }
       """,
       diagnostics: [
@@ -361,7 +361,7 @@ final class ErrorsTests: XCTestCase {
         func fixitThrow2() throws {
           var _: (Int)
           throw MSV.Foo
-          var _: (Int) throws -> Int 
+          var _: (Int) throws -> Int
         }
         """
     )

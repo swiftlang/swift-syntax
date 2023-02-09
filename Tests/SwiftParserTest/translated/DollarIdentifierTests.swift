@@ -163,7 +163,7 @@ final class DollarIdentifierTests: XCTestCase {
       """
       func escapedDollarAnd() {
         // FIXME: Bad diagnostics.
-        1️⃣`$0` = 1 
+        1️⃣`$0` = 1
         `$$` = 2
         `$abc` = 3
       }
@@ -187,40 +187,40 @@ final class DollarIdentifierTests: XCTestCase {
   func testDollarIdentifier8() {
     AssertParse(
       """
-      func $declareWithDollar() { 
-        var $foo: Int { 
+      func $declareWithDollar() {
+        var $foo: Int {
           get { 0 }
-          set($value) {} 
+          set($value) {}
         }
-        func $bar() { } 
+        func $bar() { }
         func wibble(
-          $a: Int, 
-          $b c: Int) { } 
+          $a: Int,
+          $b c: Int) { }
         let _: (Int) -> Int = {
-          [$capture = 0] 
-          $a in 
+          [$capture = 0]
+          $a in
           $capture
         }
-        let ($a: _, _) = (0, 0) 
-        $label: if true { 
+        let ($a: _, _) = (0, 0)
+        $label: if true {
           break $label
         }
         switch 0 {
-        @$dollar case _: 
+        @$dollar case _:
           break
         }
-        if #available($Dummy 9999, *) {} 
+        if #available($Dummy 9999, *) {}
         @_swift_native_objc_runtime_base($Dollar)
-        class $Class {} 
-        enum $Enum {} 
-        struct $Struct { 
+        class $Class {}
+        enum $Enum {}
+        struct $Struct {
           @_projectedValueProperty($dummy)
           let property: Never
         }
       }
-      protocol $Protocol {} 
-      precedencegroup $Precedence { 
-        higherThan: $Precedence 
+      protocol $Protocol {}
+      precedencegroup $Precedence {
+        higherThan: $Precedence
       }
       infix operator **: $Precedence
       #$UnknownDirective()

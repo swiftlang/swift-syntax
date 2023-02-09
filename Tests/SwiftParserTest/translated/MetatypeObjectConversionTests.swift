@@ -45,9 +45,9 @@ final class MetatypeObjectConversionTests: XCTestCase {
     AssertParse(
       """
       func concreteTypes() {
-        takesAnyObject(C.self) 
-        takesAnyObject(S.self) 
-        takesAnyObject(ClassConstrainedProto.self) 
+        takesAnyObject(C.self)
+        takesAnyObject(S.self)
+        takesAnyObject(ClassConstrainedProto.self)
       }
       """
     )
@@ -59,7 +59,7 @@ final class MetatypeObjectConversionTests: XCTestCase {
       func existentialMetatypes(nonClass: NonClassProto.Type,
                                 classConstrained: ClassConstrainedProto.Type,
                                 compo: (NonClassProto & ClassConstrainedProto).Type) {
-        takesAnyObject(nonClass) 
+        takesAnyObject(nonClass)
         takesAnyObject(classConstrained)
         takesAnyObject(compo)
       }

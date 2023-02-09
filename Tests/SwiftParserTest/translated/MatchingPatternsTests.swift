@@ -76,18 +76,18 @@ final class MatchingPatternsTests: XCTestCase {
       case var a:
         a = 1
       case let a:
-        a = 1         
-      case var var a: 
+        a = 1
+      case var var a:
         a += 1
-      case var let a: 
+      case var let a:
         print(a, terminator: "")
-      case var (var b): 
+      case var (var b):
         b += 1
       // 'Any' pattern.
       case _:
         ()
       // patterns are resolved in expression-only positions are errors.
-      case 1 + (_): 
+      case 1 + (_):
         ()
       }
       """#
@@ -98,9 +98,9 @@ final class MatchingPatternsTests: XCTestCase {
     AssertParse(
       """
       switch (x,x) {
-      case (var a, var a): 
+      case (var a, var a):
         fallthrough
-      case _: 
+      case _:
         ()
       }
       """
@@ -118,7 +118,7 @@ final class MatchingPatternsTests: XCTestCase {
   func testMatchingPatterns9() {
     AssertParse(
       """
-      switch e { 
+      switch e {
       // 'is' pattern.
       case is Int,
            is A<Int>,
@@ -160,23 +160,23 @@ final class MatchingPatternsTests: XCTestCase {
           case other:
             ()
           case .Naught,
-               .Naught(), 
-               .Naught(_), 
-               .Naught(_, _): 
+               .Naught(),
+               .Naught(_),
+               .Naught(_, _):
             ()
           case .Mere,
-               .Mere(), 
+               .Mere(),
                .Mere(_),
-               .Mere(_, _): 
+               .Mere(_, _):
             ()
-          case .Twain(), 
-               .Twain(_), 
+          case .Twain(),
+               .Twain(_),
                .Twain(_, _),
-               .Twain(_, _, _): 
+               .Twain(_, _, _):
             ()
           }
           switch foo {
-          case .Naught: 
+          case .Naught:
             ()
           case .A, .B, .C:
             ()
@@ -191,7 +191,7 @@ final class MatchingPatternsTests: XCTestCase {
     AssertParse(
       """
       var n : Voluntary<Int> = .Naught
-      if case let .Naught(value) = n {} 
+      if case let .Naught(value) = n {}
       if case let .Naught(value1, value2, value3) = n {}
       """
     )
@@ -201,26 +201,26 @@ final class MatchingPatternsTests: XCTestCase {
     AssertParse(
       """
       switch n {
-      case Foo.A: 
+      case Foo.A:
         ()
       case Voluntary<Int>.Naught,
-           Voluntary<Int>.Naught(), 
-           Voluntary<Int>.Naught(_, _), 
+           Voluntary<Int>.Naught(),
+           Voluntary<Int>.Naught(_, _),
            Voluntary.Naught,
            .Naught:
         ()
       case Voluntary<Int>.Mere,
            Voluntary<Int>.Mere(_),
-           Voluntary<Int>.Mere(_, _), 
+           Voluntary<Int>.Mere(_, _),
            Voluntary.Mere,
            Voluntary.Mere(_),
            .Mere,
            .Mere(_):
         ()
       case .Twain,
-           .Twain(_), 
+           .Twain(_),
            .Twain(_, _),
-           .Twain(_, _, _): 
+           .Twain(_, _, _):
         ()
       }
       """
@@ -239,7 +239,7 @@ final class MatchingPatternsTests: XCTestCase {
     AssertParse(
       """
       switch notAnEnum {
-      case .Foo: 
+      case .Foo:
         ()
       }
       """
@@ -256,12 +256,12 @@ final class MatchingPatternsTests: XCTestCase {
           case Twain(T, T)
         }
         func member(_ n: Possible<Int>) {
-          switch n { 
+          switch n {
           case ContainsEnum.Possible<Int>.Naught,
-               ContainsEnum.Possible.Naught, 
-               Possible<Int>.Naught, 
-               Possible.Naught, 
-               .Naught: 
+               ContainsEnum.Possible.Naught,
+               Possible<Int>.Naught,
+               Possible.Naught,
+               .Naught:
             ()
           }
         }
@@ -274,9 +274,9 @@ final class MatchingPatternsTests: XCTestCase {
     AssertParse(
       """
       func nonmemberAccessesMemberType(_ n: ContainsEnum.Possible<Int>) {
-        switch n { 
+        switch n {
         case ContainsEnum.Possible<Int>.Naught,
-             .Naught: 
+             .Naught:
           ()
         }
       }
@@ -297,15 +297,15 @@ final class MatchingPatternsTests: XCTestCase {
       """
       switch m {
       case imported_enums.ImportedEnum.Simple,
-           ImportedEnum.Simple, 
-           .Simple: 
+           ImportedEnum.Simple,
+           .Simple:
         ()
       case imported_enums.ImportedEnum.Compound,
-           imported_enums.ImportedEnum.Compound(_), 
-           ImportedEnum.Compound, 
-           ImportedEnum.Compound(_), 
-           .Compound, 
-           .Compound(_): 
+           imported_enums.ImportedEnum.Compound(_),
+           ImportedEnum.Compound,
+           ImportedEnum.Compound(_),
+           .Compound,
+           .Compound(_):
         ()
       }
       """
@@ -351,22 +351,22 @@ final class MatchingPatternsTests: XCTestCase {
       case let .Payload(x):
         acceptInt(x)
         acceptString("\(x)")
-      case let .Payload(name: x): 
+      case let .Payload(name: x):
         acceptInt(x)
         acceptString("\(x)")
-      case let .Payload((name: x)): 
+      case let .Payload((name: x)):
         acceptInt(x)
         acceptString("\(x)")
-      case .Payload(let (name: x)): 
+      case .Payload(let (name: x)):
         acceptInt(x)
         acceptString("\(x)")
-      case .Payload(let (name: x)): 
+      case .Payload(let (name: x)):
         acceptInt(x)
         acceptString("\(x)")
-      case .Payload(let x): 
+      case .Payload(let x):
         acceptInt(x)
         acceptString("\(x)")
-      case .Payload((let x)): 
+      case .Payload((let x)):
         acceptInt(x)
         acceptString("\(x)")
       }
@@ -434,7 +434,7 @@ final class MatchingPatternsTests: XCTestCase {
         a += 1
       case var (_, b, 3):
         b += 1
-      case var (_, var c, 3): 
+      case var (_, var c, 3):
         c += 1
       case (1, 2, 3):
         ()
@@ -465,9 +465,9 @@ final class MatchingPatternsTests: XCTestCase {
     AssertParse(
       """
       switch [Derived(), Derived(), Base()] {
-      case let ds as [Derived]: 
+      case let ds as [Derived]:
         ()
-      case is [Derived]: 
+      case is [Derived]:
         ()
       default:
         ()
@@ -505,7 +505,7 @@ final class MatchingPatternsTests: XCTestCase {
       case nil: break
       case _?: break
       case (1?)?: break
-      case (_?)?: break 
+      case (_?)?: break
       }
       """
     )

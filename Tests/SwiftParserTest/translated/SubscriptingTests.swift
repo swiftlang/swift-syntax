@@ -139,7 +139,7 @@ final class SubscriptingTests: XCTestCase {
       """
       struct Y1 {
         var stored: Int
-        subscript(_: i, j: Int) -> Int { 
+        subscript(_: i, j: Int) -> Int {
           get {
             return stored + j
           }
@@ -177,7 +177,7 @@ final class SubscriptingTests: XCTestCase {
     AssertParse(
       """
       // FIXME: This test case does not belong in Parse/
-      let y2 = Y2() 
+      let y2 = Y2()
       _ = y2[0]
       """
     )
@@ -246,7 +246,7 @@ final class SubscriptingTests: XCTestCase {
         subscript (i : Int) 1️⃣
            Int {
           get {
-            return stored 
+            return stored
           }
           set {
             stored = newValue
@@ -270,7 +270,7 @@ final class SubscriptingTests: XCTestCase {
             return stored
           }
           set {
-            stored = newValue 
+            stored = newValue
           }
         }
       }
@@ -303,7 +303,7 @@ final class SubscriptingTests: XCTestCase {
     AssertParse(
       """
       struct A4 {
-        subscript(i : Int) 1️⃣{ 
+        subscript(i : Int) 1️⃣{
           get {
             return i
           }
@@ -320,7 +320,7 @@ final class SubscriptingTests: XCTestCase {
     AssertParse(
       """
       struct A5 {
-        subscript(i : Int) -> Int 
+        subscript(i : Int) -> Int
       }
       """
     )
@@ -330,9 +330,9 @@ final class SubscriptingTests: XCTestCase {
     AssertParse(
       """
       struct A6 {
-        subscript(i: Int)1️⃣(j: Int) -> Int { 
+        subscript(i: Int)1️⃣(j: Int) -> Int {
           get {
-            return i + j 
+            return i + j
           }
         }
       }
@@ -347,7 +347,7 @@ final class SubscriptingTests: XCTestCase {
     AssertParse(
       """
       struct A7 {
-        class subscript(a: Float) -> Int { 
+        class subscript(a: Float) -> Int {
           get {
             return 42
           }
@@ -361,7 +361,7 @@ final class SubscriptingTests: XCTestCase {
     AssertParse(
       """
       class A7b {
-        class static subscript(a: Float) -> Int { 
+        class static subscript(a: Float) -> Int {
           get {
             return 42
           }
@@ -395,7 +395,7 @@ final class SubscriptingTests: XCTestCase {
     AssertParse(
       """
       struct A9 {
-        subscript 1️⃣x() -> Int { 
+        subscript 1️⃣x() -> Int {
           return 0
         }
       }
@@ -418,10 +418,10 @@ final class SubscriptingTests: XCTestCase {
     AssertParse(
       """
       struct A10 {
-        subscript 1️⃣x(i: Int) -> Int { 
+        subscript 1️⃣x(i: Int) -> Int {
           return 0
         }
-        subscript 2️⃣x<T>(i: T) -> Int { 
+        subscript 2️⃣x<T>(i: T) -> Int {
           return 0
         }
       }

@@ -200,7 +200,7 @@ final class OperatorDeclDesignatedTypesTests: XCTestCase {
   func testOperatorDeclDesignatedTypes17() {
     AssertParse(
       """
-      infix operator **^^ : MediumPrecedence 
+      infix operator **^^ : MediumPrecedence
       infix operator **^^ : InfixMagicOperatorProtocol
       """,
       diagnostics: [

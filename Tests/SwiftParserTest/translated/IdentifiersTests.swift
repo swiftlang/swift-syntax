@@ -167,14 +167,14 @@ final class IdentifiersTests: XCTestCase {
     AssertParse(
       """
       // SIL keywords are tokenized as normal identifiers in non-SIL mode.
-      _ = undef 
-      _ = sil 
-      _ = sil_stage 
-      _ = sil_vtable 
-      _ = sil_global 
-      _ = sil_witness_table 
-      _ = sil_default_witness_table 
-      _ = sil_coverage_map 
+      _ = undef
+      _ = sil
+      _ = sil_stage
+      _ = sil_vtable
+      _ = sil_global
+      _ = sil_witness_table
+      _ = sil_default_witness_table
+      _ = sil_coverage_map
       _ = sil_scope
       """
     )
@@ -192,7 +192,7 @@ final class IdentifiersTests: XCTestCase {
   func testIdentifiers11() {
     AssertParse(
       """
-      @propertyWrapper 
+      @propertyWrapper
       struct Wrapper {
         var wrappedValue = 0
       }

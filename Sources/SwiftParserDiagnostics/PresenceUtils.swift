@@ -52,7 +52,7 @@ class PresentMaker: SyntaxRewriter {
       if let text = text, (!text.isEmpty || rawKind == .stringSegment) {  // string segments can have empty text
         presentToken = TokenSyntax(token.tokenKind, presence: .present)
       } else {
-        let newKind = TokenKind.fromRaw(kind: rawKind, text: rawKind.defaultText.map(String.init) ?? "<#\(rawKind.nameForDiagnostics)#>")
+        let newKind = TokenKind.fromRaw(kind: rawKind, text: rawKind.defaultText.map(String.init) ?? "<#\(token.tokenKind.nameForDiagnostics)#>")
         presentToken = TokenSyntax(newKind, leadingTrivia: token.leadingTrivia, trailingTrivia: token.trailingTrivia, presence: .present)
       }
       return BasicFormat().visit(presentToken)

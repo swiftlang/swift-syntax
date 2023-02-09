@@ -279,6 +279,105 @@ public enum TokenKind: Hashable {
     }
   }
   
+  public var nameForDiagnostics: String {
+    switch self {
+    case .eof: 
+      return "end of file"
+    case .wildcard: 
+      return #"wildcard"#
+    case .leftParen: 
+      return #"("#
+    case .rightParen: 
+      return #")"#
+    case .leftBrace: 
+      return #"{"#
+    case .rightBrace: 
+      return #"}"#
+    case .leftSquareBracket: 
+      return #"["#
+    case .rightSquareBracket: 
+      return #"]"#
+    case .leftAngle: 
+      return #"<"#
+    case .rightAngle: 
+      return #">"#
+    case .period: 
+      return #"."#
+    case .comma: 
+      return #","#
+    case .ellipsis: 
+      return #"..."#
+    case .colon: 
+      return #":"#
+    case .semicolon: 
+      return #";"#
+    case .equal: 
+      return #"="#
+    case .atSign: 
+      return #"@"#
+    case .pound: 
+      return #"#"#
+    case .prefixAmpersand: 
+      return #"&"#
+    case .arrow: 
+      return #"->"#
+    case .backtick: 
+      return #"`"#
+    case .backslash: 
+      return #"\"#
+    case .exclamationMark: 
+      return #"!"#
+    case .postfixQuestionMark: 
+      return #"?"#
+    case .infixQuestionMark: 
+      return #"?"#
+    case .stringQuote: 
+      return #"""#
+    case .singleQuote: 
+      return #"'"#
+    case .multilineStringQuote: 
+      return #"""""#
+    case .poundSourceLocationKeyword: 
+      return #"#sourceLocation"#
+    case .poundIfKeyword: 
+      return #"#if"#
+    case .poundElseKeyword: 
+      return #"#else"#
+    case .poundElseifKeyword: 
+      return #"#elseif"#
+    case .poundEndifKeyword: 
+      return #"#endif"#
+    case .poundAvailableKeyword: 
+      return #"#available"#
+    case .poundUnavailableKeyword: 
+      return #"#unavailable"#
+    case .integerLiteral: 
+      return #"integer literal"#
+    case .floatingLiteral: 
+      return #"floating literal"#
+    case .regexLiteral: 
+      return #"regex literal"#
+    case .unknown: 
+      return #"token"#
+    case .identifier: 
+      return #"identifier"#
+    case .binaryOperator: 
+      return #"binary operator"#
+    case .postfixOperator: 
+      return #"postfix operator"#
+    case .prefixOperator: 
+      return #"prefix operator"#
+    case .dollarIdentifier: 
+      return #"dollar identifier"#
+    case .rawStringDelimiter: 
+      return #"raw string delimiter"#
+    case .stringSegment: 
+      return #"string segment"#
+    case .keyword(let keyword): 
+      return String(syntaxText: keyword.defaultText)
+    }
+  }
+  
   /// Returns `true` if the token is a Swift keyword.
   ///
   /// Keywords are reserved unconditionally for use by Swift and may not
@@ -993,105 +1092,6 @@ public struct RawTokenKind: Equatable, Hashable {
       return self.keyword.defaultText
     default: 
       return nil
-    }
-  }
-  
-  public var nameForDiagnostics: String {
-    switch self.base {
-    case .eof: 
-      return "end of file"
-    case .wildcard: 
-      return #"wildcard"#
-    case .leftParen: 
-      return #"("#
-    case .rightParen: 
-      return #")"#
-    case .leftBrace: 
-      return #"{"#
-    case .rightBrace: 
-      return #"}"#
-    case .leftSquareBracket: 
-      return #"["#
-    case .rightSquareBracket: 
-      return #"]"#
-    case .leftAngle: 
-      return #"<"#
-    case .rightAngle: 
-      return #">"#
-    case .period: 
-      return #"."#
-    case .comma: 
-      return #","#
-    case .ellipsis: 
-      return #"..."#
-    case .colon: 
-      return #":"#
-    case .semicolon: 
-      return #";"#
-    case .equal: 
-      return #"="#
-    case .atSign: 
-      return #"@"#
-    case .pound: 
-      return #"#"#
-    case .prefixAmpersand: 
-      return #"&"#
-    case .arrow: 
-      return #"->"#
-    case .backtick: 
-      return #"`"#
-    case .backslash: 
-      return #"\"#
-    case .exclamationMark: 
-      return #"!"#
-    case .postfixQuestionMark: 
-      return #"?"#
-    case .infixQuestionMark: 
-      return #"?"#
-    case .stringQuote: 
-      return #"""#
-    case .singleQuote: 
-      return #"'"#
-    case .multilineStringQuote: 
-      return #"""""#
-    case .poundSourceLocationKeyword: 
-      return #"#sourceLocation"#
-    case .poundIfKeyword: 
-      return #"#if"#
-    case .poundElseKeyword: 
-      return #"#else"#
-    case .poundElseifKeyword: 
-      return #"#elseif"#
-    case .poundEndifKeyword: 
-      return #"#endif"#
-    case .poundAvailableKeyword: 
-      return #"#available"#
-    case .poundUnavailableKeyword: 
-      return #"#unavailable"#
-    case .integerLiteral: 
-      return #"integer literal"#
-    case .floatingLiteral: 
-      return #"floating literal"#
-    case .regexLiteral: 
-      return #"regex literal"#
-    case .unknown: 
-      return #"token"#
-    case .identifier: 
-      return #"identifier"#
-    case .binaryOperator: 
-      return #"binary operator"#
-    case .postfixOperator: 
-      return #"postfix operator"#
-    case .prefixOperator: 
-      return #"prefix operator"#
-    case .dollarIdentifier: 
-      return #"dollar identifier"#
-    case .rawStringDelimiter: 
-      return #"raw string delimiter"#
-    case .stringSegment: 
-      return #"string segment"#
-    case .keyword: 
-      return String(syntaxText: self.keyword.defaultText)
     }
   }
   

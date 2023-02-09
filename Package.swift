@@ -140,6 +140,16 @@ let package = Package(
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
       ]
     ),
+    .executableTarget(
+      name: "fuzzing-target",
+      dependencies: [
+        "SwiftParser", "SwiftParserDiagnostics", "SwiftSyntax", "SwiftBasicFormat",
+      ],
+      exclude: ["README.md"],
+      swiftSettings: [
+        .unsafeFlags(["-parse-as-library"])
+      ]
+    ),
     .testTarget(name: "IDEUtilsTest", dependencies: ["_SwiftSyntaxTestSupport", "SwiftParser", "SwiftSyntax", "IDEUtils"]),
     .testTarget(
       name: "SwiftDiagnosticsTest",

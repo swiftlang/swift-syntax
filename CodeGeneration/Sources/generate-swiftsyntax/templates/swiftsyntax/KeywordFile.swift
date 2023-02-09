@@ -38,7 +38,7 @@ let keywordFile = SourceFileSyntax {
   try! EnumDeclSyntax(
     """
     @frozen  // FIXME: Not actually stable, works around a miscompile
-    public enum Keyword: UInt8, Hashable
+    public enum Keyword: UInt8, Hashable, CaseIterable
     """
   ) {
     for (index, keyword) in KEYWORDS.enumerated() {

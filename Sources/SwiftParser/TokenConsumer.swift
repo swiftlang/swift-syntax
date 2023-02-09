@@ -57,12 +57,12 @@ extension TokenConsumer {
   /// Returns whether the the current token matches one of the two specs.
   @inline(__always)
   mutating func at(
-    _ spec1: RawTokenKind,
-    _ spec2: RawTokenKind
+    _ spec1: TokenSpec,
+    _ spec2: TokenSpec
   ) -> Bool {
     switch self.currentToken {
-    case TokenSpec(spec1): return true
-    case TokenSpec(spec2): return true
+    case spec1: return true
+    case spec2: return true
     default: return false
     }
   }
@@ -70,14 +70,14 @@ extension TokenConsumer {
   /// Returns whether the the current token matches one of the three specs.
   @inline(__always)
   mutating func at(
-    _ spec1: RawTokenKind,
-    _ spec2: RawTokenKind,
-    _ spec3: RawTokenKind
+    _ spec1: TokenSpec,
+    _ spec2: TokenSpec,
+    _ spec3: TokenSpec
   ) -> Bool {
     switch self.currentToken {
-    case TokenSpec(spec1): return true
-    case TokenSpec(spec2): return true
-    case TokenSpec(spec3): return true
+    case spec1: return true
+    case spec2: return true
+    case spec3: return true
     default: return false
     }
   }

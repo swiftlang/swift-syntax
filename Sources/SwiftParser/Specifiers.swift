@@ -331,6 +331,18 @@ extension RawTypeEffectSpecifiersSyntax: RawEffectSpecifiersTrait {
   }
 }
 
+extension TokenConsumer {
+  mutating func at<SpecSet1: TokenSpecSet, SpecSet2: TokenSpecSet>(anyIn specSet1: SpecSet1.Type, or specSet2: SpecSet2.Type) -> (TokenSpec, TokenConsumptionHandle)? {
+    if let (spec, handle) = self.at(anyIn: specSet1) {
+      return (spec.spec, handle)
+    } else if let (spec, handle) = self.at(anyIn: specSet2) {
+      return (spec.spec, handle)
+    } else {
+      return nil
+    }
+  }
+}
+
 // MARK: - Parsing effect specifiers
 
 extension Parser {
@@ -378,13 +390,15 @@ extension Parser {
 
     var unexpectedAfterThrowsLoopProgress = LoopProgressCondition()
     while unexpectedAfterThrowsLoopProgress.evaluate(self.currentToken) {
-      if let misspelledAsync = self.consume(ifAnyIn: S.MisspelledAsyncSpecifiers.self) ?? self.consume(ifAnyIn: S.CorrectAsyncTokenKinds.self) {
+      if let (_, handle) = self.at(anyIn: S.MisspelledAsyncSpecifiers.self, or: S.CorrectAsyncTokenKinds.self) {
+        let misspelledAsync = self.eat(handle)
         unexpectedAfterThrows.append(RawSyntax(misspelledAsync))
         if asyncKeyword == nil {
           // Handle `async` after `throws`
           asyncKeyword = missingToken(.keyword(.async))
         }
-      } else if let misspelledThrows = self.consume(ifAnyIn: S.MisspelledThrowsTokenKinds.self) ?? self.consume(ifAnyIn: S.CorrectThrowsTokenKinds.self) {
+      } else if let (_, handle) = self.at(anyIn: S.MisspelledThrowsTokenKinds.self, or: S.CorrectThrowsTokenKinds.self) {
+        let misspelledThrows = self.eat(handle)
         unexpectedAfterThrows.append(RawSyntax(misspelledThrows))
       } else {
         break
@@ -423,15 +437,17 @@ extension Parser {
     var unexpected: [RawTokenSyntax] = []
     var loopProgress = LoopProgressCondition()
     while loopProgress.evaluate(self.currentToken) {
-      if let misspelledAsync = self.consume(ifAnyIn: S.MisspelledAsyncSpecifiers.self) ?? self.consume(ifAnyIn: S.CorrectAsyncTokenKinds.self) {
+      if let (spec, handle) = self.at(anyIn: S.MisspelledAsyncSpecifiers.self, or: S.CorrectAsyncTokenKinds.self) {
+        let misspelledAsync = self.eat(handle)
         unexpected.append(misspelledAsync)
         if effectSpecifiers?.asyncSpecifier == nil {
-          synthesizedAsync = missingToken(misspelledAsync.tokenKind)
+          synthesizedAsync = missingToken(spec)
         }
-      } else if let misspelledThrows = self.consume(ifAnyIn: S.MisspelledThrowsTokenKinds.self) ?? self.consume(ifAnyIn: S.CorrectThrowsTokenKinds.self) {
+      } else if let (spec, handle) = self.at(anyIn: S.MisspelledThrowsTokenKinds.self, or: S.CorrectThrowsTokenKinds.self) {
+        let misspelledThrows = self.eat(handle)
         unexpected.append(misspelledThrows)
         if effectSpecifiers?.throwsSpecifier == nil {
-          synthesizedThrows = missingToken(misspelledThrows.tokenKind)
+          synthesizedThrows = missingToken(spec)
         }
       } else {
         break

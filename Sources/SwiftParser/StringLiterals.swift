@@ -487,7 +487,7 @@ extension Parser {
         // This allows us to skip over extraneous identifiers etc. in an unterminated string interpolation.
         var unexpectedBeforeRightParen: [RawTokenSyntax] = []
         var unexpectedProgress = LoopProgressCondition()
-        while !self.at(.rightParen, .stringSegment, .backslash) && !self.at(openQuoteKind, .eof) && unexpectedProgress.evaluate(self.currentToken) {
+        while !self.at(.rightParen, .stringSegment, .backslash) && !self.at(TokenSpec(openQuoteKind), .eof) && unexpectedProgress.evaluate(self.currentToken) {
           unexpectedBeforeRightParen.append(self.consumeAnyToken())
         }
         let rightParen = self.expectWithoutRecovery(.rightParen)

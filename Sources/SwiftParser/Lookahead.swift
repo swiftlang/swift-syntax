@@ -254,7 +254,7 @@ extension Parser.Lookahead {
     // If we have a 'didSet' or a 'willSet' label, disambiguate immediately as
     // an accessor block.
     let nextToken = self.peek()
-    if TokenSpec(.keyword(.didSet)) ~= nextToken || TokenSpec(.keyword(.willSet)) ~= nextToken {
+    if TokenSpec(.didSet) ~= nextToken || TokenSpec(.willSet) ~= nextToken {
       return true
     }
 
@@ -286,7 +286,7 @@ extension Parser.Lookahead {
 // MARK: Skipping Tokens
 
 extension Parser.Lookahead {
-  mutating func skipUntil(_ t1: RawTokenKind, _ t2: RawTokenKind) {
+  mutating func skipUntil(_ t1: TokenSpec, _ t2: TokenSpec) {
     return skip(initialState: .skipUntil(t1, t2))
   }
 
@@ -346,7 +346,7 @@ extension Parser.Lookahead {
     /// Execute code after skipping bracketed tokens detected from `skipSingle`.
     case skipSinglePost(start: BracketedTokens)
     /// Skip until either `t1` or `t2`.
-    case skipUntil(_ t1: RawTokenKind, _ t2: RawTokenKind)
+    case skipUntil(_ t1: TokenSpec, _ t2: TokenSpec)
   }
 
   /// A non-recursie function to skip tokens.

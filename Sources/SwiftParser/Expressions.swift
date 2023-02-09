@@ -356,7 +356,7 @@ extension Parser {
       return parseUnresolvedAsExpr(handle: handle)
 
     case (.async, _)?:
-      if self.peek().rawTokenKind == .arrow || self.peek().rawTokenKind == .keyword(.throws) {
+      if self.peek().rawTokenKind == .arrow || TokenSpec(.throws) ~= self.peek() {
         fallthrough
       } else {
         return nil
@@ -494,8 +494,8 @@ extension Parser {
     // First check to see if we have the start of a regex literal `/.../`.
     //    tryLexRegexLiteral(/*forUnappliedOperator*/ false)
 
-    switch self.currentToken.rawTokenKind {
-    case .keyword(.repeat):
+    switch self.currentToken {
+    case TokenSpec(.repeat):
       // 'repeat' is the start of a pack expansion expression.
       return RawExprSyntax(parsePackExpansionExpr(flavor, pattern: pattern))
 
@@ -503,11 +503,11 @@ extension Parser {
     // parseUnaryExpression as we don't allow postfix syntax to hang off such
     // expressions to avoid ambiguities such as postfix '.member', which can
     // currently be parsed as a static dot member for a result builder.
-    case .keyword(.switch):
+    case TokenSpec(.switch):
       return RawExprSyntax(
         parseSwitchExpression(switchHandle: .constant(.keyword(.switch)))
       )
-    case .keyword(.if):
+    case TokenSpec(.if):
       return RawExprSyntax(
         parseIfExpression(ifHandle: .constant(.keyword(.if)))
       )
@@ -2063,7 +2063,7 @@ extension Parser.Lookahead {
     }
 
     // If this is the start of a switch body, this isn't a trailing closure.
-    if self.peek().rawTokenKind == .keyword(.case) {
+    if TokenSpec(.case) ~= self.peek() {
       return false
     }
 
@@ -2104,23 +2104,23 @@ extension Parser.Lookahead {
       return false
     }
 
-    switch backtrack.currentToken.rawTokenKind {
-    case .leftBrace,
-      .keyword(.where),
-      .comma:
+    switch backtrack.currentToken {
+    case TokenSpec(.leftBrace),
+      TokenSpec(.where),
+      TokenSpec(.comma):
       return true
-    case .leftSquareBracket,
-      .leftParen,
-      .period,
-      .keyword(.is),
-      .keyword(.as),
-      .postfixQuestionMark,
-      .infixQuestionMark,
-      .exclamationMark,
-      .colon,
-      .equal,
-      .postfixOperator,
-      .binaryOperator:
+    case TokenSpec(.leftSquareBracket),
+      TokenSpec(.leftParen),
+      TokenSpec(.period),
+      TokenSpec(.is),
+      TokenSpec(.as),
+      TokenSpec(.postfixQuestionMark),
+      TokenSpec(.infixQuestionMark),
+      TokenSpec(.exclamationMark),
+      TokenSpec(.colon),
+      TokenSpec(.equal),
+      TokenSpec(.postfixOperator),
+      TokenSpec(.binaryOperator):
       return !backtrack.currentToken.isAtStartOfLine
     default:
       return false
@@ -2559,14 +2559,7 @@ extension Parser.Lookahead {
       return true
     }
 
-    if self.peek().rawTokenKind != .identifier,
-      self.peek().rawTokenKind != .keyword(.Self),
-      self.peek().rawTokenKind != .keyword(.self),
-      !self.peek().isLexerClassifiedKeyword
-    {
-      return false
-    }
-    return true
+    return self.peek().isLexerClassifiedKeyword || TokenSpec(.identifier) ~= self.peek()
   }
 
   fileprivate func isNextTokenCallPattern() -> Bool {

@@ -353,7 +353,7 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseThrowStatement(throwHandle: RecoveryConsumptionHandle) -> RawThrowStmtSyntax {
     let (unexpectedBeforeThrowKeyword, throwKeyword) = self.eat(throwHandle)
-    let hasMisplacedTry = unexpectedBeforeThrowKeyword?.containsToken(where: { $0.tokenKind == .keyword(.try) }) ?? false
+    let hasMisplacedTry = unexpectedBeforeThrowKeyword?.containsToken(where: { TokenSpec(.try) ~= $0 }) ?? false
     var expr = self.parseExpression()
     if hasMisplacedTry && !expr.is(RawTryExprSyntax.self) {
       expr = RawExprSyntax(
@@ -692,7 +692,7 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseReturnStatement(returnHandle: RecoveryConsumptionHandle) -> RawReturnStmtSyntax {
     let (unexpectedBeforeRet, ret) = self.eat(returnHandle)
-    let hasMisplacedTry = unexpectedBeforeRet?.containsToken(where: { $0.tokenKind == .keyword(.try) }) ?? false
+    let hasMisplacedTry = unexpectedBeforeRet?.containsToken(where: { TokenSpec(.try) ~= $0 }) ?? false
 
     // Handle the ambiguity between consuming the expression and allowing the
     // enclosing stmt-brace to get it by eagerly eating it unless the return is

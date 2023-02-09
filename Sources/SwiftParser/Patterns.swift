@@ -55,13 +55,13 @@ extension Parser {
       case varKeyword
 
       init?(lexeme: Lexer.Lexeme) {
-        switch lexeme.rawTokenKind {
-        case .leftParen: self = .leftParen
-        case .wildcard: self = .wildcard
-        case .identifier: self = .identifier
-        case .dollarIdentifier: self = .dollarIdentifier
-        case .keyword(.let): self = .letKeyword
-        case .keyword(.var): self = .varKeyword
+        switch lexeme {
+        case TokenSpec(.leftParen): self = .leftParen
+        case TokenSpec(.wildcard): self = .wildcard
+        case TokenSpec(.identifier): self = .identifier
+        case TokenSpec(.dollarIdentifier): self = .dollarIdentifier
+        case TokenSpec(.let): self = .letKeyword
+        case TokenSpec(.var): self = .varKeyword
         default: return nil
         }
       }
@@ -296,12 +296,12 @@ extension Parser.Lookahead {
       case leftParen
 
       init?(lexeme: Lexer.Lexeme) {
-        switch lexeme.rawTokenKind {
-        case .identifier: self = .identifier
-        case .wildcard: self = .wildcard
-        case .keyword(.let): self = .letKeyword
-        case .keyword(.var): self = .varKeyword
-        case .leftParen: self = .leftParen
+        switch lexeme {
+        case TokenSpec(.identifier): self = .identifier
+        case TokenSpec(.wildcard): self = .wildcard
+        case TokenSpec(.let): self = .letKeyword
+        case TokenSpec(.var): self = .varKeyword
+        case TokenSpec(.leftParen): self = .leftParen
         default: return nil
         }
       }

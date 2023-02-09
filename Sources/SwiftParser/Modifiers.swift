@@ -196,7 +196,7 @@ extension Parser {
 
     let unexpectedBeforeDetail: RawUnexpectedNodesSyntax?
     let detail: RawTokenSyntax
-    if let setHandle = canRecoverTo(TokenSpec(.keyword(.set), recoveryPrecedence: .weakBracketClose)) {
+    if let setHandle = canRecoverTo(TokenSpec(.set, recoveryPrecedence: .weakBracketClose)) {
       (unexpectedBeforeDetail, detail) = eat(setHandle)
     } else {
       unexpectedBeforeDetail = nil

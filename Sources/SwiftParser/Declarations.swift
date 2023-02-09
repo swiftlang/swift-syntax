@@ -1477,7 +1477,7 @@ extension Parser {
     inMemberDeclList: Bool = false
   ) -> RawVariableDeclSyntax {
     let (unexpectedBeforeIntroducer, introducer) = self.eat(handle)
-    let hasTryBeforeIntroducer = unexpectedBeforeIntroducer?.containsToken(where: { $0.tokenKind == .keyword(.try) }) ?? false
+    let hasTryBeforeIntroducer = unexpectedBeforeIntroducer?.containsToken(where: { TokenSpec(.try) ~= $0 }) ?? false
 
     var elements = [RawPatternBindingSyntax]()
     do {

@@ -201,6 +201,6 @@ extension TokenSpec {
   }
   
   static func keyword(_ keyword: Keyword) -> TokenSpec { 
-    return TokenSpec(.keyword(keyword)) 
+    return TokenSpec(keyword) 
   }
 }

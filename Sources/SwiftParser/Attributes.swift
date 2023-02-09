@@ -315,7 +315,7 @@ extension Parser {
       }
     case .rethrows:
       let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-      let (unexpectedBeforeAttributeName, attributeName) = self.expect(TokenSpec(.keyword(.rethrows), remapping: .identifier))
+      let (unexpectedBeforeAttributeName, attributeName) = self.expect(TokenSpec(.rethrows, remapping: .identifier))
       return .attribute(
         RawAttributeSyntax(
           unexpectedBeforeAtSign,
@@ -1158,15 +1158,15 @@ extension Parser.Lookahead {
     // Alternatively, we might have a token that illustrates we're not going to
     // get anything following the attribute, which means the parentheses describe
     // what follows the attribute.
-    switch lookahead.currentToken.rawTokenKind {
-    case .arrow,
-      .keyword(.throw),
-      .keyword(.throws),
-      .keyword(.rethrows),
-      .rightParen,
-      .rightBrace,
-      .rightSquareBracket,
-      .rightAngle:
+    switch lookahead.currentToken {
+    case TokenSpec(.arrow),
+      TokenSpec(.throw),
+      TokenSpec(.throws),
+      TokenSpec(.rethrows),
+      TokenSpec(.rightParen),
+      TokenSpec(.rightBrace),
+      TokenSpec(.rightSquareBracket),
+      TokenSpec(.rightAngle):
       return false
     case _ where lookahead.at(.keyword(.async)):
       return false

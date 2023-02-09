@@ -32,6 +32,18 @@ public protocol TokenConsumer {
   func peek() -> Lexer.Lexeme
 
   func lookahead() -> Parser.Lookahead
+
+  #if ENABLE_FUZZING_INTERSPECTION
+  /// When we are compiling the parser to be used with libFuzzer, we can record
+  /// alternative tokens that the parser was looking for at specific offsets.
+  ///
+  /// I.e. if at offset 33, we issue an `at(.leftParen)` call, this will record
+  /// that `.leftParen` is an interesting token at offset 33. This allows the
+  /// fuzzing mutator to prefer replacing the current token at offset 33 by a
+  /// left paren, because apparently this would be a code path that the parser
+  /// is interested in.
+  mutating func recordAlternativeTokenChoice(for lexeme: Lexer.Lexeme, choices: [RawTokenKind])
+  #endif
 }
 
 // MARK: Checking if we are at one specific token (`at`)
@@ -57,6 +69,9 @@ extension TokenConsumer {
     _ kind: RawTokenKind,
     allowTokenAtStartOfLine: Bool = true
   ) -> Bool {
+    #if ENABLE_FUZZING_INTERSPECTION
+    recordAlternativeTokenChoice(for: self.currentToken, choices: [kind])
+    #endif
     if !allowTokenAtStartOfLine && self.currentToken.isAtStartOfLine {
       return false
     }
@@ -74,6 +89,9 @@ extension TokenConsumer {
     if !allowTokenAtStartOfLine && self.currentToken.isAtStartOfLine {
       return false
     }
+    #if ENABLE_FUZZING_INTERSPECTION
+    recordAlternativeTokenChoice(for: self.currentToken, choices: [kind1, kind2])
+    #endif
     switch self.currentToken {
     case RawTokenKindMatch(kind1): return true
     case RawTokenKindMatch(kind2): return true
@@ -93,6 +111,9 @@ extension TokenConsumer {
     if !allowTokenAtStartOfLine && self.currentToken.isAtStartOfLine {
       return false
     }
+    #if ENABLE_FUZZING_INTERSPECTION
+    recordAlternativeTokenChoice(for: self.currentToken, choices: [kind1, kind2, kind3])
+    #endif
     switch self.currentToken {
     case RawTokenKindMatch(kind1): return true
     case RawTokenKindMatch(kind2): return true
@@ -129,6 +150,9 @@ extension TokenConsumer {
   /// If this is the case, return the `Subset` case that the parser is positioned in
   /// as well as a handle to consume that token.
   mutating func at<Subset: RawTokenKindSubset>(anyIn subset: Subset.Type) -> (Subset, TokenConsumptionHandle)? {
+    #if ENABLE_FUZZING_INTERSPECTION
+    recordAlternativeTokenChoice(for: self.currentToken, choices: subset.allCases.map(\.rawTokenKind))
+    #endif
     if let matchedKind = Subset(lexeme: self.currentToken) {
       return (
         matchedKind,

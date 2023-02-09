@@ -71,6 +71,10 @@ extension Parser.Lookahead: TokenConsumer {
   public mutating func eat(_ kind: RawTokenKind) -> Token {
     return self.consume(if: kind)!
   }
+
+  #if ENABLE_FUZZING_INTERSPECTION
+  public mutating func recordAlternativeTokenChoice(for lexeme: Lexer.Lexeme, choices: [RawTokenKind]) {}
+  #endif
 }
 
 extension Parser.Lookahead {

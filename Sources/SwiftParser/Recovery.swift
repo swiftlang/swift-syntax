@@ -72,6 +72,9 @@ extension Parser.Lookahead {
     _ kind3: RawTokenKind,
     recoveryPrecedence: TokenPrecedence? = nil
   ) -> RecoveryConsumptionHandle? {
+    #if ENABLE_FUZZING_INTERSPECTION
+    recordAlternativeTokenChoice(for: self.currentToken, choices: [kind1, kind2, kind3])
+    #endif
     let initialTokensConsumed = self.tokensConsumed
 
     let recoveryPrecedence = recoveryPrecedence ?? min(TokenPrecedence(kind1), TokenPrecedence(kind2), TokenPrecedence(kind3))
@@ -131,6 +134,9 @@ extension Parser.Lookahead {
     anyIn subset: Subset.Type,
     recoveryPrecedence: TokenPrecedence? = nil
   ) -> (matchedKind: Subset, handle: RecoveryConsumptionHandle)? {
+    #if ENABLE_FUZZING_INTERSPECTION
+    recordAlternativeTokenChoice(for: self.currentToken, choices: subset.allCases.map(\.rawTokenKind))
+    #endif
     let initialTokensConsumed = self.tokensConsumed
 
     assert(!subset.allCases.isEmpty, "Subset must have at least one case")

@@ -202,6 +202,20 @@ public struct Parser {
       break
     }
   }
+
+  #if ENABLE_FUZZING_INTERSPECTION
+  /// When we are compiling for use with libFuzzer, this records alternative
+  /// interesting token choices for a token that has text (excluding trivia)
+  /// identified by the key in this dictionary. We use the base address of the
+  /// token's text start to identify tokens in the source tree, which is a
+  /// little hacky but works.
+  @_spi(RawSyntax)
+  public var alternativeTokenChoices: [SyntaxText: [RawTokenKind]] = [:]
+
+  public mutating func recordAlternativeTokenChoice(for lexeme: Lexer.Lexeme, choices: [RawTokenKind]) {
+    alternativeTokenChoices[lexeme.tokenText, default: []].append(contentsOf: choices)
+  }
+  #endif
 }
 
 // MARK: Inspecting Tokens

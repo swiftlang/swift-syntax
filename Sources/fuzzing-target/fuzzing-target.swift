@@ -10,11 +10,31 @@
 //
 //===----------------------------------------------------------------------===//
 
-import SwiftParser
+@_spi(RawSyntax) import SwiftParser
 import SwiftParserDiagnostics
-import SwiftSyntax
+@_spi(RawSyntax) import SwiftSyntax
 import SwiftBasicFormat
 import Darwin
+
+public struct SeededRandomNumberGenerators: RandomNumberGenerator {
+  public mutating func seed(_ seed: Int) { srand48(seed) }
+
+  public mutating func next() -> UInt64 {
+    return UInt64(self.nextDouble() * Double(UInt64.max))
+  }
+
+  public mutating func nextDouble() -> Double {
+    return drand48()
+  }
+
+  public mutating func next(in range: Range<Int>) -> Int {
+    return Int(Double(range.count) * nextDouble()) + range.lowerBound
+  }
+
+  public static var shared = SeededRandomNumberGenerators()
+
+  private init() {}
+}
 
 // MARK: - Testing an input
 
@@ -23,7 +43,7 @@ public func LLVMFuzzerTestOneInput(_ data: UnsafePointer<UInt8>, size: Int) -> C
   let source = UnsafeBufferPointer(start: data, count: size)
   let tree = Parser.parse(source: source)
 
-  var diags = ParseDiagnosticsGenerator.diagnostics(for: tree)
+  _ = ParseDiagnosticsGenerator.diagnostics(for: tree)
 
   if tree.syntaxTextBytes != [UInt8](source) {
     assertionFailure("Source file did not round-trip")
@@ -33,131 +53,64 @@ public func LLVMFuzzerTestOneInput(_ data: UnsafePointer<UInt8>, size: Int) -> C
 
 // MARK: - Mutating the input
 
-enum RandomTokenGenerator {
-  static let allTokenKinds: [TokenKind] =
-    [
-      .wildcard,
-      .leftParen,
-      .rightParen,
-      .leftBrace,
-      .rightBrace,
-      .leftSquareBracket,
-      .rightSquareBracket,
-      .leftAngle,
-      .rightAngle,
-      .period,
-      .comma,
-      .ellipsis,
-      .colon,
-      .semicolon,
-      .equal,
-      .atSign,
-      .pound,
-      .prefixAmpersand,
-      .arrow,
-      .backtick,
-      .backslash,
-      .exclamationMark,
-      .postfixQuestionMark,
-      .infixQuestionMark,
-      .stringQuote,
-      .singleQuote,
-      .multilineStringQuote,
-      .poundSourceLocationKeyword,
-      .poundIfKeyword,
-      .poundElseKeyword,
-      .poundElseifKeyword,
-      .poundEndifKeyword,
-      .poundAvailableKeyword,
-      .poundUnavailableKeyword,
-      .integerLiteral("1"),
-      .floatingLiteral("1.0"),
-      .regexLiteral("/.*/"),
-      .identifier("myIdent"),
-      .binaryOperator("+"),
-      .postfixOperator("++"),
-      .prefixOperator("!"),
-      .dollarIdentifier("$0"),
-      .rawStringDelimiter("#"),
-      .stringSegment("abc"),
-    ] + Keyword.allCases.map(TokenKind.keyword)
-
-  static func createRandomToken() -> TokenSyntax {
-    let tokenKind = allTokenKinds[Int(drand48() * Double(allTokenKinds.count) - 1)]
-    return TokenSyntax(tokenKind, presence: .present).formatted().cast(TokenSyntax.self)
-  }
-}
-
-enum Mutation {
-  case replace(old: Syntax, new: Syntax)
-  case insert(before: Syntax, insert: Syntax)
-  case remove(node: Syntax)
-}
-
-/// Generates a list of mutations to apply to the tree.
-/// At the moment it just replaces, inserts and deletes tokens with probability 1% each.
-/// Improving this would be the next starting point to improvew the fuzzer.
-class MutationGenerator: SyntaxVisitor {
-  static func getMutations(for tree: Syntax) -> [Mutation] {
-    let generator = MutationGenerator(viewMode: .sourceAccurate)
-    generator.walk(tree)
-    return generator.mutations
-  }
-
-  private var mutations: [Mutation] = []
-
-  override func visit(_ node: TokenSyntax) -> SyntaxVisitorContinueKind {
-    switch drand48() {
-    case 0..<0.01:
-      mutations.append(.replace(old: Syntax(node), new: Syntax(RandomTokenGenerator.createRandomToken())))
-    case 0..<0.02:
-      mutations.append(.insert(before: Syntax(node), insert: Syntax(RandomTokenGenerator.createRandomToken())))
-    case 0..<0.03:
-      mutations.append(.remove(node: Syntax(node)))
-    default:
-      break
+extension RawTokenKind {
+  var synthesizedText: TokenKind {
+    switch self {
+    case .integerLiteral: return .integerLiteral("1")
+    case .floatingLiteral: return .floatingLiteral("1.0")
+    case .regexLiteral: return .regexLiteral("/.*/")
+    case .identifier: return .identifier("myIdent")
+    case .binaryOperator: return .binaryOperator("+")
+    case .postfixOperator: return .postfixOperator("++")
+    case .prefixOperator: return .prefixOperator("!")
+    case .dollarIdentifier: return .dollarIdentifier("$0")
+    case .rawStringDelimiter: return .rawStringDelimiter("#")
+    case .stringSegment: return .stringSegment("abc")
+    default: return TokenKind.fromRaw(kind: self, text: "")
     }
-    return .visitChildren
   }
 }
 
-class MutatedTreePrinter: SyntaxAnyVisitor {
+class MutatedTreePrinter: SyntaxVisitor {
   /// Prints `tree` as bytes, applying `mutations`.
-  static func print(tree: Syntax, mutations: [Mutation]) -> [UInt8] {
-    let printer = MutatedTreePrinter(mutations: mutations)
+  /// Mutations map the `SyntaxText` of tokens that should be replaced to their
+  /// replacement kind.
+  ///
+  /// Tokens that should be replaced are identified by the base address of their
+  /// SyntaxText.
+  static func print(tree: Syntax, modifications: [SyntaxText: RawTokenKind]) -> [UInt8] {
+    let printer = MutatedTreePrinter(modifications: modifications)
     printer.walk(tree)
     return printer.printedSource
   }
 
-  private let mutations: [Mutation]
+  private var modifications: [UnsafePointer<UInt8>: RawTokenKind] = [:]
   private var printedSource: [UInt8] = []
 
-  private init(mutations: [Mutation]) {
-    self.mutations = mutations
+  private init(modifications: [SyntaxText: RawTokenKind]) {
+    for (key, value) in modifications {
+      self.modifications[key.baseAddress!] = value
+    }
     super.init(viewMode: .sourceAccurate)
   }
 
-  override func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
-    for mutation in mutations {
-      switch mutation {
-      case .replace(let old, let new) where old == node:
-        printedSource.append(contentsOf: new.syntaxTextBytes)
-        return .skipChildren
-      case .insert(let before, let insert) where before == node:
-        printedSource.append(contentsOf: insert.syntaxTextBytes)
-        return .visitChildren
-      case .remove(let toRemove) where toRemove == node:
-        return .skipChildren
-      default:
-        break
-      }
-    }
-    return .visitChildren
-  }
-
   override func visit(_ node: TokenSyntax) -> SyntaxVisitorContinueKind {
-    if visitAny(Syntax(node)) == .skipChildren {
-      return .skipChildren
+    if let replacement = modifications[node.tokenView.rawText.baseAddress!] {
+      switch SeededRandomNumberGenerators.shared.nextDouble() {
+      case 0..<0.5:
+        // Replace the token
+        let newToken = TokenSyntax(replacement.synthesizedText, presence: .present).formatted()
+        printedSource.append(contentsOf: newToken.syntaxTextBytes)
+        return .skipChildren
+      case 0..<0.75:
+        // Insert the replacement token, keeping the current token
+        let newToken = TokenSyntax(replacement.synthesizedText, presence: .present).formatted()
+        printedSource.append(contentsOf: newToken.syntaxTextBytes)
+      default:
+        // Delete the token
+        return .skipChildren
+      }
+
     }
     printedSource.append(contentsOf: node.syntaxTextBytes)
     return .skipChildren
@@ -166,15 +119,23 @@ class MutatedTreePrinter: SyntaxAnyVisitor {
 
 @_cdecl("LLVMFuzzerCustomMutator")
 public func LLVMFuzzerCustomMutator(_ data: UnsafeMutablePointer<UInt8>, size: Int, maxSize: Int, seed: UInt32) -> Int {
-  srand48(Int(seed))
+  SeededRandomNumberGenerators.shared.seed(Int(seed))
   let source = UnsafeBufferPointer(start: data, count: size)
-  let tree = Parser.parse(source: source)
+  var parser = Parser(source)
+  let tree = SourceFileSyntax.parse(from: &parser)
+  let tokensInTree = Array(tree.tokens(viewMode: .sourceAccurate)).count
+  let percentageOfTokensToReplace = 0.01
+  let tokensToModify = min(Int(Double(tokensInTree) * percentageOfTokensToReplace), 1)
 
-  let mutationGenerator = MutationGenerator(viewMode: .sourceAccurate)
-  mutationGenerator.walk(tree)
+  var modifications: [SyntaxText: RawTokenKind] = [:]
 
-  let mutations = MutationGenerator.getMutations(for: Syntax(tree))
-  var mutatedSource = MutatedTreePrinter.print(tree: Syntax(tree), mutations: mutations)
+  for _ in 0..<tokensToModify {
+    let keyToReplace = parser.alternativeTokenChoices.keys.randomElement(using: &SeededRandomNumberGenerators.shared)!
+    let valueToReplace = parser.alternativeTokenChoices[keyToReplace]?.randomElement(using: &SeededRandomNumberGenerators.shared)!
+    modifications[keyToReplace] = valueToReplace
+  }
+
+  var mutatedSource = MutatedTreePrinter.print(tree: Syntax(tree), modifications: modifications)
 
   if mutatedSource.count > maxSize {
     mutatedSource = Array(mutatedSource.prefix(maxSize))

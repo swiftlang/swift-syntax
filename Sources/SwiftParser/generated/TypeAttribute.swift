@@ -17,7 +17,7 @@
 @_spi(RawSyntax) import SwiftSyntax
 
 extension Parser {
-  enum TypeAttribute: RawTokenKindSubset {
+  enum TypeAttribute: TokenSpecSet {
     case autoclosure
     
     case convention
@@ -44,36 +44,36 @@ extension Parser {
     
     init?(lexeme: Lexer.Lexeme) {
       switch lexeme {
-      case RawTokenKindMatch(.autoclosure): 
+      case TokenSpec(.autoclosure): 
         self = .autoclosure
-      case RawTokenKindMatch(.convention): 
+      case TokenSpec(.convention): 
         self = .convention
-      case RawTokenKindMatch(.noescape): 
+      case TokenSpec(.noescape): 
         self = .noescape
-      case RawTokenKindMatch(.escaping): 
+      case TokenSpec(.escaping): 
         self = .escaping
-      case RawTokenKindMatch(.differentiable): 
+      case TokenSpec(.differentiable): 
         self = .differentiable
-      case RawTokenKindMatch(.noDerivative): 
+      case TokenSpec(.noDerivative): 
         self = .noDerivative
-      case RawTokenKindMatch(.async): 
+      case TokenSpec(.async): 
         self = .async
-      case RawTokenKindMatch(.Sendable): 
+      case TokenSpec(.Sendable): 
         self = .Sendable
-      case RawTokenKindMatch(.unchecked): 
+      case TokenSpec(.unchecked): 
         self = .unchecked
-      case RawTokenKindMatch(._local): 
+      case TokenSpec(._local): 
         self = ._local
-      case RawTokenKindMatch(._noMetadata): 
+      case TokenSpec(._noMetadata): 
         self = ._noMetadata
-      case RawTokenKindMatch(._opaqueReturnTypeOf): 
+      case TokenSpec(._opaqueReturnTypeOf): 
         self = ._opaqueReturnTypeOf
       default: 
         return nil
       }
     }
     
-    var rawTokenKind: RawTokenKind {
+    var spec: TokenSpec {
       switch self {
       case .autoclosure: 
         return .keyword(.autoclosure)

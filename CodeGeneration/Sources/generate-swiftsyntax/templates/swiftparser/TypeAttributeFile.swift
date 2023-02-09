@@ -25,7 +25,7 @@ let typeAttributeFile = SourceFileSyntax {
   )
 
   try! ExtensionDeclSyntax("extension Parser") {
-    try EnumDeclSyntax("enum TypeAttribute: RawTokenKindSubset") {
+    try EnumDeclSyntax("enum TypeAttribute: TokenSpecSet") {
       for attribute in TYPE_ATTR_KINDS {
         DeclSyntax("case \(raw: attribute.name)")
       }
@@ -33,7 +33,7 @@ let typeAttributeFile = SourceFileSyntax {
       try InitializerDeclSyntax("init?(lexeme: Lexer.Lexeme)") {
         SwitchExprSyntax(switchKeyword: .keyword(.switch), expression: ExprSyntax("lexeme")) {
           for attribute in TYPE_ATTR_KINDS {
-            SwitchCaseSyntax("case RawTokenKindMatch(.\(raw: attribute.name)):") {
+            SwitchCaseSyntax("case TokenSpec(.\(raw: attribute.name)):") {
               ExprSyntax("self = .\(raw: attribute.swiftName)")
             }
           }
@@ -43,7 +43,7 @@ let typeAttributeFile = SourceFileSyntax {
         }
       }
 
-      try VariableDeclSyntax("var rawTokenKind: RawTokenKind") {
+      try VariableDeclSyntax("var spec: TokenSpec") {
         SwitchExprSyntax(switchKeyword: .keyword(.switch), expression: ExprSyntax("self")) {
           for attribute in TYPE_ATTR_KINDS {
             SwitchCaseSyntax("case .\(raw: attribute.swiftName):") {

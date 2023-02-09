@@ -66,6 +66,7 @@ struct GenerateSwiftSyntax: ParsableCommand {
         // SwiftParser
         TemplateSpec(sourceFile: declarationModifierFile, module: swiftParserDir, filename: "DeclarationModifier.swift"),
         TemplateSpec(sourceFile: parserEntryFile, module: swiftParserDir, filename: "Parser+Entry.swift"),
+        TemplateSpec(sourceFile: tokenSpecStaticMembersFile, module: swiftParserDir, filename: "TokenSpecStaticMembers.swift"),
         TemplateSpec(sourceFile: typeAttributeFile, module: swiftParserDir, filename: "TypeAttribute.swift"),
 
         // SwiftSyntax

@@ -13,12 +13,12 @@
 @_spi(RawSyntax) import SwiftSyntax
 
 extension Parser {
-  private enum IfConfigClauseStartKeyword: RawTokenKindSubset {
+  private enum IfConfigClauseStartKeyword: TokenSpecSet {
     case poundIfKeyword
     case poundElseifKeyword
     case poundElseKeyword
 
-    var rawTokenKind: RawTokenKind {
+    var spec: TokenSpec {
       switch self {
       case .poundIfKeyword: return .poundIfKeyword
       case .poundElseifKeyword: return .poundElseifKeyword
@@ -28,9 +28,9 @@ extension Parser {
 
     init?(lexeme: Lexer.Lexeme) {
       switch lexeme {
-      case RawTokenKindMatch(.poundIfKeyword): self = .poundIfKeyword
-      case RawTokenKindMatch(.poundElseifKeyword): self = .poundElseifKeyword
-      case RawTokenKindMatch(.poundElseKeyword): self = .poundElseKeyword
+      case TokenSpec(.poundIfKeyword): self = .poundIfKeyword
+      case TokenSpec(.poundElseifKeyword): self = .poundElseifKeyword
+      case TokenSpec(.poundElseKeyword): self = .poundElseKeyword
       default: return nil
       }
     }

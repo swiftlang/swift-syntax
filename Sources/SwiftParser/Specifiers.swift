@@ -12,9 +12,9 @@
 
 @_spi(RawSyntax) import SwiftSyntax
 
-// MARK: - RawTokenKindSubset
+// MARK: - TokenSpecSet
 
-public enum AsyncEffectSpecifier: RawTokenKindSubset {
+public enum AsyncEffectSpecifier: TokenSpecSet {
   case async
   case await
   case reasync
@@ -23,9 +23,9 @@ public enum AsyncEffectSpecifier: RawTokenKindSubset {
     // We'll take 'await' too for recovery but they have to be on the same line
     // as the declaration they're modifying.
     switch lexeme {
-    case RawTokenKindMatch(.async): self = .async
-    case RawTokenKindMatch(.await) where !lexeme.isAtStartOfLine: self = .await
-    case RawTokenKindMatch(.reasync): self = .reasync
+    case TokenSpec(.async): self = .async
+    case TokenSpec(.await, allowAtStartOfLine: false): self = .await
+    case TokenSpec(.reasync): self = .reasync
     default: return nil
     }
   }
@@ -39,7 +39,7 @@ public enum AsyncEffectSpecifier: RawTokenKindSubset {
     }
   }
 
-  var rawTokenKind: RawTokenKind {
+  var spec: TokenSpec {
     switch self {
     case .async: return .keyword(.async)
     case .await: return .keyword(.await)
@@ -48,7 +48,7 @@ public enum AsyncEffectSpecifier: RawTokenKindSubset {
   }
 }
 
-public enum ThrowsEffectSpecifier: RawTokenKindSubset {
+public enum ThrowsEffectSpecifier: TokenSpecSet {
   case `rethrows`
   case `throw`
   case `throws`
@@ -58,10 +58,10 @@ public enum ThrowsEffectSpecifier: RawTokenKindSubset {
     // We'll take 'throw' and 'try' too for recovery but they have to
     // be on the same line as the declaration they're modifying.
     switch lexeme {
-    case RawTokenKindMatch(.rethrows): self = .rethrows
-    case RawTokenKindMatch(.throw) where !lexeme.isAtStartOfLine: self = .throw
-    case RawTokenKindMatch(.throws): self = .throws
-    case RawTokenKindMatch(.try) where !lexeme.isAtStartOfLine: self = .try
+    case TokenSpec(.rethrows): self = .rethrows
+    case TokenSpec(.throw, allowAtStartOfLine: false): self = .throw
+    case TokenSpec(.throws): self = .throws
+    case TokenSpec(.try, allowAtStartOfLine: false): self = .try
     default: return nil
     }
   }
@@ -76,7 +76,7 @@ public enum ThrowsEffectSpecifier: RawTokenKindSubset {
     }
   }
 
-  var rawTokenKind: RawTokenKind {
+  var spec: TokenSpec {
     switch self {
     case .rethrows: return .keyword(.rethrows)
     case .throw: return .keyword(.throw)
@@ -86,7 +86,7 @@ public enum ThrowsEffectSpecifier: RawTokenKindSubset {
   }
 }
 
-public enum EffectSpecifier: RawTokenKindSubset {
+public enum EffectSpecifier: TokenSpecSet {
   case asyncSpecifier(AsyncEffectSpecifier)
   case throwsSpecifier(ThrowsEffectSpecifier)
 
@@ -115,10 +115,10 @@ public enum EffectSpecifier: RawTokenKindSubset {
       + ThrowsEffectSpecifier.allCases.map(Self.throwsSpecifier)
   }
 
-  var rawTokenKind: RawTokenKind {
+  var spec: TokenSpec {
     switch self {
-    case .asyncSpecifier(let underlyingKind): return underlyingKind.rawTokenKind
-    case .throwsSpecifier(let underlyingKind): return underlyingKind.rawTokenKind
+    case .asyncSpecifier(let underlyingKind): return underlyingKind.spec
+    case .throwsSpecifier(let underlyingKind): return underlyingKind.spec
     }
   }
 }
@@ -130,19 +130,19 @@ public enum EffectSpecifier: RawTokenKindSubset {
 protocol RawEffectSpecifiersTrait {
   /// The token kinds that should be consumed as misspelled `asyncSpecifier`.
   /// Should be a subset of `AsyncEffectSpecifier`.
-  associatedtype MisspelledAsyncSpecifiers: RawTokenKindSubset
+  associatedtype MisspelledAsyncSpecifiers: TokenSpecSet
 
   /// The token kinds that we can consume as a correct `asyncSpecifier`.
   /// Should be a subset of `AsyncEffectSpecifier`.
-  associatedtype CorrectAsyncTokenKinds: RawTokenKindSubset
+  associatedtype CorrectAsyncTokenKinds: TokenSpecSet
 
   /// The token kinds that should be consumed as misspelled `throwsSpecifier`.
   /// Should be a subset of `ThrowsEffectSpecifier`.
-  associatedtype MisspelledThrowsTokenKinds: RawTokenKindSubset
+  associatedtype MisspelledThrowsTokenKinds: TokenSpecSet
 
   /// The token kinds that we can consume as a correct `throwsSpecifier`.
   /// Should be a subset of `ThrowsEffectSpecifier`.
-  associatedtype CorrectThrowsTokenKinds: RawTokenKindSubset
+  associatedtype CorrectThrowsTokenKinds: TokenSpecSet
 
   var unexpectedBeforeAsyncSpecifier: RawUnexpectedNodesSyntax? { get }
   var asyncSpecifier: RawTokenSyntax? { get }
@@ -174,36 +174,36 @@ extension RawEffectSpecifiersTrait {
 }
 
 extension RawDeclEffectSpecifiersSyntax: RawEffectSpecifiersTrait {
-  enum MisspelledAsyncSpecifiers: RawTokenKindSubset {
+  enum MisspelledAsyncSpecifiers: TokenSpecSet {
     case await
 
     init?(lexeme: Lexer.Lexeme) {
       switch lexeme {
-      case RawTokenKindMatch(.await) where !lexeme.isAtStartOfLine: self = .await
+      case TokenSpec(.await, allowAtStartOfLine: false): self = .await
       default: return nil
       }
     }
 
-    var rawTokenKind: RawTokenKind {
+    var spec: TokenSpec {
       switch self {
       case .await: return .keyword(.await)
       }
     }
   }
 
-  enum CorrectAsyncTokenKinds: RawTokenKindSubset {
+  enum CorrectAsyncTokenKinds: TokenSpecSet {
     case async
     case reasync
 
     init?(lexeme: Lexer.Lexeme) {
       switch lexeme {
-      case RawTokenKindMatch(.async): self = .async
-      case RawTokenKindMatch(.reasync): self = .reasync
+      case TokenSpec(.async): self = .async
+      case TokenSpec(.reasync): self = .reasync
       default: return nil
       }
     }
 
-    var rawTokenKind: RawTokenKind {
+    var spec: TokenSpec {
       switch self {
       case .async: return .keyword(.async)
       case .reasync: return .keyword(.reasync)
@@ -211,19 +211,19 @@ extension RawDeclEffectSpecifiersSyntax: RawEffectSpecifiersTrait {
     }
   }
 
-  enum MisspelledThrowsTokenKinds: RawTokenKindSubset {
+  enum MisspelledThrowsTokenKinds: TokenSpecSet {
     case `try`
     case `throw`
 
     init?(lexeme: Lexer.Lexeme) {
       switch lexeme {
-      case RawTokenKindMatch(.try) where !lexeme.isAtStartOfLine: self = .try
-      case RawTokenKindMatch(.throw) where !lexeme.isAtStartOfLine: self = .throw
+      case TokenSpec(.try, allowAtStartOfLine: false): self = .try
+      case TokenSpec(.throw, allowAtStartOfLine: false): self = .throw
       default: return nil
       }
     }
 
-    var rawTokenKind: RawTokenKind {
+    var spec: TokenSpec {
       switch self {
       case .try: return .keyword(.try)
       case .throw: return .keyword(.throw)
@@ -231,19 +231,19 @@ extension RawDeclEffectSpecifiersSyntax: RawEffectSpecifiersTrait {
     }
   }
 
-  enum CorrectThrowsTokenKinds: RawTokenKindSubset {
+  enum CorrectThrowsTokenKinds: TokenSpecSet {
     case `rethrows`
     case `throws`
 
     init?(lexeme: Lexer.Lexeme) {
       switch lexeme {
-      case RawTokenKindMatch(.rethrows): self = .rethrows
-      case RawTokenKindMatch(.throws): self = .throws
+      case TokenSpec(.rethrows): self = .rethrows
+      case TokenSpec(.throws): self = .throws
       default: return nil
       }
     }
 
-    var rawTokenKind: RawTokenKind {
+    var spec: TokenSpec {
       switch self {
       case .rethrows: return .keyword(.rethrows)
       case .throws: return .keyword(.throws)
@@ -253,19 +253,19 @@ extension RawDeclEffectSpecifiersSyntax: RawEffectSpecifiersTrait {
 }
 
 extension RawTypeEffectSpecifiersSyntax: RawEffectSpecifiersTrait {
-  enum MisspelledAsyncSpecifiers: RawTokenKindSubset {
+  enum MisspelledAsyncSpecifiers: TokenSpecSet {
     case await
     case reasync
 
     init?(lexeme: Lexer.Lexeme) {
       switch lexeme {
-      case RawTokenKindMatch(.await) where !lexeme.isAtStartOfLine: self = .await
-      case RawTokenKindMatch(.reasync): self = .reasync
+      case TokenSpec(.await, allowAtStartOfLine: false): self = .await
+      case TokenSpec(.reasync): self = .reasync
       default: return nil
       }
     }
 
-    var rawTokenKind: RawTokenKind {
+    var spec: TokenSpec {
       switch self {
       case .await: return .keyword(.await)
       case .reasync: return .keyword(.reasync)
@@ -273,38 +273,38 @@ extension RawTypeEffectSpecifiersSyntax: RawEffectSpecifiersTrait {
     }
   }
 
-  enum CorrectAsyncTokenKinds: RawTokenKindSubset {
+  enum CorrectAsyncTokenKinds: TokenSpecSet {
     case async
 
     init?(lexeme: Lexer.Lexeme) {
       switch lexeme {
-      case RawTokenKindMatch(.async): self = .async
+      case TokenSpec(.async): self = .async
       default: return nil
       }
     }
 
-    var rawTokenKind: RawTokenKind {
+    var spec: TokenSpec {
       switch self {
       case .async: return .keyword(.async)
       }
     }
   }
 
-  enum MisspelledThrowsTokenKinds: RawTokenKindSubset {
+  enum MisspelledThrowsTokenKinds: TokenSpecSet {
     case `rethrows`
     case `try`
     case `throw`
 
     init?(lexeme: Lexer.Lexeme) {
       switch lexeme {
-      case RawTokenKindMatch(.rethrows): self = .rethrows
-      case RawTokenKindMatch(.try) where !lexeme.isAtStartOfLine: self = .try
-      case RawTokenKindMatch(.throw) where !lexeme.isAtStartOfLine: self = .throw
+      case TokenSpec(.rethrows): self = .rethrows
+      case TokenSpec(.try, allowAtStartOfLine: false): self = .try
+      case TokenSpec(.throw, allowAtStartOfLine: false): self = .throw
       default: return nil
       }
     }
 
-    var rawTokenKind: RawTokenKind {
+    var spec: TokenSpec {
       switch self {
       case .rethrows: return .keyword(.rethrows)
       case .try: return .keyword(.try)
@@ -313,17 +313,17 @@ extension RawTypeEffectSpecifiersSyntax: RawEffectSpecifiersTrait {
     }
   }
 
-  enum CorrectThrowsTokenKinds: RawTokenKindSubset {
+  enum CorrectThrowsTokenKinds: TokenSpecSet {
     case `throws`
 
     init?(lexeme: Lexer.Lexeme) {
       switch lexeme {
-      case RawTokenKindMatch(.throws): self = .throws
+      case TokenSpec(.throws): self = .throws
       default: return nil
       }
     }
 
-    var rawTokenKind: RawTokenKind {
+    var spec: TokenSpec {
       switch self {
       case .throws: return .keyword(.throws)
       }

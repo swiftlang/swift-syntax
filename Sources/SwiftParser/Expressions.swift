@@ -255,7 +255,7 @@ extension Parser {
     _ flavor: ExprFlavor,
     pattern: PatternContext
   ) -> (operator: RawExprSyntax, rhs: RawExprSyntax?)? {
-    enum ExpectedTokenKind: RawTokenKindSubset {
+    enum ExpectedTokenKind: TokenSpecSet {
       case binaryOperator
       case infixQuestionMark
       case equal
@@ -267,19 +267,19 @@ extension Parser {
 
       init?(lexeme: Lexer.Lexeme) {
         switch lexeme {
-        case RawTokenKindMatch(.binaryOperator): self = .binaryOperator
-        case RawTokenKindMatch(.infixQuestionMark): self = .infixQuestionMark
-        case RawTokenKindMatch(.equal): self = .equal
-        case RawTokenKindMatch(.is): self = .isKeyword
-        case RawTokenKindMatch(.as): self = .asKeyword
-        case RawTokenKindMatch(.async): self = .async
-        case RawTokenKindMatch(.arrow): self = .arrow
-        case RawTokenKindMatch(.throws): self = .throwsKeyword
+        case TokenSpec(.binaryOperator): self = .binaryOperator
+        case TokenSpec(.infixQuestionMark): self = .infixQuestionMark
+        case TokenSpec(.equal): self = .equal
+        case TokenSpec(.is): self = .isKeyword
+        case TokenSpec(.as): self = .asKeyword
+        case TokenSpec(.async): self = .async
+        case TokenSpec(.arrow): self = .arrow
+        case TokenSpec(.throws): self = .throwsKeyword
         default: return nil
         }
       }
 
-      var rawTokenKind: RawTokenKind {
+      var spec: TokenSpec {
         switch self {
         case .binaryOperator: return .binaryOperator
         case .infixQuestionMark: return .infixQuestionMark
@@ -730,7 +730,7 @@ extension Parser {
       }
 
       // If there is an expr-call-suffix, parse it and form a call.
-      if let lparen = self.consume(if: .leftParen, allowTokenAtStartOfLine: false) {
+      if let lparen = self.consume(if: TokenSpec(.leftParen, allowAtStartOfLine: false)) {
         let args = self.parseArgumentListElements(pattern: pattern)
         let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
 
@@ -761,7 +761,7 @@ extension Parser {
 
       // Check for a [expr] suffix.
       // Note that this cannot be the start of a new line.
-      if let lsquare = self.consume(if: .leftSquareBracket, allowTokenAtStartOfLine: false) {
+      if let lsquare = self.consume(if: TokenSpec(.leftSquareBracket, allowAtStartOfLine: false)) {
         let args: [RawTupleExprElementSyntax]
         if self.at(.rightSquareBracket) {
           args = []
@@ -1002,7 +1002,7 @@ extension Parser {
     while loopCondition.evaluate(currentToken) {
       // Check for a [] or .[] suffix. The latter is only permitted when there
       // are no components.
-      if self.at(.leftSquareBracket, allowTokenAtStartOfLine: false)
+      if self.at(TokenSpec(.leftSquareBracket, allowAtStartOfLine: false))
         || (components.isEmpty && self.at(.period) && self.peek().rawTokenKind == .leftSquareBracket)
       {
         // Consume the '.', if it's allowed here.
@@ -1327,7 +1327,7 @@ extension Parser {
     }
 
     // Parse the optional parenthesized argument list.
-    let leftParen = self.consume(if: .leftParen, allowTokenAtStartOfLine: false)
+    let leftParen = self.consume(if: TokenSpec(.leftParen, allowAtStartOfLine: false))
     let args: [RawTupleExprElementSyntax]
     let unexpectedBeforeRightParen: RawUnexpectedNodesSyntax?
     let rightParen: RawTokenSyntax?

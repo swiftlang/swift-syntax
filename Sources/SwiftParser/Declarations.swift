@@ -83,7 +83,7 @@ extension TokenConsumer {
       declStartKeyword =
         subparser.canRecoverTo(
           anyIn: DeclarationStart.self,
-          recoveryPrecedence: isAtTopLevel ? nil : .closingBrace
+          overrideRecoveryPrecedence: isAtTopLevel ? nil : .closingBrace
         )?.0
     } else {
       declStartKeyword = subparser.at(anyIn: DeclarationStart.self)?.0
@@ -218,7 +218,7 @@ extension Parser {
     // while recoverying to the declaration start.
     let recoveryPrecedence = inMemberDeclList ? TokenPrecedence.closingBrace : nil
 
-    switch self.canRecoverTo(anyIn: DeclarationStart.self, recoveryPrecedence: recoveryPrecedence) {
+    switch self.canRecoverTo(anyIn: DeclarationStart.self, overrideRecoveryPrecedence: recoveryPrecedence) {
     case (.importKeyword, let handle)?:
       return RawDeclSyntax(self.parseImportDeclaration(attrs, handle))
     case (.classKeyword, let handle)?:
@@ -321,7 +321,7 @@ extension Parser {
 
   @_spi(RawSyntax)
   public mutating func parseImportKind() -> RawTokenSyntax? {
-    enum ImportKind: RawTokenKindSubset {
+    enum ImportKind: TokenSpecSet {
       case `typealias`
       case `struct`
       case `class`
@@ -331,7 +331,7 @@ extension Parser {
       case `let`
       case `func`
 
-      var rawTokenKind: RawTokenKind {
+      var spec: TokenSpec {
         switch self {
         case .typealias: return .keyword(.typealias)
         case .struct: return .keyword(.struct)
@@ -346,14 +346,14 @@ extension Parser {
 
       init?(lexeme: Lexer.Lexeme) {
         switch lexeme {
-        case RawTokenKindMatch(.typealias): self = .typealias
-        case RawTokenKindMatch(.struct): self = .struct
-        case RawTokenKindMatch(.class): self = .class
-        case RawTokenKindMatch(.enum): self = .enum
-        case RawTokenKindMatch(.protocol): self = .protocol
-        case RawTokenKindMatch(.var): self = .var
-        case RawTokenKindMatch(.let): self = .let
-        case RawTokenKindMatch(.func): self = .func
+        case TokenSpec(.typealias): self = .typealias
+        case TokenSpec(.struct): self = .struct
+        case TokenSpec(.class): self = .class
+        case TokenSpec(.enum): self = .enum
+        case TokenSpec(.protocol): self = .protocol
+        case TokenSpec(.var): self = .var
+        case TokenSpec(.let): self = .let
+        case TokenSpec(.func): self = .func
         default: return nil
         }
       }
@@ -546,7 +546,7 @@ extension Parser {
     )
   }
 
-  enum LayoutConstraint: RawTokenKindSubset {
+  enum LayoutConstraint: TokenSpecSet {
     case trivialLayout
     case trivialAtMostLayout
     case unknownLayout
@@ -557,18 +557,18 @@ extension Parser {
 
     init?(lexeme: Lexer.Lexeme) {
       switch lexeme {
-      case RawTokenKindMatch(._Trivial): self = .trivialLayout
-      case RawTokenKindMatch(._TrivialAtMost): self = .trivialAtMostLayout
-      case RawTokenKindMatch(._UnknownLayout): self = .unknownLayout
-      case RawTokenKindMatch(._RefCountedObject): self = .refCountedObjectLayout
-      case RawTokenKindMatch(._NativeRefCountedObject): self = .nativeRefCountedObjectLayout
-      case RawTokenKindMatch(._Class): self = .classLayout
-      case RawTokenKindMatch(._NativeClass): self = .nativeClassLayout
+      case TokenSpec(._Trivial): self = .trivialLayout
+      case TokenSpec(._TrivialAtMost): self = .trivialAtMostLayout
+      case TokenSpec(._UnknownLayout): self = .unknownLayout
+      case TokenSpec(._RefCountedObject): self = .refCountedObjectLayout
+      case TokenSpec(._NativeRefCountedObject): self = .nativeRefCountedObjectLayout
+      case TokenSpec(._Class): self = .classLayout
+      case TokenSpec(._NativeClass): self = .nativeClassLayout
       default: return nil
       }
     }
 
-    var rawTokenKind: RawTokenKind {
+    var spec: TokenSpec {
       switch self {
       case .trivialLayout: return .keyword(._Trivial)
       case .trivialAtMostLayout: return .keyword(._TrivialAtMost)
@@ -625,7 +625,7 @@ extension Parser {
           continue
         }
 
-        enum ExpectedTokenKind: RawTokenKindSubset {
+        enum ExpectedTokenKind: TokenSpecSet {
           case colon
           case binaryOperator
           case postfixOperator
@@ -641,7 +641,7 @@ extension Parser {
             }
           }
 
-          var rawTokenKind: RawTokenKind {
+          var spec: TokenSpec {
             switch self {
             case .colon: return .colon
             case .binaryOperator: return .binaryOperator
@@ -875,7 +875,7 @@ extension Parser {
         let (unexpectedBeforeName, name) = self.expectIdentifier(allowIdentifierLikeKeywords: false, keywordRecovery: true)
 
         let associatedValue: RawParameterClauseSyntax?
-        if self.at(.leftParen, allowTokenAtStartOfLine: false) {
+        if self.at(TokenSpec(.leftParen, allowAtStartOfLine: false)) {
           associatedValue = self.parseParameterClause(for: .enumCase)
         } else {
           associatedValue = nil
@@ -1071,7 +1071,7 @@ extension Parser {
   ) -> RawDeinitializerDeclSyntax {
     let (unexpectedBeforeDeinitKeyword, deinitKeyword) = self.eat(handle)
     var unexpectedNameAndSignature: [RawSyntax?] = []
-    unexpectedNameAndSignature.append(self.consume(if: .identifier, allowTokenAtStartOfLine: false).map(RawSyntax.init))
+    unexpectedNameAndSignature.append(self.consume(if: TokenSpec(.identifier, allowAtStartOfLine: false)).map(RawSyntax.init))
     if self.at(.leftParen) && !self.currentToken.isAtStartOfLine {
       unexpectedNameAndSignature.append(RawSyntax(parseFunctionSignature()))
     }
@@ -1623,7 +1623,7 @@ extension Parser {
 
   /// Parse an accessor.
   mutating func parseAccessorDecl() -> RawAccessorDeclSyntax {
-    let forcedHandle = TokenConsumptionHandle(tokenKind: .keyword(.get), missing: true)
+    let forcedHandle = TokenConsumptionHandle(spec: .keyword(.get), missing: true)
     let introducer = parseAccessorIntroducer(forcedKind: (.get, forcedHandle))!
     return parseAccessorDecl(introducer: introducer)
   }
@@ -1850,7 +1850,7 @@ extension Parser {
     case (_, let handle)?:
       (unexpectedBeforeName, name) = self.eat(handle)
     default:
-      if let identifier = self.consume(if: .identifier, .dollarIdentifier, allowTokenAtStartOfLine: false) {
+      if let identifier = self.consume(if: TokenSpec(.identifier, allowAtStartOfLine: false), TokenSpec(.dollarIdentifier, allowAtStartOfLine: false)) {
         // Recover if the developer tried to use an identifier as the operator name
         unexpectedBeforeName = RawUnexpectedNodesSyntax([identifier], arena: self.arena)
       } else {
@@ -1986,7 +1986,7 @@ extension Parser {
 
   @_spi(RawSyntax)
   public mutating func parsePrecedenceGroupAttributeListSyntax() -> RawPrecedenceGroupAttributeListSyntax {
-    enum LabelText: RawTokenKindSubset {
+    enum LabelText: TokenSpecSet {
       case associativity
       case assignment
       case higherThan
@@ -1994,15 +1994,15 @@ extension Parser {
 
       init?(lexeme: Lexer.Lexeme) {
         switch lexeme {
-        case RawTokenKindMatch(.associativity): self = .associativity
-        case RawTokenKindMatch(.assignment): self = .assignment
-        case RawTokenKindMatch(.higherThan): self = .higherThan
-        case RawTokenKindMatch(.lowerThan): self = .lowerThan
+        case TokenSpec(.associativity): self = .associativity
+        case TokenSpec(.assignment): self = .assignment
+        case TokenSpec(.higherThan): self = .higherThan
+        case TokenSpec(.lowerThan): self = .lowerThan
         default: return nil
         }
       }
 
-      var rawTokenKind: RawTokenKind {
+      var spec: TokenSpec {
         switch self {
         case .associativity: return .keyword(.associativity)
         case .assignment: return .keyword(.assignment)
@@ -2041,7 +2041,7 @@ extension Parser {
           let (unexpectedBeforeColon, colon) = self.expect(.colon)
           let (unexpectedBeforeFlag, flag) = self.expect(.keyword(.true), .keyword(.false), default: .keyword(.true))
           let unexpectedAfterFlag: RawUnexpectedNodesSyntax?
-          if flag.isMissing, let unexpectedIdentifier = self.consume(if: .identifier, allowTokenAtStartOfLine: false) {
+          if flag.isMissing, let unexpectedIdentifier = self.consume(if: TokenSpec(.identifier, allowAtStartOfLine: false)) {
             unexpectedAfterFlag = RawUnexpectedNodesSyntax([unexpectedIdentifier], arena: self.arena)
           } else {
             unexpectedAfterFlag = nil
@@ -2185,7 +2185,7 @@ extension Parser {
     }
 
     // Parse the optional parenthesized argument list.
-    let leftParen = self.consume(if: .leftParen, allowTokenAtStartOfLine: false)
+    let leftParen = self.consume(if: TokenSpec(.leftParen, allowAtStartOfLine: false))
     let args: [RawTupleExprElementSyntax]
     let unexpectedBeforeRightParen: RawUnexpectedNodesSyntax?
     let rightParen: RawTokenSyntax?

@@ -16,7 +16,7 @@
 
 @_spi(RawSyntax) import SwiftSyntax
 
-enum DeclarationModifier: RawTokenKindSubset {
+enum DeclarationModifier: TokenSpecSet {
   case `static`
   
   case `class`
@@ -85,78 +85,78 @@ enum DeclarationModifier: RawTokenKindSubset {
   
   init?(lexeme: Lexer.Lexeme) {
     switch lexeme {
-    case RawTokenKindMatch(.`static`): 
+    case TokenSpec(.`static`): 
       self = .`static`
-    case RawTokenKindMatch(.`class`): 
+    case TokenSpec(.`class`): 
       self = .`class`
-    case RawTokenKindMatch(.final): 
+    case TokenSpec(.final): 
       self = .final
-    case RawTokenKindMatch(.required): 
+    case TokenSpec(.required): 
       self = .required
-    case RawTokenKindMatch(.optional): 
+    case TokenSpec(.optional): 
       self = .optional
-    case RawTokenKindMatch(.lazy): 
+    case TokenSpec(.lazy): 
       self = .lazy
-    case RawTokenKindMatch(.dynamic): 
+    case TokenSpec(.dynamic): 
       self = .dynamic
-    case RawTokenKindMatch(.infix): 
+    case TokenSpec(.infix): 
       self = .infix
-    case RawTokenKindMatch(.prefix): 
+    case TokenSpec(.prefix): 
       self = .prefix
-    case RawTokenKindMatch(.postfix): 
+    case TokenSpec(.postfix): 
       self = .postfix
-    case RawTokenKindMatch(.__consuming): 
+    case TokenSpec(.__consuming): 
       self = .__consuming
-    case RawTokenKindMatch(.mutating): 
+    case TokenSpec(.mutating): 
       self = .mutating
-    case RawTokenKindMatch(.nonmutating): 
+    case TokenSpec(.nonmutating): 
       self = .nonmutating
-    case RawTokenKindMatch(.convenience): 
+    case TokenSpec(.convenience): 
       self = .convenience
-    case RawTokenKindMatch(.override): 
+    case TokenSpec(.override): 
       self = .override
-    case RawTokenKindMatch(.`private`): 
+    case TokenSpec(.`private`): 
       self = .`private`
-    case RawTokenKindMatch(.`fileprivate`): 
+    case TokenSpec(.`fileprivate`): 
       self = .`fileprivate`
-    case RawTokenKindMatch(.`internal`): 
+    case TokenSpec(.`internal`): 
       self = .`internal`
-    case RawTokenKindMatch(.`public`): 
+    case TokenSpec(.`public`): 
       self = .`public`
-    case RawTokenKindMatch(.package): 
+    case TokenSpec(.package): 
       self = .package
-    case RawTokenKindMatch(.open): 
+    case TokenSpec(.open): 
       self = .open
-    case RawTokenKindMatch(.__setter_access): 
+    case TokenSpec(.__setter_access): 
       self = .__setter_access
-    case RawTokenKindMatch(.weak): 
+    case TokenSpec(.weak): 
       self = .weak
-    case RawTokenKindMatch(.unowned): 
+    case TokenSpec(.unowned): 
       self = .unowned
-    case RawTokenKindMatch(.`rethrows`): 
+    case TokenSpec(.`rethrows`): 
       self = .`rethrows`
-    case RawTokenKindMatch(.indirect): 
+    case TokenSpec(.indirect): 
       self = .indirect
-    case RawTokenKindMatch(.isolated): 
+    case TokenSpec(.isolated): 
       self = .isolated
-    case RawTokenKindMatch(.async): 
+    case TokenSpec(.async): 
       self = .async
-    case RawTokenKindMatch(.reasync): 
+    case TokenSpec(.reasync): 
       self = .reasync
-    case RawTokenKindMatch(.nonisolated): 
+    case TokenSpec(.nonisolated): 
       self = .nonisolated
-    case RawTokenKindMatch(.distributed): 
+    case TokenSpec(.distributed): 
       self = .distributed
-    case RawTokenKindMatch(._const): 
+    case TokenSpec(._const): 
       self = ._const
-    case RawTokenKindMatch(._local): 
+    case TokenSpec(._local): 
       self = ._local
     default: 
       return nil
     }
   }
   
-  var rawTokenKind: RawTokenKind {
+  var spec: TokenSpec {
     switch self {
     case .`static`: 
       return .keyword(.`static`)

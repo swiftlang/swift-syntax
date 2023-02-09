@@ -237,21 +237,18 @@ extension Parser {
 // MARK: Check if we can recover to a token
 
 extension Parser {
-  /// Checks if it can reach a token of the given `kind` by skipping unexpected
-  /// tokens that have lower ``TokenPrecedence`` than expected token.
-  @_spi(RawSyntax)
-  public mutating func canRecoverTo(
-    _ kind: RawTokenKind,
-    recoveryPrecedence: TokenPrecedence? = nil
-  ) -> RecoveryConsumptionHandle? {
-    if self.at(kind) {
+  /// Checks if it can reach a token of the given `spec` by skipping unexpected
+  /// tokens that have lower ``TokenPrecedence`` than specified by `spec`.
+  @inline(__always)
+  mutating func canRecoverTo(_ spec: TokenSpec) -> RecoveryConsumptionHandle? {
+    if self.at(spec) {
       return RecoveryConsumptionHandle(
         unexpectedTokens: 0,
-        tokenConsumptionHandle: TokenConsumptionHandle(tokenKind: kind)
+        tokenConsumptionHandle: TokenConsumptionHandle(spec: spec)
       )
     }
     var lookahead = self.lookahead()
-    return lookahead.canRecoverTo(kind, recoveryPrecedence: recoveryPrecedence)
+    return lookahead.canRecoverTo(spec)
   }
 
   /// Checks if we can reach a token in `subset` by skipping tokens that have
@@ -259,18 +256,20 @@ extension Parser {
   /// precedence of a token in that subset.
   /// If so, return the token that we can recover to and a handle that can be
   /// used to consume the unexpected tokens and the token we recovered to.
-  mutating func canRecoverTo<Subset: RawTokenKindSubset>(
-    anyIn subset: Subset.Type,
-    recoveryPrecedence: TokenPrecedence? = nil
-  ) -> (matchedKind: Subset, handle: RecoveryConsumptionHandle)? {
-    if let (kind, handle) = self.at(anyIn: subset) {
+  @inline(__always)
+  mutating func canRecoverTo<SpecSet: TokenSpecSet>(
+    anyIn specSet: SpecSet.Type,
+    overrideRecoveryPrecedence: TokenPrecedence? = nil
+  ) -> (match: SpecSet, handle: RecoveryConsumptionHandle)? {
+    if let (kind, handle) = self.at(anyIn: specSet) {
       return (kind, RecoveryConsumptionHandle(unexpectedTokens: 0, tokenConsumptionHandle: handle))
     }
     var lookahead = self.lookahead()
-    return lookahead.canRecoverTo(anyIn: subset, recoveryPrecedence: recoveryPrecedence)
+    return lookahead.canRecoverTo(anyIn: specSet, overrideRecoveryPrecedence: overrideRecoveryPrecedence)
   }
 
   /// Eat a token that we know we are currently positioned at, based on `canRecoverTo(anyIn:)`.
+  @inline(__always)
   mutating func eat(_ handle: RecoveryConsumptionHandle) -> (RawUnexpectedNodesSyntax?, Token) {
     let unexpectedNodes: RawUnexpectedNodesSyntax?
     if handle.unexpectedTokens > 0 {
@@ -287,10 +286,30 @@ extension Parser {
   }
 }
 
+// MARK: Expecting Tokens without Recovery
+
+extension Parser {
+  /// If the current token matches the given `spec`, consume it.
+  /// Othwerise, synthesize a missing token of with the `kind` of `spec`.
+  ///
+  /// This method does not try to eat unexpected until it finds the token that
+  /// matches `spec`.
+  /// In the parser, `expect` should be preferred.
+  @inline(__always)
+  mutating func expectWithoutRecovery(_ spec: TokenSpec) -> Token {
+    if let token = self.consume(if: spec) {
+      return token
+    } else {
+      return missingToken(spec)
+    }
+  }
+}
+
 // MARK: Expecting Tokens with Recovery
 
 extension Parser {
   /// Implements the paradigm shared across all `expect` methods.
+  @inline(__always)
   private mutating func expectImpl(
     consume: (inout Parser) -> RawTokenSyntax?,
     canRecoverTo: (inout Lookahead) -> RecoveryConsumptionHandle?,
@@ -307,93 +326,73 @@ extension Parser {
     return (nil, makeMissing(&self))
   }
 
-  /// Attempts to consume a token of the given kind.
+  /// Attempts to consume a token that matches the given `spec`.
   /// If it cannot be found, the parser tries
-  ///  1. To eat unexpected tokens that have lower ``TokenPrecedence`` than the
-  ///     expected token and see if the token occurs after that unexpected.
+  ///  1. To eat unexpected tokens that have lower ``TokenPrecedence`` than
+  ///     specified by `spec` and see if the token occurs after that unexpected.
   ///  2. If the token couldn't be found after skipping unexpected, it synthesizes
   ///     a missing token of the requested kind.
-  @_spi(RawSyntax)
-  public mutating func expect(
-    _ kind: RawTokenKind,
-    remapping: RawTokenKind? = nil
+  @inline(__always)
+  mutating func expect(
+    _ spec: TokenSpec
   ) -> (unexpected: RawUnexpectedNodesSyntax?, token: RawTokenSyntax) {
     return expectImpl(
-      consume: { $0.consume(if: kind, remapping: remapping) },
-      canRecoverTo: { $0.canRecoverTo(kind) },
-      makeMissing: {
-        if let remapping = remapping {
-          return $0.missingToken(remapping, text: kind.defaultText)
-        } else {
-          return $0.missingToken(kind)
-        }
-      }
+      consume: { $0.consume(if: spec) },
+      canRecoverTo: { $0.canRecoverTo(spec) },
+      makeMissing: { $0.missingToken(spec) }
     )
   }
 
-  /// Attempts to consume a token whose kind is `kind1` or `kind2`.
+  /// Attempts to consume a token that matches `spec1` or `spec2`.
   /// If it cannot be found, the parser tries
   ///  1. To eat unexpected tokens that have lower ``TokenPrecedence`` than the
-  ///     lowest precedence of the expected token kinds and see if a token of
-  ///     the requested kinds occurs after the unexpected.
+  ///     lowest precedence of the spec and see if a token of the requested
+  ///     kinds occurs after the unexpected.
   ///  2. If the token couldn't be found after skipping unexpected, it synthesizes
   ///     a missing token of `defaultKind`.
-  @_spi(RawSyntax)
-  public mutating func expect(
-    _ kind1: RawTokenKind,
-    _ kind2: RawTokenKind,
-    default defaultKind: RawTokenKind,
-    remapping: RawTokenKind? = nil
+  @inline(__always)
+  mutating func expect(
+    _ spec1: TokenSpec,
+    _ spec2: TokenSpec,
+    default defaultKind: TokenSpec
   ) -> (unexpected: RawUnexpectedNodesSyntax?, token: RawTokenSyntax) {
     return expectImpl(
-      consume: { $0.consume(if: kind1, kind2) },
-      canRecoverTo: { $0.canRecoverTo(kind1, kind2) },
-      makeMissing: {
-        if let remapping = remapping {
-          return $0.missingToken(remapping, text: defaultKind.defaultText)
-        } else {
-          return $0.missingToken(defaultKind)
-        }
-      }
+      consume: { $0.consume(if: spec1, spec2) },
+      canRecoverTo: { $0.canRecoverTo(spec1, spec2) },
+      makeMissing: { $0.missingToken(defaultKind) }
     )
   }
 
-  /// Attempts to consume a token whose kind is `kind1`, `kind2` or `kind3`.
+  /// Attempts to consume a token that matches `spec1` or `spec2`.
   /// If it cannot be found, the parser tries
   ///  1. To eat unexpected tokens that have lower ``TokenPrecedence`` than the
-  ///     lowest precedence of the expected token kinds and see if a token of
-  ///     the requested kinds occurs after the unexpected.
+  ///     lowest precedence of the spec and see if a token of the requested
+  ///     kinds occurs after the unexpected.
   ///  2. If the token couldn't be found after skipping unexpected, it synthesizes
   ///     a missing token of `defaultKind`.
-  @_spi(RawSyntax)
-  public mutating func expect(
-    _ kind1: RawTokenKind,
-    _ kind2: RawTokenKind,
-    _ kind3: RawTokenKind,
-    default defaultKind: RawTokenKind,
-    remapping: RawTokenKind? = nil
+  @inline(__always)
+  mutating func expect(
+    _ spec1: TokenSpec,
+    _ spec2: TokenSpec,
+    _ spec3: TokenSpec,
+    default defaultKind: TokenSpec
   ) -> (unexpected: RawUnexpectedNodesSyntax?, token: RawTokenSyntax) {
     return expectImpl(
-      consume: { $0.consume(if: kind1, kind2, kind3) },
-      canRecoverTo: { $0.canRecoverTo(kind1, kind2, kind3) },
-      makeMissing: {
-        if let remapping = remapping {
-          return $0.missingToken(remapping, text: defaultKind.defaultText)
-        } else {
-          return $0.missingToken(defaultKind)
-        }
-      }
+      consume: { $0.consume(if: spec1, spec2, spec3) },
+      canRecoverTo: { $0.canRecoverTo(spec1, spec2, spec3) },
+      makeMissing: { $0.missingToken(defaultKind) }
     )
   }
 
-  mutating func expect<Subset: RawTokenKindSubset>(
-    anyIn subset: Subset.Type,
-    default defaultKind: Subset
+  @inline(__always)
+  mutating func expect<SpecSet: TokenSpecSet>(
+    anyIn specSet: SpecSet.Type,
+    default defaultKind: SpecSet
   ) -> (unexpected: RawUnexpectedNodesSyntax?, token: RawTokenSyntax) {
     return expectImpl(
-      consume: { $0.consume(ifAnyIn: subset) },
-      canRecoverTo: { $0.canRecoverTo(anyIn: subset)?.1 },
-      makeMissing: { $0.missingToken(defaultKind.rawTokenKind) }
+      consume: { $0.consume(ifAnyIn: specSet) },
+      canRecoverTo: { $0.canRecoverTo(anyIn: specSet)?.1 },
+      makeMissing: { $0.missingToken(defaultKind.spec) }
     )
   }
 
@@ -403,8 +402,10 @@ extension Parser {
   /// incorrectly used a keyword as an identifier.
   /// This should be set if keywords aren't strong recovery marker at this
   /// position, e.g. because the parser expects a punctuator next.
-  @_spi(RawSyntax)
-  public mutating func expectIdentifier(allowIdentifierLikeKeywords: Bool = true, keywordRecovery: Bool = false) -> (RawUnexpectedNodesSyntax?, RawTokenSyntax) {
+  mutating func expectIdentifier(
+    allowIdentifierLikeKeywords: Bool = true,
+    keywordRecovery: Bool = false
+  ) -> (RawUnexpectedNodesSyntax?, RawTokenSyntax) {
     if allowIdentifierLikeKeywords {
       if let (_, handle) = self.canRecoverTo(anyIn: IdentifierTokens.self) {
         return self.eat(handle)
@@ -441,8 +442,7 @@ extension Parser {
     )
   }
 
-  @_spi(RawSyntax)
-  public mutating func expectIdentifierOrRethrows() -> (RawUnexpectedNodesSyntax?, RawTokenSyntax) {
+  mutating func expectIdentifierOrRethrows() -> (RawUnexpectedNodesSyntax?, RawTokenSyntax) {
     if let (_, handle) = self.canRecoverTo(anyIn: IdentifierOrRethrowsTokens.self) {
       return self.eat(handle)
     }

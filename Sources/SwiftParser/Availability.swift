@@ -54,7 +54,7 @@ extension Parser {
     return RawAvailabilitySpecListSyntax(elements: elements, arena: self.arena)
   }
 
-  enum AvailabilityArgumentKind: RawTokenKindSubset {
+  enum AvailabilityArgumentKind: TokenSpecSet {
     case message
     case renamed
     case introduced
@@ -67,20 +67,20 @@ extension Parser {
 
     init?(lexeme: Lexer.Lexeme) {
       switch lexeme {
-      case RawTokenKindMatch(.message): self = .message
-      case RawTokenKindMatch(.renamed): self = .renamed
-      case RawTokenKindMatch(.introduced): self = .introduced
-      case RawTokenKindMatch(.deprecated): self = .deprecated
-      case RawTokenKindMatch(.obsoleted): self = .obsoleted
-      case RawTokenKindMatch(.unavailable): self = .unavailable
-      case RawTokenKindMatch(.noasync): self = .noasync
-      case RawTokenKindMatch(.binaryOperator) where lexeme.tokenText == "*": self = .star
-      case RawTokenKindMatch(.identifier): self = .identifier
+      case TokenSpec(.message): self = .message
+      case TokenSpec(.renamed): self = .renamed
+      case TokenSpec(.introduced): self = .introduced
+      case TokenSpec(.deprecated): self = .deprecated
+      case TokenSpec(.obsoleted): self = .obsoleted
+      case TokenSpec(.unavailable): self = .unavailable
+      case TokenSpec(.noasync): self = .noasync
+      case TokenSpec(.binaryOperator) where lexeme.tokenText == "*": self = .star
+      case TokenSpec(.identifier): self = .identifier
       default: return nil
       }
     }
 
-    var rawTokenKind: RawTokenKind {
+    var spec: TokenSpec {
       switch self {
       case .message: return .keyword(.message)
       case .renamed: return .keyword(.renamed)

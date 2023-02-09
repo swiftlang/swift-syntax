@@ -20,8 +20,8 @@ add_swift_host_library(SwiftParser
   Nominals.swift
   Parser.swift
   Patterns.swift
-  RawTokenKindMatch.swift
-  RawTokenKindSubset.swift
+  TokenSpec.swift
+  TokenSpecSet.swift
   Recovery.swift
   Specifiers.swift
   Statements.swift
@@ -35,6 +35,7 @@ add_swift_host_library(SwiftParser
 
   generated/DeclarationModifier.swift
   generated/Parser+Entry.swift
+  generated/TokenSpecStaticMembers.swift
   generated/TypeAttribute.swift
 
   Lexer/Cursor.swift

@@ -266,7 +266,7 @@ extension Parser {
       case throwsKeyword
 
       init?(lexeme: Lexer.Lexeme) {
-        switch lexeme {
+        switch PrepareForKeywordMatch(lexeme) {
         case TokenSpec(.binaryOperator): self = .binaryOperator
         case TokenSpec(.infixQuestionMark): self = .infixQuestionMark
         case TokenSpec(.equal): self = .equal
@@ -2256,7 +2256,7 @@ extension Parser {
               unknownAttr: nil,
               label: .case(
                 RawSwitchCaseLabelSyntax(
-                  caseKeyword: missingToken(.keyword(.case), text: nil),
+                  caseKeyword: missingToken(.case),
                   caseItems: RawCaseItemListSyntax(
                     elements: [
                       RawCaseItemSyntax(

@@ -695,7 +695,7 @@ extension TokenKind: Equatable {
 // `RawTokenBaseKind` for equality. With the raw value, it compiles down to
 // a primitive integer compare, without, it calls into `__derived_enum_equals`.
 @frozen // FIXME: Not actually stable, works around a miscompile
-public enum RawTokenBaseKind: UInt8, Equatable, Hashable {
+public enum RawTokenKind: UInt8, Equatable, Hashable {
   case eof
   
   case wildcard
@@ -789,235 +789,10 @@ public enum RawTokenBaseKind: UInt8, Equatable, Hashable {
   case rawStringDelimiter
   
   case stringSegment
-}
-
-fileprivate extension Keyword {
-  static var rawValueZero: Keyword {
-    return Keyword(rawValue: 0)!
-  }
-}
-
-/// Similar to `TokenKind` but without a `String` associated value.
-/// Technically, this should be an enum like
-/// ```
-/// enum RawTokenKind {
-///   case eof
-///   case associatedtypeKeyword
-///   // remaining case from `RawTokenBaseKind`...
-///   case keyword(Keyword)
-/// }
-/// ```
-///
-/// But modelling it this way has significant performance implications since
-/// comparing two `RawTokenKind` calls into `__derived_enum_equals`. It's more
-/// effient to model the base kind as an enum with a raw value and store the
-/// keyword separately.
-///
-/// Whenever `base` is not `keyword`, `keyword` should have a raw value
-/// of `0`.
-@frozen // FIXME: Not actually stable, works around a miscompile
-public struct RawTokenKind: Equatable, Hashable {
-  public let base: RawTokenBaseKind
-  
-  public let keyword: Keyword
-  
-  public init(base: RawTokenBaseKind, keyword: Keyword) {
-    assert(base == .keyword || keyword.rawValue == 0)
-    self.base = base
-    self.keyword = keyword
-  }
-  
-  public static var eof: RawTokenKind {
-    return RawTokenKind(base: .eof, keyword: .rawValueZero)
-  }
-  
-  public static var wildcard: RawTokenKind {
-    return RawTokenKind(base: .wildcard, keyword: .rawValueZero)
-  }
-  
-  public static var leftParen: RawTokenKind {
-    return RawTokenKind(base: .leftParen, keyword: .rawValueZero)
-  }
-  
-  public static var rightParen: RawTokenKind {
-    return RawTokenKind(base: .rightParen, keyword: .rawValueZero)
-  }
-  
-  public static var leftBrace: RawTokenKind {
-    return RawTokenKind(base: .leftBrace, keyword: .rawValueZero)
-  }
-  
-  public static var rightBrace: RawTokenKind {
-    return RawTokenKind(base: .rightBrace, keyword: .rawValueZero)
-  }
-  
-  public static var leftSquareBracket: RawTokenKind {
-    return RawTokenKind(base: .leftSquareBracket, keyword: .rawValueZero)
-  }
-  
-  public static var rightSquareBracket: RawTokenKind {
-    return RawTokenKind(base: .rightSquareBracket, keyword: .rawValueZero)
-  }
-  
-  public static var leftAngle: RawTokenKind {
-    return RawTokenKind(base: .leftAngle, keyword: .rawValueZero)
-  }
-  
-  public static var rightAngle: RawTokenKind {
-    return RawTokenKind(base: .rightAngle, keyword: .rawValueZero)
-  }
-  
-  public static var period: RawTokenKind {
-    return RawTokenKind(base: .period, keyword: .rawValueZero)
-  }
-  
-  public static var comma: RawTokenKind {
-    return RawTokenKind(base: .comma, keyword: .rawValueZero)
-  }
-  
-  public static var ellipsis: RawTokenKind {
-    return RawTokenKind(base: .ellipsis, keyword: .rawValueZero)
-  }
-  
-  public static var colon: RawTokenKind {
-    return RawTokenKind(base: .colon, keyword: .rawValueZero)
-  }
-  
-  public static var semicolon: RawTokenKind {
-    return RawTokenKind(base: .semicolon, keyword: .rawValueZero)
-  }
-  
-  public static var equal: RawTokenKind {
-    return RawTokenKind(base: .equal, keyword: .rawValueZero)
-  }
-  
-  public static var atSign: RawTokenKind {
-    return RawTokenKind(base: .atSign, keyword: .rawValueZero)
-  }
-  
-  public static var pound: RawTokenKind {
-    return RawTokenKind(base: .pound, keyword: .rawValueZero)
-  }
-  
-  public static var prefixAmpersand: RawTokenKind {
-    return RawTokenKind(base: .prefixAmpersand, keyword: .rawValueZero)
-  }
-  
-  public static var arrow: RawTokenKind {
-    return RawTokenKind(base: .arrow, keyword: .rawValueZero)
-  }
-  
-  public static var backtick: RawTokenKind {
-    return RawTokenKind(base: .backtick, keyword: .rawValueZero)
-  }
-  
-  public static var backslash: RawTokenKind {
-    return RawTokenKind(base: .backslash, keyword: .rawValueZero)
-  }
-  
-  public static var exclamationMark: RawTokenKind {
-    return RawTokenKind(base: .exclamationMark, keyword: .rawValueZero)
-  }
-  
-  public static var postfixQuestionMark: RawTokenKind {
-    return RawTokenKind(base: .postfixQuestionMark, keyword: .rawValueZero)
-  }
-  
-  public static var infixQuestionMark: RawTokenKind {
-    return RawTokenKind(base: .infixQuestionMark, keyword: .rawValueZero)
-  }
-  
-  public static var stringQuote: RawTokenKind {
-    return RawTokenKind(base: .stringQuote, keyword: .rawValueZero)
-  }
-  
-  public static var singleQuote: RawTokenKind {
-    return RawTokenKind(base: .singleQuote, keyword: .rawValueZero)
-  }
-  
-  public static var multilineStringQuote: RawTokenKind {
-    return RawTokenKind(base: .multilineStringQuote, keyword: .rawValueZero)
-  }
-  
-  public static var poundSourceLocationKeyword: RawTokenKind {
-    return RawTokenKind(base: .poundSourceLocationKeyword, keyword: .rawValueZero)
-  }
-  
-  public static var poundIfKeyword: RawTokenKind {
-    return RawTokenKind(base: .poundIfKeyword, keyword: .rawValueZero)
-  }
-  
-  public static var poundElseKeyword: RawTokenKind {
-    return RawTokenKind(base: .poundElseKeyword, keyword: .rawValueZero)
-  }
-  
-  public static var poundElseifKeyword: RawTokenKind {
-    return RawTokenKind(base: .poundElseifKeyword, keyword: .rawValueZero)
-  }
-  
-  public static var poundEndifKeyword: RawTokenKind {
-    return RawTokenKind(base: .poundEndifKeyword, keyword: .rawValueZero)
-  }
-  
-  public static var poundAvailableKeyword: RawTokenKind {
-    return RawTokenKind(base: .poundAvailableKeyword, keyword: .rawValueZero)
-  }
-  
-  public static var poundUnavailableKeyword: RawTokenKind {
-    return RawTokenKind(base: .poundUnavailableKeyword, keyword: .rawValueZero)
-  }
-  
-  public static var integerLiteral: RawTokenKind {
-    return RawTokenKind(base: .integerLiteral, keyword: .rawValueZero)
-  }
-  
-  public static var floatingLiteral: RawTokenKind {
-    return RawTokenKind(base: .floatingLiteral, keyword: .rawValueZero)
-  }
-  
-  public static var regexLiteral: RawTokenKind {
-    return RawTokenKind(base: .regexLiteral, keyword: .rawValueZero)
-  }
-  
-  public static var unknown: RawTokenKind {
-    return RawTokenKind(base: .unknown, keyword: .rawValueZero)
-  }
-  
-  public static var identifier: RawTokenKind {
-    return RawTokenKind(base: .identifier, keyword: .rawValueZero)
-  }
-  
-  public static var binaryOperator: RawTokenKind {
-    return RawTokenKind(base: .binaryOperator, keyword: .rawValueZero)
-  }
-  
-  public static var postfixOperator: RawTokenKind {
-    return RawTokenKind(base: .postfixOperator, keyword: .rawValueZero)
-  }
-  
-  public static var prefixOperator: RawTokenKind {
-    return RawTokenKind(base: .prefixOperator, keyword: .rawValueZero)
-  }
-  
-  public static var dollarIdentifier: RawTokenKind {
-    return RawTokenKind(base: .dollarIdentifier, keyword: .rawValueZero)
-  }
-  
-  public static var rawStringDelimiter: RawTokenKind {
-    return RawTokenKind(base: .rawStringDelimiter, keyword: .rawValueZero)
-  }
-  
-  public static var stringSegment: RawTokenKind {
-    return RawTokenKind(base: .stringSegment, keyword: .rawValueZero)
-  }
-  
-  public static func keyword(_ keyword: Keyword) -> RawTokenKind {
-    return RawTokenKind(base: .keyword, keyword: keyword)
-  }
   
   @_spi(RawSyntax)
   public var defaultText: SyntaxText? {
-    switch self.base {
+    switch self {
     case .eof: 
       return ""
     case .wildcard: 
@@ -1088,8 +863,6 @@ public struct RawTokenKind: Equatable, Hashable {
       return #"#available"#
     case .poundUnavailableKeyword: 
       return #"#unavailable"#
-    case .keyword: 
-      return self.keyword.defaultText
     default: 
       return nil
     }
@@ -1101,7 +874,7 @@ public struct RawTokenKind: Equatable, Hashable {
   /// example, the '<' and '>' characters in a generic parameter list, or the
   /// quote characters in a string literal.
   public var isPunctuation: Bool {
-    switch self.base {
+    switch self {
     case .eof: 
       return false
     case .wildcard: 
@@ -1204,7 +977,7 @@ extension TokenKind {
   /// If the `rawKind` has a `defaultText`, `text` can be empty.
   @_spi(RawSyntax)
   public static func fromRaw(kind rawKind: RawTokenKind, text: String) -> TokenKind {
-    switch rawKind.base {
+    switch rawKind {
     case .eof: 
       return .eof
     case .wildcard: 
@@ -1328,8 +1101,10 @@ extension TokenKind {
     case .dollarIdentifier: 
       return .dollarIdentifier(text)
     case .keyword: 
-      assert(text.isEmpty || String(syntaxText: rawKind.keyword.defaultText) == text)
-      return .keyword(rawKind.keyword)
+      var text = text
+      return text.withSyntaxText { text in 
+        return .keyword(Keyword(text)!)
+      }
     case .rawStringDelimiter: 
       return .rawStringDelimiter(text)
     case .stringSegment: 
@@ -1431,7 +1206,7 @@ extension TokenKind {
     case .dollarIdentifier(let str): 
       return (.dollarIdentifier, str)
     case .keyword(let keyword): 
-      return (.keyword(keyword), nil)
+      return (.keyword, String(syntaxText: keyword.defaultText))
     case .rawStringDelimiter(let str): 
       return (.rawStringDelimiter, str)
     case .stringSegment(let str): 

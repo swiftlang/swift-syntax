@@ -92,7 +92,7 @@ extension Parser.Lookahead {
           tokenConsumptionHandle: TokenConsumptionHandle(spec: matchedSpec)
         )
       }
-      let currentTokenPrecedence = TokenPrecedence(self.currentToken.rawTokenKind)
+      let currentTokenPrecedence = TokenPrecedence(self.currentToken)
       if currentTokenPrecedence >= recoveryPrecedence {
         break
       }
@@ -141,7 +141,7 @@ extension Parser.Lookahead {
           )
         )
       }
-      let currentTokenPrecedence = TokenPrecedence(self.currentToken.rawTokenKind)
+      let currentTokenPrecedence = TokenPrecedence(self.currentToken)
       if currentTokenPrecedence >= recoveryPrecedence {
         break
       }

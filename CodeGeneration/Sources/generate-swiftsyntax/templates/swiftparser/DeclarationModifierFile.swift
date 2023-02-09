@@ -30,7 +30,7 @@ let declarationModifierFile = SourceFileSyntax {
     }
 
     try InitializerDeclSyntax("init?(lexeme: Lexer.Lexeme)") {
-      try SwitchExprSyntax("switch lexeme") {
+      try SwitchExprSyntax("switch PrepareForKeywordMatch(lexeme)") {
         for attribute in DECL_MODIFIER_KINDS {
           SwitchCaseSyntax("case TokenSpec(.\(raw: attribute.swiftName)):") {
             ExprSyntax("self = .\(raw: attribute.swiftName)")

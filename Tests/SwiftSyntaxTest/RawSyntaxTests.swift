@@ -15,7 +15,7 @@ import XCTest
 
 fileprivate func cannedStructDecl(arena: SyntaxArena) -> RawStructDeclSyntax {
   let structKW = RawTokenSyntax(
-    kind: .keyword(.struct),
+    kind: .keyword,
     text: arena.intern("struct"),
     leadingTriviaPieces: [],
     trailingTriviaPieces: [.spaces(1)],
@@ -145,7 +145,7 @@ final class RawSyntaxTests: XCTestCase {
       let barIdentSyntax = identSyntax.withKind(.keyword(.open))
       let barIdent = barIdentSyntax.raw.as(RawTokenSyntax.self)!
 
-      XCTAssertEqual(barIdent.tokenKind, .keyword(.open))
+      XCTAssertEqual(barIdent.tokenKind, .keyword)
       XCTAssertEqual(barIdent.tokenText, "open")
       XCTAssertEqual(barIdent.leadingTriviaPieces, [.unexpectedText("\n")])
       XCTAssertEqual(barIdent.trailingTriviaPieces, [.unexpectedText(" ")])

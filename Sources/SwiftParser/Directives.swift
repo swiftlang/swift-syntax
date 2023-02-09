@@ -27,7 +27,7 @@ extension Parser {
     }
 
     init?(lexeme: Lexer.Lexeme) {
-      switch lexeme {
+      switch PrepareForKeywordMatch(lexeme) {
       case TokenSpec(.poundIfKeyword): self = .poundIfKeyword
       case TokenSpec(.poundElseifKeyword): self = .poundElseifKeyword
       case TokenSpec(.poundElseKeyword): self = .poundElseKeyword

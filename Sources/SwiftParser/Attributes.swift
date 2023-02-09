@@ -65,7 +65,7 @@ extension Parser {
     case transpose
 
     init?(lexeme: Lexer.Lexeme) {
-      switch lexeme {
+      switch PrepareForKeywordMatch(lexeme) {
       case TokenSpec(._alignment): self = ._alignment
       case TokenSpec(._backDeploy): self = ._backDeploy
       case TokenSpec(._cdecl): self = ._cdecl
@@ -366,7 +366,7 @@ extension Parser {
     case forward
 
     init?(lexeme: Lexer.Lexeme) {
-      switch lexeme {
+      switch PrepareForKeywordMatch(lexeme) {
       case TokenSpec(.reverse): self = .reverse
       case TokenSpec(._linear): self = .linear
       case TokenSpec(._forward): self = .forward
@@ -477,7 +477,7 @@ extension Parser {
       case selfKeyword
 
       init?(lexeme: Lexer.Lexeme) {
-        switch lexeme {
+        switch PrepareForKeywordMatch(lexeme) {
         case TokenSpec(.identifier): self = .identifier
         case TokenSpec(.integerLiteral): self = .integerLiteral
         case TokenSpec(.self): self = .selfKeyword
@@ -661,7 +661,7 @@ extension Parser {
     case available
 
     init?(lexeme: Lexer.Lexeme) {
-      switch lexeme {
+      switch PrepareForKeywordMatch(lexeme) {
       case TokenSpec(.target): self = .target
       case TokenSpec(.availability): self = .availability
       case TokenSpec(.exported): self = .exported
@@ -1102,7 +1102,7 @@ extension Parser {
           }
 
           init?(lexeme: Lexer.Lexeme) {
-            switch lexeme {
+            switch PrepareForKeywordMatch(lexeme) {
             case TokenSpec(.private): self = .private
             case TokenSpec(.fileprivate): self = .fileprivate
             case TokenSpec(.internal): self = .internal

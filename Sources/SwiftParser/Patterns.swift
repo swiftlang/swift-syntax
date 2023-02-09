@@ -55,7 +55,7 @@ extension Parser {
       case varKeyword
 
       init?(lexeme: Lexer.Lexeme) {
-        switch lexeme {
+        switch PrepareForKeywordMatch(lexeme) {
         case TokenSpec(.leftParen): self = .leftParen
         case TokenSpec(.wildcard): self = .wildcard
         case TokenSpec(.identifier): self = .identifier
@@ -296,7 +296,7 @@ extension Parser.Lookahead {
       case leftParen
 
       init?(lexeme: Lexer.Lexeme) {
-        switch lexeme {
+        switch PrepareForKeywordMatch(lexeme) {
         case TokenSpec(.identifier): self = .identifier
         case TokenSpec(.wildcard): self = .wildcard
         case TokenSpec(.let): self = .letKeyword

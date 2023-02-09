@@ -169,6 +169,11 @@ public struct Parser {
     return RawTokenSyntax(missing: kind, text: text, arena: self.arena)
   }
 
+  @_spi(RawSyntax)
+  public mutating func missingToken(_ keyword: Keyword) -> RawTokenSyntax {
+    return missingToken(.keyword, text: keyword.defaultText)
+  }
+
   /// Consumes the current token and advances the lexer to the next token.
   ///
   /// - Returns: The token that was consumed.

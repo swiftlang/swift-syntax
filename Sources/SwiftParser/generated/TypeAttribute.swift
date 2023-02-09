@@ -43,7 +43,7 @@ extension Parser {
     case _opaqueReturnTypeOf
     
     init?(lexeme: Lexer.Lexeme) {
-      switch lexeme {
+      switch PrepareForKeywordMatch(lexeme) {
       case TokenSpec(.autoclosure): 
         self = .autoclosure
       case TokenSpec(.convention): 

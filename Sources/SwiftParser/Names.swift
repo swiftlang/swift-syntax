@@ -282,7 +282,7 @@ extension Lexer.Lexeme {
     // Only lexer-classified lexemes have `RawTokenKind` of `keyword.
     // Contextual keywords will only be made keywords when a `RawTokenSyntax` is
     // constructed from them.
-    return self.rawTokenKind.base == .keyword
+    return self.rawTokenKind == .keyword
   }
 
   func starts(with symbol: SyntaxText) -> Bool {

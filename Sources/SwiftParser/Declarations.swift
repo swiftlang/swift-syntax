@@ -345,7 +345,7 @@ extension Parser {
       }
 
       init?(lexeme: Lexer.Lexeme) {
-        switch lexeme {
+        switch PrepareForKeywordMatch(lexeme) {
         case TokenSpec(.typealias): self = .typealias
         case TokenSpec(.struct): self = .struct
         case TokenSpec(.class): self = .class
@@ -556,7 +556,7 @@ extension Parser {
     case nativeClassLayout
 
     init?(lexeme: Lexer.Lexeme) {
-      switch lexeme {
+      switch PrepareForKeywordMatch(lexeme) {
       case TokenSpec(._Trivial): self = .trivialLayout
       case TokenSpec(._TrivialAtMost): self = .trivialAtMostLayout
       case TokenSpec(._UnknownLayout): self = .unknownLayout
@@ -1494,7 +1494,7 @@ extension Parser {
           if hasTryBeforeIntroducer && !value.is(RawTryExprSyntax.self) {
             value = RawExprSyntax(
               RawTryExprSyntax(
-                tryKeyword: missingToken(.keyword(.try), text: nil),
+                tryKeyword: missingToken(.try),
                 questionOrExclamationMark: nil,
                 expression: value,
                 arena: self.arena
@@ -1993,7 +1993,7 @@ extension Parser {
       case lowerThan
 
       init?(lexeme: Lexer.Lexeme) {
-        switch lexeme {
+        switch PrepareForKeywordMatch(lexeme) {
         case TokenSpec(.associativity): self = .associativity
         case TokenSpec(.assignment): self = .assignment
         case TokenSpec(.higherThan): self = .higherThan

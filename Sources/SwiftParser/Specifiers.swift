@@ -42,7 +42,7 @@ public enum AsyncEffectSpecifier: TokenSpecSet {
   var spec: TokenSpec {
     switch self {
     case .async: return .keyword(.async)
-    case .await: return .keyword(.await)
+    case .await: return TokenSpec(.await, allowAtStartOfLine: false)
     case .reasync: return .keyword(.reasync)
     }
   }
@@ -79,9 +79,9 @@ public enum ThrowsEffectSpecifier: TokenSpecSet {
   var spec: TokenSpec {
     switch self {
     case .rethrows: return .keyword(.rethrows)
-    case .throw: return .keyword(.throw)
+    case .throw: return TokenSpec(.throw, allowAtStartOfLine: false)
     case .throws: return .keyword(.throws)
-    case .try: return .keyword(.try)
+    case .try: return TokenSpec(.try, allowAtStartOfLine: false)
     }
   }
 }
@@ -186,7 +186,7 @@ extension RawDeclEffectSpecifiersSyntax: RawEffectSpecifiersTrait {
 
     var spec: TokenSpec {
       switch self {
-      case .await: return .keyword(.await)
+      case .await: return TokenSpec(.await, allowAtStartOfLine: false)
       }
     }
   }
@@ -225,8 +225,8 @@ extension RawDeclEffectSpecifiersSyntax: RawEffectSpecifiersTrait {
 
     var spec: TokenSpec {
       switch self {
-      case .try: return .keyword(.try)
-      case .throw: return .keyword(.throw)
+      case .try: return TokenSpec(.try, allowAtStartOfLine: false)
+      case .throw: return TokenSpec(.throw, allowAtStartOfLine: false)
       }
     }
   }
@@ -267,7 +267,7 @@ extension RawTypeEffectSpecifiersSyntax: RawEffectSpecifiersTrait {
 
     var spec: TokenSpec {
       switch self {
-      case .await: return .keyword(.await)
+      case .await: return TokenSpec(.await, allowAtStartOfLine: false)
       case .reasync: return .keyword(.reasync)
       }
     }
@@ -307,8 +307,8 @@ extension RawTypeEffectSpecifiersSyntax: RawEffectSpecifiersTrait {
     var spec: TokenSpec {
       switch self {
       case .rethrows: return .keyword(.rethrows)
-      case .try: return .keyword(.try)
-      case .throw: return .keyword(.throw)
+      case .try: return TokenSpec(.try, allowAtStartOfLine: false)
+      case .throw: return TokenSpec(.throw, allowAtStartOfLine: false)
       }
     }
   }

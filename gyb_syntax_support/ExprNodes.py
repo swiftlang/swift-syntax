@@ -71,7 +71,7 @@ EXPR_NODES = [
     Node('DeclNameArgument', name_for_diagnostics=None, kind='Syntax',
          children=[
              Child('Name', kind='Token'),
-             Child('Colon', kind='ColonToken'),
+             Child('Colon', kind='ColonToken', requires_trailing_space=False),
          ]),
     Node('DeclNameArgumentList', name_for_diagnostics=None, kind='SyntaxCollection',
          element='DeclNameArgument'),

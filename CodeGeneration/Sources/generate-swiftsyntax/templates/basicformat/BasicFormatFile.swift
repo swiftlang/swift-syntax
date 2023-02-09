@@ -246,15 +246,15 @@ let basicFormatFile = SourceFileSyntax {
       StmtSyntax(
         """
         switch (token.tokenKind, token.nextToken(viewMode: .sourceAccurate)?.tokenKind) {
-        case (.keyword(.as), .exclamationMark), // Ensures there is not space in `as!`
-             (.keyword(.as), .postfixQuestionMark), // Ensures there is not space in `as?`
-             (.exclamationMark, .leftParen), // Ensures there is not space in `myOptionalClosure!()`
+        case (.exclamationMark, .leftParen), // Ensures there is not space in `myOptionalClosure!()`
              (.exclamationMark, .period), // Ensures there is not space in `myOptionalBar!.foo()`
+             (.keyword(.as), .exclamationMark), // Ensures there is not space in `as!`
+             (.keyword(.as), .postfixQuestionMark), // Ensures there is not space in `as?`
+             (.keyword(.try), .exclamationMark), // Ensures there is not space in `try!`
+             (.keyword(.try), .postfixQuestionMark), // Ensures there is not space in `try?`:
              (.postfixQuestionMark, .leftParen), // Ensures there is not space in `init?()` or `myOptionalClosure?()`s
              (.postfixQuestionMark, .rightAngle), // Ensures there is not space in `ContiguousArray<RawSyntax?>`
-             (.postfixQuestionMark, .rightParen), // Ensures there is not space in `myOptionalClosure?()`
-             (.keyword(.try), .exclamationMark), // Ensures there is not space in `try!`
-             (.keyword(.try), .postfixQuestionMark): // Ensures there is not space in `try?`:
+             (.postfixQuestionMark, .rightParen): // Ensures there is not space in `myOptionalClosure?()`
           return false
         default:
           break

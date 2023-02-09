@@ -131,7 +131,7 @@ extension Parser {
         )
       )
     case nil:
-      if self.currentToken.rawTokenKind.isLexerClassifiedKeyword, !self.currentToken.isAtStartOfLine {
+      if self.currentToken.isLexerClassifiedKeyword, !self.currentToken.isAtStartOfLine {
         // Recover if a keyword was used instead of an identifier
         let keyword = self.consumeAnyToken()
         return RawPatternSyntax(

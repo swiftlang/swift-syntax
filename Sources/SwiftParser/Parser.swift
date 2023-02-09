@@ -427,7 +427,7 @@ extension Parser {
         self.missingToken(.identifier, text: nil)
       )
     } else if keywordRecovery,
-      (self.currentToken.rawTokenKind.isLexerClassifiedKeyword || self.currentToken.rawTokenKind == .wildcard),
+      (self.currentToken.isLexerClassifiedKeyword || self.currentToken.rawTokenKind == .wildcard),
       !self.currentToken.isAtStartOfLine
     {
       let keyword = self.consumeAnyToken()

@@ -2562,7 +2562,7 @@ extension Parser.Lookahead {
     if self.peek().rawTokenKind != .identifier,
       self.peek().rawTokenKind != .keyword(.Self),
       self.peek().rawTokenKind != .keyword(.self),
-      !self.peek().rawTokenKind.isLexerClassifiedKeyword
+      !self.peek().isLexerClassifiedKeyword
     {
       return false
     }

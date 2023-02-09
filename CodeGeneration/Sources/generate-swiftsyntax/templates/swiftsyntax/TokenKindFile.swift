@@ -306,32 +306,6 @@ let tokenKindFile = SourceFileSyntax {
 
     try! VariableDeclSyntax(
       """
-      /// Returns `true` if the token is a Swift keyword.
-      ///
-      /// Keywords are reserved unconditionally for use by Swift and may not
-      /// appear as identifiers in any position without being escaped. For example,
-      /// `class`, `func`, or `import`.
-      public var isLexerClassifiedKeyword: Bool
-      """
-    ) {
-      try! SwitchExprSyntax("switch self.base") {
-        SwitchCaseSyntax("case .eof:") {
-          StmtSyntax("return false")
-        }
-
-        for token in SYNTAX_TOKENS where token.swiftKind != "keyword" {
-          SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
-            StmtSyntax("return \(raw: token.isKeyword)")
-          }
-        }
-        SwitchCaseSyntax("case .keyword:") {
-          StmtSyntax("return self.keyword.isLexerClassified")
-        }
-      }
-    }
-
-    try! VariableDeclSyntax(
-      """
       /// Returns `true` if the token is a Swift punctuator.
       ///
       /// Punctuation tokens generally separate identifiers from each other. For

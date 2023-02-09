@@ -55,7 +55,7 @@ fileprivate class StringLiteralExpressionIndentationChecker {
     if hasSufficientIndentation {
       return nil
     }
-    if token.tokenView.tokenDiagnostic != nil {
+    if let tokenDiagnostic = token.tokenView.tokenDiagnostic, tokenDiagnostic.severity == .error {
       // Token already has a lexer error, ignore the indentation error until that
       // error is fixed
       return nil

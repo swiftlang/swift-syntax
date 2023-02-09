@@ -1238,4 +1238,15 @@ public class LexerTests: XCTestCase {
       ]
     )
   }
+
+  func testLexerErrorOverridesLexerWarning() {
+    // Make sure we output the error about the malformed hex literal instead of
+    // the warning about the non-breaking whitespace.
+    AssertLexemes(
+      "\u{a0}0x1️⃣r",
+      lexemes: [
+        LexemeSpec(.integerLiteral, leading: "\u{a0}", text: "0xr", diagnostic: "'r' is not a valid hexadecimal digit (0-9, A-F) in integer literal")
+      ]
+    )
+  }
 }

@@ -99,6 +99,15 @@ struct TokenSpec {
       atStartOfLine: token.leadingTrivia.contains(where: { $0.isNewline })
     )
   }
+
+  @inline(__always)
+  static func ~= (kind: TokenSpec, token: RawTokenSyntax) -> Bool {
+    return kind.matches(
+      rawTokenKind: token.tokenKind,
+      text: token.tokenView.rawText,
+      atStartOfLine: token.leadingTriviaPieces.contains(where: \.isNewline)
+    )
+  }
 }
 
 extension TokenConsumer {

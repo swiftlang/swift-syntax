@@ -269,9 +269,9 @@ enum DeclarationStart: TokenSpecSet {
 
   var spec: TokenSpec {
     switch self {
-    case .actorKeyword: return TokenSpec(.keyword(.actor), recoveryPrecedence: .declKeyword)
+    case .actorKeyword: return TokenSpec(.actor, recoveryPrecedence: .declKeyword)
     case .associatedtypeKeyword: return .keyword(.associatedtype)
-    case .caseKeyword: return TokenSpec(.keyword(.case), recoveryPrecedence: .declKeyword)
+    case .caseKeyword: return TokenSpec(.case, recoveryPrecedence: .declKeyword)
     case .classKeyword: return .keyword(.class)
     case .deinitKeyword: return .keyword(.deinit)
     case .enumKeyword: return .keyword(.enum)
@@ -280,7 +280,7 @@ enum DeclarationStart: TokenSpecSet {
     case .importKeyword: return .keyword(.import)
     case .initKeyword: return .keyword(.`init`)
     case .letKeyword: return .keyword(.let)
-    case .macroKeyword: return TokenSpec(.keyword(.macro), recoveryPrecedence: .declKeyword)
+    case .macroKeyword: return TokenSpec(.macro, recoveryPrecedence: .declKeyword)
     case .operatorKeyword: return .keyword(.operator)
     case .precedencegroupKeyword: return .keyword(.precedencegroup)
     case .protocolKeyword: return .keyword(.protocol)
@@ -345,7 +345,7 @@ enum IdentifierOrRethrowsTokens: TokenSpecSet {
     case .capitalSelfKeyword: return .keyword(.Self)
     case .identifier: return .identifier
     case .selfKeyword: return .keyword(.self)
-    case .rethrowsKeyword: return TokenSpec(.keyword(.rethrows), remapping: .identifier)
+    case .rethrowsKeyword: return TokenSpec(.rethrows, remapping: .identifier)
     }
   }
 }

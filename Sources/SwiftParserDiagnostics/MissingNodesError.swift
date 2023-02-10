@@ -42,7 +42,7 @@ fileprivate enum NodesDescriptionPart {
       if let childName = token.childNameInParent {
         return childName
       }
-      return token.tokenKind.decomposeToRaw().rawKind.nameForDiagnostics
+      return token.tokenKind.nameForDiagnostics
     case .node(let node):
       var walk: Syntax = node
       while true {

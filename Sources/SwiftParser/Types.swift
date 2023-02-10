@@ -227,16 +227,16 @@ extension Parser {
     stopAtFirstPeriod: Bool = false
   ) -> RawTypeSyntax {
     var base: RawTypeSyntax
-    switch self.currentToken.rawTokenKind {
-    case .keyword(.Self),
-      .keyword(.Any),
-      .identifier:
+    switch self.currentToken {
+    case TokenSpec(.Self),
+      TokenSpec(.Any),
+      TokenSpec(.identifier):
       base = self.parseTypeIdentifier()
-    case .leftParen:
+    case TokenSpec(.leftParen):
       base = RawTypeSyntax(self.parseTupleTypeBody())
-    case .leftSquareBracket:
+    case TokenSpec(.leftSquareBracket):
       base = RawTypeSyntax(self.parseCollectionType())
-    case .wildcard:
+    case TokenSpec(.wildcard):
       base = RawTypeSyntax(self.parsePlaceholderType())
     default:
       return RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena))
@@ -719,19 +719,19 @@ extension Parser.Lookahead {
   }
 
   mutating func canParseSimpleType() -> Bool {
-    switch self.currentToken.rawTokenKind {
-    case .keyword(.Any):
+    switch self.currentToken {
+    case TokenSpec(.Any):
       self.consumeAnyToken()
-    case .keyword(.Self), .identifier:
+    case TokenSpec(.Self), TokenSpec(.identifier):
       guard self.canParseTypeIdentifier() else {
         return false
       }
-    case .leftParen:
+    case TokenSpec(.leftParen):
       self.consumeAnyToken()
       guard self.canParseTupleBodyType() else {
         return false
       }
-    case .leftSquareBracket:
+    case TokenSpec(.leftSquareBracket):
       self.consumeAnyToken()
       guard self.canParseType() else {
         return false
@@ -744,9 +744,9 @@ extension Parser.Lookahead {
       guard self.consume(if: .rightSquareBracket) != nil else {
         return false
       }
-    case .wildcard:
+    case TokenSpec(.wildcard):
       self.consumeAnyToken()
-    case .keyword(.repeat):
+    case TokenSpec(.repeat):
       return true
     default:
       return false

@@ -490,7 +490,7 @@ public struct MoveTokensAfterFixIt: ParserFixIt {
   public let movedTokens: [TokenSyntax]
 
   /// The token after which `movedTokens` should be moved
-  public let after: RawTokenKind
+  public let after: TokenKind
 
   public var message: String {
     "move \(nodesDescription(movedTokens, format: false)) after '\(after.nameForDiagnostics)'"
@@ -502,7 +502,7 @@ public struct MoveTokensInFrontOfFixIt: ParserFixIt {
   public let movedTokens: [TokenSyntax]
 
   /// The token after which 'try' should be moved
-  public let inFrontOf: RawTokenKind
+  public let inFrontOf: TokenKind
 
   public var message: String {
     "move \(nodesDescription(movedTokens, format: false)) in front of '\(inFrontOf.nameForDiagnostics)'"

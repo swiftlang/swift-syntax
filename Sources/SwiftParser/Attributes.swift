@@ -32,6 +32,7 @@ extension Parser {
   /// Compiler-known attributes that take arguments.
   enum DeclarationAttributeWithSpecialSyntax: TokenSpecSet {
     case _alignment
+    case _backDeploy
     case _cdecl
     case _documentation
     case _dynamicReplacement
@@ -66,7 +67,7 @@ extension Parser {
     init?(lexeme: Lexer.Lexeme) {
       switch lexeme {
       case TokenSpec(._alignment): self = ._alignment
-      case TokenSpec(._backDeploy): self = .backDeployed
+      case TokenSpec(._backDeploy): self = ._backDeploy
       case TokenSpec(._cdecl): self = ._cdecl
       case TokenSpec(._documentation): self = ._documentation
       case TokenSpec(._dynamicReplacement): self = ._dynamicReplacement
@@ -105,6 +106,7 @@ extension Parser {
     var spec: TokenSpec {
       switch self {
       case ._alignment: return .keyword(._alignment)
+      case ._backDeploy: return .keyword(._backDeploy)
       case ._cdecl: return .keyword(._cdecl)
       case ._documentation: return .keyword(._documentation)
       case ._dynamicReplacement: return .keyword(._dynamicReplacement)
@@ -223,7 +225,7 @@ extension Parser {
       return parseAttribute(argumentMode: .required) { parser in
         return .availability(parser.parseAvailabilityArgumentSpecList())
       }
-    case .backDeployed:
+    case .backDeployed, ._backDeploy:
       return parseAttribute(argumentMode: .required) { parser in
         return .backDeployedArguments(parser.parseBackDeployedArguments())
       }
@@ -313,7 +315,7 @@ extension Parser {
       }
     case .rethrows:
       let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-      let (unexpectedBeforeAttributeName, attributeName) = self.expect(TokenSpec(.keyword(.rethrows), remapping: .identifier))
+      let (unexpectedBeforeAttributeName, attributeName) = self.expect(TokenSpec(.rethrows, remapping: .identifier))
       return .attribute(
         RawAttributeSyntax(
           unexpectedBeforeAtSign,
@@ -1156,15 +1158,15 @@ extension Parser.Lookahead {
     // Alternatively, we might have a token that illustrates we're not going to
     // get anything following the attribute, which means the parentheses describe
     // what follows the attribute.
-    switch lookahead.currentToken.rawTokenKind {
-    case .arrow,
-      .keyword(.throw),
-      .keyword(.throws),
-      .keyword(.rethrows),
-      .rightParen,
-      .rightBrace,
-      .rightSquareBracket,
-      .rightAngle:
+    switch lookahead.currentToken {
+    case TokenSpec(.arrow),
+      TokenSpec(.throw),
+      TokenSpec(.throws),
+      TokenSpec(.rethrows),
+      TokenSpec(.rightParen),
+      TokenSpec(.rightBrace),
+      TokenSpec(.rightSquareBracket),
+      TokenSpec(.rightAngle):
       return false
     case _ where lookahead.at(.keyword(.async)):
       return false

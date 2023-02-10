@@ -68,7 +68,7 @@ extension Parser {
       ident = self.expectIdentifierWithoutRecovery()
     } else if flags.contains(.operators), let (_, _) = self.at(anyIn: Operator.self) {
       ident = self.consumeAnyToken(remapping: .binaryOperator)
-    } else if flags.contains(.keywords) && self.currentToken.rawTokenKind.isLexerClassifiedKeyword {
+    } else if flags.contains(.keywords) && self.currentToken.isLexerClassifiedKeyword {
       ident = self.consumeAnyToken(remapping: .identifier)
     } else {
       ident = self.expectIdentifierWithoutRecovery()
@@ -279,7 +279,10 @@ extension Lexer.Lexeme {
   }
 
   var isLexerClassifiedKeyword: Bool {
-    self.rawTokenKind.isLexerClassifiedKeyword
+    // Only lexer-classified lexemes have `RawTokenKind` of `keyword.
+    // Contextual keywords will only be made keywords when a `RawTokenSyntax` is
+    // constructed from them.
+    return self.rawTokenKind.base == .keyword
   }
 
   func starts(with symbol: SyntaxText) -> Bool {

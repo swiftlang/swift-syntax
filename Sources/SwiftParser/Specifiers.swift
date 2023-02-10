@@ -42,7 +42,7 @@ public enum AsyncEffectSpecifier: TokenSpecSet {
   var spec: TokenSpec {
     switch self {
     case .async: return .keyword(.async)
-    case .await: return .keyword(.await)
+    case .await: return TokenSpec(.await, allowAtStartOfLine: false)
     case .reasync: return .keyword(.reasync)
     }
   }
@@ -79,9 +79,9 @@ public enum ThrowsEffectSpecifier: TokenSpecSet {
   var spec: TokenSpec {
     switch self {
     case .rethrows: return .keyword(.rethrows)
-    case .throw: return .keyword(.throw)
+    case .throw: return TokenSpec(.throw, allowAtStartOfLine: false)
     case .throws: return .keyword(.throws)
-    case .try: return .keyword(.try)
+    case .try: return TokenSpec(.try, allowAtStartOfLine: false)
     }
   }
 }
@@ -186,7 +186,7 @@ extension RawDeclEffectSpecifiersSyntax: RawEffectSpecifiersTrait {
 
     var spec: TokenSpec {
       switch self {
-      case .await: return .keyword(.await)
+      case .await: return TokenSpec(.await, allowAtStartOfLine: false)
       }
     }
   }
@@ -225,8 +225,8 @@ extension RawDeclEffectSpecifiersSyntax: RawEffectSpecifiersTrait {
 
     var spec: TokenSpec {
       switch self {
-      case .try: return .keyword(.try)
-      case .throw: return .keyword(.throw)
+      case .try: return TokenSpec(.try, allowAtStartOfLine: false)
+      case .throw: return TokenSpec(.throw, allowAtStartOfLine: false)
       }
     }
   }
@@ -267,7 +267,7 @@ extension RawTypeEffectSpecifiersSyntax: RawEffectSpecifiersTrait {
 
     var spec: TokenSpec {
       switch self {
-      case .await: return .keyword(.await)
+      case .await: return TokenSpec(.await, allowAtStartOfLine: false)
       case .reasync: return .keyword(.reasync)
       }
     }
@@ -307,8 +307,8 @@ extension RawTypeEffectSpecifiersSyntax: RawEffectSpecifiersTrait {
     var spec: TokenSpec {
       switch self {
       case .rethrows: return .keyword(.rethrows)
-      case .try: return .keyword(.try)
-      case .throw: return .keyword(.throw)
+      case .try: return TokenSpec(.try, allowAtStartOfLine: false)
+      case .throw: return TokenSpec(.throw, allowAtStartOfLine: false)
       }
     }
   }
@@ -327,6 +327,18 @@ extension RawTypeEffectSpecifiersSyntax: RawEffectSpecifiersTrait {
       switch self {
       case .throws: return .keyword(.throws)
       }
+    }
+  }
+}
+
+extension TokenConsumer {
+  mutating func at<SpecSet1: TokenSpecSet, SpecSet2: TokenSpecSet>(anyIn specSet1: SpecSet1.Type, or specSet2: SpecSet2.Type) -> (TokenSpec, TokenConsumptionHandle)? {
+    if let (spec, handle) = self.at(anyIn: specSet1) {
+      return (spec.spec, handle)
+    } else if let (spec, handle) = self.at(anyIn: specSet2) {
+      return (spec.spec, handle)
+    } else {
+      return nil
     }
   }
 }
@@ -378,13 +390,15 @@ extension Parser {
 
     var unexpectedAfterThrowsLoopProgress = LoopProgressCondition()
     while unexpectedAfterThrowsLoopProgress.evaluate(self.currentToken) {
-      if let misspelledAsync = self.consume(ifAnyIn: S.MisspelledAsyncSpecifiers.self) ?? self.consume(ifAnyIn: S.CorrectAsyncTokenKinds.self) {
+      if let (_, handle) = self.at(anyIn: S.MisspelledAsyncSpecifiers.self, or: S.CorrectAsyncTokenKinds.self) {
+        let misspelledAsync = self.eat(handle)
         unexpectedAfterThrows.append(RawSyntax(misspelledAsync))
         if asyncKeyword == nil {
           // Handle `async` after `throws`
           asyncKeyword = missingToken(.keyword(.async))
         }
-      } else if let misspelledThrows = self.consume(ifAnyIn: S.MisspelledThrowsTokenKinds.self) ?? self.consume(ifAnyIn: S.CorrectThrowsTokenKinds.self) {
+      } else if let (_, handle) = self.at(anyIn: S.MisspelledThrowsTokenKinds.self, or: S.CorrectThrowsTokenKinds.self) {
+        let misspelledThrows = self.eat(handle)
         unexpectedAfterThrows.append(RawSyntax(misspelledThrows))
       } else {
         break
@@ -423,15 +437,17 @@ extension Parser {
     var unexpected: [RawTokenSyntax] = []
     var loopProgress = LoopProgressCondition()
     while loopProgress.evaluate(self.currentToken) {
-      if let misspelledAsync = self.consume(ifAnyIn: S.MisspelledAsyncSpecifiers.self) ?? self.consume(ifAnyIn: S.CorrectAsyncTokenKinds.self) {
+      if let (spec, handle) = self.at(anyIn: S.MisspelledAsyncSpecifiers.self, or: S.CorrectAsyncTokenKinds.self) {
+        let misspelledAsync = self.eat(handle)
         unexpected.append(misspelledAsync)
         if effectSpecifiers?.asyncSpecifier == nil {
-          synthesizedAsync = missingToken(misspelledAsync.tokenKind)
+          synthesizedAsync = missingToken(spec)
         }
-      } else if let misspelledThrows = self.consume(ifAnyIn: S.MisspelledThrowsTokenKinds.self) ?? self.consume(ifAnyIn: S.CorrectThrowsTokenKinds.self) {
+      } else if let (spec, handle) = self.at(anyIn: S.MisspelledThrowsTokenKinds.self, or: S.CorrectThrowsTokenKinds.self) {
+        let misspelledThrows = self.eat(handle)
         unexpected.append(misspelledThrows)
         if effectSpecifiers?.throwsSpecifier == nil {
-          synthesizedThrows = missingToken(misspelledThrows.tokenKind)
+          synthesizedThrows = missingToken(spec)
         }
       } else {
         break

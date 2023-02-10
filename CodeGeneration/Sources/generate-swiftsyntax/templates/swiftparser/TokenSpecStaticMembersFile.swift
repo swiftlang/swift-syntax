@@ -27,6 +27,6 @@ let tokenSpecStaticMembersFile = SourceFileSyntax(
       DeclSyntax("static var \(raw: token.swiftKind): TokenSpec { return TokenSpec(.\(raw: token.swiftKind)) }")
     }
 
-    DeclSyntax("static func keyword(_ keyword: Keyword) -> TokenSpec { return TokenSpec(.keyword(keyword)) }")
+    DeclSyntax("static func keyword(_ keyword: Keyword) -> TokenSpec { return TokenSpec(keyword) }")
   }
 }

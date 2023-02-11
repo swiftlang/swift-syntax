@@ -13,7 +13,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-
 import SwiftSyntax
 import SwiftParser
 import SwiftParserDiagnostics

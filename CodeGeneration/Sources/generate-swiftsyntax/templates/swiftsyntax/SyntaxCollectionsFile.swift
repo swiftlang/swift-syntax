@@ -15,7 +15,7 @@ import SwiftSyntaxBuilder
 import SyntaxSupport
 import Utils
 
-let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: [.blockComment(generateCopyrightHeader(for: "generate-swiftsyntax"))]) {
+let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: generateCopyrightHeader(for: "generate-swiftsyntax")) {
   DeclSyntax(
     """
     public protocol SyntaxCollection: SyntaxProtocol, Sequence where Element: SyntaxProtocol {

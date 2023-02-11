@@ -14,7 +14,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-
 extension Syntax {
   public static var structure: SyntaxNodeStructure {
     return .choices([

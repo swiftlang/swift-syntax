@@ -15,7 +15,7 @@ import SwiftSyntaxBuilder
 import SyntaxSupport
 import Utils
 
-let rawSyntaxNodesFile = SourceFileSyntax(leadingTrivia: "\(generateCopyrightHeader(for: "generate-swiftsyntax"))" + .newline) {
+let rawSyntaxNodesFile = SourceFileSyntax(leadingTrivia: generateCopyrightHeader(for: "generate-swiftsyntax")) {
   for node in SYNTAX_NODES where node.isBase {
     DeclSyntax(
       """

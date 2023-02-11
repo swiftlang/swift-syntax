@@ -15,11 +15,9 @@ import SyntaxSupport
 import SwiftSyntaxBuilder
 import Utils
 
-let resultBuildersFile = SourceFileSyntax {
-  ImportDeclSyntax(
-    leadingTrivia: .docLineComment(generateCopyrightHeader(for: "generate-swiftsyntaxbuilder")),
-    path: [AccessPathComponentSyntax(name: "SwiftSyntax")]
-  )
+let resultBuildersFile = SourceFileSyntax(leadingTrivia: generateCopyrightHeader(for: "generate-swiftsyntaxbuilder")) {
+  DeclSyntax("import SwiftSyntax")
+
   for node in SYNTAX_NODES where node.isSyntaxCollection {
     let type = SyntaxBuildableType(syntaxKind: node.syntaxKind)
     let elementType = node.collectionElementType

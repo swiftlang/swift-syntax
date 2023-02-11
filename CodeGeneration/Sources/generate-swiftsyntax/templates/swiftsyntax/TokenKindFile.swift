@@ -15,7 +15,7 @@ import SwiftSyntaxBuilder
 import SyntaxSupport
 import Utils
 
-let tokenKindFile = SourceFileSyntax {
+let tokenKindFile = SourceFileSyntax(leadingTrivia: generateCopyrightHeader(for: "generate-swiftsyntax")) {
   try! EnumDeclSyntax(
     """
     /// Enumerates the kinds of tokens in the Swift language.

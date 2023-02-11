@@ -13,7 +13,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-
 @_spi(RawSyntax) import SwiftSyntax
 
 public enum SyntaxClassification {

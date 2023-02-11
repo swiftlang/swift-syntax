@@ -15,7 +15,7 @@ import SwiftSyntaxBuilder
 import SyntaxSupport
 import Utils
 
-let syntaxVisitorFile = SourceFileSyntax {
+let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: generateCopyrightHeader(for: "generate-swiftsyntax")) {
   DeclSyntax(
     """
     /// The enum describes how the SyntaxVistor should continue after visiting

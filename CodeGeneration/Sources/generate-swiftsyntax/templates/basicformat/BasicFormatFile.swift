@@ -49,13 +49,8 @@ extension Child {
   }
 }
 
-let basicFormatFile = SourceFileSyntax {
-  DeclSyntax(
-    """
-    \(raw: generateCopyrightHeader(for: "generate-swiftbasicformat"))
-    import SwiftSyntax
-    """
-  )
+let basicFormatFile = SourceFileSyntax(leadingTrivia: generateCopyrightHeader(for: "generate-swiftbasicformat")) {
+  DeclSyntax("import SwiftSyntax")
 
   try! ClassDeclSyntax("open class BasicFormat: SyntaxRewriter") {
     DeclSyntax("public var indentationLevel: Int = 0")

@@ -15,13 +15,8 @@ import SyntaxSupport
 import SwiftSyntaxBuilder
 import Utils
 
-let syntaxExpressibleByStringInterpolationConformancesFile = SourceFileSyntax {
-  DeclSyntax(
-    """
-    \(raw: generateCopyrightHeader(for: "generate-swiftsyntaxbuilder"))
-    import SwiftSyntax
-    """
-  )
+let syntaxExpressibleByStringInterpolationConformancesFile = SourceFileSyntax(leadingTrivia: generateCopyrightHeader(for: "generate-swiftsyntaxbuilder")) {
+  DeclSyntax("import SwiftSyntax")
   DeclSyntax("import SwiftParser")
   DeclSyntax("import SwiftParserDiagnostics")
 

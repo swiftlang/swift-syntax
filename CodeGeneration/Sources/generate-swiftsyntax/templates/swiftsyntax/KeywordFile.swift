@@ -21,11 +21,9 @@ let lookupTable = ArrayExprSyntax(leftSquare: .leftSquareBracketToken(trailingTr
   }
 }
 
-let keywordFile = SourceFileSyntax {
+let keywordFile = SourceFileSyntax(leadingTrivia: generateCopyrightHeader(for: "generate-swiftsyntax")) {
   DeclSyntax(
     """
-    \(raw: generateCopyrightHeader(for: "generate-swiftparser"))
-
     /// Make `StaticString` equatable so we can use it as the raw value for Keyword.
     extension StaticString: Equatable {
       public static func == (lhs: StaticString, rhs: StaticString) -> Bool {

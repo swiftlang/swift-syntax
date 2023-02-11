@@ -15,14 +15,8 @@ import SwiftSyntaxBuilder
 import SyntaxSupport
 import Utils
 
-let typeAttributeFile = SourceFileSyntax {
-  DeclSyntax(
-    """
-    \(raw: generateCopyrightHeader(for: "generate-swiftparser"))
-    @_spi(RawSyntax) import SwiftSyntax
-
-    """
-  )
+let typeAttributeFile = SourceFileSyntax(leadingTrivia: generateCopyrightHeader(for: "generate-swiftparser")) {
+  DeclSyntax("@_spi(RawSyntax) import SwiftSyntax")
 
   try! ExtensionDeclSyntax("extension Parser") {
     try EnumDeclSyntax("enum TypeAttribute: TokenSpecSet") {

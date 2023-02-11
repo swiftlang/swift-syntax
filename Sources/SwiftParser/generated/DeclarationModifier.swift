@@ -13,7 +13,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-
 @_spi(RawSyntax) import SwiftSyntax
 
 enum DeclarationModifier: TokenSpecSet {

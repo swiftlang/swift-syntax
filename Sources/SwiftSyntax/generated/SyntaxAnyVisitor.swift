@@ -14,8 +14,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-
-
 /// A `SyntaxVisitor` that can visit the nodes as generic `Syntax` values.
 ///
 /// This subclass of `SyntaxVisitor` is slower than the type-specific visitation

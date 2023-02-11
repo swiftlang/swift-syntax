@@ -15,11 +15,8 @@ import SwiftSyntaxBuilder
 import SyntaxSupport
 import Utils
 
-let buildableNodesFile = SourceFileSyntax {
-  ImportDeclSyntax(
-    leadingTrivia: .docLineComment(generateCopyrightHeader(for: "generate-swiftsyntaxbuilder")),
-    path: [AccessPathComponentSyntax(name: "SwiftSyntax")]
-  )
+let buildableNodesFile = SourceFileSyntax(leadingTrivia: generateCopyrightHeader(for: "generate-swiftsyntaxbuilder")) {
+  DeclSyntax("import SwiftSyntax")
 
   for node in SYNTAX_NODES where node.isBuildable {
     let type = node.type

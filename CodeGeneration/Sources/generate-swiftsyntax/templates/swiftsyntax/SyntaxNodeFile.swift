@@ -20,7 +20,7 @@ import Utils
 /// variable `emitKind` set to a base kind listed in
 /// It then only emits those syntax nodes whose base kind are that specified kind.
 func syntaxNode(emitKind: String) -> SourceFileSyntax {
-  SourceFileSyntax(leadingTrivia: .docLineComment(generateCopyrightHeader(for: "generate-swiftsyntax"))) {
+  SourceFileSyntax(leadingTrivia: generateCopyrightHeader(for: "generate-swiftsyntax")) {
     for node in SYNTAX_NODES where !node.isBase && node.collectionElement.isEmpty && node.baseKind == emitKind {
       // We are actually handling this node now
       let nodeDoc = node.description.map { "/// \($0)" }

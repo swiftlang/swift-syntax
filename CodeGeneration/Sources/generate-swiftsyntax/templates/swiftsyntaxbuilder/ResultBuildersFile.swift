@@ -174,8 +174,8 @@ let resultBuildersFile = SourceFileSyntax {
     DeclSyntax(
       """
       public extension \(raw: type.syntaxBaseName) {
-        init(@\(raw: type.resultBuilderBaseName) itemsBuilder: () -> \(raw: type.syntaxBaseName)) {
-          self = itemsBuilder()
+        init(@\(raw: type.resultBuilderBaseName) itemsBuilder: () throws -> \(raw: type.syntaxBaseName)) rethrows {
+          self = try itemsBuilder()
         }
       }
       """

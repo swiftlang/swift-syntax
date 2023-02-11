@@ -90,8 +90,8 @@ public struct AccessPathBuilder {
 }
 
 public extension AccessPathSyntax {
-  init(@AccessPathBuilder itemsBuilder: () -> AccessPathSyntax) {
-    self = itemsBuilder()
+  init(@AccessPathBuilder itemsBuilder: () throws -> AccessPathSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }
 
@@ -170,8 +170,8 @@ public struct AccessorListBuilder {
 }
 
 public extension AccessorListSyntax {
-  init(@AccessorListBuilder itemsBuilder: () -> AccessorListSyntax) {
-    self = itemsBuilder()
+  init(@AccessorListBuilder itemsBuilder: () throws -> AccessorListSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }
 
@@ -253,8 +253,8 @@ public struct ArrayElementListBuilder {
 }
 
 public extension ArrayElementListSyntax {
-  init(@ArrayElementListBuilder itemsBuilder: () -> ArrayElementListSyntax) {
-    self = itemsBuilder()
+  init(@ArrayElementListBuilder itemsBuilder: () throws -> ArrayElementListSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }
 
@@ -345,8 +345,8 @@ public struct AttributeListBuilder {
 }
 
 public extension AttributeListSyntax {
-  init(@AttributeListBuilder itemsBuilder: () -> AttributeListSyntax) {
-    self = itemsBuilder()
+  init(@AttributeListBuilder itemsBuilder: () throws -> AttributeListSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }
 
@@ -425,8 +425,8 @@ public struct AvailabilitySpecListBuilder {
 }
 
 public extension AvailabilitySpecListSyntax {
-  init(@AvailabilitySpecListBuilder itemsBuilder: () -> AvailabilitySpecListSyntax) {
-    self = itemsBuilder()
+  init(@AvailabilitySpecListBuilder itemsBuilder: () throws -> AvailabilitySpecListSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }
 
@@ -505,8 +505,8 @@ public struct AvailabilityVersionRestrictionListBuilder {
 }
 
 public extension AvailabilityVersionRestrictionListSyntax {
-  init(@AvailabilityVersionRestrictionListBuilder itemsBuilder: () -> AvailabilityVersionRestrictionListSyntax) {
-    self = itemsBuilder()
+  init(@AvailabilityVersionRestrictionListBuilder itemsBuilder: () throws -> AvailabilityVersionRestrictionListSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }
 
@@ -588,8 +588,8 @@ public struct CaseItemListBuilder {
 }
 
 public extension CaseItemListSyntax {
-  init(@CaseItemListBuilder itemsBuilder: () -> CaseItemListSyntax) {
-    self = itemsBuilder()
+  init(@CaseItemListBuilder itemsBuilder: () throws -> CaseItemListSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }
 
@@ -668,8 +668,8 @@ public struct CatchClauseListBuilder {
 }
 
 public extension CatchClauseListSyntax {
-  init(@CatchClauseListBuilder itemsBuilder: () -> CatchClauseListSyntax) {
-    self = itemsBuilder()
+  init(@CatchClauseListBuilder itemsBuilder: () throws -> CatchClauseListSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }
 
@@ -751,8 +751,8 @@ public struct CatchItemListBuilder {
 }
 
 public extension CatchItemListSyntax {
-  init(@CatchItemListBuilder itemsBuilder: () -> CatchItemListSyntax) {
-    self = itemsBuilder()
+  init(@CatchItemListBuilder itemsBuilder: () throws -> CatchItemListSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }
 
@@ -834,8 +834,8 @@ public struct ClosureCaptureItemListBuilder {
 }
 
 public extension ClosureCaptureItemListSyntax {
-  init(@ClosureCaptureItemListBuilder itemsBuilder: () -> ClosureCaptureItemListSyntax) {
-    self = itemsBuilder()
+  init(@ClosureCaptureItemListBuilder itemsBuilder: () throws -> ClosureCaptureItemListSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }
 
@@ -917,8 +917,8 @@ public struct ClosureParamListBuilder {
 }
 
 public extension ClosureParamListSyntax {
-  init(@ClosureParamListBuilder itemsBuilder: () -> ClosureParamListSyntax) {
-    self = itemsBuilder()
+  init(@ClosureParamListBuilder itemsBuilder: () throws -> ClosureParamListSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }
 
@@ -997,8 +997,8 @@ public struct CodeBlockItemListBuilder {
 }
 
 public extension CodeBlockItemListSyntax {
-  init(@CodeBlockItemListBuilder itemsBuilder: () -> CodeBlockItemListSyntax) {
-    self = itemsBuilder()
+  init(@CodeBlockItemListBuilder itemsBuilder: () throws -> CodeBlockItemListSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }
 
@@ -1077,8 +1077,8 @@ public struct CompositionTypeElementListBuilder {
 }
 
 public extension CompositionTypeElementListSyntax {
-  init(@CompositionTypeElementListBuilder itemsBuilder: () -> CompositionTypeElementListSyntax) {
-    self = itemsBuilder()
+  init(@CompositionTypeElementListBuilder itemsBuilder: () throws -> CompositionTypeElementListSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }
 
@@ -1160,8 +1160,8 @@ public struct ConditionElementListBuilder {
 }
 
 public extension ConditionElementListSyntax {
-  init(@ConditionElementListBuilder itemsBuilder: () -> ConditionElementListSyntax) {
-    self = itemsBuilder()
+  init(@ConditionElementListBuilder itemsBuilder: () throws -> ConditionElementListSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }
 
@@ -1240,8 +1240,8 @@ public struct DeclNameArgumentListBuilder {
 }
 
 public extension DeclNameArgumentListSyntax {
-  init(@DeclNameArgumentListBuilder itemsBuilder: () -> DeclNameArgumentListSyntax) {
-    self = itemsBuilder()
+  init(@DeclNameArgumentListBuilder itemsBuilder: () throws -> DeclNameArgumentListSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }
 
@@ -1320,8 +1320,8 @@ public struct DesignatedTypeListBuilder {
 }
 
 public extension DesignatedTypeListSyntax {
-  init(@DesignatedTypeListBuilder itemsBuilder: () -> DesignatedTypeListSyntax) {
-    self = itemsBuilder()
+  init(@DesignatedTypeListBuilder itemsBuilder: () throws -> DesignatedTypeListSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }
 
@@ -1403,8 +1403,8 @@ public struct DictionaryElementListBuilder {
 }
 
 public extension DictionaryElementListSyntax {
-  init(@DictionaryElementListBuilder itemsBuilder: () -> DictionaryElementListSyntax) {
-    self = itemsBuilder()
+  init(@DictionaryElementListBuilder itemsBuilder: () throws -> DictionaryElementListSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }
 
@@ -1486,8 +1486,8 @@ public struct DifferentiabilityParamListBuilder {
 }
 
 public extension DifferentiabilityParamListSyntax {
-  init(@DifferentiabilityParamListBuilder itemsBuilder: () -> DifferentiabilityParamListSyntax) {
-    self = itemsBuilder()
+  init(@DifferentiabilityParamListBuilder itemsBuilder: () throws -> DifferentiabilityParamListSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }
 
@@ -1569,8 +1569,8 @@ public struct DocumentationAttributeArgumentsBuilder {
 }
 
 public extension DocumentationAttributeArgumentsSyntax {
-  init(@DocumentationAttributeArgumentsBuilder itemsBuilder: () -> DocumentationAttributeArgumentsSyntax) {
-    self = itemsBuilder()
+  init(@DocumentationAttributeArgumentsBuilder itemsBuilder: () throws -> DocumentationAttributeArgumentsSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }
 
@@ -1649,8 +1649,8 @@ public struct EffectsArgumentsBuilder {
 }
 
 public extension EffectsArgumentsSyntax {
-  init(@EffectsArgumentsBuilder itemsBuilder: () -> EffectsArgumentsSyntax) {
-    self = itemsBuilder()
+  init(@EffectsArgumentsBuilder itemsBuilder: () throws -> EffectsArgumentsSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }
 
@@ -1732,8 +1732,8 @@ public struct EnumCaseElementListBuilder {
 }
 
 public extension EnumCaseElementListSyntax {
-  init(@EnumCaseElementListBuilder itemsBuilder: () -> EnumCaseElementListSyntax) {
-    self = itemsBuilder()
+  init(@EnumCaseElementListBuilder itemsBuilder: () throws -> EnumCaseElementListSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }
 
@@ -1812,8 +1812,8 @@ public struct ExprListBuilder {
 }
 
 public extension ExprListSyntax {
-  init(@ExprListBuilder itemsBuilder: () -> ExprListSyntax) {
-    self = itemsBuilder()
+  init(@ExprListBuilder itemsBuilder: () throws -> ExprListSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }
 
@@ -1895,8 +1895,8 @@ public struct FunctionParameterListBuilder {
 }
 
 public extension FunctionParameterListSyntax {
-  init(@FunctionParameterListBuilder itemsBuilder: () -> FunctionParameterListSyntax) {
-    self = itemsBuilder()
+  init(@FunctionParameterListBuilder itemsBuilder: () throws -> FunctionParameterListSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }
 
@@ -1978,8 +1978,8 @@ public struct GenericArgumentListBuilder {
 }
 
 public extension GenericArgumentListSyntax {
-  init(@GenericArgumentListBuilder itemsBuilder: () -> GenericArgumentListSyntax) {
-    self = itemsBuilder()
+  init(@GenericArgumentListBuilder itemsBuilder: () throws -> GenericArgumentListSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }
 
@@ -2061,8 +2061,8 @@ public struct GenericParameterListBuilder {
 }
 
 public extension GenericParameterListSyntax {
-  init(@GenericParameterListBuilder itemsBuilder: () -> GenericParameterListSyntax) {
-    self = itemsBuilder()
+  init(@GenericParameterListBuilder itemsBuilder: () throws -> GenericParameterListSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }
 
@@ -2144,8 +2144,8 @@ public struct GenericRequirementListBuilder {
 }
 
 public extension GenericRequirementListSyntax {
-  init(@GenericRequirementListBuilder itemsBuilder: () -> GenericRequirementListSyntax) {
-    self = itemsBuilder()
+  init(@GenericRequirementListBuilder itemsBuilder: () throws -> GenericRequirementListSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }
 
@@ -2224,8 +2224,8 @@ public struct IfConfigClauseListBuilder {
 }
 
 public extension IfConfigClauseListSyntax {
-  init(@IfConfigClauseListBuilder itemsBuilder: () -> IfConfigClauseListSyntax) {
-    self = itemsBuilder()
+  init(@IfConfigClauseListBuilder itemsBuilder: () throws -> IfConfigClauseListSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }
 
@@ -2307,8 +2307,8 @@ public struct InheritedTypeListBuilder {
 }
 
 public extension InheritedTypeListSyntax {
-  init(@InheritedTypeListBuilder itemsBuilder: () -> InheritedTypeListSyntax) {
-    self = itemsBuilder()
+  init(@InheritedTypeListBuilder itemsBuilder: () throws -> InheritedTypeListSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }
 
@@ -2387,8 +2387,8 @@ public struct KeyPathComponentListBuilder {
 }
 
 public extension KeyPathComponentListSyntax {
-  init(@KeyPathComponentListBuilder itemsBuilder: () -> KeyPathComponentListSyntax) {
-    self = itemsBuilder()
+  init(@KeyPathComponentListBuilder itemsBuilder: () throws -> KeyPathComponentListSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }
 
@@ -2467,8 +2467,8 @@ public struct MemberDeclListBuilder {
 }
 
 public extension MemberDeclListSyntax {
-  init(@MemberDeclListBuilder itemsBuilder: () -> MemberDeclListSyntax) {
-    self = itemsBuilder()
+  init(@MemberDeclListBuilder itemsBuilder: () throws -> MemberDeclListSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }
 
@@ -2547,8 +2547,8 @@ public struct ModifierListBuilder {
 }
 
 public extension ModifierListSyntax {
-  init(@ModifierListBuilder itemsBuilder: () -> ModifierListSyntax) {
-    self = itemsBuilder()
+  init(@ModifierListBuilder itemsBuilder: () throws -> ModifierListSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }
 
@@ -2627,8 +2627,8 @@ public struct MultipleTrailingClosureElementListBuilder {
 }
 
 public extension MultipleTrailingClosureElementListSyntax {
-  init(@MultipleTrailingClosureElementListBuilder itemsBuilder: () -> MultipleTrailingClosureElementListSyntax) {
-    self = itemsBuilder()
+  init(@MultipleTrailingClosureElementListBuilder itemsBuilder: () throws -> MultipleTrailingClosureElementListSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }
 
@@ -2707,8 +2707,8 @@ public struct ObjCSelectorBuilder {
 }
 
 public extension ObjCSelectorSyntax {
-  init(@ObjCSelectorBuilder itemsBuilder: () -> ObjCSelectorSyntax) {
-    self = itemsBuilder()
+  init(@ObjCSelectorBuilder itemsBuilder: () throws -> ObjCSelectorSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }
 
@@ -2790,8 +2790,8 @@ public struct PatternBindingListBuilder {
 }
 
 public extension PatternBindingListSyntax {
-  init(@PatternBindingListBuilder itemsBuilder: () -> PatternBindingListSyntax) {
-    self = itemsBuilder()
+  init(@PatternBindingListBuilder itemsBuilder: () throws -> PatternBindingListSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }
 
@@ -2888,8 +2888,8 @@ public struct PrecedenceGroupAttributeListBuilder {
 }
 
 public extension PrecedenceGroupAttributeListSyntax {
-  init(@PrecedenceGroupAttributeListBuilder itemsBuilder: () -> PrecedenceGroupAttributeListSyntax) {
-    self = itemsBuilder()
+  init(@PrecedenceGroupAttributeListBuilder itemsBuilder: () throws -> PrecedenceGroupAttributeListSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }
 
@@ -2968,8 +2968,8 @@ public struct PrecedenceGroupNameListBuilder {
 }
 
 public extension PrecedenceGroupNameListSyntax {
-  init(@PrecedenceGroupNameListBuilder itemsBuilder: () -> PrecedenceGroupNameListSyntax) {
-    self = itemsBuilder()
+  init(@PrecedenceGroupNameListBuilder itemsBuilder: () throws -> PrecedenceGroupNameListSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }
 
@@ -3051,8 +3051,8 @@ public struct PrimaryAssociatedTypeListBuilder {
 }
 
 public extension PrimaryAssociatedTypeListSyntax {
-  init(@PrimaryAssociatedTypeListBuilder itemsBuilder: () -> PrimaryAssociatedTypeListSyntax) {
-    self = itemsBuilder()
+  init(@PrimaryAssociatedTypeListBuilder itemsBuilder: () throws -> PrimaryAssociatedTypeListSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }
 
@@ -3155,8 +3155,8 @@ public struct SpecializeAttributeSpecListBuilder {
 }
 
 public extension SpecializeAttributeSpecListSyntax {
-  init(@SpecializeAttributeSpecListBuilder itemsBuilder: () -> SpecializeAttributeSpecListSyntax) {
-    self = itemsBuilder()
+  init(@SpecializeAttributeSpecListBuilder itemsBuilder: () throws -> SpecializeAttributeSpecListSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }
 
@@ -3247,8 +3247,8 @@ public struct StringLiteralSegmentsBuilder {
 }
 
 public extension StringLiteralSegmentsSyntax {
-  init(@StringLiteralSegmentsBuilder itemsBuilder: () -> StringLiteralSegmentsSyntax) {
-    self = itemsBuilder()
+  init(@StringLiteralSegmentsBuilder itemsBuilder: () throws -> StringLiteralSegmentsSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }
 
@@ -3339,8 +3339,8 @@ public struct SwitchCaseListBuilder {
 }
 
 public extension SwitchCaseListSyntax {
-  init(@SwitchCaseListBuilder itemsBuilder: () -> SwitchCaseListSyntax) {
-    self = itemsBuilder()
+  init(@SwitchCaseListBuilder itemsBuilder: () throws -> SwitchCaseListSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }
 
@@ -3422,8 +3422,8 @@ public struct TupleExprElementListBuilder {
 }
 
 public extension TupleExprElementListSyntax {
-  init(@TupleExprElementListBuilder itemsBuilder: () -> TupleExprElementListSyntax) {
-    self = itemsBuilder()
+  init(@TupleExprElementListBuilder itemsBuilder: () throws -> TupleExprElementListSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }
 
@@ -3505,8 +3505,8 @@ public struct TuplePatternElementListBuilder {
 }
 
 public extension TuplePatternElementListSyntax {
-  init(@TuplePatternElementListBuilder itemsBuilder: () -> TuplePatternElementListSyntax) {
-    self = itemsBuilder()
+  init(@TuplePatternElementListBuilder itemsBuilder: () throws -> TuplePatternElementListSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }
 
@@ -3588,8 +3588,8 @@ public struct TupleTypeElementListBuilder {
 }
 
 public extension TupleTypeElementListSyntax {
-  init(@TupleTypeElementListBuilder itemsBuilder: () -> TupleTypeElementListSyntax) {
-    self = itemsBuilder()
+  init(@TupleTypeElementListBuilder itemsBuilder: () throws -> TupleTypeElementListSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }
 
@@ -3668,8 +3668,8 @@ public struct UnexpectedNodesBuilder {
 }
 
 public extension UnexpectedNodesSyntax {
-  init(@UnexpectedNodesBuilder itemsBuilder: () -> UnexpectedNodesSyntax) {
-    self = itemsBuilder()
+  init(@UnexpectedNodesBuilder itemsBuilder: () throws -> UnexpectedNodesSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }
 
@@ -3748,7 +3748,7 @@ public struct YieldExprListBuilder {
 }
 
 public extension YieldExprListSyntax {
-  init(@YieldExprListBuilder itemsBuilder: () -> YieldExprListSyntax) {
-    self = itemsBuilder()
+  init(@YieldExprListBuilder itemsBuilder: () throws -> YieldExprListSyntax) rethrows {
+    self = try itemsBuilder()
   }
 }

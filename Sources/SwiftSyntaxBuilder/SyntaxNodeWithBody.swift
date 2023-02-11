@@ -40,7 +40,7 @@ extension SyntaxStringInterpolation {
 public protocol HasTrailingCodeBlock {
   var body: CodeBlockSyntax { get set }
 
-  init(_ header: PartialSyntaxNodeString, @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax) throws
+  init(_ header: PartialSyntaxNodeString, @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax) rethrows
 }
 
 public extension HasTrailingCodeBlock where Self: StmtSyntaxProtocol {
@@ -55,7 +55,7 @@ public extension HasTrailingCodeBlock where Self: StmtSyntaxProtocol {
 }
 
 extension CatchClauseSyntax: HasTrailingCodeBlock {
-  public init(_ header: PartialSyntaxNodeString, @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax) throws {
+  public init(_ header: PartialSyntaxNodeString, @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax) rethrows {
     self = CatchClauseSyntax("\(header) {}")
     self.body = try CodeBlockSyntax(statements: bodyBuilder())
   }
@@ -132,13 +132,13 @@ public extension IfExprSyntax {
     self.elseKeyword = elseBody != nil ? .keyword(.else) : nil
   }
 
-  init(_ header: PartialSyntaxNodeString, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemListSyntax, elseIf: IfExprSyntax) throws {
+  init(_ header: PartialSyntaxNodeString, @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax, elseIf: IfExprSyntax) throws {
     let expr = ExprSyntax("\(header) {}")
     guard let ifExpr = expr.as(Self.self) else {
       throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualNode: expr)
     }
     self = ifExpr
-    self.body = CodeBlockSyntax(statements: bodyBuilder())
+    self.body = CodeBlockSyntax(statements: try bodyBuilder())
     self.elseBody = .ifExpr(elseIf)
     self.elseKeyword = elseBody != nil ? .keyword(.else) : nil
   }
@@ -147,9 +147,9 @@ public extension IfExprSyntax {
 // MARK: - SwitchCase
 
 extension SwitchCaseSyntax {
-  public init(_ header: PartialSyntaxNodeString, @CodeBlockItemListBuilder statementsBuilder: () -> CodeBlockItemListSyntax) {
+  public init(_ header: PartialSyntaxNodeString, @CodeBlockItemListBuilder statementsBuilder: () throws -> CodeBlockItemListSyntax) rethrows {
     self = SwitchCaseSyntax("\(header)")
-    self.statements = statementsBuilder()
+    self.statements = try statementsBuilder()
   }
 }
 

@@ -192,6 +192,17 @@ let basicFormatFile = SourceFileSyntax {
         """
       )
 
+      StmtSyntax(
+        """
+        switch (token.previousToken(viewMode: .sourceAccurate)?.tokenKind, token.tokenKind) {
+        case (.leftParen, .leftBrace): // Ensures there is not a space in `.map({ $0.foo })`
+          return false
+        default:
+          break
+        }
+        """
+      )
+
       try SwitchExprSyntax("switch token.tokenKind") {
         for token in SYNTAX_TOKENS {
           if token.requiresLeadingSpace {
@@ -246,15 +257,15 @@ let basicFormatFile = SourceFileSyntax {
       StmtSyntax(
         """
         switch (token.tokenKind, token.nextToken(viewMode: .sourceAccurate)?.tokenKind) {
-        case (.exclamationMark, .leftParen), // Ensures there is not space in `myOptionalClosure!()`
-             (.exclamationMark, .period), // Ensures there is not space in `myOptionalBar!.foo()`
-             (.keyword(.as), .exclamationMark), // Ensures there is not space in `as!`
-             (.keyword(.as), .postfixQuestionMark), // Ensures there is not space in `as?`
-             (.keyword(.try), .exclamationMark), // Ensures there is not space in `try!`
-             (.keyword(.try), .postfixQuestionMark), // Ensures there is not space in `try?`:
-             (.postfixQuestionMark, .leftParen), // Ensures there is not space in `init?()` or `myOptionalClosure?()`s
-             (.postfixQuestionMark, .rightAngle), // Ensures there is not space in `ContiguousArray<RawSyntax?>`
-             (.postfixQuestionMark, .rightParen): // Ensures there is not space in `myOptionalClosure?()`
+        case (.exclamationMark, .leftParen), // Ensures there is not a space in `myOptionalClosure!()`
+             (.exclamationMark, .period), // Ensures there is not a space in `myOptionalBar!.foo()`
+             (.keyword(.as), .exclamationMark), // Ensures there is not a space in `as!`
+             (.keyword(.as), .postfixQuestionMark), // Ensures there is not a space in `as?`
+             (.keyword(.try), .exclamationMark), // Ensures there is not a space in `try!`
+             (.keyword(.try), .postfixQuestionMark), // Ensures there is not a space in `try?`:
+             (.postfixQuestionMark, .leftParen), // Ensures there is not a space in `init?()` or `myOptionalClosure?()`s
+             (.postfixQuestionMark, .rightAngle), // Ensures there is not a space in `ContiguousArray<RawSyntax?>`
+             (.postfixQuestionMark, .rightParen): // Ensures there is not a space in `myOptionalClosure?()`
           return false
         default:
           break

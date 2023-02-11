@@ -105,6 +105,16 @@ final class VariableTests: XCTestCase {
         }
         """
       ),
+      #line: (
+        DeclSyntax("var bar: [String] { bar.map({ $0.description }) }"),
+        """
+        var bar: [String] {
+            bar.map({
+                    $0.description
+                })
+        }
+        """
+      ),
     ]
 
     for (line, testCase) in testCases {

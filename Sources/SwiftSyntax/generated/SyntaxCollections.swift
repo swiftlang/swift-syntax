@@ -685,9 +685,9 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
     
     public var _syntaxNode: Syntax {
       switch self {
-      case .attribute(let node): 
+      case .attribute(let node):
         return node._syntaxNode
-      case .ifConfigDecl(let node): 
+      case .ifConfigDecl(let node):
         return node._syntaxNode
       }
     }
@@ -7384,11 +7384,11 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
     
     public var _syntaxNode: Syntax {
       switch self {
-      case .precedenceGroupRelation(let node): 
+      case .precedenceGroupRelation(let node):
         return node._syntaxNode
-      case .precedenceGroupAssignment(let node): 
+      case .precedenceGroupAssignment(let node):
         return node._syntaxNode
-      case .precedenceGroupAssociativity(let node): 
+      case .precedenceGroupAssociativity(let node):
         return node._syntaxNode
       }
     }
@@ -8085,13 +8085,13 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
     
     public var _syntaxNode: Syntax {
       switch self {
-      case .labeledSpecializeEntry(let node): 
+      case .labeledSpecializeEntry(let node):
         return node._syntaxNode
-      case .availabilityEntry(let node): 
+      case .availabilityEntry(let node):
         return node._syntaxNode
-      case .targetFunctionEntry(let node): 
+      case .targetFunctionEntry(let node):
         return node._syntaxNode
-      case .genericWhereClause(let node): 
+      case .genericWhereClause(let node):
         return node._syntaxNode
       }
     }
@@ -8367,9 +8367,9 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
     
     public var _syntaxNode: Syntax {
       switch self {
-      case .stringSegment(let node): 
+      case .stringSegment(let node):
         return node._syntaxNode
-      case .expressionSegment(let node): 
+      case .expressionSegment(let node):
         return node._syntaxNode
       }
     }
@@ -8626,9 +8626,9 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
     
     public var _syntaxNode: Syntax {
       switch self {
-      case .switchCase(let node): 
+      case .switchCase(let node):
         return node._syntaxNode
-      case .ifConfigDecl(let node): 
+      case .ifConfigDecl(let node):
         return node._syntaxNode
       }
     }

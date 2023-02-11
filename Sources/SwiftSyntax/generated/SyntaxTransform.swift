@@ -3149,527 +3149,527 @@ extension SyntaxTransformVisitor {
   
   public func visit(_ node: Syntax) -> ResultType {
     switch node.as(SyntaxEnum.self) {
-    case .token(let node): 
+    case .token(let node):
       return visit(node)
-    case .accessPathComponent(let derived): 
+    case .accessPathComponent(let derived):
       return visit(derived)
-    case .accessPath(let derived): 
+    case .accessPath(let derived):
       return visit(derived)
-    case .accessorBlock(let derived): 
+    case .accessorBlock(let derived):
       return visit(derived)
-    case .accessorDecl(let derived): 
+    case .accessorDecl(let derived):
       return visit(derived)
-    case .accessorList(let derived): 
+    case .accessorList(let derived):
       return visit(derived)
-    case .accessorParameter(let derived): 
+    case .accessorParameter(let derived):
       return visit(derived)
-    case .actorDecl(let derived): 
+    case .actorDecl(let derived):
       return visit(derived)
-    case .arrayElementList(let derived): 
+    case .arrayElementList(let derived):
       return visit(derived)
-    case .arrayElement(let derived): 
+    case .arrayElement(let derived):
       return visit(derived)
-    case .arrayExpr(let derived): 
+    case .arrayExpr(let derived):
       return visit(derived)
-    case .arrayType(let derived): 
+    case .arrayType(let derived):
       return visit(derived)
-    case .arrowExpr(let derived): 
+    case .arrowExpr(let derived):
       return visit(derived)
-    case .asExpr(let derived): 
+    case .asExpr(let derived):
       return visit(derived)
-    case .assignmentExpr(let derived): 
+    case .assignmentExpr(let derived):
       return visit(derived)
-    case .associatedtypeDecl(let derived): 
+    case .associatedtypeDecl(let derived):
       return visit(derived)
-    case .attributeList(let derived): 
+    case .attributeList(let derived):
       return visit(derived)
-    case .attribute(let derived): 
+    case .attribute(let derived):
       return visit(derived)
-    case .attributedType(let derived): 
+    case .attributedType(let derived):
       return visit(derived)
-    case .availabilityArgument(let derived): 
+    case .availabilityArgument(let derived):
       return visit(derived)
-    case .availabilityCondition(let derived): 
+    case .availabilityCondition(let derived):
       return visit(derived)
-    case .availabilityEntry(let derived): 
+    case .availabilityEntry(let derived):
       return visit(derived)
-    case .availabilityLabeledArgument(let derived): 
+    case .availabilityLabeledArgument(let derived):
       return visit(derived)
-    case .availabilitySpecList(let derived): 
+    case .availabilitySpecList(let derived):
       return visit(derived)
-    case .availabilityVersionRestrictionListEntry(let derived): 
+    case .availabilityVersionRestrictionListEntry(let derived):
       return visit(derived)
-    case .availabilityVersionRestrictionList(let derived): 
+    case .availabilityVersionRestrictionList(let derived):
       return visit(derived)
-    case .availabilityVersionRestriction(let derived): 
+    case .availabilityVersionRestriction(let derived):
       return visit(derived)
-    case .awaitExpr(let derived): 
+    case .awaitExpr(let derived):
       return visit(derived)
-    case .backDeployedAttributeSpecList(let derived): 
+    case .backDeployedAttributeSpecList(let derived):
       return visit(derived)
-    case .binaryOperatorExpr(let derived): 
+    case .binaryOperatorExpr(let derived):
       return visit(derived)
-    case .booleanLiteralExpr(let derived): 
+    case .booleanLiteralExpr(let derived):
       return visit(derived)
-    case .borrowExpr(let derived): 
+    case .borrowExpr(let derived):
       return visit(derived)
-    case .breakStmt(let derived): 
+    case .breakStmt(let derived):
       return visit(derived)
-    case .caseItemList(let derived): 
+    case .caseItemList(let derived):
       return visit(derived)
-    case .caseItem(let derived): 
+    case .caseItem(let derived):
       return visit(derived)
-    case .catchClauseList(let derived): 
+    case .catchClauseList(let derived):
       return visit(derived)
-    case .catchClause(let derived): 
+    case .catchClause(let derived):
       return visit(derived)
-    case .catchItemList(let derived): 
+    case .catchItemList(let derived):
       return visit(derived)
-    case .catchItem(let derived): 
+    case .catchItem(let derived):
       return visit(derived)
-    case .classDecl(let derived): 
+    case .classDecl(let derived):
       return visit(derived)
-    case .classRestrictionType(let derived): 
+    case .classRestrictionType(let derived):
       return visit(derived)
-    case .closureCaptureItemList(let derived): 
+    case .closureCaptureItemList(let derived):
       return visit(derived)
-    case .closureCaptureItemSpecifier(let derived): 
+    case .closureCaptureItemSpecifier(let derived):
       return visit(derived)
-    case .closureCaptureItem(let derived): 
+    case .closureCaptureItem(let derived):
       return visit(derived)
-    case .closureCaptureSignature(let derived): 
+    case .closureCaptureSignature(let derived):
       return visit(derived)
-    case .closureExpr(let derived): 
+    case .closureExpr(let derived):
       return visit(derived)
-    case .closureParamList(let derived): 
+    case .closureParamList(let derived):
       return visit(derived)
-    case .closureParam(let derived): 
+    case .closureParam(let derived):
       return visit(derived)
-    case .closureSignature(let derived): 
+    case .closureSignature(let derived):
       return visit(derived)
-    case .codeBlockItemList(let derived): 
+    case .codeBlockItemList(let derived):
       return visit(derived)
-    case .codeBlockItem(let derived): 
+    case .codeBlockItem(let derived):
       return visit(derived)
-    case .codeBlock(let derived): 
+    case .codeBlock(let derived):
       return visit(derived)
-    case .compositionTypeElementList(let derived): 
+    case .compositionTypeElementList(let derived):
       return visit(derived)
-    case .compositionTypeElement(let derived): 
+    case .compositionTypeElement(let derived):
       return visit(derived)
-    case .compositionType(let derived): 
+    case .compositionType(let derived):
       return visit(derived)
-    case .conditionElementList(let derived): 
+    case .conditionElementList(let derived):
       return visit(derived)
-    case .conditionElement(let derived): 
+    case .conditionElement(let derived):
       return visit(derived)
-    case .conformanceRequirement(let derived): 
+    case .conformanceRequirement(let derived):
       return visit(derived)
-    case .constrainedSugarType(let derived): 
+    case .constrainedSugarType(let derived):
       return visit(derived)
-    case .continueStmt(let derived): 
+    case .continueStmt(let derived):
       return visit(derived)
-    case .conventionAttributeArguments(let derived): 
+    case .conventionAttributeArguments(let derived):
       return visit(derived)
-    case .conventionWitnessMethodAttributeArguments(let derived): 
+    case .conventionWitnessMethodAttributeArguments(let derived):
       return visit(derived)
-    case .declEffectSpecifiers(let derived): 
+    case .declEffectSpecifiers(let derived):
       return visit(derived)
-    case .declModifierDetail(let derived): 
+    case .declModifierDetail(let derived):
       return visit(derived)
-    case .declModifier(let derived): 
+    case .declModifier(let derived):
       return visit(derived)
-    case .declNameArgumentList(let derived): 
+    case .declNameArgumentList(let derived):
       return visit(derived)
-    case .declNameArgument(let derived): 
+    case .declNameArgument(let derived):
       return visit(derived)
-    case .declNameArguments(let derived): 
+    case .declNameArguments(let derived):
       return visit(derived)
-    case .declName(let derived): 
+    case .declName(let derived):
       return visit(derived)
-    case .deferStmt(let derived): 
+    case .deferStmt(let derived):
       return visit(derived)
-    case .deinitializerDecl(let derived): 
+    case .deinitializerDecl(let derived):
       return visit(derived)
-    case .derivativeRegistrationAttributeArguments(let derived): 
+    case .derivativeRegistrationAttributeArguments(let derived):
       return visit(derived)
-    case .designatedTypeElement(let derived): 
+    case .designatedTypeElement(let derived):
       return visit(derived)
-    case .designatedTypeList(let derived): 
+    case .designatedTypeList(let derived):
       return visit(derived)
-    case .dictionaryElementList(let derived): 
+    case .dictionaryElementList(let derived):
       return visit(derived)
-    case .dictionaryElement(let derived): 
+    case .dictionaryElement(let derived):
       return visit(derived)
-    case .dictionaryExpr(let derived): 
+    case .dictionaryExpr(let derived):
       return visit(derived)
-    case .dictionaryType(let derived): 
+    case .dictionaryType(let derived):
       return visit(derived)
-    case .differentiabilityParamList(let derived): 
+    case .differentiabilityParamList(let derived):
       return visit(derived)
-    case .differentiabilityParam(let derived): 
+    case .differentiabilityParam(let derived):
       return visit(derived)
-    case .differentiabilityParamsClause(let derived): 
+    case .differentiabilityParamsClause(let derived):
       return visit(derived)
-    case .differentiabilityParams(let derived): 
+    case .differentiabilityParams(let derived):
       return visit(derived)
-    case .differentiableAttributeArguments(let derived): 
+    case .differentiableAttributeArguments(let derived):
       return visit(derived)
-    case .discardAssignmentExpr(let derived): 
+    case .discardAssignmentExpr(let derived):
       return visit(derived)
-    case .doStmt(let derived): 
+    case .doStmt(let derived):
       return visit(derived)
-    case .documentationAttributeArgument(let derived): 
+    case .documentationAttributeArgument(let derived):
       return visit(derived)
-    case .documentationAttributeArguments(let derived): 
+    case .documentationAttributeArguments(let derived):
       return visit(derived)
-    case .dynamicReplacementArguments(let derived): 
+    case .dynamicReplacementArguments(let derived):
       return visit(derived)
-    case .editorPlaceholderDecl(let derived): 
+    case .editorPlaceholderDecl(let derived):
       return visit(derived)
-    case .editorPlaceholderExpr(let derived): 
+    case .editorPlaceholderExpr(let derived):
       return visit(derived)
-    case .effectsArguments(let derived): 
+    case .effectsArguments(let derived):
       return visit(derived)
-    case .enumCaseDecl(let derived): 
+    case .enumCaseDecl(let derived):
       return visit(derived)
-    case .enumCaseElementList(let derived): 
+    case .enumCaseElementList(let derived):
       return visit(derived)
-    case .enumCaseElement(let derived): 
+    case .enumCaseElement(let derived):
       return visit(derived)
-    case .enumDecl(let derived): 
+    case .enumDecl(let derived):
       return visit(derived)
-    case .exposeAttributeArguments(let derived): 
+    case .exposeAttributeArguments(let derived):
       return visit(derived)
-    case .exprList(let derived): 
+    case .exprList(let derived):
       return visit(derived)
-    case .expressionPattern(let derived): 
+    case .expressionPattern(let derived):
       return visit(derived)
-    case .expressionSegment(let derived): 
+    case .expressionSegment(let derived):
       return visit(derived)
-    case .expressionStmt(let derived): 
+    case .expressionStmt(let derived):
       return visit(derived)
-    case .extensionDecl(let derived): 
+    case .extensionDecl(let derived):
       return visit(derived)
-    case .fallthroughStmt(let derived): 
+    case .fallthroughStmt(let derived):
       return visit(derived)
-    case .floatLiteralExpr(let derived): 
+    case .floatLiteralExpr(let derived):
       return visit(derived)
-    case .forInStmt(let derived): 
+    case .forInStmt(let derived):
       return visit(derived)
-    case .forcedValueExpr(let derived): 
+    case .forcedValueExpr(let derived):
       return visit(derived)
-    case .functionCallExpr(let derived): 
+    case .functionCallExpr(let derived):
       return visit(derived)
-    case .functionDecl(let derived): 
+    case .functionDecl(let derived):
       return visit(derived)
-    case .functionParameterList(let derived): 
+    case .functionParameterList(let derived):
       return visit(derived)
-    case .functionParameter(let derived): 
+    case .functionParameter(let derived):
       return visit(derived)
-    case .functionSignature(let derived): 
+    case .functionSignature(let derived):
       return visit(derived)
-    case .functionType(let derived): 
+    case .functionType(let derived):
       return visit(derived)
-    case .genericArgumentClause(let derived): 
+    case .genericArgumentClause(let derived):
       return visit(derived)
-    case .genericArgumentList(let derived): 
+    case .genericArgumentList(let derived):
       return visit(derived)
-    case .genericArgument(let derived): 
+    case .genericArgument(let derived):
       return visit(derived)
-    case .genericParameterClause(let derived): 
+    case .genericParameterClause(let derived):
       return visit(derived)
-    case .genericParameterList(let derived): 
+    case .genericParameterList(let derived):
       return visit(derived)
-    case .genericParameter(let derived): 
+    case .genericParameter(let derived):
       return visit(derived)
-    case .genericRequirementList(let derived): 
+    case .genericRequirementList(let derived):
       return visit(derived)
-    case .genericRequirement(let derived): 
+    case .genericRequirement(let derived):
       return visit(derived)
-    case .genericWhereClause(let derived): 
+    case .genericWhereClause(let derived):
       return visit(derived)
-    case .guardStmt(let derived): 
+    case .guardStmt(let derived):
       return visit(derived)
-    case .identifierExpr(let derived): 
+    case .identifierExpr(let derived):
       return visit(derived)
-    case .identifierPattern(let derived): 
+    case .identifierPattern(let derived):
       return visit(derived)
-    case .ifConfigClauseList(let derived): 
+    case .ifConfigClauseList(let derived):
       return visit(derived)
-    case .ifConfigClause(let derived): 
+    case .ifConfigClause(let derived):
       return visit(derived)
-    case .ifConfigDecl(let derived): 
+    case .ifConfigDecl(let derived):
       return visit(derived)
-    case .ifExpr(let derived): 
+    case .ifExpr(let derived):
       return visit(derived)
-    case .implementsAttributeArguments(let derived): 
+    case .implementsAttributeArguments(let derived):
       return visit(derived)
-    case .implicitlyUnwrappedOptionalType(let derived): 
+    case .implicitlyUnwrappedOptionalType(let derived):
       return visit(derived)
-    case .importDecl(let derived): 
+    case .importDecl(let derived):
       return visit(derived)
-    case .inOutExpr(let derived): 
+    case .inOutExpr(let derived):
       return visit(derived)
-    case .infixOperatorExpr(let derived): 
+    case .infixOperatorExpr(let derived):
       return visit(derived)
-    case .inheritedTypeList(let derived): 
+    case .inheritedTypeList(let derived):
       return visit(derived)
-    case .inheritedType(let derived): 
+    case .inheritedType(let derived):
       return visit(derived)
-    case .initializerClause(let derived): 
+    case .initializerClause(let derived):
       return visit(derived)
-    case .initializerDecl(let derived): 
+    case .initializerDecl(let derived):
       return visit(derived)
-    case .integerLiteralExpr(let derived): 
+    case .integerLiteralExpr(let derived):
       return visit(derived)
-    case .isExpr(let derived): 
+    case .isExpr(let derived):
       return visit(derived)
-    case .isTypePattern(let derived): 
+    case .isTypePattern(let derived):
       return visit(derived)
-    case .keyPathComponentList(let derived): 
+    case .keyPathComponentList(let derived):
       return visit(derived)
-    case .keyPathComponent(let derived): 
+    case .keyPathComponent(let derived):
       return visit(derived)
-    case .keyPathExpr(let derived): 
+    case .keyPathExpr(let derived):
       return visit(derived)
-    case .keyPathOptionalComponent(let derived): 
+    case .keyPathOptionalComponent(let derived):
       return visit(derived)
-    case .keyPathPropertyComponent(let derived): 
+    case .keyPathPropertyComponent(let derived):
       return visit(derived)
-    case .keyPathSubscriptComponent(let derived): 
+    case .keyPathSubscriptComponent(let derived):
       return visit(derived)
-    case .labeledSpecializeEntry(let derived): 
+    case .labeledSpecializeEntry(let derived):
       return visit(derived)
-    case .labeledStmt(let derived): 
+    case .labeledStmt(let derived):
       return visit(derived)
-    case .layoutRequirement(let derived): 
+    case .layoutRequirement(let derived):
       return visit(derived)
-    case .macroDecl(let derived): 
+    case .macroDecl(let derived):
       return visit(derived)
-    case .macroExpansionDecl(let derived): 
+    case .macroExpansionDecl(let derived):
       return visit(derived)
-    case .macroExpansionExpr(let derived): 
+    case .macroExpansionExpr(let derived):
       return visit(derived)
-    case .matchingPatternCondition(let derived): 
+    case .matchingPatternCondition(let derived):
       return visit(derived)
-    case .memberAccessExpr(let derived): 
+    case .memberAccessExpr(let derived):
       return visit(derived)
-    case .memberDeclBlock(let derived): 
+    case .memberDeclBlock(let derived):
       return visit(derived)
-    case .memberDeclListItem(let derived): 
+    case .memberDeclListItem(let derived):
       return visit(derived)
-    case .memberDeclList(let derived): 
+    case .memberDeclList(let derived):
       return visit(derived)
-    case .memberTypeIdentifier(let derived): 
+    case .memberTypeIdentifier(let derived):
       return visit(derived)
-    case .metatypeType(let derived): 
+    case .metatypeType(let derived):
       return visit(derived)
-    case .missingDecl(let derived): 
+    case .missingDecl(let derived):
       return visit(derived)
-    case .missingExpr(let derived): 
+    case .missingExpr(let derived):
       return visit(derived)
-    case .missingPattern(let derived): 
+    case .missingPattern(let derived):
       return visit(derived)
-    case .missingStmt(let derived): 
+    case .missingStmt(let derived):
       return visit(derived)
-    case .missing(let derived): 
+    case .missing(let derived):
       return visit(derived)
-    case .missingType(let derived): 
+    case .missingType(let derived):
       return visit(derived)
-    case .modifierList(let derived): 
+    case .modifierList(let derived):
       return visit(derived)
-    case .moveExpr(let derived): 
+    case .moveExpr(let derived):
       return visit(derived)
-    case .multipleTrailingClosureElementList(let derived): 
+    case .multipleTrailingClosureElementList(let derived):
       return visit(derived)
-    case .multipleTrailingClosureElement(let derived): 
+    case .multipleTrailingClosureElement(let derived):
       return visit(derived)
-    case .namedOpaqueReturnType(let derived): 
+    case .namedOpaqueReturnType(let derived):
       return visit(derived)
-    case .nilLiteralExpr(let derived): 
+    case .nilLiteralExpr(let derived):
       return visit(derived)
-    case .objCSelectorPiece(let derived): 
+    case .objCSelectorPiece(let derived):
       return visit(derived)
-    case .objCSelector(let derived): 
+    case .objCSelector(let derived):
       return visit(derived)
-    case .opaqueReturnTypeOfAttributeArguments(let derived): 
+    case .opaqueReturnTypeOfAttributeArguments(let derived):
       return visit(derived)
-    case .operatorDecl(let derived): 
+    case .operatorDecl(let derived):
       return visit(derived)
-    case .operatorPrecedenceAndTypes(let derived): 
+    case .operatorPrecedenceAndTypes(let derived):
       return visit(derived)
-    case .optionalBindingCondition(let derived): 
+    case .optionalBindingCondition(let derived):
       return visit(derived)
-    case .optionalChainingExpr(let derived): 
+    case .optionalChainingExpr(let derived):
       return visit(derived)
-    case .optionalType(let derived): 
+    case .optionalType(let derived):
       return visit(derived)
-    case .originallyDefinedInArguments(let derived): 
+    case .originallyDefinedInArguments(let derived):
       return visit(derived)
-    case .packElementExpr(let derived): 
+    case .packElementExpr(let derived):
       return visit(derived)
-    case .packExpansionExpr(let derived): 
+    case .packExpansionExpr(let derived):
       return visit(derived)
-    case .packExpansionType(let derived): 
+    case .packExpansionType(let derived):
       return visit(derived)
-    case .packReferenceType(let derived): 
+    case .packReferenceType(let derived):
       return visit(derived)
-    case .parameterClause(let derived): 
+    case .parameterClause(let derived):
       return visit(derived)
-    case .patternBindingList(let derived): 
+    case .patternBindingList(let derived):
       return visit(derived)
-    case .patternBinding(let derived): 
+    case .patternBinding(let derived):
       return visit(derived)
-    case .postfixIfConfigExpr(let derived): 
+    case .postfixIfConfigExpr(let derived):
       return visit(derived)
-    case .postfixUnaryExpr(let derived): 
+    case .postfixUnaryExpr(let derived):
       return visit(derived)
-    case .poundSourceLocationArgs(let derived): 
+    case .poundSourceLocationArgs(let derived):
       return visit(derived)
-    case .poundSourceLocation(let derived): 
+    case .poundSourceLocation(let derived):
       return visit(derived)
-    case .precedenceGroupAssignment(let derived): 
+    case .precedenceGroupAssignment(let derived):
       return visit(derived)
-    case .precedenceGroupAssociativity(let derived): 
+    case .precedenceGroupAssociativity(let derived):
       return visit(derived)
-    case .precedenceGroupAttributeList(let derived): 
+    case .precedenceGroupAttributeList(let derived):
       return visit(derived)
-    case .precedenceGroupDecl(let derived): 
+    case .precedenceGroupDecl(let derived):
       return visit(derived)
-    case .precedenceGroupNameElement(let derived): 
+    case .precedenceGroupNameElement(let derived):
       return visit(derived)
-    case .precedenceGroupNameList(let derived): 
+    case .precedenceGroupNameList(let derived):
       return visit(derived)
-    case .precedenceGroupRelation(let derived): 
+    case .precedenceGroupRelation(let derived):
       return visit(derived)
-    case .prefixOperatorExpr(let derived): 
+    case .prefixOperatorExpr(let derived):
       return visit(derived)
-    case .primaryAssociatedTypeClause(let derived): 
+    case .primaryAssociatedTypeClause(let derived):
       return visit(derived)
-    case .primaryAssociatedTypeList(let derived): 
+    case .primaryAssociatedTypeList(let derived):
       return visit(derived)
-    case .primaryAssociatedType(let derived): 
+    case .primaryAssociatedType(let derived):
       return visit(derived)
-    case .protocolDecl(let derived): 
+    case .protocolDecl(let derived):
       return visit(derived)
-    case .qualifiedDeclName(let derived): 
+    case .qualifiedDeclName(let derived):
       return visit(derived)
-    case .regexLiteralExpr(let derived): 
+    case .regexLiteralExpr(let derived):
       return visit(derived)
-    case .repeatWhileStmt(let derived): 
+    case .repeatWhileStmt(let derived):
       return visit(derived)
-    case .returnClause(let derived): 
+    case .returnClause(let derived):
       return visit(derived)
-    case .returnStmt(let derived): 
+    case .returnStmt(let derived):
       return visit(derived)
-    case .sameTypeRequirement(let derived): 
+    case .sameTypeRequirement(let derived):
       return visit(derived)
-    case .sequenceExpr(let derived): 
+    case .sequenceExpr(let derived):
       return visit(derived)
-    case .simpleTypeIdentifier(let derived): 
+    case .simpleTypeIdentifier(let derived):
       return visit(derived)
-    case .sourceFile(let derived): 
+    case .sourceFile(let derived):
       return visit(derived)
-    case .specializeAttributeSpecList(let derived): 
+    case .specializeAttributeSpecList(let derived):
       return visit(derived)
-    case .specializeExpr(let derived): 
+    case .specializeExpr(let derived):
       return visit(derived)
-    case .stringLiteralExpr(let derived): 
+    case .stringLiteralExpr(let derived):
       return visit(derived)
-    case .stringLiteralSegments(let derived): 
+    case .stringLiteralSegments(let derived):
       return visit(derived)
-    case .stringSegment(let derived): 
+    case .stringSegment(let derived):
       return visit(derived)
-    case .structDecl(let derived): 
+    case .structDecl(let derived):
       return visit(derived)
-    case .subscriptDecl(let derived): 
+    case .subscriptDecl(let derived):
       return visit(derived)
-    case .subscriptExpr(let derived): 
+    case .subscriptExpr(let derived):
       return visit(derived)
-    case .superRefExpr(let derived): 
+    case .superRefExpr(let derived):
       return visit(derived)
-    case .switchCaseLabel(let derived): 
+    case .switchCaseLabel(let derived):
       return visit(derived)
-    case .switchCaseList(let derived): 
+    case .switchCaseList(let derived):
       return visit(derived)
-    case .switchCase(let derived): 
+    case .switchCase(let derived):
       return visit(derived)
-    case .switchDefaultLabel(let derived): 
+    case .switchDefaultLabel(let derived):
       return visit(derived)
-    case .switchExpr(let derived): 
+    case .switchExpr(let derived):
       return visit(derived)
-    case .targetFunctionEntry(let derived): 
+    case .targetFunctionEntry(let derived):
       return visit(derived)
-    case .ternaryExpr(let derived): 
+    case .ternaryExpr(let derived):
       return visit(derived)
-    case .throwStmt(let derived): 
+    case .throwStmt(let derived):
       return visit(derived)
-    case .tryExpr(let derived): 
+    case .tryExpr(let derived):
       return visit(derived)
-    case .tupleExprElementList(let derived): 
+    case .tupleExprElementList(let derived):
       return visit(derived)
-    case .tupleExprElement(let derived): 
+    case .tupleExprElement(let derived):
       return visit(derived)
-    case .tupleExpr(let derived): 
+    case .tupleExpr(let derived):
       return visit(derived)
-    case .tuplePatternElementList(let derived): 
+    case .tuplePatternElementList(let derived):
       return visit(derived)
-    case .tuplePatternElement(let derived): 
+    case .tuplePatternElement(let derived):
       return visit(derived)
-    case .tuplePattern(let derived): 
+    case .tuplePattern(let derived):
       return visit(derived)
-    case .tupleTypeElementList(let derived): 
+    case .tupleTypeElementList(let derived):
       return visit(derived)
-    case .tupleTypeElement(let derived): 
+    case .tupleTypeElement(let derived):
       return visit(derived)
-    case .tupleType(let derived): 
+    case .tupleType(let derived):
       return visit(derived)
-    case .typeAnnotation(let derived): 
+    case .typeAnnotation(let derived):
       return visit(derived)
-    case .typeEffectSpecifiers(let derived): 
+    case .typeEffectSpecifiers(let derived):
       return visit(derived)
-    case .typeExpr(let derived): 
+    case .typeExpr(let derived):
       return visit(derived)
-    case .typeInheritanceClause(let derived): 
+    case .typeInheritanceClause(let derived):
       return visit(derived)
-    case .typeInitializerClause(let derived): 
+    case .typeInitializerClause(let derived):
       return visit(derived)
-    case .typealiasDecl(let derived): 
+    case .typealiasDecl(let derived):
       return visit(derived)
-    case .unavailableFromAsyncArguments(let derived): 
+    case .unavailableFromAsyncArguments(let derived):
       return visit(derived)
-    case .underscorePrivateAttributeArguments(let derived): 
+    case .underscorePrivateAttributeArguments(let derived):
       return visit(derived)
-    case .unexpectedNodes(let derived): 
+    case .unexpectedNodes(let derived):
       return visit(derived)
-    case .unresolvedAsExpr(let derived): 
+    case .unresolvedAsExpr(let derived):
       return visit(derived)
-    case .unresolvedIsExpr(let derived): 
+    case .unresolvedIsExpr(let derived):
       return visit(derived)
-    case .unresolvedPatternExpr(let derived): 
+    case .unresolvedPatternExpr(let derived):
       return visit(derived)
-    case .unresolvedTernaryExpr(let derived): 
+    case .unresolvedTernaryExpr(let derived):
       return visit(derived)
-    case .valueBindingPattern(let derived): 
+    case .valueBindingPattern(let derived):
       return visit(derived)
-    case .variableDecl(let derived): 
+    case .variableDecl(let derived):
       return visit(derived)
-    case .versionTuple(let derived): 
+    case .versionTuple(let derived):
       return visit(derived)
-    case .whereClause(let derived): 
+    case .whereClause(let derived):
       return visit(derived)
-    case .whileStmt(let derived): 
+    case .whileStmt(let derived):
       return visit(derived)
-    case .wildcardPattern(let derived): 
+    case .wildcardPattern(let derived):
       return visit(derived)
-    case .yieldExprListElement(let derived): 
+    case .yieldExprListElement(let derived):
       return visit(derived)
-    case .yieldExprList(let derived): 
+    case .yieldExprList(let derived):
       return visit(derived)
-    case .yieldList(let derived): 
+    case .yieldList(let derived):
       return visit(derived)
-    case .yieldStmt(let derived): 
+    case .yieldStmt(let derived):
       return visit(derived)
     }
   }

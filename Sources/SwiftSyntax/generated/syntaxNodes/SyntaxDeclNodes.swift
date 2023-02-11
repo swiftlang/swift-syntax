@@ -253,33 +253,33 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
-    case 0: 
+    case 0:
       return nil
-    case 1: 
+    case 1:
       return "attributes"
-    case 2: 
+    case 2:
       return nil
-    case 3: 
+    case 3:
       return "modifiers"
-    case 4: 
+    case 4:
       return nil
-    case 5: 
+    case 5:
       return nil
-    case 6: 
+    case 6:
       return nil
-    case 7: 
+    case 7:
       return "parameter"
-    case 8: 
+    case 8:
       return nil
-    case 9: 
+    case 9:
       return nil
-    case 10: 
+    case 10:
       return nil
-    case 11: 
+    case 11:
       return nil
-    case 12: 
+    case 12:
       return nil
-    default: 
+    default:
       fatalError("Invalid index")
     }
   }
@@ -615,41 +615,41 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
-    case 0: 
+    case 0:
       return nil
-    case 1: 
+    case 1:
       return "attributes"
-    case 2: 
+    case 2:
       return nil
-    case 3: 
+    case 3:
       return "modifiers"
-    case 4: 
+    case 4:
       return nil
-    case 5: 
+    case 5:
       return nil
-    case 6: 
+    case 6:
       return nil
-    case 7: 
+    case 7:
       return nil
-    case 8: 
+    case 8:
       return nil
-    case 9: 
+    case 9:
       return "generic parameter clause"
-    case 10: 
+    case 10:
       return nil
-    case 11: 
+    case 11:
       return "type inheritance clause"
-    case 12: 
+    case 12:
       return nil
-    case 13: 
+    case 13:
       return "generic where clause"
-    case 14: 
+    case 14:
       return nil
-    case 15: 
+    case 15:
       return nil
-    case 16: 
+    case 16:
       return nil
-    default: 
+    default:
       fatalError("Invalid index")
     }
   }
@@ -963,37 +963,37 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
-    case 0: 
+    case 0:
       return nil
-    case 1: 
+    case 1:
       return "attributes"
-    case 2: 
+    case 2:
       return nil
-    case 3: 
+    case 3:
       return "modifiers"
-    case 4: 
+    case 4:
       return nil
-    case 5: 
+    case 5:
       return nil
-    case 6: 
+    case 6:
       return nil
-    case 7: 
+    case 7:
       return nil
-    case 8: 
+    case 8:
       return nil
-    case 9: 
+    case 9:
       return "inheritance clause"
-    case 10: 
+    case 10:
       return nil
-    case 11: 
+    case 11:
       return nil
-    case 12: 
+    case 12:
       return nil
-    case 13: 
+    case 13:
       return "generic where clause"
-    case 14: 
+    case 14:
       return nil
-    default: 
+    default:
       fatalError("Invalid index")
     }
   }
@@ -1331,41 +1331,41 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
-    case 0: 
+    case 0:
       return nil
-    case 1: 
+    case 1:
       return "attributes"
-    case 2: 
+    case 2:
       return nil
-    case 3: 
+    case 3:
       return "modifiers"
-    case 4: 
+    case 4:
       return nil
-    case 5: 
+    case 5:
       return nil
-    case 6: 
+    case 6:
       return nil
-    case 7: 
+    case 7:
       return nil
-    case 8: 
+    case 8:
       return nil
-    case 9: 
+    case 9:
       return "generic parameter clause"
-    case 10: 
+    case 10:
       return nil
-    case 11: 
+    case 11:
       return "inheritance clause"
-    case 12: 
+    case 12:
       return nil
-    case 13: 
+    case 13:
       return "generic where clause"
-    case 14: 
+    case 14:
       return nil
-    case 15: 
+    case 15:
       return nil
-    case 16: 
+    case 16:
       return nil
-    default: 
+    default:
       fatalError("Invalid index")
     }
   }
@@ -1601,25 +1601,25 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
-    case 0: 
+    case 0:
       return nil
-    case 1: 
+    case 1:
       return "attributes"
-    case 2: 
+    case 2:
       return nil
-    case 3: 
+    case 3:
       return "modifiers"
-    case 4: 
+    case 4:
       return nil
-    case 5: 
+    case 5:
       return nil
-    case 6: 
+    case 6:
       return nil
-    case 7: 
+    case 7:
       return nil
-    case 8: 
+    case 8:
       return nil
-    default: 
+    default:
       fatalError("Invalid index")
     }
   }
@@ -1719,13 +1719,13 @@ public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
-    case 0: 
+    case 0:
       return nil
-    case 1: 
+    case 1:
       return nil
-    case 2: 
+    case 2:
       return nil
-    default: 
+    default:
       fatalError("Invalid index")
     }
   }
@@ -1969,25 +1969,25 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
-    case 0: 
+    case 0:
       return nil
-    case 1: 
+    case 1:
       return "attributes"
-    case 2: 
+    case 2:
       return nil
-    case 3: 
+    case 3:
       return "modifiers"
-    case 4: 
+    case 4:
       return nil
-    case 5: 
+    case 5:
       return nil
-    case 6: 
+    case 6:
       return nil
-    case 7: 
+    case 7:
       return "elements"
-    case 8: 
+    case 8:
       return nil
-    default: 
+    default:
       fatalError("Invalid index")
     }
   }
@@ -2327,41 +2327,41 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
-    case 0: 
+    case 0:
       return nil
-    case 1: 
+    case 1:
       return "attributes"
-    case 2: 
+    case 2:
       return nil
-    case 3: 
+    case 3:
       return "modifiers"
-    case 4: 
+    case 4:
       return nil
-    case 5: 
+    case 5:
       return nil
-    case 6: 
+    case 6:
       return nil
-    case 7: 
+    case 7:
       return nil
-    case 8: 
+    case 8:
       return nil
-    case 9: 
+    case 9:
       return "generic parameter clause"
-    case 10: 
+    case 10:
       return nil
-    case 11: 
+    case 11:
       return "inheritance clause"
-    case 12: 
+    case 12:
       return nil
-    case 13: 
+    case 13:
       return "generic where clause"
-    case 14: 
+    case 14:
       return nil
-    case 15: 
+    case 15:
       return nil
-    case 16: 
+    case 16:
       return nil
-    default: 
+    default:
       fatalError("Invalid index")
     }
   }
@@ -2675,37 +2675,37 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
-    case 0: 
+    case 0:
       return nil
-    case 1: 
+    case 1:
       return "attributes"
-    case 2: 
+    case 2:
       return nil
-    case 3: 
+    case 3:
       return "modifiers"
-    case 4: 
+    case 4:
       return nil
-    case 5: 
+    case 5:
       return nil
-    case 6: 
+    case 6:
       return nil
-    case 7: 
+    case 7:
       return nil
-    case 8: 
+    case 8:
       return nil
-    case 9: 
+    case 9:
       return "inheritance clause"
-    case 10: 
+    case 10:
       return nil
-    case 11: 
+    case 11:
       return "generic where clause"
-    case 12: 
+    case 12:
       return nil
-    case 13: 
+    case 13:
       return nil
-    case 14: 
+    case 14:
       return nil
-    default: 
+    default:
       fatalError("Invalid index")
     }
   }
@@ -3043,41 +3043,41 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
-    case 0: 
+    case 0:
       return nil
-    case 1: 
+    case 1:
       return "attributes"
-    case 2: 
+    case 2:
       return nil
-    case 3: 
+    case 3:
       return "modifiers"
-    case 4: 
+    case 4:
       return nil
-    case 5: 
+    case 5:
       return nil
-    case 6: 
+    case 6:
       return nil
-    case 7: 
+    case 7:
       return nil
-    case 8: 
+    case 8:
       return nil
-    case 9: 
+    case 9:
       return "generic parameter clause"
-    case 10: 
+    case 10:
       return nil
-    case 11: 
+    case 11:
       return "function signature"
-    case 12: 
+    case 12:
       return nil
-    case 13: 
+    case 13:
       return "generic where clause"
-    case 14: 
+    case 14:
       return nil
-    case 15: 
+    case 15:
       return nil
-    case 16: 
+    case 16:
       return nil
-    default: 
+    default:
       fatalError("Invalid index")
     }
   }
@@ -3242,17 +3242,17 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
-    case 0: 
+    case 0:
       return nil
-    case 1: 
+    case 1:
       return nil
-    case 2: 
+    case 2:
       return nil
-    case 3: 
+    case 3:
       return nil
-    case 4: 
+    case 4:
       return nil
-    default: 
+    default:
       fatalError("Invalid index")
     }
   }
@@ -3521,29 +3521,29 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
-    case 0: 
+    case 0:
       return nil
-    case 1: 
+    case 1:
       return "attributes"
-    case 2: 
+    case 2:
       return nil
-    case 3: 
+    case 3:
       return "modifiers"
-    case 4: 
+    case 4:
       return nil
-    case 5: 
+    case 5:
       return nil
-    case 6: 
+    case 6:
       return nil
-    case 7: 
+    case 7:
       return nil
-    case 8: 
+    case 8:
       return nil
-    case 9: 
+    case 9:
       return nil
-    case 10: 
+    case 10:
       return nil
-    default: 
+    default:
       fatalError("Invalid index")
     }
   }
@@ -3877,41 +3877,41 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
-    case 0: 
+    case 0:
       return nil
-    case 1: 
+    case 1:
       return "attributes"
-    case 2: 
+    case 2:
       return nil
-    case 3: 
+    case 3:
       return "modifiers"
-    case 4: 
+    case 4:
       return nil
-    case 5: 
+    case 5:
       return nil
-    case 6: 
+    case 6:
       return nil
-    case 7: 
+    case 7:
       return nil
-    case 8: 
+    case 8:
       return nil
-    case 9: 
+    case 9:
       return "generic parameter clause"
-    case 10: 
+    case 10:
       return nil
-    case 11: 
+    case 11:
       return "function signature"
-    case 12: 
+    case 12:
       return nil
-    case 13: 
+    case 13:
       return "generic where clause"
-    case 14: 
+    case 14:
       return nil
-    case 15: 
+    case 15:
       return nil
-    case 16: 
+    case 16:
       return nil
-    default: 
+    default:
       fatalError("Invalid index")
     }
   }
@@ -3952,9 +3952,9 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     
     public var _syntaxNode: Syntax {
       switch self {
-      case .functionLike(let node): 
+      case .functionLike(let node):
         return node._syntaxNode
-      case .valueLike(let node): 
+      case .valueLike(let node):
         return node._syntaxNode
       }
     }
@@ -4294,41 +4294,41 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
-    case 0: 
+    case 0:
       return nil
-    case 1: 
+    case 1:
       return "attributes"
-    case 2: 
+    case 2:
       return nil
-    case 3: 
+    case 3:
       return "modifiers"
-    case 4: 
+    case 4:
       return nil
-    case 5: 
+    case 5:
       return nil
-    case 6: 
+    case 6:
       return nil
-    case 7: 
+    case 7:
       return nil
-    case 8: 
+    case 8:
       return nil
-    case 9: 
+    case 9:
       return "generic parameter clause"
-    case 10: 
+    case 10:
       return nil
-    case 11: 
+    case 11:
       return "macro signature"
-    case 12: 
+    case 12:
       return nil
-    case 13: 
+    case 13:
       return "macro definition"
-    case 14: 
+    case 14:
       return nil
-    case 15: 
+    case 15:
       return "generic where clause"
-    case 16: 
+    case 16:
       return nil
-    default: 
+    default:
       fatalError("Invalid index")
     }
   }
@@ -4669,41 +4669,41 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
-    case 0: 
+    case 0:
       return nil
-    case 1: 
+    case 1:
       return nil
-    case 2: 
+    case 2:
       return nil
-    case 3: 
+    case 3:
       return nil
-    case 4: 
+    case 4:
       return nil
-    case 5: 
+    case 5:
       return nil
-    case 6: 
+    case 6:
       return nil
-    case 7: 
+    case 7:
       return nil
-    case 8: 
+    case 8:
       return nil
-    case 9: 
+    case 9:
       return nil
-    case 10: 
+    case 10:
       return nil
-    case 11: 
+    case 11:
       return nil
-    case 12: 
+    case 12:
       return nil
-    case 13: 
+    case 13:
       return nil
-    case 14: 
+    case 14:
       return nil
-    case 15: 
+    case 15:
       return nil
-    case 16: 
+    case 16:
       return nil
-    default: 
+    default:
       fatalError("Invalid index")
     }
   }
@@ -4887,17 +4887,17 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
-    case 0: 
+    case 0:
       return nil
-    case 1: 
+    case 1:
       return nil
-    case 2: 
+    case 2:
       return nil
-    case 3: 
+    case 3:
       return nil
-    case 4: 
+    case 4:
       return nil
-    default: 
+    default:
       fatalError("Invalid index")
     }
   }
@@ -5150,29 +5150,29 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
-    case 0: 
+    case 0:
       return nil
-    case 1: 
+    case 1:
       return "attributes"
-    case 2: 
+    case 2:
       return nil
-    case 3: 
+    case 3:
       return "modifiers"
-    case 4: 
+    case 4:
       return nil
-    case 5: 
+    case 5:
       return nil
-    case 6: 
+    case 6:
       return nil
-    case 7: 
+    case 7:
       return nil
-    case 8: 
+    case 8:
       return nil
-    case 9: 
+    case 9:
       return nil
-    case 10: 
+    case 10:
       return nil
-    default: 
+    default:
       fatalError("Invalid index")
     }
   }
@@ -5364,25 +5364,25 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
-    case 0: 
+    case 0:
       return nil
-    case 1: 
+    case 1:
       return nil
-    case 2: 
+    case 2:
       return nil
-    case 3: 
+    case 3:
       return nil
-    case 4: 
+    case 4:
       return nil
-    case 5: 
+    case 5:
       return "arguments"
-    case 6: 
+    case 6:
       return nil
-    case 7: 
+    case 7:
       return nil
-    case 8: 
+    case 8:
       return nil
-    default: 
+    default:
       fatalError("Invalid index")
     }
   }
@@ -5711,37 +5711,37 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
-    case 0: 
+    case 0:
       return nil
-    case 1: 
+    case 1:
       return "attributes"
-    case 2: 
+    case 2:
       return nil
-    case 3: 
+    case 3:
       return "modifiers"
-    case 4: 
+    case 4:
       return nil
-    case 5: 
+    case 5:
       return nil
-    case 6: 
+    case 6:
       return nil
-    case 7: 
+    case 7:
       return nil
-    case 8: 
+    case 8:
       return nil
-    case 9: 
+    case 9:
       return nil
-    case 10: 
+    case 10:
       return nil
-    case 11: 
+    case 11:
       return nil
-    case 12: 
+    case 12:
       return nil
-    case 13: 
+    case 13:
       return nil
-    case 14: 
+    case 14:
       return nil
-    default: 
+    default:
       fatalError("Invalid index")
     }
   }
@@ -6079,41 +6079,41 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
-    case 0: 
+    case 0:
       return nil
-    case 1: 
+    case 1:
       return "attributes"
-    case 2: 
+    case 2:
       return nil
-    case 3: 
+    case 3:
       return "modifiers"
-    case 4: 
+    case 4:
       return nil
-    case 5: 
+    case 5:
       return nil
-    case 6: 
+    case 6:
       return nil
-    case 7: 
+    case 7:
       return nil
-    case 8: 
+    case 8:
       return nil
-    case 9: 
+    case 9:
       return "primary associated type clause"
-    case 10: 
+    case 10:
       return nil
-    case 11: 
+    case 11:
       return "inheritance clause"
-    case 12: 
+    case 12:
       return nil
-    case 13: 
+    case 13:
       return "generic where clause"
-    case 14: 
+    case 14:
       return nil
-    case 15: 
+    case 15:
       return nil
-    case 16: 
+    case 16:
       return nil
-    default: 
+    default:
       fatalError("Invalid index")
     }
   }
@@ -6453,41 +6453,41 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
-    case 0: 
+    case 0:
       return nil
-    case 1: 
+    case 1:
       return "attributes"
-    case 2: 
+    case 2:
       return nil
-    case 3: 
+    case 3:
       return "modifiers"
-    case 4: 
+    case 4:
       return nil
-    case 5: 
+    case 5:
       return nil
-    case 6: 
+    case 6:
       return nil
-    case 7: 
+    case 7:
       return nil
-    case 8: 
+    case 8:
       return nil
-    case 9: 
+    case 9:
       return "generic parameter clause"
-    case 10: 
+    case 10:
       return nil
-    case 11: 
+    case 11:
       return "type inheritance clause"
-    case 12: 
+    case 12:
       return nil
-    case 13: 
+    case 13:
       return "generic where clause"
-    case 14: 
+    case 14:
       return nil
-    case 15: 
+    case 15:
       return nil
-    case 16: 
+    case 16:
       return nil
-    default: 
+    default:
       fatalError("Invalid index")
     }
   }
@@ -6528,9 +6528,9 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     
     public var _syntaxNode: Syntax {
       switch self {
-      case .accessors(let node): 
+      case .accessors(let node):
         return node._syntaxNode
-      case .getter(let node): 
+      case .getter(let node):
         return node._syntaxNode
       }
     }
@@ -6870,41 +6870,41 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
-    case 0: 
+    case 0:
       return nil
-    case 1: 
+    case 1:
       return "attributes"
-    case 2: 
+    case 2:
       return nil
-    case 3: 
+    case 3:
       return "modifiers"
-    case 4: 
+    case 4:
       return nil
-    case 5: 
+    case 5:
       return nil
-    case 6: 
+    case 6:
       return nil
-    case 7: 
+    case 7:
       return "generic parameter clause"
-    case 8: 
+    case 8:
       return nil
-    case 9: 
+    case 9:
       return nil
-    case 10: 
+    case 10:
       return nil
-    case 11: 
+    case 11:
       return nil
-    case 12: 
+    case 12:
       return nil
-    case 13: 
+    case 13:
       return "generic where clause"
-    case 14: 
+    case 14:
       return nil
-    case 15: 
+    case 15:
       return nil
-    case 16: 
+    case 16:
       return nil
-    default: 
+    default:
       fatalError("Invalid index")
     }
   }
@@ -7218,37 +7218,37 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
-    case 0: 
+    case 0:
       return nil
-    case 1: 
+    case 1:
       return "attributes"
-    case 2: 
+    case 2:
       return nil
-    case 3: 
+    case 3:
       return "modifiers"
-    case 4: 
+    case 4:
       return nil
-    case 5: 
+    case 5:
       return nil
-    case 6: 
+    case 6:
       return nil
-    case 7: 
+    case 7:
       return nil
-    case 8: 
+    case 8:
       return nil
-    case 9: 
+    case 9:
       return "generic parameter clause"
-    case 10: 
+    case 10:
       return nil
-    case 11: 
+    case 11:
       return nil
-    case 12: 
+    case 12:
       return nil
-    case 13: 
+    case 13:
       return "generic where clause"
-    case 14: 
+    case 14:
       return nil
-    default: 
+    default:
       fatalError("Invalid index")
     }
   }
@@ -7501,25 +7501,25 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
-    case 0: 
+    case 0:
       return nil
-    case 1: 
+    case 1:
       return "attributes"
-    case 2: 
+    case 2:
       return nil
-    case 3: 
+    case 3:
       return "modifiers"
-    case 4: 
+    case 4:
       return nil
-    case 5: 
+    case 5:
       return nil
-    case 6: 
+    case 6:
       return nil
-    case 7: 
+    case 7:
       return nil
-    case 8: 
+    case 8:
       return nil
-    default: 
+    default:
       fatalError("Invalid index")
     }
   }

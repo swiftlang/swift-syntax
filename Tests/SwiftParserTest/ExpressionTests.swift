@@ -1627,4 +1627,18 @@ final class StatementExpressionTests: XCTestCase {
       )
     )
   }
+
+  func testPatternExprInSwitchCaseItem() {
+    AssertParse(
+      """
+      switch x {
+      case a:
+      1️⃣is
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected 'is' keyword in 'switch' statement")
+      ]
+    )
+  }
 }

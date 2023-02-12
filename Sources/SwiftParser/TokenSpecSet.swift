@@ -706,7 +706,6 @@ enum PrimaryExpressionStart: TokenSpecSet {
 enum ExpressionStart: TokenSpecSet {
   case awaitTryMove(AwaitTryMove)
   case expressionPrefixOperator(ExpressionPrefixOperator)
-  case matchingPatternStart(MatchingPatternStart)
   case primaryExpressionStart(PrimaryExpressionStart)
   case ifOrSwitch(IfOrSwitch)
 
@@ -715,8 +714,6 @@ enum ExpressionStart: TokenSpecSet {
       self = .awaitTryMove(subset)
     } else if let subset = ExpressionPrefixOperator(lexeme: lexeme) {
       self = .expressionPrefixOperator(subset)
-    } else if let subset = MatchingPatternStart(lexeme: lexeme) {
-      self = .matchingPatternStart(subset)
     } else if let subset = PrimaryExpressionStart(lexeme: lexeme) {
       self = .primaryExpressionStart(subset)
     } else if let subset = IfOrSwitch(lexeme: lexeme) {
@@ -729,7 +726,6 @@ enum ExpressionStart: TokenSpecSet {
   static var allCases: [ExpressionStart] {
     return AwaitTryMove.allCases.map(Self.awaitTryMove)
       + ExpressionPrefixOperator.allCases.map(Self.expressionPrefixOperator)
-      + MatchingPatternStart.allCases.map(Self.matchingPatternStart)
       + PrimaryExpressionStart.allCases.map(Self.primaryExpressionStart)
       + IfOrSwitch.allCases.map(Self.ifOrSwitch)
   }
@@ -738,7 +734,6 @@ enum ExpressionStart: TokenSpecSet {
     switch self {
     case .awaitTryMove(let underlyingKind): return underlyingKind.spec
     case .expressionPrefixOperator(let underlyingKind): return underlyingKind.spec
-    case .matchingPatternStart(let underlyingKind): return underlyingKind.spec
     case .primaryExpressionStart(let underlyingKind): return underlyingKind.spec
     case .ifOrSwitch(let underlyingKind): return underlyingKind.spec
     }

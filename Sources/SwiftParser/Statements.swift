@@ -358,7 +358,7 @@ extension Parser {
     if hasMisplacedTry && !expr.is(RawTryExprSyntax.self) {
       expr = RawExprSyntax(
         RawTryExprSyntax(
-          tryKeyword: missingToken(.keyword(.try), text: nil),
+          tryKeyword: missingToken(.try),
           questionOrExclamationMark: nil,
           expression: expr,
           arena: self.arena
@@ -641,7 +641,7 @@ extension Parser {
       case eof
 
       init?(lexeme: Lexer.Lexeme) {
-        switch lexeme {
+        switch PrepareForKeywordMatch(lexeme) {
         case TokenSpec(.rightBrace): self = .rightBrace
         case TokenSpec(.case): self = .case
         case TokenSpec(.default): self = .default
@@ -703,7 +703,7 @@ extension Parser {
       if hasMisplacedTry && !parsedExpr.is(RawTryExprSyntax.self) {
         expr = RawExprSyntax(
           RawTryExprSyntax(
-            tryKeyword: missingToken(.keyword(.try), text: nil),
+            tryKeyword: missingToken(.try),
             questionOrExclamationMark: nil,
             expression: parsedExpr,
             arena: self.arena

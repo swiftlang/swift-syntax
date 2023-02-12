@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-import SwiftSyntax
+@_spi(RawSyntax) import SwiftSyntax
 
 /// Describes how distinctive a token is for parser recovery. When expecting a
 /// token, tokens with a lower token precedence may be skipped and considered
@@ -100,8 +100,17 @@ public enum TokenPrecedence: Comparable {
   }
 
   @_spi(RawSyntax)
-  public init(_ tokenKind: RawTokenKind) {
-    switch tokenKind.base {
+  public init(_ lexeme: Lexer.Lexeme) {
+    if lexeme.rawTokenKind == .keyword {
+      self.init(Keyword(lexeme.tokenText)!)
+    } else {
+      self.init(nonKeyword: lexeme.rawTokenKind)
+    }
+  }
+
+  @_spi(RawSyntax)
+  public init(nonKeyword tokenKind: RawTokenKind) {
+    switch tokenKind {
     case .unknown:
       self = .unknownToken
     // MARK: Identifier like
@@ -164,7 +173,8 @@ public enum TokenPrecedence: Comparable {
     case .poundEndifKeyword:
       self = .closingPoundIf
     case .keyword:
-      self.init(tokenKind.keyword)
+      assertionFailure("RawTokenKind passed to init(nonKeyword:) must not be a keyword")
+      self = .exprKeyword
     }
   }
 

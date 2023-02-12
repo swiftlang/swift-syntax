@@ -84,7 +84,7 @@ enum DeclarationModifier: TokenSpecSet {
   case _local
   
   init?(lexeme: Lexer.Lexeme) {
-    switch lexeme {
+    switch PrepareForKeywordMatch(lexeme) {
     case TokenSpec(.`static`): 
       self = .`static`
     case TokenSpec(.`class`): 

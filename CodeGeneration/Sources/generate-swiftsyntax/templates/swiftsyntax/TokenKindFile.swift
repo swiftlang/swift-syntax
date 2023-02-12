@@ -197,7 +197,7 @@ let tokenKindFile = SourceFileSyntax {
     // `RawTokenBaseKind` for equality. With the raw value, it compiles down to
     // a primitive integer compare, without, it calls into `__derived_enum_equals`.
     @frozen // FIXME: Not actually stable, works around a miscompile
-    public enum RawTokenBaseKind: UInt8, Equatable, Hashable
+    public enum RawTokenKind: UInt8, Equatable, Hashable
     """
   ) {
     DeclSyntax("case eof")
@@ -205,75 +205,6 @@ let tokenKindFile = SourceFileSyntax {
     for token in SYNTAX_TOKENS {
       DeclSyntax("case \(raw: token.swiftKind)")
     }
-  }
-
-  DeclSyntax(
-    """
-    fileprivate extension Keyword {
-      static var rawValueZero: Keyword {
-        return Keyword(rawValue: 0)!
-      }
-    }
-    """
-  )
-
-  try! StructDeclSyntax(
-    """
-    /// Similar to `TokenKind` but without a `String` associated value.
-    /// Technically, this should be an enum like
-    /// ```
-    /// enum RawTokenKind {
-    ///   case eof
-    ///   case associatedtypeKeyword
-    ///   // remaining case from `RawTokenBaseKind`...
-    ///   case keyword(Keyword)
-    /// }
-    /// ```
-    ///
-    /// But modelling it this way has significant performance implications since
-    /// comparing two `RawTokenKind` calls into `__derived_enum_equals`. It's more
-    /// effient to model the base kind as an enum with a raw value and store the
-    /// keyword separately.
-    ///
-    /// Whenever `base` is not `keyword`, `keyword` should have a raw value
-    /// of `0`.
-    @frozen // FIXME: Not actually stable, works around a miscompile
-    public struct RawTokenKind: Equatable, Hashable
-    """
-  ) {
-    DeclSyntax("public let base: RawTokenBaseKind")
-    DeclSyntax("public let keyword: Keyword")
-
-    DeclSyntax(
-      """
-      public init(base: RawTokenBaseKind, keyword: Keyword) {
-        assert(base == .keyword || keyword.rawValue == 0)
-        self.base = base
-        self.keyword = keyword
-      }
-      """
-    )
-
-    DeclSyntax(
-      """
-      public static var eof: RawTokenKind {
-        return RawTokenKind(base: .eof, keyword: .rawValueZero)
-      }
-      """
-    )
-    for token in SYNTAX_TOKENS where token.swiftKind != "keyword" {
-      try VariableDeclSyntax("public static var \(raw: token.swiftKind): RawTokenKind") {
-        StmtSyntax("return RawTokenKind(base: .\(raw: token.swiftKind), keyword: .rawValueZero)")
-      }
-    }
-
-    DeclSyntax(
-      """
-      public static func keyword(_ keyword: Keyword) -> RawTokenKind {
-        return RawTokenKind(base: .keyword, keyword: keyword)
-      }
-      """
-    )
 
     try VariableDeclSyntax(
       """
@@ -281,17 +212,13 @@ let tokenKindFile = SourceFileSyntax {
       public var defaultText: SyntaxText?
       """
     ) {
-      try! SwitchExprSyntax("switch self.base") {
+      try! SwitchExprSyntax("switch self") {
         SwitchCaseSyntax("case .eof:") {
           StmtSyntax(#"return """#)
         }
 
         for token in SYNTAX_TOKENS {
-          if token.swiftKind == "keyword" {
-            SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
-              StmtSyntax("return self.keyword.defaultText")
-            }
-          } else if let text = token.text {
+          if let text = token.text {
             SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
               StmtSyntax("return #\"\(raw: text)\"#")
             }
@@ -314,7 +241,7 @@ let tokenKindFile = SourceFileSyntax {
       public var isPunctuation: Bool
       """
     ) {
-      try! SwitchExprSyntax("switch self.base") {
+      try! SwitchExprSyntax("switch self") {
         SwitchCaseSyntax("case .eof:") {
           StmtSyntax("return false")
         }
@@ -336,7 +263,7 @@ let tokenKindFile = SourceFileSyntax {
       public static func fromRaw(kind rawKind: RawTokenKind, text: String) -> TokenKind
       """
     ) {
-      try! SwitchExprSyntax("switch rawKind.base") {
+      try! SwitchExprSyntax("switch rawKind") {
         SwitchCaseSyntax("case .eof:") {
           StmtSyntax("return .eof")
         }
@@ -344,8 +271,14 @@ let tokenKindFile = SourceFileSyntax {
         for token in SYNTAX_TOKENS {
           if token.swiftKind == "keyword" {
             SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
-              ExprSyntax("assert(text.isEmpty || String(syntaxText: rawKind.keyword.defaultText) == text)")
-              StmtSyntax("return .keyword(rawKind.keyword)")
+              DeclSyntax("var text = text")
+              StmtSyntax(
+                """
+                return text.withSyntaxText { text in
+                  return .keyword(Keyword(text)!)
+                }
+                """
+              )
             }
           } else if token.text != nil {
             SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
@@ -377,7 +310,7 @@ let tokenKindFile = SourceFileSyntax {
         for token in SYNTAX_TOKENS {
           if token.swiftKind == "keyword" {
             SwitchCaseSyntax("case .\(raw: token.swiftKind)(let keyword):") {
-              StmtSyntax("return (.\(raw: token.swiftKind)(keyword), nil)")
+              StmtSyntax("return (.\(raw: token.swiftKind), String(syntaxText: keyword.defaultText))")
             }
           } else if token.text != nil {
             SwitchCaseSyntax("case .\(raw: token.swiftKind):") {

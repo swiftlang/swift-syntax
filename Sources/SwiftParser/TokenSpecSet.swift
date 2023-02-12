@@ -38,7 +38,7 @@ enum AccessorKind: TokenSpecSet {
   case _modify
 
   init?(lexeme: Lexer.Lexeme) {
-    switch lexeme {
+    switch PrepareForKeywordMatch(lexeme) {
     case TokenSpec(.get): self = .get
     case TokenSpec(.set): self = .set
     case TokenSpec(.didSet): self = .didSet
@@ -90,7 +90,7 @@ enum CanBeStatementStart: TokenSpecSet {
   case yield
 
   init?(lexeme: Lexer.Lexeme) {
-    switch lexeme {
+    switch PrepareForKeywordMatch(lexeme) {
     case TokenSpec(.break): self = .breakKeyword
     case TokenSpec(.continue): self = .continueKeyword
     case TokenSpec(.defer): self = .deferKeyword
@@ -158,7 +158,7 @@ enum ContextualDeclKeyword: TokenSpecSet {
   case weak
 
   init?(lexeme: Lexer.Lexeme) {
-    switch lexeme {
+    switch PrepareForKeywordMatch(lexeme) {
     case TokenSpec(.__consuming): self = .__consuming
     case TokenSpec(._compilerInitialized): self = ._compilerInitialized
     case TokenSpec(._const): self = ._const
@@ -243,7 +243,7 @@ enum DeclarationStart: TokenSpecSet {
   case varKeyword
 
   init?(lexeme: Lexer.Lexeme) {
-    switch lexeme {
+    switch PrepareForKeywordMatch(lexeme) {
     case TokenSpec(.actor): self = .actorKeyword
     case TokenSpec(.macro): self = .macroKeyword
     case TokenSpec(.associatedtype): self = .associatedtypeKeyword
@@ -300,7 +300,7 @@ enum IdentifierTokens: TokenSpecSet {
   case selfKeyword
 
   init?(lexeme: Lexer.Lexeme) {
-    switch lexeme {
+    switch PrepareForKeywordMatch(lexeme) {
     case TokenSpec(.Any): self = .anyKeyword
     case TokenSpec(.Self): self = .capitalSelfKeyword
     case TokenSpec(.identifier): self = .identifier
@@ -329,7 +329,7 @@ enum IdentifierOrRethrowsTokens: TokenSpecSet {
   case rethrowsKeyword
 
   init?(lexeme: Lexer.Lexeme) {
-    switch lexeme {
+    switch PrepareForKeywordMatch(lexeme) {
     case TokenSpec(.Any): self = .anyKeyword
     case TokenSpec(.Self): self = .capitalSelfKeyword
     case TokenSpec(.identifier): self = .identifier
@@ -418,7 +418,7 @@ enum OperatorLike: TokenSpecSet {
     case .postfixQuestionMark: return TokenSpec(.postfixQuestionMark, remapping: .postfixOperator)
     case .equal: return TokenSpec(.equal, remapping: .binaryOperator)
     case .arrow: return TokenSpec(.arrow, remapping: .binaryOperator)
-    case .regexLiteral: return TokenSpec(.regexLiteral, remapping: .binaryOperator, recoveryPrecedence: TokenPrecedence(.binaryOperator))
+    case .regexLiteral: return TokenSpec(.regexLiteral, remapping: .binaryOperator, recoveryPrecedence: TokenPrecedence(nonKeyword: .binaryOperator))
     }
   }
 }
@@ -448,7 +448,7 @@ enum SwitchCaseStart: TokenSpecSet {
   case defaultKeyword
 
   init?(lexeme: Lexer.Lexeme) {
-    switch lexeme {
+    switch PrepareForKeywordMatch(lexeme) {
     case TokenSpec(.case): self = .caseKeyword
     case TokenSpec(.default): self = .defaultKeyword
     default: return nil
@@ -469,7 +469,7 @@ public enum TypeSpecifier: TokenSpecSet {
   case shared
 
   init?(lexeme: Lexer.Lexeme) {
-    switch lexeme {
+    switch PrepareForKeywordMatch(lexeme) {
     case TokenSpec(.inout): self = .inoutKeyword
     case TokenSpec(.__owned): self = .owned
     case TokenSpec(.__shared): self = .shared
@@ -504,7 +504,7 @@ enum AwaitTryMove: TokenSpecSet {
   case tryKeyword
 
   init?(lexeme: Lexer.Lexeme) {
-    switch lexeme {
+    switch PrepareForKeywordMatch(lexeme) {
     case TokenSpec(.await): self = .awaitKeyword
     case TokenSpec(._move): self = ._moveKeyword
     case TokenSpec(._borrow): self = ._borrowKeyword
@@ -528,7 +528,7 @@ enum IfOrSwitch: TokenSpecSet {
   case switchKeyword
 
   init?(lexeme: Lexer.Lexeme) {
-    switch lexeme {
+    switch PrepareForKeywordMatch(lexeme) {
     case TokenSpec(.if): self = .ifKeyword
     case TokenSpec(.switch): self = .switchKeyword
     default: return nil
@@ -572,7 +572,7 @@ enum MatchingPatternStart: TokenSpecSet {
   case varKeyword
 
   init?(lexeme: Lexer.Lexeme) {
-    switch lexeme {
+    switch PrepareForKeywordMatch(lexeme) {
     case TokenSpec(.is): self = .isKeyword
     case TokenSpec(.let): self = .letKeyword
     case TokenSpec(.var): self = .varKeyword
@@ -594,7 +594,7 @@ enum ParameterModifier: TokenSpecSet {
   case isolated
 
   init?(lexeme: Lexer.Lexeme) {
-    switch lexeme {
+    switch PrepareForKeywordMatch(lexeme) {
     case TokenSpec(._const): self = ._const
     case TokenSpec(.isolated): self = .isolated
     default: return nil
@@ -637,7 +637,7 @@ enum PrimaryExpressionStart: TokenSpecSet {
   case singleQuote
 
   init?(lexeme: Lexer.Lexeme) {
-    switch lexeme {
+    switch PrepareForKeywordMatch(lexeme) {
     case TokenSpec(.Any): self = .anyKeyword
     case TokenSpec(.Self): self = .capitalSelfKeyword
     case TokenSpec(.dollarIdentifier): self = .dollarIdentifier

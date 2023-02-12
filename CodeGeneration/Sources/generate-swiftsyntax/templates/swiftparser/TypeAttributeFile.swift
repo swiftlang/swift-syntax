@@ -31,7 +31,7 @@ let typeAttributeFile = SourceFileSyntax {
       }
 
       try InitializerDeclSyntax("init?(lexeme: Lexer.Lexeme)") {
-        SwitchExprSyntax(switchKeyword: .keyword(.switch), expression: ExprSyntax("lexeme")) {
+        try! SwitchExprSyntax("switch PrepareForKeywordMatch(lexeme)") {
           for attribute in TYPE_ATTR_KINDS {
             SwitchCaseSyntax("case TokenSpec(.\(raw: attribute.name)):") {
               ExprSyntax("self = .\(raw: attribute.swiftName)")

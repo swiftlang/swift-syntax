@@ -94,7 +94,7 @@ let syntaxClassificationFile = SourceFileSyntax {
 
   try! ExtensionDeclSyntax("extension RawTokenKind") {
     try VariableDeclSyntax("internal var classification: SyntaxClassification") {
-      try SwitchExprSyntax("switch self.base") {
+      try SwitchExprSyntax("switch self") {
         for token in SYNTAX_TOKENS {
           SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
             if let classification = token.classification {

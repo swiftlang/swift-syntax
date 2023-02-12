@@ -66,7 +66,7 @@ extension Parser {
     case identifier
 
     init?(lexeme: Lexer.Lexeme) {
-      switch lexeme {
+      switch PrepareForKeywordMatch(lexeme) {
       case TokenSpec(.message): self = .message
       case TokenSpec(.renamed): self = .renamed
       case TokenSpec(.introduced): self = .introduced

@@ -166,7 +166,7 @@ extension Parser {
       }
 
       init?(lexeme: Lexer.Lexeme) {
-        switch lexeme {
+        switch PrepareForKeywordMatch(lexeme) {
         case TokenSpec(.private): self = .private
         case TokenSpec(.fileprivate): self = .fileprivate
         case TokenSpec(.internal): self = .internal
@@ -200,11 +200,7 @@ extension Parser {
       (unexpectedBeforeDetail, detail) = eat(setHandle)
     } else {
       unexpectedBeforeDetail = nil
-      detail = RawTokenSyntax(
-        missing: .keyword(.set),
-        text: "set",
-        arena: arena
-      )
+      detail = missingToken(.set)
     }
     let (unexpectedBeforeRightParen, rightParen) = expect(.rightParen)
 

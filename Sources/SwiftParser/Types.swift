@@ -949,7 +949,7 @@ extension Parser {
       }
 
       init?(lexeme: Lexer.Lexeme) {
-        switch lexeme {
+        switch PrepareForKeywordMatch(lexeme) {
         case TokenSpec(.inout): self = .inout
         case TokenSpec(.__shared): self = .__shared
         case TokenSpec(.__owned): self = .__owned

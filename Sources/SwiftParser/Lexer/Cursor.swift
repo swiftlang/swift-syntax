@@ -218,7 +218,7 @@ extension Lexer {
     var input: UnsafeBufferPointer<UInt8>
     var previous: UInt8
     /// If we have already lexed a token, the kind of the previously lexed token
-    var previousTokenKind: RawTokenBaseKind?
+    var previousTokenKind: RawTokenKind?
     private var stateStack: StateStack = StateStack()
 
     init(input: UnsafeBufferPointer<UInt8>, previous: UInt8) {
@@ -357,7 +357,7 @@ extension Lexer.Cursor {
       flags.insert(.isAtStartOfLine)
     }
 
-    self.previousTokenKind = result.tokenKind.base
+    self.previousTokenKind = result.tokenKind
     diagnostic = TokenDiagnostic(combining: diagnostic, result.error?.tokenDiagnostic(tokenStart: cursor))
 
     return .init(
@@ -1900,7 +1900,7 @@ extension Lexer.Cursor {
 
     let text = tokStart.text(upTo: self)
     if let keyword = Keyword(text), keyword.isLexerClassified {
-      return Lexer.Result(.keyword(keyword))
+      return Lexer.Result(.keyword)
     } else if text == "_" {
       return Lexer.Result(.wildcard)
     } else {

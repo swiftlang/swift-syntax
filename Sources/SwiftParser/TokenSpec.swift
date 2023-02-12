@@ -12,6 +12,32 @@
 
 @_spi(RawSyntax) import SwiftSyntax
 
+/// Pre-computes the keyword a lexeme might represent. This makes matching
+/// a lexeme that has been converted into `PrepareForKeyword` match cheaper to
+/// match against multiple `TokenSpec` that assume a keyword.
+struct PrepareForKeywordMatch {
+  /// The kind of the lexeme.
+  fileprivate let rawTokenKind: RawTokenKind
+
+  /// If the lexeme has the same text as a keyword, that keyword, otherwise `nil`.
+  fileprivate let keyword: Keyword?
+
+  /// Whether to lexeme occurred at the start of a line.
+  fileprivate let isAtStartOfLine: Bool
+
+  @inline(__always)
+  init(_ lexeme: Lexer.Lexeme) {
+    self.rawTokenKind = lexeme.rawTokenKind
+    switch lexeme.rawTokenKind {
+    case .keyword, .identifier:
+      keyword = Keyword(lexeme.tokenText)
+    default:
+      keyword = nil
+    }
+    self.isAtStartOfLine = lexeme.isAtStartOfLine
+  }
+}
+
 /// Describes a token that should be consumed by the parser.
 ///
 /// All the methods in here and all functions that take a `TokenSpec` need to be
@@ -27,6 +53,10 @@ struct TokenSpec {
   /// `fileprivate` because only functions in this file should access it since
   /// they know how to handle the identifier -> keyword remapping.
   fileprivate let rawTokenKind: RawTokenKind
+
+  /// If `rawTokenKind` is `keyword`, the keyword we are expecting. For all other
+  /// values of `rawTokenKind`, this is `nil`.
+  fileprivate let keyword: Keyword?
 
   /// If not nil, the token will be remapped to the provided kind when consumed.
   ///
@@ -51,9 +81,11 @@ struct TokenSpec {
     recoveryPrecedence: TokenPrecedence? = nil,
     allowAtStartOfLine: Bool = true
   ) {
+    assert(rawTokenKind != .keyword, "To create a TokenSpec for a keyword use the initializer that takes a keyword")
     self.rawTokenKind = rawTokenKind
+    self.keyword = nil
     self.remapping = remapping
-    self.recoveryPrecedence = recoveryPrecedence ?? TokenPrecedence(rawTokenKind)
+    self.recoveryPrecedence = recoveryPrecedence ?? TokenPrecedence(nonKeyword: rawTokenKind)
     self.allowAtStartOfLine = allowAtStartOfLine
   }
 
@@ -64,19 +96,30 @@ struct TokenSpec {
     recoveryPrecedence: TokenPrecedence? = nil,
     allowAtStartOfLine: Bool = true
   ) {
-    self.rawTokenKind = .keyword(keyword)
+    self.rawTokenKind = .keyword
+    self.keyword = keyword
     self.remapping = remapping
-    self.recoveryPrecedence = recoveryPrecedence ?? TokenPrecedence(rawTokenKind)
+    self.recoveryPrecedence = recoveryPrecedence ?? TokenPrecedence(keyword)
     self.allowAtStartOfLine = allowAtStartOfLine
   }
 
   @inline(__always)
-  func matches(rawTokenKind: RawTokenKind, text: SyntaxText, atStartOfLine: @autoclosure () -> Bool) -> Bool {
+  func matches(
+    rawTokenKind: RawTokenKind,
+    keyword: @autoclosure () -> Keyword?,
+    atStartOfLine: @autoclosure () -> Bool
+  ) -> Bool {
     if !allowAtStartOfLine && atStartOfLine() {
       return false
     }
-    if self.rawTokenKind.base == .keyword {
-      return rawTokenKind == self.rawTokenKind || (rawTokenKind == .identifier && self.rawTokenKind.keyword.defaultText == text)
+    if self.rawTokenKind == .keyword {
+      assert(self.keyword != nil)
+      switch rawTokenKind {
+      case .keyword, .identifier:
+        return keyword() == self.keyword
+      default:
+        return false
+      }
     } else {
       return rawTokenKind == self.rawTokenKind
     }
@@ -86,7 +129,7 @@ struct TokenSpec {
   static func ~= (kind: TokenSpec, lexeme: Lexer.Lexeme) -> Bool {
     return kind.matches(
       rawTokenKind: lexeme.rawTokenKind,
-      text: lexeme.tokenText,
+      keyword: Keyword(lexeme.tokenText),
       atStartOfLine: lexeme.isAtStartOfLine
     )
   }
@@ -95,7 +138,7 @@ struct TokenSpec {
   static func ~= (kind: TokenSpec, token: TokenSyntax) -> Bool {
     return kind.matches(
       rawTokenKind: token.rawTokenKind,
-      text: token.tokenView.rawText,
+      keyword: Keyword(token.tokenView.rawText),
       atStartOfLine: token.leadingTrivia.contains(where: { $0.isNewline })
     )
   }
@@ -104,8 +147,17 @@ struct TokenSpec {
   static func ~= (kind: TokenSpec, token: RawTokenSyntax) -> Bool {
     return kind.matches(
       rawTokenKind: token.tokenKind,
-      text: token.tokenView.rawText,
+      keyword: Keyword(token.tokenView.rawText),
       atStartOfLine: token.leadingTriviaPieces.contains(where: \.isNewline)
+    )
+  }
+
+  @inline(__always)
+  static func ~= (kind: TokenSpec, lexeme: PrepareForKeywordMatch) -> Bool {
+    return kind.matches(
+      rawTokenKind: lexeme.rawTokenKind,
+      keyword: lexeme.keyword,
+      atStartOfLine: lexeme.isAtStartOfLine
     )
   }
 }
@@ -114,7 +166,7 @@ extension TokenConsumer {
   /// Generates a missing token that has the expected kind of `spec`.
   @inline(__always)
   mutating func missingToken(_ spec: TokenSpec) -> Token {
-    return missingToken(spec.remapping ?? spec.rawTokenKind, text: spec.rawTokenKind.defaultText)
+    return missingToken(spec.remapping ?? spec.rawTokenKind, text: spec.keyword?.defaultText ?? spec.rawTokenKind.defaultText)
   }
 
   /// Asserts that the current token matches `spec` and consumes it, performing
@@ -127,8 +179,8 @@ extension TokenConsumer {
     assert(spec ~= self.currentToken)
     if let remapping = spec.remapping {
       return self.consumeAnyToken(remapping: remapping)
-    } else if spec.rawTokenKind.base == .keyword {
-      return self.consumeAnyToken(remapping: spec.rawTokenKind)
+    } else if spec.rawTokenKind == .keyword {
+      return self.consumeAnyToken(remapping: .keyword)
     } else {
       return self.consumeAnyToken()
     }

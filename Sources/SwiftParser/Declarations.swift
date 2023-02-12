@@ -176,7 +176,7 @@ extension Parser {
         // parsed when we're parsing the attributes.
         break
       }
-      let directive = self.parsePoundIfDirective { parser in
+      let directive = self.parsePoundIfDirective { (parser, _) in
         let parsedDecl = parser.parseDeclaration()
         let semicolon = parser.consume(if: .semicolon)
         return RawMemberDeclListItemSyntax(

@@ -659,7 +659,10 @@ extension Parser {
   ) -> RawExprSyntax {
     assert(self.at(.poundIfKeyword))
 
-    let config = self.parsePoundIfDirective { parser -> RawExprSyntax? in
+    let config = self.parsePoundIfDirective { (parser, isFirstElement) -> RawExprSyntax? in
+      if !isFirstElement {
+        return nil
+      }
       let head: RawExprSyntax
       if parser.at(.period) {
         head = parser.parseDottedExpressionSuffix(nil)
@@ -2236,7 +2239,7 @@ extension Parser {
         elements.append(
           .ifConfigDecl(
             self.parsePoundIfDirective(
-              { $0.parseSwitchCases(allowStandaloneStmtRecovery: allowStandaloneStmtRecovery) },
+              { (parser, _) in parser.parseSwitchCases(allowStandaloneStmtRecovery: allowStandaloneStmtRecovery) },
               syntax: { parser, cases in
                 guard cases.count == 1, let firstCase = cases.first else {
                   assert(cases.isEmpty)

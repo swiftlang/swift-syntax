@@ -1666,4 +1666,15 @@ final class StatementExpressionTests: XCTestCase {
       ]
     )
   }
+
+  func testStringLiteralAfterKeyPath() {
+    AssertParse(
+      #"""
+      \String.?1️⃣""
+      """#,
+      diagnostics: [
+        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'")
+      ]
+    )
+  }
 }

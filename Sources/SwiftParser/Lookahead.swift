@@ -122,12 +122,10 @@ extension Parser.Lookahead {
     }
     assert(tokenText.hasPrefix(prefix))
 
-    // See also: Parser.consumePrefix(_:as:)
-    let offset =
-      (self.currentToken.trailingTriviaByteLength
-        + tokenText.count
-        - prefix.count)
-    self.currentToken = self.lexemes.resetForSplit(of: offset)
+    self.currentToken = self.lexemes.resetForSplit(
+      splitToken: self.currentToken,
+      consumedPrefix: self.currentToken.leadingTriviaByteLength + prefix.count
+    )
   }
 }
 

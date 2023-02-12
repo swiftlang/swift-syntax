@@ -61,18 +61,14 @@ extension Lexer {
       return self.nextToken
     }
 
+    /// Reset the lexeme sequence to the state we were in when lexing `splitToken`
+    /// but after we consumed `consumedPrefix` bytes from `splitToken`.
     /// - Warning: Do not add more usages of this function.
-    mutating func resetForSplit(of bytes: Int) -> Lexer.Lexeme {
-      guard bytes > 0 else {
-        return self.advance()
+    mutating func resetForSplit(splitToken: Lexeme, consumedPrefix: Int) -> Lexer.Lexeme {
+      self.cursor = splitToken.cursor
+      for _ in 0..<consumedPrefix {
+        _ = self.cursor.advance()
       }
-
-      // FIXME: This is kind of ridiculous. We shouldn't have to look backwards
-      // in the token stream. We should be fusing together runs of operator and
-      // identifier characters in the parser, not splitting and backing up
-      // again in the lexer.
-      let backUpLength = self.nextToken.byteLength + bytes
-      self.cursor.backUp(by: backUpLength)
       self.nextToken = self.cursor.nextToken(sourceBufferStart: self.sourceBufferStart, stateAllocator: lexerStateAllocator)
       return self.advance()
     }

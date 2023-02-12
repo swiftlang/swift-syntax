@@ -695,16 +695,6 @@ extension Lexer.Cursor {
   mutating func advanceValidatingUTF8Character() -> Unicode.Scalar? {
     return Unicode.Scalar.lexing(advance: { self.advance() }, peek: { self.peek(at: 0) })
   }
-
-  /// Rever the lexer by `offset` bytes. This should only be used by `resetForSplit`.
-  /// This must not back up by more bytes than the last token because that would
-  /// require us to also update `previousTokenKind`, which we don't do in this
-  /// function
-  mutating func backUp(by offset: Int) {
-    assert(!self.isAtStartOfFile)
-    self.previous = self.input.baseAddress!.advanced(by: -(offset + 1)).pointee
-    self.input = UnsafeBufferPointer(start: self.input.baseAddress!.advanced(by: -offset), count: self.input.count + offset)
-  }
 }
 
 // MARK: - Boundness of operators

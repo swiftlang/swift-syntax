@@ -607,7 +607,7 @@ extension Parser {
   mutating func parseObjectiveCSelector() -> RawObjCSelectorSyntax {
     var elements = [RawObjCSelectorPieceSyntax]()
     var loopProgress = LoopProgressCondition()
-    while !self.at(.eof, .rightParen) && loopProgress.evaluate(currentToken) {
+    while loopProgress.evaluate(currentToken) {
       // Empty selector piece.
       if let colon = self.consume(if: .colon) {
         elements.append(
@@ -618,10 +618,8 @@ extension Parser {
           )
         )
         continue
-      }
-
-      if self.at(.identifier) || self.currentToken.isLexerClassifiedKeyword {
-        let name = self.consumeAnyToken()
+      } else if self.at(.identifier, .wildcard) || self.currentToken.isLexerClassifiedKeyword {
+        let name = self.consumeAnyToken(remapping: .identifier)
 
         // If we hit a ')' we may have a zero-argument selector.
         if self.at(.rightParen) && elements.isEmpty {
@@ -644,6 +642,8 @@ extension Parser {
             arena: self.arena
           )
         )
+      } else {
+        break
       }
     }
     return RawObjCSelectorSyntax(elements: elements, arena: self.arena)

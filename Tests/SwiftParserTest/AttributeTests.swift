@@ -90,6 +90,13 @@ final class AttributeTests: XCTestCase {
       func f(_: Int, _: Int, _: Int, _: Int, _: Int) { }
       """
     )
+
+    AssertParse(
+      """
+      @objc(_:)
+      func f(_: Int)
+      """
+    )
   }
 
   func testRethrowsAttribute() {

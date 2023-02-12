@@ -1641,4 +1641,15 @@ final class StatementExpressionTests: XCTestCase {
       ]
     )
   }
+
+  func testStandaloneAtCaseInSwitch() {
+    AssertParse(
+      """
+      switch x {
+        1️⃣@case
+      }
+      """,
+      diagnostics: [DiagnosticSpec(message: "unexpected code '@case' in 'switch' statement")]
+    )
+  }
 }

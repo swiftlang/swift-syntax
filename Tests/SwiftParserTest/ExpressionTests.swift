@@ -1652,4 +1652,18 @@ final class StatementExpressionTests: XCTestCase {
       diagnostics: [DiagnosticSpec(message: "unexpected code '@case' in 'switch' statement")]
     )
   }
+
+  func testUnterminatedInterpolationAtEndOfMultilineStringLiteral() {
+    AssertParse(
+      #"""
+      """\({(1️⃣})
+      2️⃣"""3️⃣
+      """#,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected value and ')' to end tuple"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: #"unexpected code '"""' in string literal"#),
+        DiagnosticSpec(locationMarker: "3️⃣", message: #"expected '"""' to end string literal"#),
+      ]
+    )
+  }
 }

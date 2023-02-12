@@ -81,6 +81,20 @@ extension Lexer {
         return remainingText
       }
     }
+
+    #if SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION
+    /// If `pointer` is in the source buffer of this `LexemeSequence`, return
+    /// its offset, otherwise `nil`. Should only be used for the parser's
+    /// alternate token introspection
+    func offset(of pointer: UnsafePointer<UInt8>) -> Int? {
+      let offset = pointer - self.sourceBufferStart.input.baseAddress!
+      if offset <= self.sourceBufferStart.input.count {
+        return offset
+      } else {
+        return nil
+      }
+    }
+    #endif
   }
 
   @_spi(RawSyntax)

@@ -70,6 +70,12 @@ extension Parser.Lookahead: TokenConsumer {
   mutating func eat(_ spec: TokenSpec) -> Token {
     return self.consume(if: spec)!
   }
+
+  #if SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION
+  var shouldRecordAlternativeTokenChoices: Bool { false }
+
+  mutating public func recordAlternativeTokenChoice(for lexeme: Lexer.Lexeme, choices: [TokenSpec]) {}
+  #endif
 }
 
 extension Parser.Lookahead {

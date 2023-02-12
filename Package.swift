@@ -28,6 +28,13 @@ if ProcessInfo.processInfo.environment["SWIFTSYNTAX_ENABLE_RAWSYNTAX_VALIDATION"
   ]
 }
 
+var swiftParserSwiftSettings: [SwiftSetting] = []
+if ProcessInfo.processInfo.environment["SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION"] != nil {
+  swiftParserSwiftSettings += [
+    .define("SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION")
+  ]
+}
+
 let package = Package(
   name: "SwiftSyntax",
   platforms: [
@@ -170,12 +177,15 @@ let package = Package(
     .target(
       name: "SwiftParser",
       dependencies: ["SwiftSyntax"],
-      exclude: ["CMakeLists.txt", "README.md"]
+      exclude: ["CMakeLists.txt", "README.md"],
+      swiftSettings: swiftParserSwiftSettings
+
     ),
 
     .testTarget(
       name: "SwiftParserTest",
-      dependencies: ["_SwiftSyntaxTestSupport", "SwiftDiagnostics", "SwiftOperators", "SwiftParser", "SwiftSyntaxBuilder"]
+      dependencies: ["_SwiftSyntaxTestSupport", "SwiftDiagnostics", "SwiftOperators", "SwiftParser", "SwiftSyntaxBuilder"],
+      swiftSettings: swiftParserSwiftSettings
     ),
 
     // MARK: SwiftParserDiagnostics

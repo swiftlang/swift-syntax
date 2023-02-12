@@ -44,7 +44,8 @@ struct PrepareForKeywordMatch {
 /// marked `@inline(__always)` so the compiler inlines the `RawTokenKind` we are
 /// matching against and is thus able to rule out one of the branches in
 /// `matches(rawTokenKind:text:)` based on the matched kind.
-struct TokenSpec {
+@_spi(RawSyntax)
+public struct TokenSpec {
   /// The kind we expect the token that we want to consume to have.
   /// This can be a keyword, in which case the `TokenSpec` will also match an
   /// identifier with the same text as the keyword and remap it to that keyword
@@ -159,6 +160,29 @@ struct TokenSpec {
       keyword: lexeme.keyword,
       atStartOfLine: lexeme.isAtStartOfLine
     )
+  }
+
+  /// Returns a `TokenKind` that will most likely be parsed as a token that
+  /// matches this `TokenSpec`.
+  ///
+  /// IMPORTANT: Should only be used when generating tokens during the
+  /// modification of test cases. This should never be used in the parser itself.
+  public var synthesizedTokenKind: TokenKind {
+    switch rawTokenKind {
+    case .binaryOperator: return .binaryOperator("+")
+    case .dollarIdentifier: return .dollarIdentifier("$0")
+    case .extendedRegexDelimiter: return .extendedRegexDelimiter("#")
+    case .floatingLiteral: return .floatingLiteral("1.0")
+    case .identifier: return .identifier("myIdent")
+    case .integerLiteral: return .integerLiteral("1")
+    case .keyword: return .keyword(keyword!)
+    case .postfixOperator: return .postfixOperator("++")
+    case .prefixOperator: return .prefixOperator("!")
+    case .rawStringDelimiter: return .rawStringDelimiter("#")
+    case .regexLiteralPattern: return .regexLiteralPattern(".*")
+    case .stringSegment: return .stringSegment("abc")
+    default: return TokenKind.fromRaw(kind: rawTokenKind, text: "")
+    }
   }
 }
 

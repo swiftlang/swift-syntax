@@ -67,6 +67,11 @@ extension Parser.Lookahead {
     _ spec2: TokenSpec,
     _ spec3: TokenSpec
   ) -> RecoveryConsumptionHandle? {
+    #if SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION
+    if shouldRecordAlternativeTokenChoices {
+      recordAlternativeTokenChoice(for: self.currentToken, choices: [spec1, spec2, spec3])
+    }
+    #endif
     let initialTokensConsumed = self.tokensConsumed
 
     let recoveryPrecedence = min(spec1.recoveryPrecedence, spec2.recoveryPrecedence, spec3.recoveryPrecedence)
@@ -119,6 +124,11 @@ extension Parser.Lookahead {
     anyIn specSet: SpecSet.Type,
     overrideRecoveryPrecedence: TokenPrecedence? = nil
   ) -> (match: SpecSet, handle: RecoveryConsumptionHandle)? {
+    #if SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION
+    if shouldRecordAlternativeTokenChoices {
+      recordAlternativeTokenChoice(for: self.currentToken, choices: specSet.allCases.map(\.spec))
+    }
+    #endif
     let initialTokensConsumed = self.tokensConsumed
 
     precondition(!specSet.allCases.isEmpty, "SpecSet must have at least one case")

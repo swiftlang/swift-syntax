@@ -773,7 +773,6 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
 enum ExpressionStart: RawTokenKindSubset {
   case awaitTryMove(AwaitTryMove)
   case expressionPrefixOperator(ExpressionPrefixOperator)
-  case matchingPatternStart(MatchingPatternStart)
   case primaryExpressionStart(PrimaryExpressionStart)
 
   init?(lexeme: Lexer.Lexeme) {
@@ -781,8 +780,6 @@ enum ExpressionStart: RawTokenKindSubset {
       self = .awaitTryMove(subset)
     } else if let subset = ExpressionPrefixOperator(lexeme: lexeme) {
       self = .expressionPrefixOperator(subset)
-    } else if let subset = MatchingPatternStart(lexeme: lexeme) {
-      self = .matchingPatternStart(subset)
     } else if let subset = PrimaryExpressionStart(lexeme: lexeme) {
       self = .primaryExpressionStart(subset)
     } else {
@@ -793,7 +790,6 @@ enum ExpressionStart: RawTokenKindSubset {
   static var allCases: [ExpressionStart] {
     return AwaitTryMove.allCases.map(Self.awaitTryMove)
       + ExpressionPrefixOperator.allCases.map(Self.expressionPrefixOperator)
-      + MatchingPatternStart.allCases.map(Self.matchingPatternStart)
       + PrimaryExpressionStart.allCases.map(Self.primaryExpressionStart)
   }
 
@@ -801,7 +797,6 @@ enum ExpressionStart: RawTokenKindSubset {
     switch self {
     case .awaitTryMove(let underlyingKind): return underlyingKind.rawTokenKind
     case .expressionPrefixOperator(let underlyingKind): return underlyingKind.rawTokenKind
-    case .matchingPatternStart(let underlyingKind): return underlyingKind.rawTokenKind
     case .primaryExpressionStart(let underlyingKind): return underlyingKind.rawTokenKind
     }
   }
@@ -810,7 +805,6 @@ enum ExpressionStart: RawTokenKindSubset {
     switch self {
     case .awaitTryMove(let underlyingKind): return underlyingKind.contextualKeyword
     case .expressionPrefixOperator(let underlyingKind): return underlyingKind.contextualKeyword
-    case .matchingPatternStart(let underlyingKind): return underlyingKind.contextualKeyword
     case .primaryExpressionStart(let underlyingKind): return underlyingKind.contextualKeyword
     }
   }

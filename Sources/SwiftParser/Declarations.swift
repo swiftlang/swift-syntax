@@ -1581,6 +1581,7 @@ extension Parser {
     var attributes: RawAttributeListSyntax?
     var modifier: RawDeclModifierSyntax?
     var kind: AccessorKind
+    var unexpectedBeforeToken: RawUnexpectedNodesSyntax?
     var token: RawTokenSyntax
   }
 
@@ -1591,7 +1592,7 @@ extension Parser {
     var look = self.lookahead()
     let _ = look.consumeAttributeList()
     let hasModifier = look.consume(if: .keyword(.mutating), .keyword(.nonmutating), .keyword(.__consuming)) != nil
-    guard let (kind, handle) = look.at(anyIn: AccessorKind.self) ?? forcedKind else {
+    guard let (kind, _) = look.at(anyIn: AccessorKind.self) ?? forcedKind else {
       return nil
     }
 
@@ -1612,11 +1613,12 @@ extension Parser {
       modifier = nil
     }
 
-    let introducer = self.eat(handle)
+    let (unexpectedBeforeIntroducer, introducer) = self.expect(kind.spec)
     return AccessorIntroducer(
       attributes: attrs,
       modifier: modifier,
       kind: kind,
+      unexpectedBeforeToken: unexpectedBeforeIntroducer,
       token: introducer
     )
   }
@@ -1673,6 +1675,7 @@ extension Parser {
     return RawAccessorDeclSyntax(
       attributes: introducer.attributes,
       modifier: introducer.modifier,
+      introducer.unexpectedBeforeToken,
       accessorKind: introducer.token,
       parameter: parameter,
       effectSpecifiers: effectSpecifiers,

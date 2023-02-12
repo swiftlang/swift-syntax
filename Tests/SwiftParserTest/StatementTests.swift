@@ -615,4 +615,19 @@ final class StatementTests: XCTestCase {
       ]
     )
   }
+
+  func testRecoveryInFrontOfAccessorIntroducer() {
+    AssertParse(
+      """
+      subscript(1️⃣{@2️⃣self _modify3️⃣
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected type and ')' to end parameter clause"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '->' and return type in subscript"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected name in attribute"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected 'self' keyword in accessor"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected '}' to end subscript"),
+      ]
+    )
+  }
 }

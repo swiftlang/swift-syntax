@@ -89,42 +89,42 @@ extension SyntaxClassification {
     // Separate checks for token nodes (most common checks) versus checks for layout nodes.
     if childKind == .token {
       switch (parentKind, indexInParent) {
-      case (.availabilityVersionRestriction, 1): 
+      case (.availabilityVersionRestriction, 1):
         return (.keyword, false)
-      case (.declModifier, 1): 
+      case (.declModifier, 1):
         return (.attribute, false)
-      case (.expressionSegment, 5): 
+      case (.expressionSegment, 5):
         return (.stringInterpolationAnchor, true)
-      case (.expressionSegment, 9): 
+      case (.expressionSegment, 9):
         return (.stringInterpolationAnchor, true)
-      case (.forInStmt, 5): 
+      case (.forInStmt, 5):
         return (.keyword, false)
-      case (.ifConfigClause, 1): 
+      case (.ifConfigClause, 1):
         return (.buildConfigId, false)
-      case (.ifConfigDecl, 3): 
+      case (.ifConfigDecl, 3):
         return (.buildConfigId, false)
-      case (.memberTypeIdentifier, 5): 
+      case (.memberTypeIdentifier, 5):
         return (.typeIdentifier, false)
-      case (.operatorDecl, 7): 
+      case (.operatorDecl, 7):
         return (.operatorIdentifier, false)
-      case (.precedenceGroupAssociativity, 1): 
+      case (.precedenceGroupAssociativity, 1):
         return (.keyword, false)
-      case (.precedenceGroupRelation, 1): 
+      case (.precedenceGroupRelation, 1):
         return (.keyword, false)
-      case (.simpleTypeIdentifier, 1): 
+      case (.simpleTypeIdentifier, 1):
         return (.typeIdentifier, false)
       default: 
         return nil
       }
     }else {
       switch (parentKind, indexInParent) {
-      case (.attribute, 3): 
+      case (.attribute, 3):
         return (.attribute, false)
-      case (.availabilityVersionRestrictionListEntry, 1): 
+      case (.availabilityVersionRestrictionListEntry, 1):
         return (.keyword, false)
-      case (.ifConfigClause, 3): 
+      case (.ifConfigClause, 3):
         return (.buildConfigId, false)
-      case (.operatorDecl, 3): 
+      case (.operatorDecl, 3):
         return (.attribute, false)
       default: 
         return nil
@@ -136,99 +136,99 @@ extension SyntaxClassification {
 extension RawTokenKind {
   internal var classification: SyntaxClassification {
     switch self {
-    case .wildcard: 
+    case .wildcard:
       return .none
-    case .leftParen: 
+    case .leftParen:
       return .none
-    case .rightParen: 
+    case .rightParen:
       return .none
-    case .leftBrace: 
+    case .leftBrace:
       return .none
-    case .rightBrace: 
+    case .rightBrace:
       return .none
-    case .leftSquareBracket: 
+    case .leftSquareBracket:
       return .none
-    case .rightSquareBracket: 
+    case .rightSquareBracket:
       return .none
-    case .leftAngle: 
+    case .leftAngle:
       return .none
-    case .rightAngle: 
+    case .rightAngle:
       return .none
-    case .period: 
+    case .period:
       return .none
-    case .comma: 
+    case .comma:
       return .none
-    case .ellipsis: 
+    case .ellipsis:
       return .none
-    case .colon: 
+    case .colon:
       return .none
-    case .semicolon: 
+    case .semicolon:
       return .none
-    case .equal: 
+    case .equal:
       return .none
-    case .atSign: 
+    case .atSign:
       return .attribute
-    case .pound: 
+    case .pound:
       return .none
-    case .prefixAmpersand: 
+    case .prefixAmpersand:
       return .none
-    case .arrow: 
+    case .arrow:
       return .none
-    case .backtick: 
+    case .backtick:
       return .none
-    case .backslash: 
+    case .backslash:
       return .none
-    case .exclamationMark: 
+    case .exclamationMark:
       return .none
-    case .postfixQuestionMark: 
+    case .postfixQuestionMark:
       return .none
-    case .infixQuestionMark: 
+    case .infixQuestionMark:
       return .none
-    case .stringQuote: 
+    case .stringQuote:
       return .stringLiteral
-    case .singleQuote: 
+    case .singleQuote:
       return .stringLiteral
-    case .multilineStringQuote: 
+    case .multilineStringQuote:
       return .stringLiteral
-    case .poundSourceLocationKeyword: 
+    case .poundSourceLocationKeyword:
       return .poundDirectiveKeyword
-    case .poundIfKeyword: 
+    case .poundIfKeyword:
       return .poundDirectiveKeyword
-    case .poundElseKeyword: 
+    case .poundElseKeyword:
       return .poundDirectiveKeyword
-    case .poundElseifKeyword: 
+    case .poundElseifKeyword:
       return .poundDirectiveKeyword
-    case .poundEndifKeyword: 
+    case .poundEndifKeyword:
       return .poundDirectiveKeyword
-    case .poundAvailableKeyword: 
+    case .poundAvailableKeyword:
       return .keyword
-    case .poundUnavailableKeyword: 
+    case .poundUnavailableKeyword:
       return .keyword
-    case .integerLiteral: 
+    case .integerLiteral:
       return .integerLiteral
-    case .floatingLiteral: 
+    case .floatingLiteral:
       return .floatingLiteral
-    case .regexLiteral: 
+    case .regexLiteral:
       return .none
-    case .unknown: 
+    case .unknown:
       return .none
-    case .identifier: 
+    case .identifier:
       return .identifier
-    case .binaryOperator: 
+    case .binaryOperator:
       return .operatorIdentifier
-    case .postfixOperator: 
+    case .postfixOperator:
       return .operatorIdentifier
-    case .prefixOperator: 
+    case .prefixOperator:
       return .operatorIdentifier
-    case .dollarIdentifier: 
+    case .dollarIdentifier:
       return .dollarIdentifier
-    case .keyword: 
+    case .keyword:
       return .keyword
-    case .rawStringDelimiter: 
+    case .rawStringDelimiter:
       return .none
-    case .stringSegment: 
+    case .stringSegment:
       return .stringLiteral
-    case .eof: 
+    case .eof:
       return .none
     }
   }

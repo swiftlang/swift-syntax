@@ -5601,527 +5601,527 @@ open class SyntaxRewriter {
   /// space transient instead of having it linger in the call stack.
   private func visitationFunc(for data: SyntaxData) -> ((SyntaxData) -> Syntax) {
     switch data.raw.kind {
-    case .token: 
+    case .token:
       return visitImplTokenSyntax
-    case .accessPathComponent: 
+    case .accessPathComponent:
       return visitImplAccessPathComponentSyntax
-    case .accessPath: 
+    case .accessPath:
       return visitImplAccessPathSyntax
-    case .accessorBlock: 
+    case .accessorBlock:
       return visitImplAccessorBlockSyntax
-    case .accessorDecl: 
+    case .accessorDecl:
       return visitImplAccessorDeclSyntax
-    case .accessorList: 
+    case .accessorList:
       return visitImplAccessorListSyntax
-    case .accessorParameter: 
+    case .accessorParameter:
       return visitImplAccessorParameterSyntax
-    case .actorDecl: 
+    case .actorDecl:
       return visitImplActorDeclSyntax
-    case .arrayElementList: 
+    case .arrayElementList:
       return visitImplArrayElementListSyntax
-    case .arrayElement: 
+    case .arrayElement:
       return visitImplArrayElementSyntax
-    case .arrayExpr: 
+    case .arrayExpr:
       return visitImplArrayExprSyntax
-    case .arrayType: 
+    case .arrayType:
       return visitImplArrayTypeSyntax
-    case .arrowExpr: 
+    case .arrowExpr:
       return visitImplArrowExprSyntax
-    case .asExpr: 
+    case .asExpr:
       return visitImplAsExprSyntax
-    case .assignmentExpr: 
+    case .assignmentExpr:
       return visitImplAssignmentExprSyntax
-    case .associatedtypeDecl: 
+    case .associatedtypeDecl:
       return visitImplAssociatedtypeDeclSyntax
-    case .attributeList: 
+    case .attributeList:
       return visitImplAttributeListSyntax
-    case .attribute: 
+    case .attribute:
       return visitImplAttributeSyntax
-    case .attributedType: 
+    case .attributedType:
       return visitImplAttributedTypeSyntax
-    case .availabilityArgument: 
+    case .availabilityArgument:
       return visitImplAvailabilityArgumentSyntax
-    case .availabilityCondition: 
+    case .availabilityCondition:
       return visitImplAvailabilityConditionSyntax
-    case .availabilityEntry: 
+    case .availabilityEntry:
       return visitImplAvailabilityEntrySyntax
-    case .availabilityLabeledArgument: 
+    case .availabilityLabeledArgument:
       return visitImplAvailabilityLabeledArgumentSyntax
-    case .availabilitySpecList: 
+    case .availabilitySpecList:
       return visitImplAvailabilitySpecListSyntax
-    case .availabilityVersionRestrictionListEntry: 
+    case .availabilityVersionRestrictionListEntry:
       return visitImplAvailabilityVersionRestrictionListEntrySyntax
-    case .availabilityVersionRestrictionList: 
+    case .availabilityVersionRestrictionList:
       return visitImplAvailabilityVersionRestrictionListSyntax
-    case .availabilityVersionRestriction: 
+    case .availabilityVersionRestriction:
       return visitImplAvailabilityVersionRestrictionSyntax
-    case .awaitExpr: 
+    case .awaitExpr:
       return visitImplAwaitExprSyntax
-    case .backDeployedAttributeSpecList: 
+    case .backDeployedAttributeSpecList:
       return visitImplBackDeployedAttributeSpecListSyntax
-    case .binaryOperatorExpr: 
+    case .binaryOperatorExpr:
       return visitImplBinaryOperatorExprSyntax
-    case .booleanLiteralExpr: 
+    case .booleanLiteralExpr:
       return visitImplBooleanLiteralExprSyntax
-    case .borrowExpr: 
+    case .borrowExpr:
       return visitImplBorrowExprSyntax
-    case .breakStmt: 
+    case .breakStmt:
       return visitImplBreakStmtSyntax
-    case .caseItemList: 
+    case .caseItemList:
       return visitImplCaseItemListSyntax
-    case .caseItem: 
+    case .caseItem:
       return visitImplCaseItemSyntax
-    case .catchClauseList: 
+    case .catchClauseList:
       return visitImplCatchClauseListSyntax
-    case .catchClause: 
+    case .catchClause:
       return visitImplCatchClauseSyntax
-    case .catchItemList: 
+    case .catchItemList:
       return visitImplCatchItemListSyntax
-    case .catchItem: 
+    case .catchItem:
       return visitImplCatchItemSyntax
-    case .classDecl: 
+    case .classDecl:
       return visitImplClassDeclSyntax
-    case .classRestrictionType: 
+    case .classRestrictionType:
       return visitImplClassRestrictionTypeSyntax
-    case .closureCaptureItemList: 
+    case .closureCaptureItemList:
       return visitImplClosureCaptureItemListSyntax
-    case .closureCaptureItemSpecifier: 
+    case .closureCaptureItemSpecifier:
       return visitImplClosureCaptureItemSpecifierSyntax
-    case .closureCaptureItem: 
+    case .closureCaptureItem:
       return visitImplClosureCaptureItemSyntax
-    case .closureCaptureSignature: 
+    case .closureCaptureSignature:
       return visitImplClosureCaptureSignatureSyntax
-    case .closureExpr: 
+    case .closureExpr:
       return visitImplClosureExprSyntax
-    case .closureParamList: 
+    case .closureParamList:
       return visitImplClosureParamListSyntax
-    case .closureParam: 
+    case .closureParam:
       return visitImplClosureParamSyntax
-    case .closureSignature: 
+    case .closureSignature:
       return visitImplClosureSignatureSyntax
-    case .codeBlockItemList: 
+    case .codeBlockItemList:
       return visitImplCodeBlockItemListSyntax
-    case .codeBlockItem: 
+    case .codeBlockItem:
       return visitImplCodeBlockItemSyntax
-    case .codeBlock: 
+    case .codeBlock:
       return visitImplCodeBlockSyntax
-    case .compositionTypeElementList: 
+    case .compositionTypeElementList:
       return visitImplCompositionTypeElementListSyntax
-    case .compositionTypeElement: 
+    case .compositionTypeElement:
       return visitImplCompositionTypeElementSyntax
-    case .compositionType: 
+    case .compositionType:
       return visitImplCompositionTypeSyntax
-    case .conditionElementList: 
+    case .conditionElementList:
       return visitImplConditionElementListSyntax
-    case .conditionElement: 
+    case .conditionElement:
       return visitImplConditionElementSyntax
-    case .conformanceRequirement: 
+    case .conformanceRequirement:
       return visitImplConformanceRequirementSyntax
-    case .constrainedSugarType: 
+    case .constrainedSugarType:
       return visitImplConstrainedSugarTypeSyntax
-    case .continueStmt: 
+    case .continueStmt:
       return visitImplContinueStmtSyntax
-    case .conventionAttributeArguments: 
+    case .conventionAttributeArguments:
       return visitImplConventionAttributeArgumentsSyntax
-    case .conventionWitnessMethodAttributeArguments: 
+    case .conventionWitnessMethodAttributeArguments:
       return visitImplConventionWitnessMethodAttributeArgumentsSyntax
-    case .declEffectSpecifiers: 
+    case .declEffectSpecifiers:
       return visitImplDeclEffectSpecifiersSyntax
-    case .declModifierDetail: 
+    case .declModifierDetail:
       return visitImplDeclModifierDetailSyntax
-    case .declModifier: 
+    case .declModifier:
       return visitImplDeclModifierSyntax
-    case .declNameArgumentList: 
+    case .declNameArgumentList:
       return visitImplDeclNameArgumentListSyntax
-    case .declNameArgument: 
+    case .declNameArgument:
       return visitImplDeclNameArgumentSyntax
-    case .declNameArguments: 
+    case .declNameArguments:
       return visitImplDeclNameArgumentsSyntax
-    case .declName: 
+    case .declName:
       return visitImplDeclNameSyntax
-    case .deferStmt: 
+    case .deferStmt:
       return visitImplDeferStmtSyntax
-    case .deinitializerDecl: 
+    case .deinitializerDecl:
       return visitImplDeinitializerDeclSyntax
-    case .derivativeRegistrationAttributeArguments: 
+    case .derivativeRegistrationAttributeArguments:
       return visitImplDerivativeRegistrationAttributeArgumentsSyntax
-    case .designatedTypeElement: 
+    case .designatedTypeElement:
       return visitImplDesignatedTypeElementSyntax
-    case .designatedTypeList: 
+    case .designatedTypeList:
       return visitImplDesignatedTypeListSyntax
-    case .dictionaryElementList: 
+    case .dictionaryElementList:
       return visitImplDictionaryElementListSyntax
-    case .dictionaryElement: 
+    case .dictionaryElement:
       return visitImplDictionaryElementSyntax
-    case .dictionaryExpr: 
+    case .dictionaryExpr:
       return visitImplDictionaryExprSyntax
-    case .dictionaryType: 
+    case .dictionaryType:
       return visitImplDictionaryTypeSyntax
-    case .differentiabilityParamList: 
+    case .differentiabilityParamList:
       return visitImplDifferentiabilityParamListSyntax
-    case .differentiabilityParam: 
+    case .differentiabilityParam:
       return visitImplDifferentiabilityParamSyntax
-    case .differentiabilityParamsClause: 
+    case .differentiabilityParamsClause:
       return visitImplDifferentiabilityParamsClauseSyntax
-    case .differentiabilityParams: 
+    case .differentiabilityParams:
       return visitImplDifferentiabilityParamsSyntax
-    case .differentiableAttributeArguments: 
+    case .differentiableAttributeArguments:
       return visitImplDifferentiableAttributeArgumentsSyntax
-    case .discardAssignmentExpr: 
+    case .discardAssignmentExpr:
       return visitImplDiscardAssignmentExprSyntax
-    case .doStmt: 
+    case .doStmt:
       return visitImplDoStmtSyntax
-    case .documentationAttributeArgument: 
+    case .documentationAttributeArgument:
       return visitImplDocumentationAttributeArgumentSyntax
-    case .documentationAttributeArguments: 
+    case .documentationAttributeArguments:
       return visitImplDocumentationAttributeArgumentsSyntax
-    case .dynamicReplacementArguments: 
+    case .dynamicReplacementArguments:
       return visitImplDynamicReplacementArgumentsSyntax
-    case .editorPlaceholderDecl: 
+    case .editorPlaceholderDecl:
       return visitImplEditorPlaceholderDeclSyntax
-    case .editorPlaceholderExpr: 
+    case .editorPlaceholderExpr:
       return visitImplEditorPlaceholderExprSyntax
-    case .effectsArguments: 
+    case .effectsArguments:
       return visitImplEffectsArgumentsSyntax
-    case .enumCaseDecl: 
+    case .enumCaseDecl:
       return visitImplEnumCaseDeclSyntax
-    case .enumCaseElementList: 
+    case .enumCaseElementList:
       return visitImplEnumCaseElementListSyntax
-    case .enumCaseElement: 
+    case .enumCaseElement:
       return visitImplEnumCaseElementSyntax
-    case .enumDecl: 
+    case .enumDecl:
       return visitImplEnumDeclSyntax
-    case .exposeAttributeArguments: 
+    case .exposeAttributeArguments:
       return visitImplExposeAttributeArgumentsSyntax
-    case .exprList: 
+    case .exprList:
       return visitImplExprListSyntax
-    case .expressionPattern: 
+    case .expressionPattern:
       return visitImplExpressionPatternSyntax
-    case .expressionSegment: 
+    case .expressionSegment:
       return visitImplExpressionSegmentSyntax
-    case .expressionStmt: 
+    case .expressionStmt:
       return visitImplExpressionStmtSyntax
-    case .extensionDecl: 
+    case .extensionDecl:
       return visitImplExtensionDeclSyntax
-    case .fallthroughStmt: 
+    case .fallthroughStmt:
       return visitImplFallthroughStmtSyntax
-    case .floatLiteralExpr: 
+    case .floatLiteralExpr:
       return visitImplFloatLiteralExprSyntax
-    case .forInStmt: 
+    case .forInStmt:
       return visitImplForInStmtSyntax
-    case .forcedValueExpr: 
+    case .forcedValueExpr:
       return visitImplForcedValueExprSyntax
-    case .functionCallExpr: 
+    case .functionCallExpr:
       return visitImplFunctionCallExprSyntax
-    case .functionDecl: 
+    case .functionDecl:
       return visitImplFunctionDeclSyntax
-    case .functionParameterList: 
+    case .functionParameterList:
       return visitImplFunctionParameterListSyntax
-    case .functionParameter: 
+    case .functionParameter:
       return visitImplFunctionParameterSyntax
-    case .functionSignature: 
+    case .functionSignature:
       return visitImplFunctionSignatureSyntax
-    case .functionType: 
+    case .functionType:
       return visitImplFunctionTypeSyntax
-    case .genericArgumentClause: 
+    case .genericArgumentClause:
       return visitImplGenericArgumentClauseSyntax
-    case .genericArgumentList: 
+    case .genericArgumentList:
       return visitImplGenericArgumentListSyntax
-    case .genericArgument: 
+    case .genericArgument:
       return visitImplGenericArgumentSyntax
-    case .genericParameterClause: 
+    case .genericParameterClause:
       return visitImplGenericParameterClauseSyntax
-    case .genericParameterList: 
+    case .genericParameterList:
       return visitImplGenericParameterListSyntax
-    case .genericParameter: 
+    case .genericParameter:
       return visitImplGenericParameterSyntax
-    case .genericRequirementList: 
+    case .genericRequirementList:
       return visitImplGenericRequirementListSyntax
-    case .genericRequirement: 
+    case .genericRequirement:
       return visitImplGenericRequirementSyntax
-    case .genericWhereClause: 
+    case .genericWhereClause:
       return visitImplGenericWhereClauseSyntax
-    case .guardStmt: 
+    case .guardStmt:
       return visitImplGuardStmtSyntax
-    case .identifierExpr: 
+    case .identifierExpr:
       return visitImplIdentifierExprSyntax
-    case .identifierPattern: 
+    case .identifierPattern:
       return visitImplIdentifierPatternSyntax
-    case .ifConfigClauseList: 
+    case .ifConfigClauseList:
       return visitImplIfConfigClauseListSyntax
-    case .ifConfigClause: 
+    case .ifConfigClause:
       return visitImplIfConfigClauseSyntax
-    case .ifConfigDecl: 
+    case .ifConfigDecl:
       return visitImplIfConfigDeclSyntax
-    case .ifExpr: 
+    case .ifExpr:
       return visitImplIfExprSyntax
-    case .implementsAttributeArguments: 
+    case .implementsAttributeArguments:
       return visitImplImplementsAttributeArgumentsSyntax
-    case .implicitlyUnwrappedOptionalType: 
+    case .implicitlyUnwrappedOptionalType:
       return visitImplImplicitlyUnwrappedOptionalTypeSyntax
-    case .importDecl: 
+    case .importDecl:
       return visitImplImportDeclSyntax
-    case .inOutExpr: 
+    case .inOutExpr:
       return visitImplInOutExprSyntax
-    case .infixOperatorExpr: 
+    case .infixOperatorExpr:
       return visitImplInfixOperatorExprSyntax
-    case .inheritedTypeList: 
+    case .inheritedTypeList:
       return visitImplInheritedTypeListSyntax
-    case .inheritedType: 
+    case .inheritedType:
       return visitImplInheritedTypeSyntax
-    case .initializerClause: 
+    case .initializerClause:
       return visitImplInitializerClauseSyntax
-    case .initializerDecl: 
+    case .initializerDecl:
       return visitImplInitializerDeclSyntax
-    case .integerLiteralExpr: 
+    case .integerLiteralExpr:
       return visitImplIntegerLiteralExprSyntax
-    case .isExpr: 
+    case .isExpr:
       return visitImplIsExprSyntax
-    case .isTypePattern: 
+    case .isTypePattern:
       return visitImplIsTypePatternSyntax
-    case .keyPathComponentList: 
+    case .keyPathComponentList:
       return visitImplKeyPathComponentListSyntax
-    case .keyPathComponent: 
+    case .keyPathComponent:
       return visitImplKeyPathComponentSyntax
-    case .keyPathExpr: 
+    case .keyPathExpr:
       return visitImplKeyPathExprSyntax
-    case .keyPathOptionalComponent: 
+    case .keyPathOptionalComponent:
       return visitImplKeyPathOptionalComponentSyntax
-    case .keyPathPropertyComponent: 
+    case .keyPathPropertyComponent:
       return visitImplKeyPathPropertyComponentSyntax
-    case .keyPathSubscriptComponent: 
+    case .keyPathSubscriptComponent:
       return visitImplKeyPathSubscriptComponentSyntax
-    case .labeledSpecializeEntry: 
+    case .labeledSpecializeEntry:
       return visitImplLabeledSpecializeEntrySyntax
-    case .labeledStmt: 
+    case .labeledStmt:
       return visitImplLabeledStmtSyntax
-    case .layoutRequirement: 
+    case .layoutRequirement:
       return visitImplLayoutRequirementSyntax
-    case .macroDecl: 
+    case .macroDecl:
       return visitImplMacroDeclSyntax
-    case .macroExpansionDecl: 
+    case .macroExpansionDecl:
       return visitImplMacroExpansionDeclSyntax
-    case .macroExpansionExpr: 
+    case .macroExpansionExpr:
       return visitImplMacroExpansionExprSyntax
-    case .matchingPatternCondition: 
+    case .matchingPatternCondition:
       return visitImplMatchingPatternConditionSyntax
-    case .memberAccessExpr: 
+    case .memberAccessExpr:
       return visitImplMemberAccessExprSyntax
-    case .memberDeclBlock: 
+    case .memberDeclBlock:
       return visitImplMemberDeclBlockSyntax
-    case .memberDeclListItem: 
+    case .memberDeclListItem:
       return visitImplMemberDeclListItemSyntax
-    case .memberDeclList: 
+    case .memberDeclList:
       return visitImplMemberDeclListSyntax
-    case .memberTypeIdentifier: 
+    case .memberTypeIdentifier:
       return visitImplMemberTypeIdentifierSyntax
-    case .metatypeType: 
+    case .metatypeType:
       return visitImplMetatypeTypeSyntax
-    case .missingDecl: 
+    case .missingDecl:
       return visitImplMissingDeclSyntax
-    case .missingExpr: 
+    case .missingExpr:
       return visitImplMissingExprSyntax
-    case .missingPattern: 
+    case .missingPattern:
       return visitImplMissingPatternSyntax
-    case .missingStmt: 
+    case .missingStmt:
       return visitImplMissingStmtSyntax
-    case .missing: 
+    case .missing:
       return visitImplMissingSyntax
-    case .missingType: 
+    case .missingType:
       return visitImplMissingTypeSyntax
-    case .modifierList: 
+    case .modifierList:
       return visitImplModifierListSyntax
-    case .moveExpr: 
+    case .moveExpr:
       return visitImplMoveExprSyntax
-    case .multipleTrailingClosureElementList: 
+    case .multipleTrailingClosureElementList:
       return visitImplMultipleTrailingClosureElementListSyntax
-    case .multipleTrailingClosureElement: 
+    case .multipleTrailingClosureElement:
       return visitImplMultipleTrailingClosureElementSyntax
-    case .namedOpaqueReturnType: 
+    case .namedOpaqueReturnType:
       return visitImplNamedOpaqueReturnTypeSyntax
-    case .nilLiteralExpr: 
+    case .nilLiteralExpr:
       return visitImplNilLiteralExprSyntax
-    case .objCSelectorPiece: 
+    case .objCSelectorPiece:
       return visitImplObjCSelectorPieceSyntax
-    case .objCSelector: 
+    case .objCSelector:
       return visitImplObjCSelectorSyntax
-    case .opaqueReturnTypeOfAttributeArguments: 
+    case .opaqueReturnTypeOfAttributeArguments:
       return visitImplOpaqueReturnTypeOfAttributeArgumentsSyntax
-    case .operatorDecl: 
+    case .operatorDecl:
       return visitImplOperatorDeclSyntax
-    case .operatorPrecedenceAndTypes: 
+    case .operatorPrecedenceAndTypes:
       return visitImplOperatorPrecedenceAndTypesSyntax
-    case .optionalBindingCondition: 
+    case .optionalBindingCondition:
       return visitImplOptionalBindingConditionSyntax
-    case .optionalChainingExpr: 
+    case .optionalChainingExpr:
       return visitImplOptionalChainingExprSyntax
-    case .optionalType: 
+    case .optionalType:
       return visitImplOptionalTypeSyntax
-    case .originallyDefinedInArguments: 
+    case .originallyDefinedInArguments:
       return visitImplOriginallyDefinedInArgumentsSyntax
-    case .packElementExpr: 
+    case .packElementExpr:
       return visitImplPackElementExprSyntax
-    case .packExpansionExpr: 
+    case .packExpansionExpr:
       return visitImplPackExpansionExprSyntax
-    case .packExpansionType: 
+    case .packExpansionType:
       return visitImplPackExpansionTypeSyntax
-    case .packReferenceType: 
+    case .packReferenceType:
       return visitImplPackReferenceTypeSyntax
-    case .parameterClause: 
+    case .parameterClause:
       return visitImplParameterClauseSyntax
-    case .patternBindingList: 
+    case .patternBindingList:
       return visitImplPatternBindingListSyntax
-    case .patternBinding: 
+    case .patternBinding:
       return visitImplPatternBindingSyntax
-    case .postfixIfConfigExpr: 
+    case .postfixIfConfigExpr:
       return visitImplPostfixIfConfigExprSyntax
-    case .postfixUnaryExpr: 
+    case .postfixUnaryExpr:
       return visitImplPostfixUnaryExprSyntax
-    case .poundSourceLocationArgs: 
+    case .poundSourceLocationArgs:
       return visitImplPoundSourceLocationArgsSyntax
-    case .poundSourceLocation: 
+    case .poundSourceLocation:
       return visitImplPoundSourceLocationSyntax
-    case .precedenceGroupAssignment: 
+    case .precedenceGroupAssignment:
       return visitImplPrecedenceGroupAssignmentSyntax
-    case .precedenceGroupAssociativity: 
+    case .precedenceGroupAssociativity:
       return visitImplPrecedenceGroupAssociativitySyntax
-    case .precedenceGroupAttributeList: 
+    case .precedenceGroupAttributeList:
       return visitImplPrecedenceGroupAttributeListSyntax
-    case .precedenceGroupDecl: 
+    case .precedenceGroupDecl:
       return visitImplPrecedenceGroupDeclSyntax
-    case .precedenceGroupNameElement: 
+    case .precedenceGroupNameElement:
       return visitImplPrecedenceGroupNameElementSyntax
-    case .precedenceGroupNameList: 
+    case .precedenceGroupNameList:
       return visitImplPrecedenceGroupNameListSyntax
-    case .precedenceGroupRelation: 
+    case .precedenceGroupRelation:
       return visitImplPrecedenceGroupRelationSyntax
-    case .prefixOperatorExpr: 
+    case .prefixOperatorExpr:
       return visitImplPrefixOperatorExprSyntax
-    case .primaryAssociatedTypeClause: 
+    case .primaryAssociatedTypeClause:
       return visitImplPrimaryAssociatedTypeClauseSyntax
-    case .primaryAssociatedTypeList: 
+    case .primaryAssociatedTypeList:
       return visitImplPrimaryAssociatedTypeListSyntax
-    case .primaryAssociatedType: 
+    case .primaryAssociatedType:
       return visitImplPrimaryAssociatedTypeSyntax
-    case .protocolDecl: 
+    case .protocolDecl:
       return visitImplProtocolDeclSyntax
-    case .qualifiedDeclName: 
+    case .qualifiedDeclName:
       return visitImplQualifiedDeclNameSyntax
-    case .regexLiteralExpr: 
+    case .regexLiteralExpr:
       return visitImplRegexLiteralExprSyntax
-    case .repeatWhileStmt: 
+    case .repeatWhileStmt:
       return visitImplRepeatWhileStmtSyntax
-    case .returnClause: 
+    case .returnClause:
       return visitImplReturnClauseSyntax
-    case .returnStmt: 
+    case .returnStmt:
       return visitImplReturnStmtSyntax
-    case .sameTypeRequirement: 
+    case .sameTypeRequirement:
       return visitImplSameTypeRequirementSyntax
-    case .sequenceExpr: 
+    case .sequenceExpr:
       return visitImplSequenceExprSyntax
-    case .simpleTypeIdentifier: 
+    case .simpleTypeIdentifier:
       return visitImplSimpleTypeIdentifierSyntax
-    case .sourceFile: 
+    case .sourceFile:
       return visitImplSourceFileSyntax
-    case .specializeAttributeSpecList: 
+    case .specializeAttributeSpecList:
       return visitImplSpecializeAttributeSpecListSyntax
-    case .specializeExpr: 
+    case .specializeExpr:
       return visitImplSpecializeExprSyntax
-    case .stringLiteralExpr: 
+    case .stringLiteralExpr:
       return visitImplStringLiteralExprSyntax
-    case .stringLiteralSegments: 
+    case .stringLiteralSegments:
       return visitImplStringLiteralSegmentsSyntax
-    case .stringSegment: 
+    case .stringSegment:
       return visitImplStringSegmentSyntax
-    case .structDecl: 
+    case .structDecl:
       return visitImplStructDeclSyntax
-    case .subscriptDecl: 
+    case .subscriptDecl:
       return visitImplSubscriptDeclSyntax
-    case .subscriptExpr: 
+    case .subscriptExpr:
       return visitImplSubscriptExprSyntax
-    case .superRefExpr: 
+    case .superRefExpr:
       return visitImplSuperRefExprSyntax
-    case .switchCaseLabel: 
+    case .switchCaseLabel:
       return visitImplSwitchCaseLabelSyntax
-    case .switchCaseList: 
+    case .switchCaseList:
       return visitImplSwitchCaseListSyntax
-    case .switchCase: 
+    case .switchCase:
       return visitImplSwitchCaseSyntax
-    case .switchDefaultLabel: 
+    case .switchDefaultLabel:
       return visitImplSwitchDefaultLabelSyntax
-    case .switchExpr: 
+    case .switchExpr:
       return visitImplSwitchExprSyntax
-    case .targetFunctionEntry: 
+    case .targetFunctionEntry:
       return visitImplTargetFunctionEntrySyntax
-    case .ternaryExpr: 
+    case .ternaryExpr:
       return visitImplTernaryExprSyntax
-    case .throwStmt: 
+    case .throwStmt:
       return visitImplThrowStmtSyntax
-    case .tryExpr: 
+    case .tryExpr:
       return visitImplTryExprSyntax
-    case .tupleExprElementList: 
+    case .tupleExprElementList:
       return visitImplTupleExprElementListSyntax
-    case .tupleExprElement: 
+    case .tupleExprElement:
       return visitImplTupleExprElementSyntax
-    case .tupleExpr: 
+    case .tupleExpr:
       return visitImplTupleExprSyntax
-    case .tuplePatternElementList: 
+    case .tuplePatternElementList:
       return visitImplTuplePatternElementListSyntax
-    case .tuplePatternElement: 
+    case .tuplePatternElement:
       return visitImplTuplePatternElementSyntax
-    case .tuplePattern: 
+    case .tuplePattern:
       return visitImplTuplePatternSyntax
-    case .tupleTypeElementList: 
+    case .tupleTypeElementList:
       return visitImplTupleTypeElementListSyntax
-    case .tupleTypeElement: 
+    case .tupleTypeElement:
       return visitImplTupleTypeElementSyntax
-    case .tupleType: 
+    case .tupleType:
       return visitImplTupleTypeSyntax
-    case .typeAnnotation: 
+    case .typeAnnotation:
       return visitImplTypeAnnotationSyntax
-    case .typeEffectSpecifiers: 
+    case .typeEffectSpecifiers:
       return visitImplTypeEffectSpecifiersSyntax
-    case .typeExpr: 
+    case .typeExpr:
       return visitImplTypeExprSyntax
-    case .typeInheritanceClause: 
+    case .typeInheritanceClause:
       return visitImplTypeInheritanceClauseSyntax
-    case .typeInitializerClause: 
+    case .typeInitializerClause:
       return visitImplTypeInitializerClauseSyntax
-    case .typealiasDecl: 
+    case .typealiasDecl:
       return visitImplTypealiasDeclSyntax
-    case .unavailableFromAsyncArguments: 
+    case .unavailableFromAsyncArguments:
       return visitImplUnavailableFromAsyncArgumentsSyntax
-    case .underscorePrivateAttributeArguments: 
+    case .underscorePrivateAttributeArguments:
       return visitImplUnderscorePrivateAttributeArgumentsSyntax
-    case .unexpectedNodes: 
+    case .unexpectedNodes:
       return visitImplUnexpectedNodesSyntax
-    case .unresolvedAsExpr: 
+    case .unresolvedAsExpr:
       return visitImplUnresolvedAsExprSyntax
-    case .unresolvedIsExpr: 
+    case .unresolvedIsExpr:
       return visitImplUnresolvedIsExprSyntax
-    case .unresolvedPatternExpr: 
+    case .unresolvedPatternExpr:
       return visitImplUnresolvedPatternExprSyntax
-    case .unresolvedTernaryExpr: 
+    case .unresolvedTernaryExpr:
       return visitImplUnresolvedTernaryExprSyntax
-    case .valueBindingPattern: 
+    case .valueBindingPattern:
       return visitImplValueBindingPatternSyntax
-    case .variableDecl: 
+    case .variableDecl:
       return visitImplVariableDeclSyntax
-    case .versionTuple: 
+    case .versionTuple:
       return visitImplVersionTupleSyntax
-    case .whereClause: 
+    case .whereClause:
       return visitImplWhereClauseSyntax
-    case .whileStmt: 
+    case .whileStmt:
       return visitImplWhileStmtSyntax
-    case .wildcardPattern: 
+    case .wildcardPattern:
       return visitImplWildcardPatternSyntax
-    case .yieldExprListElement: 
+    case .yieldExprListElement:
       return visitImplYieldExprListElementSyntax
-    case .yieldExprList: 
+    case .yieldExprList:
       return visitImplYieldExprListSyntax
-    case .yieldList: 
+    case .yieldList:
       return visitImplYieldListSyntax
-    case .yieldStmt: 
+    case .yieldStmt:
       return visitImplYieldStmtSyntax
     }
   }
@@ -6131,527 +6131,527 @@ open class SyntaxRewriter {
   #else 
   private func visit(_ data: SyntaxData) -> Syntax {
     switch data.raw.kind {
-    case .token: 
+    case .token:
       return visitImplTokenSyntax(data)
-    case .accessPathComponent: 
+    case .accessPathComponent:
       return visitImplAccessPathComponentSyntax(data)
-    case .accessPath: 
+    case .accessPath:
       return visitImplAccessPathSyntax(data)
-    case .accessorBlock: 
+    case .accessorBlock:
       return visitImplAccessorBlockSyntax(data)
-    case .accessorDecl: 
+    case .accessorDecl:
       return visitImplAccessorDeclSyntax(data)
-    case .accessorList: 
+    case .accessorList:
       return visitImplAccessorListSyntax(data)
-    case .accessorParameter: 
+    case .accessorParameter:
       return visitImplAccessorParameterSyntax(data)
-    case .actorDecl: 
+    case .actorDecl:
       return visitImplActorDeclSyntax(data)
-    case .arrayElementList: 
+    case .arrayElementList:
       return visitImplArrayElementListSyntax(data)
-    case .arrayElement: 
+    case .arrayElement:
       return visitImplArrayElementSyntax(data)
-    case .arrayExpr: 
+    case .arrayExpr:
       return visitImplArrayExprSyntax(data)
-    case .arrayType: 
+    case .arrayType:
       return visitImplArrayTypeSyntax(data)
-    case .arrowExpr: 
+    case .arrowExpr:
       return visitImplArrowExprSyntax(data)
-    case .asExpr: 
+    case .asExpr:
       return visitImplAsExprSyntax(data)
-    case .assignmentExpr: 
+    case .assignmentExpr:
       return visitImplAssignmentExprSyntax(data)
-    case .associatedtypeDecl: 
+    case .associatedtypeDecl:
       return visitImplAssociatedtypeDeclSyntax(data)
-    case .attributeList: 
+    case .attributeList:
       return visitImplAttributeListSyntax(data)
-    case .attribute: 
+    case .attribute:
       return visitImplAttributeSyntax(data)
-    case .attributedType: 
+    case .attributedType:
       return visitImplAttributedTypeSyntax(data)
-    case .availabilityArgument: 
+    case .availabilityArgument:
       return visitImplAvailabilityArgumentSyntax(data)
-    case .availabilityCondition: 
+    case .availabilityCondition:
       return visitImplAvailabilityConditionSyntax(data)
-    case .availabilityEntry: 
+    case .availabilityEntry:
       return visitImplAvailabilityEntrySyntax(data)
-    case .availabilityLabeledArgument: 
+    case .availabilityLabeledArgument:
       return visitImplAvailabilityLabeledArgumentSyntax(data)
-    case .availabilitySpecList: 
+    case .availabilitySpecList:
       return visitImplAvailabilitySpecListSyntax(data)
-    case .availabilityVersionRestrictionListEntry: 
+    case .availabilityVersionRestrictionListEntry:
       return visitImplAvailabilityVersionRestrictionListEntrySyntax(data)
-    case .availabilityVersionRestrictionList: 
+    case .availabilityVersionRestrictionList:
       return visitImplAvailabilityVersionRestrictionListSyntax(data)
-    case .availabilityVersionRestriction: 
+    case .availabilityVersionRestriction:
       return visitImplAvailabilityVersionRestrictionSyntax(data)
-    case .awaitExpr: 
+    case .awaitExpr:
       return visitImplAwaitExprSyntax(data)
-    case .backDeployedAttributeSpecList: 
+    case .backDeployedAttributeSpecList:
       return visitImplBackDeployedAttributeSpecListSyntax(data)
-    case .binaryOperatorExpr: 
+    case .binaryOperatorExpr:
       return visitImplBinaryOperatorExprSyntax(data)
-    case .booleanLiteralExpr: 
+    case .booleanLiteralExpr:
       return visitImplBooleanLiteralExprSyntax(data)
-    case .borrowExpr: 
+    case .borrowExpr:
       return visitImplBorrowExprSyntax(data)
-    case .breakStmt: 
+    case .breakStmt:
       return visitImplBreakStmtSyntax(data)
-    case .caseItemList: 
+    case .caseItemList:
       return visitImplCaseItemListSyntax(data)
-    case .caseItem: 
+    case .caseItem:
       return visitImplCaseItemSyntax(data)
-    case .catchClauseList: 
+    case .catchClauseList:
       return visitImplCatchClauseListSyntax(data)
-    case .catchClause: 
+    case .catchClause:
       return visitImplCatchClauseSyntax(data)
-    case .catchItemList: 
+    case .catchItemList:
       return visitImplCatchItemListSyntax(data)
-    case .catchItem: 
+    case .catchItem:
       return visitImplCatchItemSyntax(data)
-    case .classDecl: 
+    case .classDecl:
       return visitImplClassDeclSyntax(data)
-    case .classRestrictionType: 
+    case .classRestrictionType:
       return visitImplClassRestrictionTypeSyntax(data)
-    case .closureCaptureItemList: 
+    case .closureCaptureItemList:
       return visitImplClosureCaptureItemListSyntax(data)
-    case .closureCaptureItemSpecifier: 
+    case .closureCaptureItemSpecifier:
       return visitImplClosureCaptureItemSpecifierSyntax(data)
-    case .closureCaptureItem: 
+    case .closureCaptureItem:
       return visitImplClosureCaptureItemSyntax(data)
-    case .closureCaptureSignature: 
+    case .closureCaptureSignature:
       return visitImplClosureCaptureSignatureSyntax(data)
-    case .closureExpr: 
+    case .closureExpr:
       return visitImplClosureExprSyntax(data)
-    case .closureParamList: 
+    case .closureParamList:
       return visitImplClosureParamListSyntax(data)
-    case .closureParam: 
+    case .closureParam:
       return visitImplClosureParamSyntax(data)
-    case .closureSignature: 
+    case .closureSignature:
       return visitImplClosureSignatureSyntax(data)
-    case .codeBlockItemList: 
+    case .codeBlockItemList:
       return visitImplCodeBlockItemListSyntax(data)
-    case .codeBlockItem: 
+    case .codeBlockItem:
       return visitImplCodeBlockItemSyntax(data)
-    case .codeBlock: 
+    case .codeBlock:
       return visitImplCodeBlockSyntax(data)
-    case .compositionTypeElementList: 
+    case .compositionTypeElementList:
       return visitImplCompositionTypeElementListSyntax(data)
-    case .compositionTypeElement: 
+    case .compositionTypeElement:
       return visitImplCompositionTypeElementSyntax(data)
-    case .compositionType: 
+    case .compositionType:
       return visitImplCompositionTypeSyntax(data)
-    case .conditionElementList: 
+    case .conditionElementList:
       return visitImplConditionElementListSyntax(data)
-    case .conditionElement: 
+    case .conditionElement:
       return visitImplConditionElementSyntax(data)
-    case .conformanceRequirement: 
+    case .conformanceRequirement:
       return visitImplConformanceRequirementSyntax(data)
-    case .constrainedSugarType: 
+    case .constrainedSugarType:
       return visitImplConstrainedSugarTypeSyntax(data)
-    case .continueStmt: 
+    case .continueStmt:
       return visitImplContinueStmtSyntax(data)
-    case .conventionAttributeArguments: 
+    case .conventionAttributeArguments:
       return visitImplConventionAttributeArgumentsSyntax(data)
-    case .conventionWitnessMethodAttributeArguments: 
+    case .conventionWitnessMethodAttributeArguments:
       return visitImplConventionWitnessMethodAttributeArgumentsSyntax(data)
-    case .declEffectSpecifiers: 
+    case .declEffectSpecifiers:
       return visitImplDeclEffectSpecifiersSyntax(data)
-    case .declModifierDetail: 
+    case .declModifierDetail:
       return visitImplDeclModifierDetailSyntax(data)
-    case .declModifier: 
+    case .declModifier:
       return visitImplDeclModifierSyntax(data)
-    case .declNameArgumentList: 
+    case .declNameArgumentList:
       return visitImplDeclNameArgumentListSyntax(data)
-    case .declNameArgument: 
+    case .declNameArgument:
       return visitImplDeclNameArgumentSyntax(data)
-    case .declNameArguments: 
+    case .declNameArguments:
       return visitImplDeclNameArgumentsSyntax(data)
-    case .declName: 
+    case .declName:
       return visitImplDeclNameSyntax(data)
-    case .deferStmt: 
+    case .deferStmt:
       return visitImplDeferStmtSyntax(data)
-    case .deinitializerDecl: 
+    case .deinitializerDecl:
       return visitImplDeinitializerDeclSyntax(data)
-    case .derivativeRegistrationAttributeArguments: 
+    case .derivativeRegistrationAttributeArguments:
       return visitImplDerivativeRegistrationAttributeArgumentsSyntax(data)
-    case .designatedTypeElement: 
+    case .designatedTypeElement:
       return visitImplDesignatedTypeElementSyntax(data)
-    case .designatedTypeList: 
+    case .designatedTypeList:
       return visitImplDesignatedTypeListSyntax(data)
-    case .dictionaryElementList: 
+    case .dictionaryElementList:
       return visitImplDictionaryElementListSyntax(data)
-    case .dictionaryElement: 
+    case .dictionaryElement:
       return visitImplDictionaryElementSyntax(data)
-    case .dictionaryExpr: 
+    case .dictionaryExpr:
       return visitImplDictionaryExprSyntax(data)
-    case .dictionaryType: 
+    case .dictionaryType:
       return visitImplDictionaryTypeSyntax(data)
-    case .differentiabilityParamList: 
+    case .differentiabilityParamList:
       return visitImplDifferentiabilityParamListSyntax(data)
-    case .differentiabilityParam: 
+    case .differentiabilityParam:
       return visitImplDifferentiabilityParamSyntax(data)
-    case .differentiabilityParamsClause: 
+    case .differentiabilityParamsClause:
       return visitImplDifferentiabilityParamsClauseSyntax(data)
-    case .differentiabilityParams: 
+    case .differentiabilityParams:
       return visitImplDifferentiabilityParamsSyntax(data)
-    case .differentiableAttributeArguments: 
+    case .differentiableAttributeArguments:
       return visitImplDifferentiableAttributeArgumentsSyntax(data)
-    case .discardAssignmentExpr: 
+    case .discardAssignmentExpr:
       return visitImplDiscardAssignmentExprSyntax(data)
-    case .doStmt: 
+    case .doStmt:
       return visitImplDoStmtSyntax(data)
-    case .documentationAttributeArgument: 
+    case .documentationAttributeArgument:
       return visitImplDocumentationAttributeArgumentSyntax(data)
-    case .documentationAttributeArguments: 
+    case .documentationAttributeArguments:
       return visitImplDocumentationAttributeArgumentsSyntax(data)
-    case .dynamicReplacementArguments: 
+    case .dynamicReplacementArguments:
       return visitImplDynamicReplacementArgumentsSyntax(data)
-    case .editorPlaceholderDecl: 
+    case .editorPlaceholderDecl:
       return visitImplEditorPlaceholderDeclSyntax(data)
-    case .editorPlaceholderExpr: 
+    case .editorPlaceholderExpr:
       return visitImplEditorPlaceholderExprSyntax(data)
-    case .effectsArguments: 
+    case .effectsArguments:
       return visitImplEffectsArgumentsSyntax(data)
-    case .enumCaseDecl: 
+    case .enumCaseDecl:
       return visitImplEnumCaseDeclSyntax(data)
-    case .enumCaseElementList: 
+    case .enumCaseElementList:
       return visitImplEnumCaseElementListSyntax(data)
-    case .enumCaseElement: 
+    case .enumCaseElement:
       return visitImplEnumCaseElementSyntax(data)
-    case .enumDecl: 
+    case .enumDecl:
       return visitImplEnumDeclSyntax(data)
-    case .exposeAttributeArguments: 
+    case .exposeAttributeArguments:
       return visitImplExposeAttributeArgumentsSyntax(data)
-    case .exprList: 
+    case .exprList:
       return visitImplExprListSyntax(data)
-    case .expressionPattern: 
+    case .expressionPattern:
       return visitImplExpressionPatternSyntax(data)
-    case .expressionSegment: 
+    case .expressionSegment:
       return visitImplExpressionSegmentSyntax(data)
-    case .expressionStmt: 
+    case .expressionStmt:
       return visitImplExpressionStmtSyntax(data)
-    case .extensionDecl: 
+    case .extensionDecl:
       return visitImplExtensionDeclSyntax(data)
-    case .fallthroughStmt: 
+    case .fallthroughStmt:
       return visitImplFallthroughStmtSyntax(data)
-    case .floatLiteralExpr: 
+    case .floatLiteralExpr:
       return visitImplFloatLiteralExprSyntax(data)
-    case .forInStmt: 
+    case .forInStmt:
       return visitImplForInStmtSyntax(data)
-    case .forcedValueExpr: 
+    case .forcedValueExpr:
       return visitImplForcedValueExprSyntax(data)
-    case .functionCallExpr: 
+    case .functionCallExpr:
       return visitImplFunctionCallExprSyntax(data)
-    case .functionDecl: 
+    case .functionDecl:
       return visitImplFunctionDeclSyntax(data)
-    case .functionParameterList: 
+    case .functionParameterList:
       return visitImplFunctionParameterListSyntax(data)
-    case .functionParameter: 
+    case .functionParameter:
       return visitImplFunctionParameterSyntax(data)
-    case .functionSignature: 
+    case .functionSignature:
       return visitImplFunctionSignatureSyntax(data)
-    case .functionType: 
+    case .functionType:
       return visitImplFunctionTypeSyntax(data)
-    case .genericArgumentClause: 
+    case .genericArgumentClause:
       return visitImplGenericArgumentClauseSyntax(data)
-    case .genericArgumentList: 
+    case .genericArgumentList:
       return visitImplGenericArgumentListSyntax(data)
-    case .genericArgument: 
+    case .genericArgument:
       return visitImplGenericArgumentSyntax(data)
-    case .genericParameterClause: 
+    case .genericParameterClause:
       return visitImplGenericParameterClauseSyntax(data)
-    case .genericParameterList: 
+    case .genericParameterList:
       return visitImplGenericParameterListSyntax(data)
-    case .genericParameter: 
+    case .genericParameter:
       return visitImplGenericParameterSyntax(data)
-    case .genericRequirementList: 
+    case .genericRequirementList:
       return visitImplGenericRequirementListSyntax(data)
-    case .genericRequirement: 
+    case .genericRequirement:
       return visitImplGenericRequirementSyntax(data)
-    case .genericWhereClause: 
+    case .genericWhereClause:
       return visitImplGenericWhereClauseSyntax(data)
-    case .guardStmt: 
+    case .guardStmt:
       return visitImplGuardStmtSyntax(data)
-    case .identifierExpr: 
+    case .identifierExpr:
       return visitImplIdentifierExprSyntax(data)
-    case .identifierPattern: 
+    case .identifierPattern:
       return visitImplIdentifierPatternSyntax(data)
-    case .ifConfigClauseList: 
+    case .ifConfigClauseList:
       return visitImplIfConfigClauseListSyntax(data)
-    case .ifConfigClause: 
+    case .ifConfigClause:
       return visitImplIfConfigClauseSyntax(data)
-    case .ifConfigDecl: 
+    case .ifConfigDecl:
       return visitImplIfConfigDeclSyntax(data)
-    case .ifExpr: 
+    case .ifExpr:
       return visitImplIfExprSyntax(data)
-    case .implementsAttributeArguments: 
+    case .implementsAttributeArguments:
       return visitImplImplementsAttributeArgumentsSyntax(data)
-    case .implicitlyUnwrappedOptionalType: 
+    case .implicitlyUnwrappedOptionalType:
       return visitImplImplicitlyUnwrappedOptionalTypeSyntax(data)
-    case .importDecl: 
+    case .importDecl:
       return visitImplImportDeclSyntax(data)
-    case .inOutExpr: 
+    case .inOutExpr:
       return visitImplInOutExprSyntax(data)
-    case .infixOperatorExpr: 
+    case .infixOperatorExpr:
       return visitImplInfixOperatorExprSyntax(data)
-    case .inheritedTypeList: 
+    case .inheritedTypeList:
       return visitImplInheritedTypeListSyntax(data)
-    case .inheritedType: 
+    case .inheritedType:
       return visitImplInheritedTypeSyntax(data)
-    case .initializerClause: 
+    case .initializerClause:
       return visitImplInitializerClauseSyntax(data)
-    case .initializerDecl: 
+    case .initializerDecl:
       return visitImplInitializerDeclSyntax(data)
-    case .integerLiteralExpr: 
+    case .integerLiteralExpr:
       return visitImplIntegerLiteralExprSyntax(data)
-    case .isExpr: 
+    case .isExpr:
       return visitImplIsExprSyntax(data)
-    case .isTypePattern: 
+    case .isTypePattern:
       return visitImplIsTypePatternSyntax(data)
-    case .keyPathComponentList: 
+    case .keyPathComponentList:
       return visitImplKeyPathComponentListSyntax(data)
-    case .keyPathComponent: 
+    case .keyPathComponent:
       return visitImplKeyPathComponentSyntax(data)
-    case .keyPathExpr: 
+    case .keyPathExpr:
       return visitImplKeyPathExprSyntax(data)
-    case .keyPathOptionalComponent: 
+    case .keyPathOptionalComponent:
       return visitImplKeyPathOptionalComponentSyntax(data)
-    case .keyPathPropertyComponent: 
+    case .keyPathPropertyComponent:
       return visitImplKeyPathPropertyComponentSyntax(data)
-    case .keyPathSubscriptComponent: 
+    case .keyPathSubscriptComponent:
       return visitImplKeyPathSubscriptComponentSyntax(data)
-    case .labeledSpecializeEntry: 
+    case .labeledSpecializeEntry:
       return visitImplLabeledSpecializeEntrySyntax(data)
-    case .labeledStmt: 
+    case .labeledStmt:
       return visitImplLabeledStmtSyntax(data)
-    case .layoutRequirement: 
+    case .layoutRequirement:
       return visitImplLayoutRequirementSyntax(data)
-    case .macroDecl: 
+    case .macroDecl:
       return visitImplMacroDeclSyntax(data)
-    case .macroExpansionDecl: 
+    case .macroExpansionDecl:
       return visitImplMacroExpansionDeclSyntax(data)
-    case .macroExpansionExpr: 
+    case .macroExpansionExpr:
       return visitImplMacroExpansionExprSyntax(data)
-    case .matchingPatternCondition: 
+    case .matchingPatternCondition:
       return visitImplMatchingPatternConditionSyntax(data)
-    case .memberAccessExpr: 
+    case .memberAccessExpr:
       return visitImplMemberAccessExprSyntax(data)
-    case .memberDeclBlock: 
+    case .memberDeclBlock:
       return visitImplMemberDeclBlockSyntax(data)
-    case .memberDeclListItem: 
+    case .memberDeclListItem:
       return visitImplMemberDeclListItemSyntax(data)
-    case .memberDeclList: 
+    case .memberDeclList:
       return visitImplMemberDeclListSyntax(data)
-    case .memberTypeIdentifier: 
+    case .memberTypeIdentifier:
       return visitImplMemberTypeIdentifierSyntax(data)
-    case .metatypeType: 
+    case .metatypeType:
       return visitImplMetatypeTypeSyntax(data)
-    case .missingDecl: 
+    case .missingDecl:
       return visitImplMissingDeclSyntax(data)
-    case .missingExpr: 
+    case .missingExpr:
       return visitImplMissingExprSyntax(data)
-    case .missingPattern: 
+    case .missingPattern:
       return visitImplMissingPatternSyntax(data)
-    case .missingStmt: 
+    case .missingStmt:
       return visitImplMissingStmtSyntax(data)
-    case .missing: 
+    case .missing:
       return visitImplMissingSyntax(data)
-    case .missingType: 
+    case .missingType:
       return visitImplMissingTypeSyntax(data)
-    case .modifierList: 
+    case .modifierList:
       return visitImplModifierListSyntax(data)
-    case .moveExpr: 
+    case .moveExpr:
       return visitImplMoveExprSyntax(data)
-    case .multipleTrailingClosureElementList: 
+    case .multipleTrailingClosureElementList:
       return visitImplMultipleTrailingClosureElementListSyntax(data)
-    case .multipleTrailingClosureElement: 
+    case .multipleTrailingClosureElement:
       return visitImplMultipleTrailingClosureElementSyntax(data)
-    case .namedOpaqueReturnType: 
+    case .namedOpaqueReturnType:
       return visitImplNamedOpaqueReturnTypeSyntax(data)
-    case .nilLiteralExpr: 
+    case .nilLiteralExpr:
       return visitImplNilLiteralExprSyntax(data)
-    case .objCSelectorPiece: 
+    case .objCSelectorPiece:
       return visitImplObjCSelectorPieceSyntax(data)
-    case .objCSelector: 
+    case .objCSelector:
       return visitImplObjCSelectorSyntax(data)
-    case .opaqueReturnTypeOfAttributeArguments: 
+    case .opaqueReturnTypeOfAttributeArguments:
       return visitImplOpaqueReturnTypeOfAttributeArgumentsSyntax(data)
-    case .operatorDecl: 
+    case .operatorDecl:
       return visitImplOperatorDeclSyntax(data)
-    case .operatorPrecedenceAndTypes: 
+    case .operatorPrecedenceAndTypes:
       return visitImplOperatorPrecedenceAndTypesSyntax(data)
-    case .optionalBindingCondition: 
+    case .optionalBindingCondition:
       return visitImplOptionalBindingConditionSyntax(data)
-    case .optionalChainingExpr: 
+    case .optionalChainingExpr:
       return visitImplOptionalChainingExprSyntax(data)
-    case .optionalType: 
+    case .optionalType:
       return visitImplOptionalTypeSyntax(data)
-    case .originallyDefinedInArguments: 
+    case .originallyDefinedInArguments:
       return visitImplOriginallyDefinedInArgumentsSyntax(data)
-    case .packElementExpr: 
+    case .packElementExpr:
       return visitImplPackElementExprSyntax(data)
-    case .packExpansionExpr: 
+    case .packExpansionExpr:
       return visitImplPackExpansionExprSyntax(data)
-    case .packExpansionType: 
+    case .packExpansionType:
       return visitImplPackExpansionTypeSyntax(data)
-    case .packReferenceType: 
+    case .packReferenceType:
       return visitImplPackReferenceTypeSyntax(data)
-    case .parameterClause: 
+    case .parameterClause:
       return visitImplParameterClauseSyntax(data)
-    case .patternBindingList: 
+    case .patternBindingList:
       return visitImplPatternBindingListSyntax(data)
-    case .patternBinding: 
+    case .patternBinding:
       return visitImplPatternBindingSyntax(data)
-    case .postfixIfConfigExpr: 
+    case .postfixIfConfigExpr:
       return visitImplPostfixIfConfigExprSyntax(data)
-    case .postfixUnaryExpr: 
+    case .postfixUnaryExpr:
       return visitImplPostfixUnaryExprSyntax(data)
-    case .poundSourceLocationArgs: 
+    case .poundSourceLocationArgs:
       return visitImplPoundSourceLocationArgsSyntax(data)
-    case .poundSourceLocation: 
+    case .poundSourceLocation:
       return visitImplPoundSourceLocationSyntax(data)
-    case .precedenceGroupAssignment: 
+    case .precedenceGroupAssignment:
       return visitImplPrecedenceGroupAssignmentSyntax(data)
-    case .precedenceGroupAssociativity: 
+    case .precedenceGroupAssociativity:
       return visitImplPrecedenceGroupAssociativitySyntax(data)
-    case .precedenceGroupAttributeList: 
+    case .precedenceGroupAttributeList:
       return visitImplPrecedenceGroupAttributeListSyntax(data)
-    case .precedenceGroupDecl: 
+    case .precedenceGroupDecl:
       return visitImplPrecedenceGroupDeclSyntax(data)
-    case .precedenceGroupNameElement: 
+    case .precedenceGroupNameElement:
       return visitImplPrecedenceGroupNameElementSyntax(data)
-    case .precedenceGroupNameList: 
+    case .precedenceGroupNameList:
       return visitImplPrecedenceGroupNameListSyntax(data)
-    case .precedenceGroupRelation: 
+    case .precedenceGroupRelation:
       return visitImplPrecedenceGroupRelationSyntax(data)
-    case .prefixOperatorExpr: 
+    case .prefixOperatorExpr:
       return visitImplPrefixOperatorExprSyntax(data)
-    case .primaryAssociatedTypeClause: 
+    case .primaryAssociatedTypeClause:
       return visitImplPrimaryAssociatedTypeClauseSyntax(data)
-    case .primaryAssociatedTypeList: 
+    case .primaryAssociatedTypeList:
       return visitImplPrimaryAssociatedTypeListSyntax(data)
-    case .primaryAssociatedType: 
+    case .primaryAssociatedType:
       return visitImplPrimaryAssociatedTypeSyntax(data)
-    case .protocolDecl: 
+    case .protocolDecl:
       return visitImplProtocolDeclSyntax(data)
-    case .qualifiedDeclName: 
+    case .qualifiedDeclName:
       return visitImplQualifiedDeclNameSyntax(data)
-    case .regexLiteralExpr: 
+    case .regexLiteralExpr:
       return visitImplRegexLiteralExprSyntax(data)
-    case .repeatWhileStmt: 
+    case .repeatWhileStmt:
       return visitImplRepeatWhileStmtSyntax(data)
-    case .returnClause: 
+    case .returnClause:
       return visitImplReturnClauseSyntax(data)
-    case .returnStmt: 
+    case .returnStmt:
       return visitImplReturnStmtSyntax(data)
-    case .sameTypeRequirement: 
+    case .sameTypeRequirement:
       return visitImplSameTypeRequirementSyntax(data)
-    case .sequenceExpr: 
+    case .sequenceExpr:
       return visitImplSequenceExprSyntax(data)
-    case .simpleTypeIdentifier: 
+    case .simpleTypeIdentifier:
       return visitImplSimpleTypeIdentifierSyntax(data)
-    case .sourceFile: 
+    case .sourceFile:
       return visitImplSourceFileSyntax(data)
-    case .specializeAttributeSpecList: 
+    case .specializeAttributeSpecList:
       return visitImplSpecializeAttributeSpecListSyntax(data)
-    case .specializeExpr: 
+    case .specializeExpr:
       return visitImplSpecializeExprSyntax(data)
-    case .stringLiteralExpr: 
+    case .stringLiteralExpr:
       return visitImplStringLiteralExprSyntax(data)
-    case .stringLiteralSegments: 
+    case .stringLiteralSegments:
       return visitImplStringLiteralSegmentsSyntax(data)
-    case .stringSegment: 
+    case .stringSegment:
       return visitImplStringSegmentSyntax(data)
-    case .structDecl: 
+    case .structDecl:
       return visitImplStructDeclSyntax(data)
-    case .subscriptDecl: 
+    case .subscriptDecl:
       return visitImplSubscriptDeclSyntax(data)
-    case .subscriptExpr: 
+    case .subscriptExpr:
       return visitImplSubscriptExprSyntax(data)
-    case .superRefExpr: 
+    case .superRefExpr:
       return visitImplSuperRefExprSyntax(data)
-    case .switchCaseLabel: 
+    case .switchCaseLabel:
       return visitImplSwitchCaseLabelSyntax(data)
-    case .switchCaseList: 
+    case .switchCaseList:
       return visitImplSwitchCaseListSyntax(data)
-    case .switchCase: 
+    case .switchCase:
       return visitImplSwitchCaseSyntax(data)
-    case .switchDefaultLabel: 
+    case .switchDefaultLabel:
       return visitImplSwitchDefaultLabelSyntax(data)
-    case .switchExpr: 
+    case .switchExpr:
       return visitImplSwitchExprSyntax(data)
-    case .targetFunctionEntry: 
+    case .targetFunctionEntry:
       return visitImplTargetFunctionEntrySyntax(data)
-    case .ternaryExpr: 
+    case .ternaryExpr:
       return visitImplTernaryExprSyntax(data)
-    case .throwStmt: 
+    case .throwStmt:
       return visitImplThrowStmtSyntax(data)
-    case .tryExpr: 
+    case .tryExpr:
       return visitImplTryExprSyntax(data)
-    case .tupleExprElementList: 
+    case .tupleExprElementList:
       return visitImplTupleExprElementListSyntax(data)
-    case .tupleExprElement: 
+    case .tupleExprElement:
       return visitImplTupleExprElementSyntax(data)
-    case .tupleExpr: 
+    case .tupleExpr:
       return visitImplTupleExprSyntax(data)
-    case .tuplePatternElementList: 
+    case .tuplePatternElementList:
       return visitImplTuplePatternElementListSyntax(data)
-    case .tuplePatternElement: 
+    case .tuplePatternElement:
       return visitImplTuplePatternElementSyntax(data)
-    case .tuplePattern: 
+    case .tuplePattern:
       return visitImplTuplePatternSyntax(data)
-    case .tupleTypeElementList: 
+    case .tupleTypeElementList:
       return visitImplTupleTypeElementListSyntax(data)
-    case .tupleTypeElement: 
+    case .tupleTypeElement:
       return visitImplTupleTypeElementSyntax(data)
-    case .tupleType: 
+    case .tupleType:
       return visitImplTupleTypeSyntax(data)
-    case .typeAnnotation: 
+    case .typeAnnotation:
       return visitImplTypeAnnotationSyntax(data)
-    case .typeEffectSpecifiers: 
+    case .typeEffectSpecifiers:
       return visitImplTypeEffectSpecifiersSyntax(data)
-    case .typeExpr: 
+    case .typeExpr:
       return visitImplTypeExprSyntax(data)
-    case .typeInheritanceClause: 
+    case .typeInheritanceClause:
       return visitImplTypeInheritanceClauseSyntax(data)
-    case .typeInitializerClause: 
+    case .typeInitializerClause:
       return visitImplTypeInitializerClauseSyntax(data)
-    case .typealiasDecl: 
+    case .typealiasDecl:
       return visitImplTypealiasDeclSyntax(data)
-    case .unavailableFromAsyncArguments: 
+    case .unavailableFromAsyncArguments:
       return visitImplUnavailableFromAsyncArgumentsSyntax(data)
-    case .underscorePrivateAttributeArguments: 
+    case .underscorePrivateAttributeArguments:
       return visitImplUnderscorePrivateAttributeArgumentsSyntax(data)
-    case .unexpectedNodes: 
+    case .unexpectedNodes:
       return visitImplUnexpectedNodesSyntax(data)
-    case .unresolvedAsExpr: 
+    case .unresolvedAsExpr:
       return visitImplUnresolvedAsExprSyntax(data)
-    case .unresolvedIsExpr: 
+    case .unresolvedIsExpr:
       return visitImplUnresolvedIsExprSyntax(data)
-    case .unresolvedPatternExpr: 
+    case .unresolvedPatternExpr:
       return visitImplUnresolvedPatternExprSyntax(data)
-    case .unresolvedTernaryExpr: 
+    case .unresolvedTernaryExpr:
       return visitImplUnresolvedTernaryExprSyntax(data)
-    case .valueBindingPattern: 
+    case .valueBindingPattern:
       return visitImplValueBindingPatternSyntax(data)
-    case .variableDecl: 
+    case .variableDecl:
       return visitImplVariableDeclSyntax(data)
-    case .versionTuple: 
+    case .versionTuple:
       return visitImplVersionTupleSyntax(data)
-    case .whereClause: 
+    case .whereClause:
       return visitImplWhereClauseSyntax(data)
-    case .whileStmt: 
+    case .whileStmt:
       return visitImplWhileStmtSyntax(data)
-    case .wildcardPattern: 
+    case .wildcardPattern:
       return visitImplWildcardPatternSyntax(data)
-    case .yieldExprListElement: 
+    case .yieldExprListElement:
       return visitImplYieldExprListElementSyntax(data)
-    case .yieldExprList: 
+    case .yieldExprList:
       return visitImplYieldExprListSyntax(data)
-    case .yieldList: 
+    case .yieldList:
       return visitImplYieldListSyntax(data)
-    case .yieldStmt: 
+    case .yieldStmt:
       return visitImplYieldStmtSyntax(data)
     }
   }

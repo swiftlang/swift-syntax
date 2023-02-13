@@ -6017,530 +6017,530 @@ open class SyntaxVisitor {
   
   private func visit(_ data: SyntaxData) {
     switch data.raw.kind {
-    case .token: 
+    case .token:
       let node = TokenSyntax(data)
       _ = visit(node)
       // No children to visit.
       visitPost(node)
-    case .accessPathComponent: 
+    case .accessPathComponent:
       visitImplAccessPathComponentSyntax(data)
-    case .accessPath: 
+    case .accessPath:
       visitImplAccessPathSyntax(data)
-    case .accessorBlock: 
+    case .accessorBlock:
       visitImplAccessorBlockSyntax(data)
-    case .accessorDecl: 
+    case .accessorDecl:
       visitImplAccessorDeclSyntax(data)
-    case .accessorList: 
+    case .accessorList:
       visitImplAccessorListSyntax(data)
-    case .accessorParameter: 
+    case .accessorParameter:
       visitImplAccessorParameterSyntax(data)
-    case .actorDecl: 
+    case .actorDecl:
       visitImplActorDeclSyntax(data)
-    case .arrayElementList: 
+    case .arrayElementList:
       visitImplArrayElementListSyntax(data)
-    case .arrayElement: 
+    case .arrayElement:
       visitImplArrayElementSyntax(data)
-    case .arrayExpr: 
+    case .arrayExpr:
       visitImplArrayExprSyntax(data)
-    case .arrayType: 
+    case .arrayType:
       visitImplArrayTypeSyntax(data)
-    case .arrowExpr: 
+    case .arrowExpr:
       visitImplArrowExprSyntax(data)
-    case .asExpr: 
+    case .asExpr:
       visitImplAsExprSyntax(data)
-    case .assignmentExpr: 
+    case .assignmentExpr:
       visitImplAssignmentExprSyntax(data)
-    case .associatedtypeDecl: 
+    case .associatedtypeDecl:
       visitImplAssociatedtypeDeclSyntax(data)
-    case .attributeList: 
+    case .attributeList:
       visitImplAttributeListSyntax(data)
-    case .attribute: 
+    case .attribute:
       visitImplAttributeSyntax(data)
-    case .attributedType: 
+    case .attributedType:
       visitImplAttributedTypeSyntax(data)
-    case .availabilityArgument: 
+    case .availabilityArgument:
       visitImplAvailabilityArgumentSyntax(data)
-    case .availabilityCondition: 
+    case .availabilityCondition:
       visitImplAvailabilityConditionSyntax(data)
-    case .availabilityEntry: 
+    case .availabilityEntry:
       visitImplAvailabilityEntrySyntax(data)
-    case .availabilityLabeledArgument: 
+    case .availabilityLabeledArgument:
       visitImplAvailabilityLabeledArgumentSyntax(data)
-    case .availabilitySpecList: 
+    case .availabilitySpecList:
       visitImplAvailabilitySpecListSyntax(data)
-    case .availabilityVersionRestrictionListEntry: 
+    case .availabilityVersionRestrictionListEntry:
       visitImplAvailabilityVersionRestrictionListEntrySyntax(data)
-    case .availabilityVersionRestrictionList: 
+    case .availabilityVersionRestrictionList:
       visitImplAvailabilityVersionRestrictionListSyntax(data)
-    case .availabilityVersionRestriction: 
+    case .availabilityVersionRestriction:
       visitImplAvailabilityVersionRestrictionSyntax(data)
-    case .awaitExpr: 
+    case .awaitExpr:
       visitImplAwaitExprSyntax(data)
-    case .backDeployedAttributeSpecList: 
+    case .backDeployedAttributeSpecList:
       visitImplBackDeployedAttributeSpecListSyntax(data)
-    case .binaryOperatorExpr: 
+    case .binaryOperatorExpr:
       visitImplBinaryOperatorExprSyntax(data)
-    case .booleanLiteralExpr: 
+    case .booleanLiteralExpr:
       visitImplBooleanLiteralExprSyntax(data)
-    case .borrowExpr: 
+    case .borrowExpr:
       visitImplBorrowExprSyntax(data)
-    case .breakStmt: 
+    case .breakStmt:
       visitImplBreakStmtSyntax(data)
-    case .caseItemList: 
+    case .caseItemList:
       visitImplCaseItemListSyntax(data)
-    case .caseItem: 
+    case .caseItem:
       visitImplCaseItemSyntax(data)
-    case .catchClauseList: 
+    case .catchClauseList:
       visitImplCatchClauseListSyntax(data)
-    case .catchClause: 
+    case .catchClause:
       visitImplCatchClauseSyntax(data)
-    case .catchItemList: 
+    case .catchItemList:
       visitImplCatchItemListSyntax(data)
-    case .catchItem: 
+    case .catchItem:
       visitImplCatchItemSyntax(data)
-    case .classDecl: 
+    case .classDecl:
       visitImplClassDeclSyntax(data)
-    case .classRestrictionType: 
+    case .classRestrictionType:
       visitImplClassRestrictionTypeSyntax(data)
-    case .closureCaptureItemList: 
+    case .closureCaptureItemList:
       visitImplClosureCaptureItemListSyntax(data)
-    case .closureCaptureItemSpecifier: 
+    case .closureCaptureItemSpecifier:
       visitImplClosureCaptureItemSpecifierSyntax(data)
-    case .closureCaptureItem: 
+    case .closureCaptureItem:
       visitImplClosureCaptureItemSyntax(data)
-    case .closureCaptureSignature: 
+    case .closureCaptureSignature:
       visitImplClosureCaptureSignatureSyntax(data)
-    case .closureExpr: 
+    case .closureExpr:
       visitImplClosureExprSyntax(data)
-    case .closureParamList: 
+    case .closureParamList:
       visitImplClosureParamListSyntax(data)
-    case .closureParam: 
+    case .closureParam:
       visitImplClosureParamSyntax(data)
-    case .closureSignature: 
+    case .closureSignature:
       visitImplClosureSignatureSyntax(data)
-    case .codeBlockItemList: 
+    case .codeBlockItemList:
       visitImplCodeBlockItemListSyntax(data)
-    case .codeBlockItem: 
+    case .codeBlockItem:
       visitImplCodeBlockItemSyntax(data)
-    case .codeBlock: 
+    case .codeBlock:
       visitImplCodeBlockSyntax(data)
-    case .compositionTypeElementList: 
+    case .compositionTypeElementList:
       visitImplCompositionTypeElementListSyntax(data)
-    case .compositionTypeElement: 
+    case .compositionTypeElement:
       visitImplCompositionTypeElementSyntax(data)
-    case .compositionType: 
+    case .compositionType:
       visitImplCompositionTypeSyntax(data)
-    case .conditionElementList: 
+    case .conditionElementList:
       visitImplConditionElementListSyntax(data)
-    case .conditionElement: 
+    case .conditionElement:
       visitImplConditionElementSyntax(data)
-    case .conformanceRequirement: 
+    case .conformanceRequirement:
       visitImplConformanceRequirementSyntax(data)
-    case .constrainedSugarType: 
+    case .constrainedSugarType:
       visitImplConstrainedSugarTypeSyntax(data)
-    case .continueStmt: 
+    case .continueStmt:
       visitImplContinueStmtSyntax(data)
-    case .conventionAttributeArguments: 
+    case .conventionAttributeArguments:
       visitImplConventionAttributeArgumentsSyntax(data)
-    case .conventionWitnessMethodAttributeArguments: 
+    case .conventionWitnessMethodAttributeArguments:
       visitImplConventionWitnessMethodAttributeArgumentsSyntax(data)
-    case .declEffectSpecifiers: 
+    case .declEffectSpecifiers:
       visitImplDeclEffectSpecifiersSyntax(data)
-    case .declModifierDetail: 
+    case .declModifierDetail:
       visitImplDeclModifierDetailSyntax(data)
-    case .declModifier: 
+    case .declModifier:
       visitImplDeclModifierSyntax(data)
-    case .declNameArgumentList: 
+    case .declNameArgumentList:
       visitImplDeclNameArgumentListSyntax(data)
-    case .declNameArgument: 
+    case .declNameArgument:
       visitImplDeclNameArgumentSyntax(data)
-    case .declNameArguments: 
+    case .declNameArguments:
       visitImplDeclNameArgumentsSyntax(data)
-    case .declName: 
+    case .declName:
       visitImplDeclNameSyntax(data)
-    case .deferStmt: 
+    case .deferStmt:
       visitImplDeferStmtSyntax(data)
-    case .deinitializerDecl: 
+    case .deinitializerDecl:
       visitImplDeinitializerDeclSyntax(data)
-    case .derivativeRegistrationAttributeArguments: 
+    case .derivativeRegistrationAttributeArguments:
       visitImplDerivativeRegistrationAttributeArgumentsSyntax(data)
-    case .designatedTypeElement: 
+    case .designatedTypeElement:
       visitImplDesignatedTypeElementSyntax(data)
-    case .designatedTypeList: 
+    case .designatedTypeList:
       visitImplDesignatedTypeListSyntax(data)
-    case .dictionaryElementList: 
+    case .dictionaryElementList:
       visitImplDictionaryElementListSyntax(data)
-    case .dictionaryElement: 
+    case .dictionaryElement:
       visitImplDictionaryElementSyntax(data)
-    case .dictionaryExpr: 
+    case .dictionaryExpr:
       visitImplDictionaryExprSyntax(data)
-    case .dictionaryType: 
+    case .dictionaryType:
       visitImplDictionaryTypeSyntax(data)
-    case .differentiabilityParamList: 
+    case .differentiabilityParamList:
       visitImplDifferentiabilityParamListSyntax(data)
-    case .differentiabilityParam: 
+    case .differentiabilityParam:
       visitImplDifferentiabilityParamSyntax(data)
-    case .differentiabilityParamsClause: 
+    case .differentiabilityParamsClause:
       visitImplDifferentiabilityParamsClauseSyntax(data)
-    case .differentiabilityParams: 
+    case .differentiabilityParams:
       visitImplDifferentiabilityParamsSyntax(data)
-    case .differentiableAttributeArguments: 
+    case .differentiableAttributeArguments:
       visitImplDifferentiableAttributeArgumentsSyntax(data)
-    case .discardAssignmentExpr: 
+    case .discardAssignmentExpr:
       visitImplDiscardAssignmentExprSyntax(data)
-    case .doStmt: 
+    case .doStmt:
       visitImplDoStmtSyntax(data)
-    case .documentationAttributeArgument: 
+    case .documentationAttributeArgument:
       visitImplDocumentationAttributeArgumentSyntax(data)
-    case .documentationAttributeArguments: 
+    case .documentationAttributeArguments:
       visitImplDocumentationAttributeArgumentsSyntax(data)
-    case .dynamicReplacementArguments: 
+    case .dynamicReplacementArguments:
       visitImplDynamicReplacementArgumentsSyntax(data)
-    case .editorPlaceholderDecl: 
+    case .editorPlaceholderDecl:
       visitImplEditorPlaceholderDeclSyntax(data)
-    case .editorPlaceholderExpr: 
+    case .editorPlaceholderExpr:
       visitImplEditorPlaceholderExprSyntax(data)
-    case .effectsArguments: 
+    case .effectsArguments:
       visitImplEffectsArgumentsSyntax(data)
-    case .enumCaseDecl: 
+    case .enumCaseDecl:
       visitImplEnumCaseDeclSyntax(data)
-    case .enumCaseElementList: 
+    case .enumCaseElementList:
       visitImplEnumCaseElementListSyntax(data)
-    case .enumCaseElement: 
+    case .enumCaseElement:
       visitImplEnumCaseElementSyntax(data)
-    case .enumDecl: 
+    case .enumDecl:
       visitImplEnumDeclSyntax(data)
-    case .exposeAttributeArguments: 
+    case .exposeAttributeArguments:
       visitImplExposeAttributeArgumentsSyntax(data)
-    case .exprList: 
+    case .exprList:
       visitImplExprListSyntax(data)
-    case .expressionPattern: 
+    case .expressionPattern:
       visitImplExpressionPatternSyntax(data)
-    case .expressionSegment: 
+    case .expressionSegment:
       visitImplExpressionSegmentSyntax(data)
-    case .expressionStmt: 
+    case .expressionStmt:
       visitImplExpressionStmtSyntax(data)
-    case .extensionDecl: 
+    case .extensionDecl:
       visitImplExtensionDeclSyntax(data)
-    case .fallthroughStmt: 
+    case .fallthroughStmt:
       visitImplFallthroughStmtSyntax(data)
-    case .floatLiteralExpr: 
+    case .floatLiteralExpr:
       visitImplFloatLiteralExprSyntax(data)
-    case .forInStmt: 
+    case .forInStmt:
       visitImplForInStmtSyntax(data)
-    case .forcedValueExpr: 
+    case .forcedValueExpr:
       visitImplForcedValueExprSyntax(data)
-    case .functionCallExpr: 
+    case .functionCallExpr:
       visitImplFunctionCallExprSyntax(data)
-    case .functionDecl: 
+    case .functionDecl:
       visitImplFunctionDeclSyntax(data)
-    case .functionParameterList: 
+    case .functionParameterList:
       visitImplFunctionParameterListSyntax(data)
-    case .functionParameter: 
+    case .functionParameter:
       visitImplFunctionParameterSyntax(data)
-    case .functionSignature: 
+    case .functionSignature:
       visitImplFunctionSignatureSyntax(data)
-    case .functionType: 
+    case .functionType:
       visitImplFunctionTypeSyntax(data)
-    case .genericArgumentClause: 
+    case .genericArgumentClause:
       visitImplGenericArgumentClauseSyntax(data)
-    case .genericArgumentList: 
+    case .genericArgumentList:
       visitImplGenericArgumentListSyntax(data)
-    case .genericArgument: 
+    case .genericArgument:
       visitImplGenericArgumentSyntax(data)
-    case .genericParameterClause: 
+    case .genericParameterClause:
       visitImplGenericParameterClauseSyntax(data)
-    case .genericParameterList: 
+    case .genericParameterList:
       visitImplGenericParameterListSyntax(data)
-    case .genericParameter: 
+    case .genericParameter:
       visitImplGenericParameterSyntax(data)
-    case .genericRequirementList: 
+    case .genericRequirementList:
       visitImplGenericRequirementListSyntax(data)
-    case .genericRequirement: 
+    case .genericRequirement:
       visitImplGenericRequirementSyntax(data)
-    case .genericWhereClause: 
+    case .genericWhereClause:
       visitImplGenericWhereClauseSyntax(data)
-    case .guardStmt: 
+    case .guardStmt:
       visitImplGuardStmtSyntax(data)
-    case .identifierExpr: 
+    case .identifierExpr:
       visitImplIdentifierExprSyntax(data)
-    case .identifierPattern: 
+    case .identifierPattern:
       visitImplIdentifierPatternSyntax(data)
-    case .ifConfigClauseList: 
+    case .ifConfigClauseList:
       visitImplIfConfigClauseListSyntax(data)
-    case .ifConfigClause: 
+    case .ifConfigClause:
       visitImplIfConfigClauseSyntax(data)
-    case .ifConfigDecl: 
+    case .ifConfigDecl:
       visitImplIfConfigDeclSyntax(data)
-    case .ifExpr: 
+    case .ifExpr:
       visitImplIfExprSyntax(data)
-    case .implementsAttributeArguments: 
+    case .implementsAttributeArguments:
       visitImplImplementsAttributeArgumentsSyntax(data)
-    case .implicitlyUnwrappedOptionalType: 
+    case .implicitlyUnwrappedOptionalType:
       visitImplImplicitlyUnwrappedOptionalTypeSyntax(data)
-    case .importDecl: 
+    case .importDecl:
       visitImplImportDeclSyntax(data)
-    case .inOutExpr: 
+    case .inOutExpr:
       visitImplInOutExprSyntax(data)
-    case .infixOperatorExpr: 
+    case .infixOperatorExpr:
       visitImplInfixOperatorExprSyntax(data)
-    case .inheritedTypeList: 
+    case .inheritedTypeList:
       visitImplInheritedTypeListSyntax(data)
-    case .inheritedType: 
+    case .inheritedType:
       visitImplInheritedTypeSyntax(data)
-    case .initializerClause: 
+    case .initializerClause:
       visitImplInitializerClauseSyntax(data)
-    case .initializerDecl: 
+    case .initializerDecl:
       visitImplInitializerDeclSyntax(data)
-    case .integerLiteralExpr: 
+    case .integerLiteralExpr:
       visitImplIntegerLiteralExprSyntax(data)
-    case .isExpr: 
+    case .isExpr:
       visitImplIsExprSyntax(data)
-    case .isTypePattern: 
+    case .isTypePattern:
       visitImplIsTypePatternSyntax(data)
-    case .keyPathComponentList: 
+    case .keyPathComponentList:
       visitImplKeyPathComponentListSyntax(data)
-    case .keyPathComponent: 
+    case .keyPathComponent:
       visitImplKeyPathComponentSyntax(data)
-    case .keyPathExpr: 
+    case .keyPathExpr:
       visitImplKeyPathExprSyntax(data)
-    case .keyPathOptionalComponent: 
+    case .keyPathOptionalComponent:
       visitImplKeyPathOptionalComponentSyntax(data)
-    case .keyPathPropertyComponent: 
+    case .keyPathPropertyComponent:
       visitImplKeyPathPropertyComponentSyntax(data)
-    case .keyPathSubscriptComponent: 
+    case .keyPathSubscriptComponent:
       visitImplKeyPathSubscriptComponentSyntax(data)
-    case .labeledSpecializeEntry: 
+    case .labeledSpecializeEntry:
       visitImplLabeledSpecializeEntrySyntax(data)
-    case .labeledStmt: 
+    case .labeledStmt:
       visitImplLabeledStmtSyntax(data)
-    case .layoutRequirement: 
+    case .layoutRequirement:
       visitImplLayoutRequirementSyntax(data)
-    case .macroDecl: 
+    case .macroDecl:
       visitImplMacroDeclSyntax(data)
-    case .macroExpansionDecl: 
+    case .macroExpansionDecl:
       visitImplMacroExpansionDeclSyntax(data)
-    case .macroExpansionExpr: 
+    case .macroExpansionExpr:
       visitImplMacroExpansionExprSyntax(data)
-    case .matchingPatternCondition: 
+    case .matchingPatternCondition:
       visitImplMatchingPatternConditionSyntax(data)
-    case .memberAccessExpr: 
+    case .memberAccessExpr:
       visitImplMemberAccessExprSyntax(data)
-    case .memberDeclBlock: 
+    case .memberDeclBlock:
       visitImplMemberDeclBlockSyntax(data)
-    case .memberDeclListItem: 
+    case .memberDeclListItem:
       visitImplMemberDeclListItemSyntax(data)
-    case .memberDeclList: 
+    case .memberDeclList:
       visitImplMemberDeclListSyntax(data)
-    case .memberTypeIdentifier: 
+    case .memberTypeIdentifier:
       visitImplMemberTypeIdentifierSyntax(data)
-    case .metatypeType: 
+    case .metatypeType:
       visitImplMetatypeTypeSyntax(data)
-    case .missingDecl: 
+    case .missingDecl:
       visitImplMissingDeclSyntax(data)
-    case .missingExpr: 
+    case .missingExpr:
       visitImplMissingExprSyntax(data)
-    case .missingPattern: 
+    case .missingPattern:
       visitImplMissingPatternSyntax(data)
-    case .missingStmt: 
+    case .missingStmt:
       visitImplMissingStmtSyntax(data)
-    case .missing: 
+    case .missing:
       visitImplMissingSyntax(data)
-    case .missingType: 
+    case .missingType:
       visitImplMissingTypeSyntax(data)
-    case .modifierList: 
+    case .modifierList:
       visitImplModifierListSyntax(data)
-    case .moveExpr: 
+    case .moveExpr:
       visitImplMoveExprSyntax(data)
-    case .multipleTrailingClosureElementList: 
+    case .multipleTrailingClosureElementList:
       visitImplMultipleTrailingClosureElementListSyntax(data)
-    case .multipleTrailingClosureElement: 
+    case .multipleTrailingClosureElement:
       visitImplMultipleTrailingClosureElementSyntax(data)
-    case .namedOpaqueReturnType: 
+    case .namedOpaqueReturnType:
       visitImplNamedOpaqueReturnTypeSyntax(data)
-    case .nilLiteralExpr: 
+    case .nilLiteralExpr:
       visitImplNilLiteralExprSyntax(data)
-    case .objCSelectorPiece: 
+    case .objCSelectorPiece:
       visitImplObjCSelectorPieceSyntax(data)
-    case .objCSelector: 
+    case .objCSelector:
       visitImplObjCSelectorSyntax(data)
-    case .opaqueReturnTypeOfAttributeArguments: 
+    case .opaqueReturnTypeOfAttributeArguments:
       visitImplOpaqueReturnTypeOfAttributeArgumentsSyntax(data)
-    case .operatorDecl: 
+    case .operatorDecl:
       visitImplOperatorDeclSyntax(data)
-    case .operatorPrecedenceAndTypes: 
+    case .operatorPrecedenceAndTypes:
       visitImplOperatorPrecedenceAndTypesSyntax(data)
-    case .optionalBindingCondition: 
+    case .optionalBindingCondition:
       visitImplOptionalBindingConditionSyntax(data)
-    case .optionalChainingExpr: 
+    case .optionalChainingExpr:
       visitImplOptionalChainingExprSyntax(data)
-    case .optionalType: 
+    case .optionalType:
       visitImplOptionalTypeSyntax(data)
-    case .originallyDefinedInArguments: 
+    case .originallyDefinedInArguments:
       visitImplOriginallyDefinedInArgumentsSyntax(data)
-    case .packElementExpr: 
+    case .packElementExpr:
       visitImplPackElementExprSyntax(data)
-    case .packExpansionExpr: 
+    case .packExpansionExpr:
       visitImplPackExpansionExprSyntax(data)
-    case .packExpansionType: 
+    case .packExpansionType:
       visitImplPackExpansionTypeSyntax(data)
-    case .packReferenceType: 
+    case .packReferenceType:
       visitImplPackReferenceTypeSyntax(data)
-    case .parameterClause: 
+    case .parameterClause:
       visitImplParameterClauseSyntax(data)
-    case .patternBindingList: 
+    case .patternBindingList:
       visitImplPatternBindingListSyntax(data)
-    case .patternBinding: 
+    case .patternBinding:
       visitImplPatternBindingSyntax(data)
-    case .postfixIfConfigExpr: 
+    case .postfixIfConfigExpr:
       visitImplPostfixIfConfigExprSyntax(data)
-    case .postfixUnaryExpr: 
+    case .postfixUnaryExpr:
       visitImplPostfixUnaryExprSyntax(data)
-    case .poundSourceLocationArgs: 
+    case .poundSourceLocationArgs:
       visitImplPoundSourceLocationArgsSyntax(data)
-    case .poundSourceLocation: 
+    case .poundSourceLocation:
       visitImplPoundSourceLocationSyntax(data)
-    case .precedenceGroupAssignment: 
+    case .precedenceGroupAssignment:
       visitImplPrecedenceGroupAssignmentSyntax(data)
-    case .precedenceGroupAssociativity: 
+    case .precedenceGroupAssociativity:
       visitImplPrecedenceGroupAssociativitySyntax(data)
-    case .precedenceGroupAttributeList: 
+    case .precedenceGroupAttributeList:
       visitImplPrecedenceGroupAttributeListSyntax(data)
-    case .precedenceGroupDecl: 
+    case .precedenceGroupDecl:
       visitImplPrecedenceGroupDeclSyntax(data)
-    case .precedenceGroupNameElement: 
+    case .precedenceGroupNameElement:
       visitImplPrecedenceGroupNameElementSyntax(data)
-    case .precedenceGroupNameList: 
+    case .precedenceGroupNameList:
       visitImplPrecedenceGroupNameListSyntax(data)
-    case .precedenceGroupRelation: 
+    case .precedenceGroupRelation:
       visitImplPrecedenceGroupRelationSyntax(data)
-    case .prefixOperatorExpr: 
+    case .prefixOperatorExpr:
       visitImplPrefixOperatorExprSyntax(data)
-    case .primaryAssociatedTypeClause: 
+    case .primaryAssociatedTypeClause:
       visitImplPrimaryAssociatedTypeClauseSyntax(data)
-    case .primaryAssociatedTypeList: 
+    case .primaryAssociatedTypeList:
       visitImplPrimaryAssociatedTypeListSyntax(data)
-    case .primaryAssociatedType: 
+    case .primaryAssociatedType:
       visitImplPrimaryAssociatedTypeSyntax(data)
-    case .protocolDecl: 
+    case .protocolDecl:
       visitImplProtocolDeclSyntax(data)
-    case .qualifiedDeclName: 
+    case .qualifiedDeclName:
       visitImplQualifiedDeclNameSyntax(data)
-    case .regexLiteralExpr: 
+    case .regexLiteralExpr:
       visitImplRegexLiteralExprSyntax(data)
-    case .repeatWhileStmt: 
+    case .repeatWhileStmt:
       visitImplRepeatWhileStmtSyntax(data)
-    case .returnClause: 
+    case .returnClause:
       visitImplReturnClauseSyntax(data)
-    case .returnStmt: 
+    case .returnStmt:
       visitImplReturnStmtSyntax(data)
-    case .sameTypeRequirement: 
+    case .sameTypeRequirement:
       visitImplSameTypeRequirementSyntax(data)
-    case .sequenceExpr: 
+    case .sequenceExpr:
       visitImplSequenceExprSyntax(data)
-    case .simpleTypeIdentifier: 
+    case .simpleTypeIdentifier:
       visitImplSimpleTypeIdentifierSyntax(data)
-    case .sourceFile: 
+    case .sourceFile:
       visitImplSourceFileSyntax(data)
-    case .specializeAttributeSpecList: 
+    case .specializeAttributeSpecList:
       visitImplSpecializeAttributeSpecListSyntax(data)
-    case .specializeExpr: 
+    case .specializeExpr:
       visitImplSpecializeExprSyntax(data)
-    case .stringLiteralExpr: 
+    case .stringLiteralExpr:
       visitImplStringLiteralExprSyntax(data)
-    case .stringLiteralSegments: 
+    case .stringLiteralSegments:
       visitImplStringLiteralSegmentsSyntax(data)
-    case .stringSegment: 
+    case .stringSegment:
       visitImplStringSegmentSyntax(data)
-    case .structDecl: 
+    case .structDecl:
       visitImplStructDeclSyntax(data)
-    case .subscriptDecl: 
+    case .subscriptDecl:
       visitImplSubscriptDeclSyntax(data)
-    case .subscriptExpr: 
+    case .subscriptExpr:
       visitImplSubscriptExprSyntax(data)
-    case .superRefExpr: 
+    case .superRefExpr:
       visitImplSuperRefExprSyntax(data)
-    case .switchCaseLabel: 
+    case .switchCaseLabel:
       visitImplSwitchCaseLabelSyntax(data)
-    case .switchCaseList: 
+    case .switchCaseList:
       visitImplSwitchCaseListSyntax(data)
-    case .switchCase: 
+    case .switchCase:
       visitImplSwitchCaseSyntax(data)
-    case .switchDefaultLabel: 
+    case .switchDefaultLabel:
       visitImplSwitchDefaultLabelSyntax(data)
-    case .switchExpr: 
+    case .switchExpr:
       visitImplSwitchExprSyntax(data)
-    case .targetFunctionEntry: 
+    case .targetFunctionEntry:
       visitImplTargetFunctionEntrySyntax(data)
-    case .ternaryExpr: 
+    case .ternaryExpr:
       visitImplTernaryExprSyntax(data)
-    case .throwStmt: 
+    case .throwStmt:
       visitImplThrowStmtSyntax(data)
-    case .tryExpr: 
+    case .tryExpr:
       visitImplTryExprSyntax(data)
-    case .tupleExprElementList: 
+    case .tupleExprElementList:
       visitImplTupleExprElementListSyntax(data)
-    case .tupleExprElement: 
+    case .tupleExprElement:
       visitImplTupleExprElementSyntax(data)
-    case .tupleExpr: 
+    case .tupleExpr:
       visitImplTupleExprSyntax(data)
-    case .tuplePatternElementList: 
+    case .tuplePatternElementList:
       visitImplTuplePatternElementListSyntax(data)
-    case .tuplePatternElement: 
+    case .tuplePatternElement:
       visitImplTuplePatternElementSyntax(data)
-    case .tuplePattern: 
+    case .tuplePattern:
       visitImplTuplePatternSyntax(data)
-    case .tupleTypeElementList: 
+    case .tupleTypeElementList:
       visitImplTupleTypeElementListSyntax(data)
-    case .tupleTypeElement: 
+    case .tupleTypeElement:
       visitImplTupleTypeElementSyntax(data)
-    case .tupleType: 
+    case .tupleType:
       visitImplTupleTypeSyntax(data)
-    case .typeAnnotation: 
+    case .typeAnnotation:
       visitImplTypeAnnotationSyntax(data)
-    case .typeEffectSpecifiers: 
+    case .typeEffectSpecifiers:
       visitImplTypeEffectSpecifiersSyntax(data)
-    case .typeExpr: 
+    case .typeExpr:
       visitImplTypeExprSyntax(data)
-    case .typeInheritanceClause: 
+    case .typeInheritanceClause:
       visitImplTypeInheritanceClauseSyntax(data)
-    case .typeInitializerClause: 
+    case .typeInitializerClause:
       visitImplTypeInitializerClauseSyntax(data)
-    case .typealiasDecl: 
+    case .typealiasDecl:
       visitImplTypealiasDeclSyntax(data)
-    case .unavailableFromAsyncArguments: 
+    case .unavailableFromAsyncArguments:
       visitImplUnavailableFromAsyncArgumentsSyntax(data)
-    case .underscorePrivateAttributeArguments: 
+    case .underscorePrivateAttributeArguments:
       visitImplUnderscorePrivateAttributeArgumentsSyntax(data)
-    case .unexpectedNodes: 
+    case .unexpectedNodes:
       visitImplUnexpectedNodesSyntax(data)
-    case .unresolvedAsExpr: 
+    case .unresolvedAsExpr:
       visitImplUnresolvedAsExprSyntax(data)
-    case .unresolvedIsExpr: 
+    case .unresolvedIsExpr:
       visitImplUnresolvedIsExprSyntax(data)
-    case .unresolvedPatternExpr: 
+    case .unresolvedPatternExpr:
       visitImplUnresolvedPatternExprSyntax(data)
-    case .unresolvedTernaryExpr: 
+    case .unresolvedTernaryExpr:
       visitImplUnresolvedTernaryExprSyntax(data)
-    case .valueBindingPattern: 
+    case .valueBindingPattern:
       visitImplValueBindingPatternSyntax(data)
-    case .variableDecl: 
+    case .variableDecl:
       visitImplVariableDeclSyntax(data)
-    case .versionTuple: 
+    case .versionTuple:
       visitImplVersionTupleSyntax(data)
-    case .whereClause: 
+    case .whereClause:
       visitImplWhereClauseSyntax(data)
-    case .whileStmt: 
+    case .whileStmt:
       visitImplWhileStmtSyntax(data)
-    case .wildcardPattern: 
+    case .wildcardPattern:
       visitImplWildcardPatternSyntax(data)
-    case .yieldExprListElement: 
+    case .yieldExprListElement:
       visitImplYieldExprListElementSyntax(data)
-    case .yieldExprList: 
+    case .yieldExprList:
       visitImplYieldExprListSyntax(data)
-    case .yieldList: 
+    case .yieldList:
       visitImplYieldListSyntax(data)
-    case .yieldStmt: 
+    case .yieldStmt:
       visitImplYieldStmtSyntax(data)
     }
   }

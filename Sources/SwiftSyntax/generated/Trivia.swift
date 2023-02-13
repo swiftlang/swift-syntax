@@ -86,35 +86,35 @@ extension TriviaPiece: TextOutputStreamable {
       }
     }
     switch self {
-    case let .spaces(count): 
+    case let .spaces(count):
       printRepeated(" ", count: count)
-    case let .tabs(count): 
+    case let .tabs(count):
       printRepeated("\t", count: count)
-    case let .verticalTabs(count): 
+    case let .verticalTabs(count):
       printRepeated("\u{b}", count: count)
-    case let .formfeeds(count): 
+    case let .formfeeds(count):
       printRepeated("\u{c}", count: count)
-    case let .newlines(count): 
+    case let .newlines(count):
       printRepeated("\n", count: count)
-    case let .carriageReturns(count): 
+    case let .carriageReturns(count):
       printRepeated("\r", count: count)
-    case let .carriageReturnLineFeeds(count): 
+    case let .carriageReturnLineFeeds(count):
       printRepeated("\r\n", count: count)
-    case let .lineComment(text): 
+    case let .lineComment(text):
       target.write(text)
-    case let .blockComment(text): 
+    case let .blockComment(text):
       target.write(text)
-    case let .docLineComment(text): 
+    case let .docLineComment(text):
       target.write(text)
-    case let .docBlockComment(text): 
+    case let .docBlockComment(text):
       target.write(text)
-    case let .backslashes(count): 
+    case let .backslashes(count):
       printRepeated(#"\"#, count: count)
-    case let .pounds(count): 
+    case let .pounds(count):
       printRepeated("#", count: count)
-    case let .unexpectedText(text): 
+    case let .unexpectedText(text):
       target.write(text)
-    case let .shebang(text): 
+    case let .shebang(text):
       target.write(text)
     }
   }
@@ -124,35 +124,35 @@ extension TriviaPiece: CustomDebugStringConvertible {
   /// Returns a description used by dump.
   public var debugDescription: String {
     switch self {
-    case .spaces(let data): 
+    case .spaces(let data):
       return "spaces(\(data))"
-    case .tabs(let data): 
+    case .tabs(let data):
       return "tabs(\(data))"
-    case .verticalTabs(let data): 
+    case .verticalTabs(let data):
       return "verticalTabs(\(data))"
-    case .formfeeds(let data): 
+    case .formfeeds(let data):
       return "formfeeds(\(data))"
-    case .newlines(let data): 
+    case .newlines(let data):
       return "newlines(\(data))"
-    case .carriageReturns(let data): 
+    case .carriageReturns(let data):
       return "carriageReturns(\(data))"
-    case .carriageReturnLineFeeds(let data): 
+    case .carriageReturnLineFeeds(let data):
       return "carriageReturnLineFeeds(\(data))"
-    case .lineComment(let name): 
+    case .lineComment(let name):
       return "lineComment(\(name.debugDescription))"
-    case .blockComment(let name): 
+    case .blockComment(let name):
       return "blockComment(\(name.debugDescription))"
-    case .docLineComment(let name): 
+    case .docLineComment(let name):
       return "docLineComment(\(name.debugDescription))"
-    case .docBlockComment(let name): 
+    case .docBlockComment(let name):
       return "docBlockComment(\(name.debugDescription))"
-    case .backslashes(let data): 
+    case .backslashes(let data):
       return "backslashes(\(data))"
-    case .pounds(let data): 
+    case .pounds(let data):
       return "pounds(\(data))"
-    case .unexpectedText(let name): 
+    case .unexpectedText(let name):
       return "unexpectedText(\(name.debugDescription))"
-    case .shebang(let name): 
+    case .shebang(let name):
       return "shebang(\(name.debugDescription))"
     }
   }
@@ -164,9 +164,9 @@ extension TriviaPiece {
     switch self {
     case .newlines, 
         .carriageReturns, 
-        .carriageReturnLineFeeds: 
+        .carriageReturnLineFeeds:
       return true
-    default: 
+    default:
       return false
     }
   }
@@ -409,35 +409,35 @@ extension TriviaPiece: Equatable {}
 extension TriviaPiece {
   public var sourceLength: SourceLength {
     switch self {
-    case let .spaces(count): 
+    case let .spaces(count):
       return SourceLength(utf8Length: count)
-    case let .tabs(count): 
+    case let .tabs(count):
       return SourceLength(utf8Length: count)
-    case let .verticalTabs(count): 
+    case let .verticalTabs(count):
       return SourceLength(utf8Length: count)
-    case let .formfeeds(count): 
+    case let .formfeeds(count):
       return SourceLength(utf8Length: count)
-    case let .newlines(count): 
+    case let .newlines(count):
       return SourceLength(utf8Length: count)
-    case let .carriageReturns(count): 
+    case let .carriageReturns(count):
       return SourceLength(utf8Length: count)
-    case let .carriageReturnLineFeeds(count): 
+    case let .carriageReturnLineFeeds(count):
       return SourceLength(utf8Length: count * 2)
-    case let .lineComment(text): 
+    case let .lineComment(text):
       return SourceLength(of: text)
-    case let .blockComment(text): 
+    case let .blockComment(text):
       return SourceLength(of: text)
-    case let .docLineComment(text): 
+    case let .docLineComment(text):
       return SourceLength(of: text)
-    case let .docBlockComment(text): 
+    case let .docBlockComment(text):
       return SourceLength(of: text)
-    case let .backslashes(count): 
+    case let .backslashes(count):
       return SourceLength(utf8Length: count)
-    case let .pounds(count): 
+    case let .pounds(count):
       return SourceLength(utf8Length: count)
-    case let .unexpectedText(text): 
+    case let .unexpectedText(text):
       return SourceLength(of: text)
-    case let .shebang(text): 
+    case let .shebang(text):
       return SourceLength(of: text)
     }
   }
@@ -481,35 +481,35 @@ public enum RawTriviaPiece: Equatable {
   
   static func make(_ piece: TriviaPiece, arena: SyntaxArena) -> RawTriviaPiece {
     switch piece {
-    case let .spaces(count): 
+    case let .spaces(count):
       return .spaces(count)
-    case let .tabs(count): 
+    case let .tabs(count):
       return .tabs(count)
-    case let .verticalTabs(count): 
+    case let .verticalTabs(count):
       return .verticalTabs(count)
-    case let .formfeeds(count): 
+    case let .formfeeds(count):
       return .formfeeds(count)
-    case let .newlines(count): 
+    case let .newlines(count):
       return .newlines(count)
-    case let .carriageReturns(count): 
+    case let .carriageReturns(count):
       return .carriageReturns(count)
-    case let .carriageReturnLineFeeds(count): 
+    case let .carriageReturnLineFeeds(count):
       return .carriageReturnLineFeeds(count)
-    case let .lineComment(text): 
+    case let .lineComment(text):
       return .lineComment(arena.intern(text))
-    case let .blockComment(text): 
+    case let .blockComment(text):
       return .blockComment(arena.intern(text))
-    case let .docLineComment(text): 
+    case let .docLineComment(text):
       return .docLineComment(arena.intern(text))
-    case let .docBlockComment(text): 
+    case let .docBlockComment(text):
       return .docBlockComment(arena.intern(text))
-    case let .backslashes(count): 
+    case let .backslashes(count):
       return .backslashes(count)
-    case let .pounds(count): 
+    case let .pounds(count):
       return .pounds(count)
-    case let .unexpectedText(text): 
+    case let .unexpectedText(text):
       return .unexpectedText(arena.intern(text))
-    case let .shebang(text): 
+    case let .shebang(text):
       return .shebang(arena.intern(text))
     }
   }
@@ -530,35 +530,35 @@ extension RawTriviaPiece: CustomDebugStringConvertible {
 extension TriviaPiece {
   @_spi(RawSyntax) public init(raw: RawTriviaPiece) {
     switch raw {
-    case let .spaces(count): 
+    case let .spaces(count):
       self = .spaces(count)
-    case let .tabs(count): 
+    case let .tabs(count):
       self = .tabs(count)
-    case let .verticalTabs(count): 
+    case let .verticalTabs(count):
       self = .verticalTabs(count)
-    case let .formfeeds(count): 
+    case let .formfeeds(count):
       self = .formfeeds(count)
-    case let .newlines(count): 
+    case let .newlines(count):
       self = .newlines(count)
-    case let .carriageReturns(count): 
+    case let .carriageReturns(count):
       self = .carriageReturns(count)
-    case let .carriageReturnLineFeeds(count): 
+    case let .carriageReturnLineFeeds(count):
       self = .carriageReturnLineFeeds(count)
-    case let .lineComment(text): 
+    case let .lineComment(text):
       self = .lineComment(String(syntaxText: text))
-    case let .blockComment(text): 
+    case let .blockComment(text):
       self = .blockComment(String(syntaxText: text))
-    case let .docLineComment(text): 
+    case let .docLineComment(text):
       self = .docLineComment(String(syntaxText: text))
-    case let .docBlockComment(text): 
+    case let .docBlockComment(text):
       self = .docBlockComment(String(syntaxText: text))
-    case let .backslashes(count): 
+    case let .backslashes(count):
       self = .backslashes(count)
-    case let .pounds(count): 
+    case let .pounds(count):
       self = .pounds(count)
-    case let .unexpectedText(text): 
+    case let .unexpectedText(text):
       self = .unexpectedText(String(syntaxText: text))
-    case let .shebang(text): 
+    case let .shebang(text):
       self = .shebang(String(syntaxText: text))
     }
   }
@@ -567,70 +567,70 @@ extension TriviaPiece {
 extension RawTriviaPiece {
   public var byteLength: Int {
     switch self {
-    case let .spaces(count): 
+    case let .spaces(count):
       return count
-    case let .tabs(count): 
+    case let .tabs(count):
       return count
-    case let .verticalTabs(count): 
+    case let .verticalTabs(count):
       return count
-    case let .formfeeds(count): 
+    case let .formfeeds(count):
       return count
-    case let .newlines(count): 
+    case let .newlines(count):
       return count
-    case let .carriageReturns(count): 
+    case let .carriageReturns(count):
       return count
-    case let .carriageReturnLineFeeds(count): 
+    case let .carriageReturnLineFeeds(count):
       return count * 2
-    case let .lineComment(text): 
+    case let .lineComment(text):
       return text.count
-    case let .blockComment(text): 
+    case let .blockComment(text):
       return text.count
-    case let .docLineComment(text): 
+    case let .docLineComment(text):
       return text.count
-    case let .docBlockComment(text): 
+    case let .docBlockComment(text):
       return text.count
-    case let .backslashes(count): 
+    case let .backslashes(count):
       return count
-    case let .pounds(count): 
+    case let .pounds(count):
       return count
-    case let .unexpectedText(text): 
+    case let .unexpectedText(text):
       return text.count
-    case let .shebang(text): 
+    case let .shebang(text):
       return text.count
     }
   }
   
   var storedText: SyntaxText? {
     switch self {
-    case .spaces(_): 
+    case .spaces(_):
       return nil
-    case .tabs(_): 
+    case .tabs(_):
       return nil
-    case .verticalTabs(_): 
+    case .verticalTabs(_):
       return nil
-    case .formfeeds(_): 
+    case .formfeeds(_):
       return nil
-    case .newlines(_): 
+    case .newlines(_):
       return nil
-    case .carriageReturns(_): 
+    case .carriageReturns(_):
       return nil
-    case .carriageReturnLineFeeds(_): 
+    case .carriageReturnLineFeeds(_):
       return nil
-    case .lineComment(let text): 
+    case .lineComment(let text):
       return text
-    case .blockComment(let text): 
+    case .blockComment(let text):
       return text
-    case .docLineComment(let text): 
+    case .docLineComment(let text):
       return text
-    case .docBlockComment(let text): 
+    case .docBlockComment(let text):
       return text
-    case .backslashes(_): 
+    case .backslashes(_):
       return nil
-    case .pounds(_): 
+    case .pounds(_):
       return nil
-    case .unexpectedText(let text): 
+    case .unexpectedText(let text):
       return text
-    case .shebang(let text): 
+    case .shebang(let text):
       return text
     }
   }
@@ -642,9 +642,9 @@ extension RawTriviaPiece {
     switch self {
     case .newlines, 
         .carriageReturns, 
-        .carriageReturnLineFeeds: 
+        .carriageReturnLineFeeds:
       return true
-    default: 
+    default:
       return false
     }
   }

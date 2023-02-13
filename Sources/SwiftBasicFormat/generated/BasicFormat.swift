@@ -74,65 +74,65 @@ open class BasicFormat: SyntaxRewriter {
   
   open func shouldIndent(_ keyPath: AnyKeyPath) -> Bool {
     switch keyPath {
-    case \AccessorBlockSyntax.accessors: 
+    case \AccessorBlockSyntax.accessors:
       return true
-    case \ArrayExprSyntax.elements: 
+    case \ArrayExprSyntax.elements:
       return true
-    case \ClosureExprSyntax.statements: 
+    case \ClosureExprSyntax.statements:
       return true
-    case \CodeBlockSyntax.statements: 
+    case \CodeBlockSyntax.statements:
       return true
-    case \DictionaryElementSyntax.valueExpression: 
+    case \DictionaryElementSyntax.valueExpression:
       return true
-    case \DictionaryExprSyntax.content: 
+    case \DictionaryExprSyntax.content:
       return true
-    case \FunctionCallExprSyntax.argumentList: 
+    case \FunctionCallExprSyntax.argumentList:
       return true
-    case \FunctionTypeSyntax.arguments: 
+    case \FunctionTypeSyntax.arguments:
       return true
-    case \MemberDeclBlockSyntax.members: 
+    case \MemberDeclBlockSyntax.members:
       return true
-    case \ParameterClauseSyntax.parameterList: 
+    case \ParameterClauseSyntax.parameterList:
       return true
-    case \SwitchCaseSyntax.statements: 
+    case \SwitchCaseSyntax.statements:
       return true
-    case \TupleExprSyntax.elementList: 
+    case \TupleExprSyntax.elementList:
       return true
-    case \TupleTypeSyntax.elements: 
+    case \TupleTypeSyntax.elements:
       return true
-    default: 
+    default:
       return false
     }
   }
   
   open func requiresLeadingNewline(_ keyPath: AnyKeyPath) -> Bool {
     switch keyPath {
-    case \AccessorBlockSyntax.rightBrace: 
+    case \AccessorBlockSyntax.rightBrace:
       return true
-    case \ClosureExprSyntax.rightBrace: 
+    case \ClosureExprSyntax.rightBrace:
       return true
-    case \CodeBlockSyntax.rightBrace: 
+    case \CodeBlockSyntax.rightBrace:
       return true
-    case \MemberDeclBlockSyntax.rightBrace: 
+    case \MemberDeclBlockSyntax.rightBrace:
       return true
-    case \SwitchExprSyntax.rightBrace: 
+    case \SwitchExprSyntax.rightBrace:
       return true
-    default: 
+    default:
       return putNextTokenOnNewLine
     }
   }
   
   open func childrenSeparatedByNewline(_ node: Syntax) -> Bool {
     switch node.as(SyntaxEnum.self) {
-    case .accessorList: 
+    case .accessorList:
       return true
-    case .codeBlockItemList: 
+    case .codeBlockItemList:
       return true
-    case .memberDeclList: 
+    case .memberDeclList:
       return true
-    case .switchCaseList: 
+    case .switchCaseList:
       return true
-    default: 
+    default:
       return false
     }
   }
@@ -141,9 +141,9 @@ open class BasicFormat: SyntaxRewriter {
   /// leading space behavior of a token.
   open func requiresLeadingSpace(_ keyPath: AnyKeyPath) -> Bool? {
     switch keyPath {
-    case \AvailabilityArgumentSyntax.entry: 
+    case \AvailabilityArgumentSyntax.entry:
       return false
-    default: 
+    default:
       return nil
     }
   }
@@ -153,21 +153,21 @@ open class BasicFormat: SyntaxRewriter {
       return requiresLeadingSpace
     }
     switch token.tokenKind {
-    case .leftBrace: 
+    case .leftBrace:
       return true
-    case .equal: 
+    case .equal:
       return true
-    case .arrow: 
+    case .arrow:
       return true
-    case .binaryOperator: 
+    case .binaryOperator:
       return true
-    case .keyword(.`catch`): 
+    case .keyword(.`catch`):
       return true
-    case .keyword(.`in`): 
+    case .keyword(.`in`):
       return true
-    case .keyword(.`where`): 
+    case .keyword(.`where`):
       return true
-    default: 
+    default:
       return false
     }
   }
@@ -176,23 +176,23 @@ open class BasicFormat: SyntaxRewriter {
   /// trailing space behavior of a token.
   open func requiresTrailingSpace(_ keyPath: AnyKeyPath) -> Bool? {
     switch keyPath {
-    case \AvailabilityArgumentSyntax.entry: 
+    case \AvailabilityArgumentSyntax.entry:
       return false
-    case \BreakStmtSyntax.breakKeyword: 
+    case \BreakStmtSyntax.breakKeyword:
       return false
-    case \DeclNameArgumentSyntax.colon: 
+    case \DeclNameArgumentSyntax.colon:
       return false
-    case \DictionaryExprSyntax.content: 
+    case \DictionaryExprSyntax.content:
       return false
-    case \DynamicReplacementArgumentsSyntax.forLabel: 
+    case \DynamicReplacementArgumentsSyntax.forLabel:
       return false
-    case \SwitchCaseLabelSyntax.colon: 
+    case \SwitchCaseLabelSyntax.colon:
       return false
-    case \SwitchDefaultLabelSyntax.colon: 
+    case \SwitchDefaultLabelSyntax.colon:
       return false
-    case \TryExprSyntax.questionOrExclamationMark: 
+    case \TryExprSyntax.questionOrExclamationMark:
       return true
-    default: 
+    default:
       return nil
     }
   }
@@ -212,121 +212,121 @@ open class BasicFormat: SyntaxRewriter {
      (.postfixQuestionMark, .rightAngle), // Ensures there is not space in `ContiguousArray<RawSyntax?>`
      (.postfixQuestionMark, .rightParen): // Ensures there is not space in `myOptionalClosure?()`
       return false
-    default: 
-      break 
+    default:
+      break
     }
     switch token.tokenKind {
-    case .comma: 
+    case .comma:
       return true
-    case .colon: 
+    case .colon:
       return true
-    case .equal: 
+    case .equal:
       return true
-    case .arrow: 
+    case .arrow:
       return true
-    case .poundSourceLocationKeyword: 
+    case .poundSourceLocationKeyword:
       return true
-    case .poundIfKeyword: 
+    case .poundIfKeyword:
       return true
-    case .poundElseKeyword: 
+    case .poundElseKeyword:
       return true
-    case .poundElseifKeyword: 
+    case .poundElseifKeyword:
       return true
-    case .poundEndifKeyword: 
+    case .poundEndifKeyword:
       return true
-    case .poundAvailableKeyword: 
+    case .poundAvailableKeyword:
       return true
-    case .poundUnavailableKeyword: 
+    case .poundUnavailableKeyword:
       return true
-    case .binaryOperator: 
+    case .binaryOperator:
       return true
-    case .keyword(.`Any`): 
+    case .keyword(.`Any`):
       return true
-    case .keyword(.`as`): 
+    case .keyword(.`as`):
       return true
-    case .keyword(.`associatedtype`): 
+    case .keyword(.`associatedtype`):
       return true
-    case .keyword(.async): 
+    case .keyword(.async):
       return true
-    case .keyword(.`break`): 
+    case .keyword(.`break`):
       return true
-    case .keyword(.`case`): 
+    case .keyword(.`case`):
       return true
-    case .keyword(.`class`): 
+    case .keyword(.`class`):
       return true
-    case .keyword(.`continue`): 
+    case .keyword(.`continue`):
       return true
-    case .keyword(.`defer`): 
+    case .keyword(.`defer`):
       return true
-    case .keyword(.`else`): 
+    case .keyword(.`else`):
       return true
-    case .keyword(.`enum`): 
+    case .keyword(.`enum`):
       return true
-    case .keyword(.`extension`): 
+    case .keyword(.`extension`):
       return true
-    case .keyword(.`fallthrough`): 
+    case .keyword(.`fallthrough`):
       return true
-    case .keyword(.`fileprivate`): 
+    case .keyword(.`fileprivate`):
       return true
-    case .keyword(.`for`): 
+    case .keyword(.`for`):
       return true
-    case .keyword(.`func`): 
+    case .keyword(.`func`):
       return true
-    case .keyword(.`guard`): 
+    case .keyword(.`guard`):
       return true
-    case .keyword(.`if`): 
+    case .keyword(.`if`):
       return true
-    case .keyword(.`import`): 
+    case .keyword(.`import`):
       return true
-    case .keyword(.`in`): 
+    case .keyword(.`in`):
       return true
-    case .keyword(.`inout`): 
+    case .keyword(.`inout`):
       return true
-    case .keyword(.`internal`): 
+    case .keyword(.`internal`):
       return true
-    case .keyword(.`is`): 
+    case .keyword(.`is`):
       return true
-    case .keyword(.`let`): 
+    case .keyword(.`let`):
       return true
-    case .keyword(.`operator`): 
+    case .keyword(.`operator`):
       return true
-    case .keyword(.`precedencegroup`): 
+    case .keyword(.`precedencegroup`):
       return true
-    case .keyword(.`private`): 
+    case .keyword(.`private`):
       return true
-    case .keyword(.`protocol`): 
+    case .keyword(.`protocol`):
       return true
-    case .keyword(.`public`): 
+    case .keyword(.`public`):
       return true
-    case .keyword(.`repeat`): 
+    case .keyword(.`repeat`):
       return true
-    case .keyword(.`rethrows`): 
+    case .keyword(.`rethrows`):
       return true
-    case .keyword(.`return`): 
+    case .keyword(.`return`):
       return true
-    case .keyword(.`static`): 
+    case .keyword(.`static`):
       return true
-    case .keyword(.`struct`): 
+    case .keyword(.`struct`):
       return true
-    case .keyword(.`subscript`): 
+    case .keyword(.`subscript`):
       return true
-    case .keyword(.`switch`): 
+    case .keyword(.`switch`):
       return true
-    case .keyword(.`throw`): 
+    case .keyword(.`throw`):
       return true
-    case .keyword(.`throws`): 
+    case .keyword(.`throws`):
       return true
-    case .keyword(.`try`): 
+    case .keyword(.`try`):
       return true
-    case .keyword(.`typealias`): 
+    case .keyword(.`typealias`):
       return true
-    case .keyword(.`var`): 
+    case .keyword(.`var`):
       return true
-    case .keyword(.`where`): 
+    case .keyword(.`where`):
       return true
-    case .keyword(.`while`): 
+    case .keyword(.`while`):
       return true
-    default: 
+    default:
       return false
     }
   }

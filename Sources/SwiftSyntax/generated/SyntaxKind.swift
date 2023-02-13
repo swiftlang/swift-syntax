@@ -541,114 +541,114 @@ public enum SyntaxKind {
   
   public var isSyntaxCollection: Bool {
     switch self {
-    case .accessPath: 
+    case .accessPath:
       return true
-    case .accessorList: 
+    case .accessorList:
       return true
-    case .arrayElementList: 
+    case .arrayElementList:
       return true
-    case .attributeList: 
+    case .attributeList:
       return true
-    case .availabilitySpecList: 
+    case .availabilitySpecList:
       return true
-    case .availabilityVersionRestrictionList: 
+    case .availabilityVersionRestrictionList:
       return true
-    case .caseItemList: 
+    case .caseItemList:
       return true
-    case .catchClauseList: 
+    case .catchClauseList:
       return true
-    case .catchItemList: 
+    case .catchItemList:
       return true
-    case .closureCaptureItemList: 
+    case .closureCaptureItemList:
       return true
-    case .closureParamList: 
+    case .closureParamList:
       return true
-    case .codeBlockItemList: 
+    case .codeBlockItemList:
       return true
-    case .compositionTypeElementList: 
+    case .compositionTypeElementList:
       return true
-    case .conditionElementList: 
+    case .conditionElementList:
       return true
-    case .declNameArgumentList: 
+    case .declNameArgumentList:
       return true
-    case .designatedTypeList: 
+    case .designatedTypeList:
       return true
-    case .dictionaryElementList: 
+    case .dictionaryElementList:
       return true
-    case .differentiabilityParamList: 
+    case .differentiabilityParamList:
       return true
-    case .documentationAttributeArguments: 
+    case .documentationAttributeArguments:
       return true
-    case .effectsArguments: 
+    case .effectsArguments:
       return true
-    case .enumCaseElementList: 
+    case .enumCaseElementList:
       return true
-    case .exprList: 
+    case .exprList:
       return true
-    case .functionParameterList: 
+    case .functionParameterList:
       return true
-    case .genericArgumentList: 
+    case .genericArgumentList:
       return true
-    case .genericParameterList: 
+    case .genericParameterList:
       return true
-    case .genericRequirementList: 
+    case .genericRequirementList:
       return true
-    case .ifConfigClauseList: 
+    case .ifConfigClauseList:
       return true
-    case .inheritedTypeList: 
+    case .inheritedTypeList:
       return true
-    case .keyPathComponentList: 
+    case .keyPathComponentList:
       return true
-    case .memberDeclList: 
+    case .memberDeclList:
       return true
-    case .modifierList: 
+    case .modifierList:
       return true
-    case .multipleTrailingClosureElementList: 
+    case .multipleTrailingClosureElementList:
       return true
-    case .objCSelector: 
+    case .objCSelector:
       return true
-    case .patternBindingList: 
+    case .patternBindingList:
       return true
-    case .precedenceGroupAttributeList: 
+    case .precedenceGroupAttributeList:
       return true
-    case .precedenceGroupNameList: 
+    case .precedenceGroupNameList:
       return true
-    case .primaryAssociatedTypeList: 
+    case .primaryAssociatedTypeList:
       return true
-    case .specializeAttributeSpecList: 
+    case .specializeAttributeSpecList:
       return true
-    case .stringLiteralSegments: 
+    case .stringLiteralSegments:
       return true
-    case .switchCaseList: 
+    case .switchCaseList:
       return true
-    case .tupleExprElementList: 
+    case .tupleExprElementList:
       return true
-    case .tuplePatternElementList: 
+    case .tuplePatternElementList:
       return true
-    case .tupleTypeElementList: 
+    case .tupleTypeElementList:
       return true
-    case .unexpectedNodes: 
+    case .unexpectedNodes:
       return true
-    case .yieldExprList: 
+    case .yieldExprList:
       return true
-    default: 
+    default:
       return false
     }
   }
   
   public var isMissing: Bool {
     switch self {
-    case .missingDecl: 
+    case .missingDecl:
       return true
-    case .missingExpr: 
+    case .missingExpr:
       return true
-    case .missingPattern: 
+    case .missingPattern:
       return true
-    case .missingStmt: 
+    case .missingStmt:
       return true
-    case .missingType: 
+    case .missingType:
       return true
-    default: 
+    default:
       return false
     }
   }

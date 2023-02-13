@@ -544,527 +544,527 @@ public extension Syntax {
   /// Get an enum that can be used to exhaustively switch over all syntax nodes.
   func `as`(_: SyntaxEnum.Type) -> SyntaxEnum {
     switch raw.kind {
-    case .token: 
+    case .token:
       return .token(TokenSyntax(self)!)
-    case .accessPathComponent: 
+    case .accessPathComponent:
       return .accessPathComponent(AccessPathComponentSyntax(self)!)
-    case .accessPath: 
+    case .accessPath:
       return .accessPath(AccessPathSyntax(self)!)
-    case .accessorBlock: 
+    case .accessorBlock:
       return .accessorBlock(AccessorBlockSyntax(self)!)
-    case .accessorDecl: 
+    case .accessorDecl:
       return .accessorDecl(AccessorDeclSyntax(self)!)
-    case .accessorList: 
+    case .accessorList:
       return .accessorList(AccessorListSyntax(self)!)
-    case .accessorParameter: 
+    case .accessorParameter:
       return .accessorParameter(AccessorParameterSyntax(self)!)
-    case .actorDecl: 
+    case .actorDecl:
       return .actorDecl(ActorDeclSyntax(self)!)
-    case .arrayElementList: 
+    case .arrayElementList:
       return .arrayElementList(ArrayElementListSyntax(self)!)
-    case .arrayElement: 
+    case .arrayElement:
       return .arrayElement(ArrayElementSyntax(self)!)
-    case .arrayExpr: 
+    case .arrayExpr:
       return .arrayExpr(ArrayExprSyntax(self)!)
-    case .arrayType: 
+    case .arrayType:
       return .arrayType(ArrayTypeSyntax(self)!)
-    case .arrowExpr: 
+    case .arrowExpr:
       return .arrowExpr(ArrowExprSyntax(self)!)
-    case .asExpr: 
+    case .asExpr:
       return .asExpr(AsExprSyntax(self)!)
-    case .assignmentExpr: 
+    case .assignmentExpr:
       return .assignmentExpr(AssignmentExprSyntax(self)!)
-    case .associatedtypeDecl: 
+    case .associatedtypeDecl:
       return .associatedtypeDecl(AssociatedtypeDeclSyntax(self)!)
-    case .attributeList: 
+    case .attributeList:
       return .attributeList(AttributeListSyntax(self)!)
-    case .attribute: 
+    case .attribute:
       return .attribute(AttributeSyntax(self)!)
-    case .attributedType: 
+    case .attributedType:
       return .attributedType(AttributedTypeSyntax(self)!)
-    case .availabilityArgument: 
+    case .availabilityArgument:
       return .availabilityArgument(AvailabilityArgumentSyntax(self)!)
-    case .availabilityCondition: 
+    case .availabilityCondition:
       return .availabilityCondition(AvailabilityConditionSyntax(self)!)
-    case .availabilityEntry: 
+    case .availabilityEntry:
       return .availabilityEntry(AvailabilityEntrySyntax(self)!)
-    case .availabilityLabeledArgument: 
+    case .availabilityLabeledArgument:
       return .availabilityLabeledArgument(AvailabilityLabeledArgumentSyntax(self)!)
-    case .availabilitySpecList: 
+    case .availabilitySpecList:
       return .availabilitySpecList(AvailabilitySpecListSyntax(self)!)
-    case .availabilityVersionRestrictionListEntry: 
+    case .availabilityVersionRestrictionListEntry:
       return .availabilityVersionRestrictionListEntry(AvailabilityVersionRestrictionListEntrySyntax(self)!)
-    case .availabilityVersionRestrictionList: 
+    case .availabilityVersionRestrictionList:
       return .availabilityVersionRestrictionList(AvailabilityVersionRestrictionListSyntax(self)!)
-    case .availabilityVersionRestriction: 
+    case .availabilityVersionRestriction:
       return .availabilityVersionRestriction(AvailabilityVersionRestrictionSyntax(self)!)
-    case .awaitExpr: 
+    case .awaitExpr:
       return .awaitExpr(AwaitExprSyntax(self)!)
-    case .backDeployedAttributeSpecList: 
+    case .backDeployedAttributeSpecList:
       return .backDeployedAttributeSpecList(BackDeployedAttributeSpecListSyntax(self)!)
-    case .binaryOperatorExpr: 
+    case .binaryOperatorExpr:
       return .binaryOperatorExpr(BinaryOperatorExprSyntax(self)!)
-    case .booleanLiteralExpr: 
+    case .booleanLiteralExpr:
       return .booleanLiteralExpr(BooleanLiteralExprSyntax(self)!)
-    case .borrowExpr: 
+    case .borrowExpr:
       return .borrowExpr(BorrowExprSyntax(self)!)
-    case .breakStmt: 
+    case .breakStmt:
       return .breakStmt(BreakStmtSyntax(self)!)
-    case .caseItemList: 
+    case .caseItemList:
       return .caseItemList(CaseItemListSyntax(self)!)
-    case .caseItem: 
+    case .caseItem:
       return .caseItem(CaseItemSyntax(self)!)
-    case .catchClauseList: 
+    case .catchClauseList:
       return .catchClauseList(CatchClauseListSyntax(self)!)
-    case .catchClause: 
+    case .catchClause:
       return .catchClause(CatchClauseSyntax(self)!)
-    case .catchItemList: 
+    case .catchItemList:
       return .catchItemList(CatchItemListSyntax(self)!)
-    case .catchItem: 
+    case .catchItem:
       return .catchItem(CatchItemSyntax(self)!)
-    case .classDecl: 
+    case .classDecl:
       return .classDecl(ClassDeclSyntax(self)!)
-    case .classRestrictionType: 
+    case .classRestrictionType:
       return .classRestrictionType(ClassRestrictionTypeSyntax(self)!)
-    case .closureCaptureItemList: 
+    case .closureCaptureItemList:
       return .closureCaptureItemList(ClosureCaptureItemListSyntax(self)!)
-    case .closureCaptureItemSpecifier: 
+    case .closureCaptureItemSpecifier:
       return .closureCaptureItemSpecifier(ClosureCaptureItemSpecifierSyntax(self)!)
-    case .closureCaptureItem: 
+    case .closureCaptureItem:
       return .closureCaptureItem(ClosureCaptureItemSyntax(self)!)
-    case .closureCaptureSignature: 
+    case .closureCaptureSignature:
       return .closureCaptureSignature(ClosureCaptureSignatureSyntax(self)!)
-    case .closureExpr: 
+    case .closureExpr:
       return .closureExpr(ClosureExprSyntax(self)!)
-    case .closureParamList: 
+    case .closureParamList:
       return .closureParamList(ClosureParamListSyntax(self)!)
-    case .closureParam: 
+    case .closureParam:
       return .closureParam(ClosureParamSyntax(self)!)
-    case .closureSignature: 
+    case .closureSignature:
       return .closureSignature(ClosureSignatureSyntax(self)!)
-    case .codeBlockItemList: 
+    case .codeBlockItemList:
       return .codeBlockItemList(CodeBlockItemListSyntax(self)!)
-    case .codeBlockItem: 
+    case .codeBlockItem:
       return .codeBlockItem(CodeBlockItemSyntax(self)!)
-    case .codeBlock: 
+    case .codeBlock:
       return .codeBlock(CodeBlockSyntax(self)!)
-    case .compositionTypeElementList: 
+    case .compositionTypeElementList:
       return .compositionTypeElementList(CompositionTypeElementListSyntax(self)!)
-    case .compositionTypeElement: 
+    case .compositionTypeElement:
       return .compositionTypeElement(CompositionTypeElementSyntax(self)!)
-    case .compositionType: 
+    case .compositionType:
       return .compositionType(CompositionTypeSyntax(self)!)
-    case .conditionElementList: 
+    case .conditionElementList:
       return .conditionElementList(ConditionElementListSyntax(self)!)
-    case .conditionElement: 
+    case .conditionElement:
       return .conditionElement(ConditionElementSyntax(self)!)
-    case .conformanceRequirement: 
+    case .conformanceRequirement:
       return .conformanceRequirement(ConformanceRequirementSyntax(self)!)
-    case .constrainedSugarType: 
+    case .constrainedSugarType:
       return .constrainedSugarType(ConstrainedSugarTypeSyntax(self)!)
-    case .continueStmt: 
+    case .continueStmt:
       return .continueStmt(ContinueStmtSyntax(self)!)
-    case .conventionAttributeArguments: 
+    case .conventionAttributeArguments:
       return .conventionAttributeArguments(ConventionAttributeArgumentsSyntax(self)!)
-    case .conventionWitnessMethodAttributeArguments: 
+    case .conventionWitnessMethodAttributeArguments:
       return .conventionWitnessMethodAttributeArguments(ConventionWitnessMethodAttributeArgumentsSyntax(self)!)
-    case .declEffectSpecifiers: 
+    case .declEffectSpecifiers:
       return .declEffectSpecifiers(DeclEffectSpecifiersSyntax(self)!)
-    case .declModifierDetail: 
+    case .declModifierDetail:
       return .declModifierDetail(DeclModifierDetailSyntax(self)!)
-    case .declModifier: 
+    case .declModifier:
       return .declModifier(DeclModifierSyntax(self)!)
-    case .declNameArgumentList: 
+    case .declNameArgumentList:
       return .declNameArgumentList(DeclNameArgumentListSyntax(self)!)
-    case .declNameArgument: 
+    case .declNameArgument:
       return .declNameArgument(DeclNameArgumentSyntax(self)!)
-    case .declNameArguments: 
+    case .declNameArguments:
       return .declNameArguments(DeclNameArgumentsSyntax(self)!)
-    case .declName: 
+    case .declName:
       return .declName(DeclNameSyntax(self)!)
-    case .deferStmt: 
+    case .deferStmt:
       return .deferStmt(DeferStmtSyntax(self)!)
-    case .deinitializerDecl: 
+    case .deinitializerDecl:
       return .deinitializerDecl(DeinitializerDeclSyntax(self)!)
-    case .derivativeRegistrationAttributeArguments: 
+    case .derivativeRegistrationAttributeArguments:
       return .derivativeRegistrationAttributeArguments(DerivativeRegistrationAttributeArgumentsSyntax(self)!)
-    case .designatedTypeElement: 
+    case .designatedTypeElement:
       return .designatedTypeElement(DesignatedTypeElementSyntax(self)!)
-    case .designatedTypeList: 
+    case .designatedTypeList:
       return .designatedTypeList(DesignatedTypeListSyntax(self)!)
-    case .dictionaryElementList: 
+    case .dictionaryElementList:
       return .dictionaryElementList(DictionaryElementListSyntax(self)!)
-    case .dictionaryElement: 
+    case .dictionaryElement:
       return .dictionaryElement(DictionaryElementSyntax(self)!)
-    case .dictionaryExpr: 
+    case .dictionaryExpr:
       return .dictionaryExpr(DictionaryExprSyntax(self)!)
-    case .dictionaryType: 
+    case .dictionaryType:
       return .dictionaryType(DictionaryTypeSyntax(self)!)
-    case .differentiabilityParamList: 
+    case .differentiabilityParamList:
       return .differentiabilityParamList(DifferentiabilityParamListSyntax(self)!)
-    case .differentiabilityParam: 
+    case .differentiabilityParam:
       return .differentiabilityParam(DifferentiabilityParamSyntax(self)!)
-    case .differentiabilityParamsClause: 
+    case .differentiabilityParamsClause:
       return .differentiabilityParamsClause(DifferentiabilityParamsClauseSyntax(self)!)
-    case .differentiabilityParams: 
+    case .differentiabilityParams:
       return .differentiabilityParams(DifferentiabilityParamsSyntax(self)!)
-    case .differentiableAttributeArguments: 
+    case .differentiableAttributeArguments:
       return .differentiableAttributeArguments(DifferentiableAttributeArgumentsSyntax(self)!)
-    case .discardAssignmentExpr: 
+    case .discardAssignmentExpr:
       return .discardAssignmentExpr(DiscardAssignmentExprSyntax(self)!)
-    case .doStmt: 
+    case .doStmt:
       return .doStmt(DoStmtSyntax(self)!)
-    case .documentationAttributeArgument: 
+    case .documentationAttributeArgument:
       return .documentationAttributeArgument(DocumentationAttributeArgumentSyntax(self)!)
-    case .documentationAttributeArguments: 
+    case .documentationAttributeArguments:
       return .documentationAttributeArguments(DocumentationAttributeArgumentsSyntax(self)!)
-    case .dynamicReplacementArguments: 
+    case .dynamicReplacementArguments:
       return .dynamicReplacementArguments(DynamicReplacementArgumentsSyntax(self)!)
-    case .editorPlaceholderDecl: 
+    case .editorPlaceholderDecl:
       return .editorPlaceholderDecl(EditorPlaceholderDeclSyntax(self)!)
-    case .editorPlaceholderExpr: 
+    case .editorPlaceholderExpr:
       return .editorPlaceholderExpr(EditorPlaceholderExprSyntax(self)!)
-    case .effectsArguments: 
+    case .effectsArguments:
       return .effectsArguments(EffectsArgumentsSyntax(self)!)
-    case .enumCaseDecl: 
+    case .enumCaseDecl:
       return .enumCaseDecl(EnumCaseDeclSyntax(self)!)
-    case .enumCaseElementList: 
+    case .enumCaseElementList:
       return .enumCaseElementList(EnumCaseElementListSyntax(self)!)
-    case .enumCaseElement: 
+    case .enumCaseElement:
       return .enumCaseElement(EnumCaseElementSyntax(self)!)
-    case .enumDecl: 
+    case .enumDecl:
       return .enumDecl(EnumDeclSyntax(self)!)
-    case .exposeAttributeArguments: 
+    case .exposeAttributeArguments:
       return .exposeAttributeArguments(ExposeAttributeArgumentsSyntax(self)!)
-    case .exprList: 
+    case .exprList:
       return .exprList(ExprListSyntax(self)!)
-    case .expressionPattern: 
+    case .expressionPattern:
       return .expressionPattern(ExpressionPatternSyntax(self)!)
-    case .expressionSegment: 
+    case .expressionSegment:
       return .expressionSegment(ExpressionSegmentSyntax(self)!)
-    case .expressionStmt: 
+    case .expressionStmt:
       return .expressionStmt(ExpressionStmtSyntax(self)!)
-    case .extensionDecl: 
+    case .extensionDecl:
       return .extensionDecl(ExtensionDeclSyntax(self)!)
-    case .fallthroughStmt: 
+    case .fallthroughStmt:
       return .fallthroughStmt(FallthroughStmtSyntax(self)!)
-    case .floatLiteralExpr: 
+    case .floatLiteralExpr:
       return .floatLiteralExpr(FloatLiteralExprSyntax(self)!)
-    case .forInStmt: 
+    case .forInStmt:
       return .forInStmt(ForInStmtSyntax(self)!)
-    case .forcedValueExpr: 
+    case .forcedValueExpr:
       return .forcedValueExpr(ForcedValueExprSyntax(self)!)
-    case .functionCallExpr: 
+    case .functionCallExpr:
       return .functionCallExpr(FunctionCallExprSyntax(self)!)
-    case .functionDecl: 
+    case .functionDecl:
       return .functionDecl(FunctionDeclSyntax(self)!)
-    case .functionParameterList: 
+    case .functionParameterList:
       return .functionParameterList(FunctionParameterListSyntax(self)!)
-    case .functionParameter: 
+    case .functionParameter:
       return .functionParameter(FunctionParameterSyntax(self)!)
-    case .functionSignature: 
+    case .functionSignature:
       return .functionSignature(FunctionSignatureSyntax(self)!)
-    case .functionType: 
+    case .functionType:
       return .functionType(FunctionTypeSyntax(self)!)
-    case .genericArgumentClause: 
+    case .genericArgumentClause:
       return .genericArgumentClause(GenericArgumentClauseSyntax(self)!)
-    case .genericArgumentList: 
+    case .genericArgumentList:
       return .genericArgumentList(GenericArgumentListSyntax(self)!)
-    case .genericArgument: 
+    case .genericArgument:
       return .genericArgument(GenericArgumentSyntax(self)!)
-    case .genericParameterClause: 
+    case .genericParameterClause:
       return .genericParameterClause(GenericParameterClauseSyntax(self)!)
-    case .genericParameterList: 
+    case .genericParameterList:
       return .genericParameterList(GenericParameterListSyntax(self)!)
-    case .genericParameter: 
+    case .genericParameter:
       return .genericParameter(GenericParameterSyntax(self)!)
-    case .genericRequirementList: 
+    case .genericRequirementList:
       return .genericRequirementList(GenericRequirementListSyntax(self)!)
-    case .genericRequirement: 
+    case .genericRequirement:
       return .genericRequirement(GenericRequirementSyntax(self)!)
-    case .genericWhereClause: 
+    case .genericWhereClause:
       return .genericWhereClause(GenericWhereClauseSyntax(self)!)
-    case .guardStmt: 
+    case .guardStmt:
       return .guardStmt(GuardStmtSyntax(self)!)
-    case .identifierExpr: 
+    case .identifierExpr:
       return .identifierExpr(IdentifierExprSyntax(self)!)
-    case .identifierPattern: 
+    case .identifierPattern:
       return .identifierPattern(IdentifierPatternSyntax(self)!)
-    case .ifConfigClauseList: 
+    case .ifConfigClauseList:
       return .ifConfigClauseList(IfConfigClauseListSyntax(self)!)
-    case .ifConfigClause: 
+    case .ifConfigClause:
       return .ifConfigClause(IfConfigClauseSyntax(self)!)
-    case .ifConfigDecl: 
+    case .ifConfigDecl:
       return .ifConfigDecl(IfConfigDeclSyntax(self)!)
-    case .ifExpr: 
+    case .ifExpr:
       return .ifExpr(IfExprSyntax(self)!)
-    case .implementsAttributeArguments: 
+    case .implementsAttributeArguments:
       return .implementsAttributeArguments(ImplementsAttributeArgumentsSyntax(self)!)
-    case .implicitlyUnwrappedOptionalType: 
+    case .implicitlyUnwrappedOptionalType:
       return .implicitlyUnwrappedOptionalType(ImplicitlyUnwrappedOptionalTypeSyntax(self)!)
-    case .importDecl: 
+    case .importDecl:
       return .importDecl(ImportDeclSyntax(self)!)
-    case .inOutExpr: 
+    case .inOutExpr:
       return .inOutExpr(InOutExprSyntax(self)!)
-    case .infixOperatorExpr: 
+    case .infixOperatorExpr:
       return .infixOperatorExpr(InfixOperatorExprSyntax(self)!)
-    case .inheritedTypeList: 
+    case .inheritedTypeList:
       return .inheritedTypeList(InheritedTypeListSyntax(self)!)
-    case .inheritedType: 
+    case .inheritedType:
       return .inheritedType(InheritedTypeSyntax(self)!)
-    case .initializerClause: 
+    case .initializerClause:
       return .initializerClause(InitializerClauseSyntax(self)!)
-    case .initializerDecl: 
+    case .initializerDecl:
       return .initializerDecl(InitializerDeclSyntax(self)!)
-    case .integerLiteralExpr: 
+    case .integerLiteralExpr:
       return .integerLiteralExpr(IntegerLiteralExprSyntax(self)!)
-    case .isExpr: 
+    case .isExpr:
       return .isExpr(IsExprSyntax(self)!)
-    case .isTypePattern: 
+    case .isTypePattern:
       return .isTypePattern(IsTypePatternSyntax(self)!)
-    case .keyPathComponentList: 
+    case .keyPathComponentList:
       return .keyPathComponentList(KeyPathComponentListSyntax(self)!)
-    case .keyPathComponent: 
+    case .keyPathComponent:
       return .keyPathComponent(KeyPathComponentSyntax(self)!)
-    case .keyPathExpr: 
+    case .keyPathExpr:
       return .keyPathExpr(KeyPathExprSyntax(self)!)
-    case .keyPathOptionalComponent: 
+    case .keyPathOptionalComponent:
       return .keyPathOptionalComponent(KeyPathOptionalComponentSyntax(self)!)
-    case .keyPathPropertyComponent: 
+    case .keyPathPropertyComponent:
       return .keyPathPropertyComponent(KeyPathPropertyComponentSyntax(self)!)
-    case .keyPathSubscriptComponent: 
+    case .keyPathSubscriptComponent:
       return .keyPathSubscriptComponent(KeyPathSubscriptComponentSyntax(self)!)
-    case .labeledSpecializeEntry: 
+    case .labeledSpecializeEntry:
       return .labeledSpecializeEntry(LabeledSpecializeEntrySyntax(self)!)
-    case .labeledStmt: 
+    case .labeledStmt:
       return .labeledStmt(LabeledStmtSyntax(self)!)
-    case .layoutRequirement: 
+    case .layoutRequirement:
       return .layoutRequirement(LayoutRequirementSyntax(self)!)
-    case .macroDecl: 
+    case .macroDecl:
       return .macroDecl(MacroDeclSyntax(self)!)
-    case .macroExpansionDecl: 
+    case .macroExpansionDecl:
       return .macroExpansionDecl(MacroExpansionDeclSyntax(self)!)
-    case .macroExpansionExpr: 
+    case .macroExpansionExpr:
       return .macroExpansionExpr(MacroExpansionExprSyntax(self)!)
-    case .matchingPatternCondition: 
+    case .matchingPatternCondition:
       return .matchingPatternCondition(MatchingPatternConditionSyntax(self)!)
-    case .memberAccessExpr: 
+    case .memberAccessExpr:
       return .memberAccessExpr(MemberAccessExprSyntax(self)!)
-    case .memberDeclBlock: 
+    case .memberDeclBlock:
       return .memberDeclBlock(MemberDeclBlockSyntax(self)!)
-    case .memberDeclListItem: 
+    case .memberDeclListItem:
       return .memberDeclListItem(MemberDeclListItemSyntax(self)!)
-    case .memberDeclList: 
+    case .memberDeclList:
       return .memberDeclList(MemberDeclListSyntax(self)!)
-    case .memberTypeIdentifier: 
+    case .memberTypeIdentifier:
       return .memberTypeIdentifier(MemberTypeIdentifierSyntax(self)!)
-    case .metatypeType: 
+    case .metatypeType:
       return .metatypeType(MetatypeTypeSyntax(self)!)
-    case .missingDecl: 
+    case .missingDecl:
       return .missingDecl(MissingDeclSyntax(self)!)
-    case .missingExpr: 
+    case .missingExpr:
       return .missingExpr(MissingExprSyntax(self)!)
-    case .missingPattern: 
+    case .missingPattern:
       return .missingPattern(MissingPatternSyntax(self)!)
-    case .missingStmt: 
+    case .missingStmt:
       return .missingStmt(MissingStmtSyntax(self)!)
-    case .missing: 
+    case .missing:
       return .missing(MissingSyntax(self)!)
-    case .missingType: 
+    case .missingType:
       return .missingType(MissingTypeSyntax(self)!)
-    case .modifierList: 
+    case .modifierList:
       return .modifierList(ModifierListSyntax(self)!)
-    case .moveExpr: 
+    case .moveExpr:
       return .moveExpr(MoveExprSyntax(self)!)
-    case .multipleTrailingClosureElementList: 
+    case .multipleTrailingClosureElementList:
       return .multipleTrailingClosureElementList(MultipleTrailingClosureElementListSyntax(self)!)
-    case .multipleTrailingClosureElement: 
+    case .multipleTrailingClosureElement:
       return .multipleTrailingClosureElement(MultipleTrailingClosureElementSyntax(self)!)
-    case .namedOpaqueReturnType: 
+    case .namedOpaqueReturnType:
       return .namedOpaqueReturnType(NamedOpaqueReturnTypeSyntax(self)!)
-    case .nilLiteralExpr: 
+    case .nilLiteralExpr:
       return .nilLiteralExpr(NilLiteralExprSyntax(self)!)
-    case .objCSelectorPiece: 
+    case .objCSelectorPiece:
       return .objCSelectorPiece(ObjCSelectorPieceSyntax(self)!)
-    case .objCSelector: 
+    case .objCSelector:
       return .objCSelector(ObjCSelectorSyntax(self)!)
-    case .opaqueReturnTypeOfAttributeArguments: 
+    case .opaqueReturnTypeOfAttributeArguments:
       return .opaqueReturnTypeOfAttributeArguments(OpaqueReturnTypeOfAttributeArgumentsSyntax(self)!)
-    case .operatorDecl: 
+    case .operatorDecl:
       return .operatorDecl(OperatorDeclSyntax(self)!)
-    case .operatorPrecedenceAndTypes: 
+    case .operatorPrecedenceAndTypes:
       return .operatorPrecedenceAndTypes(OperatorPrecedenceAndTypesSyntax(self)!)
-    case .optionalBindingCondition: 
+    case .optionalBindingCondition:
       return .optionalBindingCondition(OptionalBindingConditionSyntax(self)!)
-    case .optionalChainingExpr: 
+    case .optionalChainingExpr:
       return .optionalChainingExpr(OptionalChainingExprSyntax(self)!)
-    case .optionalType: 
+    case .optionalType:
       return .optionalType(OptionalTypeSyntax(self)!)
-    case .originallyDefinedInArguments: 
+    case .originallyDefinedInArguments:
       return .originallyDefinedInArguments(OriginallyDefinedInArgumentsSyntax(self)!)
-    case .packElementExpr: 
+    case .packElementExpr:
       return .packElementExpr(PackElementExprSyntax(self)!)
-    case .packExpansionExpr: 
+    case .packExpansionExpr:
       return .packExpansionExpr(PackExpansionExprSyntax(self)!)
-    case .packExpansionType: 
+    case .packExpansionType:
       return .packExpansionType(PackExpansionTypeSyntax(self)!)
-    case .packReferenceType: 
+    case .packReferenceType:
       return .packReferenceType(PackReferenceTypeSyntax(self)!)
-    case .parameterClause: 
+    case .parameterClause:
       return .parameterClause(ParameterClauseSyntax(self)!)
-    case .patternBindingList: 
+    case .patternBindingList:
       return .patternBindingList(PatternBindingListSyntax(self)!)
-    case .patternBinding: 
+    case .patternBinding:
       return .patternBinding(PatternBindingSyntax(self)!)
-    case .postfixIfConfigExpr: 
+    case .postfixIfConfigExpr:
       return .postfixIfConfigExpr(PostfixIfConfigExprSyntax(self)!)
-    case .postfixUnaryExpr: 
+    case .postfixUnaryExpr:
       return .postfixUnaryExpr(PostfixUnaryExprSyntax(self)!)
-    case .poundSourceLocationArgs: 
+    case .poundSourceLocationArgs:
       return .poundSourceLocationArgs(PoundSourceLocationArgsSyntax(self)!)
-    case .poundSourceLocation: 
+    case .poundSourceLocation:
       return .poundSourceLocation(PoundSourceLocationSyntax(self)!)
-    case .precedenceGroupAssignment: 
+    case .precedenceGroupAssignment:
       return .precedenceGroupAssignment(PrecedenceGroupAssignmentSyntax(self)!)
-    case .precedenceGroupAssociativity: 
+    case .precedenceGroupAssociativity:
       return .precedenceGroupAssociativity(PrecedenceGroupAssociativitySyntax(self)!)
-    case .precedenceGroupAttributeList: 
+    case .precedenceGroupAttributeList:
       return .precedenceGroupAttributeList(PrecedenceGroupAttributeListSyntax(self)!)
-    case .precedenceGroupDecl: 
+    case .precedenceGroupDecl:
       return .precedenceGroupDecl(PrecedenceGroupDeclSyntax(self)!)
-    case .precedenceGroupNameElement: 
+    case .precedenceGroupNameElement:
       return .precedenceGroupNameElement(PrecedenceGroupNameElementSyntax(self)!)
-    case .precedenceGroupNameList: 
+    case .precedenceGroupNameList:
       return .precedenceGroupNameList(PrecedenceGroupNameListSyntax(self)!)
-    case .precedenceGroupRelation: 
+    case .precedenceGroupRelation:
       return .precedenceGroupRelation(PrecedenceGroupRelationSyntax(self)!)
-    case .prefixOperatorExpr: 
+    case .prefixOperatorExpr:
       return .prefixOperatorExpr(PrefixOperatorExprSyntax(self)!)
-    case .primaryAssociatedTypeClause: 
+    case .primaryAssociatedTypeClause:
       return .primaryAssociatedTypeClause(PrimaryAssociatedTypeClauseSyntax(self)!)
-    case .primaryAssociatedTypeList: 
+    case .primaryAssociatedTypeList:
       return .primaryAssociatedTypeList(PrimaryAssociatedTypeListSyntax(self)!)
-    case .primaryAssociatedType: 
+    case .primaryAssociatedType:
       return .primaryAssociatedType(PrimaryAssociatedTypeSyntax(self)!)
-    case .protocolDecl: 
+    case .protocolDecl:
       return .protocolDecl(ProtocolDeclSyntax(self)!)
-    case .qualifiedDeclName: 
+    case .qualifiedDeclName:
       return .qualifiedDeclName(QualifiedDeclNameSyntax(self)!)
-    case .regexLiteralExpr: 
+    case .regexLiteralExpr:
       return .regexLiteralExpr(RegexLiteralExprSyntax(self)!)
-    case .repeatWhileStmt: 
+    case .repeatWhileStmt:
       return .repeatWhileStmt(RepeatWhileStmtSyntax(self)!)
-    case .returnClause: 
+    case .returnClause:
       return .returnClause(ReturnClauseSyntax(self)!)
-    case .returnStmt: 
+    case .returnStmt:
       return .returnStmt(ReturnStmtSyntax(self)!)
-    case .sameTypeRequirement: 
+    case .sameTypeRequirement:
       return .sameTypeRequirement(SameTypeRequirementSyntax(self)!)
-    case .sequenceExpr: 
+    case .sequenceExpr:
       return .sequenceExpr(SequenceExprSyntax(self)!)
-    case .simpleTypeIdentifier: 
+    case .simpleTypeIdentifier:
       return .simpleTypeIdentifier(SimpleTypeIdentifierSyntax(self)!)
-    case .sourceFile: 
+    case .sourceFile:
       return .sourceFile(SourceFileSyntax(self)!)
-    case .specializeAttributeSpecList: 
+    case .specializeAttributeSpecList:
       return .specializeAttributeSpecList(SpecializeAttributeSpecListSyntax(self)!)
-    case .specializeExpr: 
+    case .specializeExpr:
       return .specializeExpr(SpecializeExprSyntax(self)!)
-    case .stringLiteralExpr: 
+    case .stringLiteralExpr:
       return .stringLiteralExpr(StringLiteralExprSyntax(self)!)
-    case .stringLiteralSegments: 
+    case .stringLiteralSegments:
       return .stringLiteralSegments(StringLiteralSegmentsSyntax(self)!)
-    case .stringSegment: 
+    case .stringSegment:
       return .stringSegment(StringSegmentSyntax(self)!)
-    case .structDecl: 
+    case .structDecl:
       return .structDecl(StructDeclSyntax(self)!)
-    case .subscriptDecl: 
+    case .subscriptDecl:
       return .subscriptDecl(SubscriptDeclSyntax(self)!)
-    case .subscriptExpr: 
+    case .subscriptExpr:
       return .subscriptExpr(SubscriptExprSyntax(self)!)
-    case .superRefExpr: 
+    case .superRefExpr:
       return .superRefExpr(SuperRefExprSyntax(self)!)
-    case .switchCaseLabel: 
+    case .switchCaseLabel:
       return .switchCaseLabel(SwitchCaseLabelSyntax(self)!)
-    case .switchCaseList: 
+    case .switchCaseList:
       return .switchCaseList(SwitchCaseListSyntax(self)!)
-    case .switchCase: 
+    case .switchCase:
       return .switchCase(SwitchCaseSyntax(self)!)
-    case .switchDefaultLabel: 
+    case .switchDefaultLabel:
       return .switchDefaultLabel(SwitchDefaultLabelSyntax(self)!)
-    case .switchExpr: 
+    case .switchExpr:
       return .switchExpr(SwitchExprSyntax(self)!)
-    case .targetFunctionEntry: 
+    case .targetFunctionEntry:
       return .targetFunctionEntry(TargetFunctionEntrySyntax(self)!)
-    case .ternaryExpr: 
+    case .ternaryExpr:
       return .ternaryExpr(TernaryExprSyntax(self)!)
-    case .throwStmt: 
+    case .throwStmt:
       return .throwStmt(ThrowStmtSyntax(self)!)
-    case .tryExpr: 
+    case .tryExpr:
       return .tryExpr(TryExprSyntax(self)!)
-    case .tupleExprElementList: 
+    case .tupleExprElementList:
       return .tupleExprElementList(TupleExprElementListSyntax(self)!)
-    case .tupleExprElement: 
+    case .tupleExprElement:
       return .tupleExprElement(TupleExprElementSyntax(self)!)
-    case .tupleExpr: 
+    case .tupleExpr:
       return .tupleExpr(TupleExprSyntax(self)!)
-    case .tuplePatternElementList: 
+    case .tuplePatternElementList:
       return .tuplePatternElementList(TuplePatternElementListSyntax(self)!)
-    case .tuplePatternElement: 
+    case .tuplePatternElement:
       return .tuplePatternElement(TuplePatternElementSyntax(self)!)
-    case .tuplePattern: 
+    case .tuplePattern:
       return .tuplePattern(TuplePatternSyntax(self)!)
-    case .tupleTypeElementList: 
+    case .tupleTypeElementList:
       return .tupleTypeElementList(TupleTypeElementListSyntax(self)!)
-    case .tupleTypeElement: 
+    case .tupleTypeElement:
       return .tupleTypeElement(TupleTypeElementSyntax(self)!)
-    case .tupleType: 
+    case .tupleType:
       return .tupleType(TupleTypeSyntax(self)!)
-    case .typeAnnotation: 
+    case .typeAnnotation:
       return .typeAnnotation(TypeAnnotationSyntax(self)!)
-    case .typeEffectSpecifiers: 
+    case .typeEffectSpecifiers:
       return .typeEffectSpecifiers(TypeEffectSpecifiersSyntax(self)!)
-    case .typeExpr: 
+    case .typeExpr:
       return .typeExpr(TypeExprSyntax(self)!)
-    case .typeInheritanceClause: 
+    case .typeInheritanceClause:
       return .typeInheritanceClause(TypeInheritanceClauseSyntax(self)!)
-    case .typeInitializerClause: 
+    case .typeInitializerClause:
       return .typeInitializerClause(TypeInitializerClauseSyntax(self)!)
-    case .typealiasDecl: 
+    case .typealiasDecl:
       return .typealiasDecl(TypealiasDeclSyntax(self)!)
-    case .unavailableFromAsyncArguments: 
+    case .unavailableFromAsyncArguments:
       return .unavailableFromAsyncArguments(UnavailableFromAsyncArgumentsSyntax(self)!)
-    case .underscorePrivateAttributeArguments: 
+    case .underscorePrivateAttributeArguments:
       return .underscorePrivateAttributeArguments(UnderscorePrivateAttributeArgumentsSyntax(self)!)
-    case .unexpectedNodes: 
+    case .unexpectedNodes:
       return .unexpectedNodes(UnexpectedNodesSyntax(self)!)
-    case .unresolvedAsExpr: 
+    case .unresolvedAsExpr:
       return .unresolvedAsExpr(UnresolvedAsExprSyntax(self)!)
-    case .unresolvedIsExpr: 
+    case .unresolvedIsExpr:
       return .unresolvedIsExpr(UnresolvedIsExprSyntax(self)!)
-    case .unresolvedPatternExpr: 
+    case .unresolvedPatternExpr:
       return .unresolvedPatternExpr(UnresolvedPatternExprSyntax(self)!)
-    case .unresolvedTernaryExpr: 
+    case .unresolvedTernaryExpr:
       return .unresolvedTernaryExpr(UnresolvedTernaryExprSyntax(self)!)
-    case .valueBindingPattern: 
+    case .valueBindingPattern:
       return .valueBindingPattern(ValueBindingPatternSyntax(self)!)
-    case .variableDecl: 
+    case .variableDecl:
       return .variableDecl(VariableDeclSyntax(self)!)
-    case .versionTuple: 
+    case .versionTuple:
       return .versionTuple(VersionTupleSyntax(self)!)
-    case .whereClause: 
+    case .whereClause:
       return .whereClause(WhereClauseSyntax(self)!)
-    case .whileStmt: 
+    case .whileStmt:
       return .whileStmt(WhileStmtSyntax(self)!)
-    case .wildcardPattern: 
+    case .wildcardPattern:
       return .wildcardPattern(WildcardPatternSyntax(self)!)
-    case .yieldExprListElement: 
+    case .yieldExprListElement:
       return .yieldExprListElement(YieldExprListElementSyntax(self)!)
-    case .yieldExprList: 
+    case .yieldExprList:
       return .yieldExprList(YieldExprListSyntax(self)!)
-    case .yieldList: 
+    case .yieldList:
       return .yieldList(YieldListSyntax(self)!)
-    case .yieldStmt: 
+    case .yieldStmt:
       return .yieldStmt(YieldStmtSyntax(self)!)
     }
   }

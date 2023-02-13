@@ -85,144 +85,144 @@ enum DeclarationModifier: TokenSpecSet {
   
   init?(lexeme: Lexer.Lexeme) {
     switch PrepareForKeywordMatch(lexeme) {
-    case TokenSpec(.`static`): 
+    case TokenSpec(.`static`):
       self = .`static`
-    case TokenSpec(.`class`): 
+    case TokenSpec(.`class`):
       self = .`class`
-    case TokenSpec(.final): 
+    case TokenSpec(.final):
       self = .final
-    case TokenSpec(.required): 
+    case TokenSpec(.required):
       self = .required
-    case TokenSpec(.optional): 
+    case TokenSpec(.optional):
       self = .optional
-    case TokenSpec(.lazy): 
+    case TokenSpec(.lazy):
       self = .lazy
-    case TokenSpec(.dynamic): 
+    case TokenSpec(.dynamic):
       self = .dynamic
-    case TokenSpec(.infix): 
+    case TokenSpec(.infix):
       self = .infix
-    case TokenSpec(.prefix): 
+    case TokenSpec(.prefix):
       self = .prefix
-    case TokenSpec(.postfix): 
+    case TokenSpec(.postfix):
       self = .postfix
-    case TokenSpec(.__consuming): 
+    case TokenSpec(.__consuming):
       self = .__consuming
-    case TokenSpec(.mutating): 
+    case TokenSpec(.mutating):
       self = .mutating
-    case TokenSpec(.nonmutating): 
+    case TokenSpec(.nonmutating):
       self = .nonmutating
-    case TokenSpec(.convenience): 
+    case TokenSpec(.convenience):
       self = .convenience
-    case TokenSpec(.override): 
+    case TokenSpec(.override):
       self = .override
-    case TokenSpec(.`private`): 
+    case TokenSpec(.`private`):
       self = .`private`
-    case TokenSpec(.`fileprivate`): 
+    case TokenSpec(.`fileprivate`):
       self = .`fileprivate`
-    case TokenSpec(.`internal`): 
+    case TokenSpec(.`internal`):
       self = .`internal`
-    case TokenSpec(.`public`): 
+    case TokenSpec(.`public`):
       self = .`public`
-    case TokenSpec(.package): 
+    case TokenSpec(.package):
       self = .package
-    case TokenSpec(.open): 
+    case TokenSpec(.open):
       self = .open
-    case TokenSpec(.__setter_access): 
+    case TokenSpec(.__setter_access):
       self = .__setter_access
-    case TokenSpec(.weak): 
+    case TokenSpec(.weak):
       self = .weak
-    case TokenSpec(.unowned): 
+    case TokenSpec(.unowned):
       self = .unowned
-    case TokenSpec(.`rethrows`): 
+    case TokenSpec(.`rethrows`):
       self = .`rethrows`
-    case TokenSpec(.indirect): 
+    case TokenSpec(.indirect):
       self = .indirect
-    case TokenSpec(.isolated): 
+    case TokenSpec(.isolated):
       self = .isolated
-    case TokenSpec(.async): 
+    case TokenSpec(.async):
       self = .async
-    case TokenSpec(.reasync): 
+    case TokenSpec(.reasync):
       self = .reasync
-    case TokenSpec(.nonisolated): 
+    case TokenSpec(.nonisolated):
       self = .nonisolated
-    case TokenSpec(.distributed): 
+    case TokenSpec(.distributed):
       self = .distributed
-    case TokenSpec(._const): 
+    case TokenSpec(._const):
       self = ._const
-    case TokenSpec(._local): 
+    case TokenSpec(._local):
       self = ._local
-    default: 
+    default:
       return nil
     }
   }
   
   var spec: TokenSpec {
     switch self {
-    case .`static`: 
+    case .`static`:
       return .keyword(.`static`)
-    case .`class`: 
+    case .`class`:
       return .keyword(.`class`)
-    case .final: 
+    case .final:
       return .keyword(.final)
-    case .required: 
+    case .required:
       return .keyword(.required)
-    case .optional: 
+    case .optional:
       return .keyword(.optional)
-    case .lazy: 
+    case .lazy:
       return .keyword(.lazy)
-    case .dynamic: 
+    case .dynamic:
       return .keyword(.dynamic)
-    case .infix: 
+    case .infix:
       return .keyword(.infix)
-    case .prefix: 
+    case .prefix:
       return .keyword(.prefix)
-    case .postfix: 
+    case .postfix:
       return .keyword(.postfix)
-    case .__consuming: 
+    case .__consuming:
       return .keyword(.__consuming)
-    case .mutating: 
+    case .mutating:
       return .keyword(.mutating)
-    case .nonmutating: 
+    case .nonmutating:
       return .keyword(.nonmutating)
-    case .convenience: 
+    case .convenience:
       return .keyword(.convenience)
-    case .override: 
+    case .override:
       return .keyword(.override)
-    case .`private`: 
+    case .`private`:
       return .keyword(.`private`)
-    case .`fileprivate`: 
+    case .`fileprivate`:
       return .keyword(.`fileprivate`)
-    case .`internal`: 
+    case .`internal`:
       return .keyword(.`internal`)
-    case .`public`: 
+    case .`public`:
       return .keyword(.`public`)
-    case .package: 
+    case .package:
       return .keyword(.package)
-    case .open: 
+    case .open:
       return .keyword(.open)
-    case .__setter_access: 
+    case .__setter_access:
       return .keyword(.__setter_access)
-    case .weak: 
+    case .weak:
       return .keyword(.weak)
-    case .unowned: 
+    case .unowned:
       return .keyword(.unowned)
-    case .`rethrows`: 
+    case .`rethrows`:
       return .keyword(.`rethrows`)
-    case .indirect: 
+    case .indirect:
       return .keyword(.indirect)
-    case .isolated: 
+    case .isolated:
       return .keyword(.isolated)
-    case .async: 
+    case .async:
       return .keyword(.async)
-    case .reasync: 
+    case .reasync:
       return .keyword(.reasync)
-    case .nonisolated: 
+    case .nonisolated:
       return .keyword(.nonisolated)
-    case .distributed: 
+    case .distributed:
       return .keyword(.distributed)
-    case ._const: 
+    case ._const:
       return .keyword(._const)
-    case ._local: 
+    case ._local:
       return .keyword(._local)
     }
   }

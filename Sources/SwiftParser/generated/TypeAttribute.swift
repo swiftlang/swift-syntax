@@ -44,60 +44,60 @@ extension Parser {
     
     init?(lexeme: Lexer.Lexeme) {
       switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.autoclosure): 
+      case TokenSpec(.autoclosure):
         self = .autoclosure
-      case TokenSpec(.convention): 
+      case TokenSpec(.convention):
         self = .convention
-      case TokenSpec(.noescape): 
+      case TokenSpec(.noescape):
         self = .noescape
-      case TokenSpec(.escaping): 
+      case TokenSpec(.escaping):
         self = .escaping
-      case TokenSpec(.differentiable): 
+      case TokenSpec(.differentiable):
         self = .differentiable
-      case TokenSpec(.noDerivative): 
+      case TokenSpec(.noDerivative):
         self = .noDerivative
-      case TokenSpec(.async): 
+      case TokenSpec(.async):
         self = .async
-      case TokenSpec(.Sendable): 
+      case TokenSpec(.Sendable):
         self = .Sendable
-      case TokenSpec(.unchecked): 
+      case TokenSpec(.unchecked):
         self = .unchecked
-      case TokenSpec(._local): 
+      case TokenSpec(._local):
         self = ._local
-      case TokenSpec(._noMetadata): 
+      case TokenSpec(._noMetadata):
         self = ._noMetadata
-      case TokenSpec(._opaqueReturnTypeOf): 
+      case TokenSpec(._opaqueReturnTypeOf):
         self = ._opaqueReturnTypeOf
-      default: 
+      default:
         return nil
       }
     }
     
     var spec: TokenSpec {
       switch self {
-      case .autoclosure: 
+      case .autoclosure:
         return .keyword(.autoclosure)
-      case .convention: 
+      case .convention:
         return .keyword(.convention)
-      case .noescape: 
+      case .noescape:
         return .keyword(.noescape)
-      case .escaping: 
+      case .escaping:
         return .keyword(.escaping)
-      case .differentiable: 
+      case .differentiable:
         return .keyword(.differentiable)
-      case .noDerivative: 
+      case .noDerivative:
         return .keyword(.noDerivative)
-      case .async: 
+      case .async:
         return .keyword(.async)
-      case .Sendable: 
+      case .Sendable:
         return .keyword(.Sendable)
-      case .unchecked: 
+      case .unchecked:
         return .keyword(.unchecked)
-      case ._local: 
+      case ._local:
         return .keyword(._local)
-      case ._noMetadata: 
+      case ._noMetadata:
         return .keyword(._noMetadata)
-      case ._opaqueReturnTypeOf: 
+      case ._opaqueReturnTypeOf:
         return .keyword(._opaqueReturnTypeOf)
       }
     }

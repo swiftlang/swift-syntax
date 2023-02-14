@@ -19,7 +19,7 @@ import _SwiftSyntaxTestSupport
 final class FunctionTests: XCTestCase {
   func testFibonacci() {
     let buildable = FunctionDecl("func fibonacci(_ n: Int) -> Int") {
-      IfExpr("if n <= 1 { return n }")
+      IfStmt("if n <= 1 { return n }")
 
       ReturnStmt("return fibonacci(n - 1) + self.fibonacci(n - 2)")
     }

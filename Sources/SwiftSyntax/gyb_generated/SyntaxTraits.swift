@@ -188,10 +188,6 @@ extension TupleExprSyntax: ParenthesizedSyntax {}
 extension TupleExprElementSyntax: WithTrailingCommaSyntax {}
 extension ArrayElementSyntax: WithTrailingCommaSyntax {}
 extension DictionaryElementSyntax: WithTrailingCommaSyntax {}
-extension IfExprSyntax: WithCodeBlockSyntax {}
-extension SwitchExprSyntax: BracedSyntax {}
-extension SwitchCaseSyntax: WithStatementsSyntax {}
-extension CaseItemSyntax: WithTrailingCommaSyntax {}
 extension ClosureCaptureItemSyntax: WithTrailingCommaSyntax {}
 extension ClosureParamSyntax: WithTrailingCommaSyntax {}
 extension ClosureExprSyntax: BracedSyntax, WithStatementsSyntax {}
@@ -229,8 +225,12 @@ extension DeferStmtSyntax: WithCodeBlockSyntax {}
 extension RepeatWhileStmtSyntax: WithCodeBlockSyntax {}
 extension GuardStmtSyntax: WithCodeBlockSyntax {}
 extension ForInStmtSyntax: WithCodeBlockSyntax {}
+extension SwitchStmtSyntax: BracedSyntax {}
 extension DoStmtSyntax: WithCodeBlockSyntax {}
 extension ConditionElementSyntax: WithTrailingCommaSyntax {}
+extension IfStmtSyntax: WithCodeBlockSyntax {}
+extension SwitchCaseSyntax: WithStatementsSyntax {}
+extension CaseItemSyntax: WithTrailingCommaSyntax {}
 extension CatchItemSyntax: WithTrailingCommaSyntax {}
 extension CatchClauseSyntax: WithCodeBlockSyntax {}
 extension GenericRequirementSyntax: WithTrailingCommaSyntax {}

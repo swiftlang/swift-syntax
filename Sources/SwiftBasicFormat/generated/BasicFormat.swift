@@ -103,7 +103,7 @@ open class BasicFormat: SyntaxRewriter {
       return true
     case \MemberDeclBlockSyntax.rightBrace: 
       return true
-    case \SwitchExprSyntax.rightBrace: 
+    case \SwitchStmtSyntax.rightBrace: 
       return true
     default: 
       return putNextTokenOnNewLine

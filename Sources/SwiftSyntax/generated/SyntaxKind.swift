@@ -264,7 +264,7 @@ public enum SyntaxKind {
   
   case ifConfigDecl
   
-  case ifExpr
+  case ifStmt
   
   case implementsAttributeArguments
   
@@ -470,7 +470,7 @@ public enum SyntaxKind {
   
   case switchDefaultLabel
   
-  case switchExpr
+  case switchStmt
   
   case symbolicReferenceExpr
   

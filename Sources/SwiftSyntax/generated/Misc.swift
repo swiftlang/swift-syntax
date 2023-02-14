@@ -142,7 +142,7 @@ extension Syntax {
       .node(IfConfigClauseListSyntax.self), 
       .node(IfConfigClauseSyntax.self), 
       .node(IfConfigDeclSyntax.self), 
-      .node(IfExprSyntax.self), 
+      .node(IfStmtSyntax.self), 
       .node(ImplementsAttributeArgumentsSyntax.self), 
       .node(ImplicitlyUnwrappedOptionalTypeSyntax.self), 
       .node(ImportDeclSyntax.self), 
@@ -245,7 +245,7 @@ extension Syntax {
       .node(SwitchCaseListSyntax.self), 
       .node(SwitchCaseSyntax.self), 
       .node(SwitchDefaultLabelSyntax.self), 
-      .node(SwitchExprSyntax.self), 
+      .node(SwitchStmtSyntax.self), 
       .node(SymbolicReferenceExprSyntax.self), 
       .node(TargetFunctionEntrySyntax.self), 
       .node(TernaryExprSyntax.self), 
@@ -536,8 +536,8 @@ extension SyntaxKind {
       return IfConfigClauseSyntax.self
     case .ifConfigDecl: 
       return IfConfigDeclSyntax.self
-    case .ifExpr: 
-      return IfExprSyntax.self
+    case .ifStmt: 
+      return IfStmtSyntax.self
     case .implementsAttributeArguments: 
       return ImplementsAttributeArgumentsSyntax.self
     case .implicitlyUnwrappedOptionalType: 
@@ -742,8 +742,8 @@ extension SyntaxKind {
       return SwitchCaseSyntax.self
     case .switchDefaultLabel: 
       return SwitchDefaultLabelSyntax.self
-    case .switchExpr: 
-      return SwitchExprSyntax.self
+    case .switchStmt: 
+      return SwitchStmtSyntax.self
     case .symbolicReferenceExpr: 
       return SymbolicReferenceExprSyntax.self
     case .targetFunctionEntry: 
@@ -1069,7 +1069,7 @@ extension SyntaxKind {
       return "conditional compilation clause"
     case .ifConfigDecl: 
       return "conditional compilation block"
-    case .ifExpr: 
+    case .ifStmt: 
       return "'if' statement"
     case .implementsAttributeArguments: 
       return "@_implements arguemnts"
@@ -1275,7 +1275,7 @@ extension SyntaxKind {
       return "switch case"
     case .switchDefaultLabel: 
       return nil
-    case .switchExpr: 
+    case .switchStmt: 
       return "'switch' statement"
     case .symbolicReferenceExpr: 
       return nil

@@ -21,7 +21,7 @@ final class StatementTests: XCTestCase {
       if let baz {}
       """,
       substructure: Syntax(
-        IfExprSyntax(
+        IfStmtSyntax(
           ifKeyword: .ifKeyword(),
           conditions: ConditionElementListSyntax([
             ConditionElementSyntax(
@@ -47,7 +47,7 @@ final class StatementTests: XCTestCase {
       if let self = self {}
       """,
       substructure: Syntax(
-        IfExprSyntax(
+        IfStmtSyntax(
           ifKeyword: .ifKeyword(),
           conditions: ConditionElementListSyntax([
             ConditionElementSyntax(

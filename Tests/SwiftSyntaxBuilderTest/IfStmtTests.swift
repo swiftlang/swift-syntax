@@ -15,11 +15,11 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 
 final class IfStmtTests: XCTestCase {
-  func testEmptyIfExpr() {
+  func testEmptyIfStmt() {
     // Use the convenience initializer from IfStmtConvenienceInitializers. This is
     // disambiguated by the absence of a labelName parameter and the use of a
     // trailing closure.
-    let buildable = IfExpr(conditions: ConditionElementList { BooleanLiteralExpr(false) }) {}
+    let buildable = IfStmt(conditions: ConditionElementList { BooleanLiteralExpr(false) }) {}
     AssertBuildResult(
       buildable,
       """
@@ -32,7 +32,7 @@ final class IfStmtTests: XCTestCase {
   func testIfElseStmt() {
     // Use the convenience initializer from IfStmtConvenienceInitializers
     // with an else branch expressed by a second trailing closure.
-    let buildable = IfExpr(conditions: ConditionElementList { BooleanLiteralExpr(true) }) {
+    let buildable = IfStmt(conditions: ConditionElementList { BooleanLiteralExpr(true) }) {
       FunctionCallExpr(callee: ExprSyntax("print")) {
         TupleExprElement(expression: StringLiteralExpr(content: "Hello from the if-branch!"))
       }
@@ -54,7 +54,7 @@ final class IfStmtTests: XCTestCase {
   }
 
   func testIfLetStmt() {
-    let buildable = IfExpr(
+    let buildable = IfStmt(
       conditions: ConditionElementList {
         OptionalBindingCondition(
           letOrVarKeyword: .let,
@@ -73,7 +73,7 @@ final class IfStmtTests: XCTestCase {
   }
 
   func testIfCaseStmt() {
-    let buildable = IfExpr(
+    let buildable = IfStmt(
       conditions: ConditionElementList {
         MatchingPatternCondition(
           pattern: ExpressionPattern(expression: MemberAccessExpr(name: "x")),

@@ -309,7 +309,6 @@ extension Parser {
     // -------------------------------------------------------------------------
     // Precondition
 
-    assert(closeQuote.leadingTriviaByteLength == 0, "Closing quote produced by the lexer should not have leading trivia because we would drop it during post-processing")
     assert(
       allSegments.allSatisfy {
         if case .stringSegment(let segment) = $0 {
@@ -349,7 +348,7 @@ extension Parser {
       middleSegments: &middleSegments
     )
 
-    if !closeDelimiterOnNewLine {
+    if !closeDelimiterOnNewLine || closeQuote.leadingTriviaByteLength != 0 {
       unexpectedBeforeCloseQuote = [closeQuote]
       closeQuote = RawTokenSyntax(missing: closeQuote.tokenKind, leadingTriviaPieces: [.newlines(1)], arena: self.arena)
 

@@ -228,8 +228,8 @@ extension Parser {
     if self.at(.poundIfKeyword) && !self.withLookahead({ $0.consumeIfConfigOfAttributes() }) {
       // If config of attributes is parsed as part of declaration parsing as it
       // doesn't constitute its own code block item.
-      let directive = self.parsePoundIfDirective {
-        $0.parseCodeBlockItem()
+      let directive = self.parsePoundIfDirective { (parser, _) in
+        parser.parseCodeBlockItem()
       } addSemicolonIfNeeded: { lastElement, newItemAtStartOfLine, parser in
         if lastElement.semicolon == nil && !newItemAtStartOfLine {
           return RawCodeBlockItemSyntax(

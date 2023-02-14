@@ -200,7 +200,7 @@ public struct Trivia {
   }
   
   public var sourceLength: SourceLength {
-    return pieces.map( { 
+    return pieces.map({ 
         $0.sourceLength 
       }).reduce(.zero, + )
   }

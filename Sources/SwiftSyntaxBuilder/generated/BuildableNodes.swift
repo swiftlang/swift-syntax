@@ -703,7 +703,7 @@ extension GuardStmt {
   }
 }
 
-extension IfExpr {
+extension IfStmt {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
@@ -1148,7 +1148,7 @@ extension SwitchCase {
   }
 }
 
-extension SwitchExpr {
+extension SwitchStmt {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings

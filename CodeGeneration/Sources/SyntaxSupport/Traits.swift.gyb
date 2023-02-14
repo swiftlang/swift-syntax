@@ -10,7 +10,7 @@
 //
 // This source file is part of the Swift.org open source project
 //
-// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Copyright (c) 2014 - 2023 Apple Inc. and the Swift project authors
 // Licensed under Apache License v2.0 with Runtime Library Exception
 //
 // See https://swift.org/LICENSE.txt for license information
@@ -31,7 +31,7 @@ public class Trait {
 }
 
 public let TRAITS: [Trait] = [
-% for trait in TRAITS:
+% for trait in sorted(TRAITS, key=lambda x: x.trait_name):
   Trait(traitName: "${trait.trait_name}",
         children: [
 %   for child in trait.children:

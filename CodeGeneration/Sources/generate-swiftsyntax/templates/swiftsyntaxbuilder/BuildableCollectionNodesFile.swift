@@ -2,7 +2,7 @@
 //
 // This source file is part of the Swift.org open source project
 //
-// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Copyright (c) 2014 - 2023 Apple Inc. and the Swift project authors
 // Licensed under Apache License v2.0 with Runtime Library Exception
 //
 // See https://swift.org/LICENSE.txt for license information
@@ -16,11 +16,8 @@ import SyntaxSupport
 import Utils
 import SwiftBasicFormat
 
-let buildableCollectionNodesFile = SourceFileSyntax {
-  ImportDeclSyntax(
-    leadingTrivia: .docLineComment(generateCopyrightHeader(for: "generate-swiftsyntaxbuilder")),
-    path: [AccessPathComponentSyntax(name: "SwiftSyntax")]
-  )
+let buildableCollectionNodesFile = SourceFileSyntax(leadingTrivia: generateCopyrightHeader(for: "generate-swiftsyntaxbuilder")) {
+  DeclSyntax("import SwiftSyntax")
 
   for node in SYNTAX_NODES where node.isSyntaxCollection {
     let elementType = node.collectionElementType

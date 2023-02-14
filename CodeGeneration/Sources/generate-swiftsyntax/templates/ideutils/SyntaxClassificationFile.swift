@@ -2,7 +2,7 @@
 //
 // This source file is part of the Swift.org open source project
 //
-// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Copyright (c) 2014 - 2023 Apple Inc. and the Swift project authors
 // Licensed under Apache License v2.0 with Runtime Library Exception
 //
 // See https://swift.org/LICENSE.txt for license information
@@ -29,13 +29,8 @@ fileprivate var node_child_classifications: [ChildClassification] {
   return result
 }
 
-let syntaxClassificationFile = SourceFileSyntax {
-  DeclSyntax(
-    """
-    \(raw: generateCopyrightHeader(for: "generate-ideutils"))
-    @_spi(RawSyntax) import SwiftSyntax
-    """
-  )
+let syntaxClassificationFile = SourceFileSyntax(leadingTrivia: generateCopyrightHeader(for: "generate-ideutils")) {
+  DeclSyntax("@_spi(RawSyntax) import SwiftSyntax")
 
   try! EnumDeclSyntax("public enum SyntaxClassification") {
     for classification in SYNTAX_CLASSIFICATIONS {

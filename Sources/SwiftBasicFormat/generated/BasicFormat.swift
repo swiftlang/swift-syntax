@@ -5,14 +5,13 @@
 //
 // This source file is part of the Swift.org open source project
 //
-// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Copyright (c) 2014 - 2023 Apple Inc. and the Swift project authors
 // Licensed under Apache License v2.0 with Runtime Library Exception
 //
 // See https://swift.org/LICENSE.txt for license information
 // See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
 //
 //===----------------------------------------------------------------------===//
-
 
 import SwiftSyntax
 
@@ -159,13 +158,13 @@ open class BasicFormat: SyntaxRewriter {
       break
     }
     switch token.tokenKind {
-    case .leftBrace:
-      return true
-    case .equal:
-      return true
     case .arrow:
       return true
     case .binaryOperator:
+      return true
+    case .equal:
+      return true
+    case .leftBrace:
       return true
     case .keyword(.`catch`):
       return true
@@ -222,17 +221,17 @@ open class BasicFormat: SyntaxRewriter {
       break
     }
     switch token.tokenKind {
-    case .comma:
+    case .arrow:
+      return true
+    case .binaryOperator:
       return true
     case .colon:
       return true
+    case .comma:
+      return true
     case .equal:
       return true
-    case .arrow:
-      return true
-    case .poundSourceLocationKeyword:
-      return true
-    case .poundIfKeyword:
+    case .poundAvailableKeyword:
       return true
     case .poundElseKeyword:
       return true
@@ -240,11 +239,11 @@ open class BasicFormat: SyntaxRewriter {
       return true
     case .poundEndifKeyword:
       return true
-    case .poundAvailableKeyword:
+    case .poundIfKeyword:
+      return true
+    case .poundSourceLocationKeyword:
       return true
     case .poundUnavailableKeyword:
-      return true
-    case .binaryOperator:
       return true
     case .keyword(.`Any`):
       return true

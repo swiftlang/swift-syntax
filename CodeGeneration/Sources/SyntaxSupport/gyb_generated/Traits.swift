@@ -4,7 +4,7 @@
 //
 // This source file is part of the Swift.org open source project
 //
-// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Copyright (c) 2014 - 2023 Apple Inc. and the Swift project authors
 // Licensed under Apache License v2.0 with Runtime Library Exception
 //
 // See https://swift.org/LICENSE.txt for license information
@@ -30,6 +30,12 @@ public let TRAITS: [Trait] = [
           Child(name: "Attributes", kind: .node(kind: "AttributeList"), isOptional: true),
         ]
   ),
+  Trait(traitName: "Braced",
+        children: [
+          Child(name: "LeftBrace", kind: .token(choices: [.token(tokenKind: "LeftBraceToken")])),
+          Child(name: "RightBrace", kind: .token(choices: [.token(tokenKind: "RightBraceToken")])),
+        ]
+  ),
   Trait(traitName: "DeclGroup",
         children: [
           Child(name: "Attributes", kind: .node(kind: "AttributeList"), isOptional: true),
@@ -37,26 +43,13 @@ public let TRAITS: [Trait] = [
           Child(name: "Members", kind: .node(kind: "MemberDeclBlock")),
         ]
   ),
-  Trait(traitName: "Braced",
+  Trait(traitName: "EffectSpecifiers",
         children: [
-          Child(name: "LeftBrace", kind: .token(choices: [.token(tokenKind: "LeftBraceToken")])),
-          Child(name: "RightBrace", kind: .token(choices: [.token(tokenKind: "RightBraceToken")])),
-        ]
-  ),
-  Trait(traitName: "IdentifiedDecl",
-        children: [
-          Child(name: "Identifier", kind: .token(choices: [.token(tokenKind: "IdentifierToken")])),
-        ]
-  ),
-  Trait(traitName: "WithCodeBlock",
-        children: [
-          Child(name: "Body", kind: .node(kind: "CodeBlock")),
-        ]
-  ),
-  Trait(traitName: "Parenthesized",
-        children: [
-          Child(name: "LeftParen", kind: .token(choices: [.token(tokenKind: "LeftParenToken")])),
-          Child(name: "RightParen", kind: .token(choices: [.token(tokenKind: "RightParenToken")])),
+          Child(name: "UnexpectedBeforeAsyncSpecifier", kind: .node(kind: "UnexpectedNodes"), isOptional: true),
+          Child(name: "AsyncSpecifier", kind: .token(choices: [.token(tokenKind: "KeywordToken")]), isOptional: true),
+          Child(name: "UnexpectedBetweenAsyncSpecifierAndThrowsSpecifier", kind: .node(kind: "UnexpectedNodes"), isOptional: true),
+          Child(name: "ThrowsSpecifier", kind: .token(choices: [.token(tokenKind: "KeywordToken")]), isOptional: true),
+          Child(name: "UnexpectedAfterThrowsSpecifier", kind: .node(kind: "UnexpectedNodes"), isOptional: true),
         ]
   ),
   Trait(traitName: "FreestandingMacroExpansion",
@@ -71,9 +64,20 @@ public let TRAITS: [Trait] = [
           Child(name: "AdditionalTrailingClosures", kind: .node(kind: "MultipleTrailingClosureElementList"), isOptional: true),
         ]
   ),
-  Trait(traitName: "WithTrailingComma",
+  Trait(traitName: "IdentifiedDecl",
         children: [
-          Child(name: "TrailingComma", kind: .token(choices: [.token(tokenKind: "CommaToken")]), isOptional: true),
+          Child(name: "Identifier", kind: .token(choices: [.token(tokenKind: "IdentifierToken")])),
+        ]
+  ),
+  Trait(traitName: "Parenthesized",
+        children: [
+          Child(name: "LeftParen", kind: .token(choices: [.token(tokenKind: "LeftParenToken")])),
+          Child(name: "RightParen", kind: .token(choices: [.token(tokenKind: "RightParenToken")])),
+        ]
+  ),
+  Trait(traitName: "WithCodeBlock",
+        children: [
+          Child(name: "Body", kind: .node(kind: "CodeBlock")),
         ]
   ),
   Trait(traitName: "WithStatements",
@@ -81,13 +85,9 @@ public let TRAITS: [Trait] = [
           Child(name: "Statements", kind: .node(kind: "CodeBlockItemList")),
         ]
   ),
-  Trait(traitName: "EffectSpecifiers",
+  Trait(traitName: "WithTrailingComma",
         children: [
-          Child(name: "UnexpectedBeforeAsyncSpecifier", kind: .node(kind: "UnexpectedNodes"), isOptional: true),
-          Child(name: "AsyncSpecifier", kind: .token(choices: [.token(tokenKind: "KeywordToken")]), isOptional: true),
-          Child(name: "UnexpectedBetweenAsyncSpecifierAndThrowsSpecifier", kind: .node(kind: "UnexpectedNodes"), isOptional: true),
-          Child(name: "ThrowsSpecifier", kind: .token(choices: [.token(tokenKind: "KeywordToken")]), isOptional: true),
-          Child(name: "UnexpectedAfterThrowsSpecifier", kind: .node(kind: "UnexpectedNodes"), isOptional: true),
+          Child(name: "TrailingComma", kind: .token(choices: [.token(tokenKind: "CommaToken")]), isOptional: true),
         ]
   ),
 ]

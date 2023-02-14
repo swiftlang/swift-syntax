@@ -2,7 +2,7 @@
 //
 // This source file is part of the Swift.org open source project
 //
-// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Copyright (c) 2014 - 2023 Apple Inc. and the Swift project authors
 // Licensed under Apache License v2.0 with Runtime Library Exception
 //
 // See https://swift.org/LICENSE.txt for license information
@@ -15,9 +15,7 @@ import SwiftSyntaxBuilder
 import SyntaxSupport
 import Utils
 
-let tokensFile = SourceFileSyntax(
-  leadingTrivia: .docLineComment(generateCopyrightHeader(for: "generate-swiftsyntax"))
-) {
+let tokensFile = SourceFileSyntax(leadingTrivia: generateCopyrightHeader(for: "generate-swiftsyntax")) {
   try! ExtensionDeclSyntax("extension TokenSyntax") {
     for token in SYNTAX_TOKENS {
       if token.isKeyword {

@@ -4,7 +4,7 @@
 //
 // This source file is part of the Swift.org open source project
 //
-// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Copyright (c) 2014 - 2023 Apple Inc. and the Swift project authors
 // Licensed under Apache License v2.0 with Runtime Library Exception
 //
 // See https://swift.org/LICENSE.txt for license information
@@ -13,11 +13,6 @@
 //===----------------------------------------------------------------------===//
 
 public let AVAILABILITY_NODES: [Node] = [
-  Node(name: "AvailabilitySpecList",
-       nameForDiagnostics: "'@availability' arguments",
-       kind: "SyntaxCollection",
-       element: "AvailabilityArgument"),
-
   Node(name: "AvailabilityArgument",
        nameForDiagnostics: "availability argument",
        description: "A single argument to an `@available` argument like `*`, `iOS 10.1`, or `message: \"This has been deprecated\"`.",
@@ -61,6 +56,11 @@ public let AVAILABILITY_NODES: [Node] = [
                nameForDiagnostics: "value",
                description: "The value of this labeled argument")
        ]),
+
+  Node(name: "AvailabilitySpecList",
+       nameForDiagnostics: "'@availability' arguments",
+       kind: "SyntaxCollection",
+       element: "AvailabilityArgument"),
 
   Node(name: "AvailabilityVersionRestriction",
        nameForDiagnostics: "version restriction",

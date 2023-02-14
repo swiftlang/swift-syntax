@@ -2,7 +2,7 @@
 //
 // This source file is part of the Swift.org open source project
 //
-// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Copyright (c) 2014 - 2023 Apple Inc. and the Swift project authors
 // Licensed under Apache License v2.0 with Runtime Library Exception
 //
 // See https://swift.org/LICENSE.txt for license information
@@ -15,11 +15,9 @@ import SwiftSyntaxBuilder
 import SyntaxSupport
 import Utils
 
-let syntaxAnyVisitorFile = SourceFileSyntax {
+let syntaxAnyVisitorFile = SourceFileSyntax(leadingTrivia: generateCopyrightHeader(for: "generate-swiftsyntax")) {
   try! ClassDeclSyntax(
     """
-    \(raw: generateCopyrightHeader(for: "generate-swiftsyntax"))
-
     /// A `SyntaxVisitor` that can visit the nodes as generic `Syntax` values.
     ///
     /// This subclass of `SyntaxVisitor` is slower than the type-specific visitation

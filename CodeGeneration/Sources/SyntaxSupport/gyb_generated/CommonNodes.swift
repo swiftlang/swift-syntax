@@ -4,7 +4,7 @@
 //
 // This source file is part of the Swift.org open source project
 //
-// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Copyright (c) 2014 - 2023 Apple Inc. and the Swift project authors
 // Licensed under Apache License v2.0 with Runtime Library Exception
 //
 // See https://swift.org/LICENSE.txt for license information
@@ -13,65 +13,11 @@
 //===----------------------------------------------------------------------===//
 
 public let COMMON_NODES: [Node] = [
-  Node(name: "Decl",
-       nameForDiagnostics: "declaration",
-       kind: "Syntax",
-       parserFunction: "parseDeclaration"),
-
-  Node(name: "Expr",
-       nameForDiagnostics: "expression",
-       kind: "Syntax",
-       parserFunction: "parseExpression"),
-
-  Node(name: "Stmt",
-       nameForDiagnostics: "statement",
-       kind: "Syntax",
-       parserFunction: "parseStatement"),
-
-  Node(name: "Type",
-       nameForDiagnostics: "type",
-       kind: "Syntax",
-       parserFunction: "parseType"),
-
-  Node(name: "Pattern",
-       nameForDiagnostics: "pattern",
-       kind: "Syntax",
-       parserFunction: "parsePattern"),
-
-  Node(name: "Missing",
+  Node(name: "CodeBlockItemList",
        nameForDiagnostics: nil,
-       kind: "Syntax"),
-
-  Node(name: "MissingDecl",
-       nameForDiagnostics: "declaration",
-       kind: "Decl",
-       traits: [
-         "Attributed"
-       ],
-       children: [
-         Child(name: "Attributes",
-               kind: .collection(kind: "AttributeList", collectionElementName: "Attribute"),
-               isOptional: true),
-         Child(name: "Modifiers",
-               kind: .collection(kind: "ModifierList", collectionElementName: "Modifier"),
-               isOptional: true)
-       ]),
-
-  Node(name: "MissingExpr",
-       nameForDiagnostics: "expression",
-       kind: "Expr"),
-
-  Node(name: "MissingStmt",
-       nameForDiagnostics: "statement",
-       kind: "Stmt"),
-
-  Node(name: "MissingType",
-       nameForDiagnostics: "type",
-       kind: "Type"),
-
-  Node(name: "MissingPattern",
-       nameForDiagnostics: "pattern",
-       kind: "Pattern"),
+       kind: "SyntaxCollection",
+       element: "CodeBlockItem",
+       elementsSeparatedByNewline: true),
 
   Node(name: "CodeBlockItem",
        nameForDiagnostics: nil,
@@ -94,12 +40,6 @@ public let COMMON_NODES: [Node] = [
                isOptional: true)
        ],
        omitWhenEmpty: true),
-
-  Node(name: "CodeBlockItemList",
-       nameForDiagnostics: nil,
-       kind: "SyntaxCollection",
-       element: "CodeBlockItem",
-       elementsSeparatedByNewline: true),
 
   Node(name: "CodeBlock",
        nameForDiagnostics: "code block",
@@ -135,6 +75,61 @@ public let COMMON_NODES: [Node] = [
                isOptional: true)
        ]),
 
+  Node(name: "Decl",
+       nameForDiagnostics: "declaration",
+       kind: "Syntax",
+       parserFunction: "parseDeclaration"),
+
+  Node(name: "Expr",
+       nameForDiagnostics: "expression",
+       kind: "Syntax",
+       parserFunction: "parseExpression"),
+
+  Node(name: "MissingDecl",
+       nameForDiagnostics: "declaration",
+       kind: "Decl",
+       traits: [
+         "Attributed"
+       ],
+       children: [
+         Child(name: "Attributes",
+               kind: .collection(kind: "AttributeList", collectionElementName: "Attribute"),
+               isOptional: true),
+         Child(name: "Modifiers",
+               kind: .collection(kind: "ModifierList", collectionElementName: "Modifier"),
+               isOptional: true)
+       ]),
+
+  Node(name: "MissingExpr",
+       nameForDiagnostics: "expression",
+       kind: "Expr"),
+
+  Node(name: "MissingPattern",
+       nameForDiagnostics: "pattern",
+       kind: "Pattern"),
+
+  Node(name: "MissingStmt",
+       nameForDiagnostics: "statement",
+       kind: "Stmt"),
+
+  Node(name: "Missing",
+       nameForDiagnostics: nil,
+       kind: "Syntax"),
+
+  Node(name: "MissingType",
+       nameForDiagnostics: "type",
+       kind: "Type"),
+
+  Node(name: "Pattern",
+       nameForDiagnostics: "pattern",
+       kind: "Syntax",
+       parserFunction: "parsePattern"),
+
+  Node(name: "Stmt",
+       nameForDiagnostics: "statement",
+       kind: "Syntax",
+       parserFunction: "parseStatement"),
+
   Node(name: "TypeEffectSpecifiers",
        nameForDiagnostics: "effect specifiers",
        kind: "Syntax",
@@ -149,6 +144,11 @@ public let COMMON_NODES: [Node] = [
                kind: .token(choices: [.keyword(text: "throws")]),
                isOptional: true)
        ]),
+
+  Node(name: "Type",
+       nameForDiagnostics: "type",
+       kind: "Syntax",
+       parserFunction: "parseType"),
 
   Node(name: "UnexpectedNodes",
        nameForDiagnostics: nil,

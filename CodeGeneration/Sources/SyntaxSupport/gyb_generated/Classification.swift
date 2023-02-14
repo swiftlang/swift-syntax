@@ -4,7 +4,7 @@
 //
 // This source file is part of the Swift.org open source project
 //
-// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Copyright (c) 2014 - 2023 Apple Inc. and the Swift project authors
 // Licensed under Apache License v2.0 with Runtime Library Exception
 //
 // See https://swift.org/LICENSE.txt for license information
@@ -45,25 +45,25 @@ public class ChildClassification {
 
 
 public let SYNTAX_CLASSIFICATIONS: [SyntaxClassification] = [
-  SyntaxClassification(name: "None", description: "The token should not receive syntax coloring."),
-  SyntaxClassification(name: "Keyword", description: "A Swift keyword, including contextual keywords."),
-  SyntaxClassification(name: "Identifier", description: "A generic identifier."),
-  SyntaxClassification(name: "TypeIdentifier", description: "An identifier referring to a type."),
-  SyntaxClassification(name: "OperatorIdentifier", description: "An identifier referring to an operator."),
-  SyntaxClassification(name: "DollarIdentifier", description: "An identifier starting with `$` like `$0`."),
-  SyntaxClassification(name: "IntegerLiteral", description: "An integer literal."),
-  SyntaxClassification(name: "FloatingLiteral", description: "A floating point literal."),
-  SyntaxClassification(name: "StringLiteral", description: "A string literal including multiline string literals."),
-  SyntaxClassification(name: "StringInterpolationAnchor", description: "The opening and closing parenthesis of string interpolation."),
-  SyntaxClassification(name: "PoundDirectiveKeyword", description: "A `#` keyword like `#warning`."),
-  SyntaxClassification(name: "BuildConfigId", description: "A build configuration directive like `#if`, `#elseif`, `#else`."),
   SyntaxClassification(name: "Attribute", description: "An attribute starting with an `@`."),
-  SyntaxClassification(name: "ObjectLiteral", description: "An image, color, etc. literal."),
-  SyntaxClassification(name: "EditorPlaceholder", description: "An editor placeholder of the form `<#content#>`"),
-  SyntaxClassification(name: "LineComment", description: "A line comment starting with `//`."),
-  SyntaxClassification(name: "DocLineComment", description: "A doc line comment starting with `///`."),
   SyntaxClassification(name: "BlockComment", description: "A block comment starting with `/**` and ending with `*/."),
+  SyntaxClassification(name: "BuildConfigId", description: "A build configuration directive like `#if`, `#elseif`, `#else`."),
   SyntaxClassification(name: "DocBlockComment", description: "A doc block comment starting with `/**` and ending with `*/."),
+  SyntaxClassification(name: "DocLineComment", description: "A doc line comment starting with `///`."),
+  SyntaxClassification(name: "DollarIdentifier", description: "An identifier starting with `$` like `$0`."),
+  SyntaxClassification(name: "EditorPlaceholder", description: "An editor placeholder of the form `<#content#>`"),
+  SyntaxClassification(name: "FloatingLiteral", description: "A floating point literal."),
+  SyntaxClassification(name: "Identifier", description: "A generic identifier."),
+  SyntaxClassification(name: "IntegerLiteral", description: "An integer literal."),
+  SyntaxClassification(name: "Keyword", description: "A Swift keyword, including contextual keywords."),
+  SyntaxClassification(name: "LineComment", description: "A line comment starting with `//`."),
+  SyntaxClassification(name: "None", description: "The token should not receive syntax coloring."),
+  SyntaxClassification(name: "ObjectLiteral", description: "An image, color, etc. literal."),
+  SyntaxClassification(name: "OperatorIdentifier", description: "An identifier referring to an operator."),
+  SyntaxClassification(name: "PoundDirectiveKeyword", description: "A `#` keyword like `#warning`."),
+  SyntaxClassification(name: "StringInterpolationAnchor", description: "The opening and closing parenthesis of string interpolation."),
+  SyntaxClassification(name: "StringLiteral", description: "A string literal including multiline string literals."),
+  SyntaxClassification(name: "TypeIdentifier", description: "An identifier referring to a type."),
 ]
 
 func classificationByName(_ name: String?) -> SyntaxClassification? {

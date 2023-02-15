@@ -107,28 +107,3 @@ def flat_documentation(indented_documentation):
   """
   return " ".join(dedented_lines(indented_documentation)).replace("\n", "").replace('"','\\"').strip()
 
-def make_swift_attribute(attr):
-  """
-  Given a Python `Attribute` or one of the inheritance from `gyb_syntax_support`, return the source code for matching attribute definition in Swift.
-  """
-  
-  class_name = type(attr).__name__
-  spaces = 10
-  parameters = ['name: "%s"' % attr.name]
-  
-  if hasattr(attr, 'class_name'):
-    parameters += ['className: "%s"' % attr.class_name]
-  
-  if hasattr(attr, 'options'):
-    mapped_options = map(lambda x: (' ' * (spaces + 8)) + '"%s"' % x, attr.options)
-    parameters += ['options: \n%s' % (',\n'.join(mapped_options))]
-  
-  if hasattr(attr, 'code'):
-    parameters += ['code: %s' % attr.code]
-  
-  # `ContextualSimpleDeclAttribute` and `ContextualDeclAttribute` don't have a `swiftName` parameter so we need to ommit them.
-  if class_name not in ['ContextualSimpleDeclAttribute', 'ContextualDeclAttribute'] and hasattr(attr, 'swift_name'):
-    parameters += ['swiftName: "%s"' % attr.swift_name]
-  
-  parameter_spacing = ' ' * (spaces + 6)
-  return '%s(%s)' % (class_name, (',\n%s' % parameter_spacing).join(parameters))

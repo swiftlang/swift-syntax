@@ -201,8 +201,8 @@ extension Parser {
   /// wrapping declaration instead of being consumed by lookeahead.
   private mutating func parseItem(isAtTopLevel: Bool = false, allowInitDecl: Bool = true) -> RawCodeBlockItemSyntax.Item {
     if self.at(.poundIfKeyword) {
-      let directive = self.parsePoundIfDirective {
-        $0.parseCodeBlockItem()
+      let directive = self.parsePoundIfDirective { (parser, _) in
+        parser.parseCodeBlockItem()
       } addSemicolonIfNeeded: { lastElement, newItemAtStartOfLine, parser in
         if lastElement.semicolon == nil && !newItemAtStartOfLine {
           return RawCodeBlockItemSyntax(

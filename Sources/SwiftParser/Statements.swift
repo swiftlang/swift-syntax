@@ -752,7 +752,7 @@ extension Parser {
         elements.append(
           .ifConfigDecl(
             self.parsePoundIfDirective(
-              { $0.parseSwitchCases(allowStandaloneStmtRecovery: allowStandaloneStmtRecovery) },
+              { (parser, _) in parser.parseSwitchCases(allowStandaloneStmtRecovery: allowStandaloneStmtRecovery) },
               syntax: { parser, cases in
                 guard cases.count == 1, let firstCase = cases.first else {
                   assert(cases.isEmpty)

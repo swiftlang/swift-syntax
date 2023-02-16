@@ -32,7 +32,7 @@ extension Parser {
   mutating func parseAttribute() -> RawAttributeListSyntax.Element {
     if self.at(.poundIfKeyword) {
       return .ifConfigDecl(
-        self.parsePoundIfDirective { parser -> RawAttributeListSyntax.Element in
+        self.parsePoundIfDirective { (parser, _) -> RawAttributeListSyntax.Element in
           return parser.parseAttribute()
         } syntax: { parser, attributes in
           return .attributes(RawAttributeListSyntax(elements: attributes, arena: parser.arena))

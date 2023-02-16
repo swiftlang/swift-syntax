@@ -69,6 +69,22 @@ final class DirectiveTests: XCTestCase {
     )
   }
 
+  func testPostfixIfConfigExpressionContainsPoundIf() {
+    AssertParse(
+      """
+      b
+      #if true
+      .a
+      1️⃣#if true
+      #endif
+      #endif
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected code in conditional compilation block")
+      ]
+    )
+  }
+
   func testSourceLocation() {
     AssertParse(
       """

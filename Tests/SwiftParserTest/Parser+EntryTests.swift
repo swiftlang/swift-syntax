@@ -44,4 +44,25 @@ public class EntryTests: XCTestCase {
       diagnostics: [DiagnosticSpec(message: "unexpected code 'other tokens' in function")]
     )
   }
+
+  func testRemainderUnexpectedDoesntOverrideExistingUnexpected() throws {
+    AssertParse(
+      "operator 1️⃣test 2️⃣{} other tokens",
+      { DeclSyntax.parse(from: &$0) },
+      substructure: Syntax(
+        UnexpectedNodesSyntax([
+          TokenSyntax.leftBraceToken(),
+          PrecedenceGroupAttributeListSyntax([]),
+          TokenSyntax.rightBraceToken(),
+          TokenSyntax.identifier("other"),
+          TokenSyntax.identifier("tokens"),
+        ])
+      ),
+      substructureAfterMarker: "2️⃣",
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "'test' is considered an identifier and must not appear within an operator name"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "operator should not be declared with body"),
+      ]
+    )
+  }
 }

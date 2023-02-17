@@ -1,0 +1,130 @@
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2023 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
+import _SwiftSyntaxTestSupport
+import XCTest
+import SwiftDiagnostics
+import SwiftParser
+import SwiftParserDiagnostics
+import SwiftSyntax
+
+struct SimpleDiagnosticMessage: DiagnosticMessage {
+  let message: String
+  let diagnosticID: MessageID
+  let severity: DiagnosticSeverity
+}
+
+extension SimpleDiagnosticMessage: FixItMessage {
+  var fixItID: MessageID { diagnosticID }
+}
+
+extension GroupedDiagnostics {
+  /// Add a new test file to the group, starting with marked source and using
+  /// the markers to add any suggested extra diagnostics at the marker
+  /// positions.
+  mutating func addTestFile(
+    _ markedSource: String,
+    displayName: String,
+    parent: (SourceFileID, AbsolutePosition)? = nil,
+    extraDiagnostics: [String : (String, DiagnosticSeverity)] = [:]
+  ) -> (SourceFileID, [String: AbsolutePosition]) {
+    // Parse the source file and produce parser diagnostics.
+    let (markers, source) = extractMarkers(markedSource)
+    let tree = Parser.parse(source: source)
+    var diagnostics = ParseDiagnosticsGenerator.diagnostics(for: tree)
+
+    // Add on any extra diagnostics provided, at their marker locations.
+    for (marker, (message, severity)) in extraDiagnostics {
+      let pos = AbsolutePosition(utf8Offset: markers[marker]!)
+      let node = tree.token(at: pos)!.parent!
+
+      let diag = Diagnostic(
+        node: node,
+        message: SimpleDiagnosticMessage(
+          message: message,
+          diagnosticID: MessageID(domain: "test", id: "conjured"),
+          severity: severity
+        )
+      )
+      diagnostics.append(diag)
+    }
+
+    let id = addSourceFile(
+      tree: tree,
+      displayName: displayName,
+      parent: parent,
+      diagnostics: diagnostics
+    )
+
+    let markersWithAbsPositions = markers.map { (marker, pos) in
+      (marker, AbsolutePosition(utf8Offset: pos))
+    }
+
+    return (id, Dictionary(uniqueKeysWithValues: markersWithAbsPositions))
+  }
+}
+
+final class GroupedDiagnosticsFormatterTests: XCTestCase {
+  func testGroupingForMacroExpansion() {
+    var group = GroupedDiagnostics()
+
+    // Main source file.
+    let (mainSourceID, mainSourceMarkers) = group.addTestFile(
+      """
+      let pi = 3.14159
+      0️⃣#myAssert(pi == 3)
+      print("hello"
+      """,
+      displayName: "main.swift",
+      extraDiagnostics: ["0️⃣" : ("in expansion of macro 'myAssert' here", .note)]
+    )
+    let inExpansionNotePos = mainSourceMarkers["0️⃣"]!
+
+    // Expansion source file
+    _ = group.addTestFile(
+      """
+      let __a = pi
+      let __b = 3
+      if !(__a 0️⃣== __b) {
+        fatalError("assertion failed: pi != 3")
+      }
+      """,
+      displayName: "#myAssert",
+      parent: (mainSourceID, inExpansionNotePos),
+      extraDiagnostics: [
+        "0️⃣" : ("no matching operator '==' for types 'Double' and 'Int'", .error)
+      ]
+    )
+
+    let formatter = DiagnosticsFormatter()
+    let annotated = formatter.annotateSources(in: group)
+    print(annotated)
+    AssertStringsEqualWithDiff(annotated, """
+      === main.swift ===
+      1 │ let pi = 3.14159
+      2 │ #myAssert(pi == 3)
+        ∣ ╰─ in expansion of macro 'myAssert' here
+         ╭-── #myAssert───────────────────────────────────────────────────────────────
+         |1 │ let __a = pi
+         |2 │ let __b = 3
+         |3 │ if !(__a == __b) {
+         |  ∣          ╰─ no matching operator '==' for types 'Double' and 'Int'
+         |4 │   fatalError("assertion failed: pi != 3")
+         |5 │ }
+         ╰-───────────────────────────────────────────────────────────────────────────
+      3 │ print("hello"
+        ∣              ╰─ expected ')' to end function call
+
+      """
+    )
+  }
+}

@@ -14,10 +14,19 @@ import SwiftSyntax
 
 public struct DiagnosticsFormatter {
 
-  /// A wrapper struct for a source line and its diagnostics
+  /// A wrapper struct for a source line, its diagnostics, and any
+  /// non-diagnostic text that follows the line.
   private struct AnnotatedSourceLine {
     var diagnostics: [Diagnostic]
     var sourceString: String
+
+    /// Non-diagnostic text.
+    var suffixText: String
+
+    /// Whether this line is free of annotations.
+    var isEmpty: Bool {
+      return diagnostics.isEmpty && suffixText.isEmpty
+    }
   }
 
   /// Number of lines which should be printed before and after the diagnostic message
@@ -42,7 +51,12 @@ public struct DiagnosticsFormatter {
   }
 
   /// Print given diagnostics for a given syntax tree on the command line
-  public func annotatedSource<SyntaxType: SyntaxProtocol>(tree: SyntaxType, diags: [Diagnostic]) -> String {
+  func annotatedSource<SyntaxType: SyntaxProtocol>(
+    fileName: String?,
+    tree: SyntaxType, diags: [Diagnostic],
+    indentString: String,
+    suffixText: [(AbsolutePosition, String)]
+  ) -> String {
     let slc = SourceLocationConverter(file: "", tree: tree)
 
     // First, we need to put each line and its diagnostics together
@@ -52,19 +66,33 @@ public struct DiagnosticsFormatter {
       let diagsForLine = diags.filter { diag in
         return diag.location(converter: slc).line == (sourceLineIndex + 1)
       }
-      annotatedSourceLines.append(AnnotatedSourceLine(diagnostics: diagsForLine, sourceString: sourceLine))
+      let suffixText = suffixText.compactMap { (position, text) in
+        if slc.location(for: position).line == (sourceLineIndex + 1) {
+          return text
+        }
+
+        return nil
+      }.joined()
+
+      annotatedSourceLines.append(AnnotatedSourceLine(diagnostics: diagsForLine, sourceString: sourceLine, suffixText: suffixText))
     }
 
     // Only lines with diagnostic messages should be printed, but including some context
     let rangesToPrint = annotatedSourceLines.enumerated().compactMap { (lineIndex, sourceLine) -> Range<Int>? in
       let lineNumber = lineIndex + 1
-      if !sourceLine.diagnostics.isEmpty {
+      if !sourceLine.isEmpty {
         return Range<Int>(uncheckedBounds: (lower: lineNumber - contextSize, upper: lineNumber + contextSize + 1))
       }
       return nil
     }
 
     var annotatedSource = ""
+
+    // If there was a filename, add it first.
+    if let fileName = fileName {
+      annotatedSource.append(indentString)
+      annotatedSource.append("=== \(fileName) ===\n")
+    }
 
     /// Keep track if a line missing char should be printed
     var hasLineBeenSkipped = false
@@ -89,11 +117,14 @@ public struct DiagnosticsFormatter {
 
       // If necessary, print a line that indicates that there was lines skipped in the source code
       if hasLineBeenSkipped && !annotatedSource.isEmpty {
-        let lineMissingInfoLine = String(repeating: " ", count: maxNumberOfDigits) + " ┆"
+        let lineMissingInfoLine = indentString + String(repeating: " ", count: maxNumberOfDigits) + " ┆"
         annotatedSource.append("\(lineMissingInfoLine)\n")
       }
       hasLineBeenSkipped = false
 
+      // add indentation
+      annotatedSource.append(indentString)
+      
       // print the source line
       annotatedSource.append("\(linePrefix)\(annotatedLine.sourceString)")
 
@@ -111,7 +142,7 @@ public struct DiagnosticsFormatter {
 
       for (column, diags) in diagsPerColumn {
         // compute the string that is shown before each message
-        var preMessage = String(repeating: " ", count: maxNumberOfDigits) + " ∣"
+        var preMessage = indentString + String(repeating: " ", count: maxNumberOfDigits) + " ∣"
         for c in 0..<column {
           if columnsWithDiagnostics.contains(c) {
             preMessage.append("│")
@@ -125,8 +156,27 @@ public struct DiagnosticsFormatter {
         }
         annotatedSource.append("\(preMessage)╰─ \(colorizeIfRequested(diags.last!.diagMessage))\n")
       }
+
+      // Add suffix text.
+      annotatedSource.append(annotatedLine.suffixText)
+      if annotatedSource.last != "\n" {
+        annotatedSource.append("\n")
+      }
     }
     return annotatedSource
+  }
+
+  /// Print given diagnostics for a given syntax tree on the command line
+  public func annotatedSource<SyntaxType: SyntaxProtocol>(
+    tree: SyntaxType, diags: [Diagnostic]
+  ) -> String {
+    return annotatedSource(
+      fileName: nil,
+      tree: tree,
+      diags: diags,
+      indentString: "",
+      suffixText: []
+    )
   }
 
   /// Annotates the given ``DiagnosticMessage`` with an appropriate ANSI color code (if the value of the `colorize`

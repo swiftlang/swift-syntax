@@ -10,6 +10,7 @@ add_swift_host_library(SwiftDiagnostics
   Diagnostic.swift
   DiagnosticsFormatter.swift
   FixIt.swift
+  GroupedDiagnostics.swift
   Message.swift
   Note.swift
 )

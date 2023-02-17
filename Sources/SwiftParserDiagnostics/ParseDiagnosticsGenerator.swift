@@ -668,6 +668,37 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: IfConfigDeclSyntax) -> SyntaxVisitorContinueKind {
+    for clause in node.clauses where clause.hasError {
+      if let unexpectedBeforePoundKeyword = clause.unexpectedBeforePoundKeyword,
+        clause.poundKeyword.tokenKind == .poundElseifKeyword,
+        clause.poundKeyword.presence == .missing
+      {
+        let unexpectedTokens =
+          unexpectedBeforePoundKeyword
+          .suffix(2)
+          .compactMap { $0.as(TokenSyntax.self) }
+        if unexpectedTokens.map(\.tokenKind) == [.poundElseKeyword, .keyword(.if)] {
+          addDiagnostic(
+            unexpectedBeforePoundKeyword,
+            StaticParserError.unexpectedPoundElseSpaceIf,
+            fixIts: [
+              FixIt(
+                message: ReplaceTokensFixIt(replaceTokens: unexpectedTokens, replacement: clause.poundKeyword),
+                changes: [
+                  .makeMissing(unexpectedBeforePoundKeyword, transferTrivia: false),
+                  .makePresent(clause.poundKeyword, leadingTrivia: unexpectedBeforePoundKeyword.leadingTrivia),
+                ]
+              )
+            ],
+            handledNodes: [unexpectedBeforePoundKeyword.id, clause.poundKeyword.id]
+          )
+        }
+      }
+    }
+    return .visitChildren
+  }
+
   public override func visit(_ node: InitializerClauseSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren

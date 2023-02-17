@@ -428,6 +428,35 @@ final class IfconfigExprTests: XCTestCase {
     )
   }
 
+  func testIfconfigExpr31() {
+    AssertParse(
+      """
+      #if arch(x86_64)
+        debugPrint("x86_64")
+      1️⃣#else if arch(arm64)
+        debugPrint("arm64")
+      #else
+        debugPrint("Some other architecture.")
+      #endif
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "unexpected 'if' keyword following '#else' conditional compilation directive; did you mean '#elseif'?",
+          fixIts: ["replace '#else if' with '#elseif'"]
+        )
+      ],
+      fixedSource: """
+        #if arch(x86_64)
+          debugPrint("x86_64")
+        #elseif arch(arm64)
+          debugPrint("arm64")
+        #else
+          debugPrint("Some other architecture.")
+        #endif
+        """
+    )
+  }
+
   func testUnknownPlatform1() {
     AssertParse(
       """

@@ -158,9 +158,11 @@ extension GroupedDiagnostics {
       prefixString = ""
       suffixString = ""
     } else {
+      let padding = indentString.dropLast(1)
+
       // Should we make this depend on the width of the snippet itself?
       let targetLineLength = 72
-      let extraLengthNeeded = targetLineLength - indentString.count - 5
+      let extraLengthNeeded = targetLineLength - padding.count - sourceFile.displayName.count - 5
       let boxSuffix: String
       if extraLengthNeeded > 0 {
         boxSuffix = String(repeating: "─", count: extraLengthNeeded)
@@ -168,7 +170,6 @@ extension GroupedDiagnostics {
         boxSuffix = ""
       }
 
-      let padding = indentString.dropLast(1)
       prefixString = padding + "╭-── " + sourceFile.displayName + boxSuffix + "\n"
       suffixString = padding + "╰-──" + String(repeating: "─", count: sourceFile.displayName.count + 1) + boxSuffix + "\n"
     }

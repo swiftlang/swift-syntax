@@ -113,14 +113,85 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
       1 │ let pi = 3.14159
       2 │ #myAssert(pi == 3)
         ∣ ╰─ in expansion of macro 'myAssert' here
-         ╭-── #myAssert───────────────────────────────────────────────────────────────
+         ╭-── #myAssert───────────────────────────────────────────────────────
          |1 │ let __a = pi
          |2 │ let __b = 3
          |3 │ if !(__a == __b) {
          |  ∣          ╰─ no matching operator '==' for types 'Double' and 'Int'
          |4 │   fatalError("assertion failed: pi != 3")
          |5 │ }
-         ╰-───────────────────────────────────────────────────────────────────────────
+         ╰-───────────────────────────────────────────────────────────────────
+      3 │ print("hello"
+        ∣              ╰─ expected ')' to end function call
+
+      """
+    )
+  }
+
+  func testGroupingForDoubleNestedMacroExpansion() {
+    var group = GroupedDiagnostics()
+
+    // Main source file.
+    let (mainSourceID, mainSourceMarkers) = group.addTestFile(
+      """
+      let pi = 3.14159
+      0️⃣#myAssert(pi == 3)
+      print("hello"
+      """,
+      displayName: "main.swift",
+      extraDiagnostics: ["0️⃣" : ("in expansion of macro 'myAssert' here", .note)]
+    )
+    let inExpansionNotePos = mainSourceMarkers["0️⃣"]!
+
+    // Outer expansion source file
+    let (outerExpansionSourceID, outerExpansionSourceMarkers) = group.addTestFile(
+      """
+      let __a = pi
+      let __b = 3
+      if 0️⃣#invertedEqualityCheck(__a, __b) {
+        fatalError("assertion failed: pi != 3")
+      }
+      """,
+      displayName: "#myAssert",
+      parent: (mainSourceID, inExpansionNotePos),
+      extraDiagnostics: [
+        "0️⃣" : ("in expansion of macro 'invertedEqualityCheck' here", .note)
+      ]
+    )
+    let inInnerExpansionNotePos = outerExpansionSourceMarkers["0️⃣"]!
+
+    // Expansion source file
+    _ = group.addTestFile(
+      """
+      !(__a 0️⃣== __b)
+      """,
+      displayName: "#invertedEqualityCheck",
+      parent: (outerExpansionSourceID, inInnerExpansionNotePos),
+      extraDiagnostics: [
+        "0️⃣" : ("no matching operator '==' for types 'Double' and 'Int'", .error)
+      ]
+    )
+
+    let formatter = DiagnosticsFormatter()
+    let annotated = formatter.annotateSources(in: group)
+    print(annotated)
+    AssertStringsEqualWithDiff(annotated, """
+      === main.swift ===
+      1 │ let pi = 3.14159
+      2 │ #myAssert(pi == 3)
+        ∣ ╰─ in expansion of macro 'myAssert' here
+         ╭-── #myAssert───────────────────────────────────────────────────────
+         |1 │ let __a = pi
+         |2 │ let __b = 3
+         |3 │ if #invertedEqualityCheck(__a, __b) {
+         |  ∣    ╰─ in expansion of macro 'invertedEqualityCheck' here
+         |   ╭-── #invertedEqualityCheck──────────────────────────────────────
+         |   |1 │ !(__a == __b)
+         |   |  ∣       ╰─ no matching operator '==' for types 'Double' and 'Int'
+         |   ╰-───────────────────────────────────────────────────────────────
+         |4 │   fatalError("assertion failed: pi != 3")
+         |5 │ }
+         ╰-───────────────────────────────────────────────────────────────────
       3 │ print("hello"
         ∣              ╰─ expected ')' to end function call
 

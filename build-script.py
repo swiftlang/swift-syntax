@@ -433,8 +433,8 @@ def verify_gyb_generated_files(gyb_exec: str, verbose: bool) -> None:
 def verify_code_generated_files(
     toolchain: str, verbose: bool
 ) -> None:
-    
-    
+    self_temp_dir = tempfile.mkdtemp()
+
     try:
         run_code_generation(
             source_dir=self_temp_dir,
@@ -451,7 +451,7 @@ def verify_code_generated_files(
 
     for module in ["SwiftBasicFormat", "IDEUtils", \
       "SwiftParser", "SwiftSyntax", "SwiftSyntaxBuilder"]:
-      self_generated_dir = os.path.join(self_temp_dir, "Sources", module, "generated")
+      self_generated_dir = os.path.join(self_temp_dir, module, "generated")
       user_generated_dir = os.path.join(SOURCES_DIR, module, "generated")
       check_generated_files_match(self_generated_dir, user_generated_dir)
     

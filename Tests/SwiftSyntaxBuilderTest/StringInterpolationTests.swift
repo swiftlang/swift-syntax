@@ -278,7 +278,6 @@ final class StringInterpolationTests: XCTestCase {
       """
       func plusOne(base: Int) -> Int {
         switch base {
-
         case 0:
           return 1
         case 1:
@@ -323,7 +322,6 @@ final class StringInterpolationTests: XCTestCase {
       """
       func plusOne(base: Int) -> Int {
         switch base {
-
         case 0:
           return 1
         case 1:

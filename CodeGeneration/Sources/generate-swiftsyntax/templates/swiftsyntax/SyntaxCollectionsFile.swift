@@ -38,12 +38,12 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: generateCopyrightHea
   for node in SYNTAX_NODES where node.isSyntaxCollection {
     let documentation =
       node.description.map { "/// " + $0 }
-        ?? """
-        /// `\(node.name)` represents a collection of one or more
-        /// `\(node.collectionElement)` nodes. \(node.name) behaves
-        /// as a regular Swift collection, and has accessors that return new
-        /// versions of the collection with different children.
-        """
+      ?? """
+      /// `\(node.name)` represents a collection of one or more
+      /// `\(node.collectionElement)` nodes. \(node.name) behaves
+      /// as a regular Swift collection, and has accessors that return new
+      /// versions of the collection with different children.
+      """
 
     try! StructDeclSyntax(
       """

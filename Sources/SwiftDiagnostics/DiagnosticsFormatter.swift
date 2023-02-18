@@ -53,7 +53,8 @@ public struct DiagnosticsFormatter {
   /// Print given diagnostics for a given syntax tree on the command line
   func annotatedSource<SyntaxType: SyntaxProtocol>(
     fileName: String?,
-    tree: SyntaxType, diags: [Diagnostic],
+    tree: SyntaxType,
+    diags: [Diagnostic],
     indentString: String,
     suffixText: [(AbsolutePosition, String)]
   ) -> String {
@@ -124,7 +125,7 @@ public struct DiagnosticsFormatter {
 
       // add indentation
       annotatedSource.append(indentString)
-      
+
       // print the source line
       annotatedSource.append("\(linePrefix)\(annotatedLine.sourceString)")
 
@@ -168,7 +169,8 @@ public struct DiagnosticsFormatter {
 
   /// Print given diagnostics for a given syntax tree on the command line
   public func annotatedSource<SyntaxType: SyntaxProtocol>(
-    tree: SyntaxType, diags: [Diagnostic]
+    tree: SyntaxType,
+    diags: [Diagnostic]
   ) -> String {
     return annotatedSource(
       fileName: nil,

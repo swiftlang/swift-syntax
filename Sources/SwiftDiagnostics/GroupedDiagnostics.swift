@@ -49,7 +49,7 @@ public struct GroupedDiagnostics {
   /// source file IDs.
   var rootIndexes: [SourceFileSyntax: SourceFileID] = [:]
 
-  public init() { }
+  public init() {}
 
   /// Add a new source file to the set of grouped diagnostics.
   ///
@@ -106,7 +106,8 @@ public struct GroupedDiagnostics {
   ///   - knownSourceFileID: the source file into which this diagnostic goes,
   ///     if known.
   public mutating func addDiagnostic(
-    _ diagnostic: Diagnostic, in knownSourceFileID: SourceFileID? = nil
+    _ diagnostic: Diagnostic,
+    in knownSourceFileID: SourceFileID? = nil
   ) {
     guard let sourceFileID = knownSourceFileID ?? findSourceFileContaining(diagnostic.node) else {
       // Drop the diagnostic on the floor.
@@ -175,13 +176,14 @@ extension GroupedDiagnostics {
     }
 
     // Render the buffer.
-    return prefixString + formatter.annotatedSource(
-      fileName: isRoot ? sourceFile.displayName : nil,
-      tree: sourceFile.tree,
-      diags: sourceFile.diagnostics,
-      indentString: indentString,
-      suffixText: childSources
-    ) + suffixString
+    return prefixString
+      + formatter.annotatedSource(
+        fileName: isRoot ? sourceFile.displayName : nil,
+        tree: sourceFile.tree,
+        diags: sourceFile.diagnostics,
+        indentString: indentString,
+        suffixText: childSources
+      ) + suffixString
   }
 }
 

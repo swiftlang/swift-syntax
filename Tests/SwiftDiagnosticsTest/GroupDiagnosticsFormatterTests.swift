@@ -35,7 +35,7 @@ extension GroupedDiagnostics {
     _ markedSource: String,
     displayName: String,
     parent: (SourceFileID, AbsolutePosition)? = nil,
-    extraDiagnostics: [String : (String, DiagnosticSeverity)] = [:]
+    extraDiagnostics: [String: (String, DiagnosticSeverity)] = [:]
   ) -> (SourceFileID, [String: AbsolutePosition]) {
     // Parse the source file and produce parser diagnostics.
     let (markers, source) = extractMarkers(markedSource)
@@ -85,7 +85,7 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
       print("hello"
       """,
       displayName: "main.swift",
-      extraDiagnostics: ["0️⃣" : ("in expansion of macro 'myAssert' here", .note)]
+      extraDiagnostics: ["0️⃣": ("in expansion of macro 'myAssert' here", .note)]
     )
     let inExpansionNotePos = mainSourceMarkers["0️⃣"]!
 
@@ -101,14 +101,16 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
       displayName: "#myAssert",
       parent: (mainSourceID, inExpansionNotePos),
       extraDiagnostics: [
-        "0️⃣" : ("no matching operator '==' for types 'Double' and 'Int'", .error)
+        "0️⃣": ("no matching operator '==' for types 'Double' and 'Int'", .error)
       ]
     )
 
     let formatter = DiagnosticsFormatter()
     let annotated = formatter.annotateSources(in: group)
     print(annotated)
-    AssertStringsEqualWithDiff(annotated, """
+    AssertStringsEqualWithDiff(
+      annotated,
+      """
       === main.swift ===
       1 │ let pi = 3.14159
       2 │ #myAssert(pi == 3)
@@ -139,7 +141,7 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
       print("hello"
       """,
       displayName: "main.swift",
-      extraDiagnostics: ["0️⃣" : ("in expansion of macro 'myAssert' here", .note)]
+      extraDiagnostics: ["0️⃣": ("in expansion of macro 'myAssert' here", .note)]
     )
     let inExpansionNotePos = mainSourceMarkers["0️⃣"]!
 
@@ -155,7 +157,7 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
       displayName: "#myAssert",
       parent: (mainSourceID, inExpansionNotePos),
       extraDiagnostics: [
-        "0️⃣" : ("in expansion of macro 'invertedEqualityCheck' here", .note)
+        "0️⃣": ("in expansion of macro 'invertedEqualityCheck' here", .note)
       ]
     )
     let inInnerExpansionNotePos = outerExpansionSourceMarkers["0️⃣"]!
@@ -168,14 +170,16 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
       displayName: "#invertedEqualityCheck",
       parent: (outerExpansionSourceID, inInnerExpansionNotePos),
       extraDiagnostics: [
-        "0️⃣" : ("no matching operator '==' for types 'Double' and 'Int'", .error)
+        "0️⃣": ("no matching operator '==' for types 'Double' and 'Int'", .error)
       ]
     )
 
     let formatter = DiagnosticsFormatter()
     let annotated = formatter.annotateSources(in: group)
     print(annotated)
-    AssertStringsEqualWithDiff(annotated, """
+    AssertStringsEqualWithDiff(
+      annotated,
+      """
       === main.swift ===
       1 │ let pi = 3.14159
       2 │ #myAssert(pi == 3)

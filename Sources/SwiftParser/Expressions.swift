@@ -624,7 +624,10 @@ extension Parser {
   ) -> RawExprSyntax {
     assert(self.at(.poundIfKeyword))
 
-    let config = self.parsePoundIfDirective { parser -> RawExprSyntax? in
+    let config = self.parsePoundIfDirective { (parser, isFirstElement) -> RawExprSyntax? in
+      if !isFirstElement {
+        return nil
+      }
       let head: RawExprSyntax
       if parser.at(any: [.period, .prefixPeriod]) {
         head = parser.parseDottedExpressionSuffix(nil)

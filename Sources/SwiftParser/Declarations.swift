@@ -165,7 +165,7 @@ extension Parser {
   public mutating func parseDeclaration(inMemberDeclList: Bool = false) -> RawDeclSyntax {
     switch self.at(anyIn: PoundDeclarationStart.self) {
     case (.poundIfKeyword, _)?:
-      let directive = self.parsePoundIfDirective { parser in
+      let directive = self.parsePoundIfDirective { (parser, _) in
         let parsedDecl = parser.parseDeclaration()
         let semicolon = parser.consume(if: .semicolon)
         return RawMemberDeclListItemSyntax(

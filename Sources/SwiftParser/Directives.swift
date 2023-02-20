@@ -66,7 +66,7 @@ extension Parser {
   ///             into a syntax collection.
   @_spi(RawSyntax)
   public mutating func parsePoundIfDirective<Element: RawSyntaxNodeProtocol>(
-    _ parseElement: (inout Parser) -> Element?,
+    _ parseElement: (_ parser: inout Parser, _ isFirstElement: Bool) -> Element?,
     addSemicolonIfNeeded: (_ lastElement: Element, _ newItemAtStartOfLine: Bool, _ parser: inout Parser) -> Element? = { _, _, _ in nil },
     syntax: (inout Parser, [Element]) -> RawIfConfigClauseSyntax.Elements?
   ) -> RawIfConfigDeclSyntax {
@@ -83,7 +83,7 @@ extension Parser {
     do {
       var firstIteration = true
       var loopProgress = LoopProgressCondition()
-      while let poundIfHandle = self.canRecoverTo(any: firstIteration ? [.poundIfKeyword] : [.poundIfKeyword, .poundElseifKeyword, .poundElseKeyword]),
+      while let poundIfHandle = self.canRecoverTo(any: firstIteration ? [.poundIfKeyword] : [.poundElseifKeyword, .poundElseKeyword]),
         loopProgress.evaluate(self.currentToken)
       {
         let (unexpectedBeforePoundIf, poundIf) = self.eat(poundIfHandle)
@@ -104,7 +104,7 @@ extension Parser {
           var elementsProgress = LoopProgressCondition()
           while !self.at(any: [.eof, .poundElseKeyword, .poundElseifKeyword, .poundEndifKeyword]) && elementsProgress.evaluate(currentToken) {
             let newItemAtStartOfLine = self.currentToken.isAtStartOfLine
-            guard let element = parseElement(&self), !element.isEmpty else {
+            guard let element = parseElement(&self, elements.isEmpty), !element.isEmpty else {
               break
             }
             if let lastElement = elements.last, let fixedUpLastItem = addSemicolonIfNeeded(lastElement, newItemAtStartOfLine, &self) {

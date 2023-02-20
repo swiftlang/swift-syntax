@@ -32,7 +32,7 @@ extension Parser {
   mutating func parseAttribute() -> RawAttributeListSyntax.Element {
     if self.at(.poundIfKeyword) {
       return .ifConfigDecl(
-        self.parsePoundIfDirective { parser -> RawAttributeListSyntax.Element in
+        self.parsePoundIfDirective { (parser, _) -> RawAttributeListSyntax.Element in
           return parser.parseAttribute()
         } syntax: { parser, attributes in
           return .attributes(RawAttributeListSyntax(elements: attributes, arena: parser.arena))
@@ -494,7 +494,7 @@ extension Parser {
   mutating func parseObjectiveCSelector() -> RawObjCSelectorSyntax {
     var elements = [RawObjCSelectorPieceSyntax]()
     var loopProgress = LoopProgressCondition()
-    while !self.at(any: [.eof, .rightParen]) && loopProgress.evaluate(currentToken) {
+    while loopProgress.evaluate(currentToken) {
       // Empty selector piece.
       if let colon = self.consume(if: .colon) {
         elements.append(
@@ -507,7 +507,7 @@ extension Parser {
         continue
       }
 
-      if self.at(.identifier) || self.currentToken.isKeyword {
+      if self.at(any: [.identifier, .wildcardKeyword]) || self.currentToken.isKeyword {
         let name = self.consumeAnyToken()
 
         // If we hit a ')' we may have a zero-argument selector.
@@ -531,6 +531,8 @@ extension Parser {
             arena: self.arena
           )
         )
+      } else {
+        break
       }
     }
     return RawObjCSelectorSyntax(elements: elements, arena: self.arena)

@@ -752,7 +752,7 @@ extension Parser {
         elements.append(
           .ifConfigDecl(
             self.parsePoundIfDirective(
-              { $0.parseSwitchCases(allowStandaloneStmtRecovery: allowStandaloneStmtRecovery) },
+              { (parser, _) in parser.parseSwitchCases(allowStandaloneStmtRecovery: allowStandaloneStmtRecovery) },
               syntax: { parser, cases in
                 guard cases.count == 1, let firstCase = cases.first else {
                   assert(cases.isEmpty)
@@ -766,6 +766,9 @@ extension Parser {
       } else if allowStandaloneStmtRecovery && (self.atStartOfExpression() || self.atStartOfStatement() || self.atStartOfDeclaration()) {
         // Synthesize a label for the stamenent or declaration that isn't coverd by a case right now.
         let statements = parseSwitchCaseBody()
+        if statements.isEmpty {
+          break
+        }
         elements.append(
           .switchCase(
             RawSwitchCaseSyntax(

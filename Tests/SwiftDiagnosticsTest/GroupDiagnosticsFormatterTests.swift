@@ -115,14 +115,14 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
       1 │ let pi = 3.14159
       2 │ #myAssert(pi == 3)
         ∣ ╰─ in expansion of macro 'myAssert' here
-         ╭-── #myAssert───────────────────────────────────────────────────────
-         |1 │ let __a = pi
-         |2 │ let __b = 3
-         |3 │ if !(__a == __b) {
-         |  ∣          ╰─ no matching operator '==' for types 'Double' and 'Int'
-         |4 │   fatalError("assertion failed: pi != 3")
-         |5 │ }
-         ╰-───────────────────────────────────────────────────────────────────
+        ╭-── #myAssert────────────────────────────────────────────────────────
+        |1 │ let __a = pi
+        |2 │ let __b = 3
+        |3 │ if !(__a == __b) {
+        |  ∣          ╰─ no matching operator '==' for types 'Double' and 'Int'
+        |4 │   fatalError("assertion failed: pi != 3")
+        |5 │ }
+        ╰-────────────────────────────────────────────────────────────────────
       3 │ print("hello"
         ∣              ╰─ expected ')' to end function call
 
@@ -184,18 +184,18 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
       1 │ let pi = 3.14159
       2 │ #myAssert(pi == 3)
         ∣ ╰─ in expansion of macro 'myAssert' here
-         ╭-── #myAssert───────────────────────────────────────────────────────
-         |1 │ let __a = pi
-         |2 │ let __b = 3
-         |3 │ if #invertedEqualityCheck(__a, __b) {
-         |  ∣    ╰─ in expansion of macro 'invertedEqualityCheck' here
-         |   ╭-── #invertedEqualityCheck──────────────────────────────────────
-         |   |1 │ !(__a == __b)
-         |   |  ∣       ╰─ no matching operator '==' for types 'Double' and 'Int'
-         |   ╰-───────────────────────────────────────────────────────────────
-         |4 │   fatalError("assertion failed: pi != 3")
-         |5 │ }
-         ╰-───────────────────────────────────────────────────────────────────
+        ╭-── #myAssert────────────────────────────────────────────────────────
+        |1 │ let __a = pi
+        |2 │ let __b = 3
+        |3 │ if #invertedEqualityCheck(__a, __b) {
+        |  ∣    ╰─ in expansion of macro 'invertedEqualityCheck' here
+        |  ╭-── #invertedEqualityCheck────────────────────────────────────────
+        |  |1 │ !(__a == __b)
+        |  |  ∣       ╰─ no matching operator '==' for types 'Double' and 'Int'
+        |  ╰-─────────────────────────────────────────────────────────────────
+        |4 │   fatalError("assertion failed: pi != 3")
+        |5 │ }
+        ╰-────────────────────────────────────────────────────────────────────
       3 │ print("hello"
         ∣              ╰─ expected ')' to end function call
 

@@ -139,18 +139,25 @@ extension GroupedDiagnostics {
     formatter: DiagnosticsFormatter,
     indentString: String
   ) -> String {
+    let sourceFile = sourceFiles[sourceFileID.id]
+    let slc = SourceLocationConverter(
+      file: sourceFile.displayName,
+      tree: sourceFile.tree
+    )
+
+    let childPadding = String(slc.sourceLines.count + 1).count + 1;
+
     let childSources: [(AbsolutePosition, String)] = sourceFiles[sourceFileID.id].children.map { childBufferID in
       let childSource = annotateSource(
         childBufferID,
         formatter: formatter,
-        indentString: indentString + "   |"
+        indentString: indentString + String(repeating: " ", count: childPadding) + "|"
       )
 
       return (sourceFiles[childBufferID.id].parent!.1, childSource)
     }
 
     // If this is a nested source file, draw a box around it.
-    let sourceFile = sourceFiles[sourceFileID.id]
     let isRoot = sourceFile.parent == nil
     let prefixString: String
     let suffixString: String
@@ -182,7 +189,8 @@ extension GroupedDiagnostics {
         tree: sourceFile.tree,
         diags: sourceFile.diagnostics,
         indentString: indentString,
-        suffixText: childSources
+        suffixText: childSources,
+        sourceLocationConverter: slc
       ) + suffixString
   }
 }

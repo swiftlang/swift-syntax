@@ -54,11 +54,14 @@ open class BasicFormat: SyntaxRewriter {
     if requiresTrailingSpace(node) && trailingTrivia.isEmpty {
       trailingTrivia += .space
     }
-    if let keyPath = getKeyPath(Syntax(node)), requiresLeadingNewline(keyPath), !(leadingTrivia.first?.isNewline ?? false) {
+    if let keyPath = getKeyPath(Syntax(node)), requiresLeadingNewline(keyPath), !(leadingTrivia.first?.isNewline ?? false), !shouldOmitNewline(node) {
       leadingTrivia = .newline + leadingTrivia
     }
-    leadingTrivia = leadingTrivia.indented(indentation: indentation)
-    trailingTrivia = trailingTrivia.indented(indentation: indentation)
+    var isOnNewline: Bool = (lastRewrittenToken?.trailingTrivia.pieces.last?.isNewline == true)
+    if case .stringSegment(let text) = lastRewrittenToken?.tokenKind {
+      isOnNewline = isOnNewline || (text.last?.isNewline == true)
+    }
+    leadingTrivia = leadingTrivia.indented(indentation: indentation, isOnNewline: isOnNewline)
     let rewritten = TokenSyntax(
         node.tokenKind, 
         leadingTrivia: leadingTrivia, 
@@ -69,6 +72,21 @@ open class BasicFormat: SyntaxRewriter {
     lastRewrittenToken = rewritten
     putNextTokenOnNewLine = false
     return rewritten
+  }
+  
+  /// If this returns `true`, ``BasicFormat`` will not wrap `node` to a new line. This can be used to e.g. keep string interpolation segments on a single line.
+  /// - Parameter node: the node that is being visited
+  /// - Returns: returns true if newline should be omitted
+  open func shouldOmitNewline(_ node: TokenSyntax) -> Bool {
+    var ancestor: Syntax = Syntax(node)
+    while let parent = ancestor.parent {
+      ancestor = parent
+      if ancestor.is(ExpressionSegmentSyntax.self) {
+        return true
+      }
+    }
+
+    return false
   }
   
   open func shouldIndent(_ keyPath: AnyKeyPath) -> Bool {

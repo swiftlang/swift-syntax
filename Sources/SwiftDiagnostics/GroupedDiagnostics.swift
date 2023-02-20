@@ -151,7 +151,7 @@ extension GroupedDiagnostics {
       let childSource = annotateSource(
         childBufferID,
         formatter: formatter,
-        indentString: indentString + String(repeating: " ", count: childPadding) + "|"
+        indentString: indentString + String(repeating: " ", count: childPadding) + "│"
       )
 
       return (sourceFiles[childBufferID.id].parent!.1, childSource)

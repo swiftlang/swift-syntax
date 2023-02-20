@@ -87,15 +87,7 @@ let parserEntryFile = SourceFileSyntax(leadingTrivia: generateCopyrightHeader(fo
           return into
         }
 
-        let existingUnexpected: [RawSyntax]
-        if let unexpectedNode = layout.children[layout.children.count - 1] {
-           assert(unexpectedNode.is(RawUnexpectedNodesSyntax.self))
-           existingUnexpected = unexpectedNode.as(RawUnexpectedNodesSyntax.self).elements
-        } else {
-           existingUnexpected = []
-        }
-        let unexpected = RawUnexpectedNodesSyntax(elements: existingUnexpected + remainingTokens, arena: self.arena)
-
+        let unexpected = RawUnexpectedNodesSyntax(elements: remainingTokens, arena: self.arena)
         let withUnexpected = layout.replacingChild(at: layout.children.count - 1, with: unexpected.raw, arena: self.arena)
         return R.init(withUnexpected)!
       }

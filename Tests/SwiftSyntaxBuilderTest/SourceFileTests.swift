@@ -31,13 +31,13 @@ final class SourceFileTests: XCTestCase {
     AssertBuildResult(
       source,
       """
-
       import Foundation
       import UIKit
       class SomeViewController {
           let tableView: UITableView
       }
-      """
+      """,
+      trimTrailingWhitespace: false
     )
   }
 }

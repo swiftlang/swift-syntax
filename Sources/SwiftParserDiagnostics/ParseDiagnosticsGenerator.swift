@@ -865,10 +865,18 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
           unexpectedBeforePoundKeyword
           .suffix(2)
           .compactMap { $0.as(TokenSyntax.self) }
+        var diagnosticMessage: DiagnosticMessage?
+
         if unexpectedTokens.map(\.tokenKind) == [.poundElseKeyword, .keyword(.if)] {
+          diagnosticMessage = StaticParserError.unexpectedPoundElseSpaceIf
+        } else if unexpectedTokens.first?.tokenKind == .pound, unexpectedTokens.last?.text == "elif" {
+          diagnosticMessage = UnknownDirectiveError(unexpected: unexpectedBeforePoundKeyword)
+        }
+
+        if let diagnosticMessage = diagnosticMessage {
           addDiagnostic(
             unexpectedBeforePoundKeyword,
-            StaticParserError.unexpectedPoundElseSpaceIf,
+            diagnosticMessage,
             fixIts: [
               FixIt(
                 message: ReplaceTokensFixIt(replaceTokens: unexpectedTokens, replacements: [clause.poundKeyword]),

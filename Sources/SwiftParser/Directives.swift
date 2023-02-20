@@ -16,11 +16,13 @@ extension Parser {
   private enum IfConfigContinuationClauseStartKeyword: TokenSpecSet {
     case poundElseifKeyword
     case poundElseKeyword
+    case pound
 
     var spec: TokenSpec {
       switch self {
       case .poundElseifKeyword: return .poundElseifKeyword
       case .poundElseKeyword: return .poundElseKeyword
+      case .pound: return TokenSpec(.pound, recoveryPrecedence: .openingPoundIf)
       }
     }
 
@@ -28,6 +30,7 @@ extension Parser {
       switch PrepareForKeywordMatch(lexeme) {
       case TokenSpec(.poundElseifKeyword): self = .poundElseifKeyword
       case TokenSpec(.poundElseKeyword): self = .poundElseKeyword
+      case TokenSpec(.pound): self = .pound
       default: return nil
       }
     }
@@ -100,56 +103,64 @@ extension Parser {
     }
 
     var clauses = [RawIfConfigClauseSyntax]()
-    do {
-      var firstIteration = true
-      var loopProgress = LoopProgressCondition()
-      while let poundIfHandle = firstIteration ? self.canRecoverTo(.poundIfKeyword) : self.canRecoverTo(anyIn: IfConfigContinuationClauseStartKeyword.self)?.handle,
-        loopProgress.evaluate(self.currentToken)
-      {
-        var (unexpectedBeforePoundIf, poundIf) = self.eat(poundIfHandle)
-        firstIteration = false
-        // Parse the condition.
-        let condition: RawExprSyntax?
-        switch poundIf.tokenKind {
-        case .poundIfKeyword, .poundElseifKeyword:
+
+    // Parse #if
+    let (unexpectedBeforePoundIfKeyword, poundIfKeyword) = self.expect(.poundIfKeyword)
+    let condition = RawExprSyntax(self.parseSequenceExpression(.basic, forDirective: true))
+
+    clauses.append(
+      RawIfConfigClauseSyntax(
+        unexpectedBeforePoundIfKeyword,
+        poundKeyword: poundIfKeyword,
+        condition: condition,
+        elements: syntax(&self, parseIfConfigClauseElements(parseElement, addSemicolonIfNeeded: addSemicolonIfNeeded)),
+        arena: self.arena
+      )
+    )
+
+    // Proceed to parse #if continuation clauses (#elseif, #else, check #elif typo, #endif)
+    var loopProgress = LoopProgressCondition()
+    LOOP: while let (match, handle) = self.canRecoverTo(anyIn: IfConfigContinuationClauseStartKeyword.self), loopProgress.evaluate(self.currentToken) {
+      var unexpectedBeforePoundKeyword: RawUnexpectedNodesSyntax?
+      var poundKeyword: RawTokenSyntax
+      let condition: RawExprSyntax?
+
+      switch match {
+      case .poundElseifKeyword:
+        (unexpectedBeforePoundKeyword, poundKeyword) = self.eat(handle)
+        condition = RawExprSyntax(self.parseSequenceExpression(.basic, forDirective: true))
+      case .poundElseKeyword:
+        (unexpectedBeforePoundKeyword, poundKeyword) = self.eat(handle)
+        if let ifToken = self.consume(if: .init(.if, allowAtStartOfLine: false)) {
+          unexpectedBeforePoundKeyword = RawUnexpectedNodesSyntax(combining: unexpectedBeforePoundKeyword, poundKeyword, ifToken, arena: self.arena)
+          poundKeyword = self.missingToken(.poundElseifKeyword)
           condition = RawExprSyntax(self.parseSequenceExpression(.basic, forDirective: true))
-        case .poundElseKeyword:
-          if let ifToken = self.consume(if: .init(.if, allowAtStartOfLine: false)) {
-            unexpectedBeforePoundIf = RawUnexpectedNodesSyntax(combining: unexpectedBeforePoundIf, poundIf, ifToken, arena: self.arena)
-            poundIf = self.missingToken(.poundElseifKeyword)
-            condition = RawExprSyntax(self.parseSequenceExpression(.basic, forDirective: true))
-          } else {
-            condition = nil
-          }
-        default:
-          preconditionFailure("The loop condition should guarantee that we are at one of these tokens")
+        } else {
+          condition = nil
         }
-
-        var elements = [Element]()
-        do {
-          var elementsProgress = LoopProgressCondition()
-          while !self.at(.eof) && !self.at(.poundElseKeyword, .poundElseifKeyword, .poundEndifKeyword) && elementsProgress.evaluate(currentToken) {
-            let newItemAtStartOfLine = self.currentToken.isAtStartOfLine
-            guard let element = parseElement(&self, elements.isEmpty), !element.isEmpty else {
-              break
-            }
-            if let lastElement = elements.last, let fixedUpLastItem = addSemicolonIfNeeded(lastElement, newItemAtStartOfLine, &self) {
-              elements[elements.count - 1] = fixedUpLastItem
-            }
-            elements.append(element)
+      case .pound:
+        if self.atElifTypo() {
+          (unexpectedBeforePoundKeyword, poundKeyword) = self.eat(handle)
+          guard let elif = self.consume(if: TokenSpec(.identifier, allowAtStartOfLine: false)) else {
+            preconditionFailure("The current token should be an identifier, guaranteed by the `atElifTypo` check.")
           }
+          unexpectedBeforePoundKeyword = RawUnexpectedNodesSyntax(combining: unexpectedBeforePoundKeyword, poundKeyword, elif, arena: self.arena)
+          poundKeyword = self.missingToken(.poundElseifKeyword)
+          condition = RawExprSyntax(self.parseSequenceExpression(.basic, forDirective: true))
+        } else {
+          break LOOP
         }
-
-        clauses.append(
-          RawIfConfigClauseSyntax(
-            unexpectedBeforePoundIf,
-            poundKeyword: poundIf,
-            condition: condition,
-            elements: syntax(&self, elements),
-            arena: self.arena
-          )
-        )
       }
+
+      clauses.append(
+        RawIfConfigClauseSyntax(
+          unexpectedBeforePoundKeyword,
+          poundKeyword: poundKeyword,
+          condition: condition,
+          elements: syntax(&self, parseIfConfigClauseElements(parseElement, addSemicolonIfNeeded: addSemicolonIfNeeded)),
+          arena: self.arena
+        )
+      )
     }
 
     let (unexpectedBeforePoundEndIf, poundEndIf) = self.expect(.poundEndifKeyword)
@@ -159,6 +170,40 @@ extension Parser {
       poundEndif: poundEndIf,
       arena: self.arena
     )
+  }
+
+  private mutating func atElifTypo() -> Bool {
+    guard self.at(TokenSpec(.pound)), self.currentToken.trailingTriviaText.isEmpty else {
+      return false
+    }
+    var lookahead = self.lookahead()
+    lookahead.consumeAnyToken()  // consume `#`
+    guard lookahead.at(TokenSpec(.identifier, allowAtStartOfLine: false)), lookahead.currentToken.tokenText == "elif", lookahead.currentToken.leadingTriviaText.isEmpty else {
+      return false  // `#` and `elif` must not be separated by trivia
+    }
+    lookahead.consumeAnyToken()  // consume `elif`
+    // We are only at a `elif` typo if it’s followed by an identifier for the condition.
+    // `#elif` or `#elif(…)` could be macro invocations.
+    return lookahead.at(TokenSpec(.identifier, allowAtStartOfLine: false))
+  }
+
+  private mutating func parseIfConfigClauseElements<Element: RawSyntaxNodeProtocol>(
+    _ parseElement: (_ parser: inout Parser, _ isFirstElement: Bool) -> Element?,
+    addSemicolonIfNeeded: (_ lastElement: Element, _ newItemAtStartOfLine: Bool, _ parser: inout Parser) -> Element?
+  ) -> [Element] {
+    var elements = [Element]()
+    var elementsProgress = LoopProgressCondition()
+    while !self.at(.eof) && !self.at(.poundElseKeyword, .poundElseifKeyword, .poundEndifKeyword) && !self.atElifTypo() && elementsProgress.evaluate(currentToken) {
+      let newItemAtStartOfLine = self.currentToken.isAtStartOfLine
+      guard let element = parseElement(&self, elements.isEmpty), !element.isEmpty else {
+        break
+      }
+      if let lastElement = elements.last, let fixedUpLastItem = addSemicolonIfNeeded(lastElement, newItemAtStartOfLine, &self) {
+        elements[elements.count - 1] = fixedUpLastItem
+      }
+      elements.append(element)
+    }
+    return elements
   }
 }
 

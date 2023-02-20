@@ -465,6 +465,102 @@ final class IfconfigExprTests: XCTestCase {
     )
   }
 
+  func testIfConfigExpr32() {
+    assertParse(
+      """
+      #if arch(x86_64)
+        debugPrint("x86_64")
+      1️⃣#elif arch(arm64)
+        debugPrint("arm64")
+      #else
+        debugPrint("Some other architecture.")
+      #endif
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "use of unknown directive '#elif'",
+          fixIts: ["replace '#elif' with '#elseif'"]
+        )
+      ],
+      fixedSource: """
+        #if arch(x86_64)
+          debugPrint("x86_64")
+        #elseif arch(arm64)
+          debugPrint("arm64")
+        #else
+          debugPrint("Some other architecture.")
+        #endif
+        """
+    )
+  }
+
+  func testIfConfigExpr33() {
+    assertParse(
+      """
+      #if arch(x86_64)
+      #line
+      #endif
+      """
+    )
+  }
+
+  // FIXME: Parsing should generate diagnostics - https://github.com/apple/swift-syntax/issues/1395
+  func testIfConfigExpr34() {
+    assertParse(
+      """
+      #if MY_FLAG
+      #
+      elif
+      #endif
+      """
+    )
+  }
+
+  // FIXME: Parsing should generate diagnostics - https://github.com/apple/swift-syntax/issues/1395
+  func testIfConfigExpr35() {
+    assertParse(
+      """
+      #if MY_FLAG
+      # elif
+      #endif
+      """
+    )
+  }
+
+  func testIfConfigExpr36() {
+    assertParse(
+      """
+      switch x {
+        1️⃣#()
+      #if true
+        2️⃣bar()
+      #endif
+        case .A, .B:
+          break
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected code '#()' before conditional compilation clause"),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "all statements inside a switch must be covered by a 'case' or 'default' label",
+          fixIts: ["insert label"]
+        ),
+      ],
+      fixedSource: """
+        switch x {
+          #()
+        #if true
+        case <#identifier#>:
+          bar()
+        #endif
+          case .A, .B:
+            break
+        }
+        """
+    )
+  }
+
   func testUnknownPlatform1() {
     assertParse(
       """

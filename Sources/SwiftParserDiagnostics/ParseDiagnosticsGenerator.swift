@@ -1095,7 +1095,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return $0.initializer?.value.as(TryExprSyntax.self)?.tryKeyword
     })
     exchangeTokens(
-      unexpected: node.unexpectedBetweenModifiersAndLetOrVarKeyword,
+      unexpected: node.unexpectedBetweenModifiersAndBindingKeyword,
       unexpectedTokenCondition: { $0.tokenKind == .keyword(.try) },
       correctTokens: missingTries,
       message: { _ in .tryOnInitialValueExpression },

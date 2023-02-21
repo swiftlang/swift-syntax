@@ -14364,9 +14364,9 @@ public struct OptionalBindingConditionSyntax: SyntaxProtocol, SyntaxHashable {
   
   public init<P: PatternSyntaxProtocol>(
       leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeLetOrVarKeyword: UnexpectedNodesSyntax? = nil, 
-      letOrVarKeyword: TokenSyntax, 
-      _ unexpectedBetweenLetOrVarKeywordAndPattern: UnexpectedNodesSyntax? = nil, 
+      _ unexpectedBeforeBindingKeyword: UnexpectedNodesSyntax? = nil, 
+      bindingKeyword: TokenSyntax, 
+      _ unexpectedBetweenBindingKeywordAndPattern: UnexpectedNodesSyntax? = nil, 
       pattern: P, 
       _ unexpectedBetweenPatternAndTypeAnnotation: UnexpectedNodesSyntax? = nil, 
       typeAnnotation: TypeAnnotationSyntax? = nil, 
@@ -14379,9 +14379,9 @@ public struct OptionalBindingConditionSyntax: SyntaxProtocol, SyntaxHashable {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeLetOrVarKeyword, 
-            letOrVarKeyword, 
-            unexpectedBetweenLetOrVarKeywordAndPattern, 
+            unexpectedBeforeBindingKeyword, 
+            bindingKeyword, 
+            unexpectedBetweenBindingKeywordAndPattern, 
             pattern, 
             unexpectedBetweenPatternAndTypeAnnotation, 
             typeAnnotation, 
@@ -14390,9 +14390,9 @@ public struct OptionalBindingConditionSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedAfterInitializer
           ))) {(arena, _) in 
       let layout: [RawSyntax?] = [
-          unexpectedBeforeLetOrVarKeyword?.raw, 
-          letOrVarKeyword.raw, 
-          unexpectedBetweenLetOrVarKeywordAndPattern?.raw, 
+          unexpectedBeforeBindingKeyword?.raw, 
+          bindingKeyword.raw, 
+          unexpectedBetweenBindingKeywordAndPattern?.raw, 
           pattern.raw, 
           unexpectedBetweenPatternAndTypeAnnotation?.raw, 
           typeAnnotation?.raw, 
@@ -14412,7 +14412,7 @@ public struct OptionalBindingConditionSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
   
-  public var unexpectedBeforeLetOrVarKeyword: UnexpectedNodesSyntax? {
+  public var unexpectedBeforeBindingKeyword: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -14421,7 +14421,7 @@ public struct OptionalBindingConditionSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var letOrVarKeyword: TokenSyntax {
+  public var bindingKeyword: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
@@ -14430,7 +14430,7 @@ public struct OptionalBindingConditionSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenLetOrVarKeywordAndPattern: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenBindingKeywordAndPattern: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -14495,9 +14495,9 @@ public struct OptionalBindingConditionSyntax: SyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([
-          \Self.unexpectedBeforeLetOrVarKeyword, 
-          \Self.letOrVarKeyword, 
-          \Self.unexpectedBetweenLetOrVarKeywordAndPattern, 
+          \Self.unexpectedBeforeBindingKeyword, 
+          \Self.bindingKeyword, 
+          \Self.unexpectedBetweenBindingKeywordAndPattern, 
           \Self.pattern, 
           \Self.unexpectedBetweenPatternAndTypeAnnotation, 
           \Self.typeAnnotation, 
@@ -14536,9 +14536,9 @@ public struct OptionalBindingConditionSyntax: SyntaxProtocol, SyntaxHashable {
 extension OptionalBindingConditionSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-          "unexpectedBeforeLetOrVarKeyword": unexpectedBeforeLetOrVarKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "letOrVarKeyword": Syntax(letOrVarKeyword).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenLetOrVarKeywordAndPattern": unexpectedBetweenLetOrVarKeywordAndPattern.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "unexpectedBeforeBindingKeyword": unexpectedBeforeBindingKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "bindingKeyword": Syntax(bindingKeyword).asProtocol(SyntaxProtocol.self), 
+          "unexpectedBetweenBindingKeywordAndPattern": unexpectedBetweenBindingKeywordAndPattern.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
           "pattern": Syntax(pattern).asProtocol(SyntaxProtocol.self), 
           "unexpectedBetweenPatternAndTypeAnnotation": unexpectedBetweenPatternAndTypeAnnotation.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
           "typeAnnotation": typeAnnotation.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 

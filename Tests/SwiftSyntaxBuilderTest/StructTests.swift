@@ -90,7 +90,7 @@ final class StructTests: XCTestCase {
     let myStruct = StructDeclSyntax(identifier: "MyStruct") {
       for i in 0..<5 {
         if i.isMultiple(of: 2) {
-          VariableDeclSyntax(letOrVarKeyword: .keyword(.let)) {
+          VariableDeclSyntax(bindingKeyword: .keyword(.let)) {
             PatternBindingSyntax(
               pattern: PatternSyntax("var\(raw: i)"),
               typeAnnotation: TypeAnnotationSyntax(type: TypeSyntax("String"))

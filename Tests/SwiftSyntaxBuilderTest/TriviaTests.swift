@@ -23,7 +23,7 @@ final class TriviaTests: XCTestCase {
 
         """,
       modifiers: [DeclModifierSyntax(name: .keyword(.static))],
-      letOrVarKeyword: .keyword(.var)
+      bindingKeyword: .keyword(.var)
     ) {
       PatternBindingSyntax(
         // TODO: This is meant to be `Pattern`, but it's ambiguous with XCTest

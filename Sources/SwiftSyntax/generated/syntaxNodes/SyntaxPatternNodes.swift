@@ -646,9 +646,9 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   
   public init<V: PatternSyntaxProtocol>(
       leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeLetOrVarKeyword: UnexpectedNodesSyntax? = nil, 
-      letOrVarKeyword: TokenSyntax, 
-      _ unexpectedBetweenLetOrVarKeywordAndValuePattern: UnexpectedNodesSyntax? = nil, 
+      _ unexpectedBeforeBindingKeyword: UnexpectedNodesSyntax? = nil, 
+      bindingKeyword: TokenSyntax, 
+      _ unexpectedBetweenBindingKeywordAndValuePattern: UnexpectedNodesSyntax? = nil, 
       valuePattern: V, 
       _ unexpectedAfterValuePattern: UnexpectedNodesSyntax? = nil, 
       trailingTrivia: Trivia? = nil
@@ -657,16 +657,16 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeLetOrVarKeyword, 
-            letOrVarKeyword, 
-            unexpectedBetweenLetOrVarKeywordAndValuePattern, 
+            unexpectedBeforeBindingKeyword, 
+            bindingKeyword, 
+            unexpectedBetweenBindingKeywordAndValuePattern, 
             valuePattern, 
             unexpectedAfterValuePattern
           ))) {(arena, _) in 
       let layout: [RawSyntax?] = [
-          unexpectedBeforeLetOrVarKeyword?.raw, 
-          letOrVarKeyword.raw, 
-          unexpectedBetweenLetOrVarKeywordAndValuePattern?.raw, 
+          unexpectedBeforeBindingKeyword?.raw, 
+          bindingKeyword.raw, 
+          unexpectedBetweenBindingKeywordAndValuePattern?.raw, 
           valuePattern.raw, 
           unexpectedAfterValuePattern?.raw
         ]
@@ -682,7 +682,7 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
   
-  public var unexpectedBeforeLetOrVarKeyword: UnexpectedNodesSyntax? {
+  public var unexpectedBeforeBindingKeyword: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -691,7 +691,7 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var letOrVarKeyword: TokenSyntax {
+  public var bindingKeyword: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
@@ -700,7 +700,7 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenLetOrVarKeywordAndValuePattern: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenBindingKeywordAndValuePattern: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -729,9 +729,9 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([
-          \Self.unexpectedBeforeLetOrVarKeyword, 
-          \Self.letOrVarKeyword, 
-          \Self.unexpectedBetweenLetOrVarKeywordAndValuePattern, 
+          \Self.unexpectedBeforeBindingKeyword, 
+          \Self.bindingKeyword, 
+          \Self.unexpectedBetweenBindingKeywordAndValuePattern, 
           \Self.valuePattern, 
           \Self.unexpectedAfterValuePattern
         ])
@@ -758,9 +758,9 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 extension ValueBindingPatternSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-          "unexpectedBeforeLetOrVarKeyword": unexpectedBeforeLetOrVarKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "letOrVarKeyword": Syntax(letOrVarKeyword).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenLetOrVarKeywordAndValuePattern": unexpectedBetweenLetOrVarKeywordAndValuePattern.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "unexpectedBeforeBindingKeyword": unexpectedBeforeBindingKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "bindingKeyword": Syntax(bindingKeyword).asProtocol(SyntaxProtocol.self), 
+          "unexpectedBetweenBindingKeywordAndValuePattern": unexpectedBetweenBindingKeywordAndValuePattern.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
           "valuePattern": Syntax(valuePattern).asProtocol(SyntaxProtocol.self), 
           "unexpectedAfterValuePattern": unexpectedAfterValuePattern.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
         ])

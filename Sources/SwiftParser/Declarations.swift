@@ -242,7 +242,7 @@ extension Parser {
     case (.subscriptKeyword, let handle)?:
       return RawDeclSyntax(self.parseSubscriptDeclaration(attrs, handle))
     case (.letKeyword, let handle)?, (.varKeyword, let handle)?:
-      return RawDeclSyntax(self.parseLetOrVarDeclaration(attrs, handle, inMemberDeclList: inMemberDeclList))
+      return RawDeclSyntax(self.parseBindingDeclaration(attrs, handle, inMemberDeclList: inMemberDeclList))
     case (.initKeyword, let handle)?:
       return RawDeclSyntax(self.parseInitializerDeclaration(attrs, handle))
     case (.deinitKeyword, let handle)?:
@@ -261,7 +261,7 @@ extension Parser {
         let isProbablyTupleDecl = self.at(.leftParen) && self.peek().rawTokenKind.is(.identifier, .wildcard)
 
         if isProbablyVarDecl || isProbablyTupleDecl {
-          return RawDeclSyntax(self.parseLetOrVarDeclaration(attrs, .missing(.keyword(.var))))
+          return RawDeclSyntax(self.parseBindingDeclaration(attrs, .missing(.keyword(.var))))
         }
 
         if self.currentToken.isEditorPlaceholder {
@@ -1471,7 +1471,7 @@ extension Parser {
   /// }
   /// ```
   @_spi(RawSyntax)
-  public mutating func parseLetOrVarDeclaration(
+  public mutating func parseBindingDeclaration(
     _ attrs: DeclAttributes,
     _ handle: RecoveryConsumptionHandle,
     inMemberDeclList: Bool = false
@@ -1571,7 +1571,7 @@ extension Parser {
       attributes: attrs.attributes,
       modifiers: attrs.modifiers,
       unexpectedBeforeIntroducer,
-      letOrVarKeyword: introducer,
+      bindingKeyword: introducer,
       bindings: RawPatternBindingListSyntax(elements: elements, arena: self.arena),
       arena: self.arena
     )

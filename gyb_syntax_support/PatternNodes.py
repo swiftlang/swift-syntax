@@ -74,7 +74,7 @@ PATTERN_NODES = [
     Node('ValueBindingPattern', name_for_diagnostics='value binding pattern',
          kind='Pattern',
          children=[
-             Child('LetOrVarKeyword', kind='KeywordToken',
+             Child('BindingKeyword', kind='KeywordToken',
                    token_choices=['KeywordToken|let', 'KeywordToken|var']),
              Child('ValuePattern', kind='Pattern'),
          ]),

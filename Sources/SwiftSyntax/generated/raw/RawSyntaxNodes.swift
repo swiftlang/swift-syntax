@@ -13718,9 +13718,9 @@ public struct RawOptionalBindingConditionSyntax: RawSyntaxNodeProtocol {
   }
   
   public init(
-      _ unexpectedBeforeLetOrVarKeyword: RawUnexpectedNodesSyntax? = nil, 
-      letOrVarKeyword: RawTokenSyntax, 
-      _ unexpectedBetweenLetOrVarKeywordAndPattern: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBeforeBindingKeyword: RawUnexpectedNodesSyntax? = nil, 
+      bindingKeyword: RawTokenSyntax, 
+      _ unexpectedBetweenBindingKeywordAndPattern: RawUnexpectedNodesSyntax? = nil, 
       pattern: RawPatternSyntax, 
       _ unexpectedBetweenPatternAndTypeAnnotation: RawUnexpectedNodesSyntax? = nil, 
       typeAnnotation: RawTypeAnnotationSyntax?, 
@@ -13732,9 +13732,9 @@ public struct RawOptionalBindingConditionSyntax: RawSyntaxNodeProtocol {
     let raw = RawSyntax.makeLayout(
       kind: .optionalBindingCondition, uninitializedCount: 9, arena: arena) { layout in 
       layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeLetOrVarKeyword?.raw
-      layout[1] = letOrVarKeyword.raw
-      layout[2] = unexpectedBetweenLetOrVarKeywordAndPattern?.raw
+      layout[0] = unexpectedBeforeBindingKeyword?.raw
+      layout[1] = bindingKeyword.raw
+      layout[2] = unexpectedBetweenBindingKeywordAndPattern?.raw
       layout[3] = pattern.raw
       layout[4] = unexpectedBetweenPatternAndTypeAnnotation?.raw
       layout[5] = typeAnnotation?.raw
@@ -13745,15 +13745,15 @@ public struct RawOptionalBindingConditionSyntax: RawSyntaxNodeProtocol {
     self.init(raw: raw)
   }
   
-  public var unexpectedBeforeLetOrVarKeyword: RawUnexpectedNodesSyntax? {
+  public var unexpectedBeforeBindingKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var letOrVarKeyword: RawTokenSyntax {
+  public var bindingKeyword: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
   
-  public var unexpectedBetweenLetOrVarKeywordAndPattern: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenBindingKeywordAndPattern: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
@@ -19827,9 +19827,9 @@ public struct RawValueBindingPatternSyntax: RawPatternSyntaxNodeProtocol {
   }
   
   public init(
-      _ unexpectedBeforeLetOrVarKeyword: RawUnexpectedNodesSyntax? = nil, 
-      letOrVarKeyword: RawTokenSyntax, 
-      _ unexpectedBetweenLetOrVarKeywordAndValuePattern: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBeforeBindingKeyword: RawUnexpectedNodesSyntax? = nil, 
+      bindingKeyword: RawTokenSyntax, 
+      _ unexpectedBetweenBindingKeywordAndValuePattern: RawUnexpectedNodesSyntax? = nil, 
       valuePattern: RawPatternSyntax, 
       _ unexpectedAfterValuePattern: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
@@ -19837,24 +19837,24 @@ public struct RawValueBindingPatternSyntax: RawPatternSyntaxNodeProtocol {
     let raw = RawSyntax.makeLayout(
       kind: .valueBindingPattern, uninitializedCount: 5, arena: arena) { layout in 
       layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeLetOrVarKeyword?.raw
-      layout[1] = letOrVarKeyword.raw
-      layout[2] = unexpectedBetweenLetOrVarKeywordAndValuePattern?.raw
+      layout[0] = unexpectedBeforeBindingKeyword?.raw
+      layout[1] = bindingKeyword.raw
+      layout[2] = unexpectedBetweenBindingKeywordAndValuePattern?.raw
       layout[3] = valuePattern.raw
       layout[4] = unexpectedAfterValuePattern?.raw
     }
     self.init(raw: raw)
   }
   
-  public var unexpectedBeforeLetOrVarKeyword: RawUnexpectedNodesSyntax? {
+  public var unexpectedBeforeBindingKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var letOrVarKeyword: RawTokenSyntax {
+  public var bindingKeyword: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
   
-  public var unexpectedBetweenLetOrVarKeywordAndValuePattern: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenBindingKeywordAndValuePattern: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
@@ -19897,9 +19897,9 @@ public struct RawVariableDeclSyntax: RawDeclSyntaxNodeProtocol {
       attributes: RawAttributeListSyntax?, 
       _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil, 
       modifiers: RawModifierListSyntax?, 
-      _ unexpectedBetweenModifiersAndLetOrVarKeyword: RawUnexpectedNodesSyntax? = nil, 
-      letOrVarKeyword: RawTokenSyntax, 
-      _ unexpectedBetweenLetOrVarKeywordAndBindings: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenModifiersAndBindingKeyword: RawUnexpectedNodesSyntax? = nil, 
+      bindingKeyword: RawTokenSyntax, 
+      _ unexpectedBetweenBindingKeywordAndBindings: RawUnexpectedNodesSyntax? = nil, 
       bindings: RawPatternBindingListSyntax, 
       _ unexpectedAfterBindings: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
@@ -19911,9 +19911,9 @@ public struct RawVariableDeclSyntax: RawDeclSyntaxNodeProtocol {
       layout[1] = attributes?.raw
       layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
       layout[3] = modifiers?.raw
-      layout[4] = unexpectedBetweenModifiersAndLetOrVarKeyword?.raw
-      layout[5] = letOrVarKeyword.raw
-      layout[6] = unexpectedBetweenLetOrVarKeywordAndBindings?.raw
+      layout[4] = unexpectedBetweenModifiersAndBindingKeyword?.raw
+      layout[5] = bindingKeyword.raw
+      layout[6] = unexpectedBetweenBindingKeywordAndBindings?.raw
       layout[7] = bindings.raw
       layout[8] = unexpectedAfterBindings?.raw
     }
@@ -19936,15 +19936,15 @@ public struct RawVariableDeclSyntax: RawDeclSyntaxNodeProtocol {
     layoutView.children[3].map(RawModifierListSyntax.init(raw:))
   }
   
-  public var unexpectedBetweenModifiersAndLetOrVarKeyword: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenModifiersAndBindingKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var letOrVarKeyword: RawTokenSyntax {
+  public var bindingKeyword: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
   }
   
-  public var unexpectedBetweenLetOrVarKeywordAndBindings: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenBindingKeywordAndBindings: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   

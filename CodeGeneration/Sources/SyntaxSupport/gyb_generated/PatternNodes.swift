@@ -94,7 +94,7 @@ public let PATTERN_NODES: [Node] = [
        nameForDiagnostics: "value binding pattern",
        kind: "Pattern",
        children: [
-         Child(name: "LetOrVarKeyword",
+         Child(name: "BindingKeyword",
                kind: .token(choices: [.keyword(text: "let"), .keyword(text: "var")])),
          Child(name: "ValuePattern",
                kind: .node(kind: "Pattern"))

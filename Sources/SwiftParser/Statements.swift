@@ -288,7 +288,7 @@ extension Parser {
     case let .optional(letOrVar, pattern):
       return .optionalBinding(
         RawOptionalBindingConditionSyntax(
-          letOrVarKeyword: letOrVar,
+          bindingKeyword: letOrVar,
           pattern: pattern,
           typeAnnotation: annotation,
           initializer: initializer,

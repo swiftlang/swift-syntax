@@ -343,7 +343,7 @@ extension VariableDeclSyntax {
     leadingTrivia: Trivia = [],
     attributes: AttributeListSyntax? = nil,
     modifiers: ModifierListSyntax? = nil,
-    _ letOrVarKeyword: Keyword,
+    _ bindingKeyword: Keyword,
     name: PatternSyntax,
     type: TypeAnnotationSyntax? = nil,
     initializer: InitializerClauseSyntax? = nil
@@ -352,7 +352,7 @@ extension VariableDeclSyntax {
       leadingTrivia: leadingTrivia,
       attributes: attributes?.with(\.trailingTrivia, .space),
       modifiers: modifiers,
-      letOrVarKeyword: .keyword(letOrVarKeyword)
+      bindingKeyword: .keyword(bindingKeyword)
     ) {
       PatternBindingSyntax(
         pattern: name,

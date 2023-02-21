@@ -1213,7 +1213,7 @@ public let DECL_NODES: [Node] = [
                kind: .collection(kind: "ModifierList", collectionElementName: "Modifier"),
                nameForDiagnostics: "modifiers",
                isOptional: true),
-         Child(name: "LetOrVarKeyword",
+         Child(name: "BindingKeyword",
                kind: .token(choices: [.keyword(text: "let"), .keyword(text: "var")])),
          Child(name: "Bindings",
                kind: .collection(kind: "PatternBindingList", collectionElementName: "Binding"))

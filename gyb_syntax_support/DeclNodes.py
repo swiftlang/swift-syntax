@@ -585,7 +585,7 @@ DECL_NODES = [
                    collection_element_name='Attribute', is_optional=True),
              Child('Modifiers', kind='ModifierList', name_for_diagnostics='modifiers',
                    collection_element_name='Modifier', is_optional=True),
-             Child('LetOrVarKeyword', kind='KeywordToken',
+             Child('BindingKeyword', kind='KeywordToken',
                    token_choices=[
                        'KeywordToken|let', 'KeywordToken|var',
                    ]),

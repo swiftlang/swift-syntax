@@ -547,4 +547,13 @@ final class AttributeTests: XCTestCase {
     AssertParse("func takeRepeater(_ f: @MainActor @Sendable @escaping () -> Int) {}")
     AssertParse("takeRepesater { @MainActor @Sendable () -> Int in 0 }")
   }
+
+  func testLexicalLifetimes() {
+    AssertParse(
+      """
+      @_lexicalLifetimes
+      func lexy(_ c: C) {}
+      """
+    )
+  }
 }

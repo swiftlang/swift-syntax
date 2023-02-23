@@ -43,6 +43,7 @@ let package = Package(
     .library(name: "SwiftSyntaxParser", type: .static, targets: ["SwiftSyntaxParser"]),
     .library(name: "SwiftSyntaxBuilder", type: .static, targets: ["SwiftSyntaxBuilder"]),
     .library(name: "SwiftSyntaxMacros", type: .static, targets: ["SwiftSyntaxMacros"]),
+    .library(name: "SwiftCompilerPlugin", type: .static, targets: ["SwiftCompilerPlugin"]),
     .library(name: "SwiftRefactor", type: .static, targets: ["SwiftRefactor"]),
   ],
   targets: [
@@ -119,6 +120,12 @@ let package = Package(
       ],
       exclude: [
         "CMakeLists.txt"
+      ]
+    ),
+    .target(
+      name: "SwiftCompilerPlugin",
+      dependencies: [
+        "SwiftSyntax", "SwiftParser", "SwiftDiagnostics", "SwiftSyntaxMacros", "SwiftOperators",
       ]
     ),
     .target(

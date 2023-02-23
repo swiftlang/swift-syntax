@@ -295,7 +295,7 @@ final class ErrorsTests: XCTestCase {
               item: .decl(
                 DeclSyntax(
                   VariableDeclSyntax(
-                    letOrVarKeyword: .keyword(.let),
+                    bindingKeyword: .keyword(.let),
                     bindings: PatternBindingListSyntax([
                       PatternBindingSyntax(
                         pattern: WildcardPatternSyntax(),

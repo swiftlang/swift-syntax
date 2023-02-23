@@ -262,7 +262,7 @@ public let STMT_NODES: [Node] = [
        nameForDiagnostics: "optional binding",
        kind: "Syntax",
        children: [
-         Child(name: "LetOrVarKeyword",
+         Child(name: "BindingKeyword",
                kind: .token(choices: [.keyword(text: "let"), .keyword(text: "var")])),
          Child(name: "Pattern",
                kind: .node(kind: "Pattern")),

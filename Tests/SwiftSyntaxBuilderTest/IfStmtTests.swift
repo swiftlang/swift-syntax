@@ -118,7 +118,7 @@ final class IfStmtTests: XCTestCase {
     let buildable = IfExprSyntax(
       conditions: ConditionElementListSyntax {
         OptionalBindingConditionSyntax(
-          letOrVarKeyword: .keyword(.let),
+          bindingKeyword: .keyword(.let),
           pattern: PatternSyntax("x"),
           initializer: InitializerClauseSyntax(value: ExprSyntax("y"))
         )

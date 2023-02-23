@@ -125,7 +125,7 @@ extension Parser {
       let value = self.parsePattern()
       return RawPatternSyntax(
         RawValueBindingPatternSyntax(
-          letOrVarKeyword: letOrVar,
+          bindingKeyword: letOrVar,
           valuePattern: value,
           arena: self.arena
         )
@@ -244,7 +244,7 @@ extension Parser {
       let value = self.parseMatchingPattern(context: .letOrVar)
       return RawPatternSyntax(
         RawValueBindingPatternSyntax(
-          letOrVarKeyword: letOrVar,
+          bindingKeyword: letOrVar,
           valuePattern: value,
           arena: self.arena
         )

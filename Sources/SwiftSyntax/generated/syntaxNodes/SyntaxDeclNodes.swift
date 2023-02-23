@@ -7303,9 +7303,9 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       attributes: AttributeListSyntax? = nil, 
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, 
       modifiers: ModifierListSyntax? = nil, 
-      _ unexpectedBetweenModifiersAndLetOrVarKeyword: UnexpectedNodesSyntax? = nil, 
-      letOrVarKeyword: TokenSyntax, 
-      _ unexpectedBetweenLetOrVarKeywordAndBindings: UnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenModifiersAndBindingKeyword: UnexpectedNodesSyntax? = nil, 
+      bindingKeyword: TokenSyntax, 
+      _ unexpectedBetweenBindingKeywordAndBindings: UnexpectedNodesSyntax? = nil, 
       bindings: PatternBindingListSyntax, 
       _ unexpectedAfterBindings: UnexpectedNodesSyntax? = nil, 
       trailingTrivia: Trivia? = nil
@@ -7318,9 +7318,9 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             attributes, 
             unexpectedBetweenAttributesAndModifiers, 
             modifiers, 
-            unexpectedBetweenModifiersAndLetOrVarKeyword, 
-            letOrVarKeyword, 
-            unexpectedBetweenLetOrVarKeywordAndBindings, 
+            unexpectedBetweenModifiersAndBindingKeyword, 
+            bindingKeyword, 
+            unexpectedBetweenBindingKeywordAndBindings, 
             bindings, 
             unexpectedAfterBindings
           ))) {(arena, _) in 
@@ -7329,9 +7329,9 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           attributes?.raw, 
           unexpectedBetweenAttributesAndModifiers?.raw, 
           modifiers?.raw, 
-          unexpectedBetweenModifiersAndLetOrVarKeyword?.raw, 
-          letOrVarKeyword.raw, 
-          unexpectedBetweenLetOrVarKeywordAndBindings?.raw, 
+          unexpectedBetweenModifiersAndBindingKeyword?.raw, 
+          bindingKeyword.raw, 
+          unexpectedBetweenBindingKeywordAndBindings?.raw, 
           bindings.raw, 
           unexpectedAfterBindings?.raw
         ]
@@ -7421,7 +7421,7 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return VariableDeclSyntax(newData)
   }
   
-  public var unexpectedBetweenModifiersAndLetOrVarKeyword: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenModifiersAndBindingKeyword: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -7430,7 +7430,7 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var letOrVarKeyword: TokenSyntax {
+  public var bindingKeyword: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
@@ -7439,7 +7439,7 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenLetOrVarKeywordAndBindings: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenBindingKeywordAndBindings: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -7491,9 +7491,9 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.attributes, 
           \Self.unexpectedBetweenAttributesAndModifiers, 
           \Self.modifiers, 
-          \Self.unexpectedBetweenModifiersAndLetOrVarKeyword, 
-          \Self.letOrVarKeyword, 
-          \Self.unexpectedBetweenLetOrVarKeywordAndBindings, 
+          \Self.unexpectedBetweenModifiersAndBindingKeyword, 
+          \Self.bindingKeyword, 
+          \Self.unexpectedBetweenBindingKeywordAndBindings, 
           \Self.bindings, 
           \Self.unexpectedAfterBindings
         ])
@@ -7532,9 +7532,9 @@ extension VariableDeclSyntax: CustomReflectable {
           "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
           "unexpectedBetweenAttributesAndModifiers": unexpectedBetweenAttributesAndModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
           "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenModifiersAndLetOrVarKeyword": unexpectedBetweenModifiersAndLetOrVarKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "letOrVarKeyword": Syntax(letOrVarKeyword).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenLetOrVarKeywordAndBindings": unexpectedBetweenLetOrVarKeywordAndBindings.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "unexpectedBetweenModifiersAndBindingKeyword": unexpectedBetweenModifiersAndBindingKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "bindingKeyword": Syntax(bindingKeyword).asProtocol(SyntaxProtocol.self), 
+          "unexpectedBetweenBindingKeywordAndBindings": unexpectedBetweenBindingKeywordAndBindings.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
           "bindings": Syntax(bindings).asProtocol(SyntaxProtocol.self), 
           "unexpectedAfterBindings": unexpectedAfterBindings.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
         ])

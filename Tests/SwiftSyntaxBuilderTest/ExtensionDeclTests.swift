@@ -24,7 +24,7 @@ final class ExtensionDeclTests: XCTestCase {
 
       return VariableDeclSyntax(
         modifiers: [DeclModifierSyntax(name: .keyword(.public))],
-        letOrVarKeyword: .keyword(.var)
+        bindingKeyword: .keyword(.var)
       ) {
         PatternBindingSyntax(
           pattern: PatternSyntax("`\(raw: keyword)`"),

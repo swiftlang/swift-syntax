@@ -2,8 +2,9 @@
 
 Each example can be executed by navigating into this folder and running `swift run <example> <arguments>`. There is the following set of examples available:
 
-- [AddOneToIntegerLiterals](AddOneToIntegerLiterals.swift): Command line tool to add 1 to every integer literal in a source file
-- [CodeGenerationUsingSwiftSyntaxBuilder](CodeGenerationUsingSwiftSyntaxBuilder.swift): Code-generate a simple source file using SwiftSyntaxBuilder
+- [AddOneToIntegerLiterals](Sources/AddOneToIntegerLiterals/AddOneToIntegerLiterals.swift): Command line tool to add 1 to every integer literal in a source file
+- [CodeGenerationUsingSwiftSyntaxBuilder](Sources/CodeGenerationUsingSwiftSyntaxBuilder/CodeGenerationUsingSwiftSyntaxBuilder.swift): Code-generate a simple source file using SwiftSyntaxBuilder
+- [ExamplePlugin](Sources/ExamplePlugn): Compiler plugin executable using [`SwiftCompilerPlugin`](../Sources/SwiftCompilerPlugin)
 
 ## Some Example Usages
 

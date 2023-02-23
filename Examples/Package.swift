@@ -10,6 +10,7 @@ let package = Package(
   products: [
     .executable(name: "AddOneToIntegerLiterals", targets: ["AddOneToIntegerLiterals"]),
     .executable(name: "CodeGenerationUsingSwiftSyntaxBuilder", targets: ["CodeGenerationUsingSwiftSyntaxBuilder"]),
+    .executable(name: "ExamplePlugin", targets: ["ExamplePlugin"]),
   ],
   dependencies: [
     .package(path: "../")
@@ -20,17 +21,22 @@ let package = Package(
       dependencies: [
         .product(name: "SwiftParser", package: "swift-syntax"),
         .product(name: "SwiftSyntax", package: "swift-syntax"),
-      ],
-      path: ".",
-      exclude: ["README.md", "CodeGenerationUsingSwiftSyntaxBuilder.swift"]
+      ]
     ),
     .executableTarget(
       name: "CodeGenerationUsingSwiftSyntaxBuilder",
       dependencies: [
         .product(name: "SwiftSyntaxBuilder", package: "swift-syntax")
-      ],
-      path: ".",
-      exclude: ["README.md", "AddOneToIntegerLiterals.swift"]
+      ]
+    ),
+    .executableTarget(
+      name: "ExamplePlugin",
+      dependencies: [
+        .product(name: "SwiftCompilerPlugin", package: "swift-syntax"),
+        .product(name: "SwiftSyntax", package: "swift-syntax"),
+        .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
+        .product(name: "SwiftDiagnostics", package: "swift-syntax"),
+      ]
     ),
   ]
 )

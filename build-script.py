@@ -563,6 +563,12 @@ def run_lit_tests(toolchain: str, build_dir: Optional[str], release: bool,
         ["--param", "INCR_TRANSFER_ROUND_TRIP.PY=" + INCR_TRANSFER_ROUNDTRIP_EXEC]
     )
 
+    build_subdir = 'release' if release else 'debug'
+    package_build_dir = build_dir + '/' + build_subdir
+
+    lit_call.extend(["--param", "BUILD_DIR=" + package_build_dir])
+    lit_call.extend(["--param", "TOOLCHAIN=" + toolchain])
+
     # Print all failures
     lit_call.extend(["--verbose"])
     # Don't show all commands if verbose is not enabled
@@ -688,6 +694,7 @@ def test_command(args: argparse.Namespace) -> None:
         )
 
         builder.buildProduct("lit-test-helper")
+        builder.buildExample("ExamplePlugin")
 
         run_tests(
             toolchain=args.toolchain,

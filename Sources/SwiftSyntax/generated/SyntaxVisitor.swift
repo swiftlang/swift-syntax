@@ -17,7 +17,6 @@
 public enum SyntaxVisitorContinueKind {
   /// The visitor should visit the descendents of the current node.
   case visitChildren
-  
   /// The visitor should avoid visiting the descendents of the current node.
   case skipChildren
 }

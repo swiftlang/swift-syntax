@@ -1377,7 +1377,6 @@ extension ClosureExprSyntax: CustomReflectable {
 public struct DictionaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public enum Content: SyntaxChildChoices {
     case `colon`(TokenSyntax)
-    
     case `elements`(DictionaryElementListSyntax)
     
     public var _syntaxNode: Syntax {
@@ -2491,7 +2490,6 @@ extension IdentifierExprSyntax: CustomReflectable {
 public struct IfExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public enum ElseBody: SyntaxChildChoices {
     case `ifExpr`(IfExprSyntax)
-    
     case `codeBlock`(CodeBlockSyntax)
     
     public var _syntaxNode: Syntax {

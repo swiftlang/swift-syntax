@@ -678,7 +678,6 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Element: SyntaxChildChoices {
     case `attribute`(AttributeSyntax)
-    
     case `ifConfigDecl`(IfConfigDeclSyntax)
     
     public var _syntaxNode: Syntax {
@@ -7375,9 +7374,7 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Element: SyntaxChildChoices {
     case `precedenceGroupRelation`(PrecedenceGroupRelationSyntax)
-    
     case `precedenceGroupAssignment`(PrecedenceGroupAssignmentSyntax)
-    
     case `precedenceGroupAssociativity`(PrecedenceGroupAssociativitySyntax)
     
     public var _syntaxNode: Syntax {
@@ -8074,11 +8071,8 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Element: SyntaxChildChoices {
     case `labeledSpecializeEntry`(LabeledSpecializeEntrySyntax)
-    
     case `availabilityEntry`(AvailabilityEntrySyntax)
-    
     case `targetFunctionEntry`(TargetFunctionEntrySyntax)
-    
     case `genericWhereClause`(GenericWhereClauseSyntax)
     
     public var _syntaxNode: Syntax {
@@ -8360,7 +8354,6 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Element: SyntaxChildChoices {
     case `stringSegment`(StringSegmentSyntax)
-    
     case `expressionSegment`(ExpressionSegmentSyntax)
     
     public var _syntaxNode: Syntax {
@@ -8619,7 +8612,6 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Element: SyntaxChildChoices {
     case `switchCase`(SwitchCaseSyntax)
-    
     case `ifConfigDecl`(IfConfigDeclSyntax)
     
     public var _syntaxNode: Syntax {

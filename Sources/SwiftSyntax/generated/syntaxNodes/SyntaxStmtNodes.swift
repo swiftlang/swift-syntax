@@ -2440,7 +2440,6 @@ extension WhileStmtSyntax: CustomReflectable {
 public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public enum Yields: SyntaxChildChoices {
     case `yieldList`(YieldListSyntax)
-    
     case `simpleYield`(ExprSyntax)
     
     public var _syntaxNode: Syntax {

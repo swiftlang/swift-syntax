@@ -14,7 +14,6 @@
 
 public enum TriviaPosition {
   case leading
-  
   case trailing
 }
 
@@ -29,46 +28,32 @@ public enum TriviaPosition {
 public enum TriviaPiece {
   /// A backslash that is at the end of a line in a multi-line string literal to escape the newline.
   case backslashes(Int)
-  
   /// A developer block comment, starting with '/*' and ending with '*/'.
   case blockComment(String)
-  
   /// A newline '\r' character.
   case carriageReturns(Int)
-  
   /// A newline consists of contiguous '\r' and '\n' characters.
   case carriageReturnLineFeeds(Int)
-  
   /// A documentation block comment, starting with '/**' and ending with '*/'.
   case docBlockComment(String)
-  
   /// A documentation line comment, starting with '///'.
   case docLineComment(String)
-  
   /// A form-feed 'f' character.
   case formfeeds(Int)
-  
   /// A developer line comment, starting with '//'
   case lineComment(String)
-  
   /// A newline '\n' character.
   case newlines(Int)
-  
   /// A '#' that is at the end of a line in a multi-line string literal to escape the newline.
   case pounds(Int)
-  
   /// A script command, starting with '#!'.
   case shebang(String)
-  
   /// A space ' ' character.
   case spaces(Int)
-  
   /// A tab '\t' character.
   case tabs(Int)
-  
   /// Any skipped unexpected text.
   case unexpectedText(String)
-  
   /// A vertical tab '\v' character.
   case verticalTabs(Int)
 }
@@ -448,33 +433,19 @@ extension TriviaPiece {
 @_spi(RawSyntax)
 public enum RawTriviaPiece: Equatable {
   case backslashes(Int)
-  
   case blockComment(SyntaxText)
-  
   case carriageReturns(Int)
-  
   case carriageReturnLineFeeds(Int)
-  
   case docBlockComment(SyntaxText)
-  
   case docLineComment(SyntaxText)
-  
   case formfeeds(Int)
-  
   case lineComment(SyntaxText)
-  
   case newlines(Int)
-  
   case pounds(Int)
-  
   case shebang(SyntaxText)
-  
   case spaces(Int)
-  
   case tabs(Int)
-  
   case unexpectedText(SyntaxText)
-  
   case verticalTabs(Int)
   
   static func make(_ piece: TriviaPiece, arena: SyntaxArena) -> RawTriviaPiece {

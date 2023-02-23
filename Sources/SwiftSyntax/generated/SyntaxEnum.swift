@@ -16,525 +16,265 @@
 @frozen // FIXME: Not actually stable, works around a miscompile
 public enum SyntaxEnum {
   case token(TokenSyntax)
-  
   case accessPathComponent(AccessPathComponentSyntax)
-  
   case accessPath(AccessPathSyntax)
-  
   case accessorBlock(AccessorBlockSyntax)
-  
   case accessorDecl(AccessorDeclSyntax)
-  
   case accessorList(AccessorListSyntax)
-  
   case accessorParameter(AccessorParameterSyntax)
-  
   case actorDecl(ActorDeclSyntax)
-  
   case arrayElementList(ArrayElementListSyntax)
-  
   case arrayElement(ArrayElementSyntax)
-  
   case arrayExpr(ArrayExprSyntax)
-  
   case arrayType(ArrayTypeSyntax)
-  
   case arrowExpr(ArrowExprSyntax)
-  
   case asExpr(AsExprSyntax)
-  
   case assignmentExpr(AssignmentExprSyntax)
-  
   case associatedtypeDecl(AssociatedtypeDeclSyntax)
-  
   case attributeList(AttributeListSyntax)
-  
   case attribute(AttributeSyntax)
-  
   case attributedType(AttributedTypeSyntax)
-  
   case availabilityArgument(AvailabilityArgumentSyntax)
-  
   case availabilityCondition(AvailabilityConditionSyntax)
-  
   case availabilityEntry(AvailabilityEntrySyntax)
-  
   case availabilityLabeledArgument(AvailabilityLabeledArgumentSyntax)
-  
   case availabilitySpecList(AvailabilitySpecListSyntax)
-  
   case availabilityVersionRestrictionListEntry(AvailabilityVersionRestrictionListEntrySyntax)
-  
   case availabilityVersionRestrictionList(AvailabilityVersionRestrictionListSyntax)
-  
   case availabilityVersionRestriction(AvailabilityVersionRestrictionSyntax)
-  
   case awaitExpr(AwaitExprSyntax)
-  
   case backDeployedAttributeSpecList(BackDeployedAttributeSpecListSyntax)
-  
   case binaryOperatorExpr(BinaryOperatorExprSyntax)
-  
   case booleanLiteralExpr(BooleanLiteralExprSyntax)
-  
   case borrowExpr(BorrowExprSyntax)
-  
   case breakStmt(BreakStmtSyntax)
-  
   case caseItemList(CaseItemListSyntax)
-  
   case caseItem(CaseItemSyntax)
-  
   case catchClauseList(CatchClauseListSyntax)
-  
   case catchClause(CatchClauseSyntax)
-  
   case catchItemList(CatchItemListSyntax)
-  
   case catchItem(CatchItemSyntax)
-  
   case classDecl(ClassDeclSyntax)
-  
   case classRestrictionType(ClassRestrictionTypeSyntax)
-  
   case closureCaptureItemList(ClosureCaptureItemListSyntax)
-  
   case closureCaptureItemSpecifier(ClosureCaptureItemSpecifierSyntax)
-  
   case closureCaptureItem(ClosureCaptureItemSyntax)
-  
   case closureCaptureSignature(ClosureCaptureSignatureSyntax)
-  
   case closureExpr(ClosureExprSyntax)
-  
   case closureParamList(ClosureParamListSyntax)
-  
   case closureParam(ClosureParamSyntax)
-  
   case closureSignature(ClosureSignatureSyntax)
-  
   case codeBlockItemList(CodeBlockItemListSyntax)
-  
   case codeBlockItem(CodeBlockItemSyntax)
-  
   case codeBlock(CodeBlockSyntax)
-  
   case compositionTypeElementList(CompositionTypeElementListSyntax)
-  
   case compositionTypeElement(CompositionTypeElementSyntax)
-  
   case compositionType(CompositionTypeSyntax)
-  
   case conditionElementList(ConditionElementListSyntax)
-  
   case conditionElement(ConditionElementSyntax)
-  
   case conformanceRequirement(ConformanceRequirementSyntax)
-  
   case constrainedSugarType(ConstrainedSugarTypeSyntax)
-  
   case continueStmt(ContinueStmtSyntax)
-  
   case conventionAttributeArguments(ConventionAttributeArgumentsSyntax)
-  
   case conventionWitnessMethodAttributeArguments(ConventionWitnessMethodAttributeArgumentsSyntax)
-  
   case declEffectSpecifiers(DeclEffectSpecifiersSyntax)
-  
   case declModifierDetail(DeclModifierDetailSyntax)
-  
   case declModifier(DeclModifierSyntax)
-  
   case declNameArgumentList(DeclNameArgumentListSyntax)
-  
   case declNameArgument(DeclNameArgumentSyntax)
-  
   case declNameArguments(DeclNameArgumentsSyntax)
-  
   case declName(DeclNameSyntax)
-  
   case deferStmt(DeferStmtSyntax)
-  
   case deinitializerDecl(DeinitializerDeclSyntax)
-  
   case derivativeRegistrationAttributeArguments(DerivativeRegistrationAttributeArgumentsSyntax)
-  
   case designatedTypeElement(DesignatedTypeElementSyntax)
-  
   case designatedTypeList(DesignatedTypeListSyntax)
-  
   case dictionaryElementList(DictionaryElementListSyntax)
-  
   case dictionaryElement(DictionaryElementSyntax)
-  
   case dictionaryExpr(DictionaryExprSyntax)
-  
   case dictionaryType(DictionaryTypeSyntax)
-  
   case differentiabilityParamList(DifferentiabilityParamListSyntax)
-  
   case differentiabilityParam(DifferentiabilityParamSyntax)
-  
   case differentiabilityParamsClause(DifferentiabilityParamsClauseSyntax)
-  
   case differentiabilityParams(DifferentiabilityParamsSyntax)
-  
   case differentiableAttributeArguments(DifferentiableAttributeArgumentsSyntax)
-  
   case discardAssignmentExpr(DiscardAssignmentExprSyntax)
-  
   case doStmt(DoStmtSyntax)
-  
   case documentationAttributeArgument(DocumentationAttributeArgumentSyntax)
-  
   case documentationAttributeArguments(DocumentationAttributeArgumentsSyntax)
-  
   case dynamicReplacementArguments(DynamicReplacementArgumentsSyntax)
-  
   case editorPlaceholderDecl(EditorPlaceholderDeclSyntax)
-  
   case editorPlaceholderExpr(EditorPlaceholderExprSyntax)
-  
   case effectsArguments(EffectsArgumentsSyntax)
-  
   case enumCaseDecl(EnumCaseDeclSyntax)
-  
   case enumCaseElementList(EnumCaseElementListSyntax)
-  
   case enumCaseElement(EnumCaseElementSyntax)
-  
   case enumDecl(EnumDeclSyntax)
-  
   case exposeAttributeArguments(ExposeAttributeArgumentsSyntax)
-  
   case exprList(ExprListSyntax)
-  
   case expressionPattern(ExpressionPatternSyntax)
-  
   case expressionSegment(ExpressionSegmentSyntax)
-  
   case expressionStmt(ExpressionStmtSyntax)
-  
   case extensionDecl(ExtensionDeclSyntax)
-  
   case fallthroughStmt(FallthroughStmtSyntax)
-  
   case floatLiteralExpr(FloatLiteralExprSyntax)
-  
   case forInStmt(ForInStmtSyntax)
-  
   case forcedValueExpr(ForcedValueExprSyntax)
-  
   case functionCallExpr(FunctionCallExprSyntax)
-  
   case functionDecl(FunctionDeclSyntax)
-  
   case functionParameterList(FunctionParameterListSyntax)
-  
   case functionParameter(FunctionParameterSyntax)
-  
   case functionSignature(FunctionSignatureSyntax)
-  
   case functionType(FunctionTypeSyntax)
-  
   case genericArgumentClause(GenericArgumentClauseSyntax)
-  
   case genericArgumentList(GenericArgumentListSyntax)
-  
   case genericArgument(GenericArgumentSyntax)
-  
   case genericParameterClause(GenericParameterClauseSyntax)
-  
   case genericParameterList(GenericParameterListSyntax)
-  
   case genericParameter(GenericParameterSyntax)
-  
   case genericRequirementList(GenericRequirementListSyntax)
-  
   case genericRequirement(GenericRequirementSyntax)
-  
   case genericWhereClause(GenericWhereClauseSyntax)
-  
   case guardStmt(GuardStmtSyntax)
-  
   case identifierExpr(IdentifierExprSyntax)
-  
   case identifierPattern(IdentifierPatternSyntax)
-  
   case ifConfigClauseList(IfConfigClauseListSyntax)
-  
   case ifConfigClause(IfConfigClauseSyntax)
-  
   case ifConfigDecl(IfConfigDeclSyntax)
-  
   case ifExpr(IfExprSyntax)
-  
   case implementsAttributeArguments(ImplementsAttributeArgumentsSyntax)
-  
   case implicitlyUnwrappedOptionalType(ImplicitlyUnwrappedOptionalTypeSyntax)
-  
   case importDecl(ImportDeclSyntax)
-  
   case inOutExpr(InOutExprSyntax)
-  
   case infixOperatorExpr(InfixOperatorExprSyntax)
-  
   case inheritedTypeList(InheritedTypeListSyntax)
-  
   case inheritedType(InheritedTypeSyntax)
-  
   case initializerClause(InitializerClauseSyntax)
-  
   case initializerDecl(InitializerDeclSyntax)
-  
   case integerLiteralExpr(IntegerLiteralExprSyntax)
-  
   case isExpr(IsExprSyntax)
-  
   case isTypePattern(IsTypePatternSyntax)
-  
   case keyPathComponentList(KeyPathComponentListSyntax)
-  
   case keyPathComponent(KeyPathComponentSyntax)
-  
   case keyPathExpr(KeyPathExprSyntax)
-  
   case keyPathOptionalComponent(KeyPathOptionalComponentSyntax)
-  
   case keyPathPropertyComponent(KeyPathPropertyComponentSyntax)
-  
   case keyPathSubscriptComponent(KeyPathSubscriptComponentSyntax)
-  
   case labeledSpecializeEntry(LabeledSpecializeEntrySyntax)
-  
   case labeledStmt(LabeledStmtSyntax)
-  
   case layoutRequirement(LayoutRequirementSyntax)
-  
   case macroDecl(MacroDeclSyntax)
-  
   case macroExpansionDecl(MacroExpansionDeclSyntax)
-  
   case macroExpansionExpr(MacroExpansionExprSyntax)
-  
   case matchingPatternCondition(MatchingPatternConditionSyntax)
-  
   case memberAccessExpr(MemberAccessExprSyntax)
-  
   case memberDeclBlock(MemberDeclBlockSyntax)
-  
   case memberDeclListItem(MemberDeclListItemSyntax)
-  
   case memberDeclList(MemberDeclListSyntax)
-  
   case memberTypeIdentifier(MemberTypeIdentifierSyntax)
-  
   case metatypeType(MetatypeTypeSyntax)
-  
   case missingDecl(MissingDeclSyntax)
-  
   case missingExpr(MissingExprSyntax)
-  
   case missingPattern(MissingPatternSyntax)
-  
   case missingStmt(MissingStmtSyntax)
-  
   case missing(MissingSyntax)
-  
   case missingType(MissingTypeSyntax)
-  
   case modifierList(ModifierListSyntax)
-  
   case moveExpr(MoveExprSyntax)
-  
   case multipleTrailingClosureElementList(MultipleTrailingClosureElementListSyntax)
-  
   case multipleTrailingClosureElement(MultipleTrailingClosureElementSyntax)
-  
   case namedOpaqueReturnType(NamedOpaqueReturnTypeSyntax)
-  
   case nilLiteralExpr(NilLiteralExprSyntax)
-  
   case objCSelectorPiece(ObjCSelectorPieceSyntax)
-  
   case objCSelector(ObjCSelectorSyntax)
-  
   case opaqueReturnTypeOfAttributeArguments(OpaqueReturnTypeOfAttributeArgumentsSyntax)
-  
   case operatorDecl(OperatorDeclSyntax)
-  
   case operatorPrecedenceAndTypes(OperatorPrecedenceAndTypesSyntax)
-  
   case optionalBindingCondition(OptionalBindingConditionSyntax)
-  
   case optionalChainingExpr(OptionalChainingExprSyntax)
-  
   case optionalType(OptionalTypeSyntax)
-  
   case originallyDefinedInArguments(OriginallyDefinedInArgumentsSyntax)
-  
   case packElementExpr(PackElementExprSyntax)
-  
   case packExpansionExpr(PackExpansionExprSyntax)
-  
   case packExpansionType(PackExpansionTypeSyntax)
-  
   case packReferenceType(PackReferenceTypeSyntax)
-  
   case parameterClause(ParameterClauseSyntax)
-  
   case patternBindingList(PatternBindingListSyntax)
-  
   case patternBinding(PatternBindingSyntax)
-  
   case postfixIfConfigExpr(PostfixIfConfigExprSyntax)
-  
   case postfixUnaryExpr(PostfixUnaryExprSyntax)
-  
   case poundSourceLocationArgs(PoundSourceLocationArgsSyntax)
-  
   case poundSourceLocation(PoundSourceLocationSyntax)
-  
   case precedenceGroupAssignment(PrecedenceGroupAssignmentSyntax)
-  
   case precedenceGroupAssociativity(PrecedenceGroupAssociativitySyntax)
-  
   case precedenceGroupAttributeList(PrecedenceGroupAttributeListSyntax)
-  
   case precedenceGroupDecl(PrecedenceGroupDeclSyntax)
-  
   case precedenceGroupNameElement(PrecedenceGroupNameElementSyntax)
-  
   case precedenceGroupNameList(PrecedenceGroupNameListSyntax)
-  
   case precedenceGroupRelation(PrecedenceGroupRelationSyntax)
-  
   case prefixOperatorExpr(PrefixOperatorExprSyntax)
-  
   case primaryAssociatedTypeClause(PrimaryAssociatedTypeClauseSyntax)
-  
   case primaryAssociatedTypeList(PrimaryAssociatedTypeListSyntax)
-  
   case primaryAssociatedType(PrimaryAssociatedTypeSyntax)
-  
   case protocolDecl(ProtocolDeclSyntax)
-  
   case qualifiedDeclName(QualifiedDeclNameSyntax)
-  
   case regexLiteralExpr(RegexLiteralExprSyntax)
-  
   case repeatWhileStmt(RepeatWhileStmtSyntax)
-  
   case returnClause(ReturnClauseSyntax)
-  
   case returnStmt(ReturnStmtSyntax)
-  
   case sameTypeRequirement(SameTypeRequirementSyntax)
-  
   case sequenceExpr(SequenceExprSyntax)
-  
   case simpleTypeIdentifier(SimpleTypeIdentifierSyntax)
-  
   case sourceFile(SourceFileSyntax)
-  
   case specializeAttributeSpecList(SpecializeAttributeSpecListSyntax)
-  
   case specializeExpr(SpecializeExprSyntax)
-  
   case stringLiteralExpr(StringLiteralExprSyntax)
-  
   case stringLiteralSegments(StringLiteralSegmentsSyntax)
-  
   case stringSegment(StringSegmentSyntax)
-  
   case structDecl(StructDeclSyntax)
-  
   case subscriptDecl(SubscriptDeclSyntax)
-  
   case subscriptExpr(SubscriptExprSyntax)
-  
   case superRefExpr(SuperRefExprSyntax)
-  
   case switchCaseLabel(SwitchCaseLabelSyntax)
-  
   case switchCaseList(SwitchCaseListSyntax)
-  
   case switchCase(SwitchCaseSyntax)
-  
   case switchDefaultLabel(SwitchDefaultLabelSyntax)
-  
   case switchExpr(SwitchExprSyntax)
-  
   case targetFunctionEntry(TargetFunctionEntrySyntax)
-  
   case ternaryExpr(TernaryExprSyntax)
-  
   case throwStmt(ThrowStmtSyntax)
-  
   case tryExpr(TryExprSyntax)
-  
   case tupleExprElementList(TupleExprElementListSyntax)
-  
   case tupleExprElement(TupleExprElementSyntax)
-  
   case tupleExpr(TupleExprSyntax)
-  
   case tuplePatternElementList(TuplePatternElementListSyntax)
-  
   case tuplePatternElement(TuplePatternElementSyntax)
-  
   case tuplePattern(TuplePatternSyntax)
-  
   case tupleTypeElementList(TupleTypeElementListSyntax)
-  
   case tupleTypeElement(TupleTypeElementSyntax)
-  
   case tupleType(TupleTypeSyntax)
-  
   case typeAnnotation(TypeAnnotationSyntax)
-  
   case typeEffectSpecifiers(TypeEffectSpecifiersSyntax)
-  
   case typeExpr(TypeExprSyntax)
-  
   case typeInheritanceClause(TypeInheritanceClauseSyntax)
-  
   case typeInitializerClause(TypeInitializerClauseSyntax)
-  
   case typealiasDecl(TypealiasDeclSyntax)
-  
   case unavailableFromAsyncArguments(UnavailableFromAsyncArgumentsSyntax)
-  
   case underscorePrivateAttributeArguments(UnderscorePrivateAttributeArgumentsSyntax)
-  
   case unexpectedNodes(UnexpectedNodesSyntax)
-  
   case unresolvedAsExpr(UnresolvedAsExprSyntax)
-  
   case unresolvedIsExpr(UnresolvedIsExprSyntax)
-  
   case unresolvedPatternExpr(UnresolvedPatternExprSyntax)
-  
   case unresolvedTernaryExpr(UnresolvedTernaryExprSyntax)
-  
   case valueBindingPattern(ValueBindingPatternSyntax)
-  
   case variableDecl(VariableDeclSyntax)
-  
   case versionTuple(VersionTupleSyntax)
-  
   case whereClause(WhereClauseSyntax)
-  
   case whileStmt(WhileStmtSyntax)
-  
   case wildcardPattern(WildcardPatternSyntax)
-  
   case yieldExprListElement(YieldExprListElementSyntax)
-  
   case yieldExprList(YieldExprListSyntax)
-  
   case yieldList(YieldListSyntax)
-  
   case yieldStmt(YieldStmtSyntax)
 }
 

@@ -17,27 +17,16 @@
 extension Parser {
   enum TypeAttribute: TokenSpecSet {
     case autoclosure
-    
     case convention
-    
     case noescape
-    
     case escaping
-    
     case differentiable
-    
     case noDerivative
-    
     case async
-    
     case Sendable
-    
     case unchecked
-    
     case _local
-    
     case _noMetadata
-    
     case _opaqueReturnTypeOf
     
     init?(lexeme: Lexer.Lexeme) {

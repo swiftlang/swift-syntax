@@ -1202,7 +1202,6 @@ public struct RawAttributeListSyntax: RawSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Element: RawSyntaxNodeProtocol {
     case `attribute`(RawAttributeSyntax)
-    
     case `ifConfigDecl`(RawIfConfigDeclSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
@@ -1280,43 +1279,24 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Argument: RawSyntaxNodeProtocol {
     case `argumentList`(RawTupleExprElementListSyntax)
-    
     case `token`(RawTokenSyntax)
-    
     case `string`(RawStringLiteralExprSyntax)
-    
     case `availability`(RawAvailabilitySpecListSyntax)
-    
     case `specializeArguments`(RawSpecializeAttributeSpecListSyntax)
-    
     case `objCName`(RawObjCSelectorSyntax)
-    
     case `implementsArguments`(RawImplementsAttributeArgumentsSyntax)
-    
     case `differentiableArguments`(RawDifferentiableAttributeArgumentsSyntax)
-    
     case `derivativeRegistrationArguments`(RawDerivativeRegistrationAttributeArgumentsSyntax)
-    
     case `backDeployedArguments`(RawBackDeployedAttributeSpecListSyntax)
-    
     case `conventionArguments`(RawConventionAttributeArgumentsSyntax)
-    
     case `conventionWitnessMethodArguments`(RawConventionWitnessMethodAttributeArgumentsSyntax)
-    
     case `opaqueReturnTypeOfAttributeArguments`(RawOpaqueReturnTypeOfAttributeArgumentsSyntax)
-    
     case `exposeAttributeArguments`(RawExposeAttributeArgumentsSyntax)
-    
     case `originallyDefinedInArguments`(RawOriginallyDefinedInArgumentsSyntax)
-    
     case `underscorePrivateAttributeArguments`(RawUnderscorePrivateAttributeArgumentsSyntax)
-    
     case `dynamicReplacementArguments`(RawDynamicReplacementArgumentsSyntax)
-    
     case `unavailableFromAsyncArguments`(RawUnavailableFromAsyncArgumentsSyntax)
-    
     case `effectsArguments`(RawEffectsArgumentsSyntax)
-    
     case `documentationArguments`(RawDocumentationAttributeArgumentsSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
@@ -1636,9 +1616,7 @@ public struct RawAvailabilityArgumentSyntax: RawSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Entry: RawSyntaxNodeProtocol {
     case `token`(RawTokenSyntax)
-    
     case `availabilityVersionRestriction`(RawAvailabilityVersionRestrictionSyntax)
-    
     case `availabilityLabeledArgument`(RawAvailabilityLabeledArgumentSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
@@ -1922,7 +1900,6 @@ public struct RawAvailabilityLabeledArgumentSyntax: RawSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Value: RawSyntaxNodeProtocol {
     case `string`(RawStringLiteralExprSyntax)
-    
     case `version`(RawVersionTupleSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
@@ -3722,7 +3699,6 @@ public struct RawClosureSignatureSyntax: RawSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Input: RawSyntaxNodeProtocol {
     case `simpleInput`(RawClosureParamListSyntax)
-    
     case `input`(RawParameterClauseSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
@@ -3914,9 +3890,7 @@ public struct RawCodeBlockItemSyntax: RawSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Item: RawSyntaxNodeProtocol {
     case `decl`(RawDeclSyntax)
-    
     case `stmt`(RawStmtSyntax)
-    
     case `expr`(RawExprSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
@@ -4310,11 +4284,8 @@ public struct RawConditionElementSyntax: RawSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Condition: RawSyntaxNodeProtocol {
     case `expression`(RawExprSyntax)
-    
     case `availability`(RawAvailabilityConditionSyntax)
-    
     case `matchingPattern`(RawMatchingPatternConditionSyntax)
-    
     case `optionalBinding`(RawOptionalBindingConditionSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
@@ -5845,7 +5816,6 @@ public struct RawDictionaryExprSyntax: RawExprSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Content: RawSyntaxNodeProtocol {
     case `colon`(RawTokenSyntax)
-    
     case `elements`(RawDictionaryElementListSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
@@ -6169,7 +6139,6 @@ public struct RawDifferentiabilityParamsClauseSyntax: RawSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Parameters: RawSyntaxNodeProtocol {
     case `parameter`(RawDifferentiabilityParamSyntax)
-    
     case `parameterList`(RawDifferentiabilityParamsSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
@@ -6591,7 +6560,6 @@ public struct RawDocumentationAttributeArgumentSyntax: RawSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Value: RawSyntaxNodeProtocol {
     case `token`(RawTokenSyntax)
-    
     case `string`(RawStringLiteralExprSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
@@ -9300,9 +9268,7 @@ public struct RawGenericRequirementSyntax: RawSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Body: RawSyntaxNodeProtocol {
     case `sameTypeRequirement`(RawSameTypeRequirementSyntax)
-    
     case `conformanceRequirement`(RawConformanceRequirementSyntax)
-    
     case `layoutRequirement`(RawLayoutRequirementSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
@@ -9728,13 +9694,9 @@ public struct RawIfConfigClauseSyntax: RawSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Elements: RawSyntaxNodeProtocol {
     case `statements`(RawCodeBlockItemListSyntax)
-    
     case `switchCases`(RawSwitchCaseListSyntax)
-    
     case `decls`(RawMemberDeclListSyntax)
-    
     case `postfixExpression`(RawExprSyntax)
-    
     case `attributes`(RawAttributeListSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
@@ -9928,7 +9890,6 @@ public struct RawIfExprSyntax: RawExprSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum ElseBody: RawSyntaxNodeProtocol {
     case `ifExpr`(RawIfExprSyntax)
-    
     case `codeBlock`(RawCodeBlockSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
@@ -11024,9 +10985,7 @@ public struct RawKeyPathComponentSyntax: RawSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Component: RawSyntaxNodeProtocol {
     case `property`(RawKeyPathPropertyComponentSyntax)
-    
     case `subscript`(RawKeyPathSubscriptComponentSyntax)
-    
     case `optional`(RawKeyPathOptionalComponentSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
@@ -11724,7 +11683,6 @@ public struct RawMacroDeclSyntax: RawDeclSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Signature: RawSyntaxNodeProtocol {
     case `functionLike`(RawFunctionSignatureSyntax)
-    
     case `valueLike`(RawTypeAnnotationSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
@@ -14407,7 +14365,6 @@ public struct RawPatternBindingSyntax: RawSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Accessor: RawSyntaxNodeProtocol {
     case `accessors`(RawAccessorBlockSyntax)
-    
     case `getter`(RawCodeBlockSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
@@ -15080,9 +15037,7 @@ public struct RawPrecedenceGroupAttributeListSyntax: RawSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Element: RawSyntaxNodeProtocol {
     case `precedenceGroupRelation`(RawPrecedenceGroupRelationSyntax)
-    
     case `precedenceGroupAssignment`(RawPrecedenceGroupAssignmentSyntax)
-    
     case `precedenceGroupAssociativity`(RawPrecedenceGroupAssociativitySyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
@@ -16506,11 +16461,8 @@ public struct RawSpecializeAttributeSpecListSyntax: RawSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Element: RawSyntaxNodeProtocol {
     case `labeledSpecializeEntry`(RawLabeledSpecializeEntrySyntax)
-    
     case `availabilityEntry`(RawAvailabilityEntrySyntax)
-    
     case `targetFunctionEntry`(RawTargetFunctionEntrySyntax)
-    
     case `genericWhereClause`(RawGenericWhereClauseSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
@@ -16803,7 +16755,6 @@ public struct RawStringLiteralSegmentsSyntax: RawSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Element: RawSyntaxNodeProtocol {
     case `stringSegment`(RawStringSegmentSyntax)
-    
     case `expressionSegment`(RawExpressionSegmentSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
@@ -17073,7 +17024,6 @@ public struct RawSubscriptDeclSyntax: RawDeclSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Accessor: RawSyntaxNodeProtocol {
     case `accessors`(RawAccessorBlockSyntax)
-    
     case `getter`(RawCodeBlockSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
@@ -17489,7 +17439,6 @@ public struct RawSwitchCaseListSyntax: RawSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Element: RawSyntaxNodeProtocol {
     case `switchCase`(RawSwitchCaseSyntax)
-    
     case `ifConfigDecl`(RawIfConfigDeclSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
@@ -17567,7 +17516,6 @@ public struct RawSwitchCaseSyntax: RawSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Label: RawSyntaxNodeProtocol {
     case `default`(RawSwitchDefaultLabelSyntax)
-    
     case `case`(RawSwitchCaseLabelSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
@@ -20438,7 +20386,6 @@ public struct RawYieldStmtSyntax: RawStmtSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Yields: RawSyntaxNodeProtocol {
     case `yieldList`(RawYieldListSyntax)
-    
     case `simpleYield`(RawExprSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {

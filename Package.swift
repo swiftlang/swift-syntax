@@ -200,6 +200,12 @@ let package = Package(
         "SwiftRefactor", "SwiftSyntaxBuilder", "_SwiftSyntaxTestSupport",
       ]
     ),
+    .testTarget(
+      name: "SwiftCompilerPluginTest",
+      dependencies: [
+        "SwiftCompilerPlugin"
+      ]
+    ),
   ]
 )
 

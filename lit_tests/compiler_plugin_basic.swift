@@ -5,7 +5,7 @@
 // RUN: %swift-frontend -typecheck -swift-version 5 \
 // RUN:   -enable-experimental-feature Macros \
 // RUN:   -dump-macro-expansions \
-// RUN:   -load-plugin-executable %build_dir/ExamplePlugin#ExamplePlugin \
+// RUN:   -load-plugin-executable %examples_bin_path/ExamplePlugin#ExamplePlugin \
 // RUN    -module-name MyApp \
 // RUN:   %s > %t/expansions-dump.txt 2>&1
 //

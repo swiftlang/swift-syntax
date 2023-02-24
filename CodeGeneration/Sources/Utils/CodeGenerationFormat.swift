@@ -27,16 +27,8 @@ public class CodeGenerationFormat: BasicFormat {
     }
   }
 
-  public override func visit(_ node: MemberDeclBlockSyntax) -> MemberDeclBlockSyntax {
-    if node.members.count == 0 {
-      return node.with(\.leftBrace, .leftBraceToken())
-    } else {
-      return super.visit(node)
-    }
-  }
-
   public override func visit(_ node: CodeBlockItemSyntax) -> CodeBlockItemSyntax {
-    if node.parent?.parent?.is(SourceFileSyntax.self) == true, !node.item.is(ImportDeclSyntax.self) {
+    if node.parent?.parent?.is(SourceFileSyntax.self) == true, !shouldBeSeparatedByTwoNewlines(node: node) {
       let formatted = super.visit(node)
       return ensuringTwoLeadingNewlines(node: formatted)
     } else {
@@ -64,9 +56,17 @@ public class CodeGenerationFormat: BasicFormat {
     }
   }
 
+  public override func visit(_ node: MemberDeclBlockSyntax) -> MemberDeclBlockSyntax {
+    if node.members.count == 0 {
+      return node.with(\.leftBrace, .leftBraceToken())
+    } else {
+      return super.visit(node)
+    }
+  }
+
   public override func visit(_ node: MemberDeclListItemSyntax) -> MemberDeclListItemSyntax {
     let formatted = super.visit(node)
-    if node.indexInParent != 0 {
+    if node.indexInParent != 0 && !node.decl.is(EnumCaseDeclSyntax.self) {
       return ensuringTwoLeadingNewlines(node: formatted)
     } else {
       return formatted
@@ -84,6 +84,12 @@ public class CodeGenerationFormat: BasicFormat {
   }
 
   // MARK: - Private
+
+  private func shouldBeSeparatedByTwoNewlines(node: CodeBlockItemSyntax) -> Bool {
+    // First item in the `CodeBlockItemListSyntax` don't need a newline or identation if the parent is a `SourceFileSyntax`.
+    // We want to group imports so newline between them should be omitted
+    return node.parent?.as(CodeBlockItemListSyntax.self)?.first == node || node.item.is(ImportDeclSyntax.self)
+  }
 
   private func ensuringTwoLeadingNewlines<NodeType: SyntaxProtocol>(node: NodeType) -> NodeType {
     if node.leadingTrivia?.first?.isNewline ?? false {

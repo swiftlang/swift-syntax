@@ -32,5 +32,5 @@ public protocol ConformanceMacro: AttachedMacro {
     of node: AttributeSyntax,
     providingConformancesOf declaration: Declaration,
     in context: Context
-  ) throws -> [(TypeSyntax, WhereClauseSyntax?)]
+  ) throws -> [(TypeSyntax, GenericWhereClauseSyntax?)]
 }

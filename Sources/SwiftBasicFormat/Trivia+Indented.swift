@@ -13,18 +13,24 @@
 import SwiftSyntax
 
 extension Trivia {
-  func indented(indentation: TriviaPiece) -> Trivia {
+  /// Makes sure each newline of this trivia is followed by `indentation`. If this is not the case, the existing indentation is extended to `indentation`.
+  /// `isOnNewline` determines whether the trivia starts on a new line. If this is the case, the function makes sure that the returned trivia starts with `indentation`.
+  func indented(indentation: TriviaPiece, isOnNewline: Bool = false) -> Trivia {
     var indentedPieces: [TriviaPiece] = []
     for (index, piece) in self.enumerated() {
-      let nextPiece = index < pieces.count - 1 ? pieces[index + 1] : nil
-      indentedPieces.append(piece)
-      if piece.isNewline {
-        switch (nextPiece, indentation) {
-        case (.spaces(let nextPieceSpaces)?, .spaces(let indentationSpaces)):
+      let previousPieceIsNewline: Bool
+      if index == 0 {
+        previousPieceIsNewline = isOnNewline
+      } else {
+        previousPieceIsNewline = pieces[index - 1].isNewline
+      }
+      if previousPieceIsNewline {
+        switch (piece, indentation) {
+        case (.spaces(let nextPieceSpaces), .spaces(let indentationSpaces)):
           if nextPieceSpaces < indentationSpaces {
             indentedPieces.append(.spaces(indentationSpaces - nextPieceSpaces))
           }
-        case (.tabs(let nextPieceTabs)?, .tabs(let indentationTabs)):
+        case (.tabs(let nextPieceTabs), .tabs(let indentationTabs)):
           if nextPieceTabs < indentationTabs {
             indentedPieces.append(.tabs(indentationTabs - nextPieceTabs))
           }
@@ -32,6 +38,10 @@ extension Trivia {
           indentedPieces.append(indentation)
         }
       }
+      indentedPieces.append(piece)
+    }
+    if self.pieces.last?.isNewline == true {
+      indentedPieces.append(indentation)
     }
     return Trivia(pieces: indentedPieces)
   }

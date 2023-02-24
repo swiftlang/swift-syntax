@@ -206,6 +206,40 @@ extension CompilerPlugin {
       expanded =
         peers
         .map { $0.trimmedDescription }
+
+    case (let attachedMacro as ConformanceMacro.Type, .conformance):
+      guard
+        let declGroup = declarationNode.asProtocol(DeclGroupSyntax.self),
+        let identified = declarationNode.asProtocol(IdentifiedDeclSyntax.self)
+      else {
+        fatalError("type mismatch")
+      }
+
+      // Local function to expand a conformance macro once we've opened up
+      // the existential.
+      func expandConformanceMacro<Node: DeclGroupSyntax>(
+        _ node: Node
+      ) throws -> [(TypeSyntax, GenericWhereClauseSyntax?)] {
+        return try attachedMacro.expansion(
+          of: customAttributeNode,
+          providingConformancesOf: node,
+          in: context
+        )
+      }
+
+      let conformances = try _openExistential(
+        declGroup,
+        do: expandConformanceMacro
+      )
+
+      // Form a buffer of extension declarations to return to the caller.
+      expanded = conformances.map { typeSyntax, whereClause in
+        let typeName = identified.identifier.trimmedDescription
+        let protocolName = typeSyntax.trimmedDescription
+        let whereClause = whereClause?.trimmedDescription ?? ""
+        return "extension \(typeName) : \(protocolName) \(whereClause) {}"
+      }
+
     default:
       fatalError("\(macroDefinition) does not conform to any known attached macro protocol")
     }

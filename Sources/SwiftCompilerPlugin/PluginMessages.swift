@@ -47,7 +47,7 @@ internal enum PluginToHostMessage: Codable {
 }
 
 /*namespace*/ internal enum PluginMessage {
-  static var PROTOCOL_VERSION_NUMBER: Int { 1 }
+  static var PROTOCOL_VERSION_NUMBER: Int { 2 }  // Added 'MacroRole.conformance'
 
   struct PluginCapability: Codable {
     var protocolVersion: Int
@@ -72,6 +72,7 @@ internal enum PluginToHostMessage: Codable {
     case memberAttribute
     case member
     case peer
+    case conformance
   }
 
   struct SourceLocation: Codable {

@@ -7,7 +7,7 @@
 // RUN:   -dump-macro-expansions \
 // RUN:   -load-plugin-executable %examples_bin_path/ExamplePlugin#ExamplePlugin \
 // RUN    -module-name MyApp \
-// RUN:   %s > %t/expansions-dump.txt 2>&1
+// RUN:   %s 2>&1 | tee %t/expansions-dump.txt
 //
 // RUN: %FileCheck %s < %t/expansions-dump.txt
 

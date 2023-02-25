@@ -65,7 +65,7 @@ extension CompilerPlugin {
 
   /// Main entry point of the plugin — sets up a communication channel with
   /// the plugin host and runs the main message loop.
-  public static func main() async throws {
+  public static func main() throws {
     // Duplicate the `stdin` file descriptor, which we will then use for
     // receiving messages from the plugin host.
     let inputFD = dup(fileno(stdin))
@@ -115,7 +115,7 @@ extension CompilerPlugin {
     let instance = Self()
     do {
       while let message = try pluginHostConnection.waitForNextMessage() {
-        try await instance.handleMessage(message)
+        try instance.handleMessage(message)
       }
     } catch {
       // Emit a diagnostic and indicate failure to the plugin host,
@@ -137,7 +137,7 @@ extension CompilerPlugin {
   }
 
   /// Handles a single message received from the plugin host.
-  fileprivate func handleMessage(_ message: HostToPluginMessage) async throws {
+  fileprivate func handleMessage(_ message: HostToPluginMessage) throws {
     switch message {
     case .getCapability:
       try pluginHostConnection.sendMessage(

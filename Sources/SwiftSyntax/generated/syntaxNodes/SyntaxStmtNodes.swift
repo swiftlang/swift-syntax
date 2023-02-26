@@ -1237,6 +1237,150 @@ extension ForInStmtSyntax: CustomReflectable {
   }
 }
 
+// MARK: - ForgetStmtSyntax
+
+
+public struct ForgetStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+  
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .forgetStmt else { 
+      return nil 
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+  
+  /// Creates a `ForgetStmtSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .forgetStmt)
+    self._syntaxNode = Syntax(data)
+  }
+  
+  public init<E: ExprSyntaxProtocol>(
+      leadingTrivia: Trivia? = nil, 
+      _ unexpectedBeforeForgetKeyword: UnexpectedNodesSyntax? = nil, 
+      forgetKeyword: TokenSyntax = .keyword(._forget), 
+      _ unexpectedBetweenForgetKeywordAndExpression: UnexpectedNodesSyntax? = nil, 
+      expression: E, 
+      _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil, 
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
+            unexpectedBeforeForgetKeyword, 
+            forgetKeyword, 
+            unexpectedBetweenForgetKeywordAndExpression, 
+            expression, 
+            unexpectedAfterExpression
+          ))) {(arena, _) in 
+      let layout: [RawSyntax?] = [
+          unexpectedBeforeForgetKeyword?.raw, 
+          forgetKeyword.raw, 
+          unexpectedBetweenForgetKeywordAndExpression?.raw, 
+          expression.raw, 
+          unexpectedAfterExpression?.raw
+        ]
+      let raw = RawSyntax.makeLayout(
+          kind: SyntaxKind.forgetStmt, 
+          from: layout, 
+          arena: arena, 
+          leadingTrivia: leadingTrivia, 
+          trailingTrivia: trailingTrivia
+        )
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+  
+  public var unexpectedBeforeForgetKeyword: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = ForgetStmtSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var forgetKeyword: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = ForgetStmtSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenForgetKeywordAndExpression: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = ForgetStmtSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var expression: ExprSyntax {
+    get {
+      return ExprSyntax(data.child(at: 3, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = ForgetStmtSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedAfterExpression: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = ForgetStmtSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+          \Self.unexpectedBeforeForgetKeyword, 
+          \Self.forgetKeyword, 
+          \Self.unexpectedBetweenForgetKeywordAndExpression, 
+          \Self.expression, 
+          \Self.unexpectedAfterExpression
+        ])
+  }
+  
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
+}
+
+extension ForgetStmtSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+          "unexpectedBeforeForgetKeyword": unexpectedBeforeForgetKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "forgetKeyword": Syntax(forgetKeyword).asProtocol(SyntaxProtocol.self), 
+          "unexpectedBetweenForgetKeywordAndExpression": unexpectedBetweenForgetKeywordAndExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "expression": Syntax(expression).asProtocol(SyntaxProtocol.self), 
+          "unexpectedAfterExpression": unexpectedAfterExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
+        ])
+  }
+}
+
 // MARK: - GuardStmtSyntax
 
 

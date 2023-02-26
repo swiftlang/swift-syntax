@@ -133,6 +133,7 @@ public let KEYWORDS: [KeywordSpec] = [
   KeywordSpec("fileprivate", isLexerClassified: true, requiresTrailingSpace: true),
   KeywordSpec("final"),
   KeywordSpec("for", isLexerClassified: true, requiresTrailingSpace: true),
+  KeywordSpec("_forget"),
   KeywordSpec("forward"),
   KeywordSpec("func", isLexerClassified: true, requiresTrailingSpace: true),
   KeywordSpec("get"),

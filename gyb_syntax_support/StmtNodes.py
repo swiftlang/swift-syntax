@@ -219,6 +219,13 @@ STMT_NODES = [
              Child('Expression', kind='Expr'),
          ]),
 
+     # forget-stmt -> 'forget' expr ';'?
+    Node('ForgetStmt', name_for_diagnostics="'forget' statement", kind='Stmt',
+         children=[
+             Child('ForgetKeyword', kind='KeywordToken', token_choices=['KeywordToken|_forget']),
+             Child('Expression', kind='Expr'),
+         ]),
+
     # catch-item -> pattern? where-clause? ','?
     Node('CatchItem', name_for_diagnostics=None, kind='Syntax',
          traits=['WithTrailingComma'],

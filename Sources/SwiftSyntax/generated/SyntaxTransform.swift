@@ -539,6 +539,11 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ForcedValueExprSyntax) -> ResultType
   
+  /// Visiting `ForgetStmtSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: ForgetStmtSyntax) -> ResultType
+  
   /// Visiting `FunctionCallExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -2053,6 +2058,13 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
+  /// Visiting `ForgetStmtSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: ForgetStmtSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
   /// Visiting `FunctionCallExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -3356,6 +3368,8 @@ extension SyntaxTransformVisitor {
     case .forInStmt(let derived):
       return visit(derived)
     case .forcedValueExpr(let derived):
+      return visit(derived)
+    case .forgetStmt(let derived):
       return visit(derived)
     case .functionCallExpr(let derived):
       return visit(derived)

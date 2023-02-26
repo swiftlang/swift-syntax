@@ -753,6 +753,13 @@ open class SyntaxRewriter {
     return ExprSyntax(visitChildren(node))
   }
   
+  /// Visit a `ForgetStmtSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: ForgetStmtSyntax) -> StmtSyntax {
+    return StmtSyntax(visitChildren(node))
+  }
+  
   /// Visit a `FunctionCallExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -3376,6 +3383,20 @@ open class SyntaxRewriter {
   }
   
   /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplForgetStmtSyntax(_ data: SyntaxData) -> Syntax {
+    let node = ForgetStmtSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { 
+      visitPost(node._syntaxNode) 
+    }
+    if let newNode = visitAny(node._syntaxNode) { 
+      return newNode 
+    }
+    return Syntax(visit(node))
+  }
+  
+  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplFunctionCallExprSyntax(_ data: SyntaxData) -> Syntax {
     let node = FunctionCallExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -5809,6 +5830,8 @@ open class SyntaxRewriter {
       return visitImplForInStmtSyntax
     case .forcedValueExpr:
       return visitImplForcedValueExprSyntax
+    case .forgetStmt:
+      return visitImplForgetStmtSyntax
     case .functionCallExpr:
       return visitImplFunctionCallExprSyntax
     case .functionDecl:
@@ -6339,6 +6362,8 @@ open class SyntaxRewriter {
       return visitImplForInStmtSyntax(data)
     case .forcedValueExpr:
       return visitImplForcedValueExprSyntax(data)
+    case .forgetStmt:
+      return visitImplForgetStmtSyntax(data)
     case .functionCallExpr:
       return visitImplFunctionCallExprSyntax(data)
     case .functionDecl:

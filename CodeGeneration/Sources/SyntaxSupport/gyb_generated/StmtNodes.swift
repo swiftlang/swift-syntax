@@ -1,4 +1,4 @@
-//// Automatically Generated From GenericNodes.swift.gyb.
+//// Automatically Generated From StmtNodes.swift.gyb.
 //// Do Not Edit Directly!
 //===----------------------------------------------------------------------===//
 //
@@ -209,6 +209,16 @@ public let STMT_NODES: [Node] = [
          Child(name: "Body",
                kind: .node(kind: "CodeBlock"),
                nameForDiagnostics: "body")
+       ]),
+
+  Node(name: "ForgetStmt",
+       nameForDiagnostics: "'forget' statement",
+       kind: "Stmt",
+       children: [
+         Child(name: "ForgetKeyword",
+               kind: .token(choices: [.keyword(text: "_forget")])),
+         Child(name: "Expression",
+               kind: .node(kind: "Expr"))
        ]),
 
   Node(name: "GuardStmt",

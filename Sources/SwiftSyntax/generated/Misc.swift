@@ -120,6 +120,7 @@ extension Syntax {
           .node(FloatLiteralExprSyntax.self), 
           .node(ForInStmtSyntax.self), 
           .node(ForcedValueExprSyntax.self), 
+          .node(ForgetStmtSyntax.self), 
           .node(FunctionCallExprSyntax.self), 
           .node(FunctionDeclSyntax.self), 
           .node(FunctionParameterListSyntax.self), 
@@ -493,6 +494,8 @@ extension SyntaxKind {
       return ForInStmtSyntax.self
     case .forcedValueExpr:
       return ForcedValueExprSyntax.self
+    case .forgetStmt:
+      return ForgetStmtSyntax.self
     case .functionCallExpr:
       return FunctionCallExprSyntax.self
     case .functionDecl:
@@ -1020,6 +1023,8 @@ extension SyntaxKind {
       return "'for' statement"
     case .forcedValueExpr:
       return "force unwrap"
+    case .forgetStmt:
+      return "'forget' statement"
     case .functionCallExpr:
       return "function call"
     case .functionDecl:

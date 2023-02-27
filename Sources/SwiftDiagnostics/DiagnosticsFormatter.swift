@@ -12,12 +12,61 @@
 
 import SwiftSyntax
 
+extension Sequence where Element == Range<Int> {
+  /// Given a set of ranges that are sorted in order of nondecreasing lower
+  /// bound, merge any overlapping ranges to produce a sequence of
+  /// nonoverlapping ranges.
+  fileprivate func mergingOverlappingRanges() -> [Range<Int>] {
+    var result: [Range<Int>] = []
+
+    var prior: Range<Int>? = nil
+    for range in self {
+      // If this is the first range we've seen, note it as the prior and
+      // continue.
+      guard let priorRange = prior else {
+        prior = range
+        continue
+      }
+
+      // If the ranges overlap, expand the prior range.
+      if priorRange.overlaps(range) {
+        let lower = Swift.min(priorRange.lowerBound, range.lowerBound)
+        let upper = Swift.max(priorRange.upperBound, range.upperBound)
+        prior = lower..<upper
+        continue
+      }
+
+      // Append the prior range, then take this new range as the prior
+      result.append(priorRange)
+      prior = range
+    }
+
+    if let priorRange = prior {
+      result.append(priorRange)
+    }
+    return result
+  }
+}
+
 public struct DiagnosticsFormatter {
 
-  /// A wrapper struct for a source line and its diagnostics
+  /// A wrapper struct for a source line, its diagnostics, and any
+  /// non-diagnostic text that follows the line.
   private struct AnnotatedSourceLine {
     var diagnostics: [Diagnostic]
     var sourceString: String
+
+    /// Non-diagnostic text that is appended after this source line.
+    ///
+    /// Suffix text can be used to provide more information following a source
+    /// line, such as to provide an inset source buffer for a macro expansion
+    /// that occurs on that line.
+    var suffixText: String
+
+    /// Whether this line is free of annotations.
+    var isFreeOfAnnotations: Bool {
+      return diagnostics.isEmpty && suffixText.isEmpty
+    }
   }
 
   /// Number of lines which should be printed before and after the diagnostic message
@@ -41,9 +90,108 @@ public struct DiagnosticsFormatter {
     return formatter.annotatedSource(tree: tree, diags: diags)
   }
 
+  /// Colorize the given source line by applying highlights from diagnostics.
+  private func colorizeSourceLine<SyntaxType: SyntaxProtocol>(
+    _ annotatedLine: AnnotatedSourceLine,
+    lineNumber: Int,
+    tree: SyntaxType,
+    sourceLocationConverter slc: SourceLocationConverter
+  ) -> String {
+    guard colorize, !annotatedLine.diagnostics.isEmpty else {
+      return annotatedLine.sourceString
+    }
+
+    // Compute the set of highlight ranges that land on this line. These
+    // are column ranges, sorted in order of increasing starting column, and
+    // with overlapping ranges merged.
+    let highlightRanges: [Range<Int>] = annotatedLine.diagnostics.map {
+      $0.highlights
+    }.joined().compactMap { (highlight) -> Range<Int>? in
+      if highlight.root != Syntax(tree) {
+        return nil
+      }
+
+      let startLoc = highlight.startLocation(converter: slc, afterLeadingTrivia: true);
+      guard let startLine = startLoc.line else {
+        return nil
+      }
+
+      // Find the starting column.
+      let startColumn: Int
+      if startLine < lineNumber {
+        startColumn = 1
+      } else if startLine == lineNumber, let column = startLoc.column {
+        startColumn = column
+      } else {
+        return nil
+      }
+
+      // Find the ending column.
+      let endLoc = highlight.endLocation(converter: slc, afterTrailingTrivia: false)
+      guard let endLine = endLoc.line else {
+        return nil
+      }
+
+      let endColumn: Int
+      if endLine > lineNumber {
+        endColumn = annotatedLine.sourceString.count
+      } else if endLine == lineNumber, let column = endLoc.column {
+        endColumn = column
+      } else {
+        return nil
+      }
+
+      if startColumn == endColumn {
+        return nil
+      }
+
+      return startColumn..<endColumn
+    }.sorted { (lhs, rhs) in
+      lhs.lowerBound < rhs.lowerBound
+    }.mergingOverlappingRanges()
+
+    // Map the column ranges into index ranges within the source string itself.
+    let sourceString = annotatedLine.sourceString
+    let highlightIndexRanges: [Range<String.Index>] = highlightRanges.map { highlightRange in
+      let startIndex = sourceString.index(sourceString.startIndex, offsetBy: highlightRange.lowerBound - 1)
+      let endIndex = sourceString.index(startIndex, offsetBy: highlightRange.count)
+      return startIndex..<endIndex
+    }
+
+    // Form the annotated string by copying in text from the original source,
+    // highlighting the column ranges.
+    var resultSourceString: String = ""
+    var sourceIndex = sourceString.startIndex
+    let annotation = ANSIAnnotation.sourceHighlight
+    for highlightRange in highlightIndexRanges {
+      // Text before the highlight range
+      resultSourceString += sourceString[sourceIndex..<highlightRange.lowerBound]
+
+      // Highlighted source text
+      let highlightString = String(sourceString[highlightRange])
+      resultSourceString += annotation.applied(to: highlightString)
+
+      sourceIndex = highlightRange.upperBound
+    }
+
+    resultSourceString += sourceString[sourceIndex...]
+    return resultSourceString
+  }
+
   /// Print given diagnostics for a given syntax tree on the command line
-  public func annotatedSource<SyntaxType: SyntaxProtocol>(tree: SyntaxType, diags: [Diagnostic]) -> String {
-    let slc = SourceLocationConverter(file: "", tree: tree)
+  ///
+  /// - Parameters:
+  ///   - suffixTexts: suffix text to be printed at the given absolute
+  ///                  locations within the source file.
+  func annotatedSource<SyntaxType: SyntaxProtocol>(
+    fileName: String?,
+    tree: SyntaxType,
+    diags: [Diagnostic],
+    indentString: String,
+    suffixTexts: [(AbsolutePosition, String)],
+    sourceLocationConverter: SourceLocationConverter? = nil
+  ) -> String {
+    let slc = sourceLocationConverter ?? SourceLocationConverter(file: fileName ?? "", tree: tree)
 
     // First, we need to put each line and its diagnostics together
     var annotatedSourceLines = [AnnotatedSourceLine]()
@@ -52,19 +200,33 @@ public struct DiagnosticsFormatter {
       let diagsForLine = diags.filter { diag in
         return diag.location(converter: slc).line == (sourceLineIndex + 1)
       }
-      annotatedSourceLines.append(AnnotatedSourceLine(diagnostics: diagsForLine, sourceString: sourceLine))
+      let suffixText = suffixTexts.compactMap { (position, text) in
+        if slc.location(for: position).line == (sourceLineIndex + 1) {
+          return text
+        }
+
+        return nil
+      }.joined()
+
+      annotatedSourceLines.append(AnnotatedSourceLine(diagnostics: diagsForLine, sourceString: sourceLine, suffixText: suffixText))
     }
 
     // Only lines with diagnostic messages should be printed, but including some context
     let rangesToPrint = annotatedSourceLines.enumerated().compactMap { (lineIndex, sourceLine) -> Range<Int>? in
       let lineNumber = lineIndex + 1
-      if !sourceLine.diagnostics.isEmpty {
+      if !sourceLine.isFreeOfAnnotations {
         return Range<Int>(uncheckedBounds: (lower: lineNumber - contextSize, upper: lineNumber + contextSize + 1))
       }
       return nil
     }
 
     var annotatedSource = ""
+
+    // If there was a filename, add it first.
+    if let fileName = fileName {
+      let header = colorizeBufferOutline("===")
+      annotatedSource.append("\(indentString)\(header) \(fileName) \(header)\n")
+    }
 
     /// Keep track if a line missing char should be printed
     var hasLineBeenSkipped = false
@@ -85,17 +247,28 @@ public struct DiagnosticsFormatter {
       // line numbers should be right aligned
       let lineNumberString = String(lineNumber)
       let leadingSpaces = String(repeating: " ", count: maxNumberOfDigits - lineNumberString.count)
-      let linePrefix = "\(leadingSpaces)\(lineNumberString) │ "
+      let linePrefix = "\(leadingSpaces)\(colorizeBufferOutline("\(lineNumberString) │")) "
 
       // If necessary, print a line that indicates that there was lines skipped in the source code
       if hasLineBeenSkipped && !annotatedSource.isEmpty {
-        let lineMissingInfoLine = String(repeating: " ", count: maxNumberOfDigits) + " ┆"
+        let lineMissingInfoLine = indentString + String(repeating: " ", count: maxNumberOfDigits) + " \(colorizeBufferOutline("┆"))"
         annotatedSource.append("\(lineMissingInfoLine)\n")
       }
       hasLineBeenSkipped = false
 
+      // add indentation
+      annotatedSource.append(indentString)
+
       // print the source line
-      annotatedSource.append("\(linePrefix)\(annotatedLine.sourceString)")
+      annotatedSource.append(linePrefix)
+      annotatedSource.append(
+        colorizeSourceLine(
+          annotatedLine,
+          lineNumber: lineNumber,
+          tree: tree,
+          sourceLocationConverter: slc
+        )
+      )
 
       // If the line did not end with \n (e.g. the last line), append it manually
       if annotatedSource.last != "\n" {
@@ -111,7 +284,7 @@ public struct DiagnosticsFormatter {
 
       for (column, diags) in diagsPerColumn {
         // compute the string that is shown before each message
-        var preMessage = String(repeating: " ", count: maxNumberOfDigits) + " ∣"
+        var preMessage = indentString + String(repeating: " ", count: maxNumberOfDigits) + " " + colorizeBufferOutline("∣")
         for c in 0..<column {
           if columnsWithDiagnostics.contains(c) {
             preMessage.append("│")
@@ -125,8 +298,28 @@ public struct DiagnosticsFormatter {
         }
         annotatedSource.append("\(preMessage)╰─ \(colorizeIfRequested(diags.last!.diagMessage))\n")
       }
+
+      // Add suffix text.
+      annotatedSource.append(annotatedLine.suffixText)
+      if annotatedSource.last != "\n" {
+        annotatedSource.append("\n")
+      }
     }
     return annotatedSource
+  }
+
+  /// Print given diagnostics for a given syntax tree on the command line
+  public func annotatedSource<SyntaxType: SyntaxProtocol>(
+    tree: SyntaxType,
+    diags: [Diagnostic]
+  ) -> String {
+    return annotatedSource(
+      fileName: nil,
+      tree: tree,
+      diags: diags,
+      indentString: "",
+      suffixTexts: []
+    )
   }
 
   /// Annotates the given ``DiagnosticMessage`` with an appropriate ANSI color code (if the value of the `colorize`
@@ -147,6 +340,24 @@ public struct DiagnosticsFormatter {
     case .note:
       return message.message
     }
+  }
+
+  /// Apply the given color and trait to the specified text, when we are
+  /// supposed to color the output.
+  private func colorizeIfRequested(
+    _ text: String,
+    annotation: ANSIAnnotation
+  ) -> String {
+    guard colorize, !text.isEmpty else {
+      return text
+    }
+
+    return annotation.applied(to: text)
+  }
+
+  /// Colorize for the buffer outline and line numbers.
+  func colorizeBufferOutline(_ text: String) -> String {
+    colorizeIfRequested(text, annotation: .bufferOutline)
   }
 }
 
@@ -194,5 +405,15 @@ struct ANSIAnnotation {
   /// The "normal" or "reset" ANSI code used to unset any previously added annotation.
   static var normal: ANSIAnnotation {
     self.init(color: .normal, trait: .normal)
+  }
+
+  /// Annotation used for the outline and line numbers of a buffer.
+  static var bufferOutline: ANSIAnnotation {
+    ANSIAnnotation(color: .cyan, trait: .normal)
+  }
+
+  /// Annotation used for highlighting source text.
+  static var sourceHighlight: ANSIAnnotation {
+    ANSIAnnotation(color: .white, trait: .underline)
   }
 }

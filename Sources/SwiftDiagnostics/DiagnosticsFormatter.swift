@@ -12,6 +12,42 @@
 
 import SwiftSyntax
 
+extension Sequence where Element == Range<Int> {
+  /// Given a set of ranges that are sorted in order of nondecreasing lower
+  /// bound, merge any overlapping ranges to produce a sequence of
+  /// nonoverlapping ranges.
+  fileprivate func mergingOverlappingRanges() -> [Range<Int>] {
+    var result: [Range<Int>] = []
+
+    var prior: Range<Int>? = nil
+    for range in self {
+      // If this is the first range we've seen, note it as the prior and
+      // continue.
+      guard let priorRange = prior else {
+        prior = range
+        continue
+      }
+
+      // If the ranges overlap, expand the prior range.
+      if priorRange.overlaps(range) {
+        let lower = Swift.min(priorRange.lowerBound, range.lowerBound)
+        let upper = Swift.max(priorRange.upperBound, range.upperBound)
+        prior = lower..<upper
+        continue
+      }
+
+      // Append the prior range, then take this new range as the prior
+      result.append(priorRange)
+      prior = range
+    }
+
+    if let priorRange = prior {
+      result.append(priorRange)
+    }
+    return result
+  }
+}
+
 public struct DiagnosticsFormatter {
 
   /// A wrapper struct for a source line, its diagnostics, and any
@@ -52,6 +88,94 @@ public struct DiagnosticsFormatter {
   ) -> String {
     let formatter = DiagnosticsFormatter(contextSize: contextSize, colorize: colorize)
     return formatter.annotatedSource(tree: tree, diags: diags)
+  }
+
+  /// Colorize the given source line by applying highlights from diagnostics.
+  private func colorizeSourceLine<SyntaxType: SyntaxProtocol>(
+    _ annotatedLine: AnnotatedSourceLine,
+    lineNumber: Int,
+    tree: SyntaxType,
+    sourceLocationConverter slc: SourceLocationConverter
+  ) -> String {
+    guard colorize, !annotatedLine.diagnostics.isEmpty else {
+      return annotatedLine.sourceString
+    }
+
+    // Compute the set of highlight ranges that land on this line. These
+    // are column ranges, sorted in order of increasing starting column, and
+    // with overlapping ranges merged.
+    let highlightRanges: [Range<Int>] = annotatedLine.diagnostics.map {
+      $0.highlights
+    }.joined().compactMap { (highlight) -> Range<Int>? in
+      if highlight.root != Syntax(tree) {
+        return nil
+      }
+
+      let startLoc = highlight.startLocation(converter: slc, afterLeadingTrivia: true);
+      guard let startLine = startLoc.line else {
+        return nil
+      }
+
+      // Find the starting column.
+      let startColumn: Int
+      if startLine < lineNumber {
+        startColumn = 1
+      } else if startLine == lineNumber, let column = startLoc.column {
+        startColumn = column
+      } else {
+        return nil
+      }
+
+      // Find the ending column.
+      let endLoc = highlight.endLocation(converter: slc, afterTrailingTrivia: false)
+      guard let endLine = endLoc.line else {
+        return nil
+      }
+
+      let endColumn: Int
+      if endLine > lineNumber {
+        endColumn = annotatedLine.sourceString.count
+      } else if endLine == lineNumber, let column = endLoc.column {
+        endColumn = column
+      } else {
+        return nil
+      }
+
+      if startColumn == endColumn {
+        return nil
+      }
+
+      return startColumn..<endColumn
+    }.sorted { (lhs, rhs) in
+      lhs.lowerBound < rhs.lowerBound
+    }.mergingOverlappingRanges()
+
+    // Map the column ranges into index ranges within the source string itself.
+    let sourceString = annotatedLine.sourceString
+    let highlightIndexRanges: [Range<String.Index>] = highlightRanges.map { highlightRange in
+      let startIndex = sourceString.index(sourceString.startIndex, offsetBy: highlightRange.lowerBound - 1)
+      let endIndex = sourceString.index(startIndex, offsetBy: highlightRange.count)
+      return startIndex..<endIndex
+    }
+
+    // Form the annotated string by copying in text from the original source,
+    // highlighting the column ranges.
+    var resultSourceString: String = ""
+    var sourceIndex = sourceString.startIndex
+    let annotation = ANSIAnnotation.sourceHighlight
+    for highlightRange in highlightIndexRanges {
+      // Text before the highlight range
+      resultSourceString += sourceString[sourceIndex..<highlightRange.lowerBound]
+
+      // Highlighted source text
+      let highlightString = String(sourceString[highlightRange])
+      resultSourceString += annotation.applied(to: highlightString)
+
+      sourceIndex = highlightRange.upperBound
+    }
+
+    resultSourceString += sourceString[sourceIndex...]
+    return resultSourceString
   }
 
   /// Print given diagnostics for a given syntax tree on the command line
@@ -136,7 +260,15 @@ public struct DiagnosticsFormatter {
       annotatedSource.append(indentString)
 
       // print the source line
-      annotatedSource.append("\(linePrefix)\(annotatedLine.sourceString)")
+      annotatedSource.append(linePrefix)
+      annotatedSource.append(
+        colorizeSourceLine(
+          annotatedLine,
+          lineNumber: lineNumber,
+          tree: tree,
+          sourceLocationConverter: slc
+        )
+      )
 
       // If the line did not end with \n (e.g. the last line), append it manually
       if annotatedSource.last != "\n" {
@@ -278,5 +410,10 @@ struct ANSIAnnotation {
   /// Annotation used for the outline and line numbers of a buffer.
   static var bufferOutline: ANSIAnnotation {
     ANSIAnnotation(color: .cyan, trait: .normal)
+  }
+
+  /// Annotation used for highlighting source text.
+  static var sourceHighlight: ANSIAnnotation {
+    ANSIAnnotation(color: .white, trait: .underline)
   }
 }

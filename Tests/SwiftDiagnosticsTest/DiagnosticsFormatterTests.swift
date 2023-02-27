@@ -120,4 +120,19 @@ final class DiagnosticsFormatterTests: XCTestCase {
       """
     AssertStringsEqualWithDiff(annotate(source: source, colorize: true), expectedOutput)
   }
+
+  func testColoringWithHighlights() {
+    let source = """
+      for (i = 0; i != 10; i += 1) { }
+      """
+
+    let expectedOutput = """
+      \u{001B}[0;36m1 │\u{001B}[0;0m for \u{001B}[4;37m(i\u{001B}[0;0m \u{001B}[4;37m= 0; i != 10; i += 1)\u{001B}[0;0m { }
+        \u{001B}[0;36m∣\u{001B}[0;0m │      ╰─ \u{001B}[1;31merror: expected ')' to end tuple pattern\u{001B}[0;0m
+        \u{001B}[0;36m∣\u{001B}[0;0m ╰─ \u{001B}[1;31merror: C-style for statement has been removed in Swift 3\u{001B}[0;0m
+
+      """
+
+    AssertStringsEqualWithDiff(annotate(source: source, colorize: true), expectedOutput)
+  }
 }

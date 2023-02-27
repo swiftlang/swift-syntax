@@ -242,7 +242,6 @@ def generate_gyb_files_helper(
 def gyb_dir_mapping(temp_directories: bool) -> Dict[str, str]:
     source_dirs = [
         SYNTAXSUPPORT_DIR,
-        os.path.join(SWIFTSYNTAX_DIR, "Raw"),
         SWIFTSYNTAX_DOCUMENTATION_DIR,
     ]
     mapping = {}

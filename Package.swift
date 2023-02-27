@@ -64,8 +64,7 @@ let package = Package(
       name: "SwiftSyntax",
       dependencies: [],
       exclude: [
-        "CMakeLists.txt",
-        "Raw/RawSyntaxValidation.swift.gyb",
+        "CMakeLists.txt"
       ],
       swiftSettings: swiftSyntaxSwiftSettings
     ),

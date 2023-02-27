@@ -100,8 +100,8 @@ final class DiagnosticsFormatterTests: XCTestCase {
       """
 
     let expectedOutput = """
-      1 │ var foo = bar +
-        ∣                ╰─ \u{001B}[1;31merror: expected expression after operator\u{001B}[0;0m
+      \u{001B}[0;36m1 │\u{001B}[0;0m var foo = bar +
+        \u{001B}[0;36m∣\u{001B}[0;0m                ╰─ \u{001B}[1;31merror: expected expression after operator\u{001B}[0;0m
 
       """
     AssertStringsEqualWithDiff(annotate(source: source, colorize: true), expectedOutput)
@@ -112,10 +112,10 @@ final class DiagnosticsFormatterTests: XCTestCase {
       foo.[].[].[]
       """
     let expectedOutput = """
-      1 │ foo.[].[].[]
-        ∣     │  │  ╰─ \u{001B}[1;31merror: expected name in member access\u{001B}[0;0m
-        ∣     │  ╰─ \u{001B}[1;31merror: expected name in member access\u{001B}[0;0m
-        ∣     ╰─ \u{001B}[1;31merror: expected name in member access\u{001B}[0;0m
+      \u{001B}[0;36m1 │\u{001B}[0;0m foo.[].[].[]
+        \u{001B}[0;36m∣\u{001B}[0;0m     │  │  ╰─ \u{001B}[1;31merror: expected name in member access\u{001B}[0;0m
+        \u{001B}[0;36m∣\u{001B}[0;0m     │  ╰─ \u{001B}[1;31merror: expected name in member access\u{001B}[0;0m
+        \u{001B}[0;36m∣\u{001B}[0;0m     ╰─ \u{001B}[1;31merror: expected name in member access\u{001B}[0;0m
 
       """
     AssertStringsEqualWithDiff(annotate(source: source, colorize: true), expectedOutput)

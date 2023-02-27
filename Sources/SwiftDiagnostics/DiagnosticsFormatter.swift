@@ -92,8 +92,8 @@ public struct DiagnosticsFormatter {
 
     // If there was a filename, add it first.
     if let fileName = fileName {
-      annotatedSource.append(indentString)
-      annotatedSource.append("=== \(fileName) ===\n")
+      let header = colorizeBufferOutline("===")
+      annotatedSource.append("\(indentString)\(header) \(fileName) \(header)\n")
     }
 
     /// Keep track if a line missing char should be printed
@@ -115,11 +115,11 @@ public struct DiagnosticsFormatter {
       // line numbers should be right aligned
       let lineNumberString = String(lineNumber)
       let leadingSpaces = String(repeating: " ", count: maxNumberOfDigits - lineNumberString.count)
-      let linePrefix = "\(leadingSpaces)\(lineNumberString) │ "
+      let linePrefix = "\(leadingSpaces)\(colorizeBufferOutline("\(lineNumberString) │")) "
 
       // If necessary, print a line that indicates that there was lines skipped in the source code
       if hasLineBeenSkipped && !annotatedSource.isEmpty {
-        let lineMissingInfoLine = indentString + String(repeating: " ", count: maxNumberOfDigits) + " ┆"
+        let lineMissingInfoLine = indentString + String(repeating: " ", count: maxNumberOfDigits) + " \(colorizeBufferOutline("┆"))"
         annotatedSource.append("\(lineMissingInfoLine)\n")
       }
       hasLineBeenSkipped = false
@@ -144,7 +144,7 @@ public struct DiagnosticsFormatter {
 
       for (column, diags) in diagsPerColumn {
         // compute the string that is shown before each message
-        var preMessage = indentString + String(repeating: " ", count: maxNumberOfDigits) + " ∣"
+        var preMessage = indentString + String(repeating: " ", count: maxNumberOfDigits) + " " + colorizeBufferOutline("∣")
         for c in 0..<column {
           if columnsWithDiagnostics.contains(c) {
             preMessage.append("│")
@@ -201,6 +201,24 @@ public struct DiagnosticsFormatter {
       return message.message
     }
   }
+
+  /// Apply the given color and trait to the specified text, when we are
+  /// supposed to color the output.
+  private func colorizeIfRequested(
+    _ text: String,
+    annotation: ANSIAnnotation
+  ) -> String {
+    guard colorize, !text.isEmpty else {
+      return text
+    }
+
+    return annotation.applied(to: text)
+  }
+
+  /// Colorize for the buffer outline and line numbers.
+  func colorizeBufferOutline(_ text: String) -> String {
+    colorizeIfRequested(text, annotation: .bufferOutline)
+  }
 }
 
 struct ANSIAnnotation {
@@ -247,5 +265,10 @@ struct ANSIAnnotation {
   /// The "normal" or "reset" ANSI code used to unset any previously added annotation.
   static var normal: ANSIAnnotation {
     self.init(color: .normal, trait: .normal)
+  }
+
+  /// Annotation used for the outline and line numbers of a buffer.
+  static var bufferOutline: ANSIAnnotation {
+    ANSIAnnotation(color: .cyan, trait: .normal)
   }
 }

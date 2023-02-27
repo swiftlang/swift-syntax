@@ -145,6 +145,8 @@ extension GroupedDiagnostics {
       tree: sourceFile.tree
     )
 
+    let colorizeBufferOutline = formatter.colorizeBufferOutline
+
     let childPadding = String(slc.sourceLines.count + 1).count + 1;
 
     let childSources: [(AbsolutePosition, String)] = sourceFiles[sourceFileID.id].children.map { childBufferID in
@@ -170,16 +172,16 @@ extension GroupedDiagnostics {
 
       // Should we make this depend on the width of the snippet itself?
       let targetLineLength = 72
-      let extraLengthNeeded = targetLineLength - padding.count - sourceFile.displayName.count - 5
+      let extraLengthNeeded = targetLineLength - padding.count - sourceFile.displayName.count - 6
       let boxSuffix: String
       if extraLengthNeeded > 0 {
-        boxSuffix = String(repeating: "─", count: extraLengthNeeded)
+        boxSuffix = colorizeBufferOutline(String(repeating: "─", count: extraLengthNeeded))
       } else {
         boxSuffix = ""
       }
 
-      prefixString = padding + "╭-── " + sourceFile.displayName + boxSuffix + "\n"
-      suffixString = padding + "╰-──" + String(repeating: "─", count: sourceFile.displayName.count + 1) + boxSuffix + "\n"
+      prefixString = colorizeBufferOutline(padding + "╭-── ") + sourceFile.displayName + " " + boxSuffix + "\n"
+      suffixString = colorizeBufferOutline(padding + "╰-──" + String(repeating: "─", count: sourceFile.displayName.count + 2)) + boxSuffix + "\n"
     }
 
     // Render the buffer.
@@ -188,7 +190,7 @@ extension GroupedDiagnostics {
         fileName: isRoot ? sourceFile.displayName : nil,
         tree: sourceFile.tree,
         diags: sourceFile.diagnostics,
-        indentString: indentString,
+        indentString: colorizeBufferOutline(indentString),
         suffixText: childSources,
         sourceLocationConverter: slc
       ) + suffixString

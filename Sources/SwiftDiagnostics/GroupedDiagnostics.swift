@@ -180,8 +180,8 @@ extension GroupedDiagnostics {
         boxSuffix = ""
       }
 
-      prefixString = colorizeBufferOutline(padding + "╭-── ") + sourceFile.displayName + " " + boxSuffix + "\n"
-      suffixString = colorizeBufferOutline(padding + "╰-──" + String(repeating: "─", count: sourceFile.displayName.count + 2)) + boxSuffix + "\n"
+      prefixString = colorizeBufferOutline(padding + "╭─── ") + sourceFile.displayName + " " + boxSuffix + "\n"
+      suffixString = colorizeBufferOutline(padding + "╰───" + String(repeating: "─", count: sourceFile.displayName.count + 2)) + boxSuffix + "\n"
     }
 
     // Render the buffer.

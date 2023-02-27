@@ -81,27 +81,27 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
     let (mainSourceID, mainSourceMarkers) = group.addTestFile(
       """
       let pi = 3.14159
-      0️⃣#myAssert(pi == 3)
+      1️⃣#myAssert(pi == 3)
       print("hello"
       """,
       displayName: "main.swift",
-      extraDiagnostics: ["0️⃣": ("in expansion of macro 'myAssert' here", .note)]
+      extraDiagnostics: ["1️⃣": ("in expansion of macro 'myAssert' here", .note)]
     )
-    let inExpansionNotePos = mainSourceMarkers["0️⃣"]!
+    let inExpansionNotePos = mainSourceMarkers["1️⃣"]!
 
     // Expansion source file
     _ = group.addTestFile(
       """
       let __a = pi
       let __b = 3
-      if !(__a 0️⃣== __b) {
+      if !(__a 1️⃣== __b) {
         fatalError("assertion failed: pi != 3")
       }
       """,
       displayName: "#myAssert",
       parent: (mainSourceID, inExpansionNotePos),
       extraDiagnostics: [
-        "0️⃣": ("no matching operator '==' for types 'Double' and 'Int'", .error)
+        "1️⃣": ("no matching operator '==' for types 'Double' and 'Int'", .error)
       ]
     )
 
@@ -137,40 +137,40 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
     let (mainSourceID, mainSourceMarkers) = group.addTestFile(
       """
       let pi = 3.14159
-      0️⃣#myAssert(pi == 3)
+      1️⃣#myAssert(pi == 3)
       print("hello"
       """,
       displayName: "main.swift",
-      extraDiagnostics: ["0️⃣": ("in expansion of macro 'myAssert' here", .note)]
+      extraDiagnostics: ["1️⃣": ("in expansion of macro 'myAssert' here", .note)]
     )
-    let inExpansionNotePos = mainSourceMarkers["0️⃣"]!
+    let inExpansionNotePos = mainSourceMarkers["1️⃣"]!
 
     // Outer expansion source file
     let (outerExpansionSourceID, outerExpansionSourceMarkers) = group.addTestFile(
       """
       let __a = pi
       let __b = 3
-      if 0️⃣#invertedEqualityCheck(__a, __b) {
+      if 1️⃣#invertedEqualityCheck(__a, __b) {
         fatalError("assertion failed: pi != 3")
       }
       """,
       displayName: "#myAssert",
       parent: (mainSourceID, inExpansionNotePos),
       extraDiagnostics: [
-        "0️⃣": ("in expansion of macro 'invertedEqualityCheck' here", .note)
+        "1️⃣": ("in expansion of macro 'invertedEqualityCheck' here", .note)
       ]
     )
-    let inInnerExpansionNotePos = outerExpansionSourceMarkers["0️⃣"]!
+    let inInnerExpansionNotePos = outerExpansionSourceMarkers["1️⃣"]!
 
     // Expansion source file
     _ = group.addTestFile(
       """
-      !(__a 0️⃣== __b)
+      !(__a 1️⃣== __b)
       """,
       displayName: "#invertedEqualityCheck",
       parent: (outerExpansionSourceID, inInnerExpansionNotePos),
       extraDiagnostics: [
-        "0️⃣": ("no matching operator '==' for types 'Double' and 'Int'", .error)
+        "1️⃣": ("no matching operator '==' for types 'Double' and 'Int'", .error)
       ]
     )
 

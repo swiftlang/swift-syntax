@@ -20,11 +20,15 @@ public struct DiagnosticsFormatter {
     var diagnostics: [Diagnostic]
     var sourceString: String
 
-    /// Non-diagnostic text.
+    /// Non-diagnostic text that is appended after this source line.
+    ///
+    /// Suffix text can be used to provide more information following a source
+    /// line, such as to provide an inset source buffer for a macro expansion
+    /// that occurs on that line.
     var suffixText: String
 
     /// Whether this line is free of annotations.
-    var isEmpty: Bool {
+    var isFreeOfAnnotations: Bool {
       return diagnostics.isEmpty && suffixText.isEmpty
     }
   }
@@ -51,15 +55,19 @@ public struct DiagnosticsFormatter {
   }
 
   /// Print given diagnostics for a given syntax tree on the command line
+  ///
+  /// - Parameters:
+  ///   - suffixTexts: suffix text to be printed at the given absolute
+  ///                  locations within the source file.
   func annotatedSource<SyntaxType: SyntaxProtocol>(
     fileName: String?,
     tree: SyntaxType,
     diags: [Diagnostic],
     indentString: String,
-    suffixText: [(AbsolutePosition, String)],
+    suffixTexts: [(AbsolutePosition, String)],
     sourceLocationConverter: SourceLocationConverter? = nil
   ) -> String {
-    let slc = sourceLocationConverter ?? SourceLocationConverter(file: "", tree: tree)
+    let slc = sourceLocationConverter ?? SourceLocationConverter(file: fileName ?? "", tree: tree)
 
     // First, we need to put each line and its diagnostics together
     var annotatedSourceLines = [AnnotatedSourceLine]()
@@ -68,7 +76,7 @@ public struct DiagnosticsFormatter {
       let diagsForLine = diags.filter { diag in
         return diag.location(converter: slc).line == (sourceLineIndex + 1)
       }
-      let suffixText = suffixText.compactMap { (position, text) in
+      let suffixText = suffixTexts.compactMap { (position, text) in
         if slc.location(for: position).line == (sourceLineIndex + 1) {
           return text
         }
@@ -82,7 +90,7 @@ public struct DiagnosticsFormatter {
     // Only lines with diagnostic messages should be printed, but including some context
     let rangesToPrint = annotatedSourceLines.enumerated().compactMap { (lineIndex, sourceLine) -> Range<Int>? in
       let lineNumber = lineIndex + 1
-      if !sourceLine.isEmpty {
+      if !sourceLine.isFreeOfAnnotations {
         return Range<Int>(uncheckedBounds: (lower: lineNumber - contextSize, upper: lineNumber + contextSize + 1))
       }
       return nil
@@ -178,7 +186,7 @@ public struct DiagnosticsFormatter {
       tree: tree,
       diags: diags,
       indentString: "",
-      suffixText: []
+      suffixTexts: []
     )
   }
 

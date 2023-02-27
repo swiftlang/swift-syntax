@@ -191,7 +191,7 @@ extension GroupedDiagnostics {
         tree: sourceFile.tree,
         diags: sourceFile.diagnostics,
         indentString: colorizeBufferOutline(indentString),
-        suffixText: childSources,
+        suffixTexts: childSources,
         sourceLocationConverter: slc
       ) + suffixString
   }

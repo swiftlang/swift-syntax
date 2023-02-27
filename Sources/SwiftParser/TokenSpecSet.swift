@@ -241,6 +241,7 @@ enum DeclarationStart: TokenSpecSet {
   case subscriptKeyword
   case typealiasKeyword
   case varKeyword
+  case inoutKeyword
 
   init?(lexeme: Lexer.Lexeme) {
     switch PrepareForKeywordMatch(lexeme) {
@@ -263,6 +264,7 @@ enum DeclarationStart: TokenSpecSet {
     case TokenSpec(.subscript): self = .subscriptKeyword
     case TokenSpec(.typealias): self = .typealiasKeyword
     case TokenSpec(.var): self = .varKeyword
+    case TokenSpec(.inout): self = .inoutKeyword
     default: return nil
     }
   }
@@ -288,6 +290,7 @@ enum DeclarationStart: TokenSpecSet {
     case .subscriptKeyword: return .keyword(.subscript)
     case .typealiasKeyword: return .keyword(.typealias)
     case .varKeyword: return .keyword(.var)
+    case .inoutKeyword: return .keyword(.inout)
     }
   }
 }
@@ -570,12 +573,14 @@ enum MatchingPatternStart: TokenSpecSet {
   case isKeyword
   case letKeyword
   case varKeyword
+  case inoutKeyword
 
   init?(lexeme: Lexer.Lexeme) {
     switch PrepareForKeywordMatch(lexeme) {
     case TokenSpec(.is): self = .isKeyword
     case TokenSpec(.let): self = .letKeyword
     case TokenSpec(.var): self = .varKeyword
+    case TokenSpec(.inout): self = .inoutKeyword
     default: return nil
     }
   }
@@ -585,6 +590,7 @@ enum MatchingPatternStart: TokenSpecSet {
     case .isKeyword: return .keyword(.is)
     case .letKeyword: return .keyword(.let)
     case .varKeyword: return .keyword(.var)
+    case .inoutKeyword: return .keyword(.inout)
     }
   }
 }

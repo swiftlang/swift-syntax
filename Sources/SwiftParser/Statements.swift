@@ -213,7 +213,8 @@ extension Parser {
   ///     condition → expression | availability-condition | case-condition | optional-binding-condition
   ///
   ///     case-condition → 'case' pattern initializer
-  ///     optional-binding-condition → 'let' pattern initializer? | 'var' pattern initializer?
+  ///     optional-binding-condition → 'let' pattern initializer? | 'var' pattern initializer? |
+  ///                                  'inout' pattern initializer?
   @_spi(RawSyntax)
   public mutating func parseConditionElement() -> RawConditionElementSyntax.Condition {
     // Parse a leading #available/#unavailable condition if present.
@@ -221,9 +222,9 @@ extension Parser {
       return self.parsePoundAvailableConditionElement()
     }
 
-    // Parse the basic expression case.  If we have a leading let/var/case
-    // keyword or an assignment, then we know this is a binding.
-    guard self.at(.keyword(.let), .keyword(.var), .keyword(.case)) else {
+    // Parse the basic expression case.  If we have a leading let, var, inout,
+    // borrow, case keyword or an assignment, then we know this is a binding.
+    guard self.at(.keyword(.let), .keyword(.var), .keyword(.case)) || self.at(.keyword(.inout)) else {
       // If we lack it, then this is theoretically a boolean condition.
       // However, we also need to handle migrating from Swift 2 syntax, in
       // which a comma followed by an expression could actually be a pattern
@@ -240,7 +241,7 @@ extension Parser {
     }
 
     // We're parsing a conditional binding.
-    assert(self.at(.keyword(.let), .keyword(.var), .keyword(.case)))
+    assert(self.at(.keyword(.let), .keyword(.var)) || self.at(.keyword(.inout), .keyword(.case)))
     enum BindingKind {
       case pattern(RawTokenSyntax, RawPatternSyntax)
       case optional(RawTokenSyntax, RawPatternSyntax)
@@ -252,7 +253,7 @@ extension Parser {
       kind = .pattern(caseKeyword, pattern)
     } else {
       let letOrVar = self.consumeAnyToken()
-      let pattern = self.parseMatchingPattern(context: .letOrVar)
+      let pattern = self.parseMatchingPattern(context: .bindingIntroducer)
       kind = .optional(letOrVar, pattern)
     }
 
@@ -285,10 +286,10 @@ extension Parser {
     }
 
     switch kind {
-    case let .optional(letOrVar, pattern):
+    case let .optional(bindingKeyword, pattern):
       return .optionalBinding(
         RawOptionalBindingConditionSyntax(
-          bindingKeyword: letOrVar,
+          bindingKeyword: bindingKeyword,
           pattern: pattern,
           typeAnnotation: annotation,
           initializer: initializer,

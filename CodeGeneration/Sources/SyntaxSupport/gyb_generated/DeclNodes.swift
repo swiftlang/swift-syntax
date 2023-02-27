@@ -574,7 +574,7 @@ public let DECL_NODES: [Node] = [
          Child(name: "ImportTok",
                kind: .token(choices: [.keyword(text: "import")])),
          Child(name: "ImportKind",
-               kind: .token(choices: [.keyword(text: "typealias"), .keyword(text: "struct"), .keyword(text: "class"), .keyword(text: "enum"), .keyword(text: "protocol"), .keyword(text: "var"), .keyword(text: "let"), .keyword(text: "func")]),
+               kind: .token(choices: [.keyword(text: "typealias"), .keyword(text: "struct"), .keyword(text: "class"), .keyword(text: "enum"), .keyword(text: "protocol"), .keyword(text: "var"), .keyword(text: "let"), .keyword(text: "func"), .keyword(text: "inout")]),
                isOptional: true),
          Child(name: "Path",
                kind: .collection(kind: "AccessPath", collectionElementName: "PathComponent"))
@@ -1214,7 +1214,7 @@ public let DECL_NODES: [Node] = [
                nameForDiagnostics: "modifiers",
                isOptional: true),
          Child(name: "BindingKeyword",
-               kind: .token(choices: [.keyword(text: "let"), .keyword(text: "var")])),
+               kind: .token(choices: [.keyword(text: "let"), .keyword(text: "var"), .keyword(text: "inout")])),
          Child(name: "Bindings",
                kind: .collection(kind: "PatternBindingList", collectionElementName: "Binding"))
        ]),

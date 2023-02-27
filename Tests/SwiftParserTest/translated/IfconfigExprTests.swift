@@ -330,7 +330,6 @@ final class IfconfigExprTests: XCTestCase {
       #endif
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: unexpected ',' separator
         DiagnosticSpec(message: "expected value in function call")
       ]
     )
@@ -370,7 +369,6 @@ final class IfconfigExprTests: XCTestCase {
       #endif
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected expression in list of expressions
         DiagnosticSpec(message: "expected value in function call")
       ]
     )

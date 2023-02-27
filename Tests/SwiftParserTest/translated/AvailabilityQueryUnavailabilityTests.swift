@@ -127,7 +127,6 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected version number
         DiagnosticSpec(
           message: "expected ')' to end availability condition",
           notes: [
@@ -143,10 +142,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
       """
       if #unavailable(OSX) {
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: expected version number
-      ]
+      """
     )
   }
 
@@ -321,7 +317,6 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected version number
         DiagnosticSpec(
           message: "expected ')' to end availability condition",
           notes: [
@@ -346,10 +341,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
       """
       if #unavailable(iDishwasherOS 10.51, OSX 10.51) {
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 1: unrecognized platform name 'iDishwasherOS'
-      ]
+      """
     )
   }
 
@@ -373,7 +365,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: version comparison not needed, Fix-It replacements: 21 - 24 = ''
+        // TODO: (good first issue) Old parser expected error on line 2: version comparison not needed, Fix-It replacements: 21 - 24 = ''
         DiagnosticSpec(message: "unexpected code '>= 10.51' in availability condition")
       ]
     )
@@ -424,15 +416,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
       }
       if #available(macOS 10.51, *), case 42 = 42, #unavailable(macOS 10.52) {
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: #available and #unavailable cannot be in the same statement
-        // TODO: Old parser expected error on line 4: #available and #unavailable cannot be in the same statement
-        // TODO: Old parser expected error on line 6: #available and #unavailable cannot be in the same statement
-        // TODO: Old parser expected error on line 8: #available and #unavailable cannot be in the same statement
-        // TODO: Old parser expected error on line 10: #available and #unavailable cannot be in the same statement
-        // TODO: Old parser expected error on line 12: #available and #unavailable cannot be in the same statement
-      ]
+      """
     )
   }
 
@@ -458,7 +442,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: #available cannot be used as an expression, did you mean to use '#unavailable'?, Fix-It replacements: 4 - 14 = '#unavailable', 18 - 27 = ''
+        // TODO: (good first issue) Old parser expected error on line 2: #available cannot be used as an expression, did you mean to use '#unavailable'?, Fix-It replacements: 4 - 14 = '#unavailable', 18 - 27 = ''
         DiagnosticSpec(message: "unexpected code '== false' in 'if' statement")
       ]
     )

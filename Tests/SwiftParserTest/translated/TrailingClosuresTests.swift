@@ -200,12 +200,12 @@ final class TrailingClosuresTests: XCTestCase {
   }
 
   func testTrailingClosures14() {
+    // TODO: The diagnostics here are perhaps a little overboard.
     AssertParse(
       """
       func produce(fn: () -> Int?, default d: () -> Int) -> Int {
         return fn() ?? d()
       }
-      // TODO: The diagnostics here are perhaps a little overboard.
       _ = produce { 0 }1️⃣ 2️⃣default: { 1 }
       _ = produce { 2 } `default`: { 3 }
       """,

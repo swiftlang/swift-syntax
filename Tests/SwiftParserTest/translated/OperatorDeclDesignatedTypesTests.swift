@@ -14,6 +14,8 @@
 
 import XCTest
 
+// TODO: Designated operator types are only valid in langauge mode 4. We should disallow them in language mode 5.
+
 final class OperatorDeclDesignatedTypesTests: XCTestCase {
   func testOperatorDeclDesignatedTypes1() {
     AssertParse(
@@ -69,12 +71,7 @@ final class OperatorDeclDesignatedTypesTests: XCTestCase {
       prefix operator ^^ : PrefixMagicOperatorProtocol
       infix operator  <*< : MediumPrecedence, InfixMagicOperatorProtocol
       postfix operator ^^ : PostfixMagicOperatorProtocol
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 1: designated types are no longer used by the compiler; please remove the designated type list from this operator declaration, Fix-It replacements: 20 - 49 = ''
-        // TODO: Old parser expected warning on line 2: designated types are no longer used by the compiler, Fix-It replacements: 39 - 67 = ''
-        // TODO: Old parser expected warning on line 3: designated types are no longer used by the compiler, Fix-It replacements: 21 - 51 = ''
-      ]
+      """
     )
   }
 
@@ -92,10 +89,7 @@ final class OperatorDeclDesignatedTypesTests: XCTestCase {
     AssertParse(
       """
       infix operator **>> : UndeclaredPrecedence
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 1: designated types are no longer used by the compiler, Fix-It replacements: 21 - 43 = ''
-      ]
+      """
     )
   }
 
@@ -103,10 +97,7 @@ final class OperatorDeclDesignatedTypesTests: XCTestCase {
     AssertParse(
       """
       infix operator **+> : MediumPrecedence, UndeclaredProtocol
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 1: designated types are no longer used by the compiler, Fix-It replacements: 39 - 59 = ''
-      ]
+      """
     )
   }
 
@@ -114,10 +105,7 @@ final class OperatorDeclDesignatedTypesTests: XCTestCase {
     AssertParse(
       """
       prefix operator *+*> : MediumPrecedence
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 1: designated types are no longer used by the compiler, Fix-It replacements: 22 - 40 = ''
-      ]
+      """
     )
   }
 
@@ -125,10 +113,7 @@ final class OperatorDeclDesignatedTypesTests: XCTestCase {
     AssertParse(
       """
       postfix operator ++*> : MediumPrecedence
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 1: designated types are no longer used by the compiler, Fix-It replacements: 23 - 41 = ''
-      ]
+      """
     )
   }
 
@@ -137,11 +122,7 @@ final class OperatorDeclDesignatedTypesTests: XCTestCase {
       """
       prefix operator *++> : UndeclaredProtocol
       postfix operator +*+> : UndeclaredProtocol
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 1: designated types are no longer used by the compiler, Fix-It replacements: 22 - 42 = ''
-        // TODO: Old parser expected warning on line 2: designated types are no longer used by the compiler, Fix-It replacements: 23 - 43 = ''
-      ]
+      """
     )
   }
 
@@ -152,11 +133,7 @@ final class OperatorDeclDesignatedTypesTests: XCTestCase {
       class Class {}
       infix operator *>*> : Struct
       infix operator >**> : Class
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 3: designated types are no longer used by the compiler, Fix-It replacements: 21 - 29 = ''
-        // TODO: Old parser expected warning on line 4: designated types are no longer used by the compiler, Fix-It replacements: 21 - 28 = ''
-      ]
+      """
     )
   }
 
@@ -165,11 +142,7 @@ final class OperatorDeclDesignatedTypesTests: XCTestCase {
       """
       prefix operator **>> : Struct
       prefix operator *>*> : Class
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 1: designated types are no longer used by the compiler, Fix-It replacements: 22 - 30 = ''
-        // TODO: Old parser expected warning on line 2: designated types are no longer used by the compiler, Fix-It replacements: 22 - 29 = ''
-      ]
+      """
     )
   }
 
@@ -178,11 +151,7 @@ final class OperatorDeclDesignatedTypesTests: XCTestCase {
       """
       postfix operator >*>* : Struct
       postfix operator >>** : Class
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 1: designated types are no longer used by the compiler, Fix-It replacements: 23 - 31 = ''
-        // TODO: Old parser expected warning on line 2: designated types are no longer used by the compiler, Fix-It replacements: 23 - 30 = ''
-      ]
+      """
     )
   }
 
@@ -190,10 +159,7 @@ final class OperatorDeclDesignatedTypesTests: XCTestCase {
     AssertParse(
       """
       infix operator  <*<<< : MediumPrecedence, &
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 1: designated types are no longer used by the compiler, Fix-It replacements: 41 - 44 = ''
-      ]
+      """
     )
   }
 
@@ -202,10 +168,7 @@ final class OperatorDeclDesignatedTypesTests: XCTestCase {
       """
       infix operator **^^ : MediumPrecedence
       infix operator **^^ : InfixMagicOperatorProtocol
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 2: designated types are no longer used by the compiler, Fix-It replacements: 21 - 50 = ''
-      ]
+      """
     )
   }
 
@@ -218,16 +181,7 @@ final class OperatorDeclDesignatedTypesTests: XCTestCase {
       postfix operator ^^*^% : Struct, Class
       prefix operator %%*^^ : LowPrecedence, Class
       postfix operator ^^*%% : MediumPrecedence, Class
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 1: designated types are no longer used by the compiler, Fix-It replacements: 40 - 55 = ''
-        // TODO: Old parser expected warning on line 2: designated types are no longer used by the compiler, Fix-It replacements: 30 - 37 = ''
-        // TODO: Old parser expected warning on line 2: designated types are no longer used by the compiler, Fix-It replacements: 22 - 30 = ''
-        // TODO: Old parser expected warning on line 3: designated types are no longer used by the compiler, Fix-It replacements: 23 - 38 = ''
-        // TODO: Old parser expected warning on line 4: designated types are no longer used by the compiler, Fix-It replacements: 24 - 39 = ''
-        // TODO: Old parser expected warning on line 5: designated types are no longer used by the compiler, Fix-It replacements: 23 - 45 = ''
-        // TODO: Old parser expected warning on line 6: designated types are no longer used by the compiler, Fix-It replacements: 24 - 49 = ''
-      ]
+      """
     )
   }
 
@@ -235,10 +189,7 @@ final class OperatorDeclDesignatedTypesTests: XCTestCase {
     AssertParse(
       """
       infix operator <*<>*> : AdditionPrecedence,
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 1: designated types are no longer used by the compiler, Fix-It replacements: 43 - 44 = ''
-      ]
+      """
     )
   }
 

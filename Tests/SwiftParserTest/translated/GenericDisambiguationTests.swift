@@ -225,10 +225,10 @@ final class GenericDisambiguationTests: XCTestCase {
   }
 
   func testGenericDisambiguation15() {
+    // TODO: parse empty <> list
     AssertParse(
       """
-      // TODO: parse empty <> list
-      //A<>.c() // e/xpected-error{{xxx}}
+      A<>.c()
       """
     )
   }

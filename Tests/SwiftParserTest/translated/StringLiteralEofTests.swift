@@ -22,8 +22,6 @@ final class StringLiteralEofTests: XCTestCase {
       _ = "foo\(1️⃣
       """##,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: unterminated string literal
-        // TODO: Old parser expected error on line 2: cannot find ')' to match opening '(' in string interpolation
         DiagnosticSpec(message: "expected value and ')' in string literal"),
         DiagnosticSpec(message: #"expected '"' to end string literal"#),
       ]
@@ -37,8 +35,6 @@ final class StringLiteralEofTests: XCTestCase {
       _ = 9️⃣"foo\8️⃣(7️⃣"bar1️⃣
       """##,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: cannot find ')' to match opening '(' in string interpolation
-        // TODO: Old parser expected error on line 2: unterminated string literal
         DiagnosticSpec(message: #"expected '"' to end string literal"#, notes: [NoteSpec(locationMarker: "7️⃣", message: #"to match this opening '"'"#)]),
         DiagnosticSpec(message: #"expected ')' in string literal"#, notes: [NoteSpec(locationMarker: "8️⃣", message: "to match this opening '('")]),
         DiagnosticSpec(message: #"expected '"' to end string literal"#, notes: [NoteSpec(locationMarker: "9️⃣", message: #"to match this opening '"'"#)]),
@@ -82,7 +78,6 @@ final class StringLiteralEofTests: XCTestCase {
           foo1️⃣
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: unterminated string literal
         DiagnosticSpec(message: #"expected '"""' to end string literal"#)
       ]
     )

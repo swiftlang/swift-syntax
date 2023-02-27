@@ -14,6 +14,8 @@
 
 import XCTest
 
+// TODO: The generic where clause next to generic parameters is only valid in language mode 4. We should disallow them in language mode 5.
+
 final class DeprecatedWhereTests: XCTestCase {
   func testDeprecatedWhere1() {
     AssertParse(
@@ -45,10 +47,7 @@ final class DeprecatedWhereTests: XCTestCase {
       func f4<T>(x: T) -> Int { return 2 } // no-warning
       // 4: Trailing where
       func f5<T>(x: T) where T : Equatable {} // no-warning
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 5: 'where' clause next to generic parameters is obsolete, Fix-It replacements: 10 - 30 = '', 37 - 37 = ' where T: Womparable'
-      ]
+      """
     )
   }
 
@@ -68,12 +67,7 @@ final class DeprecatedWhereTests: XCTestCase {
       func f24<T where T: Womparable>(x: T) where T: Equatable {}
       // 3,4
       func f34<T>(x: T) -> Int where T: Equatable { return 2 } // no-warning
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 3: 'where' clause next to generic parameters is obsolete, Fix-It replacements: 21 - 41 = '', 48 - 48 = ' where T: Womparable'
-        // TODO: Old parser expected error on line 9: 'where' clause next to generic parameters is obsolete, Fix-It replacements: 11 - 31 = '', 45 - 45 = ' where T: Womparable'
-        // TODO: Old parser expected error on line 11: 'where' clause next to generic parameters is obsolete, Fix-It replacements: 11 - 31 = '', 39 - 44 = 'where T: Womparable,'
-      ]
+      """
     )
   }
 
@@ -87,12 +81,7 @@ final class DeprecatedWhereTests: XCTestCase {
       func f124<T: Mashable where T: Womparable>(x: T) where T: Equatable {}
       // 2,3,4
       func f234<T where T: Womparable>(x: T) -> Int where T: Equatable { return 2 }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 3: 'where' clause next to generic parameters is obsolete, Fix-It replacements: 22 - 42 = '', 56 - 56 = ' where T: Womparable'
-        // TODO: Old parser expected error on line 5: 'where' clause next to generic parameters is obsolete, Fix-It replacements: 22 - 42 = '', 50 - 55 = 'where T: Womparable,'
-        // TODO: Old parser expected error on line 7: 'where' clause next to generic parameters is obsolete, Fix-It replacements: 12 - 32 = '', 47 - 52 = 'where T: Womparable,'
-      ]
+      """
     )
   }
 
@@ -102,10 +91,7 @@ final class DeprecatedWhereTests: XCTestCase {
       // FuncDecl: Choose 4
       // 1,2,3,4
       func f1234<T: Mashable where T: Womparable>(x: T) -> Int where T: Equatable { return 2 }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 3: 'where' clause next to generic parameters is obsolete, Fix-It replacements: 23 - 43 = '', 58 - 63 = 'where T: Womparable,'
-      ]
+      """
     )
   }
 
@@ -128,10 +114,7 @@ final class DeprecatedWhereTests: XCTestCase {
       struct S2<T where T: Womparable> {}
       // 3: Trailing where
       struct S3<T> where T : Equatable {} // no-warning
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 5: 'where' clause next to generic parameters is obsolete, Fix-It replacements: 12 - 32 = '', 33 - 33 = ' where T: Womparable'
-      ]
+      """
     )
   }
 
@@ -145,11 +128,7 @@ final class DeprecatedWhereTests: XCTestCase {
       struct S13<T: Mashable> where T: Equatable {} // no-warning
       // 2,3
       struct S23<T where T: Womparable> where T: Equatable {}
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 3: 'where' clause next to generic parameters is obsolete, Fix-It replacements: 23 - 43 = '', 44 - 44 = ' where T: Womparable'
-        // TODO: Old parser expected error on line 7: 'where' clause next to generic parameters is obsolete, Fix-It replacements: 13 - 33 = '', 35 - 40 = 'where T: Womparable,'
-      ]
+      """
     )
   }
 
@@ -159,10 +138,7 @@ final class DeprecatedWhereTests: XCTestCase {
       // NominalTypeDecl: Choose 3
       // 1,2,3
       struct S123<T: Mashable where T: Womparable> where T: Equatable {}
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 3: 'where' clause next to generic parameters is obsolete, Fix-It replacements: 24 - 44 = '', 46 - 51 = 'where T: Womparable,'
-      ]
+      """
     )
   }
 
@@ -175,11 +151,7 @@ final class DeprecatedWhereTests: XCTestCase {
       protocol ProtoD {}
       func testCombinedConstraints<T: ProtoA & ProtoB where T: ProtoC>(x: T) {}
       func testCombinedConstraints<T: ProtoA & ProtoB where T: ProtoC>(x: T) where T: ProtoD {}
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 5: 'where' clause next to generic parameters is obsolete, Fix-It replacements: 48 - 64 = '', 71 - 71 = ' where T: ProtoC'
-        // TODO: Old parser expected error on line 6: 'where' clause next to generic parameters is obsolete, Fix-It replacements: 48 - 64 = '', 72 - 77 = 'where T: ProtoC,'
-      ]
+      """
     )
   }
 
@@ -189,8 +161,6 @@ final class DeprecatedWhereTests: XCTestCase {
       func testCombinedConstraintsOld<T: 2️⃣protocol3️⃣<ProtoA, ProtoB> where T: ProtoC4️⃣>(x: T) {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: 'where' clause next to generic parameters is obsolete, Fix-It replacements: 60 - 76 = '', 83 - 83 = ' where T: ProtoC'
-        // TODO: Old parser expected error on line 1: 'protocol<...>' composition syntax has been removed
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected inherited type in generic parameter"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected '>' to end generic parameter clause"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature"),
@@ -206,8 +176,6 @@ final class DeprecatedWhereTests: XCTestCase {
       func testCombinedConstraintsOld<T: 2️⃣protocol3️⃣<ProtoA, ProtoB> where T: ProtoC4️⃣>(x: T) where T: ProtoD {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: 'where' clause next to generic parameters is obsolete, Fix-It replacements: 60 - 76 = '', 84 - 89 = 'where T: ProtoC,'
-        // TODO: Old parser expected error on line 1: 'protocol<...>' composition syntax has been removed
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected inherited type in generic parameter"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected '>' to end generic parameter clause"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature"),

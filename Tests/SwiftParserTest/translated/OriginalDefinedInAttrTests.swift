@@ -20,10 +20,7 @@ final class OriginalDefinedInAttrTests: XCTestCase {
       #"""
       @_originallyDefinedIn(module: "foo", OSX 13.13)
       public func foo() {}
-      """#,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: '@_originallyDefinedIn' requires that 'foo()' have explicit availability for macOS
-      ]
+      """#
     )
   }
 
@@ -45,11 +42,7 @@ final class OriginalDefinedInAttrTests: XCTestCase {
       #"""
       @_originallyDefinedIn(module: "foo", OSX 13.13.3)
       public class ToplevelClass {}
-      """#,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 1: '@_originallyDefinedIn' only uses major and minor version number
-        // TODO: Old parser expected error on line 1: '@_originallyDefinedIn' requires that 'ToplevelClass' have explicit availability for macOS
-      ]
+      """#
     )
   }
 
@@ -135,10 +128,7 @@ final class OriginalDefinedInAttrTests: XCTestCase {
       @_originallyDefinedIn(module: "foo", OSX 13.13)
       @_originallyDefinedIn(module: "foo", iOS 7.0)
       internal class ToplevelClass5 {}
-      """#,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 2: '@_originallyDefinedIn' does not have any effect on internal declarations
-      ]
+      """#
     )
   }
 
@@ -149,10 +139,7 @@ final class OriginalDefinedInAttrTests: XCTestCase {
       @_originallyDefinedIn(module: "foo", OSX 13.13)
       @_originallyDefinedIn(module: "foo", iOS 7.0)
       private class ToplevelClass6 {}
-      """#,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 2: '@_originallyDefinedIn' does not have any effect on private declarations
-      ]
+      """#
     )
   }
 
@@ -163,10 +150,7 @@ final class OriginalDefinedInAttrTests: XCTestCase {
       @_originallyDefinedIn(module: "foo", OSX 13.13)
       @_originallyDefinedIn(module: "foo", iOS 7.0)
       fileprivate class ToplevelClass7 {}
-      """#,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 2: '@_originallyDefinedIn' does not have any effect on fileprivate declarations
-      ]
+      """#
     )
   }
 
@@ -176,10 +160,7 @@ final class OriginalDefinedInAttrTests: XCTestCase {
       @available(OSX 13.10, *)
       @_originallyDefinedIn(module: "foo", OSX 13.13, iOS 7.0)
       internal class ToplevelClass8 {}
-      """#,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 2: '@_originallyDefinedIn' does not have any effect on internal declarations
-      ]
+      """#
     )
   }
 

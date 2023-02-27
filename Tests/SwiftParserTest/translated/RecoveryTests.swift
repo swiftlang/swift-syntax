@@ -214,12 +214,12 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery17() {
+    // It is debatable if we should do recovery here and parse { true } as the
+    // body, but the error message should be sensible.
     AssertParse(
       """
-      // It is debatable if we should do recovery here and parse { true } as the
-        // body, but the error message should be sensible.
-        if { true } {
-        }
+      if { true } {
+      }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 3: missing condition in 'if' statement
@@ -359,11 +359,7 @@ final class RecoveryTests: XCTestCase {
       {
         missingControllingExprInRepeatWhile();
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: closure expression is unused
-        // TODO: Old parser expected note on line 1: did you mean to use a 'do' statement?, Fix-It replacements: 3 - 3 = 'do '
-      ]
+      """
     )
   }
 
@@ -552,7 +548,6 @@ final class RecoveryTests: XCTestCase {
       }2️⃣
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected '{' to start the body of for-each loop
         DiagnosticSpec(locationMarker: "1️⃣", message: "keyword 'for' cannot be used as an identifier here"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected code block in 'for' statement"),
       ]
@@ -799,9 +794,6 @@ final class RecoveryTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "found an unexpected second identifier in enum"),
-        // TODO: Old parser expected error on line 2: found an unexpected second identifier in enum 'case' declaration; is there an accidental break?
-        // TODO: Old parser expected note on line 2: join the identifiers together, Fix-It replacements: 8 - 11 = 'aa'
-        // TODO: Old parser expected note on line 2: join the identifiers together with camel-case, Fix-It replacements: 8 - 11 = 'aA'
         DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive declarations on a line must be separated by ';'"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code 'a' before enum case"),
       ]
@@ -821,12 +813,9 @@ final class RecoveryTests: XCTestCase {
       """#,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "found an unexpected second identifier in struct"),
-        // TODO: Old parser expected error on line 2: found an unexpected second identifier in variable declaration; is there an accidental break?
-        // TODO: Old parser expected error on line 2: cannot convert value of type 'String' to specified type 'Int'
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected ':' in type annotation"),
         DiagnosticSpec(locationMarker: "3️⃣", message: #"unexpected code ': Int = ""' before function"#),
-        // TODO: Old parser expected error on line 4: found an unexpected second identifier in variable declaration; is there an accidental break?
-        // TODO: Old parser expected warning on line 4: initialization of variable 'c' was never used; consider replacing with assignment to '_' or removing it
+        // TODO: (good first issue) Old parser expected error on line 4: found an unexpected second identifier in variable declaration; is there an accidental break?
         DiagnosticSpec(locationMarker: "4️⃣", message: "expected ':' in type annotation"),
       ]
     )
@@ -838,7 +827,7 @@ final class RecoveryTests: XCTestCase {
       let (efg 1️⃣hij, foobar) = (5, 6)
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: found an unexpected second identifier in constant declaration; is there an accidental break?
+        // TODO: (good first issue) Old parser expected error on line 1: found an unexpected second identifier in constant declaration; is there an accidental break?
         DiagnosticSpec(message: "unexpected code 'hij, foobar' in tuple pattern")
       ]
     )
@@ -1117,8 +1106,6 @@ final class RecoveryTests: XCTestCase {
       let a2: Set<Int1️⃣]>
       """,
       diagnostics: [
-        // TODO: Old parser expected note on line 3: to match this opening '<'
-        // TODO: Old parser expected error on line 3: expected '>' to complete generic argument list
         DiagnosticSpec(message: "expected '>' to end generic argument clause"),
         DiagnosticSpec(message: "extraneous code ']>' at top level"),
       ]
@@ -1144,8 +1131,6 @@ final class RecoveryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 5: unexpected ']' in type; did you mean to write an array type?, Fix-It replacements: 11 - 11 = '['
-        // TODO: Old parser expected error on line 5: expected declaration
-        // TODO: Old parser expected error on line 5: consecutive declarations on a line must be separated by ';'
         DiagnosticSpec(message: "extraneous code ']?' at top level")
       ]
     )
@@ -1199,7 +1184,6 @@ final class RecoveryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: unexpected ':' in type; did you mean to write a dictionary type?, Fix-It replacements: 11 - 11 = '['
-        // TODO: Old parser expected error on line 2: expected dictionary value type
         DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive declarations on a line must be separated by ';'"),
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code ':' before variable"),
         // TODO: Old parser expected error on line 3: unexpected ':' in type; did you mean to write a dictionary type?, Fix-It replacements: 11 - 11 = '['
@@ -1225,10 +1209,7 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected '{' in body of function declaration
-        // TODO: Old parser expected note on line 2: to match this opening '['
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '}' to end struct"),
-        // TODO: Old parser expected error on line 4: expected ']' in array type
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected ']' to end array"),
         // TODO: Old parser expected error on line 5: unexpected ']' in type; did you mean to write an array type?, Fix-It replacements: 17 - 17 = '['
         DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous code at top level"),
@@ -1312,13 +1293,6 @@ final class RecoveryTests: XCTestCase {
       2️⃣}
       """,
       diagnostics: [
-        // TODO: Old parser expected note on line 1: in declaration of 'ErrorInFunctionSignatureResultArrayType11'
-        // TODO: Old parser expected error on line 2: consecutive declarations on a line must be separated by ';', Fix-It replacements: 29 - 29 = ';'
-        // TODO: Old parser expected error on line 2: expected ']' in array type
-        // TODO: Old parser expected note on line 2: to match this opening '['
-        // TODO: Old parser expected error on line 2: cannot find operator '++' in scope; did you mean '+= 1'?
-        // TODO: Old parser expected error on line 2: cannot find 'a' in scope
-        // TODO: Old parser expected error on line 2: expected declaration
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '}' to end struct"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous brace at top level"),
       ]
@@ -1468,7 +1442,6 @@ final class RecoveryTests: XCTestCase {
       }
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: expected parameter name followed by ':'
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'func' in function"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected type in parameter"),
         DiagnosticSpec(locationMarker: "2️⃣", message: #"unexpected code '"No one else was in the room where it happened"' in parameter clause"#),
@@ -1484,7 +1457,6 @@ final class RecoveryTests: XCTestCase {
       }
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected parameter name followed by ':'
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'func' in function"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected type in parameter"),
         DiagnosticSpec(locationMarker: "2️⃣", message: #"unexpected code '"The room where it happened, the room where it happened"' in parameter clause"#),
@@ -1654,9 +1626,6 @@ final class RecoveryTests: XCTestCase {
       }
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: expected '{' in body of function declaration
-        // TODO: Old parser expected error on line 3: expected parameter name followed by ':'
-        // TODO: Old parser expected error on line 4: expected parameter name followed by ':'
         DiagnosticSpec(message: #"unexpected code '!= 0, "Can't form a Character from an empty String"' in parameter clause"#)
       ]
     )
@@ -1671,9 +1640,6 @@ final class RecoveryTests: XCTestCase {
       }
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected '{' in body of function declaration
-        // TODO: Old parser expected error on line 2: expected parameter name followed by ':'
-        // TODO: Old parser expected error on line 3: expected parameter name followed by ':'
         DiagnosticSpec(message: #"unexpected code '?= 0, "Can't form a Character from an empty String"' in parameter clause"#)
       ]
     )
@@ -1696,7 +1662,6 @@ final class RecoveryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: unnamed parameters must be written with the empty name '_'
-        // TODO: Old parser expected note on line 2: did you mean 'foo1'?
       ]
     )
   }
@@ -1708,7 +1673,6 @@ final class RecoveryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: unnamed parameters must be written with the empty name '_'
-        // TODO: Old parser expected note on line 1: did you mean 'foo2'?
       ]
     )
   }
@@ -1774,7 +1738,7 @@ final class RecoveryTests: XCTestCase {
       init 1️⃣a(b: Int) {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: initializers cannot have a name, Fix-It replacements: 8 - 9 = ''
+        // TODO: (good first issue) Old parser expected error on line 3: initializers cannot have a name, Fix-It replacements: 8 - 9 = ''
         DiagnosticSpec(message: "unexpected code 'a' before parameter clause")
       ]
     )
@@ -1786,7 +1750,7 @@ final class RecoveryTests: XCTestCase {
       init? 1️⃣c(_ d: Int) {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: initializers cannot have a name, Fix-It replacements: 9 - 10 = ''
+        // TODO: (good first issue) Old parser expected error on line 1: initializers cannot have a name, Fix-It replacements: 9 - 10 = ''
         DiagnosticSpec(message: "unexpected code 'c' before parameter clause")
       ]
     )
@@ -1798,7 +1762,7 @@ final class RecoveryTests: XCTestCase {
       init 1️⃣e<T>(f: T) {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: initializers cannot have a name, Fix-It replacements: 8 - 9 = ''
+        // TODO: (good first issue) Old parser expected error on line 1: initializers cannot have a name, Fix-It replacements: 8 - 9 = ''
         DiagnosticSpec(message: "unexpected code 'e<T>' before parameter clause")
       ]
     )
@@ -1810,7 +1774,7 @@ final class RecoveryTests: XCTestCase {
       init? 1️⃣g<T>(_: T) {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: initializers cannot have a name, Fix-It replacements: 9 - 10 = ''
+        // TODO: (good first issue) Old parser expected error on line 1: initializers cannot have a name, Fix-It replacements: 9 - 10 = ''
         DiagnosticSpec(message: "unexpected code 'g<T>' before parameter clause")
       ]
     )
@@ -2104,7 +2068,6 @@ final class RecoveryTests: XCTestCase {
       infix operator -1️⃣@-class Recover1 {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: '@' is not allowed in operator names
         DiagnosticSpec(message: "'@-class' is not allowed in operator names")
       ]
     )
@@ -2116,7 +2079,6 @@ final class RecoveryTests: XCTestCase {
       prefix operator -1️⃣фф--class Recover2 {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: 'фф' is considered an identifier and must not appear within an operator name
         DiagnosticSpec(message: "'фф--class' is not allowed in operator names")
       ]
     )

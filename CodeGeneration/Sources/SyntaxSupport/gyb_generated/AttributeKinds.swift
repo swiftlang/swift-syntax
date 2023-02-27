@@ -286,6 +286,7 @@ public let DECL_MODIFIER_KINDS: [Attribute] = [
                   "OnSubscript",
                   "OnConstructor",
                   "OnMacro",
+                  "OnImport",
                   "DeclModifier",
                   "NotSerialized",
                   "ABIStableToAdd",

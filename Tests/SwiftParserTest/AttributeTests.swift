@@ -556,4 +556,18 @@ final class AttributeTests: XCTestCase {
       """
     )
   }
+
+  func testImportAttributes() {
+    AssertParse(
+      """
+      import A
+      @_implementationOnly import B
+      public import C
+      package import D
+      internal import E
+      fileprivate import F
+      private import G
+      """
+    )
+  }
 }

@@ -152,12 +152,12 @@ extension CompilerPlugin {
         expandingSyntax: expandingSyntax
       )
 
-    case .expandAttachedMacro(let macro, let macroRole, let discriminator, let customAttributeSyntax, let declSyntax, let parentDeclSyntax):
+    case .expandAttachedMacro(let macro, let macroRole, let discriminator, let attributeSyntax, let declSyntax, let parentDeclSyntax):
       try expandAttachedMacro(
         macro: macro,
         macroRole: macroRole,
         discriminator: discriminator,
-        customAttributeSyntax: customAttributeSyntax,
+        attributeSyntax: attributeSyntax,
         declSyntax: declSyntax,
         parentDeclSyntax: parentDeclSyntax
       )

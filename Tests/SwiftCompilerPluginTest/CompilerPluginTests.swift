@@ -51,15 +51,15 @@ public class CompilerPluginTests: XCTestCase {
   func testResolveMacro() {
     let plugin = MyPlugin()
 
-    let registeredMacro = plugin.resolveMacro(
+    let registeredMacro = plugin._resolveMacro(
       moduleName: "SwiftCompilerPluginTest",
       typeName: "RegisteredMacro"
     )
     XCTAssertNotNil(registeredMacro)
     XCTAssertTrue(registeredMacro == RegisteredMacro.self)
 
-    /// Test the plugin doesn't provide macros other than ``
-    let dummyMacro = plugin.resolveMacro(
+    /// Test the plugin doesn't provide unregistered macros.
+    let dummyMacro = plugin._resolveMacro(
       moduleName: "SwiftCompilerPluginTest",
       typeName: "DummyMacro"
     )

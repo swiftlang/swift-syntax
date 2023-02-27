@@ -16,7 +16,9 @@ import SwiftSyntax
 /// Errors in macro handing.
 enum MacroExpansionError: String {
   case macroTypeNotFound = "macro expanding type not found"
+  case unmathedMacroRole = "macro doesn't conform to required macro role"
   case freestandingMacroSyntaxIsNotMacro = "macro syntax couldn't be parsed"
+  case invalidExpansionMessage = "internal message error; please file a bug report"
 }
 
 extension MacroExpansionError: DiagnosticMessage {
@@ -24,12 +26,14 @@ extension MacroExpansionError: DiagnosticMessage {
     self.rawValue
   }
   var diagnosticID: SwiftDiagnostics.MessageID {
-    .init(domain: "\(type(of: self))", id: "\(self)")
+    .init(domain: "SwiftCompilerPlugin", id: "\(type(of: self)).\(self)")
   }
   var severity: SwiftDiagnostics.DiagnosticSeverity {
     .error
   }
 }
+
+extension MacroExpansionError: Error {}
 
 extension PluginMessage.Diagnostic.Severity {
   init(from syntaxDiagSeverity: SwiftDiagnostics.DiagnosticSeverity) {
@@ -43,22 +47,21 @@ extension PluginMessage.Diagnostic.Severity {
 
 extension PluginMessage.Diagnostic {
   init(from syntaxDiag: SwiftDiagnostics.Diagnostic, in sourceManager: SourceManager) {
-    guard
-      let position = sourceManager.position(
-        of: syntaxDiag.node,
-        at: .afterLeadingTrivia
-      )
-    else {
-      fatalError("unknown diagnostic node")
+    if let position = sourceManager.position(
+      of: syntaxDiag.node,
+      at: .afterLeadingTrivia
+    ) {
+      self.position = .init(fileName: position.fileName, offset: position.utf8Offset)
+    } else {
+      self.position = .invalid
     }
 
-    self.position = .init(fileName: position.fileName, offset: position.utf8Offset)
     self.severity = .init(from: syntaxDiag.diagMessage.severity)
     self.message = syntaxDiag.message
 
-    self.highlights = syntaxDiag.highlights.map {
+    self.highlights = syntaxDiag.highlights.compactMap {
       guard let range = sourceManager.range(of: $0) else {
-        fatalError("highlight node is not known")
+        return nil
       }
       return .init(
         fileName: range.fileName,
@@ -67,9 +70,9 @@ extension PluginMessage.Diagnostic {
       )
     }
 
-    self.notes = syntaxDiag.notes.map {
+    self.notes = syntaxDiag.notes.compactMap {
       guard let pos = sourceManager.position(of: $0.node, at: .afterLeadingTrivia) else {
-        fatalError("note node is not known")
+        return nil
       }
       let position = PluginMessage.Diagnostic.Position(
         fileName: pos.fileName,
@@ -78,10 +81,10 @@ extension PluginMessage.Diagnostic {
       return .init(position: position, message: $0.message)
     }
 
-    self.fixIts = syntaxDiag.fixIts.map {
+    self.fixIts = syntaxDiag.fixIts.compactMap {
       PluginMessage.Diagnostic.FixIt(
         message: $0.message.message,
-        changes: $0.changes.changes.map {
+        changes: $0.changes.changes.compactMap {
           let range: SourceManager.SourceRange?
           let text: String
           switch $0 {
@@ -108,7 +111,7 @@ extension PluginMessage.Diagnostic {
             text = newTrivia.description
           }
           guard let range = range else {
-            fatalError("unknown")
+            return nil
           }
           return .init(
             range: PositionRange(

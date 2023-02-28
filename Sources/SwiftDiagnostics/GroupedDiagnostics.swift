@@ -150,7 +150,7 @@ extension GroupedDiagnostics {
     let childPadding = String(slc.sourceLines.count + 1).count + 1;
 
     // Collect the child sources.
-    var childSources: [AbsolutePosition : String] = [:]
+    var childSources: [AbsolutePosition: String] = [:]
     for childBufferID in sourceFiles[sourceFileID.id].children {
       let childSource = annotateSource(
         childBufferID,

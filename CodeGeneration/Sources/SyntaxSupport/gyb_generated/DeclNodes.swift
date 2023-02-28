@@ -523,7 +523,8 @@ public let DECL_NODES: [Node] = [
        children: [
          Child(name: "PoundKeyword",
                kind: .token(choices: [.token(tokenKind: "PoundIfToken"), .token(tokenKind: "PoundElseifToken"), .token(tokenKind: "PoundElseToken")]),
-               classification: "BuildConfigId"),
+               classification: "BuildConfigId",
+               requiresLeadingNewline: true),
          Child(name: "Condition",
                kind: .node(kind: "Expr"),
                nameForDiagnostics: "condition",
@@ -553,7 +554,8 @@ public let DECL_NODES: [Node] = [
                kind: .collection(kind: "IfConfigClauseList", collectionElementName: "Clause")),
          Child(name: "PoundEndif",
                kind: .token(choices: [.token(tokenKind: "PoundEndifToken")]),
-               classification: "BuildConfigId")
+               classification: "BuildConfigId",
+               requiresLeadingNewline: true)
        ]),
 
   Node(name: "ImportDecl",

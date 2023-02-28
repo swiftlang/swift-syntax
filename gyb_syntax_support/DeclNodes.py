@@ -94,7 +94,7 @@ DECL_NODES = [
                        'PoundIfToken',
                        'PoundElseifToken',
                        'PoundElseToken',
-                   ]),
+                   ], requires_leading_newline=True),
              Child('Condition', kind='Expr', name_for_diagnostics='condition', classification='BuildConfigId',
                    is_optional=True),
              Child('Elements', is_optional=True, kind='Syntax',
@@ -118,7 +118,7 @@ DECL_NODES = [
              Child('Clauses', kind='IfConfigClauseList',
                    collection_element_name='Clause'),
              Child('PoundEndif', kind='PoundEndifToken',
-                   classification='BuildConfigId'),
+                   classification='BuildConfigId', requires_leading_newline=True),
          ]),
 
     Node('PoundSourceLocation', name_for_diagnostics="'#sourceLocation' directive",

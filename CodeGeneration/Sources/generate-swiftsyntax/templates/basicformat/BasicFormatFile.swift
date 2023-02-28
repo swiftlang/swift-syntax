@@ -119,6 +119,9 @@ let basicFormatFile = SourceFileSyntax(leadingTrivia: generateCopyrightHeader(fo
       /// - Parameter node: the node that is being visited
       /// - Returns: returns true if newline should be omitted
       open func shouldOmitNewline(_ node: TokenSyntax) -> Bool {
+        if node.previousToken(viewMode: .sourceAccurate) == nil {
+          return true
+        }
         var ancestor: Syntax = Syntax(node)
         while let parent = ancestor.parent {
           ancestor = parent

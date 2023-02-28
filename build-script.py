@@ -523,22 +523,33 @@ Refer to README.md for more information.
         )
 
 
-def find_lit_test_helper_exec(
-    toolchain: str, build_dir: Optional[str], release: bool
+def find_swiftpm_bin_path(
+    package_dir: str, toolchain: str, build_dir: Optional[str], release: bool
 ) -> str:
     swiftpm_call = get_swiftpm_invocation(
         toolchain=toolchain,
         action="build",
-        package_dir=PACKAGE_DIR,
+        package_dir=package_dir,
         build_dir=build_dir,
         multiroot_data_file=None,
         release=release,
     )
-    swiftpm_call.extend(["--product", "lit-test-helper"])
     swiftpm_call.extend(["--show-bin-path"])
 
     bin_dir = subprocess.check_output(swiftpm_call)
-    return os.path.join(bin_dir.strip().decode('utf-8'), "lit-test-helper")
+    return bin_dir.strip().decode('utf-8')
+
+
+def find_product_bin_path(
+    toolchain: str, build_dir: Optional[str], release: bool
+) -> str:
+    return find_swiftpm_bin_path(PACKAGE_DIR, toolchain, build_dir, release)
+
+
+def find_examples_bin_path(
+    toolchain: str, build_dir: Optional[str], release: bool
+) -> str:
+    return find_swiftpm_bin_path(EXAMPLES_DIR, toolchain, build_dir, release)
 
 
 def run_lit_tests(toolchain: str, build_dir: Optional[str], release: bool,
@@ -548,9 +559,12 @@ def run_lit_tests(toolchain: str, build_dir: Optional[str], release: bool,
     check_lit_exec()
     check_incr_transfer_roundtrip_exec()
 
-    lit_test_helper_exec = find_lit_test_helper_exec(
-        toolchain=toolchain, build_dir=build_dir, release=release
-    )
+    product_bin_path = find_product_bin_path(
+        toolchain=toolchain, build_dir=build_dir, release=release)
+    examples_bin_path = find_examples_bin_path(
+        toolchain=toolchain, build_dir=build_dir, release=release)
+
+    lit_test_helper_exec = os.path.join(product_bin_path, "lit-test-helper")
 
     lit_call = ["python3", LIT_EXEC]
     lit_call.append(os.path.join(PACKAGE_DIR, "lit_tests"))
@@ -562,6 +576,8 @@ def run_lit_tests(toolchain: str, build_dir: Optional[str], release: bool,
     lit_call.extend(
         ["--param", "INCR_TRANSFER_ROUND_TRIP.PY=" + INCR_TRANSFER_ROUNDTRIP_EXEC]
     )
+    lit_call.extend(["--param", "EXAMPLES_BIN_PATH=" + examples_bin_path])
+    lit_call.extend(["--param", "TOOLCHAIN=" + toolchain])
 
     # Print all failures
     lit_call.extend(["--verbose"])
@@ -656,7 +672,7 @@ def verify_source_code_command(args: argparse.Namespace) -> None:
 def build_command(args: argparse.Namespace) -> None:
     try:
         builder = Builder(
-            toolchain=args.toolchain,
+            toolchain=realpath(args.toolchain),
             build_dir=realpath(args.build_dir),
             multiroot_data_file=args.multiroot_data_file,
             release=args.release,
@@ -679,7 +695,7 @@ def build_command(args: argparse.Namespace) -> None:
 def test_command(args: argparse.Namespace) -> None:
     try:
         builder = Builder(
-            toolchain=args.toolchain,
+            toolchain=realpath(args.toolchain),
             build_dir=realpath(args.build_dir),
             multiroot_data_file=args.multiroot_data_file,
             release=args.release,
@@ -688,9 +704,10 @@ def test_command(args: argparse.Namespace) -> None:
         )
 
         builder.buildProduct("lit-test-helper")
+        builder.buildExample("ExamplePlugin")
 
         run_tests(
-            toolchain=args.toolchain,
+            toolchain=realpath(args.toolchain),
             build_dir=realpath(args.build_dir),
             multiroot_data_file=args.multiroot_data_file,
             release=args.release,

@@ -23,18 +23,6 @@ final class MatchingPatternsTests: XCTestCase {
     )
   }
 
-  func testMatchingPatterns2() {
-    AssertParse(
-      """
-      // TODO: Implement tuple equality in the library.
-      // BLOCKED: <rdar://problem/13822406>
-      func ~= (x: (Int,Int,Int), y: (Int,Int,Int)) -> Bool {
-        return true
-      }
-      """
-    )
-  }
-
   func testMatchingPatterns3() {
     AssertParse(
       """

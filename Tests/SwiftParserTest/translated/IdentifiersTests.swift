@@ -86,7 +86,7 @@ final class IdentifiersTests: XCTestCase {
       func <#some name#>() {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: editor placeholder in source file
+        // TODO: (good first issue) Old parser expected error on line 2: editor placeholder in source file
       ]
     )
   }

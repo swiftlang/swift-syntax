@@ -87,10 +87,7 @@ final class EffectfulPropertiesTests: XCTestCase {
             set {}
           }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 4: 'set' accessor is not allowed on property with 'get' accessor that is 'async' or 'throws'
-      ]
+      """
     )
   }
 
@@ -103,11 +100,7 @@ final class EffectfulPropertiesTests: XCTestCase {
             set throws {}
           }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 4: 'set' accessor is not allowed on property with 'get' accessor that is 'async' or 'throws'
-        // TODO: Old parser expected error on line 4: 'set' accessor cannot have specifier 'throws'
-      ]
+      """
     )
   }
 
@@ -120,10 +113,7 @@ final class EffectfulPropertiesTests: XCTestCase {
           nonmutating set {}
         }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 4: 'set' accessor is not allowed on property with 'get' accessor that is 'async' or 'throws'
-      ]
+      """
     )
   }
 
@@ -132,19 +122,11 @@ final class EffectfulPropertiesTests: XCTestCase {
       """
       var prop3 : Bool {
         _read { yield prop3 }
-        // expected-note@+1 2 {{previous definition of getter here}}
         get throws { false }
         get async { true }
         get {}
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: '_read' accessor is not allowed on property with 'get' accessor that is 'async' or 'throws'
-        // TODO: Old parser expected error on line 2: variable cannot provide both a 'read' accessor and a getter
-        // TODO: Old parser expected note on line 4: getter defined here
-        // TODO: Old parser expected error on line 5: variable already has a getter
-        // TODO: Old parser expected error on line 6: variable already has a getter
-      ]
+      """
     )
   }
 
@@ -158,11 +140,7 @@ final class EffectfulPropertiesTests: XCTestCase {
           _modify { yield &prop4 }
         }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 3: 'set' accessor is not allowed on property with 'get' accessor that is 'async' or 'throws'
-        // TODO: Old parser expected error on line 5: '_modify' accessor is not allowed on property with 'get' accessor that is 'async' or 'throws'
-      ]
+      """
     )
   }
 
@@ -179,12 +157,7 @@ final class EffectfulPropertiesTests: XCTestCase {
         var prop6 : T { mutating get throws }
         var prop7 : T { mutating get async nonmutating set }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 4: 'set' accessor is not allowed on property with 'get' accessor that is 'async' or 'throws'
-        // TODO: Old parser expected error on line 5: 'set' accessor is not allowed on property with 'get' accessor that is 'async' or 'throws'
-        // TODO: Old parser expected error on line 9: 'set' accessor is not allowed on property with 'get' accessor that is 'async' or 'throws'
-      ]
+      """
     )
   }
 
@@ -207,8 +180,6 @@ final class EffectfulPropertiesTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: only function declarations may be marked 'rethrows'; did you mean 'throws'?
-        // TODO: Old parser expected error on line 3: 'set' accessor is not allowed on property with 'get' accessor that is 'async' or 'throws'
-        // TODO: Old parser expected error on line 3: 'set' accessor cannot have specifier 'rethrows'
       ]
     )
   }
@@ -234,11 +205,7 @@ final class EffectfulPropertiesTests: XCTestCase {
         _read async { yield 0 }
         set(theValue) async { }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: '_read' accessor cannot have specifier 'async'
-        // TODO: Old parser expected error on line 3: 'set' accessor cannot have specifier 'async'
-      ]
+      """
     )
   }
 
@@ -290,8 +257,6 @@ final class EffectfulPropertiesTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected '{' to start getter definition
-        // TODO: Old parser expected error on line 2: only function declarations may be marked 'rethrows'; did you mean 'throws'?
         DiagnosticSpec(message: "unexpected code '-> Int { 0 }' in variable")
       ]
     )

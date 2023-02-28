@@ -401,7 +401,6 @@ final class SubscriptingTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: subscripts cannot have a name, Fix-It replacements: 13 - 14 = ''
         DiagnosticSpec(message: "subscripts cannot have a name", fixIts: ["remove 'x'"])
       ],
       fixedSource: """

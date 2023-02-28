@@ -22,7 +22,6 @@ final class InvalidTests: XCTestCase {
       func test1(1️⃣inout var x : Int) {}
       """,
       diagnostics: [
-        // TODO: Old parser expected warning on line 2: 'var' in this position is interpreted as an argument label, Fix-It replacements: 18 - 21 = '`var`'
         DiagnosticSpec(message: "'inout' before a parameter name is not allowed", fixIts: ["move 'inout' in front of type"])
       ],
       fixedSource: "func test1(var x : inout Int) {}"
@@ -35,7 +34,6 @@ final class InvalidTests: XCTestCase {
       func test2(1️⃣inout let x : Int) {}
       """,
       diagnostics: [
-        // TODO: Old parser expected warning on line 1: 'let' in this position is interpreted as an argument label, Fix-It replacements: 18 - 21 = '`let`'
         DiagnosticSpec(message: "'inout' before a parameter name is not allowed")
       ]
     )
@@ -59,7 +57,6 @@ final class InvalidTests: XCTestCase {
       func test1s(1️⃣__shared var x : Int) {}
       """,
       diagnostics: [
-        // TODO: Old parser expected warning on line 1: 'var' in this position is interpreted as an argument label, Fix-It replacements: 22 - 25 = '`var`'
         DiagnosticSpec(message: "'__shared' before a parameter name is not allowed")
       ]
     )
@@ -71,7 +68,6 @@ final class InvalidTests: XCTestCase {
       func test2s(1️⃣__shared let x : Int) {}
       """,
       diagnostics: [
-        // TODO: Old parser expected warning on line 1: 'let' in this position is interpreted as an argument label, Fix-It replacements: 22 - 25 = '`let`'
         DiagnosticSpec(message: "'__shared' before a parameter name is not allowed")
       ]
     )
@@ -83,7 +79,6 @@ final class InvalidTests: XCTestCase {
       func test1o(1️⃣__owned var x : Int) {}
       """,
       diagnostics: [
-        // TODO: Old parser expected warning on line 1: 'var' in this position is interpreted as an argument label, Fix-It replacements: 21 - 24 = '`var`'
         DiagnosticSpec(message: "'__owned' before a parameter name is not allowed")
       ]
     )
@@ -95,7 +90,6 @@ final class InvalidTests: XCTestCase {
       func test2o(1️⃣__owned let x : Int) {}
       """,
       diagnostics: [
-        // TODO: Old parser expected warning on line 2: 'let' in this position is interpreted as an argument label, Fix-It replacements: 21 - 24 = '`let`'
         DiagnosticSpec(message: "'__owned' before a parameter name is not allowed")
       ]
     )
@@ -299,7 +293,6 @@ final class InvalidTests: XCTestCase {
       func f3_43591(let let 1️⃣a: Int) {}
       """,
       diagnostics: [
-        // TODO: Old parser expected warning on line 3: 'let' in this position is interpreted as an argument label, Fix-It replacements: 15 - 18 = '`let`'
         DiagnosticSpec(message: "unexpected code 'a' in parameter")
       ]
     )

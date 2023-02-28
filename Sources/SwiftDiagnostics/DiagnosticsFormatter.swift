@@ -29,8 +29,9 @@ extension Sequence where Element == Range<Int> {
       }
 
       // If the ranges overlap, expand the prior range.
+      assert(priorRange.lowerBound <= range.lowerBound)
       if priorRange.overlaps(range) {
-        let lower = Swift.min(priorRange.lowerBound, range.lowerBound)
+        let lower = priorRange.lowerBound
         let upper = Swift.max(priorRange.upperBound, range.upperBound)
         prior = lower..<upper
         continue
@@ -151,18 +152,19 @@ public struct DiagnosticsFormatter {
     }.mergingOverlappingRanges()
 
     // Map the column ranges into index ranges within the source string itself.
-    let sourceString = annotatedLine.sourceString
+    let sourceStringUTF8 = annotatedLine.sourceString.utf8
     let highlightIndexRanges: [Range<String.Index>] = highlightRanges.map { highlightRange in
-      let startIndex = sourceString.index(sourceString.startIndex, offsetBy: highlightRange.lowerBound - 1)
-      let endIndex = sourceString.index(startIndex, offsetBy: highlightRange.count)
+      let startIndex = sourceStringUTF8.index(sourceStringUTF8.startIndex, offsetBy: highlightRange.lowerBound - 1)
+      let endIndex = sourceStringUTF8.index(startIndex, offsetBy: highlightRange.count)
       return startIndex..<endIndex
     }
 
     // Form the annotated string by copying in text from the original source,
     // highlighting the column ranges.
     var resultSourceString: String = ""
-    var sourceIndex = sourceString.startIndex
     let annotation = ANSIAnnotation.sourceHighlight
+    let sourceString = annotatedLine.sourceString
+    var sourceIndex = sourceString.startIndex
     for highlightRange in highlightIndexRanges {
       // Text before the highlight range
       resultSourceString += sourceString[sourceIndex..<highlightRange.lowerBound]
@@ -188,7 +190,7 @@ public struct DiagnosticsFormatter {
     tree: SyntaxType,
     diags: [Diagnostic],
     indentString: String,
-    suffixTexts: [(AbsolutePosition, String)],
+    suffixTexts: [AbsolutePosition: String],
     sourceLocationConverter: SourceLocationConverter? = nil
   ) -> String {
     let slc = sourceLocationConverter ?? SourceLocationConverter(file: fileName ?? "", tree: tree)
@@ -318,7 +320,7 @@ public struct DiagnosticsFormatter {
       tree: tree,
       diags: diags,
       indentString: "",
-      suffixTexts: []
+      suffixTexts: [:]
     )
   }
 
@@ -372,6 +374,7 @@ struct ANSIAnnotation {
     case magenta = 35
     case cyan = 36
     case white = 37
+    case `default` = 39
   }
 
   enum Trait: UInt8 {
@@ -414,6 +417,6 @@ struct ANSIAnnotation {
 
   /// Annotation used for highlighting source text.
   static var sourceHighlight: ANSIAnnotation {
-    ANSIAnnotation(color: .white, trait: .underline)
+    ANSIAnnotation(color: .default, trait: .underline)
   }
 }

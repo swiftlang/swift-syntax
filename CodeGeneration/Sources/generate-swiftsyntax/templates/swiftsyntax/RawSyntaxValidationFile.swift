@@ -93,7 +93,6 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: "\(generateCo
                        Error validating child at index \(index) of \(nodeKind):
                        \(error.description)
                        """, file: file, line: line)
-                       _ = 1
                   }
                 }
                 """#

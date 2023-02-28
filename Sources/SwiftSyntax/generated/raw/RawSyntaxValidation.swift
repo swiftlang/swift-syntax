@@ -100,7 +100,6 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
         Error validating child at index \(index) of \(nodeKind):
         \(error.description)
         """, file: file, line: line)
-       _ = 1
     }
   }
   func assertAnyHasNoError(_ nodeKind: SyntaxKind, _ index: Int, _ errors: [ValidationError?]) {

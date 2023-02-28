@@ -29,8 +29,9 @@ extension Sequence where Element == Range<Int> {
       }
 
       // If the ranges overlap, expand the prior range.
+      assert(priorRange.lowerBound <= range.lowerBound)
       if priorRange.overlaps(range) {
-        let lower = Swift.min(priorRange.lowerBound, range.lowerBound)
+        let lower = priorRange.lowerBound
         let upper = Swift.max(priorRange.upperBound, range.upperBound)
         prior = lower..<upper
         continue

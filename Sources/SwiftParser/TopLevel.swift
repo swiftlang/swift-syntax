@@ -249,7 +249,7 @@ extension Parser {
       return .decl(RawDeclSyntax(directive))
     } else if self.at(.poundSourceLocationKeyword) {
       return .decl(RawDeclSyntax(self.parsePoundSourceLocationDirective()))
-    } else if self.atStartOfDeclaration(allowInitDecl: allowInitDecl) {
+    } else if self.atStartOfDeclaration(isAtTopLevel: isAtTopLevel, allowInitDecl: allowInitDecl) {
       return .decl(self.parseDeclaration())
     } else if self.atStartOfStatement() {
       return self.parseStatementItem()

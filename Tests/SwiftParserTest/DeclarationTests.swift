@@ -286,7 +286,11 @@ final class DeclarationTests: XCTestCase {
       fileprivate fileprivate(set) var fileprivateProp = 0
       private private(set) var privateProp = 0
       internal(set) var defaultProp = 0
-      """
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'"),
+      ]
     )
 
     AssertParse(
@@ -1406,6 +1410,79 @@ final class DeclarationTests: XCTestCase {
       fixedSource: """
         let a = <#expression#>
         """
+    )
+  }
+
+  func testCallToOpenThatLooksLikeDeclarationModifier() {
+    AssertParse(
+      """
+      func test() {
+        open(set)
+        var foo = 2
+      }
+      """,
+      substructure: Syntax(
+        FunctionCallExprSyntax(
+          calledExpression: IdentifierExprSyntax(identifier: .identifier("open")),
+          leftParen: .leftParenToken(),
+          argumentList: TupleExprElementListSyntax([
+            TupleExprElementSyntax(
+              expression: IdentifierExprSyntax(identifier: .identifier("set"))
+            )
+          ]),
+          rightParen: .rightParenToken()
+        )
+      )
+    )
+  }
+
+  func testReferenceToOpenThatLooksLikeDeclarationModifier() {
+    // Ideally, this should be parsed as an identifier expression to 'open',
+    // followed by a variable declaration but the current behavior matches the C++ parser.
+    AssertParse(
+      """
+      func test() {
+        open
+        var foo = 2
+      }
+      """,
+      substructure: Syntax(
+        VariableDeclSyntax(
+          modifiers: ModifierListSyntax([
+            DeclModifierSyntax(name: .keyword(.open))
+          ]),
+          bindingKeyword: .keyword(.var),
+          bindings: PatternBindingListSyntax([
+            PatternBindingSyntax(
+              pattern: IdentifierPatternSyntax(identifier: .identifier("foo")),
+              initializer: InitializerClauseSyntax(
+                value: IntegerLiteralExprSyntax(digits: .integerLiteral("2"))
+              )
+            )
+          ])
+        )
+      )
+    )
+  }
+
+  func testOpenVarInCodeBlockItemList() {
+    AssertParse(
+      """
+      func test() {
+        open var foo = 2
+      }
+      """,
+      substructure: Syntax(DeclModifierSyntax(name: .keyword(.open)))
+    )
+  }
+
+  func testAsyncLetInLocalContext() {
+    AssertParse(
+      """
+      func foo() async {
+        async let x: String = "x"
+      }
+      """
     )
   }
 }

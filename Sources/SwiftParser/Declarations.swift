@@ -60,7 +60,9 @@ extension TokenConsumer {
         modifierProgress.evaluate(subparser.currentToken)
       {
         subparser.eat(handle)
-        if subparser.at(.leftParen) && modifierKind.canHaveParenthesizedArgument {
+        if modifierKind != .open && subparser.at(.leftParen) && modifierKind.canHaveParenthesizedArgument {
+          // When determining whether we are at a declaration, don't consume anything in parentheses after 'open'
+          // so we don't consider a function call to open as a decl modifier. This matches the C++ parser.
           subparser.consumeAnyToken()
           subparser.consume(to: .rightParen)
         }
@@ -100,7 +102,7 @@ extension TokenConsumer {
       var lookahead = subparser.lookahead()
       repeat {
         lookahead.consumeAnyToken()
-      } while lookahead.atStartOfDeclaration(allowInitDecl: allowInitDecl)
+      } while lookahead.atStartOfDeclaration(isAtTopLevel: isAtTopLevel, allowInitDecl: allowInitDecl)
       return lookahead.at(.identifier)
     case .caseKeyword:
       // When 'case' appears inside a function, it's probably a switch

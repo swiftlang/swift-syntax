@@ -77,6 +77,9 @@ open class BasicFormat: SyntaxRewriter {
   /// - Parameter node: the node that is being visited
   /// - Returns: returns true if newline should be omitted
   open func shouldOmitNewline(_ node: TokenSyntax) -> Bool {
+    if node.previousToken(viewMode: .sourceAccurate) == nil {
+      return true
+    }
     var ancestor: Syntax = Syntax(node)
     while let parent = ancestor.parent {
       ancestor = parent
@@ -128,6 +131,10 @@ open class BasicFormat: SyntaxRewriter {
     case \ClosureExprSyntax.rightBrace:
       return true
     case \CodeBlockSyntax.rightBrace:
+      return true
+    case \IfConfigClauseSyntax.poundKeyword:
+      return true
+    case \IfConfigDeclSyntax.poundEndif:
       return true
     case \MemberDeclBlockSyntax.rightBrace:
       return true

@@ -739,8 +739,8 @@ final class MacroSystemTests: XCTestCase {
   func testContextUniqueLocalNames() {
     let context = BasicMacroExpansionContext()
 
-    let t1 = context.createUniqueName("mine")
-    let t2 = context.createUniqueName("mine")
+    let t1 = context.makeUniqueName("mine")
+    let t2 = context.makeUniqueName("mine")
     XCTAssertNotEqual(t1.description, t2.description)
     XCTAssertEqual(t1.description, "__macro_local_4minefMu_")
     XCTAssertEqual(t2.description, "__macro_local_4minefMu0_")

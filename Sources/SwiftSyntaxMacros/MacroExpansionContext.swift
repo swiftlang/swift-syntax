@@ -25,7 +25,18 @@ public protocol MacroExpansionContext: AnyObject {
   ///
   /// - Returns: an identifier token containing a unique name that will not
   ///   conflict with any other name in a well-formed program.
+  @available(*, renamed: "makeUniqueName(_:)")
   func createUniqueName(_ name: String) -> TokenSyntax
+
+  /// Generate a unique name for use in the macro.
+  ///
+  /// - Parameters:
+  ///   - name: The name to use as a basis for the uniquely-generated name,
+  ///     which will appear in the unique name that's produced here.
+  ///
+  /// - Returns: an identifier token containing a unique name that will not
+  ///   conflict with any other name in a well-formed program.
+  func makeUniqueName(_ name: String) -> TokenSyntax
 
   /// Produce a diagnostic while expanding the macro.
   func diagnose(_ diagnostic: Diagnostic)
@@ -136,6 +147,31 @@ extension MacroExpansionContext {
       line: "\(literal: line)",
       column: "\(literal: column)"
     )
+  }
+
+  /// Generate a unique name for use in the macro.
+  ///
+  /// - Parameters:
+  ///   - name: The name to use as a basis for the uniquely-generated name,
+  ///     which will appear in the unique name that's produced here.
+  ///
+  /// - Returns: an identifier token containing a unique name that will not
+  ///   conflict with any other name in a well-formed program.
+  @available(*, renamed: "makeUniqueName(_:)")
+  public func createUniqueName(_ name: String) -> TokenSyntax {
+    makeUniqueName(name)
+  }
+
+  /// Generate a unique name for use in the macro.
+  ///
+  /// - Parameters:
+  ///   - name: The name to use as a basis for the uniquely-generated name,
+  ///     which will appear in the unique name that's produced here.
+  ///
+  /// - Returns: an identifier token containing a unique name that will not
+  ///   conflict with any other name in a well-formed program.
+  public func makeUniqueName(_ name: String) -> TokenSyntax {
+    createUniqueName(name)
   }
 }
 

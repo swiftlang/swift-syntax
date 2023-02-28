@@ -1022,4 +1022,26 @@ final class AttributeTests: ParserTestCase {
       ]
     )
   }
+
+  func testMisplacedAttributeInVariableDecl() {
+    assertParse(
+      """
+      struct A {
+        var 1️⃣@State name: String
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "misplaced attribute in variable declaration",
+          fixIts: ["move attributes in front of 'var'"]
+        )
+      ],
+      fixedSource:
+        """
+        struct A {
+          @State var name: String
+        }
+        """
+    )
+  }
 }

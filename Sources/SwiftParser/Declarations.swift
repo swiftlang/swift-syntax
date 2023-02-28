@@ -1262,11 +1262,33 @@ extension Parser {
     let (unexpectedBeforeIntroducer, introducer) = self.eat(handle)
     let hasTryBeforeIntroducer = unexpectedBeforeIntroducer?.containsToken(where: { TokenSpec(.try) ~= $0 }) ?? false
 
+    var attrs = attrs
     var elements = [RawPatternBindingSyntax]()
     do {
       var keepGoing: RawTokenSyntax? = nil
       var loopProgress = LoopProgressCondition()
       repeat {
+        var unexpectedBeforePattern: RawUnexpectedNodesSyntax?
+
+        if self.at(.atSign), attrs.attributes.isEmpty {
+          let recoveredAttributes = self.parseAttributeList()
+          unexpectedBeforePattern = RawUnexpectedNodesSyntax(
+            [recoveredAttributes],
+            arena: self.arena
+          )
+
+          /// Create a version of the same attribute with all tokens missing.
+          class TokenMissingMaker: SyntaxRewriter {
+            override func visit(_ token: TokenSyntax) -> TokenSyntax {
+              return .init(token.tokenKind, presence: .missing)
+            }
+          }
+          let tokenMissingMaker = TokenMissingMaker(arena: self.arena)
+          let missingAttributes = tokenMissingMaker.rewrite(
+            Syntax(raw: RawSyntax(recoveredAttributes), rawNodeArena: arena)
+          ).raw
+          attrs.attributes = missingAttributes.cast(RawAttributeListSyntax.self)
+        }
 
         var (pattern, typeAnnotation) = self.parseTypedPattern()
 
@@ -1344,6 +1366,7 @@ extension Parser {
         keepGoing = self.consume(if: .comma)
         elements.append(
           RawPatternBindingSyntax(
+            unexpectedBeforePattern,
             pattern: pattern,
             typeAnnotation: typeAnnotation,
             initializer: initializer,

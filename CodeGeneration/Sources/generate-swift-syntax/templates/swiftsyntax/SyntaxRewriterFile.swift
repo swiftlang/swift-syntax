@@ -31,11 +31,32 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     """
   ) {
     DeclSyntax("public let viewMode: SyntaxTreeViewMode")
+    DeclSyntax(
+      """
+      /// The arena in which the parents of rewritten nodes should be allocated.
+      /// 
+      /// The `SyntaxRewriter` subclass is responsible for generating the rewritten nodes. To incorporate them into the
+      /// tree, all of the rewritten node's parents also need to be re-created. This is the arena in which those 
+      /// intermediate nodes should be allocated.
+      private let arena: SyntaxArena?
+      """
+    )
 
     DeclSyntax(
       """
       public init(viewMode: SyntaxTreeViewMode = .sourceAccurate) {
         self.viewMode = viewMode
+        self.arena = nil
+      }
+      """
+    )
+
+    DeclSyntax(
+      """
+      @_spi(RawSyntax)
+      public init(viewMode: SyntaxTreeViewMode = .sourceAccurate, arena: SyntaxArena? = nil) {
+        self.viewMode = viewMode
+        self.arena = arena
       }
       """
     )
@@ -346,7 +367,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           // Sanity check, ensure the new children are the same length.
           precondition(newLayout.count == node.raw.layoutView!.children.count)
 
-          let arena = SyntaxArena()
+          let arena = self.arena ?? SyntaxArena()
           let newRaw = node.raw.layoutView!.replacingLayout(with: Array(newLayout), arena: arena)
           // 'withExtendedLifetime' to keep 'SyntaxArena's of them alive until here.
           return withExtendedLifetime(rewrittens) {

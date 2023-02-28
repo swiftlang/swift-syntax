@@ -372,6 +372,7 @@ struct ANSIAnnotation {
     case magenta = 35
     case cyan = 36
     case white = 37
+    case `default` = 39
   }
 
   enum Trait: UInt8 {
@@ -414,6 +415,6 @@ struct ANSIAnnotation {
 
   /// Annotation used for highlighting source text.
   static var sourceHighlight: ANSIAnnotation {
-    ANSIAnnotation(color: .white, trait: .underline)
+    ANSIAnnotation(color: .default, trait: .underline)
   }
 }

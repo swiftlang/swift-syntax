@@ -19,6 +19,7 @@ add_swift_host_library(SwiftSyntaxMacros
   MacroProtocols/MemberMacro.swift
   MacroProtocols/PeerMacro.swift
 
+  AbstractSourceLocation.swift
   BasicMacroExpansionContext.swift
   MacroExpansionContext.swift
   MacroSystem.swift

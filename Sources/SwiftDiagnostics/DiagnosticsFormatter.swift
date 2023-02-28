@@ -190,7 +190,7 @@ public struct DiagnosticsFormatter {
     tree: SyntaxType,
     diags: [Diagnostic],
     indentString: String,
-    suffixTexts: [(AbsolutePosition, String)],
+    suffixTexts: [AbsolutePosition: String],
     sourceLocationConverter: SourceLocationConverter? = nil
   ) -> String {
     let slc = sourceLocationConverter ?? SourceLocationConverter(file: fileName ?? "", tree: tree)
@@ -320,7 +320,7 @@ public struct DiagnosticsFormatter {
       tree: tree,
       diags: diags,
       indentString: "",
-      suffixTexts: []
+      suffixTexts: [:]
     )
   }
 

@@ -149,14 +149,16 @@ extension GroupedDiagnostics {
 
     let childPadding = String(slc.sourceLines.count + 1).count + 1;
 
-    let childSources: [(AbsolutePosition, String)] = sourceFiles[sourceFileID.id].children.map { childBufferID in
+    // Collect the child sources.
+    var childSources: [AbsolutePosition : String] = [:]
+    for childBufferID in sourceFiles[sourceFileID.id].children {
       let childSource = annotateSource(
         childBufferID,
         formatter: formatter,
         indentString: indentString + String(repeating: " ", count: childPadding) + "│"
       )
 
-      return (sourceFiles[childBufferID.id].parent!.1, childSource)
+      childSources[sourceFiles[childBufferID.id].parent!.1, default: ""].append(childSource)
     }
 
     // If this is a nested source file, draw a box around it.

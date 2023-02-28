@@ -10,8 +10,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-import SwiftSyntax
 import SwiftDiagnostics
+import SwiftSyntax
+import SwiftSyntaxBuilder
 
 /// Interface to extract information about the context in which a given
 /// macro is expanded.
@@ -41,11 +42,31 @@ public protocol MacroExpansionContext: AnyObject {
   /// - Returns: the source location within the given node, or `nil` if the
   ///   given syntax node is not rooted in a source file that the macro
   ///   expansion context knows about.
+  @available(*, deprecated, message: "Please use AbstractSourceLocation version")
   func location<Node: SyntaxProtocol>(
     of node: Node,
     at position: PositionInSyntaxNode,
     filePathMode: SourceLocationFilePathMode
   ) -> SourceLocation?
+
+  /// Retrieve a source location for the given syntax node.
+  ///
+  /// - Parameters:
+  ///   - node: The syntax node whose source location to produce.
+  ///   - position: The position within the syntax node for the resulting
+  ///     location.
+  ///   - filePathMode: How the file name contained in the source location is
+  ///     formed.
+  ///
+  /// - Returns: the source location within the given node, or `nil` if the
+  ///   given syntax node is not rooted in a source file that the macro
+  ///   expansion context knows about.
+  @_disfavoredOverload
+  func location<Node: SyntaxProtocol>(
+    of node: Node,
+    at position: PositionInSyntaxNode,
+    filePathMode: SourceLocationFilePathMode
+  ) -> AbstractSourceLocation?
 }
 
 extension MacroExpansionContext {
@@ -58,10 +79,63 @@ extension MacroExpansionContext {
   /// - Returns: the source location within the given node, or `nil` if the
   ///   given syntax node is not rooted in a source file that the macro
   ///   expansion context knows about.
+  @available(*, deprecated, message: "Please use AbstractSourceLocation version")
   public func location<Node: SyntaxProtocol>(
     of node: Node
   ) -> SourceLocation? {
     return location(of: node, at: .afterLeadingTrivia, filePathMode: .fileID)
+  }
+
+  /// Retrieve a source location for the given syntax node's starting token
+  /// (after leading trivia) using file naming according to `#fileID`.
+  ///
+  /// - Parameters:
+  ///   - node: The syntax node whose source location to produce.
+  ///
+  /// - Returns: the source location within the given node, or `nil` if the
+  ///   given syntax node is not rooted in a source file that the macro
+  ///   expansion context knows about.
+  @_disfavoredOverload
+  public func location<Node: SyntaxProtocol>(
+    of node: Node
+  ) -> AbstractSourceLocation? {
+    return location(of: node, at: .afterLeadingTrivia, filePathMode: .fileID)
+  }
+}
+
+extension MacroExpansionContext {
+  /// Retrieve a source location for the given syntax node.
+  ///
+  /// - Parameters:
+  ///   - node: The syntax node whose source location to produce.
+  ///   - position: The position within the syntax node for the resulting
+  ///     location.
+  ///   - filePathMode: How the file name contained in the source location is
+  ///     formed.
+  ///
+  /// - Returns: the source location within the given node, or `nil` if the
+  ///   given syntax node is not rooted in a source file that the macro
+  ///   expansion context knows about.
+  @_disfavoredOverload
+  @available(*, deprecated, message: "Please use AbstractSourceLocation version")
+  public func location<Node: SyntaxProtocol>(
+    of node: Node,
+    at position: PositionInSyntaxNode,
+    filePathMode: SourceLocationFilePathMode
+  ) -> AbstractSourceLocation? {
+    guard let sourceLoc: SourceLocation = location(of: node, at: position, filePathMode: filePathMode),
+      let file = sourceLoc.file,
+      let line = sourceLoc.line,
+      let column = sourceLoc.column
+    else {
+      return nil
+    }
+
+    return AbstractSourceLocation(
+      file: "\(literal: file)",
+      line: "\(literal: line)",
+      column: "\(literal: column)"
+    )
   }
 }
 

@@ -170,7 +170,7 @@ public struct SyntaxBuildableType: Hashable {
   }
 
   /// Wraps a type in an optional chaining depending on whether `isOptional` is true.
-  public func optionalChained(expr: ExprSyntaxProtocol) -> ExprSyntax {
+  public func optionalChained<ExprNode: ExprSyntaxProtocol>(expr: ExprNode) -> ExprSyntax {
     if isOptional {
       return ExprSyntax(OptionalChainingExprSyntax(expression: expr))
     } else {
@@ -179,7 +179,7 @@ public struct SyntaxBuildableType: Hashable {
   }
 
   /// Wraps a type in a force unwrap expression depending on whether `isOptional` is true.
-  public func forceUnwrappedIfNeeded(expr: ExprSyntaxProtocol) -> ExprSyntax {
+  public func forceUnwrappedIfNeeded<ExprNode: ExprSyntaxProtocol>(expr: ExprNode) -> ExprSyntax {
     if isOptional {
       return ExprSyntax(ForcedValueExprSyntax(expression: expr))
     } else {

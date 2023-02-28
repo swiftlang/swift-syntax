@@ -162,8 +162,6 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: "\(generateCo
                         }
                       }
                     }
-
-                    BreakStmtSyntax()
                   }
                 }
               }

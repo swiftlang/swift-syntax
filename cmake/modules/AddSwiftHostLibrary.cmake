@@ -30,6 +30,17 @@ function(add_swift_host_library name)
       COMMAND "${CMAKE_COMMAND}" -E make_directory ${module_base}
       COMMENT "Generating module directory for ${name}")
 
+  # Touch the library and objects to workaround their mtime not being updated
+  # when there are no real changes (eg. a file was updated with a comment).
+  # Ideally this should be done in the driver, which could only update the
+  # files that have changed.
+  add_custom_command(
+      TARGET ${name}
+      POST_BUILD
+      COMMAND "${CMAKE_COMMAND}" -E touch_nocreate $<TARGET_FILE:${name}> $<TARGET_OBJECTS:${name}>
+      COMMAND_EXPAND_LISTS
+      COMMENT "Update mtime of library outputs workaround")
+
   # Install the Swift module into the appropriate location.
   set_target_properties(${name}
     PROPERTIES Swift_MODULE_DIRECTORY ${module_dir}

@@ -120,6 +120,7 @@ public enum SyntaxEnum {
   case floatLiteralExpr(FloatLiteralExprSyntax)
   case forInStmt(ForInStmtSyntax)
   case forcedValueExpr(ForcedValueExprSyntax)
+  case forgetStmt(ForgetStmtSyntax)
   case functionCallExpr(FunctionCallExprSyntax)
   case functionDecl(FunctionDeclSyntax)
   case functionParameterList(FunctionParameterListSyntax)
@@ -492,6 +493,8 @@ public extension Syntax {
       return .forInStmt(ForInStmtSyntax(self)!)
     case .forcedValueExpr:
       return .forcedValueExpr(ForcedValueExprSyntax(self)!)
+    case .forgetStmt:
+      return .forgetStmt(ForgetStmtSyntax(self)!)
     case .functionCallExpr:
       return .functionCallExpr(FunctionCallExprSyntax(self)!)
     case .functionDecl:

@@ -885,6 +885,14 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
+  override open func visit(_ node: ForgetStmtSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: ForgetStmtSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
   override open func visit(_ node: FunctionCallExprSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

@@ -117,6 +117,7 @@ public enum Keyword: UInt8, Hashable {
   case `fileprivate`
   case final
   case `for`
+  case _forget
   case forward
   case `func`
   case get
@@ -428,6 +429,8 @@ public enum Keyword: UInt8, Hashable {
         self = .`default`
       case "dynamic":
         self = .dynamic
+      case "_forget":
+        self = ._forget
       case "forward":
         self = .forward
       case "message":
@@ -946,6 +949,7 @@ public enum Keyword: UInt8, Hashable {
       "fileprivate", 
       "final", 
       "for", 
+      "_forget", 
       "forward", 
       "func", 
       "get", 

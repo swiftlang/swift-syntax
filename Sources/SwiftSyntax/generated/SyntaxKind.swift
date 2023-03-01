@@ -120,6 +120,7 @@ public enum SyntaxKind {
   case floatLiteralExpr
   case forInStmt
   case forcedValueExpr
+  case forgetStmt
   case functionCallExpr
   case functionDecl
   case functionParameterList

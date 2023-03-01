@@ -97,6 +97,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/FallthroughStmtSyntax>
 - <doc:SwiftSyntax/BreakStmtSyntax>
 - <doc:SwiftSyntax/ThrowStmtSyntax>
+- <doc:SwiftSyntax/ForgetStmtSyntax>
 
 ### Expressions
 

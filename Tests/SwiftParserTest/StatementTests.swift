@@ -574,6 +574,76 @@ final class StatementTests: XCTestCase {
     )
   }
 
+  func testForget() {
+    AssertParse(
+      """
+      _forget self
+      """,
+      substructure: Syntax(
+        ForgetStmtSyntax(
+          expression: IdentifierExprSyntax(identifier: .keyword(.`self`))
+        )
+      )
+    )
+
+    AssertParse(
+      """
+      _forget Self
+      """,
+      substructure: Syntax(
+        ForgetStmtSyntax(
+          expression: IdentifierExprSyntax(identifier: .keyword(.Self))
+        )
+      )
+    )
+
+    AssertParse(
+      """
+      _forget SarahMarshall
+      """,
+      substructure: Syntax(
+        ForgetStmtSyntax(
+          expression: IdentifierExprSyntax(identifier: .identifier("SarahMarshall"))
+        )
+      )
+    )
+
+    AssertParse(
+      """
+      _forget 1️⃣case
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression in 'forget' statement"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "'case' can only appear inside a 'switch' statement or 'enum' declaration"),
+      ]
+    )
+
+    // It's important that we don't parse this one as a forget statement!
+    AssertParse(
+      """
+      func _forget<T>(_ t: T) {}
+
+      func caller() {
+        _forget(self)
+      }
+      """,
+      substructure: Syntax(
+        FunctionCallExprSyntax(
+          callee: IdentifierExprSyntax(
+            identifier: .identifier("_forget")
+          ),
+          argumentList: {
+            TupleExprElementListSyntax([
+              TupleExprElementSyntax(
+                expression: IdentifierExprSyntax(identifier: .keyword(.`self`))
+              )
+            ])
+          }
+        )
+      )
+    )
+  }
+
   func testDefaultIdentIdentifierInReturnStmt() {
     AssertParse("return FileManager.default")
   }

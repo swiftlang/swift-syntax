@@ -55,6 +55,7 @@ extension Parser {
   ///     statement → control-transfer-statement ';'?
   ///     statement → defer-statement ';'?
   ///     statement → do-statement ';'?
+  ///     statement → forget-statement ';'?
   ///
   ///     loop-statement → for-in-statement
   ///     loop-statement → while-statement
@@ -123,6 +124,8 @@ extension Parser {
       return label(self.parseContinueStatement(continueHandle: handle), with: optLabel)
     case (.fallthroughKeyword, let handle)?:
       return label(self.parseFallthroughStatement(fallthroughHandle: handle), with: optLabel)
+    case (.forgetKeyword, let handle)?:
+      return label(self.parseForgetStatement(forgetHandle: handle), with: optLabel)
     case (.returnKeyword, let handle)?:
       return label(self.parseReturnStatement(returnHandle: handle), with: optLabel)
     case (.throwKeyword, let handle)?:
@@ -368,6 +371,28 @@ extension Parser {
     return RawThrowStmtSyntax(
       unexpectedBeforeThrowKeyword,
       throwKeyword: throwKeyword,
+      expression: expr,
+      arena: self.arena
+    )
+  }
+}
+
+// MARK: Forget Statements
+
+extension Parser {
+  /// Parse a forget statement.
+  ///
+  /// Grammar
+  /// =======
+  ///
+  ///     forget-statement → 'forget' expression
+  @_spi(RawSyntax)
+  public mutating func parseForgetStatement(forgetHandle: RecoveryConsumptionHandle) -> RawForgetStmtSyntax {
+    let (unexpectedBeforeForgetKeyword, forgetKeyword) = self.eat(forgetHandle)
+    let expr = self.parseExpression()
+    return RawForgetStmtSyntax(
+      unexpectedBeforeForgetKeyword,
+      forgetKeyword: forgetKeyword,
       expression: expr,
       arena: self.arena
     )
@@ -945,6 +970,19 @@ extension Parser.Lookahead {
         // "yield" followed immediately by any other token is likely a
         // yield statement of some singular expression.
         return !self.peek().isAtStartOfLine
+      }
+    case .forgetKeyword?:
+      switch peek().rawTokenKind {
+      case .identifier, .keyword:
+        // Since some identifiers like "self" are classified as keywords,
+        // we want to recognize those too, to handle "forget self". We also
+        // accept any identifier since we want to emit a nice error message
+        // later on during type checking.
+        return true
+      default:
+        // any other token following "forget" means it's not the statement.
+        // For example, could be the function call "forget()".
+        return false
       }
     case nil:
       return false

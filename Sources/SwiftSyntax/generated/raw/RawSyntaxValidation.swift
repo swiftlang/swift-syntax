@@ -12,7 +12,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-
 /// Check that the `layout` is valid for the given 'SyntaxKind'.
 ///
 /// Note that this only validates the immediate children.
@@ -2362,5 +2361,6 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertAnyHasNoError(kind, 3, [
         verify(layout[3], as: RawSyntax.self)])
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
-  }#endif 
+  }
+  #endif 
 }

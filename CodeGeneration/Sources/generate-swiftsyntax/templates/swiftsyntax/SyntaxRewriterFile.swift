@@ -162,7 +162,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: generateCopyrightHeader
       """
     )
 
-    IfConfigDeclSyntax(
+    try IfConfigDeclSyntax(
       leadingTrivia:
         """
         // SwiftSyntax requires a lot of stack space in debug builds for syntax tree
@@ -177,8 +177,8 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: generateCopyrightHeader
           poundKeyword: .poundIfKeyword(),
           condition: ExprSyntax("DEBUG"),
           elements: .statements(
-            CodeBlockItemListSyntax {
-              try! FunctionDeclSyntax(
+            try CodeBlockItemListSyntax {
+              try FunctionDeclSyntax(
                 """
                 /// Implementation detail of visit(_:). Do not call directly.
                 ///
@@ -225,7 +225,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: generateCopyrightHeader
           )
         )
         IfConfigClauseSyntax(
-          poundKeyword: .poundElseKeyword(leadingTrivia: .newline),
+          poundKeyword: .poundElseKeyword(),
           elements: .statements(
             CodeBlockItemListSyntax {
               try! FunctionDeclSyntax("private func visit(_ data: SyntaxData) -> Syntax") {
@@ -244,8 +244,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: generateCopyrightHeader
             }
           )
         )
-      },
-      poundEndif: .poundEndifKeyword(leadingTrivia: .newline)
+      }
     )
 
     DeclSyntax(

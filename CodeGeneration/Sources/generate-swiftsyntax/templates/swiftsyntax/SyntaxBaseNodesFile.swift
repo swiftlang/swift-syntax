@@ -142,7 +142,7 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: generateCopyrightHeade
             IfConfigClauseSyntax(
               poundKeyword: .poundIfKeyword(),
               condition: ExprSyntax("DEBUG"),
-              elements: IfConfigClauseSyntax.Elements.statements(
+              elements: .statements(
                 CodeBlockItemListSyntax {
                   try! SwitchExprSyntax("switch data.raw.kind") {
                     SwitchCaseSyntax(

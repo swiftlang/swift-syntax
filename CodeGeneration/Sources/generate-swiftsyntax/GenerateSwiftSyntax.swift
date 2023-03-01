@@ -120,9 +120,11 @@ struct GenerateSwiftSyntax: ParsableCommand {
           .appendingPathComponent(template.module)
           .appendingPathComponent("generated")
           .appendingPathComponent(template.filename)
-        previouslyGeneratedFilesLock.withLock {
-          _ = previouslyGeneratedFiles.remove(destination)
-        }
+
+        previouslyGeneratedFilesLock.lock();
+        _ = previouslyGeneratedFiles.remove(destination)
+        previouslyGeneratedFilesLock.unlock()
+
         try generateTemplate(
           sourceFile: template.sourceFile,
           destination: destination,

@@ -68,6 +68,8 @@ extension Parser {
         (.prefix, let handle)?,
         (.postfix, let handle)?,
         (.__consuming, let handle)?,
+        (.borrowing, let handle)?,
+        (.consuming, let handle)?,
         (.mutating, let handle)?,
         (.nonmutating, let handle)?,
         (.convenience, let handle)?,

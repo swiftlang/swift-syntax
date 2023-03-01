@@ -3,8 +3,6 @@ import textwrap
 from . import Classification  # noqa: I201
 from . import Token
 from .AttributeNodes import ATTRIBUTE_NODES  # noqa: I201
-from .AttributeKinds import DECL_ATTR_KINDS, DECL_MODIFIER_KINDS, \
-    verify_attribute_serialization_codes
 from .AvailabilityNodes import AVAILABILITY_NODES  # noqa: I201
 from .CommonNodes import COMMON_NODES  # noqa: I201
 from .DeclNodes import DECL_NODES  # noqa: I201
@@ -25,12 +23,7 @@ NON_BASE_SYNTAX_NODES = [node for node in SYNTAX_NODES if not node.is_base()]
 SYNTAX_TOKENS = Token.SYNTAX_TOKENS
 SYNTAX_TOKEN_MAP = Token.SYNTAX_TOKEN_MAP
 SYNTAX_CLASSIFICATIONS = Classification.SYNTAX_CLASSIFICATIONS
-TYPE_ATTR_KINDS = AttributeKinds.TYPE_ATTR_KINDS
-DECL_ATTR_KINDS = AttributeKinds.DECL_ATTR_KINDS
-DECL_MODIFIER_KINDS = AttributeKinds.DECL_MODIFIER_KINDS
-DEPRECATED_MODIFIER_KINDS = AttributeKinds.DEPRECATED_MODIFIER_KINDS
 
-verify_attribute_serialization_codes(DECL_ATTR_KINDS + DECL_MODIFIER_KINDS)
 
 def make_missing_child(child):
     """

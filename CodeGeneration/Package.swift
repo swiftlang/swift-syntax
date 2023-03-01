@@ -29,7 +29,6 @@ let package = Package(
       name: "SyntaxSupport",
       exclude: [
         "gyb_helpers",
-        "AttributeKinds.swift.gyb",
         "AttributeNodes.swift.gyb",
         "AvailabilityNodes.swift.gyb",
         "BuilderInitializableTypes.swift.gyb",

@@ -84,10 +84,12 @@ public enum Keyword: UInt8, Hashable {
   case backDeployed
   case before
   case block
+  case borrowing
   case `break`
   case `case`
   case `catch`
   case `class`
+  case consuming
   case `continue`
   case convenience
   case convention
@@ -506,6 +508,10 @@ public enum Keyword: UInt8, Hashable {
         self = ._optimize
       case "available":
         self = .available
+      case "borrowing":
+        self = .borrowing
+      case "consuming":
+        self = .consuming
       case "extension":
         self = .`extension`
       case "lowerThan":
@@ -907,10 +913,12 @@ public enum Keyword: UInt8, Hashable {
       "backDeployed", 
       "before", 
       "block", 
+      "borrowing", 
       "break", 
       "case", 
       "catch", 
       "class", 
+      "consuming", 
       "continue", 
       "convenience", 
       "convention", 

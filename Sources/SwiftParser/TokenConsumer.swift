@@ -234,4 +234,30 @@ extension TokenConsumer {
     }
     return missingToken(.identifier, text: nil)
   }
+
+  var canHaveParameterSpecifier: Bool {
+    // The parameter specifiers like `isolated`, `consuming`, `borrowing` are
+    // also valid identifiers and could be the name of a type. Check whether
+    // the following token is something that can introduce a type (which,
+    // thankfully, doesn't overlap with the set of tokens that can continue
+    // a type production), in which case the current token is interpretable
+    // as a parameter specifier.
+    let lexeme = peek()
+
+    switch lexeme.rawTokenKind {
+    case .atSign, .leftParen, .identifier, .leftSquareBracket, .wildcard:
+      return true
+
+    case .keyword:
+      switch PrepareForKeywordMatch(lexeme) {
+      case TokenSpec(.inout), TokenSpec(.Any), TokenSpec(.Self), TokenSpec(.var), TokenSpec(.let):
+        return true
+      default:
+        return false
+      }
+
+    default:
+      return false
+    }
+  }
 }

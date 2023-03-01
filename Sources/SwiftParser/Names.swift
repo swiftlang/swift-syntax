@@ -259,9 +259,11 @@ extension Parser.Lookahead {
 
 extension Lexer.Lexeme {
   func canBeArgumentLabel(allowDollarIdentifier: Bool = false) -> Bool {
-    if TypeSpecifier(lexeme: self) != nil {
+    // `inout` is reserved as an argument label for historical reasons.
+    if TypeSpecifier(lexeme: self) == .inoutKeyword {
       return false
     }
+
     switch self.rawTokenKind {
     case .identifier, .wildcard:
       // Identifiers, escaped identifiers, and '_' can be argument labels.

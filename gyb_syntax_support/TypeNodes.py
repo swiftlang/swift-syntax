@@ -183,12 +183,12 @@ TYPE_NODES = [
          ]),
 
     # attributed-type -> type-specifier? attribute-list? type
-    # type-specifier -> 'inout' | '__owned' | '__unowned'
+    # type-specifier -> 'inout' | 'borrowing' | 'consuming' | '__owned' | '__shared'
     Node('AttributedType', name_for_diagnostics='type', kind='Type',
          traits=['Attributed'],
          children=[
              Child('Specifier', kind='Token',
-                   token_choices=['KeywordToken|inout', 'KeywordToken|__shared', 'KeywordToken|__owned', 'KeywordToken|isolated', 'KeywordToken|_const'],
+                   token_choices=['KeywordToken|inout', 'KeywordToken|__shared', 'KeywordToken|__owned', 'KeywordToken|isolated', 'KeywordToken|_const', 'KeywordToken|borrowing', 'KeywordToken|consuming'],
                    is_optional=True),
              Child('Attributes', kind='AttributeList',
                    collection_element_name='Attribute', is_optional=True),

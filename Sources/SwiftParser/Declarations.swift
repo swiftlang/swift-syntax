@@ -1142,8 +1142,12 @@ extension Parser {
     let modifiers = parseParameterModifiers(for: subject)
 
     var misplacedSpecifiers: [RawTokenSyntax] = []
-    while let specifier = self.consume(ifAnyIn: TypeSpecifier.self) {
-      misplacedSpecifiers.append(specifier)
+    if self.withLookahead({ !$0.startsParameterName(isClosure: subject.isClosure, allowMisplacedSpecifierRecovery: false) }) {
+      while canHaveParameterSpecifier,
+        let specifier = self.consume(ifAnyIn: TypeSpecifier.self)
+      {
+        misplacedSpecifiers.append(specifier)
+      }
     }
 
     let unexpectedBeforeFirstName: RawUnexpectedNodesSyntax?

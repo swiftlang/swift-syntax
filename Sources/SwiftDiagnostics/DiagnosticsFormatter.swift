@@ -327,20 +327,20 @@ public struct DiagnosticsFormatter {
   /// Annotates the given ``DiagnosticMessage`` with an appropriate ANSI color code (if the value of the `colorize`
   /// property is `true`) and returns the result as a printable string.
   private func colorizeIfRequested(_ message: DiagnosticMessage) -> String {
-    guard colorize else {
-      return message.message
-    }
-
     switch message.severity {
     case .error:
       let annotation = ANSIAnnotation(color: .red, trait: .bold)
-      return annotation.applied(to: "error: \(message.message)")
+      return colorizeIfRequested("error: \(message.message)", annotation: annotation)
+
     case .warning:
       let color = ANSIAnnotation(color: .yellow)
-      let prefix = color.withTrait(.bold).applied(to: "warning: ")
-      return prefix + color.applied(to: message.message)
+      let prefix = colorizeIfRequested("warning: ", annotation: color.withTrait(.bold))
+
+      return prefix + colorizeIfRequested(message.message, annotation: color);
     case .note:
-      return message.message
+      let color = ANSIAnnotation(color: .default, trait: .bold)
+      let prefix = colorizeIfRequested("note: ", annotation: color)
+      return prefix + message.message
     }
   }
 

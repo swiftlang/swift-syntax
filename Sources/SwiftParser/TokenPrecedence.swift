@@ -101,8 +101,8 @@ public enum TokenPrecedence: Comparable {
 
   @_spi(RawSyntax)
   public init(_ lexeme: Lexer.Lexeme) {
-    if lexeme.rawTokenKind == .keyword {
-      self.init(Keyword(lexeme.tokenText)!)
+    if let kw = Keyword(lexeme.tokenText) {
+      self.init(kw)
     } else {
       self.init(nonKeyword: lexeme.rawTokenKind)
     }
@@ -216,7 +216,9 @@ public enum TokenPrecedence: Comparable {
       // Access modifiers
       .fileprivate, .internal, .private, .public, .static,
       // Functions
-      .deinit, .func, .`init`, .subscript,
+      .deinit, .func, .`init`, .subscript, 
+      // Marco
+      .macro,
       // Variables
       .let, .var,
       // Operator stuff

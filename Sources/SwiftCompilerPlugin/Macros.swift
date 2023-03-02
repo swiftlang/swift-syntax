@@ -60,11 +60,17 @@ extension CompilerPlugin {
 
       switch macroDefinition {
       case let exprMacroDef as ExpressionMacro.Type:
-        let rewritten = try exprMacroDef.expansion(of: macroSyntax, in: context)
+        func _expand<Node: FreestandingMacroExpansionSyntax>(node: Node) throws -> ExprSyntax {
+          try exprMacroDef.expansion(of: node, in: context)
+        }
+        let rewritten = try _openExistential(macroSyntax, do: _expand)
         expandedSource = rewritten.description
 
       case let declMacroDef as DeclarationMacro.Type:
-        let rewritten = try declMacroDef.expansion(of: macroSyntax, in: context)
+        func _expand<Node: FreestandingMacroExpansionSyntax>(node: Node) throws -> [DeclSyntax] {
+          try declMacroDef.expansion(of: node, in: context)
+        }
+        let rewritten = try _openExistential(macroSyntax, do: _expand)
         expandedSource = CodeBlockItemListSyntax(rewritten.map { CodeBlockItemSyntax(item: .decl($0)) }).description
 
       default:

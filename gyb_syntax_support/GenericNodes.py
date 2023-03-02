@@ -74,10 +74,10 @@ GENERIC_NODES = [
          children=[
              Child('Attributes', kind='AttributeList',
                    collection_element_name='Attribute', is_optional=True),
-             Child('Name', name_for_diagnostics='name', kind='IdentifierToken'),
-             Child('Ellipsis',
+             Child('Each',
                    name_for_diagnostics='parameter pack specifier',
-                   kind='EllipsisToken', is_optional=True),
+                   kind='KeywordToken', token_choices=['KeywordToken|each'], is_optional=True),
+             Child('Name', name_for_diagnostics='name', kind='IdentifierToken'),
              Child('Colon', kind='ColonToken',
                    is_optional=True),
              Child('InheritedType', name_for_diagnostics='inherited type', kind='Type',

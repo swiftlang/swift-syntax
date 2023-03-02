@@ -515,7 +515,7 @@ DECL_NODES = [
              Child('ImportKind', kind='KeywordToken', is_optional=True,
                    token_choices=[
                       'KeywordToken|typealias', 'KeywordToken|struct', 'KeywordToken|class', 'KeywordToken|enum', 'KeywordToken|protocol', 'KeywordToken|var',
-                      'KeywordToken|let', 'KeywordToken|func',
+                      'KeywordToken|let', 'KeywordToken|func', 'KeywordToken|inout'
                    ]),
              Child('Path', kind='AccessPath',
                    collection_element_name='PathComponent'),
@@ -589,6 +589,7 @@ DECL_NODES = [
              Child('BindingKeyword', kind='KeywordToken',
                    token_choices=[
                        'KeywordToken|let', 'KeywordToken|var',
+                       'KeywordToken|inout'
                    ]),
              Child('Bindings', kind='PatternBindingList',
                    collection_element_name='Binding'),

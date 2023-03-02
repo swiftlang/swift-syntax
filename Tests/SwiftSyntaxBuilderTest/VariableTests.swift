@@ -25,11 +25,25 @@ final class VariableTests: XCTestCase {
     AssertBuildResult(buildable, "␣let a: [Int]")
   }
 
+  func testInoutBindingDecl() {
+    let leadingTrivia = Trivia.unexpectedText("␣")
+
+    let buildable = VariableDeclSyntax(leadingTrivia: leadingTrivia, bindingKeyword: .keyword(.inout)) {
+      PatternBindingSyntax(pattern: PatternSyntax("a"), typeAnnotation: TypeAnnotationSyntax(type: ArrayTypeSyntax(elementType: TypeSyntax("Int"))))
+    }
+
+    AssertBuildResult(buildable, "␣inout a: [Int]")
+  }
+
   func testVariableDeclWithStringParsing() {
     let testCases: [UInt: (DeclSyntax, String)] = [
       #line: (
         DeclSyntax("let content = try? String(contentsOf: url)"),
         "let content = try? String(contentsOf: url)"
+      ),
+      #line: (
+        DeclSyntax("inout content = try? String(contentsOf: url)"),
+        "inout content = try? String(contentsOf: url)"
       ),
       #line: (
         DeclSyntax("let content = try! String(contentsOf: url)"),
@@ -43,6 +57,14 @@ final class VariableTests: XCTestCase {
         DeclSyntax("var foo: String { myOptional!.someProperty }"),
         """
         var foo: String {
+            myOptional!.someProperty
+        }
+        """
+      ),
+      #line: (
+        DeclSyntax("inout foo: String { myOptional!.someProperty }"),
+        """
+        inout foo: String {
             myOptional!.someProperty
         }
         """
@@ -109,6 +131,16 @@ final class VariableTests: XCTestCase {
         DeclSyntax("var bar: [String] { bar.map({ $0.description }) }"),
         """
         var bar: [String] {
+            bar.map({
+                    $0.description
+                })
+        }
+        """
+      ),
+      #line: (
+        DeclSyntax("inout bar: [String] { bar.map({ $0.description }) }"),
+        """
+        inout bar: [String] {
             bar.map({
                     $0.description
                 })

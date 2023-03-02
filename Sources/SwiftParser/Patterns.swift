@@ -53,6 +53,7 @@ extension Parser {
       case dollarIdentifier  // For recovery
       case letKeyword
       case varKeyword
+      case inoutKeyword
 
       init?(lexeme: Lexer.Lexeme) {
         switch PrepareForKeywordMatch(lexeme) {
@@ -62,6 +63,7 @@ extension Parser {
         case TokenSpec(.dollarIdentifier): self = .dollarIdentifier
         case TokenSpec(.let): self = .letKeyword
         case TokenSpec(.var): self = .varKeyword
+        case TokenSpec(.inout): self = .inoutKeyword
         default: return nil
         }
       }
@@ -74,6 +76,7 @@ extension Parser {
         case .dollarIdentifier: return .dollarIdentifier
         case .letKeyword: return .keyword(.let)
         case .varKeyword: return .keyword(.var)
+        case .inoutKeyword: return .keyword(.inout)
         }
       }
     }
@@ -120,12 +123,13 @@ extension Parser {
         )
       )
     case (.letKeyword, let handle)?,
-      (.varKeyword, let handle)?:
-      let letOrVar = self.eat(handle)
+      (.varKeyword, let handle)?,
+      (.inoutKeyword, let handle)?:
+      let bindingKeyword = self.eat(handle)
       let value = self.parsePattern()
       return RawPatternSyntax(
         RawValueBindingPatternSyntax(
-          bindingKeyword: letOrVar,
+          bindingKeyword: bindingKeyword,
           valuePattern: value,
           arena: self.arena
         )
@@ -239,12 +243,13 @@ extension Parser {
     // Parse productions that can only be patterns.
     switch self.at(anyIn: MatchingPatternStart.self) {
     case (.varKeyword, let handle)?,
-      (.letKeyword, let handle)?:
-      let letOrVar = self.eat(handle)
-      let value = self.parseMatchingPattern(context: .letOrVar)
+      (.letKeyword, let handle)?,
+      (.inoutKeyword, let handle)?:
+      let bindingKeyword = self.eat(handle)
+      let value = self.parseMatchingPattern(context: .bindingIntroducer)
       return RawPatternSyntax(
         RawValueBindingPatternSyntax(
-          bindingKeyword: letOrVar,
+          bindingKeyword: bindingKeyword,
           valuePattern: value,
           arena: self.arena
         )
@@ -287,6 +292,7 @@ extension Parser.Lookahead {
   ///   pattern ::= pattern-tuple
   ///   pattern ::= 'var' pattern
   ///   pattern ::= 'let' pattern
+  ///   pattern ::= 'inout' pattern
   mutating func canParsePattern() -> Bool {
     enum PatternStartTokens: TokenSpecSet {
       case identifier
@@ -294,6 +300,7 @@ extension Parser.Lookahead {
       case letKeyword
       case varKeyword
       case leftParen
+      case inoutKeyword
 
       init?(lexeme: Lexer.Lexeme) {
         switch PrepareForKeywordMatch(lexeme) {
@@ -302,6 +309,7 @@ extension Parser.Lookahead {
         case TokenSpec(.let): self = .letKeyword
         case TokenSpec(.var): self = .varKeyword
         case TokenSpec(.leftParen): self = .leftParen
+        case TokenSpec(.inout): self = .inoutKeyword
         default: return nil
         }
       }
@@ -313,6 +321,7 @@ extension Parser.Lookahead {
         case .letKeyword: return .keyword(.let)
         case .varKeyword: return .keyword(.var)
         case .leftParen: return .leftParen
+        case .inoutKeyword: return .keyword(.inout)
         }
       }
     }
@@ -323,7 +332,8 @@ extension Parser.Lookahead {
       self.eat(handle)
       return true
     case (.letKeyword, let handle)?,
-      (.varKeyword, let handle)?:
+      (.varKeyword, let handle)?,
+      (.inoutKeyword, let handle)?:
       self.eat(handle)
       return self.canParsePattern()
     case (.leftParen, _)?:

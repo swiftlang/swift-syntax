@@ -192,6 +192,9 @@ public enum TokenPrecedence: Comparable {
       // Keywords in function types (we should be allowed to skip them inside parenthesis)
       .rethrows, .throws,
       // Consider 'any' and 'inout' like a prefix operator to a type and a type is expression-like.
+      //
+      // NOTE: We reuse this for inout bindings and choose the higher precedence level of expr keywords
+      // so we do not break anything.
       .inout,
       // Consider 'any' and 'inout' like a prefix operator to a type and a type is expression-like.
       .Any,

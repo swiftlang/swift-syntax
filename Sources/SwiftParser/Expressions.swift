@@ -75,16 +75,16 @@ extension Parser {
     /// case x.y <- 'x' must refer to some 'x' defined in another scope, it cannot be e.g. an enum type.
     /// ```
     case matching
-    /// We're parsing a matching pattern that is introduced via `let` or `var`.
+    /// We're parsing a matching pattern that is introduced via `let`, `var`, or `inout`
     ///
     /// ```
     /// case let x.y <- 'x' must refer to the base of some member access, y must refer to some pattern-compatible identfier
     /// ```
-    case letOrVar
+    case bindingIntroducer
 
     var admitsBinding: Bool {
       switch self {
-      case .letOrVar:
+      case .bindingIntroducer:
         return true
       case .none, .matching:
         return false
@@ -328,7 +328,7 @@ extension Parser {
 
     case (.equal, let handle)?:
       switch pattern {
-      case .matching, .letOrVar:
+      case .matching, .bindingIntroducer:
         return nil
       case .none:
         let eq = self.eat(handle)

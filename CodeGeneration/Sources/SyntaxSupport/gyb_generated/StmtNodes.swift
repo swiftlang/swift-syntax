@@ -273,7 +273,7 @@ public let STMT_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "BindingKeyword",
-               kind: .token(choices: [.keyword(text: "let"), .keyword(text: "var")])),
+               kind: .token(choices: [.keyword(text: "let"), .keyword(text: "var"), .keyword(text: "inout")])),
          Child(name: "Pattern",
                kind: .node(kind: "Pattern")),
          Child(name: "TypeAnnotation",

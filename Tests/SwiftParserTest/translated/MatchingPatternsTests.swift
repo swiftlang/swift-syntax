@@ -65,6 +65,8 @@ final class MatchingPatternsTests: XCTestCase {
         a = 1
       case let a:
         a = 1
+      case inout a:
+        a = 1
       case var var a:
         a += 1
       case var let a:
@@ -181,6 +183,7 @@ final class MatchingPatternsTests: XCTestCase {
       var n : Voluntary<Int> = .Naught
       if case let .Naught(value) = n {}
       if case let .Naught(value1, value2, value3) = n {}
+      if case inout .Naught(value) = n {}
       """
     )
   }
@@ -357,6 +360,8 @@ final class MatchingPatternsTests: XCTestCase {
       case .Payload((let x)):
         acceptInt(x)
         acceptString("\(x)")
+      case .Payload(inout x):
+        acceptInt(x)
       }
       """#
     )
@@ -419,6 +424,8 @@ final class MatchingPatternsTests: XCTestCase {
       """
       switch t {
       case (_, var a, 3):
+        a += 1
+      case (_, inout a, 3):
         a += 1
       case var (_, b, 3):
         b += 1

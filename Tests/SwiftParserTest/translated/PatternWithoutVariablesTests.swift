@@ -19,6 +19,7 @@ final class PatternWithoutVariablesTests: XCTestCase {
     AssertParse(
       """
       let _ = 1
+      inout _ = 1
       """
     )
   }
@@ -28,6 +29,7 @@ final class PatternWithoutVariablesTests: XCTestCase {
       """
       func foo() {
         let _ = 1 // OK
+        inout _ = 1
       }
       """
     )
@@ -42,6 +44,7 @@ final class PatternWithoutVariablesTests: XCTestCase {
         func foo() {
           let _ = 1 // OK
         }
+        inout (_, _) = (1, 2)
       }
       """
     )
@@ -73,6 +76,9 @@ final class PatternWithoutVariablesTests: XCTestCase {
         case let (_, x): _ = x; break    // ok
         }
         if case let _ = "str" {}
+        switch a {
+        case inout .Bar: break
+        }
       }
       """#
     )

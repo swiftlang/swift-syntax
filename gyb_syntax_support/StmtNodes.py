@@ -199,7 +199,8 @@ STMT_NODES = [
          kind='Syntax',
          children=[
              Child('BindingKeyword', kind='KeywordToken',
-                   token_choices=['KeywordToken|let', 'KeywordToken|var']),
+                   token_choices=['KeywordToken|let', 'KeywordToken|var',
+                                  'KeywordToken|inout']),
              Child('Pattern', kind='Pattern'),
              Child('TypeAnnotation', kind='TypeAnnotation',
                    is_optional=True),

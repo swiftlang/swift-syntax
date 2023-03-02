@@ -243,7 +243,8 @@ extension Parser {
       return RawDeclSyntax(self.parseFuncDeclaration(attrs, handle))
     case (.subscriptKeyword, let handle)?:
       return RawDeclSyntax(self.parseSubscriptDeclaration(attrs, handle))
-    case (.letKeyword, let handle)?, (.varKeyword, let handle)?:
+    case (.letKeyword, let handle)?, (.varKeyword, let handle)?,
+      (.inoutKeyword, let handle)?:
       return RawDeclSyntax(self.parseBindingDeclaration(attrs, handle, inMemberDeclList: inMemberDeclList))
     case (.initKeyword, let handle)?:
       return RawDeclSyntax(self.parseInitializerDeclaration(attrs, handle))
@@ -332,6 +333,7 @@ extension Parser {
       case `var`
       case `let`
       case `func`
+      case `inout`
 
       var spec: TokenSpec {
         switch self {
@@ -343,6 +345,7 @@ extension Parser {
         case .var: return .keyword(.var)
         case .let: return .keyword(.let)
         case .func: return .keyword(.func)
+        case .inout: return .keyword(.inout)
         }
       }
 
@@ -356,6 +359,7 @@ extension Parser {
         case TokenSpec(.var): self = .var
         case TokenSpec(.let): self = .let
         case TokenSpec(.func): self = .func
+        case TokenSpec(.inout): self = .inout
         default: return nil
         }
       }

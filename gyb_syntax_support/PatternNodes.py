@@ -71,11 +71,13 @@ PATTERN_NODES = [
 
     # value-binding-pattern -> 'let' pattern
     #                        | 'var' pattern
+    #                        | 'inout' pattern
     Node('ValueBindingPattern', name_for_diagnostics='value binding pattern',
          kind='Pattern',
          children=[
              Child('BindingKeyword', kind='KeywordToken',
-                   token_choices=['KeywordToken|let', 'KeywordToken|var']),
+                   token_choices=['KeywordToken|let', 'KeywordToken|var',
+                                  'KeywordToken|inout']),
              Child('ValuePattern', kind='Pattern'),
          ]),
 ]

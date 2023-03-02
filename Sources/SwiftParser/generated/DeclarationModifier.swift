@@ -48,6 +48,8 @@ enum DeclarationModifier: TokenSpecSet {
   case distributed
   case _const
   case _local
+  case consuming
+  case borrowing
   
   init?(lexeme: Lexer.Lexeme) {
     switch PrepareForKeywordMatch(lexeme) {
@@ -117,6 +119,10 @@ enum DeclarationModifier: TokenSpecSet {
       self = ._const
     case TokenSpec(._local):
       self = ._local
+    case TokenSpec(.consuming):
+      self = .consuming
+    case TokenSpec(.borrowing):
+      self = .borrowing
     default:
       return nil
     }
@@ -190,6 +196,10 @@ enum DeclarationModifier: TokenSpecSet {
       return .keyword(._const)
     case ._local:
       return .keyword(._local)
+    case .consuming:
+      return .keyword(.consuming)
+    case .borrowing:
+      return .keyword(.borrowing)
     }
   }
 }

@@ -16,8 +16,8 @@ extension DeclarationModifier {
   var canHaveParenthesizedArgument: Bool {
     switch self {
     case .__consuming, .__setter_access, ._const, ._local, .async,
-      .class, .convenience, .distributed, .dynamic, .final,
-      .indirect, .infix, .isolated, .lazy, .mutating, .nonisolated,
+      .borrowing, .class, .consuming, .convenience, .distributed, .dynamic,
+      .final, .indirect, .infix, .isolated, .lazy, .mutating, .nonisolated,
       .nonmutating, .optional, .override, .postfix, .prefix, .reasync,
       .required, .rethrows, .static, .weak:
       return false

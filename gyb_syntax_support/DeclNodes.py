@@ -161,6 +161,7 @@ DECL_NODES = [
                        'KeywordToken|required', 'KeywordToken|static', 'KeywordToken|unowned', 'KeywordToken|weak', 'KeywordToken|private',
                        'KeywordToken|fileprivate', 'KeywordToken|internal', 'KeywordToken|public', 'KeywordToken|open',
                        'KeywordToken|mutating', 'KeywordToken|nonmutating', 'KeywordToken|indirect', 'KeywordToken|__consuming',
+                       'KeywordToken|borrowing', 'KeywordToken|consuming',
                        'KeywordToken|actor', 'KeywordToken|async', 'KeywordToken|distributed', 'KeywordToken|isolated',
                        'KeywordToken|nonisolated', 'KeywordToken|_const', 'KeywordToken|_local', 'KeywordToken|package'
                    ]),

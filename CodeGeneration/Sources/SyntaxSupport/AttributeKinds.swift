@@ -1881,15 +1881,15 @@ public let DECL_MODIFIER_KINDS: [Attribute] = [
   ),
   ContextualSimpleDeclAttribute(
     name: "__consuming",
-    className: "Consuming",
+    className: "LegacyConsuming",
     options:
       onFunc,
     onAccessor,
     declModifier,
     userInaccessible,
     notSerialized,
-    ABIStableToAdd,
-    ABIStableToRemove,
+    ABIBreakingToAdd,
+    ABIBreakingToRemove,
     APIStableToAdd,
     APIStableToRemove,
     code: 40
@@ -2158,6 +2158,36 @@ public let DECL_MODIFIER_KINDS: [Attribute] = [
     APIBreakingToAdd,
     APIBreakingToRemove,
     code: 130
+  ),
+  ContextualSimpleDeclAttribute(
+    name: "consuming",
+    className: "Consuming",
+    options:
+      declModifier,
+    onFunc,
+    onAccessor,
+    userInaccessible,
+    notSerialized,
+    ABIBreakingToAdd,
+    ABIBreakingToRemove,
+    APIStableToAdd,
+    APIStableToRemove,
+    code: 140
+  ),
+  ContextualSimpleDeclAttribute(
+    name: "borrowing",
+    className: "Borrowing",
+    options:
+      declModifier,
+    onFunc,
+    onAccessor,
+    userInaccessible,
+    notSerialized,
+    ABIBreakingToAdd,
+    ABIBreakingToRemove,
+    APIStableToAdd,
+    APIStableToRemove,
+    code: 141
   ),
 ]
 

@@ -637,7 +637,7 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "MoveKeyword",
-               kind: .token(choices: [.keyword(text: "_move")])),
+               kind: .token(choices: [.keyword(text: "_move"), .keyword(text: "consume")])),
          Child(name: "Expression",
                kind: .node(kind: "Expr"))
        ]),

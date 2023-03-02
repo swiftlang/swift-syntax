@@ -290,7 +290,7 @@ enum DeclarationStart: TokenSpecSet {
     case .subscriptKeyword: return .keyword(.subscript)
     case .typealiasKeyword: return .keyword(.typealias)
     case .varKeyword: return .keyword(.var)
-    case .inoutKeyword: return .keyword(.inout)
+    case .inoutKeyword: return TokenSpec(.inout, recoveryPrecedence: .declKeyword)
     }
   }
 }

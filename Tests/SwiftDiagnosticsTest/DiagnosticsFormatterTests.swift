@@ -30,7 +30,7 @@ final class DiagnosticsFormatterTests: XCTestCase {
       """
     let expectedOutput = """
       1 │ var foo = bar +
-        ∣                ╰─ expected expression after operator
+        ∣                ╰─ error: expected expression after operator
 
       """
     AssertStringsEqualWithDiff(annotate(source: source), expectedOutput)
@@ -42,9 +42,9 @@ final class DiagnosticsFormatterTests: XCTestCase {
       """
     let expectedOutput = """
       1 │ foo.[].[].[]
-        ∣     │  │  ╰─ expected name in member access
-        ∣     │  ╰─ expected name in member access
-        ∣     ╰─ expected name in member access
+        ∣     │  │  ╰─ error: expected name in member access
+        ∣     │  ╰─ error: expected name in member access
+        ∣     ╰─ error: expected name in member access
 
       """
     AssertStringsEqualWithDiff(annotate(source: source), expectedOutput)
@@ -68,14 +68,14 @@ final class DiagnosticsFormatterTests: XCTestCase {
        2 │ i = 2
        3 │ i = foo(
        4 │ i = 4
-         ∣      ╰─ expected ')' to end function call
+         ∣      ╰─ error: expected ')' to end function call
        5 │ i = 5
        6 │ i = 6
          ┆
        9 │ i = 9
       10 │ i = 10
       11 │ i = bar(
-         ∣         ╰─ expected value and ')' to end function call
+         ∣         ╰─ error: expected value and ')' to end function call
 
       """
     AssertStringsEqualWithDiff(annotate(source: source), expectedOutput)
@@ -86,8 +86,8 @@ final class DiagnosticsFormatterTests: XCTestCase {
 
     let expectedOutput = """
       1 │ t as (..)
-        ∣       ├─ expected type in tuple type
-        ∣       ╰─ unexpected code '..' in tuple type
+        ∣       ├─ error: expected type in tuple type
+        ∣       ╰─ error: unexpected code '..' in tuple type
 
       """
 

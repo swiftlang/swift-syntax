@@ -15,15 +15,17 @@
 import XCTest
 
 final class TypeTests: XCTestCase {
-
   func testMissingColonInType() {
     assertParse(
       """
       var foo 1️⃣Bar = 1
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ':' in type annotation")
-      ]
+        DiagnosticSpec(message: "expected ':' in type annotation", fixIts: ["insert ':'"])
+      ],
+      fixedSource: """
+        var foo: Bar = 1
+        """
     )
   }
 
@@ -65,7 +67,6 @@ final class TypeTests: XCTestCase {
   }
 
   func testClosureSignatures() {
-
     assertParse(
       """
       simple { [] str in

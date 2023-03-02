@@ -536,7 +536,7 @@ extension Parser {
         if let first = first,
           second == nil,
           colon?.isMissing == true,
-          first.tokenText.description.first?.isUppercase == true
+          first.tokenText.isStartingWithUppercase
         {
           elements.append(
             RawTupleTypeElementSyntax(

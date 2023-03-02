@@ -164,10 +164,10 @@ extension FixIt.MultiNodeChange {
     }
   }
 
-  /// Transfers the leading and trivia trivia of `nodes` to the trailing trivia
-  /// of the previous token. While doing this, it tries to be smart, merging trivia
-  /// where it makes sense and refusing to add e.g. a space after punctuation,
-  /// where it usually doesn't make sense.
+  /// Transfers the leading and trailing trivia of `nodes` to the previous token
+  /// While doing this, it tries to be smart, merging trivia where it makes sense
+  /// and refusing to add e.g. a space after punctuation, where it usually
+  /// doesn't make sense.
   static func transferTriviaAtSides<SyntaxType: SyntaxProtocol>(from nodes: [SyntaxType]) -> Self {
     let removedTriviaAtSides = (nodes.first?.leadingTrivia ?? []).merging(nodes.last?.trailingTrivia ?? [])
     if !removedTriviaAtSides.isEmpty, let previousToken = nodes.first?.previousToken(viewMode: .sourceAccurate) {

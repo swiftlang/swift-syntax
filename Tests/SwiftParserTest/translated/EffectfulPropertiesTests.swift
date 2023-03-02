@@ -231,7 +231,7 @@ final class EffectfulPropertiesTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code 'bogus {}' in variable")
+        DiagnosticSpec(message: "unexpected code 'bogus' in accessor")
       ]
     )
   }
@@ -257,7 +257,7 @@ final class EffectfulPropertiesTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code '-> Int { 0 }' in variable")
+        DiagnosticSpec(message: "unexpected code '-> Int' in accessor")
       ]
     )
   }

@@ -917,7 +917,7 @@ final class DeclarationTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' in parameter"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end parameter clause"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous code ': Int) {}' at top level"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code ': Int)' in function"),
       ]
     )
   }

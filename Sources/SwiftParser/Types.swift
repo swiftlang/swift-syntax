@@ -783,10 +783,10 @@ extension Parser.Lookahead {
 
   mutating func canParseTupleBodyType() -> Bool {
     guard
-      !self.at(.rightParen, .rightBrace) && !self.atContextualPunctuator("...") &&
-      // In types, we do not allow for an inout binding to be declared in a
-      // tuple type.
-      (self.at(.keyword(.inout)) || !self.atStartOfDeclaration())
+      !self.at(.rightParen, .rightBrace) && !self.atContextualPunctuator("...")
+        // In types, we do not allow for an inout binding to be declared in a
+        // tuple type.
+        && (self.at(.keyword(.inout)) || !self.atStartOfDeclaration())
     else {
       return self.consume(if: .rightParen) != nil
     }

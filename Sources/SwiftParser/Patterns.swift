@@ -123,8 +123,8 @@ extension Parser {
         )
       )
     case (.letKeyword, let handle)?,
-         (.varKeyword, let handle)?,
-         (.inoutKeyword, let handle)?:
+      (.varKeyword, let handle)?,
+      (.inoutKeyword, let handle)?:
       let bindingKeyword = self.eat(handle)
       let value = self.parsePattern()
       return RawPatternSyntax(
@@ -243,8 +243,8 @@ extension Parser {
     // Parse productions that can only be patterns.
     switch self.at(anyIn: MatchingPatternStart.self) {
     case (.varKeyword, let handle)?,
-         (.letKeyword, let handle)?,
-         (.inoutKeyword, let handle)?:
+      (.letKeyword, let handle)?,
+      (.inoutKeyword, let handle)?:
       let bindingKeyword = self.eat(handle)
       let value = self.parseMatchingPattern(context: .bindingIntroducer)
       return RawPatternSyntax(
@@ -332,8 +332,8 @@ extension Parser.Lookahead {
       self.eat(handle)
       return true
     case (.letKeyword, let handle)?,
-         (.varKeyword, let handle)?,
-         (.inoutKeyword, let handle)?:
+      (.varKeyword, let handle)?,
+      (.inoutKeyword, let handle)?:
       self.eat(handle)
       return self.canParsePattern()
     case (.leftParen, _)?:

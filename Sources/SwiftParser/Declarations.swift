@@ -242,7 +242,7 @@ extension Parser {
     case (.subscriptKeyword, let handle)?:
       return RawDeclSyntax(self.parseSubscriptDeclaration(attrs, handle))
     case (.letKeyword, let handle)?, (.varKeyword, let handle)?,
-         (.inoutKeyword, let handle)?:
+      (.inoutKeyword, let handle)?:
       return RawDeclSyntax(self.parseBindingDeclaration(attrs, handle, inMemberDeclList: inMemberDeclList))
     case (.initKeyword, let handle)?:
       return RawDeclSyntax(self.parseInitializerDeclaration(attrs, handle))

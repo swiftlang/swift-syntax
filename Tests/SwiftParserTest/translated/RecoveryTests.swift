@@ -2206,4 +2206,20 @@ final class RecoveryTests: XCTestCase {
     )
   }
 
+  func testRecovery182() {
+    AssertParse(
+      "func foo() 1️⃣bogus {}",
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected code 'bogus' in function")
+      ]
+    )
+
+    AssertParse(
+      "func foo() 1️⃣bogus -> Int {}",
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected code 'bogus' in function signature")
+      ]
+    )
+  }
+
 }

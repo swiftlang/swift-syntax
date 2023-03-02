@@ -471,6 +471,34 @@ extension Parser {
           arena: self.arena
         )
       )
+
+    case (.consumeKeyword, let handle)?:
+      // `consume` is only contextually a keyword, if it's followed by an
+      // identifier or keyword on the same line.
+      let next = peek()
+      if next.isAtStartOfLine {
+        fallthrough
+      }
+      if next.rawTokenKind != .identifier,
+        next.rawTokenKind != .dollarIdentifier,
+        next.rawTokenKind != .keyword
+      {
+        fallthrough
+      }
+
+      let consumeTok = self.eat(handle)
+      let sub = self.parseSequenceExpressionElement(
+        flavor,
+        forDirective: forDirective,
+        pattern: pattern
+      )
+      return RawExprSyntax(
+        RawMoveExprSyntax(
+          moveKeyword: consumeTok,
+          expression: sub,
+          arena: self.arena
+        )
+      )
     case nil:
       return self.parseUnaryExpression(flavor, forDirective: forDirective, pattern: pattern)
     }

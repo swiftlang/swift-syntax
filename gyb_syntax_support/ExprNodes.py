@@ -53,7 +53,10 @@ EXPR_NODES = [
     Node('MoveExpr', name_for_diagnostics="'_move' expression", kind='Expr',
          children=[
              Child('MoveKeyword', kind='KeywordToken',
-                   token_choices=['KeywordToken|_move']),
+                   token_choices=[
+                       'KeywordToken|_move',
+                       'KeywordToken|consume',
+                   ]),
              Child('Expression', kind='Expr'),
          ]),
 

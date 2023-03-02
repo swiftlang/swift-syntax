@@ -89,6 +89,7 @@ public enum Keyword: UInt8, Hashable {
   case `case`
   case `catch`
   case `class`
+  case consume
   case consuming
   case `continue`
   case convenience
@@ -425,6 +426,8 @@ public enum Keyword: UInt8, Hashable {
         self = ._linear
       case "_modify":
         self = ._modify
+      case "consume":
+        self = .consume
       case "default":
         self = .`default`
       case "dynamic":
@@ -921,6 +924,7 @@ public enum Keyword: UInt8, Hashable {
       "case", 
       "catch", 
       "class", 
+      "consume", 
       "consuming", 
       "continue", 
       "convenience", 

@@ -4328,7 +4328,7 @@ public struct MoveExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public init<E: ExprSyntaxProtocol>(
       leadingTrivia: Trivia? = nil, 
       _ unexpectedBeforeMoveKeyword: UnexpectedNodesSyntax? = nil, 
-      moveKeyword: TokenSyntax = .keyword(._move), 
+      moveKeyword: TokenSyntax, 
       _ unexpectedBetweenMoveKeywordAndExpression: UnexpectedNodesSyntax? = nil, 
       expression: E, 
       _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil, 

@@ -972,7 +972,12 @@ extension Parser.Lookahead {
         return !self.peek().isAtStartOfLine
       }
     case .forgetKeyword?:
-      switch peek().rawTokenKind {
+      let next = peek()
+      // The thing to be forgotten must be on the same line as `forget`.
+      if next.isAtStartOfLine {
+        return false
+      }
+      switch next.rawTokenKind {
       case .identifier, .keyword:
         // Since some identifiers like "self" are classified as keywords,
         // we want to recognize those too, to handle "forget self". We also

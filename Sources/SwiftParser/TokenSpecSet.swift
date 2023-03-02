@@ -513,6 +513,7 @@ enum AwaitTryMove: TokenSpecSet {
   case _moveKeyword
   case _borrowKeyword
   case tryKeyword
+  case consumeKeyword
 
   init?(lexeme: Lexer.Lexeme) {
     switch PrepareForKeywordMatch(lexeme) {
@@ -520,6 +521,7 @@ enum AwaitTryMove: TokenSpecSet {
     case TokenSpec(._move): self = ._moveKeyword
     case TokenSpec(._borrow): self = ._borrowKeyword
     case TokenSpec(.try): self = .tryKeyword
+    case TokenSpec(.consume): self = .consumeKeyword
     default: return nil
     }
   }
@@ -529,6 +531,7 @@ enum AwaitTryMove: TokenSpecSet {
     case .awaitKeyword: return .keyword(.await)
     case ._moveKeyword: return .keyword(._move)
     case ._borrowKeyword: return .keyword(._borrow)
+    case .consumeKeyword: return .keyword(.consume)
     case .tryKeyword: return .keyword(.try)
     }
   }

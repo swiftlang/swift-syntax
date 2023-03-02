@@ -98,7 +98,7 @@ extension Parser {
   /// This function is used when parsing places where function bodies are
   /// optional - like the function requirements in protocol declarations.
   mutating func parseOptionalCodeBlock(allowInitDecl: Bool = true) -> RawCodeBlockSyntax? {
-    guard self.at(.leftBrace) else {
+    guard let _ = self.canRecoverTo(TokenSpec(.leftBrace)) else {
       return nil
     }
     return self.parseCodeBlock(allowInitDecl: allowInitDecl)

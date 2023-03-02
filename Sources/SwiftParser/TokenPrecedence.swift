@@ -216,7 +216,7 @@ public enum TokenPrecedence: Comparable {
       // Access modifiers
       .fileprivate, .internal, .private, .public, .static,
       // Functions
-      .deinit, .func, .`init`, .subscript, 
+      .deinit, .func, .`init`, .subscript,
       // Marco
       .macro,
       // Variables

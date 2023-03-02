@@ -1212,7 +1212,7 @@ final class RecoveryTests: XCTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '}' to end struct"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected ']' to end array"),
         // TODO: Old parser expected error on line 5: unexpected ']' in type; did you mean to write an array type?, Fix-It replacements: 17 - 17 = '['
-        DiagnosticSpec(locationMarker: "3️⃣",  message: "unexpected code ']' in function"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code ']' in function"),
         DiagnosticSpec(locationMarker: "4️⃣", message: "extraneous brace at top level"),
       ]
     )

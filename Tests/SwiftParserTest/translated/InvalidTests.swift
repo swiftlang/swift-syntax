@@ -206,7 +206,7 @@ final class InvalidTests: XCTestCase {
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected return type in function type"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected ')' to end parameter clause"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code '<T>()' in function signature"),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "unexpected code ')' in function")
+        DiagnosticSpec(locationMarker: "4️⃣", message: "unexpected code ')' in function"),
       ]
     )
   }
@@ -485,7 +485,7 @@ final class InvalidTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(' to start parameter clause"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end parameter clause"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '()' in function")
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '()' in function"),
       ]
     )
   }
@@ -499,7 +499,7 @@ final class InvalidTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(' to start parameter clause"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end parameter clause"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '(x: T)' in function")
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '(x: T)' in function"),
       ]
     )
   }

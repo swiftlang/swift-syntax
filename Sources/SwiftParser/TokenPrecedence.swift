@@ -101,8 +101,8 @@ public enum TokenPrecedence: Comparable {
 
   @_spi(RawSyntax)
   public init(_ lexeme: Lexer.Lexeme) {
-    if let kw = Keyword(lexeme.tokenText) {
-      self.init(kw)
+    if lexeme.rawTokenKind == .keyword {
+      self.init(Keyword(lexeme.tokenText)!)
     } else {
       self.init(nonKeyword: lexeme.rawTokenKind)
     }

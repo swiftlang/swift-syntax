@@ -217,8 +217,6 @@ public enum TokenPrecedence: Comparable {
       .fileprivate, .internal, .private, .public, .static,
       // Functions
       .deinit, .func, .`init`, .subscript,
-      // Macro
-      .macro,
       // Variables
       .let, .var,
       // Operator stuff

@@ -473,13 +473,13 @@ extension Parser {
       repeat {
         let attributes = self.parseAttributeList()
 
-        let (unexpectedBeforeName, name) = self.expectIdentifier()
-        if attributes == nil && unexpectedBeforeName == nil && name.isMissing && elements.isEmpty {
+        // Parse the 'each' keyword for a type parameter pack 'each T'.
+        let each = self.consume(if: .keyword(.each))
+
+        let (unexpectedBetweenEachAndName, name) = self.expectIdentifier()
+        if attributes == nil && unexpectedBetweenEachAndName == nil && name.isMissing && elements.isEmpty {
           break
         }
-
-        // Parse the ellipsis for a type parameter pack  'T...'.
-        let ellipsis = tryConsumeEllipsisPrefix()
 
         // Parse the ':' followed by a type.
         let colon = self.consume(if: .colon)
@@ -510,9 +510,9 @@ extension Parser {
         elements.append(
           RawGenericParameterSyntax(
             attributes: attributes,
-            unexpectedBeforeName,
+            each: each,
+            unexpectedBetweenEachAndName,
             name: name,
-            ellipsis: ellipsis,
             colon: colon,
             unexpectedBeforeInherited,
             inheritedType: inherited,

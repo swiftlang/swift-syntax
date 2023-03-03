@@ -10305,11 +10305,11 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
       leadingTrivia: Trivia? = nil, 
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, 
       attributes: AttributeListSyntax? = nil, 
-      _ unexpectedBetweenAttributesAndName: UnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenAttributesAndEach: UnexpectedNodesSyntax? = nil, 
+      each: TokenSyntax? = nil, 
+      _ unexpectedBetweenEachAndName: UnexpectedNodesSyntax? = nil, 
       name: TokenSyntax = .identifier("IdentifierToken"), 
-      _ unexpectedBetweenNameAndEllipsis: UnexpectedNodesSyntax? = nil, 
-      ellipsis: TokenSyntax? = nil, 
-      _ unexpectedBetweenEllipsisAndColon: UnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenNameAndColon: UnexpectedNodesSyntax? = nil, 
       colon: TokenSyntax? = nil, 
       _ unexpectedBetweenColonAndInheritedType: UnexpectedNodesSyntax? = nil, 
       inheritedType: I? = nil, 
@@ -10324,11 +10324,11 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
             unexpectedBeforeAttributes, 
             attributes, 
-            unexpectedBetweenAttributesAndName, 
+            unexpectedBetweenAttributesAndEach, 
+            each, 
+            unexpectedBetweenEachAndName, 
             name, 
-            unexpectedBetweenNameAndEllipsis, 
-            ellipsis, 
-            unexpectedBetweenEllipsisAndColon, 
+            unexpectedBetweenNameAndColon, 
             colon, 
             unexpectedBetweenColonAndInheritedType, 
             inheritedType, 
@@ -10339,11 +10339,11 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
           attributes?.raw, 
-          unexpectedBetweenAttributesAndName?.raw, 
+          unexpectedBetweenAttributesAndEach?.raw, 
+          each?.raw, 
+          unexpectedBetweenEachAndName?.raw, 
           name.raw, 
-          unexpectedBetweenNameAndEllipsis?.raw, 
-          ellipsis?.raw, 
-          unexpectedBetweenEllipsisAndColon?.raw, 
+          unexpectedBetweenNameAndColon?.raw, 
           colon?.raw, 
           unexpectedBetweenColonAndInheritedType?.raw, 
           inheritedType?.raw, 
@@ -10377,11 +10377,11 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
       leadingTrivia: Trivia? = nil, 
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, 
       attributes: AttributeListSyntax? = nil, 
-      _ unexpectedBetweenAttributesAndName: UnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenAttributesAndEach: UnexpectedNodesSyntax? = nil, 
+      each: TokenSyntax? = nil, 
+      _ unexpectedBetweenEachAndName: UnexpectedNodesSyntax? = nil, 
       name: TokenSyntax = .identifier("IdentifierToken"), 
-      _ unexpectedBetweenNameAndEllipsis: UnexpectedNodesSyntax? = nil, 
-      ellipsis: TokenSyntax? = nil, 
-      _ unexpectedBetweenEllipsisAndColon: UnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenNameAndColon: UnexpectedNodesSyntax? = nil, 
       colon: TokenSyntax? = nil, 
       _ unexpectedBetweenColonAndInheritedType: UnexpectedNodesSyntax? = nil, 
       inheritedType: MissingTypeSyntax? = nil, 
@@ -10395,11 +10395,11 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
         leadingTrivia: leadingTrivia, 
         unexpectedBeforeAttributes, 
         attributes: attributes, 
-        unexpectedBetweenAttributesAndName, 
+        unexpectedBetweenAttributesAndEach, 
+        each: each, 
+        unexpectedBetweenEachAndName, 
         name: name, 
-        unexpectedBetweenNameAndEllipsis, 
-        ellipsis: ellipsis, 
-        unexpectedBetweenEllipsisAndColon, 
+        unexpectedBetweenNameAndColon, 
         colon: colon, 
         unexpectedBetweenColonAndInheritedType, 
         inheritedType: Optional<TypeSyntax>.none, 
@@ -10447,7 +10447,7 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
     return GenericParameterSyntax(newData)
   }
   
-  public var unexpectedBetweenAttributesAndName: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenAttributesAndEach: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -10456,16 +10456,16 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var name: TokenSyntax {
+  public var each: TokenSyntax? {
     get {
-      return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
+      return data.child(at: 3, parent: Syntax(self)).map(TokenSyntax.init)
     }
     set(value) {
-      self = GenericParameterSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+      self = GenericParameterSyntax(data.replacingChild(at: 3, with: value?.raw, arena: SyntaxArena()))
     }
   }
   
-  public var unexpectedBetweenNameAndEllipsis: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenEachAndName: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -10474,16 +10474,16 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var ellipsis: TokenSyntax? {
+  public var name: TokenSyntax {
     get {
-      return data.child(at: 5, parent: Syntax(self)).map(TokenSyntax.init)
+      return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
-      self = GenericParameterSyntax(data.replacingChild(at: 5, with: value?.raw, arena: SyntaxArena()))
+      self = GenericParameterSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
     }
   }
   
-  public var unexpectedBetweenEllipsisAndColon: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenNameAndColon: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -10550,11 +10550,11 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
     return .layout([
           \Self.unexpectedBeforeAttributes, 
           \Self.attributes, 
-          \Self.unexpectedBetweenAttributesAndName, 
+          \Self.unexpectedBetweenAttributesAndEach, 
+          \Self.each, 
+          \Self.unexpectedBetweenEachAndName, 
           \Self.name, 
-          \Self.unexpectedBetweenNameAndEllipsis, 
-          \Self.ellipsis, 
-          \Self.unexpectedBetweenEllipsisAndColon, 
+          \Self.unexpectedBetweenNameAndColon, 
           \Self.colon, 
           \Self.unexpectedBetweenColonAndInheritedType, 
           \Self.inheritedType, 
@@ -10573,11 +10573,11 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
     case 2:
       return nil
     case 3:
-      return "name"
+      return "parameter pack specifier"
     case 4:
       return nil
     case 5:
-      return "parameter pack specifier"
+      return "name"
     case 6:
       return nil
     case 7:
@@ -10603,11 +10603,11 @@ extension GenericParameterSyntax: CustomReflectable {
     return Mirror(self, children: [
           "unexpectedBeforeAttributes": unexpectedBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
           "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenAttributesAndName": unexpectedBetweenAttributesAndName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "unexpectedBetweenAttributesAndEach": unexpectedBetweenAttributesAndEach.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "each": each.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "unexpectedBetweenEachAndName": unexpectedBetweenEachAndName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
           "name": Syntax(name).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenNameAndEllipsis": unexpectedBetweenNameAndEllipsis.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "ellipsis": ellipsis.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenEllipsisAndColon": unexpectedBetweenEllipsisAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "unexpectedBetweenNameAndColon": unexpectedBetweenNameAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
           "colon": colon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
           "unexpectedBetweenColonAndInheritedType": unexpectedBetweenColonAndInheritedType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
           "inheritedType": inheritedType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 

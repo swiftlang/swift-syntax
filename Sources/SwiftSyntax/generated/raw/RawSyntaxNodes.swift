@@ -9197,11 +9197,11 @@ public struct RawGenericParameterSyntax: RawSyntaxNodeProtocol {
   public init(
       _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil, 
       attributes: RawAttributeListSyntax?, 
-      _ unexpectedBetweenAttributesAndName: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenAttributesAndEach: RawUnexpectedNodesSyntax? = nil, 
+      each: RawTokenSyntax?, 
+      _ unexpectedBetweenEachAndName: RawUnexpectedNodesSyntax? = nil, 
       name: RawTokenSyntax, 
-      _ unexpectedBetweenNameAndEllipsis: RawUnexpectedNodesSyntax? = nil, 
-      ellipsis: RawTokenSyntax?, 
-      _ unexpectedBetweenEllipsisAndColon: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenNameAndColon: RawUnexpectedNodesSyntax? = nil, 
       colon: RawTokenSyntax?, 
       _ unexpectedBetweenColonAndInheritedType: RawUnexpectedNodesSyntax? = nil, 
       inheritedType: RawTypeSyntax?, 
@@ -9215,11 +9215,11 @@ public struct RawGenericParameterSyntax: RawSyntaxNodeProtocol {
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
-      layout[2] = unexpectedBetweenAttributesAndName?.raw
-      layout[3] = name.raw
-      layout[4] = unexpectedBetweenNameAndEllipsis?.raw
-      layout[5] = ellipsis?.raw
-      layout[6] = unexpectedBetweenEllipsisAndColon?.raw
+      layout[2] = unexpectedBetweenAttributesAndEach?.raw
+      layout[3] = each?.raw
+      layout[4] = unexpectedBetweenEachAndName?.raw
+      layout[5] = name.raw
+      layout[6] = unexpectedBetweenNameAndColon?.raw
       layout[7] = colon?.raw
       layout[8] = unexpectedBetweenColonAndInheritedType?.raw
       layout[9] = inheritedType?.raw
@@ -9238,23 +9238,23 @@ public struct RawGenericParameterSyntax: RawSyntaxNodeProtocol {
     layoutView.children[1].map(RawAttributeListSyntax.init(raw:))
   }
   
-  public var unexpectedBetweenAttributesAndName: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenAttributesAndEach: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var name: RawTokenSyntax {
-    layoutView.children[3].map(RawTokenSyntax.init(raw:))!
+  public var each: RawTokenSyntax? {
+    layoutView.children[3].map(RawTokenSyntax.init(raw:))
   }
   
-  public var unexpectedBetweenNameAndEllipsis: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenEachAndName: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var ellipsis: RawTokenSyntax? {
-    layoutView.children[5].map(RawTokenSyntax.init(raw:))
+  public var name: RawTokenSyntax {
+    layoutView.children[5].map(RawTokenSyntax.init(raw:))!
   }
   
-  public var unexpectedBetweenEllipsisAndColon: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenNameAndColon: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   

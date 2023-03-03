@@ -17,7 +17,7 @@ final class VariadicGenericsTests: XCTestCase {
   func testSimpleForwarding() {
     AssertParse(
       """
-      func tuplify<T...>(_ t: repeat each T) -> (repeat each T) {
+      func tuplify<each T>(_ t: repeat each T) -> (repeat each T) {
         return (1️⃣repeat each t)
       }
       """,
@@ -39,7 +39,7 @@ final class VariadicGenericsTests: XCTestCase {
   func testRequirement() {
     AssertParse(
       """
-      func requirement<T...>() where each T: P {
+      func requirement<each T>() where each T: P {
       }
       """
     )
@@ -49,7 +49,7 @@ final class VariadicGenericsTests: XCTestCase {
     // This is valid to parse, and becomes invalid during type resolution.
     AssertParse(
       """
-      func invalid<T...>(_ t: each T) -> each T {}
+      func invalid<each T>(_ t: each T) -> each T {}
       """
     )
   }
@@ -57,7 +57,7 @@ final class VariadicGenericsTests: XCTestCase {
   func testInvalidPackElement() {
     AssertParse(
       """
-      func invalid<T...>() -> (each any 1️⃣T) {}
+      func invalid<each T>() -> (each any 1️⃣T) {}
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected ',' in tuple type")
@@ -66,7 +66,7 @@ final class VariadicGenericsTests: XCTestCase {
 
     AssertParse(
       """
-      func invalid<T...>(_: each T 1️⃣& P) {}
+      func invalid<each T>(_: each T 1️⃣& P) {}
       """,
       diagnostics: [
         DiagnosticSpec(message: "unexpected code '& P' in parameter clause")
@@ -77,7 +77,7 @@ final class VariadicGenericsTests: XCTestCase {
   func testPackElementExprSimple() {
     AssertParse(
       """
-      func tuplify<T...>(_ t: repeat each T) -> (repeat each T) {
+      func tuplify<each T>(_ t: repeat each T) -> (repeat each T) {
         return (repeat each t)
       }
       """
@@ -85,7 +85,7 @@ final class VariadicGenericsTests: XCTestCase {
 
     AssertParse(
       """
-      func zip<T..., U...>(_ first: repeat each T, with second: repeat each U) -> (repeat (each T, each U)) {
+      func zip<each T, each U>(_ first: repeat each T, with second: repeat each U) -> (repeat (each T, each U)) {
         return (repeat (each first, each second))
       }
       """
@@ -93,7 +93,7 @@ final class VariadicGenericsTests: XCTestCase {
 
     AssertParse(
       """
-      func variadicMap<T..., Result...>(_ t: repeat each T, transform: repeat (each T) -> each Result) -> (repeat each Result) {
+      func variadicMap<each T, each Result>(_ t: repeat each T, transform: repeat (each T) -> each Result) -> (repeat each Result) {
         return (repeat (each transform)(each t))
       }
       """
@@ -158,7 +158,7 @@ final class VariadicGenericsTests: XCTestCase {
   func testPackExpansionExpr() {
     AssertParse(
       """
-      func expand<T...>(_ t: repeat each T) {
+      func expand<each T>(_ t: repeat each T) {
         1️⃣repeat (each t).member()
       }
       """,
@@ -191,7 +191,7 @@ final class VariadicGenericsTests: XCTestCase {
 
     AssertParse(
       """
-      func expand<T...>(_ t: repeat each T) {
+      func expand<each T>(_ t: repeat each T) {
         1️⃣repeat each t.member
       }
       """,
@@ -216,7 +216,7 @@ final class VariadicGenericsTests: XCTestCase {
 
     AssertParse(
       """
-      func expand<T...>(_ t: repeat each T) {
+      func expand<each T>(_ t: repeat each T) {
         1️⃣repeat x + each t + 10
       }
       """,
@@ -274,21 +274,21 @@ final class TypeParameterPackTests: XCTestCase {
   func testParameterPacks1() {
     AssertParse(
       """
-      func f1<T...>() -> repeat each T {}
+      func f1<each T>() -> repeat each T {}
       """
     )
   }
   func testParameterPacks2() {
     AssertParse(
       """
-      func f2<T...>() -> (repeat each T) {}
+      func f2<each T>() -> (repeat each T) {}
       """
     )
   }
   func testParameterPacks3() {
     AssertParse(
       """
-      func f3<T...>() -> G<repeat each T> {}
+      func f3<each T>() -> G<repeat each T> {}
       """
     )
   }
@@ -310,119 +310,119 @@ final class TypeParameterPackTests: XCTestCase {
   func testParameterPacks5() {
     AssertParse(
       """
-      typealias Alias<T...> = (repeat each T)
+      typealias Alias<each T> = (repeat each T)
       """
     )
   }
   func testParameterPacks6() {
     AssertParse(
       """
-      struct S<T...> {}
+      struct S<each T> {}
       """
     )
   }
   func testParameterPacks7() {
     AssertParse(
       """
-      struct S<T, U...> {}
+      struct S<T, each U> {}
       """
     )
   }
   func testParameterPacks8() {
     AssertParse(
       """
-      struct S<T..., U> {}
+      struct S<each T, U> {}
       """
     )
   }
   func testParameterPacks9() {
     AssertParse(
       """
-      struct S<T...:P, U> {}
+      struct S<each T:P, U> {}
       """
     )
   }
   func testParameterPacks10() {
     AssertParse(
       """
-      struct S<T... :P, U> {}
+      struct S<each T :P, U> {}
       """
     )
   }
   func testParameterPacks11() {
     AssertParse(
       """
-      struct S<T...: P> {}
+      struct S<each T: P> {}
       """
     )
   }
   func testParameterPacks12() {
     AssertParse(
       """
-      struct S<T... : P> {}
+      struct S<each T : P> {}
       """
     )
   }
   func testParameterPacks13() {
     AssertParse(
       """
-      func foo<T...>(_ x: repeat each T) {}
+      func foo<each T>(_ x: repeat each T) {}
       """
     )
   }
   func testParameterPacks14() {
     AssertParse(
       """
-      func foo<T...:P>(_ x: repeat each T) {}
+      func foo<each T:P>(_ x: repeat each T) {}
       """
     )
   }
   func testParameterPacks15() {
     AssertParse(
       """
-      func foo<T... :P>(_ x: repeat each T) {}
+      func foo<each T :P>(_ x: repeat each T) {}
       """
     )
   }
   func testParameterPacks16() {
     AssertParse(
       """
-      func foo<T... : P>(_ x: repeat each T) {}
+      func foo<each T : P>(_ x: repeat each T) {}
       """
     )
   }
   func testParameterPacks17() {
     AssertParse(
       """
-      func foo<T...: P>(_ x: repeat each T) {}
+      func foo<each T: P>(_ x: repeat each T) {}
       """
     )
   }
   func testParameterPacks18() {
     AssertParse(
       """
-      func foo<T, U, V...>(x: T, y: U, z: repeat each V) { }
+      func foo<T, U, each V>(x: T, y: U, z: repeat each V) { }
       """
     )
   }
   func testParameterPacks19() {
     AssertParse(
       """
-      func foo<T, U..., V>(x: T, y: repeat each U, z: V) { }
+      func foo<T, each U, V>(x: T, y: repeat each U, z: V) { }
       """
     )
   }
   func testParameterPacks20() {
     AssertParse(
       """
-      func foo<T..., U..., V...>(x: repeat each T, y: repeat each U, z: repeat each V) { }
+      func foo<each T, each U, each V>(x: repeat each T, y: repeat each U, z: repeat each V) { }
       """
     )
   }
   func testParameterPacks21() {
     AssertParse(
       """
-      enum E<T...> {
+      enum E<each T> {
         case f1(_: repeat each T)
       }
       """
@@ -431,7 +431,7 @@ final class TypeParameterPackTests: XCTestCase {
   func testParameterPacks22() {
     AssertParse(
       """
-      enum E<T...> {
+      enum E<each T> {
         case f2(_: G<repeat each T>)
       }
       """
@@ -440,7 +440,7 @@ final class TypeParameterPackTests: XCTestCase {
   func testParameterPacks23() {
     AssertParse(
       """
-      enum E<T...> {
+      enum E<each T> {
         var x: repeat each T { fatalError() }
       }
       """
@@ -449,7 +449,7 @@ final class TypeParameterPackTests: XCTestCase {
   func testParameterPacks24() {
     AssertParse(
       """
-      enum E<T...> {
+      enum E<each T> {
         var x: (repeat each T) { fatalError() }
       }
       """
@@ -458,7 +458,7 @@ final class TypeParameterPackTests: XCTestCase {
   func testParameterPacks25() {
     AssertParse(
       """
-      enum E<T...> {
+      enum E<each T> {
         subscript(_: repeat each T) -> Int { fatalError() }
       }
       """
@@ -467,7 +467,7 @@ final class TypeParameterPackTests: XCTestCase {
   func testParameterPacks26() {
     AssertParse(
       """
-      enum E<T...> {
+      enum E<each T> {
         subscript() -> repeat each T { fatalError() }
       }
       """
@@ -476,7 +476,7 @@ final class TypeParameterPackTests: XCTestCase {
   func testParameterPacks27() {
     AssertParse(
       """
-      enum E<T...> {
+      enum E<each T> {
         subscript() -> (repeat each T) { fatalError() }
       }
       """

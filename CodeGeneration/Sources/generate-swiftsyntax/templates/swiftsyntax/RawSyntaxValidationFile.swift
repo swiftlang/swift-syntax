@@ -15,7 +15,7 @@ import SwiftSyntaxBuilder
 import SyntaxSupport
 import Utils
 
-let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: "\(generateCopyrightHeader(for: "generate-swiftsyntax"))" + .newline) {
+let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: generateCopyrightHeader(for: "generate-swiftsyntax")) {
   try FunctionDeclSyntax(
     """
     /// Check that the `layout` is valid for the given 'SyntaxKind'.
@@ -26,12 +26,12 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: "\(generateCo
     """
   ) {
     IfConfigDeclSyntax(
-      clauses: IfConfigClauseListSyntax {
+      clauses: try IfConfigClauseListSyntax {
         IfConfigClauseSyntax(
           poundKeyword: .poundIfKeyword(),
           condition: ExprSyntax("DEBUG"),
           elements: .statements(
-            CodeBlockItemListSyntax {
+            try CodeBlockItemListSyntax {
               DeclSyntax(
                 #"""
                 enum ValidationError: CustomStringConvertible {
@@ -93,7 +93,6 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: "\(generateCo
                        Error validating child at index \(index) of \(nodeKind):
                        \(error.description)
                        """, file: file, line: line)
-                       _ = 1
                   }
                 }
                 """#
@@ -117,7 +116,7 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: "\(generateCo
                 """#
               )
 
-              try! SwitchExprSyntax("switch kind") {
+              try SwitchExprSyntax("switch kind") {
                 SwitchCaseSyntax(
                   """
                   case .token:
@@ -126,7 +125,7 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: "\(generateCo
                 )
 
                 for node in NON_BASE_SYNTAX_NODES {
-                  SwitchCaseSyntax("case .\(raw: node.swiftSyntaxKind):") {
+                  try SwitchCaseSyntax("case .\(raw: node.swiftSyntaxKind):") {
                     if node.isBuildable || node.isMissing {
                       ExprSyntax("assert(layout.count == \(raw: node.children.count))")
                       for (index, child) in node.children.enumerated() {
@@ -145,7 +144,7 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: "\(generateCo
                         }
                       }
                     } else if node.isSyntaxCollection {
-                      try! ForInStmtSyntax("for (index, element) in layout.enumerated()") {
+                      try ForInStmtSyntax("for (index, element) in layout.enumerated()") {
                         if let collectionElementChoices = node.collectionElementChoices, !collectionElementChoices.isEmpty {
                           let verifiedChoices = ArrayExprSyntax {
                             for choiceName in node.collectionElementChoices! {
@@ -162,8 +161,6 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: "\(generateCo
                         }
                       }
                     }
-
-                    BreakStmtSyntax()
                   }
                 }
               }

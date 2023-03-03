@@ -88,7 +88,8 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       break
     default:
       fatalError("Unable to create DeclSyntax from \(data.raw.kind)")
-    }#endif 
+    }
+    #endif 
     self._syntaxNode = Syntax(data)
   }
   
@@ -236,7 +237,8 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       break
     default:
       fatalError("Unable to create ExprSyntax from \(data.raw.kind)")
-    }#endif 
+    }
+    #endif 
     self._syntaxNode = Syntax(data)
   }
   
@@ -408,7 +410,8 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       break
     default:
       fatalError("Unable to create PatternSyntax from \(data.raw.kind)")
-    }#endif 
+    }
+    #endif 
     self._syntaxNode = Syntax(data)
   }
   
@@ -539,7 +542,8 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       break
     default:
       fatalError("Unable to create StmtSyntax from \(data.raw.kind)")
-    }#endif 
+    }
+    #endif 
     self._syntaxNode = Syntax(data)
   }
   
@@ -679,7 +683,8 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       break
     default:
       fatalError("Unable to create TypeSyntax from \(data.raw.kind)")
-    }#endif 
+    }
+    #endif 
     self._syntaxNode = Syntax(data)
   }
   

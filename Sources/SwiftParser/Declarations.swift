@@ -1375,7 +1375,8 @@ extension Parser {
     var effectSpecifiers = self.parseDeclEffectSpecifiers()
 
     let output: RawReturnClauseSyntax?
-    if let _ = self.canRecoverTo(TokenSpec(.arrow)) {
+
+    if self.at(.arrow) || self.canRecoverTo(TokenSpec(.arrow, recoveryPrecedence: .weakPunctuator, allowAtStartOfLine: false)) != nil {
       output = self.parseFunctionReturnClause(effectSpecifiers: &effectSpecifiers, allowNamedOpaqueResultType: true)
     } else {
       output = nil

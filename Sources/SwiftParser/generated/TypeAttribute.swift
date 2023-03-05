@@ -24,6 +24,7 @@ extension Parser {
     case noDerivative
     case async
     case Sendable
+    case retroactive
     case unchecked
     case _local
     case _noMetadata
@@ -47,6 +48,8 @@ extension Parser {
         self = .async
       case TokenSpec(.Sendable):
         self = .Sendable
+      case TokenSpec(.retroactive):
+        self = .retroactive
       case TokenSpec(.unchecked):
         self = .unchecked
       case TokenSpec(._local):
@@ -78,6 +81,8 @@ extension Parser {
         return .keyword(.async)
       case .Sendable:
         return .keyword(.Sendable)
+      case .retroactive:
+        return .keyword(.retroactive)
       case .unchecked:
         return .keyword(.unchecked)
       case ._local:

@@ -134,6 +134,7 @@ TYPE_ATTR_KINDS = [
     TypeAttribute('noDerivative'),
     TypeAttribute('async'),
     TypeAttribute('Sendable'),
+    TypeAttribute('retroactive'),
     TypeAttribute('unchecked'),
     TypeAttribute('_local'),
     TypeAttribute('_noMetadata'),

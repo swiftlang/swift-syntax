@@ -75,6 +75,7 @@ public let TYPE_ATTR_KINDS = [
   TypeAttribute(name: "noDerivative"),
   TypeAttribute(name: "async"),
   TypeAttribute(name: "Sendable"),
+  TypeAttribute(name: "retroactive"),
   TypeAttribute(name: "unchecked"),
   TypeAttribute(name: "_local"),
   TypeAttribute(name: "_noMetadata"),

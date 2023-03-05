@@ -14,7 +14,7 @@
 @freestanding(expression)
 macro echo<T>(_: T) -> T = #externalMacro(module: "ExamplePlugin", type: "EchoExpressionMacro")
 
-@attached(member)
+@attached(member, names: named(__metadata__))
 macro Metadata() = #externalMacro(module: "ExamplePlugin", type: "MetadataMacro")
 
 @Metadata

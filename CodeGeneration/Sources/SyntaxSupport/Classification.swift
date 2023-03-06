@@ -43,7 +43,6 @@ public class ChildClassification {
   }
 }
 
-
 public let SYNTAX_CLASSIFICATIONS: [SyntaxClassification] = [
   SyntaxClassification(name: "Attribute", description: "An attribute starting with an `@`."),
   SyntaxClassification(name: "BlockComment", description: "A block comment starting with `/**` and ending with `*/."),

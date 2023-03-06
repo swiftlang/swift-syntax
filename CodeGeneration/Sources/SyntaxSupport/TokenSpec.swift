@@ -107,7 +107,7 @@ public class PoundObjectLiteralSpec: PoundKeywordSpec {
   }
 }
 
-public class PoundConfigSpec: PoundKeywordSpec { }
+public class PoundConfigSpec: PoundKeywordSpec {}
 
 public class PoundDirectiveKeywordSpec: PoundKeywordSpec {
   init(
@@ -164,9 +164,9 @@ public class PunctuatorSpec: TokenSpec {
   }
 }
 
-public class LiteralSpec: TokenSpec { }
+public class LiteralSpec: TokenSpec {}
 
-public class MiscSpec: TokenSpec { }
+public class MiscSpec: TokenSpec {}
 
 public let SYNTAX_TOKENS: [TokenSpec] = [
   PunctuatorSpec(name: "Arrow", kind: "arrow", text: "->", requiresLeadingSpace: true, requiresTrailingSpace: true),

@@ -197,6 +197,9 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var tryOnInitialValueExpression: Self {
     .init("'try' must be placed on the initial value expression")
   }
+  public static var typeParameterPackEllipsis: Self {
+    .init("ellipsis operator cannot be used with a type parameter pack")
+  }
   public static var unexpectedPoundElseSpaceIf: Self {
     .init("unexpected 'if' keyword following '#else' conditional compilation directive; did you mean '#elseif'?")
   }
@@ -504,7 +507,7 @@ public struct MoveTokensInFrontOfFixIt: ParserFixIt {
   /// The token that should be moved
   public let movedTokens: [TokenSyntax]
 
-  /// The token after which 'try' should be moved
+  /// The token before which 'movedTokens' should be moved
   public let inFrontOf: TokenKind
 
   public var message: String {

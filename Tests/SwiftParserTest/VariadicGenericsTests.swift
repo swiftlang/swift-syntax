@@ -74,6 +74,37 @@ final class VariadicGenericsTests: XCTestCase {
     )
   }
 
+  func testTypeParameterPackEllipsis() {
+    AssertParse(
+      """
+      func invalid<T1️⃣...>(_ t: repeat each T) {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "ellipsis operator cannot be used with a type parameter pack",
+          fixIts: ["replace '...' with 'each'"]
+        )
+      ],
+      fixedSource: """
+        func invalid<each T>(_ t: repeat each T) {}
+        """
+    )
+  }
+
+  func testTypeParameterPackEachEllipsis() {
+    AssertParse(
+      """
+      func invalid<each T1️⃣...>(_ t: repeat each T) {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "ellipsis operator cannot be used with a type parameter pack",
+          fixIts: ["remove '...'"]
+        )
+      ]
+    )
+  }
+
   func testPackElementExprSimple() {
     AssertParse(
       """
@@ -293,6 +324,21 @@ final class TypeParameterPackTests: XCTestCase {
     )
   }
   func testParameterPacks4() {
+    AssertParse(
+      """
+      protocol P {
+        associatedtype 1️⃣each T
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "associated types cannot be variadic",
+          fixIts: ["remove 'each'"]
+        )
+      ]
+    )
+  }
+  func testParameterPacks4EarlySyntax() {
     AssertParse(
       """
       protocol P {

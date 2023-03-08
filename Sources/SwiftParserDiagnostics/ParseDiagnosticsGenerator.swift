@@ -389,6 +389,13 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if shouldSkip(node) {
       return .skipChildren
     }
+    // Emit a custom diagnostic for an unexpected 'each' before an associatedtype
+    // name.
+    removeToken(
+      node.unexpectedBetweenAssociatedtypeKeywordAndIdentifier,
+      where: { $0.tokenKind == .keyword(.each) },
+      message: { _ in .associatedTypeCannotUsePack }
+    )
     // Emit a custom diagnostic for an unexpected '...' after an associatedtype
     // name.
     removeToken(
@@ -614,6 +621,32 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
   public override func visit(_ node: GenericParameterSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren
+    }
+    // Emit a custom diagnostic for an unexpected '...' after the type name.
+    if node.each?.presence == .present {
+      removeToken(
+        node.unexpectedBetweenNameAndColon,
+        where: { $0.tokenKind == .ellipsis },
+        message: { _ in .typeParameterPackEllipsis }
+      )
+    } else if let unexpected = node.unexpectedBetweenNameAndColon,
+      let unexpectedEllipsis = unexpected.onlyToken(where: { $0.tokenKind == .ellipsis }),
+      let each = node.each
+    {
+      addDiagnostic(
+        unexpected,
+        .typeParameterPackEllipsis,
+        fixIts: [
+          FixIt(
+            message: ReplaceTokensFixIt(replaceTokens: [unexpectedEllipsis], replacement: .keyword(.each)),
+            changes: [
+              .makeMissing(unexpected),
+              .makePresent(each, trailingTrivia: .space),
+            ]
+          )
+        ],
+        handledNodes: [unexpected.id, each.id]
+      )
     }
     if let inheritedTypeName = node.inheritedType?.as(SimpleTypeIdentifierSyntax.self)?.name {
       exchangeTokens(

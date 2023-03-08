@@ -214,9 +214,11 @@ class PrintDiags: ParsableCommand {
       if foldSequences {
         diags += foldAllSequences(tree).1
       }
-      let annotatedSource = DiagnosticsFormatter.annotatedSource(
-        tree: tree,
-        diags: diags,
+
+      var group = GroupedDiagnostics()
+      group.addSourceFile(tree: tree, displayName: sourceFile ?? "stdin", diagnostics: diags)
+      let annotatedSource = DiagnosticsFormatter.annotateSources(
+        in: group,
         colorize: colorize || TerminalHelper.isConnectedToTerminal
       )
 

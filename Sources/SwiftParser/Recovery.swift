@@ -70,9 +70,10 @@ extension Parser.Lookahead {
     let initialTokensConsumed = self.tokensConsumed
 
     let recoveryPrecedence = min(spec1.recoveryPrecedence, spec2.recoveryPrecedence, spec3.recoveryPrecedence)
+    let shouldSkipOverNewlines = recoveryPrecedence.shouldSkipOverNewlines && spec1.allowAtStartOfLine && spec2.allowAtStartOfLine && spec3.allowAtStartOfLine
 
     while !self.at(.eof) {
-      if !recoveryPrecedence.shouldSkipOverNewlines, self.currentToken.isAtStartOfLine {
+      if !shouldSkipOverNewlines, self.currentToken.isAtStartOfLine {
         break
       }
       let matchedSpec: TokenSpec?

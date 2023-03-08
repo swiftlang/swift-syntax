@@ -36,8 +36,6 @@ INCR_TRANSFER_ROUNDTRIP_EXEC = os.path.join(
     PACKAGE_DIR, "utils", "incrparse", "incr_transfer_round_trip.py"
 )
 
-GYB_EXEC = os.path.join(SWIFT_DIR, "utils", "gyb")
-
 LIT_EXEC = os.path.join(LLVM_DIR, "utils", "lit", "lit.py")
 
 GROUP_INFO_PATH = os.path.join(PACKAGE_DIR, "utils", "group.json")
@@ -123,157 +121,6 @@ def realpath(path: Optional[str]) -> Optional[str]:
 # Generating gyb Files
 
 
-def check_gyb_exec(gyb_exec: str) -> None:
-    if not os.path.exists(gyb_exec):
-        fatal_error(
-            """
-Error: Could not find gyb.
-Looking at '%s'.
-
-Make sure you have the main swift repo checked out next to the swift-syntax
-repository.
-Refer to README.md for more information.
-"""
-            % gyb_exec
-        )
-
-
-def check_rsync() -> None:
-    if call(["rsync", "--version"], stdout=subprocess.DEVNULL) != 0:
-        fatal_error("Error: Could not find rsync.")
-
-
-def generate_single_gyb_file(
-    gyb_exec: str,
-    gyb_file: str,
-    output_file_name: str,
-    destination: str,
-    temp_files_dir: str,
-    add_source_locations: bool,
-    additional_gyb_flags: List[str],
-    verbose: bool,
-) -> None:
-    # Source locations are added by default by gyb, and cleared by passing
-    # `--line-directive=` (nothing following the `=`) to the generator. Our
-    # flag is the reverse; we don't want them by default, only if requested.
-    line_directive_flags = [] if add_source_locations else ["--line-directive="]
-
-    # Generate the new file
-    gyb_command = [
-        sys.executable,
-        gyb_exec,
-        gyb_file,
-        "-o",
-        os.path.join(temp_files_dir, output_file_name),
-    ]
-    gyb_command += line_directive_flags
-    gyb_command += additional_gyb_flags
-
-    env = dict()
-    env["PYTHONPATH"] = PACKAGE_DIR
-    check_call(gyb_command, env=env, verbose=verbose)
-
-    # Copy the file if different from the file already present in
-    # gyb_generated
-    rsync_command = [
-        "rsync",
-        "--checksum",
-        os.path.join(temp_files_dir, output_file_name),
-        os.path.join(destination, output_file_name),
-    ]
-
-    check_call(rsync_command, verbose=verbose)
-
-
-# Generate the `.swift` files for all `.gyb` files in `sources_dir`. If
-# `destination_dir` is not `None`, the resulting files will be written to
-# `destination_dir`, otherwise they will be written to
-# `sources_dir/gyb_generated`.
-def generate_gyb_files_helper(
-    sources_dir: str,
-    destination_dir: str,
-    gyb_exec: str,
-    add_source_locations: bool,
-    verbose: bool,
-) -> None:
-    temp_files_dir = tempfile.gettempdir()
-    make_dir_if_needed(temp_files_dir)
-    make_dir_if_needed(destination_dir)
-
-    # Clear any *.swift files that are relics from the previous run.
-    clear_gyb_files_from_previous_run(
-        sources_dir, destination_dir, verbose)
-
-    def generate_gyb_file(gyb_file: str) -> None:
-        gyb_file_path = os.path.join(sources_dir, gyb_file)
-
-        # Slice off the '.gyb' to get the name for the output file
-        output_file_name = gyb_file[:-4]
-
-        generate_single_gyb_file(
-            gyb_exec,
-            gyb_file_path,
-            output_file_name,
-            destination_dir,
-            temp_files_dir,
-            add_source_locations,
-            additional_gyb_flags=[],
-            verbose=verbose,
-        )
-
-    # Generate the new .swift files in `temp_files_dir` and only copy them
-    # to `destiantion_dir` if they are different than the
-    # files already residing there. This way we don't touch the generated .swift
-    # files if they haven't changed and don't trigger a rebuild.
-    gyb_files = [file for file in os.listdir(sources_dir) if file.endswith(".gyb")]
-    with ThreadPoolExecutor() as executor:
-        results = executor.map(generate_gyb_file, gyb_files)
-        # An exception raised in a thread managed by `ThreadPoolExecutor` only gets
-        # raised if its value is retrieved. Iterate over all the 'None' results to cause
-        # the exceptions to be propagated.
-        for _ in results:
-            pass
-
-
-# If `temp_directories` is True, creates a dictionary that maps every source dir in
-# `source_dirs` to a unique temporary directory.
-# If `temp_directories` is False, it maps each source dir to the corresponding
-# gyb_generated directory.
-def gyb_dir_mapping(temp_directories: bool) -> Dict[str, str]:
-    source_dirs = [
-        SYNTAXSUPPORT_DIR,
-        SWIFTSYNTAX_DOCUMENTATION_DIR,
-    ]
-    mapping = {}
-    for source_dir in source_dirs:
-        if temp_directories:
-            mapping[source_dir] = tempfile.mkdtemp()
-        else:
-            mapping[source_dir] = os.path.join(source_dir, "gyb_generated")
-    return mapping
-
-
-def generate_gyb_files(
-    gyb_exec: str, gyb_dir_mapping: Dict[str, str],
-    add_source_locations: bool, verbose: bool,
-) -> None:
-    print("** Generating gyb Files **")
-
-    check_gyb_exec(gyb_exec)
-    check_rsync()
-
-    for source_dir, destination_dir in gyb_dir_mapping.items():
-        generate_gyb_files_helper(
-            source_dir,
-            destination_dir,
-            gyb_exec,
-            add_source_locations,
-            verbose
-        )
-
-    print("** Done Generating gyb Files **")
-
-
 def run_code_generation(
     source_dir: str,
     toolchain: str,
@@ -295,29 +142,6 @@ def run_code_generation(
     env = dict(os.environ)
     env["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] = "1"
     check_call(swiftpm_call, env=env, verbose=verbose)
-
-
-def make_dir_if_needed(path: str) -> None:
-    if not os.path.exists(path):
-        os.makedirs(path)
-
-
-# Remove any files in the `gyb_generated` directory that no longer have a
-# corresponding `.gyb` file in the `Sources` directory.
-def clear_gyb_files_from_previous_run(
-    sources_dir: str, destination_dir: str, verbose: bool
-) -> None:
-    for previous_gyb_gen_file in os.listdir(destination_dir):
-        if previous_gyb_gen_file.endswith(".swift"):
-            gyb_file = os.path.join(
-                sources_dir, previous_gyb_gen_file + ".gyb"
-            )
-            if not os.path.exists(gyb_file):
-                check_call(
-                    ["rm", previous_gyb_gen_file],
-                    cwd=destination_dir,
-                    verbose=verbose
-                )
 
 
 # -----------------------------------------------------------------------------
@@ -406,27 +230,6 @@ class Builder(object):
 
 # -----------------------------------------------------------------------------
 # Testing
-
-
-def verify_gyb_generated_files(gyb_exec: str, verbose: bool) -> None:
-    gyb_dirs = gyb_dir_mapping(temp_directories=True)
-
-    generate_gyb_files(
-        gyb_exec,
-        gyb_dir_mapping=gyb_dirs,
-        add_source_locations=False,
-        verbose=verbose,
-    )
-
-    for source_dir, destination_dir in gyb_dirs.items():
-        if destination_dir is None:
-            raise ValueError('gyb_dir_mapping should have custom temp dirs')
-
-        pre_generated_dir = os.path.join(source_dir, "gyb_generated")
-        check_generated_files_match(
-            pre_generated_dir,
-            destination_dir
-        )
 
 
 def verify_code_generated_files(
@@ -627,22 +430,11 @@ def generate_xcodeproj(args: argparse.Namespace) -> None:
 
 def generate_source_code_command(args: argparse.Namespace) -> None:
     try:
-        generate_gyb_files(
-            args.gyb_exec,
-            gyb_dir_mapping=gyb_dir_mapping(temp_directories=False),
-            add_source_locations=args.add_source_locations,
-            verbose=args.verbose,
+        run_code_generation(
+            source_dir=SOURCES_DIR,
+            toolchain=args.toolchain,
+            verbose=args.verbose
         )
-    except subprocess.CalledProcessError as e:
-        fail_for_called_process_error("Generating .gyb files failed", e)
-
-    try:
-        if not args.gyb_only:
-            run_code_generation(
-                source_dir=SOURCES_DIR,
-                toolchain=args.toolchain,
-                verbose=args.verbose
-            )
     except subprocess.CalledProcessError as e:
         fail_for_called_process_error(
             "Source generation using SwiftSyntaxBuilder failed", e)
@@ -650,18 +442,15 @@ def generate_source_code_command(args: argparse.Namespace) -> None:
 
 def verify_source_code_command(args: argparse.Namespace) -> None:
     try:
-        verify_gyb_generated_files(args.gyb_exec, verbose=args.verbose)
-
-        if not args.gyb_only:
-            verify_code_generated_files(
-                toolchain=args.toolchain,
-                verbose=args.verbose,
-            )
+        verify_code_generated_files(
+            toolchain=args.toolchain,
+            verbose=args.verbose,
+        )
     except subprocess.CalledProcessError:
         printerr(
-            "FAIL: Gyb-generated files committed to repository do " +
+            "FAIL: code-generated files committed to repository do " +
             "not match generated ones. Please re-generate the " +
-            "gyb-files using the following command, open a PR to the " +
+            "code-generated-files using the following command, open a PR to the " +
             "SwiftSyntax project and merge it alongside the main PR." +
             "$ swift-syntax/build-script.py generate-source-code " +
             "--toolchain /path/to/toolchain.xctoolchain/usr"
@@ -788,20 +577,6 @@ def parse_args() -> argparse.Namespace:
                 "--toolchain",
                 required=True,
                 help="The path to the toolchain that shall be used to build SwiftSyntax.",
-            )
-
-            parser.add_argument(
-                "--gyb-exec",
-                default=GYB_EXEC,
-                help="Path to the gyb tool (default: %(default)s).",
-            )
-
-            parser.add_argument(
-                "--gyb-only",
-                action="store_true",
-                help="""
-                Only generate gyb templates (and not generate-swift-syntax-builder's templates)
-                """,
             )
 
             parser.add_argument(

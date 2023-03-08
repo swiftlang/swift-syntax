@@ -26,25 +26,7 @@ let package = Package(
       ]
     ),
     .target(
-      name: "SyntaxSupport",
-      exclude: [
-        "gyb_helpers",
-        "AttributeNodes.swift.gyb",
-        "AvailabilityNodes.swift.gyb",
-        "BuilderInitializableTypes.swift.gyb",
-        "Classification.swift.gyb",
-        "CommonNodes.swift.gyb",
-        "DeclNodes.swift.gyb",
-        "ExprNodes.swift.gyb",
-        "GenericNodes.swift.gyb",
-        "PatternNodes.swift.gyb",
-        "StmtNodes.swift.gyb",
-        "SyntaxBaseKinds.swift.gyb",
-        "TokenSpec.swift.gyb",
-        "Traits.swift.gyb",
-        "Trivia.swift.gyb",
-        "TypeNodes.swift.gyb",
-      ]
+      name: "SyntaxSupport"
     ),
     .target(
       name: "Utils",

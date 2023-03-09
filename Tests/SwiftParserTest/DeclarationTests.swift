@@ -1531,6 +1531,17 @@ final class DeclarationTests: XCTestCase {
       """
     )
   }
+
+  func testWhereClauseWithFunctionType() {
+    // A function type in the where clause isn't semantically valid but its fine
+    // with the parser. Make sure we don't recover to the arrow to parse the
+    // function return type.
+    AssertParse(
+      """
+      func badTypeConformance3<T>(_: T) where (T) -> () : EqualComparable { }
+      """
+    )
+  }
 }
 
 extension Parser.DeclAttributes {

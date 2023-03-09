@@ -1061,6 +1061,14 @@ extension Parser {
     // Parse the signature.
     let signature = self.parseFunctionSignature()
 
+    // mark the unexpected result type of initializer
+    // and replace the ‘output‘ of signature with nil
+    var unexpectedResultType: RawUnexpectedNodesSyntax?
+    if let output = signature.output {
+      signature.raw = signature.layoutView.replacingChild(at: 5, with: nil, arena: self.arena)
+      unexpectedResultType = RawUnexpectedNodesSyntax([output.raw], arena: self.arena)
+    }
+
     let whereClause: RawGenericWhereClauseSyntax?
     if self.at(.keyword(.where)) {
       whereClause = self.parseGenericWhereClause()
@@ -1078,6 +1086,7 @@ extension Parser {
       optionalMark: failable,
       genericParameterClause: generics,
       signature: signature,
+      unexpectedResultType,
       genericWhereClause: whereClause,
       body: items,
       arena: self.arena

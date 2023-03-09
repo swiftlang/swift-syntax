@@ -131,6 +131,12 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var initializerInPattern: Self {
     .init("unexpected initializer in pattern; did you mean to use '='?")
   }
+  public static var initializerCannotHaveName: Self {
+    .init("initializers cannot have a name")
+  }
+  public static var initializerCannotHaveResultType: Self {
+    .init("initializers cannot have a result type")
+  }
   public static var invalidFlagAfterPrecedenceGroupAssignment: Self {
     .init("expected 'true' or 'false' after 'assignment'")
   }

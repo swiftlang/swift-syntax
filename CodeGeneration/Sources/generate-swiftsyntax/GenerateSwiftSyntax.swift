@@ -17,11 +17,13 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 import Utils
 
-private let swiftBasicFormatDir: String = "SwiftBasicFormat"
-private let ideUtilsDir: String = "IDEUtils"
-private let swiftParserDir: String = "SwiftParser"
-private let swiftSyntaxDir: String = "SwiftSyntax"
-private let swiftSyntaxBuilderDir: String = "SwiftSyntaxBuilder"
+private let generatedDirName = "generated"
+
+private let swiftBasicFormatGeneratedDir = ["SwiftBasicFormat", generatedDirName]
+private let ideUtilsGeneratedDir = ["IDEUtils", generatedDirName]
+private let swiftParserGeneratedDir = ["SwiftParser", generatedDirName]
+private let swiftSyntaxGeneratedDir = ["SwiftSyntax", generatedDirName]
+private let swiftSyntaxBuilderGeneratedDir = ["SwiftSyntaxBuilder", generatedDirName]
 private let BASE_KIND_FILES = [
   "Decl": "SyntaxDeclNodes.swift",
   "Expr": "SyntaxExprNodes.swift",
@@ -30,6 +32,23 @@ private let BASE_KIND_FILES = [
   "Syntax": "SyntaxNodes.swift",
   "Type": "SyntaxTypeNodes.swift",
 ]
+
+struct GeneratedFileSpec {
+  let pathComponents: [String]
+  private let contentsGenerator: () -> String
+  var contents: String {
+    return self.contentsGenerator()
+  }
+
+  init(_ pathComponents: [String], _ contents: @escaping @autoclosure () -> String) {
+    self.pathComponents = pathComponents
+    self.contentsGenerator = contents
+  }
+
+  init(_ pathComponents: [String], _ contents: @escaping @autoclosure () -> SourceFileSyntax) {
+    self.init(pathComponents, "\(contents().formatted(using: CodeGenerationFormat()))\n")
+  }
+}
 
 struct TemplateSpec {
   let sourceFileGenerator: () -> SourceFileSyntax
@@ -55,49 +74,51 @@ struct GenerateSwiftSyntax: ParsableCommand {
   var verbose: Bool = false
 
   func run() throws {
-    let templates: [TemplateSpec] =
+    let fileSpecs: [GeneratedFileSpec] =
       [
         // SwiftBasicFormat
-        TemplateSpec(sourceFile: basicFormatFile, module: swiftBasicFormatDir, filename: "BasicFormat.swift"),
+        GeneratedFileSpec(swiftBasicFormatGeneratedDir + ["BasicFormat.swift"], basicFormatFile),
 
         // IDEUtils
-        TemplateSpec(sourceFile: syntaxClassificationFile, module: ideUtilsDir, filename: "SyntaxClassification.swift"),
+        GeneratedFileSpec(ideUtilsGeneratedDir + ["SyntaxClassification.swift"], syntaxClassificationFile),
 
         // SwiftParser
-        TemplateSpec(sourceFile: declarationModifierFile, module: swiftParserDir, filename: "DeclarationModifier.swift"),
-        TemplateSpec(sourceFile: parserEntryFile, module: swiftParserDir, filename: "Parser+Entry.swift"),
-        TemplateSpec(sourceFile: tokenSpecStaticMembersFile, module: swiftParserDir, filename: "TokenSpecStaticMembers.swift"),
-        TemplateSpec(sourceFile: typeAttributeFile, module: swiftParserDir, filename: "TypeAttribute.swift"),
+        GeneratedFileSpec(swiftParserGeneratedDir + ["DeclarationModifier.swift"], declarationModifierFile),
+        GeneratedFileSpec(swiftParserGeneratedDir + ["Parser+Entry.swift"], parserEntryFile),
+        GeneratedFileSpec(swiftParserGeneratedDir + ["TokenSpecStaticMembers.swift"], tokenSpecStaticMembersFile),
+        GeneratedFileSpec(swiftParserGeneratedDir + ["TypeAttribute.swift"], typeAttributeFile),
 
         // SwiftSyntax
-        TemplateSpec(sourceFile: keywordFile, module: swiftSyntaxDir, filename: "Keyword.swift"),
-        TemplateSpec(sourceFile: miscFile, module: swiftSyntaxDir, filename: "Misc.swift"),
-        TemplateSpec(sourceFile: rawSyntaxNodesFile, module: swiftSyntaxDir, filename: "raw/RawSyntaxNodes.swift"),
-        TemplateSpec(sourceFile: rawSyntaxValidationFile, module: swiftSyntaxDir, filename: "raw/RawSyntaxValidation.swift"),
-        TemplateSpec(sourceFile: syntaxAnyVisitorFile, module: swiftSyntaxDir, filename: "SyntaxAnyVisitor.swift"),
-        TemplateSpec(sourceFile: syntaxBaseNodesFile, module: swiftSyntaxDir, filename: "SyntaxBaseNodes.swift"),
-        TemplateSpec(sourceFile: syntaxCollectionsFile, module: swiftSyntaxDir, filename: "SyntaxCollections.swift"),
-        TemplateSpec(sourceFile: syntaxEnumFile, module: swiftSyntaxDir, filename: "SyntaxEnum.swift"),
-        TemplateSpec(sourceFile: syntaxKindFile, module: swiftSyntaxDir, filename: "SyntaxKind.swift"),
-        TemplateSpec(sourceFile: syntaxRewriterFile, module: swiftSyntaxDir, filename: "SyntaxRewriter.swift"),
-        TemplateSpec(sourceFile: syntaxTraitsFile, module: swiftSyntaxDir, filename: "SyntaxTraits.swift"),
-        TemplateSpec(sourceFile: syntaxTransformFile, module: swiftSyntaxDir, filename: "SyntaxTransform.swift"),
-        TemplateSpec(sourceFile: syntaxVisitorFile, module: swiftSyntaxDir, filename: "SyntaxVisitor.swift"),
-        TemplateSpec(sourceFile: tokenKindFile, module: swiftSyntaxDir, filename: "TokenKind.swift"),
-        TemplateSpec(sourceFile: tokensFile, module: swiftSyntaxDir, filename: "Tokens.swift"),
-        TemplateSpec(sourceFile: triviaFile, module: swiftSyntaxDir, filename: "Trivia.swift"),
+        GeneratedFileSpec(swiftSyntaxGeneratedDir + ["Keyword.swift"], keywordFile),
+        GeneratedFileSpec(swiftSyntaxGeneratedDir + ["Misc.swift"], miscFile),
+        GeneratedFileSpec(swiftSyntaxGeneratedDir + ["raw", "RawSyntaxNodes.swift"], rawSyntaxNodesFile),
+        GeneratedFileSpec(swiftSyntaxGeneratedDir + ["raw", "RawSyntaxValidation.swift"], rawSyntaxValidationFile),
+        GeneratedFileSpec(swiftSyntaxGeneratedDir + ["SyntaxAnyVisitor.swift"], syntaxAnyVisitorFile),
+        GeneratedFileSpec(swiftSyntaxGeneratedDir + ["SyntaxBaseNodes.swift"], syntaxBaseNodesFile),
+        GeneratedFileSpec(swiftSyntaxGeneratedDir + ["SyntaxCollections.swift"], syntaxCollectionsFile),
+        GeneratedFileSpec(swiftSyntaxGeneratedDir + ["SyntaxEnum.swift"], syntaxEnumFile),
+        GeneratedFileSpec(swiftSyntaxGeneratedDir + ["SyntaxKind.swift"], syntaxKindFile),
+        GeneratedFileSpec(swiftSyntaxGeneratedDir + ["SyntaxRewriter.swift"], syntaxRewriterFile),
+        GeneratedFileSpec(swiftSyntaxGeneratedDir + ["SyntaxTraits.swift"], syntaxTraitsFile),
+        GeneratedFileSpec(swiftSyntaxGeneratedDir + ["SyntaxTransform.swift"], syntaxTransformFile),
+        GeneratedFileSpec(swiftSyntaxGeneratedDir + ["SyntaxVisitor.swift"], syntaxVisitorFile),
+        GeneratedFileSpec(swiftSyntaxGeneratedDir + ["TokenKind.swift"], tokenKindFile),
+        GeneratedFileSpec(swiftSyntaxGeneratedDir + ["Tokens.swift"], tokensFile),
+        GeneratedFileSpec(swiftSyntaxGeneratedDir + ["Trivia.swift"], triviaFile),
 
         // SwiftSyntaxBuilder
-        TemplateSpec(sourceFile: buildableCollectionNodesFile, module: swiftSyntaxBuilderDir, filename: "BuildableCollectionNodes.swift"),
-        TemplateSpec(sourceFile: buildableNodesFile, module: swiftSyntaxBuilderDir, filename: "BuildableNodes.swift"),
-        TemplateSpec(sourceFile: resultBuildersFile, module: swiftSyntaxBuilderDir, filename: "ResultBuilders.swift"),
-        TemplateSpec(sourceFile: syntaxExpressibleByStringInterpolationConformancesFile, module: swiftSyntaxBuilderDir, filename: "SyntaxExpressibleByStringInterpolationConformances.swift"),
+        GeneratedFileSpec(swiftSyntaxBuilderGeneratedDir + ["BuildableCollectionNodes.swift"], buildableCollectionNodesFile),
+        GeneratedFileSpec(swiftSyntaxBuilderGeneratedDir + ["BuildableNodes.swift"], buildableNodesFile),
+        GeneratedFileSpec(swiftSyntaxBuilderGeneratedDir + ["ResultBuilders.swift"], resultBuildersFile),
+        GeneratedFileSpec(swiftSyntaxBuilderGeneratedDir + ["SyntaxExpressibleByStringInterpolationConformances.swift"], syntaxExpressibleByStringInterpolationConformancesFile),
       ]
       + BASE_KIND_FILES.map { baseKind in
-        TemplateSpec(sourceFile: syntaxNode(emitKind: baseKind.key), module: swiftSyntaxDir, filename: "syntaxNodes/\(baseKind.value)")
-      }
+        GeneratedFileSpec(swiftSyntaxGeneratedDir + ["syntaxNodes", baseKind.value], syntaxNode(emitKind: baseKind.key))
+      } + [
+        GeneratedFileSpec(["SwiftSyntax", "Documentation.docc", "generated", "SwiftSyntax.md"], swiftSyntaxDoccIndex)
+      ]
 
-    let modules = Set(templates.map(\.module))
+    let modules = Set(fileSpecs.compactMap { $0.pathComponents.first })
 
     let previouslyGeneratedFilesLock = NSLock()
     var previouslyGeneratedFiles = Set(
@@ -108,25 +129,25 @@ struct GenerateSwiftSyntax: ParsableCommand {
         return FileManager.default
           .enumerator(at: generatedDir, includingPropertiesForKeys: nil)!
           .compactMap { $0 as? URL }
-          .filter { $0.pathExtension == "swift" }
+          .filter { !$0.hasDirectoryPath }
       }
     )
 
     var errors: [Error] = []
-    DispatchQueue.concurrentPerform(iterations: templates.count) { index in
-      let template = templates[index]
+    DispatchQueue.concurrentPerform(iterations: fileSpecs.count) { index in
+      let fileSpec = fileSpecs[index]
       do {
-        let destination = URL(fileURLWithPath: destination)
-          .appendingPathComponent(template.module)
-          .appendingPathComponent("generated")
-          .appendingPathComponent(template.filename)
+        var destination = URL(fileURLWithPath: destination)
+        for component in fileSpec.pathComponents {
+          destination = destination.appendingPathComponent(component)
+        }
 
         previouslyGeneratedFilesLock.lock();
         _ = previouslyGeneratedFiles.remove(destination)
         previouslyGeneratedFilesLock.unlock()
 
-        try generateTemplate(
-          sourceFile: template.sourceFile,
+        try generateFile(
+          contents: fileSpec.contents,
           destination: destination,
           verbose: verbose
         )
@@ -147,8 +168,8 @@ struct GenerateSwiftSyntax: ParsableCommand {
     }
   }
 
-  private func generateTemplate(
-    sourceFile: SourceFileSyntax,
+  private func generateFile(
+    contents: @autoclosure () -> String,
     destination: URL,
     verbose: Bool
   ) throws {
@@ -161,7 +182,10 @@ struct GenerateSwiftSyntax: ParsableCommand {
     if verbose {
       print("Generating \(destination.path)...")
     }
-    let syntax = sourceFile.formatted(using: CodeGenerationFormat())
-    try "\(syntax)\n".write(to: destination, atomically: true, encoding: .utf8)
+    let start = Date()
+    try contents().write(to: destination, atomically: true, encoding: .utf8)
+    if verbose {
+      print("Generated \(destination.path) in \((Date().timeIntervalSince(start) * 1000).rounded() / 1000)s")
+    }
   }
 }

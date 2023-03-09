@@ -22,6 +22,7 @@ public struct TokenDiagnostic: Hashable {
   public enum Kind {
     // Please order these alphabetically
 
+    case editorPlaceholder
     case expectedBinaryExponentInHexFloatLiteral
     case expectedClosingBraceInUnicodeEscape
     case expectedDigitInFloatLiteral
@@ -94,6 +95,7 @@ public struct TokenDiagnostic: Hashable {
 
   public var severity: Severity {
     switch kind {
+    case .editorPlaceholder: return .error
     case .expectedBinaryExponentInHexFloatLiteral: return .error
     case .expectedClosingBraceInUnicodeEscape: return .error
     case .expectedDigitInFloatLiteral: return .error

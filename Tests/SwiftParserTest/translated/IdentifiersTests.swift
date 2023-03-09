@@ -83,10 +83,10 @@ final class IdentifiersTests: XCTestCase {
     assertParse(
       """
       // Placeholders are recognized as identifiers but with error.
-      func <#some name#>() {}
+      func 1️⃣<#some name#>() {}
       """,
       diagnostics: [
-        // TODO: (good first issue) Old parser expected error on line 2: editor placeholder in source file
+        DiagnosticSpec(message: "editor placeholder in source file")
       ]
     )
   }

@@ -838,9 +838,28 @@ final class ExpressionTests: XCTestCase {
   }
 
   func testCodeCompletionExpressions() {
-    assertParse("if !<#b1#> && !<#b2#> {}")
-    assertParse("if <#test#> {}")
-    assertParse("if <#b1#>, <#b2#> {}")
+    assertParse(
+      "if !1️⃣<#b1#> && !2️⃣<#b2#> {}",
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "editor placeholder in source file"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "editor placeholder in source file"),
+      ]
+    )
+
+    assertParse(
+      "if 1️⃣<#test#> {}",
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "editor placeholder in source file")
+      ]
+    )
+
+    assertParse(
+      "if 1️⃣<#b1#>, 2️⃣<#b2#> {}",
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "editor placeholder in source file"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "editor placeholder in source file"),
+      ]
+    )
   }
 
   func testKeywordApplyExpression() {

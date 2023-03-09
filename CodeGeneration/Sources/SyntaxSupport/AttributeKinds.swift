@@ -1,5 +1,3 @@
-//// Automatically Generated From AttributeKinds.swift.gyb.
-//// Do Not Edit Directly!
 //===----------------------------------------------------------------------===//
 //
 // This source file is part of the Swift.org open source project

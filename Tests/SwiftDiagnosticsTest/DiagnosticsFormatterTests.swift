@@ -30,7 +30,7 @@ final class DiagnosticsFormatterTests: XCTestCase {
       """
     let expectedOutput = """
       1 │ var foo = bar +
-        ∣                ╰─ error: expected expression after operator
+        │                ╰─ error: expected expression after operator
 
       """
     AssertStringsEqualWithDiff(annotate(source: source), expectedOutput)
@@ -42,9 +42,9 @@ final class DiagnosticsFormatterTests: XCTestCase {
       """
     let expectedOutput = """
       1 │ foo.[].[].[]
-        ∣     │  │  ╰─ error: expected name in member access
-        ∣     │  ╰─ error: expected name in member access
-        ∣     ╰─ error: expected name in member access
+        │     │  │  ╰─ error: expected name in member access
+        │     │  ╰─ error: expected name in member access
+        │     ╰─ error: expected name in member access
 
       """
     AssertStringsEqualWithDiff(annotate(source: source), expectedOutput)
@@ -68,14 +68,14 @@ final class DiagnosticsFormatterTests: XCTestCase {
        2 │ i = 2
        3 │ i = foo(
        4 │ i = 4
-         ∣      ╰─ error: expected ')' to end function call
+         │      ╰─ error: expected ')' to end function call
        5 │ i = 5
        6 │ i = 6
          ┆
        9 │ i = 9
       10 │ i = 10
       11 │ i = bar(
-         ∣         ╰─ error: expected value and ')' to end function call
+         │         ╰─ error: expected value and ')' to end function call
 
       """
     AssertStringsEqualWithDiff(annotate(source: source), expectedOutput)
@@ -86,8 +86,8 @@ final class DiagnosticsFormatterTests: XCTestCase {
 
     let expectedOutput = """
       1 │ t as (..)
-        ∣       ├─ error: expected type in tuple type
-        ∣       ╰─ error: unexpected code '..' in tuple type
+        │       ├─ error: expected type in tuple type
+        │       ╰─ error: unexpected code '..' in tuple type
 
       """
 
@@ -101,7 +101,7 @@ final class DiagnosticsFormatterTests: XCTestCase {
 
     let expectedOutput = """
       \u{001B}[0;36m1 │\u{001B}[0;0m var foo = bar +
-        \u{001B}[0;36m∣\u{001B}[0;0m                ╰─ \u{001B}[1;31merror: expected expression after operator\u{001B}[0;0m
+        \u{001B}[0;36m│\u{001B}[0;0m                ╰─ \u{001B}[1;31merror: expected expression after operator\u{001B}[0;0m
 
       """
     AssertStringsEqualWithDiff(annotate(source: source, colorize: true), expectedOutput)
@@ -113,9 +113,9 @@ final class DiagnosticsFormatterTests: XCTestCase {
       """
     let expectedOutput = """
       \u{001B}[0;36m1 │\u{001B}[0;0m foo.[].[].[]
-        \u{001B}[0;36m∣\u{001B}[0;0m     │  │  ╰─ \u{001B}[1;31merror: expected name in member access\u{001B}[0;0m
-        \u{001B}[0;36m∣\u{001B}[0;0m     │  ╰─ \u{001B}[1;31merror: expected name in member access\u{001B}[0;0m
-        \u{001B}[0;36m∣\u{001B}[0;0m     ╰─ \u{001B}[1;31merror: expected name in member access\u{001B}[0;0m
+        \u{001B}[0;36m│\u{001B}[0;0m     │  │  ╰─ \u{001B}[1;31merror: expected name in member access\u{001B}[0;0m
+        \u{001B}[0;36m│\u{001B}[0;0m     │  ╰─ \u{001B}[1;31merror: expected name in member access\u{001B}[0;0m
+        \u{001B}[0;36m│\u{001B}[0;0m     ╰─ \u{001B}[1;31merror: expected name in member access\u{001B}[0;0m
 
       """
     AssertStringsEqualWithDiff(annotate(source: source, colorize: true), expectedOutput)
@@ -128,8 +128,8 @@ final class DiagnosticsFormatterTests: XCTestCase {
 
     let expectedOutput = """
       \u{001B}[0;36m1 │\u{001B}[0;0m for \u{001B}[4;39m(i\u{001B}[0;0m \u{001B}[4;39m= 🐮; i != 👩‍👩‍👦‍👦; i += 1)\u{001B}[0;0m { }
-        \u{001B}[0;36m∣\u{001B}[0;0m │      ╰─ \u{001B}[1;31merror: expected ')' to end tuple pattern\u{001B}[0;0m
-        \u{001B}[0;36m∣\u{001B}[0;0m ╰─ \u{001B}[1;31merror: C-style for statement has been removed in Swift 3\u{001B}[0;0m
+        \u{001B}[0;36m│\u{001B}[0;0m │      ╰─ \u{001B}[1;31merror: expected ')' to end tuple pattern\u{001B}[0;0m
+        \u{001B}[0;36m│\u{001B}[0;0m ╰─ \u{001B}[1;31merror: C-style for statement has been removed in Swift 3\u{001B}[0;0m
 
       """
 

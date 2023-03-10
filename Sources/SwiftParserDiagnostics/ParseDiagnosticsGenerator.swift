@@ -764,7 +764,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
             message: RemoveNodesFixIt(unexpectedName),
             changes: [
               .makeMissing(unexpectedName),
-              FixIt.Changes(changes: [.replaceTrailingTrivia(token: previous, newTrivia: .zero)])
+              FixIt.Changes(changes: [.replaceTrailingTrivia(token: previous, newTrivia: .zero)]),
             ]
           )
         ],

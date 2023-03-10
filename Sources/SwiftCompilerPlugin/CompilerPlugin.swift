@@ -13,6 +13,7 @@
 // https://github.com/apple/swift-package-manager/blob/main/Sources/PackagePlugin/Plugin.swift
 
 import SwiftSyntaxMacros
+@_implementationOnly import SwiftCompilerPluginMessageHandling
 
 @_implementationOnly import Foundation
 #if os(Windows)
@@ -62,6 +63,37 @@ public protocol CompilerPlugin {
 }
 
 extension CompilerPlugin {
+  func resolveMacro(moduleName: String, typeName: String) -> Macro.Type? {
+    let qualifedName = "\(moduleName).\(typeName)"
+
+    for type in providingMacros {
+      // FIXME: Is `String(reflecting:)` stable?
+      // Getting the module name and type name should be more robust.
+      let name = String(reflecting: type)
+      if name == qualifedName {
+        return type
+      }
+    }
+    return nil
+  }
+
+  // @testable
+  public func _resolveMacro(moduleName: String, typeName: String) -> Macro.Type? {
+    resolveMacro(moduleName: moduleName, typeName: typeName)
+  }
+}
+
+struct MacroProviderAdapter<Plugin: CompilerPlugin>: PluginProvider {
+  let plugin: Plugin
+  init(plugin: Plugin) {
+    self.plugin = plugin
+  }
+  func resolveMacro(moduleName: String, typeName: String) -> Macro.Type? {
+    plugin.resolveMacro(moduleName: moduleName, typeName: typeName)
+  }
+}
+
+extension CompilerPlugin {
 
   /// Main entry point of the plugin — sets up a communication channel with
   /// the plugin host and runs the main message loop.
@@ -105,18 +137,17 @@ extension CompilerPlugin {
     #endif
 
     // Open a message channel for communicating with the plugin host.
-    pluginHostConnection = PluginHostConnection(
+    let connection = PluginHostConnection(
       inputStream: FileHandle(fileDescriptor: inputFD),
       outputStream: FileHandle(fileDescriptor: outputFD)
     )
 
     // Handle messages from the host until the input stream is closed,
     // indicating that we're done.
-    let instance = Self()
+    let provider = MacroProviderAdapter(plugin: Self())
+    let impl = CompilerPluginMessageHandler(connection: connection, provider: provider)
     do {
-      while let message = try pluginHostConnection.waitForNextMessage() {
-        try instance.handleMessage(message)
-      }
+      try impl.main()
     } catch {
       // Emit a diagnostic and indicate failure to the plugin host,
       // and exit with an error code.
@@ -135,46 +166,13 @@ extension CompilerPlugin {
     if let cStr = strerror(errno) { return String(cString: cStr) }
     return String(describing: errno)
   }
-
-  /// Handles a single message received from the plugin host.
-  fileprivate func handleMessage(_ message: HostToPluginMessage) throws {
-    switch message {
-    case .getCapability:
-      try pluginHostConnection.sendMessage(
-        .getCapabilityResult(capability: PluginMessage.capability)
-      )
-      break
-
-    case .expandFreestandingMacro(let macro, let discriminator, let expandingSyntax):
-      try expandFreestandingMacro(
-        macro: macro,
-        discriminator: discriminator,
-        expandingSyntax: expandingSyntax
-      )
-
-    case .expandAttachedMacro(let macro, let macroRole, let discriminator, let attributeSyntax, let declSyntax, let parentDeclSyntax):
-      try expandAttachedMacro(
-        macro: macro,
-        macroRole: macroRole,
-        discriminator: discriminator,
-        attributeSyntax: attributeSyntax,
-        declSyntax: declSyntax,
-        parentDeclSyntax: parentDeclSyntax
-      )
-    }
-  }
 }
 
-/// Message channel for bidirectional communication with the plugin host.
-internal fileprivate(set) var pluginHostConnection: PluginHostConnection!
-
-typealias PluginHostConnection = MessageConnection<PluginToHostMessage, HostToPluginMessage>
-
-internal struct MessageConnection<TX, RX> where TX: Encodable, RX: Decodable {
+internal struct PluginHostConnection: MessageConnection {
   let inputStream: FileHandle
   let outputStream: FileHandle
 
-  func sendMessage(_ message: TX) throws {
+  func sendMessage<TX: Encodable>(_ message: TX) throws {
     // Encode the message as JSON.
     let payload = try JSONEncoder().encode(message)
 
@@ -188,7 +186,7 @@ internal struct MessageConnection<TX, RX> where TX: Encodable, RX: Decodable {
     try outputStream._write(contentsOf: payload)
   }
 
-  func waitForNextMessage() throws -> RX? {
+  func waitForNextMessage<RX: Decodable>(_ ty: RX.Type) throws -> RX? {
     // Read the header (a 64-bit length field in little endian byte order).
     guard
       let header = try inputStream._read(upToCount: 8),

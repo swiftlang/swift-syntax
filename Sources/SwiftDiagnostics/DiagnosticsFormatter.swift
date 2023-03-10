@@ -227,7 +227,13 @@ public struct DiagnosticsFormatter {
     // If there was a filename, add it first.
     if let fileName = fileName {
       let header = colorizeBufferOutline("===")
-      annotatedSource.append("\(indentString)\(header) \(fileName) \(header)\n")
+      let firstLine =
+        1
+        + (annotatedSourceLines.enumerated().first { (lineIndex, sourceLine) in
+          !sourceLine.isFreeOfAnnotations
+        }?.offset ?? 0)
+
+      annotatedSource.append("\(indentString)\(header) \(fileName):\(firstLine) \(header)\n")
     }
 
     /// Keep track if a line missing char should be printed

@@ -80,6 +80,9 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
     // Main source file.
     let (mainSourceID, mainSourceMarkers) = group.addTestFile(
       """
+
+
+      // test
       let pi = 3.14159
       1️⃣#myAssert(pi == 3)
       print("hello"
@@ -111,9 +114,11 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
     AssertStringsEqualWithDiff(
       annotated,
       """
-      === main.swift ===
-      1 │ let pi = 3.14159
-      2 │ #myAssert(pi == 3)
+      === main.swift:5 ===
+        ┆
+      3 │ // test
+      4 │ let pi = 3.14159
+      5 │ #myAssert(pi == 3)
         │ ╰─ note: in expansion of macro 'myAssert' here
         ╭─── #myAssert ───────────────────────────────────────────────────────
         │1 │ let __a = pi
@@ -123,7 +128,7 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
         │4 │   fatalError("assertion failed: pi != 3")
         │5 │ }
         ╰─────────────────────────────────────────────────────────────────────
-      3 │ print("hello"
+      6 │ print("hello"
         │              ╰─ error: expected ')' to end function call
 
       """
@@ -180,7 +185,7 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
     AssertStringsEqualWithDiff(
       annotated,
       """
-      === main.swift ===
+      === main.swift:2 ===
       1 │ let pi = 3.14159
       2 │ #myAssert(pi == 3)
         │ ╰─ note: in expansion of macro 'myAssert' here

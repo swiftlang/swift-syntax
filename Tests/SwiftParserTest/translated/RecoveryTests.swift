@@ -1007,6 +1007,19 @@ final class RecoveryTests: XCTestCase {
     )
   }
 
+  func testRecovery87b() {
+    AssertParse(
+      """
+      struct ErrorGenericParameterList1<each1️⃣
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected name in generic parameter"),
+        DiagnosticSpec(message: "expected '>' to end generic parameter clause"),
+        DiagnosticSpec(message: "expected member block in struct"),
+      ]
+    )
+  }
+
   func testRecovery88() {
     AssertParse(
       """

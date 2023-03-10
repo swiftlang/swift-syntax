@@ -474,11 +474,22 @@ extension Parser {
         let attributes = self.parseAttributeList()
 
         // Parse the 'each' keyword for a type parameter pack 'each T'.
-        let each = self.consume(if: .keyword(.each))
+        var each = self.consume(if: .keyword(.each))
 
         let (unexpectedBetweenEachAndName, name) = self.expectIdentifier()
-        if attributes == nil && unexpectedBetweenEachAndName == nil && name.isMissing && elements.isEmpty {
+        if attributes == nil && each == nil && unexpectedBetweenEachAndName == nil && name.isMissing && elements.isEmpty {
           break
+        }
+
+        // Parse the unsupported ellipsis for a type parameter pack 'T...'.
+        let unexpectedBetweenNameAndColon: RawUnexpectedNodesSyntax?
+        if let ellipsis = tryConsumeEllipsisPrefix() {
+          unexpectedBetweenNameAndColon = RawUnexpectedNodesSyntax([ellipsis], arena: self.arena)
+          if each == nil {
+            each = missingToken(.each)
+          }
+        } else {
+          unexpectedBetweenNameAndColon = nil
         }
 
         // Parse the ':' followed by a type.
@@ -513,6 +524,7 @@ extension Parser {
             each: each,
             unexpectedBetweenEachAndName,
             name: name,
+            unexpectedBetweenNameAndColon,
             colon: colon,
             unexpectedBeforeInherited,
             inheritedType: inherited,
@@ -937,7 +949,15 @@ extension Parser {
     _ handle: RecoveryConsumptionHandle
   ) -> RawAssociatedtypeDeclSyntax {
     let (unexpectedBeforeAssocKeyword, assocKeyword) = self.eat(handle)
-    let (unexpectedBeforeName, name) = self.expectIdentifier(keywordRecovery: true)
+
+    // Detect an attempt to use a type parameter pack.
+    let eachKeyword = self.consume(if: .keyword(.each))
+
+    var (unexpectedBeforeName, name) = self.expectIdentifier(keywordRecovery: true)
+    if eachKeyword != nil {
+      unexpectedBeforeName = RawUnexpectedNodesSyntax(combining: eachKeyword, unexpectedBeforeName, arena: self.arena)
+    }
+
     if unexpectedBeforeName == nil && name.isMissing {
       return RawAssociatedtypeDeclSyntax(
         attributes: attrs.attributes,
@@ -953,7 +973,7 @@ extension Parser {
       )
     }
 
-    // Detect an attempt to use a type parameter pack.
+    // Detect an attempt to use (early syntax) type parameter pack.
     let ellipsis = tryConsumeEllipsisPrefix()
 
     // Parse optional inheritance clause.

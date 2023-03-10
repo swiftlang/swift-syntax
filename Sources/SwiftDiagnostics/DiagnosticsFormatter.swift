@@ -286,7 +286,7 @@ public struct DiagnosticsFormatter {
 
       for (column, diags) in diagsPerColumn {
         // compute the string that is shown before each message
-        var preMessage = indentString + String(repeating: " ", count: maxNumberOfDigits) + " " + colorizeBufferOutline("∣")
+        var preMessage = indentString + String(repeating: " ", count: maxNumberOfDigits) + " " + colorizeBufferOutline("│")
         for c in 0..<column {
           if columnsWithDiagnostics.contains(c) {
             preMessage.append("│")

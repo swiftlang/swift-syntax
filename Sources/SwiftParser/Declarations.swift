@@ -1396,7 +1396,9 @@ extension Parser {
 
     let output: RawReturnClauseSyntax?
 
-    if self.at(.arrow) || self.canRecoverTo(TokenSpec(.arrow, allowAtStartOfLine: false)) != nil {
+    /// Only allow recovery to the arrow with exprKeyword precedence so we only
+    /// skip over misplaced identifiers and don't e.g. recover to an arrow in a 'where' clause.
+    if self.at(.arrow) || self.canRecoverTo(TokenSpec(.arrow, recoveryPrecedence: .exprKeyword)) != nil {
       output = self.parseFunctionReturnClause(effectSpecifiers: &effectSpecifiers, allowNamedOpaqueResultType: true)
     } else {
       output = nil

@@ -391,6 +391,17 @@ final class InitDeinitTests: XCTestCase {
     )
   }
 
+  func testInitDeinit28() {
+    AssertParse(
+      """
+      init(_ foo: T) 1️⃣-> Int where T: Comparable {} 
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "initializers cannot have a result type")
+      ]
+    )
+  }
+
   func testDeinitInSwiftinterfaceIsFollowedByFinalFunc() {
     AssertParse(
       """

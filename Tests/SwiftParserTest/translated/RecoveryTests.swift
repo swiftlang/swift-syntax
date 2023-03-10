@@ -1755,7 +1755,7 @@ final class RecoveryTests: XCTestCase {
         DiagnosticSpec(message: "initializers cannot have a name", fixIts: ["remove 'a'"])
       ],
       fixedSource: """
-        init (b: Int) {}
+        init(b: Int) {}
         """
     )
   }
@@ -1769,7 +1769,7 @@ final class RecoveryTests: XCTestCase {
         DiagnosticSpec(message: "initializers cannot have a name", fixIts: ["remove 'c'"])
       ],
       fixedSource: """
-        init? (_ d: Int) {}
+        init?(_ d: Int) {}
         """
     )
   }
@@ -1783,7 +1783,7 @@ final class RecoveryTests: XCTestCase {
         DiagnosticSpec(message: "initializers cannot have a name", fixIts: ["remove 'e<T>'"])
       ],
       fixedSource: """
-        init (f: T) {}
+        init(f: T) {}
         """
     )
   }
@@ -1797,7 +1797,7 @@ final class RecoveryTests: XCTestCase {
         DiagnosticSpec(message: "initializers cannot have a name", fixIts: ["remove 'g<T>'"])
       ],
       fixedSource: """
-        init? (_: T) {}
+        init?(_: T) {}
         """
     )
   }

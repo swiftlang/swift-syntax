@@ -1059,15 +1059,7 @@ extension Parser {
     }
 
     // Parse the signature.
-    let signature = self.parseFunctionSignature()
-
-    // mark the unexpected result type of initializer
-    // and replace the ‘output‘ of signature with nil
-    var unexpectedResultType: RawUnexpectedNodesSyntax?
-    if let output = signature.output {
-      signature.raw = signature.layoutView.replacingChild(at: 5, with: nil, arena: self.arena)
-      unexpectedResultType = RawUnexpectedNodesSyntax([output.raw], arena: self.arena)
-    }
+    let signature = self.parseFunctionSignature(allowOutput: false)
 
     let whereClause: RawGenericWhereClauseSyntax?
     if self.at(.keyword(.where)) {
@@ -1086,7 +1078,6 @@ extension Parser {
       optionalMark: failable,
       genericParameterClause: generics,
       signature: signature,
-      unexpectedResultType,
       genericWhereClause: whereClause,
       body: items,
       arena: self.arena
@@ -1398,12 +1389,12 @@ extension Parser {
   }
 
   @_spi(RawSyntax)
-  public mutating func parseFunctionSignature() -> RawFunctionSignatureSyntax {
+  public mutating func parseFunctionSignature(allowOutput: Bool = true) -> RawFunctionSignatureSyntax {
     let input = self.parseParameterClause(for: .functionParameters)
 
     var effectSpecifiers = self.parseDeclEffectSpecifiers()
 
-    let output: RawReturnClauseSyntax?
+    var output: RawReturnClauseSyntax?
 
     /// Only allow recovery to the arrow with exprKeyword precedence so we only
     /// skip over misplaced identifiers and don't e.g. recover to an arrow in a 'where' clause.
@@ -1413,10 +1404,19 @@ extension Parser {
       output = nil
     }
 
+    var unexpectedAfterOutput: RawUnexpectedNodesSyntax?
+    if !allowOutput,
+      let unexpectedOutput = output
+    {
+      output = nil
+      unexpectedAfterOutput = RawUnexpectedNodesSyntax([unexpectedOutput.raw], arena: self.arena)
+    }
+
     return RawFunctionSignatureSyntax(
       input: input,
       effectSpecifiers: effectSpecifiers,
       output: output,
+      unexpectedAfterOutput,
       arena: self.arena
     )
   }

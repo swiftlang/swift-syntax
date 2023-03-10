@@ -753,18 +753,26 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
 
-    if let unexpectedName = node.signature.input.unexpectedBeforeLeftParen {
+    if let unexpectedName = node.signature.input.unexpectedBeforeLeftParen,
+      let previous = unexpectedName.previousToken(viewMode: .sourceAccurate)
+    {
       addDiagnostic(
         unexpectedName,
         .initializerCannotHaveName,
         fixIts: [
-          FixIt(message: RemoveNodesFixIt(unexpectedName), changes: .makeMissing(unexpectedName))
+          FixIt(
+            message: RemoveNodesFixIt(unexpectedName),
+            changes: [
+              .makeMissing(unexpectedName),
+              FixIt.Changes(changes: [.replaceTrailingTrivia(token: previous, newTrivia: .zero)])
+            ]
+          )
         ],
         handledNodes: [unexpectedName.id]
       )
     }
 
-    if let unexpectedOutput = node.unexpectedBetweenSignatureAndGenericWhereClause {
+    if let unexpectedOutput = node.signature.unexpectedAfterOutput {
       addDiagnostic(
         unexpectedOutput,
         .initializerCannotHaveResultType,

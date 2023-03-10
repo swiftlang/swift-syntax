@@ -182,8 +182,8 @@ extension GroupedDiagnostics {
         boxSuffix = ""
       }
 
-      prefixString = colorizeBufferOutline(padding + "╭─── ") + sourceFile.displayName + " " + boxSuffix + "\n"
-      suffixString = colorizeBufferOutline(padding + "╰───" + String(repeating: "─", count: sourceFile.displayName.count + 2)) + boxSuffix + "\n"
+      prefixString = colorizeBufferOutline(padding + "╭─── ") + sourceFile.displayName + " " + boxSuffix + String.newline
+      suffixString = colorizeBufferOutline(padding + "╰───" + String(repeating: "─", count: sourceFile.displayName.count + 2)) + boxSuffix + String.newline
     }
 
     // Render the buffer.
@@ -204,6 +204,6 @@ extension DiagnosticsFormatter {
   public func annotateSources(in group: GroupedDiagnostics) -> String {
     return group.rootSourceFiles.map { rootSourceFileID in
       group.annotateSource(rootSourceFileID, formatter: self, indentString: "")
-    }.joined(separator: "\n")
+    }.joined(separator: String.newline)
   }
 }

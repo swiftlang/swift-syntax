@@ -49,6 +49,14 @@ extension Sequence where Element == Range<Int> {
   }
 }
 
+extension String {
+#if os(Windows)
+    internal static let newline = "\r\n"
+#else
+    internal static let newline = "\n"
+#endif
+}
+
 public struct DiagnosticsFormatter {
 
   /// A wrapper struct for a source line, its diagnostics, and any
@@ -227,7 +235,7 @@ public struct DiagnosticsFormatter {
     // If there was a filename, add it first.
     if let fileName = fileName {
       let header = colorizeBufferOutline("===")
-      annotatedSource.append("\(indentString)\(header) \(fileName) \(header)\n")
+      annotatedSource.append("\(indentString)\(header) \(fileName) \(header)\(String.newline)")
     }
 
     /// Keep track if a line missing char should be printed
@@ -254,7 +262,7 @@ public struct DiagnosticsFormatter {
       // If necessary, print a line that indicates that there was lines skipped in the source code
       if hasLineBeenSkipped && !annotatedSource.isEmpty {
         let lineMissingInfoLine = indentString + String(repeating: " ", count: maxNumberOfDigits) + " \(colorizeBufferOutline("┆"))"
-        annotatedSource.append("\(lineMissingInfoLine)\n")
+        annotatedSource.append("\(lineMissingInfoLine)\(String.newline)")
       }
       hasLineBeenSkipped = false
 
@@ -274,7 +282,7 @@ public struct DiagnosticsFormatter {
 
       // If the line did not end with \n (e.g. the last line), append it manually
       if annotatedSource.last != "\n" {
-        annotatedSource.append("\n")
+        annotatedSource.append(String.newline)
       }
 
       let columnsWithDiagnostics = Set(annotatedLine.diagnostics.map { $0.location(converter: slc).column ?? 0 })
@@ -296,15 +304,15 @@ public struct DiagnosticsFormatter {
         }
 
         for diag in diags.dropLast(1) {
-          annotatedSource.append("\(preMessage)├─ \(colorizeIfRequested(diag.diagMessage))\n")
+          annotatedSource.append("\(preMessage)├─ \(colorizeIfRequested(diag.diagMessage))\(String.newline)")
         }
-        annotatedSource.append("\(preMessage)╰─ \(colorizeIfRequested(diags.last!.diagMessage))\n")
+        annotatedSource.append("\(preMessage)╰─ \(colorizeIfRequested(diags.last!.diagMessage))\(String.newline)")
       }
 
       // Add suffix text.
       annotatedSource.append(annotatedLine.suffixText)
       if annotatedSource.last != "\n" {
-        annotatedSource.append("\n")
+        annotatedSource.append(String.newline)
       }
     }
     return annotatedSource

@@ -1409,7 +1409,7 @@ extension Parser {
       let unexpectedOutput = output
     {
       output = nil
-      unexpectedAfterOutput = RawUnexpectedNodesSyntax([unexpectedOutput.raw], arena: self.arena)
+      unexpectedAfterOutput = RawUnexpectedNodesSyntax([unexpectedOutput], arena: self.arena)
     }
 
     return RawFunctionSignatureSyntax(

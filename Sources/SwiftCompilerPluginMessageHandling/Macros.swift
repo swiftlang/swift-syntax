@@ -14,25 +14,10 @@ import SwiftDiagnostics
 import SwiftSyntax
 import SwiftSyntaxMacros
 
-/// Implementation for `CompilerPlugin` macro related request processing.
-extension CompilerPlugin {
-  private func resolveMacro(moduleName: String, typeName: String) -> Macro.Type? {
-    let qualifedName = "\(moduleName).\(typeName)"
-
-    for type in self.providingMacros {
-      // FIXME: Is `String(reflecting:)` stable?
-      // Getting the module name and type name should be more robust.
-      let name = String(reflecting: type)
-      if name == qualifedName {
-        return type
-      }
-    }
-    return nil
-  }
-
+extension CompilerPluginMessageHandler {
   /// Get concrete macro type from a pair of module name and type name.
   private func resolveMacro(_ ref: PluginMessage.MacroReference) -> Macro.Type? {
-    resolveMacro(moduleName: ref.moduleName, typeName: ref.typeName)
+    provider.resolveMacro(moduleName: ref.moduleName, typeName: ref.typeName)
   }
 
   /// Expand `@freestainding(XXX)` macros.
@@ -90,7 +75,7 @@ extension CompilerPlugin {
     let diagnostics = context.diagnostics.map {
       PluginMessage.Diagnostic(from: $0, in: sourceManager)
     }
-    try pluginHostConnection.sendMessage(
+    try self.sendMessage(
       .expandFreestandingMacroResult(expandedSource: expandedSource, diagnostics: diagnostics)
     )
   }
@@ -249,16 +234,9 @@ extension CompilerPlugin {
     let diagnostics = context.diagnostics.map {
       PluginMessage.Diagnostic(from: $0, in: sourceManager)
     }
-    try pluginHostConnection.sendMessage(
+    try self.sendMessage(
       .expandAttachedMacroResult(expandedSources: expandedSources, diagnostics: diagnostics)
     )
-  }
-}
-
-extension CompilerPlugin {
-  // @testable
-  public func _resolveMacro(moduleName: String, typeName: String) -> Macro.Type? {
-    resolveMacro(moduleName: moduleName, typeName: typeName)
   }
 }
 

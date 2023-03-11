@@ -44,6 +44,7 @@ let package = Package(
     .library(name: "SwiftSyntaxBuilder", type: .static, targets: ["SwiftSyntaxBuilder"]),
     .library(name: "SwiftSyntaxMacros", type: .static, targets: ["SwiftSyntaxMacros"]),
     .library(name: "SwiftCompilerPlugin", type: .static, targets: ["SwiftCompilerPlugin"]),
+    .library(name: "SwiftCompilerPluginMessageHandling", type: .static, targets: ["SwiftCompilerPluginMessageHandling"]),
     .library(name: "SwiftRefactor", type: .static, targets: ["SwiftRefactor"]),
   ],
   targets: [
@@ -124,6 +125,12 @@ let package = Package(
     ),
     .target(
       name: "SwiftCompilerPlugin",
+      dependencies: [
+        "SwiftCompilerPluginMessageHandling", "SwiftSyntaxMacros",
+      ]
+    ),
+    .target(
+      name: "SwiftCompilerPluginMessageHandling",
       dependencies: [
         "SwiftSyntax", "SwiftParser", "SwiftDiagnostics", "SwiftSyntaxMacros", "SwiftOperators",
       ]

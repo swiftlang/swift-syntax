@@ -139,7 +139,7 @@ extension Parser {
     // Parsed sequence elements except 'lastElement'.
     var elements = [RawExprSyntax]()
 
-    // The last element parsed. we don't eagarly append to 'elements' because we
+    // The last element parsed. we don't eagerly append to 'elements' because we
     // don't want to populate the 'Array' unless the expression is actually
     // sequenced.
     var lastElement: RawExprSyntax

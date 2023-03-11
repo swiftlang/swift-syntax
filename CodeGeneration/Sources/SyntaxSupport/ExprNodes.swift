@@ -1602,7 +1602,7 @@ public let EXPR_NODES: [Node] = [
   ),
 
   // 'as' ('?'|'!')
-  // "as" type casting ooperator without operands.
+  // "as" type casting operator without operands.
   // NOTE: This appears only in SequenceExpr.
   Node(
     name: "UnresolvedAsExpr",
@@ -1622,7 +1622,7 @@ public let EXPR_NODES: [Node] = [
   ),
 
   // 'is'
-  // "is" type casting ooperator without operands.
+  // "is" type casting operator without operands.
   // NOTE: This appears only in SequenceExpr.
   Node(
     name: "UnresolvedIsExpr",

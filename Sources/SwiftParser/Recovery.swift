@@ -34,7 +34,7 @@ public struct RecoveryConsumptionHandle {
   static func missing(_ spec: TokenSpec) -> RecoveryConsumptionHandle {
     return RecoveryConsumptionHandle(
       unexpectedTokens: 0,
-      tokenConsumptionHandle: TokenConsumptionHandle(spec: spec, missing: true)
+      tokenConsumptionHandle: TokenConsumptionHandle(spec: spec, tokenIsMissing: true)
     )
   }
 }

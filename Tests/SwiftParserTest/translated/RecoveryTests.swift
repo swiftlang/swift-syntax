@@ -1741,7 +1741,7 @@ final class RecoveryTests: XCTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '>' to end generic parameter clause"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected type and ')' to end parameter clause"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code ')}' before struct"),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "unexpected code 'x' before parameter clause"),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "initializers cannot have a name", fixIts: ["remove 'x'"]),
       ]
     )
   }
@@ -1752,9 +1752,11 @@ final class RecoveryTests: XCTestCase {
       init 1️⃣a(b: Int) {}
       """,
       diagnostics: [
-        // TODO: (good first issue) Old parser expected error on line 3: initializers cannot have a name, Fix-It replacements: 8 - 9 = ''
-        DiagnosticSpec(message: "unexpected code 'a' before parameter clause")
-      ]
+        DiagnosticSpec(message: "initializers cannot have a name", fixIts: ["remove 'a'"])
+      ],
+      fixedSource: """
+        init(b: Int) {}
+        """
     )
   }
 
@@ -1764,9 +1766,11 @@ final class RecoveryTests: XCTestCase {
       init? 1️⃣c(_ d: Int) {}
       """,
       diagnostics: [
-        // TODO: (good first issue) Old parser expected error on line 1: initializers cannot have a name, Fix-It replacements: 9 - 10 = ''
-        DiagnosticSpec(message: "unexpected code 'c' before parameter clause")
-      ]
+        DiagnosticSpec(message: "initializers cannot have a name", fixIts: ["remove 'c'"])
+      ],
+      fixedSource: """
+        init?(_ d: Int) {}
+        """
     )
   }
 
@@ -1776,9 +1780,11 @@ final class RecoveryTests: XCTestCase {
       init 1️⃣e<T>(f: T) {}
       """,
       diagnostics: [
-        // TODO: (good first issue) Old parser expected error on line 1: initializers cannot have a name, Fix-It replacements: 8 - 9 = ''
-        DiagnosticSpec(message: "unexpected code 'e<T>' before parameter clause")
-      ]
+        DiagnosticSpec(message: "initializers cannot have a name", fixIts: ["remove 'e<T>'"])
+      ],
+      fixedSource: """
+        init(f: T) {}
+        """
     )
   }
 
@@ -1788,9 +1794,11 @@ final class RecoveryTests: XCTestCase {
       init? 1️⃣g<T>(_: T) {}
       """,
       diagnostics: [
-        // TODO: (good first issue) Old parser expected error on line 1: initializers cannot have a name, Fix-It replacements: 9 - 10 = ''
-        DiagnosticSpec(message: "unexpected code 'g<T>' before parameter clause")
-      ]
+        DiagnosticSpec(message: "initializers cannot have a name", fixIts: ["remove 'g<T>'"])
+      ],
+      fixedSource: """
+        init?(_: T) {}
+        """
     )
   }
 

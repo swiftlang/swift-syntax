@@ -748,6 +748,41 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: InitializerDeclSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+
+    if let unexpectedName = node.signature.input.unexpectedBeforeLeftParen,
+      let previous = unexpectedName.previousToken(viewMode: .sourceAccurate)
+    {
+      addDiagnostic(
+        unexpectedName,
+        .initializerCannotHaveName,
+        fixIts: [
+          FixIt(
+            message: RemoveNodesFixIt(unexpectedName),
+            changes: [
+              .makeMissing(unexpectedName),
+              FixIt.Changes(changes: [.replaceTrailingTrivia(token: previous, newTrivia: .zero)]),
+            ]
+          )
+        ],
+        handledNodes: [unexpectedName.id]
+      )
+    }
+
+    if let unexpectedOutput = node.signature.unexpectedAfterOutput {
+      addDiagnostic(
+        unexpectedOutput,
+        .initializerCannotHaveResultType,
+        handledNodes: [unexpectedOutput.id]
+      )
+    }
+
+    return .visitChildren
+  }
+
   public override func visit(_ node: MemberDeclListItemSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren

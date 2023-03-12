@@ -83,11 +83,11 @@ final class InitDeinitTests: XCTestCase {
     AssertParse(
       """
       struct FooStructConstructorD {
-        init() -> FooStructConstructorD { }
+        init() 1️⃣-> FooStructConstructorD { }
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: initializers cannot have a result type
+        DiagnosticSpec(message: "initializers cannot have a result type")
       ]
     )
   }
@@ -388,6 +388,17 @@ final class InitDeinitTests: XCTestCase {
         init(x: Int) { init(rawValue: x)! }
       }
       """
+    )
+  }
+
+  func testInitDeinit28() {
+    AssertParse(
+      """
+      init(_ foo: T) 1️⃣-> Int where T: Comparable {} 
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "initializers cannot have a result type")
+      ]
     )
   }
 

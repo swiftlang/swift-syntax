@@ -242,28 +242,29 @@ extension Parser {
   mutating func parseMatchingPattern(context: PatternContext) -> RawPatternSyntax {
     // Parse productions that can only be patterns.
     switch self.at(anyIn: MatchingPatternStart.self) {
-    case (.varKeyword, let handle)?,
-      (.letKeyword, let handle)?,
-      (.inoutKeyword, let handle)?:
-      let bindingKeyword = self.eat(handle)
-      let value = self.parseMatchingPattern(context: .bindingIntroducer)
-      return RawPatternSyntax(
-        RawValueBindingPatternSyntax(
-          bindingKeyword: bindingKeyword,
-          valuePattern: value,
-          arena: self.arena
+    case let .some((patternStart, handle)):
+      switch patternStart {
+      case .varKeyword, .letKeyword, .inoutKeyword:
+        let bindingKeyword = self.eat(handle)
+        let value = self.parseMatchingPattern(context: .bindingIntroducer)
+        return RawPatternSyntax(
+          RawValueBindingPatternSyntax(
+            bindingKeyword: bindingKeyword,
+            valuePattern: value,
+            arena: self.arena
+          )
         )
-      )
-    case (.isKeyword, let handle)?:
-      let isKeyword = self.eat(handle)
-      let type = self.parseType()
-      return RawPatternSyntax(
-        RawIsTypePatternSyntax(
-          isKeyword: isKeyword,
-          type: type,
-          arena: self.arena
+      case .isKeyword:
+        let isKeyword = self.eat(handle)
+        let type = self.parseType()
+        return RawPatternSyntax(
+          RawIsTypePatternSyntax(
+            isKeyword: isKeyword,
+            type: type,
+            arena: self.arena
+          )
         )
-      )
+      }
     case nil:
       // matching-pattern ::= expr
       // Fall back to expression parsing for ambiguous forms. Name lookup will

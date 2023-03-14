@@ -108,9 +108,7 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
       ]
     )
 
-    let formatter = DiagnosticsFormatter()
-    let annotated = formatter.annotateSources(in: group)
-    print(annotated)
+    let annotated = DiagnosticsFormatter.annotateSources(in: group)
     AssertStringsEqualWithDiff(
       annotated,
       """
@@ -179,9 +177,7 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
       ]
     )
 
-    let formatter = DiagnosticsFormatter()
-    let annotated = formatter.annotateSources(in: group)
-    print(annotated)
+    let annotated = DiagnosticsFormatter.annotateSources(in: group)
     AssertStringsEqualWithDiff(
       annotated,
       """

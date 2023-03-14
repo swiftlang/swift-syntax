@@ -61,6 +61,7 @@ public struct GroupedDiagnostics {
   ///     absolute position within that parent source file.
   ///
   /// - Returns: The unique ID for this source file.
+  @discardableResult
   public mutating func addSourceFile(
     tree: SourceFileSyntax,
     displayName: String,
@@ -205,5 +206,14 @@ extension DiagnosticsFormatter {
     return group.rootSourceFiles.map { rootSourceFileID in
       group.annotateSource(rootSourceFileID, formatter: self, indentString: "")
     }.joined(separator: "\n")
+  }
+
+  public static func annotateSources(
+    in group: GroupedDiagnostics,
+    contextSize: Int = 2,
+    colorize: Bool = false
+  ) -> String {
+    let formatter = DiagnosticsFormatter(contextSize: contextSize, colorize: colorize)
+    return formatter.annotateSources(in: group)
   }
 }

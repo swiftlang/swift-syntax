@@ -55,6 +55,7 @@
     "TokenDiagnostic.swift",
   ],
   "Internal": [
+    "Assert.swift",
     "SyntaxArena.swift",
     "SyntaxVerifier.swift",
     "BumpPtrAllocator.swift",

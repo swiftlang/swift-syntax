@@ -12,13 +12,14 @@ if ProcessInfo.processInfo.environment["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] != nil 
     .appendingPathComponent("utils")
     .appendingPathComponent("group.json")
   swiftSyntaxSwiftSettings = [
+    .define("SWIFTSYNTAX_ENABLE_ASSERTIONS"),
     .unsafeFlags([
       "-Xfrontend", "-group-info-path",
       "-Xfrontend", groupFile.path,
       // Enforcing exclusivity increases compile time of release builds by 2 minutes.
       // Disable it when we're in a controlled CI environment.
       "-enforce-exclusivity=unchecked",
-    ])
+    ]),
   ]
 } else {
   swiftSyntaxSwiftSettings = []

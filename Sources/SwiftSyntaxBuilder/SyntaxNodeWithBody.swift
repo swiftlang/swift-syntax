@@ -179,7 +179,7 @@ public extension VariableDeclSyntax {
       throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualNode: decl)
     }
     self = castedDecl
-    assert(self.bindings.count == 1)
+    precondition(self.bindings.count == 1)
     var binding: PatternBindingSyntax? = self.bindings.last
     binding?.accessor = try .getter(CodeBlockSyntax(statements: accessor()))
     bindings = PatternBindingListSyntax([binding].compactMap { $0 })

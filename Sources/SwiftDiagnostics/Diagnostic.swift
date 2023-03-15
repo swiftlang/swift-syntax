@@ -80,7 +80,7 @@ public struct DiagnosticsError: Error {
   public init(diagnostics: [Diagnostic]) {
     self.diagnostics = diagnostics
 
-    assert(
+    precondition(
       diagnostics.contains(where: { $0.diagMessage.severity == .error }),
       "at least one diagnostic must have severity == .error"
     )

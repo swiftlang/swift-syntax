@@ -282,7 +282,7 @@ let tokenKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
             }
           } else if token.text != nil {
             SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
-              ExprSyntax("assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)")
+              ExprSyntax("precondition(text.isEmpty || rawKind.defaultText.map(String.init) == text)")
               StmtSyntax("return .\(raw: token.swiftKind)")
             }
           } else {

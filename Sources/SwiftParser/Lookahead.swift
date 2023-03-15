@@ -120,7 +120,7 @@ extension Parser.Lookahead {
     if tokenText == prefix {
       return self.consumeAnyToken()
     }
-    assert(tokenText.hasPrefix(prefix))
+    precondition(tokenText.hasPrefix(prefix))
 
     self.currentToken = self.lexemes.resetForSplit(
       splitToken: self.currentToken,
@@ -209,11 +209,11 @@ extension Parser.Lookahead {
   ///  - the directive contained non-attributes
   ///  - the directive did not contain any attributes
   mutating func consumeIfConfigOfAttributes() -> Bool {
-    assert(self.at(.poundIfKeyword))
+    precondition(self.at(.poundIfKeyword))
     var didSeeAnyAttributes = false
     var poundIfLoopProgress = LoopProgressCondition()
     repeat {
-      assert(self.at(.poundIfKeyword, .poundElseKeyword, .poundElseifKeyword))
+      precondition(self.at(.poundIfKeyword, .poundElseKeyword, .poundElseifKeyword))
       self.consumeAnyToken()
 
       // <expression> after `#if` or `#elseif`
@@ -241,7 +241,7 @@ extension Parser.Lookahead {
 
 extension Parser.Lookahead {
   mutating func isStartOfGetSetAccessor() -> Bool {
-    assert(self.at(.leftBrace), "not checking a brace?")
+    precondition(self.at(.leftBrace), "not checking a brace?")
 
     // The only case this can happen is if the accessor label is immediately after
     // a brace (possibly preceded by attributes).  "get" is implicit, so it can't

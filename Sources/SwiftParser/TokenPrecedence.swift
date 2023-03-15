@@ -173,8 +173,7 @@ public enum TokenPrecedence: Comparable {
     case .poundEndifKeyword:
       self = .closingPoundIf
     case .keyword:
-      assertionFailure("RawTokenKind passed to init(nonKeyword:) must not be a keyword")
-      self = .exprKeyword
+      preconditionFailure("RawTokenKind passed to init(nonKeyword:) must not be a keyword")
     }
   }
 

@@ -29,7 +29,7 @@ public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .expressionPattern)
+    precondition(data.raw.kind == .expressionPattern)
     self._syntaxNode = Syntax(data)
   }
   
@@ -128,7 +128,7 @@ public struct IdentifierPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .identifierPattern)
+    precondition(data.raw.kind == .identifierPattern)
     self._syntaxNode = Syntax(data)
   }
   
@@ -227,7 +227,7 @@ public struct IsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .isTypePattern)
+    precondition(data.raw.kind == .isTypePattern)
     self._syntaxNode = Syntax(data)
   }
   
@@ -371,7 +371,7 @@ public struct MissingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .missingPattern)
+    precondition(data.raw.kind == .missingPattern)
     self._syntaxNode = Syntax(data)
   }
   
@@ -443,7 +443,7 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .tuplePattern)
+    precondition(data.raw.kind == .tuplePattern)
     self._syntaxNode = Syntax(data)
   }
   
@@ -638,7 +638,7 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .valueBindingPattern)
+    precondition(data.raw.kind == .valueBindingPattern)
     self._syntaxNode = Syntax(data)
   }
   
@@ -782,7 +782,7 @@ public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .wildcardPattern)
+    precondition(data.raw.kind == .wildcardPattern)
     self._syntaxNode = Syntax(data)
   }
   

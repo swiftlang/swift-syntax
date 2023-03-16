@@ -2037,6 +2037,14 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
+  override open func visit(_ node: UnresolvedIsCaseExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: UnresolvedIsCaseExprSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
   override open func visit(_ node: UnresolvedIsExprSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

@@ -264,6 +264,7 @@ public enum SyntaxKind {
   case underscorePrivateAttributeArguments
   case unexpectedNodes
   case unresolvedAsExpr
+  case unresolvedIsCaseExpr
   case unresolvedIsExpr
   case unresolvedPatternExpr
   case unresolvedTernaryExpr

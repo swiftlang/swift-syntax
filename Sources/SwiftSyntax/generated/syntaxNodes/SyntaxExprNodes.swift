@@ -7584,6 +7584,150 @@ extension UnresolvedAsExprSyntax: CustomReflectable {
   }
 }
 
+// MARK: - UnresolvedIsCaseExprSyntax
+
+
+public struct UnresolvedIsCaseExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+  
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .unresolvedIsCaseExpr else { 
+      return nil 
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+  
+  /// Creates a `UnresolvedIsCaseExprSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .unresolvedIsCaseExpr)
+    self._syntaxNode = Syntax(data)
+  }
+  
+  public init(
+      leadingTrivia: Trivia? = nil, 
+      _ unexpectedBeforeIsTok: UnexpectedNodesSyntax? = nil, 
+      isTok: TokenSyntax = .keyword(.is), 
+      _ unexpectedBetweenIsTokAndCaseTok: UnexpectedNodesSyntax? = nil, 
+      caseTok: TokenSyntax = .keyword(.case), 
+      _ unexpectedAfterCaseTok: UnexpectedNodesSyntax? = nil, 
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
+            unexpectedBeforeIsTok, 
+            isTok, 
+            unexpectedBetweenIsTokAndCaseTok, 
+            caseTok, 
+            unexpectedAfterCaseTok
+          ))) {(arena, _) in 
+      let layout: [RawSyntax?] = [
+          unexpectedBeforeIsTok?.raw, 
+          isTok.raw, 
+          unexpectedBetweenIsTokAndCaseTok?.raw, 
+          caseTok.raw, 
+          unexpectedAfterCaseTok?.raw
+        ]
+      let raw = RawSyntax.makeLayout(
+          kind: SyntaxKind.unresolvedIsCaseExpr, 
+          from: layout, 
+          arena: arena, 
+          leadingTrivia: leadingTrivia, 
+          trailingTrivia: trailingTrivia
+        )
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+  
+  public var unexpectedBeforeIsTok: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = UnresolvedIsCaseExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var isTok: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = UnresolvedIsCaseExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenIsTokAndCaseTok: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = UnresolvedIsCaseExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var caseTok: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = UnresolvedIsCaseExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedAfterCaseTok: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = UnresolvedIsCaseExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+          \Self.unexpectedBeforeIsTok, 
+          \Self.isTok, 
+          \Self.unexpectedBetweenIsTokAndCaseTok, 
+          \Self.caseTok, 
+          \Self.unexpectedAfterCaseTok
+        ])
+  }
+  
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return "'is'"
+    case 2:
+      return nil
+    case 3:
+      return "'case'"
+    case 4:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
+}
+
+extension UnresolvedIsCaseExprSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+          "unexpectedBeforeIsTok": unexpectedBeforeIsTok.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "isTok": Syntax(isTok).asProtocol(SyntaxProtocol.self), 
+          "unexpectedBetweenIsTokAndCaseTok": unexpectedBetweenIsTokAndCaseTok.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "caseTok": Syntax(caseTok).asProtocol(SyntaxProtocol.self), 
+          "unexpectedAfterCaseTok": unexpectedAfterCaseTok.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
+        ])
+  }
+}
+
 // MARK: - UnresolvedIsExprSyntax
 
 

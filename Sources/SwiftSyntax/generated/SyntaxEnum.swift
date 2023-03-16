@@ -264,6 +264,7 @@ public enum SyntaxEnum {
   case underscorePrivateAttributeArguments(UnderscorePrivateAttributeArgumentsSyntax)
   case unexpectedNodes(UnexpectedNodesSyntax)
   case unresolvedAsExpr(UnresolvedAsExprSyntax)
+  case unresolvedIsCaseExpr(UnresolvedIsCaseExprSyntax)
   case unresolvedIsExpr(UnresolvedIsExprSyntax)
   case unresolvedPatternExpr(UnresolvedPatternExprSyntax)
   case unresolvedTernaryExpr(UnresolvedTernaryExprSyntax)
@@ -781,6 +782,8 @@ public extension Syntax {
       return .unexpectedNodes(UnexpectedNodesSyntax(self)!)
     case .unresolvedAsExpr:
       return .unresolvedAsExpr(UnresolvedAsExprSyntax(self)!)
+    case .unresolvedIsCaseExpr:
+      return .unresolvedIsCaseExpr(UnresolvedIsCaseExprSyntax(self)!)
     case .unresolvedIsExpr:
       return .unresolvedIsExpr(UnresolvedIsExprSyntax(self)!)
     case .unresolvedPatternExpr:

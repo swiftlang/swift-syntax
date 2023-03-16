@@ -129,6 +129,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/TupleExprSyntax>
 - <doc:SwiftSyntax/TypeExprSyntax>
 - <doc:SwiftSyntax/UnresolvedAsExprSyntax>
+- <doc:SwiftSyntax/UnresolvedIsCaseExprSyntax>
 - <doc:SwiftSyntax/UnresolvedIsExprSyntax>
 - <doc:SwiftSyntax/UnresolvedPatternExprSyntax>
 - <doc:SwiftSyntax/UnresolvedTernaryExprSyntax>

@@ -125,6 +125,7 @@ extension Parser {
   ///     infix-expression → assignment-operator try-operator? prefix-expression
   ///     infix-expression → conditional-operator try-operator? prefix-expression
   ///     infix-expression → type-casting-operator
+  ///     infix-expression → pattern-matching-boolean-expression
   ///     infix-expressions → infix-expression infix-expressions?
   @_spi(RawSyntax)
   public mutating func parseSequenceExpression(
@@ -248,6 +249,8 @@ extension Parser {
   ///     type-casting-operator → 'as' type
   ///     type-casting-operator → 'as' '?' type
   ///     type-casting-operator → 'as' '!' type
+  ///     pattern-matching-boolean-expression → pattern-matching-boolean-operator pattern
+  ///     pattern-matching-boolean-operator  →  'is' 'case'
   ///     arrow-operator -> 'async' '->'
   ///     arrow-operator -> 'throws' '->'
   ///     arrow-operator -> 'async' 'throws' '->'
@@ -341,16 +344,32 @@ extension Parser {
 
     case (.isKeyword, let handle)?:
       let isKeyword = self.eat(handle)
-      let op = RawUnresolvedIsExprSyntax(
-        isTok: isKeyword,
-        arena: self.arena
-      )
-
-      // Parse the right type expression operand as part of the 'is' production.
-      let type = self.parseType()
-      let rhs = RawTypeExprSyntax(type: type, arena: self.arena)
-
-      return (RawExprSyntax(op), RawExprSyntax(rhs))
+      
+      if self.at(TokenSpec(.case)) {
+        let caseKeyword = self.eat(TokenSpec(.case))
+        let op = RawUnresolvedIsCaseExprSyntax(
+          isTok: isKeyword,
+          caseTok: caseKeyword,
+          arena: self.arena
+        )
+        
+        // Parse the right pattern operand as part of the 'is case' production.
+        let pattern = self.parsePattern()
+        let rhs = RawUnresolvedPatternExprSyntax(pattern: pattern, arena: self.arena)
+        
+        return (RawExprSyntax(op), RawExprSyntax(rhs))
+      } else {
+        let op = RawUnresolvedIsExprSyntax(
+          isTok: isKeyword,
+          arena: self.arena
+        )
+        
+        // Parse the right type expression operand as part of the 'is' production.
+        let type = self.parseType()
+        let rhs = RawTypeExprSyntax(type: type, arena: self.arena)
+        
+        return (RawExprSyntax(op), RawExprSyntax(rhs))
+      }
 
     case (.asKeyword, let handle)?:
       return parseUnresolvedAsExpr(handle: handle)

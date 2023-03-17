@@ -490,7 +490,7 @@ extension Parser {
           unexpectedBeforeRightParen.append(self.consumeAnyToken())
         }
         let rightParen = self.expectWithoutRecovery(.rightParen)
-        if rightParen.isMissing, case .inStringInterpolation = self.currentToken.cursor.currentState {
+        if case .inStringInterpolation = self.currentToken.cursor.currentState {
           // The parser has more knowledge that we have reached the end of the
           // string interpolation now, even if we haven't seen the closing ')'.
           // For example, consider the following code

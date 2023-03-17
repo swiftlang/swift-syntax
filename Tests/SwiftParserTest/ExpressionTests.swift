@@ -1656,13 +1656,12 @@ final class StatementExpressionTests: XCTestCase {
   func testUnterminatedInterpolationAtEndOfMultilineStringLiteral() {
     AssertParse(
       #"""
-      """\({(1️⃣})
-      2️⃣"""3️⃣
+      """1️⃣\({(2️⃣})
+      """
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected value and ')' to end tuple"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: #"unexpected code '"""' in string literal"#),
-        DiagnosticSpec(locationMarker: "3️⃣", message: #"expected '"""' to end string literal"#),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "multi-line string literal content must begin on a new line"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected value and ')' to end tuple"),
       ]
     )
   }

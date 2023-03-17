@@ -12,9 +12,23 @@
 
 import SwiftSyntaxMacros
 
+/// Optional features.
+public enum PluginFeature: String {
+  case loadPluginLibrary = "load-plugin-library"
+}
+
 /// A type that provides the actual plugin functions.
 public protocol PluginProvider {
+  /// Resolve macro type by the module name and the type name.
   func resolveMacro(moduleName: String, typeName: String) -> Macro.Type?
+
+  /// Load dynamic link library at `libraryPath`. Implementations can use
+  /// `moduleName` to associate the loaded library with it.
+  func loadPluginLibrary(libraryPath: String, moduleName: String) throws
+
+  /// Optional plugin features. This is sent to the host so the it can decide
+  /// the behavior depending on these.
+  var features: [PluginFeature] { get }
 }
 
 /// Low level message connection to the plugin host.
@@ -67,9 +81,11 @@ extension CompilerPluginMessageHandler {
   fileprivate func handleMessage(_ message: HostToPluginMessage) throws {
     switch message {
     case .getCapability:
-      try self.sendMessage(
-        .getCapabilityResult(capability: PluginMessage.capability)
+      let capability = PluginMessage.PluginCapability(
+        protocolVersion: PluginMessage.PROTOCOL_VERSION_NUMBER,
+        features: provider.features.map({ $0.rawValue })
       )
+      try self.sendMessage(.getCapabilityResult(capability: capability))
 
     case .expandFreestandingMacro(let macro, let discriminator, let expandingSyntax):
       try expandFreestandingMacro(
@@ -87,6 +103,42 @@ extension CompilerPluginMessageHandler {
         declSyntax: declSyntax,
         parentDeclSyntax: parentDeclSyntax
       )
+
+    case .loadPluginLibrary(let libraryPath, let moduleName):
+      var diags: [PluginMessage.Diagnostic] = []
+      do {
+        try provider.loadPluginLibrary(libraryPath: libraryPath, moduleName: moduleName)
+      } catch {
+        diags.append(
+          PluginMessage.Diagnostic(
+            message: String(describing: error),
+            severity: .error,
+            position: .invalid,
+            highlights: [],
+            notes: [],
+            fixIts: []
+          )
+        )
+      }
+      try self.sendMessage(.loadPluginLibraryResult(loaded: diags.isEmpty, diagnostics: diags));
     }
+  }
+}
+
+struct UnimplementedError: Error, CustomStringConvertible {
+  var description: String { "unimplemented" }
+}
+
+/// Default implementation of 'PluginProvider' requirements.
+public extension PluginProvider {
+  var features: [PluginFeature] {
+    // No optional features by default.
+    return []
+  }
+
+  func loadPluginLibrary(libraryPath: String, moduleName: String) throws {
+    // This should be unreachable. The host should not call 'loadPluginLibrary'
+    // unless the feature is not declared.
+    throw UnimplementedError()
   }
 }

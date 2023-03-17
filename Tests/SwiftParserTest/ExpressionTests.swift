@@ -1666,6 +1666,73 @@ final class StatementExpressionTests: XCTestCase {
     )
   }
 
+  func testUnterminatedString1() {
+    AssertParse(
+      #"""
+      "abc1️⃣
+      "2️⃣
+      """#,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: #"expected '"' to end string literal"#),
+        DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#),
+      ]
+    )
+  }
+
+  func testUnterminatedString2() {
+    AssertParse(
+      #"""
+      "1️⃣
+      "2️⃣
+      """#,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: #"expected '"' to end string literal"#),
+        DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#),
+      ]
+    )
+  }
+
+  func testUnterminatedString3() {
+    AssertParse(
+      #"""
+      "abc1️⃣
+      \(def)2️⃣"3️⃣
+      """#,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: #"expected '"' to end string literal"#),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: #"expected '"' to end string literal"#),
+      ]
+    )
+  }
+
+  func testUnterminatedString4() {
+    AssertParse(
+      #"""
+      "abc\(def1️⃣2️⃣
+      3️⃣)"
+      """#,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ')' in string literal"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#),
+        DiagnosticSpec(locationMarker: "3️⃣", message: #"extraneous code ')"' at top level"#),
+      ]
+    )
+  }
+
+  func testUnterminatedString5() {
+    AssertParse(
+      #"""
+      "abc\(1️⃣2️⃣
+      def3️⃣)"
+      """#,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected value and ')' in string literal"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#),
+        DiagnosticSpec(locationMarker: "3️⃣", message: #"extraneous code ')"' at top level"#),
+      ]
+    )
+  }
 
   func testUnterminatedString6() {
     AssertParse(
@@ -1681,6 +1748,69 @@ final class StatementExpressionTests: XCTestCase {
       ]
     )
   }
+
+  func testUnterminatedString7() {
+    AssertParse(
+      #"""
+      #1️⃣
+      "abc"2️⃣#3️⃣
+      """#,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in macro expansion"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected identifier in macro expansion"),
+      ]
+    )
+  }
+
+  func testUnterminatedString8() {
+    AssertParse(
+      #"""
+      #"1️⃣
+      abc2️⃣"#3️⃣
+      """#,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: ##"expected '"#' to end string literal"##),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: #"expected '"' to end string literal"#),
+      ]
+    )
+  }
+
+  func testUnterminatedString9() {
+    AssertParse(
+      #"""
+      #"abc1️⃣
+      "#2️⃣
+      """#,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: ##"expected '"#' to end string literal"##),
+        DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#),
+      ]
+    )
+  }
+
+  func testUnterminatedString10() {
+    AssertParse(
+      #"""
+      #"abc"1️⃣
+      #2️⃣
+      """#,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: ##"expected '"#' to end string literal"##),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in macro expansion"),
+      ]
+    )
+  }
+
+  func testTriviaEndingInterpolation() {
+    AssertParse(
+      #"""
+      "abc\(def )"
+      """#
+    )
+  }
+
   func testStringLiteralAfterKeyPath() {
     AssertParse(
       #"""

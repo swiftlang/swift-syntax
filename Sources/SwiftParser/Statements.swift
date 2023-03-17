@@ -45,36 +45,6 @@ extension Parser {
   /// This function is meant to be invoked as part of parsing an item. As such
   /// it does not deal with parsing expressions, declarations, or consuming
   /// any trailing semicolons.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     statement → loop-statement ';'?
-  ///     statement → branch-statement ';'?
-  ///     statement → labeled-statement ';'?
-  ///     statement → control-transfer-statement ';'?
-  ///     statement → defer-statement ';'?
-  ///     statement → do-statement ';'?
-  ///     statement → discard-statement ';'?
-  ///
-  ///     loop-statement → for-in-statement
-  ///     loop-statement → while-statement
-  ///     loop-statement → repeat-while-statement
-  ///
-  ///     branch-statement → if-statement
-  ///     branch-statement → guard-statement
-  ///     branch-statement → switch-statement
-  ///
-  ///     labeled-statement → statement-label loop-statement
-  ///     labeled-statement → statement-label if-statement
-  ///     labeled-statement → statement-label switch-statement
-  ///     labeled-statement → statement-label do-statement
-  ///
-  ///     control-transfer-statement → break-statement
-  ///     control-transfer-statement → continue-statement
-  ///     control-transfer-statement → fallthrough-statement
-  ///     control-transfer-statement → return-statement
-  ///     control-transfer-statement → throw-statement
   mutating func parseStatement() -> RawStmtSyntax {
     // If this is a label on a loop/switch statement, consume it and pass it into
     // parsing logic below.
@@ -146,11 +116,6 @@ extension Parser {
 
 extension Parser {
   /// Parse a guard statement.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     guard-statement → 'guard' condition-list 'else' code-block
   mutating func parseGuardStatement(guardHandle: RecoveryConsumptionHandle) -> RawGuardStmtSyntax {
     let (unexpectedBeforeGuardKeyword, guardKeyword) = self.eat(guardHandle)
     let conditions = self.parseConditionList()
@@ -170,11 +135,6 @@ extension Parser {
 
 extension Parser {
   /// Parse a list of condition elements.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     condition-list → condition | condition , condition-list
   mutating func parseConditionList() -> RawConditionElementListSyntax {
     // We have a simple comma separated list of clauses, but also need to handle
     // a variety of common errors situations (including migrating from Swift 2
@@ -205,14 +165,6 @@ extension Parser {
 
   /// Parse a condition element.
   ///
-  /// Grammar
-  /// =======
-  ///
-  ///     condition → expression | availability-condition | case-condition | optional-binding-condition
-  ///
-  ///     case-condition → 'case' pattern initializer
-  ///     optional-binding-condition → 'let' pattern initializer? | 'var' pattern initializer? |
-  ///                                  'inout' pattern initializer?
   /// `lastBindingKind` will be used to get a correct fall back, when there is missing `var` or `let` in a `if` statement etc.
   mutating func parseConditionElement(lastBindingKind: RawTokenSyntax?) -> RawConditionElementSyntax.Condition {
     // Parse a leading #available/#unavailable condition if present.
@@ -326,12 +278,6 @@ extension Parser {
   }
 
   /// Parse an availability condition.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     availability-condition → '#available' '(' availability-arguments ')'
-  ///     availability-condition → '#unavailable' '(' availability-arguments ')'
   mutating func parsePoundAvailableConditionElement() -> RawConditionElementSyntax.Condition {
     precondition(self.at(.poundAvailable, .poundUnavailable))
     let keyword = self.consumeAnyToken()
@@ -363,11 +309,6 @@ extension Parser {
 
 extension Parser {
   /// Parse a throw statement.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     throw-statement → 'throw' expression
   mutating func parseThrowStatement(throwHandle: RecoveryConsumptionHandle) -> RawThrowStmtSyntax {
     let (unexpectedBeforeThrowKeyword, throwKeyword) = self.eat(throwHandle)
     let hasMisplacedTry = unexpectedBeforeThrowKeyword?.containsToken(where: { TokenSpec(.try) ~= $0 }) ?? false
@@ -395,13 +336,6 @@ extension Parser {
 
 extension Parser {
   /// Parse a discard statement.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     discard-statement → 'discard' expression
-  ///
-  /// where expression's first token is an identifier.
   mutating func parseDiscardStatement(discardHandle: RecoveryConsumptionHandle) -> RawDiscardStmtSyntax {
     let (unexpectedBeforeDiscardKeyword, discardKeyword) = self.eat(discardHandle)
     let expr = self.parseExpression()
@@ -418,11 +352,6 @@ extension Parser {
 
 extension Parser {
   /// Parse a defer statement.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     defer-statement → 'defer' code-block
   mutating func parseDeferStatement(deferHandle: RecoveryConsumptionHandle) -> RawDeferStmtSyntax {
     let (unexpectedBeforeDeferKeyword, deferKeyword) = self.eat(deferHandle)
     let items = self.parseCodeBlock(introducer: deferKeyword)
@@ -439,11 +368,6 @@ extension Parser {
 
 extension Parser {
   /// Parse a do statement.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     do-statement → 'do' code-block catch-clauses?
   mutating func parseDoStatement(doHandle: RecoveryConsumptionHandle) -> RawDoStmtSyntax {
     let (unexpectedBeforeDoKeyword, doKeyword) = self.eat(doHandle)
     let body = self.parseCodeBlock(introducer: doKeyword)
@@ -469,13 +393,6 @@ extension Parser {
   ///
   /// - Note: This is not a "first class" statement it can only appear
   /// following a 'do' statement.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     catch-clauses → catch-clause catch-clauses?
-  ///     catch-clause → catch catch-pattern-list? code-block
-  ///     catch-pattern-list → catch-pattern | catch-pattern ',' catch-pattern-list
   mutating func parseCatchClause() -> RawCatchClauseSyntax {
     let (unexpectedBeforeCatchKeyword, catchKeyword) = self.expect(.keyword(.catch))
     var catchItems = [RawCatchItemSyntax]()
@@ -507,11 +424,6 @@ extension Parser {
 
   /// Parse a pattern-matching clause for a catch statement,
   /// including the guard expression.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     catch-pattern → pattern where-clause?
   private mutating func parseGuardedCatchPattern() -> (RawPatternSyntax?, RawWhereClauseSyntax?) {
     // If this is a 'catch' clause and we have "catch {" or "catch where...",
     // then we get an implicit "let error" pattern.
@@ -542,11 +454,6 @@ extension Parser {
 
 extension Parser {
   /// Parse a while statement.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     while-statement → 'while' condition-list code-block
   mutating func parseWhileStatement(whileHandle: RecoveryConsumptionHandle) -> RawWhileStmtSyntax {
     let (unexpectedBeforeWhileKeyword, whileKeyword) = self.eat(whileHandle)
     let conditions: RawConditionElementListSyntax
@@ -578,11 +485,6 @@ extension Parser {
 
 extension Parser {
   /// Parse a repeat-while statement.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     repeat-while-statement → 'repeat' code-block 'while' expression
   mutating func parseRepeatWhileStatement(repeatHandle: RecoveryConsumptionHandle) -> RawRepeatWhileStmtSyntax {
     let (unexpectedBeforeRepeatKeyword, repeatKeyword) = self.eat(repeatHandle)
     let body = self.parseCodeBlock(introducer: repeatKeyword)
@@ -604,11 +506,6 @@ extension Parser {
 
 extension Parser {
   /// Parse a for-in statement.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     for-in-statement → 'for' 'case'? pattern 'in' expression where-clause? code-block
   mutating func parseForEachStatement(forHandle: RecoveryConsumptionHandle) -> RawForInStmtSyntax {
     let (unexpectedBeforeForKeyword, forKeyword) = self.eat(forHandle)
     let tryKeyword = self.consume(if: .keyword(.try))
@@ -740,11 +637,6 @@ extension Parser {
   }
 
   /// Parse a return statement
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     return-statement → 'return' expression?
   mutating func parseReturnStatement(returnHandle: RecoveryConsumptionHandle) -> RawReturnStmtSyntax {
     let (unexpectedBeforeRet, ret) = self.eat(returnHandle)
     let hasMisplacedTry = unexpectedBeforeRet?.containsToken(where: { TokenSpec(.try) ~= $0 }) ?? false
@@ -783,11 +675,6 @@ extension Parser {
   /// Parse a yield statement.
   ///
   /// Yield statements are not formally a part of the Swift language yet.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     yield-statement → 'yield' '('? expr-list? ')'?
   mutating func parseYieldStatement(yieldHandle: RecoveryConsumptionHandle) -> RawYieldStmtSyntax {
     let (unexpectedBeforeYield, yield) = self.eat(yieldHandle)
 
@@ -851,12 +738,6 @@ extension Parser {
   }
 
   /// Parse an optional label that defines a named control flow point.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     statement-label → label-name ':'
-  ///     label-name → identifier
   mutating func parseOptionalStatementLabel() -> StatementLabel? {
     if let (label, colon) = self.consume(if: .identifier, followedBy: .colon) {
       return StatementLabel(
@@ -871,11 +752,6 @@ extension Parser {
 
 extension Parser {
   /// Parse a break statement.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     break-statement → 'break' label-name?
   mutating func parseBreakStatement(breakHandle: RecoveryConsumptionHandle) -> RawBreakStmtSyntax {
     let (unexpectedBeforeBreakKeyword, breakKeyword) = self.eat(breakHandle)
     let label = self.parseOptionalControlTransferTarget()
@@ -888,11 +764,6 @@ extension Parser {
   }
 
   /// Parse a continue statement.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     continue-statement → 'continue' label-name?
   mutating func parseContinueStatement(continueHandle: RecoveryConsumptionHandle) -> RawContinueStmtSyntax {
     let (unexpectedBeforeContinueKeyword, continueKeyword) = self.eat(continueHandle)
     let label = self.parseOptionalControlTransferTarget()
@@ -905,11 +776,6 @@ extension Parser {
   }
 
   /// Parse a fallthrough statement.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     fallthrough-statement → 'fallthrough'
   mutating func parseFallthroughStatement(fallthroughHandle: RecoveryConsumptionHandle) -> RawFallthroughStmtSyntax {
     let (unexpectedBeforeFallthroughKeyword, fallthroughKeyword) = self.eat(fallthroughHandle)
     return RawFallthroughStmtSyntax(
@@ -919,7 +785,6 @@ extension Parser {
     )
   }
 
-  // label-name → identifier
   mutating func parseOptionalControlTransferTarget() -> RawTokenSyntax? {
     guard !self.currentToken.isAtStartOfLine else {
       return nil

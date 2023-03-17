@@ -39,11 +39,6 @@ extension Parser {
   /// This function is the true parsing entry point that the high-level
   /// ``Parser/parse(source:parseTransition:filenameForDiagnostics:languageVersion:enableBareSlashRegexLiteral:)-7tndx``
   /// API calls.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     source-file → top-level-declaration?
   mutating func parseSourceFile() -> RawSourceFileSyntax {
     let items = self.parseTopLevelCodeBlockItems()
     let unexpectedBeforeEndOfFileToken = consumeRemainingTokens()
@@ -86,11 +81,6 @@ extension Parser {
   }
 
   /// Parse the top level items in a source file.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     top-level-declaration → statements?
   mutating func parseTopLevelCodeBlockItems() -> RawCodeBlockItemListSyntax {
     return parseCodeBlockItemList(isAtTopLevel: true, until: { _ in false })
   }
@@ -108,11 +98,6 @@ extension Parser {
   }
 
   /// Parse a code block.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     code-block → '{' statements? '}'
   ///
   /// `introducer` is the `while`, `if`, ... keyword that is the cause that the code block is being parsed.
   /// If the left brace is missing, its indentation will be used to judge whether a following `}` was
@@ -136,20 +121,6 @@ extension Parser {
   ///
   /// Returns `nil` if the parser did not consume any tokens while trying to
   /// parse the code block item.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     statement → expression ';'?
-  ///     statement → declaration ';'?
-  ///     statement → loop-statement ';'?
-  ///     statement → branch-statement ';'?
-  ///     statement → labeled-statement ';'?
-  ///     statement → control-transfer-statement ';'?
-  ///     statement → defer-statement ';'?
-  ///     statement → do-statement ';'?
-  ///     statement → compiler-control-statement
-  ///     statements → statement statements?
   mutating func parseCodeBlockItem(isAtTopLevel: Bool, allowInitDecl: Bool) -> RawCodeBlockItemSyntax? {
     let startToken = self.currentToken
     if let syntax = self.loadCurrentSyntaxNodeFromCache(for: .codeBlockItem) {

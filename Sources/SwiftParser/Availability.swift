@@ -14,11 +14,6 @@
 
 extension Parser {
   /// Parse a list of availability arguments.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     availability-arguments → availability-argument | availability-argument , availability-arguments
   mutating func parseAvailabilitySpecList() -> RawAvailabilitySpecListSyntax {
     var elements = [RawAvailabilityArgumentSyntax]()
     do {
@@ -181,12 +176,6 @@ extension Parser {
   }
 
   /// Parse an availability argument.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     availability-argument → platform-name platform-version
-  ///     availability-argument → *
   mutating func parseAvailabilitySpec() -> RawAvailabilityArgumentSyntax.Entry {
     if let star = self.consumeIfContextualPunctuator("*") {
       // FIXME: Use makeAvailabilityVersionRestriction here - but swift-format
@@ -200,11 +189,6 @@ extension Parser {
   /// Parse an availability macro.
   ///
   /// Availability macros are not an official part of the Swift language.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     availability-argument → macro-name platform-version
   ///
   /// If `allowStarAsVersionNumber` is `true`, versions like `* 13.0` are accepted.
   /// This is to match the behavior of `@_originallyDefinedIn` in the old parser that accepted such versions
@@ -271,13 +255,6 @@ extension Parser {
   }
 
   /// Parse a dot-separated list of version numbers.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     version-tuple -> integer-literal version-list?
-  ///     version-list -> version-tuple-element version-list?
-  ///     version-tuple-element -> '.' integer-literal
   mutating func parseVersionTuple(maxComponentCount: Int) -> RawVersionTupleSyntax {
     if self.at(.floatingLiteral),
       let periodIndex = self.currentToken.tokenText.firstIndex(of: UInt8(ascii: ".")),

@@ -14,36 +14,6 @@
 
 extension Parser {
   /// Parse a pattern.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     pattern → wildcard-pattern type-annotation?
-  ///     pattern → identifier-pattern type-annotation?
-  ///     pattern → value-binding-pattern
-  ///     pattern → tuple-pattern type-annotation?
-  ///     pattern → enum-case-pattern
-  ///     pattern → optional-pattern
-  ///     pattern → type-casting-pattern
-  ///     pattern → expression-pattern
-  ///
-  ///     wildcard-pattern → _
-  ///
-  ///     identifier-pattern → identifier
-  ///
-  ///     value-binding-pattern → 'var' pattern | 'let' pattern
-  ///
-  ///     tuple-pattern → ( tuple-pattern-element-list opt )
-  ///
-  ///     enum-case-pattern → type-identifier? '.' enum-case-name tuple-pattern?
-  ///
-  ///     optional-pattern → identifier-pattern '?'
-  ///
-  ///     type-casting-pattern → is-pattern | as-pattern
-  ///     is-pattern → 'is' type
-  ///     as-pattern → pattern 'as' type
-  ///
-  ///     expression-pattern → expression
   mutating func parsePattern() -> RawPatternSyntax {
     enum ExpectedTokens: TokenSpecSet {
       case leftParen
@@ -151,11 +121,6 @@ extension Parser {
   }
 
   /// Parse a typed pattern.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     typed-pattern → pattern ':' attributes? inout? type
   mutating func parseTypedPattern(allowRecoveryFromMissingColon: Bool = true) -> (RawPatternSyntax, RawTypeAnnotationSyntax?) {
     let pattern = self.parsePattern()
 
@@ -189,12 +154,6 @@ extension Parser {
   }
 
   /// Parse the elements of a tuple pattern.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     tuple-pattern-element-list → tuple-pattern-element | tuple-pattern-element ',' tuple-pattern-element-list
-  ///     tuple-pattern-element → pattern | identifier ':' pattern
   mutating func parsePatternTupleElements() -> RawTuplePatternElementListSyntax {
     if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
       return RawTuplePatternElementListSyntax(

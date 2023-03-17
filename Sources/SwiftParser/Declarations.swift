@@ -168,29 +168,6 @@ extension Parser {
 
   /// Parse a declaration.
   ///
-  /// Grammar
-  /// =======
-  ///
-  ///     declaration → import-declaration
-  ///     declaration → constant-declaration
-  ///     declaration → variable-declaration
-  ///     declaration → typealias-declaration
-  ///     declaration → function-declaration
-  ///     declaration → enum-declaration
-  ///     declaration → struct-declaration
-  ///     declaration → class-declaration
-  ///     declaration → actor-declaration
-  ///     declaration → protocol-declaration
-  ///     declaration → initializer-declaration
-  ///     declaration → deinitializer-declaration
-  ///     declaration → extension-declaration
-  ///     declaration → subscript-declaration
-  ///     declaration → operator-declaration
-  ///     declaration → precedence-group-declaration
-  ///     declaration → macro-declaration
-  ///
-  ///     declarations → declaration declarations?
-  ///
   /// If `inMemberDeclList` is `true`, we know that the next item must be a
   /// declaration and thus start with a keyword. This allows further recovery.
   mutating func parseDeclaration(inMemberDeclList: Bool = false) -> RawDeclSyntax {
@@ -313,13 +290,6 @@ extension Parser {
 
 extension Parser {
   /// Parse an import declaration.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     import-declaration → attributes? 'import' import-kind? import-path
-  ///     import-kind → 'typealias' | 'struct' | 'class' | 'enum' | 'protocol' | 'let' | 'var' | 'func'
-  ///     import-path → identifier | identifier '.' import-path
   mutating func parseImportDeclaration(
     _ attrs: DeclAttributes,
     _ handle: RecoveryConsumptionHandle
@@ -363,14 +333,6 @@ extension Parser {
 
 extension Parser {
   /// Parse an extension declaration.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     extension-declaration → attributes? access-level-modifier? 'extension' type-identifier type-inheritance-clause? generic-where-clause?t extension-body
-  ///     extension-body → '{' extension-members? '}'
-  ///     extension-members → extension-member extension-members?
-  ///     extension-member → declaration | compiler-control-statement
   mutating func parseExtensionDeclaration(
     _ attrs: DeclAttributes,
     _ handle: RecoveryConsumptionHandle
@@ -798,19 +760,6 @@ extension Parser {
 
 extension Parser {
   /// Parse an enum 'case' declaration.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     union-style-enum-case-clause → attributes? 'indirect'? 'case' union-style-enum-case-list
-  ///     union-style-enum-case-list → union-style-enum-case | union-style-enum-case ',' union-style-enum-case-list
-  ///     union-style-enum-case → enum-case-name tuple-type?
-  ///
-  ///     raw-value-style-enum-case-clause → attributes? 'case' raw-value-style-enum-case-list
-  ///     raw-value-style-enum-case-list → raw-value-style-enum-case | raw-value-style-enum-case ',' raw-value-style-enum-case-list
-  ///     raw-value-style-enum-case → enum-case-name raw-value-assignment?
-  ///     raw-value-assignment → = raw-value-literal
-  ///     raw-value-literal → numeric-literal | static-string-literal | boolean-literal
   mutating func parseEnumCaseDeclaration(
     _ attrs: DeclAttributes,
     _ handle: RecoveryConsumptionHandle
@@ -872,11 +821,6 @@ extension Parser {
   }
 
   /// Parse an associated type declaration.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     protocol-associated-type-declaration → attributes? access-level-modifier? 'associatedtype' typealias-name type-inheritance-clause? typealias-assignment? generic-where-clause?
   mutating func parseAssociatedTypeDeclaration(
     _ attrs: DeclAttributes,
     _ handle: RecoveryConsumptionHandle
@@ -956,17 +900,6 @@ extension Parser {
 
 extension Parser {
   /// Parse an initializer declaration.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     initializer-declaration → initializer-head generic-parameter-clause? parameter-clause 'async'? 'throws'? generic-where-clause? initializer-body
-  ///     initializer-declaration → initializer-head generic-parameter-clause? parameter-clause 'async'? 'rethrows' generic-where-clause? initializer-body
-  ///
-  ///     initializer-head → attributes? declaration-modifiers? 'init'
-  ///     initializer-head → attributes? declaration-modifiers? 'init' '?'
-  ///     initializer-head → attributes? declaration-modifiers? 'init' '!'
-  ///     initializer-body → code-block
   mutating func parseInitializerDeclaration(
     _ attrs: DeclAttributes,
     _ handle: RecoveryConsumptionHandle
@@ -1017,11 +950,6 @@ extension Parser {
   }
 
   /// Parse a deinitializer declaration.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  /// deinitializer-declaration → attributes? 'deinit' code-block
   mutating func parseDeinitializerDeclaration(
     _ attrs: DeclAttributes,
     _ handle: RecoveryConsumptionHandle
@@ -1186,15 +1114,6 @@ extension Parser {
 
 extension Parser {
   /// Parse a subscript declaration.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     subscript-declaration → subscript-head subscript-result generic-where-clause? code-block
-  ///     subscript-declaration → subscript-head subscript-result generic-where-clause? getter-setter-block
-  ///     subscript-declaration → subscript-head subscript-result generic-where-clause? getter-setter-keyword-block
-  ///     subscript-head → attributes? declaration-modifiers? 'subscript' generic-parameter-clause? parameter-clause
-  ///     subscript-result → '->' attributes? type
   mutating func parseSubscriptDeclaration(
     _ attrs: DeclAttributes,
     _ handle: RecoveryConsumptionHandle
@@ -1256,14 +1175,6 @@ extension Parser {
 
 extension Parser {
   /// Parse a variable declaration starting with a leading 'let' or 'var' keyword.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     constant-declaration → attributes? declaration-modifiers? 'let' pattern-initializer-list
-  ///     pattern-initializer-list → pattern-initializer | pattern-initializer ',' pattern-initializer-list
-  ///     pattern-initializer → pattern initializer?
-  ///     initializer → = expression
   ///
   /// If `inMemberDeclList` is `true`, we know that the next item needs to be a
   /// declaration that is started by a keyword. Thus, we in the following case
@@ -1443,21 +1354,6 @@ extension Parser {
   }
 
   /// Parse an accessor once we know we have an introducer
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     getter-clause → attributes opt mutation-modifier opt get code-block
-  ///     setter-clause → attributes opt mutation-modifier opt set setter-name opt code-block
-  ///     setter-name → ( identifier )
-  ///     getter-setter-keyword-block → { getter-keyword-clause setter-keyword-clause opt }
-  ///     getter-setter-keyword-block → { setter-keyword-clause getter-keyword-clause }
-  ///     getter-keyword-clause → attributes opt mutation-modifier opt get
-  ///     setter-keyword-clause → attributes opt mutation-modifier opt set
-  ///     willSet-didSet-block → { willSet-clause didSet-clause opt }
-  ///     willSet-didSet-block → { didSet-clause willSet-clause opt }
-  ///     willSet-clause → attributes opt willSet setter-name opt code-block
-  ///     didSet-clause → attributes opt didSet setter-name opt code-block
   private mutating func parseAccessorDecl(
     introducer: AccessorIntroducer
   ) -> RawAccessorDeclSyntax {
@@ -1500,13 +1396,6 @@ extension Parser {
 
   /// Parse the body of a variable declaration. This can include explicit
   /// getters, setters, and observers, or the body of a computed property.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     getter-setter-block → code-block
-  ///     getter-setter-block → { getter-clause setter-clause opt }
-  ///     getter-setter-block → { setter-clause getter-clause }
   mutating func parseGetSet() -> RawSubscriptDeclSyntax.Accessors {
     // Parse getter and setter.
     let unexpectedBeforeLBrace: RawUnexpectedNodesSyntax?
@@ -1574,13 +1463,6 @@ extension Parser {
 
 extension Parser {
   /// Parse a typealias declaration.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     typealias-declaration → attributes? access-level-modifier? 'typealias' typealias-name generic-parameter-clause? typealias-assignment
-  ///     typealias-name → identifier
-  ///     typealias-assignment → '=' type
   mutating func parseTypealiasDeclaration(
     _ attrs: DeclAttributes,
     _ handle: RecoveryConsumptionHandle
@@ -1637,17 +1519,6 @@ extension Parser {
 }
 
 extension Parser {
-  /// Parse an operator declaration.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     operator-declaration → prefix-operator-declaration | postfix-operator-declaration | infix-operator-declaration
-  ///     prefix-operator-declaration → 'prefix' 'operator' operator
-  ///     postfix-operator-declaration → 'postfix' 'operator' operator
-  ///     infix-operator-declaration → 'infix' 'operator' operator infix-operator-group?
-  ///     infix-operator-group → ':' precedence-group-name
-
   struct OperatorDeclIntroducer {
     var unexpectedBeforeFixity: RawUnexpectedNodesSyntax?
     var fixity: RawTokenSyntax
@@ -1655,6 +1526,7 @@ extension Parser {
     var operatorKeyword: RawTokenSyntax
   }
 
+  /// Parse an operator declaration.
   mutating func parseOperatorDeclIntroducer(_ attrs: DeclAttributes, _ handle: RecoveryConsumptionHandle) -> OperatorDeclIntroducer {
     func isFixity(_ modifier: RawDeclModifierSyntax) -> Bool {
       switch modifier.name {
@@ -1809,28 +1681,6 @@ extension Parser {
   }
 
   /// Parse a precedence group declaration.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     precedence-group-declaration → precedencegroup precedence-group-name '{' precedence-group-attributes? '}'
-  ///
-  ///     precedence-group-attributes → precedence-group-attribute precedence-group-attributes?
-  ///     precedence-group-attribute → precedence-group-relation
-  ///     precedence-group-attribute → precedence-group-assignment
-  ///     precedence-group-attribute → precedence-group-associativity
-  ///
-  ///     precedence-group-relation → 'higherThan' ':' precedence-group-names
-  ///     precedence-group-relation → 'lowerThan' ':' precedence-group-names
-  ///
-  ///     precedence-group-assignment → 'assignment' ':' boolean-literal
-  ///
-  ///     precedence-group-associativity → 'associativity' ':' 'left'
-  ///     precedence-group-associativity → 'associativity' ':' 'right'
-  ///     precedence-group-associativity → 'associativity' ':' 'none'
-  ///
-  ///     precedence-group-names → precedence-group-name | precedence-group-name ',' precedence-group-names
-  ///     precedence-group-name → identifier
   mutating func parsePrecedenceGroupDeclaration(
     _ attrs: DeclAttributes,
     _ handle: RecoveryConsumptionHandle
@@ -2031,12 +1881,6 @@ extension Parser {
   }
 
   /// Parse a macro expansion as a declaration.
-  ///
-  ///
-  /// Grammar
-  /// =======
-  ///
-  /// macro-expansion-declaration → '#' identifier expr-call-suffix?
   mutating func parseMacroExpansionDeclaration(
     _ attrs: DeclAttributes,
     _ handle: RecoveryConsumptionHandle

@@ -1666,6 +1666,21 @@ final class StatementExpressionTests: XCTestCase {
     )
   }
 
+
+  func testUnterminatedString6() {
+    AssertParse(
+      #"""
+      "abc1️⃣\2️⃣
+      (def)3️⃣"4️⃣
+      """#,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "invalid escape sequence in literal"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "4️⃣", message: #"expected '"' to end string literal"#),
+      ]
+    )
+  }
   func testStringLiteralAfterKeyPath() {
     AssertParse(
       #"""

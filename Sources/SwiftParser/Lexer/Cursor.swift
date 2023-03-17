@@ -1777,7 +1777,7 @@ extension Lexer.Cursor {
             error: error,
             stateTransition: .push(newState: .inStringInterpolationStart(stringLiteralKind: stringLiteralKind))
           )
-        } else if self.isAtEscapedNewline(delimiterLength: delimiterLength) {
+        } else if stringLiteralKind == .multiLine && self.isAtEscapedNewline(delimiterLength: delimiterLength) {
           return Lexer.Result(
             .stringSegment,
             trailingTriviaLexingMode: .escapedNewlineInMultiLineStringLiteral

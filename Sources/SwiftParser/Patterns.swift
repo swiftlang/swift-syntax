@@ -44,6 +44,8 @@ extension Parser {
   ///     as-pattern → pattern 'as' type
   ///
   ///     expression-pattern → expression
+  ///
+  /// - Note: enum-case-pattern is parsed in ``parseGuardStatement(guardHandle:)``.
   @_spi(RawSyntax)
   public mutating func parsePattern() -> RawPatternSyntax {
     enum ExpectedTokens: TokenSpecSet {

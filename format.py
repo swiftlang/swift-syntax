@@ -99,6 +99,8 @@ def get_files_to_format() -> List[Path]:
             return True
         elif 'Inputs' in path.parts:
             return True
+        elif '.build' in path.parts:
+            return True
         return False
 
     files_to_format = [file for file in files_to_format if not should_exclude(file)]

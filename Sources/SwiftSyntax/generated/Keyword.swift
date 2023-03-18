@@ -735,7 +735,7 @@ public enum Keyword: UInt8, Hashable {
     }
   }
   
-  /// Whether the token kind is switched from being an identifier to a keyword in the lexer.
+  /// Whether the token kind is switched from being an identifier to being a keyword in the lexer.
   /// This is true for keywords that used to be considered non-contextual.
   public var isLexerClassified: Bool {
     switch self {

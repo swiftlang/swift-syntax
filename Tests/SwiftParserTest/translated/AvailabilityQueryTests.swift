@@ -407,9 +407,12 @@ final class AvailabilityQueryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: (good first issue) Old parser expected error on line 1: version comparison not needed, Fix-It replacements: 19 - 22 = ''
-        DiagnosticSpec(message: "unexpected code '>= 10.51, *' in availability condition")
-      ]
+        DiagnosticSpec(message: "version comparison not needed", fixIts: ["remove '>='"])
+      ],
+      fixedSource: """
+        if #available(OSX 10.51, *) {
+        }
+        """
     )
   }
 

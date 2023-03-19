@@ -365,8 +365,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: (good first issue) Old parser expected error on line 2: version comparison not needed, Fix-It replacements: 21 - 24 = ''
-        DiagnosticSpec(message: "unexpected code '>= 10.51' in availability condition")
+        DiagnosticSpec(message: "version comparison not needed", fixIts: ["remove '>='"])
       ]
     )
   }

@@ -212,6 +212,9 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var unexpectedSemicolon: Self {
     .init("unexpected ';' separator")
   }
+  public static var versionComparisonNotNeeded: Self {
+    .init("version comparison not needed")
+  }
 }
 
 // MARK: - Diagnostics (please sort alphabetically)

@@ -78,7 +78,7 @@ extension Parser {
     /// We're parsing a matching pattern that is introduced via `let`, `var`, or `inout`
     ///
     /// ```
-    /// case let x.y <- 'x' must refer to the base of some member access, y must refer to some pattern-compatible identfier
+    /// case let x.y <- 'x' must refer to the base of some member access, y must refer to some pattern-compatible identifier
     /// ```
     case bindingIntroducer
 
@@ -2279,7 +2279,7 @@ extension Parser {
           )
         )
       } else if allowStandaloneStmtRecovery && (self.atStartOfExpression() || self.atStartOfStatement() || self.atStartOfDeclaration()) {
-        // Synthesize a label for the stamenent or declaration that isn't coverd by a case right now.
+        // Synthesize a label for the statement or declaration that isn't covered by a case right now.
         let statements = parseSwitchCaseBody()
         if statements.isEmpty {
           break
@@ -2470,7 +2470,7 @@ extension Parser {
   /// Grammar
   /// =======
   ///
-  ///     case-item     → pattern where-clause?
+  ///     case-item → pattern where-clause?
   mutating func parseGuardedCasePattern() -> (RawPatternSyntax, RawWhereClauseSyntax?) {
     let pattern = self.parseMatchingPattern(context: .matching)
 

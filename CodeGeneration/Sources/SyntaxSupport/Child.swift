@@ -147,8 +147,8 @@ public class Child {
 
   /// If a classification is passed, it specifies the color identifiers in
   /// that subtree should inherit for syntax coloring. Must be a member of
-  /// SyntaxClassification in SyntaxClassifier.h.gyb
-  /// If force_classification is also set to true, all child nodes (not only
+  /// ``SyntaxClassification``.
+  /// If `forceClassification` is also set to true, all child nodes (not only
   /// identifiers) inherit the syntax classification.
   init(
     name: String,

@@ -1761,6 +1761,13 @@ open class SyntaxRewriter {
     return ExprSyntax(visitChildren(node))
   }
   
+  /// Visit a `UnresolvedIsCaseExprSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: UnresolvedIsCaseExprSyntax) -> ExprSyntax {
+    return ExprSyntax(visitChildren(node))
+  }
+  
   /// Visit a `UnresolvedIsExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -5399,6 +5406,20 @@ open class SyntaxRewriter {
   }
   
   /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplUnresolvedIsCaseExprSyntax(_ data: SyntaxData) -> Syntax {
+    let node = UnresolvedIsCaseExprSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { 
+      visitPost(node._syntaxNode) 
+    }
+    if let newNode = visitAny(node._syntaxNode) { 
+      return newNode 
+    }
+    return Syntax(visit(node))
+  }
+  
+  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplUnresolvedIsExprSyntax(_ data: SyntaxData) -> Syntax {
     let node = UnresolvedIsExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -6118,6 +6139,8 @@ open class SyntaxRewriter {
       return visitImplUnexpectedNodesSyntax
     case .unresolvedAsExpr:
       return visitImplUnresolvedAsExprSyntax
+    case .unresolvedIsCaseExpr:
+      return visitImplUnresolvedIsCaseExprSyntax
     case .unresolvedIsExpr:
       return visitImplUnresolvedIsExprSyntax
     case .unresolvedPatternExpr:
@@ -6650,6 +6673,8 @@ open class SyntaxRewriter {
       return visitImplUnexpectedNodesSyntax(data)
     case .unresolvedAsExpr:
       return visitImplUnresolvedAsExprSyntax(data)
+    case .unresolvedIsCaseExpr:
+      return visitImplUnresolvedIsCaseExprSyntax(data)
     case .unresolvedIsExpr:
       return visitImplUnresolvedIsExprSyntax(data)
     case .unresolvedPatternExpr:

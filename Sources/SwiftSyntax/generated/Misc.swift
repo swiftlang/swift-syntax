@@ -264,6 +264,7 @@ extension Syntax {
           .node(UnderscorePrivateAttributeArgumentsSyntax.self), 
           .node(UnexpectedNodesSyntax.self), 
           .node(UnresolvedAsExprSyntax.self), 
+          .node(UnresolvedIsCaseExprSyntax.self), 
           .node(UnresolvedIsExprSyntax.self), 
           .node(UnresolvedPatternExprSyntax.self), 
           .node(UnresolvedTernaryExprSyntax.self), 
@@ -782,6 +783,8 @@ extension SyntaxKind {
       return UnexpectedNodesSyntax.self
     case .unresolvedAsExpr:
       return UnresolvedAsExprSyntax.self
+    case .unresolvedIsCaseExpr:
+      return UnresolvedIsCaseExprSyntax.self
     case .unresolvedIsExpr:
       return UnresolvedIsExprSyntax.self
     case .unresolvedPatternExpr:
@@ -1311,6 +1314,8 @@ extension SyntaxKind {
       return nil
     case .unresolvedAsExpr:
       return "'as'"
+    case .unresolvedIsCaseExpr:
+      return "'is case'"
     case .unresolvedIsExpr:
       return "'is'"
     case .unresolvedPatternExpr:

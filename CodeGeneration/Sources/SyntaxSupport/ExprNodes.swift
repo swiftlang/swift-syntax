@@ -1635,6 +1635,28 @@ public let EXPR_NODES: [Node] = [
       )
     ]
   ),
+  
+  // 'is case'
+  // Pattern-matching boolean operator without operands.
+  // NOTE: This appears only in SequenceExpr.
+  Node(
+    name: "UnresolvedIsCaseExpr",
+    nameForDiagnostics: "'is case'",
+    kind: "Expr",
+    children: [
+      Child(
+        name: "IsTok",
+        kind: .token(choices: [.keyword(text: "is")]),
+        nameForDiagnostics: "'is'"
+      ),
+      Child(
+        name: "CaseTok",
+        kind: .token(choices: [.keyword(text: "case")]),
+        nameForDiagnostics: "'case'"
+      )
+    ]
+  ),
+  
   // unresolved-pattern-expr -> pattern
   Node(
     name: "UnresolvedPatternExpr",

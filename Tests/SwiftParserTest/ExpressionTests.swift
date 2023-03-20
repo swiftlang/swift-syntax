@@ -34,7 +34,7 @@ final class ExpressionTests: XCTestCase {
 
   func testSequence() {
     AssertParse(
-      "A as? B + C -> D is E as! F ? G = 42 : H"
+      "A as? B + C -> D is E as! F ? G = 42 : H is case I.J?"
     )
   }
 
@@ -1189,6 +1189,129 @@ final class ExpressionTests: XCTestCase {
       "let a = 1️⃣\u{0}1",
       diagnostics: [
         DiagnosticSpec(message: "nul character embedded in middle of file", severity: .warning)
+      ]
+    )
+  }
+  
+  func testIsCaseExpression() {
+    // wildcard pattern
+    AssertParse(#"_ is case _"#)
+    AssertParse(#"a is case _"#)
+    AssertParse(#"b.c is case d"#)
+    
+    // identifier pattern
+    AssertParse(#"_ is case e"#)
+    AssertParse(#"f is case g"#)
+    AssertParse(#"h.i is case j"#)
+    
+    // value-binding pattern
+    // illegal uses are diagnosed in semantic analysis, not here
+    AssertParse(#"_ is case let k"#)
+    AssertParse(#"_ is case var l"#)
+    AssertParse(#"_ is case inout m"#)
+    AssertParse(#"_ is case (let n)"#)
+    AssertParse(#"_ is case (var o)"#)
+    AssertParse(#"_ is case (inout p)"#)
+    AssertParse(#"_ is case let (q)"#)
+    AssertParse(#"_ is case var (r)"#)
+    AssertParse(#"_ is case inout (s)"#)
+    AssertParse(#"_ is case let (t: u, _, v)"#)
+    AssertParse(#"_ is case var(_: w, _: _, x: _)"#)
+    AssertParse(#"_ is case inout (y, z, Б)"#)
+    AssertParse(#"_ is case (Г: let Д, var Ж, _: inout _)"#)
+    
+    AssertParse(#"И is case let Л"#)
+    AssertParse(#"П is case var У"#)
+    AssertParse(#"Ф is case inout Ц"#)
+    AssertParse(#"Ч is case (let Ш)"#)
+    AssertParse(#"Щ is case (var Ю)"#)
+    AssertParse(#"Я is case (inout α)"#)
+    AssertParse(#"β is case let (γ)"#)
+    AssertParse(#"δ is case var (ε)"#)
+    AssertParse(#"ζ is case inout (η)"#)
+    AssertParse(#"θ is case let (ι: κ, _, λ)"#)
+    AssertParse(#"μ is case var(_: ξ, _: _, π: _)"#)
+    AssertParse(#"ρ is case inout (σ, ς, τ)"#)
+    AssertParse(#"ψ is case (ω: let 甲, var 乙, _: inout _)"#)
+    
+    AssertParse(
+      #"_ is case (let 丙1️⃣: 丁, var 戊, inout _: _2️⃣)"#,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ')' to end tuple"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code ': 丁,' before variable"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code ')' at top level"),
+      ]
+    )
+    
+    // tuple pattern
+    AssertParse(#"_ is case ()"#)
+    AssertParse(#"_ is case (己)"#)
+    AssertParse(#"_ is case (庚, 辛)"#)
+    AssertParse(#"_ is case (壬, 癸)"#)
+    AssertParse(#"_ is case (巳: 午)"#)
+    AssertParse(#"_ is case (子: 丑, 寅: 卯)"#)
+    AssertParse(#"_ is case (123, 辰: "ƿþæ")"#)
+    AssertParse(#"_ is case (巳: "123", 456)"#)
+    
+    AssertParse(#"午 is case ()"#)
+    AssertParse(#"未 is case (申)"#)
+    AssertParse(#"酉 is case (戌, 亥)"#)
+    AssertParse(#"乾 is case (坤, 巽)"#)
+    AssertParse(#"艮 is case (物: 天)"#)
+    AssertParse(#"地 is case (人: ア, イ: ウ)"#)
+    AssertParse(#"キ is case (123, ケ: "ᛒᚼ")"#)
+    AssertParse(#"コ is case (サ: "123", 456)"#)
+    
+    // enumeration case pattern
+    AssertParse(#"_ is case シ"#)
+    AssertParse(#"_ is case .ス"#)
+    AssertParse(#"_ is case セ.ソ"#)
+    AssertParse(#"_ is case .チ(ツ)"#)
+    AssertParse(#"_ is case .テ(ネ: ノ)"#)
+    AssertParse(#"_ is case .ヒ(ネ: フ, ヘ)"#)
+    AssertParse(#"_ is case ホ.マ(ミ: _, _: ム)"#)
+    AssertParse(#"_ is case メ.モ(ヤ: let _, _: var ユ, inout ラ)"#)
+    AssertParse(#"_ is case let リ.モ(ル: レ, _: _, inout ワ)"#)
+    
+    AssertParse(#"ヰ is case ヱ"#)
+    AssertParse(#"ヲ is case .ㄱ"#)
+    AssertParse(#"ㄲ is case ㄴ.ㄷ"#)
+    AssertParse(#"ㄸ is case .ㄹ(ㅂ)"#)
+    AssertParse(#"ㅃ is case .ㅅ(ㄳ: ㅆ)"#)
+    AssertParse(#"ㅈ is case .ㅉ(ㅊ: ㅋ, ㅍ)"#)
+    AssertParse(#"ㅎ is case ㄵ.ㄶ(ㄺ: _, _: ㄻ)"#)
+    AssertParse(#"ㄼ is case ㄽ.ㄾ(ㄿ: let _, _: var ㅀ, inout ㅄ..<ㅕ)"#)
+    AssertParse(#"ㅏ is case let ㅐ.ㅑ(ㅒ: ㅓ, _: _, inout ㅔ)"#)
+    
+    // optional pattern
+    
+    AssertParse(#"_ is case a?"#)
+    AssertParse(#"_ is case (let b, c: var d!, _: inout _?)?"#)
+    AssertParse(#"e is case f.g?"#)
+    AssertParse(#"h.i is case (let j, k: var l?, _: inout _?)!"#)
+    
+    // type-casting patterns
+    AssertParse(#"_ is case is m"#)
+    AssertParse(#"_ is case x as n"#)
+    AssertParse(#"o is case is o?"#)
+    AssertParse(#"p.q is case y as? r"#)
+    AssertParse(#"a.b is case c?.d as! e!.f?"#)
+    
+    // expression pattern
+    AssertParse(#"_ is case 98765"#)
+    AssertParse(#"_ is case "stu""#)
+    AssertParse(#"_ is case /vwx/"#)
+    AssertParse(#"y is case 012.34"#)
+    AssertParse(#"z is case "abcde""#)
+    AssertParse(#"f is case /ghi123/"#)
+    AssertParse(#"j is case k...l"#)
+    AssertParse(#"m.n is case o.p is case q.r.s is t.u"#)
+    
+    // invalid
+    AssertParse(
+      #"v is case w1️⃣: x"#,
+      diagnostics: [
+        DiagnosticSpec(message: "extraneous code ': x' at top level")
       ]
     )
   }

@@ -1259,6 +1259,11 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: UnresolvedAsExprSyntax) -> ResultType
   
+  /// Visiting `UnresolvedIsCaseExprSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: UnresolvedIsCaseExprSyntax) -> ResultType
+  
   /// Visiting `UnresolvedIsExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -3066,6 +3071,13 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
+  /// Visiting `UnresolvedIsCaseExprSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: UnresolvedIsCaseExprSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
   /// Visiting `UnresolvedIsExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -3656,6 +3668,8 @@ extension SyntaxTransformVisitor {
     case .unexpectedNodes(let derived):
       return visit(derived)
     case .unresolvedAsExpr(let derived):
+      return visit(derived)
+    case .unresolvedIsCaseExpr(let derived):
       return visit(derived)
     case .unresolvedIsExpr(let derived):
       return visit(derived)

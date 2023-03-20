@@ -1,15 +1,6 @@
 import SwiftDiagnostics
 import SwiftSyntax
-
-/// The replacement of a parameter.
-@_spi(Testing)
-public struct ParameterReplacement {
-  /// A reference to a parameter as it occurs in the macro expansion expression.
-  public let reference: IdentifierExprSyntax
-
-  /// The index of the parameter
-  public let parameterIndex: Int
-}
+import SwiftSyntaxBuilder
 
 extension FunctionParameterSyntax {
   /// Retrieve the name of the parameter as it is used in source.
@@ -44,6 +35,7 @@ extension FunctionParameterSyntax {
 
 enum MacroExpanderError: DiagnosticMessage {
   case undefined
+  case definitionNotMacroExpansion
   case nonParameterReference(TokenSyntax)
   case nonLiteralOrParameter(ExprSyntax)
 
@@ -51,6 +43,9 @@ enum MacroExpanderError: DiagnosticMessage {
     switch self {
     case .undefined:
       return "macro expansion requires a definition"
+
+    case .definitionNotMacroExpansion:
+      return "macro definition must itself by a macro expansion expression (starting with '#')"
 
     case .nonParameterReference(let name):
       return "reference to value '\(name.text)' that is not a macro parameter in expansion"
@@ -69,9 +64,36 @@ enum MacroExpanderError: DiagnosticMessage {
   }
 }
 
+/// Provide the definition of a macro
+public enum MacroDefinition {
+  /// An externally-defined macro, known by its type name and the module in
+  /// which that type resides, which uses the deprecated syntax `A.B`.
+  case deprecatedExternal(node: Syntax, module: String, type: String)
+
+  /// A macro that is defined by expansion of another macro.
+  ///
+  /// The definition has the macro expansion expression itself, along with
+  /// sequence of replacements for subtrees that refer to parameters of the
+  /// defining macro. These subtrees will need to be replaced with the text of
+  /// the corresponding argument to the macro, which can be accomplished with
+  /// `MacroDeclSyntax.expandDefinition`.
+  case expansion(MacroExpansionExprSyntax, replacements: [Replacement])
+}
+
+extension MacroDefinition {
+  /// A replacement that occurs as part of an expanded macro definition.
+  public struct Replacement {
+    /// A reference to a parameter as it occurs in the macro expansion expression.
+    public let reference: IdentifierExprSyntax
+
+    /// The index of the parameter in the defining macro.
+    public let parameterIndex: Int
+  }
+}
+
 fileprivate class ParameterReplacementVisitor: SyntaxAnyVisitor {
   let macro: MacroDeclSyntax
-  var replacements: [ParameterReplacement] = []
+  var replacements: [MacroDefinition.Replacement] = []
   var diagnostics: [Diagnostic] = []
 
   init(macro: MacroDeclSyntax) {
@@ -159,7 +181,8 @@ fileprivate class ParameterReplacementVisitor: SyntaxAnyVisitor {
 
   override func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
     if let expr = node.as(ExprSyntax.self) {
-      // We have an expression that is not one of the allowed forms,
+      // We have an expression that is not one of the allowed forms, so
+      // diagnose it.
       diagnostics.append(
         Diagnostic(
           node: node,
@@ -176,24 +199,61 @@ fileprivate class ParameterReplacementVisitor: SyntaxAnyVisitor {
 }
 
 extension MacroDeclSyntax {
+  /// Check the definition of the given macro.
+  ///
+  /// Macros are defined by an expression, which must itself be a macro
+  /// expansion. Check the definition and produce a semantic representation of
+  /// it  or one of the "builtin"
+  ///
   /// Compute the sequence of parameter replacements required when expanding
   /// the definition of a non-external macro.
-  @_spi(Testing)
-  public func expansionParameterReplacements() -> (replacements: [ParameterReplacement], diagnostics: [Diagnostic]) {
+  ///
+  /// If there are an errors that prevent expansion, the diagnostics will be
+  /// wrapped into a  an error that prevents expansion, that error is thrown.
+  public func checkDefinition() throws -> MacroDefinition {
     // Cannot compute replacements for an undefined macro.
-    guard let definition = definition?.value else {
+    guard let originalDefinition = definition?.value else {
       let undefinedDiag = Diagnostic(
         node: Syntax(self),
         message: MacroExpanderError.undefined
       )
 
-      return (replacements: [], diagnostics: [undefinedDiag])
+      throw DiagnosticsError(diagnostics: [undefinedDiag])
+    }
+
+    /// Recognize the deprecated syntax A.B. Clients will need to
+    /// handle this themselves.
+    if let memberAccess = originalDefinition.as(MemberAccessExprSyntax.self),
+       let base = memberAccess.base,
+       let baseName = base.as(IdentifierExprSyntax.self)?.identifier
+    {
+      let memberName = memberAccess.name
+      return .deprecatedExternal(
+        node: Syntax(memberAccess),
+        module: baseName.trimmedDescription,
+        type: memberName.trimmedDescription
+      )
+    }
+
+    // Make sure we have a macro expansion expression.
+    guard let definition = originalDefinition.as(MacroExpansionExprSyntax.self) else {
+      let badDefinitionDiag =
+        Diagnostic(
+          node: Syntax(originalDefinition),
+          message: MacroExpanderError.definitionNotMacroExpansion
+        )
+
+      throw DiagnosticsError(diagnostics: [badDefinitionDiag])
     }
 
     let visitor = ParameterReplacementVisitor(macro: self)
     visitor.walk(definition)
 
-    return (replacements: visitor.replacements, diagnostics: visitor.diagnostics)
+    if !visitor.diagnostics.isEmpty {
+      throw DiagnosticsError(diagnostics: visitor.diagnostics)
+    }
+
+    return .expansion(definition, replacements: visitor.replacements)
   }
 }
 
@@ -219,27 +279,18 @@ private final class MacroExpansionRewriter: SyntaxRewriter {
 }
 
 extension MacroDeclSyntax {
-  /// Given a freestanding macro expansion syntax node that references this
-  /// macro declaration, expand the macro by substituting the arguments from
-  /// the macro expansion into the parameters that are used in the definition.
-  ///
-  /// If there are any errors, the function will throw with all diagnostics
-  /// placed in a `DiagnosticsError`.
-  public func expandDefinition(
-    _ node: some FreestandingMacroExpansionSyntax
-  ) throws -> ExprSyntax {
-    let (replacements, diagnostics) = expansionParameterReplacements()
-
-    // If there were any diagnostics, don't allow replacement.
-    if !diagnostics.isEmpty {
-      throw DiagnosticsError(diagnostics: diagnostics)
-    }
-
+  /// Expand the definition of this macro when provided with the given
+  /// argument list.
+  private func expand(
+    argumentList: TupleExprElementListSyntax?,
+    definition: MacroExpansionExprSyntax,
+    replacements: [MacroDefinition.Replacement]
+  ) -> ExprSyntax {
     // FIXME: Do real call-argument matching between the argument list and the
     // macro parameter list, porting over from the compiler.
-    let arguments: [ExprSyntax] = node.argumentList.map { element in
+    let arguments: [ExprSyntax] = argumentList?.map { element in
       element.expression
-    }
+    } ?? []
 
     return MacroExpansionRewriter(
       parameterReplacements: Dictionary(
@@ -248,6 +299,44 @@ extension MacroDeclSyntax {
         }
       ),
       arguments: arguments
-    ).visit(definition!.value)
+    ).visit(definition)
+  }
+
+  /// Given a freestanding macro expansion syntax node that references this
+  /// macro declaration, expand the macro by substituting the arguments from
+  /// the macro expansion into the parameters that are used in the definition.
+  public func expand(
+    _ node: some FreestandingMacroExpansionSyntax,
+    definition: MacroExpansionExprSyntax,
+    replacements: [MacroDefinition.Replacement]
+  ) -> ExprSyntax {
+    return try expand(
+      argumentList: node.argumentList,
+      definition: definition,
+      replacements: replacements
+    )
+  }
+
+  /// Given an attached macro expansion syntax node that references this
+  /// macro declaration, expand the macro by substituting the arguments from
+  /// the expansion into the parameters that are used in the definition.
+  public func expand(
+    _ node: AttributeSyntax,
+    definition: MacroExpansionExprSyntax,
+    replacements: [MacroDefinition.Replacement]
+  ) -> ExprSyntax {
+    // Dig out the argument list.
+    let argumentList: TupleExprElementListSyntax?
+    if case let .argumentList(argList) = node.argument {
+      argumentList = argList
+    } else {
+      argumentList = nil
+    }
+
+    return try expand(
+      argumentList: argumentList,
+      definition: definition,
+      replacements: replacements
+    )
   }
 }

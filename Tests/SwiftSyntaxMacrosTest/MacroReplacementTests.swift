@@ -14,33 +14,43 @@ import SwiftDiagnostics
 import SwiftParser
 import SwiftSyntax
 import SwiftSyntaxBuilder
-@_spi(Testing) import SwiftSyntaxMacros
+import SwiftSyntaxMacros
 import _SwiftSyntaxTestSupport
 import XCTest
 
 final class MacroReplacementTests: XCTestCase {
-  func testMacroDefinitionGood() {
+  func testMacroDefinitionGood() throws {
     let macro: DeclSyntax =
       """
       macro expand1(a: Int, b: Int) = #otherMacro(first: b, second: ["a": a], third: [3.14159, 2.71828], fourth: 4)
       """
 
-    let (replacements, diags) = macro.as(MacroDeclSyntax.self)!
-      .expansionParameterReplacements()
-    XCTAssertEqual(diags.count, 0)
+    let definition = try macro.as(MacroDeclSyntax.self)!.checkDefinition()
+    guard case let .expansion(_, replacements) = definition else {
+      XCTFail("not an expansion definition")
+      fatalError()
+    }
+
     XCTAssertEqual(replacements.count, 2)
     XCTAssertEqual(replacements[0].parameterIndex, 1)
     XCTAssertEqual(replacements[1].parameterIndex, 0)
   }
 
-  func testMacroDefinitionBad() {
+  func testMacroDefinitionBad() throws {
     let macro: DeclSyntax =
       """
       macro expand1(a: Int, b: Int) = #otherMacro(first: b + 1, c)
       """
 
-    let (_, diags) = macro.as(MacroDeclSyntax.self)!
-      .expansionParameterReplacements()
+    let diags: [Diagnostic]
+    do {
+      _ =  try macro.as(MacroDeclSyntax.self)!.checkDefinition()
+      XCTFail("should have failed with an error")
+      fatalError()
+    } catch let diagError as DiagnosticsError {
+      diags = diagError.diagnostics
+    }
+
     XCTAssertEqual(diags.count, 2)
     XCTAssertEqual(
       diags[0].diagMessage.message,
@@ -52,14 +62,21 @@ final class MacroReplacementTests: XCTestCase {
     )
   }
 
-  func testMacroUndefined() {
+  func testMacroUndefined() throws {
     let macro: DeclSyntax =
       """
       macro expand1(a: Int, b: Int)
       """
 
-    let (_, diags) = macro.as(MacroDeclSyntax.self)!
-      .expansionParameterReplacements()
+    let diags: [Diagnostic]
+    do {
+      _ = try macro.as(MacroDeclSyntax.self)!.checkDefinition()
+      XCTFail("should have failed with an error")
+      fatalError()
+    } catch let diagError as DiagnosticsError {
+      diags = diagError.diagnostics
+    }
+
     XCTAssertEqual(diags.count, 1)
     XCTAssertEqual(
       diags[0].diagMessage.message,
@@ -67,7 +84,7 @@ final class MacroReplacementTests: XCTestCase {
     )
   }
 
-  func testMacroExpansion() {
+  func testMacroExpansion() throws {
     let macro: DeclSyntax =
       """
       macro expand1(a: Int, b: Int) = #otherMacro(first: b, second: ["a": a], third: [3.14159, 2.71828], fourth: 4)
@@ -78,8 +95,18 @@ final class MacroReplacementTests: XCTestCase {
       #expand1(a: 5, b: 17)
       """
 
-    let expandedSyntax = try! macro.as(MacroDeclSyntax.self)!
-      .expandDefinition(use.as(MacroExpansionExprSyntax.self)!)
+    let macroDecl = macro.as(MacroDeclSyntax.self)!
+    let definition = try macroDecl.checkDefinition()
+    guard case let .expansion(expansion, replacements) = definition else {
+      XCTFail("not a normal expansion")
+      fatalError()
+    }
+
+    let expandedSyntax = macroDecl.expand(
+      use.as(MacroExpansionExprSyntax.self)!,
+      definition: expansion,
+      replacements: replacements
+    )
     AssertStringsEqualWithDiff(
       expandedSyntax.description,
       """

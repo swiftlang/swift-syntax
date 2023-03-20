@@ -275,8 +275,8 @@ extension MacroDeclSyntax {
   /// Given a freestanding macro expansion syntax node that references this
   /// macro declaration, expand the macro by substituting the arguments from
   /// the macro expansion into the parameters that are used in the definition.
-  public func expand(
-    _ node: some FreestandingMacroExpansionSyntax,
+  public func expand<Node: FreestandingMacroExpansionSyntax>(
+    _ node: Node,
     definition: MacroExpansionExprSyntax,
     replacements: [MacroDefinition.Replacement]
   ) -> ExprSyntax {

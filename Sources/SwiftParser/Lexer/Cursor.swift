@@ -82,9 +82,6 @@ extension Lexer.Cursor {
     /// `stringInterpolationStart` points to the first character inside the interpolation.
     case inStringInterpolation(stringLiteralKind: StringLiteralKind, parenCount: Int)
 
-    /// We have parsed a string interpolation segment and are now expecting the closing `)`.
-    case afterStringInterpolation
-
     /// The mode in which leading trivia should be lexed for this state or `nil`
     /// if no trivia should be lexed.
     func leadingTriviaLexingMode(cursor: Lexer.Cursor) -> TriviaLexingMode? {
@@ -102,7 +99,6 @@ extension Lexer.Cursor {
         case .singleLine, .singleQuote: return .noNewlines
         case .multiLine: return .normal
         }
-      case .afterStringInterpolation: return .normal
       }
     }
 
@@ -117,7 +113,6 @@ extension Lexer.Cursor {
       case .afterClosingStringQuote: return nil
       case .inStringInterpolationStart: return nil
       case .inStringInterpolation: return .noNewlines
-      case .afterStringInterpolation: return .noNewlines
       }
     }
 
@@ -134,7 +129,6 @@ extension Lexer.Cursor {
       case .afterClosingStringQuote: return false
       case .inStringInterpolationStart: return false
       case .inStringInterpolation: return false
-      case .afterStringInterpolation: return false
       }
     }
   }
@@ -333,8 +327,6 @@ extension Lexer.Cursor {
       result = lexInStringInterpolationStart(stringLiteralKind: stringLiteralKind)
     case .inStringInterpolation(stringLiteralKind: let stringLiteralKind, parenCount: let parenCount):
       result = lexInStringInterpolation(stringLiteralKind: stringLiteralKind, parenCount: parenCount, sourceBufferStart: sourceBufferStart)
-    case .afterStringInterpolation:
-      result = lexAfterStringInterpolation()
     }
 
     if let stateTransition = result.stateTransition {
@@ -971,18 +963,6 @@ extension Lexer.Cursor {
     default:
       // If we haven't reached the end of the string interpolation, lex as if we were in a normal expression.
       return self.lexNormal(sourceBufferStart: sourceBufferStart)
-    }
-  }
-
-  private mutating func lexAfterStringInterpolation() -> Lexer.Result {
-    switch self.peek() {
-    case UInt8(ascii: ")"):
-      _ = self.advance()
-      return Lexer.Result(.rightParen, stateTransition: .pop)
-    case nil:
-      return Lexer.Result(.eof)
-    default:
-      preconditionFailure("state 'isAfterStringInterpolation' expects to be positoned at ')'")
     }
   }
 }
@@ -1797,7 +1777,7 @@ extension Lexer.Cursor {
             error: error,
             stateTransition: .push(newState: .inStringInterpolationStart(stringLiteralKind: stringLiteralKind))
           )
-        } else if self.isAtEscapedNewline(delimiterLength: delimiterLength) {
+        } else if stringLiteralKind == .multiLine && self.isAtEscapedNewline(delimiterLength: delimiterLength) {
           return Lexer.Result(
             .stringSegment,
             trailingTriviaLexingMode: .escapedNewlineInMultiLineStringLiteral

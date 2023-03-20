@@ -308,6 +308,16 @@ extension Parser {
       return missingToken(spec)
     }
   }
+
+  /// Same as `expectWithoutRecovery`, but also enforces that the token does
+  /// not have any leading trivia. Otherwise, a missing token is synthesized.
+  @inline(__always)
+  mutating func expectWithoutRecoveryOrLeadingTrivia(_ spec: TokenSpec) -> Token {
+    guard self.at(spec), currentToken.leadingTriviaText.isEmpty else {
+      return missingToken(spec)
+    }
+    return self.eat(spec)
+  }
 }
 
 // MARK: Expecting Tokens with Recovery

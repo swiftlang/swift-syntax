@@ -475,11 +475,15 @@ extension Parser {
     var segments: [RawStringLiteralSegmentsSyntax.Element] = []
     var loopProgress = LoopProgressCondition()
     while loopProgress.evaluate(self.currentToken) {
+      // If we encounter a token with leading trivia, we're no longer in the
+      // string literal.
+      guard currentToken.leadingTriviaText.isEmpty else { break }
+
       if let stringSegment = self.consume(if: .stringSegment) {
         segments.append(.stringSegment(RawStringSegmentSyntax(content: stringSegment, arena: self.arena)))
       } else if let backslash = self.consume(if: .backslash) {
         let (unexpectedBeforeDelimiter, delimiter) = self.parseStringDelimiter(openDelimiter: openDelimiter)
-        let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
+        let leftParen = self.expectWithoutRecoveryOrLeadingTrivia(.leftParen)
         let expressions = RawTupleExprElementListSyntax(elements: self.parseArgumentListElements(pattern: .none), arena: self.arena)
 
         // For recovery, eat anything up to the next token that either starts a new string segment or terminates the string.
@@ -489,8 +493,16 @@ extension Parser {
         while !self.at(.rightParen, .stringSegment, .backslash) && !self.at(TokenSpec(openQuoteKind), .eof) && unexpectedProgress.evaluate(self.currentToken) {
           unexpectedBeforeRightParen.append(self.consumeAnyToken())
         }
-        let rightParen = self.expectWithoutRecovery(.rightParen)
-        if rightParen.isMissing, case .inStringInterpolation = self.currentToken.cursor.currentState {
+        // Consume the right paren if present, ensuring that it's on the same
+        // line if this is a single-line literal. Leading trivia is fine as
+        // we allow e.g "\(foo )".
+        let rightParen: Token
+        if self.at(.rightParen) && self.currentToken.isAtStartOfLine && openQuote.tokenKind != .multilineStringQuote {
+          rightParen = missingToken(.rightParen)
+        } else {
+          rightParen = self.expectWithoutRecovery(.rightParen)
+        }
+        if case .inStringInterpolation = self.currentToken.cursor.currentState {
           // The parser has more knowledge that we have reached the end of the
           // string interpolation now, even if we haven't seen the closing ')'.
           // For example, consider the following code
@@ -509,7 +521,6 @@ extension Parser {
               backslash: backslash,
               unexpectedBeforeDelimiter,
               delimiter: delimiter,
-              unexpectedBeforeLeftParen,
               leftParen: leftParen,
               expressions: expressions,
               RawUnexpectedNodesSyntax(unexpectedBeforeRightParen, arena: self.arena),
@@ -527,12 +538,12 @@ extension Parser {
     let unexpectedBeforeCloseQuote: RawUnexpectedNodesSyntax?
     let closeQuote: RawTokenSyntax
     if openQuoteKind == .singleQuote {
-      let singleQuote = self.expectWithoutRecovery(.singleQuote)
+      let singleQuote = self.expectWithoutRecoveryOrLeadingTrivia(.singleQuote)
       unexpectedBeforeCloseQuote = RawUnexpectedNodesSyntax([singleQuote], arena: self.arena)
       closeQuote = missingToken(.stringQuote)
     } else {
       unexpectedBeforeCloseQuote = nil
-      closeQuote = self.expectWithoutRecovery(TokenSpec(openQuote.tokenKind))
+      closeQuote = self.expectWithoutRecoveryOrLeadingTrivia(TokenSpec(openQuote.tokenKind))
     }
 
     let (unexpectedBeforeCloseDelimiter, closeDelimiter) = self.parseStringDelimiter(openDelimiter: openDelimiter)

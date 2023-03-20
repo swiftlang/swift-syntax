@@ -111,7 +111,7 @@ final class UnclosedStringInterpolationTests: XCTestCase {
   func testSkipUnexpectedOpeningParensInStringLiteral() {
     AssertParse(
       #"""
-      "\(e 1️⃣H()2️⃣r
+      "\(e 1️⃣H()r2️⃣
       """#,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code 'H(' in string literal"),

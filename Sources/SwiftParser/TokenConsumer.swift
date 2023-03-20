@@ -44,7 +44,7 @@ struct TokenConsumptionHandle {
   var spec: TokenSpec
   /// If `true`, the token we should consume should be synthesized as a missing token
   /// and no tokens should be consumed.
-  var missing: Bool = false
+  var tokenIsMissing: Bool = false
 }
 
 extension TokenConsumer {
@@ -106,7 +106,7 @@ extension TokenConsumer {
   /// Eat a token that we know we are currently positioned at, based on `at(anyIn:)`.
   @inline(__always)
   mutating func eat(_ handle: TokenConsumptionHandle) -> Token {
-    if handle.missing {
+    if handle.tokenIsMissing {
       return missingToken(handle.spec)
     } else {
       return eat(handle.spec)

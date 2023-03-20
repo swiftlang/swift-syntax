@@ -187,15 +187,15 @@ extension Lexer.Cursor {
   struct LexingDiagnostic {
     let kind: TokenDiagnostic.Kind
     /// The position in the token at which the diagnostic is.
-    let position: Lexer.Cursor
+    let position: Lexer.Cursor.Position
 
     init(_ kind: TokenDiagnostic.Kind, position: Lexer.Cursor) {
       self.kind = kind
-      self.position = position
+      self.position = position.position
     }
 
     func tokenDiagnostic(tokenStart: Lexer.Cursor) -> TokenDiagnostic {
-      return TokenDiagnostic(kind, byteOffset: tokenStart.distance(to: position))
+      return TokenDiagnostic(kind, byteOffset: tokenStart.position.distance(to: position))
     }
   }
 }
@@ -209,17 +209,22 @@ extension Lexer {
   /// to reading bytes from an input buffer: all accesses to its input are
   /// bounds-checked.
   struct Cursor {
-    var input: UnsafeBufferPointer<UInt8>
-    var previous: UInt8
+    struct Position {
+      var input: UnsafeBufferPointer<UInt8>
+      var previous: UInt8
+    }
+    var position: Position
+
     /// If we have already lexed a token, the kind of the previously lexed token
     var previousTokenKind: RawTokenKind?
     private var stateStack: StateStack = StateStack()
 
     init(input: UnsafeBufferPointer<UInt8>, previous: UInt8) {
-      self.input = input
-      self.previous = previous
-      self.stateStack = StateStack()
+      self.position = Position(input: input, previous: previous)
     }
+
+    var input: UnsafeBufferPointer<UInt8> { position.input }
+    var previous: UInt8 { position.previous }
 
     var currentState: State {
       stateStack.currentState
@@ -235,18 +240,18 @@ extension Lexer {
     }
 
     var pointer: UnsafePointer<UInt8> {
-      return self.input.baseAddress!
+      self.position.pointer
     }
     func distance(to other: Self) -> Int {
-      return self.pointer.distance(to: other.pointer)
+      self.position.distance(to: other.position)
     }
 
     var isAtEndOfFile: Bool {
-      return self.input.isEmpty
+      self.position.isAtEndOfFile
     }
 
     var isAtStartOfFile: Bool {
-      return !self.input.isEmpty && self.previous == UInt8(ascii: "\0")
+      self.position.isAtStartOfFile
     }
 
     /// Debug function to print the remaining source text to be lexed.
@@ -288,6 +293,24 @@ extension Lexer {
       self.stateTransition = stateTransition
       self.trailingTriviaLexingMode = trailingTriviaLexingMode
     }
+  }
+}
+
+extension Lexer.Cursor.Position {
+  var pointer: UnsafePointer<UInt8> {
+    self.input.baseAddress!
+  }
+
+  func distance(to other: Self) -> Int {
+    self.pointer.distance(to: other.pointer)
+  }
+
+  var isAtEndOfFile: Bool {
+    self.input.isEmpty
+  }
+
+  var isAtStartOfFile: Bool {
+    !self.input.isEmpty && self.previous == UInt8(ascii: "\0")
   }
 }
 
@@ -481,7 +504,7 @@ extension Lexer.Cursor {
 
 // MARK: - Advancing the cursor
 
-extension Lexer.Cursor {
+extension Lexer.Cursor.Position {
   /// If there is a character in the input, and return it, advancing the cursor.
   /// If the end of the input is reached, return `nil`.
   mutating func advance() -> UInt8? {
@@ -492,6 +515,14 @@ extension Lexer.Cursor {
     self.previous = c
     self.input = UnsafeBufferPointer(rebasing: input)
     return c
+  }
+}
+
+extension Lexer.Cursor {
+  /// If there is a character in the input, and return it, advancing the cursor.
+  /// If the end of the input is reached, return `nil`.
+  mutating func advance() -> UInt8? {
+    self.position.advance()
   }
 
   /// If the current character is `matching`, advance the cursor and return `true`.

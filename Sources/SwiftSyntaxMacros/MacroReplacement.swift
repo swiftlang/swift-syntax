@@ -193,8 +193,8 @@ extension MacroDeclSyntax {
     /// Recognize the deprecated syntax A.B. Clients will need to
     /// handle this themselves.
     if let memberAccess = originalDefinition.as(MemberAccessExprSyntax.self),
-       let base = memberAccess.base,
-       let baseName = base.as(IdentifierExprSyntax.self)?.identifier
+      let base = memberAccess.base,
+      let baseName = base.as(IdentifierExprSyntax.self)?.identifier
     {
       let memberName = memberAccess.name
       return .deprecatedExternal(
@@ -257,9 +257,10 @@ extension MacroDeclSyntax {
   ) -> ExprSyntax {
     // FIXME: Do real call-argument matching between the argument list and the
     // macro parameter list, porting over from the compiler.
-    let arguments: [ExprSyntax] = argumentList?.map { element in
-      element.expression
-    } ?? []
+    let arguments: [ExprSyntax] =
+      argumentList?.map { element in
+        element.expression
+      } ?? []
 
     return MacroExpansionRewriter(
       parameterReplacements: Dictionary(

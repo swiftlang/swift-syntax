@@ -44,7 +44,7 @@ final class MacroReplacementTests: XCTestCase {
 
     let diags: [Diagnostic]
     do {
-      _ =  try macro.as(MacroDeclSyntax.self)!.checkDefinition()
+      _ = try macro.as(MacroDeclSyntax.self)!.checkDefinition()
       XCTFail("should have failed with an error")
       fatalError()
     } catch let diagError as DiagnosticsError {

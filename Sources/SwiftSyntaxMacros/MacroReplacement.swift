@@ -280,7 +280,7 @@ extension MacroDeclSyntax {
     definition: MacroExpansionExprSyntax,
     replacements: [MacroDefinition.Replacement]
   ) -> ExprSyntax {
-    return try expand(
+    return expand(
       argumentList: node.argumentList,
       definition: definition,
       replacements: replacements
@@ -303,7 +303,7 @@ extension MacroDeclSyntax {
       argumentList = nil
     }
 
-    return try expand(
+    return expand(
       argumentList: argumentList,
       definition: definition,
       replacements: replacements

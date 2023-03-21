@@ -15,7 +15,7 @@ import SwiftSyntaxBuilder
 import SyntaxSupport
 import Utils
 
-let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: generateCopyrightHeader(for: "generate-swiftsyntax")) {
+let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: copyrightHeader) {
   try FunctionDeclSyntax(
     """
     /// Check that the `layout` is valid for the given 'SyntaxKind'.

@@ -16,7 +16,7 @@ import SyntaxSupport
 import Utils
 import SwiftBasicFormat
 
-let buildableCollectionNodesFile = SourceFileSyntax(leadingTrivia: generateCopyrightHeader(for: "generate-swiftsyntaxbuilder")) {
+let buildableCollectionNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   DeclSyntax("import SwiftSyntax")
 
   for node in SYNTAX_NODES where node.isSyntaxCollection {

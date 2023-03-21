@@ -23,6 +23,9 @@ let package = Package(
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
         "SyntaxSupport",
         "Utils",
+      ],
+      exclude: [
+        "templates/swiftsyntax/SwiftSyntaxDoccIndexTemplate.md"
       ]
     ),
     .target(

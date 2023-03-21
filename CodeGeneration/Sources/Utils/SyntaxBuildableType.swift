@@ -26,7 +26,7 @@ public struct SyntaxBuildableType: Hashable {
   public init(syntaxKind: String, isOptional: Bool = false) {
     self.isOptional = isOptional
     if syntaxKind.hasSuffix("Token") {
-      // There are different token kinds but all of them are represented by `Token` in the Swift source (see `kind_to_type` in `gyb_syntax_support`).
+      // There are different token kinds but all of them are represented by `Token` in the Swift source (see `kindToType` in `SyntaxSupport/Utils.swift`).
       self.syntaxKind = "Token"
       self.tokenKind = syntaxKind
     } else {

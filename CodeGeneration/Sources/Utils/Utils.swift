@@ -22,7 +22,7 @@ public func dedented(string: String) -> String {
 }
 
 /// Creates a single-line documentation string from indented
-/// documentation as written in `gyb_syntax_support`.
+/// documentation as written in `CodeGeneration`.
 public func flattened(indentedDocumentation: String) -> String {
   dedented(string: indentedDocumentation)
     .replacingOccurrences(of: "\n", with: "")

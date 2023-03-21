@@ -89,9 +89,7 @@ def get_files_to_format() -> List[Path]:
     files_to_format = package_dir.glob('**/*.swift')
     
     def should_exclude(path: Path) -> bool:
-        if 'gyb_generated' in path.parts:
-            return True
-        elif 'lit_tests' in path.parts:
+        if 'lit_tests' in path.parts:
             return True
         elif 'generated' in path.parts:
             return True

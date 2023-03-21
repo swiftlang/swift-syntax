@@ -49,7 +49,7 @@ extension Child {
   }
 }
 
-let basicFormatFile = SourceFileSyntax(leadingTrivia: generateCopyrightHeader(for: "generate-swiftbasicformat")) {
+let basicFormatFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   DeclSyntax("import SwiftSyntax")
 
   try! ClassDeclSyntax("open class BasicFormat: SyntaxRewriter") {

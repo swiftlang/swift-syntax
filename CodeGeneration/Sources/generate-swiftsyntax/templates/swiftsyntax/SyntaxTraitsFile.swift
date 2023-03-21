@@ -15,7 +15,7 @@ import SwiftSyntaxBuilder
 import SyntaxSupport
 import Utils
 
-let syntaxTraitsFile = SourceFileSyntax(leadingTrivia: generateCopyrightHeader(for: "generate-swiftsyntax")) {
+let syntaxTraitsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   for trait in TRAITS {
     try! ProtocolDeclSyntax(
       """

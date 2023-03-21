@@ -48,6 +48,7 @@ let package = Package(
     .library(name: "SwiftRefactor", type: .static, targets: ["SwiftRefactor"]),
   ],
   targets: [
+    .target(name: "_InstructionCounter"),
     .target(
       name: "SwiftBasicFormat",
       dependencies: ["SwiftSyntax"],
@@ -148,7 +149,7 @@ let package = Package(
     .executableTarget(
       name: "swift-parser-cli",
       dependencies: [
-        "SwiftDiagnostics", "SwiftSyntax", "SwiftParser", "SwiftParserDiagnostics", "SwiftOperators",
+        "_InstructionCounter", "SwiftDiagnostics", "SwiftSyntax", "SwiftParser", "SwiftParserDiagnostics", "SwiftOperators",
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
       ]
     ),

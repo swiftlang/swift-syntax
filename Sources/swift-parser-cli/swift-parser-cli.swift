@@ -10,6 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
+import _InstructionCounter
 import SwiftDiagnostics
 import SwiftSyntax
 import SwiftParser
@@ -177,6 +178,7 @@ class PerformanceTest: ParsableCommand {
       .map { try Data(contentsOf: $0) }
 
     let start = Date()
+    let startInstructions = getInstructionsExecuted()
     for _ in 0..<self.iterations {
       for file in files {
         file.withUnsafeBytes { buf in
@@ -184,7 +186,11 @@ class PerformanceTest: ParsableCommand {
         }
       }
     }
-    print(Date().timeIntervalSince(start) / Double(self.iterations) * 1000)
+    let endInstructions = getInstructionsExecuted()
+    let endDate = Date()
+
+    print("Time:         \(endDate.timeIntervalSince(start) / Double(self.iterations) * 1000)ms")
+    print("Instructions: \(Double(endInstructions - startInstructions) / Double(self.iterations))")
   }
 }
 

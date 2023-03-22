@@ -1043,6 +1043,18 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: SwitchExprSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+
+    if node.expression.is(MissingExprSyntax.self) && !node.cases.isEmpty {
+      addDiagnostic(node.expression, .missingExpressionInSwitchStatement, handledNodes: [node.expression.id])
+    }
+
+    return .visitChildren
+  }
+
   public override func visit(_ node: SwitchCaseSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren

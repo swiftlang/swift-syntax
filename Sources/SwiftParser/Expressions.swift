@@ -2222,7 +2222,16 @@ extension Parser {
   ) -> RawSwitchExprSyntax {
     let (unexpectedBeforeSwitchKeyword, switchKeyword) = self.eat(switchHandle)
 
-    let subject = self.parseExpression(.basic)
+    // If there is no expression, like `switch { default: return false }` then left brace would parsed as
+    // a `RawClosureExprSyntax` in the condition, which is most likely not what the user meant.
+    // Create a missing condition instead and use the `{` for the start of the body.
+    let subject: RawExprSyntax
+    if self.at(.leftBrace) {
+      subject = RawExprSyntax(RawMissingExprSyntax(arena: self.arena))
+    } else {
+      subject = self.parseExpression(.basic)
+    }
+
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
 
     let cases = self.parseSwitchCases(allowStandaloneStmtRecovery: !lbrace.isMissing)

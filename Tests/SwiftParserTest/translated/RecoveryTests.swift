@@ -621,13 +621,11 @@ final class RecoveryTests: XCTestCase {
   func testRecovery46() {
     assertParse(
       """
-      switch {
-      }1️⃣
+      switch 1️⃣{
+      }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected expression in 'switch' statement
-        // TODO: Old parser expected error on line 1: 'switch' statement body must have at least one 'case' or 'default' block
-        DiagnosticSpec(message: "expected '{}' in 'switch' statement")
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression in 'switch' statement")
       ]
     )
   }
@@ -635,14 +633,12 @@ final class RecoveryTests: XCTestCase {
   func testRecovery47() {
     assertParse(
       """
-      switch
+      switch 1️⃣
       {
-      }1️⃣
+      }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected expression in 'switch' statement
-        // TODO: Old parser expected error on line 1: 'switch' statement body must have at least one 'case' or 'default' block
-        DiagnosticSpec(message: "expected '{}' in 'switch' statement")
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression in 'switch' statement")
       ]
     )
   }
@@ -650,14 +646,12 @@ final class RecoveryTests: XCTestCase {
   func testRecovery48() {
     assertParse(
       """
-      switch {
-        1️⃣case _: return
-      }2️⃣
+      switch 1️⃣{
+        2️⃣case _: return
+      }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected expression in 'switch' statement
-        DiagnosticSpec(locationMarker: "1️⃣", message: "'case' can only appear inside a 'switch' statement or 'enum' declaration"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '{}' in 'switch' statement"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression in 'switch' statement")
       ]
     )
   }
@@ -665,17 +659,14 @@ final class RecoveryTests: XCTestCase {
   func testRecovery49() {
     assertParse(
       """
-      switch {
-        1️⃣case Int: return
-        2️⃣case _: return
-      }3️⃣
+      switch 1️⃣{
+        case Int: return
+        case _: return
+      }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected expression in 'switch' statement
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression in 'switch' statement")
         // TODO: Old parser expected error on line 2: 'is' keyword required to pattern match against type name, Fix-It replacements: 10 - 10 = 'is '
-        DiagnosticSpec(locationMarker: "1️⃣", message: "'case' can only appear inside a 'switch' statement or 'enum' declaration"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "'case' can only appear inside a 'switch' statement or 'enum' declaration"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected '{}' in 'switch' statement"),
       ]
     )
   }
@@ -683,20 +674,31 @@ final class RecoveryTests: XCTestCase {
   func testRecovery50() {
     assertParse(
       """
-      switch { 42 } {
-        case _: return
+      switch 1️⃣{ 2️⃣42 } {
+        3️⃣case _: return
       }
-      """
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression in 'switch' statement"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "all statements inside a switch must be covered by a 'case' or 'default' label"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "'case' can only appear inside a 'switch' statement or 'enum' declaration"),
+      ]
     )
   }
 
   func testRecovery51() {
     assertParse(
       """
-      switch { 42 }() {
-        case _: return
+      switch 1️⃣{ 2️⃣42 }()3️⃣ {
+        4️⃣case _: return
       }
-      """
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression in 'switch' statement"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "all statements inside a switch must be covered by a 'case' or 'default' label"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "'case' can only appear inside a 'switch' statement or 'enum' declaration"),
+      ]
     )
   }
 

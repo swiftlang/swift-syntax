@@ -15,7 +15,7 @@ import SwiftSyntaxBuilder
 import SyntaxSupport
 import Utils
 
-let tokensFile = SourceFileSyntax(leadingTrivia: generateCopyrightHeader(for: "generate-swiftsyntax")) {
+let tokensFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   try! ExtensionDeclSyntax("extension TokenSyntax") {
     for token in SYNTAX_TOKENS {
       if token.isKeyword {

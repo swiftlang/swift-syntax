@@ -29,7 +29,7 @@ fileprivate var node_child_classifications: [ChildClassification] {
   return result
 }
 
-let syntaxClassificationFile = SourceFileSyntax(leadingTrivia: generateCopyrightHeader(for: "generate-ideutils")) {
+let syntaxClassificationFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   DeclSyntax("@_spi(RawSyntax) import SwiftSyntax")
 
   try! EnumDeclSyntax("public enum SyntaxClassification") {

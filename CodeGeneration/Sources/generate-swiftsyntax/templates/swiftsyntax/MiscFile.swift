@@ -15,7 +15,7 @@ import SwiftSyntaxBuilder
 import SyntaxSupport
 import Utils
 
-let miscFile = SourceFileSyntax(leadingTrivia: generateCopyrightHeader(for: "generate-swiftsyntax")) {
+let miscFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   try! ExtensionDeclSyntax("extension Syntax") {
     try VariableDeclSyntax("public static var structure: SyntaxNodeStructure") {
       let choices = ArrayExprSyntax {

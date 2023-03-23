@@ -15,7 +15,7 @@ import SwiftSyntaxBuilder
 import SyntaxSupport
 import Utils
 
-let parserEntryFile = SourceFileSyntax(leadingTrivia: generateCopyrightHeader(for: "generate-swiftparser")) {
+let parserEntryFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   DeclSyntax("@_spi(RawSyntax) import SwiftSyntax")
 
   try! ExtensionDeclSyntax("extension Parser") {

@@ -15,7 +15,7 @@ import SwiftSyntaxBuilder
 import SyntaxSupport
 import Utils
 
-let tokenSpecStaticMembersFile = SourceFileSyntax(leadingTrivia: generateCopyrightHeader(for: "generate-swiftparser")) {
+let tokenSpecStaticMembersFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   DeclSyntax("import SwiftSyntax")
 
   try! ExtensionDeclSyntax("extension TokenSpec") {

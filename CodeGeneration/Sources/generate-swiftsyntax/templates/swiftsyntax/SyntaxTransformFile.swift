@@ -15,7 +15,7 @@ import SwiftSyntaxBuilder
 import SyntaxSupport
 import Utils
 
-let syntaxTransformFile = SourceFileSyntax(leadingTrivia: generateCopyrightHeader(for: "generate-swiftsyntax")) {
+let syntaxTransformFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   try! ProtocolDeclSyntax("public protocol SyntaxTransformVisitor") {
     DeclSyntax("associatedtype ResultType = Void")
 

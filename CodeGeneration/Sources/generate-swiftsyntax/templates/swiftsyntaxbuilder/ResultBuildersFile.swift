@@ -15,7 +15,7 @@ import SyntaxSupport
 import SwiftSyntaxBuilder
 import Utils
 
-let resultBuildersFile = SourceFileSyntax(leadingTrivia: generateCopyrightHeader(for: "generate-swiftsyntaxbuilder")) {
+let resultBuildersFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   DeclSyntax("import SwiftSyntax")
 
   for node in SYNTAX_NODES where node.isSyntaxCollection {

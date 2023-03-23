@@ -15,7 +15,7 @@ import SwiftSyntaxBuilder
 import SyntaxSupport
 import Utils
 
-let syntaxEnumFile = SourceFileSyntax(leadingTrivia: generateCopyrightHeader(for: "generate-swiftsyntax")) {
+let syntaxEnumFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   try! EnumDeclSyntax(
     """
     /// Enum to exhaustively switch over all different syntax nodes.

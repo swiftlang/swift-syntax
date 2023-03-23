@@ -181,7 +181,7 @@ extension Unicode.Scalar {
     if encodedBytes == 1 || !Unicode.Scalar(curByte).isStartOfUTF8Character {
       // Skip until we get the start of another character.  This is guaranteed to
       // at least stop at the nul at the end of the buffer.
-      while let peeked = peek(), Unicode.Scalar(peeked).isStartOfUTF8Character {
+      while let peeked = peek(), !Unicode.Scalar(peeked).isStartOfUTF8Character {
         _ = advance()
       }
       return nil

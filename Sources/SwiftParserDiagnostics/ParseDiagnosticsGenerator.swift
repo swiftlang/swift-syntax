@@ -755,6 +755,18 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: IfExprSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+
+    if node.conditions.count == 1, node.conditions.first?.as(ConditionElementSyntax.self)?.condition.is(MissingExprSyntax.self) == true, !node.body.leftBrace.isMissingAllTokens {
+      addDiagnostic(node.conditions, MissingConditionInStatement(node: node), handledNodes: [node.conditions.id])
+    }
+
+    return .visitChildren
+  }
+
   public override func visit(_ node: InitializerClauseSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren

@@ -333,6 +333,18 @@ public struct MissingAttributeArgument: ParserError {
   }
 }
 
+public struct MissingConditionInStatement: ParserError {
+  let node: SyntaxProtocol
+
+  public var message: String {
+    if let name = node.nodeTypeNameForDiagnostics(allowBlockNames: false) {
+      return "missing condition in \(name)"
+    } else {
+      return "missing condition in statement"
+    }
+  }
+}
+
 public struct MissingExpressionInStatement: ParserError {
   let node: SyntaxProtocol
 

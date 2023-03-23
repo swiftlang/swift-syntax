@@ -2174,9 +2174,24 @@ extension Parser {
     ifHandle: RecoveryConsumptionHandle
   ) -> RawIfExprSyntax {
     let (unexpectedBeforeIfKeyword, ifKeyword) = self.eat(ifHandle)
-    // A scope encloses the condition and true branch for any variables bound
-    // by a conditional binding. The else branch does *not* see these variables.
-    let conditions = self.parseConditionList()
+
+    let conditions: RawConditionElementListSyntax
+
+    if self.at(.leftBrace) {
+      conditions = RawConditionElementListSyntax(
+        elements: [
+          RawConditionElementSyntax(
+            condition: .expression(RawExprSyntax(RawMissingExprSyntax(arena: self.arena))),
+            trailingComma: nil,
+            arena: self.arena
+          )
+        ],
+        arena: self.arena
+      )
+    } else {
+      conditions = self.parseConditionList()
+    }
+
     let body = self.parseCodeBlock(introducer: ifKeyword)
 
     // The else branch, if any, is outside of the scope of the condition.

@@ -175,12 +175,11 @@ final class RecoveryTests: XCTestCase {
   func testRecovery14() {
     assertParse(
       """
-      if {
-        }1️⃣
+      if 1️⃣{
+        }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: missing condition in 'if' statement
-        DiagnosticSpec(message: "expected code block in 'if' statement")
+        DiagnosticSpec(message: "missing condition in 'if' statement")
       ]
     )
   }
@@ -188,13 +187,12 @@ final class RecoveryTests: XCTestCase {
   func testRecovery15() {
     assertParse(
       """
-      if
+      if 1️⃣
         {
-        }1️⃣
+        }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: missing condition in 'if' statement
-        DiagnosticSpec(message: "expected code block in 'if' statement")
+        DiagnosticSpec(message: "missing condition in 'if' statement")
       ]
     )
   }
@@ -203,12 +201,11 @@ final class RecoveryTests: XCTestCase {
     assertParse(
       """
       if true {
-        } else if {
-        }1️⃣
+        } else if 1️⃣{
+        }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: missing condition in 'if' statement
-        DiagnosticSpec(message: "expected code block in 'if' statement")
+        DiagnosticSpec(message: "missing condition in 'if' statement")
       ]
     )
   }
@@ -218,11 +215,11 @@ final class RecoveryTests: XCTestCase {
     // body, but the error message should be sensible.
     assertParse(
       """
-      if { true } {
+      if 1️⃣{ true } {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: missing condition in 'if' statement
+        DiagnosticSpec(message: "missing condition in 'if' statement")
         // TODO: Old parser expected error on line 3: consecutive statements on a line must be separated by ';', Fix-It replacements: 14 - 14 = ';'
         // TODO: Old parser expected error on line 3: closure expression is unused
         // TODO: Old parser expected note on line 3: did you mean to use a 'do' statement?, Fix-It replacements: 15 - 15 = 'do '
@@ -234,11 +231,11 @@ final class RecoveryTests: XCTestCase {
   func testRecovery18() {
     assertParse(
       """
-      if { true }() {
+      if 1️⃣{ true }() {
         }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: missing condition in 'if' statement
+        DiagnosticSpec(message: "missing condition in 'if' statement")
       ]
     )
   }
@@ -247,13 +244,12 @@ final class RecoveryTests: XCTestCase {
     assertParse(
       """
       // <rdar://problem/18940198>
-        if { { } }1️⃣
+        if 1️⃣{ { } }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: missing condition in 'if' statement
+        DiagnosticSpec(message: "missing condition in 'if' statement")
         // TODO: Old parser expected error on line 2: closure expression is unused
         // TODO: Old parser expected note on line 2: did you mean to use a 'do' statement?, Fix-It replacements: 8 - 8 = 'do '
-        DiagnosticSpec(message: "expected code block in 'if' statement")
       ]
     )
   }

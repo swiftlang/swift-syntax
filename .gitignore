@@ -2,8 +2,8 @@
 .build/
 # Ignore generated Xcode projects
 *.xcodeproj
-# Ignore Data Xcode stores when opening the project directly
-/.swiftpm/xcode
+# Ignore SwiftPM state, such as the generated xcodeproj when opening the project directly
+.swiftpm
 # Ignore user state in Xcode Projects
 *.xcuserdatad
 UserInterfaceState.xcuserstate

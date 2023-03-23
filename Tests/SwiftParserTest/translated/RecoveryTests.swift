@@ -268,12 +268,11 @@ final class RecoveryTests: XCTestCase {
   func testRecovery21() {
     assertParse(
       """
-      while {
-        }1️⃣
+      while 1️⃣{
+        }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: missing condition in 'while' statement
-        DiagnosticSpec(message: "expected code block in 'while' statement")
+        DiagnosticSpec(message: "missing condition in 'while' statement")
       ]
     )
   }
@@ -281,13 +280,12 @@ final class RecoveryTests: XCTestCase {
   func testRecovery22() {
     assertParse(
       """
-      while
+      while 1️⃣
         {
-        }1️⃣
+        }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: missing condition in 'while' statement
-        DiagnosticSpec(message: "expected code block in 'while' statement")
+        DiagnosticSpec(message: "missing condition in 'while' statement")
       ]
     )
   }
@@ -297,11 +295,11 @@ final class RecoveryTests: XCTestCase {
       """
       // It is debatable if we should do recovery here and parse { true } as the
       // body, but the error message should be sensible.
-      while { true } {
+      while 1️⃣{ true } {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: missing condition in 'while' statement
+        DiagnosticSpec(message: "missing condition in 'while' statement")
         // TODO: Old parser expected error on line 3: consecutive statements on a line must be separated by ';', Fix-It replacements: 17 - 17 = ';'
         // TODO: Old parser expected error on line 3: closure expression is unused
         // TODO: Old parser expected note on line 3: did you mean to use a 'do' statement?, Fix-It replacements: 18 - 18 = 'do '
@@ -313,11 +311,11 @@ final class RecoveryTests: XCTestCase {
   func testRecovery24() {
     assertParse(
       """
-      while { true }() { //  expected-error 2 {{consecutive statements on a line must be separated by ';'}} expected-error {{closure expression is unused}} expected-note {{did you mean to use a 'do' statement?}} {{20-20=do }} expected-warning {{boolean literal is unused}}
+      while 1️⃣{ true }() {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: missing condition in 'while' statement
+        DiagnosticSpec(message: "missing condition in 'while' statement")
       ]
     )
   }
@@ -326,13 +324,12 @@ final class RecoveryTests: XCTestCase {
     assertParse(
       """
       // <rdar://problem/18940198>
-      while { { } }1️⃣
+      while 1️⃣{ { } }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: missing condition in 'while' statement
+        DiagnosticSpec(message: "missing condition in 'while' statement")
         // TODO: Old parser expected error on line 2: closure expression is unused
         // TODO: Old parser expected note on line 2: did you mean to use a 'do' statement?, Fix-It replacements: 11 - 11 = 'do '
-        DiagnosticSpec(message: "expected code block in 'while' statement")
       ]
     )
   }

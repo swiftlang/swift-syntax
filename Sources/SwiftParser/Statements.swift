@@ -539,7 +539,22 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseWhileStatement(whileHandle: RecoveryConsumptionHandle) -> RawWhileStmtSyntax {
     let (unexpectedBeforeWhileKeyword, whileKeyword) = self.eat(whileHandle)
-    let conditions = self.parseConditionList()
+    let conditions: RawConditionElementListSyntax
+
+    if self.at(.leftBrace) {
+      conditions = RawConditionElementListSyntax(
+        elements: [
+          RawConditionElementSyntax(
+            condition: .expression(RawExprSyntax(RawMissingExprSyntax(arena: self.arena))),
+            trailingComma: nil,
+            arena: self.arena
+          )
+        ],
+        arena: self.arena
+      )
+    } else {
+      conditions = self.parseConditionList()
+    }
     let body = self.parseCodeBlock(introducer: whileKeyword)
     return RawWhileStmtSyntax(
       unexpectedBeforeWhileKeyword,

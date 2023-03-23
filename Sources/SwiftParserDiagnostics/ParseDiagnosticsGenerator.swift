@@ -1220,6 +1220,18 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: WhileStmtSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+
+    if node.conditions.count == 1, node.conditions.first?.as(ConditionElementSyntax.self)?.condition.is(MissingExprSyntax.self) == true, !node.body.leftBrace.isMissingAllTokens {
+      addDiagnostic(node.conditions, MissingConditionInStatement(node: node), handledNodes: [node.conditions.id])
+    }
+
+    return .visitChildren
+  }
+
   //==========================================================================//
   // IMPORTANT: If you are tempted to add a `visit` method here, please       //
   // insert it in alphabetical order above                                    //

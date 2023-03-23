@@ -649,26 +649,6 @@ extension Lexer.Cursor {
     return nil
   }
 
-  /// If this is the opening delimiter of a raw string literal, return the number
-  /// of `#` in the raw string delimiter.
-  /// Assumes that the parser is currently pointing at the character after the first `#`.
-  /// In other words, the first `#` is expected to already be consumed.
-  mutating func legacyAdvanceIfOpeningRawStringDelimiter() -> Int? {
-    assert(self.previous == UInt8(ascii: "#"))
-
-    var tmp = self
-    var length = 1
-    while tmp.advance(matching: "#") {
-      length += 1
-    }
-
-    if tmp.is(at: #"""#) {
-      self = tmp
-      return length
-    }
-    return nil
-  }
-
   /// If we are positioned at the start of a multiline string delimiter, consume
   /// that delimiter and return `true`, otherwise return `false`.
   ///
@@ -1515,8 +1495,6 @@ extension Lexer.Cursor {
   /// Lexes a single character in a string literal, handling escape sequences
   /// like `\n` or `\u{1234}` as a a single character.
   mutating func lexCharacterInStringLiteral(stringLiteralKind: StringLiteralKind, delimiterLength: Int) -> CharacterLex {
-    let charStart = self
-
     switch self.peek() {
     case UInt8(ascii: #"""#):
       let quote = Unicode.Scalar(self.advance()!)
@@ -1578,8 +1556,6 @@ extension Lexer.Cursor {
         return .error(kind)
       }
     default:
-      _ = self.advance()
-      self = charStart
       guard let charValue = self.advanceValidatingUTF8Character() else {
         return .error(.invalidUtf8)
       }

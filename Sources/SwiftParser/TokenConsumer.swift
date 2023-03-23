@@ -219,22 +219,6 @@ extension TokenConsumer {
 // MARK: Convenience functions
 
 extension TokenConsumer {
-  @inline(__always)
-  mutating func expectIdentifierWithoutRecovery() -> Token {
-    if let (_, handle) = self.at(anyIn: IdentifierTokens.self) {
-      return self.eat(handle)
-    }
-    return missingToken(.identifier)
-  }
-
-  @inline(__always)
-  mutating func expectIdentifierOrRethrowsWithoutRecovery() -> Token {
-    if let (_, handle) = self.at(anyIn: IdentifierOrRethrowsTokens.self) {
-      return self.eat(handle)
-    }
-    return missingToken(.identifier)
-  }
-
   var canHaveParameterSpecifier: Bool {
     // The parameter specifiers like `isolated`, `consuming`, `borrowing` are
     // also valid identifiers and could be the name of a type. Check whether

@@ -1796,7 +1796,7 @@ extension Parser {
           let expression: RawExprSyntax
           if self.peek().rawTokenKind == .equal {
             // The name is a new declaration.
-            (unexpectedBeforeName, name) = self.expectIdentifier()
+            (unexpectedBeforeName, name) = self.expect(.identifier, TokenSpec(.self, remapping: .identifier), default: .identifier)
             (unexpectedBeforeAssignToken, assignToken) = self.expect(.equal)
             expression = self.parseExpression()
           } else {

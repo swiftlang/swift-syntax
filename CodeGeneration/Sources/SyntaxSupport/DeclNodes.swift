@@ -19,7 +19,7 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "Name",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+        kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "BinaryOperatorToken"), .token(tokenKind: "PrefixOperatorToken"), .token(tokenKind: "PostfixOperatorToken")]),
         nameForDiagnostics: "name"
       ),
       Child(

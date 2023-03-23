@@ -298,64 +298,6 @@ enum DeclarationStart: TokenSpecSet {
   }
 }
 
-enum IdentifierTokens: TokenSpecSet {
-  case anyKeyword
-  case capitalSelfKeyword
-  case identifier
-  case initKeyword
-  case selfKeyword
-
-  init?(lexeme: Lexer.Lexeme) {
-    switch PrepareForKeywordMatch(lexeme) {
-    case TokenSpec(.Any): self = .anyKeyword
-    case TokenSpec(.Self): self = .capitalSelfKeyword
-    case TokenSpec(.identifier): self = .identifier
-    case TokenSpec(.`init`): self = .initKeyword
-    case TokenSpec(.self): self = .selfKeyword
-    default: return nil
-    }
-  }
-
-  var spec: TokenSpec {
-    switch self {
-    case .anyKeyword: return .keyword(.Any)
-    case .capitalSelfKeyword: return .keyword(.Self)
-    case .identifier: return .identifier
-    case .initKeyword: return .keyword(.`init`)
-    case .selfKeyword: return .keyword(.self)
-    }
-  }
-}
-
-enum IdentifierOrRethrowsTokens: TokenSpecSet {
-  case anyKeyword
-  case capitalSelfKeyword
-  case identifier
-  case selfKeyword
-  case rethrowsKeyword
-
-  init?(lexeme: Lexer.Lexeme) {
-    switch PrepareForKeywordMatch(lexeme) {
-    case TokenSpec(.Any): self = .anyKeyword
-    case TokenSpec(.Self): self = .capitalSelfKeyword
-    case TokenSpec(.identifier): self = .identifier
-    case TokenSpec(.self): self = .selfKeyword
-    case TokenSpec(.rethrows): self = .rethrowsKeyword
-    default: return nil
-    }
-  }
-
-  var spec: TokenSpec {
-    switch self {
-    case .anyKeyword: return .keyword(.Any)
-    case .capitalSelfKeyword: return .keyword(.Self)
-    case .identifier: return .identifier
-    case .selfKeyword: return .keyword(.self)
-    case .rethrowsKeyword: return TokenSpec(.rethrows, remapping: .identifier)
-    }
-  }
-}
-
 enum Operator: TokenSpecSet {
   case binaryOperator
   case postfixOperator

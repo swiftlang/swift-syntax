@@ -440,6 +440,25 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: AvailabilityVersionRestrictionSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    if let unexpected = node.unexpectedBetweenPlatformAndVersion,
+      unexpected.onlyToken(where: { $0.tokenKind == .binaryOperator(">=") }) != nil
+    {
+      addDiagnostic(
+        unexpected,
+        .versionComparisonNotNeeded,
+        fixIts: [
+          FixIt(message: RemoveNodesFixIt(unexpected), changes: .makeMissing(unexpected))
+        ],
+        handledNodes: [unexpected.id]
+      )
+    }
+    return .visitChildren
+  }
+
   public override func visit(_ node: ConditionElementSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren

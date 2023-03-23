@@ -218,6 +218,13 @@ extension Parser {
       (unexpectedBeforePlatform, platform) = self.expect(.identifier)
     }
 
+    let unexpectedComparison: RawUnexpectedNodesSyntax?
+    if let greaterThanOrEqualTo = self.consumeIfContextualPunctuator(">=") {
+      unexpectedComparison = RawUnexpectedNodesSyntax([greaterThanOrEqualTo], arena: self.arena)
+    } else {
+      unexpectedComparison = nil
+    }
+
     let version: RawVersionTupleSyntax?
     if self.at(.integerLiteral, .floatingLiteral) {
       version = self.parseVersionTuple()
@@ -228,6 +235,7 @@ extension Parser {
     return RawAvailabilityVersionRestrictionSyntax(
       unexpectedBeforePlatform,
       platform: platform,
+      unexpectedComparison,
       version: version,
       arena: self.arena
     )

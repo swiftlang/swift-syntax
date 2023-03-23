@@ -601,7 +601,12 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         ] as [Syntax?]).compactMap({ $0 }),
         handledNodes: [node.inKeyword.id, node.sequenceExpr.id, unexpectedCondition.id]
       )
+    } else {  // If it's not a C-style for loop
+      if node.sequenceExpr.is(MissingExprSyntax.self) {
+        addDiagnostic(node.sequenceExpr, .expectedSequenceExpressionInForEachLoop, handledNodes: [node.sequenceExpr.id])
+      }
     }
+
     return .visitChildren
   }
 
@@ -1049,7 +1054,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     }
 
     if node.expression.is(MissingExprSyntax.self) && !node.cases.isEmpty {
-      addDiagnostic(node.expression, .missingExpressionInSwitchStatement, handledNodes: [node.expression.id])
+      addDiagnostic(node.expression, MissingExpressionInStatement(node: node), handledNodes: [node.expression.id])
     }
 
     return .visitChildren

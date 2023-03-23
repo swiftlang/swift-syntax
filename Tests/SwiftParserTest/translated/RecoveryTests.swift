@@ -459,13 +459,10 @@ final class RecoveryTests: XCTestCase {
     assertParse(
       """
       for 1️⃣{
-      }2️⃣
+      }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected pattern
-        // TODO: Old parser expected error on line 1: expected Sequence expression for for-each loop
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected pattern and 'in' in 'for' statement"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected code block in 'for' statement"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected pattern, 'in', and expression in 'for' statement")
       ]
     )
   }
@@ -475,12 +472,10 @@ final class RecoveryTests: XCTestCase {
       """
       for1️⃣
       {
-      }2️⃣
+      }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected Sequence expression for for-each loop
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected pattern and 'in' in 'for' statement"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected code block in 'for' statement"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected pattern, 'in', and expression in 'for' statement")
       ]
     )
   }
@@ -489,12 +484,10 @@ final class RecoveryTests: XCTestCase {
     assertParse(
       """
       for i 1️⃣{
-      }2️⃣
+      }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected Sequence expression for for-each loop
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'in' in 'for' statement"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected code block in 'for' statement"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'in' and expression in 'for' statement")
       ]
     )
   }
@@ -503,12 +496,10 @@ final class RecoveryTests: XCTestCase {
     assertParse(
       """
       for var i 1️⃣{
-      }2️⃣
+      }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected Sequence expression for for-each loop
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'in' in 'for' statement"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected code block in 'for' statement"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'in' and expression in 'for' statement")
       ]
     )
   }
@@ -517,14 +508,11 @@ final class RecoveryTests: XCTestCase {
     assertParse(
       """
       for 1️⃣in 2️⃣{
-      }3️⃣
+      }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected pattern
-        // TODO: Old parser expected error on line 1: expected Sequence expression for for-each loop
         DiagnosticSpec(locationMarker: "1️⃣", message: "keyword 'in' cannot be used as an identifier here"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected 'in' in 'for' statement"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected code block in 'for' statement"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected 'in' and expression in 'for' statement"),
       ]
     )
   }
@@ -544,12 +532,12 @@ final class RecoveryTests: XCTestCase {
   func testRecovery41() {
     assertParse(
       """
-      for 1️⃣for in {
-      }2️⃣
+      for 1️⃣for in 2️⃣{
+      }
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "keyword 'for' cannot be used as an identifier here"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected code block in 'for' statement"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected Sequence expression for for-each loop"),
       ]
     )
   }
@@ -557,12 +545,11 @@ final class RecoveryTests: XCTestCase {
   func testRecovery42() {
     assertParse(
       """
-      for i in {
-      }1️⃣
+      for i in 1️⃣{
+      }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected Sequence expression for for-each loop
-        DiagnosticSpec(message: "expected code block in 'for' statement")
+        DiagnosticSpec(message: "expected Sequence expression for for-each loop")
       ]
     )
   }

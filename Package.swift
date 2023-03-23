@@ -133,6 +133,9 @@ let package = Package(
       name: "SwiftCompilerPluginMessageHandling",
       dependencies: [
         "SwiftSyntax", "SwiftParser", "SwiftDiagnostics", "SwiftSyntaxMacros", "SwiftOperators",
+      ],
+      exclude: [
+        "CMakeLists.txt"
       ]
     ),
     .target(

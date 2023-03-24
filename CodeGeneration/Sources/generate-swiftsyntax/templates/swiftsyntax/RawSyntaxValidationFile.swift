@@ -34,9 +34,28 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: copyrightHead
             try CodeBlockItemListSyntax {
               DeclSyntax(
                 #"""
+                enum TokenChoice: CustomStringConvertible {
+                   case keyword(StaticString)
+                   case tokenKind(RawTokenKind)
+
+                   var description: String {
+                     switch self {
+                     case .keyword(let keyword):
+                       return "keyword('\(keyword)')"
+                     case .tokenKind(let kind):
+                       return "\(kind)"
+                     }
+                   }
+                 }
+                """#
+              )
+
+              DeclSyntax(
+                #"""
                 enum ValidationError: CustomStringConvertible {
                   case expectedNonNil(expectedKind: RawSyntaxNodeProtocol.Type, file: StaticString, line: UInt)
                   case kindMismatch(expectedKind: RawSyntaxNodeProtocol.Type, actualKind: SyntaxKind, file: StaticString, line: UInt)
+                  case tokenMismatch(expectedTokenChoices: [TokenChoice], actualKind: RawTokenKind, actualText: SyntaxText, file: StaticString, line: UInt)
 
                   var description: String {
                     switch self {
@@ -44,6 +63,8 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: copyrightHead
                       return "Expected non-nil node of type \(expectedKind) but received nil"
                     case .kindMismatch(expectedKind: let expectedKind, actualKind: let actualKind, file: _, line: _):
                       return "Expected node of type \(expectedKind) but received \(actualKind)"
+                    case .tokenMismatch(expectedTokenChoices: let tokenChoices, actualKind: let actualKind, actualText: let actualText, file: _, line: _):
+                      return "Expected token with one of \(tokenChoices) but received \(actualKind) with text '\(actualText)'"
                     }
                   }
 
@@ -52,6 +73,8 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: copyrightHead
                     case .expectedNonNil(expectedKind: _, file: let file, line: let line):
                       return (file, line)
                     case .kindMismatch(expectedKind: _, actualKind: _, file: let file, line: let line):
+                      return (file, line)
+                    case .tokenMismatch(expectedTokenChoices: _, actualKind: _, actualText: _, file: let file, line: let line):
                       return (file, line)
                   }
                   }
@@ -81,6 +104,61 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: copyrightHead
                   }
                   return nil
                 }
+                """
+              )
+
+              DeclSyntax(
+                """
+                func verify(_ raw: RawSyntax?, as _: RawTokenSyntax?.Type, tokenChoices: [TokenChoice], file: StaticString = #file, line: UInt = #line) -> ValidationError? {
+                  // Validation of token choice is currently causing assertion failures where
+                  // the list of expected token choices in the syntax tree doesn't match those
+                  // the parser generates. Disable the verification for now until all issues
+                  // regarding it are fixed.
+                  #if VALIDATE_TOKEN_CHOICES
+                  if raw != nil {
+                    return verify(raw, as: RawTokenSyntax.self, tokenChoices: tokenChoices, file: file, line: line)
+                  }
+                  return nil
+                  #else
+                  return verify(raw, as: RawTokenSyntax?.self)
+                  #endif
+                }
+                """
+              )
+
+              DeclSyntax(
+                """
+                func verify(_ raw: RawSyntax?, as _: RawTokenSyntax.Type, tokenChoices: [TokenChoice], file: StaticString = #file, line: UInt = #line) -> ValidationError? {
+                  // Validation of token choice is currently causing assertion failures where
+                  // the list of expected token choices in the syntax tree doesn't match those
+                  // the parser generates. Disable the verification for now until all issues
+                  // regarding it are fixed.
+                  #if VALIDATE_TOKEN_CHOICES
+                  guard let raw = raw else {
+                    return .expectedNonNil(expectedKind: RawTokenSyntax.self, file: file, line: line)
+                  }
+                  if let error = verify(raw, as: RawTokenSyntax?.self) {
+                    return error
+                  }
+                  let tokenView = raw.tokenView!
+                  for tokenChoice in tokenChoices {
+                    switch tokenChoice {
+                    case .tokenKind(let tokenKind):
+                      if raw.tokenView?.rawKind == tokenKind {
+                        return nil
+                      }
+                    case .keyword(let keyword):
+                      if tokenView.rawKind == .keyword && tokenView.rawText == SyntaxText(keyword) {
+                        return nil
+                      }
+                    }
+                  }
+                  return ValidationError.tokenMismatch(expectedTokenChoices: tokenChoices, actualKind: tokenView.rawKind, actualText: tokenView.rawText, file: file, line: line)
+                  #else
+                  return verify(raw, as: RawTokenSyntax.self)
+                  #endif
+                }
+
                 """
               )
 
@@ -139,6 +217,19 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: copyrightHead
                           }
 
                           ExprSyntax("assertAnyHasNoError(kind, \(raw: index), \(verifiedChoices))")
+                        case .token(choices: let choices, requiresLeadingSpace: _, requiresTrailingSpace: _):
+                          let choices = ArrayExprSyntax {
+                            for choice in choices {
+                              switch choice {
+                              case .keyword(text: let text):
+                                ArrayElementSyntax(expression: ExprSyntax(#".keyword("\#(raw: text)")"#))
+                              case .token(tokenKind: let tokenKind):
+                                ArrayElementSyntax(expression: ExprSyntax(".tokenKind(.\(raw: SYNTAX_TOKEN_MAP[tokenKind]!.swiftKind))"))
+                              }
+                            }
+                          }
+                          let verifyCall = ExprSyntax("verify(layout[\(raw: index)], as: Raw\(raw: child.type.buildable).self, tokenChoices: \(choices))")
+                          ExprSyntax("assertNoError(kind, \(raw: index), \(verifyCall))")
                         default:
                           ExprSyntax("assertNoError(kind, \(raw: index), verify(layout[\(raw: index)], as: Raw\(raw: child.type.buildable).self))")
                         }

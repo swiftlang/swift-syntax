@@ -16,7 +16,7 @@ import XCTest
 
 final class AsyncSyntaxTests: XCTestCase {
   func testAsyncSyntax1() {
-    AssertParse(
+    assertParse(
       """
       func asyncGlobal1() async { }
       func asyncGlobal2() async throws { }
@@ -25,7 +25,7 @@ final class AsyncSyntaxTests: XCTestCase {
   }
 
   func testAsyncSyntax2() {
-    AssertParse(
+    assertParse(
       """
       typealias AsyncFunc1 = () async -> ()
       typealias AsyncFunc2 = () async throws -> ()
@@ -35,7 +35,7 @@ final class AsyncSyntaxTests: XCTestCase {
   }
 
   func testAsyncSyntax3() {
-    AssertParse(
+    assertParse(
       """
       func testTypeExprs() {
         let _ = [() async -> ()]()
@@ -46,7 +46,7 @@ final class AsyncSyntaxTests: XCTestCase {
   }
 
   func testAsyncSyntax4() {
-    AssertParse(
+    assertParse(
       """
       func testAwaitOperator() async {
         let _ = await asyncGlobal1()
@@ -56,7 +56,7 @@ final class AsyncSyntaxTests: XCTestCase {
   }
 
   func testAsyncSyntax5() {
-    AssertParse(
+    assertParse(
       """
       func testAsyncClosure() {
         let _ = { () async in 5 }
@@ -68,7 +68,7 @@ final class AsyncSyntaxTests: XCTestCase {
   }
 
   func testAsyncSyntax6() {
-    AssertParse(
+    assertParse(
       """
       func testAwait() async {
         let _ = await asyncGlobal1()

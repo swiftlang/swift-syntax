@@ -16,11 +16,11 @@ import XCTest
 
 public class EntryTests: XCTestCase {
   func testTopLevelStringParse() throws {
-    AssertParse("func test() {}", { Parser.parse(source: $0) })
+    assertParse("func test() {}", { Parser.parse(source: $0) })
   }
 
   func testTopLevelBufferParse() throws {
-    AssertParse(
+    assertParse(
       "func test() {}",
       { (source: String) -> SourceFileSyntax in
         var source = source
@@ -31,14 +31,14 @@ public class EntryTests: XCTestCase {
   }
 
   func testSyntaxParse() throws {
-    AssertParse(
+    assertParse(
       "func test() {}",
       { DeclSyntax.parse(from: &$0) }
     )
   }
 
   func testRemainderUnexpected() throws {
-    AssertParse(
+    assertParse(
       "func test() {} 1️⃣other tokens",
       { DeclSyntax.parse(from: &$0) },
       diagnostics: [DiagnosticSpec(message: "unexpected code 'other tokens' in function")]
@@ -46,7 +46,7 @@ public class EntryTests: XCTestCase {
   }
 
   func testRemainderUnexpectedDoesntOverrideExistingUnexpected() throws {
-    AssertParse(
+    assertParse(
       "operator 1️⃣test 2️⃣{} other tokens",
       { DeclSyntax.parse(from: &$0) },
       substructure: Syntax(

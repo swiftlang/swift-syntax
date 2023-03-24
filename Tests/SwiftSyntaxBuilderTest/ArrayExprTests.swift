@@ -21,7 +21,7 @@ final class ArrayExprTests: XCTestCase {
         ArrayElementSyntax(expression: IntegerLiteralExprSyntax(i))
       }
     }
-    AssertBuildResult(buildable, "[1, 2, 3, 4]")
+    assertBuildResult(buildable, "[1, 2, 3, 4]")
   }
 
   func testMultilineArrayLiteral() {
@@ -35,7 +35,7 @@ final class ArrayExprTests: XCTestCase {
       ]
       """
     )
-    AssertBuildResult(
+    assertBuildResult(
       builder,
       """
       [

@@ -16,7 +16,7 @@ import XCTest
 
 final class SubscriptingTests: XCTestCase {
   func testSubscripting1() {
-    AssertParse(
+    assertParse(
       """
       struct X { }
       """
@@ -24,7 +24,7 @@ final class SubscriptingTests: XCTestCase {
   }
 
   func testSubscripting2() {
-    AssertParse(
+    assertParse(
       """
       // Simple examples
       struct X1 {
@@ -44,7 +44,7 @@ final class SubscriptingTests: XCTestCase {
   }
 
   func testSubscripting3() {
-    AssertParse(
+    assertParse(
       """
       struct X2 {
         var stored: Int
@@ -62,7 +62,7 @@ final class SubscriptingTests: XCTestCase {
   }
 
   func testSubscripting4() {
-    AssertParse(
+    assertParse(
       """
       struct X3 {
         var stored: Int
@@ -80,7 +80,7 @@ final class SubscriptingTests: XCTestCase {
   }
 
   func testSubscripting5() {
-    AssertParse(
+    assertParse(
       """
       struct X4 {
         var stored: Int
@@ -99,7 +99,7 @@ final class SubscriptingTests: XCTestCase {
   }
 
   func testSubscripting6() {
-    AssertParse(
+    assertParse(
       """
       struct X5 {
         static var stored: Int = 1
@@ -117,7 +117,7 @@ final class SubscriptingTests: XCTestCase {
   }
 
   func testSubscripting7() {
-    AssertParse(
+    assertParse(
       """
       class X6 {
         static var stored: Int = 1
@@ -135,7 +135,7 @@ final class SubscriptingTests: XCTestCase {
   }
 
   func testSubscripting8() {
-    AssertParse(
+    assertParse(
       """
       struct Y1 {
         var stored: Int
@@ -153,7 +153,7 @@ final class SubscriptingTests: XCTestCase {
   }
 
   func testSubscripting9() {
-    AssertParse(
+    assertParse(
       """
       // Mutating getters on constants
       // https://github.com/apple/swift/issues/43457
@@ -162,7 +162,7 @@ final class SubscriptingTests: XCTestCase {
   }
 
   func testSubscripting10() {
-    AssertParse(
+    assertParse(
       """
       struct Y2 {
         subscript(_: Int) -> Int {
@@ -174,7 +174,7 @@ final class SubscriptingTests: XCTestCase {
   }
 
   func testSubscripting11() {
-    AssertParse(
+    assertParse(
       """
       // FIXME: This test case does not belong in Parse/
       let y2 = Y2()
@@ -184,7 +184,7 @@ final class SubscriptingTests: XCTestCase {
   }
 
   func testSubscripting12a() {
-    AssertParse(
+    assertParse(
       """
       struct A0 {
         subscript 1️⃣
@@ -224,7 +224,7 @@ final class SubscriptingTests: XCTestCase {
   }
 
   func testSubscripting12b() {
-    AssertParse(
+    assertParse(
       """
       // Parsing errors
       struct A0 {
@@ -240,7 +240,7 @@ final class SubscriptingTests: XCTestCase {
   }
 
   func testSubscripting13() {
-    AssertParse(
+    assertParse(
       """
       struct A1 {
         subscript (i : Int) 1️⃣
@@ -261,7 +261,7 @@ final class SubscriptingTests: XCTestCase {
   }
 
   func testSubscripting14() {
-    AssertParse(
+    assertParse(
       """
       struct A2 {
         subscript (i : Int) -> 1️⃣
@@ -282,7 +282,7 @@ final class SubscriptingTests: XCTestCase {
   }
 
   func testSubscripting15() {
-    AssertParse(
+    assertParse(
       """
       struct A3 {
         subscript(i : Int) 1️⃣
@@ -300,7 +300,7 @@ final class SubscriptingTests: XCTestCase {
   }
 
   func testSubscripting16() {
-    AssertParse(
+    assertParse(
       """
       struct A4 {
         subscript(i : Int) 1️⃣{
@@ -317,7 +317,7 @@ final class SubscriptingTests: XCTestCase {
   }
 
   func testSubscripting17() {
-    AssertParse(
+    assertParse(
       """
       struct A5 {
         subscript(i : Int) -> Int
@@ -327,7 +327,7 @@ final class SubscriptingTests: XCTestCase {
   }
 
   func testSubscripting18() {
-    AssertParse(
+    assertParse(
       """
       struct A6 {
         subscript(i: Int)1️⃣(j: Int) -> Int {
@@ -344,7 +344,7 @@ final class SubscriptingTests: XCTestCase {
   }
 
   func testSubscripting19() {
-    AssertParse(
+    assertParse(
       """
       struct A7 {
         class subscript(a: Float) -> Int {
@@ -358,7 +358,7 @@ final class SubscriptingTests: XCTestCase {
   }
 
   func testSubscripting20() {
-    AssertParse(
+    assertParse(
       """
       class A7b {
         class static subscript(a: Float) -> Int {
@@ -372,7 +372,7 @@ final class SubscriptingTests: XCTestCase {
   }
 
   func testSubscripting21() {
-    AssertParse(
+    assertParse(
       """
       struct A8 {
         subscript(i : Int) -> Int1️⃣
@@ -392,7 +392,7 @@ final class SubscriptingTests: XCTestCase {
   }
 
   func testSubscripting22() {
-    AssertParse(
+    assertParse(
       """
       struct A9 {
         subscript 1️⃣x() -> Int {
@@ -414,7 +414,7 @@ final class SubscriptingTests: XCTestCase {
   }
 
   func testSubscripting23() {
-    AssertParse(
+    assertParse(
       """
       struct A10 {
         subscript 1️⃣x(i: Int) -> Int {
@@ -443,7 +443,7 @@ final class SubscriptingTests: XCTestCase {
   }
 
   func testSubscripting24() {
-    AssertParse(
+    assertParse(
       """
       struct A11 {
         subscript 1️⃣x y : 2️⃣Int 3️⃣-> Int 4️⃣{

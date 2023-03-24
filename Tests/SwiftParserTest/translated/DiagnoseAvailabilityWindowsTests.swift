@@ -16,7 +16,7 @@ import XCTest
 
 final class DiagnoseAvailabilityWindowsTests: XCTestCase {
   func testDiagnoseAvailabilityWindows1() {
-    AssertParse(
+    assertParse(
       #"""
       @available(Windows, unavailable, message: "unsupported")
       func unavailable() {}
@@ -25,7 +25,7 @@ final class DiagnoseAvailabilityWindowsTests: XCTestCase {
   }
 
   func testDiagnoseAvailabilityWindows2() {
-    AssertParse(
+    assertParse(
       """
       unavailable()
       """
@@ -33,7 +33,7 @@ final class DiagnoseAvailabilityWindowsTests: XCTestCase {
   }
 
   func testDiagnoseAvailabilityWindows3() {
-    AssertParse(
+    assertParse(
       """
       @available(Windows, introduced: 10.0.17763, deprecated: 10.0.19140)
       func introduced_deprecated() {}
@@ -42,7 +42,7 @@ final class DiagnoseAvailabilityWindowsTests: XCTestCase {
   }
 
   func testDiagnoseAvailabilityWindows4() {
-    AssertParse(
+    assertParse(
       """
       introduced_deprecated()
       """
@@ -50,7 +50,7 @@ final class DiagnoseAvailabilityWindowsTests: XCTestCase {
   }
 
   func testDiagnoseAvailabilityWindows5() {
-    AssertParse(
+    assertParse(
       """
       @available(Windows 10, *)
       func windows10() {}
@@ -59,7 +59,7 @@ final class DiagnoseAvailabilityWindowsTests: XCTestCase {
   }
 
   func testDiagnoseAvailabilityWindows6() {
-    AssertParse(
+    assertParse(
       """
       windows10()
       """
@@ -67,7 +67,7 @@ final class DiagnoseAvailabilityWindowsTests: XCTestCase {
   }
 
   func testDiagnoseAvailabilityWindows7() {
-    AssertParse(
+    assertParse(
       """
       func conditional_compilation() {
         if #available(Windows 10, *) {

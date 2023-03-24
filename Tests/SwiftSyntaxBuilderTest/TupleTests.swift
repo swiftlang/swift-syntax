@@ -17,7 +17,7 @@ import SwiftSyntaxBuilder
 final class TupleTests: XCTestCase {
   func testLabeledElementList() {
     let builder = ExprSyntax("(p1: value1, p2: value2, p3: value3)")
-    AssertBuildResult(builder, "(p1: value1, p2: value2, p3: value3)")
+    assertBuildResult(builder, "(p1: value1, p2: value2, p3: value3)")
   }
 
   func testMultilineTupleExpr() {
@@ -33,7 +33,7 @@ final class TupleTests: XCTestCase {
       """
     )
 
-    AssertBuildResult(
+    assertBuildResult(
       builder,
       """
       (
@@ -60,7 +60,7 @@ final class TupleTests: XCTestCase {
       """
     )
 
-    AssertBuildResult(
+    assertBuildResult(
       builder,
       """
       (

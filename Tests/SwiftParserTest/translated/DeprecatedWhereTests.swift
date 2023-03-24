@@ -18,7 +18,7 @@ import XCTest
 
 final class DeprecatedWhereTests: XCTestCase {
   func testDeprecatedWhere1() {
-    AssertParse(
+    assertParse(
       """
       protocol Mashable { }
       protocol Womparable { }
@@ -27,7 +27,7 @@ final class DeprecatedWhereTests: XCTestCase {
   }
 
   func testDeprecatedWhere2() {
-    AssertParse(
+    assertParse(
       """
       // FuncDecl: Choose 0
       func f1<T>(x: T) {}
@@ -36,7 +36,7 @@ final class DeprecatedWhereTests: XCTestCase {
   }
 
   func testDeprecatedWhere3() {
-    AssertParse(
+    assertParse(
       """
       // FuncDecl: Choose 1
       // 1: Inherited constraint
@@ -52,7 +52,7 @@ final class DeprecatedWhereTests: XCTestCase {
   }
 
   func testDeprecatedWhere4() {
-    AssertParse(
+    assertParse(
       """
       // FuncDecl: Choose 2
       // 1,2
@@ -72,7 +72,7 @@ final class DeprecatedWhereTests: XCTestCase {
   }
 
   func testDeprecatedWhere5() {
-    AssertParse(
+    assertParse(
       """
       // FuncDecl: Choose 3
       // 1,2,3
@@ -86,7 +86,7 @@ final class DeprecatedWhereTests: XCTestCase {
   }
 
   func testDeprecatedWhere6() {
-    AssertParse(
+    assertParse(
       """
       // FuncDecl: Choose 4
       // 1,2,3,4
@@ -96,7 +96,7 @@ final class DeprecatedWhereTests: XCTestCase {
   }
 
   func testDeprecatedWhere7() {
-    AssertParse(
+    assertParse(
       """
       // NominalTypeDecl: Choose 0
       struct S0<T> {}
@@ -105,7 +105,7 @@ final class DeprecatedWhereTests: XCTestCase {
   }
 
   func testDeprecatedWhere8() {
-    AssertParse(
+    assertParse(
       """
       // NominalTypeDecl: Choose 1
       // 1: Inherited constraint
@@ -119,7 +119,7 @@ final class DeprecatedWhereTests: XCTestCase {
   }
 
   func testDeprecatedWhere9() {
-    AssertParse(
+    assertParse(
       """
       // NominalTypeDecl: Choose 2
       // 1,2
@@ -133,7 +133,7 @@ final class DeprecatedWhereTests: XCTestCase {
   }
 
   func testDeprecatedWhere10() {
-    AssertParse(
+    assertParse(
       """
       // NominalTypeDecl: Choose 3
       // 1,2,3
@@ -143,7 +143,7 @@ final class DeprecatedWhereTests: XCTestCase {
   }
 
   func testDeprecatedWhere11() {
-    AssertParse(
+    assertParse(
       """
       protocol ProtoA {}
       protocol ProtoB {}
@@ -156,7 +156,7 @@ final class DeprecatedWhereTests: XCTestCase {
   }
 
   func testDeprecatedWhere12() {
-    AssertParse(
+    assertParse(
       """
       func testCombinedConstraintsOld<T: 2️⃣protocol3️⃣<ProtoA, ProtoB> where T: ProtoC4️⃣>(x: T) {}
       """,
@@ -171,7 +171,7 @@ final class DeprecatedWhereTests: XCTestCase {
   }
 
   func testDeprecatedWhere13() {
-    AssertParse(
+    assertParse(
       """
       func testCombinedConstraintsOld<T: 2️⃣protocol3️⃣<ProtoA, ProtoB> where T: ProtoC4️⃣>(x: T) where T: ProtoD {}
       """,

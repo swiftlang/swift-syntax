@@ -16,7 +16,7 @@ import XCTest
 
 final class StringLiteralEofTests: XCTestCase {
   func testStringLiteralEof1() {
-    AssertParse(
+    assertParse(
       ##"""
       // NOTE: DO NOT add a newline at EOF.
       _ = "foo\(1️⃣
@@ -29,7 +29,7 @@ final class StringLiteralEofTests: XCTestCase {
   }
 
   func testStringLiteralEof2() {
-    AssertParse(
+    assertParse(
       // NOTE: DO NOT add a newline at EOF.
       ##"""
       _ = 9️⃣"foo\8️⃣(7️⃣"bar1️⃣
@@ -46,7 +46,7 @@ final class StringLiteralEofTests: XCTestCase {
   }
 
   func testStringLiteralEof3() {
-    AssertParse(
+    assertParse(
       ##"""
       _ = "foo 1️⃣\2️⃣
       """##,
@@ -58,7 +58,7 @@ final class StringLiteralEofTests: XCTestCase {
   }
 
   func testStringLiteralEof4() {
-    AssertParse(
+    assertParse(
       ##"""
       // NOTE: DO NOT add a newline at EOF.
       _ = "foo 1️⃣\2️⃣
@@ -71,7 +71,7 @@ final class StringLiteralEofTests: XCTestCase {
   }
 
   func testStringLiteralEof5() {
-    AssertParse(
+    assertParse(
       #"""
       // NOTE: DO NOT add a newline at EOF.
       _ = """
@@ -85,7 +85,7 @@ final class StringLiteralEofTests: XCTestCase {
 
   func testStringLiteralEof6() {
     // NOTE: DO NOT add a newline at EOF.
-    AssertParse(
+    assertParse(
       ##"""
       _ = """
           foo
@@ -106,7 +106,7 @@ final class StringLiteralEofTests: XCTestCase {
 
   func testStringLiteralEof7() {
     // NOTE: DO NOT add a newline at EOF.
-    AssertParse(
+    assertParse(
       ##"""
       _ = """
           foo
@@ -121,7 +121,7 @@ final class StringLiteralEofTests: XCTestCase {
   }
 
   func testStringLiteralEof8() {
-    AssertParse(
+    assertParse(
       ##"""
       _ = """
           \("bar1️⃣

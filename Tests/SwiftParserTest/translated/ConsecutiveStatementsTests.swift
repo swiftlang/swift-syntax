@@ -16,7 +16,7 @@ import XCTest
 
 final class ConsecutiveStatementsTests: XCTestCase {
   func testSimple() {
-    AssertParse(
+    assertParse(
       "let x = 21️⃣ let y = 3",
       diagnostics: [
         DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"])
@@ -26,7 +26,7 @@ final class ConsecutiveStatementsTests: XCTestCase {
   }
 
   func testConsecutiveStatements1() {
-    AssertParse(
+    assertParse(
       """
       func statement_starts() {
         var f : (Int) -> ()
@@ -46,7 +46,7 @@ final class ConsecutiveStatementsTests: XCTestCase {
   }
 
   func testConsecutiveStatements2() {
-    AssertParse(
+    assertParse(
       """
       // Within a function
       func test(i: inout Int, j: inout Int) {
@@ -69,7 +69,7 @@ final class ConsecutiveStatementsTests: XCTestCase {
   }
 
   func testConsecutiveStatements3() {
-    AssertParse(
+    assertParse(
       """
       struct X {
         // In a sequence of declarations.
@@ -99,7 +99,7 @@ final class ConsecutiveStatementsTests: XCTestCase {
   }
 
   func testConsecutiveStatements4() {
-    AssertParse(
+    assertParse(
       """
       class C {
         // In a sequence of declarations.
@@ -127,7 +127,7 @@ final class ConsecutiveStatementsTests: XCTestCase {
   }
 
   func testConsecutiveStatements5() {
-    AssertParse(
+    assertParse(
       """
       protocol P {
         func a()1️⃣ func b()
@@ -145,7 +145,7 @@ final class ConsecutiveStatementsTests: XCTestCase {
   }
 
   func testConsecutiveStatements6() {
-    AssertParse(
+    assertParse(
       """
       enum Color {
         case Red1️⃣ case Blue
@@ -166,7 +166,7 @@ final class ConsecutiveStatementsTests: XCTestCase {
   }
 
   func testConsecutiveStatements7() {
-    AssertParse(
+    assertParse(
       """
       // At the top level
       var i, j : Int1️⃣ i = j2️⃣ j = i

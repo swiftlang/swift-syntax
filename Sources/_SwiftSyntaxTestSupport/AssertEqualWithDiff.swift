@@ -23,7 +23,7 @@ import XCTest
 ///     which this function was called.
 ///   - line: The line number on which failure occurred. Defaults to the line number on which this
 ///     function was called.
-public func AssertStringsEqualWithDiff(
+public func assertStringsEqualWithDiff(
   _ actual: String,
   _ expected: String,
   _ message: String = "",
@@ -34,7 +34,7 @@ public func AssertStringsEqualWithDiff(
   if actual == expected {
     return
   }
-  FailStringsEqualWithDiff(
+  failStringsEqualWithDiff(
     actual,
     expected,
     message,
@@ -55,7 +55,7 @@ public func AssertStringsEqualWithDiff(
 ///     which this function was called.
 ///   - line: The line number on which failure occurred. Defaults to the line number on which this
 ///     function was called.
-public func AssertDataEqualWithDiff(
+public func assertDataEqualWithDiff(
   _ actual: Data,
   _ expected: Data,
   _ message: String = "",
@@ -69,7 +69,7 @@ public func AssertDataEqualWithDiff(
 
   // NOTE: Converting to `Stirng` here looses invalid UTF8 sequence difference,
   // but at least we can see something is different.
-  FailStringsEqualWithDiff(
+  failStringsEqualWithDiff(
     String(decoding: actual, as: UTF8.self),
     String(decoding: expected, as: UTF8.self),
     message,
@@ -80,7 +80,7 @@ public func AssertDataEqualWithDiff(
 }
 
 /// `XCTFail` with `diff`-style output.
-public func FailStringsEqualWithDiff(
+public func failStringsEqualWithDiff(
   _ actual: String,
   _ expected: String,
   _ message: String = "",

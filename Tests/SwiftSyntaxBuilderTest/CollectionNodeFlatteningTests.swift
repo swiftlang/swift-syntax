@@ -35,7 +35,7 @@ final class CollectionNodeFlatteningTests: XCTestCase {
       buildOuterCodeBlockItemList()
     }
 
-    AssertBuildResult(
+    assertBuildResult(
       codeBlock,
       """
       ␣{

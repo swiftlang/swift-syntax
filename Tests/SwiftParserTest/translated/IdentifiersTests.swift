@@ -16,7 +16,7 @@ import XCTest
 
 final class IdentifiersTests: XCTestCase {
   func testIdentifiers1() {
-    AssertParse(
+    assertParse(
       """
       func my_print<T>(_ t: T) {}
       """
@@ -24,7 +24,7 @@ final class IdentifiersTests: XCTestCase {
   }
 
   func testIdentifiers2() {
-    AssertParse(
+    assertParse(
       #"""
       class 你好 {
         class שלום {
@@ -42,7 +42,7 @@ final class IdentifiersTests: XCTestCase {
   }
 
   func testIdentifiers3() {
-    AssertParse(
+    assertParse(
       """
       你好.שלום.வணக்கம்.Γειά.привет()
       """
@@ -50,7 +50,7 @@ final class IdentifiersTests: XCTestCase {
   }
 
   func testIdentifiers4() {
-    AssertParse(
+    assertParse(
       """
       // Identifiers cannot start with combining chars.
       _ = .́duh()
@@ -59,7 +59,7 @@ final class IdentifiersTests: XCTestCase {
   }
 
   func testIdentifiers5() {
-    AssertParse(
+    assertParse(
       """
       // Combining characters can be used within identifiers.
       func s̈pin̈al_tap̈() {}
@@ -69,7 +69,7 @@ final class IdentifiersTests: XCTestCase {
 
   func testIdentifiers6() {
     // Private-use characters aren't valid in Swift source.
-    AssertParse(
+    assertParse(
       """
       1️⃣()
       """,
@@ -80,7 +80,7 @@ final class IdentifiersTests: XCTestCase {
   }
 
   func testIdentifiers7() {
-    AssertParse(
+    assertParse(
       """
       // Placeholders are recognized as identifiers but with error.
       func <#some name#>() {}
@@ -92,7 +92,7 @@ final class IdentifiersTests: XCTestCase {
   }
 
   func testIdentifiers8a() {
-    AssertParse(
+    assertParse(
       """
       // Keywords as identifiers
       class 1️⃣switch {}
@@ -108,7 +108,7 @@ final class IdentifiersTests: XCTestCase {
   }
 
   func testIdentifiers8b() {
-    AssertParse(
+    assertParse(
       """
       struct 1️⃣Self {}
       """,
@@ -119,7 +119,7 @@ final class IdentifiersTests: XCTestCase {
   }
 
   func testStructNamedLowercaseAny() {
-    AssertParse(
+    assertParse(
       """
       struct any {}
       """
@@ -127,7 +127,7 @@ final class IdentifiersTests: XCTestCase {
   }
 
   func testStructNamedCapitalAny() {
-    AssertParse(
+    assertParse(
       """
       struct 1️⃣Any {}
       """,
@@ -138,7 +138,7 @@ final class IdentifiersTests: XCTestCase {
   }
 
   func testIdentifiers8c() {
-    AssertParse(
+    assertParse(
       """
       protocol 1️⃣enum {}
       """,
@@ -149,7 +149,7 @@ final class IdentifiersTests: XCTestCase {
   }
 
   func testIdentifiers8d() {
-    AssertParse(
+    assertParse(
       """
       protocol test {
         associatedtype 1️⃣public
@@ -164,7 +164,7 @@ final class IdentifiersTests: XCTestCase {
   }
 
   func testIdentifiers9() {
-    AssertParse(
+    assertParse(
       """
       // SIL keywords are tokenized as normal identifiers in non-SIL mode.
       _ = undef
@@ -181,7 +181,7 @@ final class IdentifiersTests: XCTestCase {
   }
 
   func testIdentifiers10() {
-    AssertParse(
+    assertParse(
       """
       // https://github.com/apple/swift/issues/57542
       // Make sure we do not parse the '_' on the newline as being part of the 'variable' identifier on the line before.
@@ -190,7 +190,7 @@ final class IdentifiersTests: XCTestCase {
   }
 
   func testIdentifiers11() {
-    AssertParse(
+    assertParse(
       """
       @propertyWrapper
       struct Wrapper {
@@ -201,7 +201,7 @@ final class IdentifiersTests: XCTestCase {
   }
 
   func testIdentifiers12() {
-    AssertParse(
+    assertParse(
       """
       func localScope() {
         @Wrapper var variable

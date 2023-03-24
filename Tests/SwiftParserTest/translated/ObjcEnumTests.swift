@@ -16,7 +16,7 @@ import XCTest
 
 final class ObjcEnumTests: XCTestCase {
   func testObjcEnum1() {
-    AssertParse(
+    assertParse(
       """
       @objc enum Foo: Int32 {
         case Zim, Zang, Zung
@@ -26,7 +26,7 @@ final class ObjcEnumTests: XCTestCase {
   }
 
   func testObjcEnum2() {
-    AssertParse(
+    assertParse(
       """
       @objc enum Generic<T>: Int32 {
         case Zim, Zang, Zung
@@ -36,7 +36,7 @@ final class ObjcEnumTests: XCTestCase {
   }
 
   func testObjcEnum3() {
-    AssertParse(
+    assertParse(
       """
       @objc(EnumRuntimeName) enum RuntimeNamed: Int32 {
         case Zim, Zang, Zung
@@ -46,7 +46,7 @@ final class ObjcEnumTests: XCTestCase {
   }
 
   func testObjcEnum4() {
-    AssertParse(
+    assertParse(
       """
       @objc enum NoRawType {
         case Zim, Zang, Zung
@@ -56,7 +56,7 @@ final class ObjcEnumTests: XCTestCase {
   }
 
   func testObjcEnum5() {
-    AssertParse(
+    assertParse(
       """
       @objc enum NonIntegerRawType: Float {
         case Zim = 1.0, Zang = 1.5, Zung = 2.0
@@ -66,7 +66,7 @@ final class ObjcEnumTests: XCTestCase {
   }
 
   func testObjcEnum6() {
-    AssertParse(
+    assertParse(
       """
       enum NonObjCEnum: Int {
         case Zim, Zang, Zung
@@ -76,7 +76,7 @@ final class ObjcEnumTests: XCTestCase {
   }
 
   func testObjcEnum7() {
-    AssertParse(
+    assertParse(
       """
       class Bar {
         @objc func foo(x: Foo) {}
@@ -87,7 +87,7 @@ final class ObjcEnumTests: XCTestCase {
   }
 
   func testObjcEnum8() {
-    AssertParse(
+    assertParse(
       """
       // <rdar://problem/23681566> @objc enums with payloads rejected with no source location info
       @objc enum r23681566 : Int32 {

@@ -16,7 +16,7 @@ import XCTest
 
 final class SwitchTests: XCTestCase {
   func testSwitch1() {
-    AssertParse(
+    assertParse(
       """
       func ~= (x: (Int,Int), y: (Int,Int)) -> Bool {
         return true
@@ -26,7 +26,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch2() {
-    AssertParse(
+    assertParse(
       """
       func parseError1(x: Int) {
         switch 1️⃣func 2️⃣{}
@@ -40,7 +40,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch3() {
-    AssertParse(
+    assertParse(
       """
       func parseError2(x: Int) {
         switch x 1️⃣
@@ -53,7 +53,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch4() {
-    AssertParse(
+    assertParse(
       """
       func parseError3(x: Int) {
         switch x {
@@ -68,7 +68,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch5() {
-    AssertParse(
+    assertParse(
       """
       func parseError4(x: Int) {
         switch x {
@@ -84,7 +84,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch6() {
-    AssertParse(
+    assertParse(
       """
       func parseError5(x: Int) {
         switch x {
@@ -99,7 +99,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch7() {
-    AssertParse(
+    assertParse(
       """
       func parseError6(x: Int) {
         switch x {
@@ -114,7 +114,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch8() {
-    AssertParse(
+    assertParse(
       """
       var x: Int
       """
@@ -122,7 +122,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch9() {
-    AssertParse(
+    assertParse(
       """
       switch x {}
       """
@@ -130,7 +130,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch10() {
-    AssertParse(
+    assertParse(
       """
       switch x {
       case 0:
@@ -164,7 +164,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch11() {
-    AssertParse(
+    assertParse(
       """
       // Multiple cases per case block
       switch x {
@@ -177,7 +177,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch12() {
-    AssertParse(
+    assertParse(
       """
       switch x {
       case 0:
@@ -189,7 +189,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch13() {
-    AssertParse(
+    assertParse(
       """
       switch x {
       case 0:
@@ -201,7 +201,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch14() {
-    AssertParse(
+    assertParse(
       """
       switch x {
       case 0:
@@ -213,7 +213,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch15() {
-    AssertParse(
+    assertParse(
       """
       switch x {
       case 0:
@@ -237,7 +237,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch16a() {
-    AssertParse(
+    assertParse(
       """
       switch x {
         1️⃣x = 1
@@ -256,7 +256,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch16b() {
-    AssertParse(
+    assertParse(
       """
       switch x {
         1️⃣let x = 1
@@ -279,7 +279,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch17() {
-    AssertParse(
+    assertParse(
       """
       switch x {
       default:
@@ -292,7 +292,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch18() {
-    AssertParse(
+    assertParse(
       """
       switch x {
         1️⃣x = 1
@@ -305,7 +305,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch19() {
-    AssertParse(
+    assertParse(
       """
       switch x {
         1️⃣x = 1
@@ -319,7 +319,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch20() {
-    AssertParse(
+    assertParse(
       """
       switch x {
       default:
@@ -331,7 +331,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch21() {
-    AssertParse(
+    assertParse(
       """
       switch x {
       default:
@@ -343,7 +343,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch22() {
-    AssertParse(
+    assertParse(
       """
       switch x {
       default 1️⃣where x == 0:
@@ -357,7 +357,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch23() {
-    AssertParse(
+    assertParse(
       """
       switch x {
       case 0:
@@ -367,7 +367,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch24() {
-    AssertParse(
+    assertParse(
       """
       switch x {
       case 0:
@@ -379,7 +379,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch25() {
-    AssertParse(
+    assertParse(
       """
       switch x {
       case 0:
@@ -391,7 +391,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch26() {
-    AssertParse(
+    assertParse(
       """
       1️⃣case 0:
       var y = 0
@@ -406,7 +406,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch27() {
-    AssertParse(
+    assertParse(
       """
       fallthrough
       """
@@ -414,7 +414,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch28() {
-    AssertParse(
+    assertParse(
       """
       switch x {
       case 0:
@@ -429,7 +429,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch29() {
-    AssertParse(
+    assertParse(
       """
       // Fallthrough can transfer control anywhere within a case and can appear
       // multiple times in the same case.
@@ -446,7 +446,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch30() {
-    AssertParse(
+    assertParse(
       """
       // Cases cannot contain 'var' bindings if there are multiple matching patterns
       // attached to a block. They may however contain other non-binding patterns.
@@ -455,7 +455,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch31() {
-    AssertParse(
+    assertParse(
       """
       var t = (1, 2)
       """
@@ -463,7 +463,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch32() {
-    AssertParse(
+    assertParse(
       """
       switch t {
       case (var a, 2), (1, _):
@@ -501,7 +501,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch33() {
-    AssertParse(
+    assertParse(
       """
       func patternVarUsedInAnotherPattern(x: Int) {
         switch x {
@@ -515,7 +515,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch34() {
-    AssertParse(
+    assertParse(
       """
       // Fallthroughs can only transfer control into a case label with bindings if the previous case binds a superset of those vars.
       switch t {
@@ -529,7 +529,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch35() {
-    AssertParse(
+    assertParse(
       """
       switch t { // specifically notice on next line that we shouldn't complain that a is unused - just never mutated
       case (var a, let b):
@@ -543,7 +543,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch36() {
-    AssertParse(
+    assertParse(
       """
       func patternVarDiffType(x: Int, y: Double) {
         switch (x, y) {
@@ -558,7 +558,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch37() {
-    AssertParse(
+    assertParse(
       """
       func patternVarDiffMutability(x: Int, y: Double) {
         switch x {
@@ -584,7 +584,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch38() {
-    AssertParse(
+    assertParse(
       """
       func test_label(x : Int) {
       Gronk:
@@ -597,7 +597,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch39() {
-    AssertParse(
+    assertParse(
       """
       func enumElementSyntaxOnTuple() {
         switch (1, 1) {
@@ -612,7 +612,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch40() {
-    AssertParse(
+    assertParse(
       """
       // https://github.com/apple/swift/issues/42798
       enum Whatever { case Thing }
@@ -627,7 +627,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch41() {
-    AssertParse(
+    assertParse(
       #"""
       // https://github.com/apple/swift/issues/43334
       // https://github.com/apple/swift/issues/43335
@@ -666,7 +666,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch42() {
-    AssertParse(
+    assertParse(
       """
       switch Whatever.Thing {
       case .Thing:
@@ -678,7 +678,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch43() {
-    AssertParse(
+    assertParse(
       """
       switch Whatever.Thing {
       case .Thing:
@@ -690,7 +690,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch44() {
-    AssertParse(
+    assertParse(
       """
       switch Whatever.Thing {
       case .Thing:
@@ -702,7 +702,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch45() {
-    AssertParse(
+    assertParse(
       """
       switch Whatever.Thing {
       case .Thing:
@@ -714,7 +714,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch46() {
-    AssertParse(
+    assertParse(
       """
       switch Whatever.Thing {
       @unknown default:
@@ -729,7 +729,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch47() {
-    AssertParse(
+    assertParse(
       """
       switch Whatever.Thing {
       default:
@@ -744,7 +744,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch48() {
-    AssertParse(
+    assertParse(
       """
       switch Whatever.Thing {
       default:
@@ -759,7 +759,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch49() {
-    AssertParse(
+    assertParse(
       """
       switch Whatever.Thing {
       @unknown default 1️⃣where x == 0:
@@ -773,7 +773,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch50() {
-    AssertParse(
+    assertParse(
       """
       switch Whatever.Thing {
       @unknown case _:
@@ -784,7 +784,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch51() {
-    AssertParse(
+    assertParse(
       """
       switch Whatever.Thing {
       @unknown case _:
@@ -797,7 +797,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch52() {
-    AssertParse(
+    assertParse(
       """
       switch Whatever.Thing {
       @unknown default:
@@ -810,7 +810,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch53() {
-    AssertParse(
+    assertParse(
       """
       switch Whatever.Thing {
       @unknown case _, _:
@@ -821,7 +821,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch54() {
-    AssertParse(
+    assertParse(
       """
       switch Whatever.Thing {
       @unknown case _, _, _:
@@ -832,7 +832,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch55() {
-    AssertParse(
+    assertParse(
       """
       switch Whatever.Thing {
       @unknown case let value:
@@ -843,7 +843,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch56() {
-    AssertParse(
+    assertParse(
       """
       switch (Whatever.Thing, Whatever.Thing) {
       @unknown case (_, _):
@@ -854,7 +854,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch57() {
-    AssertParse(
+    assertParse(
       """
       switch Whatever.Thing {
       @unknown case is Whatever:
@@ -865,7 +865,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch58() {
-    AssertParse(
+    assertParse(
       """
       switch Whatever.Thing {
       @unknown case .Thing:
@@ -876,7 +876,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch59() {
-    AssertParse(
+    assertParse(
       """
       switch Whatever.Thing {
       @unknown case (_): // okay
@@ -887,7 +887,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch60() {
-    AssertParse(
+    assertParse(
       """
       switch Whatever.Thing {
       @unknown case _ where x == 0:
@@ -898,7 +898,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch61() {
-    AssertParse(
+    assertParse(
       """
       switch Whatever.Thing {
       @unknown default 1️⃣where x == 0:
@@ -912,7 +912,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch62() {
-    AssertParse(
+    assertParse(
       """
       switch Whatever.Thing {
       case .Thing:
@@ -927,7 +927,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch63() {
-    AssertParse(
+    assertParse(
       """
       switch x {
       case 0:
@@ -940,7 +940,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch64() {
-    AssertParse(
+    assertParse(
       """
       switch x {
       case 0:
@@ -956,7 +956,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch65() {
-    AssertParse(
+    assertParse(
       """
       @unknown let _ = 1
       """
@@ -964,7 +964,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch66() {
-    AssertParse(
+    assertParse(
       """
       switch x {
       case _:
@@ -975,7 +975,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch67() {
-    AssertParse(
+    assertParse(
       """
       switch Whatever.Thing {
       case .Thing:
@@ -1006,7 +1006,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch68() {
-    AssertParse(
+    assertParse(
       """
       switch x {
       case 1:
@@ -1019,7 +1019,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch69() {
-    AssertParse(
+    assertParse(
       """
       switch x {
       @unknown case _:
@@ -1030,7 +1030,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch70() {
-    AssertParse(
+    assertParse(
       """
       switch x {
       @unknown default:
@@ -1041,7 +1041,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch71() {
-    AssertParse(
+    assertParse(
       """
       switch Whatever.Thing {
       case .Thing:
@@ -1056,7 +1056,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch72() {
-    AssertParse(
+    assertParse(
       """
       switch Whatever.Thing {
       case .Thing:
@@ -1071,7 +1071,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch73() {
-    AssertParse(
+    assertParse(
       """
       switch Whatever.Thing {
       case .Thing:
@@ -1086,7 +1086,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch74() {
-    AssertParse(
+    assertParse(
       """
       switch Whatever.Thing {
       @unknown case _:
@@ -1099,7 +1099,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch75() {
-    AssertParse(
+    assertParse(
       """
       switch Whatever.Thing {
       @unknown case _:
@@ -1112,7 +1112,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch76() {
-    AssertParse(
+    assertParse(
       """
       switch Whatever.Thing {
       @unknown default:
@@ -1125,7 +1125,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch77() {
-    AssertParse(
+    assertParse(
       """
       switch x {
       @unknown case _:
@@ -1138,7 +1138,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch78() {
-    AssertParse(
+    assertParse(
       """
       switch x {
       @unknown case _:
@@ -1151,7 +1151,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch79() {
-    AssertParse(
+    assertParse(
       """
       switch x {
       @unknown default:
@@ -1164,7 +1164,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch80() {
-    AssertParse(
+    assertParse(
       """
       func testReturnBeforeUnknownDefault() {
         switch x {
@@ -1179,7 +1179,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch81() {
-    AssertParse(
+    assertParse(
       """
       func testReturnBeforeIncompleteUnknownDefault() {
         switch x {
@@ -1196,7 +1196,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch82() {
-    AssertParse(
+    assertParse(
       """
       func testReturnBeforeIncompleteUnknownDefault2() {
         switch x {
@@ -1213,7 +1213,7 @@ final class SwitchTests: XCTestCase {
   }
 
   func testSwitch83() {
-    AssertParse(
+    assertParse(
       """
       func testIncompleteArrayLiteral() {
         switch x {

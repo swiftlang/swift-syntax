@@ -21,12 +21,12 @@ final class DictionaryExprTests: XCTestCase {
         DictionaryElementSyntax(keyExpression: IntegerLiteralExprSyntax(i), valueExpression: IntegerLiteralExprSyntax(i))
       }
     }
-    AssertBuildResult(buildable, "[1: 1, 2: 2, 3: 3]")
+    assertBuildResult(buildable, "[1: 1, 2: 2, 3: 3]")
   }
 
   func testEmptyDictionaryExpr() {
     let buildable = DictionaryExprSyntax()
-    AssertBuildResult(buildable, "[:]")
+    assertBuildResult(buildable, "[:]")
   }
 
   func testMultilineDictionaryLiteral() {
@@ -41,7 +41,7 @@ final class DictionaryExprTests: XCTestCase {
       ]
       """
     )
-    AssertBuildResult(
+    assertBuildResult(
       builder,
       """
       [

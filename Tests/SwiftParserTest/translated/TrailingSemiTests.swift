@@ -16,7 +16,7 @@ import XCTest
 
 final class TrailingSemiTests: XCTestCase {
   func testTrailingSemi1() {
-    AssertParse(
+    assertParse(
       """
       struct S {
         var a : Int ;
@@ -28,7 +28,7 @@ final class TrailingSemiTests: XCTestCase {
   }
 
   func testTrailingSemi2() {
-    AssertParse(
+    assertParse(
       """
       struct SpuriousSemi {
         1️⃣;
@@ -48,7 +48,7 @@ final class TrailingSemiTests: XCTestCase {
   }
 
   func testTrailingSemi3() {
-    AssertParse(
+    assertParse(
       """
       class C {
         var a : Int = 101️⃣ func aa() {};
@@ -73,7 +73,7 @@ final class TrailingSemiTests: XCTestCase {
   }
 
   func testTrailingSemi4() {
-    AssertParse(
+    assertParse(
       """
       extension S {
         //var a : Int ;
@@ -89,7 +89,7 @@ final class TrailingSemiTests: XCTestCase {
   }
 
   func testTrailingSemi5() {
-    AssertParse(
+    assertParse(
       """
       protocol P {
         var a : Int { get };
@@ -101,7 +101,7 @@ final class TrailingSemiTests: XCTestCase {
   }
 
   func testSingleTrailingSemiInStmt() {
-    AssertParse(
+    assertParse(
       """
       let x = 5;1️⃣;
       """,
@@ -113,7 +113,7 @@ final class TrailingSemiTests: XCTestCase {
   }
 
   func testDoubleTrailingSemiInStmt() {
-    AssertParse(
+    assertParse(
       """
       let x = 5;1️⃣;;
       """,
@@ -125,7 +125,7 @@ final class TrailingSemiTests: XCTestCase {
   }
 
   func testDoubleTrailingSemiInDecl() {
-    AssertParse(
+    assertParse(
       """
       struct X {
         func foo() {};1️⃣;;
@@ -143,7 +143,7 @@ final class TrailingSemiTests: XCTestCase {
   }
 
   func testMissingSemiInIfConfigOfDecls() {
-    AssertParse(
+    assertParse(
       """
       struct X {
       #if FLAG1
@@ -165,7 +165,7 @@ final class TrailingSemiTests: XCTestCase {
   }
 
   func testMissingSemiInIfConfigOfStmts() {
-    AssertParse(
+    assertParse(
       """
       func foo() {
       #if FLAG1

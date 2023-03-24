@@ -16,7 +16,7 @@ import XCTest
 
 final class MultilinePoundDiagnosticArgRdar41154797Tests: XCTestCase {
   func testMultilinePoundDiagnosticArgRdar411547971() {
-    AssertParse(
+    assertParse(
       ##"""
       #error("""1️⃣
       """##,

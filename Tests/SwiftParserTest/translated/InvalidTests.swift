@@ -17,7 +17,7 @@ import XCTest
 final class InvalidTests: XCTestCase {
   func testInvalid1a() {
     // rdar://15946844
-    AssertParse(
+    assertParse(
       """
       func test1(1️⃣inout var x : Int) {}
       """,
@@ -29,7 +29,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid1b() {
-    AssertParse(
+    assertParse(
       """
       func test2(1️⃣inout let x : Int) {}
       """,
@@ -40,7 +40,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid1c() {
-    AssertParse(
+    assertParse(
       """
       func test3(f : (1️⃣inout _ x : Int) -> Void) {}
       """,
@@ -52,7 +52,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid2a() {
-    AssertParse(
+    assertParse(
       """
       func test1s(1️⃣__shared var x : Int) {}
       """,
@@ -63,7 +63,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid2b() {
-    AssertParse(
+    assertParse(
       """
       func test2s(1️⃣__shared let x : Int) {}
       """,
@@ -74,7 +74,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid3a() {
-    AssertParse(
+    assertParse(
       """
       func test1o(1️⃣__owned var x : Int) {}
       """,
@@ -85,7 +85,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid3b() {
-    AssertParse(
+    assertParse(
       """
       func test2o(1️⃣__owned let x : Int) {}
       """,
@@ -96,7 +96,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid4() {
-    AssertParse(
+    assertParse(
       """
       func test3() {
         undeclared_func( 1️⃣
@@ -109,7 +109,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid5() {
-    AssertParse(
+    assertParse(
       """
       func runAction() {}
       """
@@ -117,7 +117,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid6() {
-    AssertParse(
+    assertParse(
       """
       // rdar://16601779
       func foo() {
@@ -132,7 +132,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid7() {
-    AssertParse(
+    assertParse(
       """
       super.init()
       """
@@ -140,7 +140,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid8() {
-    AssertParse(
+    assertParse(
       """
       switch state {
         1️⃣let duration : Int = 0
@@ -155,7 +155,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid9() {
-    AssertParse(
+    assertParse(
       #"""
       func testNotCoveredCase(x: Int) {
         switch x {
@@ -180,7 +180,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid10() {
-    AssertParse(
+    assertParse(
       ##"""
       // rdar://18926814
       func test4() {
@@ -196,7 +196,7 @@ final class InvalidTests: XCTestCase {
 
   func testInvalid11() {
     // rdar://problem/18507467
-    AssertParse(
+    assertParse(
       """
       func d(_ b: 1️⃣String 2️⃣-> 3️⃣<T>() -> T4️⃣) {}
       """,
@@ -211,7 +211,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid12() {
-    AssertParse(
+    assertParse(
       """
       // <rdar://problem/22143680> QoI: terrible diagnostic when trying to form a generic protocol
       protocol Animal<Food> {
@@ -222,7 +222,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid13() {
-    AssertParse(
+    assertParse(
       """
       // https://github.com/apple/swift/issues/43190
       // Crash with invalid parameter declaration
@@ -241,7 +241,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid14() {
-    AssertParse(
+    assertParse(
       """
       // https://github.com/apple/swift/issues/43313
       do {
@@ -256,7 +256,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid15() {
-    AssertParse(
+    assertParse(
       """
       // https://github.com/apple/swift/issues/43591
       // Two inout crash compiler
@@ -265,7 +265,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid16a() {
-    AssertParse(
+    assertParse(
       """
       func f1_43591(a : inout 1️⃣inout Int) {}
       """,
@@ -276,7 +276,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid16b() {
-    AssertParse(
+    assertParse(
       """
       func f2_43591(1️⃣inout inout b: Int) {}
       """,
@@ -288,7 +288,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid16c() {
-    AssertParse(
+    assertParse(
       """
       func f3_43591(let let 1️⃣a: Int) {}
       """,
@@ -299,7 +299,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid16d() {
-    AssertParse(
+    assertParse(
       """
       func f4_43591(1️⃣inout x: inout String) {}
       """,
@@ -310,7 +310,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid16e() {
-    AssertParse(
+    assertParse(
       """
       func f5_43591(1️⃣inout i: inout Int) {}
       """,
@@ -321,7 +321,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid17() {
-    AssertParse(
+    assertParse(
       """
       func 1️⃣repeat() {}
       """,
@@ -332,7 +332,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid18() {
-    AssertParse(
+    assertParse(
       """
       let 1️⃣for = 2
       """,
@@ -343,7 +343,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid19() {
-    AssertParse(
+    assertParse(
       """
       func f4_43591(1️⃣inout x: inout String) {}
       """,
@@ -354,7 +354,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid20() {
-    AssertParse(
+    assertParse(
       """
       func f5_43591(1️⃣inout i: inout Int) {}
       """,
@@ -366,7 +366,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid21() {
-    AssertParse(
+    assertParse(
       """
       func 1️⃣repeat() {}
       """,
@@ -377,7 +377,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid22() {
-    AssertParse(
+    assertParse(
       """
       let 1️⃣for = 2
       """,
@@ -388,7 +388,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid23a() {
-    AssertParse(
+    assertParse(
       """
       func dog 1️⃣cow() {}
       """,
@@ -407,7 +407,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid23b() {
-    AssertParse(
+    assertParse(
       """
       func dog 1️⃣cow() {}
       """,
@@ -426,7 +426,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testThreeIdentifersForFunctionName() {
-    AssertParse(
+    assertParse(
       """
       func dog 1️⃣cow sheep() {}
       """,
@@ -445,7 +445,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid24() {
-    AssertParse(
+    assertParse(
       """
       func cat 1️⃣Mouse() {}
       """,
@@ -457,7 +457,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid25() {
-    AssertParse(
+    assertParse(
       """
       func friend 1️⃣ship<T>(x: T) {}
       """,
@@ -476,7 +476,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid26() {
-    AssertParse(
+    assertParse(
       """
       func were1️⃣
       wolf2️⃣() {}
@@ -490,7 +490,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid27() {
-    AssertParse(
+    assertParse(
       """
       func hammer1️⃣
       leavings<T>2️⃣(x: T) {}
@@ -504,7 +504,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid28() {
-    AssertParse(
+    assertParse(
       """
       prefix operator %
       prefix func %<T>(x: T) -> T { return x } // No error expected - the < is considered an identifier but is peeled off by the parser.
@@ -513,7 +513,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid29() {
-    AssertParse(
+    assertParse(
       """
       struct Weak<T: 1️⃣class> {
         weak let value: T
@@ -531,7 +531,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid30() {
-    AssertParse(
+    assertParse(
       """
       let x: () = ()
       !()
@@ -544,7 +544,7 @@ final class InvalidTests: XCTestCase {
 
   func testInvalid32() {
     // https://github.com/apple/swift/issues/50734
-    AssertParse(
+    assertParse(
       """
       func f1_50734(@NSApplicationMain x: Int) {}
       """
@@ -552,7 +552,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid33() {
-    AssertParse(
+    assertParse(
       """
       func f2_50734(@available(iOS, deprecated: 0) x: Int) {}
       """
@@ -560,7 +560,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid34() {
-    AssertParse(
+    assertParse(
       """
       func f3_50734(@discardableResult x: Int) {}
       """
@@ -568,7 +568,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid35() {
-    AssertParse(
+    assertParse(
       """
       func f4_50734(@objcMembers x: String) {}
       """
@@ -576,7 +576,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid36() {
-    AssertParse(
+    assertParse(
       """
       func f5_50734(@weak x: String) {}
       """
@@ -584,7 +584,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid37() {
-    AssertParse(
+    assertParse(
       """
       class C_50734<@NSApplicationMain T: AnyObject> {}
       """
@@ -592,7 +592,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid38() {
-    AssertParse(
+    assertParse(
       """
       func f6_50734<@discardableResult T>(x: T) {}
       """
@@ -600,7 +600,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid39() {
-    AssertParse(
+    assertParse(
       """
       enum E_50734<@indirect T> {}
       """
@@ -608,7 +608,7 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid40() {
-    AssertParse(
+    assertParse(
       """
       protocol P {
         @available(swift, introduced: 4.2) associatedtype Assoc

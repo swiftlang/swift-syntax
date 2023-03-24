@@ -23,7 +23,7 @@ final class BreakStmtSyntaxTests: XCTestCase {
 
     for (line, testCase) in testCases {
       let (builder, expected) = testCase
-      AssertBuildResult(builder, expected, trimTrailingWhitespace: false, line: line)
+      assertBuildResult(builder, expected, trimTrailingWhitespace: false, line: line)
     }
   }
 }

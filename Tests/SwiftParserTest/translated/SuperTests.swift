@@ -17,7 +17,7 @@ import XCTest
 
 final class SuperTests: XCTestCase {
   func testSuper1() {
-    AssertParse(
+    assertParse(
       """
       class B {
         var foo: Int
@@ -34,7 +34,7 @@ final class SuperTests: XCTestCase {
   }
 
   func testSuper2a() {
-    AssertParse(
+    assertParse(
       #"""
       class D : B {
         override init() {
@@ -47,7 +47,7 @@ final class SuperTests: XCTestCase {
   }
 
   func testSuper2b() {
-    AssertParse(
+    assertParse(
       #"""
       class D : B {
         override init(x:Int) {
@@ -59,7 +59,7 @@ final class SuperTests: XCTestCase {
   }
 
   func testSuper2c() {
-    AssertParse(
+    assertParse(
       #"""
       class D : B {
         convenience init(y:Int) {
@@ -71,7 +71,7 @@ final class SuperTests: XCTestCase {
   }
 
   func testSuper2d() {
-    AssertParse(
+    assertParse(
       #"""
       class D : B {
         init(z: Int) {
@@ -84,7 +84,7 @@ final class SuperTests: XCTestCase {
   }
 
   func testSuper2e() {
-    AssertParse(
+    assertParse(
       #"""
       class D : B {
         func super_calls() {
@@ -106,7 +106,7 @@ final class SuperTests: XCTestCase {
   }
 
   func testSuper2f() {
-    AssertParse(
+    assertParse(
       #"""
       class D : B {
         func bad_super_1() {
@@ -121,7 +121,7 @@ final class SuperTests: XCTestCase {
   }
 
   func testSuper2g() {
-    AssertParse(
+    assertParse(
       #"""
       class D : B {
         func bad_super_2() {
@@ -145,7 +145,7 @@ final class SuperTests: XCTestCase {
   }
 
   func testSuper2h() {
-    AssertParse(
+    assertParse(
       #"""
       class D : B {
         func bad_super_3() {
@@ -169,7 +169,7 @@ final class SuperTests: XCTestCase {
   }
 
   func testSuper3() {
-    AssertParse(
+    assertParse(
       """
       class Closures : B {
         func captureWeak() {

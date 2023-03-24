@@ -19,7 +19,7 @@ import SwiftSyntax
 // constructor call.
 final class TypeExprTests: XCTestCase {
   func testTypeExpr3() {
-    AssertParse(
+    assertParse(
       """
       struct Foo {
         struct Bar {
@@ -38,7 +38,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr4() {
-    AssertParse(
+    assertParse(
       """
       protocol Zim {
         associatedtype Zang
@@ -52,7 +52,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr5() {
-    AssertParse(
+    assertParse(
       """
       protocol Bad {
         init() {}
@@ -62,7 +62,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr6() {
-    AssertParse(
+    assertParse(
       """
       struct Gen<T> {
         struct Bar {
@@ -81,7 +81,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr7() {
-    AssertParse(
+    assertParse(
       """
       func unqualifiedType() {
         _ = Foo.self
@@ -100,7 +100,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr8() {
-    AssertParse(
+    assertParse(
       """
       func qualifiedType() {
         _ = Foo.Bar.self
@@ -117,13 +117,13 @@ final class TypeExprTests: XCTestCase {
       """
     )
 
-    AssertParse("(X).Y.self", ExprSyntax.parse)
-    AssertParse("(X.Y).Z.self", ExprSyntax.parse)
-    AssertParse("((X).Y).Z.self", ExprSyntax.parse)
+    assertParse("(X).Y.self", ExprSyntax.parse)
+    assertParse("(X.Y).Z.self", ExprSyntax.parse)
+    assertParse("((X).Y).Z.self", ExprSyntax.parse)
   }
 
   func testTypeExpr9() {
-    AssertParse(
+    assertParse(
       """
       // We allow '.Type' in expr context
       func metaType() {
@@ -137,7 +137,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr10() {
-    AssertParse(
+    assertParse(
       """
       func genType() {
         _ = Gen<Foo>.self
@@ -155,13 +155,13 @@ final class TypeExprTests: XCTestCase {
       """
     )
 
-    AssertParse("X?.self", ExprSyntax.parse)
-    AssertParse("[X].self", ExprSyntax.parse)
-    AssertParse("[X : Y].self", ExprSyntax.parse)
+    assertParse("X?.self", ExprSyntax.parse)
+    assertParse("[X].self", ExprSyntax.parse)
+    assertParse("[X : Y].self", ExprSyntax.parse)
   }
 
   func testTypeExpr11() {
-    AssertParse(
+    assertParse(
       """
       func genQualifiedType() {
         _ = Gen<Foo>.Bar.self
@@ -183,16 +183,16 @@ final class TypeExprTests: XCTestCase {
       """
     )
 
-    AssertParse("(G<X>).Y.self", ExprSyntax.parse)
-    AssertParse("X?.Y.self", ExprSyntax.parse)
-    AssertParse("(X)?.Y.self", ExprSyntax.parse)
-    AssertParse("(X?).Y.self", ExprSyntax.parse)
-    AssertParse("[X].Y.self", ExprSyntax.parse)
-    AssertParse("[X : Y].Z.self", ExprSyntax.parse)
+    assertParse("(G<X>).Y.self", ExprSyntax.parse)
+    assertParse("X?.Y.self", ExprSyntax.parse)
+    assertParse("(X)?.Y.self", ExprSyntax.parse)
+    assertParse("(X?).Y.self", ExprSyntax.parse)
+    assertParse("[X].Y.self", ExprSyntax.parse)
+    assertParse("[X : Y].Z.self", ExprSyntax.parse)
   }
 
   func testTypeExpr12() {
-    AssertParse(
+    assertParse(
       """
       func typeOfShadowing() {
         // Try to shadow type(of:)
@@ -219,7 +219,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr13() {
-    AssertParse(
+    assertParse(
       """
       func archetype<T: Zim>(_: T) {
         _ = T.self
@@ -234,7 +234,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr14() {
-    AssertParse(
+    assertParse(
       """
       func assocType<T: Zim>(_: T) where T.Zang: Zim {
         _ = T.Zang.self
@@ -249,7 +249,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr15() {
-    AssertParse(
+    assertParse(
       """
       class B {
         class func baseMethod() {}
@@ -262,7 +262,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr16() {
-    AssertParse(
+    assertParse(
       """
       func derivedType() {
         let _: B.Type = D.self
@@ -279,7 +279,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr17() {
-    AssertParse(
+    assertParse(
       #"""
       // Referencing a nonexistent member or constructor should not trigger errors
       // about the type expression.
@@ -293,7 +293,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr18() {
-    AssertParse(
+    assertParse(
       """
       protocol P {}
       """
@@ -301,7 +301,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr19() {
-    AssertParse(
+    assertParse(
       """
       func meta_metatypes() {
         let _: P.Protocol = P.self
@@ -316,7 +316,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr20() {
-    AssertParse(
+    assertParse(
       """
       class E {
         private init() {}
@@ -326,7 +326,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr21() {
-    AssertParse(
+    assertParse(
       """
       func inAccessibleInit() {
         _ = E
@@ -336,7 +336,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr22() {
-    AssertParse(
+    assertParse(
       """
       enum F: Int {
         case A, B
@@ -346,7 +346,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr23() {
-    AssertParse(
+    assertParse(
       """
       struct G {
         var x: Int
@@ -356,7 +356,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr24() {
-    AssertParse(
+    assertParse(
       """
       func implicitInit() {
         _ = F
@@ -367,7 +367,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr25a() {
-    AssertParse(
+    assertParse(
       """
       _ = [(Int) -> Int]()
       """
@@ -375,7 +375,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr25b() {
-    AssertParse(
+    assertParse(
       """
       _ = [(Int, Int) -> Int]()
       """
@@ -383,7 +383,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr25c() {
-    AssertParse(
+    assertParse(
       """
       _ = [(x: Int, y: Int) -> Int]()
       """
@@ -391,7 +391,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr25d() {
-    AssertParse(
+    assertParse(
       """
       // Make sure associativity is correct
       let a = [(Int) -> (Int) -> Int]()
@@ -400,7 +400,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr25e() {
-    AssertParse(
+    assertParse(
       """
       let b: Int = a[0](5)(4)
       """
@@ -408,7 +408,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr25f() {
-    AssertParse(
+    assertParse(
       """
       _ = [String: (Int) -> Int]()
       """
@@ -416,7 +416,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr25g() {
-    AssertParse(
+    assertParse(
       """
       _ = [String: (Int, Int) -> Int]()
       """
@@ -424,7 +424,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr25h() {
-    AssertParse(
+    assertParse(
       """
       _ = [1 -> Int]()
       """
@@ -432,7 +432,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr25i() {
-    AssertParse(
+    assertParse(
       """
       _ = [Int -> 1]()
       """
@@ -440,7 +440,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr25j() {
-    AssertParse(
+    assertParse(
       """
       // Should parse () as void type when before or after arrow
       _ = [() -> Int]()
@@ -449,7 +449,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr25k() {
-    AssertParse(
+    assertParse(
       """
       _ = [(Int) -> ()]()
       """
@@ -457,7 +457,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr25l() {
-    AssertParse(
+    assertParse(
       """
       _ = 2 + () -> Int
       """
@@ -465,7 +465,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr25m() {
-    AssertParse(
+    assertParse(
       """
       _ = () -> (Int, Int).2
       """
@@ -473,7 +473,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr25n() {
-    AssertParse(
+    assertParse(
       """
       _ = (Int) -> Int
       """
@@ -481,7 +481,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr25o() {
-    AssertParse(
+    assertParse(
       """
       _ = @convention(c) () -> Int
       """
@@ -489,7 +489,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr25p() {
-    AssertParse(
+    assertParse(
       """
       _ = 1 + (@convention(c) () -> Int).self
       """
@@ -497,7 +497,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr25q() {
-    AssertParse(
+    assertParse(
       """
       _ = (@autoclosure () -> Int) -> (Int, Int).2
       """
@@ -505,7 +505,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr25r() {
-    AssertParse(
+    assertParse(
       """
       _ = ((@autoclosure () -> Int) -> (Int, Int)).1
       """
@@ -513,7 +513,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr25s() {
-    AssertParse(
+    assertParse(
       """
       _ = ((inout Int) -> Void).self
       """
@@ -521,7 +521,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr25t() {
-    AssertParse(
+    assertParse(
       """
       _ = [(Int) throws -> Int]()
       """
@@ -529,7 +529,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr25u() {
-    AssertParse(
+    assertParse(
       """
       _ = [@convention(swift) (Int) throws -> Int]().count
       """
@@ -537,7 +537,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr25v() {
-    AssertParse(
+    assertParse(
       """
       _ = [(inout Int) throws -> (inout () -> Void) -> Void]().count
       """
@@ -545,7 +545,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr25w() {
-    AssertParse(
+    assertParse(
       """
       _ = [String: (@autoclosure (Int) -> Int32) -> Void]().keys
       """
@@ -553,7 +553,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr25x() {
-    AssertParse(
+    assertParse(
       """
       let _ = [(Int) -> 1️⃣throws Int]()
       """,
@@ -567,7 +567,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr25y() {
-    AssertParse(
+    assertParse(
       """
       let _ = [Int throws 1️⃣Int]();
       """,
@@ -578,59 +578,59 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testCompositionTypeExpr() {
-    AssertParse("P & Q", ExprSyntax.parse)
-    AssertParse("P & Q.self", ExprSyntax.parse)
-    AssertParse("any P & Q", ExprSyntax.parse)
+    assertParse("P & Q", ExprSyntax.parse)
+    assertParse("P & Q.self", ExprSyntax.parse)
+    assertParse("any P & Q", ExprSyntax.parse)
 
-    AssertParse("(P & Q).self", ExprSyntax.parse)
-    AssertParse("((P) & (Q)).self", ExprSyntax.parse)
+    assertParse("(P & Q).self", ExprSyntax.parse)
+    assertParse("((P) & (Q)).self", ExprSyntax.parse)
 
-    AssertParse("(A.B & C.D).self", ExprSyntax.parse)
-    AssertParse("((A).B & (C).D).self", ExprSyntax.parse)
+    assertParse("(A.B & C.D).self", ExprSyntax.parse)
+    assertParse("((A).B & (C).D).self", ExprSyntax.parse)
 
-    AssertParse("(G<X> & G<Y>).self", ExprSyntax.parse)
-    AssertParse("(X? & Y?).self", ExprSyntax.parse)
-    AssertParse("([X] & [Y]).self", ExprSyntax.parse)
-    AssertParse("([A : B] & [C : D]).self", ExprSyntax.parse)
+    assertParse("(G<X> & G<Y>).self", ExprSyntax.parse)
+    assertParse("(X? & Y?).self", ExprSyntax.parse)
+    assertParse("([X] & [Y]).self", ExprSyntax.parse)
+    assertParse("([A : B] & [C : D]).self", ExprSyntax.parse)
 
-    AssertParse("(G<A>.B & G<C>.D).self", ExprSyntax.parse)
-    AssertParse("(A?.B & C?.D).self", ExprSyntax.parse)
-    AssertParse("([A].B & [A].B).self", ExprSyntax.parse)
-    AssertParse("([A : B].C & [D : E].F).self", ExprSyntax.parse)
+    assertParse("(G<A>.B & G<C>.D).self", ExprSyntax.parse)
+    assertParse("(A?.B & C?.D).self", ExprSyntax.parse)
+    assertParse("([A].B & [A].B).self", ExprSyntax.parse)
+    assertParse("([A : B].C & [D : E].F).self", ExprSyntax.parse)
 
-    AssertParse("(X.Type & Y.Type).self", ExprSyntax.parse)
-    AssertParse("(X.Protocol & Y.Protocol).self", ExprSyntax.parse)
+    assertParse("(X.Type & Y.Type).self", ExprSyntax.parse)
+    assertParse("(X.Protocol & Y.Protocol).self", ExprSyntax.parse)
 
-    AssertParse("((A, B) & (C, D)).self", ExprSyntax.parse)
+    assertParse("((A, B) & (C, D)).self", ExprSyntax.parse)
   }
 
   func testTupleTypeExpr() {
-    AssertParse("(X).self", ExprSyntax.parse)
+    assertParse("(X).self", ExprSyntax.parse)
 
-    AssertParse("(X, Y)", ExprSyntax.parse)
+    assertParse("(X, Y)", ExprSyntax.parse)
 
-    AssertParse("(X, Y).self", ExprSyntax.parse)
-    AssertParse("((X), (Y)).self", ExprSyntax.parse)
+    assertParse("(X, Y).self", ExprSyntax.parse)
+    assertParse("((X), (Y)).self", ExprSyntax.parse)
 
-    AssertParse("(A.B, C.D).self", ExprSyntax.parse)
-    AssertParse("((A).B, (C).D).self", ExprSyntax.parse)
+    assertParse("(A.B, C.D).self", ExprSyntax.parse)
+    assertParse("((A).B, (C).D).self", ExprSyntax.parse)
 
-    AssertParse("(G<X>, G<Y>).self", ExprSyntax.parse)
-    AssertParse("(X?, Y?).self", ExprSyntax.parse)
-    AssertParse("([X], [Y]).self", ExprSyntax.parse)
-    AssertParse("([A : B], [C : D]).self", ExprSyntax.parse)
+    assertParse("(G<X>, G<Y>).self", ExprSyntax.parse)
+    assertParse("(X?, Y?).self", ExprSyntax.parse)
+    assertParse("([X], [Y]).self", ExprSyntax.parse)
+    assertParse("([A : B], [C : D]).self", ExprSyntax.parse)
 
-    AssertParse("(G<A>.B, G<C>.D).self", ExprSyntax.parse)
-    AssertParse("(A?.B, C?.D).self", ExprSyntax.parse)
-    AssertParse("([A].B, [C].D).self", ExprSyntax.parse)
-    AssertParse("([A : B].C, [D : E].F).self", ExprSyntax.parse)
+    assertParse("(G<A>.B, G<C>.D).self", ExprSyntax.parse)
+    assertParse("(A?.B, C?.D).self", ExprSyntax.parse)
+    assertParse("([A].B, [C].D).self", ExprSyntax.parse)
+    assertParse("([A : B].C, [D : E].F).self", ExprSyntax.parse)
 
-    AssertParse("(X.Type, Y.Type).self", ExprSyntax.parse)
-    AssertParse("(X.Protocol, Y.Protocol).self", ExprSyntax.parse)
+    assertParse("(X.Type, Y.Type).self", ExprSyntax.parse)
+    assertParse("(X.Protocol, Y.Protocol).self", ExprSyntax.parse)
 
-    AssertParse("(P & Q, P & Q).self", ExprSyntax.parse)
+    assertParse("(P & Q, P & Q).self", ExprSyntax.parse)
 
-    AssertParse(
+    assertParse(
       """
       (
         (G<X>.Y) -> (P) & X?.Y, (X.Y, [X : Y?].Type), [(G<X>).Y], [A.B.C].D
@@ -641,38 +641,38 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testFunctionTypeExpr() {
-    AssertParse("X -> Y", ExprSyntax.parse)
-    AssertParse("(X) -> Y", ExprSyntax.parse)
-    AssertParse("(X) -> Y -> Z", ExprSyntax.parse)
-    AssertParse("P & Q -> X", ExprSyntax.parse)
-    AssertParse("A & B -> C & D -> X", ExprSyntax.parse)
-    AssertParse("(X -> Y).self", ExprSyntax.parse)
-    AssertParse("(A & B -> C & D).self", ExprSyntax.parse)
+    assertParse("X -> Y", ExprSyntax.parse)
+    assertParse("(X) -> Y", ExprSyntax.parse)
+    assertParse("(X) -> Y -> Z", ExprSyntax.parse)
+    assertParse("P & Q -> X", ExprSyntax.parse)
+    assertParse("A & B -> C & D -> X", ExprSyntax.parse)
+    assertParse("(X -> Y).self", ExprSyntax.parse)
+    assertParse("(A & B -> C & D).self", ExprSyntax.parse)
 
-    AssertParse("((X) -> Y).self", ExprSyntax.parse)
-    AssertParse("(((X)) -> (Y)).self", ExprSyntax.parse)
+    assertParse("((X) -> Y).self", ExprSyntax.parse)
+    assertParse("(((X)) -> (Y)).self", ExprSyntax.parse)
 
-    AssertParse("((A.B) -> C.D).self", ExprSyntax.parse)
-    AssertParse("(((A).B) -> (C).D).self", ExprSyntax.parse)
+    assertParse("((A.B) -> C.D).self", ExprSyntax.parse)
+    assertParse("(((A).B) -> (C).D).self", ExprSyntax.parse)
 
-    AssertParse("((G<X>) -> G<Y>).self", ExprSyntax.parse)
-    AssertParse("((X?) -> Y?).self", ExprSyntax.parse)
-    AssertParse("(([X]) -> [Y]).self", ExprSyntax.parse)
-    AssertParse("(([A : B]) -> [C : D]).self", ExprSyntax.parse)
+    assertParse("((G<X>) -> G<Y>).self", ExprSyntax.parse)
+    assertParse("((X?) -> Y?).self", ExprSyntax.parse)
+    assertParse("(([X]) -> [Y]).self", ExprSyntax.parse)
+    assertParse("(([A : B]) -> [C : D]).self", ExprSyntax.parse)
 
-    AssertParse("((Gen<Foo>.Bar) -> Gen<Foo>.Bar).self", ExprSyntax.parse)
-    AssertParse("((Foo?.Bar) -> Foo?.Bar).self", ExprSyntax.parse)
-    AssertParse("(([Foo].Element) -> [Foo].Element).self", ExprSyntax.parse)
-    AssertParse("(([Int : Foo].Element) -> [Int : Foo].Element).self", ExprSyntax.parse)
+    assertParse("((Gen<Foo>.Bar) -> Gen<Foo>.Bar).self", ExprSyntax.parse)
+    assertParse("((Foo?.Bar) -> Foo?.Bar).self", ExprSyntax.parse)
+    assertParse("(([Foo].Element) -> [Foo].Element).self", ExprSyntax.parse)
+    assertParse("(([Int : Foo].Element) -> [Int : Foo].Element).self", ExprSyntax.parse)
 
-    AssertParse("((X.Type) -> Y.Type).self", ExprSyntax.parse)
-    AssertParse("((X.Protocol) -> Y.Protocol).self", ExprSyntax.parse)
+    assertParse("((X.Type) -> Y.Type).self", ExprSyntax.parse)
+    assertParse("((X.Protocol) -> Y.Protocol).self", ExprSyntax.parse)
 
-    AssertParse("(() -> X & Y).self", ExprSyntax.parse)
-    AssertParse("((A & B) -> C & D).self", ExprSyntax.parse)
-    AssertParse("((A & B) -> (C & D) -> E & Any).self", ExprSyntax.parse)
+    assertParse("(() -> X & Y).self", ExprSyntax.parse)
+    assertParse("((A & B) -> C & D).self", ExprSyntax.parse)
+    assertParse("((A & B) -> (C & D) -> E & Any).self", ExprSyntax.parse)
 
-    AssertParse(
+    assertParse(
       """
       (
         ((P) & X?.Y, G<X>.Y, (X, [A : B?].Type)) -> ([(X).Y]) -> [X].Y
@@ -683,7 +683,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr27() {
-    AssertParse(
+    assertParse(
       """
       func complexSequence() {
         // (assign_expr
@@ -697,7 +697,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr28() {
-    AssertParse(
+    assertParse(
       """
       func takesVoid(f: 1️⃣Void 2️⃣-> ()) {}
       """,
@@ -709,7 +709,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr29() {
-    AssertParse(
+    assertParse(
       """
       func takesOneArg<T>(_: T.Type) {}
       func takesTwoArgs<T>(_: T.Type, _: Int) {}
@@ -718,7 +718,7 @@ final class TypeExprTests: XCTestCase {
   }
 
   func testTypeExpr30() {
-    AssertParse(
+    assertParse(
       """
       func testMissingSelf() {
         // None of these were not caught in Swift 3.

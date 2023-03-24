@@ -16,7 +16,7 @@ import XCTest
 
 final class DelayedExtensionTests: XCTestCase {
   func testDelayedExtension1() {
-    AssertParse(
+    assertParse(
       """
       extension X { }
       _ = 1

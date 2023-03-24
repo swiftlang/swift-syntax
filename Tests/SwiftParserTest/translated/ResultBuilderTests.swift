@@ -16,7 +16,7 @@ import XCTest
 
 final class ResultBuilderTests: XCTestCase {
   func testResultBuilder1() {
-    AssertParse(
+    assertParse(
       """
       // rdar://70158735
       """
@@ -24,7 +24,7 @@ final class ResultBuilderTests: XCTestCase {
   }
 
   func testResultBuilder2() {
-    AssertParse(
+    assertParse(
       """
       @resultBuilder
       struct A<T> {
@@ -35,7 +35,7 @@ final class ResultBuilderTests: XCTestCase {
   }
 
   func testResultBuilder3() {
-    AssertParse(
+    assertParse(
       """
       struct B<T> {}
       """
@@ -43,7 +43,7 @@ final class ResultBuilderTests: XCTestCase {
   }
 
   func testResultBuilder4() {
-    AssertParse(
+    assertParse(
       """
       extension B {
         @resultBuilder
@@ -60,7 +60,7 @@ final class ResultBuilderTests: XCTestCase {
   }
 
   func testResultBuilder5() {
-    AssertParse(
+    assertParse(
       """
       @A<Float> var test0: Int {
         1
@@ -72,7 +72,7 @@ final class ResultBuilderTests: XCTestCase {
   }
 
   func testResultBuilder6() {
-    AssertParse(
+    assertParse(
       """
       @B<Float>.NonGeneric var test1: Int {
         1
@@ -84,7 +84,7 @@ final class ResultBuilderTests: XCTestCase {
   }
 
   func testResultBuilder7() {
-    AssertParse(
+    assertParse(
       """
       @B<Float>.Generic<Float> var test2: Int {
         1

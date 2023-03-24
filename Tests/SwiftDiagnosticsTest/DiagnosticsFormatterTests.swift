@@ -33,7 +33,7 @@ final class DiagnosticsFormatterTests: XCTestCase {
         │                ╰─ error: expected expression after operator
 
       """
-    AssertStringsEqualWithDiff(annotate(source: source), expectedOutput)
+    assertStringsEqualWithDiff(annotate(source: source), expectedOutput)
   }
 
   func testMultipleDiagnosticsInOneLine() {
@@ -47,7 +47,7 @@ final class DiagnosticsFormatterTests: XCTestCase {
         │     ╰─ error: expected name in member access
 
       """
-    AssertStringsEqualWithDiff(annotate(source: source), expectedOutput)
+    assertStringsEqualWithDiff(annotate(source: source), expectedOutput)
   }
 
   func testLineSkipping() {
@@ -78,7 +78,7 @@ final class DiagnosticsFormatterTests: XCTestCase {
          │         ╰─ error: expected value and ')' to end function call
 
       """
-    AssertStringsEqualWithDiff(annotate(source: source), expectedOutput)
+    assertStringsEqualWithDiff(annotate(source: source), expectedOutput)
   }
 
   func testTwoDiagnosticsAtSameLocation() throws {
@@ -91,7 +91,7 @@ final class DiagnosticsFormatterTests: XCTestCase {
 
       """
 
-    AssertStringsEqualWithDiff(annotate(source: source), expectedOutput)
+    assertStringsEqualWithDiff(annotate(source: source), expectedOutput)
   }
 
   func testAddsColoringToSingleErrorDiagnostic() {
@@ -104,7 +104,7 @@ final class DiagnosticsFormatterTests: XCTestCase {
         \u{001B}[0;36m│\u{001B}[0;0m                ╰─ \u{001B}[1;31merror: expected expression after operator\u{001B}[0;0m
 
       """
-    AssertStringsEqualWithDiff(annotate(source: source, colorize: true), expectedOutput)
+    assertStringsEqualWithDiff(annotate(source: source, colorize: true), expectedOutput)
   }
 
   func testAddsColoringToMultipleDiagnosticsInOneLine() {
@@ -118,7 +118,7 @@ final class DiagnosticsFormatterTests: XCTestCase {
         \u{001B}[0;36m│\u{001B}[0;0m     ╰─ \u{001B}[1;31merror: expected name in member access\u{001B}[0;0m
 
       """
-    AssertStringsEqualWithDiff(annotate(source: source, colorize: true), expectedOutput)
+    assertStringsEqualWithDiff(annotate(source: source, colorize: true), expectedOutput)
   }
 
   func testColoringWithHighlights() {
@@ -133,6 +133,6 @@ final class DiagnosticsFormatterTests: XCTestCase {
 
       """
 
-    AssertStringsEqualWithDiff(annotate(source: source, colorize: true), expectedOutput)
+    assertStringsEqualWithDiff(annotate(source: source, colorize: true), expectedOutput)
   }
 }

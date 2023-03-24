@@ -16,7 +16,7 @@ import XCTest
 
 final class SelfRebindingTests: XCTestCase {
   func testSelfRebinding1() {
-    AssertParse(
+    assertParse(
       #"""
       class Writer {
           private var articleWritten = 47
@@ -53,7 +53,7 @@ final class SelfRebindingTests: XCTestCase {
   }
 
   func testSelfRebinding2() {
-    AssertParse(
+    assertParse(
       """
       struct T {
           var mutable: Int = 0
@@ -69,7 +69,7 @@ final class SelfRebindingTests: XCTestCase {
   }
 
   func testSelfRebinding3() {
-    AssertParse(
+    assertParse(
       """
       class MyCls {
           func something() {}
@@ -83,7 +83,7 @@ final class SelfRebindingTests: XCTestCase {
   }
 
   func testSelfRebinding4() {
-    AssertParse(
+    assertParse(
       """
       // https://github.com/apple/swift/issues/47136
       // Method called 'self' can be confused with regular 'self'
@@ -92,7 +92,7 @@ final class SelfRebindingTests: XCTestCase {
   }
 
   func testSelfRebinding5() {
-    AssertParse(
+    assertParse(
       """
       func funcThatReturnsSomething(_ any: Any) -> Any {
           any
@@ -102,7 +102,7 @@ final class SelfRebindingTests: XCTestCase {
   }
 
   func testSelfRebinding6() {
-    AssertParse(
+    assertParse(
       """
       struct TypeWithSelfMethod {
           let property = self
@@ -121,7 +121,7 @@ final class SelfRebindingTests: XCTestCase {
   }
 
   func testSelfRebinding7() {
-    AssertParse(
+    assertParse(
       """
       /// Test fix_unqualified_access_member_named_self doesn't appear for computed var called `self`
       /// it can't currently be referenced as a static member -- unlike a method with the same name
@@ -140,7 +140,7 @@ final class SelfRebindingTests: XCTestCase {
   }
 
   func testSelfRebinding8() {
-    AssertParse(
+    assertParse(
       """
       /// Test fix_unqualified_access_member_named_self doesn't appear for property called `self`
       /// it can't currently be referenced as a static member -- unlike a method with the same name
@@ -157,7 +157,7 @@ final class SelfRebindingTests: XCTestCase {
   }
 
   func testSelfRebinding9() {
-    AssertParse(
+    assertParse(
       """
       enum EnumCaseNamedSelf {
           case `self`
@@ -172,7 +172,7 @@ final class SelfRebindingTests: XCTestCase {
   }
 
   func testSelfRebinding10() {
-    AssertParse(
+    assertParse(
       """
       // rdar://90624344 - warning about `self` which cannot be fixed because it's located in implicitly generated code.
       struct TestImplicitSelfUse : Codable {

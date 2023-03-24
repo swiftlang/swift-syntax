@@ -16,7 +16,7 @@ import XCTest
 
 final class InvalidStringInterpolationProtocolTests: XCTestCase {
   func testInvalidStringInterpolationProtocol1() {
-    AssertParse(
+    assertParse(
       """
       // Has a lot of invalid 'appendInterpolation' methods
       public struct BadStringInterpolation: StringInterpolationProtocol {
@@ -39,7 +39,7 @@ final class InvalidStringInterpolationProtocolTests: XCTestCase {
   }
 
   func testInvalidStringInterpolationProtocol2() {
-    AssertParse(
+    assertParse(
       """
       // Has no 'appendInterpolation' methods at all
       public struct IncompleteStringInterpolation: StringInterpolationProtocol {
@@ -51,7 +51,7 @@ final class InvalidStringInterpolationProtocolTests: XCTestCase {
   }
 
   func testInvalidStringInterpolationProtocol3() {
-    AssertParse(
+    assertParse(
       """
       // Has only good 'appendInterpolation' methods.
       public struct GoodStringInterpolation: StringInterpolationProtocol {
@@ -67,7 +67,7 @@ final class InvalidStringInterpolationProtocolTests: XCTestCase {
   }
 
   func testInvalidStringInterpolationProtocol4() {
-    AssertParse(
+    assertParse(
       """
       // Has only good 'appendInterpolation' methods, but they're in an extension.
       public struct GoodSplitStringInterpolation: StringInterpolationProtocol {
@@ -79,7 +79,7 @@ final class InvalidStringInterpolationProtocolTests: XCTestCase {
   }
 
   func testInvalidStringInterpolationProtocol5() {
-    AssertParse(
+    assertParse(
       """
       extension GoodSplitStringInterpolation {
         public func appendInterpolation(noResult: ()) {}
@@ -92,7 +92,7 @@ final class InvalidStringInterpolationProtocolTests: XCTestCase {
   }
 
   func testInvalidStringInterpolationProtocol6() {
-    AssertParse(
+    assertParse(
       """
       // Has only good 'appendInterpolation' methods, and is not public.
       struct GoodNonPublicStringInterpolation: StringInterpolationProtocol {
@@ -108,7 +108,7 @@ final class InvalidStringInterpolationProtocolTests: XCTestCase {
   }
 
   func testInvalidStringInterpolationProtocol7() {
-    AssertParse(
+    assertParse(
       """
       // Has a mixture of good and bad 'appendInterpolation' methods.
       // We don't emit any errors in this case--we assume the others

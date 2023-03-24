@@ -16,7 +16,7 @@ import XCTest
 
 final class BuiltinBridgeObjectTests: XCTestCase {
   func testBuiltinBridgeObject1() {
-    AssertParse(
+    assertParse(
       """
       precedencegroup AssignmentPrecedence { assignment: true }
       """
@@ -24,7 +24,7 @@ final class BuiltinBridgeObjectTests: XCTestCase {
   }
 
   func testBuiltinBridgeObject2() {
-    AssertParse(
+    assertParse(
       """
       var word: Builtin.Word
       """
@@ -32,7 +32,7 @@ final class BuiltinBridgeObjectTests: XCTestCase {
   }
 
   func testBuiltinBridgeObject3() {
-    AssertParse(
+    assertParse(
       """
       class C {}
       """
@@ -40,7 +40,7 @@ final class BuiltinBridgeObjectTests: XCTestCase {
   }
 
   func testBuiltinBridgeObject4() {
-    AssertParse(
+    assertParse(
       """
       var c: C
       let bo = Builtin.castToBridgeObject(c, word)

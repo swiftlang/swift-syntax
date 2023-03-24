@@ -16,7 +16,7 @@ import XCTest
 
 final class DirectiveTests: XCTestCase {
   func testSwitchIfConfig() {
-    AssertParse(
+    assertParse(
       """
       switch x {
       case 1: fallthrough
@@ -41,7 +41,7 @@ final class DirectiveTests: XCTestCase {
   }
 
   func testPostfixIfConfigExpression() {
-    AssertParse(
+    assertParse(
       """
       foo
         .bar()
@@ -70,7 +70,7 @@ final class DirectiveTests: XCTestCase {
   }
 
   func testPostfixIfConfigExpressionContainsPoundIf() {
-    AssertParse(
+    assertParse(
       """
       b
       #if true
@@ -86,19 +86,19 @@ final class DirectiveTests: XCTestCase {
   }
 
   func testSourceLocation() {
-    AssertParse(
+    assertParse(
       """
       #sourceLocation()
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       #sourceLocation(file: "foo", line: 42)
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       public class C<R> {
 
@@ -114,7 +114,7 @@ final class DirectiveTests: XCTestCase {
   }
 
   public func testUnterminatedPoundIf() {
-    AssertParse(
+    assertParse(
       "#if test1️⃣",
       diagnostics: [
         DiagnosticSpec(message: "expected '#endif' in conditional compilation block")
@@ -123,7 +123,7 @@ final class DirectiveTests: XCTestCase {
   }
 
   func testExtraSyntaxInDirective() {
-    AssertParse(
+    assertParse(
       """
       #if os(iOS)
         func foo() {}
@@ -141,7 +141,7 @@ final class DirectiveTests: XCTestCase {
   }
 
   func testHasAttribute() {
-    AssertParse(
+    assertParse(
       """
       @frozen
       #if hasAttribute(foo)
@@ -151,7 +151,7 @@ final class DirectiveTests: XCTestCase {
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       struct Inner {
         @frozen

@@ -16,7 +16,7 @@ import XCTest
 
 final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   func testAvailabilityQueryUnavailability1() {
-    AssertParse(
+    assertParse(
       """
       // This file is mostly an inverted version of availability_query.swift
       if #unavailable(OSX 10.51) {
@@ -26,7 +26,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   }
 
   func testAvailabilityQueryUnavailability2a() {
-    AssertParse(
+    assertParse(
       """
       // Disallow explicit wildcards.
       if #unavailable(OSX 10.51, *) {}
@@ -44,7 +44,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   }
 
   func testAvailabilityQueryUnavailability2b() {
-    AssertParse(
+    assertParse(
       """
       if !1️⃣#unavailable(OSX 10.52) {
       }
@@ -60,7 +60,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   }
 
   func testAvailabilityQueryUnavailability2c() {
-    AssertParse(
+    assertParse(
       """
       if let _ = Optional(5), !1️⃣#unavailable(OSX 10.52) {
       }
@@ -72,7 +72,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   }
 
   func testAvailabilityQueryUnavailability3() {
-    AssertParse(
+    assertParse(
       """
       if #unavailable(OSX 10.51) 1️⃣&& #unavailable(OSX 10.52) {
       }
@@ -84,7 +84,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   }
 
   func testAvailabilityQueryUnavailability4() {
-    AssertParse(
+    assertParse(
       """
       if #unavailable 1️⃣{
       }
@@ -96,7 +96,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   }
 
   func testAvailabilityQueryUnavailability5() {
-    AssertParse(
+    assertParse(
       """
       if #unavailable( 1️⃣{
       }
@@ -109,7 +109,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   }
 
   func testAvailabilityQueryUnavailability6() {
-    AssertParse(
+    assertParse(
       """
       if #unavailable(1️⃣) {
       }
@@ -121,7 +121,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   }
 
   func testAvailabilityQueryUnavailability7() {
-    AssertParse(
+    assertParse(
       """
       if #unavailableℹ️(OSX 1️⃣{
       }
@@ -138,7 +138,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   }
 
   func testAvailabilityQueryUnavailability8() {
-    AssertParse(
+    assertParse(
       """
       if #unavailable(OSX) {
       }
@@ -147,7 +147,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   }
 
   func testAvailabilityQueryUnavailability9() {
-    AssertParse(
+    assertParse(
       """
       if #unavailableℹ️(OSX 10.51 1️⃣{
       }
@@ -164,7 +164,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   }
 
   func testAvailabilityQueryUnavailability10() {
-    AssertParse(
+    assertParse(
       """
       if #unavailable(iDishwasherOS 10.51) {
       }
@@ -173,7 +173,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   }
 
   func testAvailabilityQueryUnavailability11() {
-    AssertParse(
+    assertParse(
       """
       if #unavailable(iDishwasherOS 10.51) {
       }
@@ -182,7 +182,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   }
 
   func testAvailabilityQueryUnavailability12() {
-    AssertParse(
+    assertParse(
       """
       if #unavailable(macos 10.51) {
       }
@@ -191,7 +191,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   }
 
   func testAvailabilityQueryUnavailability13() {
-    AssertParse(
+    assertParse(
       """
       if #unavailable(mscos 10.51) {
       }
@@ -200,7 +200,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   }
 
   func testAvailabilityQueryUnavailability14() {
-    AssertParse(
+    assertParse(
       """
       if #unavailable(macoss 10.51) {
       }
@@ -209,7 +209,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   }
 
   func testAvailabilityQueryUnavailability15() {
-    AssertParse(
+    assertParse(
       """
       if #unavailable(mac 10.51) {
       }
@@ -218,7 +218,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   }
 
   func testAvailabilityQueryUnavailability16() {
-    AssertParse(
+    assertParse(
       """
       if #unavailable(OSX 10.51, OSX 10.52) {
       }
@@ -227,7 +227,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   }
 
   func testAvailabilityQueryUnavailability17() {
-    AssertParse(
+    assertParse(
       """
       if #unavailable(OSX 10.51, iOS 8.0, *) { }
       if #unavailable(iOS 8.0) {
@@ -237,7 +237,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   }
 
   func testAvailabilityQueryUnavailability18() {
-    AssertParse(
+    assertParse(
       """
       if #unavailable(iOSApplicationExtension, unavailable) { // expected-error 2{{expected version number}}
       }
@@ -246,7 +246,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   }
 
   func testAvailabilityQueryUnavailability19() {
-    AssertParse(
+    assertParse(
       """
       // Should this be a valid spelling since `#unvailable(*)` cannot be written?
       if #unavailable(1️⃣) {
@@ -259,7 +259,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   }
 
   func testAvailabilityQueryUnavailability20() {
-    AssertParse(
+    assertParse(
       """
       if #unavailableℹ️(OSX 10 1️⃣{
       }
@@ -276,7 +276,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   }
 
   func testAvailabilityQueryUnavailability21() {
-    AssertParse(
+    assertParse(
       """
       // Multiple platforms
       if #unavailable(OSX 10.51, iOS 8.0) {
@@ -286,7 +286,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   }
 
   func testAvailabilityQueryUnavailability22() {
-    AssertParse(
+    assertParse(
       """
       if #unavailable(OSX 10.51, 1️⃣{
       }
@@ -299,7 +299,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   }
 
   func testAvailabilityQueryUnavailability23() {
-    AssertParse(
+    assertParse(
       """
       if #unavailable(OSX 10.51,1️⃣) {
       }
@@ -311,7 +311,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   }
 
   func testAvailabilityQueryUnavailability24() {
-    AssertParse(
+    assertParse(
       """
       if #unavailableℹ️(OSX 10.51, iOS 1️⃣{
       }
@@ -328,7 +328,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   }
 
   func testAvailabilityQueryUnavailability25() {
-    AssertParse(
+    assertParse(
       """
       if #unavailable(OSX 10.51, iOS 8.0, iDishwasherOS 10.51) {
       }
@@ -337,7 +337,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   }
 
   func testAvailabilityQueryUnavailability26() {
-    AssertParse(
+    assertParse(
       """
       if #unavailable(iDishwasherOS 10.51, OSX 10.51) {
       }
@@ -346,7 +346,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   }
 
   func testAvailabilityQueryUnavailability27() {
-    AssertParse(
+    assertParse(
       """
       if #unavailable(OSX 10.51 1️⃣|| iOS 8.0) {
       }
@@ -358,7 +358,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   }
 
   func testAvailabilityQueryUnavailability28() {
-    AssertParse(
+    assertParse(
       """
       // Emit Fix-It removing un-needed >=, for the moment.
       if #unavailable(OSX 1️⃣>= 10.51) {
@@ -371,7 +371,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   }
 
   func testAvailabilityQueryUnavailability29() {
-    AssertParse(
+    assertParse(
       """
       // Bool then #unavailable.
       if 1 != 2, #unavailable(iOS 8.0) {}
@@ -380,7 +380,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   }
 
   func testAvailabilityQueryUnavailability30() {
-    AssertParse(
+    assertParse(
       """
       // Pattern then #unavailable(iOS 8.0) {
       if case 42 = 42, #unavailable(iOS 8.0) {}
@@ -390,7 +390,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   }
 
   func testAvailabilityQueryUnavailability31() {
-    AssertParse(
+    assertParse(
       #"""
       // Allow "macOS" as well.
       if #unavailable(macOS 10.51) {
@@ -400,7 +400,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   }
 
   func testAvailabilityQueryUnavailability32() {
-    AssertParse(
+    assertParse(
       """
       // Prevent availability and unavailability being present in the same statement.
       if #unavailable(macOS 10.51), #available(macOS 10.52, *) {
@@ -420,7 +420,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   }
 
   func testAvailabilityQueryUnavailability33() {
-    AssertParse(
+    assertParse(
       """
       // Allow availability and unavailability to mix if they are not in the same statement.
       if #unavailable(macOS 11) {
@@ -434,7 +434,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   }
 
   func testAvailabilityQueryUnavailability34a() {
-    AssertParse(
+    assertParse(
       """
       // Diagnose wrong spellings of unavailability
       if #available(*) 1️⃣== false {
@@ -448,7 +448,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   }
 
   func testAvailabilityQueryUnavailability34b() {
-    AssertParse(
+    assertParse(
       """
       if !1️⃣#available(*) {
       }

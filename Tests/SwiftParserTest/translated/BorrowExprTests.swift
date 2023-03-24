@@ -16,7 +16,7 @@ import XCTest
 
 final class BorrowExprTests: XCTestCase {
   func testBorrowExpr1() {
-    AssertParse(
+    assertParse(
       """
       func useString(_ str: String) {}
       var global: String = "123"
@@ -28,7 +28,7 @@ final class BorrowExprTests: XCTestCase {
   }
 
   func testBorrowExpr2() {
-    AssertParse(
+    assertParse(
       """
       func useString(_ str: String) {}
       func testVar() {

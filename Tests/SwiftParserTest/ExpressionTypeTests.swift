@@ -15,7 +15,7 @@ import XCTest
 
 final class ExpressionTypeTests: XCTestCase {
   func testTypeExpression() {
-    AssertParse("_ = (any Sequence<Int>).self")
+    assertParse("_ = (any Sequence<Int>).self")
   }
 
   /// Test that `canParseType()` succeeds for these generic arguments.
@@ -72,7 +72,7 @@ final class ExpressionTypeTests: XCTestCase {
     ]
 
     for (line, type) in cases {
-      AssertParse(
+      assertParse(
         "G<\(type)>.self",
         ExprSyntax.parse,
         substructure: Syntax(SimpleTypeIdentifierSyntax(name: .identifier("X"))),
@@ -82,7 +82,7 @@ final class ExpressionTypeTests: XCTestCase {
     }
 
     // Void
-    AssertParse(
+    assertParse(
       "G<1️⃣()>.self",
       ExprSyntax.parse,
       substructure: Syntax(TupleTypeSyntax(elements: .init([]))),
@@ -90,7 +90,7 @@ final class ExpressionTypeTests: XCTestCase {
     )
 
     // Any
-    AssertParse(
+    assertParse(
       "G<1️⃣Any>.self",
       ExprSyntax.parse,
       substructure: Syntax(SimpleTypeIdentifierSyntax(name: .keyword(.Any))),
@@ -98,7 +98,7 @@ final class ExpressionTypeTests: XCTestCase {
     )
 
     // Self
-    AssertParse(
+    assertParse(
       "G<1️⃣Self>.self",
       ExprSyntax.parse,
       substructure: Syntax(SimpleTypeIdentifierSyntax(name: .keyword(.Self))),

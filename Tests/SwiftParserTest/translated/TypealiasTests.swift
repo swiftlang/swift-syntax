@@ -16,7 +16,7 @@ import XCTest
 
 final class TypealiasTests: XCTestCase {
   func testTypealias2a() {
-    AssertParse(
+    assertParse(
       """
       typealias IntPair = (Int, Int)
       """
@@ -24,7 +24,7 @@ final class TypealiasTests: XCTestCase {
   }
 
   func testTypealias2b() {
-    AssertParse(
+    assertParse(
       """
       typealias IntTriple = (Int, Int, Int)
       """
@@ -32,7 +32,7 @@ final class TypealiasTests: XCTestCase {
   }
 
   func testTypealias2c() {
-    AssertParse(
+    assertParse(
       """
       typealias FiveInts = (IntPair, IntTriple)
       """
@@ -40,7 +40,7 @@ final class TypealiasTests: XCTestCase {
   }
 
   func testTypealias2d() {
-    AssertParse(
+    assertParse(
       """
       var fiveInts : FiveInts = ((4,2), (1,2,3))
       """
@@ -49,7 +49,7 @@ final class TypealiasTests: XCTestCase {
 
   // <rdar://problem/13339798> QoI: poor diagnostic in malformed typealias
   func testTypealias3a() {
-    AssertParse(
+    assertParse(
       """
       typealias Foo1 1️⃣: Int
       """,
@@ -61,7 +61,7 @@ final class TypealiasTests: XCTestCase {
   }
 
   func testTypealias3b() {
-    AssertParse(
+    assertParse(
       """
       typealias Foo21️⃣: Int
       """,
@@ -73,7 +73,7 @@ final class TypealiasTests: XCTestCase {
   }
 
   func testTypealias3c() {
-    AssertParse(
+    assertParse(
       """
       typealias Foo3 1️⃣:Int
       """,
@@ -85,7 +85,7 @@ final class TypealiasTests: XCTestCase {
   }
 
   func testTypealias3d() {
-    AssertParse(
+    assertParse(
       """
       typealias Foo41️⃣:/*comment*/Int
       """,
@@ -97,7 +97,7 @@ final class TypealiasTests: XCTestCase {
   }
 
   func testTypealias5() {
-    AssertParse(
+    assertParse(
       """
       typealias Recovery11️⃣
       """,
@@ -108,7 +108,7 @@ final class TypealiasTests: XCTestCase {
   }
 
   func testTypealias6() {
-    AssertParse(
+    assertParse(
       """
       typealias Recovery2 1️⃣:2️⃣
       """,
@@ -120,7 +120,7 @@ final class TypealiasTests: XCTestCase {
   }
 
   func testTypealias7() {
-    AssertParse(
+    assertParse(
       """
       typealias Recovery3 =1️⃣
       """,
@@ -131,7 +131,7 @@ final class TypealiasTests: XCTestCase {
   }
 
   func testTypealias8() {
-    AssertParse(
+    assertParse(
       """
       typealias Recovery4 1️⃣: Int
       """,
@@ -142,7 +142,7 @@ final class TypealiasTests: XCTestCase {
   }
 
   func testTypealias9() {
-    AssertParse(
+    assertParse(
       """
       typealias Recovery5 1️⃣: Int2️⃣, Float
       """,
@@ -154,7 +154,7 @@ final class TypealiasTests: XCTestCase {
   }
 
   func testTypealias10() {
-    AssertParse(
+    assertParse(
       """
       typealias Recovery6 = 1️⃣=
       """,
@@ -166,7 +166,7 @@ final class TypealiasTests: XCTestCase {
   }
 
   func testTypealias11() {
-    AssertParse(
+    assertParse(
       """
       typealias 1️⃣switch = Int
       """,

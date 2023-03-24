@@ -33,19 +33,19 @@ final class StringLiteralTests: XCTestCase {
         closeQuote: .stringQuoteToken()
       )
 
-      AssertBuildResult(builder, expected, line: line)
+      assertBuildResult(builder, expected, line: line)
     }
   }
 
   func testRegular() {
-    AssertBuildResult(
+    assertBuildResult(
       StringLiteralExprSyntax(content: "foobar"),
       """
       "foobar"
       """
     )
 
-    AssertBuildResult(
+    assertBuildResult(
       StringLiteralExprSyntax(content: "##foobar"),
       """
       "##foobar"
@@ -54,7 +54,7 @@ final class StringLiteralTests: XCTestCase {
   }
 
   func testEscapeLiteral() {
-    AssertBuildResult(
+    assertBuildResult(
       StringLiteralExprSyntax(content: #""""foobar""#),
       ##"""
       #""""foobar""#
@@ -63,7 +63,7 @@ final class StringLiteralTests: XCTestCase {
   }
 
   func testEscapePounds() {
-    AssertBuildResult(
+    assertBuildResult(
       StringLiteralExprSyntax(content: ###"#####"foobar"##foobar"#foobar"###),
       #####"""
       ###"#####"foobar"##foobar"#foobar"###
@@ -72,7 +72,7 @@ final class StringLiteralTests: XCTestCase {
   }
 
   func testEscapeInteropolation() {
-    AssertBuildResult(
+    assertBuildResult(
       StringLiteralExprSyntax(content: ###"\##(foobar)\#(foobar)"###),
       ####"""
       ###"\##(foobar)\#(foobar)"###
@@ -81,28 +81,28 @@ final class StringLiteralTests: XCTestCase {
   }
 
   func testEscapeBackslash() {
-    AssertBuildResult(
+    assertBuildResult(
       StringLiteralExprSyntax(content: #"\"#),
       ##"""
       #"\"#
       """##
     )
 
-    AssertBuildResult(
+    assertBuildResult(
       StringLiteralExprSyntax(content: ##"\#n"##),
       ##"""
       ##"\#n"##
       """##
     )
 
-    AssertBuildResult(
+    assertBuildResult(
       StringLiteralExprSyntax(content: ##"\#\"##),
       ##"""
       ##"\#\"##
       """##
     )
 
-    AssertBuildResult(
+    assertBuildResult(
       StringLiteralExprSyntax(content: ##"\#"##),
       ##"""
       ##"\#"##
@@ -111,24 +111,24 @@ final class StringLiteralTests: XCTestCase {
   }
 
   func testNewlines() {
-    AssertBuildResult(
+    assertBuildResult(
       StringLiteralExprSyntax(content: "linux\nwindows\r\nunicode\u{2028}a"),
       #""linux\nwindows\r\nunicode\u{2028}a""#
     )
 
-    AssertBuildResult(
+    assertBuildResult(
       StringLiteralExprSyntax(content: "\\linux\nwindows\r\nunicode\u{2028}a"),
       ##"#"\linux\#nwindows\#r\#nunicode\#u{2028}a"#"##
     )
   }
 
   func testNul() {
-    AssertBuildResult(
+    assertBuildResult(
       StringLiteralExprSyntax(content: "before\0after"),
       #""before\0after""#
     )
 
-    AssertBuildResult(
+    assertBuildResult(
       StringLiteralExprSyntax(content: "\\before\0after"),
       ##"#"\before\#0after"#"##
     )
@@ -136,12 +136,12 @@ final class StringLiteralTests: XCTestCase {
 
   func testControlChars() {
     // Note that tabs do *not* get escaped.
-    AssertBuildResult(
+    assertBuildResult(
       StringLiteralExprSyntax(content: "before\u{07}\t\u{7f}after"),
       #""before\u{7}\t\u{7f}after""#
     )
 
-    AssertBuildResult(
+    assertBuildResult(
       StringLiteralExprSyntax(content: "\\before\u{07}\t\u{7f}after"),
       ##"#"\before\#u{7}\#t\#u{7f}after"#"##
     )
@@ -149,7 +149,7 @@ final class StringLiteralTests: XCTestCase {
 
   func testEscapeTab() {
     // Tab should be escaped in single-line string literals
-    AssertBuildResult(
+    assertBuildResult(
       StringLiteralExprSyntax(content: "a\tb"),
       #"""
       "a\tb"
@@ -157,7 +157,7 @@ final class StringLiteralTests: XCTestCase {
     )
 
     // Tab should not be escaped in single-line string literals
-    AssertBuildResult(
+    assertBuildResult(
       StringLiteralExprSyntax(
         openQuote: .multilineStringQuoteToken(trailingTrivia: .newline),
         content: "a\tb",
@@ -178,7 +178,7 @@ final class StringLiteralTests: XCTestCase {
       """#
     )
 
-    AssertBuildResult(
+    assertBuildResult(
       buildable,
       #"""
       "Validation failures: \(nonNilErrors.map({ "- \($0.description)" }).joined(separator: "\n"))"
@@ -189,7 +189,7 @@ final class StringLiteralTests: XCTestCase {
   func testStringSegmentWithCode() {
     let buildable = StringSegmentSyntax(content: .stringSegment(#"\(nonNilErrors.map({ "- \($0.description)" }).joined(separator: "\n"))"#))
 
-    AssertBuildResult(
+    assertBuildResult(
       buildable,
       #"\(nonNilErrors.map({ "- \($0.description)" }).joined(separator: "\n"))"#
     )
@@ -203,7 +203,7 @@ final class StringLiteralTests: XCTestCase {
       StringSegmentSyntax(content: .stringSegment(#"\(nonNilErrors.map({ "- \($0.description)" }).joined(separator: "\n"))"#))
     }
 
-    AssertBuildResult(
+    assertBuildResult(
       buildable,
       #"""
       Error validating child at index \(index) of \(nodeKind):
@@ -230,7 +230,7 @@ final class StringLiteralTests: XCTestCase {
       closeQuote: .multilineStringQuoteToken(leadingTrivia: .newline)
     )
 
-    AssertBuildResult(
+    assertBuildResult(
       buildable,
       #"""
       """
@@ -255,7 +255,7 @@ final class StringLiteralTests: XCTestCase {
       """#
     )
 
-    AssertBuildResult(
+    assertBuildResult(
       buildable,
       #"""
       assertionFailure("""
@@ -281,7 +281,7 @@ final class StringLiteralTests: XCTestCase {
       """#
     )
 
-    AssertBuildResult(
+    assertBuildResult(
       buildable,
       #"""
       if true {
@@ -310,7 +310,7 @@ final class StringLiteralTests: XCTestCase {
       """#
     )
 
-    AssertBuildResult(
+    assertBuildResult(
       buildable,
       #"""
       if true {

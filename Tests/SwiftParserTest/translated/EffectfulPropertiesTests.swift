@@ -16,7 +16,7 @@ import XCTest
 
 final class EffectfulPropertiesTests: XCTestCase {
   func testEffectfulProperties1() {
-    AssertParse(
+    assertParse(
       """
       struct MyProps {
         var prop1 : Int {
@@ -43,7 +43,7 @@ final class EffectfulPropertiesTests: XCTestCase {
   }
 
   func testEffectfulProperties2() {
-    AssertParse(
+    assertParse(
       """
       struct X1 {
         subscript(_ i : Int) -> Int {
@@ -55,7 +55,7 @@ final class EffectfulPropertiesTests: XCTestCase {
   }
 
   func testEffectfulProperties3() {
-    AssertParse(
+    assertParse(
       """
       class X2 {
         subscript(_ i : Int) -> Int {
@@ -67,7 +67,7 @@ final class EffectfulPropertiesTests: XCTestCase {
   }
 
   func testEffectfulProperties4() {
-    AssertParse(
+    assertParse(
       """
       struct X3 {
         subscript(_ i : Int) -> Int {
@@ -79,7 +79,7 @@ final class EffectfulPropertiesTests: XCTestCase {
   }
 
   func testEffectfulProperties5() {
-    AssertParse(
+    assertParse(
       """
       struct BadSubscript1 {
         subscript(_ i : Int) -> Int {
@@ -92,7 +92,7 @@ final class EffectfulPropertiesTests: XCTestCase {
   }
 
   func testEffectfulProperties6() {
-    AssertParse(
+    assertParse(
       """
       struct BadSubscript2 {
         subscript(_ i : Int) -> Int {
@@ -105,7 +105,7 @@ final class EffectfulPropertiesTests: XCTestCase {
   }
 
   func testEffectfulProperties7() {
-    AssertParse(
+    assertParse(
       """
       struct S {
         var prop2 : Int {
@@ -118,7 +118,7 @@ final class EffectfulPropertiesTests: XCTestCase {
   }
 
   func testEffectfulProperties8() {
-    AssertParse(
+    assertParse(
       """
       var prop3 : Bool {
         _read { yield prop3 }
@@ -131,7 +131,7 @@ final class EffectfulPropertiesTests: XCTestCase {
   }
 
   func testEffectfulProperties9() {
-    AssertParse(
+    assertParse(
       """
       enum E {
         private(set) var prop4 : Double {
@@ -145,7 +145,7 @@ final class EffectfulPropertiesTests: XCTestCase {
   }
 
   func testEffectfulProperties10() {
-    AssertParse(
+    assertParse(
       """
       protocol P {
         associatedtype T
@@ -162,7 +162,7 @@ final class EffectfulPropertiesTests: XCTestCase {
   }
 
   func testEffectfulProperties11() {
-    AssertParse(
+    assertParse(
       """
       ///////////////////
       // invalid syntax
@@ -171,7 +171,7 @@ final class EffectfulPropertiesTests: XCTestCase {
   }
 
   func testEffectfulProperties12() {
-    AssertParse(
+    assertParse(
       """
       var bad1 : Int {
         get rethrows { 0 }
@@ -185,7 +185,7 @@ final class EffectfulPropertiesTests: XCTestCase {
   }
 
   func testEffectfulProperties13() {
-    AssertParse(
+    assertParse(
       """
       var bad2 : Int {
         get reasync { 0 }
@@ -199,7 +199,7 @@ final class EffectfulPropertiesTests: XCTestCase {
   }
 
   func testEffectfulProperties14() {
-    AssertParse(
+    assertParse(
       """
       var bad3 : Int {
         _read async { yield 0 }
@@ -210,7 +210,7 @@ final class EffectfulPropertiesTests: XCTestCase {
   }
 
   func testEffectfulProperties15a() {
-    AssertParse(
+    assertParse(
       """
       var bad4 : Int = 0 {
         willSet(theValue) 3️⃣reasync 4️⃣rethrows 1️⃣async 2️⃣throws {}
@@ -224,7 +224,7 @@ final class EffectfulPropertiesTests: XCTestCase {
   }
 
   func testEffectfulProperties15b() {
-    AssertParse(
+    assertParse(
       """
       var bad4 : Int = 0 {
         didSet throws 1️⃣bogus {}
@@ -237,7 +237,7 @@ final class EffectfulPropertiesTests: XCTestCase {
   }
 
   func testEffectfulProperties16() {
-    AssertParse(
+    assertParse(
       """
       var bad5 : Int {
         get 1️⃣bogus rethrows {}
@@ -250,7 +250,7 @@ final class EffectfulPropertiesTests: XCTestCase {
   }
 
   func testEffectfulProperties17() {
-    AssertParse(
+    assertParse(
       """
       var bad6 : Int {
         get rethrows 1️⃣-> Int { 0 }
@@ -263,7 +263,7 @@ final class EffectfulPropertiesTests: XCTestCase {
   }
 
   func testEffectfulProperties18() {
-    AssertParse(
+    assertParse(
       """
       var bad7 : Double {
         get throws 1️⃣async { 3.14 }
@@ -276,7 +276,7 @@ final class EffectfulPropertiesTests: XCTestCase {
   }
 
   func testEffectfulProperties19() {
-    AssertParse(
+    assertParse(
       """
       var bad8 : Double {
         get {}
@@ -290,7 +290,7 @@ final class EffectfulPropertiesTests: XCTestCase {
   }
 
   func testEffectfulProperties20() {
-    AssertParse(
+    assertParse(
       """
       protocol BadP {
         var prop2 : Int { get 1️⃣bogus rethrows set }

@@ -16,7 +16,7 @@ import XCTest
 
 final class OptionalChainLvaluesTests: XCTestCase {
   func testOptionalChainLvalues1() {
-    AssertParse(
+    assertParse(
       """
       struct S {
         var x: Int = 0
@@ -29,7 +29,7 @@ final class OptionalChainLvaluesTests: XCTestCase {
   }
 
   func testOptionalChainLvalues2() {
-    AssertParse(
+    assertParse(
       """
       struct T {
         var mutS: S? = nil
@@ -42,7 +42,7 @@ final class OptionalChainLvaluesTests: XCTestCase {
   }
 
   func testOptionalChainLvalues3() {
-    AssertParse(
+    assertParse(
       """
       var mutT: T?
       let immT: T? = nil
@@ -51,7 +51,7 @@ final class OptionalChainLvaluesTests: XCTestCase {
   }
 
   func testOptionalChainLvalues4() {
-    AssertParse(
+    assertParse(
       """
       postfix operator ++
       prefix operator ++
@@ -60,7 +60,7 @@ final class OptionalChainLvaluesTests: XCTestCase {
   }
 
   func testOptionalChainLvalues5() {
-    AssertParse(
+    assertParse(
       """
       public postfix func ++ <T>(rhs: inout T) -> T { fatalError() }
       public prefix func ++ <T>(rhs: inout T) -> T { fatalError() }
@@ -69,7 +69,7 @@ final class OptionalChainLvaluesTests: XCTestCase {
   }
 
   func testOptionalChainLvalues6() {
-    AssertParse(
+    assertParse(
       """
       mutT?.mutateT()
       immT?.mutateT()
@@ -82,7 +82,7 @@ final class OptionalChainLvaluesTests: XCTestCase {
   }
 
   func testOptionalChainLvalues7() {
-    AssertParse(
+    assertParse(
       """
       // Prefix operators don't chain
       ++mutT?.mutS?.x
@@ -92,7 +92,7 @@ final class OptionalChainLvaluesTests: XCTestCase {
   }
 
   func testOptionalChainLvalues8() {
-    AssertParse(
+    assertParse(
       """
       mutT? = T()
       mutT?.mutS = S()

@@ -20,7 +20,7 @@ final class ProtocolDeclTests: XCTestCase {
       DeclSyntax("func buildDeclList(format: Format, leadingTrivia: Trivia?) -> [DeclSyntax]")
     }
 
-    AssertBuildResult(
+    assertBuildResult(
       buildable,
       """
       public protocol DeclListBuildable {

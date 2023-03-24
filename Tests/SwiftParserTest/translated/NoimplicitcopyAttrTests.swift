@@ -16,7 +16,7 @@ import XCTest
 
 final class NoimplicitcopyAttrTests: XCTestCase {
   func testNoimplicitcopyAttr1() {
-    AssertParse(
+    assertParse(
       """
       f// RUN: %target-typecheck-verify-swift -parse -parse-stdlib -disable-availability-checking -verify-syntax-tree
       """
@@ -24,7 +24,7 @@ final class NoimplicitcopyAttrTests: XCTestCase {
   }
 
   func testNoimplicitcopyAttr2() {
-    AssertParse(
+    assertParse(
       """
       import Swift
       """
@@ -32,7 +32,7 @@ final class NoimplicitcopyAttrTests: XCTestCase {
   }
 
   func testNoimplicitcopyAttr3() {
-    AssertParse(
+    assertParse(
       """
       class Klass {}
       """
@@ -40,7 +40,7 @@ final class NoimplicitcopyAttrTests: XCTestCase {
   }
 
   func testNoimplicitcopyAttr4() {
-    AssertParse(
+    assertParse(
       """
       func argumentsAndReturns(@_noImplicitCopy _ x: Klass) -> Klass {
           return x
@@ -50,7 +50,7 @@ final class NoimplicitcopyAttrTests: XCTestCase {
   }
 
   func testNoimplicitcopyAttr5() {
-    AssertParse(
+    assertParse(
       """
       func letDecls(@_noImplicitCopy  _ x: Klass) -> () {
           @_noImplicitCopy let y: Klass = x
@@ -61,7 +61,7 @@ final class NoimplicitcopyAttrTests: XCTestCase {
   }
 
   func testNoimplicitcopyAttr6() {
-    AssertParse(
+    assertParse(
       """
       func varDecls(@_noImplicitCopy _ x: Klass, @_noImplicitCopy _ x2: Klass) -> () {
           @_noImplicitCopy var y: Klass = x
@@ -73,7 +73,7 @@ final class NoimplicitcopyAttrTests: XCTestCase {
   }
 
   func testNoimplicitcopyAttr7() {
-    AssertParse(
+    assertParse(
       """
       func getKlass() -> Builtin.NativeObject {
           let k = Klass()
@@ -85,7 +85,7 @@ final class NoimplicitcopyAttrTests: XCTestCase {
   }
 
   func testNoimplicitcopyAttr8() {
-    AssertParse(
+    assertParse(
       """
       @_noImplicitCopy var g: Builtin.NativeObject = getKlass()
       @_noImplicitCopy let g2: Builtin.NativeObject = getKlass()

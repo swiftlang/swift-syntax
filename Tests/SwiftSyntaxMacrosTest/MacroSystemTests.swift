@@ -633,7 +633,7 @@ extension CustomTypeWrapperMacro: AccessorMacro {
 ///     macros in various places (e.g., `#stringify(x + y)`).
 ///   - expandedSource: The source code that we expect to see after performing
 ///     macro expansion on the original source.
-public func AssertMacroExpansion(
+public func assertMacroExpansion(
   macros: [String: Macro.Type],
   testModuleName: String = "TestModule",
   testFileName: String = "test.swift",
@@ -652,7 +652,7 @@ public func AssertMacroExpansion(
   )
   let expandedSourceFile = origSourceFile.expand(macros: macros, in: context)
 
-  AssertStringsEqualWithDiff(
+  assertStringsEqualWithDiff(
     expandedSourceFile.description,
     expandedSource,
     file: file,
@@ -689,7 +689,7 @@ public let testMacros: [String: Macro.Type] = [
 
 final class MacroSystemTests: XCTestCase {
   func testExpressionExpansion() {
-    AssertMacroExpansion(
+    assertMacroExpansion(
       macros: testMacros,
       """
       let b = #stringify(x + y)
@@ -703,7 +703,7 @@ final class MacroSystemTests: XCTestCase {
   }
 
   func testStringifyExpression() {
-    AssertMacroExpansion(
+    assertMacroExpansion(
       macros: ["stringify": StringifyMacro.self],
       """
       _ = #stringify({ () -> Bool in
@@ -721,7 +721,7 @@ final class MacroSystemTests: XCTestCase {
   }
 
   func testLocationExpansions() {
-    AssertMacroExpansion(
+    assertMacroExpansion(
       macros: testMacros,
       testModuleName: "MyModule",
       testFileName: "taylor.swift",
@@ -747,7 +747,7 @@ final class MacroSystemTests: XCTestCase {
   }
 
   func testContextIndependence() {
-    AssertMacroExpansion(
+    assertMacroExpansion(
       macros: ["checkContext": CheckContextIndependenceMacro.self],
       """
       let b = #checkContext
@@ -759,7 +759,7 @@ final class MacroSystemTests: XCTestCase {
   }
 
   func testErrorExpansion() {
-    AssertMacroExpansion(
+    assertMacroExpansion(
       macros: testMacros,
       """
       #myError("please don't do that")
@@ -788,7 +788,7 @@ final class MacroSystemTests: XCTestCase {
   }
 
   func testBitwidthNumberedStructsExpansion() {
-    AssertMacroExpansion(
+    assertMacroExpansion(
       macros: testMacros,
       """
       #bitwidthNumberedStructs("MyInt")
@@ -804,7 +804,7 @@ final class MacroSystemTests: XCTestCase {
   }
 
   func testPropertyWrapper() {
-    AssertMacroExpansion(
+    assertMacroExpansion(
       macros: testMacros,
       """
       @wrapProperty("MyWrapperType")
@@ -826,7 +826,7 @@ final class MacroSystemTests: XCTestCase {
   }
 
   func testAddCompletionHandler() {
-    AssertMacroExpansion(
+    assertMacroExpansion(
       macros: testMacros,
       """
       @addCompletionHandler
@@ -846,7 +846,7 @@ final class MacroSystemTests: XCTestCase {
   }
 
   func testAddBackingStorage() {
-    AssertMacroExpansion(
+    assertMacroExpansion(
       macros: testMacros,
       """
       @addBackingStorage
@@ -865,7 +865,7 @@ final class MacroSystemTests: XCTestCase {
   }
 
   func testWrapAllProperties() {
-    AssertMacroExpansion(
+    assertMacroExpansion(
       macros: testMacros,
       """
       @wrapAllProperties
@@ -901,7 +901,7 @@ final class MacroSystemTests: XCTestCase {
       """
     )
 
-    AssertMacroExpansion(
+    assertMacroExpansion(
       macros: testMacros,
       """
       @wrapStoredProperties
@@ -941,7 +941,7 @@ final class MacroSystemTests: XCTestCase {
   }
 
   func testTypeWrapperTransform() {
-    AssertMacroExpansion(
+    assertMacroExpansion(
       macros: testMacros,
       """
       @customTypeWrapper

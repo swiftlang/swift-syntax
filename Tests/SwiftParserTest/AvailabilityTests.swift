@@ -16,7 +16,7 @@ import XCTest
 
 final class AvailabilityTests: XCTestCase {
   func testAvailableMember() {
-    AssertParse(
+    assertParse(
       """
       @available(OSX 10.0, introduced: 10.12)
       // expected-error@-1 {{'introduced' can't be combined with shorthand specification 'OSX 10.0'}}
@@ -25,14 +25,14 @@ final class AvailabilityTests: XCTestCase {
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       @available(iOS 6.0, OSX 10.8, *)
       func availableOnMultiplePlatforms() {}
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       class IncrementalParseTransition {
         @available(*, deprecated, message: "Use the initializer taking 'ConcurrentEdits' instead")
@@ -41,7 +41,7 @@ final class AvailabilityTests: XCTestCase {
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       extension String {
         @available(macOS 10.15.4, iOS 13.4, watchOS 6.2, tvOS 13.4, *)
@@ -53,7 +53,7 @@ final class AvailabilityTests: XCTestCase {
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       @available(
         iOSApplicationExtension,
@@ -67,14 +67,14 @@ final class AvailabilityTests: XCTestCase {
   }
 
   func testAvailabilityMacros() {
-    AssertParse(
+    assertParse(
       """
       @available(_iOS9, _macOS10_11, tvOS 11.0, *)
       public func composed() {}
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       @_specialize(exported: true, availability: SwiftStdlib 5.1, *; where T == Int)
       public func testSemanticsAvailability<T>(_ t: T) {}
@@ -83,7 +83,7 @@ final class AvailabilityTests: XCTestCase {
   }
 
   func testSPIAvailabilityAttribute() {
-    AssertParse(
+    assertParse(
       """
       @_spi_available(*, deprecated, renamed: "another")
       public class SPIClass1 {}

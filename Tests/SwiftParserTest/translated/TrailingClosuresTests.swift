@@ -17,7 +17,7 @@ import XCTest
 
 final class TrailingClosuresTests: XCTestCase {
   func testTrailingClosures1() {
-    AssertParse(
+    assertParse(
       """
       func foo<T, U>(a: () -> T, b: () -> U) {}
       """
@@ -25,7 +25,7 @@ final class TrailingClosuresTests: XCTestCase {
   }
 
   func testTrailingClosures2() {
-    AssertParse(
+    assertParse(
       #"""
       foo { 42 }
       b: { "" }
@@ -34,7 +34,7 @@ final class TrailingClosuresTests: XCTestCase {
   }
 
   func testTrailingClosures3() {
-    AssertParse(
+    assertParse(
       #"""
       foo { 42 } b: { "" }
       """#
@@ -42,7 +42,7 @@ final class TrailingClosuresTests: XCTestCase {
   }
 
   func testTrailingClosures4() {
-    AssertParse(
+    assertParse(
       """
       func when<T>(_ condition: @autoclosure () -> Bool,
                    `then` trueBranch: () -> T,
@@ -54,7 +54,7 @@ final class TrailingClosuresTests: XCTestCase {
   }
 
   func testTrailingClosures5() {
-    AssertParse(
+    assertParse(
       """
       let _ = when (2 < 3) { 3 } else: { 4 }
       """
@@ -62,7 +62,7 @@ final class TrailingClosuresTests: XCTestCase {
   }
 
   func testTrailingClosures6() {
-    AssertParse(
+    assertParse(
       """
       struct S {
         static func foo(a: Int = 42, b: (inout Int) -> Void) -> S {
@@ -89,7 +89,7 @@ final class TrailingClosuresTests: XCTestCase {
   }
 
   func testTrailingClosures7() {
-    AssertParse(
+    assertParse(
       """
       let _: S = .foo {
         $0 = $0 + 1
@@ -99,7 +99,7 @@ final class TrailingClosuresTests: XCTestCase {
   }
 
   func testTrailingClosures8() {
-    AssertParse(
+    assertParse(
       """
       let _: S = .foo {} b: { $0 = $0 + 1 }
       """
@@ -107,7 +107,7 @@ final class TrailingClosuresTests: XCTestCase {
   }
 
   func testTrailingClosures9() {
-    AssertParse(
+    assertParse(
       """
       func bar(_ s: S) {
         _ = s[] {
@@ -132,7 +132,7 @@ final class TrailingClosuresTests: XCTestCase {
   }
 
   func testTrailingClosures10() {
-    AssertParse(
+    assertParse(
       """
       func multiple_trailing_with_defaults(
         duration: Int,
@@ -143,7 +143,7 @@ final class TrailingClosuresTests: XCTestCase {
   }
 
   func testTrailingClosures11() {
-    AssertParse(
+    assertParse(
       """
       multiple_trailing_with_defaults(duration: 42) {}
       """
@@ -151,7 +151,7 @@ final class TrailingClosuresTests: XCTestCase {
   }
 
   func testTrailingClosures12() {
-    AssertParse(
+    assertParse(
       """
       multiple_trailing_with_defaults(duration: 42) {} completion: {}
       """
@@ -159,7 +159,7 @@ final class TrailingClosuresTests: XCTestCase {
   }
 
   func testTrailingClosures13a() {
-    AssertParse(
+    assertParse(
       """
       fn {} g: {}
       fn {} _: {}
@@ -174,7 +174,7 @@ final class TrailingClosuresTests: XCTestCase {
   }
 
   func testTrailingClosures13b() {
-    AssertParse(
+    assertParse(
       """
       fn {} g: 1️⃣<#T##() -> Void#>
       """,
@@ -201,7 +201,7 @@ final class TrailingClosuresTests: XCTestCase {
 
   func testTrailingClosures14() {
     // TODO: The diagnostics here are perhaps a little overboard.
-    AssertParse(
+    assertParse(
       """
       func produce(fn: () -> Int?, default d: () -> Int) -> Int {
         return fn() ?? d()
@@ -217,7 +217,7 @@ final class TrailingClosuresTests: XCTestCase {
   }
 
   func testTrailingClosures15() {
-    AssertParse(
+    assertParse(
       """
       func f() -> Int { 42 }
       """
@@ -225,7 +225,7 @@ final class TrailingClosuresTests: XCTestCase {
   }
 
   func testTrailingClosures16() {
-    AssertParse(
+    assertParse(
       """
       // This should be interpreted as a trailing closure, instead of being
       // interpreted as a computed property with undesired initial value.

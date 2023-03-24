@@ -17,7 +17,7 @@ import SwiftSyntaxBuilder
 import XCTest
 import _SwiftSyntaxTestSupport
 
-func AssertRefactorIfLet(
+func assertRefactorIfLet(
   _ syntax: ExprSyntax,
   expected: ExprSyntax,
   file: StaticString = #file,
@@ -35,7 +35,7 @@ func AssertRefactorIfLet(
     line: line
   )
 
-  AssertStringsEqualWithDiff(
+  assertStringsEqualWithDiff(
     expected.description,
     refactored.description,
     file: file,
@@ -53,7 +53,7 @@ final class MigrateToNewIfLetSyntaxTest: XCTestCase {
       if let x {}
       """
 
-    try AssertRefactorIfLet(baselineSyntax, expected: expectedSyntax)
+    try assertRefactorIfLet(baselineSyntax, expected: expectedSyntax)
   }
 
   func testIdempotence() throws {
@@ -65,8 +65,8 @@ final class MigrateToNewIfLetSyntaxTest: XCTestCase {
       if let x {}
       """
 
-    try AssertRefactorIfLet(baselineSyntax, expected: expectedSyntax)
-    try AssertRefactorIfLet(expectedSyntax, expected: expectedSyntax)
+    try assertRefactorIfLet(baselineSyntax, expected: expectedSyntax)
+    try assertRefactorIfLet(expectedSyntax, expected: expectedSyntax)
   }
 
   func testMultiBinding() throws {
@@ -78,7 +78,7 @@ final class MigrateToNewIfLetSyntaxTest: XCTestCase {
       if let x, var y, let z {}
       """
 
-    try AssertRefactorIfLet(baselineSyntax, expected: expectedSyntax)
+    try assertRefactorIfLet(baselineSyntax, expected: expectedSyntax)
   }
 
   func testMixedBinding() throws {
@@ -90,7 +90,7 @@ final class MigrateToNewIfLetSyntaxTest: XCTestCase {
       if let x, var y = x, let z = y.w {}
       """
 
-    try AssertRefactorIfLet(baselineSyntax, expected: expectedSyntax)
+    try assertRefactorIfLet(baselineSyntax, expected: expectedSyntax)
   }
 
   func testConditions() throws {
@@ -102,7 +102,7 @@ final class MigrateToNewIfLetSyntaxTest: XCTestCase {
       if let x = x + 1, x == x, !x {}
       """
 
-    try AssertRefactorIfLet(baselineSyntax, expected: expectedSyntax)
+    try assertRefactorIfLet(baselineSyntax, expected: expectedSyntax)
   }
 
   func testWhitespaceNormalization() throws {
@@ -114,7 +114,7 @@ final class MigrateToNewIfLetSyntaxTest: XCTestCase {
       if let x, let y {}
       """
 
-    try AssertRefactorIfLet(baselineSyntax, expected: expectedSyntax)
+    try assertRefactorIfLet(baselineSyntax, expected: expectedSyntax)
   }
 
   func testIfStmt() throws {
@@ -127,6 +127,6 @@ final class MigrateToNewIfLetSyntaxTest: XCTestCase {
       """
 
     let exprStmt = try XCTUnwrap(baselineSyntax.as(ExpressionStmtSyntax.self))
-    try AssertRefactorIfLet(exprStmt.expression, expected: expectedSyntax)
+    try assertRefactorIfLet(exprStmt.expression, expected: expectedSyntax)
   }
 }

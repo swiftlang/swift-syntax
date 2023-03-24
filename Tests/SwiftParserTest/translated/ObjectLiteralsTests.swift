@@ -16,7 +16,7 @@ import XCTest
 
 final class ObjectLiteralsTests: XCTestCase {
   func testObjectLiterals1a() {
-    AssertParse(
+    assertParse(
       """
       let _ = [#Color(colorLiteralRed: red, green: green, blue: blue, alpha: alpha)#1️⃣]
       """,
@@ -27,7 +27,7 @@ final class ObjectLiteralsTests: XCTestCase {
   }
 
   func testObjectLiterals1b() {
-    AssertParse(
+    assertParse(
       """
       let _ = [#Image(imageLiteral: localResourceNameAsString)#1️⃣]
       """,
@@ -38,7 +38,7 @@ final class ObjectLiteralsTests: XCTestCase {
   }
 
   func testObjectLiterals1c() {
-    AssertParse(
+    assertParse(
       """
       let _ = [#FileReference(fileReferenceLiteral: localResourceNameAsString)#1️⃣]
       """,
@@ -49,7 +49,7 @@ final class ObjectLiteralsTests: XCTestCase {
   }
 
   func testObjectLiterals2a() {
-    AssertParse(
+    assertParse(
       """
       let _ = #Color(colorLiteralRed: red, green: green, blue: blue, alpha: alpha)
       """
@@ -57,7 +57,7 @@ final class ObjectLiteralsTests: XCTestCase {
   }
 
   func testObjectLiterals2b() {
-    AssertParse(
+    assertParse(
       """
       let _ = #Image(imageLiteral: localResourceNameAsString)
       """
@@ -65,7 +65,7 @@ final class ObjectLiteralsTests: XCTestCase {
   }
 
   func testObjectLiterals2c() {
-    AssertParse(
+    assertParse(
       """
       let _ = #FileReference(fileReferenceLiteral: localResourceNameAsString)
       """
@@ -73,7 +73,7 @@ final class ObjectLiteralsTests: XCTestCase {
   }
 
   func testObjectLiterals3a() {
-    AssertParse(
+    assertParse(
       """
       let _ = #notAPound
       """
@@ -81,7 +81,7 @@ final class ObjectLiteralsTests: XCTestCase {
   }
 
   func testObjectLiterals3b() {
-    AssertParse(
+    assertParse(
       """
       let _ = #notAPound(1, 2)
       """
@@ -89,7 +89,7 @@ final class ObjectLiteralsTests: XCTestCase {
   }
 
   func testObjectLiterals3c() {
-    AssertParse(
+    assertParse(
       """
       let _ = #Color
       """
@@ -97,7 +97,7 @@ final class ObjectLiteralsTests: XCTestCase {
   }
 
   func testObjectLiterals4() {
-    AssertParse(
+    assertParse(
       """
       let _ = [#1️⃣#2️⃣]
       """,
@@ -109,7 +109,7 @@ final class ObjectLiteralsTests: XCTestCase {
   }
 
   func testObjectLiterals5() {
-    AssertParse(
+    assertParse(
       """
       let _ = [#Color(_: 1, green: 1, 2)2️⃣
       """,
@@ -120,7 +120,7 @@ final class ObjectLiteralsTests: XCTestCase {
   }
 
   func testObjectLiterals6() {
-    AssertParse(
+    assertParse(
       """
       let _ = [1️⃣#Color(red: 1, green: 1, blue: 1)#2️⃣3️⃣
       """,
@@ -132,7 +132,7 @@ final class ObjectLiteralsTests: XCTestCase {
   }
 
   func testObjectLiterals7() {
-    AssertParse(
+    assertParse(
       """
       let _ = [#Color(withRed: 1, green: 1, whatever: 2)#1️⃣]
       """,
@@ -143,7 +143,7 @@ final class ObjectLiteralsTests: XCTestCase {
   }
 
   func testObjectLiterals8() {
-    AssertParse(
+    assertParse(
       """
       let _ = #Color(_: 1, green: 1)
       """

@@ -16,7 +16,7 @@ import XCTest
 
 final class ForeachAsyncTests: XCTestCase {
   func testForeachAsync1() {
-    AssertParse(
+    assertParse(
       """
       import _Concurrency
       """
@@ -24,7 +24,7 @@ final class ForeachAsyncTests: XCTestCase {
   }
 
   func testForeachAsync2() {
-    AssertParse(
+    assertParse(
       """
       struct AsyncRange<Bound: Comparable & Strideable>: AsyncSequence, AsyncIteratorProtocol where Bound.Stride : SignedInteger {
         var range: Range<Bound>.Iterator
@@ -38,7 +38,7 @@ final class ForeachAsyncTests: XCTestCase {
   }
 
   func testForeachAsync3() {
-    AssertParse(
+    assertParse(
       """
       struct AsyncIntRange<Int> : AsyncSequence, AsyncIteratorProtocol {
         typealias Element = (Int, Int)
@@ -52,7 +52,7 @@ final class ForeachAsyncTests: XCTestCase {
   }
 
   func testForeachAsync4() {
-    AssertParse(
+    assertParse(
       """
       func for_each(r: AsyncRange<Int>, iir: AsyncIntRange<Int>) async {
         var sum = 0

@@ -16,7 +16,7 @@ import XCTest
 
 final class InvalidIfExprTests: XCTestCase {
   func testInvalidIfExpr1() {
-    AssertParse(
+    assertParse(
       """
       (a ? b1️⃣)
       """,
@@ -28,7 +28,7 @@ final class InvalidIfExprTests: XCTestCase {
   }
 
   func testInvalidIfExpr2() {
-    AssertParse(
+    assertParse(
       """
       (a ? b : c ? d1️⃣)
       """,
@@ -40,7 +40,7 @@ final class InvalidIfExprTests: XCTestCase {
   }
 
   func testInvalidIfExpr3() {
-    AssertParse(
+    assertParse(
       """
       (a ? b ? c : d1️⃣
       """,
@@ -53,7 +53,7 @@ final class InvalidIfExprTests: XCTestCase {
   }
 
   func testInvalidIfExpr4() {
-    AssertParse(
+    assertParse(
       """
       (a ? b ? c1️⃣)
       """,

@@ -16,7 +16,7 @@ import XCTest
 
 final class ActorTests: XCTestCase {
   func testActor1() {
-    AssertParse(
+    assertParse(
       """
       actor MyActor11️⃣
       """,
@@ -27,7 +27,7 @@ final class ActorTests: XCTestCase {
   }
 
   func testActor2() {
-    AssertParse(
+    assertParse(
       """
       actor MyActor2 ℹ️{
           init() {

@@ -16,7 +16,7 @@ import XCTest
 
 final class ToplevelLibraryTests: XCTestCase {
   func testToplevelLibrary1() {
-    AssertParse(
+    assertParse(
       """
       // make sure trailing semicolons are valid syntax in toplevel library code.
       var x = 4;
@@ -25,7 +25,7 @@ final class ToplevelLibraryTests: XCTestCase {
   }
 
   func testToplevelLibraryInvalid1() {
-    AssertParse(
+    assertParse(
       """
       let x = 42
       x + x;
@@ -38,7 +38,7 @@ final class ToplevelLibraryTests: XCTestCase {
   }
 
   func testToplevelLibraryInvalid2() {
-    AssertParse(
+    assertParse(
       """
       for i1️⃣
       """,

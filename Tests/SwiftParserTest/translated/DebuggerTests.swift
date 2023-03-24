@@ -16,7 +16,7 @@ import XCTest
 
 final class DebuggerTests: XCTestCase {
   func testDebugger1() {
-    AssertParse(
+    assertParse(
       """
       import Nonexistent_Module
       """
@@ -24,7 +24,7 @@ final class DebuggerTests: XCTestCase {
   }
 
   func testDebugger2() {
-    AssertParse(
+    assertParse(
       """
       var ($x0, $x1) = (4, 3)
       var z = $x0 + $x1
@@ -33,7 +33,7 @@ final class DebuggerTests: XCTestCase {
   }
 
   func testDebugger3() {
-    AssertParse(
+    assertParse(
       """
       z // no error.
       """
@@ -41,7 +41,7 @@ final class DebuggerTests: XCTestCase {
   }
 
   func testDebugger4() {
-    AssertParse(
+    assertParse(
       """
       var x: Double = z
       """

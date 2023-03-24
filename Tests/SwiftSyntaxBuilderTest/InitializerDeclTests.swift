@@ -24,7 +24,7 @@ final class InitializerDeclTests: XCTestCase {
       """
     )
 
-    AssertBuildResult(
+    assertBuildResult(
       builder,
       """
       public init(errorCode: Int) {
@@ -44,7 +44,7 @@ final class InitializerDeclTests: XCTestCase {
       """
     )
 
-    AssertBuildResult(
+    assertBuildResult(
       builder,
       """
       public init?(errorCode: Int) {
@@ -72,7 +72,7 @@ final class InitializerDeclTests: XCTestCase {
       """
     )
 
-    AssertBuildResult(
+    assertBuildResult(
       builder,
       """
       init(

@@ -16,7 +16,7 @@ import XCTest
 
 final class DollarIdentifierTests: XCTestCase {
   func testDollarIdentifier1() {
-    AssertParse(
+    assertParse(
       """
       // https://github.com/apple/swift/issues/44270
       // Dollar was accidentally allowed as an identifier in Swift 3.
@@ -26,7 +26,7 @@ final class DollarIdentifierTests: XCTestCase {
   }
 
   func testDollarIdentifier2a() {
-    AssertParse(
+    assertParse(
       """
       func dollarVar() {
         var 1️⃣$ : Int = 42
@@ -41,7 +41,7 @@ final class DollarIdentifierTests: XCTestCase {
   }
 
   func testDollarIdentifier2b() {
-    AssertParse(
+    assertParse(
       """
       func dollarLet() {
         let 1️⃣$ = 42
@@ -55,7 +55,7 @@ final class DollarIdentifierTests: XCTestCase {
   }
 
   func testDollarIdentifier2c() {
-    AssertParse(
+    assertParse(
       """
       func dollarClass() {
         class 1️⃣$ {}
@@ -73,7 +73,7 @@ final class DollarIdentifierTests: XCTestCase {
   }
 
   func testDollarIdentifier2d() {
-    AssertParse(
+    assertParse(
       """
       func dollarEnum() {
         enum 1️⃣$ {}
@@ -86,7 +86,7 @@ final class DollarIdentifierTests: XCTestCase {
   }
 
   func testDollarIdentifier2e() {
-    AssertParse(
+    assertParse(
       """
       func dollarStruct() {
         struct 1️⃣$ {}
@@ -99,7 +99,7 @@ final class DollarIdentifierTests: XCTestCase {
   }
 
   func testDollarIdentifier3a() {
-    AssertParse(
+    assertParse(
       """
       func 1️⃣$(2️⃣$ dollarParam: Int) {}
       """,
@@ -112,7 +112,7 @@ final class DollarIdentifierTests: XCTestCase {
   }
 
   func testDollarIdentifier3b() {
-    AssertParse(
+    assertParse(
       """
       $(1️⃣$: 24)
       """,
@@ -123,7 +123,7 @@ final class DollarIdentifierTests: XCTestCase {
   }
 
   func testDollarIdentifier4() {
-    AssertParse(
+    assertParse(
       """
       func escapedDollarVar() {
         var `$` : Int = 42 // no error
@@ -148,7 +148,7 @@ final class DollarIdentifierTests: XCTestCase {
   }
 
   func testDollarIdentifier5() {
-    AssertParse(
+    assertParse(
       """
       func escapedDollarFunc() {
         func `$`(`$`: Int) {} // no error
@@ -159,7 +159,7 @@ final class DollarIdentifierTests: XCTestCase {
   }
 
   func testDollarIdentifier6() {
-    AssertParse(
+    assertParse(
       """
       func escapedDollarAnd() {
         // FIXME: Bad diagnostics.
@@ -175,7 +175,7 @@ final class DollarIdentifierTests: XCTestCase {
   }
 
   func testDollarIdentifier7() {
-    AssertParse(
+    assertParse(
       """
       // Test that we disallow user-defined $-prefixed identifiers. However, the error
       // should not be emitted on $-prefixed identifiers that are not considered
@@ -185,7 +185,7 @@ final class DollarIdentifierTests: XCTestCase {
   }
 
   func testDollarIdentifier8() {
-    AssertParse(
+    assertParse(
       """
       func $declareWithDollar() {
         var $foo: Int {
@@ -229,7 +229,7 @@ final class DollarIdentifierTests: XCTestCase {
   }
 
   func testDollarIdentifier9() {
-    AssertParse(
+    assertParse(
       """
       // https://github.com/apple/swift/issues/55672
       """
@@ -237,7 +237,7 @@ final class DollarIdentifierTests: XCTestCase {
   }
 
   func testDollarIdentifier10() {
-    AssertParse(
+    assertParse(
       """
       @propertyWrapper
       struct Wrapper {
@@ -249,7 +249,7 @@ final class DollarIdentifierTests: XCTestCase {
   }
 
   func testDollarIdentifier11() {
-    AssertParse(
+    assertParse(
       """
       struct S {
         @Wrapper var café = 42
@@ -259,7 +259,7 @@ final class DollarIdentifierTests: XCTestCase {
   }
 
   func testDollarIdentifier12() {
-    AssertParse(
+    assertParse(
       """
       let _ = S().$café // Okay
       """
@@ -268,7 +268,7 @@ final class DollarIdentifierTests: XCTestCase {
 
   func testDollarIdentifier13() {
     // https://github.com/apple/swift/issues/55538
-    AssertParse(
+    assertParse(
       """
       infix operator 1️⃣$
       """,
@@ -280,7 +280,7 @@ final class DollarIdentifierTests: XCTestCase {
 
   func testDollarIdentifier14() {
     // https://github.com/apple/swift/issues/55538
-    AssertParse(
+    assertParse(
       """
       infix operator 1️⃣`$`
       """,

@@ -16,7 +16,7 @@ import XCTest
 
 final class GuardTopLevelTests: XCTestCase {
   func testGuardTopLevel1() {
-    AssertParse(
+    assertParse(
       """
       let a: Int? = 1
       guard let b = a else {
@@ -26,7 +26,7 @@ final class GuardTopLevelTests: XCTestCase {
   }
 
   func testGuardTopLevel2() {
-    AssertParse(
+    assertParse(
       """
       func foo() {} // to interrupt the TopLevelCodeDecl
       """
@@ -34,7 +34,7 @@ final class GuardTopLevelTests: XCTestCase {
   }
 
   func testGuardTopLevel3() {
-    AssertParse(
+    assertParse(
       """
       let c = b
       """

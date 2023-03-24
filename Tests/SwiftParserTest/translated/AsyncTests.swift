@@ -16,7 +16,7 @@ import XCTest
 
 final class AsyncTests: XCTestCase {
   func testAsync1() {
-    AssertParse(
+    assertParse(
       """
       // Parsing function declarations with 'async'
       func asyncGlobal1() async { }
@@ -26,7 +26,7 @@ final class AsyncTests: XCTestCase {
   }
 
   func testAsync2() {
-    AssertParse(
+    assertParse(
       "func asyncGlobal3() throws 1️⃣async { }",
       diagnostics: [
         DiagnosticSpec(message: "'async' must precede 'throws'", fixIts: ["move 'async' in front of 'throws'"])
@@ -36,7 +36,7 @@ final class AsyncTests: XCTestCase {
   }
 
   func testAsync3() {
-    AssertParse(
+    assertParse(
       "func asyncGlobal3(fn: () throws -> Int) rethrows 1️⃣async { }",
       diagnostics: [
         DiagnosticSpec(message: "'async' must precede 'rethrows'", fixIts: ["move 'async' in front of 'rethrows'"])
@@ -46,7 +46,7 @@ final class AsyncTests: XCTestCase {
   }
 
   func testAsync4() {
-    AssertParse(
+    assertParse(
       "func asyncGlobal4() -> Int 1️⃣async { }",
       diagnostics: [
         DiagnosticSpec(message: "'async' must preceed '->'", fixIts: ["move 'async' in front of '->'"])
@@ -56,7 +56,7 @@ final class AsyncTests: XCTestCase {
   }
 
   func testAsync5() {
-    AssertParse(
+    assertParse(
       "func asyncGlobal5() -> Int 1️⃣async throws { }",
       diagnostics: [
         DiagnosticSpec(message: "'async throws' must preceed '->'")
@@ -66,7 +66,7 @@ final class AsyncTests: XCTestCase {
   }
 
   func testAsync6() {
-    AssertParse(
+    assertParse(
       "func asyncGlobal6() -> Int 1️⃣throws async { }",
       diagnostics: [
         DiagnosticSpec(message: "'throws async' must preceed '->'", fixIts: ["move 'throws async' in front of '->'"])
@@ -76,7 +76,7 @@ final class AsyncTests: XCTestCase {
   }
 
   func testAsync7() {
-    AssertParse(
+    assertParse(
       "func asyncGlobal7() throws -> Int 1️⃣async { }",
       diagnostics: [
         DiagnosticSpec(message: "'async' must preceed '->'")
@@ -86,7 +86,7 @@ final class AsyncTests: XCTestCase {
   }
 
   func testAsync8() {
-    AssertParse(
+    assertParse(
       """
       func asyncGlobal8() async throws 1️⃣async -> 2️⃣async Int 3️⃣async {}
       """,
@@ -102,7 +102,7 @@ final class AsyncTests: XCTestCase {
   }
 
   func testAsync9() {
-    AssertParse(
+    assertParse(
       """
       class X {
         init() async { }
@@ -125,7 +125,7 @@ final class AsyncTests: XCTestCase {
   }
 
   func testAsync10a() {
-    AssertParse(
+    assertParse(
       """
       typealias AsyncFunc1 = () async -> ()
       """
@@ -133,7 +133,7 @@ final class AsyncTests: XCTestCase {
   }
 
   func testAsync10b() {
-    AssertParse(
+    assertParse(
       """
       typealias AsyncFunc2 = () async throws -> ()
       """
@@ -141,7 +141,7 @@ final class AsyncTests: XCTestCase {
   }
 
   func testAsync10c() {
-    AssertParse(
+    assertParse(
       "typealias AsyncFunc3 = () throws 1️⃣async -> ()",
       diagnostics: [
         DiagnosticSpec(message: "'async' must precede 'throws'")
@@ -151,7 +151,7 @@ final class AsyncTests: XCTestCase {
   }
 
   func testAsync11a() {
-    AssertParse(
+    assertParse(
       """
       let _ = [() async -> ()]()
       """
@@ -159,7 +159,7 @@ final class AsyncTests: XCTestCase {
   }
 
   func testAsync11b() {
-    AssertParse(
+    assertParse(
       """
       let _ = [() async throws -> ()]()
       """
@@ -167,7 +167,7 @@ final class AsyncTests: XCTestCase {
   }
 
   func testAsync11c() {
-    AssertParse(
+    assertParse(
       "let _ = [() throws 1️⃣async -> ()]()",
       diagnostics: [
         DiagnosticSpec(message: "'async' must precede 'throws'")
@@ -177,7 +177,7 @@ final class AsyncTests: XCTestCase {
   }
 
   func testAsync11d() {
-    AssertParse(
+    assertParse(
       """
       let _ = [() -> 1️⃣async ()]()
       """,
@@ -188,7 +188,7 @@ final class AsyncTests: XCTestCase {
   }
 
   func testAsync12() {
-    AssertParse(
+    assertParse(
       """
       // Parsing await syntax.
       struct MyFuture {
@@ -199,7 +199,7 @@ final class AsyncTests: XCTestCase {
   }
 
   func testAsync13() {
-    AssertParse(
+    assertParse(
       """
       func testAwaitExpr() async {
         let _ = await asyncGlobal1()
@@ -211,7 +211,7 @@ final class AsyncTests: XCTestCase {
   }
 
   func testAsync14() {
-    AssertParse(
+    assertParse(
       """
       func getIntSomeday() async -> Int { 5 }
       """
@@ -219,7 +219,7 @@ final class AsyncTests: XCTestCase {
   }
 
   func testAsync15() {
-    AssertParse(
+    assertParse(
       """
       func testAsyncLet() async {
         async let x = await getIntSomeday()
@@ -230,7 +230,7 @@ final class AsyncTests: XCTestCase {
   }
 
   func testAsync16() {
-    AssertParse(
+    assertParse(
       """
       async func asyncIncorrectly() { }
       """

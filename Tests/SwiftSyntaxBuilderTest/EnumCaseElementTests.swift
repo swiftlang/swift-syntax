@@ -41,7 +41,7 @@ final class EnumCaseElementTests: XCTestCase {
       )
     }
 
-    AssertBuildResult(
+    assertBuildResult(
       buildable,
       """
       ␣enum Greeting: String, Codable, Equatable {

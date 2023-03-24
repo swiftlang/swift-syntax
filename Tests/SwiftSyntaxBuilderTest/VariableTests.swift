@@ -22,7 +22,7 @@ final class VariableTests: XCTestCase {
       PatternBindingSyntax(pattern: PatternSyntax("a"), typeAnnotation: TypeAnnotationSyntax(type: ArrayTypeSyntax(elementType: TypeSyntax("Int"))))
     }
 
-    AssertBuildResult(buildable, "␣let a: [Int]")
+    assertBuildResult(buildable, "␣let a: [Int]")
   }
 
   func testInoutBindingDecl() {
@@ -32,7 +32,7 @@ final class VariableTests: XCTestCase {
       PatternBindingSyntax(pattern: PatternSyntax("a"), typeAnnotation: TypeAnnotationSyntax(type: ArrayTypeSyntax(elementType: TypeSyntax("Int"))))
     }
 
-    AssertBuildResult(buildable, "␣inout a: [Int]")
+    assertBuildResult(buildable, "␣inout a: [Int]")
   }
 
   func testVariableDeclWithStringParsing() {
@@ -151,7 +151,7 @@ final class VariableTests: XCTestCase {
 
     for (line, testCase) in testCases {
       let (builder, expected) = testCase
-      AssertBuildResult(builder, expected, line: line)
+      assertBuildResult(builder, expected, line: line)
     }
   }
 
@@ -166,7 +166,7 @@ final class VariableTests: XCTestCase {
       )
     }
 
-    AssertBuildResult(buildable, "␣var d: [String: Int] = [:]")
+    assertBuildResult(buildable, "␣var d: [String: Int] = [:]")
   }
 
   func testVariableDeclWithExplicitTrailingCommas() {
@@ -188,7 +188,7 @@ final class VariableTests: XCTestCase {
         )
       ]
     )
-    AssertBuildResult(
+    assertBuildResult(
       buildable,
       """
       let a = [1,   2,   3,   ]
@@ -221,7 +221,7 @@ final class VariableTests: XCTestCase {
       PatternBindingSyntax(pattern: PatternSyntax("i"), typeAnnotation: TypeAnnotationSyntax(type: TypeSyntax("Int")))
       PatternBindingSyntax(pattern: PatternSyntax("s"), typeAnnotation: TypeAnnotationSyntax(type: TypeSyntax("String")))
     }
-    AssertBuildResult(buildable, #"let a = [1, 2, 3], d = ["key1": 1, "key2": 2, "key3": 3], i: Int, s: String"#)
+    assertBuildResult(buildable, #"let a = [1, 2, 3], d = ["key1": 1, "key2": 2, "key3": 3], i: Int, s: String"#)
   }
 
   func testClosureTypeVariableDecl() {
@@ -229,7 +229,7 @@ final class VariableTests: XCTestCase {
     let buildable = VariableDeclSyntax(bindingKeyword: .keyword(.let)) {
       PatternBindingSyntax(pattern: PatternSyntax("c"), typeAnnotation: TypeAnnotationSyntax(type: type))
     }
-    AssertBuildResult(buildable, "let c: (Int) -> Bool")
+    assertBuildResult(buildable, "let c: (Int) -> Bool")
   }
 
   func testComputedProperty() throws {
@@ -262,7 +262,7 @@ final class VariableTests: XCTestCase {
 
     for (line, testCase) in testCases {
       let (builder, expected) = testCase
-      AssertBuildResult(builder, expected, line: line)
+      assertBuildResult(builder, expected, line: line)
     }
   }
 
@@ -279,7 +279,7 @@ final class VariableTests: XCTestCase {
       AccessorDeclSyntax(accessorKind: .keyword(.willSet)) {}
     }
 
-    AssertBuildResult(
+    assertBuildResult(
       buildable,
       """
       var test: Int {
@@ -346,7 +346,7 @@ final class VariableTests: XCTestCase {
 
     for (line, testCase) in testCases {
       let (builder, expected) = testCase
-      AssertBuildResult(builder, expected, line: line)
+      assertBuildResult(builder, expected, line: line)
     }
   }
 }

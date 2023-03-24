@@ -19,7 +19,7 @@ final class StructTests: XCTestCase {
     let leadingTrivia = Trivia.unexpectedText("␣")
     let buildable = StructDeclSyntax(leadingTrivia: leadingTrivia, identifier: "TestStruct") {}
 
-    AssertBuildResult(
+    assertBuildResult(
       buildable,
       """
       ␣struct TestStruct {
@@ -65,7 +65,7 @@ final class StructTests: XCTestCase {
       carriageReturnFormFeedsStruct
     }
 
-    AssertBuildResult(
+    assertBuildResult(
       testStruct,
       """
       public struct TestStruct {
@@ -99,7 +99,7 @@ final class StructTests: XCTestCase {
         }
       }
     }
-    AssertBuildResult(
+    assertBuildResult(
       myStruct,
       """
       struct MyStruct {

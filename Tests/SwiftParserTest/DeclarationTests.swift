@@ -1344,7 +1344,7 @@ final class DeclarationTests: XCTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected parameter clause in function signature"),
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code ': Int = A.M1' before macro"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code ': T = A.M4 where T.Assoc: P' before macro")
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code ': T = A.M4 where T.Assoc: P' before macro"),
       ]
     )
 

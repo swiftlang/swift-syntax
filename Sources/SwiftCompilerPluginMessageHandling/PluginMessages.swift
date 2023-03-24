@@ -85,12 +85,13 @@ internal enum PluginToHostMessage: Codable {
 
   enum MacroRole: String, Codable {
     case expression
-    case freeStandingDeclaration
+    case declaration
     case accessor
     case memberAttribute
     case member
     case peer
     case conformance
+    case codeItem
   }
 
   struct SourceLocation: Codable {

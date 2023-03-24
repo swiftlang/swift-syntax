@@ -618,6 +618,48 @@ extension CustomTypeWrapperMacro: AccessorMacro {
   }
 }
 
+public struct UnwrapMacro: CodeItemMacro {
+  public static func expansion(
+    of node: some FreestandingMacroExpansionSyntax,
+    in context: some MacroExpansionContext
+  ) throws -> [CodeBlockItemSyntax] {
+    guard !node.argumentList.isEmpty else {
+      throw CustomError.message("'#unwrap' requires arguments")
+    }
+    let errorThrower = node.trailingClosure
+    let identifiers = try node.argumentList.map { argument in
+      guard let tupleElement = argument.as(TupleExprElementSyntax.self),
+            let identifierExpr = tupleElement.expression.as(IdentifierExprSyntax.self) else {
+        throw CustomError.message("Arguments must be identifiers")
+      }
+      return identifierExpr.identifier
+    }
+
+    func elseBlock(_ token: TokenSyntax) -> CodeBlockSyntax {
+      let expr: ExprSyntax
+      if let errorThrower {
+        expr = """
+        \(errorThrower)("\(raw: token.text)")
+        """
+      } else {
+        expr = """
+        fatalError("'\(raw: token.text)' is nil")
+        """
+      }
+      return .init(statements: .init([.init(
+        leadingTrivia: " ", item: .expr(expr), trailingTrivia: " ")]))
+    }
+
+    return identifiers.map { identifier in
+      CodeBlockItemSyntax(item: CodeBlockItemSyntax.Item.stmt(
+        """
+
+        guard let \(raw: identifier.text) else \(elseBlock(identifier))
+        """))
+    }
+  }
+}
+
 // MARK: Assertion helper functions
 
 /// Assert that expanding the given macros in the original source produces
@@ -685,6 +727,7 @@ public let testMacros: [String: Macro.Type] = [
   "wrapAllProperties": WrapAllProperties.self,
   "wrapStoredProperties": WrapStoredProperties.self,
   "customTypeWrapper": CustomTypeWrapperMacro.self,
+  "unwrap": UnwrapMacro.self
 ]
 
 final class MacroSystemTests: XCTestCase {
@@ -975,5 +1018,37 @@ final class MacroSystemTests: XCTestCase {
       """
     )
 
+  }
+
+  func testUnwrap() {
+    AssertMacroExpansion(
+      macros: testMacros,
+      #"""
+      let x: Int? = 1
+      let y: Int? = nil
+      let z: Int? = 3
+      #unwrap(x, y, z)
+      #unwrap(x, y, z) {
+        fatalError("nil is \\($0)")
+      }
+      """#,
+      #"""
+      let x: Int? = 1
+      let y: Int? = nil
+      let z: Int? = 3
+      guard let x else { fatalError("'x' is nil") }
+      guard let y else { fatalError("'y' is nil") }
+      guard let z else { fatalError("'z' is nil") }
+      guard let x else { {
+        fatalError("nil is \\($0)")
+      }("x") }
+      guard let y else { {
+        fatalError("nil is \\($0)")
+      }("y") }
+      guard let z else { {
+        fatalError("nil is \\($0)")
+      }("z") }
+      """#
+    )
   }
 }

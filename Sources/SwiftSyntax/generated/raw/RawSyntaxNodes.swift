@@ -21031,55 +21031,79 @@ public struct RawVersionTupleSyntax: RawSyntaxNodeProtocol {
   }
   
   public init(
-      _ unexpectedBeforeMajorMinor: RawUnexpectedNodesSyntax? = nil, 
-      majorMinor: RawTokenSyntax, 
-      _ unexpectedBetweenMajorMinorAndPatchPeriod: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBeforeMajor: RawUnexpectedNodesSyntax? = nil, 
+      major: RawTokenSyntax, 
+      _ unexpectedBetweenMajorAndMinorPeriod: RawUnexpectedNodesSyntax? = nil, 
+      minorPeriod: RawTokenSyntax?, 
+      _ unexpectedBetweenMinorPeriodAndMinor: RawUnexpectedNodesSyntax? = nil, 
+      minor: RawTokenSyntax?, 
+      _ unexpectedBetweenMinorAndPatchPeriod: RawUnexpectedNodesSyntax? = nil, 
       patchPeriod: RawTokenSyntax?, 
-      _ unexpectedBetweenPatchPeriodAndPatchVersion: RawUnexpectedNodesSyntax? = nil, 
-      patchVersion: RawTokenSyntax?, 
-      _ unexpectedAfterPatchVersion: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenPatchPeriodAndPatch: RawUnexpectedNodesSyntax? = nil, 
+      patch: RawTokenSyntax?, 
+      _ unexpectedAfterPatch: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .versionTuple, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .versionTuple, uninitializedCount: 11, arena: arena) { layout in 
       layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeMajorMinor?.raw
-      layout[1] = majorMinor.raw
-      layout[2] = unexpectedBetweenMajorMinorAndPatchPeriod?.raw
-      layout[3] = patchPeriod?.raw
-      layout[4] = unexpectedBetweenPatchPeriodAndPatchVersion?.raw
-      layout[5] = patchVersion?.raw
-      layout[6] = unexpectedAfterPatchVersion?.raw
+      layout[0] = unexpectedBeforeMajor?.raw
+      layout[1] = major.raw
+      layout[2] = unexpectedBetweenMajorAndMinorPeriod?.raw
+      layout[3] = minorPeriod?.raw
+      layout[4] = unexpectedBetweenMinorPeriodAndMinor?.raw
+      layout[5] = minor?.raw
+      layout[6] = unexpectedBetweenMinorAndPatchPeriod?.raw
+      layout[7] = patchPeriod?.raw
+      layout[8] = unexpectedBetweenPatchPeriodAndPatch?.raw
+      layout[9] = patch?.raw
+      layout[10] = unexpectedAfterPatch?.raw
     }
     self.init(unchecked: raw)
   }
   
-  public var unexpectedBeforeMajorMinor: RawUnexpectedNodesSyntax? {
+  public var unexpectedBeforeMajor: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var majorMinor: RawTokenSyntax {
+  public var major: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
   
-  public var unexpectedBetweenMajorMinorAndPatchPeriod: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenMajorAndMinorPeriod: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var patchPeriod: RawTokenSyntax? {
+  public var minorPeriod: RawTokenSyntax? {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))
   }
   
-  public var unexpectedBetweenPatchPeriodAndPatchVersion: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenMinorPeriodAndMinor: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var patchVersion: RawTokenSyntax? {
+  public var minor: RawTokenSyntax? {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))
   }
   
-  public var unexpectedAfterPatchVersion: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenMinorAndPatchPeriod: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  
+  public var patchPeriod: RawTokenSyntax? {
+    layoutView.children[7].map(RawTokenSyntax.init(raw:))
+  }
+  
+  public var unexpectedBetweenPatchPeriodAndPatch: RawUnexpectedNodesSyntax? {
+    layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  
+  public var patch: RawTokenSyntax? {
+    layoutView.children[9].map(RawTokenSyntax.init(raw:))
+  }
+  
+  public var unexpectedAfterPatch: RawUnexpectedNodesSyntax? {
+    layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 

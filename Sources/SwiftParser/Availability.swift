@@ -241,6 +241,18 @@ extension Parser {
     )
   }
 
+  /// If the next token is an integer literal only consisting of the digits 0-9
+  /// consume and return it, otherwise return a missing integer token.
+  private mutating func expectDecimalIntegerWithoutRecovery() -> RawTokenSyntax {
+    guard self.at(.integerLiteral) else {
+      return missingToken(.integerLiteral, text: nil)
+    }
+    guard self.currentToken.tokenText.allSatisfy({ Unicode.Scalar($0).isDigit }) else {
+      return missingToken(.integerLiteral, text: nil)
+    }
+    return self.consumeAnyToken()
+  }
+
   /// Parse a dot-separated list of version numbers.
   ///
   /// Grammar
@@ -250,31 +262,43 @@ extension Parser {
   ///     platform-version → decimal-digits '.' decimal-digits
   ///     platform-version → decimal-digits '.' decimal-digits '.' decimal-digits
   mutating func parseVersionTuple() -> RawVersionTupleSyntax {
-    let (unexpectedBeforeMajorMinor, majorMinor) = self.expect(.integerLiteral, .floatingLiteral, default: .integerLiteral)
-    let patchPeriod: RawTokenSyntax?
-    let unexpectedBeforePatch: RawUnexpectedNodesSyntax?
-    let patch: RawTokenSyntax?
-    if majorMinor.tokenKind == .floatingLiteral {
-      patchPeriod = self.consume(if: .period)
-      if patchPeriod != nil {
-        (unexpectedBeforePatch, patch) = self.expect(.integerLiteral)
+    if self.at(.floatingLiteral),
+      let periodIndex = self.currentToken.tokenText.firstIndex(of: UInt8(ascii: ".")),
+      self.currentToken.tokenText[0..<periodIndex].allSatisfy({ Unicode.Scalar($0).isDigit })
+    {
+      // The lexer generates a float literal '1.2' for the major and minor version.
+      // Split it into two integers if possible
+      let major = self.consumePrefix(SyntaxText(rebasing: self.currentToken.tokenText[0..<periodIndex]), as: .integerLiteral)
+      let (unexpectedBeforeMinorPeriod, minorPeriod) = self.expect(.period)
+      let minor = self.expectDecimalIntegerWithoutRecovery()
+      let patchPeriod: RawTokenSyntax?
+      let patch: RawTokenSyntax?
+      if let period = self.consume(if: .period) {
+        patchPeriod = period
+        patch = self.expectDecimalIntegerWithoutRecovery()
       } else {
-        unexpectedBeforePatch = nil
+        patchPeriod = nil
         patch = nil
       }
+      return RawVersionTupleSyntax(
+        major: major,
+        unexpectedBeforeMinorPeriod,
+        minorPeriod: minorPeriod,
+        minor: minor,
+        patchPeriod: patchPeriod,
+        patch: patch,
+        arena: self.arena
+      )
     } else {
-      patchPeriod = nil
-      unexpectedBeforePatch = nil
-      patch = nil
+      let major = self.expectDecimalIntegerWithoutRecovery()
+      return RawVersionTupleSyntax(
+        major: major,
+        minorPeriod: nil,
+        minor: nil,
+        patchPeriod: nil,
+        patch: nil,
+        arena: self.arena
+      )
     }
-
-    return RawVersionTupleSyntax(
-      unexpectedBeforeMajorMinor,
-      majorMinor: majorMinor,
-      patchPeriod: patchPeriod,
-      unexpectedBeforePatch,
-      patchVersion: patch,
-      arena: self.arena
-    )
   }
 }

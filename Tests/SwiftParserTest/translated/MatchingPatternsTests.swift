@@ -16,7 +16,7 @@ import XCTest
 
 final class MatchingPatternsTests: XCTestCase {
   func testMatchingPatterns1() {
-    AssertParse(
+    assertParse(
       """
       import imported_enums
       """
@@ -24,7 +24,7 @@ final class MatchingPatternsTests: XCTestCase {
   }
 
   func testMatchingPatterns3() {
-    AssertParse(
+    assertParse(
       """
       var x:Int
       """
@@ -32,7 +32,7 @@ final class MatchingPatternsTests: XCTestCase {
   }
 
   func testMatchingPatterns4() {
-    AssertParse(
+    assertParse(
       """
       func square(_ x: Int) -> Int { return x*x }
       """
@@ -40,7 +40,7 @@ final class MatchingPatternsTests: XCTestCase {
   }
 
   func testMatchingPatterns5() {
-    AssertParse(
+    assertParse(
       """
       struct A<B> {
         struct C<D> { }
@@ -50,7 +50,7 @@ final class MatchingPatternsTests: XCTestCase {
   }
 
   func testMatchingPatterns6() {
-    AssertParse(
+    assertParse(
       #"""
       switch x {
       // Expressions as patterns.
@@ -85,7 +85,7 @@ final class MatchingPatternsTests: XCTestCase {
   }
 
   func testMatchingPatterns7() {
-    AssertParse(
+    assertParse(
       """
       switch (x,x) {
       case (var a, var a):
@@ -98,7 +98,7 @@ final class MatchingPatternsTests: XCTestCase {
   }
 
   func testMatchingPatterns8() {
-    AssertParse(
+    assertParse(
       """
       var e : Any = 0
       """
@@ -106,7 +106,7 @@ final class MatchingPatternsTests: XCTestCase {
   }
 
   func testMatchingPatterns9() {
-    AssertParse(
+    assertParse(
       """
       switch e {
       // 'is' pattern.
@@ -122,7 +122,7 @@ final class MatchingPatternsTests: XCTestCase {
   }
 
   func testMatchingPatterns10() {
-    AssertParse(
+    assertParse(
       """
       // Enum patterns.
       enum Foo { case A, B, C }
@@ -131,7 +131,7 @@ final class MatchingPatternsTests: XCTestCase {
   }
 
   func testMatchingPatterns11() {
-    AssertParse(
+    assertParse(
       """
       func == <T>(_: Voluntary<T>, _: Voluntary<T>) -> Bool { return true }
       """
@@ -139,7 +139,7 @@ final class MatchingPatternsTests: XCTestCase {
   }
 
   func testMatchingPatterns12() {
-    AssertParse(
+    assertParse(
       """
       enum Voluntary<T> : Equatable {
         case Naught
@@ -178,7 +178,7 @@ final class MatchingPatternsTests: XCTestCase {
   }
 
   func testMatchingPatterns13() {
-    AssertParse(
+    assertParse(
       """
       var n : Voluntary<Int> = .Naught
       if case let .Naught(value) = n {}
@@ -189,7 +189,7 @@ final class MatchingPatternsTests: XCTestCase {
   }
 
   func testMatchingPatterns14() {
-    AssertParse(
+    assertParse(
       """
       switch n {
       case Foo.A:
@@ -219,7 +219,7 @@ final class MatchingPatternsTests: XCTestCase {
   }
 
   func testMatchingPatterns15() {
-    AssertParse(
+    assertParse(
       """
       var notAnEnum = 0
       """
@@ -227,7 +227,7 @@ final class MatchingPatternsTests: XCTestCase {
   }
 
   func testMatchingPatterns16() {
-    AssertParse(
+    assertParse(
       """
       switch notAnEnum {
       case .Foo:
@@ -238,7 +238,7 @@ final class MatchingPatternsTests: XCTestCase {
   }
 
   func testMatchingPatterns17() {
-    AssertParse(
+    assertParse(
       """
       struct ContainsEnum {
         enum Possible<T> {
@@ -262,7 +262,7 @@ final class MatchingPatternsTests: XCTestCase {
   }
 
   func testMatchingPatterns18() {
-    AssertParse(
+    assertParse(
       """
       func nonmemberAccessesMemberType(_ n: ContainsEnum.Possible<Int>) {
         switch n {
@@ -276,7 +276,7 @@ final class MatchingPatternsTests: XCTestCase {
   }
 
   func testMatchingPatterns19() {
-    AssertParse(
+    assertParse(
       """
       var m : ImportedEnum = .Simple
       """
@@ -284,7 +284,7 @@ final class MatchingPatternsTests: XCTestCase {
   }
 
   func testMatchingPatterns20() {
-    AssertParse(
+    assertParse(
       """
       switch m {
       case imported_enums.ImportedEnum.Simple,
@@ -304,7 +304,7 @@ final class MatchingPatternsTests: XCTestCase {
   }
 
   func testMatchingPatterns21() {
-    AssertParse(
+    assertParse(
       """
       // Check that single-element tuple payloads work sensibly in patterns.
       """
@@ -312,7 +312,7 @@ final class MatchingPatternsTests: XCTestCase {
   }
 
   func testMatchingPatterns22() {
-    AssertParse(
+    assertParse(
       """
       enum LabeledScalarPayload {
         case Payload(name: Int)
@@ -322,7 +322,7 @@ final class MatchingPatternsTests: XCTestCase {
   }
 
   func testMatchingPatterns23() {
-    AssertParse(
+    assertParse(
       """
       var lsp: LabeledScalarPayload = .Payload(name: 0)
       func acceptInt(_: Int) {}
@@ -332,7 +332,7 @@ final class MatchingPatternsTests: XCTestCase {
   }
 
   func testMatchingPatterns24() {
-    AssertParse(
+    assertParse(
       #"""
       switch lsp {
       case .Payload(0):
@@ -368,7 +368,7 @@ final class MatchingPatternsTests: XCTestCase {
   }
 
   func testMatchingPatterns25() {
-    AssertParse(
+    assertParse(
       """
       // Property patterns.
       """
@@ -376,7 +376,7 @@ final class MatchingPatternsTests: XCTestCase {
   }
 
   func testMatchingPatterns26() {
-    AssertParse(
+    assertParse(
       """
       struct S {
         static var stat: Int = 0
@@ -391,7 +391,7 @@ final class MatchingPatternsTests: XCTestCase {
   }
 
   func testMatchingPatterns27() {
-    AssertParse(
+    assertParse(
       """
       // Tuple patterns.
       """
@@ -399,7 +399,7 @@ final class MatchingPatternsTests: XCTestCase {
   }
 
   func testMatchingPatterns28() {
-    AssertParse(
+    assertParse(
       """
       var t = (1, 2, 3)
       """
@@ -407,7 +407,7 @@ final class MatchingPatternsTests: XCTestCase {
   }
 
   func testMatchingPatterns29() {
-    AssertParse(
+    assertParse(
       """
       prefix operator +++
       infix operator +++
@@ -420,7 +420,7 @@ final class MatchingPatternsTests: XCTestCase {
   }
 
   func testMatchingPatterns30() {
-    AssertParse(
+    assertParse(
       """
       switch t {
       case (_, var a, 3):
@@ -446,7 +446,7 @@ final class MatchingPatternsTests: XCTestCase {
   }
 
   func testMatchingPatterns31() {
-    AssertParse(
+    assertParse(
       #"""
       // FIXME: We don't currently allow subpatterns for "isa" patterns that
       // require interesting conditional downcasts.
@@ -457,7 +457,7 @@ final class MatchingPatternsTests: XCTestCase {
   }
 
   func testMatchingPatterns32() {
-    AssertParse(
+    assertParse(
       """
       switch [Derived(), Derived(), Base()] {
       case let ds as [Derived]:
@@ -472,7 +472,7 @@ final class MatchingPatternsTests: XCTestCase {
   }
 
   func testMatchingPatterns33() {
-    AssertParse(
+    assertParse(
       """
       // Optional patterns.
       let op1 : Int?
@@ -482,7 +482,7 @@ final class MatchingPatternsTests: XCTestCase {
   }
 
   func testMatchingPatterns34() {
-    AssertParse(
+    assertParse(
       """
       switch op1 {
       case nil: break
@@ -494,7 +494,7 @@ final class MatchingPatternsTests: XCTestCase {
   }
 
   func testMatchingPatterns35() {
-    AssertParse(
+    assertParse(
       """
       switch op2 {
       case nil: break
@@ -507,7 +507,7 @@ final class MatchingPatternsTests: XCTestCase {
   }
 
   func testMatchingPatterns36() {
-    AssertParse(
+    assertParse(
       #"""
       // <rdar://problem/20365753> Bogus diagnostic "refutable pattern match can fail"
       let (responseObject: Int1️⃣?) = op1

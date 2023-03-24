@@ -16,7 +16,7 @@ import XCTest
 
 final class OptionalLvaluesTests: XCTestCase {
   func testOptionalLvalues1() {
-    AssertParse(
+    assertParse(
       """
       struct S {
         var x: Int = 0
@@ -28,7 +28,7 @@ final class OptionalLvaluesTests: XCTestCase {
   }
 
   func testOptionalLvalues2() {
-    AssertParse(
+    assertParse(
       """
       struct T {
         var mutS: S? = nil
@@ -40,7 +40,7 @@ final class OptionalLvaluesTests: XCTestCase {
   }
 
   func testOptionalLvalues3() {
-    AssertParse(
+    assertParse(
       """
       var mutT: T?
       let immT: T? = nil  // expected-note 4 {{change 'let' to 'var' to make it mutable}} {{1-4=var}} {{1-4=var}} {{1-4=var}} {{1-4=var}}
@@ -49,7 +49,7 @@ final class OptionalLvaluesTests: XCTestCase {
   }
 
   func testOptionalLvalues4() {
-    AssertParse(
+    assertParse(
       """
       let mutTPayload = mutT!
       """
@@ -57,7 +57,7 @@ final class OptionalLvaluesTests: XCTestCase {
   }
 
   func testOptionalLvalues5() {
-    AssertParse(
+    assertParse(
       """
       mutT! = T()
       mutT!.mutS = S()
@@ -73,7 +73,7 @@ final class OptionalLvaluesTests: XCTestCase {
   }
 
   func testOptionalLvalues6() {
-    AssertParse(
+    assertParse(
       """
       immT! = T()
       immT!.mutS = S()
@@ -89,7 +89,7 @@ final class OptionalLvaluesTests: XCTestCase {
   }
 
   func testOptionalLvalues7() {
-    AssertParse(
+    assertParse(
       """
       var mutIUO: T! = nil
       let immIUO: T! = nil // expected-note 2 {{change 'let' to 'var' to make it mutable}} {{1-4=var}} {{1-4=var}}
@@ -98,7 +98,7 @@ final class OptionalLvaluesTests: XCTestCase {
   }
 
   func testOptionalLvalues8() {
-    AssertParse(
+    assertParse(
       """
       mutIUO!.mutS = S()
       mutIUO!.immS = S()
@@ -109,7 +109,7 @@ final class OptionalLvaluesTests: XCTestCase {
   }
 
   func testOptionalLvalues9() {
-    AssertParse(
+    assertParse(
       """
       mutIUO.mutS = S()
       mutIUO.immS = S()
@@ -120,7 +120,7 @@ final class OptionalLvaluesTests: XCTestCase {
   }
 
   func testOptionalLvalues10() {
-    AssertParse(
+    assertParse(
       """
       func foo(x: Int) {}
       """
@@ -128,7 +128,7 @@ final class OptionalLvaluesTests: XCTestCase {
   }
 
   func testOptionalLvalues11() {
-    AssertParse(
+    assertParse(
       """
       var nonOptional: S = S()
       _ = nonOptional!
@@ -138,7 +138,7 @@ final class OptionalLvaluesTests: XCTestCase {
   }
 
   func testOptionalLvalues12() {
-    AssertParse(
+    assertParse(
       """
       class C {}
       class D: C {}
@@ -147,7 +147,7 @@ final class OptionalLvaluesTests: XCTestCase {
   }
 
   func testOptionalLvalues13() {
-    AssertParse(
+    assertParse(
       """
       let c = C()
       let d = (c as! D)!

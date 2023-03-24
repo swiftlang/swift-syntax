@@ -16,7 +16,7 @@ import XCTest
 
 final class RecoveryLibraryTests: XCTestCase {
   func testRecoveryLibrary() {
-    AssertParse(
+    assertParse(
       """
       // Check that we handle multiple consecutive right braces.
       1️⃣}

@@ -4,7 +4,7 @@ import XCTest
 
 final class RecoveryTests: XCTestCase {
   func testRecovery1() {
-    AssertParse(
+    assertParse(
       """
       //===--- Helper types used in this file.
       """
@@ -12,7 +12,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery2() {
-    AssertParse(
+    assertParse(
       """
       protocol FooProtocol {}
       """
@@ -20,7 +20,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery3() {
-    AssertParse(
+    assertParse(
       """
       //===--- Tests.
       """
@@ -28,7 +28,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery4() {
-    AssertParse(
+    assertParse(
       #"""
       func garbage() -> () {
         var a : Int
@@ -43,7 +43,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery5() {
-    AssertParse(
+    assertParse(
       #"""
       func moreGarbage() -> () {
         1️⃣) this line is invalid, but we will stop at the declaration...
@@ -58,7 +58,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery6() {
-    AssertParse(
+    assertParse(
       """
       class Container<T> {
         func exists() -> Bool { return true }
@@ -68,7 +68,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery7() {
-    AssertParse(
+    assertParse(
       """
       func useContainer() -> () {
         var a : Container<not 1️⃣a2️⃣ type [skip 3️⃣this greater: >] >4️⃣, b : Int
@@ -87,7 +87,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery8() {
-    AssertParse(
+    assertParse(
       """
       @xyz class BadAttributes {
         func exists() -> Bool { return true }
@@ -97,7 +97,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery9() {
-    AssertParse(
+    assertParse(
       """
       func test(a: BadAttributes) -> () {
         _ = a.exists() // no-warning
@@ -107,7 +107,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery10() {
-    AssertParse(
+    assertParse(
       """
       // Here is an extra random close-brace!
       1️⃣}
@@ -124,7 +124,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery11() {
-    AssertParse(
+    assertParse(
       """
       func braceStmt2() {
         { () in braceStmt2(); }
@@ -134,7 +134,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery12() {
-    AssertParse(
+    assertParse(
       """
       func braceStmt3() {
         {
@@ -146,7 +146,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery13() {
-    AssertParse(
+    assertParse(
       """
       //===--- Recovery for misplaced 'static'.
       static func toplevelStaticFunc() {}
@@ -162,7 +162,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery13b() {
-    AssertParse(
+    assertParse(
       """
         if1️⃣
       """,
@@ -173,7 +173,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery14() {
-    AssertParse(
+    assertParse(
       """
       if {
         }1️⃣
@@ -186,7 +186,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery15() {
-    AssertParse(
+    assertParse(
       """
       if
         {
@@ -200,7 +200,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery16() {
-    AssertParse(
+    assertParse(
       """
       if true {
         } else if {
@@ -216,7 +216,7 @@ final class RecoveryTests: XCTestCase {
   func testRecovery17() {
     // It is debatable if we should do recovery here and parse { true } as the
     // body, but the error message should be sensible.
-    AssertParse(
+    assertParse(
       """
       if { true } {
       }
@@ -232,7 +232,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery18() {
-    AssertParse(
+    assertParse(
       """
       if { true }() {
         }
@@ -244,7 +244,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery19() {
-    AssertParse(
+    assertParse(
       """
       // <rdar://problem/18940198>
         if { { } }1️⃣
@@ -259,7 +259,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery20() {
-    AssertParse(
+    assertParse(
       """
       while1️⃣
       """,
@@ -270,7 +270,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery21() {
-    AssertParse(
+    assertParse(
       """
       while {
         }1️⃣
@@ -283,7 +283,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery22() {
-    AssertParse(
+    assertParse(
       """
       while
         {
@@ -297,7 +297,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery23() {
-    AssertParse(
+    assertParse(
       """
       // It is debatable if we should do recovery here and parse { true } as the
       // body, but the error message should be sensible.
@@ -315,7 +315,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery24() {
-    AssertParse(
+    assertParse(
       """
       while { true }() { //  expected-error 2 {{consecutive statements on a line must be separated by ';'}} expected-error {{closure expression is unused}} expected-note {{did you mean to use a 'do' statement?}} {{20-20=do }} expected-warning {{boolean literal is unused}}
       }
@@ -327,7 +327,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery25() {
-    AssertParse(
+    assertParse(
       """
       // <rdar://problem/18940198>
       while { { } }1️⃣
@@ -342,7 +342,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery26() {
-    AssertParse(
+    assertParse(
       """
       repeat {
       } while1️⃣
@@ -354,7 +354,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery27() {
-    AssertParse(
+    assertParse(
       """
       {
         missingControllingExprInRepeatWhile();
@@ -364,7 +364,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery28() {
-    AssertParse(
+    assertParse(
       """
       repeat {
       } while { true }()
@@ -379,7 +379,7 @@ final class RecoveryTests: XCTestCase {
 
   func testRecovery29() {
     // https://github.com/apple/swift/issues/42787
-    AssertParse(
+    assertParse(
       """
       repeat {
       }1️⃣
@@ -391,7 +391,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery30() {
-    AssertParse(
+    assertParse(
       """
       for 1️⃣; {
       }
@@ -404,7 +404,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery31() {
-    AssertParse(
+    assertParse(
       """
       for 1️⃣;
         {
@@ -418,7 +418,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery32() {
-    AssertParse(
+    assertParse(
       """
       for 1️⃣; true {
       }
@@ -431,7 +431,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery33() {
-    AssertParse(
+    assertParse(
       """
       for var i 1️⃣= 0; true {
         i += 1
@@ -445,7 +445,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery34() {
-    AssertParse(
+    assertParse(
       """
       for1️⃣
       """,
@@ -456,7 +456,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery35() {
-    AssertParse(
+    assertParse(
       """
       for 1️⃣{
       }2️⃣
@@ -471,7 +471,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery36() {
-    AssertParse(
+    assertParse(
       """
       for1️⃣
       {
@@ -486,7 +486,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery37() {
-    AssertParse(
+    assertParse(
       """
       for i 1️⃣{
       }2️⃣
@@ -500,7 +500,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery38() {
-    AssertParse(
+    assertParse(
       """
       for var i 1️⃣{
       }2️⃣
@@ -514,7 +514,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery39() {
-    AssertParse(
+    assertParse(
       """
       for 1️⃣in 2️⃣{
       }3️⃣
@@ -530,7 +530,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery40() {
-    AssertParse(
+    assertParse(
       """
       for 1️⃣0..<12 {
       }
@@ -542,7 +542,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery41() {
-    AssertParse(
+    assertParse(
       """
       for 1️⃣for in {
       }2️⃣
@@ -555,7 +555,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery42() {
-    AssertParse(
+    assertParse(
       """
       for i in {
       }1️⃣
@@ -568,7 +568,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery43() {
-    AssertParse(
+    assertParse(
       """
       // https://github.com/apple/swift/issues/48502
       struct User { let name: String? }
@@ -577,7 +577,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery44() {
-    AssertParse(
+    assertParse(
       #"""
       let users = [User]()
       for user in users 1️⃣whe {
@@ -593,7 +593,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery45a() {
-    AssertParse(
+    assertParse(
       """
       for 1️⃣
         2️⃣;
@@ -608,7 +608,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery45b() {
-    AssertParse(
+    assertParse(
       """
       switch1️⃣
       """,
@@ -619,7 +619,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery46() {
-    AssertParse(
+    assertParse(
       """
       switch {
       }1️⃣
@@ -633,7 +633,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery47() {
-    AssertParse(
+    assertParse(
       """
       switch
       {
@@ -648,7 +648,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery48() {
-    AssertParse(
+    assertParse(
       """
       switch {
         1️⃣case _: return
@@ -663,7 +663,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery49() {
-    AssertParse(
+    assertParse(
       """
       switch {
         1️⃣case Int: return
@@ -681,7 +681,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery50() {
-    AssertParse(
+    assertParse(
       """
       switch { 42 } {
         case _: return
@@ -691,7 +691,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery51() {
-    AssertParse(
+    assertParse(
       """
       switch { 42 }() {
         case _: return
@@ -702,7 +702,7 @@ final class RecoveryTests: XCTestCase {
 
   //===--- Recovery for missing braces in nominal type decls.
   func testRecovery54() {
-    AssertParse(
+    assertParse(
       """
       struct NoBracesStruct11️⃣()
       """,
@@ -713,7 +713,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery55() {
-    AssertParse(
+    assertParse(
       """
       enum NoBracesUnion11️⃣()
       class NoBracesClass12️⃣()
@@ -736,7 +736,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery56() {
-    AssertParse(
+    assertParse(
       """
       struct NoBracesStruct2 1️⃣
       enum NoBracesUnion2 2️⃣
@@ -760,7 +760,7 @@ final class RecoveryTests: XCTestCase {
 
   //===--- Recovery for multiple identifiers in decls
   func testRecovery58() {
-    AssertParse(
+    assertParse(
       """
       protocol Multi 1️⃣ident {}
       """,
@@ -771,7 +771,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery60() {
-    AssertParse(
+    assertParse(
       """
       class CCC 1️⃣CCC<T> {}
       """,
@@ -785,7 +785,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery62() {
-    AssertParse(
+    assertParse(
       """
       enum EE 1️⃣EE<T> where T : Multi {
         case a2️⃣ 3️⃣a
@@ -801,7 +801,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery63() {
-    AssertParse(
+    assertParse(
       #"""
       struct SS 1️⃣SS : Multi {
         private var a 2️⃣b 3️⃣: Int = ""
@@ -822,7 +822,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery64() {
-    AssertParse(
+    assertParse(
       """
       let (efg 1️⃣hij, foobar) = (5, 6)
       """,
@@ -834,7 +834,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery65() {
-    AssertParse(
+    assertParse(
       """
       _ = foobar // OK.
       """
@@ -844,7 +844,7 @@ final class RecoveryTests: XCTestCase {
   //===--- Recovery for parse errors in types.
 
   func testRecovery67() {
-    AssertParse(
+    assertParse(
       """
       struct ErrorTypeInVarDecl1 {
         var v1 : 1️⃣
@@ -857,7 +857,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery68() {
-    AssertParse(
+    assertParse(
       """
       struct ErrorTypeInVarDecl2 {
         var v1 : Int.1️⃣
@@ -871,7 +871,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery69() {
-    AssertParse(
+    assertParse(
       """
       struct ErrorTypeInVarDecl3 {
         var v1 : Int< 1️⃣
@@ -885,7 +885,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery70() {
-    AssertParse(
+    assertParse(
       """
       struct ErrorTypeInVarDecl4 {
         var v1 : Int<1️⃣,
@@ -899,7 +899,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery71() {
-    AssertParse(
+    assertParse(
       """
       struct ErrorTypeInVarDecl5 {
         var v1 : Int<Int 1️⃣
@@ -913,7 +913,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery72() {
-    AssertParse(
+    assertParse(
       """
       struct ErrorTypeInVarDecl6 {
         var v1 : Intℹ️<Int,
@@ -928,7 +928,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery73() {
-    AssertParse(
+    assertParse(
       """
       struct ErrorTypeInVarDecl7 {
         var v1 : Int<Int, 1️⃣
@@ -943,7 +943,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery83() {
-    AssertParse(
+    assertParse(
       """
       struct ErrorTypeInVarDecl12 {
         var v1 : FooProtocol & 1️⃣
@@ -957,7 +957,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery84() {
-    AssertParse(
+    assertParse(
       """
       struct ErrorTypeInVarDecl13 {
         var v1 : 1️⃣& FooProtocol
@@ -971,7 +971,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery85() {
-    AssertParse(
+    assertParse(
       """
       struct ErrorTypeInVarDecl16 {
         var v1 : FooProtocol & 1️⃣
@@ -985,7 +985,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery86() {
-    AssertParse(
+    assertParse(
       """
       func ErrorTypeInPattern4(_: FooProtocol & 1️⃣) { }
       """,
@@ -996,7 +996,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery87() {
-    AssertParse(
+    assertParse(
       """
       struct ErrorGenericParameterList1<1️⃣
       """,
@@ -1008,7 +1008,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery87b() {
-    AssertParse(
+    assertParse(
       """
       struct ErrorGenericParameterList1<each1️⃣
       """,
@@ -1021,7 +1021,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery88() {
-    AssertParse(
+    assertParse(
       """
       struct ErrorGenericParameterList2<T1️⃣
       """,
@@ -1033,7 +1033,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery89() {
-    AssertParse(
+    assertParse(
       """
       struct ErrorGenericParameterList3<T,1️⃣
       """,
@@ -1046,7 +1046,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery90() {
-    AssertParse(
+    assertParse(
       """
       // Note: Don't move braces to a different line here.
       struct ErrorGenericParameterList4< 1️⃣
@@ -1060,7 +1060,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery91() {
-    AssertParse(
+    assertParse(
       """
       // Note: Don't move braces to a different line here.
       struct ErrorGenericParameterList5<T 1️⃣
@@ -1074,7 +1074,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery92() {
-    AssertParse(
+    assertParse(
       """
       // Note: Don't move braces to a different line here.
       struct ErrorGenericParameterList6<T, 1️⃣
@@ -1089,7 +1089,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery93() {
-    AssertParse(
+    assertParse(
       """
       struct ErrorTypeInVarDeclFunctionType1 {
         var v1 : () -> 1️⃣
@@ -1103,7 +1103,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery98a() {
-    AssertParse(
+    assertParse(
       """
       let a1: Swift.Int1️⃣]
       """,
@@ -1114,7 +1114,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery98b() {
-    AssertParse(
+    assertParse(
       """
       let a2: Set<Int1️⃣]>
       """,
@@ -1126,7 +1126,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery98c() {
-    AssertParse(
+    assertParse(
       """
       let a3: Set<Int>1️⃣]
       """,
@@ -1138,7 +1138,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery98d() {
-    AssertParse(
+    assertParse(
       """
       let a4: Int1️⃣]?
       """,
@@ -1150,7 +1150,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery98e() {
-    AssertParse(
+    assertParse(
       """
       let a5: Int?1️⃣]
       """,
@@ -1162,7 +1162,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery98f() {
-    AssertParse(
+    assertParse(
       """
       let a6: [Int]1️⃣]
       """,
@@ -1174,7 +1174,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery98g() {
-    AssertParse(
+    assertParse(
       """
       let a7: [String: Int]1️⃣]
       """,
@@ -1186,7 +1186,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery99() {
-    AssertParse(
+    assertParse(
       """
       struct ErrorTypeInVarDeclDictionaryType {
         let a1: String1️⃣:
@@ -1210,7 +1210,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery100() {
-    AssertParse(
+    assertParse(
       """
       struct ErrorInFunctionSignatureResultArrayType1 {
         func foo() -> Int1️⃣[ {
@@ -1232,7 +1232,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery101() {
-    AssertParse(
+    assertParse(
       """
       struct ErrorInFunctionSignatureResultArrayType2 {
         func foo() -> Int1️⃣[0 {
@@ -1251,7 +1251,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery102() {
-    AssertParse(
+    assertParse(
       """
       struct ErrorInFunctionSignatureResultArrayType3 {
         func foo() -> Int1️⃣[0] {
@@ -1267,7 +1267,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery103() {
-    AssertParse(
+    assertParse(
       """
       struct ErrorInFunctionSignatureResultArrayType4 {
         func foo() -> Int1️⃣[0_1] {
@@ -1283,7 +1283,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery104() {
-    AssertParse(
+    assertParse(
       """
       struct ErrorInFunctionSignatureResultArrayType5 {
         func foo() -> Int1️⃣[0b1] {
@@ -1299,7 +1299,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery105() {
-    AssertParse(
+    assertParse(
       """
       struct ErrorInFunctionSignatureResultArrayType11 {
         func foo() -> Int1️⃣[(a){a++}] {
@@ -1314,7 +1314,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery106() {
-    AssertParse(
+    assertParse(
       """
       //===--- Recovery for missing initial value in var decls.
       """
@@ -1322,7 +1322,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery107() {
-    AssertParse(
+    assertParse(
       """
       struct MissingInitializer1 {
         var v1 : Int = 1️⃣
@@ -1335,7 +1335,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery108() {
-    AssertParse(
+    assertParse(
       """
       //===--- Recovery for expr-postfix.
       """
@@ -1343,7 +1343,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery109() {
-    AssertParse(
+    assertParse(
       """
       func exprPostfix1(x : Int) {
         x.1️⃣
@@ -1356,7 +1356,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery110() {
-    AssertParse(
+    assertParse(
       """
       func exprPostfix2() {
         _ = .1️⃣42
@@ -1370,7 +1370,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery111() {
-    AssertParse(
+    assertParse(
       """
       //===--- Recovery for expr-super.
       """
@@ -1378,7 +1378,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery112() {
-    AssertParse(
+    assertParse(
       """
       class Base {}
       """
@@ -1386,7 +1386,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery113() {
-    AssertParse(
+    assertParse(
       """
       class ExprSuper1 {
         init() {
@@ -1398,7 +1398,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery114() {
-    AssertParse(
+    assertParse(
       """
       class ExprSuper2 {
         init() {
@@ -1413,7 +1413,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery115() {
-    AssertParse(
+    assertParse(
       """
       //===--- Recovery for braces inside a nominal decl.
       """
@@ -1421,7 +1421,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery116() {
-    AssertParse(
+    assertParse(
       """
       struct BracesInsideNominalDecl1 {
         1️⃣{
@@ -1437,7 +1437,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery117() {
-    AssertParse(
+    assertParse(
       """
       func use_BracesInsideNominalDecl1() {
         // Ensure that the typealias decl is not skipped.
@@ -1448,7 +1448,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery118() {
-    AssertParse(
+    assertParse(
       #"""
       // https://github.com/apple/swift/issues/43383
       class С_43383 {
@@ -1464,7 +1464,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery119() {
-    AssertParse(
+    assertParse(
       #"""
       extension С_43383 {
           1️⃣print(2️⃣"The room where it happened, the room where it happened")
@@ -1479,7 +1479,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery120() {
-    AssertParse(
+    assertParse(
       """
       //===--- Recovery for wrong decl introducer keyword.
       """
@@ -1487,7 +1487,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery121() {
-    AssertParse(
+    assertParse(
       """
       class WrongDeclIntroducerKeyword1 {
         1️⃣notAKeyword() {}
@@ -1503,7 +1503,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery122() {
-    AssertParse(
+    assertParse(
       """
       //===--- Recovery for wrong inheritance clause.
       """
@@ -1511,7 +1511,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery123() {
-    AssertParse(
+    assertParse(
       """
       class Base2<T> {
       }
@@ -1520,7 +1520,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery124() {
-    AssertParse(
+    assertParse(
       """
       class SubModule {
           class Base1 {}
@@ -1531,7 +1531,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery125() {
-    AssertParse(
+    assertParse(
       """
       class WrongInheritanceClause11️⃣(Int) {}
       """,
@@ -1543,7 +1543,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery126() {
-    AssertParse(
+    assertParse(
       """
       class WrongInheritanceClause21️⃣(Base2<Int>) {}
       """,
@@ -1555,7 +1555,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery127() {
-    AssertParse(
+    assertParse(
       """
       class WrongInheritanceClause3<T>1️⃣(SubModule.Base1) where T:AnyObject {}
       """,
@@ -1567,7 +1567,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery128() {
-    AssertParse(
+    assertParse(
       """
       class WrongInheritanceClause41️⃣(SubModule.Base2<Int>) {}
       """,
@@ -1579,7 +1579,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery129() {
-    AssertParse(
+    assertParse(
       """
       class WrongInheritanceClause5<T>1️⃣(SubModule.Base2<Int>) where T:AnyObject {}
       """,
@@ -1591,7 +1591,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery130() {
-    AssertParse(
+    assertParse(
       """
       class WrongInheritanceClause61️⃣(Int 2️⃣{}3️⃣
       """,
@@ -1606,7 +1606,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery131() {
-    AssertParse(
+    assertParse(
       """
       class WrongInheritanceClause7<T>1️⃣(Int 2️⃣where T:AnyObject {}
       """,
@@ -1622,7 +1622,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery132() {
-    AssertParse(
+    assertParse(
       """
       // <rdar://problem/18502220> [swift-crashes 078] parser crash on invalid cast in sequence expr
       Base=1 as Base=1
@@ -1631,7 +1631,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery133() {
-    AssertParse(
+    assertParse(
       #"""
       // <rdar://problem/18634543> Parser hangs at swift::Parser::parseType
       public enum TestA {
@@ -1646,7 +1646,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery134() {
-    AssertParse(
+    assertParse(
       #"""
       public enum TestB {
         public static func convertFromExtenndition(
@@ -1660,7 +1660,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery135() {
-    AssertParse(
+    assertParse(
       """
       // <rdar://problem/18634543> Infinite loop and unbounded memory consumption in parser
       class bar {}
@@ -1669,7 +1669,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery136() {
-    AssertParse(
+    assertParse(
       """
       var baz: bar
       func foo1(bar!=baz) {}
@@ -1681,7 +1681,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery137() {
-    AssertParse(
+    assertParse(
       """
       func foo2(bar! = baz) {}
       """,
@@ -1692,7 +1692,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery138() {
-    AssertParse(
+    assertParse(
       """
       // rdar://19605567
       switch esp {
@@ -1709,7 +1709,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery141() {
-    AssertParse(
+    assertParse(
       """
       #if true
       // rdar://19605164
@@ -1729,7 +1729,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery143() {
-    AssertParse(
+    assertParse(
       """
       // rdar://19605567
       func F() { init<1️⃣( 2️⃣} 3️⃣)}
@@ -1747,7 +1747,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery144() {
-    AssertParse(
+    assertParse(
       """
       init 1️⃣a(b: Int) {}
       """,
@@ -1761,7 +1761,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery145() {
-    AssertParse(
+    assertParse(
       """
       init? 1️⃣c(_ d: Int) {}
       """,
@@ -1775,7 +1775,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery146() {
-    AssertParse(
+    assertParse(
       """
       init 1️⃣e<T>(f: T) {}
       """,
@@ -1789,7 +1789,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery147() {
-    AssertParse(
+    assertParse(
       """
       init? 1️⃣g<T>(_: T) {}
       """,
@@ -1803,7 +1803,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery148() {
-    AssertParse(
+    assertParse(
       """
       init 1️⃣c d: Int 2️⃣{}
       """,
@@ -1815,7 +1815,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery150() {
-    AssertParse(
+    assertParse(
       """
       let n 1️⃣== C { get {}
       }
@@ -1827,7 +1827,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery151() {
-    AssertParse(
+    assertParse(
       #"""
       // <rdar://problem/20489838> QoI: Nonsensical error and fixit if "let" is missing between 'if let ... where' clauses
       if let y = x 1️⃣where y == 0, let z = x {
@@ -1845,7 +1845,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery152() {
-    AssertParse(
+    assertParse(
       """
       if var y = x, y == 0, var z = x {
         z = y; y = z
@@ -1855,7 +1855,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery153() {
-    AssertParse(
+    assertParse(
       """
       if var y = x, z = x {
         z = y; y = z
@@ -1868,7 +1868,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery154() {
-    AssertParse(
+    assertParse(
       #"""
       // <rdar://problem/20883210> QoI: Following a "let" condition with boolean condition spouts nonsensical errors
       guard let x: Int? = 1, x == 1 else {  }
@@ -1877,7 +1877,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery156() {
-    AssertParse(
+    assertParse(
       """
       // rdar://20866942
       func testRefutableLet() {
@@ -1892,7 +1892,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery157() {
-    AssertParse(
+    assertParse(
       #"""
       // <rdar://problem/19833424> QoI: Bad error message when using Objective-C literals (@"Hello") in Swift files
       let myString = 1️⃣@"foo"
@@ -1907,7 +1907,7 @@ final class RecoveryTests: XCTestCase {
 
   func testRecovery158() {
     // <rdar://problem/16990885> support curly quotes for string literals
-    AssertParse(
+    assertParse(
       """
       let curlyQuotes1 = 1️⃣“hello world!”
       """,
@@ -1921,7 +1921,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery159() {
-    AssertParse(
+    assertParse(
       #"""
       let curlyQuotes2 = 1️⃣“hello world!"
       """#,
@@ -1936,7 +1936,7 @@ final class RecoveryTests: XCTestCase {
 
   func testRecovery160() {
     // <rdar://problem/21196171> compiler should recover better from "unicode Specials" characters
-    AssertParse(
+    assertParse(
       #"""
       let 1️⃣￼tryx  = 123
       """#,
@@ -1947,7 +1947,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery161() {
-    AssertParse(
+    assertParse(
       """
       // <rdar://problem/21369926> Malformed Swift Enums crash playground service
       enum Rank: Int {
@@ -1959,7 +1959,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery162() {
-    AssertParse(
+    assertParse(
       """
       // rdar://22240342 - Crash in diagRecursivePropertyAccess
       class r22240342 {
@@ -1976,7 +1976,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery163() {
-    AssertParse(
+    assertParse(
       """
       // <rdar://problem/22387625> QoI: Common errors: 'let x= 5' and 'let x =5' could use Fix-its
       func r22387625() {
@@ -1992,7 +1992,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery164() {
-    AssertParse(
+    assertParse(
       """
       // https://github.com/apple/swift/issues/45723
       do {
@@ -2008,7 +2008,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery165() {
-    AssertParse(
+    assertParse(
       """
       // <rdar://problem/23086402> Swift compiler crash in CSDiag
       protocol A23086402 {
@@ -2019,7 +2019,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery166() {
-    AssertParse(
+    assertParse(
       """
       protocol B23086402 {
         var c: [String] { get }
@@ -2029,7 +2029,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery167() {
-    AssertParse(
+    assertParse(
       #"""
       func test23086402(a: A23086402) {
         print(a.b.c + "") // should not crash but: expected-error {{}}
@@ -2039,7 +2039,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery168() {
-    AssertParse(
+    assertParse(
       #"""
       // <rdar://problem/23550816> QoI: Poor diagnostic in argument list of "print" (varargs related)
       // The situation has changed. String now conforms to the RangeReplaceableCollection protocol
@@ -2053,7 +2053,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery169() {
-    AssertParse(
+    assertParse(
       """
       // <rdar://problem/23719432> [practicalswift] Compiler crashes on &(Int:_)
       func test23719432() {
@@ -2068,7 +2068,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery170() {
-    AssertParse(
+    assertParse(
       """
       // <rdar://problem/19911096> QoI: terrible recovery when using '·' for an operator
       infix operator 1️⃣· 2️⃣{
@@ -2085,7 +2085,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery171() {
-    AssertParse(
+    assertParse(
       """
       infix operator -1️⃣@-class Recover1 {}
       """,
@@ -2096,7 +2096,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery172() {
-    AssertParse(
+    assertParse(
       """
       prefix operator -1️⃣фф--class Recover2 {}
       """,
@@ -2107,7 +2107,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery173() {
-    AssertParse(
+    assertParse(
       #"""
       // <rdar://problem/21712891> Swift Compiler bug: String subscripts with range should require closing bracket.
       func r21712891(s : String) -> String {
@@ -2124,7 +2124,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery174() {
-    AssertParse(
+    assertParse(
       #"""
       // <rdar://problem/24029542> "Postfix '.' is reserved" error message" isn't helpful
       func postfixDot(a : String) {
@@ -2143,7 +2143,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery175() {
-    AssertParse(
+    assertParse(
       #"""
       // <rdar://problem/22290244> QoI: "UIColor." gives two issues, should only give one
       func f() { // expected-note 2{{did you mean 'f'?}}
@@ -2157,7 +2157,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery176() {
-    AssertParse(
+    assertParse(
       """
       // rdar://problem/22478168
       // https://github.com/apple/swift/issues/53396
@@ -2171,7 +2171,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery177() {
-    AssertParse(
+    assertParse(
       """
       // rdar://38225184
       extension Collection where Element == Int 1️⃣&& Index == Int {}
@@ -2184,7 +2184,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery179() {
-    AssertParse(
+    assertParse(
       """
       func testSkipUnbalancedParen() {1️⃣
         2️⃣?(
@@ -2198,7 +2198,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery180() {
-    AssertParse(
+    assertParse(
       """
       func testSkipToFindOpenBrace1() {
         do { if case 1️⃣}
@@ -2213,7 +2213,7 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery181() {
-    AssertParse(
+    assertParse(
       """
       func testSkipToFindOpenBrace2() {
         do { if true {} else 1️⃣false }
@@ -2228,14 +2228,14 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery182() {
-    AssertParse(
+    assertParse(
       "func foo() 1️⃣bogus {}",
       diagnostics: [
         DiagnosticSpec(message: "unexpected code 'bogus' in function")
       ]
     )
 
-    AssertParse(
+    assertParse(
       "func foo() 1️⃣bogus -> Int {}",
       diagnostics: [
         DiagnosticSpec(message: "unexpected code 'bogus' in function signature")

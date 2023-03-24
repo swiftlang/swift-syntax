@@ -28,7 +28,7 @@ final class SourceFileTests: XCTestCase {
       )
     }
 
-    AssertBuildResult(
+    assertBuildResult(
       source,
       """
       import Foundation

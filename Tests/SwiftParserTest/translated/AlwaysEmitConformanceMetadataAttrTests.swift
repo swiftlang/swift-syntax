@@ -16,7 +16,7 @@ import XCTest
 
 final class AlwaysEmitConformanceMetadataAttrTests: XCTestCase {
   func testAlwaysEmitConformanceMetadataAttr() {
-    AssertParse(
+    assertParse(
       """
       @_alwaysEmitConformanceMetadata
       protocol Test {}

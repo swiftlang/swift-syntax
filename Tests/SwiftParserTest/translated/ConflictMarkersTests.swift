@@ -16,7 +16,7 @@ import XCTest
 
 final class ConflictMarkersTests: XCTestCase {
   func testConflictMarkers1() {
-    AssertParse(
+    assertParse(
       """
       // Conflict marker parsing should never conflict with operator parsing.
       """
@@ -24,7 +24,7 @@ final class ConflictMarkersTests: XCTestCase {
   }
 
   func testConflictMarkers2() {
-    AssertParse(
+    assertParse(
       """
       prefix operator <<<<<<<
       infix operator <<<<<<<
@@ -33,7 +33,7 @@ final class ConflictMarkersTests: XCTestCase {
   }
 
   func testConflictMarkers3() {
-    AssertParse(
+    assertParse(
       """
       prefix func <<<<<<< (x : String) {}
       func <<<<<<< (x : String, y : String) {}
@@ -42,7 +42,7 @@ final class ConflictMarkersTests: XCTestCase {
   }
 
   func testConflictMarkers4() {
-    AssertParse(
+    assertParse(
       """
       prefix operator >>>>>>>
       infix operator >>>>>>>
@@ -51,7 +51,7 @@ final class ConflictMarkersTests: XCTestCase {
   }
 
   func testConflictMarkers5() {
-    AssertParse(
+    assertParse(
       """
       prefix func >>>>>>> (x : String) {}
       func >>>>>>> (x : String, y : String) {}
@@ -60,7 +60,7 @@ final class ConflictMarkersTests: XCTestCase {
   }
 
   func testConflictMarkers6() {
-    AssertParse(
+    assertParse(
       """
       // diff3-style conflict markers
       """
@@ -68,7 +68,7 @@ final class ConflictMarkersTests: XCTestCase {
   }
 
   func testConflictMarkers7() {
-    AssertParse(
+    assertParse(
       #"""
       1️⃣<<<<<<< HEAD:conflict_markers.swift
       var a : String = "A"
@@ -86,7 +86,7 @@ final class ConflictMarkersTests: XCTestCase {
   }
 
   func testConflictMarkers8() {
-    AssertParse(
+    assertParse(
       #"""
       1️⃣<<<<<<< HEAD:conflict_markers.swift
       =======
@@ -101,7 +101,7 @@ final class ConflictMarkersTests: XCTestCase {
   }
 
   func testConflictMarkers9() {
-    AssertParse(
+    assertParse(
       #"""
       <<<<<<<"HEAD:fake_conflict_markers.swift" // No error
       >>>>>>>"18844bc65229786b96b89a9fc7739c0fc897905e:fake_conflict_markers.swift" // No error
@@ -110,7 +110,7 @@ final class ConflictMarkersTests: XCTestCase {
   }
 
   func testConflictMarkers10() {
-    AssertParse(
+    assertParse(
       #"""
       1️⃣<<<<<<< HEAD:conflict_markers.swift
       <<<<<<<"HEAD:fake_conflict_markers.swift"
@@ -130,7 +130,7 @@ final class ConflictMarkersTests: XCTestCase {
   }
 
   func testConflictMarkers11() {
-    AssertParse(
+    assertParse(
       """
       // Disambiguating conflict markers from operator applications.
       """
@@ -138,7 +138,7 @@ final class ConflictMarkersTests: XCTestCase {
   }
 
   func testConflictMarkers12() {
-    AssertParse(
+    assertParse(
       #"""
       _ = {
       // Conflict marker.
@@ -161,7 +161,7 @@ final class ConflictMarkersTests: XCTestCase {
   }
 
   func testConflictMarkers13() {
-    AssertParse(
+    assertParse(
       """
       // Perforce-style conflict markers
       """
@@ -169,7 +169,7 @@ final class ConflictMarkersTests: XCTestCase {
   }
 
   func testConflictMarkers14() {
-    AssertParse(
+    assertParse(
       #"""
       1️⃣>>>> ORIGINAL
       var a : String = "A"
@@ -190,7 +190,7 @@ final class ConflictMarkersTests: XCTestCase {
   }
 
   func testConflictMarkers15() {
-    AssertParse(
+    assertParse(
       #"""
       1️⃣>>>> ORIGINAL
       ==== THEIRS

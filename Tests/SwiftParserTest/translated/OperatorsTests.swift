@@ -16,7 +16,7 @@ import XCTest
 
 final class OperatorsTests: XCTestCase {
   func testOperators1() {
-    AssertParse(
+    assertParse(
       """
       // This disables importing the stdlib intentionally.
       """
@@ -24,7 +24,7 @@ final class OperatorsTests: XCTestCase {
   }
 
   func testOperators2() {
-    AssertParse(
+    assertParse(
       """
       infix operator == : Equal
       precedencegroup Equal {
@@ -36,7 +36,7 @@ final class OperatorsTests: XCTestCase {
   }
 
   func testOperators3() {
-    AssertParse(
+    assertParse(
       """
       infix operator & : BitAnd
       precedencegroup BitAnd {
@@ -48,7 +48,7 @@ final class OperatorsTests: XCTestCase {
   }
 
   func testOperators4() {
-    AssertParse(
+    assertParse(
       """
       infix operator => : FatArrow
       precedencegroup FatArrow {
@@ -63,7 +63,7 @@ final class OperatorsTests: XCTestCase {
   }
 
   func testOperators5() {
-    AssertParse(
+    assertParse(
       """
       precedencegroup DefaultPrecedence {}
       """
@@ -71,7 +71,7 @@ final class OperatorsTests: XCTestCase {
   }
 
   func testOperators6() {
-    AssertParse(
+    assertParse(
       """
       struct Man {}
       struct TheDevil {}
@@ -81,7 +81,7 @@ final class OperatorsTests: XCTestCase {
   }
 
   func testOperators7() {
-    AssertParse(
+    assertParse(
       """
       struct Five {}
       struct Six {}
@@ -91,7 +91,7 @@ final class OperatorsTests: XCTestCase {
   }
 
   func testOperators8() {
-    AssertParse(
+    assertParse(
       """
       struct ManIsFive {}
       struct TheDevilIsSix {}
@@ -101,7 +101,7 @@ final class OperatorsTests: XCTestCase {
   }
 
   func testOperators9() {
-    AssertParse(
+    assertParse(
       """
       struct TheDevilIsSixThenGodIsSeven {}
       """
@@ -109,7 +109,7 @@ final class OperatorsTests: XCTestCase {
   }
 
   func testOperators10() {
-    AssertParse(
+    assertParse(
       """
       func == (x: Man, y: Five) -> ManIsFive {}
       func == (x: TheDevil, y: Six) -> TheDevilIsSix {}
@@ -119,7 +119,7 @@ final class OperatorsTests: XCTestCase {
   }
 
   func testOperators11() {
-    AssertParse(
+    assertParse(
       """
       func => (x: TheDevilIsSix, y: GodIsSeven) -> TheDevilIsSixThenGodIsSeven {}
       func => (x: ManIsFive, y: TheDevilIsSixThenGodIsSeven) {}
@@ -128,7 +128,7 @@ final class OperatorsTests: XCTestCase {
   }
 
   func testOperators12() {
-    AssertParse(
+    assertParse(
       """
       func test1() {
         Man() == Five() => TheDevil() == Six() => God() == Seven()
@@ -138,7 +138,7 @@ final class OperatorsTests: XCTestCase {
   }
 
   func testOperators13() {
-    AssertParse(
+    assertParse(
       """
       postfix operator *!*
       prefix operator *!*
@@ -147,7 +147,7 @@ final class OperatorsTests: XCTestCase {
   }
 
   func testOperators14() {
-    AssertParse(
+    assertParse(
       """
       struct LOOK {}
       struct LOOKBang {
@@ -158,7 +158,7 @@ final class OperatorsTests: XCTestCase {
   }
 
   func testOperators15() {
-    AssertParse(
+    assertParse(
       """
       postfix func *!* (x: LOOK) -> LOOKBang {}
       prefix func *!* (x: LOOKBang) {}
@@ -167,7 +167,7 @@ final class OperatorsTests: XCTestCase {
   }
 
   func testOperators16() {
-    AssertParse(
+    assertParse(
       """
       func test2() {
         *!*LOOK()*!*
@@ -177,7 +177,7 @@ final class OperatorsTests: XCTestCase {
   }
 
   func testOperators17() {
-    AssertParse(
+    assertParse(
       """
       // This should be parsed as (x*!*).exclaim()
       LOOK()*!*.exclaim()
@@ -186,7 +186,7 @@ final class OperatorsTests: XCTestCase {
   }
 
   func testOperators18() {
-    AssertParse(
+    assertParse(
       """
       prefix operator ^
       infix operator ^
@@ -196,7 +196,7 @@ final class OperatorsTests: XCTestCase {
   }
 
   func testOperators19() {
-    AssertParse(
+    assertParse(
       """
       postfix func ^ (x: God) -> TheDevil {}
       prefix func ^ (x: TheDevil) -> God {}
@@ -205,7 +205,7 @@ final class OperatorsTests: XCTestCase {
   }
 
   func testOperators20() {
-    AssertParse(
+    assertParse(
       """
       func ^ (x: TheDevil, y: God) -> Man {}
       """
@@ -213,7 +213,7 @@ final class OperatorsTests: XCTestCase {
   }
 
   func testOperators21() {
-    AssertParse(
+    assertParse(
       """
       var _ : TheDevil = God()^
       var _ : God = ^TheDevil()
@@ -225,7 +225,7 @@ final class OperatorsTests: XCTestCase {
   }
 
   func testOperators22() {
-    AssertParse(
+    assertParse(
       """
       postfix func ^ (x: Man) -> () -> God {
         return { return God() }
@@ -235,7 +235,7 @@ final class OperatorsTests: XCTestCase {
   }
 
   func testOperators23() {
-    AssertParse(
+    assertParse(
       """
       var _ : God = Man()^()
       """
@@ -243,7 +243,7 @@ final class OperatorsTests: XCTestCase {
   }
 
   func testOperators24() {
-    AssertParse(
+    assertParse(
       """
       func &(x : Man, y : Man) -> Man { return x } // forgive amp_prefix token
       """
@@ -251,7 +251,7 @@ final class OperatorsTests: XCTestCase {
   }
 
   func testOperators25() {
-    AssertParse(
+    assertParse(
       """
       prefix operator ⚽️
       """
@@ -259,7 +259,7 @@ final class OperatorsTests: XCTestCase {
   }
 
   func testOperators26() {
-    AssertParse(
+    assertParse(
       """
       prefix func ⚽️(x: Man) { }
       """
@@ -267,7 +267,7 @@ final class OperatorsTests: XCTestCase {
   }
 
   func testOperators27() {
-    AssertParse(
+    assertParse(
       """
       infix operator ?? : OptTest
       precedencegroup OptTest {
@@ -278,7 +278,7 @@ final class OperatorsTests: XCTestCase {
   }
 
   func testOperators28() {
-    AssertParse(
+    assertParse(
       """
       func ??(x: Man, y: TheDevil) -> TheDevil {
         return y
@@ -288,7 +288,7 @@ final class OperatorsTests: XCTestCase {
   }
 
   func testOperators29() {
-    AssertParse(
+    assertParse(
       """
       func test3(a: Man, b: Man, c: TheDevil) -> TheDevil {
         return a ?? b ?? c
@@ -298,7 +298,7 @@ final class OperatorsTests: XCTestCase {
   }
 
   func testOperators30() {
-    AssertParse(
+    assertParse(
       """
       // <rdar://problem/17821399> We don't parse infix operators bound on both
       // sides that begin with ! or ? correctly yet.
@@ -308,7 +308,7 @@ final class OperatorsTests: XCTestCase {
   }
 
   func testOperators31() {
-    AssertParse(
+    assertParse(
       """
       func !!(x: Man, y: Man) {}
       """
@@ -316,7 +316,7 @@ final class OperatorsTests: XCTestCase {
   }
 
   func testOperators32() {
-    AssertParse(
+    assertParse(
       """
       let foo = Man()
       """
@@ -324,7 +324,7 @@ final class OperatorsTests: XCTestCase {
   }
 
   func testOperators33() {
-    AssertParse(
+    assertParse(
       """
       let bar = TheDevil()
       """
@@ -332,7 +332,7 @@ final class OperatorsTests: XCTestCase {
   }
 
   func testOperators34() {
-    AssertParse(
+    assertParse(
       """
       foo!!1️⃣foo
       """,
@@ -343,7 +343,7 @@ final class OperatorsTests: XCTestCase {
   }
 
   func testOperators35() {
-    AssertParse(
+    assertParse(
       """
       foo??1️⃣bar
       """,

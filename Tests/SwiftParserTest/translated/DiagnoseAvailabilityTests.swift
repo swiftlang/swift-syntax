@@ -16,7 +16,7 @@ import XCTest
 
 final class DiagnoseAvailabilityTests: XCTestCase {
   func testDiagnoseAvailability1() {
-    AssertParse(
+    assertParse(
       """
       // https://github.com/apple/swift/issues/46814
       // Misleading/wrong error message for malformed '@available'
@@ -25,7 +25,7 @@ final class DiagnoseAvailabilityTests: XCTestCase {
   }
 
   func testDiagnoseAvailability2() {
-    AssertParse(
+    assertParse(
       """
       @available(OSX 10.6, *) // no error
       func availableSince10_6() {}
@@ -34,7 +34,7 @@ final class DiagnoseAvailabilityTests: XCTestCase {
   }
 
   func testDiagnoseAvailability3() {
-    AssertParse(
+    assertParse(
       """
       @available(OSX, introduced: 10.0, deprecated: 10.12) // no error
       func introducedFollowedByDeprecated() {}
@@ -43,7 +43,7 @@ final class DiagnoseAvailabilityTests: XCTestCase {
   }
 
   func testDiagnoseAvailability4() {
-    AssertParse(
+    assertParse(
       """
       @available(OSX 10.0, deprecated: 10.12)
       func shorthandFollowedByDeprecated() {}
@@ -52,7 +52,7 @@ final class DiagnoseAvailabilityTests: XCTestCase {
   }
 
   func testDiagnoseAvailability5() {
-    AssertParse(
+    assertParse(
       """
       @available(OSX 10.0, introduced: 10.12)
       func shorthandFollowedByIntroduced() {}
@@ -61,7 +61,7 @@ final class DiagnoseAvailabilityTests: XCTestCase {
   }
 
   func testDiagnoseAvailability6() {
-    AssertParse(
+    assertParse(
       """
       @available(iOS 6.0, OSX 10.8, *) // no error
       func availableOnMultiplePlatforms() {}
@@ -70,7 +70,7 @@ final class DiagnoseAvailabilityTests: XCTestCase {
   }
 
   func testDiagnoseAvailability7() {
-    AssertParse(
+    assertParse(
       """
       @available(iOS 6.0, OSX 10.0, deprecated: 10.12)
       func twoShorthandsFollowedByDeprecated() {}
@@ -79,7 +79,7 @@ final class DiagnoseAvailabilityTests: XCTestCase {
   }
 
   func testDiagnoseAvailability8() {
-    AssertParse(
+    assertParse(
       """
       // https://github.com/apple/swift/issues/51114
       // Missing/wrong warning message for '*' or 'swift' platform.
@@ -88,7 +88,7 @@ final class DiagnoseAvailabilityTests: XCTestCase {
   }
 
   func testDiagnoseAvailability9() {
-    AssertParse(
+    assertParse(
       """
       @available(*, deprecated: 4.2)
       func allPlatformsDeprecatedVersion() {}
@@ -97,7 +97,7 @@ final class DiagnoseAvailabilityTests: XCTestCase {
   }
 
   func testDiagnoseAvailability10() {
-    AssertParse(
+    assertParse(
       """
       @available(*, deprecated, obsoleted: 4.2)
       func allPlatformsDeprecatedAndObsoleted() {}
@@ -106,7 +106,7 @@ final class DiagnoseAvailabilityTests: XCTestCase {
   }
 
   func testDiagnoseAvailability11() {
-    AssertParse(
+    assertParse(
       """
       @available(*, introduced: 4.0, deprecated: 4.1, obsoleted: 4.2)
       func allPlatformsDeprecatedAndObsoleted2() {}
@@ -115,7 +115,7 @@ final class DiagnoseAvailabilityTests: XCTestCase {
   }
 
   func testDiagnoseAvailability12() {
-    AssertParse(
+    assertParse(
       """
       @available(swift, unavailable)
       func swiftUnavailable() {}
@@ -124,7 +124,7 @@ final class DiagnoseAvailabilityTests: XCTestCase {
   }
 
   func testDiagnoseAvailability13() {
-    AssertParse(
+    assertParse(
       """
       @available(swift, unavailable, introduced: 4.2)
       func swiftUnavailableIntroduced() {}
@@ -133,7 +133,7 @@ final class DiagnoseAvailabilityTests: XCTestCase {
   }
 
   func testDiagnoseAvailability14() {
-    AssertParse(
+    assertParse(
       """
       @available(swift, deprecated)
       func swiftDeprecated() {}
@@ -142,7 +142,7 @@ final class DiagnoseAvailabilityTests: XCTestCase {
   }
 
   func testDiagnoseAvailability15() {
-    AssertParse(
+    assertParse(
       """
       @available(swift, deprecated, obsoleted: 4.2)
       func swiftDeprecatedObsoleted() {}
@@ -151,7 +151,7 @@ final class DiagnoseAvailabilityTests: XCTestCase {
   }
 
   func testDiagnoseAvailability16() {
-    AssertParse(
+    assertParse(
       #"""
       @available(swift, message: "missing valid option")
       func swiftMessage() {}
@@ -160,7 +160,7 @@ final class DiagnoseAvailabilityTests: XCTestCase {
   }
 
   func testDiagnoseAvailability17() {
-    AssertParse(
+    assertParse(
       #"""
       @available(*, unavailable, message: "\("message")")
       func interpolatedMessage() {}
@@ -172,7 +172,7 @@ final class DiagnoseAvailabilityTests: XCTestCase {
   }
 
   func testDiagnoseAvailability18() {
-    AssertParse(
+    assertParse(
       #"""
       @available(*, unavailable, message: """
         foobar message.
@@ -184,7 +184,7 @@ final class DiagnoseAvailabilityTests: XCTestCase {
   }
 
   func testDiagnoseAvailability19() {
-    AssertParse(
+    assertParse(
       #"""
       @available(*, unavailable, message: " ")
       func emptyMessage() {}
@@ -194,7 +194,7 @@ final class DiagnoseAvailabilityTests: XCTestCase {
   }
 
   func testDiagnoseAvailability20() {
-    AssertParse(
+    assertParse(
       ##"""
       @available(*, unavailable, message: #"""
         foobar message.
@@ -208,7 +208,7 @@ final class DiagnoseAvailabilityTests: XCTestCase {
   }
 
   func testDiagnoseAvailability21() {
-    AssertParse(
+    assertParse(
       ##"""
       @available(*, unavailable, renamed: #"available()"#)
       func extendedEscapedRenamed() {}

@@ -26,7 +26,7 @@ final class ClosureExprTests: XCTestCase {
       )
     ) {}
 
-    AssertBuildResult(
+    assertBuildResult(
       buildable,
       """
       {area in

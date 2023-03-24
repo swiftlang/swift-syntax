@@ -17,7 +17,7 @@ import XCTest
 
 final class OptionalTests: XCTestCase {
   func testOptional1() {
-    AssertParse(
+    assertParse(
       """
       struct A {
         func foo() {}
@@ -27,7 +27,7 @@ final class OptionalTests: XCTestCase {
   }
 
   func testOptional2() {
-    AssertParse(
+    assertParse(
       """
       var a : A?
       var b : A 1️⃣?
@@ -39,7 +39,7 @@ final class OptionalTests: XCTestCase {
   }
 
   func testOptional3a() {
-    AssertParse(
+    assertParse(
       """
       var c = a?
       """,
@@ -53,7 +53,7 @@ final class OptionalTests: XCTestCase {
   }
 
   func testOptional3b() {
-    AssertParse(
+    assertParse(
       """
       var d : ()? = a?.foo()
       """
@@ -61,7 +61,7 @@ final class OptionalTests: XCTestCase {
   }
 
   func testOptional4() {
-    AssertParse(
+    assertParse(
       """
       var e : (() -> A)?
       var f = e?()
@@ -70,7 +70,7 @@ final class OptionalTests: XCTestCase {
   }
 
   func testOptional5() {
-    AssertParse(
+    assertParse(
       """
       struct B<T> {}
       var g = B<A?>()

@@ -16,7 +16,7 @@ import XCTest
 
 final class BraceRecoveryEofTests: XCTestCase {
   func testBraceRecoveryEof1() {
-    AssertParse(
+    assertParse(
       """
       // Make sure source ranges satisfy the verifier.
       for foo in [1, 2] ℹ️{

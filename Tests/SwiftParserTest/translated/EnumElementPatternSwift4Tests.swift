@@ -16,7 +16,7 @@ import XCTest
 
 final class EnumElementPatternSwift4Tests: XCTestCase {
   func testEnumElementPatternSwift41() {
-    AssertParse(
+    assertParse(
       """
       // https://github.com/apple/swift/issues/46040
       // See test/Compatibility/enum_element_pattern.swift for Swift3 behavior.
@@ -26,7 +26,7 @@ final class EnumElementPatternSwift4Tests: XCTestCase {
   }
 
   func testEnumElementPatternSwift42() {
-    AssertParse(
+    assertParse(
       """
       enum E {
         case A, B, C, D
@@ -46,7 +46,7 @@ final class EnumElementPatternSwift4Tests: XCTestCase {
   }
 
   func testEnumElementPatternSwift43() {
-    AssertParse(
+    assertParse(
       """
       func testE(e: E) {
         switch e {
@@ -72,7 +72,7 @@ final class EnumElementPatternSwift4Tests: XCTestCase {
   }
 
   func testEnumElementPatternSwift44() {
-    AssertParse(
+    assertParse(
       """
       extension E : Error {}
       func canThrow() throws {
@@ -83,7 +83,7 @@ final class EnumElementPatternSwift4Tests: XCTestCase {
   }
 
   func testEnumElementPatternSwift45() {
-    AssertParse(
+    assertParse(
       """
       do {
         try canThrow()

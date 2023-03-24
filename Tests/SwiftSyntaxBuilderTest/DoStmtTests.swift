@@ -49,7 +49,7 @@ final class DoStmtTests: XCTestCase {
       ]
     )
 
-    AssertBuildResult(
+    assertBuildResult(
       buildable,
       """
       do {
@@ -99,7 +99,7 @@ final class DoStmtTests: XCTestCase {
       ]
     )
 
-    AssertBuildResult(
+    assertBuildResult(
       buildable,
       """
       do {
@@ -149,7 +149,7 @@ final class DoStmtTests: XCTestCase {
       ]
     )
 
-    AssertBuildResult(
+    assertBuildResult(
       buildable,
       """
       do {

@@ -16,7 +16,7 @@ import XCTest
 
 final class SemicolonTests: XCTestCase {
   func testSemicolon1() {
-    AssertParse(
+    assertParse(
       #"""
       let a = 42;
       var b = "b";
@@ -25,7 +25,7 @@ final class SemicolonTests: XCTestCase {
   }
 
   func testSemicolon2() {
-    AssertParse(
+    assertParse(
       """
       struct A {
           var a1: Int;
@@ -38,7 +38,7 @@ final class SemicolonTests: XCTestCase {
   }
 
   func testSemicolon3() {
-    AssertParse(
+    assertParse(
       """
       enum B {
           case B1;
@@ -51,7 +51,7 @@ final class SemicolonTests: XCTestCase {
   }
 
   func testSemicolon4() {
-    AssertParse(
+    assertParse(
       """
       class C {
           var x: Int;
@@ -63,7 +63,7 @@ final class SemicolonTests: XCTestCase {
   }
 
   func testSemicolon5() {
-    AssertParse(
+    assertParse(
       """
       typealias C1 = C;
       """
@@ -71,7 +71,7 @@ final class SemicolonTests: XCTestCase {
   }
 
   func testSemicolon6() {
-    AssertParse(
+    assertParse(
       """
       protocol D {
           var foo: () -> Int { get };
@@ -81,7 +81,7 @@ final class SemicolonTests: XCTestCase {
   }
 
   func testSemicolon7() {
-    AssertParse(
+    assertParse(
       """
       struct D1: D {
           let foo = { return 42; };
@@ -94,7 +94,7 @@ final class SemicolonTests: XCTestCase {
   }
 
   func testSemicolon8() {
-    AssertParse(
+    assertParse(
       """
       import Swift;
       """
@@ -102,7 +102,7 @@ final class SemicolonTests: XCTestCase {
   }
 
   func testSemicolon9() {
-    AssertParse(
+    assertParse(
       """
       for i in 1..<1000 {
           if i % 2 == 1 {
@@ -114,7 +114,7 @@ final class SemicolonTests: XCTestCase {
   }
 
   func testSemicolon10() {
-    AssertParse(
+    assertParse(
       """
       let six = (1..<3).reduce(0, +);
       """
@@ -122,7 +122,7 @@ final class SemicolonTests: XCTestCase {
   }
 
   func testSemicolon11() {
-    AssertParse(
+    assertParse(
       """
       func lessThanTwo(input: UInt) -> Bool {
           switch input {
@@ -137,7 +137,7 @@ final class SemicolonTests: XCTestCase {
   }
 
   func testSemicolon12() {
-    AssertParse(
+    assertParse(
       """
       enum StarWars {
           enum Quality { case 😀; case 🙂; case 😐; case 😏; case 😞 };

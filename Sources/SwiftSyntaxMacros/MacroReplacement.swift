@@ -114,11 +114,7 @@ fileprivate class ParameterReplacementVisitor: SyntaxAnyVisitor {
   // of a macro.
   override func visit(_ node: IdentifierExprSyntax) -> SyntaxVisitorContinueKind {
     let identifier = node.identifier
-
-    // FIXME: This will go away.
-    guard case let .functionLike(signature) = macro.signature else {
-      return .visitChildren
-    }
+    let signature = macro.signature
 
     let matchedParameter = signature.input.parameterList.enumerated().first { (index, parameter) in
       if identifier.text == "_" {

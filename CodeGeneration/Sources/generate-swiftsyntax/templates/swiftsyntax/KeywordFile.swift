@@ -21,7 +21,7 @@ let lookupTable = ArrayExprSyntax(leftSquare: .leftSquareBracketToken(trailingTr
   }
 }
 
-let keywordFile = SourceFileSyntax(leadingTrivia: generateCopyrightHeader(for: "generate-swiftsyntax")) {
+let keywordFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   DeclSyntax(
     """
     /// Make `StaticString` equatable so we can use it as the raw value for Keyword.

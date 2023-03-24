@@ -15,7 +15,7 @@ import SwiftSyntaxBuilder
 import SyntaxSupport
 import Utils
 
-let declarationModifierFile = SourceFileSyntax(leadingTrivia: generateCopyrightHeader(for: "generate-swiftparser")) {
+let declarationModifierFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   DeclSyntax("@_spi(RawSyntax) import SwiftSyntax")
 
   try! EnumDeclSyntax("enum DeclarationModifier: TokenSpecSet") {

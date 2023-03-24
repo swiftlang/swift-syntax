@@ -886,6 +886,23 @@ public class LexerTests: XCTestCase {
     }
   }
 
+  func testInvalidUtf8_3() {
+    let sourceBytes: [UInt8] = [0xfd, 0x41]  // 0x41 == "A"
+
+    lex(sourceBytes) { lexemes in
+      guard lexemes.count == 2 else {
+        return XCTFail("Expected 2 lexemes, got \(lexemes.count)")
+      }
+      AssertRawBytesLexeme(
+        lexemes[0],
+        kind: .identifier,
+        leadingTrivia: [0xfd],
+        text: [0x41],
+        error: TokenDiagnostic(.invalidUtf8, byteOffset: 0)
+      )
+    }
+  }
+
   func testInterpolatedString() {
     AssertLexemes(
       #"""

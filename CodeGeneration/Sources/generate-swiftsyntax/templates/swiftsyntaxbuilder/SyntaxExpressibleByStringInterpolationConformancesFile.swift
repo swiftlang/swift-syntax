@@ -15,7 +15,7 @@ import SyntaxSupport
 import SwiftSyntaxBuilder
 import Utils
 
-let syntaxExpressibleByStringInterpolationConformancesFile = SourceFileSyntax(leadingTrivia: generateCopyrightHeader(for: "generate-swiftsyntaxbuilder")) {
+let syntaxExpressibleByStringInterpolationConformancesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   DeclSyntax("import SwiftSyntax")
   DeclSyntax("import SwiftParser")
   DeclSyntax("import SwiftParserDiagnostics")

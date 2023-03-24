@@ -118,7 +118,7 @@ def realpath(path: Optional[str]) -> Optional[str]:
 
 
 # -----------------------------------------------------------------------------
-# Generating gyb Files
+# Generating Files
 
 
 def run_code_generation(
@@ -514,16 +514,6 @@ def test_command(args: argparse.Namespace) -> None:
 
 _DESCRIPTION = """
 Build and test script for SwiftSyntax.
-
-Build SwiftSyntax by generating all necessary files form the corresponding
-.swift.gyb files first. For this, SwiftSyntax needs to be check out alongside
-the main swift repo (http://github.com/apple/swift/) in the following structure
-
-- (containing directory)
-  - swift
-  - swift-syntax
-
-It is not necessary to build the compiler project.
 
 The build script can also drive the test suite included in the SwiftSyntax
 repo. This requires a custom build of the compiler project since it accesses

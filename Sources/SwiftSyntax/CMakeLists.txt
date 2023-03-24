@@ -8,6 +8,7 @@
 
 add_swift_host_library(SwiftSyntax
   AbsolutePosition.swift
+  Assert.swift
   BumpPtrAllocator.swift
   CommonAncestor.swift
   IncrementalParseTransition.swift

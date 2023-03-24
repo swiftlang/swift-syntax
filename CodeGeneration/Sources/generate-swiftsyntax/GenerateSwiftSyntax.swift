@@ -74,6 +74,8 @@ struct GenerateSwiftSyntax: ParsableCommand {
   var verbose: Bool = false
 
   func run() throws {
+    let destination = URL(fileURLWithPath: self.destination).standardizedFileURL
+
     let fileSpecs: [GeneratedFileSpec] =
       [
         // SwiftBasicFormat
@@ -123,13 +125,15 @@ struct GenerateSwiftSyntax: ParsableCommand {
     let previouslyGeneratedFilesLock = NSLock()
     var previouslyGeneratedFiles = Set(
       modules.flatMap { (module) -> [URL] in
-        let generatedDir = URL(fileURLWithPath: destination)
+        let generatedDir =
+          destination
           .appendingPathComponent(module)
           .appendingPathComponent("generated")
         return FileManager.default
           .enumerator(at: generatedDir, includingPropertiesForKeys: nil)!
           .compactMap { $0 as? URL }
           .filter { !$0.hasDirectoryPath }
+          .map { $0.resolvingSymlinksInPath() }
       }
     )
 
@@ -137,7 +141,7 @@ struct GenerateSwiftSyntax: ParsableCommand {
     DispatchQueue.concurrentPerform(iterations: fileSpecs.count) { index in
       let fileSpec = fileSpecs[index]
       do {
-        var destination = URL(fileURLWithPath: destination)
+        var destination = destination
         for component in fileSpec.pathComponents {
           destination = destination.appendingPathComponent(component)
         }

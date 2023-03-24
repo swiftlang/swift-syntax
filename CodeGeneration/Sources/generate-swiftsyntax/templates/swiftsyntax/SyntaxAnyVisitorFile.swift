@@ -15,7 +15,7 @@ import SwiftSyntaxBuilder
 import SyntaxSupport
 import Utils
 
-let syntaxAnyVisitorFile = SourceFileSyntax(leadingTrivia: generateCopyrightHeader(for: "generate-swiftsyntax")) {
+let syntaxAnyVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   try! ClassDeclSyntax(
     """
     /// A `SyntaxVisitor` that can visit the nodes as generic `Syntax` values.

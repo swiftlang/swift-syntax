@@ -28,7 +28,7 @@ public struct TriviaParser {
       switch cursor.advance() {
       case nil:
         // Finished.
-        assert(cursor.isAtEndOfFile)
+        precondition(cursor.isAtEndOfFile)
         return pieces
 
       case UInt8(ascii: "\n"):
@@ -127,7 +127,7 @@ public struct TriviaParser {
       // unexpected text trivia piece and were not a comment), merge it to
       // the last piece.
       if case .unexpectedText(let preUnexpected) = pieces.last {
-        assert(start.pointer == preUnexpected.baseAddress! + preUnexpected.count)
+        precondition(start.pointer == preUnexpected.baseAddress! + preUnexpected.count)
         let mergedText = SyntaxText(
           baseAddress: preUnexpected.baseAddress,
           count: preUnexpected.count + start.distance(to: cursor)
@@ -145,7 +145,7 @@ public struct TriviaParser {
 
 extension Lexer.Cursor {
   fileprivate mutating func lexCarriageReturn(start: Lexer.Cursor) -> RawTriviaPiece {
-    assert(self.previous == UInt8(ascii: "\r"))
+    precondition(self.previous == UInt8(ascii: "\r"))
     if self.advance(if: { $0 == "\n" }) {
       var mark = self
       while true {
@@ -178,7 +178,7 @@ extension Lexer.Cursor {
   fileprivate mutating func lexLineComment(start: Lexer.Cursor) -> RawTriviaPiece {
     // "///...": .docLineComment.
     // "//...": .lineComment.
-    assert(self.previous == UInt8(ascii: "/") && self.is(at: "/"))
+    precondition(self.previous == UInt8(ascii: "/") && self.is(at: "/"))
     let isDocComment = self.input.count > 1 && self.is(offset: 1, at: "/")
     self.advanceToEndOfLine()
     let contents = start.text(upTo: self)
@@ -189,7 +189,7 @@ extension Lexer.Cursor {
     // "/**...*/": .docBlockComment.
     // "/*...*/": .blockComment.
     // "/**/": .blockComment.
-    assert(self.previous == UInt8(ascii: "/") && self.is(at: "*"))
+    precondition(self.previous == UInt8(ascii: "/") && self.is(at: "*"))
     let isDocComment = self.input.count > 2 && self.is(offset: 1, at: "*") && self.is(offset: 2, notAt: "/")
     _ = self.advanceToEndOfSlashStarComment()
     let contents = start.text(upTo: self)

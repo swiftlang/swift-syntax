@@ -29,7 +29,7 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .accessorDecl)
+    precondition(data.raw.kind == .accessorDecl)
     self._syntaxNode = Syntax(data)
   }
   
@@ -320,7 +320,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .actorDecl)
+    precondition(data.raw.kind == .actorDecl)
     self._syntaxNode = Syntax(data)
   }
   
@@ -694,7 +694,7 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .associatedtypeDecl)
+    precondition(data.raw.kind == .associatedtypeDecl)
     self._syntaxNode = Syntax(data)
   }
   
@@ -1036,7 +1036,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .classDecl)
+    precondition(data.raw.kind == .classDecl)
     self._syntaxNode = Syntax(data)
   }
   
@@ -1410,7 +1410,7 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .deinitializerDecl)
+    precondition(data.raw.kind == .deinitializerDecl)
     self._syntaxNode = Syntax(data)
   }
   
@@ -1656,7 +1656,7 @@ public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .editorPlaceholderDecl)
+    precondition(data.raw.kind == .editorPlaceholderDecl)
     self._syntaxNode = Syntax(data)
   }
   
@@ -1755,7 +1755,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .enumCaseDecl)
+    precondition(data.raw.kind == .enumCaseDecl)
     self._syntaxNode = Syntax(data)
   }
   
@@ -2024,7 +2024,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .enumDecl)
+    precondition(data.raw.kind == .enumDecl)
     self._syntaxNode = Syntax(data)
   }
   
@@ -2406,7 +2406,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .extensionDecl)
+    precondition(data.raw.kind == .extensionDecl)
     self._syntaxNode = Syntax(data)
   }
   
@@ -2748,7 +2748,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .functionDecl)
+    precondition(data.raw.kind == .functionDecl)
     self._syntaxNode = Syntax(data)
   }
   
@@ -3122,7 +3122,7 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .ifConfigDecl)
+    precondition(data.raw.kind == .ifConfigDecl)
     self._syntaxNode = Syntax(data)
   }
   
@@ -3285,7 +3285,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .importDecl)
+    precondition(data.raw.kind == .importDecl)
     self._syntaxNode = Syntax(data)
   }
   
@@ -3582,7 +3582,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .initializerDecl)
+    precondition(data.raw.kind == .initializerDecl)
     self._syntaxNode = Syntax(data)
   }
   
@@ -3956,7 +3956,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .macroDecl)
+    precondition(data.raw.kind == .macroDecl)
     self._syntaxNode = Syntax(data)
   }
   
@@ -4330,7 +4330,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .macroExpansionDecl)
+    precondition(data.raw.kind == .macroExpansionDecl)
     self._syntaxNode = Syntax(data)
   }
   
@@ -4705,7 +4705,7 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .missingDecl)
+    precondition(data.raw.kind == .missingDecl)
     self._syntaxNode = Syntax(data)
   }
   
@@ -4887,7 +4887,7 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .operatorDecl)
+    precondition(data.raw.kind == .operatorDecl)
     self._syntaxNode = Syntax(data)
   }
   
@@ -5168,7 +5168,7 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .poundSourceLocation)
+    precondition(data.raw.kind == .poundSourceLocation)
     self._syntaxNode = Syntax(data)
   }
   
@@ -5376,7 +5376,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .precedenceGroupDecl)
+    precondition(data.raw.kind == .precedenceGroupDecl)
     self._syntaxNode = Syntax(data)
   }
   
@@ -5741,7 +5741,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .protocolDecl)
+    precondition(data.raw.kind == .protocolDecl)
     self._syntaxNode = Syntax(data)
   }
   
@@ -6115,7 +6115,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .structDecl)
+    precondition(data.raw.kind == .structDecl)
     self._syntaxNode = Syntax(data)
   }
   
@@ -6531,7 +6531,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .subscriptDecl)
+    precondition(data.raw.kind == .subscriptDecl)
     self._syntaxNode = Syntax(data)
   }
   
@@ -6905,7 +6905,7 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .typealiasDecl)
+    precondition(data.raw.kind == .typealiasDecl)
     self._syntaxNode = Syntax(data)
   }
   
@@ -7247,7 +7247,7 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .variableDecl)
+    precondition(data.raw.kind == .variableDecl)
     self._syntaxNode = Syntax(data)
   }
   

@@ -413,7 +413,7 @@ extension Parser {
   ///     generic-argument → type
   @_spi(RawSyntax)
   public mutating func parseGenericArguments() -> RawGenericArgumentClauseSyntax {
-    assert(self.currentToken.starts(with: "<"))
+    precondition(self.currentToken.starts(with: "<"))
     let langle = self.consumePrefix("<", as: .leftAngle)
     var arguments = [RawGenericArgumentSyntax]()
     do {

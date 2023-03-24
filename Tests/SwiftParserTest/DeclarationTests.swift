@@ -145,7 +145,7 @@ final class DeclarationTests: XCTestCase {
       actor Foo {
         nonisolated init?() {
           for (x, y, z) in self.triples {
-            assert(isSafe)
+            precondition(isSafe)
           }
         }
         subscript(_ param: String) -> Int {

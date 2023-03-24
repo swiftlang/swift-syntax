@@ -121,7 +121,7 @@ extension Parser.Lookahead {
   ) -> (match: SpecSet, handle: RecoveryConsumptionHandle)? {
     let initialTokensConsumed = self.tokensConsumed
 
-    assert(!specSet.allCases.isEmpty, "SpecSet must have at least one case")
+    precondition(!specSet.allCases.isEmpty, "SpecSet must have at least one case")
     let recoveryPrecedence =
       overrideRecoveryPrecedence ?? specSet.allCases.map({
         return $0.spec.recoveryPrecedence

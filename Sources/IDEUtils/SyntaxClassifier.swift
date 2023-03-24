@@ -189,7 +189,7 @@ private struct ClassificationVisitor {
       byteOffset += piece.byteLength
     }
 
-    assert(byteOffset == descriptor.byteOffset + descriptor.node.byteLength)
+    precondition(byteOffset == descriptor.byteOffset + descriptor.node.byteLength)
     return .continue
   }
 

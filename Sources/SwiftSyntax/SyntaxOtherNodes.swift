@@ -30,7 +30,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .token)
+    precondition(data.raw.kind == .token)
     self._syntaxNode = Syntax(data)
   }
 

@@ -42,7 +42,7 @@ public struct SyntaxText {
   }
 
   public init(baseAddress: UnsafePointer<UInt8>?, count: Int) {
-    assert(
+    precondition(
       count == 0 || baseAddress != nil,
       "If count is not zero, base address must be exist"
     )
@@ -231,7 +231,7 @@ private func compareMemory(
   _ s2: UnsafePointer<UInt8>,
   _ count: Int
 ) -> Bool {
-  assert(count >= 0)
+  precondition(count >= 0)
   #if SWIFT_SYNTAX_ALWAYS_SINGLE_THREADED
   return UnsafeBufferPointer(start: s1, count: count)
     .elementsEqual(UnsafeBufferPointer(start: s2, count: count))

@@ -68,6 +68,11 @@ message(STATUS "Module triple: ${SWIFT_MODULE_TRIPLE}")
 add_compile_definitions(
   $<$<COMPILE_LANGUAGE:Swift>:SWIFT_SYNTAX_ALWAYS_SINGLE_THREADED>
 )
+if (SWIFTSYNTAX_ENABLE_ASSERTIONS)
+  add_compile_definitions(
+    $<$<COMPILE_LANGUAGE:Swift>:SWIFTSYNTAX_ENABLE_ASSERTIONS>
+  )
+endif()
 
 add_subdirectory(Sources)
 

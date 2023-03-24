@@ -44,8 +44,8 @@ extension FixIt.Changes {
   /// If `transferTrivia` is `true`, the leading and trailing trivia of the
   /// removed node will be transferred to the trailing trivia of the previous token.
   static func makeMissing(_ tokens: [TokenSyntax], transferTrivia: Bool = true) -> Self {
-    assert(!tokens.isEmpty)
-    assert(tokens.allSatisfy({ $0.presence == .present }))
+    precondition(!tokens.isEmpty)
+    precondition(tokens.allSatisfy({ $0.presence == .present }))
     var changes = tokens.map {
       FixIt.Change.replace(
         oldNode: Syntax($0),

@@ -94,7 +94,7 @@ extension TokenConsumer {
   @inline(__always)
   mutating func at<SpecSet: TokenSpecSet>(anyIn specSet: SpecSet.Type) -> (SpecSet, TokenConsumptionHandle)? {
     if let matchedKind = SpecSet(lexeme: self.currentToken) {
-      assert(matchedKind.spec ~= self.currentToken)
+      precondition(matchedKind.spec ~= self.currentToken)
       return (
         matchedKind,
         TokenConsumptionHandle(spec: matchedKind.spec)

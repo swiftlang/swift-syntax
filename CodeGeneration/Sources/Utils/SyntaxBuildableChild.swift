@@ -63,7 +63,7 @@ public extension Child {
   }
 
   /// If this node is a token that can't contain arbitrary text, generate a Swift
-  /// `assert` statement that verifies the variable with name var_name and of type
+  /// `precondition` statement that verifies the variable with name var_name and of type
   /// `TokenSyntax` contains one of the supported text options. Otherwise return `nil`.
   func generateAssertStmtTextChoices(varName: String) -> FunctionCallExprSyntax? {
     guard case .token(choices: let choices, requiresLeadingSpace: _, requiresTrailingSpace: _) = kind else {
@@ -79,7 +79,7 @@ public extension Child {
 
     let choicesTexts: [String]
     if tokenCanContainArbitraryText {
-      // Don't generate an assert statement if token can contain arbitrary text.
+      // Don't generate an precondition statement if token can contain arbitrary text.
       return nil
     } else if !choices.isEmpty {
       choicesTexts = choices.compactMap {
@@ -92,9 +92,9 @@ public extension Child {
       return nil
     }
 
-    var assertChoices: [ExprSyntax] = []
+    var preconditionChoices: [ExprSyntax] = []
     if type.isOptional {
-      assertChoices.append(
+      preconditionChoices.append(
         ExprSyntax(
           SequenceExprSyntax {
             IdentifierExprSyntax(identifier: .identifier(varName))
@@ -105,7 +105,7 @@ public extension Child {
       )
     }
     for textChoice in choicesTexts {
-      assertChoices.append(
+      preconditionChoices.append(
         ExprSyntax(
           SequenceExprSyntax {
             MemberAccessExprSyntax(base: type.forceUnwrappedIfNeeded(expr: IdentifierExprSyntax(identifier: .identifier(varName))), name: "text")
@@ -115,8 +115,8 @@ public extension Child {
         )
       )
     }
-    let disjunction = ExprListSyntax(assertChoices.flatMap { [$0, ExprSyntax(BinaryOperatorExprSyntax(text: "||"))] }.dropLast())
-    return FunctionCallExprSyntax(callee: ExprSyntax("assert")) {
+    let disjunction = ExprListSyntax(preconditionChoices.flatMap { [$0, ExprSyntax(BinaryOperatorExprSyntax(text: "||"))] }.dropLast())
+    return FunctionCallExprSyntax(callee: ExprSyntax("precondition")) {
       TupleExprElementSyntax(expression: SequenceExprSyntax(elements: disjunction))
     }
   }

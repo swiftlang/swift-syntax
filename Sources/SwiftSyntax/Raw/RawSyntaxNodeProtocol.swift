@@ -96,13 +96,17 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
   public var raw: RawSyntax
 
   init(raw: RawSyntax) {
-    assert(Self.isKindOf(raw))
+    precondition(Self.isKindOf(raw))
+    self.raw = raw
+  }
+
+  private init(unchecked raw: RawSyntax) {
     self.raw = raw
   }
 
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
     guard Self.isKindOf(other.raw) else { return nil }
-    self.init(raw: other.raw)
+    self.init(unchecked: other.raw)
   }
 
   public var tokenKind: RawTokenKind {
@@ -159,7 +163,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
       tokenDiagnostic: tokenDiagnostic,
       arena: arena
     )
-    self = RawTokenSyntax(raw: raw)
+    self = RawTokenSyntax(unchecked: raw)
   }
 
   /// Creates a `RawTokenSyntax`. `text` and trivia must be managed by the same
@@ -222,7 +226,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
         _ = buffer.initialize(from: trailingTriviaPieces)
       }
     )
-    self = RawTokenSyntax(raw: raw)
+    self = RawTokenSyntax(unchecked: raw)
   }
 
   /// Creates a missing `TokenSyntax` with the specified kind.

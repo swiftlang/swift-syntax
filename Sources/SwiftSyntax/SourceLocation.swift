@@ -35,7 +35,7 @@ struct ComputedLocation: Hashable, Codable, CustomDebugStringConvertible {
   }
   init(offset: Int, using converter: SourceLocationConverter) {
     let loc = converter.location(for: AbsolutePosition(utf8Offset: offset))
-    assert(loc.offset == offset)
+    precondition(loc.offset == offset)
     self.line = loc.line!
     self.column = loc.column!
     self.file = loc.file!
@@ -125,11 +125,11 @@ public final class SourceLocationConverter {
   ///   - file: The file path associated with the syntax tree.
   ///   - tree: The root of the syntax tree to convert positions to line/columns for.
   public init<SyntaxType: SyntaxProtocol>(file: String, tree: SyntaxType) {
-    assert(tree.parent == nil, "SourceLocationConverter must be passed the root of the syntax tree")
+    precondition(tree.parent == nil, "SourceLocationConverter must be passed the root of the syntax tree")
     self.file = file
     self.source = tree.syntaxTextBytes
     (self.lines, endOfFile) = computeLines(tree: Syntax(tree))
-    assert(tree.byteSize == endOfFile.utf8Offset)
+    precondition(tree.byteSize == endOfFile.utf8Offset)
   }
 
   /// - Parameters:
@@ -141,7 +141,7 @@ public final class SourceLocationConverter {
     (self.lines, endOfFile) = self.source.withUnsafeBufferPointer { buf in
       return computeLines(SyntaxText(buffer: buf))
     }
-    assert(source.utf8.count == endOfFile.utf8Offset)
+    precondition(source.utf8.count == endOfFile.utf8Offset)
   }
 
   /// Execute the body with an array that contains each source line.
@@ -149,7 +149,7 @@ public final class SourceLocationConverter {
     return try source.withUnsafeBufferPointer { (sourcePointer: UnsafeBufferPointer<UInt8>) in
       var result: [SyntaxText] = []
       var previousLoc = AbsolutePosition.startOfFile
-      assert(lines.first == AbsolutePosition.startOfFile)
+      precondition(lines.first == AbsolutePosition.startOfFile)
       for lineStartLoc in lines.dropFirst() + [endOfFile] {
         result.append(
           SyntaxText(
@@ -182,7 +182,7 @@ public final class SourceLocationConverter {
       return SourceLocation(line: 1, column: 1, offset: 0, file: self.file)
     }
 
-    assert(!lines.isEmpty)
+    precondition(!lines.isEmpty)
     var first = lines.startIndex
     var i: Int
     var step: Int
@@ -200,7 +200,7 @@ public final class SourceLocationConverter {
       }
     }
 
-    assert(first > 0)
+    precondition(first > 0)
     let lineIdx = first - 1
     let lineStartOffset = lines[lineIdx].utf8Offset
     let colOffset = pos.utf8Offset - lineStartOffset
@@ -497,7 +497,7 @@ fileprivate extension RawTriviaPiece {
       let .lineComment(text),
       let .docLineComment(text):
       // Line comments are not supposed to contain newlines.
-      assert(!text.containsSwiftNewline(), "line comment created that contained a new-line character")
+      precondition(!text.containsSwiftNewline(), "line comment created that contained a new-line character")
       lineLength += SourceLength(utf8Length: text.count)
     case let .blockComment(text),
       let .docBlockComment(text),

@@ -161,7 +161,7 @@ public struct ConcurrentEdits {
           )
         }
       }
-      assert(editIndiciesMergedWithNewEdit.isSorted)
+      precondition(editIndiciesMergedWithNewEdit.isSorted)
       for indexToRemove in editIndiciesMergedWithNewEdit.reversed() {
         concurrentEdits.remove(at: indexToRemove)
       }
@@ -170,7 +170,7 @@ public struct ConcurrentEdits {
           editToAdd.endOffset <= edit.offset
         }) ?? concurrentEdits.count
       concurrentEdits.insert(editToAdd, at: insertPos)
-      assert(ConcurrentEdits.isValidConcurrentEditArray(concurrentEdits))
+      precondition(ConcurrentEdits.isValidConcurrentEditArray(concurrentEdits))
     }
     return concurrentEdits
   }

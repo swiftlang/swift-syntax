@@ -244,7 +244,7 @@ extension Parser {
     }
 
     // We're parsing a conditional binding.
-    assert(self.at(.keyword(.let), .keyword(.var)) || self.at(.keyword(.inout), .keyword(.case)))
+    precondition(self.at(.keyword(.let), .keyword(.var)) || self.at(.keyword(.inout), .keyword(.case)))
     enum BindingKind {
       case pattern(RawTokenSyntax, RawPatternSyntax)
       case optional(RawTokenSyntax, RawPatternSyntax)
@@ -326,7 +326,7 @@ extension Parser {
   ///     availability-condition → '#unavailable' '(' availability-arguments ')'
   @_spi(RawSyntax)
   public mutating func parsePoundAvailableConditionElement() -> RawConditionElementSyntax.Condition {
-    assert(self.at(.poundAvailableKeyword, .poundUnavailableKeyword))
+    precondition(self.at(.poundAvailableKeyword, .poundUnavailableKeyword))
     let keyword = self.consumeAnyToken()
     let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
     let spec = self.parseAvailabilitySpecList()

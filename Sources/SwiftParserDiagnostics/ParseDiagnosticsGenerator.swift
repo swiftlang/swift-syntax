@@ -24,8 +24,7 @@ fileprivate extension TokenSyntax {
     case .poundUnavailableKeyword:
       return self.withKind(.poundAvailableKeyword)
     default:
-      assertionFailure("The availability token of an AvailabilityConditionSyntax should always be #available or #unavailable")
-      return self
+      preconditionFailure("The availability token of an AvailabilityConditionSyntax should always be #available or #unavailable")
     }
   }
 }
@@ -361,7 +360,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     } else {
       if let tokenDiagnostic = token.tokenDiagnostic {
         let message = tokenDiagnostic.diagnosticMessage(in: token)
-        assert(message.severity.matches(tokenDiagnostic.severity))
+        precondition(message.severity.matches(tokenDiagnostic.severity))
         self.addDiagnostic(
           token,
           position: token.position.advanced(by: Int(tokenDiagnostic.byteOffset)),

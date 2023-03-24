@@ -81,7 +81,7 @@ struct TokenSpec {
     recoveryPrecedence: TokenPrecedence? = nil,
     allowAtStartOfLine: Bool = true
   ) {
-    assert(rawTokenKind != .keyword, "To create a TokenSpec for a keyword use the initializer that takes a keyword")
+    precondition(rawTokenKind != .keyword, "To create a TokenSpec for a keyword use the initializer that takes a keyword")
     self.rawTokenKind = rawTokenKind
     self.keyword = nil
     self.remapping = remapping
@@ -113,7 +113,7 @@ struct TokenSpec {
       return false
     }
     if self.rawTokenKind == .keyword {
-      assert(self.keyword != nil)
+      precondition(self.keyword != nil)
       switch rawTokenKind {
       case .keyword, .identifier:
         return keyword() == self.keyword
@@ -176,7 +176,7 @@ extension TokenConsumer {
   /// `eat`. Introduce new users of this very sparingly.
   @inline(__always)
   mutating func eat(_ spec: TokenSpec) -> Token {
-    assert(spec ~= self.currentToken)
+    precondition(spec ~= self.currentToken)
     if let remapping = spec.remapping {
       return self.consumeAnyToken(remapping: remapping)
     } else if spec.rawTokenKind == .keyword {

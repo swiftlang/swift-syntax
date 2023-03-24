@@ -192,7 +192,7 @@ extension Parser {
       return lastElement
     }
 
-    assert(
+    precondition(
       elements.count.isMultiple(of: 2),
       "elements must have a even number of elements"
     )
@@ -619,7 +619,7 @@ extension Parser {
     declNameArgs: RawDeclNameArgumentsSyntax?,
     generics: RawGenericArgumentClauseSyntax?
   ) {
-    assert(self.at(.period))
+    precondition(self.at(.period))
     let (unexpectedPeriod, period, skipMemberName) = self.consumeMemberPeriod(previousNode: previousNode)
     if skipMemberName {
       let missingIdentifier = missingToken(.identifier)
@@ -685,7 +685,7 @@ extension Parser {
     _ flavor: ExprFlavor,
     forDirective: Bool
   ) -> RawExprSyntax {
-    assert(self.at(.poundIfKeyword))
+    precondition(self.at(.poundIfKeyword))
 
     let config = self.parsePoundIfDirective { (parser, isFirstElement) -> RawExprSyntax? in
       if !isFirstElement {
@@ -978,7 +978,7 @@ extension Parser {
       if self.currentToken.starts(with: "!") {
         questionOrExclaim = self.consumePrefix("!", as: .exclamationMark)
       } else {
-        assert(self.currentToken.starts(with: "?"))
+        precondition(self.currentToken.starts(with: "?"))
         questionOrExclaim = self.consumePrefix("?", as: .postfixQuestionMark)
       }
 
@@ -1044,7 +1044,7 @@ extension Parser {
           period = nil
         }
 
-        assert(self.at(.leftSquareBracket))
+        precondition(self.at(.leftSquareBracket))
         let lsquare = self.consumeAnyToken()
         let args: [RawTupleExprElementSyntax]
         if self.at(.rightSquareBracket) {
@@ -2085,7 +2085,7 @@ extension Parser.Lookahead {
   /// handle this by doing some lookahead in common situations. And later, Sema
   /// will emit a diagnostic with a fixit to add wrapping parens.
   mutating func isValidTrailingClosure(_ flavor: Parser.ExprFlavor) -> Bool {
-    assert(self.at(.leftBrace), "Couldn't be a trailing closure")
+    precondition(self.at(.leftBrace), "Couldn't be a trailing closure")
 
     // If this is the start of a get/set accessor, then it isn't a trailing
     // closure.
@@ -2270,7 +2270,7 @@ extension Parser {
               { (parser, _) in parser.parseSwitchCases(allowStandaloneStmtRecovery: allowStandaloneStmtRecovery) },
               syntax: { parser, cases in
                 guard cases.count == 1, let firstCase = cases.first else {
-                  assert(cases.isEmpty)
+                  precondition(cases.isEmpty)
                   return .switchCases(RawSwitchCaseListSyntax(elements: [], arena: parser.arena))
                 }
                 return .switchCases(firstCase)

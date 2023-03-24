@@ -79,7 +79,7 @@ fileprivate class StringLiteralExpressionIndentationChecker {
         rewrittenChildren.append(child)
       }
     }
-    assert(rewrittenChildren.count == layoutView.children.count)
+    precondition(rewrittenChildren.count == layoutView.children.count)
     if hasRewrittenChild {
       return layoutView.replacingLayout(with: rewrittenChildren, arena: arena)
     } else {
@@ -138,8 +138,8 @@ extension Parser {
     trailing reclassifyTrailing: SyntaxText = "",
     tokenDiagnostic: TokenDiagnostic? = nil
   ) -> RawTokenSyntax {
-    assert(SyntaxText(rebasing: token.tokenText.prefix(reclassifyLeading.count)) == reclassifyLeading)
-    assert(SyntaxText(rebasing: token.tokenText.suffix(reclassifyTrailing.count)) == reclassifyTrailing)
+    precondition(SyntaxText(rebasing: token.tokenText.prefix(reclassifyLeading.count)) == reclassifyLeading)
+    precondition(SyntaxText(rebasing: token.tokenText.suffix(reclassifyTrailing.count)) == reclassifyTrailing)
     return RawTokenSyntax(
       kind: token.tokenKind,
       text: SyntaxText(rebasing: token.tokenText.dropFirst(reclassifyLeading.count).dropLast(reclassifyTrailing.count)),
@@ -165,7 +165,7 @@ extension Parser {
     switch middleSegments.last {
     case .stringSegment(let lastMiddleSegment):
       if !lastMiddleSegment.content.trailingTriviaPieces.isEmpty {
-        assert(
+        precondition(
           lastMiddleSegment.content.trailingTriviaPieces.contains(where: { $0.isBackslash }),
           "The lexer should only add trailing trivia to a string segment if the newline is escaped by a backslash"
         )
@@ -238,7 +238,7 @@ extension Parser {
         // We are not considering leading trivia for indentation computation.
         // If these assertions are violated, we can probably lift them but we
         // would need to check that they produce the expected results.
-        assert(segment.content.leadingTriviaByteLength == 0)
+        precondition(segment.content.leadingTriviaByteLength == 0)
 
         // Re-classify indentation as leading trivia
         if isSegmentOnNewLine {
@@ -309,7 +309,7 @@ extension Parser {
     // -------------------------------------------------------------------------
     // Precondition
 
-    assert(
+    precondition(
       allSegments.allSatisfy {
         if case .stringSegment(let segment) = $0 {
           return segment.unexpectedBeforeContent == nil

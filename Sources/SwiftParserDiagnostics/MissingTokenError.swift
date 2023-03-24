@@ -127,7 +127,7 @@ extension ParseDiagnosticsGenerator {
     if missingToken.parent?.is(ExpressionSegmentSyntax.self) == true {
       message = .tooManyRawStringDelimitersToStartInterpolation
     } else {
-      assert(
+      precondition(
         missingToken.parent?.is(StringLiteralExprSyntax.self) == true,
         "Raw string delimiters should only occur in string interpolation and at the end of a string literal"
       )

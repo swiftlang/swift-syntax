@@ -464,7 +464,7 @@ extension Parser {
       )
     }
 
-    assert(self.currentToken.starts(with: "<"))
+    precondition(self.currentToken.starts(with: "<"))
     let langle = self.consumeAnyToken(remapping: .leftAngle)
     var elements = [RawGenericParameterSyntax]()
     do {

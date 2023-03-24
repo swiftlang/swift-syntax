@@ -61,7 +61,7 @@ public struct TokenDiagnostic: Hashable {
   }
 
   public init(_ kind: Kind, byteOffset: Int) {
-    assert(byteOffset >= 0)
+    precondition(byteOffset >= 0)
     // `type(of: self.byteOffset).max` gets optimized to a constant
     if byteOffset > type(of: self.byteOffset).max {
       self.kind = .tokenDiagnosticOffsetOverflow

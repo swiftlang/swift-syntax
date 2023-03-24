@@ -24,7 +24,7 @@ extension Parser {
   }
 
   mutating func parseArgumentLabel() -> (RawUnexpectedNodesSyntax?, RawTokenSyntax) {
-    assert(self.currentToken.canBeArgumentLabel(allowDollarIdentifier: true))
+    precondition(self.currentToken.canBeArgumentLabel(allowDollarIdentifier: true))
     if let dollarIdent = self.consume(if: .dollarIdentifier) {
       return (
         RawUnexpectedNodesSyntax(elements: [RawSyntax(dollarIdent)], arena: self.arena),
@@ -115,7 +115,7 @@ extension Parser {
       var loopProgress = LoopProgressCondition()
       while !self.at(.eof, .rightParen) && loopProgress.evaluate(currentToken) {
         // Check to see if there is an argument label.
-        assert(self.currentToken.canBeArgumentLabel() && self.peek().rawTokenKind == .colon)
+        precondition(self.currentToken.canBeArgumentLabel() && self.peek().rawTokenKind == .colon)
         let name = self.consumeAnyToken()
         let (unexpectedBeforeColon, colon) = self.expect(.colon)
         elements.append(

@@ -24,7 +24,7 @@ extension SyntaxProtocol {
   public init(validating node: Self) throws {
     if node.hasError {
       let diagnostics = ParseDiagnosticsGenerator.diagnostics(for: node)
-      assert(!diagnostics.isEmpty)
+      precondition(!diagnostics.isEmpty)
       throw SyntaxStringInterpolationError.diagnostics(diagnostics, tree: Syntax(node))
     }
     self = node

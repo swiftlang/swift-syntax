@@ -151,7 +151,7 @@ public struct Parser {
     if let arena = arena {
       self.arena = arena
       sourceBuffer = input
-      assert(arena.contains(text: SyntaxText(baseAddress: input.baseAddress, count: input.count)))
+      precondition(arena.contains(text: SyntaxText(baseAddress: input.baseAddress, count: input.count)))
     } else {
       self.arena = ParsingSyntaxArena(
         parseTriviaFunction: TriviaParser.parseTrivia(_:position:)
@@ -545,7 +545,7 @@ extension Parser {
     if tokenText == prefix {
       return self.consumeAnyToken(remapping: tokenKind)
     }
-    assert(tokenText.hasPrefix(prefix))
+    precondition(tokenText.hasPrefix(prefix))
 
     let endIndex = current.textRange.lowerBound.advanced(by: prefix.count)
     var tokenDiagnostic = current.diagnostic
@@ -589,7 +589,7 @@ extension Parser {
   ///     period. If there is a newline also set `skipMember` to inform
   ///     callers to not parse any futher member names.
   mutating func consumeMemberPeriod<R: RawSyntaxNodeProtocol>(previousNode: R?) -> (unexpected: RawUnexpectedNodesSyntax?, period: RawTokenSyntax, skipMemberName: Bool) {
-    assert(self.at(.period))
+    precondition(self.at(.period))
 
     let beforePeriodWhitespace = previousNode?.raw.trailingTriviaByteLength ?? 0 > 0 || self.currentToken.leadingTriviaByteLength > 0
     let afterPeriodWhitespace = self.currentToken.trailingTriviaByteLength > 0 || self.peek().leadingTriviaByteLength > 0

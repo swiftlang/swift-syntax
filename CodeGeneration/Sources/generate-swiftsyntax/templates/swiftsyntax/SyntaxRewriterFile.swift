@@ -320,7 +320,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           // A child node was rewritten. Build the updated node.
           
           // Sanity check, ensure the new children are the same length.
-          assert(newLayout.count == node.raw.layoutView!.children.count)
+          precondition(newLayout.count == node.raw.layoutView!.children.count)
           
           let arena = SyntaxArena()
           let newRaw = node.raw.layoutView!.replacingLayout(with: Array(newLayout), arena: arena)

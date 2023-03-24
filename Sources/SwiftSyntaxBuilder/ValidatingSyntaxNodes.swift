@@ -32,7 +32,7 @@ extension SyntaxProtocol {
 }
 
 extension Trivia {
-  /// If `trivia` has contains no unexpected trivia, return `trivia`, otherwise
+  /// If `trivia` contains no unexpected trivia, return `trivia`, otherwise
   /// throw an error with diagnostics describing the unexpected trivia.
   public init(validating trivia: Trivia) throws {
     self = trivia

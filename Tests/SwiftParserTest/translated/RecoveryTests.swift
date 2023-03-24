@@ -765,7 +765,7 @@ final class RecoveryTests: XCTestCase {
       protocol Multi 1️⃣ident {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "found an unexpected second identifier in protocol")
+        DiagnosticSpec(message: "found an unexpected second identifier in protocol", highlight: "ident")
       ]
     )
   }

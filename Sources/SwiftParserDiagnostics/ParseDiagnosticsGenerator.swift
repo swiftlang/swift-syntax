@@ -84,11 +84,12 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
   // MARK: - Private helper functions
 
   /// Produce a diagnostic.
+  /// If `highlights` is `nil` the `node` will be highlighted.
   func addDiagnostic<T: SyntaxProtocol>(
     _ node: T,
     position: AbsolutePosition? = nil,
     _ message: DiagnosticMessage,
-    highlights: [Syntax] = [],
+    highlights: [Syntax]? = nil,
     notes: [Note] = [],
     fixIts: [FixIt] = [],
     handledNodes: [SyntaxIdentifier] = []

@@ -11746,37 +11746,6 @@ public struct RawLayoutRequirementSyntax: RawSyntaxNodeProtocol {
 
 @_spi(RawSyntax)
 public struct RawMacroDeclSyntax: RawDeclSyntaxNodeProtocol {
-  @frozen // FIXME: Not actually stable, works around a miscompile
-  public enum Signature: RawSyntaxNodeProtocol {
-    case `functionLike`(RawFunctionSignatureSyntax)
-    case `valueLike`(RawTypeAnnotationSyntax)
-    
-    public static func isKindOf(_ raw: RawSyntax) -> Bool {
-      return RawFunctionSignatureSyntax.isKindOf(raw) || RawTypeAnnotationSyntax.isKindOf(raw)
-    }
-    
-    public var raw: RawSyntax {
-      switch self {
-      case .functionLike(let node): 
-        return node.raw
-      case .valueLike(let node): 
-        return node.raw
-      }
-    }
-    
-    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
-      if let node = RawFunctionSignatureSyntax(other) {
-        self = .functionLike(node)
-        return 
-      }
-      if let node = RawTypeAnnotationSyntax(other) {
-        self = .valueLike(node)
-        return 
-      }
-      return nil
-    }
-  }
-  
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
     return raw.layoutView!
@@ -11812,7 +11781,7 @@ public struct RawMacroDeclSyntax: RawDeclSyntaxNodeProtocol {
       _ unexpectedBetweenIdentifierAndGenericParameterClause: RawUnexpectedNodesSyntax? = nil, 
       genericParameterClause: RawGenericParameterClauseSyntax?, 
       _ unexpectedBetweenGenericParameterClauseAndSignature: RawUnexpectedNodesSyntax? = nil, 
-      signature: Signature, 
+      signature: RawFunctionSignatureSyntax, 
       _ unexpectedBetweenSignatureAndDefinition: RawUnexpectedNodesSyntax? = nil, 
       definition: RawInitializerClauseSyntax?, 
       _ unexpectedBetweenDefinitionAndGenericWhereClause: RawUnexpectedNodesSyntax? = nil, 
@@ -11888,8 +11857,8 @@ public struct RawMacroDeclSyntax: RawDeclSyntaxNodeProtocol {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var signature: RawSyntax {
-    layoutView.children[11]!
+  public var signature: RawFunctionSignatureSyntax {
+    layoutView.children[11].map(RawFunctionSignatureSyntax.init(raw:))!
   }
   
   public var unexpectedBetweenSignatureAndDefinition: RawUnexpectedNodesSyntax? {

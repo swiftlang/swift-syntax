@@ -3943,48 +3943,6 @@ extension InitializerDeclSyntax: CustomReflectable {
 
 
 public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
-  public enum Signature: SyntaxChildChoices {
-    case `functionLike`(FunctionSignatureSyntax)
-    case `valueLike`(TypeAnnotationSyntax)
-    
-    public var _syntaxNode: Syntax {
-      switch self {
-      case .functionLike(let node):
-        return node._syntaxNode
-      case .valueLike(let node):
-        return node._syntaxNode
-      }
-    }
-    
-    init(_ data: SyntaxData) { 
-      self.init(Syntax(data))! 
-    }
-    
-    public init(_ node: FunctionSignatureSyntax) {
-      self = .functionLike(node)
-    }
-    
-    public init(_ node: TypeAnnotationSyntax) {
-      self = .valueLike(node)
-    }
-    
-    public init?<S: SyntaxProtocol>(_ node: S) {
-      if let node = node.as(FunctionSignatureSyntax.self) {
-        self = .functionLike(node)
-        return 
-      }
-      if let node = node.as(TypeAnnotationSyntax.self) {
-        self = .valueLike(node)
-        return 
-      }
-      return nil
-    }
-    
-    public static var structure: SyntaxNodeStructure {
-      return .choices([.node(FunctionSignatureSyntax.self), .node(TypeAnnotationSyntax.self)])
-    }
-  }
-  
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
@@ -4015,7 +3973,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       _ unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? = nil, 
       genericParameterClause: GenericParameterClauseSyntax? = nil, 
       _ unexpectedBetweenGenericParameterClauseAndSignature: UnexpectedNodesSyntax? = nil, 
-      signature: Signature, 
+      signature: FunctionSignatureSyntax, 
       _ unexpectedBetweenSignatureAndDefinition: UnexpectedNodesSyntax? = nil, 
       definition: InitializerClauseSyntax? = nil, 
       _ unexpectedBetweenDefinitionAndGenericWhereClause: UnexpectedNodesSyntax? = nil, 
@@ -4213,9 +4171,9 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var signature: Signature {
+  public var signature: FunctionSignatureSyntax {
     get {
-      return Signature(data.child(at: 11, parent: Syntax(self))!)
+      return FunctionSignatureSyntax(data.child(at: 11, parent: Syntax(self))!)
     }
     set(value) {
       self = MacroDeclSyntax(data.replacingChild(at: 11, with: value.raw, arena: SyntaxArena()))

@@ -16,7 +16,7 @@ import XCTest
 
 final class MetatypeObjectConversionTests: XCTestCase {
   func testMetatypeObjectConversion1() {
-    AssertParse(
+    assertParse(
       """
       class C {}
       struct S {}
@@ -25,7 +25,7 @@ final class MetatypeObjectConversionTests: XCTestCase {
   }
 
   func testMetatypeObjectConversion2() {
-    AssertParse(
+    assertParse(
       """
       protocol NonClassProto {}
       protocol ClassConstrainedProto : class {}
@@ -34,7 +34,7 @@ final class MetatypeObjectConversionTests: XCTestCase {
   }
 
   func testMetatypeObjectConversion3() {
-    AssertParse(
+    assertParse(
       """
       func takesAnyObject(_ x: AnyObject) {}
       """
@@ -42,7 +42,7 @@ final class MetatypeObjectConversionTests: XCTestCase {
   }
 
   func testMetatypeObjectConversion4() {
-    AssertParse(
+    assertParse(
       """
       func concreteTypes() {
         takesAnyObject(C.self)
@@ -54,7 +54,7 @@ final class MetatypeObjectConversionTests: XCTestCase {
   }
 
   func testMetatypeObjectConversion5() {
-    AssertParse(
+    assertParse(
       """
       func existentialMetatypes(nonClass: NonClassProto.Type,
                                 classConstrained: ClassConstrainedProto.Type,

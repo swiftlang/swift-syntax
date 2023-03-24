@@ -18,7 +18,7 @@ import XCTest
 
 final class OperatorDeclDesignatedTypesTests: XCTestCase {
   func testOperatorDeclDesignatedTypes1() {
-    AssertParse(
+    assertParse(
       """
       precedencegroup LowPrecedence {
         associativity: right
@@ -28,7 +28,7 @@ final class OperatorDeclDesignatedTypesTests: XCTestCase {
   }
 
   func testOperatorDeclDesignatedTypes2() {
-    AssertParse(
+    assertParse(
       """
       precedencegroup MediumPrecedence {
         associativity: left
@@ -39,7 +39,7 @@ final class OperatorDeclDesignatedTypesTests: XCTestCase {
   }
 
   func testOperatorDeclDesignatedTypes3() {
-    AssertParse(
+    assertParse(
       """
       protocol PrefixMagicOperatorProtocol {
       }
@@ -48,7 +48,7 @@ final class OperatorDeclDesignatedTypesTests: XCTestCase {
   }
 
   func testOperatorDeclDesignatedTypes4() {
-    AssertParse(
+    assertParse(
       """
       protocol PostfixMagicOperatorProtocol {
       }
@@ -57,7 +57,7 @@ final class OperatorDeclDesignatedTypesTests: XCTestCase {
   }
 
   func testOperatorDeclDesignatedTypes5() {
-    AssertParse(
+    assertParse(
       """
       protocol InfixMagicOperatorProtocol {
       }
@@ -66,7 +66,7 @@ final class OperatorDeclDesignatedTypesTests: XCTestCase {
   }
 
   func testOperatorDeclDesignatedTypes6() {
-    AssertParse(
+    assertParse(
       """
       prefix operator ^^ : PrefixMagicOperatorProtocol
       infix operator  <*< : MediumPrecedence, InfixMagicOperatorProtocol
@@ -76,7 +76,7 @@ final class OperatorDeclDesignatedTypesTests: XCTestCase {
   }
 
   func testOperatorDeclDesignatedTypes7() {
-    AssertParse(
+    assertParse(
       """
       infix operator ^*^
       prefix operator *^^
@@ -86,7 +86,7 @@ final class OperatorDeclDesignatedTypesTests: XCTestCase {
   }
 
   func testOperatorDeclDesignatedTypes8() {
-    AssertParse(
+    assertParse(
       """
       infix operator **>> : UndeclaredPrecedence
       """
@@ -94,7 +94,7 @@ final class OperatorDeclDesignatedTypesTests: XCTestCase {
   }
 
   func testOperatorDeclDesignatedTypes9() {
-    AssertParse(
+    assertParse(
       """
       infix operator **+> : MediumPrecedence, UndeclaredProtocol
       """
@@ -102,7 +102,7 @@ final class OperatorDeclDesignatedTypesTests: XCTestCase {
   }
 
   func testOperatorDeclDesignatedTypes10() {
-    AssertParse(
+    assertParse(
       """
       prefix operator *+*> : MediumPrecedence
       """
@@ -110,7 +110,7 @@ final class OperatorDeclDesignatedTypesTests: XCTestCase {
   }
 
   func testOperatorDeclDesignatedTypes11() {
-    AssertParse(
+    assertParse(
       """
       postfix operator ++*> : MediumPrecedence
       """
@@ -118,7 +118,7 @@ final class OperatorDeclDesignatedTypesTests: XCTestCase {
   }
 
   func testOperatorDeclDesignatedTypes12() {
-    AssertParse(
+    assertParse(
       """
       prefix operator *++> : UndeclaredProtocol
       postfix operator +*+> : UndeclaredProtocol
@@ -127,7 +127,7 @@ final class OperatorDeclDesignatedTypesTests: XCTestCase {
   }
 
   func testOperatorDeclDesignatedTypes13() {
-    AssertParse(
+    assertParse(
       """
       struct Struct {}
       class Class {}
@@ -138,7 +138,7 @@ final class OperatorDeclDesignatedTypesTests: XCTestCase {
   }
 
   func testOperatorDeclDesignatedTypes14() {
-    AssertParse(
+    assertParse(
       """
       prefix operator **>> : Struct
       prefix operator *>*> : Class
@@ -147,7 +147,7 @@ final class OperatorDeclDesignatedTypesTests: XCTestCase {
   }
 
   func testOperatorDeclDesignatedTypes15() {
-    AssertParse(
+    assertParse(
       """
       postfix operator >*>* : Struct
       postfix operator >>** : Class
@@ -156,7 +156,7 @@ final class OperatorDeclDesignatedTypesTests: XCTestCase {
   }
 
   func testOperatorDeclDesignatedTypes16() {
-    AssertParse(
+    assertParse(
       """
       infix operator  <*<<< : MediumPrecedence, &
       """
@@ -164,7 +164,7 @@ final class OperatorDeclDesignatedTypesTests: XCTestCase {
   }
 
   func testOperatorDeclDesignatedTypes17() {
-    AssertParse(
+    assertParse(
       """
       infix operator **^^ : MediumPrecedence
       infix operator **^^ : InfixMagicOperatorProtocol
@@ -173,7 +173,7 @@ final class OperatorDeclDesignatedTypesTests: XCTestCase {
   }
 
   func testOperatorDeclDesignatedTypes18() {
-    AssertParse(
+    assertParse(
       """
       infix operator ^%*%^ : MediumPrecedence, Struct, Class
       infix operator ^%*%% : Struct, Class
@@ -186,7 +186,7 @@ final class OperatorDeclDesignatedTypesTests: XCTestCase {
   }
 
   func testOperatorDeclDesignatedTypes19() {
-    AssertParse(
+    assertParse(
       """
       infix operator <*<>*> : AdditionPrecedence,
       """

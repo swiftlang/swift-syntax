@@ -16,7 +16,7 @@ import XCTest
 
 final class TryTests: XCTestCase {
   func testTry1() {
-    AssertParse(
+    assertParse(
       """
       // Intentionally has lower precedence than assignments and ?:
       infix operator %%%% : LowPrecedence
@@ -30,7 +30,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry2() {
-    AssertParse(
+    assertParse(
       """
       // Intentionally has lower precedence between assignments and ?:
       infix operator %%% : MiddlingPrecedence
@@ -45,7 +45,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry3() {
-    AssertParse(
+    assertParse(
       """
       func foo() throws -> Int { return 0 }
       func bar() throws -> Int { return 0 }
@@ -54,7 +54,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry4() {
-    AssertParse(
+    assertParse(
       """
       var x = try foo() + bar()
       x = try foo() + bar()
@@ -67,7 +67,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry5() {
-    AssertParse(
+    assertParse(
       """
       var y = true ? try foo() : try bar() + 0
       var z = true ? try foo() : try bar() %%% 0
@@ -76,7 +76,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry6() {
-    AssertParse(
+    assertParse(
       """
       var a = try! foo() + bar()
       a = try! foo() + bar()
@@ -89,7 +89,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry7() {
-    AssertParse(
+    assertParse(
       """
       var b = true ? try! foo() : try! bar() + 0
       var c = true ? try! foo() : try! bar() %%% 0
@@ -98,7 +98,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry8() {
-    AssertParse(
+    assertParse(
       """
       infix operator ?+= : AssignmentPrecedence
       func ?+=(lhs: inout Int?, rhs: Int?) {
@@ -109,7 +109,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry9() {
-    AssertParse(
+    assertParse(
       """
       var i = try? foo() + bar()
       let _: Double = i
@@ -126,7 +126,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry10() {
-    AssertParse(
+    assertParse(
       """
       let j = true ? try? foo() : try? bar() + 0
       let k = true ? try? foo() : try? bar() %%% 0
@@ -135,7 +135,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry11() {
-    AssertParse(
+    assertParse(
       """
       1️⃣try let singleLet = try foo()
       """,
@@ -147,7 +147,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry11a() {
-    AssertParse(
+    assertParse(
       """
       1️⃣try let singleLet = foo()
       """,
@@ -159,7 +159,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry11b() {
-    AssertParse(
+    assertParse(
       """
       1️⃣try var singleVar = foo()
       """,
@@ -171,7 +171,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry11c() {
-    AssertParse(
+    assertParse(
       """
       1️⃣try let uninit: Int
       """,
@@ -182,7 +182,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry11d() {
-    AssertParse(
+    assertParse(
       """
       1️⃣try let (destructure1, destructure2) = (foo(), bar())
       """,
@@ -194,7 +194,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry11e() {
-    AssertParse(
+    assertParse(
       """
       1️⃣try let multi1 = foo(), multi2 = bar()
       """,
@@ -206,7 +206,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry11f() {
-    AssertParse(
+    assertParse(
       """
       class TryDecl {
         1️⃣try let singleLet = foo()
@@ -224,7 +224,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry11g() {
-    AssertParse(
+    assertParse(
       """
       class TryDecl {
         1️⃣try var singleVar = foo()
@@ -242,7 +242,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry11h() {
-    AssertParse(
+    assertParse(
       """
       try1️⃣
       func method() {}
@@ -254,7 +254,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry11i() {
-    AssertParse(
+    assertParse(
       """
       1️⃣try func method() {}
       """,
@@ -265,7 +265,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry12a() {
-    AssertParse(
+    assertParse(
       """
       1️⃣try while true {
         2️⃣try break
@@ -279,7 +279,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry12b() {
-    AssertParse(
+    assertParse(
       """
       1️⃣try throw 2️⃣
       """,
@@ -292,7 +292,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry12c() {
-    AssertParse(
+    assertParse(
       """
       1️⃣try return
       """,
@@ -303,7 +303,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry12d() {
-    AssertParse(
+    assertParse(
       """
       1️⃣try throw foo()
       """,
@@ -315,7 +315,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry12e() {
-    AssertParse(
+    assertParse(
       """
       1️⃣try return foo()
       """,
@@ -327,7 +327,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry13() {
-    AssertParse(
+    assertParse(
       #"""
       // Test operators.
       func *(a : String, b : String) throws -> Int { return 42 }
@@ -342,7 +342,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry14() {
-    AssertParse(
+    assertParse(
       """
       // <rdar://problem/21414023> Assertion failure when compiling function that takes throwing functions and rethrows
       func rethrowsDispatchError(handleError: ((Error) throws -> ()), body: () throws -> ()) rethrows {
@@ -356,7 +356,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry15() {
-    AssertParse(
+    assertParse(
       """
       // <rdar://problem/21432429> Calling rethrows from rethrows crashes Swift compiler
       struct r21432429 {
@@ -370,7 +370,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry16() {
-    AssertParse(
+    assertParse(
       """
       // <rdar://problem/21427855> Swift 2: Omitting try from call to throwing closure in rethrowing function crashes compiler
       func callThrowingClosureWithoutTry(closure: (Int) throws -> Int) rethrows {
@@ -381,7 +381,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry17() {
-    AssertParse(
+    assertParse(
       """
       func producesOptional() throws -> Int? { return nil }
       let _: String = try? producesOptional()
@@ -390,7 +390,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry18() {
-    AssertParse(
+    assertParse(
       """
       let _ = (try? foo())!!
       """
@@ -398,7 +398,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry19() {
-    AssertParse(
+    assertParse(
       """
       func producesDoubleOptional() throws -> Int?? { return 3 }
       let _: String = try? producesDoubleOptional()
@@ -407,7 +407,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry20() {
-    AssertParse(
+    assertParse(
       """
       func maybeThrow() throws {}
       try maybeThrow() // okay
@@ -419,7 +419,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry21() {
-    AssertParse(
+    assertParse(
       """
       let _: () -> Void = { try! maybeThrow() } // okay
       let _: () -> Void = { try? maybeThrow() } // okay since return type of maybeThrow is Void
@@ -428,7 +428,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry22() {
-    AssertParse(
+    assertParse(
       """
       if try? maybeThrow() {
       }
@@ -438,7 +438,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry23() {
-    AssertParse(
+    assertParse(
       """
       class X {}
       func test(_: X) {}
@@ -449,7 +449,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry24() {
-    AssertParse(
+    assertParse(
       #"""
       _ = "a\(try maybeThrow())b"
       _ = try "a\(maybeThrow())b"
@@ -459,7 +459,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry25() {
-    AssertParse(
+    assertParse(
       """
       extension DefaultStringInterpolation {
         mutating func appendInterpolation() throws {}
@@ -469,7 +469,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry26() {
-    AssertParse(
+    assertParse(
       #"""
       _ = try "a\()b"
       _ = "a\()b"
@@ -479,7 +479,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry27() {
-    AssertParse(
+    assertParse(
       """
       func testGenericOptionalTry<T>(_ call: () throws -> T ) {
         let _: String = try? call()
@@ -489,7 +489,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry28() {
-    AssertParse(
+    assertParse(
       """
       func genericOptionalTry<T>(_ call: () throws -> T ) -> T? {
         let x = try? call() // no error expected
@@ -500,7 +500,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry29() {
-    AssertParse(
+    assertParse(
       """
       // Test with a non-optional type
       let _: String = genericOptionalTry({ () throws -> Int in return 3 })
@@ -509,7 +509,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry30() {
-    AssertParse(
+    assertParse(
       """
       // Test with an optional type
       let _: String = genericOptionalTry({ () throws -> Int? in return nil })
@@ -518,7 +518,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry31() {
-    AssertParse(
+    assertParse(
       """
       func produceAny() throws -> Any {
         return 3
@@ -528,7 +528,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry32() {
-    AssertParse(
+    assertParse(
       """
       let _: Int? = try? produceAny() as? Int
       let _: Int?? = (try? produceAny()) as? Int // good
@@ -539,7 +539,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry33() {
-    AssertParse(
+    assertParse(
       """
       struct ThingProducer {
         func produceInt() throws -> Int { return 3 }
@@ -553,7 +553,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry34() {
-    AssertParse(
+    assertParse(
       """
       let optProducer: ThingProducer? = ThingProducer()
       let _: Int? = try? optProducer?.produceInt()
@@ -565,7 +565,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry35() {
-    AssertParse(
+    assertParse(
       """
       let _: Int? = try? optProducer?.produceIntNoThrowing()
       let _: Int?? = try? optProducer?.produceIntNoThrowing()
@@ -574,7 +574,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry36() {
-    AssertParse(
+    assertParse(
       """
       let _: Int? = (try? optProducer?.produceAny()) as? Int // good
       let _: Int? = try? optProducer?.produceAny() as? Int
@@ -585,7 +585,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry37() {
-    AssertParse(
+    assertParse(
       """
       let _: String = try? optProducer?.produceDoubleOptionalInt()
       """
@@ -593,7 +593,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry38() {
-    AssertParse(
+    assertParse(
       """
       let producer = ThingProducer()
       """
@@ -601,7 +601,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry39() {
-    AssertParse(
+    assertParse(
       """
       let _: Int = try? producer.produceDoubleOptionalInt()
       let _: Int? = try? producer.produceDoubleOptionalInt()
@@ -613,7 +613,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry40() {
-    AssertParse(
+    assertParse(
       """
       // rdar://problem/46742002
       protocol Dummy : class {}
@@ -622,7 +622,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry41() {
-    AssertParse(
+    assertParse(
       """
       class F<T> {
         func wait() throws -> T { fatalError() }
@@ -632,7 +632,7 @@ final class TryTests: XCTestCase {
   }
 
   func testTry42() {
-    AssertParse(
+    assertParse(
       """
       func bar(_ a: F<Dummy>, _ b: F<Dummy>) {
         _ = (try? a.wait()) === (try? b.wait())

@@ -16,7 +16,7 @@ import XCTest
 
 final class StatementTests: XCTestCase {
   func testIf() {
-    AssertParse(
+    assertParse(
       """
       if let baz {}
       """,
@@ -42,7 +42,7 @@ final class StatementTests: XCTestCase {
       )
     )
 
-    AssertParse(
+    assertParse(
       """
       if let self = self {}
       """,
@@ -69,9 +69,9 @@ final class StatementTests: XCTestCase {
       )
     )
 
-    AssertParse("if let x { }")
+    assertParse("if let x { }")
 
-    AssertParse(
+    assertParse(
       """
       if case1️⃣* ! = x {
         bar()
@@ -83,7 +83,7 @@ final class StatementTests: XCTestCase {
       ]
     )
 
-    AssertParse(
+    assertParse(
       """
       if includeSavedHints { a = a.flatMap{ $0 } ?? nil }
       """
@@ -104,11 +104,11 @@ final class StatementTests: XCTestCase {
       source += indent + "}\n"
     }
     source += "}"
-    AssertParse(source)
+    assertParse(source)
   }
 
   func testDo() {
-    AssertParse(
+    assertParse(
       """
       do {
 
@@ -118,7 +118,7 @@ final class StatementTests: XCTestCase {
   }
 
   func testDoCatch() {
-    AssertParse(
+    assertParse(
       """
       do {
 
@@ -128,7 +128,7 @@ final class StatementTests: XCTestCase {
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       do {}
       catch where (error as NSError) == NSError() {}
@@ -137,9 +137,9 @@ final class StatementTests: XCTestCase {
   }
 
   func testReturn() {
-    AssertParse("return actor", { StmtSyntax.parse(from: &$0) })
+    assertParse("return actor", { StmtSyntax.parse(from: &$0) })
 
-    AssertParse(
+    assertParse(
       "{ 1️⃣return 0 }",
       { ExprSyntax.parse(from: &$0) },
       substructure: Syntax(
@@ -151,17 +151,17 @@ final class StatementTests: XCTestCase {
       substructureAfterMarker: "1️⃣"
     )
 
-    AssertParse("return")
+    assertParse("return")
 
-    AssertParse(
+    assertParse(
       #"""
       return "assert(\(assertChoices.joined(separator: " || ")))"
       """#
     )
 
-    AssertParse("return true ? nil : nil")
+    assertParse("return true ? nil : nil")
 
-    AssertParse(
+    assertParse(
       """
       switch command {
       case .start:
@@ -178,7 +178,7 @@ final class StatementTests: XCTestCase {
   }
 
   func testSwitch() {
-    AssertParse(
+    assertParse(
       """
       switch x {
       case .A, .B:
@@ -187,7 +187,7 @@ final class StatementTests: XCTestCase {
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       switch 0 {
       @$dollar case _:
@@ -196,7 +196,7 @@ final class StatementTests: XCTestCase {
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       switch x {
       case .A:
@@ -214,7 +214,7 @@ final class StatementTests: XCTestCase {
   }
 
   func testCStyleForLoop() {
-    AssertParse(
+    assertParse(
       """
       1️⃣for let x = 0; x < 10; x += 1, y += 1 {
       }
@@ -226,21 +226,21 @@ final class StatementTests: XCTestCase {
   }
 
   func testTopLevelCaseRecovery() {
-    AssertParse(
+    assertParse(
       "/*#-editable-code Swift Platground editable area*/1️⃣default/*#-end-editable-code*/",
       diagnostics: [
         DiagnosticSpec(message: "'default' label can only appear inside a 'switch' statement")
       ]
     )
 
-    AssertParse(
+    assertParse(
       "1️⃣case:",
       diagnostics: [
         DiagnosticSpec(message: "'case' can only appear inside a 'switch' statement or 'enum' declaration")
       ]
     )
 
-    AssertParse(
+    assertParse(
       #"""
       1️⃣case: { ("Hello World") }
       """#,
@@ -251,11 +251,11 @@ final class StatementTests: XCTestCase {
   }
 
   func testMissingIfClauseIntroducer() {
-    AssertParse("if _ = 42 {}")
+    assertParse("if _ = 42 {}")
   }
 
   func testAttributesOnStatements() {
-    AssertParse(
+    assertParse(
       """
       func test1() {
         1️⃣@s return
@@ -272,7 +272,7 @@ final class StatementTests: XCTestCase {
   }
 
   func testBogusSwitchStatement() {
-    AssertParse(
+    assertParse(
       """
       switch x {
         1️⃣foo()
@@ -289,7 +289,7 @@ final class StatementTests: XCTestCase {
       ]
     )
 
-    AssertParse(
+    assertParse(
       """
       switch x {
       1️⃣print()
@@ -310,7 +310,7 @@ final class StatementTests: XCTestCase {
   }
 
   func testBogusLineLabel() {
-    AssertParse(
+    assertParse(
       "LABEL1️⃣:",
       diagnostics: [
         DiagnosticSpec(message: "extraneous code ':' at top level")
@@ -319,13 +319,13 @@ final class StatementTests: XCTestCase {
   }
 
   func testIfHasSymbol() {
-    AssertParse(
+    assertParse(
       """
       if #_hasSymbol(foo) {}
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       if #_hasSymbol(foo as () -> ()) {}
       """
@@ -333,7 +333,7 @@ final class StatementTests: XCTestCase {
   }
 
   func testIdentifierPattern() {
-    AssertParse(
+    assertParse(
       "switch x { case let .y(z): break }",
       substructure: Syntax(
         IdentifierPatternSyntax(
@@ -344,7 +344,7 @@ final class StatementTests: XCTestCase {
   }
 
   func testCaseContext() {
-    AssertParse(
+    assertParse(
       """
       graphQLMap["clientMutationId"] as? 1️⃣Swift.Optional<String?> ?? Swift.Optional<String?>.none
       """,
@@ -370,7 +370,7 @@ final class StatementTests: XCTestCase {
       substructureAfterMarker: "1️⃣"
     )
 
-    AssertParse(
+    assertParse(
       """
       if case 1️⃣Optional<Any>.none = object["anyCol"] { }
       """,
@@ -393,7 +393,7 @@ final class StatementTests: XCTestCase {
   }
 
   func testHangingYieldArgument() {
-    AssertParse(
+    assertParse(
       """
       1️⃣yield
       print("huh")
@@ -405,7 +405,7 @@ final class StatementTests: XCTestCase {
 
   func testYield() {
     // Make sure these are always considered a yield statement
-    AssertParse(
+    assertParse(
       """
       var x: Int {
         _read {
@@ -427,7 +427,7 @@ final class StatementTests: XCTestCase {
       substructureAfterMarker: "1️⃣"
     )
 
-    AssertParse(
+    assertParse(
       """
       @inlinable internal subscript(key: Key) -> Value? {
         @inline(__always) get {
@@ -477,7 +477,7 @@ final class StatementTests: XCTestCase {
     )
 
     // Make sure these are not.
-    AssertParse(
+    assertParse(
       """
       var x: Int {
         _read {
@@ -496,7 +496,7 @@ final class StatementTests: XCTestCase {
       substructureAfterMarker: "1️⃣"
     )
 
-    AssertParse(
+    assertParse(
       """
       var x: Int {
         get {
@@ -515,7 +515,7 @@ final class StatementTests: XCTestCase {
       substructureAfterMarker: "1️⃣"
     )
 
-    AssertParse(
+    assertParse(
       """
       yield([])
       """,
@@ -537,7 +537,7 @@ final class StatementTests: XCTestCase {
       )
     )
 
-    AssertParse(
+    assertParse(
       """
       func f() -> Int {
         1️⃣yield & 5
@@ -555,7 +555,7 @@ final class StatementTests: XCTestCase {
       substructureAfterMarker: "1️⃣"
     )
 
-    AssertParse(
+    assertParse(
       """
       func f() -> Int {
         1️⃣yield&5
@@ -575,7 +575,7 @@ final class StatementTests: XCTestCase {
   }
 
   func testForget() {
-    AssertParse(
+    assertParse(
       """
       _forget self
       """,
@@ -586,7 +586,7 @@ final class StatementTests: XCTestCase {
       )
     )
 
-    AssertParse(
+    assertParse(
       """
       _forget Self
       """,
@@ -597,7 +597,7 @@ final class StatementTests: XCTestCase {
       )
     )
 
-    AssertParse(
+    assertParse(
       """
       _forget SarahMarshall
       """,
@@ -608,7 +608,7 @@ final class StatementTests: XCTestCase {
       )
     )
 
-    AssertParse(
+    assertParse(
       """
       _forget 1️⃣case
       """,
@@ -619,7 +619,7 @@ final class StatementTests: XCTestCase {
     )
 
     // It's important that we don't parse this one as a forget statement!
-    AssertParse(
+    assertParse(
       """
       func _forget<T>(_ t: T) {}
 
@@ -645,11 +645,11 @@ final class StatementTests: XCTestCase {
   }
 
   func testDefaultIdentIdentifierInReturnStmt() {
-    AssertParse("return FileManager.default")
+    assertParse("return FileManager.default")
   }
 
   func testDefaultAsIdentifierInSubscript() {
-    AssertParse(
+    assertParse(
       """
       data[position, default: 0]
       """,
@@ -676,7 +676,7 @@ final class StatementTests: XCTestCase {
 
   func testSkippingOverEmptyStringLiteral() {
     // https://github.com/apple/swift-syntax/issues/1247
-    AssertParse(
+    assertParse(
       """
       if p{""1️⃣
       """,
@@ -687,7 +687,7 @@ final class StatementTests: XCTestCase {
   }
 
   func testRecoveryInFrontOfAccessorIntroducer() {
-    AssertParse(
+    assertParse(
       """
       subscript(1️⃣{@2️⃣self _modify3️⃣
       """,

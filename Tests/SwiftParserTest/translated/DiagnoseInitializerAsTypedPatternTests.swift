@@ -17,7 +17,7 @@ import XCTest
 // https://github.com/apple/swift/issues/44070
 final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
   func testDiagnoseInitializerAsTypedPattern3a() {
-    AssertParse(
+    assertParse(
       """
       let a1️⃣:[X]()
       """,
@@ -29,7 +29,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
   }
 
   func testDiagnoseInitializerAsTypedPattern3b() {
-    AssertParse(
+    assertParse(
       """
       let b1️⃣: [X]()
       """,
@@ -41,7 +41,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
   }
 
   func testDiagnoseInitializerAsTypedPattern3c() {
-    AssertParse(
+    assertParse(
       """
       let c 1️⃣:[X]()
       """,
@@ -53,7 +53,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
   }
 
   func testDiagnoseInitializerAsTypedPattern3d() {
-    AssertParse(
+    assertParse(
       """
       let d 1️⃣: [X]()
       """,
@@ -65,7 +65,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
   }
 
   func testDiagnoseInitializerAsTypedPattern4() {
-    AssertParse(
+    assertParse(
       """
       let e1️⃣: X(), ee: Int
       """,
@@ -77,7 +77,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
   }
 
   func testDiagnoseInitializerAsTypedPattern5a() {
-    AssertParse(
+    assertParse(
       """
       let f1️⃣:/*comment*/[X]()
       """,
@@ -89,7 +89,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
   }
 
   func testDiagnoseInitializerAsTypedPattern5b() {
-    AssertParse(
+    assertParse(
       """
       let f/*comment*/1️⃣:[X]()
       """,
@@ -101,7 +101,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
   }
 
   func testDiagnoseInitializerAsTypedPattern6() {
-    AssertParse(
+    assertParse(
       """
       var _1 = 1, _2 = 2
       """
@@ -110,7 +110,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
 
   func testDiagnoseInitializerAsTypedPattern7() {
     // paren follows the type, but it's part of a separate (valid) expression
-    AssertParse(
+    assertParse(
       """
       let ff: X
       (_1, _2) = (_2, _1)
@@ -121,7 +121,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
   }
 
   func testDiagnoseInitializerAsTypedPattern8a() {
-    AssertParse(
+    assertParse(
       """
       let g1️⃣: X(x)
       """,
@@ -132,7 +132,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
   }
 
   func testDiagnoseInitializerAsTypedPattern8b() {
-    AssertParse(
+    assertParse(
       """
       let h1️⃣: X(x, y)
       """,
@@ -143,7 +143,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
   }
 
   func testDiagnoseInitializerAsTypedPattern8c() {
-    AssertParse(
+    assertParse(
       """
       let i1️⃣: X() { foo() }
       """,
@@ -154,7 +154,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
   }
 
   func testDiagnoseInitializerAsTypedPattern8d() {
-    AssertParse(
+    assertParse(
       """
       let j1️⃣: X(x) { foo() }
       """,
@@ -165,7 +165,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
   }
 
   func testDiagnoseInitializerAsTypedPattern8e() {
-    AssertParse(
+    assertParse(
       """
       let k1️⃣: X(x, y) { foo() }
       """,
@@ -176,7 +176,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
   }
 
   func testDiagnoseInitializerAsTypedPattern9a() {
-    AssertParse(
+    assertParse(
       """
       func nonTopLevel() {
         let a1️⃣:[X]()
@@ -189,7 +189,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
   }
 
   func testDiagnoseInitializerAsTypedPattern9b() {
-    AssertParse(
+    assertParse(
       """
       func nonTopLevel() {
         let i1️⃣: X() { foo() }
@@ -202,7 +202,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
   }
 
   func testDiagnoseInitializerAsTypedPattern9c() {
-    AssertParse(
+    assertParse(
       """
       func nonTopLevel() {
         let j1️⃣: X(x) { foo() }
@@ -215,7 +215,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
   }
 
   func testDiagnoseInitializerAsTypedPattern9d() {
-    AssertParse(
+    assertParse(
       """
       func nonTopLevel() {
         let k1️⃣: X(x, y) { foo() }
@@ -228,7 +228,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
   }
 
   func testDiagnoseInitializerAsTypedPattern9e() {
-    AssertParse(
+    assertParse(
       """
       func nonTopLevel() {
         _ = (a, i, j, k)

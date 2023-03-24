@@ -16,7 +16,7 @@ import XCTest
 
 final class MoveExprTests: XCTestCase {
   func testMoveExpr1() {
-    AssertParse(
+    assertParse(
       """
       var global: Int = 5
       func testGlobal() {
@@ -27,7 +27,7 @@ final class MoveExprTests: XCTestCase {
   }
 
   func testMoveExpr2() {
-    AssertParse(
+    assertParse(
       """
       func testLet() {
           let t = String()
@@ -38,7 +38,7 @@ final class MoveExprTests: XCTestCase {
   }
 
   func testMoveExpr3() {
-    AssertParse(
+    assertParse(
       """
       func testVar() {
           var t = String()

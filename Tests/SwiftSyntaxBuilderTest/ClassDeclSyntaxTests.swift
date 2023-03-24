@@ -22,7 +22,7 @@ final class ClassDeclSyntaxTests: XCTestCase {
       }
     }
 
-    AssertBuildResult(
+    assertBuildResult(
       buildable,
       """
       class Foo {
@@ -41,7 +41,7 @@ final class ClassDeclSyntaxTests: XCTestCase {
       }
     }
 
-    AssertBuildResult(
+    assertBuildResult(
       buildable,
       """
       class Foo {

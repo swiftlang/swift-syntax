@@ -17,7 +17,7 @@ import XCTest
 final class DiagnosticMissingFuncKeywordTests: XCTestCase {
   func testDiagnosticMissingFuncKeyword2a() {
     // https://github.com/apple/swift/issues/52877
-    AssertParse(
+    assertParse(
       """
       protocol Brew {
         1️⃣tripel() -> Int
@@ -36,7 +36,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
 
   func testDiagnosticMissingFuncKeyword2b() {
     // https://github.com/apple/swift/issues/52877
-    AssertParse(
+    assertParse(
       """
       protocol Brew {
         1️⃣quadrupel: Int { get }
@@ -55,7 +55,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
 
   func testDiagnosticMissingFuncKeyword2c() {
     // https://github.com/apple/swift/issues/52877
-    AssertParse(
+    assertParse(
       """
       protocol Brew {
         static 1️⃣+ (lhs: Self, rhs: Self) -> Self
@@ -74,7 +74,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
 
   func testDiagnosticMissingFuncKeyword2d() {
     // https://github.com/apple/swift/issues/52877
-    AssertParse(
+    assertParse(
       """
       protocol Brew {
         1️⃣* (lhs: Self, rhs: Self) -> Self
@@ -93,7 +93,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
 
   func testDiagnosticMissingFuncKeyword2e() {
     // https://github.com/apple/swift/issues/52877
-    AssertParse(
+    assertParse(
       """
       protocol Brew {
         1️⃣ipa: Int { get }; 2️⃣apa: Float { get }
@@ -113,7 +113,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
 
   func testDiagnosticMissingFuncKeyword2f() {
     // https://github.com/apple/swift/issues/52877
-    AssertParse(
+    assertParse(
       """
       protocol Brew {
         1️⃣stout: Int { get } 2️⃣porter: Float { get }
@@ -132,7 +132,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
   }
 
   func testDiagnosticMissingFuncKeyword3() {
-    AssertParse(
+    assertParse(
       """
       infix operator %%
       """
@@ -140,7 +140,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
   }
 
   func testDiagnosticMissingFuncKeyword4a() {
-    AssertParse(
+    assertParse(
       """
       struct Bar {
         1️⃣fisr = 0x5F3759DF
@@ -153,7 +153,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
   }
 
   func testDiagnosticMissingFuncKeyword4b() {
-    AssertParse(
+    assertParse(
       """
       struct Bar {
         1️⃣%%<T: Brew> (lhs: T, rhs: T) -> T {
@@ -168,7 +168,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
   }
 
   func testDiagnosticMissingFuncKeyword4c() {
-    AssertParse(
+    assertParse(
       """
       struct Bar {
         1️⃣_: Int = 42
@@ -181,7 +181,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
   }
 
   func testDiagnosticMissingFuncKeyword4d() {
-    AssertParse(
+    assertParse(
       """
       struct Bar {
         1️⃣(light, dark) = (100, 200)
@@ -194,7 +194,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
   }
 
   func testDiagnosticMissingFuncKeyword4e() {
-    AssertParse(
+    assertParse(
       """
       struct Bar {
         1️⃣a, b: Int
@@ -212,7 +212,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
   }
 
   func testDiagnosticMissingFuncKeyword5a() {
-    AssertParse(
+    assertParse(
       """
       class Baz {
         1️⃣instanceMethod() {}
@@ -225,7 +225,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
   }
 
   func testDiagnosticMissingFuncKeyword5b() {
-    AssertParse(
+    assertParse(
       """
       class Baz {
         static 1️⃣staticMethod() {}
@@ -238,7 +238,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
   }
 
   func testDiagnosticMissingFuncKeyword5c() {
-    AssertParse(
+    assertParse(
       """
       class Baz {
         1️⃣instanceProperty: Int { 0 }
@@ -251,7 +251,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
   }
 
   func testDiagnosticMissingFuncKeyword5d() {
-    AssertParse(
+    assertParse(
       """
       class Baz {
         static 1️⃣staticProperty: Int { 0 }
@@ -264,7 +264,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
   }
 
   func testDiagnosticMissingFuncKeyword6() {
-    AssertParse(
+    assertParse(
       """
       class C1 {
         class classMethod1️⃣() {}
@@ -277,7 +277,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
   }
 
   func testDiagnosticMissingFuncKeyword7() {
-    AssertParse(
+    assertParse(
       """
       class C2 {
         class classProperty: Int { 1️⃣0 }

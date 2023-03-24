@@ -16,7 +16,7 @@ import XCTest
 
 final class AttributeTests: XCTestCase {
   func testMissingArgumentToAttribute() {
-    AssertParse(
+    assertParse(
       """
       @_dynamicReplacement(1️⃣
       func 2️⃣test_dynamic_replacement_for2() {
@@ -35,7 +35,7 @@ final class AttributeTests: XCTestCase {
   }
 
   func testMissingGenericTypeToAttribute() {
-    AssertParse(
+    assertParse(
       """
       @differentiable(reverse wrt1️⃣,where T2️⃣
       func podcastPlaybackSpeed() {
@@ -55,7 +55,7 @@ final class AttributeTests: XCTestCase {
   }
 
   func testMissingClosingParenToAttribute() {
-    AssertParse(
+    assertParse(
       """
       @_specialize(e1️⃣
       """,
@@ -68,7 +68,7 @@ final class AttributeTests: XCTestCase {
   }
 
   func testMultipleInvalidSpecializeParams() {
-    AssertParse(
+    assertParse(
       """
       @_specialize(e1️⃣, exported2️⃣)3️⃣
       """,
@@ -81,7 +81,7 @@ final class AttributeTests: XCTestCase {
   }
 
   func testObjCAttribute() {
-    AssertParse(
+    assertParse(
       """
       @objc(zeroArg)
       class A { }
@@ -91,7 +91,7 @@ final class AttributeTests: XCTestCase {
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       @objc(_:)
       func f(_: Int)
@@ -100,7 +100,7 @@ final class AttributeTests: XCTestCase {
   }
 
   func testRethrowsAttribute() {
-    AssertParse(
+    assertParse(
       """
       @1️⃣rethrows
       protocol P { }
@@ -111,7 +111,7 @@ final class AttributeTests: XCTestCase {
   }
 
   func testAutoclosureAttribute() {
-    AssertParse(
+    assertParse(
       """
       func f(in: @autoclosure () -> Int) { }
       func g(in: @autoclosure @escaping () -> Int) { }
@@ -120,7 +120,7 @@ final class AttributeTests: XCTestCase {
   }
 
   func testDifferentiableAttribute() {
-    AssertParse(
+    assertParse(
       """
       func f(in: @differentiable(reverse) (Int) -> Int) { }
       func f(in: @differentiable(reverse, wrt: a) (Int) -> Int) { }
@@ -129,7 +129,7 @@ final class AttributeTests: XCTestCase {
   }
 
   func testQualifiedAttribute() {
-    AssertParse(
+    assertParse(
       """
       @_Concurrency.MainActor(unsafe) public struct Image : SwiftUI.View {}
       """
@@ -137,7 +137,7 @@ final class AttributeTests: XCTestCase {
   }
 
   func testDerivativeAttribute() {
-    AssertParse(
+    assertParse(
       """
       @inlinable
       @differentiable(reverse, wrt: self)
@@ -149,7 +149,7 @@ final class AttributeTests: XCTestCase {
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       @inlinable
       @differentiable(reverse, wrt: (self, initialResult))
@@ -162,7 +162,7 @@ final class AttributeTests: XCTestCase {
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       @inlinable
       @derivative(of: differentiableReduce)
@@ -179,7 +179,7 @@ final class AttributeTests: XCTestCase {
   }
 
   func testTransposeAttribute() {
-    AssertParse(
+    assertParse(
       """
       @transpose(of: S.instanceMethod, wrt: self)
       static func transposeInstanceMethodWrtSelf(_ other: S, t: S) -> S {
@@ -187,7 +187,7 @@ final class AttributeTests: XCTestCase {
       }
       """
     )
-    AssertParse(
+    assertParse(
       """
       @transpose(of: +)
       func addTranspose(_ v: Float) -> (Float, Float) {
@@ -196,7 +196,7 @@ final class AttributeTests: XCTestCase {
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       @transpose(of: -, wrt: (0, 1))
       func subtractTranspose(_ v: Float) -> (Float, Float) {
@@ -205,7 +205,7 @@ final class AttributeTests: XCTestCase {
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       @transpose(of: Float.-, wrt: (0, 1))
       func subtractTranspose(_ v: Float) -> (Float, Float) {
@@ -216,7 +216,7 @@ final class AttributeTests: XCTestCase {
   }
 
   func testImplementsAttribute() {
-    AssertParse(
+    assertParse(
       """
       @_implements(P, f0())
       func g0() -> Int {
@@ -280,7 +280,7 @@ final class AttributeTests: XCTestCase {
     for (line, baseType) in cases {
       var parser = Parser(baseType)
 
-      AssertParse(
+      assertParse(
         "@_implements(1️⃣\(baseType), f())",
         AttributeSyntax.parse,
         substructure: Syntax(TypeSyntax.parse(from: &parser)),
@@ -291,7 +291,7 @@ final class AttributeTests: XCTestCase {
   }
 
   func testSemanticsAttribute() {
-    AssertParse(
+    assertParse(
       """
       @_semantics("constant_evaluable")
       func testRecursion(_ a: Int) -> Int {
@@ -307,7 +307,7 @@ final class AttributeTests: XCTestCase {
   }
 
   func testMissingDeclarationAfterAttributes() {
-    AssertParse(
+    assertParse(
       "@resultBuilder1️⃣",
       diagnostics: [DiagnosticSpec(message: "expected declaration after attribute")],
       fixedSource: """
@@ -318,7 +318,7 @@ final class AttributeTests: XCTestCase {
   }
 
   func testObjcImplementationAttribute() {
-    AssertParse(
+    assertParse(
       """
       @_objcImplementation extension MyClass {
         func fn() {}
@@ -331,7 +331,7 @@ final class AttributeTests: XCTestCase {
   }
 
   func testSpiAttributeWithoutParameter() {
-    AssertParse(
+    assertParse(
       "@_spi(1️⃣) class Foo {}",
       diagnostics: [
         DiagnosticSpec(message: "expected argument for '@_spi' attribute", fixIts: ["insert attribute argument"])
@@ -341,14 +341,14 @@ final class AttributeTests: XCTestCase {
   }
 
   func testSilgenName() {
-    AssertParse(
+    assertParse(
       """
       @_silgen_name("testExclusivityBogusPC")
       private static func _testExclusivityBogusPC()
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       @_silgen_name("") func foo() {}
       """
@@ -356,21 +356,21 @@ final class AttributeTests: XCTestCase {
   }
 
   func testBackDeployed() {
-    AssertParse(
+    assertParse(
       """
       @backDeployed(before: macOS 12.0)
       struct Foo {}
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       @backDeployed(before: macos 12.0, iOS 15.0)
       struct Foo {}
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       @available(macOS 11.0, *)
       @backDeployed(before: _macOS12_1)
@@ -379,21 +379,21 @@ final class AttributeTests: XCTestCase {
     )
 
     // Legacy spelling @_backDeploy(before:)
-    AssertParse(
+    assertParse(
       """
       @_backDeploy(before: macOS 12.0)
       struct Foo {}
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       @_backDeploy(before: macos 12.0, iOS 15.0)
       struct Foo {}
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       @available(macOS 11.0, *)
       @_backDeploy(before: _macOS12_1)
@@ -403,25 +403,25 @@ final class AttributeTests: XCTestCase {
   }
 
   func testExpose() {
-    AssertParse(
+    assertParse(
       """
       @_expose(Cxx) func foo() {}
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       @_expose(Cplusplus) func foo() {}
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       @_expose(Cxx, "baz") func foo() {}
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       @_expose(Cxx, 1️⃣baz) func foo() {}
       """,
@@ -433,21 +433,21 @@ final class AttributeTests: XCTestCase {
   }
 
   func testOriginallyDefinedIn() {
-    AssertParse(
+    assertParse(
       """
       @_originallyDefinedIn(module: "ToasterKit", macOS 10.15)
       struct Vehicle {}
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       @_originallyDefinedIn(module: "ToasterKit", macOS 10.15, iOS 13)
       struct Vehicle {}
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       @_originallyDefinedIn(module: "ToasterKit", _iOS13Aligned)
       struct Vehicle {}
@@ -456,21 +456,21 @@ final class AttributeTests: XCTestCase {
   }
 
   func testUnavailableFromAsync() {
-    AssertParse(
+    assertParse(
       """
       @_unavailableFromAsync
       func foo() {}
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       @_unavailableFromAsync(message: "abc")
       func foo() {}
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       @_unavailableFromAsync(1️⃣nope: "abc")
       func foo() {}
@@ -481,7 +481,7 @@ final class AttributeTests: XCTestCase {
       ]
     )
 
-    AssertParse(
+    assertParse(
       """
       @_unavailableFromAsync(message1️⃣= "abc")
       func foo() {}
@@ -492,7 +492,7 @@ final class AttributeTests: XCTestCase {
       ]
     )
 
-    AssertParse(
+    assertParse(
       """
       @_unavailableFromAsync(message: 1️⃣abc)
       func foo() {}
@@ -505,14 +505,14 @@ final class AttributeTests: XCTestCase {
   }
 
   func testEffects() {
-    AssertParse(
+    assertParse(
       """
       @_effects(notEscaping self.value**)
       func foo() {}
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       @_effects(escaping self.value**.class*.value** => return.value**)
       func foo() {}
@@ -521,13 +521,13 @@ final class AttributeTests: XCTestCase {
   }
 
   func testEscapingOnClosureType() {
-    AssertParse(
+    assertParse(
       "func foo(closure: @escaping () -> Void) {}"
     )
   }
 
   func testNonSendable() {
-    AssertParse(
+    assertParse(
       """
       @_nonSendable
       class NonSendableType {
@@ -537,19 +537,19 @@ final class AttributeTests: XCTestCase {
   }
 
   func testDocumentationAttribute() {
-    AssertParse("@_documentation(visibility: internal) @_exported import A")
-    AssertParse("@_documentation(metadata: cool_stuff) public class SomeClass {}")
-    AssertParse(#"@_documentation(metadata: "this is a longer string") public class OtherClass {}"#)
-    AssertParse(#"@_documentation(visibility: internal, metadata: "this is a longer string") public class OtherClass {}"#)
+    assertParse("@_documentation(visibility: internal) @_exported import A")
+    assertParse("@_documentation(metadata: cool_stuff) public class SomeClass {}")
+    assertParse(#"@_documentation(metadata: "this is a longer string") public class OtherClass {}"#)
+    assertParse(#"@_documentation(visibility: internal, metadata: "this is a longer string") public class OtherClass {}"#)
   }
 
   func testSendable() {
-    AssertParse("func takeRepeater(_ f: @MainActor @Sendable @escaping () -> Int) {}")
-    AssertParse("takeRepesater { @MainActor @Sendable () -> Int in 0 }")
+    assertParse("func takeRepeater(_ f: @MainActor @Sendable @escaping () -> Int) {}")
+    assertParse("takeRepesater { @MainActor @Sendable () -> Int in 0 }")
   }
 
   func testLexicalLifetimes() {
-    AssertParse(
+    assertParse(
       """
       @_lexicalLifetimes
       func lexy(_ c: C) {}
@@ -558,7 +558,7 @@ final class AttributeTests: XCTestCase {
   }
 
   func testImportAttributes() {
-    AssertParse(
+    assertParse(
       """
       import A
       @_implementationOnly import B

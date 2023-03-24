@@ -40,7 +40,7 @@ final class ExtensionDeclTests: XCTestCase {
       members: MemberDeclBlockSyntax(members: members)
     )
 
-    AssertBuildResult(
+    assertBuildResult(
       buildable,
       """
       extension TokenSyntax {

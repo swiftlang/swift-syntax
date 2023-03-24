@@ -36,7 +36,7 @@ final class TriviaTests: XCTestCase {
       )
     }
 
-    AssertBuildResult(
+    assertBuildResult(
       decl,
       """
       /// A doc comment
@@ -66,7 +66,7 @@ final class TriviaTests: XCTestCase {
     ]
     for (line, testCase) in testCases {
       let (builder, expected) = testCase
-      AssertBuildResult(builder, expected, line: line)
+      assertBuildResult(builder, expected, line: line)
     }
   }
 
@@ -88,7 +88,7 @@ final class TriviaTests: XCTestCase {
     ]
     for (line, testCase) in testCases {
       let (builder, expected) = testCase
-      AssertBuildResult(builder, expected, line: line)
+      assertBuildResult(builder, expected, line: line)
     }
   }
 }

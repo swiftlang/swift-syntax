@@ -24,6 +24,6 @@ final class ImportTests: XCTestCase {
       path: AccessPathSyntax([AccessPathComponentSyntax(name: identifier)])
     )
 
-    AssertBuildResult(importDecl, "␣import SwiftSyntax")
+    assertBuildResult(importDecl, "␣import SwiftSyntax")
   }
 }

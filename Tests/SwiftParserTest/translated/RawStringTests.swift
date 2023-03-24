@@ -16,7 +16,7 @@ import XCTest
 
 final class RawStringTests: XCTestCase {
   func testRawString1() {
-    AssertParse(
+    assertParse(
       """
       import Swift
       """
@@ -24,7 +24,7 @@ final class RawStringTests: XCTestCase {
   }
 
   func testRawString2() {
-    AssertParse(
+    assertParse(
       ##"""
       _ = #"""
       ###################################################################
@@ -36,7 +36,7 @@ final class RawStringTests: XCTestCase {
   }
 
   func testRawString3() {
-    AssertParse(
+    assertParse(
       ####"""
       _ = #"""
           # H1 #
@@ -48,7 +48,7 @@ final class RawStringTests: XCTestCase {
   }
 
   func testRawString5() {
-    AssertParse(
+    assertParse(
       ###"""
       _ = ##"""
           One
@@ -59,7 +59,7 @@ final class RawStringTests: XCTestCase {
   }
 
   func testRawString6() {
-    AssertParse(
+    assertParse(
       ###"""
       _ = ##"""
           Two
@@ -70,7 +70,7 @@ final class RawStringTests: XCTestCase {
   }
 
   func testRawString7() {
-    AssertParse(
+    assertParse(
       ##"""
       _ = #"""
           Three\r
@@ -81,7 +81,7 @@ final class RawStringTests: XCTestCase {
   }
 
   func testRawString8() {
-    AssertParse(
+    assertParse(
       ####"""
       _ = ###"""
           Four \(foo)
@@ -92,7 +92,7 @@ final class RawStringTests: XCTestCase {
   }
 
   func testRawString9() {
-    AssertParse(
+    assertParse(
       ###"""
       _ = ##"""
         print("""
@@ -104,7 +104,7 @@ final class RawStringTests: XCTestCase {
   }
 
   func testRawString10() {
-    AssertParse(
+    assertParse(
       """
       // ===---------- Single line --------===
       """
@@ -112,7 +112,7 @@ final class RawStringTests: XCTestCase {
   }
 
   func testRawString11() {
-    AssertParse(
+    assertParse(
       ##"""
       _ = #""Zeta""#
       """##
@@ -120,7 +120,7 @@ final class RawStringTests: XCTestCase {
   }
 
   func testRawString12() {
-    AssertParse(
+    assertParse(
       ##"""
       _ = #""Eta"\#n\#n\#n\#""#
       """##
@@ -128,7 +128,7 @@ final class RawStringTests: XCTestCase {
   }
 
   func testRawString13() {
-    AssertParse(
+    assertParse(
       ##"""
       _ = #""Iota"\n\n\n\""#
       """##
@@ -136,7 +136,7 @@ final class RawStringTests: XCTestCase {
   }
 
   func testRawString14() {
-    AssertParse(
+    assertParse(
       ##"""
       _ = #"a raw string with \" in it"#
       """##
@@ -144,7 +144,7 @@ final class RawStringTests: XCTestCase {
   }
 
   func testRawString15() {
-    AssertParse(
+    assertParse(
       ###"""
       _ = ##"""
             a raw string with """ in it
@@ -154,7 +154,7 @@ final class RawStringTests: XCTestCase {
   }
 
   func testRawString16() {
-    AssertParse(
+    assertParse(
       """
       // ===---------- False Multiline Delimiters --------===
       """
@@ -162,7 +162,7 @@ final class RawStringTests: XCTestCase {
   }
 
   func testRawString17() {
-    AssertParse(
+    assertParse(
       ##"""
       /// Source code contains zero-width character in this format: `#"[U+200B]"[U+200B]"#`
       /// The check contains zero-width character in this format: `"[U+200B]\"[U+200B]"`
@@ -177,7 +177,7 @@ final class RawStringTests: XCTestCase {
   }
 
   func testRawString18() {
-    AssertParse(
+    assertParse(
       ##"""
       _ = #""""#
       """##
@@ -185,7 +185,7 @@ final class RawStringTests: XCTestCase {
   }
 
   func testRawString19() {
-    AssertParse(
+    assertParse(
       ##"""
       _ = #"""""#
       """##
@@ -193,7 +193,7 @@ final class RawStringTests: XCTestCase {
   }
 
   func testRawString20() {
-    AssertParse(
+    assertParse(
       ##"""
       _ = #""""""#
       """##
@@ -201,7 +201,7 @@ final class RawStringTests: XCTestCase {
   }
 
   func testRawString21() {
-    AssertParse(
+    assertParse(
       ##"""
       _ = #"""#
       """##
@@ -209,7 +209,7 @@ final class RawStringTests: XCTestCase {
   }
 
   func testRawString22() {
-    AssertParse(
+    assertParse(
       ###"""
       _ = ##""" foo # "# "##
       """###
@@ -217,7 +217,7 @@ final class RawStringTests: XCTestCase {
   }
 
   func testRawString23() {
-    AssertParse(
+    assertParse(
       ####"""
       _ = ###""" "# "## "###
       """####
@@ -225,7 +225,7 @@ final class RawStringTests: XCTestCase {
   }
 
   func testRawString24() {
-    AssertParse(
+    assertParse(
       ####"""
       _ = ###"""##"###
       """####
@@ -233,7 +233,7 @@ final class RawStringTests: XCTestCase {
   }
 
   func testRawString25() {
-    AssertParse(
+    assertParse(
       ##"""
       _ = "interpolating \(#"""false delimiter"#)"
       """##
@@ -241,7 +241,7 @@ final class RawStringTests: XCTestCase {
   }
 
   func testRawString26() {
-    AssertParse(
+    assertParse(
       ##"""
       _ = """
         interpolating \(#"""false delimiters"""#)
@@ -251,7 +251,7 @@ final class RawStringTests: XCTestCase {
   }
 
   func testRawString27() {
-    AssertParse(
+    assertParse(
       ##"""
       let foo = "Interpolation"
       _ = #"\b\b \#(foo)\#(foo) Kappa"#
@@ -260,7 +260,7 @@ final class RawStringTests: XCTestCase {
   }
 
   func testRawString28() {
-    AssertParse(
+    assertParse(
       ###"""
       _ = """
         interpolating \(##"""
@@ -272,7 +272,7 @@ final class RawStringTests: XCTestCase {
   }
 
   func testRawString30() {
-    AssertParse(
+    assertParse(
       ##"""
       #"unused literal"#
       """##
@@ -280,7 +280,7 @@ final class RawStringTests: XCTestCase {
   }
 
   func testRawString32() {
-    AssertParse(
+    assertParse(
       ##"""
       _ = #"This is a string"#
       """##
@@ -288,7 +288,7 @@ final class RawStringTests: XCTestCase {
   }
 
   func testRawString33() {
-    AssertParse(
+    assertParse(
       ######"""
       _ = #####"This is a string"#####
       """######
@@ -296,7 +296,7 @@ final class RawStringTests: XCTestCase {
   }
 
   func testRawString34() {
-    AssertParse(
+    assertParse(
       ###"""
       _ = #"enum\s+.+\{.*case\s+[:upper:]"#
       _ = #"Alice: "How long is forever?" White Rabbit: "Sometimes, just one second.""#

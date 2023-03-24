@@ -18,7 +18,7 @@ import XCTest
 
 final class MultilineStringTests: XCTestCase {
   func testMultilineString1() {
-    AssertParse(
+    assertParse(
       """
       import Swift
       """
@@ -26,7 +26,7 @@ final class MultilineStringTests: XCTestCase {
   }
 
   func testMultilineString2() {
-    AssertParse(
+    assertParse(
       """
       // ===---------- Multiline --------===
       """
@@ -34,7 +34,7 @@ final class MultilineStringTests: XCTestCase {
   }
 
   func testMultilineString3() {
-    AssertParse(
+    assertParse(
       #"""
       _ = """
           One
@@ -45,7 +45,7 @@ final class MultilineStringTests: XCTestCase {
   }
 
   func testMultilineString4() {
-    AssertParse(
+    assertParse(
       #"""
       _ = """
           Two
@@ -56,7 +56,7 @@ final class MultilineStringTests: XCTestCase {
   }
 
   func testMultilineString5() {
-    AssertParse(
+    assertParse(
       #"""
       _ = """
           Three
@@ -67,7 +67,7 @@ final class MultilineStringTests: XCTestCase {
   }
 
   func testMultilineString6() {
-    AssertParse(
+    assertParse(
       #"""
       _ = """
           Four
@@ -78,7 +78,7 @@ final class MultilineStringTests: XCTestCase {
   }
 
   func testMultilineString7() {
-    AssertParse(
+    assertParse(
       #"""
       _ = """
           Five\n
@@ -90,7 +90,7 @@ final class MultilineStringTests: XCTestCase {
   }
 
   func testMultilineString9() {
-    AssertParse(
+    assertParse(
       #"""
       _ = """
           Six
@@ -102,7 +102,7 @@ final class MultilineStringTests: XCTestCase {
   }
 
   func testMultilineString11() {
-    AssertParse(
+    assertParse(
       #"""
       _ = """
           Seven
@@ -113,7 +113,7 @@ final class MultilineStringTests: XCTestCase {
   }
 
   func testMultilineString12() {
-    AssertParse(
+    assertParse(
       #"""
       _ = """
           \"""
@@ -126,7 +126,7 @@ final class MultilineStringTests: XCTestCase {
   }
 
   func testMultilineString13() {
-    AssertParse(
+    assertParse(
       #"""
       _ = """
            \("Nine")
@@ -137,7 +137,7 @@ final class MultilineStringTests: XCTestCase {
   }
 
   func testMultilineString14() {
-    AssertParse(
+    assertParse(
       #"""
       _ = """
       	first
@@ -149,7 +149,7 @@ final class MultilineStringTests: XCTestCase {
   }
 
   func testMultilineString15() {
-    AssertParse(
+    assertParse(
       #"""
       _ = """
        first
@@ -161,7 +161,7 @@ final class MultilineStringTests: XCTestCase {
   }
 
   func testMultilineString16() {
-    AssertParse(
+    assertParse(
       #"""
       _ = """
       \\
@@ -171,7 +171,7 @@ final class MultilineStringTests: XCTestCase {
   }
 
   func testMultilineString17() {
-    AssertParse(
+    assertParse(
       #"""
       _ = """
         \\
@@ -181,7 +181,7 @@ final class MultilineStringTests: XCTestCase {
   }
 
   func testMultilineString18() {
-    AssertParse(
+    assertParse(
       #"""
       _ = """
 
@@ -192,7 +192,7 @@ final class MultilineStringTests: XCTestCase {
   }
 
   func testMultilineString20() {
-    AssertParse(
+    assertParse(
       #"""
       _ = """
 
@@ -203,7 +203,7 @@ final class MultilineStringTests: XCTestCase {
   }
 
   func testMultilineString22() {
-    AssertParse(
+    assertParse(
       #"""
       _ = """
 
@@ -214,7 +214,7 @@ final class MultilineStringTests: XCTestCase {
   }
 
   func testMultilineString24() {
-    AssertParse(
+    assertParse(
       #"""
       // contains tabs
       _ = """
@@ -226,7 +226,7 @@ final class MultilineStringTests: XCTestCase {
   }
 
   func testMultilineString25() {
-    AssertParse(
+    assertParse(
       #"""
       _ = """
         newline \
@@ -238,7 +238,7 @@ final class MultilineStringTests: XCTestCase {
 
   func testMultilineString26() {
     // contains trailing whitespace
-    AssertParse(
+    assertParse(
       #"""
       _ = """
         trailing \
@@ -257,7 +257,7 @@ final class MultilineStringTests: XCTestCase {
 
   func testMultilineString27() {
     // contains trailing whitespace
-    AssertParse(
+    assertParse(
       #"""
       _ = """
           foo
@@ -270,7 +270,7 @@ final class MultilineStringTests: XCTestCase {
 
   func testMultilineString29() {
     // contains trailing whitespace
-    AssertParse(
+    assertParse(
       #"""
       _ = """
           foo\\#u{20}
@@ -282,7 +282,7 @@ final class MultilineStringTests: XCTestCase {
   }
 
   func testMultilineString31() {
-    AssertParse(
+    assertParse(
       #"""
       _ = """
           foo \
@@ -293,7 +293,7 @@ final class MultilineStringTests: XCTestCase {
   }
 
   func testMultilineString32() {
-    AssertParse(
+    assertParse(
       #"""
       _ = """
 
@@ -304,7 +304,7 @@ final class MultilineStringTests: XCTestCase {
   }
 
   func testMultilineString34() {
-    AssertParse(
+    assertParse(
       #"""
       _ = """
 
@@ -316,7 +316,7 @@ final class MultilineStringTests: XCTestCase {
   }
 
   func testMultilineString37() {
-    AssertParse(
+    assertParse(
       #"""
       _ = """
 
@@ -327,7 +327,7 @@ final class MultilineStringTests: XCTestCase {
   }
 
   func testMultilineString39() {
-    AssertParse(
+    assertParse(
       #"""
       _ = """
 
@@ -337,7 +337,7 @@ final class MultilineStringTests: XCTestCase {
   }
 
   func testMultilineString41() {
-    AssertParse(
+    assertParse(
       #"""
       _ = """
           """
@@ -346,7 +346,7 @@ final class MultilineStringTests: XCTestCase {
   }
 
   func testMultilineString42() {
-    AssertParse(
+    assertParse(
       #"""
       _ = "\("""
         \("a" + """
@@ -358,7 +358,7 @@ final class MultilineStringTests: XCTestCase {
   }
 
   func testMultilineString43() {
-    AssertParse(
+    assertParse(
       #"""
       _ = "hello\("""
         world
@@ -368,7 +368,7 @@ final class MultilineStringTests: XCTestCase {
   }
 
   func testMultilineString44() {
-    AssertParse(
+    assertParse(
       #"""
       _ = """
         hello\("""
@@ -381,7 +381,7 @@ final class MultilineStringTests: XCTestCase {
   }
 
   func testMultilineString45() {
-    AssertParse(
+    assertParse(
       #"""
       _ = "hello\("""
                   "world'
@@ -391,7 +391,7 @@ final class MultilineStringTests: XCTestCase {
   }
 
   func testMultilineString46() {
-    AssertParse(
+    assertParse(
       #"""
       _ = """
           welcome
@@ -412,7 +412,7 @@ final class MultilineStringTests: XCTestCase {
   }
 
   func testEscapeNewlineInRawString() {
-    AssertParse(
+    assertParse(
       ##"""
       #"""
       Three \#
@@ -441,7 +441,7 @@ final class MultilineStringTests: XCTestCase {
     // We really shouldn't be allow the last newline in the multi-line string
     // literal to be escaped in a multi-line string literal. But since the C++
     // parser accepts this, so does SwiftParser.
-    AssertParse(
+    assertParse(
       ##"""
       #"""
       Three \#

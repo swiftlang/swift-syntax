@@ -16,7 +16,7 @@ import XCTest
 
 final class ImplicitGetterIncompleteTests: XCTestCase {
   func testImplicitGetterIncomplete1() {
-    AssertParse(
+    assertParse(
       """
       func test1() {
         var a : Int {
@@ -32,7 +32,7 @@ final class ImplicitGetterIncompleteTests: XCTestCase {
   }
 
   func testImplicitGetterIncomplete2() {
-    AssertParse(
+    assertParse(
       #"""
       // Would trigger assertion when AST verifier checks source ranges ("child source range not contained within its parent")
       func test2() {

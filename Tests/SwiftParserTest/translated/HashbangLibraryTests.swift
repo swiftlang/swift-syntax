@@ -20,7 +20,7 @@ final class HashbangLibraryTests: XCTestCase {
   func testHashbangLibrary1() {
     // Check that we diagnose and skip the hashbang at the beginning of the file
     // when compiling in library mode.
-    AssertParse(
+    assertParse(
       """
       #!/usr/bin/swift
       class Foo {}

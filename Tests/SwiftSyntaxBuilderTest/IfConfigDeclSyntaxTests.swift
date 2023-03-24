@@ -51,7 +51,7 @@ final class IfConfigDeclSyntaxTests: XCTestCase {
       poundEndif: .poundEndifKeyword(leadingTrivia: .newline)
     )
 
-    AssertBuildResult(
+    assertBuildResult(
       buildable,
       """
       #if DEBUG

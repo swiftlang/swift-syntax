@@ -16,7 +16,7 @@ import XCTest
 
 final class BuiltinWordTests: XCTestCase {
   func testBuiltinWord1() {
-    AssertParse(
+    assertParse(
       """
       precedencegroup AssignmentPrecedence { assignment: true }
       """
@@ -24,7 +24,7 @@ final class BuiltinWordTests: XCTestCase {
   }
 
   func testBuiltinWord2() {
-    AssertParse(
+    assertParse(
       """
       var word: Builtin.Word
       var i16: Builtin.Int16
@@ -36,7 +36,7 @@ final class BuiltinWordTests: XCTestCase {
   }
 
   func testBuiltinWord3() {
-    AssertParse(
+    assertParse(
       """
       // Check that trunc/?ext operations are appropriately available given the
       // abstract range of potential Word sizes.
@@ -45,7 +45,7 @@ final class BuiltinWordTests: XCTestCase {
   }
 
   func testBuiltinWord4() {
-    AssertParse(
+    assertParse(
       """
       word = Builtin.truncOrBitCast_Int128_Word(i128)
       word = Builtin.truncOrBitCast_Int64_Word(i64)
@@ -56,7 +56,7 @@ final class BuiltinWordTests: XCTestCase {
   }
 
   func testBuiltinWord5() {
-    AssertParse(
+    assertParse(
       """
       i16 = Builtin.truncOrBitCast_Word_Int16(word)
       i32 = Builtin.truncOrBitCast_Word_Int32(word)
@@ -67,7 +67,7 @@ final class BuiltinWordTests: XCTestCase {
   }
 
   func testBuiltinWord6() {
-    AssertParse(
+    assertParse(
       """
       word = Builtin.zextOrBitCast_Int128_Word(i128)
       word = Builtin.zextOrBitCast_Int64_Word(i64)
@@ -78,7 +78,7 @@ final class BuiltinWordTests: XCTestCase {
   }
 
   func testBuiltinWord7() {
-    AssertParse(
+    assertParse(
       """
       i16 = Builtin.zextOrBitCast_Word_Int16(word)
       i32 = Builtin.zextOrBitCast_Word_Int32(word)
@@ -89,7 +89,7 @@ final class BuiltinWordTests: XCTestCase {
   }
 
   func testBuiltinWord8() {
-    AssertParse(
+    assertParse(
       """
       word = Builtin.trunc_Int128_Word(i128)
       word = Builtin.trunc_Int64_Word(i64)
@@ -100,7 +100,7 @@ final class BuiltinWordTests: XCTestCase {
   }
 
   func testBuiltinWord9() {
-    AssertParse(
+    assertParse(
       """
       i16 = Builtin.trunc_Word_Int16(word)
       i32 = Builtin.trunc_Word_Int32(word)
@@ -111,7 +111,7 @@ final class BuiltinWordTests: XCTestCase {
   }
 
   func testBuiltinWord10() {
-    AssertParse(
+    assertParse(
       """
       word = Builtin.zext_Int128_Word(i128)
       word = Builtin.zext_Int64_Word(i64)
@@ -122,7 +122,7 @@ final class BuiltinWordTests: XCTestCase {
   }
 
   func testBuiltinWord11() {
-    AssertParse(
+    assertParse(
       """
       i16 = Builtin.zext_Word_Int16(word)
       i32 = Builtin.zext_Word_Int32(word)

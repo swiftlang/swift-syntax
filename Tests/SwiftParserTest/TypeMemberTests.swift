@@ -16,7 +16,7 @@ import XCTest
 
 final class TypeMemberTests: XCTestCase {
   func testKeyword() {
-    AssertParse(
+    assertParse(
       "MyType.class",
       TypeSyntax.parse,
       substructure: Syntax(
@@ -31,7 +31,7 @@ final class TypeMemberTests: XCTestCase {
   }
 
   func testMissing() {
-    AssertParse(
+    assertParse(
       "MyType.1️⃣",
       TypeSyntax.parse,
       substructure: Syntax(
@@ -66,7 +66,7 @@ final class TypeMemberTests: XCTestCase {
       #line: "MyType\n.\nNested",
     ]
     for (line, source) in cases {
-      AssertParse(
+      assertParse(
         source,
         TypeSyntax.parse,
         substructure: expected,
@@ -83,7 +83,7 @@ final class TypeMemberTests: XCTestCase {
       #line: "MyType1️⃣./*bar*/Nested",
     ]
     for (line, source) in cases {
-      AssertParse(
+      assertParse(
         source,
         TypeSyntax.parse,
         diagnostics: [DiagnosticSpec(message: "extraneous whitespace after '.' is not permitted")],
@@ -133,14 +133,14 @@ final class TypeMemberTests: XCTestCase {
         name: .identifier("Z")
       )
 
-      AssertParse(
+      assertParse(
         "\(baseType).Z",
         TypeSyntax.parse,
         substructure: Syntax(expectedSyntax),
         line: line
       )
 
-      AssertParse(
+      assertParse(
         "\(baseType).Z<W>",
         TypeSyntax.parse,
         substructure: Syntax(

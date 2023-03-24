@@ -65,7 +65,7 @@ struct LexemeSpec {
 ///     which this function was called.
 ///   - line: The line number on which failure occurred. Defaults to the line number on which this
 ///     function was called.
-private func AssertTokens(
+private func assertTokens(
   _ actual: [Lexer.Lexeme],
   _ expected: [LexemeSpec],
   markerLocations: [String: Int],
@@ -98,7 +98,7 @@ private func AssertTokens(
     }
 
     if actualLexeme.leadingTriviaText != expectedLexeme.leadingTrivia {
-      FailStringsEqualWithDiff(
+      failStringsEqualWithDiff(
         String(syntaxText: actualLexeme.leadingTriviaText),
         String(syntaxText: expectedLexeme.leadingTrivia),
         "Leading trivia does not match",
@@ -108,7 +108,7 @@ private func AssertTokens(
     }
 
     if actualLexeme.tokenText.debugDescription != expectedLexeme.tokenText.debugDescription {
-      FailStringsEqualWithDiff(
+      failStringsEqualWithDiff(
         actualLexeme.tokenText.debugDescription,
         expectedLexeme.tokenText.debugDescription,
         "Token text does not match",
@@ -118,7 +118,7 @@ private func AssertTokens(
     }
 
     if actualLexeme.trailingTriviaText != expectedLexeme.trailingTrivia {
-      FailStringsEqualWithDiff(
+      failStringsEqualWithDiff(
         String(syntaxText: actualLexeme.trailingTriviaText),
         String(syntaxText: expectedLexeme.trailingTrivia),
         "Trailing trivia does not match",
@@ -142,7 +142,7 @@ private func AssertTokens(
         line: expectedLexeme.line
       )
     case (let actualError?, let expectedError?):
-      AssertStringsEqualWithDiff(
+      assertStringsEqualWithDiff(
         actualError.diagnosticMessage(wholeTextBytes: Array(actualLexeme.wholeText)).message,
         expectedError,
         file: expectedLexeme.file,
@@ -175,7 +175,7 @@ private func AssertTokens(
   }
 }
 
-func AssertLexemes(
+func assertLexemes(
   _ markedSource: String,
   lexemes expectedLexemes: [LexemeSpec],
   file: StaticString = #file,
@@ -196,7 +196,7 @@ func AssertLexemes(
         break
       }
     }
-    AssertTokens(lexemes, expectedLexemes, markerLocations: markerLocations, file: file, line: line)
+    assertTokens(lexemes, expectedLexemes, markerLocations: markerLocations, file: file, line: line)
   }
 }
 
@@ -324,7 +324,7 @@ class FixItApplier: SyntaxRewriter {
 }
 
 /// Assert that `location` is the same as that of `locationMarker` in `tree`.
-func AssertLocation<T: SyntaxProtocol>(
+func assertLocation<T: SyntaxProtocol>(
   _ location: SourceLocation,
   in tree: T,
   markerLocations: [String: Int],
@@ -354,7 +354,7 @@ func AssertLocation<T: SyntaxProtocol>(
 
 /// Assert that the diagnostic `note` produced in `tree` matches `spec`,
 /// using `markerLocations` to translate markers to actual source locations.
-func AssertNote<T: SyntaxProtocol>(
+func assertNote<T: SyntaxProtocol>(
   _ note: Note,
   in tree: T,
   markerLocations: [String: Int],
@@ -364,7 +364,7 @@ func AssertNote<T: SyntaxProtocol>(
 ) {
   XCTAssertEqual(note.message, spec.message, file: file, line: line)
   let locationConverter = SourceLocationConverter(file: "", source: tree.description)
-  AssertLocation(
+  assertLocation(
     note.location(converter: locationConverter),
     in: tree,
     markerLocations: markerLocations,
@@ -376,7 +376,7 @@ func AssertNote<T: SyntaxProtocol>(
 
 /// Assert that the diagnostic `diag` produced in `tree` matches `spec`,
 /// using `markerLocations` to translate markers to actual source locations.
-func AssertDiagnostic<T: SyntaxProtocol>(
+func assertDiagnostic<T: SyntaxProtocol>(
   _ diag: Diagnostic,
   in tree: T,
   markerLocations: [String: Int],
@@ -385,7 +385,7 @@ func AssertDiagnostic<T: SyntaxProtocol>(
   line: UInt = #line
 ) {
   let locationConverter = SourceLocationConverter(file: "", source: tree.description)
-  AssertLocation(
+  assertLocation(
     diag.location(converter: locationConverter),
     in: tree,
     markerLocations: markerLocations,
@@ -397,7 +397,7 @@ func AssertDiagnostic<T: SyntaxProtocol>(
     XCTAssertEqual(diag.diagnosticID, id, file: file, line: line)
   }
   if let message = spec.message {
-    AssertStringsEqualWithDiff(diag.message, message, file: file, line: line)
+    assertStringsEqualWithDiff(diag.message, message, file: file, line: line)
   }
   XCTAssertEqual(spec.severity, diag.diagMessage.severity, file: file, line: line)
   if diag.message.contains("\n") {
@@ -411,7 +411,7 @@ func AssertDiagnostic<T: SyntaxProtocol>(
     )
   }
   if let highlight = spec.highlight {
-    AssertStringsEqualWithDiff(
+    assertStringsEqualWithDiff(
       diag.highlights.map(\.description).joined().trimmingTrailingWhitespace(),
       highlight.trimmingTrailingWhitespace(),
       file: file,
@@ -430,13 +430,13 @@ func AssertDiagnostic<T: SyntaxProtocol>(
       )
     } else {
       for (note, expectedNote) in zip(diag.notes, notes) {
-        AssertNote(note, in: tree, markerLocations: markerLocations, expected: expectedNote, file: expectedNote.file, line: expectedNote.line)
+        assertNote(note, in: tree, markerLocations: markerLocations, expected: expectedNote, file: expectedNote.file, line: expectedNote.line)
       }
     }
   }
   if let fixIts = spec.fixIts {
     if fixIts != diag.fixIts.map(\.message.message) {
-      FailStringsEqualWithDiff(
+      failStringsEqualWithDiff(
         diag.fixIts.map(\.message.message).joined(separator: "\n"),
         fixIts.joined(separator: "\n"),
         file: file,
@@ -462,9 +462,9 @@ public struct AssertParseOptions: OptionSet {
   public static let normalizeNewlinesInFixedSource = AssertParseOptions(rawValue: 1 << 1)
 }
 
-/// Same as `AssertParse` overload with a `(String) -> S` `parse`,
+/// Same as `assertParse` overload with a `(String) -> S` `parse`,
 /// parsing the resulting `String` as a `SourceFileSyntax`.
-func AssertParse(
+func assertParse(
   _ markedSource: String,
   substructure expectedSubstructure: Syntax? = nil,
   substructureAfterMarker: String = "START",
@@ -475,7 +475,7 @@ func AssertParse(
   file: StaticString = #file,
   line: UInt = #line
 ) {
-  AssertParse(
+  assertParse(
     markedSource,
     { SourceFileSyntax.parse(from: &$0) },
     substructure: expectedSubstructure,
@@ -489,10 +489,10 @@ func AssertParse(
   )
 }
 
-/// Same as `AssertParse` overload with a `(String) -> S` `parse`,
+/// Same as `assertParse` overload with a `(String) -> S` `parse`,
 /// constructing a `Parser` from the given `String` and passing that to
 /// `parse` instead.
-func AssertParse<S: SyntaxProtocol>(
+func assertParse<S: SyntaxProtocol>(
   _ markedSource: String,
   _ parse: (inout Parser) -> S,
   substructure expectedSubstructure: Syntax? = nil,
@@ -504,7 +504,7 @@ func AssertParse<S: SyntaxProtocol>(
   file: StaticString = #file,
   line: UInt = #line
 ) {
-  AssertParse(
+  assertParse(
     markedSource,
     { (source: String) -> S in
       var parser = Parser(source)
@@ -539,7 +539,7 @@ func AssertParse<S: SyntaxProtocol>(
 ///   - applyFixIts: Applies only the fix-its with these messages.
 ///   - fixedSource: Asserts that the source after applying fix-its matches
 ///     this string.
-func AssertParse<S: SyntaxProtocol>(
+func assertParse<S: SyntaxProtocol>(
   _ markedSource: String,
   _ parse: (String) -> S,
   substructure expectedSubstructure: Syntax? = nil,
@@ -558,7 +558,7 @@ func AssertParse<S: SyntaxProtocol>(
   let tree: S = parse(source)
 
   // Round-trip
-  AssertStringsEqualWithDiff(
+  assertStringsEqualWithDiff(
     "\(tree)",
     source,
     additionalInfo: """
@@ -594,7 +594,7 @@ func AssertParse<S: SyntaxProtocol>(
     )
   } else {
     for (diag, expectedDiag) in zip(diags, expectedDiagnostics) {
-      AssertDiagnostic(diag, in: tree, markerLocations: markerLocations, expected: expectedDiag, file: expectedDiag.file, line: expectedDiag.line)
+      assertDiagnostic(diag, in: tree, markerLocations: markerLocations, expected: expectedDiag, file: expectedDiag.file, line: expectedDiag.line)
     }
   }
 
@@ -608,7 +608,7 @@ func AssertParse<S: SyntaxProtocol>(
         .replacingOccurrences(of: "\r\n", with: "\n")
         .replacingOccurrences(of: "\r", with: "\n")
     }
-    AssertStringsEqualWithDiff(
+    assertStringsEqualWithDiff(
       fixedTreeDescription.trimmingTrailingWhitespace(),
       expectedFixedSource.trimmingTrailingWhitespace(),
       file: file,

@@ -17,7 +17,7 @@ import XCTest
 final class TypeTests: XCTestCase {
 
   func testMissingColonInType() {
-    AssertParse(
+    assertParse(
       """
       var foo 1️⃣Bar = 1
       """,
@@ -28,22 +28,22 @@ final class TypeTests: XCTestCase {
   }
 
   func testClosureParsing() {
-    AssertParse(
+    assertParse(
       "(a, b) -> c",
       { TypeSyntax.parse(from: &$0) }
     )
 
-    AssertParse(
+    assertParse(
       "@MainActor (a, b) async throws -> c",
       { TypeSyntax.parse(from: &$0) }
     )
 
-    AssertParse("() -> (\u{feff})")
+    assertParse("() -> (\u{feff})")
   }
 
   func testGenericTypeWithTrivia() {
     // N.B. Whitespace is significant here.
-    AssertParse(
+    assertParse(
       """
               Foo<Bar<
                   V, Baz<Quux>
@@ -54,7 +54,7 @@ final class TypeTests: XCTestCase {
   }
 
   func testFunctionTypes() {
-    AssertParse(
+    assertParse(
       "t as(1️⃣..)->2️⃣",
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected type in function type"),
@@ -66,7 +66,7 @@ final class TypeTests: XCTestCase {
 
   func testClosureSignatures() {
 
-    AssertParse(
+    assertParse(
       """
       simple { [] str in
         print("closure with empty capture list")
@@ -74,7 +74,7 @@ final class TypeTests: XCTestCase {
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       { ()
       throws -> Void in }
@@ -82,14 +82,14 @@ final class TypeTests: XCTestCase {
       { ExprSyntax.parse(from: &$0) }
     )
 
-    AssertParse(
+    assertParse(
       """
       { [weak a, unowned(safe) self, b = 3] (a: Int, b: Int, _: Int) -> Int in }
       """,
       { ExprSyntax.parse(from: &$0) }
     )
 
-    AssertParse(
+    assertParse(
       "{[1️⃣class]in2️⃣",
       { ExprSyntax.parse(from: &$0) },
       diagnostics: [
@@ -99,7 +99,7 @@ final class TypeTests: XCTestCase {
       ]
     )
 
-    AssertParse(
+    assertParse(
       "{[n1️⃣`]in}",
       { ExprSyntax.parse(from: &$0) },
       diagnostics: [
@@ -107,7 +107,7 @@ final class TypeTests: XCTestCase {
       ]
     )
 
-    AssertParse(
+    assertParse(
       "{[weak1️⃣^]in}",
       { ExprSyntax.parse(from: &$0) },
       diagnostics: [
@@ -118,7 +118,7 @@ final class TypeTests: XCTestCase {
   }
 
   func testOpaqueReturnTypes() {
-    AssertParse(
+    assertParse(
       """
       public typealias Body = @_opaqueReturnTypeOf("$s6CatKit10pspspspspsV5cmereV6lilguyQrvp", 0) __
       """
@@ -126,7 +126,7 @@ final class TypeTests: XCTestCase {
   }
 
   func testVariadics() {
-    AssertParse(
+    assertParse(
       #"""
       func takesVariadicFnWithGenericRet<T>(_ fn: (S...) -> T) {}
       let _: (S...) -> Int = \.i
@@ -137,7 +137,7 @@ final class TypeTests: XCTestCase {
   }
 
   func testConvention() {
-    AssertParse(
+    assertParse(
       #"""
       let _: @convention(thin) (@convention(thick) () -> (),
                                 @convention(thin) () -> (),
@@ -152,7 +152,7 @@ final class TypeTests: XCTestCase {
   }
 
   func testNamedOpaqueReturnTypes() {
-    AssertParse(
+    assertParse(
       """
       func f2() -> <T: SignedInteger, U: SignedInteger> Int {
       }

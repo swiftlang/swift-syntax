@@ -18,24 +18,24 @@ import XCTest
 
 final class DeclarationTests: XCTestCase {
   func testImports() {
-    AssertParse("import Foundation")
+    assertParse("import Foundation")
 
-    AssertParse("@_spi(Private) import SwiftUI")
+    assertParse("@_spi(Private) import SwiftUI")
 
-    AssertParse("@_exported import class Foundation.Thread")
+    assertParse("@_exported import class Foundation.Thread")
 
-    AssertParse(#"@_private(sourceFile: "YetAnotherFile.swift") import Foundation"#)
+    assertParse(#"@_private(sourceFile: "YetAnotherFile.swift") import Foundation"#)
   }
   func testStructParsing() {
-    AssertParse("struct Foo {}")
+    assertParse("struct Foo {}")
   }
 
   func testFuncParsing() {
-    AssertParse("func foo() {}")
+    assertParse("func foo() {}")
 
-    AssertParse("func foo() -> Slice<MinimalMutableCollection<T>> {}")
+    assertParse("func foo() -> Slice<MinimalMutableCollection<T>> {}")
 
-    AssertParse(
+    assertParse(
       """
       func onEscapingAutoclosure(_ fn: @Sendable @autoclosure @escaping () -> Int) { }
       func onEscapingAutoclosure2(_ fn: @escaping @autoclosure @Sendable () -> Int) { }
@@ -47,7 +47,7 @@ final class DeclarationTests: XCTestCase {
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       func 1️⃣where2️⃣
       r3️⃣
@@ -63,9 +63,9 @@ final class DeclarationTests: XCTestCase {
         """
     )
 
-    AssertParse("func /^/ (lhs: Int, rhs: Int) -> Int { 1 / 2 }")
+    assertParse("func /^/ (lhs: Int, rhs: Int) -> Int { 1 / 2 }")
 
-    AssertParse(
+    assertParse(
       "func 1️⃣/^notoperator^/ (lhs: Int, rhs: Int) -> Int { 1 / 2 }",
       diagnostics: [
         DiagnosticSpec(message: "expected identifier in function"),
@@ -73,9 +73,9 @@ final class DeclarationTests: XCTestCase {
       ]
     )
 
-    AssertParse("func /^ (lhs: Int, rhs: Int) -> Int { 1 / 2 }")
+    assertParse("func /^ (lhs: Int, rhs: Int) -> Int { 1 / 2 }")
 
-    AssertParse(
+    assertParse(
       """
       func name(_ default: Int) {}
       """,
@@ -91,7 +91,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testFuncAfterUnbalancedClosingBrace() {
-    AssertParse(
+    assertParse(
       """
       1️⃣}
       func foo() {}
@@ -103,9 +103,9 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testClassParsing() {
-    AssertParse("class Foo {}")
+    assertParse("class Foo {}")
 
-    AssertParse(
+    assertParse(
       """
       @dynamicMemberLookup @available(swift 4.0)
       public class MyClass {
@@ -115,19 +115,19 @@ final class DeclarationTests: XCTestCase {
       """
     )
 
-    AssertParse(
+    assertParse(
       "<@NSApplicationMain T: AnyObject>",
       { GenericParameterClauseSyntax.parse(from: &$0) }
     )
 
-    AssertParse(
+    assertParse(
       "class T where t1️⃣",
       diagnostics: [
         DiagnosticSpec(message: "expected ':' or '==' to indicate a conformance or same-type requirement"),
         DiagnosticSpec(message: "expected member block in class"),
       ]
     )
-    AssertParse(
+    assertParse(
       "class B<where g1️⃣",
       diagnostics: [
         DiagnosticSpec(message: "expected ':' or '==' to indicate a conformance or same-type requirement"),
@@ -138,9 +138,9 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testActorParsing() {
-    AssertParse("actor Foo {}")
+    assertParse("actor Foo {}")
 
-    AssertParse(
+    assertParse(
       """
       actor Foo {
         nonisolated init?() {
@@ -157,7 +157,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testActorAfterUnbalancedClosingBrace() {
-    AssertParse(
+    assertParse(
       """
       1️⃣}
       actor Foo {}
@@ -169,11 +169,11 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testProtocolParsing() {
-    AssertParse("protocol Foo {}")
+    assertParse("protocol Foo {}")
 
-    AssertParse("protocol P { init() }")
+    assertParse("protocol P { init() }")
 
-    AssertParse(
+    assertParse(
       """
       protocol P {
         associatedtype Foo: Bar where X.Y == Z.W.W.Self
@@ -184,7 +184,7 @@ final class DeclarationTests: XCTestCase {
       """
     )
 
-    AssertParse(
+    assertParse(
       "protocol P{1️⃣{}case2️⃣",
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '{}' before enum case"),
@@ -195,7 +195,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testVariableDeclarations() {
-    AssertParse(
+    assertParse(
       """
       z
 
@@ -203,7 +203,7 @@ final class DeclarationTests: XCTestCase {
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       async let a = fetch("1.jpg")
       async let b: Image = fetch("2.jpg")
@@ -212,23 +212,23 @@ final class DeclarationTests: XCTestCase {
       """
     )
 
-    AssertParse("private unowned(unsafe) var foo: Int")
-    AssertParse("unowned(unsafe) let unmanagedVar: Class = c")
+    assertParse("private unowned(unsafe) var foo: Int")
+    assertParse("unowned(unsafe) let unmanagedVar: Class = c")
 
-    AssertParse("_ = foo?.description")
+    assertParse("_ = foo?.description")
 
-    AssertParse(
+    assertParse(
       "_ = foo/* */?.description1️⃣",
       diagnostics: [
         DiagnosticSpec(message: "expected ':' and expression after '? ...' in ternary expression")
       ]
     )
 
-    AssertParse("var a = Array<Int>?(from: decoder)")
+    assertParse("var a = Array<Int>?(from: decoder)")
 
-    AssertParse("@Wrapper var café = 42")
+    assertParse("@Wrapper var café = 42")
 
-    AssertParse(
+    assertParse(
       """
       var x: T {
         get async {
@@ -239,7 +239,7 @@ final class DeclarationTests: XCTestCase {
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       var foo: Int {
         _read {
@@ -253,7 +253,7 @@ final class DeclarationTests: XCTestCase {
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       var foo: Int {
         @available(swift 5.0)
@@ -265,7 +265,7 @@ final class DeclarationTests: XCTestCase {
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       var foo: Int {
         mutating set {
@@ -277,7 +277,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testAccessLevelModifier() {
-    AssertParse(
+    assertParse(
       """
       open1️⃣ open(set)2️⃣ var openProp = 0
       public public(set) var publicProp = 0
@@ -293,7 +293,7 @@ final class DeclarationTests: XCTestCase {
       ]
     )
 
-    AssertParse(
+    assertParse(
       """
       private(1️⃣get) var a = 0
       """,
@@ -303,7 +303,7 @@ final class DeclarationTests: XCTestCase {
       ]
     )
 
-    AssertParse(
+    assertParse(
       """
       private(1️⃣+
         set
@@ -316,7 +316,7 @@ final class DeclarationTests: XCTestCase {
       ]
     )
 
-    AssertParse(
+    assertParse(
       """
       private(1️⃣get, set) var a = 0
       """,
@@ -325,7 +325,7 @@ final class DeclarationTests: XCTestCase {
       ]
     )
 
-    AssertParse(
+    assertParse(
       """
       private(1️⃣get: set) var a = 0
       """,
@@ -334,7 +334,7 @@ final class DeclarationTests: XCTestCase {
       ]
     )
 
-    AssertParse(
+    assertParse(
       """
       1️⃣private(
       """,
@@ -343,7 +343,7 @@ final class DeclarationTests: XCTestCase {
       ]
     )
 
-    AssertParse(
+    assertParse(
       """
       private(1️⃣var a = 0
       """,
@@ -352,7 +352,7 @@ final class DeclarationTests: XCTestCase {
       ]
     )
 
-    AssertParse(
+    assertParse(
       """
       private(1️⃣get, set2️⃣, didSet) var a = 0
       """,
@@ -362,7 +362,7 @@ final class DeclarationTests: XCTestCase {
       ]
     )
 
-    AssertParse(
+    assertParse(
       """
       private(1️⃣get, didSet var a = 0
       """,
@@ -374,15 +374,15 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testTypealias() {
-    AssertParse("typealias Foo = Int")
+    assertParse("typealias Foo = Int")
 
-    AssertParse("typealias MyAlias = (_ a: Int, _ b: Double, _ c: Bool, _ d: String) -> Bool")
+    assertParse("typealias MyAlias = (_ a: Int, _ b: Double, _ c: Bool, _ d: String) -> Bool")
 
-    AssertParse("typealias A = @attr1 @attr2(hello) (Int) -> Void")
+    assertParse("typealias A = @attr1 @attr2(hello) (Int) -> Void")
   }
 
   func testPrecedenceGroup() {
-    AssertParse(
+    assertParse(
       """
       precedencegroup FooGroup {
         higherThan: Group1, Group2
@@ -393,7 +393,7 @@ final class DeclarationTests: XCTestCase {
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       precedencegroup FunnyPrecedence {
        associativity: left
@@ -404,9 +404,9 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testOperators() {
-    AssertParse("infix operator *-* : FunnyPrecedence")
+    assertParse("infix operator *-* : FunnyPrecedence")
 
-    AssertParse(
+    assertParse(
       """
       infix operator  <*<<< : MediumPrecedence, &
       prefix operator ^^ : PrefixMagicOperatorProtocol
@@ -418,7 +418,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testObjCAttribute() {
-    AssertParse(
+    assertParse(
       """
       @objc(
         thisMethodHasAVeryLongName:
@@ -431,7 +431,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testDifferentiableAttribute() {
-    AssertParse(
+    assertParse(
       """
       @differentiable(wrt: x where T: D)
       func foo<T>(_ x: T) -> T {}
@@ -449,15 +449,15 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testParsePoundError() {
-    AssertParse(#"#error("Unsupported platform")"#)
+    assertParse(#"#error("Unsupported platform")"#)
   }
 
   func testParsePoundWarning() {
-    AssertParse(#"#warning("Unsupported platform")"#)
+    assertParse(#"#warning("Unsupported platform")"#)
   }
 
   func testParseSpecializeAttribute() {
-    AssertParse(
+    assertParse(
       #"""
       @_specialize(where T == Int, U == Float)
       mutating func exchangeSecond<U>(_ u: U, _ t: T) -> (U, T) {
@@ -516,7 +516,7 @@ final class DeclarationTests: XCTestCase {
       """#
     )
 
-    AssertParse(
+    assertParse(
       """
       @_specialize(where T: _Trivial(32), T: _Trivial(64), T: _Trivial, T: _RefCountedObject)
       @_specialize(where T: _Trivial, T: _Trivial(64))
@@ -531,7 +531,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testParseDynamicReplacement() {
-    AssertParse(
+    assertParse(
       """
       @_dynamicReplacement(for: dynamic_replaceable())
       func replacement() {
@@ -540,7 +540,7 @@ final class DeclarationTests: XCTestCase {
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       @_dynamicReplacement(for: subscript(_:))
       subscript(x y: Int) -> Int {
@@ -554,7 +554,7 @@ final class DeclarationTests: XCTestCase {
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       @_dynamicReplacement(for: dynamic_replaceable_var)
       var r : Int {
@@ -563,7 +563,7 @@ final class DeclarationTests: XCTestCase {
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       @_dynamicReplacement(for: init(x:))
       init(y: Int) {
@@ -574,7 +574,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testEnumParsing() {
-    AssertParse(
+    assertParse(
       """
       enum Foo {
         @preconcurrency case custom(@Sendable () throws -> Void)
@@ -582,7 +582,7 @@ final class DeclarationTests: XCTestCase {
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       enum Content {
         case keyPath(KeyPath<FocusedValues, Value?>)
@@ -594,7 +594,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testStandaloneModifier() {
-    AssertParse(
+    assertParse(
       """
       struct a {
         public1️⃣
@@ -607,7 +607,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testMissingColonInFunctionSignature() {
-    AssertParse(
+    assertParse(
       "func test(first second 1️⃣Int)",
       diagnostics: [
         DiagnosticSpec(message: "expected ':' in parameter")
@@ -616,7 +616,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testExtraArgumentLabelsInFunctionSignature() {
-    AssertParse(
+    assertParse(
       "func test(first second 1️⃣third fourth: Int)",
       diagnostics: [
         DiagnosticSpec(message: "unexpected code 'third fourth' in parameter")
@@ -625,7 +625,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testMissingClosingParenInFunctionSignature() {
-    AssertParse(
+    assertParse(
       "func test(first second: Int1️⃣",
       diagnostics: [
         DiagnosticSpec(message: "expected ')' to end parameter clause")
@@ -634,7 +634,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testMissingOpeningParenInFunctionSignature() {
-    AssertParse(
+    assertParse(
       "func test 1️⃣first second: Int)",
       diagnostics: [
         DiagnosticSpec(message: "expected '(' to start parameter clause")
@@ -643,7 +643,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testNoParamsForFunction() {
-    AssertParse(
+    assertParse(
       """
       class MyClass {
         func withoutParameters1️⃣
@@ -671,7 +671,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testThrowsInWrongLocation() {
-    AssertParse(
+    assertParse(
       "func test() -> 1️⃣throws Int",
       diagnostics: [
         DiagnosticSpec(message: "'throws' must preceed '->'", fixIts: ["move 'throws' in front of '->'"])
@@ -681,7 +681,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testExtraneousRightBraceRecovery() {
-    AssertParse(
+    assertParse(
       """
       class ABC {
         let def = ghi(jkl: mno)
@@ -695,7 +695,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testMissingSubscriptReturnClause() {
-    AssertParse(
+    assertParse(
       """
       struct Foo {
         subscript(x: String) 1️⃣{}
@@ -708,7 +708,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testClassWithLeadingNumber() {
-    AssertParse(
+    assertParse(
       """
       class 1️⃣23class {
         func 2️⃣24method() {}
@@ -722,7 +722,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testAccessors() {
-    AssertParse(
+    assertParse(
       """
       var bad1 : Int {
         _read async { 0 }
@@ -730,7 +730,7 @@ final class DeclarationTests: XCTestCase {
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       var bad2 : Int {
         get reasync { 0 }
@@ -740,7 +740,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testExpressionMember() {
-    AssertParse(
+    assertParse(
       """
       struct S {
         1️⃣/ 2️⃣#3️⃣#4️⃣#line 5️⃣25 "line-directive.swift"
@@ -757,7 +757,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testBogusProtocolRequirements() {
-    AssertParse(
+    assertParse(
       """
       protocol P {
         var prop : Int { get 1️⃣bogus rethrows set }
@@ -784,7 +784,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testTextRecovery() {
-    AssertParse(
+    assertParse(
       """
       Lorem1️⃣ ipsum2️⃣ dolor3️⃣ sit4️⃣ amet5️⃣, consectetur adipiscing elit
       """,
@@ -799,7 +799,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testRecoverOneExtraLabel() {
-    AssertParse(
+    assertParse(
       "func test(first second 1️⃣third: Int)",
       substructure: Syntax(
         FunctionParameterSyntax(
@@ -817,7 +817,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testRecoverTwoExtraLabels() {
-    AssertParse(
+    assertParse(
       "func test(first second 1️⃣third fourth: Int)",
       substructure: Syntax(
         FunctionParameterSyntax(
@@ -835,7 +835,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testDontRecoverFromDeclKeyword() {
-    AssertParse(
+    assertParse(
       "func foo(first second 1️⃣third 2️⃣struct3️⃣: Int4️⃣) {}",
       substructure: Syntax(
         FunctionParameterSyntax(
@@ -855,7 +855,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testRecoverFromParens() {
-    AssertParse(
+    assertParse(
       "func test(first second 1️⃣[third fourth]: Int)",
       substructure: Syntax(
         FunctionParameterSyntax(
@@ -878,7 +878,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testDontRecoverFromUnbalancedParens() {
-    AssertParse(
+    assertParse(
       "func foo(first second 1️⃣[third 2️⃣fourth: Int) {}",
       substructure: Syntax(
         FunctionParameterSyntax(
@@ -901,7 +901,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testDontRecoverIfNewlineIsBeforeColon() {
-    AssertParse(
+    assertParse(
       """
       func foo(first second 1️⃣third2️⃣
       3️⃣: Int) {}
@@ -923,7 +923,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testMalforedStruct() {
-    AssertParse(
+    assertParse(
       """
       struct n1️⃣
       #if2️⃣
@@ -941,7 +941,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testInitializers() {
-    AssertParse(
+    assertParse(
       """
       struct S0 {
         init!(int: Int) { }
@@ -957,12 +957,12 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testDeinitializers() {
-    AssertParse("deinit {}")
-    AssertParse("deinit")
+    assertParse("deinit {}")
+    assertParse("deinit")
   }
 
   func testAttributedMember() {
-    AssertParse(
+    assertParse(
       #"""
       struct Foo {
         @Argument(help: "xxx")
@@ -973,17 +973,17 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testAnyAsParameterLabel() {
-    AssertParse(
+    assertParse(
       "func at(any kinds: [RawTokenKind]) {}"
     )
   }
 
   func testPublicClass() {
-    AssertParse("public class Foo: Superclass {}")
+    assertParse("public class Foo: Superclass {}")
   }
 
   func testReturnVariableNamedAsync() {
-    AssertParse(
+    assertParse(
       ##"""
       if let async = self.consume(if: .keyword(.async)) {
         return async
@@ -997,7 +997,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testLeadingUnexpectedTokens() {
-    AssertParse(
+    assertParse(
       "1️⃣}class C2️⃣",
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before class"),
@@ -1007,49 +1007,49 @@ final class DeclarationTests: XCTestCase {
         }class C {}
         """
     )
-    AssertParse(
+    assertParse(
       "1️⃣}enum C2️⃣",
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before enum"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in enum"),
       ]
     )
-    AssertParse(
+    assertParse(
       "1️⃣}protocol C2️⃣",
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before protocol"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in protocol"),
       ]
     )
-    AssertParse(
+    assertParse(
       "1️⃣}actor C2️⃣",
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before actor"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in actor"),
       ]
     )
-    AssertParse(
+    assertParse(
       "1️⃣}struct C2️⃣",
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before struct"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in struct"),
       ]
     )
-    AssertParse(
+    assertParse(
       "1️⃣}func C2️⃣",
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before function"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature"),
       ]
     )
-    AssertParse(
+    assertParse(
       "1️⃣}init2️⃣",
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before initializer"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature"),
       ]
     )
-    AssertParse(
+    assertParse(
       "1️⃣}subscript2️⃣",
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before subscript"),
@@ -1060,7 +1060,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testBogusTypeDeclName() {
-    AssertParse(
+    assertParse(
       "associatedtype 1️⃣5s",
       diagnostics: [
         DiagnosticSpec(message: "identifier can only start with a letter or underscore, not a number")
@@ -1069,49 +1069,49 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testModifiedParameter() {
-    AssertParse(
+    assertParse(
       """
       func const(_const _ map: String) {}
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       func isolated(isolated _ 1️⃣map: String) {}
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       func isolatedConst(isolated _const _ 1️⃣map: String) {}
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       func nonEphemeralIsolatedConst(@_nonEmphemeral isolated _const _ 1️⃣map: String) {}
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       func const(_const map: String) {}
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       func isolated(isolated map: String) {}
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       func isolatedConst(isolated _const map1️⃣: String) {}
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       func const(_const x: String) {}
       func isolated(isolated: String) {}
@@ -1121,7 +1121,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testReasyncFunctions() {
-    AssertParse(
+    assertParse(
       """
       class MyType {
         init(_ f: () async -> Void) reasync {
@@ -1137,7 +1137,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testStandaloneAtSignInGenericParameter() {
-    AssertParse(
+    assertParse(
       """
       struct U<@1️⃣
       """,
@@ -1151,7 +1151,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testMatchBracesBasedOnSpaces() {
-    AssertParse(
+    assertParse(
       """
       struct Foo {
         struct Bar 1️⃣
@@ -1164,7 +1164,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testFunctionWithoutNameOrArguments() {
-    AssertParse(
+    assertParse(
       "func 1️⃣{}",
       diagnostics: [
         DiagnosticSpec(message: "expected identifier and function signature in function")
@@ -1173,14 +1173,14 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testMacroExpansionDeclaration() {
-    AssertParse(
+    assertParse(
       """
       struct X {
         #memberwiseInit(access: .public)
       }
       """
     )
-    AssertParse(
+    assertParse(
       """
       #expand
       """,
@@ -1195,7 +1195,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testVariableDeclWithGetSetButNoBrace() {
-    AssertParse(
+    assertParse(
       """
       struct Foo {
         var x: Int 1️⃣
@@ -1215,7 +1215,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testVariableDeclWithSetGetButNoBrace() {
-    AssertParse(
+    assertParse(
       """
       struct Foo {
         var x: Int 1️⃣
@@ -1235,7 +1235,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testVariableFollowedByReferenceToSet() {
-    AssertParse(
+    assertParse(
       """
       func bar() {
           let a = b
@@ -1246,10 +1246,10 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testNominalDeclarationRecovery() {
-    AssertParse("protocol 1️⃣{}", diagnostics: [DiagnosticSpec(message: "expected identifier in protocol")])
-    AssertParse("class 1️⃣{}", diagnostics: [DiagnosticSpec(message: "expected identifier in class")])
-    AssertParse("struct 1️⃣{}", diagnostics: [DiagnosticSpec(message: "expected identifier in struct")])
-    AssertParse("enum 1️⃣{}", diagnostics: [DiagnosticSpec(message: "expected identifier in enum")])
+    assertParse("protocol 1️⃣{}", diagnostics: [DiagnosticSpec(message: "expected identifier in protocol")])
+    assertParse("class 1️⃣{}", diagnostics: [DiagnosticSpec(message: "expected identifier in class")])
+    assertParse("struct 1️⃣{}", diagnostics: [DiagnosticSpec(message: "expected identifier in struct")])
+    assertParse("enum 1️⃣{}", diagnostics: [DiagnosticSpec(message: "expected identifier in enum")])
     // `actor` cannot recover from a missing identifier since it's contextual
     // based on the presence of the identifier.
   }
@@ -1257,7 +1257,7 @@ final class DeclarationTests: XCTestCase {
   func testDontNestClassesIfTheyContainUnexpectedTokens() {
     // There used to be a bug where `class B` was parsed as a nested class of A
     // because recovery to the `class` keyword of B consumed the closing brace.
-    AssertParse(
+    assertParse(
       """
       class A {
         1️⃣^2️⃣
@@ -1319,7 +1319,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testIssue1025() {
-    AssertParse(
+    assertParse(
       """
       struct Math {
         public static let pi = 3.14
@@ -1328,11 +1328,11 @@ final class DeclarationTests: XCTestCase {
       """
     )
 
-    AssertParse("func foo(body: (isolated String) -> Int) {}")
+    assertParse("func foo(body: (isolated String) -> Int) {}")
   }
 
   func testMacroDecl() {
-    AssertParse(
+    assertParse(
       """
       macro m1: Int = A.M1
       macro m2(_: Int) = A.M2
@@ -1342,7 +1342,7 @@ final class DeclarationTests: XCTestCase {
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       macro m1 1️⃣= A
       """,
@@ -1353,7 +1353,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testPrimaryAssociatedTypeNotTerminatedWithAngleBracket() {
-    AssertParse(
+    assertParse(
       "protocol1️⃣<2️⃣:3️⃣",
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in protocol"),
@@ -1366,7 +1366,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testClassWithPrivateSet() {
-    AssertParse(
+    assertParse(
       """
       struct Properties {
         class private(set) var privateSetterCustomNames: Bool
@@ -1376,7 +1376,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testEditorPlaceholderInMemberDeclList() {
-    AssertParse(
+    assertParse(
       """
       class Foo {
         <#code#>
@@ -1389,7 +1389,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testAttributeInPoundIf() {
-    AssertParse(
+    assertParse(
       """
       #if hasAttribute(foo)
       @foo
@@ -1400,7 +1400,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testMissingExpressionInVariableAssignment() {
-    AssertParse(
+    assertParse(
       """
       let a =1️⃣
       """,
@@ -1414,7 +1414,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testCallToOpenThatLooksLikeDeclarationModifier() {
-    AssertParse(
+    assertParse(
       """
       func test() {
         open(set)
@@ -1439,7 +1439,7 @@ final class DeclarationTests: XCTestCase {
   func testReferenceToOpenThatLooksLikeDeclarationModifier() {
     // Ideally, this should be parsed as an identifier expression to 'open',
     // followed by a variable declaration but the current behavior matches the C++ parser.
-    AssertParse(
+    assertParse(
       """
       func test() {
         open
@@ -1466,7 +1466,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testOpenVarInCodeBlockItemList() {
-    AssertParse(
+    assertParse(
       """
       func test() {
         open var foo = 2
@@ -1477,7 +1477,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testAsyncLetInLocalContext() {
-    AssertParse(
+    assertParse(
       """
       func foo() async {
         async let x: String = "x"
@@ -1487,7 +1487,7 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testBorrowingConsumingParameterSpecifiers() {
-    AssertParse(
+    assertParse(
       """
       struct borrowing {}
       struct consuming {}
@@ -1536,7 +1536,7 @@ final class DeclarationTests: XCTestCase {
     // A function type in the where clause isn't semantically valid but its fine
     // with the parser. Make sure we don't recover to the arrow to parse the
     // function return type.
-    AssertParse(
+    assertParse(
       """
       func badTypeConformance3<T>(_: T) where (T) -> () : EqualComparable { }
       """

@@ -16,7 +16,7 @@ import XCTest
 
 final class RawStringErrorsTests: XCTestCase {
   func testRawStringErrors1() {
-    AssertParse(
+    assertParse(
       ###"""
       let _ = "foo\(#"bar"#1️⃣#)baz"
       """###,
@@ -27,7 +27,7 @@ final class RawStringErrorsTests: XCTestCase {
   }
 
   func testRawStringErrors2() {
-    AssertParse(
+    assertParse(
       ###"""
       let _ = #"\#1️⃣#("invalid")"#
       """###,
@@ -41,7 +41,7 @@ final class RawStringErrorsTests: XCTestCase {
   }
 
   func testRawStringErrors3() {
-    AssertParse(
+    assertParse(
       #####"""
       let _ = ###"""invalid"###1️⃣###
       """#####,
@@ -55,7 +55,7 @@ final class RawStringErrorsTests: XCTestCase {
   }
 
   func testRawStringErrors4() {
-    AssertParse(
+    assertParse(
       #####"""
       let _ = ####"invalid"###1️⃣
       """#####,
@@ -66,7 +66,7 @@ final class RawStringErrorsTests: XCTestCase {
   }
 
   func testRawStringErrors5() {
-    AssertParse(
+    assertParse(
       #####"""
       let _ = ###"invalid"###1️⃣###
       """#####,
@@ -77,7 +77,7 @@ final class RawStringErrorsTests: XCTestCase {
   }
 
   func testRawStringErrors6() {
-    AssertParse(
+    assertParse(
       ###"""
       let _ = ##"""1️⃣aa
         foobar
@@ -98,7 +98,7 @@ final class RawStringErrorsTests: XCTestCase {
   }
 
   func testRawStringErrors7() {
-    AssertParse(
+    assertParse(
       ##"""
       let _ = #"""1️⃣ foo "bar" #baz
         """#
@@ -115,7 +115,7 @@ final class RawStringErrorsTests: XCTestCase {
   }
 
   func testRawStringErrors8() {
-    AssertParse(
+    assertParse(
       ####"""
       let _ = ###"""1️⃣ "# "##
         """###

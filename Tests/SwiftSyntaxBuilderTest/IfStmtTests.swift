@@ -20,7 +20,7 @@ final class IfStmtTests: XCTestCase {
     // disambiguated by the absence of a labelName parameter and the use of a
     // trailing closure.
     let buildable = IfExprSyntax(conditions: ConditionElementListSyntax { BooleanLiteralExprSyntax(false) }) {}
-    AssertBuildResult(
+    assertBuildResult(
       buildable,
       """
       if false {
@@ -81,7 +81,7 @@ final class IfStmtTests: XCTestCase {
 
     for (line, testCase) in testCases {
       let (builder, expected) = testCase
-      AssertBuildResult(builder, expected, line: line)
+      assertBuildResult(builder, expected, line: line)
     }
   }
 
@@ -110,7 +110,7 @@ final class IfStmtTests: XCTestCase {
 
     for (line, testCase) in testCases {
       let (builder, expected) = testCase
-      AssertBuildResult(builder, expected, line: line)
+      assertBuildResult(builder, expected, line: line)
     }
   }
 
@@ -124,7 +124,7 @@ final class IfStmtTests: XCTestCase {
         )
       }
     ) {}
-    AssertBuildResult(
+    assertBuildResult(
       buildable,
       """
       if let x = y {
@@ -142,7 +142,7 @@ final class IfStmtTests: XCTestCase {
         )
       }
     ) {}
-    AssertBuildResult(
+    assertBuildResult(
       buildable,
       """
       if case .x = y {

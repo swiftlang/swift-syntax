@@ -105,32 +105,32 @@ final class StringInterpolationTests: XCTestCase {
 
   func testInterpolationLiteralString() {
     let a: ExprSyntax = "print(\(literal: "Hello, world!"))"
-    AssertStringsEqualWithDiff(a.description, #"print("Hello, world!")"#)
+    assertStringsEqualWithDiff(a.description, #"print("Hello, world!")"#)
 
     let b: ExprSyntax = "print(\(literal: "\"Hello\", world!"))"
-    AssertStringsEqualWithDiff(b.description, ##"print(#""Hello", world!"#)"##)
+    assertStringsEqualWithDiff(b.description, ##"print(#""Hello", world!"#)"##)
 
     let c: ExprSyntax = "print(\(literal: "Hello\\#\\world!"))"
-    AssertStringsEqualWithDiff(c.description, ###"print(##"Hello\#\world!"##)"###)
+    assertStringsEqualWithDiff(c.description, ###"print(##"Hello\#\world!"##)"###)
 
     let d: ExprSyntax = "print(\(literal: "Hello, world!\n"))"
-    AssertStringsEqualWithDiff(d.description, #"print("Hello, world!\n")"#)
+    assertStringsEqualWithDiff(d.description, #"print("Hello, world!\n")"#)
 
     let e: ExprSyntax = "print(\(literal: "\"Hello\", world!\n"))"
-    AssertStringsEqualWithDiff(e.description, ##"print(#""Hello", world!\#n"#)"##)
+    assertStringsEqualWithDiff(e.description, ##"print(#""Hello", world!\#n"#)"##)
   }
 
   func testInterpolationLiteralInt() {
     func test<T: ExpressibleByIntegerLiteral & ExpressibleByLiteralSyntax>(with ty: T.Type, unsigned: Bool = false) {
       let a: ExprSyntax = "print(\(literal: 42 as T))"
-      AssertStringsEqualWithDiff(a.description, #"print(42)"#, additionalInfo: String(describing: ty))
+      assertStringsEqualWithDiff(a.description, #"print(42)"#, additionalInfo: String(describing: ty))
 
       let b: ExprSyntax = "print(\(literal: 0 as T))"
-      AssertStringsEqualWithDiff(b.description, #"print(0)"#, additionalInfo: String(describing: ty))
+      assertStringsEqualWithDiff(b.description, #"print(0)"#, additionalInfo: String(describing: ty))
 
       if !unsigned {
         let c: ExprSyntax = "print(\(literal: -42 as T))"
-        AssertStringsEqualWithDiff(c.description, ##"print(-42)"##, additionalInfo: String(describing: ty))
+        assertStringsEqualWithDiff(c.description, ##"print(-42)"##, additionalInfo: String(describing: ty))
       }
     }
 
@@ -149,28 +149,28 @@ final class StringInterpolationTests: XCTestCase {
   func testInterpolationLiteralFloat() {
     func test<T: FloatingPoint & ExpressibleByFloatLiteral & ExpressibleByLiteralSyntax>(with ty: T.Type) {
       let a: ExprSyntax = "print(\(literal: 3.14 as T))"
-      AssertStringsEqualWithDiff(a.description, #"print(3.14)"#, additionalInfo: String(describing: ty))
+      assertStringsEqualWithDiff(a.description, #"print(3.14)"#, additionalInfo: String(describing: ty))
 
       let b: ExprSyntax = "print(\(literal: 0 as T))"
-      AssertStringsEqualWithDiff(b.description, #"print(0.0)"#, additionalInfo: String(describing: ty))
+      assertStringsEqualWithDiff(b.description, #"print(0.0)"#, additionalInfo: String(describing: ty))
 
       let c: ExprSyntax = "print(\(literal: -42 as T))"
-      AssertStringsEqualWithDiff(c.description, ##"print(-42.0)"##, additionalInfo: String(describing: ty))
+      assertStringsEqualWithDiff(c.description, ##"print(-42.0)"##, additionalInfo: String(describing: ty))
 
       let d: ExprSyntax = "print(\(literal: T.infinity))"
-      AssertStringsEqualWithDiff(d.description, ##"print(.infinity)"##, additionalInfo: String(describing: ty))
+      assertStringsEqualWithDiff(d.description, ##"print(.infinity)"##, additionalInfo: String(describing: ty))
 
       let e: ExprSyntax = "print(\(literal: -T.infinity))"
-      AssertStringsEqualWithDiff(e.description, ##"print(-.infinity)"##, additionalInfo: String(describing: ty))
+      assertStringsEqualWithDiff(e.description, ##"print(-.infinity)"##, additionalInfo: String(describing: ty))
 
       let f: ExprSyntax = "print(\(literal: T.nan))"
-      AssertStringsEqualWithDiff(f.description, ##"print(.nan)"##, additionalInfo: String(describing: ty))
+      assertStringsEqualWithDiff(f.description, ##"print(.nan)"##, additionalInfo: String(describing: ty))
 
       let g: ExprSyntax = "print(\(literal: T.signalingNaN))"
-      AssertStringsEqualWithDiff(g.description, ##"print(.signalingNaN)"##, additionalInfo: String(describing: ty))
+      assertStringsEqualWithDiff(g.description, ##"print(.signalingNaN)"##, additionalInfo: String(describing: ty))
 
       let h: ExprSyntax = "print(\(literal: -0.0 as T))"
-      AssertStringsEqualWithDiff(h.description, ##"print(-0.0)"##, additionalInfo: String(describing: ty))
+      assertStringsEqualWithDiff(h.description, ##"print(-0.0)"##, additionalInfo: String(describing: ty))
     }
 
     test(with: Float.self)
@@ -179,24 +179,24 @@ final class StringInterpolationTests: XCTestCase {
 
   func testInterpolationLiteralBool() {
     let a: ExprSyntax = "print(\(literal: true))"
-    AssertStringsEqualWithDiff(a.description, #"print(true)"#)
+    assertStringsEqualWithDiff(a.description, #"print(true)"#)
 
     let b: ExprSyntax = "print(\(literal: false))"
-    AssertStringsEqualWithDiff(b.description, #"print(false)"#)
+    assertStringsEqualWithDiff(b.description, #"print(false)"#)
   }
 
   func testInterpolationLiteralCollections() {
     let a: ExprSyntax = "print(\(literal: [3, 2, 1]))"
-    AssertStringsEqualWithDiff(a.description, #"print([3, 2, 1])"#)
+    assertStringsEqualWithDiff(a.description, #"print([3, 2, 1])"#)
 
     let b: ExprSyntax = "print(\(literal: [3, 2, 1] as Set))"
-    AssertStringsEqualWithDiff(b.description, #"print([1, 2, 3])"#)
+    assertStringsEqualWithDiff(b.description, #"print([1, 2, 3])"#)
 
     let c: ExprSyntax = "print(\(literal: [3: "three", 2: "two", 1: "one"] as KeyValuePairs))"
-    AssertStringsEqualWithDiff(c.description, #"print([3: "three", 2: "two", 1: "one"])"#)
+    assertStringsEqualWithDiff(c.description, #"print([3: "three", 2: "two", 1: "one"])"#)
 
     let d: ExprSyntax = "print(\(literal: [3: "three", 2: "two", 1: "one"]))"
-    AssertStringsEqualWithDiff(d.description, #"print([1: "one", 2: "two", 3: "three"])"#)
+    assertStringsEqualWithDiff(d.description, #"print([1: "one", 2: "two", 3: "three"])"#)
   }
 
   func testInterpolationLiteralOptional() {
@@ -204,19 +204,19 @@ final class StringInterpolationTests: XCTestCase {
     let none: Optional<Int> = nil
 
     let a: ExprSyntax = "print(\(literal: some))"
-    AssertStringsEqualWithDiff(a.description, #"print(42)"#)
+    assertStringsEqualWithDiff(a.description, #"print(42)"#)
 
     let b: ExprSyntax = "print(\(literal: Optional.some(some)))"
-    AssertStringsEqualWithDiff(b.description, #"print(42)"#)
+    assertStringsEqualWithDiff(b.description, #"print(42)"#)
 
     let c: ExprSyntax = "print(\(literal: none))"
-    AssertStringsEqualWithDiff(c.description, #"print(nil)"#)
+    assertStringsEqualWithDiff(c.description, #"print(nil)"#)
 
     let d: ExprSyntax = "print(\(literal: Optional.some(none)))"
-    AssertStringsEqualWithDiff(d.description, #"print(.some(nil))"#)
+    assertStringsEqualWithDiff(d.description, #"print(.some(nil))"#)
 
     let e: ExprSyntax = "print(\(literal: Int??.none))"
-    AssertStringsEqualWithDiff(e.description, #"print(nil)"#)
+    assertStringsEqualWithDiff(e.description, #"print(nil)"#)
   }
 
   func testRewriter() {
@@ -273,7 +273,7 @@ final class StringInterpolationTests: XCTestCase {
       """
     )
 
-    AssertStringsEqualWithDiff(
+    assertStringsEqualWithDiff(
       plusOne.description.trimmingTrailingWhitespace(),
       """
       func plusOne(base: Int) -> Int {
@@ -317,7 +317,7 @@ final class StringInterpolationTests: XCTestCase {
       """
     )
 
-    AssertStringsEqualWithDiff(
+    assertStringsEqualWithDiff(
       plusOne.description.trimmingTrailingWhitespace(),
       """
       func plusOne(base: Int) -> Int {
@@ -346,7 +346,7 @@ final class StringInterpolationTests: XCTestCase {
         """
       )
     }
-    AssertStringsEqualWithDiff(
+    assertStringsEqualWithDiff(
       ext.formatted(using: TwoSpacesFormat()).description,
       """
       extension MyType {
@@ -368,7 +368,7 @@ final class StringInterpolationTests: XCTestCase {
       }
       """
     XCTAssertTrue(setter.is(AccessorDeclSyntax.self))
-    AssertStringsEqualWithDiff(
+    assertStringsEqualWithDiff(
       setter.description,
       """
       set(newValue) {
@@ -413,7 +413,7 @@ final class StringInterpolationTests: XCTestCase {
     XCTAssertEqual(invalid, [.blockComment("/*comment*/"), .spaces(1), .unexpectedText("invalid"), .spaces(1), .blockComment("/*comm*/")])
 
     XCTAssertThrowsError(try Trivia(validating: "/*comment*/ invalid /*comm*/")) { error in
-      AssertStringsEqualWithDiff(
+      assertStringsEqualWithDiff(
         String(describing: error),
         """
 
@@ -430,7 +430,7 @@ final class StringInterpolationTests: XCTestCase {
     XCTAssert(invalid.hasError)
 
     XCTAssertThrowsError(try DeclSyntax(validating: "return 1")) { error in
-      AssertStringsEqualWithDiff(
+      assertStringsEqualWithDiff(
         String(describing: error),
         """
 
@@ -448,7 +448,7 @@ final class StringInterpolationTests: XCTestCase {
     XCTAssert(invalid.hasError)
 
     XCTAssertThrowsError(try StmtSyntax(validating: "struct Foo {}")) { error in
-      AssertStringsEqualWithDiff(
+      assertStringsEqualWithDiff(
         String(describing: error),
         """
 

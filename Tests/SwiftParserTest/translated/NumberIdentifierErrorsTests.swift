@@ -16,7 +16,7 @@ import XCTest
 
 final class NumberIdentifierErrorsTests: XCTestCase {
   func testNumberIdentifierErrors1() {
-    AssertParse(
+    assertParse(
       """
       // Per rdar://problem/32316666 , it is a common mistake for beginners
       // to start a function name with a number, so it's worth
@@ -26,7 +26,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
   }
 
   func testNumberIdentifierErrors2a() {
-    AssertParse(
+    assertParse(
       """
       func 1️⃣1() {}
       """,
@@ -37,7 +37,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
   }
 
   func testNumberIdentifierErrors2b() {
-    AssertParse(
+    assertParse(
       """
       func 1️⃣2.0() {}
       """,
@@ -48,7 +48,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
   }
 
   func testNumberIdentifierErrors2c() {
-    AssertParse(
+    assertParse(
       """
       func 1️⃣3func() {}
       """,
@@ -59,7 +59,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
   }
 
   func testNumberIdentifierErrors3a() {
-    AssertParse(
+    assertParse(
       """
       protocol 1️⃣4 {
         associatedtype 2️⃣5
@@ -73,7 +73,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
   }
 
   func testNumberIdentifierErrors3b() {
-    AssertParse(
+    assertParse(
       """
       protocol 1️⃣6.0 {
         associatedtype 2️⃣7.0
@@ -87,7 +87,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
   }
 
   func testNumberIdentifierErrors3c() {
-    AssertParse(
+    assertParse(
       """
       protocol 1️⃣8protocol {
         associatedtype 2️⃣9associatedtype
@@ -101,7 +101,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
   }
 
   func testNumberIdentifierErrors4a() {
-    AssertParse(
+    assertParse(
       """
       typealias 1️⃣10 = Int
       """,
@@ -112,7 +112,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
   }
 
   func testNumberIdentifierErrors4b() {
-    AssertParse(
+    assertParse(
       """
       typealias 1️⃣11.0 = Int
       """,
@@ -123,7 +123,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
   }
 
   func testNumberIdentifierErrors4c() {
-    AssertParse(
+    assertParse(
       """
       typealias 1️⃣12typealias = Int
       """,
@@ -134,7 +134,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
   }
 
   func testNumberIdentifierErrors5a() {
-    AssertParse(
+    assertParse(
       """
       struct 1️⃣13 {}
       """,
@@ -145,7 +145,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
   }
 
   func testNumberIdentifierErrors5b() {
-    AssertParse(
+    assertParse(
       """
       struct 1️⃣14.0 {}
       """,
@@ -156,7 +156,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
   }
 
   func testNumberIdentifierErrors5c() {
-    AssertParse(
+    assertParse(
       """
       struct 1️⃣15struct {}
       """,
@@ -167,7 +167,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
   }
 
   func testNumberIdentifierErrors6a() {
-    AssertParse(
+    assertParse(
       """
       enum 1️⃣16 {}
       """,
@@ -178,7 +178,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
   }
 
   func testNumberIdentifierErrors6b() {
-    AssertParse(
+    assertParse(
       """
       enum 1️⃣17.0 {}
       """,
@@ -189,7 +189,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
   }
 
   func testNumberIdentifierErrors6c() {
-    AssertParse(
+    assertParse(
       """
       enum 1️⃣18enum {}
       """,
@@ -200,7 +200,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
   }
 
   func testNumberIdentifierErrors7a() {
-    AssertParse(
+    assertParse(
       """
       class 1️⃣19 {
         func 2️⃣20() {}
@@ -214,7 +214,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
   }
 
   func testNumberIdentifierErrors7b() {
-    AssertParse(
+    assertParse(
       """
       class 1️⃣21.0 {
         func 2️⃣22.0() {}
@@ -228,7 +228,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
   }
 
   func testNumberIdentifierErrors8() {
-    AssertParse(
+    assertParse(
       """
       class 1️⃣23class {
         func 2️⃣24method() {}

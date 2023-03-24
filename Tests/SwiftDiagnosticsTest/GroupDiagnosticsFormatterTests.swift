@@ -109,7 +109,7 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
     )
 
     let annotated = DiagnosticsFormatter.annotateSources(in: group)
-    AssertStringsEqualWithDiff(
+    assertStringsEqualWithDiff(
       annotated,
       """
       === main.swift:5 ===
@@ -178,7 +178,7 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
     )
 
     let annotated = DiagnosticsFormatter.annotateSources(in: group)
-    AssertStringsEqualWithDiff(
+    assertStringsEqualWithDiff(
       annotated,
       """
       === main.swift:2 ===

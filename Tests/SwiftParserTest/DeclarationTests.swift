@@ -1334,12 +1334,18 @@ final class DeclarationTests: XCTestCase {
   func testMacroDecl() {
     AssertParse(
       """
-      macro m1: Int = A.M1
+      macro m11️⃣: Int = A.M1
       macro m2(_: Int) = A.M2
       macro m3(a b: Int) -> Int = A.M3
-      macro m4<T>: T = A.M4 where T.Assoc: P
+      macro m4<T>2️⃣: T = A.M4 where T.Assoc: P
       macro m5<T: P>(_: T)
-      """
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected parameter clause in function signature"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code ': Int = A.M1' before macro"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code ': T = A.M4 where T.Assoc: P' before macro")
+      ]
     )
 
     AssertParse(

@@ -663,20 +663,20 @@ public class LexerTests: XCTestCase {
 
   func testEditorPlaceholders() {
     assertLexemes(
-      "!<#b1#> && !<#b2#>",
+      "!1️⃣<#b1#> && !2️⃣<#b2#>",
       lexemes: [
         LexemeSpec(.prefixOperator, text: "!"),
-        LexemeSpec(.identifier, text: "<#b1#>", trailing: " "),
+        LexemeSpec(.identifier, text: "<#b1#>", trailing: " ", errorLocationMarker: "1️⃣", diagnostic: "editor placeholder in source file"),
         LexemeSpec(.binaryOperator, text: "&&", trailing: " "),
         LexemeSpec(.prefixOperator, text: "!"),
-        LexemeSpec(.identifier, text: "<#b2#>"),
+        LexemeSpec(.identifier, text: "<#b2#>", errorLocationMarker: "2️⃣", diagnostic: "editor placeholder in source file"),
       ]
     )
 
     assertLexemes(
-      "<##>",
+      "1️⃣<##>",
       lexemes: [
-        LexemeSpec(.identifier, text: "<##>", trailing: "")
+        LexemeSpec(.identifier, text: "<##>", trailing: "", diagnostic: "editor placeholder in source file")
       ]
     )
   }

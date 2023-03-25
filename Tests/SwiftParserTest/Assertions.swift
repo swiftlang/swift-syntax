@@ -87,7 +87,7 @@ private func assertTokens(
   var lexemeStartOffset = 0
   for (actualLexeme, expectedLexeme) in zip(actual, expected) {
     defer {
-      lexemeStartOffset = actualLexeme.byteLength
+      lexemeStartOffset += actualLexeme.byteLength
     }
     if actualLexeme.rawTokenKind != expectedLexeme.rawTokenKind {
       XCTFail(

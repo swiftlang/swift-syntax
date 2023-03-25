@@ -28,7 +28,7 @@ extension Parser {
     if let dollarIdent = self.consume(if: .dollarIdentifier) {
       return (
         RawUnexpectedNodesSyntax(elements: [RawSyntax(dollarIdent)], arena: self.arena),
-        self.missingToken(.identifier, text: nil)
+        self.missingToken(.identifier)
       )
     } else {
       if let wildcardToken = self.consume(if: .wildcard) {

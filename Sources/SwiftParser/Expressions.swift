@@ -2325,7 +2325,7 @@ extension Parser {
                       RawCaseItemSyntax(
                         pattern: RawPatternSyntax(
                           RawIdentifierPatternSyntax(
-                            identifier: missingToken(.identifier, text: nil),
+                            identifier: missingToken(.identifier),
                             arena: self.arena
                           )
                         ),
@@ -2336,7 +2336,7 @@ extension Parser {
                     ],
                     arena: self.arena
                   ),
-                  colon: missingToken(.colon, text: nil),
+                  colon: missingToken(.colon),
                   arena: self.arena
                 )
               ),

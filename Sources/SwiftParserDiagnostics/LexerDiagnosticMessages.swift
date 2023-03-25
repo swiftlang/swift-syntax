@@ -38,6 +38,7 @@ public extension TokenError {
 
 /// Please order the cases in this enum alphabetically by case name.
 public enum StaticTokenError: String, DiagnosticMessage {
+  case editorPlaceholder = "editor placeholder in source file"
   case expectedBinaryExponentInHexFloatLiteral = "hexadecimal floating point literal must end with an exponent"
   case expectedClosingBraceInUnicodeEscape = #"expected '}' in \u{...} escape sequence"#
   case expectedDigitInFloatLiteral = "expected a digit in floating point exponent"
@@ -132,6 +133,7 @@ public extension SwiftSyntax.TokenDiagnostic {
     }
 
     switch self.kind {
+    case .editorPlaceholder: return StaticTokenError.editorPlaceholder
     case .expectedBinaryExponentInHexFloatLiteral: return StaticTokenError.expectedBinaryExponentInHexFloatLiteral
     case .expectedClosingBraceInUnicodeEscape: return StaticTokenError.expectedClosingBraceInUnicodeEscape
     case .expectedDigitInFloatLiteral: return StaticTokenError.expectedDigitInFloatLiteral

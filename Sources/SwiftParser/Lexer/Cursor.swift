@@ -2044,6 +2044,7 @@ extension Lexer.Cursor {
 extension Lexer.Cursor {
   mutating func tryLexEditorPlaceholder(sourceBufferStart: Lexer.Cursor) -> Lexer.Result {
     precondition(self.is(at: "<") && self.is(offset: 1, at: "#"))
+    let start = self
     var ptr = self
     let leftAngleConsumed = ptr.advance(matching: "<")
     let poundConsumed = ptr.advance(matching: "#")
@@ -2058,7 +2059,10 @@ extension Lexer.Cursor {
         let closingAngleConsumed = ptr.advance(matching: ">")
         precondition(closingAngleConsumed)
         self = ptr
-        return Lexer.Result(.identifier)
+        return Lexer.Result(
+          .identifier,
+          error: LexingDiagnostic(.editorPlaceholder, position: start)
+        )
       default:
         break
       }

@@ -175,12 +175,11 @@ final class RecoveryTests: XCTestCase {
   func testRecovery14() {
     assertParse(
       """
-      if {
-        }1️⃣
+      if 1️⃣{
+        }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: missing condition in 'if' statement
-        DiagnosticSpec(message: "expected code block in 'if' statement")
+        DiagnosticSpec(message: "missing condition in 'if' statement")
       ]
     )
   }
@@ -188,13 +187,12 @@ final class RecoveryTests: XCTestCase {
   func testRecovery15() {
     assertParse(
       """
-      if
+      if 1️⃣
         {
-        }1️⃣
+        }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: missing condition in 'if' statement
-        DiagnosticSpec(message: "expected code block in 'if' statement")
+        DiagnosticSpec(message: "missing condition in 'if' statement")
       ]
     )
   }
@@ -203,12 +201,11 @@ final class RecoveryTests: XCTestCase {
     assertParse(
       """
       if true {
-        } else if {
-        }1️⃣
+        } else if 1️⃣{
+        }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: missing condition in 'if' statement
-        DiagnosticSpec(message: "expected code block in 'if' statement")
+        DiagnosticSpec(message: "missing condition in 'if' statement")
       ]
     )
   }
@@ -218,11 +215,11 @@ final class RecoveryTests: XCTestCase {
     // body, but the error message should be sensible.
     assertParse(
       """
-      if { true } {
+      if 1️⃣{ true } {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: missing condition in 'if' statement
+        DiagnosticSpec(message: "missing condition in 'if' statement")
         // TODO: Old parser expected error on line 3: consecutive statements on a line must be separated by ';', Fix-It replacements: 14 - 14 = ';'
         // TODO: Old parser expected error on line 3: closure expression is unused
         // TODO: Old parser expected note on line 3: did you mean to use a 'do' statement?, Fix-It replacements: 15 - 15 = 'do '
@@ -234,11 +231,11 @@ final class RecoveryTests: XCTestCase {
   func testRecovery18() {
     assertParse(
       """
-      if { true }() {
+      if 1️⃣{ true }() {
         }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: missing condition in 'if' statement
+        DiagnosticSpec(message: "missing condition in 'if' statement")
       ]
     )
   }
@@ -247,13 +244,12 @@ final class RecoveryTests: XCTestCase {
     assertParse(
       """
       // <rdar://problem/18940198>
-        if { { } }1️⃣
+        if 1️⃣{ { } }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: missing condition in 'if' statement
+        DiagnosticSpec(message: "missing condition in 'if' statement")
         // TODO: Old parser expected error on line 2: closure expression is unused
         // TODO: Old parser expected note on line 2: did you mean to use a 'do' statement?, Fix-It replacements: 8 - 8 = 'do '
-        DiagnosticSpec(message: "expected code block in 'if' statement")
       ]
     )
   }
@@ -272,12 +268,11 @@ final class RecoveryTests: XCTestCase {
   func testRecovery21() {
     assertParse(
       """
-      while {
-        }1️⃣
+      while 1️⃣{
+        }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: missing condition in 'while' statement
-        DiagnosticSpec(message: "expected code block in 'while' statement")
+        DiagnosticSpec(message: "missing condition in 'while' statement")
       ]
     )
   }
@@ -285,13 +280,12 @@ final class RecoveryTests: XCTestCase {
   func testRecovery22() {
     assertParse(
       """
-      while
+      while 1️⃣
         {
-        }1️⃣
+        }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: missing condition in 'while' statement
-        DiagnosticSpec(message: "expected code block in 'while' statement")
+        DiagnosticSpec(message: "missing condition in 'while' statement")
       ]
     )
   }
@@ -301,11 +295,11 @@ final class RecoveryTests: XCTestCase {
       """
       // It is debatable if we should do recovery here and parse { true } as the
       // body, but the error message should be sensible.
-      while { true } {
+      while 1️⃣{ true } {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: missing condition in 'while' statement
+        DiagnosticSpec(message: "missing condition in 'while' statement")
         // TODO: Old parser expected error on line 3: consecutive statements on a line must be separated by ';', Fix-It replacements: 17 - 17 = ';'
         // TODO: Old parser expected error on line 3: closure expression is unused
         // TODO: Old parser expected note on line 3: did you mean to use a 'do' statement?, Fix-It replacements: 18 - 18 = 'do '
@@ -317,11 +311,11 @@ final class RecoveryTests: XCTestCase {
   func testRecovery24() {
     assertParse(
       """
-      while { true }() { //  expected-error 2 {{consecutive statements on a line must be separated by ';'}} expected-error {{closure expression is unused}} expected-note {{did you mean to use a 'do' statement?}} {{20-20=do }} expected-warning {{boolean literal is unused}}
+      while 1️⃣{ true }() {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: missing condition in 'while' statement
+        DiagnosticSpec(message: "missing condition in 'while' statement")
       ]
     )
   }
@@ -330,13 +324,12 @@ final class RecoveryTests: XCTestCase {
     assertParse(
       """
       // <rdar://problem/18940198>
-      while { { } }1️⃣
+      while 1️⃣{ { } }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: missing condition in 'while' statement
+        DiagnosticSpec(message: "missing condition in 'while' statement")
         // TODO: Old parser expected error on line 2: closure expression is unused
         // TODO: Old parser expected note on line 2: did you mean to use a 'do' statement?, Fix-It replacements: 11 - 11 = 'do '
-        DiagnosticSpec(message: "expected code block in 'while' statement")
       ]
     )
   }
@@ -459,13 +452,10 @@ final class RecoveryTests: XCTestCase {
     assertParse(
       """
       for 1️⃣{
-      }2️⃣
+      }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected pattern
-        // TODO: Old parser expected error on line 1: expected Sequence expression for for-each loop
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected pattern and 'in' in 'for' statement"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected code block in 'for' statement"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected pattern, 'in', and expression in 'for' statement")
       ]
     )
   }
@@ -475,12 +465,10 @@ final class RecoveryTests: XCTestCase {
       """
       for1️⃣
       {
-      }2️⃣
+      }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected Sequence expression for for-each loop
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected pattern and 'in' in 'for' statement"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected code block in 'for' statement"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected pattern, 'in', and expression in 'for' statement")
       ]
     )
   }
@@ -489,12 +477,10 @@ final class RecoveryTests: XCTestCase {
     assertParse(
       """
       for i 1️⃣{
-      }2️⃣
+      }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected Sequence expression for for-each loop
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'in' in 'for' statement"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected code block in 'for' statement"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'in' and expression in 'for' statement")
       ]
     )
   }
@@ -503,12 +489,10 @@ final class RecoveryTests: XCTestCase {
     assertParse(
       """
       for var i 1️⃣{
-      }2️⃣
+      }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected Sequence expression for for-each loop
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'in' in 'for' statement"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected code block in 'for' statement"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'in' and expression in 'for' statement")
       ]
     )
   }
@@ -517,14 +501,11 @@ final class RecoveryTests: XCTestCase {
     assertParse(
       """
       for 1️⃣in 2️⃣{
-      }3️⃣
+      }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected pattern
-        // TODO: Old parser expected error on line 1: expected Sequence expression for for-each loop
         DiagnosticSpec(locationMarker: "1️⃣", message: "keyword 'in' cannot be used as an identifier here"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected 'in' in 'for' statement"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected code block in 'for' statement"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected 'in' and expression in 'for' statement"),
       ]
     )
   }
@@ -544,12 +525,12 @@ final class RecoveryTests: XCTestCase {
   func testRecovery41() {
     assertParse(
       """
-      for 1️⃣for in {
-      }2️⃣
+      for 1️⃣for in 2️⃣{
+      }
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "keyword 'for' cannot be used as an identifier here"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected code block in 'for' statement"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected Sequence expression for for-each loop"),
       ]
     )
   }
@@ -557,12 +538,11 @@ final class RecoveryTests: XCTestCase {
   func testRecovery42() {
     assertParse(
       """
-      for i in {
-      }1️⃣
+      for i in 1️⃣{
+      }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected Sequence expression for for-each loop
-        DiagnosticSpec(message: "expected code block in 'for' statement")
+        DiagnosticSpec(message: "expected Sequence expression for for-each loop")
       ]
     )
   }
@@ -621,13 +601,11 @@ final class RecoveryTests: XCTestCase {
   func testRecovery46() {
     assertParse(
       """
-      switch {
-      }1️⃣
+      switch 1️⃣{
+      }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected expression in 'switch' statement
-        // TODO: Old parser expected error on line 1: 'switch' statement body must have at least one 'case' or 'default' block
-        DiagnosticSpec(message: "expected '{}' in 'switch' statement")
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression in 'switch' statement")
       ]
     )
   }
@@ -635,14 +613,12 @@ final class RecoveryTests: XCTestCase {
   func testRecovery47() {
     assertParse(
       """
-      switch
+      switch 1️⃣
       {
-      }1️⃣
+      }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected expression in 'switch' statement
-        // TODO: Old parser expected error on line 1: 'switch' statement body must have at least one 'case' or 'default' block
-        DiagnosticSpec(message: "expected '{}' in 'switch' statement")
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression in 'switch' statement")
       ]
     )
   }
@@ -650,14 +626,12 @@ final class RecoveryTests: XCTestCase {
   func testRecovery48() {
     assertParse(
       """
-      switch {
-        1️⃣case _: return
-      }2️⃣
+      switch 1️⃣{
+        2️⃣case _: return
+      }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected expression in 'switch' statement
-        DiagnosticSpec(locationMarker: "1️⃣", message: "'case' can only appear inside a 'switch' statement or 'enum' declaration"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '{}' in 'switch' statement"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression in 'switch' statement")
       ]
     )
   }
@@ -665,17 +639,14 @@ final class RecoveryTests: XCTestCase {
   func testRecovery49() {
     assertParse(
       """
-      switch {
-        1️⃣case Int: return
-        2️⃣case _: return
-      }3️⃣
+      switch 1️⃣{
+        case Int: return
+        case _: return
+      }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected expression in 'switch' statement
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression in 'switch' statement")
         // TODO: Old parser expected error on line 2: 'is' keyword required to pattern match against type name, Fix-It replacements: 10 - 10 = 'is '
-        DiagnosticSpec(locationMarker: "1️⃣", message: "'case' can only appear inside a 'switch' statement or 'enum' declaration"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "'case' can only appear inside a 'switch' statement or 'enum' declaration"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected '{}' in 'switch' statement"),
       ]
     )
   }
@@ -683,20 +654,31 @@ final class RecoveryTests: XCTestCase {
   func testRecovery50() {
     assertParse(
       """
-      switch { 42 } {
-        case _: return
+      switch 1️⃣{ 2️⃣42 } {
+        3️⃣case _: return
       }
-      """
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression in 'switch' statement"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "all statements inside a switch must be covered by a 'case' or 'default' label"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "'case' can only appear inside a 'switch' statement or 'enum' declaration"),
+      ]
     )
   }
 
   func testRecovery51() {
     assertParse(
       """
-      switch { 42 }() {
-        case _: return
+      switch 1️⃣{ 2️⃣42 }()3️⃣ {
+        4️⃣case _: return
       }
-      """
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression in 'switch' statement"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "all statements inside a switch must be covered by a 'case' or 'default' label"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "'case' can only appear inside a 'switch' statement or 'enum' declaration"),
+      ]
     )
   }
 

@@ -2168,9 +2168,24 @@ extension Parser {
     ifHandle: RecoveryConsumptionHandle
   ) -> RawIfExprSyntax {
     let (unexpectedBeforeIfKeyword, ifKeyword) = self.eat(ifHandle)
-    // A scope encloses the condition and true branch for any variables bound
-    // by a conditional binding. The else branch does *not* see these variables.
-    let conditions = self.parseConditionList()
+
+    let conditions: RawConditionElementListSyntax
+
+    if self.at(.leftBrace) {
+      conditions = RawConditionElementListSyntax(
+        elements: [
+          RawConditionElementSyntax(
+            condition: .expression(RawExprSyntax(RawMissingExprSyntax(arena: self.arena))),
+            trailingComma: nil,
+            arena: self.arena
+          )
+        ],
+        arena: self.arena
+      )
+    } else {
+      conditions = self.parseConditionList()
+    }
+
     let body = self.parseCodeBlock(introducer: ifKeyword)
 
     // The else branch, if any, is outside of the scope of the condition.
@@ -2216,7 +2231,16 @@ extension Parser {
   ) -> RawSwitchExprSyntax {
     let (unexpectedBeforeSwitchKeyword, switchKeyword) = self.eat(switchHandle)
 
-    let subject = self.parseExpression(.basic)
+    // If there is no expression, like `switch { default: return false }` then left brace would parsed as
+    // a `RawClosureExprSyntax` in the condition, which is most likely not what the user meant.
+    // Create a missing condition instead and use the `{` for the start of the body.
+    let subject: RawExprSyntax
+    if self.at(.leftBrace) {
+      subject = RawExprSyntax(RawMissingExprSyntax(arena: self.arena))
+    } else {
+      subject = self.parseExpression(.basic)
+    }
+
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
 
     let cases = self.parseSwitchCases(allowStandaloneStmtRecovery: !lbrace.isMissing)

@@ -128,6 +128,9 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var expectedExpressionAfterTry: Self {
     .init("expected expression after 'try'")
   }
+  public static var expectedSequenceExpressionInForEachLoop: Self {
+    .init("expected Sequence expression for for-each loop")
+  }
   public static var initializerInPattern: Self {
     .init("unexpected initializer in pattern; did you mean to use '='?")
   }
@@ -327,6 +330,30 @@ public struct MissingAttributeArgument: ParserError {
 
   public var message: String {
     return "expected argument for '@\(attributeName)' attribute"
+  }
+}
+
+public struct MissingConditionInStatement: ParserError {
+  let node: SyntaxProtocol
+
+  public var message: String {
+    if let name = node.nodeTypeNameForDiagnostics(allowBlockNames: false) {
+      return "missing condition in \(name)"
+    } else {
+      return "missing condition in statement"
+    }
+  }
+}
+
+public struct MissingExpressionInStatement: ParserError {
+  let node: SyntaxProtocol
+
+  public var message: String {
+    if let name = node.nodeTypeNameForDiagnostics(allowBlockNames: false) {
+      return "expected expression in \(name)"
+    } else {
+      return "expected expression in statement"
+    }
   }
 }
 

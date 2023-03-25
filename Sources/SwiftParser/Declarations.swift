@@ -1229,7 +1229,7 @@ extension Parser {
     }
 
     let defaultArgument: RawInitializerClauseSyntax?
-    if self.at(.equal) {
+    if self.at(.equal) || self.atContextualPunctuator("==") {
       defaultArgument = self.parseDefaultArgument()
     } else {
       defaultArgument = nil

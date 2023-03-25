@@ -2139,16 +2139,18 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery176() {
+    // rdar://problem/22478168
+    // https://github.com/apple/swift/issues/53396
     assertParse(
       """
-      // rdar://problem/22478168
-      // https://github.com/apple/swift/issues/53396
       func f_53396(a: Int 1️⃣== 0) {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: expected '=' instead of '==' to assign default value for parameter, Fix-It replacements: 21 - 23 = '='
-        DiagnosticSpec(message: "unexpected code '== 0' in parameter clause")
-      ]
+        DiagnosticSpec(message: "expected '=' instead of '==' to assign default value for parameter", fixIts: ["replace '==' with '='"])
+      ],
+      fixedSource: """
+        func f_53396(a: Int = 0) {}
+        """
     )
   }
 

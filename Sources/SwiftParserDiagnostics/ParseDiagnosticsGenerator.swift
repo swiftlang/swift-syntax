@@ -470,6 +470,28 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         message: { _ in .joinConditionsUsingComma },
         moveFixIt: { ReplaceTokensFixIt(replaceTokens: $0, replacement: trailingComma) }
       )
+    } else if let unexpected = node.unexpectedBetweenConditionAndTrailingComma,
+      let availability = node.condition.as(AvailabilityConditionSyntax.self),
+      let comparisonOperator = unexpected.oneTokenSatisfying(satisfying: { $0.tokenKind == .binaryOperator("==") }),
+      let falseKeyword = unexpected.oneTokenSatisfying(satisfying: { $0.tokenKind == .keyword(.false) })
+    {
+      // Diagnose #available used as an expression
+      let negatedAvailabilityKeyword = availability.availabilityKeyword.negatedAvailabilityKeyword
+      addDiagnostic(
+        unexpected,
+        AvailabilityConditionAsExpression(availabilityCondition: availability.availabilityKeyword, unavailabilityCondition: negatedAvailabilityKeyword),
+        fixIts: [
+          FixIt(
+            message: ReplaceTokensFixIt(replaceTokens: [comparisonOperator], replacement: negatedAvailabilityKeyword),
+            changes: [
+              .makeMissing([comparisonOperator]),
+              .makePresent(negatedAvailabilityKeyword),
+            ]
+          ),
+          FixIt(message: RemoveNodesFixIt([comparisonOperator, falseKeyword]), changes: .makeMissing([comparisonOperator, falseKeyword])),
+        ],
+        handledNodes: [unexpected.id]
+      )
     }
     return .visitChildren
   }

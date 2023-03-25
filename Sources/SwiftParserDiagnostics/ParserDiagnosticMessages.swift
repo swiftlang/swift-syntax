@@ -231,6 +231,15 @@ public struct AsyncMustPrecedeThrows: ParserError {
   }
 }
 
+public struct AvailabilityConditionAsExpression: ParserError {
+  public let availabilityCondition: TokenSyntax
+  public let unavailabilityCondition: TokenSyntax
+
+  public var message: String {
+    return "\(availabilityCondition) cannot be used as an expression, did you mean to use '\(unavailabilityCondition)'?"
+  }
+}
+
 public struct AvailabilityConditionInExpression: ParserError {
   public let availabilityCondition: AvailabilityConditionSyntax
 

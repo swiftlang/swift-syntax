@@ -39,6 +39,16 @@ extension UnexpectedNodesSyntax {
       return nil
     }
   }
+
+  /// If this only contains one tokens satisfying `condition`, return that token, otherwise return `nil`.
+  func oneTokenSatisfying(satisfying condition: (TokenSyntax) -> Bool) -> TokenSyntax? {
+    let tokens = tokens(satisfying: condition)
+    if tokens.count == 1 {
+      return tokens.first
+    } else {
+      return nil
+    }
+  }
 }
 
 extension Syntax {

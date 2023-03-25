@@ -441,9 +441,13 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: (good first issue) Old parser expected error on line 2: #available cannot be used as an expression, did you mean to use '#unavailable'?, Fix-It replacements: 4 - 14 = '#unavailable', 18 - 27 = ''
-        DiagnosticSpec(message: "unexpected code '== false' in 'if' statement")
-      ]
+        DiagnosticSpec(message: "#available cannot be used as an expression, did you mean to use '#unavailable'?")
+      ],
+      fixedSource: """
+        // Diagnose wrong spellings of unavailability
+        if #available(*) {
+        }
+        """
     )
   }
 

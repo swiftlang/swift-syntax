@@ -2202,8 +2202,7 @@ final class RecoveryTests: XCTestCase {
       }2️⃣
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected '{' or 'if' after 'else'
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' in 'if' statement"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' or 'if' after 'else'"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end function"),
       ]
     )

@@ -773,7 +773,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     }
     if node.equal.presence == .missing {
       if let unexpected = node.unexpectedBeforeEqual,
-         unexpected.onlyToken(where: { $0.tokenKind == .binaryOperator("==") }) != nil
+        unexpected.onlyToken(where: { $0.tokenKind == .binaryOperator("==") }) != nil
       {
         addDiagnostic(
           unexpected,

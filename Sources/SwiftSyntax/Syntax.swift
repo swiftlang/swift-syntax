@@ -238,9 +238,9 @@ public extension SyntaxProtocol {
   /// Whether the tree contained by this layout has any
   ///  - missing nodes or
   ///  - unexpected nodes or
-  ///  - tokens with a `TokenDiagnostic` of severity `error`
+  ///  - tokens with a ``TokenDiagnostic`` of severity ``TokenDiagnostic/Severity-swift.enum/error``.
   var hasError: Bool {
-    return raw.recursiveFlags.contains(.hasError)
+    return raw.hasError
   }
 
   /// Whether the tree contained by this layout has any tokens with a

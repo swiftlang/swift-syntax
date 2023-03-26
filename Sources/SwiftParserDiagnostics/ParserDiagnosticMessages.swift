@@ -140,6 +140,9 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var expectedSequenceExpressionInForEachLoop: Self {
     .init("expected Sequence expression for for-each loop")
   }
+  public static var extraRightBracket: Self {
+    .init("unexpected ']' in type; did you mean to write an array type?")
+  }
   public static var initializerInPattern: Self {
     .init("unexpected initializer in pattern; did you mean to use '='?")
   }
@@ -554,6 +557,14 @@ extension FixItMessage where Self == StaticParserFixIt {
   }
   public static var wrapInBackticks: Self {
     .init("if this name is unavoidable, use backticks to escape it")
+  }
+}
+
+public struct InsertFixIt: ParserFixIt {
+  public let tokenToBeInserted: TokenSyntax
+
+  public var message: String {
+    "insert '\(tokenToBeInserted.text)'"
   }
 }
 

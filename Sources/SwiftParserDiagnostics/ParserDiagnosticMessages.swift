@@ -126,6 +126,12 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var deinitCannotHaveParameters: Self {
     .init("deinitializers cannot have parameters")
   }
+  public static var deinitCannotThrow: Self {
+    .init("deinitializers cannot throw")
+  }
+  public static var deinitCannotHaveReturnType: Self {
+    .init("deinitializers cannot have return type")
+  }
   public static var editorPlaceholderInSourceFile: Self {
     .init("editor placeholder in source file")
   }

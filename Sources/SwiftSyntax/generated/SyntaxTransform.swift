@@ -394,6 +394,11 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: DeferStmtSyntax) -> ResultType
   
+  /// Visiting ``DeinitEffectSpecifiersSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: DeinitEffectSpecifiersSyntax) -> ResultType
+  
   /// Visiting ``DeinitializerDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -1932,6 +1937,13 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DeferStmtSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting ``DeinitEffectSpecifiersSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: DeinitEffectSpecifiersSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -3502,6 +3514,8 @@ extension SyntaxTransformVisitor {
     case .declName(let derived):
       return visit(derived)
     case .deferStmt(let derived):
+      return visit(derived)
+    case .deinitEffectSpecifiers(let derived):
       return visit(derived)
     case .deinitializerDecl(let derived):
       return visit(derived)

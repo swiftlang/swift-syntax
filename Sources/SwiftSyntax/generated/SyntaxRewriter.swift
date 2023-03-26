@@ -550,6 +550,13 @@ open class SyntaxRewriter {
     return StmtSyntax(visitChildren(node))
   }
   
+  /// Visit a ``DeinitEffectSpecifiersSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: DeinitEffectSpecifiersSyntax) -> DeinitEffectSpecifiersSyntax {
+    return Syntax(visitChildren(node)).cast(DeinitEffectSpecifiersSyntax.self)
+  }
+  
   /// Visit a ``DeinitializerDeclSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -3077,6 +3084,20 @@ open class SyntaxRewriter {
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplDeferStmtSyntax(_ data: SyntaxData) -> Syntax {
     let node = DeferStmtSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer {
+      visitPost(node._syntaxNode)
+    }
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
+    }
+    return Syntax(visit(node))
+  }
+  
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplDeinitEffectSpecifiersSyntax(_ data: SyntaxData) -> Syntax {
+    let node = DeinitEffectSpecifiersSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer {
@@ -6108,6 +6129,8 @@ open class SyntaxRewriter {
       return visitImplDeclNameSyntax
     case .deferStmt:
       return visitImplDeferStmtSyntax
+    case .deinitEffectSpecifiers:
+      return visitImplDeinitEffectSpecifiersSyntax
     case .deinitializerDecl:
       return visitImplDeinitializerDeclSyntax
     case .derivativeRegistrationAttributeArguments:
@@ -6672,6 +6695,8 @@ open class SyntaxRewriter {
       return visitImplDeclNameSyntax(data)
     case .deferStmt:
       return visitImplDeferStmtSyntax(data)
+    case .deinitEffectSpecifiers:
+      return visitImplDeinitEffectSpecifiersSyntax(data)
     case .deinitializerDecl:
       return visitImplDeinitializerDeclSyntax(data)
     case .derivativeRegistrationAttributeArguments:

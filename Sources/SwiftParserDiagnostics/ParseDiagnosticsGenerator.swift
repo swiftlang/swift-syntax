@@ -183,7 +183,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
 
   /// Utility function to emit a diagnostic that removes a misplaced token and instead inserts an equivalent token at the corrected location.
   ///
-  /// If `incorrectContainer` contains only tokens that satisfy `unexpectedTokenCondition`, emit a diagnostic with message `message` that marks this token as misplaced.
+  /// If `incorrectContainer` contains some tokens that satisfy `unexpectedTokenCondition`, emit a diagnostic with message `message` that marks this token as misplaced.
   /// If `correctTokens` contains missing tokens, also emit a Fix-It with message `fixIt` that marks the unexpected token as missing and instead inserts `correctTokens`.
   public func exchangeTokens(
     unexpected: UnexpectedNodesSyntax?,
@@ -193,12 +193,9 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     moveFixIt: (_ misplacedTokens: [TokenSyntax]) -> FixItMessage,
     removeRedundantFixIt: (_ misplacedTokens: [TokenSyntax]) -> FixItMessage? = { _ in nil }
   ) {
-    guard let incorrectContainer = unexpected,
-      let misplacedTokens = incorrectContainer.onlyPresentTokens(satisfying: unexpectedTokenCondition)
-    else {
-      // If there are no unexpected nodes or the unexpected contain multiple tokens, don't emit a diagnostic.
-      return
-    }
+    guard let incorrectContainer = unexpected else { return }
+    let misplacedTokens = incorrectContainer.presentTokens(satisfying: unexpectedTokenCondition)
+    if misplacedTokens.isEmpty { return }
 
     let correctTokens = correctTokens.compactMap({ $0 })
 
@@ -816,7 +813,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if shouldSkip(node) {
       return .skipChildren
     }
-    if let unexpected = node.unexpectedBetweenDeinitKeywordAndBody,
+    if let unexpected = node.unexpectedBetweenDeinitKeywordAndEffectSpecifiers,
       let name = unexpected.presentTokens(satisfying: { $0.tokenKind.isIdentifier == true }).only?.as(TokenSyntax.self)
     {
       addDiagnostic(
@@ -828,17 +825,86 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         handledNodes: [name.id]
       )
     }
-    if let unexpected = node.unexpectedBetweenDeinitKeywordAndBody,
-      let signature = unexpected.compactMap({ $0.as(FunctionSignatureSyntax.self) }).only
+    if let unexpected = node.unexpectedBetweenDeinitKeywordAndEffectSpecifiers,
+      let params = unexpected.compactMap({ $0.as(ParameterClauseSyntax.self) }).only
     {
       addDiagnostic(
-        signature,
+        params,
         .deinitCannotHaveParameters,
         fixIts: [
-          FixIt(message: RemoveNodesFixIt(signature), changes: .makeMissing(signature))
+          FixIt(message: RemoveNodesFixIt(params), changes: .makeMissing(params))
         ],
-        handledNodes: [signature.id]
+        handledNodes: [params.id]
       )
+    }
+    if let unexpected = node.unexpectedBetweenEffectSpecifiersAndBody,
+      let returnType = unexpected.compactMap({ $0.as(ReturnClauseSyntax.self) }).only
+    {
+      addDiagnostic(
+        returnType,
+        .deinitCannotHaveReturnType,
+        fixIts: [
+          FixIt(message: RemoveNodesFixIt(returnType), changes: .makeMissing(returnType))
+        ],
+        handledNodes: [returnType.id]
+      )
+    }
+
+    return .visitChildren
+  }
+
+  public override func visit(_ node: DeinitEffectSpecifiersSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    func asThrowsEffectSpecifier(_ syntax: Syntax) -> TokenSyntax? {
+      guard let token = syntax.as(TokenSyntax.self) else { return nil }
+      if token.isMissing { return nil }
+      if ThrowsEffectSpecifier(token: token) != nil { return token }
+      return nil
+    }
+
+    let unexpectedThrows =
+      (node.unexpectedBeforeAsyncSpecifier?.compactMap(asThrowsEffectSpecifier) ?? [])
+      + (node.unexpectedAfterAsyncSpecifier?.compactMap(asThrowsEffectSpecifier) ?? [])
+    if let throwsKeyword = unexpectedThrows.first {
+      addDiagnostic(
+        throwsKeyword,
+        .deinitCannotThrow,
+        fixIts: [
+          FixIt(message: RemoveNodesFixIt(unexpectedThrows), changes: .makeMissing(unexpectedThrows))
+        ],
+        handledNodes: unexpectedThrows.map(\.id)
+      )
+    }
+
+    let isAsyncEffectSpecifier = { AsyncEffectSpecifier(token: $0) != nil }
+    if let asyncSpecifier = node.asyncSpecifier {
+      let unexpectedNodes = [node.unexpectedBeforeAsyncSpecifier, node.unexpectedAfterAsyncSpecifier]
+      for unexpected in unexpectedNodes {
+        exchangeTokens(
+          unexpected: unexpected,
+          unexpectedTokenCondition: isAsyncEffectSpecifier,
+          correctTokens: [asyncSpecifier],
+          message: { _ in StaticParserError.misspelledAsync },
+          moveFixIt: { ReplaceTokensFixIt(replaceTokens: $0, replacements: [asyncSpecifier]) },
+          removeRedundantFixIt: { RemoveRedundantFixIt(removeTokens: $0) }
+        )
+      }
+
+      if asyncSpecifier.isPresent {
+        for case .some(let unexpected) in unexpectedNodes {
+          for duplicateSpecifier in unexpected.presentTokens(satisfying: isAsyncEffectSpecifier) {
+            addDiagnostic(
+              duplicateSpecifier,
+              DuplicateEffectSpecifiers(correctSpecifier: asyncSpecifier, unexpectedSpecifier: duplicateSpecifier),
+              notes: [Note(node: Syntax(asyncSpecifier), message: EffectSpecifierDeclaredHere(specifier: asyncSpecifier))],
+              fixIts: [FixIt(message: RemoveRedundantFixIt(removeTokens: [duplicateSpecifier]), changes: [.makeMissing(duplicateSpecifier)])],
+              handledNodes: [unexpected.id]
+            )
+          }
+        }
+      }
     }
 
     return .visitChildren

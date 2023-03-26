@@ -2147,7 +2147,7 @@ final class RecoveryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 3: expected '=' instead of '==' to assign default value for parameter, Fix-It replacements: 21 - 23 = '='
-        DiagnosticSpec(message: "unexpected code '== 0' in parameter clause")
+        DiagnosticSpec(message: "expected '=' instead of '==' to assign default value for parameter")
       ]
     )
   }

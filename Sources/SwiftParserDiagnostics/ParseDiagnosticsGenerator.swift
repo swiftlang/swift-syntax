@@ -772,13 +772,26 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
     if node.equal.presence == .missing {
-      exchangeTokens(
-        unexpected: node.unexpectedBeforeEqual,
-        unexpectedTokenCondition: { $0.tokenKind == .colon },
-        correctTokens: [node.equal],
-        message: { _ in StaticParserError.initializerInPattern },
-        moveFixIt: { ReplaceTokensFixIt(replaceTokens: $0, replacement: node.equal) }
-      )
+      if let unexpected = node.unexpectedBeforeEqual,
+         unexpected.onlyToken(where: { $0.tokenKind == .binaryOperator("==") }) != nil
+      {
+        addDiagnostic(
+          unexpected,
+          .expectedEqualInsteadOfComparison,
+          fixIts: [
+            FixIt(message: RemoveNodesFixIt(unexpected), changes: .makeMissing(unexpected))
+          ],
+          handledNodes: [unexpected.id, node.equal.id]
+        )
+      } else {
+        exchangeTokens(
+          unexpected: node.unexpectedBeforeEqual,
+          unexpectedTokenCondition: { $0.tokenKind == .colon },
+          correctTokens: [node.equal],
+          message: { _ in StaticParserError.initializerInPattern },
+          moveFixIt: { ReplaceTokensFixIt(replaceTokens: $0, replacement: node.equal) }
+        )
+      }
     }
     return .visitChildren
   }

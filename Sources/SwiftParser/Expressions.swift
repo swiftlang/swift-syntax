@@ -1671,7 +1671,11 @@ extension Parser {
 extension Parser {
   @_spi(RawSyntax)
   public mutating func parseDefaultArgument() -> RawInitializerClauseSyntax {
-    let (unexpectedBeforeEq, eq) = self.expect(.equal)
+    var (unexpectedBeforeEq, eq) = self.expect(.equal)
+    if let comparison = consumeIfContextualPunctuator("=="){
+      eq = Token(missing: .equal, arena: self.arena)
+      unexpectedBeforeEq = RawUnexpectedNodesSyntax([comparison], arena: self.arena)
+    }
     let expr = self.parseExpression()
     return RawInitializerClauseSyntax(
       unexpectedBeforeEq,

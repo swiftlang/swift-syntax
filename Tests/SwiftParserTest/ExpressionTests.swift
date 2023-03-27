@@ -1839,7 +1839,7 @@ final class StatementExpressionTests: XCTestCase {
       ]
     )
   }
-  
+
   func testConsecutiveStatements2() {
     assertParse(
       "switch x {case y: a1️⃣ b2️⃣ c}",
@@ -1849,7 +1849,7 @@ final class StatementExpressionTests: XCTestCase {
       ]
     )
   }
-  
+
   func testConsecutiveStatements3() {
     assertParse(
       """
@@ -1861,7 +1861,7 @@ final class StatementExpressionTests: XCTestCase {
       ]
     )
   }
-  
+
   func testConsecutiveStatements4() {
     assertParse(
       """
@@ -1870,6 +1870,43 @@ final class StatementExpressionTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'"),
+      ]
+    )
+  }
+
+  func testInitCallInPoundIf() {
+    // Make sure we parse 'init()' as an expr, not a decl.
+    assertParse(
+      """
+      class C {
+      init() {
+      #if true
+        init()
+      #endif
+      }
+      }
+      """,
+      substructure: Syntax(
+        FunctionCallExprSyntax(
+          calledExpression: IdentifierExprSyntax(identifier: .keyword(.init("init")!)),
+          leftParen: .leftParenToken(),
+          argumentList: TupleExprElementListSyntax([]),
+          rightParen: .rightParenToken()
+        )
+      )
+    )
+  }
+
+  func testUnexpectedCloseBraceInPoundIf() {
+    assertParse(
+      """
+      #if true
+      1️⃣}
+      class C {}
+      #endif
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected brace before class")
       ]
     )
   }

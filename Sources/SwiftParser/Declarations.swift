@@ -1768,20 +1768,14 @@ extension Parser {
             )
           }
 
-          var body = [RawCodeBlockItemSyntax]()
-          var codeBlockProgress = LoopProgressCondition()
-          while !self.at(.rightBrace),
-            let newItem = self.parseCodeBlockItem(),
-            codeBlockProgress.evaluate(currentToken)
-          {
-            body.append(newItem)
-          }
+          let body = parseCodeBlockItemList(until: { $0.at(.rightBrace) })
+
           let (unexpectedBeforeRBrace, rbrace) = self.expect(.rightBrace)
           return .getter(
             RawCodeBlockSyntax(
               unexpectedBeforeLBrace,
               leftBrace: lbrace,
-              statements: RawCodeBlockItemListSyntax(elements: body, arena: self.arena),
+              statements: body,
               unexpectedBeforeRBrace,
               rightBrace: rbrace,
               arena: self.arena

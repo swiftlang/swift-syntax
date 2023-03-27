@@ -59,7 +59,7 @@ extension Parser {
 }
 
 extension Parser {
-  mutating func parseCodeBlockItemList(isAtTopLevel: Bool, allowInitDecl: Bool = true, stopCondition: (inout Parser) -> Bool) -> RawCodeBlockItemListSyntax {
+  mutating func parseCodeBlockItemList(isAtTopLevel: Bool = false, allowInitDecl: Bool = true, until stopCondition: (inout Parser) -> Bool) -> RawCodeBlockItemListSyntax {
     var elements = [RawCodeBlockItemSyntax]()
     var loopProgress = LoopProgressCondition()
     while !stopCondition(&self), loopProgress.evaluate(currentToken) {
@@ -89,7 +89,7 @@ extension Parser {
   ///
   ///     top-level-declaration → statements?
   mutating func parseTopLevelCodeBlockItems() -> RawCodeBlockItemListSyntax {
-    return parseCodeBlockItemList(isAtTopLevel: true, stopCondition: { _ in false })
+    return parseCodeBlockItemList(isAtTopLevel: true, until: { _ in false })
   }
 
   /// The optional form of `parseCodeBlock` that checks to see if the parser has
@@ -116,7 +116,7 @@ extension Parser {
   /// indented to close this code block or a surrounding context. See `expectRightBrace`.
   mutating func parseCodeBlock(introducer: RawTokenSyntax? = nil, allowInitDecl: Bool = true) -> RawCodeBlockSyntax {
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
-    let itemList = parseCodeBlockItemList(isAtTopLevel: false, allowInitDecl: allowInitDecl, stopCondition: { $0.at(.rightBrace) })
+    let itemList = parseCodeBlockItemList(allowInitDecl: allowInitDecl, until: { $0.at(.rightBrace) })
     let (unexpectedBeforeRBrace, rbrace) = self.expectRightBrace(leftBrace: lbrace, introducer: introducer)
 
     return .init(
@@ -148,7 +148,7 @@ extension Parser {
   ///     statement → compiler-control-statement
   ///     statements → statement statements?
   @_spi(RawSyntax)
-  public mutating func parseCodeBlockItem(isAtTopLevel: Bool = false, allowInitDecl: Bool = true) -> RawCodeBlockItemSyntax? {
+  public mutating func parseCodeBlockItem(isAtTopLevel: Bool, allowInitDecl: Bool) -> RawCodeBlockItemSyntax? {
     if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
       return RawCodeBlockItemSyntax(
         remainingTokens,
@@ -229,7 +229,7 @@ extension Parser {
       // If config of attributes is parsed as part of declaration parsing as it
       // doesn't constitute its own code block item.
       let directive = self.parsePoundIfDirective { (parser, _) in
-        parser.parseCodeBlockItem()
+        parser.parseCodeBlockItem(isAtTopLevel: isAtTopLevel, allowInitDecl: allowInitDecl)
       } addSemicolonIfNeeded: { lastElement, newItemAtStartOfLine, parser in
         if lastElement.semicolon == nil && !newItemAtStartOfLine {
           return RawCodeBlockItemSyntax(

@@ -1021,7 +1021,7 @@ final class MacroSystemTests: XCTestCase {
   }
 
   func testUnwrap() {
-    AssertMacroExpansion(
+    assertMacroExpansion(
       macros: testMacros,
       #"""
       let x: Int? = 1

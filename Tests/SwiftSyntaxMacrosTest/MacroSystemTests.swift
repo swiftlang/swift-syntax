@@ -629,7 +629,8 @@ public struct UnwrapMacro: CodeItemMacro {
     let errorThrower = node.trailingClosure
     let identifiers = try node.argumentList.map { argument in
       guard let tupleElement = argument.as(TupleExprElementSyntax.self),
-            let identifierExpr = tupleElement.expression.as(IdentifierExprSyntax.self) else {
+        let identifierExpr = tupleElement.expression.as(IdentifierExprSyntax.self)
+      else {
         throw CustomError.message("Arguments must be identifiers")
       }
       return identifierExpr.identifier
@@ -639,23 +640,33 @@ public struct UnwrapMacro: CodeItemMacro {
       let expr: ExprSyntax
       if let errorThrower {
         expr = """
-        \(errorThrower)("\(raw: token.text)")
-        """
+          \(errorThrower)("\(raw: token.text)")
+          """
       } else {
         expr = """
-        fatalError("'\(raw: token.text)' is nil")
-        """
+          fatalError("'\(raw: token.text)' is nil")
+          """
       }
-      return .init(statements: .init([.init(
-        leadingTrivia: " ", item: .expr(expr), trailingTrivia: " ")]))
+      return .init(
+        statements: .init([
+          .init(
+            leadingTrivia: " ",
+            item: .expr(expr),
+            trailingTrivia: " "
+          )
+        ])
+      )
     }
 
     return identifiers.map { identifier in
-      CodeBlockItemSyntax(item: CodeBlockItemSyntax.Item.stmt(
-        """
+      CodeBlockItemSyntax(
+        item: CodeBlockItemSyntax.Item.stmt(
+          """
 
-        guard let \(raw: identifier.text) else \(elseBlock(identifier))
-        """))
+          guard let \(raw: identifier.text) else \(elseBlock(identifier))
+          """
+        )
+      )
     }
   }
 }
@@ -727,7 +738,7 @@ public let testMacros: [String: Macro.Type] = [
   "wrapAllProperties": WrapAllProperties.self,
   "wrapStoredProperties": WrapStoredProperties.self,
   "customTypeWrapper": CustomTypeWrapperMacro.self,
-  "unwrap": UnwrapMacro.self
+  "unwrap": UnwrapMacro.self,
 ]
 
 final class MacroSystemTests: XCTestCase {

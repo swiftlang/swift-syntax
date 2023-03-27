@@ -162,7 +162,7 @@ final class InvalidTests: XCTestCase {
           1️⃣let y = "foo"
           switch y {
             case "bar":
-              blah blah // ignored
+              blah2️⃣ blah // ignored
           }
         case "baz":
           break
@@ -174,7 +174,8 @@ final class InvalidTests: XCTestCase {
       }
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "all statements inside a switch must be covered by a 'case' or 'default' label")
+        DiagnosticSpec(locationMarker: "1️⃣", message: "all statements inside a switch must be covered by a 'case' or 'default' label"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'"),
       ]
     )
   }

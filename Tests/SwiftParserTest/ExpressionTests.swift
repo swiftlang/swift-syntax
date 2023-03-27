@@ -1811,6 +1811,50 @@ final class StatementExpressionTests: XCTestCase {
     )
   }
 
+  func testConsecutiveStatements1() {
+    assertParse(
+      "{a1️⃣ b2️⃣ c}",
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'"),
+      ]
+    )
+  }
+  
+  func testConsecutiveStatements2() {
+    assertParse(
+      "switch x {case y: a1️⃣ b2️⃣ c}",
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'"),
+      ]
+    )
+  }
+  
+  func testConsecutiveStatements3() {
+    assertParse(
+      """
+      var i: Int { a1️⃣ b2️⃣ c }
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'"),
+      ]
+    )
+  }
+  
+  func testConsecutiveStatements4() {
+    assertParse(
+      """
+      var i: Int { get {a1️⃣ b} set {c2️⃣ d} }
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'"),
+      ]
+    )
+  }
+
   func testStringLiteralAfterKeyPath() {
     assertParse(
       #"""

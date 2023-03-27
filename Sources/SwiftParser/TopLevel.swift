@@ -229,7 +229,7 @@ extension Parser {
       // If config of attributes is parsed as part of declaration parsing as it
       // doesn't constitute its own code block item.
       let directive = self.parsePoundIfDirective { (parser, _) in
-        parser.parseCodeBlockItem(isAtTopLevel: false, allowInitDecl: true)
+        parser.parseCodeBlockItem(isAtTopLevel: isAtTopLevel, allowInitDecl: allowInitDecl)
       } addSemicolonIfNeeded: { lastElement, newItemAtStartOfLine, parser in
         if lastElement.semicolon == nil && !newItemAtStartOfLine {
           return RawCodeBlockItemSyntax(

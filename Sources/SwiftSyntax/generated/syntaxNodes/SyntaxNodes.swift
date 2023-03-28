@@ -19925,35 +19925,47 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
   
   public init(
       leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeMajorMinor: UnexpectedNodesSyntax? = nil, 
-      majorMinor: TokenSyntax, 
-      _ unexpectedBetweenMajorMinorAndPatchPeriod: UnexpectedNodesSyntax? = nil, 
+      _ unexpectedBeforeMajor: UnexpectedNodesSyntax? = nil, 
+      major: TokenSyntax = .integerLiteral("IntegerLiteralToken"), 
+      _ unexpectedBetweenMajorAndMinorPeriod: UnexpectedNodesSyntax? = nil, 
+      minorPeriod: TokenSyntax? = nil, 
+      _ unexpectedBetweenMinorPeriodAndMinor: UnexpectedNodesSyntax? = nil, 
+      minor: TokenSyntax? = nil, 
+      _ unexpectedBetweenMinorAndPatchPeriod: UnexpectedNodesSyntax? = nil, 
       patchPeriod: TokenSyntax? = nil, 
-      _ unexpectedBetweenPatchPeriodAndPatchVersion: UnexpectedNodesSyntax? = nil, 
-      patchVersion: TokenSyntax? = nil, 
-      _ unexpectedAfterPatchVersion: UnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenPatchPeriodAndPatch: UnexpectedNodesSyntax? = nil, 
+      patch: TokenSyntax? = nil, 
+      _ unexpectedAfterPatch: UnexpectedNodesSyntax? = nil, 
       trailingTrivia: Trivia? = nil
     
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeMajorMinor, 
-            majorMinor, 
-            unexpectedBetweenMajorMinorAndPatchPeriod, 
+            unexpectedBeforeMajor, 
+            major, 
+            unexpectedBetweenMajorAndMinorPeriod, 
+            minorPeriod, 
+            unexpectedBetweenMinorPeriodAndMinor, 
+            minor, 
+            unexpectedBetweenMinorAndPatchPeriod, 
             patchPeriod, 
-            unexpectedBetweenPatchPeriodAndPatchVersion, 
-            patchVersion, 
-            unexpectedAfterPatchVersion
+            unexpectedBetweenPatchPeriodAndPatch, 
+            patch, 
+            unexpectedAfterPatch
           ))) {(arena, _) in 
       let layout: [RawSyntax?] = [
-          unexpectedBeforeMajorMinor?.raw, 
-          majorMinor.raw, 
-          unexpectedBetweenMajorMinorAndPatchPeriod?.raw, 
+          unexpectedBeforeMajor?.raw, 
+          major.raw, 
+          unexpectedBetweenMajorAndMinorPeriod?.raw, 
+          minorPeriod?.raw, 
+          unexpectedBetweenMinorPeriodAndMinor?.raw, 
+          minor?.raw, 
+          unexpectedBetweenMinorAndPatchPeriod?.raw, 
           patchPeriod?.raw, 
-          unexpectedBetweenPatchPeriodAndPatchVersion?.raw, 
-          patchVersion?.raw, 
-          unexpectedAfterPatchVersion?.raw
+          unexpectedBetweenPatchPeriodAndPatch?.raw, 
+          patch?.raw, 
+          unexpectedAfterPatch?.raw
         ]
       let raw = RawSyntax.makeLayout(
           kind: SyntaxKind.versionTuple, 
@@ -19967,7 +19979,7 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
   
-  public var unexpectedBeforeMajorMinor: UnexpectedNodesSyntax? {
+  public var unexpectedBeforeMajor: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -19976,8 +19988,8 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// In case the version consists only of the major version, an integer literal that specifies the major version. In case the version consists of major and minor version number, a floating literal in which the decimal part is interpreted as the minor version.
-  public var majorMinor: TokenSyntax {
+  /// The major version.
+  public var major: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
@@ -19986,7 +19998,7 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenMajorMinorAndPatchPeriod: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenMajorAndMinorPeriod: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -19995,8 +20007,8 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// If the version contains a patch number, the period separating the minor from the patch number.
-  public var patchPeriod: TokenSyntax? {
+  /// If the version contains a minor number, the period separating the major from the minor number.
+  public var minorPeriod: TokenSyntax? {
     get {
       return data.child(at: 3, parent: Syntax(self)).map(TokenSyntax.init)
     }
@@ -20005,7 +20017,7 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenPatchPeriodAndPatchVersion: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenMinorPeriodAndMinor: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -20014,8 +20026,8 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// The patch version if specified.
-  public var patchVersion: TokenSyntax? {
+  /// The minor version if specified.
+  public var minor: TokenSyntax? {
     get {
       return data.child(at: 5, parent: Syntax(self)).map(TokenSyntax.init)
     }
@@ -20024,7 +20036,7 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedAfterPatchVersion: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenMinorAndPatchPeriod: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -20033,15 +20045,57 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// If the version contains a patch number, the period separating the minor from the patch number.
+  public var patchPeriod: TokenSyntax? {
+    get {
+      return data.child(at: 7, parent: Syntax(self)).map(TokenSyntax.init)
+    }
+    set(value) {
+      self = VersionTupleSyntax(data.replacingChild(at: 7, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenPatchPeriodAndPatch: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = VersionTupleSyntax(data.replacingChild(at: 8, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  /// The patch version if specified.
+  public var patch: TokenSyntax? {
+    get {
+      return data.child(at: 9, parent: Syntax(self)).map(TokenSyntax.init)
+    }
+    set(value) {
+      self = VersionTupleSyntax(data.replacingChild(at: 9, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedAfterPatch: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 10, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = VersionTupleSyntax(data.replacingChild(at: 10, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
   public static var structure: SyntaxNodeStructure {
     return .layout([
-          \Self.unexpectedBeforeMajorMinor, 
-          \Self.majorMinor, 
-          \Self.unexpectedBetweenMajorMinorAndPatchPeriod, 
+          \Self.unexpectedBeforeMajor, 
+          \Self.major, 
+          \Self.unexpectedBetweenMajorAndMinorPeriod, 
+          \Self.minorPeriod, 
+          \Self.unexpectedBetweenMinorPeriodAndMinor, 
+          \Self.minor, 
+          \Self.unexpectedBetweenMinorAndPatchPeriod, 
           \Self.patchPeriod, 
-          \Self.unexpectedBetweenPatchPeriodAndPatchVersion, 
-          \Self.patchVersion, 
-          \Self.unexpectedAfterPatchVersion
+          \Self.unexpectedBetweenPatchPeriodAndPatch, 
+          \Self.patch, 
+          \Self.unexpectedAfterPatch
         ])
   }
   
@@ -20061,6 +20115,14 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
       return nil
     case 6:
       return nil
+    case 7:
+      return nil
+    case 8:
+      return nil
+    case 9:
+      return nil
+    case 10:
+      return nil
     default:
       fatalError("Invalid index")
     }
@@ -20070,13 +20132,17 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
 extension VersionTupleSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-          "unexpectedBeforeMajorMinor": unexpectedBeforeMajorMinor.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "majorMinor": Syntax(majorMinor).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenMajorMinorAndPatchPeriod": unexpectedBetweenMajorMinorAndPatchPeriod.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "unexpectedBeforeMajor": unexpectedBeforeMajor.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "major": Syntax(major).asProtocol(SyntaxProtocol.self), 
+          "unexpectedBetweenMajorAndMinorPeriod": unexpectedBetweenMajorAndMinorPeriod.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "minorPeriod": minorPeriod.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "unexpectedBetweenMinorPeriodAndMinor": unexpectedBetweenMinorPeriodAndMinor.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "minor": minor.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "unexpectedBetweenMinorAndPatchPeriod": unexpectedBetweenMinorAndPatchPeriod.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
           "patchPeriod": patchPeriod.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenPatchPeriodAndPatchVersion": unexpectedBetweenPatchPeriodAndPatchVersion.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "patchVersion": patchVersion.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedAfterPatchVersion": unexpectedAfterPatchVersion.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
+          "unexpectedBetweenPatchPeriodAndPatch": unexpectedBetweenPatchPeriodAndPatch.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "patch": patch.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "unexpectedAfterPatch": unexpectedAfterPatch.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
         ])
   }
 }

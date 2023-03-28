@@ -504,6 +504,9 @@ extension FixItMessage where Self == StaticParserFixIt {
   public static var insertNewline: Self {
     .init("insert newline")
   }
+  public static var insertWhitespace: Self {
+    .init("insert whitespace")
+  }
   public static var joinIdentifiers: Self {
     .init("join the identifiers together")
   }

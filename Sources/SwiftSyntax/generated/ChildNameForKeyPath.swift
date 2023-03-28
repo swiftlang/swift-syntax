@@ -1713,8 +1713,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "rightOperand"
   case \InfixOperatorExprSyntax.unexpectedAfterRightOperand:
     return "unexpectedAfterRightOperand"
-  case \InheritedTypeSyntax.unexpectedBeforeTypeName:
-    return "unexpectedBeforeTypeName"
+  case \InheritedTypeSyntax.unexpectedBeforeHasWithout:
+    return "unexpectedBeforeHasWithout"
+  case \InheritedTypeSyntax.hasWithout:
+    return "hasWithout"
+  case \InheritedTypeSyntax.unexpectedBetweenHasWithoutAndTypeName:
+    return "unexpectedBetweenHasWithoutAndTypeName"
   case \InheritedTypeSyntax.typeName:
     return "typeName"
   case \InheritedTypeSyntax.unexpectedBetweenTypeNameAndTrailingComma:

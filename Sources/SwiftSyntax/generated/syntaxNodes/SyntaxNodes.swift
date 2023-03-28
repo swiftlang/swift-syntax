@@ -10564,7 +10564,9 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
   
   public init<T: TypeSyntaxProtocol>(
       leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeTypeName: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBeforeHasWithout: UnexpectedNodesSyntax? = nil,
+      hasWithout: TokenSyntax? = nil,
+      _ unexpectedBetweenHasWithoutAndTypeName: UnexpectedNodesSyntax? = nil,
       typeName: T,
       _ unexpectedBetweenTypeNameAndTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingComma: TokenSyntax? = nil,
@@ -10575,14 +10577,18 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeTypeName, 
+            unexpectedBeforeHasWithout, 
+            hasWithout, 
+            unexpectedBetweenHasWithoutAndTypeName, 
             typeName, 
             unexpectedBetweenTypeNameAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
           ))) {(arena, _) in
       let layout: [RawSyntax?] = [
-          unexpectedBeforeTypeName?.raw, 
+          unexpectedBeforeHasWithout?.raw, 
+          hasWithout?.raw, 
+          unexpectedBetweenHasWithoutAndTypeName?.raw, 
           typeName.raw, 
           unexpectedBetweenTypeNameAndTrailingComma?.raw, 
           trailingComma?.raw, 
@@ -10601,7 +10607,7 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
   
-  public var unexpectedBeforeTypeName: UnexpectedNodesSyntax? {
+  public var unexpectedBeforeHasWithout: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -10610,16 +10616,16 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var typeName: TypeSyntax {
+  public var hasWithout: TokenSyntax? {
     get {
-      return TypeSyntax(data.child(at: 1, parent: Syntax(self))!)
+      return data.child(at: 1, parent: Syntax(self)).map(TokenSyntax.init)
     }
     set(value) {
-      self = InheritedTypeSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = InheritedTypeSyntax(data.replacingChild(at: 1, with: value?.raw, arena: SyntaxArena()))
     }
   }
   
-  public var unexpectedBetweenTypeNameAndTrailingComma: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenHasWithoutAndTypeName: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -10628,16 +10634,16 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var trailingComma: TokenSyntax? {
+  public var typeName: TypeSyntax {
     get {
-      return data.child(at: 3, parent: Syntax(self)).map(TokenSyntax.init)
+      return TypeSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = InheritedTypeSyntax(data.replacingChild(at: 3, with: value?.raw, arena: SyntaxArena()))
+      self = InheritedTypeSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
     }
   }
   
-  public var unexpectedAfterTrailingComma: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenTypeNameAndTrailingComma: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -10646,9 +10652,29 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
+  public var trailingComma: TokenSyntax? {
+    get {
+      return data.child(at: 5, parent: Syntax(self)).map(TokenSyntax.init)
+    }
+    set(value) {
+      self = InheritedTypeSyntax(data.replacingChild(at: 5, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedAfterTrailingComma: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = InheritedTypeSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
   public static var structure: SyntaxNodeStructure {
     return .layout([
-          \Self.unexpectedBeforeTypeName, 
+          \Self.unexpectedBeforeHasWithout, 
+          \Self.hasWithout, 
+          \Self.unexpectedBetweenHasWithoutAndTypeName, 
           \Self.typeName, 
           \Self.unexpectedBetweenTypeNameAndTrailingComma, 
           \Self.trailingComma, 

@@ -11,7 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 @_spi(RawSyntax) import SwiftSyntax
-@_spi(Testing)@_spi(RawSyntax) import SwiftParser
+@_spi(Testing) @_spi(RawSyntax) import SwiftParser
 import SwiftSyntaxBuilder
 import SwiftBasicFormat
 import XCTest
@@ -1559,6 +1559,16 @@ final class DeclarationTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(message: "unexpected code '> test' before parameter clause")
       ]
+    )
+  }
+
+  func testSuppressedImplicitConformance() {
+    assertParse(
+      """
+      struct Hello: ~Copyable {}
+
+      enum Whatever: Int, ~ Hashable, Equatable {}
+      """
     )
   }
 }

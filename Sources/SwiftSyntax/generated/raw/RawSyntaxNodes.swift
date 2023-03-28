@@ -11708,7 +11708,9 @@ public struct RawInheritedTypeSyntax: RawSyntaxNodeProtocol {
   }
   
   public init(
-      _ unexpectedBeforeTypeName: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBeforeHasWithout: RawUnexpectedNodesSyntax? = nil, 
+      hasWithout: RawTokenSyntax?, 
+      _ unexpectedBetweenHasWithoutAndTypeName: RawUnexpectedNodesSyntax? = nil, 
       typeName: RawTypeSyntax, 
       _ unexpectedBetweenTypeNameAndTrailingComma: RawUnexpectedNodesSyntax? = nil, 
       trailingComma: RawTokenSyntax?, 
@@ -11716,35 +11718,45 @@ public struct RawInheritedTypeSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .inheritedType, uninitializedCount: 5, arena: arena) { layout in
+      kind: .inheritedType, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeTypeName?.raw
-      layout[1] = typeName.raw
-      layout[2] = unexpectedBetweenTypeNameAndTrailingComma?.raw
-      layout[3] = trailingComma?.raw
-      layout[4] = unexpectedAfterTrailingComma?.raw
+      layout[0] = unexpectedBeforeHasWithout?.raw
+      layout[1] = hasWithout?.raw
+      layout[2] = unexpectedBetweenHasWithoutAndTypeName?.raw
+      layout[3] = typeName.raw
+      layout[4] = unexpectedBetweenTypeNameAndTrailingComma?.raw
+      layout[5] = trailingComma?.raw
+      layout[6] = unexpectedAfterTrailingComma?.raw
     }
     self.init(unchecked: raw)
   }
   
-  public var unexpectedBeforeTypeName: RawUnexpectedNodesSyntax? {
+  public var unexpectedBeforeHasWithout: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var typeName: RawTypeSyntax {
-    layoutView.children[1].map(RawTypeSyntax.init(raw:))!
+  public var hasWithout: RawTokenSyntax? {
+    layoutView.children[1].map(RawTokenSyntax.init(raw:))
   }
   
-  public var unexpectedBetweenTypeNameAndTrailingComma: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenHasWithoutAndTypeName: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
+  public var typeName: RawTypeSyntax {
+    layoutView.children[3].map(RawTypeSyntax.init(raw:))!
+  }
+  
+  public var unexpectedBetweenTypeNameAndTrailingComma: RawUnexpectedNodesSyntax? {
+    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  
   public var trailingComma: RawTokenSyntax? {
-    layoutView.children[3].map(RawTokenSyntax.init(raw:))
+    layoutView.children[5].map(RawTokenSyntax.init(raw:))
   }
   
   public var unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? {
-    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 

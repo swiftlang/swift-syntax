@@ -3,27 +3,8 @@
 import XCTest
 
 final class ForwardSlashRegexSkippingTests: XCTestCase {
-  func testForwardSlashRegexSkipping1() {
-    AssertParse(
-      """
-      // Make sure we properly handle `/.../` regex literals in skipped function
-      // bodies. Currently we detect them and avoid skipping, but in the future we
-      // ought to be able to skip over them.
-      """
-    )
-  }
-
-  func testForwardSlashRegexSkipping2() {
-    AssertParse(
-      """
-      prefix operator ^^
-      prefix func ^^ <T>(_ x: T) -> T { x }
-      """
-    )
-  }
-
   func testForwardSlashRegexSkipping3() {
-    AssertParse(
+    assertParse(
       #"""
       struct A {
         static let r = /test":"(.*?)"/
@@ -33,7 +14,7 @@ final class ForwardSlashRegexSkippingTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkipping4() {
-    AssertParse(
+    assertParse(
       """
       struct B {
         static let r = /x*/
@@ -43,7 +24,7 @@ final class ForwardSlashRegexSkippingTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkipping5() {
-    AssertParse(
+    assertParse(
       """
       struct C {
         func foo() {
@@ -55,36 +36,29 @@ final class ForwardSlashRegexSkippingTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkipping6() {
-    AssertParse(
+    assertParse(
       """
       struct D {
         func foo() {
           func bar() {
             let r = /x}}*/
-          }1️⃣
-      """,
-      diagnostics: [
-        DiagnosticSpec(message: "expected '}' to end function"),
-        DiagnosticSpec(message: "expected '}' to end struct"),
-      ]
+          }
+        }
+      }
+      """
     )
   }
 
   func testForwardSlashRegexSkipping7() {
-    AssertParse(
+    assertParse(
       """
-      1️⃣}
-      }
       func a() { _ = /abc}}*/ }
-      """,
-      diagnostics: [
-        DiagnosticSpec(message: "unexpected braces before function"),
-      ]
+      """
     )
   }
 
   func testForwardSlashRegexSkipping8() {
-    AssertParse(
+    assertParse(
       #"""
       func b() { _ = /\// }
       """#
@@ -92,7 +66,7 @@ final class ForwardSlashRegexSkippingTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkipping9() {
-    AssertParse(
+    assertParse(
       #"""
       func c() { _ = /\\/ }
       """#
@@ -100,22 +74,24 @@ final class ForwardSlashRegexSkippingTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkipping10() {
-    AssertParse(
+    assertParse(
       """
       func d() { _ = ^^/x}1️⃣}*/ }
       """,
       diagnostics: [
+        // FIXME: This should not emit any diagnostics.
         DiagnosticSpec(message: "extraneous code '}*/ }' at top level"),
       ]
     )
   }
 
   func testForwardSlashRegexSkipping11() {
-    AssertParse(
+    assertParse(
       """
       func e() { _ = (^^/x1️⃣}2️⃣}*/) }
       """,
       diagnostics: [
+        // FIXME: This should not emit any diagnostics.
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected ')' to end tuple"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code '}*/) }' at top level"),
       ]
@@ -123,18 +99,19 @@ final class ForwardSlashRegexSkippingTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkipping12() {
-    AssertParse(
+    assertParse(
       """
       func f() { _ = ^^/^x}1️⃣}*/ }
       """,
       diagnostics: [
+        // FIXME: This should not emit any diagnostics.
         DiagnosticSpec(message: "extraneous code '}*/ }' at top level"),
       ]
     )
   }
 
   func testForwardSlashRegexSkipping13() {
-    AssertParse(
+    assertParse(
       #"""
       func g() { _ = "\(/x}}*/)" }
       """#
@@ -142,18 +119,19 @@ final class ForwardSlashRegexSkippingTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkipping14() {
-    AssertParse(
+    assertParse(
       #"""
       func h() { _ = "\(^^/x1️⃣}}*/)" }
       """#,
       diagnostics: [
+        // FIXME: This should not emit any diagnostics.
         DiagnosticSpec(message: "unexpected code '}}*/' in string literal"),
       ]
     )
   }
 
   func testForwardSlashRegexSkipping15() {
-    AssertParse(
+    assertParse(
       #"""
       func i() {
         func foo<T>(_ x: T, y: T) {}
@@ -164,7 +142,7 @@ final class ForwardSlashRegexSkippingTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkipping16() {
-    AssertParse(
+    assertParse(
       """
       func j() {
         _ = {
@@ -178,7 +156,7 @@ final class ForwardSlashRegexSkippingTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkipping17() {
-    AssertParse(
+    assertParse(
       """
       func k() {
         _ = 2
@@ -189,31 +167,18 @@ final class ForwardSlashRegexSkippingTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkipping18() {
-    AssertParse(
+    assertParse(
       """
       func l() {
         _ = 2
-        /x}*/ .self1️⃣
-      """,
-      diagnostics: [
-        DiagnosticSpec(message: "expected '}' to end function"),
-      ]
-    )
-  }
-
-  func testForwardSlashRegexSkipping19() {
-    AssertParse(
+        /x}*/ .self
+      }
       """
-      1️⃣}
-      """,
-      diagnostics: [
-        DiagnosticSpec(message: "extraneous brace at top level"),
-      ]
     )
   }
 
   func testForwardSlashRegexSkipping20() {
-    AssertParse(
+    assertParse(
       """
       func m() {
         _ = 2
@@ -225,32 +190,19 @@ final class ForwardSlashRegexSkippingTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkipping21() {
-    AssertParse(
+    assertParse(
       """
       func n() {
         _ = 2
-        /x}/1️⃣
-      """,
-      diagnostics: [
-        DiagnosticSpec(message: "expected '}' to end function"),
-      ]
-    )
-  }
-
-  func testForwardSlashRegexSkipping22() {
-    AssertParse(
+        /x}/
+          .bitWidth
+      }
       """
-      .bitWidth
-      1️⃣}
-      """,
-      diagnostics: [
-        DiagnosticSpec(message: "extraneous brace at top level"),
-      ]
     )
   }
 
   func testForwardSlashRegexSkipping23() {
-    AssertParse(
+    assertParse(
       """
       func o() {
         _ = /x// comment
@@ -260,7 +212,7 @@ final class ForwardSlashRegexSkippingTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkipping24() {
-    AssertParse(
+    assertParse(
       """
       func p() {
         _ = /x // comment
@@ -270,7 +222,7 @@ final class ForwardSlashRegexSkippingTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkipping25() {
-    AssertParse(
+    assertParse(
       """
       func q() {
         _ = /x/*comment*/
@@ -280,7 +232,7 @@ final class ForwardSlashRegexSkippingTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkipping26() {
-    AssertParse(
+    assertParse(
       """
       func r() { _ = /[(0)]/ }
       """
@@ -288,7 +240,7 @@ final class ForwardSlashRegexSkippingTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkipping27() {
-    AssertParse(
+    assertParse(
       """
       func s() { _ = /(x)/ }
       """
@@ -296,56 +248,39 @@ final class ForwardSlashRegexSkippingTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkipping28() {
-    AssertParse(
+    assertParse(
       """
-      func t() { _ = /[1️⃣)]/ }
-      """,
-      diagnostics: [
-        DiagnosticSpec(message: "expected ']' to end array"),
-        DiagnosticSpec(message: "unexpected code ')]/' in function"),
-      ]
+      func t() { _ = /[)]/ }
+      """
     )
   }
 
   func testForwardSlashRegexSkipping29() {
-    AssertParse(
+    assertParse(
       #"""
-      func u() { _ = /[a\1️⃣]2️⃣)]/ }
-      """#,
-      diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected root in key path"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code ')]/' in function"),
-      ]
+      func u() { _ = /[a\])]/ }
+      """#
     )
   }
 
   func testForwardSlashRegexSkipping30() {
-    AssertParse(
+    assertParse(
       """
-      func v() { _ = /([1️⃣)2️⃣])/ }
-      """,
-      diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ']' to end array"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '])/' in function"),
-      ]
+      func v() { _ = /([)])/ }
+      """
     )
   }
 
   func testForwardSlashRegexSkipping31() {
-    AssertParse(
+    assertParse(
       """
-      func w() { _ = 1️⃣/]]][)]/ }
-      """,
-      diagnostics: [
-        DiagnosticSpec(message: "expected expression in function"),
-        DiagnosticSpec(message: "expected '}' to end function"),
-        DiagnosticSpec(message: "extraneous code '/]]][)]/ }' at top level"),
-      ]
+      func w() { _ = /]]][)]/ }
+      """
     )
   }
 
   func testForwardSlashRegexSkipping32() {
-    AssertParse(
+    assertParse(
       """
       func x() { _ = /,/ }
       """
@@ -353,7 +288,7 @@ final class ForwardSlashRegexSkippingTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkipping33() {
-    AssertParse(
+    assertParse(
       """
       func y() { _ = /}/ }
       """
@@ -361,7 +296,7 @@ final class ForwardSlashRegexSkippingTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkipping34() {
-    AssertParse(
+    assertParse(
       """
       func z() { _ = /]/ }
       """
@@ -369,7 +304,7 @@ final class ForwardSlashRegexSkippingTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkipping35() {
-    AssertParse(
+    assertParse(
       """
       func a1() { _ = /:/ }
       """
@@ -377,7 +312,7 @@ final class ForwardSlashRegexSkippingTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkipping36() {
-    AssertParse(
+    assertParse(
       """
       func a2() { _ = /;/ }
       """
@@ -385,11 +320,13 @@ final class ForwardSlashRegexSkippingTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkipping37() {
-    AssertParse(
+    assertParse(
       """
       func a3() { _ = 1️⃣/)/ }
       """,
       diagnostics: [
+        // FIXME: Improve diagnostics (ideally we'd be able to parse as an
+        // invalid regex)
         DiagnosticSpec(message: "expected expression in function"),
         DiagnosticSpec(message: "unexpected code '/)/' in function"),
       ]
@@ -397,7 +334,7 @@ final class ForwardSlashRegexSkippingTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkipping38() {
-    AssertParse(
+    assertParse(
       """
       func a4() { _ = 1️⃣/ / }
       """,
@@ -410,39 +347,15 @@ final class ForwardSlashRegexSkippingTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkipping39() {
-    AssertParse(
+    assertParse(
       #"""
-      func a5() { _ = /\ 1️⃣/ 2️⃣}
-      """#,
-      diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected root in key path"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression in function"),
-      ]
-    )
-  }
-
-  func testForwardSlashRegexSkipping40() {
-    AssertParse(
-      """
-      prefix operator /
-      prefix func / <T> (_ x: T) -> T { x }
-      """
-    )
-  }
-
-  func testForwardSlashRegexSkipping41() {
-    AssertParse(
-      """
-      enum E {
-        case e
-        func foo<T>(_ x: T) {}
-      }
-      """
+      func a5() { _ = /\ / }
+      """#
     )
   }
 
   func testForwardSlashRegexSkipping42() {
-    AssertParse(
+    assertParse(
       #"""
       func a7() { _ = /\/}/ }
       """#
@@ -450,7 +363,7 @@ final class ForwardSlashRegexSkippingTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkipping43() {
-    AssertParse(
+    assertParse(
       """
       // Make sure we don't emit errors for these.
       func err1() { _ = /0xG/ }
@@ -459,7 +372,7 @@ final class ForwardSlashRegexSkippingTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkipping44() {
-    AssertParse(
+    assertParse(
       """
       func err2() { _ = /0oG/ }
       """
@@ -467,7 +380,7 @@ final class ForwardSlashRegexSkippingTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkipping45() {
-    AssertParse(
+    assertParse(
       #"""
       func err3() { _ = /"/ }
       """#
@@ -475,7 +388,7 @@ final class ForwardSlashRegexSkippingTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkipping46() {
-    AssertParse(
+    assertParse(
       """
       func err4() { _ = /'/ }
       """
@@ -483,7 +396,7 @@ final class ForwardSlashRegexSkippingTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkipping47() {
-    AssertParse(
+    assertParse(
       """
       func err5() { _ = /<#placeholder#>/ }
       """
@@ -491,11 +404,12 @@ final class ForwardSlashRegexSkippingTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkipping48() {
-    AssertParse(
+    assertParse(
       """
       func err6() { _ = ^^/1️⃣0xG/ }
       """,
       diagnostics: [
+        // FIXME: This should not emit any diagnostics.
         DiagnosticSpec(message: "expected expression in prefix operator expression"),
         DiagnosticSpec(message: "unexpected code '0xG/' in function"),
       ]
@@ -503,11 +417,12 @@ final class ForwardSlashRegexSkippingTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkipping49() {
-    AssertParse(
+    assertParse(
       """
       func err7() { _ = ^^/1️⃣0oG/ }
       """,
       diagnostics: [
+        // FIXME: This should not emit any diagnostics.
         DiagnosticSpec(message: "expected expression in prefix operator expression"),
         DiagnosticSpec(message: "unexpected code '0oG/' in function"),
       ]
@@ -515,11 +430,12 @@ final class ForwardSlashRegexSkippingTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkipping50() {
-    AssertParse(
+    assertParse(
       #"""
       func err8() { _ = ^^/"/ }1️⃣
       """#,
       diagnostics: [
+        // FIXME: This should not emit any diagnostics.
         DiagnosticSpec(message: #"expected '"' to end string literal"#),
         DiagnosticSpec(message: "expected '}' to end function"),
       ]
@@ -527,11 +443,12 @@ final class ForwardSlashRegexSkippingTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkipping51() {
-    AssertParse(
+    assertParse(
       """
       func err9() { _ = ^^/'/ }1️⃣
       """,
       diagnostics: [
+        // FIXME: This should not emit any diagnostics.
         DiagnosticSpec(message: "expected ''' in string literal"),
         DiagnosticSpec(message: "expected '}' to end function"),
       ]
@@ -539,7 +456,7 @@ final class ForwardSlashRegexSkippingTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkipping52() {
-    AssertParse(
+    assertParse(
       """
       func err10() { _ = ^^/<#placeholder#>/ }
       """
@@ -547,11 +464,12 @@ final class ForwardSlashRegexSkippingTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkipping53() {
-    AssertParse(
+    assertParse(
       """
       func err11() { _ = (^^/1️⃣0xG/) }
       """,
       diagnostics: [
+        // FIXME: This should not emit any diagnostics.
         DiagnosticSpec(message: "expected expression in prefix operator expression"),
         DiagnosticSpec(message: "unexpected code '0xG/' in tuple"),
       ]
@@ -559,11 +477,12 @@ final class ForwardSlashRegexSkippingTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkipping54() {
-    AssertParse(
+    assertParse(
       """
       func err12() { _ = (^^/1️⃣0oG/) }
       """,
       diagnostics: [
+        // FIXME: This should not emit any diagnostics.
         DiagnosticSpec(message: "expected expression in prefix operator expression"),
         DiagnosticSpec(message: "unexpected code '0oG/' in tuple"),
       ]
@@ -571,11 +490,12 @@ final class ForwardSlashRegexSkippingTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkipping55() {
-    AssertParse(
+    assertParse(
       #"""
       func err13() { _ = (^^/"/) }1️⃣
       """#,
       diagnostics: [
+        // FIXME: This should not emit any diagnostics.
         DiagnosticSpec(message: #"expected '"' to end string literal"#),
         DiagnosticSpec(message: "expected ')' to end tuple"),
         DiagnosticSpec(message: "expected '}' to end function"),
@@ -584,11 +504,12 @@ final class ForwardSlashRegexSkippingTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkipping56() {
-    AssertParse(
+    assertParse(
       """
       func err14() { _ = (^^/'/) }1️⃣
       """,
       diagnostics: [
+        // FIXME: This should not emit any diagnostics.
         DiagnosticSpec(message: "expected ''' in string literal"),
         DiagnosticSpec(message: "expected ')' to end tuple"),
         DiagnosticSpec(message: "expected '}' to end function"),
@@ -597,7 +518,7 @@ final class ForwardSlashRegexSkippingTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkipping57() {
-    AssertParse(
+    assertParse(
       """
       func err15() { _ = (^^/<#placeholder#>/) }
       """

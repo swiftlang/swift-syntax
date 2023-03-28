@@ -4,7 +4,7 @@ import XCTest
 
 final class RegexTests: XCTestCase {
   func testRegex1() {
-    AssertParse(
+    assertParse(
       """
       _ = /abc/
       _ = #/abc/#
@@ -14,7 +14,7 @@ final class RegexTests: XCTestCase {
   }
 
   func testRegex2() {
-    AssertParse(
+    assertParse(
       """
       func foo<T>(_ x: T...) {}
       """
@@ -22,7 +22,7 @@ final class RegexTests: XCTestCase {
   }
 
   func testRegex3() {
-    AssertParse(
+    assertParse(
       """
       foo(/abc/, #/abc/#, ##/abc/##)
       """
@@ -30,7 +30,7 @@ final class RegexTests: XCTestCase {
   }
 
   func testRegex4() {
-    AssertParse(
+    assertParse(
       """
       let arr = [/abc/, #/abc/#, ##/abc/##]
       """
@@ -38,7 +38,7 @@ final class RegexTests: XCTestCase {
   }
 
   func testRegex5() {
-    AssertParse(
+    assertParse(
       #"""
       _ = /\w+/.self
       _ = #/\w+/#.self
@@ -48,7 +48,7 @@ final class RegexTests: XCTestCase {
   }
 
   func testRegex6() {
-    AssertParse(
+    assertParse(
       ##"""
       _ = /#\/\#\\/
       _ = #/#/\/\#\\/#
@@ -58,14 +58,10 @@ final class RegexTests: XCTestCase {
   }
 
   func testRegex7() {
-    AssertParse(
+    assertParse(
       """
       _ = (#/[*/#, #/+]/#, #/.]/#)
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: cannot parse regular expression: expected ']'
-        // TODO: Old parser expected error on line 1: cannot parse regular expression: quantifier '+' must appear after expression
-      ]
+      """
     )
   }
 

@@ -4,7 +4,7 @@ import XCTest
 
 final class PrefixSlashTests: XCTestCase {
   func testPrefixSlash1() {
-    AssertParse(
+    assertParse(
       """
       // Test the behavior of prefix '/' with regex literals enabled.
       """
@@ -12,7 +12,7 @@ final class PrefixSlashTests: XCTestCase {
   }
 
   func testPrefixSlash2() {
-    AssertParse(
+    assertParse(
       """
       prefix operator /
       prefix func / <T> (_ x: T) -> T { x }
@@ -21,7 +21,7 @@ final class PrefixSlashTests: XCTestCase {
   }
 
   func testPrefixSlash3() {
-    AssertParse(
+    assertParse(
       """
       enum E {
         case e
@@ -32,7 +32,7 @@ final class PrefixSlashTests: XCTestCase {
   }
 
   func testPrefixSlash4() {
-    AssertParse(
+    assertParse(
       """
       _ = /E.e
       (/E.e).foo(/0)
@@ -41,7 +41,7 @@ final class PrefixSlashTests: XCTestCase {
   }
 
   func testPrefixSlash5() {
-    AssertParse(
+    assertParse(
       """
       func foo<T, U>(_ x: T, _ y: U) {}
       """
@@ -49,7 +49,7 @@ final class PrefixSlashTests: XCTestCase {
   }
 
   func testPrefixSlash6() {
-    AssertParse(
+    assertParse(
       """
       foo(/E.e, /E.e)
       foo((/E.e), /E.e)
@@ -59,7 +59,7 @@ final class PrefixSlashTests: XCTestCase {
   }
 
   func testPrefixSlash7() {
-    AssertParse(
+    assertParse(
       """
       func bar<T>(_ x: T) -> Int { 0 }
       """
@@ -67,7 +67,7 @@ final class PrefixSlashTests: XCTestCase {
   }
 
   func testPrefixSlash8() {
-    AssertParse(
+    assertParse(
       """
       _ = bar(/E.e) / 2
       """

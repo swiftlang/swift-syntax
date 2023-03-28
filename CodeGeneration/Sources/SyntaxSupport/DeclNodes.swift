@@ -906,6 +906,14 @@ public let DECL_NODES: [Node] = [
       "WithTrailingComma"
     ],
     children: [
+      /// Indicates whether the 'without' operator was applied to the type to
+      /// indicate the suppression of implicit conformance to this type.
+      /// This child stores the token representing the 'without' operator.
+      Child(
+        name: "HasWithout",
+        kind: .token(choices: [.token(tokenKind: "PrefixOperatorToken")]),
+        isOptional: true
+      ),
       Child(
         name: "TypeName",
         kind: .node(kind: "Type")

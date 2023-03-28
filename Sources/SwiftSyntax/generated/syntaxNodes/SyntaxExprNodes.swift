@@ -5465,16 +5465,48 @@ public struct RegexLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public init(
       leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeRegex: UnexpectedNodesSyntax? = nil, 
-      regex: TokenSyntax = .regexLiteral("RegexLiteralToken"), 
-      _ unexpectedAfterRegex: UnexpectedNodesSyntax? = nil, 
+      _ unexpectedBeforeOpeningPounds: UnexpectedNodesSyntax? = nil, 
+      openingPounds: TokenSyntax? = nil, 
+      _ unexpectedBetweenOpeningPoundsAndOpenSlash: UnexpectedNodesSyntax? = nil, 
+      openSlash: TokenSyntax = .regexSlashToken(), 
+      _ unexpectedBetweenOpenSlashAndRegexPattern: UnexpectedNodesSyntax? = nil, 
+      regexPattern: TokenSyntax = .regexLiteralPattern("RegexLiteralPatternToken"), 
+      _ unexpectedBetweenRegexPatternAndCloseSlash: UnexpectedNodesSyntax? = nil, 
+      closeSlash: TokenSyntax = .regexSlashToken(), 
+      _ unexpectedBetweenCloseSlashAndClosingPounds: UnexpectedNodesSyntax? = nil, 
+      closingPounds: TokenSyntax? = nil, 
+      _ unexpectedAfterClosingPounds: UnexpectedNodesSyntax? = nil, 
       trailingTrivia: Trivia? = nil
     
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeRegex, regex, unexpectedAfterRegex))) {(arena, _) in 
-      let layout: [RawSyntax?] = [unexpectedBeforeRegex?.raw, regex.raw, unexpectedAfterRegex?.raw]
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
+            unexpectedBeforeOpeningPounds, 
+            openingPounds, 
+            unexpectedBetweenOpeningPoundsAndOpenSlash, 
+            openSlash, 
+            unexpectedBetweenOpenSlashAndRegexPattern, 
+            regexPattern, 
+            unexpectedBetweenRegexPatternAndCloseSlash, 
+            closeSlash, 
+            unexpectedBetweenCloseSlashAndClosingPounds, 
+            closingPounds, 
+            unexpectedAfterClosingPounds
+          ))) {(arena, _) in 
+      let layout: [RawSyntax?] = [
+          unexpectedBeforeOpeningPounds?.raw, 
+          openingPounds?.raw, 
+          unexpectedBetweenOpeningPoundsAndOpenSlash?.raw, 
+          openSlash.raw, 
+          unexpectedBetweenOpenSlashAndRegexPattern?.raw, 
+          regexPattern.raw, 
+          unexpectedBetweenRegexPatternAndCloseSlash?.raw, 
+          closeSlash.raw, 
+          unexpectedBetweenCloseSlashAndClosingPounds?.raw, 
+          closingPounds?.raw, 
+          unexpectedAfterClosingPounds?.raw
+        ]
       let raw = RawSyntax.makeLayout(
           kind: SyntaxKind.regexLiteralExpr, 
           from: layout, 
@@ -5487,7 +5519,7 @@ public struct RegexLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
   
-  public var unexpectedBeforeRegex: UnexpectedNodesSyntax? {
+  public var unexpectedBeforeOpeningPounds: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -5496,16 +5528,16 @@ public struct RegexLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var regex: TokenSyntax {
+  public var openingPounds: TokenSyntax? {
     get {
-      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+      return data.child(at: 1, parent: Syntax(self)).map(TokenSyntax.init)
     }
     set(value) {
-      self = RegexLiteralExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = RegexLiteralExprSyntax(data.replacingChild(at: 1, with: value?.raw, arena: SyntaxArena()))
     }
   }
   
-  public var unexpectedAfterRegex: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenOpeningPoundsAndOpenSlash: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -5514,8 +5546,92 @@ public struct RegexLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  public var openSlash: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = RegexLiteralExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenOpenSlashAndRegexPattern: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = RegexLiteralExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var regexPattern: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = RegexLiteralExprSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenRegexPatternAndCloseSlash: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = RegexLiteralExprSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var closeSlash: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 7, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = RegexLiteralExprSyntax(data.replacingChild(at: 7, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenCloseSlashAndClosingPounds: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = RegexLiteralExprSyntax(data.replacingChild(at: 8, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var closingPounds: TokenSyntax? {
+    get {
+      return data.child(at: 9, parent: Syntax(self)).map(TokenSyntax.init)
+    }
+    set(value) {
+      self = RegexLiteralExprSyntax(data.replacingChild(at: 9, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedAfterClosingPounds: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 10, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = RegexLiteralExprSyntax(data.replacingChild(at: 10, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
   public static var structure: SyntaxNodeStructure {
-    return .layout([\Self.unexpectedBeforeRegex, \Self.regex, \Self.unexpectedAfterRegex])
+    return .layout([
+          \Self.unexpectedBeforeOpeningPounds, 
+          \Self.openingPounds, 
+          \Self.unexpectedBetweenOpeningPoundsAndOpenSlash, 
+          \Self.openSlash, 
+          \Self.unexpectedBetweenOpenSlashAndRegexPattern, 
+          \Self.regexPattern, 
+          \Self.unexpectedBetweenRegexPatternAndCloseSlash, 
+          \Self.closeSlash, 
+          \Self.unexpectedBetweenCloseSlashAndClosingPounds, 
+          \Self.closingPounds, 
+          \Self.unexpectedAfterClosingPounds
+        ])
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -5526,6 +5642,22 @@ public struct RegexLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return nil
     case 2:
       return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    case 5:
+      return nil
+    case 6:
+      return nil
+    case 7:
+      return nil
+    case 8:
+      return nil
+    case 9:
+      return nil
+    case 10:
+      return nil
     default:
       fatalError("Invalid index")
     }
@@ -5535,9 +5667,18 @@ public struct RegexLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 extension RegexLiteralExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-        "unexpectedBeforeRegex": unexpectedBeforeRegex.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-        "regex": Syntax(regex).asProtocol(SyntaxProtocol.self), 
-        "unexpectedAfterRegex": unexpectedAfterRegex.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any ])
+          "unexpectedBeforeOpeningPounds": unexpectedBeforeOpeningPounds.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "openingPounds": openingPounds.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "unexpectedBetweenOpeningPoundsAndOpenSlash": unexpectedBetweenOpeningPoundsAndOpenSlash.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "openSlash": Syntax(openSlash).asProtocol(SyntaxProtocol.self), 
+          "unexpectedBetweenOpenSlashAndRegexPattern": unexpectedBetweenOpenSlashAndRegexPattern.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "regexPattern": Syntax(regexPattern).asProtocol(SyntaxProtocol.self), 
+          "unexpectedBetweenRegexPatternAndCloseSlash": unexpectedBetweenRegexPatternAndCloseSlash.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "closeSlash": Syntax(closeSlash).asProtocol(SyntaxProtocol.self), 
+          "unexpectedBetweenCloseSlashAndClosingPounds": unexpectedBetweenCloseSlashAndClosingPounds.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "closingPounds": closingPounds.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "unexpectedAfterClosingPounds": unexpectedAfterClosingPounds.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
+        ])
   }
 }
 

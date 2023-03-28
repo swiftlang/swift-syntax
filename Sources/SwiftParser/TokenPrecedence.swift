@@ -115,15 +115,15 @@ public enum TokenPrecedence: Comparable {
       self = .unknownToken
     // MARK: Identifier like
     case  // Literals
-    .floatingLiteral, .integerLiteral, .regexLiteral,
+    .floatingLiteral, .integerLiteral,
       // Pound literals
       .poundAvailableKeyword, .poundSourceLocationKeyword, .poundUnavailableKeyword,
       // Identifiers
       .dollarIdentifier, .identifier,
       // '_' can occur in types to replace a type identifier
       .wildcard,
-      // String segment, string interpolation anchor and pound don't really fit anywhere else
-      .pound, .stringSegment:
+      // String segment, string interpolation anchor, pound, and regex pattern don't really fit anywhere else
+      .pound, .stringSegment, .regexLiteralPattern:
       self = .identifierLike
 
     // MARK: Expr keyword
@@ -139,7 +139,8 @@ public enum TokenPrecedence: Comparable {
       self = .weakBracketed(closingDelimiter: .rightSquareBracket)
     case .leftAngle:
       self = .weakBracketed(closingDelimiter: .rightAngle)
-    case .multilineStringQuote, .rawStringDelimiter, .singleQuote, .stringQuote:
+    case .multilineStringQuote, .rawStringDelimiter, .singleQuote, .stringQuote,
+      .regexSlash, .extendedRegexDelimiter:
       self = .weakBracketed(closingDelimiter: tokenKind)
     case  // Chaining punctuators
     .infixQuestionMark, .period, .postfixQuestionMark, .exclamationMark,

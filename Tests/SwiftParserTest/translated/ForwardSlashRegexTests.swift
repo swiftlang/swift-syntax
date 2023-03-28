@@ -53,12 +53,8 @@ final class ForwardSlashRegexTests: XCTestCase {
   func testForwardSlashRegex11() {
     assertParse(
       """
-      let i = 01️⃣ /^/2️⃣ 1/^/3
-      """,
-      diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'"),
-      ]
+      let i = 0 /^/ 1/^/3
+      """
     )
   }
 
@@ -112,10 +108,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 4: type annotation missing in pattern
-        // TODO: Old parser expected error on line 4: consecutive statements on a line must be separated by ';'
-        // TODO: Old parser expected error on line 4: expected expression
-        DiagnosticSpec(message: "unexpected code '=/0/' in 'do' statement"),
+        DiagnosticSpec(message: "unexpected code '=/0/' in 'do' statement")
       ]
     )
   }
@@ -157,13 +150,10 @@ final class ForwardSlashRegexTests: XCTestCase {
   func testForwardSlashRegex24() {
     assertParse(
       """
-      _ = 1️⃣!/ /
+      _ = !/1️⃣ /
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: regex literal may not start with space; add backslash to escape
-
-        DiagnosticSpec(message: "expected expression"),
-        DiagnosticSpec(message: "extraneous code '!/ /' at top level"),
+        DiagnosticSpec(message: "bare slash regex literal may not end with space")
       ]
     )
   }
@@ -171,12 +161,10 @@ final class ForwardSlashRegexTests: XCTestCase {
   func testForwardSlashRegex25() {
     assertParse(
       """
-      _ = 1️⃣!!/ /
+      _ = !!/1️⃣ /
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: regex literal may not start with space; add backslash to escape
-        DiagnosticSpec(message: "expected expression"),
-        DiagnosticSpec(message: "extraneous code '!!/ /' at top level"),
+        DiagnosticSpec(message: "bare slash regex literal may not end with space")
       ]
     )
   }
@@ -200,12 +188,10 @@ final class ForwardSlashRegexTests: XCTestCase {
   func testForwardSlashRegex28() {
     assertParse(
       """
-      _ = 1️⃣/^)
+      _ = /^)1️⃣
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: unterminated regex literal
-        DiagnosticSpec(message: "expected expression"),
-        DiagnosticSpec(message: "extraneous code '/^)' at top level"),
+        DiagnosticSpec(message: "expected '/' to end regex literal")
       ]
     )
   }
@@ -287,8 +273,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected expression in 'do' statement"),
-        // TODO: Old parser expected error on line 3: expected expression after operator
+        DiagnosticSpec(message: "expected expression after operator")
       ]
     )
   }
@@ -302,9 +287,8 @@ final class ForwardSlashRegexTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected expression in 'do' statement"),
+        DiagnosticSpec(message: "expected expression after operator"),
         DiagnosticSpec(message: "unexpected code '? 0 : 1' in 'do' statement"),
-        // TODO: Old parser expected error on line 3: expected expression after operator
       ]
     )
   }
@@ -327,9 +311,8 @@ final class ForwardSlashRegexTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 3: unary operator cannot be separated from its operand
-        DiagnosticSpec(message: "expected expression in 'do' statement"),
+        DiagnosticSpec(message: "expected expression after operator"),
         DiagnosticSpec(message: "unexpected code '?? /x /' in 'do' statement"),
-        // TODO: Old parser expected error on line 4: expected expression after operator
       ]
     )
   }
@@ -379,7 +362,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 2: operator with postfix spacing cannot start a subexpression
         DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression in prefix operator expression"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression in operator"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '...' in 'do' statement"),
       ]
     )
@@ -393,8 +376,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected expression after operator
-        DiagnosticSpec(message: "expected expression in 'do' statement"),
+        DiagnosticSpec(message: "expected expression after operator")
       ]
     )
   }
@@ -437,7 +419,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       foo(/abc/, y: /abc /1️⃣)
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected expression in function call"),
+        DiagnosticSpec(message: "expected expression after operator")
       ]
     )
   }
@@ -471,8 +453,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected expression in subscript"),
-        // TODO: Old parser expected error on line 3: expected expression after operator
+        DiagnosticSpec(message: "expected expression after operator")
       ]
     )
   }
@@ -488,8 +469,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected expression in 'return' statement"),
-        // TODO: Old parser expected error on line 6: expected expression after operator
+        DiagnosticSpec(message: "expected expression after operator")
       ]
     )
   }
@@ -512,8 +492,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected expression in array element"),
-        // TODO: Old parser expected error on line 2: expected expression after operator
+        DiagnosticSpec(message: "expected expression after operator")
       ]
     )
   }
@@ -526,9 +505,8 @@ final class ForwardSlashRegexTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression in dictionary element"),
-        // TODO: Old parser expected error on line 2: expected expression after operator
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression in dictionary element"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression after operator"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression after operator"),
       ]
     )
   }
@@ -589,8 +567,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected expression in tuple"),
-        // TODO: Old parser expected error on line 2: expected expression after operator
+        DiagnosticSpec(message: "expected expression after operator")
       ]
     )
   }
@@ -724,11 +701,10 @@ final class ForwardSlashRegexTests: XCTestCase {
     // the user hasn't written the member name yet.
     assertParse(
       """
-      _ = 01️⃣. / 1 / 2
+      _ = 0.1️⃣ / 1 / 2
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected member name following '.'
-        DiagnosticSpec(message: "extraneous code '. / 1 / 2' at top level"),
+        DiagnosticSpec(message: "expected name in member access")
       ]
     )
   }
@@ -739,8 +715,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       _ = 0 . 1️⃣/ 1 / 2
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected member name following '.'
-        DiagnosticSpec(message: "expected name in member access"),
+        DiagnosticSpec(message: "expected name in member access")
       ]
     )
   }
@@ -843,7 +818,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected pattern in variable"),
+        DiagnosticSpec(message: "expected pattern in variable")
       ]
     )
   }
@@ -856,8 +831,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected expression in 'do' statement"),
-        // TODO: Old parser expected error on line 3: expected expression after operator
+        DiagnosticSpec(message: "expected expression after operator")
       ]
     )
   }
@@ -870,8 +844,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected expression in 'do' statement"),
-        // TODO: Old parser expected error on line 3: expected expression after operator
+        DiagnosticSpec(message: "expected expression after operator")
       ]
     )
   }
@@ -884,8 +857,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected expression in 'do' statement"),
-        // TODO: Old parser expected error on line 3: expected expression after operator
+        DiagnosticSpec(message: "expected expression after operator")
       ]
     )
   }
@@ -998,7 +970,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       }
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "expected ')' to end function call"),
+        DiagnosticSpec(message: "expected ')' to end function call")
       ]
     )
   }
@@ -1152,12 +1124,10 @@ final class ForwardSlashRegexTests: XCTestCase {
   func testForwardSlashRegex139() {
     assertParse(
       """
-      _ = 1️⃣/
+      _ = /1️⃣
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: unterminated regex literal
-        DiagnosticSpec(message: "expected expression"),
-        DiagnosticSpec(message: "extraneous code '/' at top level"),
+        DiagnosticSpec(message: "expected '/' to end regex literal")
       ]
     )
   }
@@ -1165,12 +1135,10 @@ final class ForwardSlashRegexTests: XCTestCase {
   func testForwardSlashRegex140() {
     assertParse(
       """
-      _ = 1️⃣/)
+      _ = /)1️⃣
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: unterminated regex literal
-        DiagnosticSpec(message: "expected expression"),
-        DiagnosticSpec(message: "extraneous code '/)' at top level"),
+        DiagnosticSpec(message: "expected '/' to end regex literal")
       ]
     )
   }
@@ -1189,8 +1157,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       _ = /\()1️⃣/
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: invalid component of Swift key path
-        DiagnosticSpec(message: "extraneous code '/' at top level"),
+        DiagnosticSpec(message: "extraneous code '/' at top level")
       ]
     )
   }
@@ -1204,7 +1171,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       """#,
       diagnostics: [
         // TODO: Old parser expected note on line 2: to match this opening '('
-        DiagnosticSpec(message: "expected ')' to end tuple"),
+        DiagnosticSpec(message: "expected ')' to end tuple")
       ]
     )
   }
@@ -1217,9 +1184,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: consecutive statements on a line must be separated by ';'
-        // TODO: Old parser expected error on line 2: expected expression
-        DiagnosticSpec(message: "unexpected code ')/' in 'do' statement"),
+        DiagnosticSpec(message: "unexpected code ')/' in 'do' statement")
       ]
     )
   }
@@ -1232,9 +1197,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: consecutive statements on a line must be separated by ';'
-        // TODO: Old parser expected error on line 2: expected expression
-        DiagnosticSpec(message: "unexpected code ')/' in 'do' statement"),
+        DiagnosticSpec(message: "unexpected code ')/' in 'do' statement")
       ]
     )
   }
@@ -1247,7 +1210,6 @@ final class ForwardSlashRegexTests: XCTestCase {
       }
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected expression path in Swift key path
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected root in key path"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '])/' in 'do' statement"),
       ]
@@ -1258,14 +1220,16 @@ final class ForwardSlashRegexTests: XCTestCase {
     assertParse(
       """
       _ = ^/x/
-      """)
+      """
+    )
   }
 
   func testForwardSlashRegex148() {
     assertParse(
       """
       _ = (^/x)/
-      """)
+      """
+    )
   }
 
   func testForwardSlashRegex149() {
@@ -1279,10 +1243,11 @@ final class ForwardSlashRegexTests: XCTestCase {
   func testForwardSlashRegex150() {
     assertParse(
       #"""
-      _ = ^/"/"
+      _ = ^/"/1️⃣"2️⃣
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: unterminated string literal
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#),
       ]
     )
   }
@@ -1290,10 +1255,11 @@ final class ForwardSlashRegexTests: XCTestCase {
   func testForwardSlashRegex151() {
     assertParse(
       #"""
-      _ = ^/"[/"
+      _ = ^/"[/1️⃣"2️⃣
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: unterminated string literal
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#),
       ]
     )
   }
@@ -1315,6 +1281,7 @@ final class ForwardSlashRegexTests: XCTestCase {
   }
 
   func testForwardSlashRegex157() {
+    // Okay, as the space is escaped.
     assertParse(
       #"""
       _ = /\ /
@@ -1325,12 +1292,10 @@ final class ForwardSlashRegexTests: XCTestCase {
   func testForwardSlashRegex158() {
     assertParse(
       """
-      _ = 1️⃣/ /
+      _ = /1️⃣ /
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: regex literal may not start with space; add backslash to escape, Fix-It replacements: 6 - 6 = '\'
-        DiagnosticSpec(message: "expected expression"),
-        DiagnosticSpec(message: "extraneous code '/ /' at top level"),
+        DiagnosticSpec(message: "bare slash regex literal may not end with space")
       ]
     )
   }
@@ -1338,13 +1303,10 @@ final class ForwardSlashRegexTests: XCTestCase {
   func testForwardSlashRegex159() {
     assertParse(
       """
-      _ = 1️⃣/  /
+      _ = / 1️⃣ /
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: regex literal may not start with space; add backslash to escape, Fix-It replacements: 6 - 6 = '\'
-        // TODO: Old parser expected error on line 1: regex literal may not end with space; use extended literal instead, Fix-It replacements: 5 - 5 = '#', 9 - 9 = '#'
-        DiagnosticSpec(message: "expected expression"),
-        DiagnosticSpec(message: "extraneous code '/  /' at top level"),
+        DiagnosticSpec(message: "bare slash regex literal may not end with space")
       ]
     )
   }
@@ -1376,6 +1338,7 @@ final class ForwardSlashRegexTests: XCTestCase {
   func testForwardSlashRegex163() {
     assertParse(
       """
+
       """
     )
   }
@@ -1384,13 +1347,11 @@ final class ForwardSlashRegexTests: XCTestCase {
     // There are intentionally trailing spaces here
     assertParse(
       """
-      _ = 1️⃣/               
+      _ = /1️⃣               2️⃣
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: unterminated regex literal
-        // TODO: Old parser expected error on line 1: regex literal may not start with space; add backslash to escape, Fix-It replacements: 6 - 6 = '\'
-        DiagnosticSpec(message: "expected expression"),
-        DiagnosticSpec(message: "extraneous code '/' at top level"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "bare slash regex literal may not start with space"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '/' to end regex literal"),
       ]
     )
   }
@@ -1399,12 +1360,10 @@ final class ForwardSlashRegexTests: XCTestCase {
     // There are intentionally trailing spaces here
     assertParse(
       """
-      _ = 1️⃣/^                  
+      _ = /^                  1️⃣
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: unterminated regex literal
-        DiagnosticSpec(message: "expected expression"),
-        DiagnosticSpec(message: "extraneous code '/^' at top level"),
+        DiagnosticSpec(message: "expected '/' to end regex literal")
       ]
     )
   }
@@ -1420,12 +1379,8 @@ final class ForwardSlashRegexTests: XCTestCase {
   func testForwardSlashRegex168() {
     assertParse(
       """
-      _ = 1️⃣/)/
-      """,
-      diagnostics: [
-        DiagnosticSpec(message: "expected expression"),
-        DiagnosticSpec(message: "extraneous code '/)/' at top level"),
-      ]
+      _ = /)/
+      """
     )
   }
 
@@ -1513,12 +1468,7 @@ final class ForwardSlashRegexTests: XCTestCase {
     assertParse(
       """
       _ = ^^/1️⃣0xG/
-      """,
-      diagnostics: [
-        // FIXME: This should not error
-        DiagnosticSpec(message: "expected expression in prefix operator expression"),
-        DiagnosticSpec(message: "extraneous code '0xG/' at top level"),
-      ]
+      """
     )
   }
 
@@ -1526,12 +1476,7 @@ final class ForwardSlashRegexTests: XCTestCase {
     assertParse(
       """
       _ = ^^/1️⃣0oG/
-      """,
-      diagnostics: [
-        // FIXME: This should not error
-        DiagnosticSpec(message: "expected expression in prefix operator expression"),
-        DiagnosticSpec(message: "extraneous code '0oG/' at top level"),
-      ]
+      """
     )
   }
 
@@ -1539,11 +1484,7 @@ final class ForwardSlashRegexTests: XCTestCase {
     assertParse(
       #"""
       _ = ^^/"/1️⃣
-      """#,
-      diagnostics: [
-        // FIXME: This should not error
-        DiagnosticSpec(message: #"expected '"' to end string literal"#),
-      ]
+      """#
     )
   }
 
@@ -1551,11 +1492,7 @@ final class ForwardSlashRegexTests: XCTestCase {
     assertParse(
       """
       _ = ^^/'/1️⃣
-      """,
-      diagnostics: [
-        // FIXME: This should not error
-        DiagnosticSpec(message: "expected ''' in string literal"),
-      ]
+      """
     )
   }
 
@@ -1571,12 +1508,7 @@ final class ForwardSlashRegexTests: XCTestCase {
     assertParse(
       """
       _ = (^^/1️⃣0xG/)
-      """,
-      diagnostics: [
-        // FIXME: This should not error
-        DiagnosticSpec(message: "expected expression in prefix operator expression"),
-        DiagnosticSpec(message: "unexpected code '0xG/' in tuple"),
-      ]
+      """
     )
   }
 
@@ -1584,12 +1516,7 @@ final class ForwardSlashRegexTests: XCTestCase {
     assertParse(
       """
       _ = (^^/1️⃣0oG/)
-      """,
-      diagnostics: [
-        // FIXME: This should not error
-        DiagnosticSpec(message: "expected expression in prefix operator expression"),
-        DiagnosticSpec(message: "unexpected code '0oG/' in tuple"),
-      ]
+      """
     )
   }
 
@@ -1597,12 +1524,7 @@ final class ForwardSlashRegexTests: XCTestCase {
     assertParse(
       #"""
       _ = (^^/"/)1️⃣
-      """#,
-      diagnostics: [
-        // FIXME: This should not error
-        DiagnosticSpec(message: #"expected '"' to end string literal"#),
-        DiagnosticSpec(message: "expected ')' to end tuple"),
-      ]
+      """#
     )
   }
 
@@ -1610,12 +1532,7 @@ final class ForwardSlashRegexTests: XCTestCase {
     assertParse(
       """
       _ = (^^/'/)1️⃣
-      """,
-      diagnostics: [
-        // FIXME: This should not error
-        DiagnosticSpec(message: "expected ''' in string literal"),
-        DiagnosticSpec(message: "expected ')' to end tuple"),
-      ]
+      """
     )
   }
 

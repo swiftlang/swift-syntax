@@ -66,10 +66,9 @@ final class DeclarationTests: XCTestCase {
     assertParse("func /^/ (lhs: Int, rhs: Int) -> Int { 1 / 2 }")
 
     assertParse(
-      "func 1️⃣/^notoperator^/ (lhs: Int, rhs: Int) -> Int { 1 / 2 }",
+      "func /^1️⃣notoperator^/ (lhs: Int, rhs: Int) -> Int { 1 / 2 }",
       diagnostics: [
-        DiagnosticSpec(message: "expected identifier in function"),
-        DiagnosticSpec(message: "unexpected code '/^notoperator^/' before parameter clause"),
+        DiagnosticSpec(message: "unexpected code 'notoperator^/' before parameter clause")
       ]
     )
 

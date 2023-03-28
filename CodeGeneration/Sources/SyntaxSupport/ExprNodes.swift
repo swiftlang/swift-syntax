@@ -1199,9 +1199,27 @@ public let EXPR_NODES: [Node] = [
     kind: "Expr",
     children: [
       Child(
-        name: "Regex",
-        kind: .token(choices: [.token(tokenKind: "RegexLiteralToken")])
-      )
+        name: "OpeningPounds",
+        kind: .token(choices: [.token(tokenKind: "ExtendedRegexDelimiterToken")]),
+        isOptional: true
+      ),
+      Child(
+        name: "OpenSlash",
+        kind: .token(choices: [.token(tokenKind: "RegexSlashToken")])
+      ),
+      Child(
+        name: "RegexPattern",
+        kind: .token(choices: [.token(tokenKind: "RegexLiteralPatternToken")])
+      ),
+      Child(
+        name: "CloseSlash",
+        kind: .token(choices: [.token(tokenKind: "RegexSlashToken")])
+      ),
+      Child(
+        name: "ClosingPounds",
+        kind: .token(choices: [.token(tokenKind: "ExtendedRegexDelimiterToken")]),
+        isOptional: true
+      ),
     ]
   ),
 

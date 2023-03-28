@@ -49,9 +49,19 @@ extension Lexer.Cursor {
   /// New entries in the state stack are added when:
   ///  - A string literal is entered
   ///  - A string interpolation inside is entered
+  ///  - A regex literal is being lexed
+  ///  - A narrow case for 'try?' and 'try!' to ensure correct regex lexing
   enum State {
     /// Normal top-level lexing mode
     case normal
+
+    /// A narrow mode that's used for 'try?' and 'try!' to ensure we prefer to
+    /// lex a regex literal rather than a binary operator. This is needed as the
+    /// last token will be a postfix operator, which would normally indicate a
+    /// binary operator is expected next, but in this case we know it must be an
+    /// expression. See the comment in `tryScanOperatorAsRegexLiteral` for more info.
+    /// NOTE: This is a complete hack, do not add new uses of this.
+    case preferRegexOverBinaryOperator
 
     /// The lexer has lexed `delimiterLength` raw string delimiters '##' but not
     /// the string quote itself.
@@ -82,11 +92,15 @@ extension Lexer.Cursor {
     /// `stringInterpolationStart` points to the first character inside the interpolation.
     case inStringInterpolation(stringLiteralKind: StringLiteralKind, parenCount: Int)
 
+    /// We have encountered a regex literal, and have its tokens to work
+    /// through.
+    case inRegexLiteral(index: UInt8, lexemes: UnsafePointer<RegexLiteralLexemes>)
+
     /// The mode in which leading trivia should be lexed for this state or `nil`
     /// if no trivia should be lexed.
     func leadingTriviaLexingMode(cursor: Lexer.Cursor) -> TriviaLexingMode? {
       switch self {
-      case .normal: return .normal
+      case .normal, .preferRegexOverBinaryOperator: return .normal
       case .afterRawStringDelimiter: return nil
       case .inStringLiteral: return nil
       case .afterStringLiteral: return nil
@@ -99,6 +113,7 @@ extension Lexer.Cursor {
         case .singleLine, .singleQuote: return .noNewlines
         case .multiLine: return .normal
         }
+      case .inRegexLiteral: return nil
       }
     }
 
@@ -106,13 +121,14 @@ extension Lexer.Cursor {
     /// if no trivia should be lexed.
     func trailingTriviaLexingMode(cursor: Lexer.Cursor) -> TriviaLexingMode? {
       switch self {
-      case .normal: return .noNewlines
+      case .normal, .preferRegexOverBinaryOperator: return .noNewlines
       case .afterRawStringDelimiter: return nil
       case .inStringLiteral: return nil
       case .afterStringLiteral: return nil
       case .afterClosingStringQuote: return nil
       case .inStringInterpolationStart: return nil
       case .inStringInterpolation: return .noNewlines
+      case .inRegexLiteral: return nil
       }
     }
 
@@ -122,13 +138,14 @@ extension Lexer.Cursor {
     /// hitting a newline.
     var shouldPopStateWhenReachingNewlineInTrailingTrivia: Bool {
       switch self {
-      case .normal: return false
+      case .normal, .preferRegexOverBinaryOperator: return false
       case .afterRawStringDelimiter: return false
       case .inStringLiteral(kind: let stringLiteralKind, delimiterLength: _): return stringLiteralKind != .multiLine
       case .afterStringLiteral: return false
       case .afterClosingStringQuote: return false
       case .inStringInterpolationStart: return false
       case .inStringInterpolation: return false
+      case .inRegexLiteral: return false
       }
     }
   }
@@ -166,6 +183,8 @@ extension Lexer.Cursor {
           }
         }
         topState = newState
+      case .pushRegexLexemes(let index, let lexemes):
+        perform(stateTransition: .push(newState: .inRegexLiteral(index: index, lexemes: lexemes.allocate(in: stateAllocator))), stateAllocator: stateAllocator)
       case .replace(newState: let newState):
         topState = newState
       case .pop:
@@ -189,9 +208,12 @@ extension Lexer.Cursor {
     /// The position in the token at which the diagnostic is.
     let position: Lexer.Cursor.Position
 
-    init(_ kind: TokenDiagnostic.Kind, position: Lexer.Cursor) {
+    init(_ kind: TokenDiagnostic.Kind, position: Lexer.Cursor.Position) {
       self.kind = kind
-      self.position = position.position
+      self.position = position
+    }
+    init(_ kind: TokenDiagnostic.Kind, position: Lexer.Cursor) {
+      self.init(kind, position: position.position)
     }
 
     func tokenDiagnostic(tokenStart: Lexer.Cursor) -> TokenDiagnostic {
@@ -265,6 +287,11 @@ extension Lexer {
   enum StateTransition {
     /// Push a new state onto the state stack
     case push(newState: Cursor.State)
+
+    /// Push a set of regex literal lexemes onto the state stack. This avoids
+    /// needing to plumb the state allocator through the lexer.
+    case pushRegexLexemes(index: UInt8, lexemes: RegexLiteralLexemes)
+
     /// Replace the current state on the state stack by `newState`
     case replace(newState: Cursor.State)
     /// Pop a single state from the state stack.
@@ -340,6 +367,10 @@ extension Lexer.Cursor {
     switch currentState {
     case .normal:
       result = lexNormal(sourceBufferStart: sourceBufferStart)
+    case .preferRegexOverBinaryOperator:
+      // In this state we lex a single token with the flag set, and then pop the state.
+      result = lexNormal(sourceBufferStart: sourceBufferStart, preferRegexOverBinaryOperator: true)
+      self.stateStack.perform(stateTransition: .pop, stateAllocator: stateAllocator)
     case .afterRawStringDelimiter(delimiterLength: let delimiterLength):
       result = lexAfterRawStringDelimiter(delimiterLength: delimiterLength)
     case .inStringLiteral(kind: let stringLiteralKind, delimiterLength: let delimiterLength):
@@ -352,6 +383,8 @@ extension Lexer.Cursor {
       result = lexInStringInterpolationStart(stringLiteralKind: stringLiteralKind)
     case .inStringInterpolation(stringLiteralKind: let stringLiteralKind, parenCount: let parenCount):
       result = lexInStringInterpolation(stringLiteralKind: stringLiteralKind, parenCount: parenCount, sourceBufferStart: sourceBufferStart)
+    case .inRegexLiteral(let index, let lexemes):
+      result = lexInRegexLiteral(lexemes.pointee[index...], existingPtr: lexemes)
     }
 
     if let stateTransition = result.stateTransition {
@@ -520,6 +553,14 @@ extension Lexer.Cursor.Position {
     self.previous = c
     self.input = UnsafeBufferPointer(rebasing: input)
     return c
+  }
+  /// Advance the cursor position by `n` bytes. The offset must be valid.
+  func advanced(by n: Int) -> Self {
+    precondition(n > 0)
+    precondition(n <= self.input.count)
+    var input = self.input.dropFirst(n - 1)
+    let c = input.removeFirst()
+    return .init(input: UnsafeBufferPointer(rebasing: input), previous: c)
   }
 }
 
@@ -781,7 +822,10 @@ extension Lexer.Cursor {
 // MARK: - Main entry point
 
 extension Lexer.Cursor {
-  private mutating func lexNormal(sourceBufferStart: Lexer.Cursor) -> Lexer.Result {
+  private mutating func lexNormal(
+    sourceBufferStart: Lexer.Cursor,
+    preferRegexOverBinaryOperator: Bool = false
+  ) -> Lexer.Result {
     switch self.peek() {
     case UInt8(ascii: "@"): _ = self.advance(); return Lexer.Result(.atSign)
     case UInt8(ascii: "{"): _ = self.advance(); return Lexer.Result(.leftBrace)
@@ -803,24 +847,20 @@ extension Lexer.Cursor {
       }
 
       // Try lex a regex literal.
-      if let token = self.tryLexRegexLiteral(sourceBufferStart: sourceBufferStart) {
-        return Lexer.Result(token)
+      if let result = self.lexRegexLiteral() {
+        return result
       }
       // Otherwise try lex a magic pound literal.
       return self.lexMagicPoundLiteral()
-    case UInt8(ascii: "/"):
-      // Try lex a regex literal.
-      if let token = self.tryLexRegexLiteral(sourceBufferStart: sourceBufferStart) {
-        return Lexer.Result(token)
-      }
 
-      // Otherwise try lex a magic pound literal.
-      return self.lexOperatorIdentifier(sourceBufferStart: sourceBufferStart)
     case UInt8(ascii: "!"), UInt8(ascii: "?"):
       if let result = lexPostfixOptionalChain(sourceBufferStart: sourceBufferStart) {
         return result
       }
-      return self.lexOperatorIdentifier(sourceBufferStart: sourceBufferStart)
+      return self.lexOperatorIdentifier(
+        sourceBufferStart: sourceBufferStart,
+        preferRegexOverBinaryOperator: preferRegexOverBinaryOperator
+      )
 
     case UInt8(ascii: "<"):
       if self.is(offset: 1, at: "#"),
@@ -828,7 +868,10 @@ extension Lexer.Cursor {
       {
         return result
       }
-      return self.lexOperatorIdentifier(sourceBufferStart: sourceBufferStart)
+      return self.lexOperatorIdentifier(
+        sourceBufferStart: sourceBufferStart,
+        preferRegexOverBinaryOperator: preferRegexOverBinaryOperator
+      )
 
     case UInt8(ascii: "A"), UInt8(ascii: "B"), UInt8(ascii: "C"),
       UInt8(ascii: "D"), UInt8(ascii: "E"), UInt8(ascii: "F"),
@@ -873,7 +916,10 @@ extension Lexer.Cursor {
       }
 
       if tmp.advance(if: { Unicode.Scalar($0).isOperatorStartCodePoint }) {
-        return self.lexOperatorIdentifier(sourceBufferStart: sourceBufferStart)
+        return self.lexOperatorIdentifier(
+          sourceBufferStart: sourceBufferStart,
+          preferRegexOverBinaryOperator: preferRegexOverBinaryOperator
+        )
       }
 
       switch self.lexUnknown() {
@@ -1672,9 +1718,9 @@ extension Lexer.Cursor {
       return .pop
     case .afterRawStringDelimiter(delimiterLength: let delimiterLength):
       return .replace(newState: .inStringLiteral(kind: kind, delimiterLength: delimiterLength))
-    case .normal, .inStringInterpolation:
+    case .normal, .preferRegexOverBinaryOperator, .inStringInterpolation:
       return .push(newState: .inStringLiteral(kind: kind, delimiterLength: 0))
-    default:
+    case .inRegexLiteral, .inStringLiteral, .afterClosingStringQuote, .inStringInterpolationStart:
       preconditionFailure("Unexpected currentState '\(currentState)' for 'stateTransitionAfterLexingStringQuote'")
     }
   }
@@ -1916,6 +1962,14 @@ extension Lexer.Cursor {
     // Must be left bound, otherwise this isn't postfix.
     guard self.isLeftBound(sourceBufferStart: sourceBufferStart) else { return nil }
 
+    var transition: Lexer.StateTransition?
+    if previousKeyword == .try {
+      // If we have 'try' as the previous keyword kind, we have `try?` or `try!`
+      // and need to transition into the state where we prefer lexing a regex
+      // literal over a binary operator. See the comment in
+      // `tryScanOperatorAsRegexLiteral` for more info.
+      transition = .push(newState: .preferRegexOverBinaryOperator)
+    }
     let kind: RawTokenKind = {
       switch self.peek() {
       case UInt8(ascii: "!"):
@@ -1927,10 +1981,13 @@ extension Lexer.Cursor {
       }
     }()
     _ = self.advance()
-    return Lexer.Result(kind)
+    return Lexer.Result(kind, stateTransition: transition)
   }
 
-  mutating func lexOperatorIdentifier(sourceBufferStart: Lexer.Cursor) -> Lexer.Result {
+  mutating func lexOperatorIdentifier(
+    sourceBufferStart: Lexer.Cursor,
+    preferRegexOverBinaryOperator: Bool
+  ) -> Lexer.Result {
     let tokStart = self
     let didStart = self.advance(if: { $0.isOperatorStartCodePoint })
     precondition(didStart, "unexpected operator start")
@@ -1945,14 +2002,30 @@ extension Lexer.Cursor {
       if text.hasPrefix("<#") && text.containsPlaceholderEnd() {
         break
       }
-
-      //      // If we are lexing a `/.../` regex literal, we don't consider `/` to be an
-      //      // operator character.
-      //      if ForwardSlashRegexMode != LexerForwardSlashRegexMode::None &&
-      //          CurPtr.peek() == UInt8(ascii: "/") {
-      //        break
-      //      }
     } while self.advance(if: { $0.isOperatorContinuationCodePoint })
+
+    // Check to see if we have a regex literal starting in the operator.
+    do {
+      var ptr = tokStart
+      while ptr.input.baseAddress! < self.input.baseAddress! {
+        // Scan for the first '/' in the operator to see if it starts a regex
+        // literal.
+        guard ptr.is(at: "/") else {
+          _ = ptr.advance()
+          continue
+        }
+        guard
+          let result = self.tryLexOperatorAsRegexLiteral(
+            at: ptr,
+            operatorStart: tokStart,
+            operatorEnd: self,
+            sourceBufferStart: sourceBufferStart,
+            preferRegexOverBinaryOperator: preferRegexOverBinaryOperator
+          )
+        else { break }
+        return result
+      }
+    }
 
     if self.input.baseAddress! - tokStart.input.baseAddress! > 2 {
       // If there is a "//" or "/*" in the middle of an identifier token,
@@ -2276,125 +2349,5 @@ extension Lexer.Cursor {
       )
     }
     return nil
-  }
-}
-
-extension Lexer.Cursor {
-  mutating func tryLexRegexLiteral(sourceBufferStart: Lexer.Cursor) -> RawTokenKind? {
-    guard !self.isLeftBound(sourceBufferStart: sourceBufferStart) else {
-      return nil
-    }
-
-    var tmp = self
-    var poundCount = 0
-    var parenCount = 0
-
-    while tmp.advance(matching: "#") {
-      poundCount += 1
-    }
-
-    guard tmp.advance(matching: "/") else {
-      return nil
-    }
-
-    // For `/.../` regex literals, we need to ban space and tab at the start of
-    // a regex to avoid ambiguity with operator chains, e.g:
-    //
-    // Builder {
-    //   0
-    //   / 1 /
-    //   2
-    // }
-    //
-    if poundCount == 0 && tmp.is(at: " ", "\n", "\t") {
-      return nil
-    }
-
-    var isMultiline = false
-    LOOP: while true {
-      switch tmp.peek() {
-      case UInt8(ascii: " "), UInt8(ascii: "\t"):
-        _ = tmp.advance()
-      case UInt8(ascii: "\n"), UInt8(ascii: "\r"):
-        isMultiline = true
-        break LOOP
-      default:
-        break LOOP
-      }
-    }
-
-    var escaped = false
-    DELIMITLOOP: while true {
-      defer { escaped = false }
-
-      let previousByte = tmp.previous
-      switch tmp.advance() {
-      case nil:
-        return nil
-      case UInt8(ascii: "/"):
-        // If we're at the end of the literal, peek ahead to see if the closing
-        // slash is actually the start of a comment.
-        if tmp.is(at: "/", "*") {
-          return nil
-        }
-
-        var endLex = tmp
-        for _ in 0..<poundCount {
-          guard endLex.advance(matching: "#") else {
-            continue DELIMITLOOP
-          }
-        }
-
-        // A regex literal may not end in a space or tab.
-        if !isMultiline && poundCount == 0 && (previousByte == UInt8(ascii: " ") || previousByte == UInt8(ascii: "\t")) {
-          return nil
-        }
-
-        tmp = endLex
-        break DELIMITLOOP
-      case let .some(next) where !Unicode.Scalar(next).isASCII:
-        // Just advance into a UTF-8 sequence. It shouldn't matter that we'll
-        // iterate through each byte as we only match against ASCII, and we
-        // validate it at the end. This case is separated out so we can just deal
-        // with the ASCII cases below.
-        continue
-
-      case UInt8(ascii: "\n"), UInt8(ascii: "\r"):
-        guard isMultiline else {
-          return nil
-        }
-
-      case UInt8(ascii: "\\") where !escaped:
-        // Advance again for an escape sequence.
-        _ = tmp.advance()
-        escaped = true
-
-      //      case let next
-      //        where !next.isPrintableASCII && !(isMultiline && next == "\t"):
-      //        // Diagnose unprintable ASCII.
-      //        // Note that tabs are allowed in multi-line literals.
-      //        // TODO: This matches the string literal behavior, but should we allow
-      //        // tabs for single-line regex literals too?
-      //        // TODO: Ideally we would recover and continue to lex until the ending
-      //        // delimiter.
-      //        throw DelimiterLexError(.unprintableASCII, resumeAt: cursor.successor())
-
-      case UInt8(ascii: "("):
-        parenCount += 1
-
-      case UInt8(ascii: ")"):
-        if parenCount == 0 {
-          return nil
-        }
-        parenCount -= 1
-
-      default:
-        break
-      }
-    }
-
-    // We either had a successful lex, or something that was recoverable.
-    self = tmp
-    return .regexLiteral
   }
 }

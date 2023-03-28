@@ -426,8 +426,12 @@ extension Parser {
 // MARK: - Parse string literals
 
 extension Parser {
-  /// Consumes a raw string delimiter that has the same number of `#` as `openDelimiter`.
-  private mutating func parseStringDelimiter(openDelimiter: RawTokenSyntax?) -> (unexpectedBeforeCheckedDelimiter: RawUnexpectedNodesSyntax?, checkedDelimiter: RawTokenSyntax?) {
+  /// Consumes a raw string or extended regex delimiter that has the same
+  /// number of `#` as `openDelimiter`.
+  mutating func parsePoundDelimiter(
+    _ kind: RawTokenKind,
+    matching openDelimiter: RawTokenSyntax?
+  ) -> (unexpectedBeforeCheckedDelimiter: RawUnexpectedNodesSyntax?, checkedDelimiter: RawTokenSyntax?) {
     // Check for leadingTriviaText == "" so we don't consume the leading raw
     // string delimiter of an upcoming string literal, e.g. in
     // ```
@@ -435,7 +439,7 @@ extension Parser {
     // #"raw literal"#
     // ```
     let delimiter: RawTokenSyntax?
-    if self.at(.rawStringDelimiter) && self.currentToken.leadingTriviaText == "" {
+    if self.at(TokenSpec(kind)) && self.currentToken.leadingTriviaText == "" {
       delimiter = self.consumeAnyToken()
     } else {
       delimiter = nil
@@ -445,14 +449,14 @@ extension Parser {
     case (nil, nil):
       return (nil, nil)
     case (let open?, nil):
-      return (nil, missingToken(.rawStringDelimiter, text: open.tokenText))
+      return (nil, missingToken(kind, text: open.tokenText))
     case (nil, .some):
       return (RawUnexpectedNodesSyntax([delimiter], arena: self.arena), nil)
     case (let open?, let close?):
       if open.tokenText == close.tokenText {
         return (nil, close)
       } else {
-        return (RawUnexpectedNodesSyntax([delimiter], arena: self.arena), missingToken(.rawStringDelimiter, text: open.tokenText))
+        return (RawUnexpectedNodesSyntax([delimiter], arena: self.arena), missingToken(kind, text: open.tokenText))
       }
     }
   }
@@ -482,7 +486,7 @@ extension Parser {
       if let stringSegment = self.consume(if: .stringSegment) {
         segments.append(.stringSegment(RawStringSegmentSyntax(content: stringSegment, arena: self.arena)))
       } else if let backslash = self.consume(if: .backslash) {
-        let (unexpectedBeforeDelimiter, delimiter) = self.parseStringDelimiter(openDelimiter: openDelimiter)
+        let (unexpectedBeforeDelimiter, delimiter) = self.parsePoundDelimiter(.rawStringDelimiter, matching: openDelimiter)
         let leftParen = self.expectWithoutRecoveryOrLeadingTrivia(.leftParen)
         let expressions = RawTupleExprElementListSyntax(elements: self.parseArgumentListElements(pattern: .none), arena: self.arena)
 
@@ -546,7 +550,7 @@ extension Parser {
       closeQuote = self.expectWithoutRecoveryOrLeadingTrivia(TokenSpec(openQuote.tokenKind))
     }
 
-    let (unexpectedBeforeCloseDelimiter, closeDelimiter) = self.parseStringDelimiter(openDelimiter: openDelimiter)
+    let (unexpectedBeforeCloseDelimiter, closeDelimiter) = self.parsePoundDelimiter(.rawStringDelimiter, matching: openDelimiter)
 
     if openQuote.tokenKind == .multilineStringQuote, !openQuote.isMissing, !closeQuote.isMissing {
       let postProcessed = postProcessMultilineStringLiteral(rawStringDelimitersToken: openDelimiter, openQuote: openQuote, segments: segments, closeQuote: closeQuote)

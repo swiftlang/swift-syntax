@@ -4,16 +4,13 @@ import XCTest
 
 final class RegexParseEndOfBufferTests: XCTestCase {
   func testRegexParseEndOfBuffer1() {
-    AssertParse(
+    assertParse(
       """
       // Note there is purposefully no trailing newline here.
-      var unterminated = 1️⃣#/(xy2️⃣
+      var unterminated = 1️⃣#/(xy
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "use of unknown directive '#'"),
-        // TODO: Old parser expected error on line 2: unterminated regex literal
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end tuple"),
-        // TODO: Old parser expected error on line 2: cannot parse regular expression: expected ')'
+        DiagnosticSpec(message: "unterminated regex literal")
       ]
     )
   }

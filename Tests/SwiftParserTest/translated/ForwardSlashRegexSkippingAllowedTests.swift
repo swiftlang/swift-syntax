@@ -4,7 +4,7 @@ import XCTest
 
 final class ForwardSlashRegexSkippingAllowedTests: XCTestCase {
   func testForwardSlashRegexSkippingAllowed1() {
-    AssertParse(
+    assertParse(
       """
       // Make sure we can skip in all of the below cases.
       """
@@ -12,7 +12,7 @@ final class ForwardSlashRegexSkippingAllowedTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkippingAllowed2() {
-    AssertParse(
+    assertParse(
       #"""
       // The printing implementation differs in asserts and no-asserts builds, it will
       // either print `"Parse.NumFunctionsParsed" 0` or not print it at all. Make sure
@@ -23,54 +23,53 @@ final class ForwardSlashRegexSkippingAllowedTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkippingAllowed3() {
-    AssertParse(
+    assertParse(
       """
       // Ensures there is a parse error
       var 1️⃣: Int
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected pattern
-        DiagnosticSpec(message: "expected pattern in variable"),
+        DiagnosticSpec(message: "expected pattern in variable")
       ]
     )
   }
 
   func testForwardSlashRegexSkippingAllowed4() {
-    AssertParse(
+    assertParse(
       """
       // Balanced `{}`, so okay.
       func a() { 1️⃣/ {}/ }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code '/ {}/' in function"),
+        DiagnosticSpec(message: "unexpected code '/ {}/' in function")
       ]
     )
   }
 
   func testForwardSlashRegexSkippingAllowed5() {
-    AssertParse(
+    assertParse(
       #"""
       func b() { 1️⃣/ \{}/ }
       """#,
       diagnostics: [
-        DiagnosticSpec(message: #"unexpected code '/ \{}/' in function"#),
+        DiagnosticSpec(message: #"unexpected code '/ \{}/' in function"#)
       ]
     )
   }
 
   func testForwardSlashRegexSkippingAllowed6() {
-    AssertParse(
+    assertParse(
       #"""
       func c() { 1️⃣/ {"{"}/ }
       """#,
       diagnostics: [
-        DiagnosticSpec(message: #"unexpected code '/ {"{"}/' in function"#),
+        DiagnosticSpec(message: #"unexpected code '/ {"{"}/' in function"#)
       ]
     )
   }
 
   func testForwardSlashRegexSkippingAllowed7() {
-    AssertParse(
+    assertParse(
       """
       // Some cases of infix '/' that we should continue to skip.
       func d() {
@@ -82,7 +81,7 @@ final class ForwardSlashRegexSkippingAllowedTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkippingAllowed8() {
-    AssertParse(
+    assertParse(
       #"""
       func e() {
         let arr = [1, 2, 3]
@@ -95,7 +94,7 @@ final class ForwardSlashRegexSkippingAllowedTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkippingAllowed9() {
-    AssertParse(
+    assertParse(
       """
       // Some cases of prefix '/' that we should continue to skip.
       prefix operator /
@@ -105,7 +104,7 @@ final class ForwardSlashRegexSkippingAllowedTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkippingAllowed10() {
-    AssertParse(
+    assertParse(
       """
       enum E {
         case e
@@ -116,7 +115,7 @@ final class ForwardSlashRegexSkippingAllowedTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkippingAllowed11() {
-    AssertParse(
+    assertParse(
       """
       func f() {
         _ = /E.e
@@ -133,7 +132,7 @@ final class ForwardSlashRegexSkippingAllowedTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkippingAllowed12() {
-    AssertParse(
+    assertParse(
       """
       postfix operator /
       prefix func / <T> (_ x: T) -> T { x }
@@ -142,7 +141,7 @@ final class ForwardSlashRegexSkippingAllowedTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkippingAllowed13() {
-    AssertParse(
+    assertParse(
       """
       // Some cases of postfix '/' that we should continue to skip.
       func g() {

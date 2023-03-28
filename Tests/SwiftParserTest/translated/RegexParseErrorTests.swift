@@ -4,37 +4,23 @@ import XCTest
 
 final class RegexParseErrorTests: XCTestCase {
   func testRegexParseError1() {
-    AssertParse(
+    assertParse(
       """
       _ = /(/
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: expected ')'
-      ]
+      """
     )
   }
 
   func testRegexParseError2() {
-    AssertParse(
+    assertParse(
       """
       _ = #/(/#
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: expected ')'
-      ]
-    )
-  }
-
-  func testRegexParseError3() {
-    AssertParse(
-      """
-      // FIXME: Should be 'group openings'
       """
     )
   }
 
   func testRegexParseError4() {
-    AssertParse(
+    assertParse(
       """
       _ = 1️⃣/)/
       """,
@@ -47,135 +33,104 @@ final class RegexParseErrorTests: XCTestCase {
   }
 
   func testRegexParseError5() {
-    AssertParse(
+    assertParse(
       """
-      _ = 1️⃣#/2️⃣)/#
-      """,
-      diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "use of unknown directive '#'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code ')/#' at top level"),
-        // TODO: Old parser expected error on line 1: closing ')' does not balance any groups openings
-      ]
+      _ = #/)/#
+      """
     )
   }
 
   func testRegexParseError6() {
-    AssertParse(
+    assertParse(
       #"""
-      _ = 1️⃣#/\2️⃣\3️⃣/''/
+      _ = 1️⃣#/\\/''/
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "use of unknown directive '#'"),
-        // TODO: Old parser expected error on line 1: unterminated regex literal
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected root in key path"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected root in key path"),
+        DiagnosticSpec(message: "unterminated regex literal")
       ]
     )
   }
 
   func testRegexParseError7() {
-    AssertParse(
+    assertParse(
       #"""
-      _ = 1️⃣#/\2️⃣|
+      _ = 1️⃣#/\|
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "use of unknown directive '#'"),
-        // TODO: Old parser expected error on line 1: unterminated regex literal
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected root in key path"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code '|' at top level"),
+        DiagnosticSpec(message: "unterminated regex literal")
       ]
     )
   }
 
   func testRegexParseError8() {
-    AssertParse(
+    assertParse(
       """
       _ = 1️⃣#//
       """,
       diagnostics: [
-        DiagnosticSpec(message: "use of unknown directive '#'"),
-        // TODO: Old parser expected error on line 1: unterminated regex literal
+        DiagnosticSpec(message: "unterminated regex literal")
       ]
     )
   }
 
   func testRegexParseError9() {
-    AssertParse(
+    assertParse(
       """
       _ = 1️⃣#/xy
       """,
       diagnostics: [
-        DiagnosticSpec(message: "use of unknown directive '#'"),
-        // TODO: Old parser expected error on line 1: unterminated regex literal
+        DiagnosticSpec(message: "unterminated regex literal")
       ]
     )
   }
 
   func testRegexParseError10() {
-    AssertParse(
+    assertParse(
       """
       _ = #/(?/#
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: expected group specifier
-      ]
+      """
     )
   }
 
   func testRegexParseError11() {
-    AssertParse(
+    assertParse(
       """
       _ = #/(?'/#
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: expected group name
-      ]
+      """
     )
   }
 
   func testRegexParseError12() {
-    AssertParse(
+    assertParse(
       """
       _ = #/(?'abc/#
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: expected '''
-      ]
+      """
     )
   }
 
   func testRegexParseError13() {
-    AssertParse(
+    assertParse(
       """
       _ = #/(?'abc /#
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: expected '''
-      ]
+      """
     )
   }
 
   func testRegexParseError14() {
-    AssertParse(
+    assertParse(
       """
       do {
-        _ = 1️⃣#/(2️⃣?3️⃣'a
+        _ = 1️⃣#/(?'a
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "use of unknown directive '#'"),
-        // TODO: Old parser expected error on line 2: unterminated regex literal
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected value and ')' to end tuple"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected expression and ':' in 'do' statement"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected expression in 'do' statement"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code ''a' in 'do' statement"),
-        // TODO: Old parser expected error on line 2: cannot parse regular expression: expected '''
+        DiagnosticSpec(message: "unterminated regex literal")
       ]
     )
   }
 
   func testRegexParseError15() {
-    AssertParse(
+    assertParse(
       #"""
       _ = #/\(?'abc/#
       """#
@@ -183,7 +138,7 @@ final class RegexParseErrorTests: XCTestCase {
   }
 
   func testRegexParseError16() {
-    AssertParse(
+    assertParse(
       #"""
       do {
         _ = /\1️⃣
@@ -199,23 +154,22 @@ final class RegexParseErrorTests: XCTestCase {
   }
 
   func testRegexParseError17() {
-    AssertParse(
+    assertParse(
       #"""
       do {
-        _ = #/\
-        /#
+        _ = 1️⃣#/\
+      /#2️⃣
       }
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: unterminated regex literal
-        // TODO: Old parser expected error on line 2: expected escape sequence
-        // TODO: Old parser expected error on line 3: expected expression
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unterminated regex literal"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in pound literal expression")
       ]
     )
   }
 
   func testRegexParseError18() {
-    AssertParse(
+    assertParse(
       """
       func foo<T>(
         _ x: T, 
@@ -225,27 +179,19 @@ final class RegexParseErrorTests: XCTestCase {
   }
 
   func testRegexParseError19() {
-    AssertParse(
+    assertParse(
       """
       foo(#/(?/#, #/abc/#) 
       foo(#/(?C/#, #/abc/#)
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: expected group specifier
-        // TODO: Old parser expected error on line 2: expected ')'
-      ]
+      """
     )
   }
 
   func testRegexParseError20() {
-    AssertParse(
+    assertParse(
       """
       foo(#/(?'/#, #/abc/#)
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: expected group name
-      ]
+      """
     )
   }
-
 }

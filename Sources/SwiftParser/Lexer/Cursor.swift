@@ -816,33 +816,20 @@ extension Lexer.Cursor {
 
       // Otherwise try lex a magic pound literal.
       return self.lexOperatorIdentifier(sourceBufferStart: sourceBufferStart)
-    case UInt8(ascii: "!"):
-      if self.isLeftBound(sourceBufferStart: sourceBufferStart) {
-        _ = self.advance()
-        return Lexer.Result(.exclamationMark)
-      }
-      return self.lexOperatorIdentifier(sourceBufferStart: sourceBufferStart)
-
-    case UInt8(ascii: "?"):
-      if self.isLeftBound(sourceBufferStart: sourceBufferStart) {
-        _ = self.advance()
-        return Lexer.Result(.postfixQuestionMark)
+    case UInt8(ascii: "!"), UInt8(ascii: "?"):
+      if let result = lexPostfixOptionalChain(sourceBufferStart: sourceBufferStart) {
+        return result
       }
       return self.lexOperatorIdentifier(sourceBufferStart: sourceBufferStart)
 
     case UInt8(ascii: "<"):
-      if self.is(offset: 1, at: "#") {
-        return self.tryLexEditorPlaceholder(sourceBufferStart: sourceBufferStart)
+      if self.is(offset: 1, at: "#"),
+        let result = self.tryLexEditorPlaceholder(sourceBufferStart: sourceBufferStart)
+      {
+        return result
       }
       return self.lexOperatorIdentifier(sourceBufferStart: sourceBufferStart)
-    case UInt8(ascii: ">"):
-      return self.lexOperatorIdentifier(sourceBufferStart: sourceBufferStart)
 
-    case UInt8(ascii: "="), UInt8(ascii: "-"), UInt8(ascii: "+"),
-      UInt8(ascii: "*"), UInt8(ascii: "%"), UInt8(ascii: "&"),
-      UInt8(ascii: "|"), UInt8(ascii: "^"), UInt8(ascii: "~"),
-      UInt8(ascii: "."):
-      return self.lexOperatorIdentifier(sourceBufferStart: sourceBufferStart)
     case UInt8(ascii: "A"), UInt8(ascii: "B"), UInt8(ascii: "C"),
       UInt8(ascii: "D"), UInt8(ascii: "E"), UInt8(ascii: "F"),
       UInt8(ascii: "G"), UInt8(ascii: "H"), UInt8(ascii: "I"),
@@ -1924,6 +1911,25 @@ extension Lexer.Cursor {
     return Lexer.Result(.backtick)
   }
 
+  /// Attempt to lex a postfix '!' or '?'.
+  mutating func lexPostfixOptionalChain(sourceBufferStart: Lexer.Cursor) -> Lexer.Result? {
+    // Must be left bound, otherwise this isn't postfix.
+    guard self.isLeftBound(sourceBufferStart: sourceBufferStart) else { return nil }
+
+    let kind: RawTokenKind = {
+      switch self.peek() {
+      case UInt8(ascii: "!"):
+        return .exclamationMark
+      case UInt8(ascii: "?"):
+        return .postfixQuestionMark
+      default:
+        fatalError("Must be at '!' or '?'")
+      }
+    }()
+    _ = self.advance()
+    return Lexer.Result(kind)
+  }
+
   mutating func lexOperatorIdentifier(sourceBufferStart: Lexer.Cursor) -> Lexer.Result {
     let tokStart = self
     let didStart = self.advance(if: { $0.isOperatorStartCodePoint })
@@ -2065,7 +2071,7 @@ extension Lexer.Cursor {
 // MARK: - Editor Placeholders
 
 extension Lexer.Cursor {
-  mutating func tryLexEditorPlaceholder(sourceBufferStart: Lexer.Cursor) -> Lexer.Result {
+  mutating func tryLexEditorPlaceholder(sourceBufferStart: Lexer.Cursor) -> Lexer.Result? {
     precondition(self.is(at: "<") && self.is(offset: 1, at: "#"))
     let start = self
     var ptr = self
@@ -2092,7 +2098,7 @@ extension Lexer.Cursor {
     }
 
     // Not a well-formed placeholder.
-    return self.lexOperatorIdentifier(sourceBufferStart: sourceBufferStart)
+    return nil
   }
 }
 

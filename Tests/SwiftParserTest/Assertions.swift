@@ -285,7 +285,7 @@ class FixItApplier: SyntaxRewriter {
           return true
         }
       }
-      .flatMap { $0.changes.changes }
+      .flatMap { $0.changes }
   }
 
   public override func visitAny(_ node: Syntax) -> Syntax? {

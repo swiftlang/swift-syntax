@@ -27,10 +27,10 @@
     "SyntaxDeclNodes.swift",
     "SyntaxExprNodes.swift",
     "SyntaxNodes.swift",
-    "SyntaxOtherNodes.swift",
     "SyntaxPatternNodes.swift",
     "SyntaxStmtNodes.swift",
     "SyntaxTypeNodes.swift",
+    "TokenSyntax.swift",
   ],
   "Utils": [
     "CommonAncestor.swift",

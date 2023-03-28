@@ -115,7 +115,7 @@ final class MultiLineStringLiteralIndentatinDiagnosticsGenerator: SyntaxVisitor 
       message: InvalidIndentationInMultiLineStringLiteralError(kind: currentDiagnostic.kind, lines: currentDiagnostic.lines),
       highlights: [],
       notes: [Note(node: Syntax(closeQuote), message: .shouldMatchIndentationOfClosingQuote)],
-      fixIts: [FixIt(message: .changeIndentationToMatchClosingDelimiter, changes: FixIt.Changes(changes: currentDiagnostic.changes))]
+      fixIts: [FixIt(message: .changeIndentationToMatchClosingDelimiter, changes: currentDiagnostic.changes)]
     )
 
     finishedDiagnostics.append((diagnostic, currentDiagnostic.handledNodes))

@@ -84,7 +84,7 @@ extension PluginMessage.Diagnostic {
     self.fixIts = syntaxDiag.fixIts.compactMap {
       PluginMessage.Diagnostic.FixIt(
         message: $0.message.message,
-        changes: $0.changes.changes.compactMap {
+        changes: $0.changes.compactMap {
           let range: SourceManager.SourceRange?
           let text: String
           switch $0 {

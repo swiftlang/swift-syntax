@@ -15,8 +15,32 @@ import SwiftBasicFormat
 import SwiftSyntax
 
 extension FixIt {
-  public init(message: FixItMessage, changes: [Changes]) {
-    self.init(message: message, changes: FixIt.Changes(combining: changes))
+  /// A more complex set of changes that affects multiple syntax nodes and thus
+  /// produces multiple `FixIt.Change`s. This allows us to e.g. mark a node as
+  /// missing but keep the trivia by transferring it to the previous or next
+  /// token.
+  struct MultiNodeChange {
+    var primitiveChanges: [Change]
+
+    init(primitiveChanges: [Change]) {
+      self.primitiveChanges = primitiveChanges
+    }
+
+    init(_ primitiveChanges: Change...) {
+      self.init(primitiveChanges: primitiveChanges)
+    }
+
+    init(combining: [MultiNodeChange]) {
+      self.init(primitiveChanges: combining.flatMap(\.primitiveChanges))
+    }
+  }
+
+  init(message: FixItMessage, changes: [MultiNodeChange]) {
+    self.init(message: message, changes: MultiNodeChange(combining: changes))
+  }
+
+  init(message: FixItMessage, changes: MultiNodeChange) {
+    self.init(message: message, changes: changes.primitiveChanges)
   }
 
   // These overloads shouldn't be needed, but are currently required for the
@@ -24,15 +48,18 @@ extension FixIt {
   // leading-dot syntax.
   // TODO: These can be dropped once we require a minimum of Swift 5.6 to
   // compile the library.
-  init(message: StaticParserFixIt, changes: Changes) {
-    self.init(message: message as FixItMessage, changes: changes)
+  init(message: StaticParserFixIt, changes: MultiNodeChange) {
+    self.init(message: message as FixItMessage, changes: changes.primitiveChanges)
   }
-  init(message: StaticParserFixIt, changes: [Changes]) {
-    self.init(message: message as FixItMessage, changes: FixIt.Changes(combining: changes))
+  init(message: StaticParserFixIt, changes: [MultiNodeChange]) {
+    self.init(message: message as FixItMessage, changes: MultiNodeChange(combining: changes).primitiveChanges)
+  }
+  public init(message: StaticParserFixIt, changes: [Change]) {
+    self.init(message: message as FixItMessage, changes: changes)
   }
 }
 
-extension FixIt.Changes {
+extension FixIt.MultiNodeChange {
   /// Replaced a present token with a missing node.
   /// If `transferTrivia` is `true`, the leading and trailing trivia of the
   /// removed node will be transferred to the trailing trivia of the previous token.
@@ -49,26 +76,26 @@ extension FixIt.Changes {
     var changes = tokens.map {
       FixIt.Change.replace(
         oldNode: Syntax($0),
-        newNode: Syntax(TokenSyntax($0.tokenKind, leadingTrivia: [], trailingTrivia: [], presence: .missing))
+        newNode: Syntax($0.with(\.presence, .missing))
       )
     }
     if transferTrivia {
-      changes += FixIt.Changes.transferTriviaAtSides(from: tokens).changes
+      changes += FixIt.MultiNodeChange.transferTriviaAtSides(from: tokens).primitiveChanges
     }
-    return FixIt.Changes(changes: changes)
+    return FixIt.MultiNodeChange(primitiveChanges: changes)
   }
 
   /// If `transferTrivia` is `true`, the leading and trailing trivia of the
   /// removed node will be transferred to the trailing trivia of the previous token.
   static func makeMissing<SyntaxType: SyntaxProtocol>(_ node: SyntaxType?, transferTrivia: Bool = true) -> Self {
     guard let node = node else {
-      return FixIt.Changes(changes: [])
+      return FixIt.MultiNodeChange(primitiveChanges: [])
     }
     var changes = [FixIt.Change.replace(oldNode: Syntax(node), newNode: MissingMaker().visit(Syntax(node)))]
     if transferTrivia {
-      changes += FixIt.Changes.transferTriviaAtSides(from: [node]).changes
+      changes += FixIt.MultiNodeChange.transferTriviaAtSides(from: [node]).primitiveChanges
     }
-    return FixIt.Changes(changes: changes)
+    return FixIt.MultiNodeChange(primitiveChanges: changes)
   }
 
   /// Make a node present. If `leadingTrivia` or `trailingTrivia` is specified,
@@ -89,13 +116,13 @@ extension FixIt.Changes {
       let nextToken = node.nextToken(viewMode: .sourceAccurate),
       leadingTrivia == nil
     {
-      return [
+      return FixIt.MultiNodeChange(
         .replace(
           oldNode: Syntax(node),
           newNode: Syntax(presentNode).with(\.leadingTrivia, nextToken.leadingTrivia)
         ),
-        .replaceLeadingTrivia(token: nextToken, newTrivia: []),
-      ]
+        .replaceLeadingTrivia(token: nextToken, newTrivia: [])
+      )
     } else if node.leadingTrivia.isEmpty,
       let previousToken = node.previousToken(viewMode: .fixedUp),
       previousToken.presence == .present,
@@ -105,19 +132,19 @@ extension FixIt.Changes {
     {
       /// If neither this nor the previous token are punctionation make sure they
       /// are separated by a space.
-      return [
+      return FixIt.MultiNodeChange(
         .replace(
           oldNode: Syntax(node),
           newNode: Syntax(presentNode).with(\.leadingTrivia, .space)
         )
-      ]
+      )
     } else {
-      return [
+      return FixIt.MultiNodeChange(
         .replace(
           oldNode: Syntax(node),
           newNode: Syntax(presentNode)
         )
-      ]
+      )
     }
   }
 
@@ -128,10 +155,10 @@ extension FixIt.Changes {
       if !previousToken.trailingTrivia.isEmpty {
         presentToken = presentToken.with(\.trailingTrivia, previousToken.trailingTrivia)
       }
-      return [
+      return FixIt.MultiNodeChange(
         .replaceTrailingTrivia(token: previousToken, newTrivia: []),
-        .replace(oldNode: Syntax(token), newNode: Syntax(presentToken)),
-      ]
+        .replace(oldNode: Syntax(token), newNode: Syntax(presentToken))
+      )
     } else {
       return .makePresent(token)
     }
@@ -149,11 +176,11 @@ extension FixIt.Changes {
         // Punctuation is generally not followed by spaces in Swift.
         // If this action would only add spaces to the punctuation, drop it.
         // This generally yields better results.
-        return []
+        return FixIt.MultiNodeChange()
       }
-      return [.replaceTrailingTrivia(token: previousToken, newTrivia: mergedTrivia)]
+      return FixIt.MultiNodeChange(.replaceTrailingTrivia(token: previousToken, newTrivia: mergedTrivia))
     } else {
-      return []
+      return FixIt.MultiNodeChange()
     }
   }
 }

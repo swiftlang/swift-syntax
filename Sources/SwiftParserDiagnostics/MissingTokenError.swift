@@ -97,7 +97,7 @@ extension ParseDiagnosticsGenerator {
 
   private func handleInvalidPeriod(invalidToken: TokenSyntax, missingToken: TokenSyntax, invalidTokenContainer: UnexpectedNodesSyntax) -> Bool {
     // Trailing trivia is the cause of this diagnostic, don't transfer it.
-    let changes: [FixIt.Changes] = [
+    let changes: [FixIt.MultiNodeChange] = [
       .makeMissing(invalidToken, transferTrivia: false),
       .makePresent(missingToken),
     ]

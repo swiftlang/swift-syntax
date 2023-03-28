@@ -336,6 +336,14 @@ struct SyntaxData {
       return self
     }
   }
+
+  func withPresence(_ presence: SourcePresence, arena: SyntaxArena) -> SyntaxData {
+    if let raw = raw.tokenView?.withPresence(presence, arena: arena) {
+      return replacingSelf(raw, arena: arena)
+    } else {
+      return self
+    }
+  }
 }
 
 #if DEBUG

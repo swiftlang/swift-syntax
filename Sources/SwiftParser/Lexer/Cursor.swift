@@ -217,6 +217,8 @@ extension Lexer {
 
     /// If we have already lexed a token, the kind of the previously lexed token
     var previousTokenKind: RawTokenKind?
+    var previousKeyword: Keyword?
+
     private var stateStack: StateStack = StateStack()
 
     init(input: UnsafeBufferPointer<UInt8>, previous: UInt8) {
@@ -372,10 +374,9 @@ extension Lexer.Cursor {
       flags.insert(.isAtStartOfLine)
     }
 
-    self.previousTokenKind = result.tokenKind
     diagnostic = TokenDiagnostic(combining: diagnostic, result.error?.tokenDiagnostic(tokenStart: cursor))
 
-    return .init(
+    let lexeme = Lexer.Lexeme(
       tokenKind: result.tokenKind,
       flags: flags,
       diagnostic: diagnostic,
@@ -385,6 +386,10 @@ extension Lexer.Cursor {
       trailingTriviaLength: trailingTriviaStart.distance(to: self),
       cursor: cursor
     )
+    self.previousTokenKind = result.tokenKind
+    self.previousKeyword = result.tokenKind == .keyword ? Keyword(lexeme.tokenText)! : nil
+
+    return lexeme
   }
 
 }

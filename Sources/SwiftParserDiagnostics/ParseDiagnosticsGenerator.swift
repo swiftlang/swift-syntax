@@ -765,6 +765,10 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       addDiagnostic(node.conditions, MissingConditionInStatement(node: node), handledNodes: [node.conditions.id])
     }
 
+    if let leftBrace = node.elseBody?.as(CodeBlockSyntax.self)?.leftBrace, leftBrace.presence == .missing {
+      addDiagnostic(leftBrace, .expectedLeftBraceOrIfAfterElse, handledNodes: [leftBrace.id])
+    }
+
     return .visitChildren
   }
 

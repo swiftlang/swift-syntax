@@ -776,6 +776,23 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if shouldSkip(node) {
       return .skipChildren
     }
+
+    if let unexpected = node.unexpectedBeforeEqual,
+      unexpected.first?.as(TokenSyntax.self)?.tokenKind == .binaryOperator("==")
+    {
+      addDiagnostic(
+        unexpected,
+        .expectedAssignmentInsteadOfComparisonOperator,
+        fixIts: [
+          FixIt(
+            message: ReplaceTokensFixIt(replaceTokens: [.binaryOperator("==")], replacement: node.equal),
+            changes: [.makeMissing(unexpected), .makePresent(node.equal, leadingTrivia: [])]
+          )
+        ],
+        handledNodes: [unexpected.id, node.equal.id]
+      )
+    }
+
     if node.equal.presence == .missing {
       exchangeTokens(
         unexpected: node.unexpectedBeforeEqual,

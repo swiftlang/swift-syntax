@@ -224,7 +224,7 @@ extension TokenConsumer {
     if let (_, handle) = self.at(anyIn: IdentifierTokens.self) {
       return self.eat(handle)
     }
-    return missingToken(.identifier, text: nil)
+    return missingToken(.identifier)
   }
 
   @inline(__always)
@@ -232,7 +232,7 @@ extension TokenConsumer {
     if let (_, handle) = self.at(anyIn: IdentifierOrRethrowsTokens.self) {
       return self.eat(handle)
     }
-    return missingToken(.identifier, text: nil)
+    return missingToken(.identifier)
   }
 
   var canHaveParameterSpecifier: Bool {

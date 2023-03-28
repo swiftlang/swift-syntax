@@ -72,7 +72,7 @@ extension Parser {
           lastItem.unexpectedBeforeItem,
           item: .init(lastItem.item)!,
           lastItem.unexpectedBetweenItemAndSemicolon,
-          semicolon: self.missingToken(.semicolon, text: nil),
+          semicolon: self.missingToken(.semicolon),
           lastItem.unexpectedAfterSemicolon,
           arena: self.arena
         )
@@ -236,7 +236,7 @@ extension Parser {
             lastElement.unexpectedBeforeItem,
             item: .init(lastElement.item)!,
             lastElement.unexpectedBetweenItemAndSemicolon,
-            semicolon: parser.missingToken(.semicolon, text: nil),
+            semicolon: parser.missingToken(.semicolon),
             lastElement.unexpectedAfterSemicolon,
             arena: parser.arena
           )

@@ -128,6 +128,9 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var expectedExpressionAfterTry: Self {
     .init("expected expression after 'try'")
   }
+  public static var expectedAssignmentInsteadOfComparisonOperator: Self {
+    .init("expected '=' instead of '==' to assign default value for parameter")
+  }
   public static var expectedLeftBraceOrIfAfterElse: Self {
     .init("expected '{' or 'if' after 'else'")
   }

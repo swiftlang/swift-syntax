@@ -166,6 +166,8 @@ fileprivate extension TokenKind {
       return .leftSquareBracket
     case .stringQuote, .multilineStringQuote, .rawStringDelimiter:
       return self
+    case .regexSlash, .extendedRegexDelimiter:
+      return self
     default:
       return nil
     }

@@ -329,7 +329,6 @@ enum OperatorLike: TokenSpecSet {
   case postfixQuestionMark
   case equal
   case arrow
-  case regexLiteral  // regex literals can look like operators, e.g. '/^/'
 
   init?(lexeme: Lexer.Lexeme) {
     if let op = Operator(lexeme: lexeme) {
@@ -342,7 +341,6 @@ enum OperatorLike: TokenSpecSet {
     case .postfixQuestionMark: self = .postfixQuestionMark
     case .equal: self = .equal
     case .arrow: self = .arrow
-    case .regexLiteral: self = .regexLiteral
     default: return nil
     }
   }
@@ -354,7 +352,6 @@ enum OperatorLike: TokenSpecSet {
       .postfixQuestionMark,
       .equal,
       .arrow,
-      .regexLiteral,
     ]
   }
 
@@ -366,7 +363,6 @@ enum OperatorLike: TokenSpecSet {
     case .postfixQuestionMark: return TokenSpec(.postfixQuestionMark, remapping: .postfixOperator)
     case .equal: return TokenSpec(.equal, remapping: .binaryOperator)
     case .arrow: return TokenSpec(.arrow, remapping: .binaryOperator)
-    case .regexLiteral: return TokenSpec(.regexLiteral, remapping: .binaryOperator, recoveryPrecedence: TokenPrecedence(nonKeyword: .binaryOperator))
     }
   }
 }
@@ -588,7 +584,8 @@ enum PrimaryExpressionStart: TokenSpecSet {
   case pound
   case poundAvailableKeyword  // For recovery
   case poundUnavailableKeyword  // For recovery
-  case regexLiteral
+  case regexSlash
+  case extendedRegexDelimiter
   case selfKeyword
   case superKeyword
   case trueKeyword
@@ -616,7 +613,8 @@ enum PrimaryExpressionStart: TokenSpecSet {
     case TokenSpec(.pound): self = .pound
     case TokenSpec(.poundAvailableKeyword): self = .poundAvailableKeyword
     case TokenSpec(.poundUnavailableKeyword): self = .poundUnavailableKeyword
-    case TokenSpec(.regexLiteral): self = .regexLiteral
+    case TokenSpec(.regexSlash): self = .regexSlash
+    case TokenSpec(.extendedRegexDelimiter): self = .extendedRegexDelimiter
     case TokenSpec(.self): self = .selfKeyword
     case TokenSpec(.super): self = .superKeyword
     case TokenSpec(.true): self = .trueKeyword
@@ -647,7 +645,8 @@ enum PrimaryExpressionStart: TokenSpecSet {
     case .pound: return .pound
     case .poundAvailableKeyword: return .poundAvailableKeyword
     case .poundUnavailableKeyword: return .poundUnavailableKeyword
-    case .regexLiteral: return .regexLiteral
+    case .regexSlash: return .regexSlash
+    case .extendedRegexDelimiter: return .extendedRegexDelimiter
     case .selfKeyword: return .keyword(.self)
     case .superKeyword: return .keyword(.super)
     case .trueKeyword: return .keyword(.true)

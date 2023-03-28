@@ -8,12 +8,10 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
       """
       // We don't consider this a regex literal when skipping as it has an initial
       // space.
-      func a() { _ = 1️⃣/ x*/ }
+      func a() { _ = /1️⃣ x*/ }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: unexpected end of block comment
-        DiagnosticSpec(message: "expected expression in function"),
-        DiagnosticSpec(message: "unexpected code '/ x*/' in function"),
+        DiagnosticSpec(message: "bare slash regex literal may not start with space")
       ]
     )
   }
@@ -25,8 +23,7 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
       func b() { _ = /x1️⃣)*/ }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: unexpected end of block comment
-        DiagnosticSpec(message: "unexpected code ')*/' in function"),
+        DiagnosticSpec(message: "unexpected code ')*/' in function")
       ]
     )
   }
@@ -35,18 +32,12 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
     assertParse(
       """
       // These also fail the heuristic, but have unbalanced `{` `}`, so we don't skip.
-      func c() { _ = 1️⃣/ x}2️⃣*/ } 
-      func d() { _ = 3️⃣/ x{*/ }
+      func c() { _ = /1️⃣ x}*/ }
+      func d() { _ = /2️⃣ x{*/ }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: regex literal may not start with space; add backslash to escape
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression in function"),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '/ x' in function"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '*/ }' before function"),
-        // TODO: Old parser expected error on line 3: regex literal may not start with space; add backslash to escape
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected expression in function"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected '}' to end function"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous code '/ x{*/ }' at top level"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "bare slash regex literal may not start with space"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "bare slash regex literal may not start with space"),
       ]
     )
   }
@@ -56,15 +47,12 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
       """
       // Unterminated, and unbalanced `{}`.
       func e() {
-        _ = 1️⃣/         }
-      2️⃣}
+        _ = /1️⃣         }2️⃣
+      }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression in function"),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '/' in function"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous brace at top level"),
-        // TODO: Old parser expected error on line 0: unterminated regex literal
-        // TODO: Old parser expected error on line 0: regex literal may not start with space; add backslash to escape
+        DiagnosticSpec(locationMarker: "1️⃣", message: "bare slash regex literal may not start with space"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '/' to end regex literal"),
       ]
     )
   }
@@ -73,15 +61,12 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
     assertParse(
       """
       func f() {
-        _ = 1️⃣/         {
+        _ = /1️⃣         {2️⃣
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: unterminated regex literal
-        // TODO: Old parser expected error on line 3: regex literal may not start with space; add backslash to escape
-        DiagnosticSpec(message: "expected expression in function"),
-        DiagnosticSpec(message: "expected '}' to end function"),
-        DiagnosticSpec(message: "extraneous code at top level"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "bare slash regex literal may not start with space"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '/' to end regex literal"),
       ]
     )
   }
@@ -94,8 +79,7 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
       1️⃣}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: extraneous '}' at top level
-        DiagnosticSpec(message: "extraneous brace at top level"),
+        DiagnosticSpec(message: "extraneous brace at top level")
       ]
     )
   }
@@ -115,12 +99,12 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
     assertParse(
       #"""
       func i() {
-        _ = /x 2️⃣"[abc]     {
+        _ = /x1️⃣ "[abc]     {2️⃣
       }
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: unterminated string literal
-        DiagnosticSpec(locationMarker: "2️⃣", message: #"unexpected code '"[abc]     {' in function"#),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#),
       ]
     )
   }
@@ -129,14 +113,11 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
     assertParse(
       """
       func j() {
-        _ = 1️⃣/^ [abc]     {
+        _ = /^ [abc]     {1️⃣
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: unterminated regex literal
-        DiagnosticSpec(message: "expected expression in function"),
-        DiagnosticSpec(message: "expected '}' to end function"),
-        DiagnosticSpec(message: "extraneous code at top level"),
+        DiagnosticSpec(message: "expected '/' to end regex literal")
       ]
     )
   }
@@ -145,13 +126,11 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
     assertParse(
       #"""
       func k() {
-        _ = 1️⃣/^ "[abc]     {
+        _ = /^ "[abc]     {1️⃣
       }
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: unterminated string literal
-        DiagnosticSpec(message: "expected expression in function"),
-        DiagnosticSpec(message: #"unexpected code '/^ "[abc]     {' in function"#),
+        DiagnosticSpec(message: "expected '/' to end regex literal")
       ]
     )
   }
@@ -160,13 +139,11 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
     assertParse(
       """
       func l() {
-        _ = 1️⃣/^    } abc     {
+        _ = /^    } abc     {1️⃣
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: unterminated regex literal
-        DiagnosticSpec(message: "expected expression in function"),
-        DiagnosticSpec(message: "unexpected code '/^' in function"),
+        DiagnosticSpec(message: "expected '/' to end regex literal")
       ]
     )
   }
@@ -175,16 +152,14 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
     assertParse(
       #"""
       func m() {
-        _ = 1️⃣/ "
-        }
-      2️⃣}
+        _ = /1️⃣ "2️⃣
+      }
+      3️⃣}
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: unterminated string literal
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression in function"),
-        DiagnosticSpec(locationMarker: "1️⃣", message: #"unexpected code '/ "' in function"#),
-        // TODO: Old parser expected error on line 4: extraneous '}' at top level
-        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous brace at top level"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "bare slash regex literal may not start with space"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '/' to end regex literal"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous brace at top level"),
 
       ]
     )
@@ -250,13 +225,10 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
   func testForwardSlashRegexSkippingInvalid17() {
     assertParse(
       """
-      func err1() { _ = 1️⃣/ 0xG}2️⃣/ }
+      func err1() { _ = /1️⃣ 0xG}/ }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: regex literal may not start with space; add backslash to escape
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression in function"),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '/ 0xG' in function"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code '/ }' at top level"),
+        DiagnosticSpec(message: "bare slash regex literal may not start with space")
       ]
     )
   }
@@ -264,27 +236,21 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
   func testForwardSlashRegexSkippingInvalid18() {
     assertParse(
       """
-      func err2() { _ = 1️⃣/ 0oG}2️⃣/ }
+      func err2() { _ = /1️⃣ 0oG}/ }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: regex literal may not start with space; add backslash to escape
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression in function"),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '/ 0oG' in function"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code '/ }' at top level"),
+        DiagnosticSpec(message: "bare slash regex literal may not start with space")
       ]
     )
   }
 
   func testForwardSlashRegexSkippingInvalid19() {
     assertParse(
-      #"""
-      func err3() { _ = 1️⃣/ {"/ }
-      """#,
+      """
+      func err3() { _ = /1️⃣ {"/ }
+      """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: regex literal may not start with space; add backslash to escape
-        DiagnosticSpec(message: "expected expression in function"),
-        DiagnosticSpec(message: "expected '}' to end function"),
-        DiagnosticSpec(message: #"extraneous code '/ {"/ }' at top level"#),
+        DiagnosticSpec(message: "bare slash regex literal may not start with space")
       ]
     )
   }
@@ -292,13 +258,10 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
   func testForwardSlashRegexSkippingInvalid20() {
     assertParse(
       """
-      func err4() { _ = 1️⃣/ {'/ }
+      func err4() { _ = /1️⃣ {'/ }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: regex literal may not start with space; add backslash to escape
-        DiagnosticSpec(message: "expected expression in function"),
-        DiagnosticSpec(message: "expected '}' to end function"),
-        DiagnosticSpec(message: "extraneous code '/ {'/ }' at top level"),
+        DiagnosticSpec(message: "bare slash regex literal may not start with space")
       ]
     )
   }
@@ -306,13 +269,10 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
   func testForwardSlashRegexSkippingInvalid21() {
     assertParse(
       """
-      func err5() { _ = 1️⃣/ {<#placeholder#>/ }
+      func err5() { _ = /1️⃣ {<#placeholder#>/ }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: regex literal may not start with space; add backslash to escape
-        DiagnosticSpec(message: "expected expression in function"),
-        DiagnosticSpec(message: "expected '}' to end function"),
-        DiagnosticSpec(message: "extraneous code '/ {<#placeholder#>/ }' at top level"),
+        DiagnosticSpec(message: "bare slash regex literal may not start with space")
       ]
     )
   }

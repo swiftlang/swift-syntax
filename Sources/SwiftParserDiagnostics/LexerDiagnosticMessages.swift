@@ -54,6 +54,9 @@ public enum StaticTokenError: String, DiagnosticMessage {
   case sourceConflictMarker = "source control conflict marker in source file"
   case unexpectedBlockCommentEnd = "unexpected end of block comment"
   case unicodeCurlyQuote = #"unicode curly quote found; use '"' instead"#
+  case spaceAtStartOfRegexLiteral = "bare slash regex literal may not start with space"
+  case spaceAtEndOfRegexLiteral = "bare slash regex literal may not end with space"
+  case multilineRegexClosingNotOnNewline = "multi-line regex closing delimiter must appear on new line"
   case unprintableAsciiCharacter = "unprintable ASCII character found in source file"
 
   public var message: String { self.rawValue }
@@ -163,6 +166,9 @@ public extension SwiftSyntax.TokenDiagnostic {
     case .sourceConflictMarker: return StaticTokenError.sourceConflictMarker
     case .unexpectedBlockCommentEnd: return StaticTokenError.unexpectedBlockCommentEnd
     case .unicodeCurlyQuote: return StaticTokenError.unicodeCurlyQuote
+    case .spaceAtStartOfRegexLiteral: return StaticTokenError.spaceAtStartOfRegexLiteral
+    case .spaceAtEndOfRegexLiteral: return StaticTokenError.spaceAtEndOfRegexLiteral
+    case .multilineRegexClosingNotOnNewline: return StaticTokenError.multilineRegexClosingNotOnNewline
     case .unprintableAsciiCharacter: return StaticTokenError.unprintableAsciiCharacter
     }
   }

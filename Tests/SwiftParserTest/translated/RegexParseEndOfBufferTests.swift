@@ -5,12 +5,9 @@ import XCTest
 final class RegexParseEndOfBufferTests: XCTestCase {
   func testRegexParseEndOfBuffer1() {
     assertParse(
-      """
-      // Note there is purposefully no trailing newline here.
-      var unterminated = 1️⃣#/(xy
-      """,
+      "var unterminated = #/(xy1️⃣",
       diagnostics: [
-        DiagnosticSpec(message: "unterminated regex literal")
+        DiagnosticSpec(message: "expected '/#' to end regex literal")
       ]
     )
   }

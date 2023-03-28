@@ -22,13 +22,8 @@ final class RegexParseErrorTests: XCTestCase {
   func testRegexParseError4() {
     assertParse(
       """
-      _ = 1️⃣/)/
-      """,
-      diagnostics: [
-        DiagnosticSpec(message: "expected expression"),
-        DiagnosticSpec(message: "extraneous code '/)/' at top level"),
-        // TODO: Old parser expected error on line 1: closing ')' does not balance any groups openings
-      ]
+      _ = /)/
+      """
     )
   }
 
@@ -43,10 +38,10 @@ final class RegexParseErrorTests: XCTestCase {
   func testRegexParseError6() {
     assertParse(
       #"""
-      _ = 1️⃣#/\\/''/
+      _ = #/\\/''/1️⃣
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "unterminated regex literal")
+        DiagnosticSpec(message: "expected '#' to end regex literal")
       ]
     )
   }
@@ -54,10 +49,10 @@ final class RegexParseErrorTests: XCTestCase {
   func testRegexParseError7() {
     assertParse(
       #"""
-      _ = 1️⃣#/\|
+      _ = #/\|1️⃣
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "unterminated regex literal")
+        DiagnosticSpec(message: "expected '/#' to end regex literal")
       ]
     )
   }
@@ -65,10 +60,10 @@ final class RegexParseErrorTests: XCTestCase {
   func testRegexParseError8() {
     assertParse(
       """
-      _ = 1️⃣#//
+      _ = #//1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unterminated regex literal")
+        DiagnosticSpec(message: "expected '#' to end regex literal")
       ]
     )
   }
@@ -76,10 +71,10 @@ final class RegexParseErrorTests: XCTestCase {
   func testRegexParseError9() {
     assertParse(
       """
-      _ = 1️⃣#/xy
+      _ = #/xy1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unterminated regex literal")
+        DiagnosticSpec(message: "expected '/#' to end regex literal")
       ]
     )
   }
@@ -120,11 +115,11 @@ final class RegexParseErrorTests: XCTestCase {
     assertParse(
       """
       do {
-        _ = 1️⃣#/(?'a
+        _ = #/(?'a1️⃣
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unterminated regex literal")
+        DiagnosticSpec(message: "expected '/#' to end regex literal")
       ]
     )
   }
@@ -147,8 +142,7 @@ final class RegexParseErrorTests: XCTestCase {
       """#,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected root in key path"),
-        // TODO: Old parser expected error on line 3: expected expression path in Swift key path
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression in 'do' statement"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression after operator"),
       ]
     )
   }
@@ -157,13 +151,13 @@ final class RegexParseErrorTests: XCTestCase {
     assertParse(
       #"""
       do {
-        _ = 1️⃣#/\
+        _ = #/\1️⃣
       /#2️⃣
       }
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unterminated regex literal"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in pound literal expression")
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '/#' to end regex literal"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in macro expansion"),
       ]
     )
   }

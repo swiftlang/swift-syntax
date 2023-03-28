@@ -34,8 +34,8 @@ extension ParseDiagnosticsGenerator {
       handled = handleInvalidMultilineStringQuote(invalidToken: invalidToken, missingToken: missingToken, invalidTokenContainer: invalidTokenContainer)
     case (.period, .period):
       handled = handleInvalidPeriod(invalidToken: invalidToken, missingToken: missingToken, invalidTokenContainer: invalidTokenContainer)
-    case (.rawStringDelimiter, .rawStringDelimiter):
-      handled = handleInvalidRawStringDelimiter(invalidToken: invalidToken, missingToken: missingToken, invalidTokenContainer: invalidTokenContainer)
+    case (.rawStringDelimiter, .rawStringDelimiter), (.extendedRegexDelimiter, .extendedRegexDelimiter):
+      handled = handleInvalidPoundDelimiter(invalidToken: invalidToken, missingToken: missingToken, invalidTokenContainer: invalidTokenContainer)
     default:
       handled = false
     }
@@ -122,19 +122,25 @@ extension ParseDiagnosticsGenerator {
     return true
   }
 
-  private func handleInvalidRawStringDelimiter(invalidToken: TokenSyntax, missingToken: TokenSyntax, invalidTokenContainer: UnexpectedNodesSyntax) -> Bool {
+  private func handleInvalidPoundDelimiter(
+    invalidToken: TokenSyntax,
+    missingToken: TokenSyntax,
+    invalidTokenContainer: UnexpectedNodesSyntax
+  ) -> Bool {
+    let isTooMany = invalidToken.contentLength > missingToken.contentLength
     let message: DiagnosticMessage
     if missingToken.parent?.is(ExpressionSegmentSyntax.self) == true {
       message = .tooManyRawStringDelimitersToStartInterpolation
     } else {
+      let parent = missingToken.parent!
       precondition(
-        missingToken.parent?.is(StringLiteralExprSyntax.self) == true,
-        "Raw string delimiters should only occur in string interpolation and at the end of a string literal"
+        parent.is(StringLiteralExprSyntax.self) || parent.is(RegexLiteralExprSyntax.self),
+        "Raw string delimiters should only occur in string interpolation and at the end of a string or regex literal"
       )
-      message = .tooManyClosingRawStringDelimiters
+      message = isTooMany ? StaticParserError.tooManyClosingPoundDelimiters : .tooFewClosingPoundDelimiters
     }
     let fixIt = FixIt(
-      message: .removeExtraneousDelimiters,
+      message: isTooMany ? .removeExtraneousDelimiters : .insertExtraClosingPounds,
       changes: [
         .makeMissing(invalidToken),
         .makePresentBeforeTrivia(missingToken),

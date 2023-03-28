@@ -42,6 +42,7 @@ add_swift_host_library(SwiftParser
   Lexer/Lexeme.swift
   Lexer/LexemeSequence.swift
   Lexer/Lexer.swift
+  Lexer/RegexLiteralLexer.swift
   Lexer/UnicodeScalarExtensions.swift
 )
 

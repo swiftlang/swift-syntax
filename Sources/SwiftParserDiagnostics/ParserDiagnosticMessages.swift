@@ -197,8 +197,11 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var subscriptsCannotHaveNames: Self {
     .init("subscripts cannot have a name")
   }
-  public static var tooManyClosingRawStringDelimiters: Self {
+  public static var tooManyClosingPoundDelimiters: Self {
     .init("too many '#' characters in closing delimiter")
+  }
+  public static var tooFewClosingPoundDelimiters: Self {
+    .init("expected additional '#' characters in closing delimiter")
   }
   public static var tooManyRawStringDelimitersToStartInterpolation: Self {
     .init("too many '#' characters to start string interpolation")
@@ -518,6 +521,9 @@ extension FixItMessage where Self == StaticParserFixIt {
   }
   public static var removeExtraneousDelimiters: Self {
     .init("remove extraneous delimiters")
+  }
+  public static var insertExtraClosingPounds: Self {
+    .init("insert additional closing '#' delimiters")
   }
   public static var removeExtraneousWhitespace: Self {
     .init("remove whitespace")

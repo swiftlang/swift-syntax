@@ -304,7 +304,7 @@ public struct DiagnosticsFormatter {
         for diag in diags.dropLast(1) {
           annotatedSource.append("\(preMessage)├─ \(colorizeIfRequested(diag.diagMessage))\n")
         }
-        annotatedSource.append("\(preMessage)╰─ \(colorizeIfRequested(diags.last!.diagMessage))\n")
+        annotatedSource.append("\(preMessage)└─ \(colorizeIfRequested(diags.last!.diagMessage))\n")
       }
 
       // Add suffix text.

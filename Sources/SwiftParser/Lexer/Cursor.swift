@@ -1969,7 +1969,23 @@ extension Lexer.Cursor {
     if self.input.baseAddress! - tokStart.input.baseAddress! == 1 {
       switch tokStart.peek() {
       case UInt8(ascii: "="):
-        return Lexer.Result(.equal)
+        if leftBound != rightBound {
+          var errorPos = tokStart
+
+          if rightBound {
+            _ = errorPos.advance()
+          }
+
+          return Lexer.Result(
+            .equal,
+            error: LexingDiagnostic(
+              .equalMustHaveConsistentWhitespaceOnBothSides,
+              position: errorPos
+            )
+          )
+        } else {
+          return Lexer.Result(.equal)
+        }
       case UInt8(ascii: "&"):
         if leftBound == rightBound || leftBound {
           break

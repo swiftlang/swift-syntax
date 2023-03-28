@@ -58,6 +58,13 @@ extension CompilerPluginMessageHandler {
         let rewritten = try _openExistential(macroSyntax, do: _expand)
         expandedSource = CodeBlockItemListSyntax(rewritten.map { CodeBlockItemSyntax(item: .decl($0)) }).description
 
+      case let codeItemMacroDef as CodeItemMacro.Type:
+        func _expand<Node: FreestandingMacroExpansionSyntax>(node: Node) throws -> [CodeBlockItemSyntax] {
+          try codeItemMacroDef.expansion(of: node, in: context)
+        }
+        let rewritten = try _openExistential(macroSyntax, do: _expand)
+        expandedSource = CodeBlockItemListSyntax(rewritten).description
+
       default:
         throw MacroExpansionError.unmathedMacroRole
       }

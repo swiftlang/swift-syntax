@@ -1772,6 +1772,8 @@ extension Lexer.Cursor {
   }
 
   mutating func lexInStringLiteral(stringLiteralKind: StringLiteralKind, delimiterLength: Int) -> Lexer.Result {
+    if self.isAtEndOfFile { return .init(.eof) }
+
     var error: LexingDiagnostic? = nil
 
     while true {

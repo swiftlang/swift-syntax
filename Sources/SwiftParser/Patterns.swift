@@ -141,7 +141,7 @@ extension Parser {
         return RawPatternSyntax(
           RawIdentifierPatternSyntax(
             RawUnexpectedNodesSyntax([keyword], arena: self.arena),
-            identifier: missingToken(.identifier, text: nil),
+            identifier: missingToken(.identifier),
             arena: self.arena
           )
         )
@@ -178,7 +178,7 @@ extension Parser {
       // Recovery if the user forgot to add ':'
       let result = self.parseResultType()
       type = RawTypeAnnotationSyntax(
-        colon: self.missingToken(.colon, text: nil),
+        colon: self.missingToken(.colon),
         type: result,
         arena: self.arena
       )

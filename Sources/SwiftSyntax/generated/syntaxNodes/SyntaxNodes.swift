@@ -36,7 +36,7 @@ public struct AccessPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil, 
       _ unexpectedBeforeName: UnexpectedNodesSyntax? = nil, 
-      name: TokenSyntax = .identifier("IdentifierToken"), 
+      name: TokenSyntax, 
       _ unexpectedBetweenNameAndTrailingDot: UnexpectedNodesSyntax? = nil, 
       trailingDot: TokenSyntax? = nil, 
       _ unexpectedAfterTrailingDot: UnexpectedNodesSyntax? = nil, 

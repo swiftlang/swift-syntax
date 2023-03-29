@@ -932,7 +932,7 @@ extension Parser {
       return nil
     }
 
-    return self.expectIdentifierWithoutRecovery()
+    return self.expectWithoutRecovery(.identifier)
   }
 }
 

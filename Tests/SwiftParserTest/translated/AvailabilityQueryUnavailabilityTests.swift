@@ -441,13 +441,28 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: (good first issue) Old parser expected error on line 2: #available cannot be used as an expression, did you mean to use '#unavailable'?, Fix-It replacements: 4 - 14 = '#unavailable', 18 - 27 = ''
-        DiagnosticSpec(message: "unexpected code '== false' in 'if' statement")
+        DiagnosticSpec(message: "#available cannot be used as an expression, did you mean to use '#unavailable'?", fixIts: ["replace '#available(*) == false' with '#unavailable(*)'"])
       ]
     )
   }
 
   func testAvailabilityQueryUnavailability34b() {
+    assertParse(
+      """
+      // Diagnose wrong spellings of unavailability
+      if #available(*) 1️⃣== false && 2️⃣true {
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '== false &&' in 'if' statement"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ',' in 'if' statement", fixIts: ["insert ','"]),
+        // TODO: Old parser expected error on line 2: #available cannot be used as an expression, did you mean to use '#unavailable'?, Fix-It replacements: 4 - 14 = '#unavailable', 18 - 27 = ''
+        // TODO: Old parser expected error on line 2: expected ',' joining parts of a multi-clause condition, Fix-It replacements: 27 - 28 = ','
+      ]
+    )
+  }
+
+  func testAvailabilityQueryUnavailability34c() {
     assertParse(
       """
       if !1️⃣#available(*) {

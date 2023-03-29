@@ -112,13 +112,23 @@ func nodesDescription<SyntaxType: SyntaxProtocol>(_ nodes: [SyntaxType], format:
 func nodesDescriptionAndCommonParent<SyntaxType: SyntaxProtocol>(_ nodes: [SyntaxType], format: Bool) -> (commonAncestor: Syntax?, description: String) {
   let missingSyntaxNodes = nodes.map(Syntax.init)
 
-  // If all tokens in the parent are missing, return the parent type name.
+  let isOnlyTokenWithNonMissingText: Bool
+  if let token = nodes.only?.as(TokenSyntax.self) {
+    isOnlyTokenWithNonMissingText = token.text != ""
+  } else {
+    isOnlyTokenWithNonMissingText = false
+  }
+
+  // If all tokens in the parent are missing, return the parent type name unless
+  // we are replacing by a single token that has explicit text, in which case we
+  // return that explicit text.
   if let commonAncestor = findCommonAncestor(missingSyntaxNodes),
     commonAncestor.isMissingAllTokens,
     let firstToken = commonAncestor.firstToken(viewMode: .all),
     let lastToken = commonAncestor.lastToken(viewMode: .all),
     missingSyntaxNodes.contains(Syntax(firstToken)),
-    missingSyntaxNodes.contains(Syntax(lastToken))
+    missingSyntaxNodes.contains(Syntax(lastToken)),
+    !isOnlyTokenWithNonMissingText
   {
     if let nodeTypeName = commonAncestor.nodeTypeNameForDiagnostics(allowBlockNames: true) {
       return (commonAncestor, nodeTypeName)

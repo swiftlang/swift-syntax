@@ -246,6 +246,15 @@ public struct AsyncMustPrecedeThrows: ParserError {
   }
 }
 
+public struct AvailabilityConditionAsExpression: ParserError {
+  public let availabilityToken: TokenSyntax
+  public let negatedAvailabilityToken: TokenSyntax
+
+  public var message: String {
+    return "\(availabilityToken) cannot be used as an expression, did you mean to use '\(negatedAvailabilityToken)'?"
+  }
+}
+
 public struct AvailabilityConditionInExpression: ParserError {
   public let availabilityCondition: AvailabilityConditionSyntax
 
@@ -608,9 +617,9 @@ public struct RemoveNodesFixIt: ParserFixIt {
 public struct ReplaceTokensFixIt: ParserFixIt {
   public let replaceTokens: [TokenSyntax]
 
-  public let replacement: TokenSyntax
+  public let replacements: [TokenSyntax]
 
   public var message: String {
-    "replace \(nodesDescription(replaceTokens, format: false)) with '\(replacement.text)'"
+    "replace \(nodesDescription(replaceTokens, format: false)) with \(nodesDescription(replacements, format: false))"
   }
 }

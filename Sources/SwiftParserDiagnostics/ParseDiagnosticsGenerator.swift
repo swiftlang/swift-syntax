@@ -462,6 +462,33 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if shouldSkip(node) {
       return .skipChildren
     }
+    if let unexpected = node.unexpectedBetweenConditionAndTrailingComma,
+       let availability = node.condition.as(AvailabilityConditionSyntax.self),
+       let (comparisonOperator, falseKeyword) = unexpected.twoTekens(firstSatisfying: { $0.tokenKind == .binaryOperator("==") },
+                                                                     secondSatisfying: { $0.tokenKind == .keyword(.false) })
+    {
+      // Diagnose #available used as an expression
+      let availabilityKeyword = availability.availabilityKeyword
+      let negatedAvailabilityKeyword = availabilityKeyword.negatedAvailabilityKeyword
+      addDiagnostic(
+        unexpected,
+        AvailabilityConditionAsExpression(availabilityToken: availabilityKeyword, negatedAvailabilityToken: negatedAvailabilityKeyword),
+        fixIts: [
+          FixIt(
+            message: ReplaceTokensFixIt(replaceTokens: [availabilityKeyword], replacement: negatedAvailabilityKeyword),
+            changes: [
+              .replace(oldNode: Syntax(availabilityKeyword), newNode: Syntax(negatedAvailabilityKeyword)),
+              .replaceTrailingTrivia(token: availability.rightParen, newTrivia: .zero),
+            ]
+          ),
+          FixIt(
+            message: RemoveNodesFixIt([comparisonOperator, falseKeyword]),
+            changes: .makeMissing([comparisonOperator, falseKeyword])
+          ),
+        ],
+        handledNodes: [unexpected.id]
+      )
+    }
     if let trailingComma = node.trailingComma {
       exchangeTokens(
         unexpected: node.unexpectedBetweenConditionAndTrailingComma,
@@ -469,28 +496,6 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         correctTokens: [node.trailingComma],
         message: { _ in .joinConditionsUsingComma },
         moveFixIt: { ReplaceTokensFixIt(replaceTokens: $0, replacement: trailingComma) }
-      )
-    } else if let unexpected = node.unexpectedBetweenConditionAndTrailingComma,
-      let availability = node.condition.as(AvailabilityConditionSyntax.self),
-      let comparisonOperator = unexpected.oneTokenSatisfying(satisfying: { $0.tokenKind == .binaryOperator("==") }),
-      let falseKeyword = unexpected.oneTokenSatisfying(satisfying: { $0.tokenKind == .keyword(.false) })
-    {
-      // Diagnose #available used as an expression
-      let negatedAvailabilityKeyword = availability.availabilityKeyword.negatedAvailabilityKeyword
-      addDiagnostic(
-        unexpected,
-        AvailabilityConditionAsExpression(availabilityCondition: availability.availabilityKeyword, unavailabilityCondition: negatedAvailabilityKeyword),
-        fixIts: [
-          FixIt(
-            message: ReplaceTokensFixIt(replaceTokens: [comparisonOperator], replacement: negatedAvailabilityKeyword),
-            changes: [
-              .makeMissing([comparisonOperator]),
-              .makePresent(negatedAvailabilityKeyword),
-            ]
-          ),
-          FixIt(message: RemoveNodesFixIt([comparisonOperator, falseKeyword]), changes: .makeMissing([comparisonOperator, falseKeyword])),
-        ],
-        handledNodes: [unexpected.id]
       )
     }
     return .visitChildren

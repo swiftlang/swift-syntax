@@ -40,11 +40,13 @@ extension UnexpectedNodesSyntax {
     }
   }
 
-  /// If this only contains one tokens satisfying `condition`, return that token, otherwise return `nil`.
-  func oneTokenSatisfying(satisfying condition: (TokenSyntax) -> Bool) -> TokenSyntax? {
-    let tokens = tokens(satisfying: condition)
-    if tokens.count == 1 {
-      return tokens.first
+  /// If this only contains two tokens, one satisfying `firstCondition`,  and one satisfying `secondCondition`,
+  /// return these tokens as a tuple, otherwise return `nil`. The function is not order sensitive
+  func twoTekens(firstSatisfying firstCondition: (TokenSyntax) -> Bool, secondSatisfying secondCondition: (TokenSyntax) -> Bool) -> (first: TokenSyntax, second: TokenSyntax)? {
+    let firstTokens = tokens(satisfying: firstCondition)
+    let secondTokens = tokens(satisfying: secondCondition)
+    if firstTokens.count == 1, secondTokens.count == 1, firstTokens.first != secondTokens.first {
+      return (firstTokens[0], secondTokens[0])
     } else {
       return nil
     }

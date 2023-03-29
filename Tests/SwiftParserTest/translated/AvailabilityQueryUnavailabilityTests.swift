@@ -441,13 +441,8 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "#available cannot be used as an expression, did you mean to use '#unavailable'?")
-      ],
-      fixedSource: """
-        // Diagnose wrong spellings of unavailability
-        if #available(*) {
-        }
-        """
+        DiagnosticSpec(message: "#available cannot be used as an expression, did you mean to use '#unavailable'?", fixIts: ["replace '#available' with '#unavailable'", "remove '== false'"])
+      ]
     )
   }
 

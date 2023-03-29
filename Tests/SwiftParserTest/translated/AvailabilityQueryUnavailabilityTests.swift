@@ -436,7 +436,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   func testAvailabilityQueryUnavailability34a() {
     assertParse(
       """
-      // Diagnose wrong spellings of unavailability
+      // Diagnose wrong spellings of unavailabil  ity
       if #available(*) 1️⃣== false {
       }
       """,

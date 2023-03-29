@@ -16,7 +16,7 @@ import XCTest
 
 final class DiagnoseDynamicReplacementTests: XCTestCase {
   func testDiagnoseDynamicReplacement1() {
-    AssertParse(
+    assertParse(
       """
       dynamic func dynamic_replaceable() {
       }
@@ -25,7 +25,7 @@ final class DiagnoseDynamicReplacementTests: XCTestCase {
   }
 
   func testDiagnoseDynamicReplacement2() {
-    AssertParse(
+    assertParse(
       """
       @_dynamicReplacement1️⃣
       func test_dynamic_replacement_for() {
@@ -38,7 +38,7 @@ final class DiagnoseDynamicReplacementTests: XCTestCase {
   }
 
   func testDiagnoseDynamicReplacement3() {
-    AssertParse(
+    assertParse(
       """
       @_dynamicReplacement(1️⃣
       func test_dynamic_replacement_for2() {
@@ -52,7 +52,7 @@ final class DiagnoseDynamicReplacementTests: XCTestCase {
   }
 
   func testDiagnoseDynamicReplacement4() {
-    AssertParse(
+    assertParse(
       """
       @_dynamicReplacementℹ️(for: dynamically_replaceable() 1️⃣
       func test_dynamic_replacement_for3() {

@@ -49,7 +49,7 @@ final class TypeCompositionTests: XCTestCase {
       var parser = Parser(component)
       let componentSyntax = TypeSyntax.parse(from: &parser)
 
-      AssertParse(
+      assertParse(
         "\(component) & \(component) & \(component)",
         TypeSyntax.parse,
         substructure: Syntax(

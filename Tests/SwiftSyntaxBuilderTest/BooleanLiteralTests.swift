@@ -27,7 +27,7 @@ final class BooleanLiteralTests: XCTestCase {
 
     for (line, testCase) in testCases {
       let (builder, expected) = testCase
-      AssertBuildResult(builder, expected, line: line)
+      assertBuildResult(builder, expected, line: line)
     }
   }
 }

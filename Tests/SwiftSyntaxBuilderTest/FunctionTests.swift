@@ -24,7 +24,7 @@ final class FunctionTests: XCTestCase {
       StmtSyntax("return fibonacci(n - 1) + self.fibonacci(n - 2)")
     }
 
-    AssertBuildResult(
+    assertBuildResult(
       buildable,
       """
       func fibonacci(_ n: Int) -> Int {
@@ -239,7 +239,7 @@ final class FunctionTests: XCTestCase {
 
     for (line, testCase) in testCases {
       let (builder, expected) = testCase
-      AssertBuildResult(builder, expected, line: line)
+      assertBuildResult(builder, expected, line: line)
     }
   }
 
@@ -249,7 +249,7 @@ final class FunctionTests: XCTestCase {
         TupleExprElementSyntax(label: param.isMultiple(of: 2) ? "p\(param)" : nil, expression: ExprSyntax("value\(raw: param)"))
       }
     }
-    AssertBuildResult(buildable, "test(value1, p2: value2, value3, p4: value4, value5)")
+    assertBuildResult(buildable, "test(value1, p2: value2, value3, p4: value4, value5)")
   }
 
   func testFunctionDeclBuilder() {
@@ -261,7 +261,7 @@ final class FunctionTests: XCTestCase {
       """
     )
 
-    AssertBuildResult(
+    assertBuildResult(
       builder,
       """
       func test(_ p1: Int, p2: Int, _ p3: Int, p4: Int, _ p5: Int) -> Int {
@@ -286,7 +286,7 @@ final class FunctionTests: XCTestCase {
       """
     )
 
-    AssertBuildResult(
+    assertBuildResult(
       builder,
       """
       func test(
@@ -315,7 +315,7 @@ final class FunctionTests: XCTestCase {
       """
     )
 
-    AssertBuildResult(
+    assertBuildResult(
       builder,
       """
       test(
@@ -331,14 +331,14 @@ final class FunctionTests: XCTestCase {
 
   func testParensEmittedForNoArgumentsAndNoTrailingClosure() {
     let buildable = FunctionCallExprSyntax(callee: ExprSyntax("test"))
-    AssertBuildResult(buildable, "test()")
+    assertBuildResult(buildable, "test()")
   }
 
   func testParensEmittedForArgumentAndTrailingClosure() {
     let buildable = FunctionCallExprSyntax(callee: ExprSyntax("test"), trailingClosure: ClosureExprSyntax {}) {
       TupleExprElementSyntax(expression: ExprSyntax("42"))
     }
-    AssertBuildResult(buildable, "test(42) {\n}")
+    assertBuildResult(buildable, "test(42) {\n}")
   }
 
   func testParensOmittedForNoArgumentsAndTrailingClosure() {
@@ -349,7 +349,7 @@ final class FunctionTests: XCTestCase {
     })
     let buildable = FunctionCallExprSyntax(callee: ExprSyntax("test"), trailingClosure: closure)
 
-    AssertBuildResult(
+    assertBuildResult(
       buildable,
       """
       test {

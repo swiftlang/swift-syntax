@@ -16,7 +16,7 @@ import XCTest
 
 final class UnclosedStringInterpolationTests: XCTestCase {
   func testUnclosedStringInterpolation1() {
-    AssertParse(
+    assertParse(
       #"""
       let mid = "pete"
       """#
@@ -24,7 +24,7 @@ final class UnclosedStringInterpolationTests: XCTestCase {
   }
 
   func testUnclosedStringInterpolation2() {
-    AssertParse(
+    assertParse(
       ##"""
       _ = "mid == \(pete1️⃣"
       """##,
@@ -35,7 +35,7 @@ final class UnclosedStringInterpolationTests: XCTestCase {
   }
 
   func testUnclosedStringInterpolation3() {
-    AssertParse(
+    assertParse(
       ##"""
       let theGoat = "kanye \("1️⃣
       """##,
@@ -48,7 +48,7 @@ final class UnclosedStringInterpolationTests: XCTestCase {
   }
 
   func testUnclosedStringInterpolation4() {
-    AssertParse(
+    assertParse(
       ##"""
       let equation1 = "2 + 2 = \(2 + 21️⃣"
       """##,
@@ -59,7 +59,7 @@ final class UnclosedStringInterpolationTests: XCTestCase {
   }
 
   func testUnclosedStringInterpolation5() {
-    AssertParse(
+    assertParse(
       ##"""
       let s = "\(x1️⃣"; print(x)
       """##,
@@ -70,7 +70,7 @@ final class UnclosedStringInterpolationTests: XCTestCase {
   }
 
   func testUnclosedStringInterpolation6() {
-    AssertParse(
+    assertParse(
       ##"""
       let zzz = "\(x1️⃣; print(x)2️⃣
       """##,
@@ -82,7 +82,7 @@ final class UnclosedStringInterpolationTests: XCTestCase {
   }
 
   func testUnclosedStringInterpolation7() {
-    AssertParse(
+    assertParse(
       ##"""
       let goatedAlbum = "The Life Of \("Pablo"1️⃣
       """##,
@@ -94,7 +94,7 @@ final class UnclosedStringInterpolationTests: XCTestCase {
   }
 
   func testUnclosedStringInterpolation8() {
-    AssertParse(
+    assertParse(
       ##"""
       _ = """
       \(
@@ -109,7 +109,7 @@ final class UnclosedStringInterpolationTests: XCTestCase {
   }
 
   func testSkipUnexpectedOpeningParensInStringLiteral() {
-    AssertParse(
+    assertParse(
       #"""
       "\(e 1️⃣H()r2️⃣
       """#,
@@ -121,7 +121,7 @@ final class UnclosedStringInterpolationTests: XCTestCase {
   }
 
   func testUnterminatedStringLiteralInInterpolation() {
-    AssertParse(
+    assertParse(
       #"""
       "\("1️⃣
       """#,

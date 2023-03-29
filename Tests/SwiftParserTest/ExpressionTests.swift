@@ -16,15 +16,15 @@ import XCTest
 
 final class ExpressionTests: XCTestCase {
   func testTernary() {
-    AssertParse(
+    assertParse(
       "let a =1️⃣",
       diagnostics: [
         DiagnosticSpec(message: "expected expression in variable")
       ]
     )
 
-    AssertParse("a ? b : c ? d : e")
-    AssertParse(
+    assertParse("a ? b : c ? d : e")
+    assertParse(
       "a ? b :1️⃣",
       diagnostics: [
         DiagnosticSpec(message: "expected expression after ternary operator")
@@ -33,19 +33,19 @@ final class ExpressionTests: XCTestCase {
   }
 
   func testSequence() {
-    AssertParse(
+    assertParse(
       "A as? B + C -> D is E as! F ? G = 42 : H"
     )
   }
 
   func testClosureLiterals() {
-    AssertParse(
+    assertParse(
       #"""
       { @MainActor (a: Int) async -> Int in print("hi") }
       """#
     )
 
-    AssertParse(
+    assertParse(
       """
       { [weak self, weak weakB = b] foo in
         return 0
@@ -55,7 +55,7 @@ final class ExpressionTests: XCTestCase {
   }
 
   func testTrailingClosures() {
-    AssertParse(
+    assertParse(
       """
       var button =  View.Button[5, 4, 3
       ] {
@@ -65,12 +65,12 @@ final class ExpressionTests: XCTestCase {
       """
     )
 
-    AssertParse("compactMap { (parserDiag) in }")
+    assertParse("compactMap { (parserDiag) in }")
   }
 
   func testSequenceExpressions() {
-    AssertParse("await a()")
-    AssertParse(
+    assertParse("await a()")
+    assertParse(
       """
       async let child = testNestedTaskPriority(basePri: basePri, curPri: curPri)
       await child
@@ -79,11 +79,11 @@ final class ExpressionTests: XCTestCase {
   }
 
   func testNestedTypeSpecialization() {
-    AssertParse("Swift.Array<Array<Foo>>()")
+    assertParse("Swift.Array<Array<Foo>>()")
   }
 
   func testObjectLiterals() {
-    AssertParse(
+    assertParse(
       """
       #colorLiteral()
       #colorLiteral(red: 1.0)
@@ -92,7 +92,7 @@ final class ExpressionTests: XCTestCase {
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       #imageLiteral()
       #imageLiteral(resourceName: "foo.png")
@@ -103,7 +103,7 @@ final class ExpressionTests: XCTestCase {
   }
 
   func testKeypathExpression() {
-    AssertParse(
+    assertParse(
       #"""
       \.?.foo
       """#,
@@ -138,13 +138,13 @@ final class ExpressionTests: XCTestCase {
       )
     )
 
-    AssertParse(
+    assertParse(
       #"""
       children.filter(\.type.defaultInitialization.isEmpty)
       """#
     )
 
-    AssertParse(
+    assertParse(
       #"""
       \a
       cℹ️[1️⃣
@@ -154,79 +154,79 @@ final class ExpressionTests: XCTestCase {
       ]
     )
 
-    AssertParse(
+    assertParse(
       #"""
       _ = \Lens<[Int]>.[0]
       """#
     )
 
-    AssertParse(
+    assertParse(
       #"""
       \(UnsafeRawPointer?, String).1
       """#
     )
 
-    AssertParse(
+    assertParse(
       #"""
       \a.b.c
       """#
     )
 
-    AssertParse(
+    assertParse(
       #"""
       \ABCProtocol[100]
       """#
     )
 
-    AssertParse(
+    assertParse(
       #"""
       \S<T>.x
       """#
     )
 
-    AssertParse(
+    assertParse(
       #"""
       \TupleProperties.self
       """#
     )
 
-    AssertParse(
+    assertParse(
       #"""
       \Tuple<Int, Int>.self
       """#
     )
 
-    AssertParse(
+    assertParse(
       #"""
       \T.extension
       """#
     )
 
-    AssertParse(
+    assertParse(
       #"""
       \T.12[14]
       """#
     )
 
-    AssertParse(
+    assertParse(
       #"""
       \String?.!.count.?
       """#
     )
 
-    AssertParse(
+    assertParse(
       #"""
       \Optional.?!?!?!?
       """#
     )
 
-    AssertParse(
+    assertParse(
       #"""
       \Optional.?!?!?!?.??!
       """#
     )
 
-    AssertParse(
+    assertParse(
       #"""
       _ = distinctUntilChanged(\ .?.status)
       _ = distinctUntilChanged(\.?.status)
@@ -261,7 +261,7 @@ final class ExpressionTests: XCTestCase {
     for (line, rootType) in cases {
       var parser = Parser(rootType)
 
-      AssertParse(
+      assertParse(
         "\\\(rootType).y",
         ExprSyntax.parse,
         substructure: Syntax(
@@ -283,7 +283,7 @@ final class ExpressionTests: XCTestCase {
   }
 
   func testBasicLiterals() {
-    AssertParse(
+    assertParse(
       """
       #file
       #fileID
@@ -305,7 +305,7 @@ final class ExpressionTests: XCTestCase {
   }
 
   func testRegexLiteral() {
-    AssertParse(
+    assertParse(
       #"""
       /(?<identifier>[[:alpha:]]\w*) = (?<hex>[0-9A-F]+)/
       """#
@@ -313,19 +313,19 @@ final class ExpressionTests: XCTestCase {
   }
 
   func testInitializerExpression() {
-    AssertParse("Lexer.Cursor(input: input, previous: 0)")
+    assertParse("Lexer.Cursor(input: input, previous: 0)")
   }
 
   func testCollectionLiterals() {
-    AssertParse("[Dictionary<String, Int>: Int]()")
-    AssertParse("[(Int, Double) -> Bool]()")
-    AssertParse("[(Int, Double) -> Bool]()")
-    AssertParse("_ = [@convention(block) ()  -> Int]().count")
-    AssertParse("A<@convention(c) () -> Int32>.c()")
-    AssertParse("A<(@autoclosure @escaping () -> Int, Int) -> Void>.c()")
-    AssertParse("_ = [String: (@escaping (A<B>) -> Int) -> Void]().keys")
+    assertParse("[Dictionary<String, Int>: Int]()")
+    assertParse("[(Int, Double) -> Bool]()")
+    assertParse("[(Int, Double) -> Bool]()")
+    assertParse("_ = [@convention(block) ()  -> Int]().count")
+    assertParse("A<@convention(c) () -> Int32>.c()")
+    assertParse("A<(@autoclosure @escaping () -> Int, Int) -> Void>.c()")
+    assertParse("_ = [String: (@escaping (A<B>) -> Int) -> Void]().keys")
 
-    AssertParse(
+    assertParse(
       """
       [
         condition ? firstOption : secondOption,
@@ -334,7 +334,7 @@ final class ExpressionTests: XCTestCase {
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       [1️⃣
         ,2️⃣
@@ -345,7 +345,7 @@ final class ExpressionTests: XCTestCase {
       ]
     )
 
-    AssertParse(
+    assertParse(
       """
       ([1:1️⃣)
       """,
@@ -355,7 +355,7 @@ final class ExpressionTests: XCTestCase {
       ]
     )
 
-    AssertParse(
+    assertParse(
       """
       [
         #line : Calendar(identifier: .gregorian),
@@ -391,7 +391,7 @@ final class ExpressionTests: XCTestCase {
       substructureAfterMarker: "1️⃣"
     )
 
-    AssertParse(
+    assertParse(
       """
       #fancyMacro<Arg1, Arg2>(hello: "me")
       """
@@ -399,19 +399,19 @@ final class ExpressionTests: XCTestCase {
   }
 
   func testInterpolatedStringLiterals() {
-    AssertParse(
+    assertParse(
       #"""
       return "Fixit: \(range.debugDescription) Text: \"\(text)\""
       """#
     )
 
-    AssertParse(
+    assertParse(
       #"""
       "text \(array.map({ "\($0)" }).joined(separator: ",")) text"
       """#
     )
 
-    AssertParse(
+    assertParse(
       #"""
       """
       \(gen(xx) { (x) in
@@ -423,7 +423,7 @@ final class ExpressionTests: XCTestCase {
       """#
     )
 
-    AssertParse(
+    assertParse(
       #"""
       "\(()1️⃣
       """#,
@@ -435,26 +435,26 @@ final class ExpressionTests: XCTestCase {
   }
 
   func testStringLiterals() {
-    AssertParse(
+    assertParse(
       #"""
       "–"
       """#
     )
 
-    AssertParse(
+    assertParse(
       #"""
       ""
       """#
     )
 
-    AssertParse(
+    assertParse(
       #"""
       """
       """
       """#
     )
 
-    AssertParse(
+    assertParse(
       #"""
       " >> \( abc 1️⃣} ) << "
       """#,
@@ -463,7 +463,7 @@ final class ExpressionTests: XCTestCase {
       ]
     )
 
-    AssertParse(
+    assertParse(
       ##"""
 
 
@@ -475,7 +475,7 @@ final class ExpressionTests: XCTestCase {
       """##
     )
 
-    AssertParse(
+    assertParse(
       #"""
       ℹ️"\",1️⃣
       """#,
@@ -489,7 +489,7 @@ final class ExpressionTests: XCTestCase {
       ]
     )
 
-    AssertParse(
+    assertParse(
       #"""
       "(?i)\\b((?:[a-z][\\w-]+:(?:/{1,3}|[a-z0-9%])|www\\d{0,3}[.]|[a-z0-9.\\-]+[.][a-z]{2,4}/)" +
       "(?:[^\\s()<>]+|\\(([^\\s()<>]+|(\\([^\\s()<>]+\\)))*\\))+(?:\\(([^\\s()<>]+|(\\([^\\s()<>]+\\)))*" +
@@ -497,7 +497,7 @@ final class ExpressionTests: XCTestCase {
       """#
     )
 
-    AssertParse(
+    assertParse(
       #"""
       """
           Custom(custom: \(interval),\
@@ -508,32 +508,32 @@ final class ExpressionTests: XCTestCase {
       """#
     )
 
-    AssertParse(
+    assertParse(
       #"""
       "Founded: \(Date.appleFounding, format: 📆)"
       """#
     )
 
-    AssertParse(
+    assertParse(
       """
 
       ""
       """
     )
 
-    AssertParse(
+    assertParse(
       ##"""
       #"""#
       """##
     )
 
-    AssertParse(
+    assertParse(
       ##"""
       #"""""#
       """##
     )
 
-    AssertParse(
+    assertParse(
       ##"""
       #"""
       multiline raw
@@ -541,13 +541,13 @@ final class ExpressionTests: XCTestCase {
       """##
     )
 
-    AssertParse(
+    assertParse(
       #"""
       "\(x)"
       """#
     )
 
-    AssertParse(
+    assertParse(
       ##"""
       ℹ️""""1️⃣
       """##,
@@ -561,7 +561,7 @@ final class ExpressionTests: XCTestCase {
       ]
     )
 
-    AssertParse(
+    assertParse(
       ##"""
       """""1️⃣
       """##,
@@ -570,7 +570,7 @@ final class ExpressionTests: XCTestCase {
       ]
     )
 
-    AssertParse(
+    assertParse(
       ##"""
       """1️⃣"""
       """##,
@@ -583,7 +583,7 @@ final class ExpressionTests: XCTestCase {
         """##
     )
 
-    AssertParse(
+    assertParse(
       ##"""
       #"1️⃣
       """##,
@@ -592,7 +592,7 @@ final class ExpressionTests: XCTestCase {
       ]
     )
 
-    AssertParse(
+    assertParse(
       ##"""
       #"""1️⃣
       """##,
@@ -601,7 +601,7 @@ final class ExpressionTests: XCTestCase {
       ]
     )
 
-    AssertParse(
+    assertParse(
       ##"""
       #"""a1️⃣
       """##,
@@ -610,7 +610,7 @@ final class ExpressionTests: XCTestCase {
       ]
     )
 
-    AssertParse(
+    assertParse(
       ###""1️⃣\2️⃣"###,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "invalid escape sequence in literal"),
@@ -620,14 +620,14 @@ final class ExpressionTests: XCTestCase {
   }
 
   func testAdjacentRawStringLiterals() {
-    AssertParse(
+    assertParse(
       """
       "normal literal"
       #"raw literal"#
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       #"raw literal"#
       #"second raw literal"#
@@ -636,7 +636,7 @@ final class ExpressionTests: XCTestCase {
   }
 
   func testSingleQuoteStringLiteral() {
-    AssertParse(
+    assertParse(
       #"""
       1️⃣'red'
       """#,
@@ -648,7 +648,7 @@ final class ExpressionTests: XCTestCase {
         """
     )
 
-    AssertParse(
+    assertParse(
       #"""
        1️⃣' red ' + 1
       """#,
@@ -662,7 +662,7 @@ final class ExpressionTests: XCTestCase {
   }
 
   func testStringBogusClosingDelimiters() {
-    AssertParse(
+    assertParse(
       ##"""
       \1️⃣\(2️⃣
       """##,
@@ -672,13 +672,13 @@ final class ExpressionTests: XCTestCase {
       ]
     )
 
-    AssertParse(
+    assertParse(
       ##"""
       #"\\("#
       """##
     )
 
-    AssertParse(
+    assertParse(
       #"""
       "1️⃣
       """#,
@@ -687,7 +687,7 @@ final class ExpressionTests: XCTestCase {
       ]
     )
 
-    AssertParse(
+    assertParse(
       #"""
       "'1️⃣
       """#,
@@ -698,7 +698,7 @@ final class ExpressionTests: XCTestCase {
   }
 
   func testPoundsInStringInterpolationWhereNotNecessary() {
-    AssertParse(
+    assertParse(
       ##"""
       "1️⃣\#(1)"
       """##,
@@ -710,13 +710,13 @@ final class ExpressionTests: XCTestCase {
   }
 
   func testSubscript() {
-    AssertParse(
+    assertParse(
       """
       array[]
       """
     )
 
-    AssertParse(
+    assertParse(
       """
       text[...]
       """
@@ -724,7 +724,7 @@ final class ExpressionTests: XCTestCase {
   }
 
   func testMissingColonInTernary() {
-    AssertParse(
+    assertParse(
       "foo ? 11️⃣",
       diagnostics: [
         DiagnosticSpec(message: "expected ':' and expression after '? ...' in ternary expression")
@@ -733,7 +733,7 @@ final class ExpressionTests: XCTestCase {
   }
 
   func testBogusKeypathBaseRecovery() {
-    AssertParse(
+    assertParse(
       #"""
       func nestThoseIfs() {
         \n
@@ -749,7 +749,7 @@ final class ExpressionTests: XCTestCase {
       ]
     )
 
-    AssertParse(
+    assertParse(
       "#keyPath((b:1️⃣)2️⃣",
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected value in tuple"),
@@ -759,7 +759,7 @@ final class ExpressionTests: XCTestCase {
   }
 
   func testMissingArrowInArrowExpr() {
-    AssertParse(
+    assertParse(
       "[(Int) -> 1️⃣throws Int]()",
       diagnostics: [
         DiagnosticSpec(message: "'throws' must preceed '->'", fixIts: ["move 'throws' in front of '->'"])
@@ -767,7 +767,7 @@ final class ExpressionTests: XCTestCase {
       fixedSource: "[(Int) throws -> Int]()"
     )
 
-    AssertParse(
+    assertParse(
       "[(Int) -> 1️⃣async throws Int]()",
       diagnostics: [
         DiagnosticSpec(message: "'async throws' must preceed '->'", fixIts: ["move 'async throws' in front of '->'"])
@@ -775,7 +775,7 @@ final class ExpressionTests: XCTestCase {
       fixedSource: "[(Int) async throws -> Int]()"
     )
 
-    AssertParse(
+    assertParse(
       "let _ = [Int throws 1️⃣Int]()",
       diagnostics: [
         DiagnosticSpec(message: "expected '->' in array element")
@@ -784,7 +784,7 @@ final class ExpressionTests: XCTestCase {
   }
 
   func testBogusThrowingTernary() {
-    AssertParse(
+    assertParse(
       """
       do {
         true ? () : 1️⃣throw opaque_error()
@@ -798,7 +798,7 @@ final class ExpressionTests: XCTestCase {
   }
 
   func testClosureExpression() {
-    AssertParse(
+    assertParse(
       """
       let 1️⃣:(2️⃣..)->3️⃣
       """,
@@ -812,7 +812,7 @@ final class ExpressionTests: XCTestCase {
   }
 
   func testParseArrowExpr() {
-    AssertParse(
+    assertParse(
       "Foo 1️⃣async ->2️⃣",
       { ExprSyntax.parse(from: &$0) },
       substructure: Syntax(TokenSyntax.keyword(.async)),
@@ -824,27 +824,27 @@ final class ExpressionTests: XCTestCase {
   }
 
   func testMoveExpression() {
-    AssertParse("_move msg")
-    AssertParse("use(_move msg)")
-    AssertParse("_move msg")
-    AssertParse("let b = (_move self).buffer")
+    assertParse("_move msg")
+    assertParse("use(_move msg)")
+    assertParse("_move msg")
+    assertParse("let b = (_move self).buffer")
   }
 
   func testBorrowExpression() {
-    AssertParse("_borrow msg")
-    AssertParse("use(_borrow msg)")
-    AssertParse("_borrow msg")
-    AssertParse("let b = (_borrow self).buffer")
+    assertParse("_borrow msg")
+    assertParse("use(_borrow msg)")
+    assertParse("_borrow msg")
+    assertParse("let b = (_borrow self).buffer")
   }
 
   func testCodeCompletionExpressions() {
-    AssertParse("if !<#b1#> && !<#b2#> {}")
-    AssertParse("if <#test#> {}")
-    AssertParse("if <#b1#>, <#b2#> {}")
+    assertParse("if !<#b1#> && !<#b2#> {}")
+    assertParse("if <#test#> {}")
+    assertParse("if <#b1#>, <#b2#> {}")
   }
 
   func testKeywordApplyExpression() {
-    AssertParse(
+    assertParse(
       """
       optional(x: .some(23))
       optional(x: .none)
@@ -858,7 +858,7 @@ final class ExpressionTests: XCTestCase {
   //
   // See https://github.com/apple/swift/issues/51192 for more context here.
   func testFalseMultilineDelimiters() {
-    AssertParse(
+    assertParse(
       ###"""
       _ = #"​"​"#
 
@@ -874,7 +874,7 @@ final class ExpressionTests: XCTestCase {
   }
 
   func testOperatorReference() {
-    AssertParse(
+    assertParse(
       "reduce(0, 1️⃣+)",
       substructure: Syntax(TokenSyntax.binaryOperator("+")),
       substructureAfterMarker: "1️⃣"
@@ -885,7 +885,7 @@ final class ExpressionTests: XCTestCase {
     // N.B. This test ensures that capture list lookahead doesn't try to pair
     // the opening square bracket from the array literal with the closing
     // square bracket from the capture list.
-    AssertParse(
+    assertParse(
       """
       {
           [
@@ -900,15 +900,15 @@ final class ExpressionTests: XCTestCase {
   }
 
   func testMacroExpansionExpression() {
-    AssertParse(
+    assertParse(
       #"#file == $0.path"#
     )
 
-    AssertParse(
+    assertParse(
       #"let a = #embed("filename.txt")"#
     )
 
-    AssertParse(
+    assertParse(
       """
       #Test {
         print("This is a test")
@@ -918,7 +918,7 @@ final class ExpressionTests: XCTestCase {
   }
 
   func testNewlineInInterpolationOfSingleLineString() {
-    AssertParse(
+    assertParse(
       #"""
       "test \(label:1️⃣
       foo2️⃣)"
@@ -933,7 +933,7 @@ final class ExpressionTests: XCTestCase {
   }
 
   func testUnterminatedStringLiteral() {
-    AssertParse(
+    assertParse(
       """
       "This is unterminated1️⃣
       x
@@ -954,7 +954,7 @@ final class ExpressionTests: XCTestCase {
   }
 
   func testPostProcessMultilineStringLiteral() {
-    AssertParse(
+    assertParse(
       #"""
         """
         line 1
@@ -974,7 +974,7 @@ final class ExpressionTests: XCTestCase {
       options: [.substructureCheckTrivia]
     )
 
-    AssertParse(
+    assertParse(
       #"""
         """
         line 1 \
@@ -994,7 +994,7 @@ final class ExpressionTests: XCTestCase {
       options: [.substructureCheckTrivia]
     )
 
-    AssertParse(
+    assertParse(
       #"""
         """
         line 1
@@ -1025,7 +1025,7 @@ final class ExpressionTests: XCTestCase {
 
   func testMultiLineStringInInterpolationOfSingleLineStringLiteral() {
     // It's odd that we accept this but it matches the C++ parser's behavior.
-    AssertParse(
+    assertParse(
       #"""
       "foo\(test("""
       bar
@@ -1035,7 +1035,7 @@ final class ExpressionTests: XCTestCase {
   }
 
   func testEmptyLineInMultilineStringLiteral() {
-    AssertParse(
+    assertParse(
       #"""
         """
         line 1
@@ -1059,7 +1059,7 @@ final class ExpressionTests: XCTestCase {
       options: [.substructureCheckTrivia]
     )
 
-    AssertParse(
+    assertParse(
       #"""
         """
         line 1
@@ -1083,7 +1083,7 @@ final class ExpressionTests: XCTestCase {
   }
 
   func testUnderIndentedWhitespaceonlyLineInMultilineStringLiteral() {
-    AssertParse(
+    assertParse(
       #"""
         """
         line 1
@@ -1105,7 +1105,7 @@ final class ExpressionTests: XCTestCase {
   }
 
   func testMissingExpresssionInSequenceExpression() {
-    AssertParse(
+    assertParse(
       """
       a ? b :1️⃣
       """,
@@ -1117,7 +1117,7 @@ final class ExpressionTests: XCTestCase {
         """
     )
 
-    AssertParse(
+    assertParse(
       """
       a +1️⃣
       """,
@@ -1129,7 +1129,7 @@ final class ExpressionTests: XCTestCase {
         """
     )
 
-    AssertParse(
+    assertParse(
       """
       a as1️⃣
       """,
@@ -1141,7 +1141,7 @@ final class ExpressionTests: XCTestCase {
         """
     )
 
-    AssertParse(
+    assertParse(
       """
       a is1️⃣
       """,
@@ -1155,7 +1155,7 @@ final class ExpressionTests: XCTestCase {
   }
 
   func testNonBreakingSpace() {
-    AssertParse(
+    assertParse(
       "a 1️⃣\u{a0}+ 2",
       diagnostics: [
         DiagnosticSpec(message: "non-breaking space (U+00A0) used instead of regular space", severity: .warning, fixIts: ["replace non-breaking space with ' '"])
@@ -1165,7 +1165,7 @@ final class ExpressionTests: XCTestCase {
   }
 
   func testTabsIndentationInMultilineStringLiteral() {
-    AssertParse(
+    assertParse(
       #"""
       _ = """
       \#taq
@@ -1175,7 +1175,7 @@ final class ExpressionTests: XCTestCase {
   }
 
   func testMixedIndentationInMultilineStringLiteral() {
-    AssertParse(
+    assertParse(
       #"""
       _ = """
       \#t aq
@@ -1185,7 +1185,7 @@ final class ExpressionTests: XCTestCase {
   }
 
   func testNulCharacterInSourceFile() {
-    AssertParse(
+    assertParse(
       "let a = 1️⃣\u{0}1",
       diagnostics: [
         DiagnosticSpec(message: "nul character embedded in middle of file", severity: .warning)
@@ -1204,7 +1204,7 @@ final class MemberExprTests: XCTestCase {
       #line: "\n  member",
     ]
     for (line, trailing) in cases {
-      AssertParse(
+      assertParse(
         "someVar.1️⃣\(trailing)",
         diagnostics: [DiagnosticSpec(message: "expected name in member access")],
         fixedSource: "someVar.<#identifier#>\(trailing)",
@@ -1280,7 +1280,7 @@ final class StatementExpressionTests: XCTestCase {
     )
   }
   func testIfExprInCoercion() {
-    AssertParse(
+    assertParse(
       """
       func foo() {
         if .random() { 0 } else { 1 } as Int
@@ -1302,7 +1302,7 @@ final class StatementExpressionTests: XCTestCase {
     )
   }
   func testSwitchExprInCoercion() {
-    AssertParse(
+    assertParse(
       """
       switch Bool.random() { case true: 0 case false: 1 } as Int
       """,
@@ -1322,7 +1322,7 @@ final class StatementExpressionTests: XCTestCase {
     )
   }
   func testIfExprInReturn() {
-    AssertParse(
+    assertParse(
       """
       func foo() {
         return if .random() { 0 } else { 1 }
@@ -1334,7 +1334,7 @@ final class StatementExpressionTests: XCTestCase {
     )
   }
   func testSwitchExprInReturn() {
-    AssertParse(
+    assertParse(
       """
       func foo() {
         return switch Bool.random() { case true: 0 case false: 1 }
@@ -1346,7 +1346,7 @@ final class StatementExpressionTests: XCTestCase {
     )
   }
   func testTryIf1() {
-    AssertParse(
+    assertParse(
       """
       func foo() -> Int {
         try if .random() { 0 } else { 1 }
@@ -1358,7 +1358,7 @@ final class StatementExpressionTests: XCTestCase {
     )
   }
   func testTryIf2() {
-    AssertParse(
+    assertParse(
       """
       func foo() -> Int {
         return try if .random() { 0 } else { 1 }
@@ -1370,7 +1370,7 @@ final class StatementExpressionTests: XCTestCase {
     )
   }
   func testTryIf3() {
-    AssertParse(
+    assertParse(
       """
       func foo() -> Int {
         let x = try if .random() { 0 } else { 1 }
@@ -1383,7 +1383,7 @@ final class StatementExpressionTests: XCTestCase {
     )
   }
   func testAwaitIf1() {
-    AssertParse(
+    assertParse(
       """
       func foo() async -> Int {
         await if .random() { 0 } else { 1 }
@@ -1395,7 +1395,7 @@ final class StatementExpressionTests: XCTestCase {
     )
   }
   func testAwaitIf2() {
-    AssertParse(
+    assertParse(
       """
       func foo() async -> Int {
         return await if .random() { 0 } else { 1 }
@@ -1407,7 +1407,7 @@ final class StatementExpressionTests: XCTestCase {
     )
   }
   func testAwaitIf3() {
-    AssertParse(
+    assertParse(
       """
       func foo() async -> Int {
         let x = await if .random() { 0 } else { 1 }
@@ -1420,7 +1420,7 @@ final class StatementExpressionTests: XCTestCase {
     )
   }
   func testTrySwitch1() {
-    AssertParse(
+    assertParse(
       """
       try switch Bool.random() { case true: 0 case false: 1 }
       """,
@@ -1430,7 +1430,7 @@ final class StatementExpressionTests: XCTestCase {
     )
   }
   func testTrySwitch2() {
-    AssertParse(
+    assertParse(
       """
       func foo() -> Int {
         return try switch Bool.random() { case true: 0 case false: 1 }
@@ -1442,7 +1442,7 @@ final class StatementExpressionTests: XCTestCase {
     )
   }
   func testTrySwitch3() {
-    AssertParse(
+    assertParse(
       """
       func foo() -> Int {
         let x = try switch Bool.random() { case true: 0 case false: 1 }
@@ -1455,7 +1455,7 @@ final class StatementExpressionTests: XCTestCase {
     )
   }
   func testAwaitSwitch1() {
-    AssertParse(
+    assertParse(
       """
       await switch Bool.random() { case true: 0 case false: 1 }
       """,
@@ -1465,7 +1465,7 @@ final class StatementExpressionTests: XCTestCase {
     )
   }
   func testAwaitSwitch2() {
-    AssertParse(
+    assertParse(
       """
       func foo() async -> Int {
         return await switch Bool.random() { case true: 0 case false: 1 }
@@ -1477,7 +1477,7 @@ final class StatementExpressionTests: XCTestCase {
     )
   }
   func testAwaitSwitch3() {
-    AssertParse(
+    assertParse(
       """
       func foo() async -> Int {
         let x = await switch Bool.random() { case true: 0 case false: 1 }
@@ -1492,7 +1492,7 @@ final class StatementExpressionTests: XCTestCase {
   func testIfExprMultipleCoerce() {
     // We only allow coercions as a narrow case in the parser, so attempting to
     // double them up is invalid.
-    AssertParse(
+    assertParse(
       """
       func foo() {
         if .random() { 0 } else { 1 } as Int 1️⃣as Int
@@ -1505,7 +1505,7 @@ final class StatementExpressionTests: XCTestCase {
   }
   func testIfExprIs() {
     // We don't parse 'is Int'.
-    AssertParse(
+    assertParse(
       """
       func foo() -> Bool {
         if .random() { 0 } else { 1 } 1️⃣is Int
@@ -1518,7 +1518,7 @@ final class StatementExpressionTests: XCTestCase {
   }
   func testIfExprCondCast() {
     // We parse 'as? Int', but it will be a semantic error.
-    AssertParse(
+    assertParse(
       """
       if .random() { 0 } else { 1 } as? Int
       """,
@@ -1539,7 +1539,7 @@ final class StatementExpressionTests: XCTestCase {
   }
   func testIfExprForceCast() {
     // We parse 'as! Int', but it will be a semantic error.
-    AssertParse(
+    assertParse(
       """
       if .random() { 0 } else { 1 } as! Int
       """,
@@ -1561,7 +1561,7 @@ final class StatementExpressionTests: XCTestCase {
   func testSwitchExprMultipleCoerce() {
     // We only allow coercions as a narrow case in the parser, so attempting to
     // double them up is invalid.
-    AssertParse(
+    assertParse(
       """
       func foo() {
         switch Bool.random() { case true: 0 case false: 1 } as Int 1️⃣as Int
@@ -1574,7 +1574,7 @@ final class StatementExpressionTests: XCTestCase {
   }
   func testSwitchExprIs() {
     // We don't parse 'is Int'.
-    AssertParse(
+    assertParse(
       """
       func foo() -> Bool {
         switch Bool.random() { case true: 0 case false: 1 } 1️⃣is Int
@@ -1587,7 +1587,7 @@ final class StatementExpressionTests: XCTestCase {
   }
   func testSwitchExprCondCast() {
     // We parse 'as? Int', but it will be a semantic error.
-    AssertParse(
+    assertParse(
       """
       switch Bool.random() { case true: 0 case false: 1 } as? Int
       """,
@@ -1608,7 +1608,7 @@ final class StatementExpressionTests: XCTestCase {
   }
   func testSwitchExprForceCast() {
     // We parse 'as! Int', but it will be a semantic error.
-    AssertParse(
+    assertParse(
       """
       switch Bool.random() { case true: 0 case false: 1 } as! Int
       """,
@@ -1629,7 +1629,7 @@ final class StatementExpressionTests: XCTestCase {
   }
 
   func testPatternExprInSwitchCaseItem() {
-    AssertParse(
+    assertParse(
       """
       switch x {
       case a:
@@ -1643,7 +1643,7 @@ final class StatementExpressionTests: XCTestCase {
   }
 
   func testStandaloneAtCaseInSwitch() {
-    AssertParse(
+    assertParse(
       """
       switch x {
         1️⃣@case
@@ -1654,7 +1654,7 @@ final class StatementExpressionTests: XCTestCase {
   }
 
   func testUnterminatedInterpolationAtEndOfMultilineStringLiteral() {
-    AssertParse(
+    assertParse(
       #"""
       """1️⃣\({(2️⃣})
       """
@@ -1667,7 +1667,7 @@ final class StatementExpressionTests: XCTestCase {
   }
 
   func testUnterminatedString1() {
-    AssertParse(
+    assertParse(
       #"""
       "abc1️⃣
       "2️⃣
@@ -1680,7 +1680,7 @@ final class StatementExpressionTests: XCTestCase {
   }
 
   func testUnterminatedString2() {
-    AssertParse(
+    assertParse(
       #"""
       "1️⃣
       "2️⃣
@@ -1693,7 +1693,7 @@ final class StatementExpressionTests: XCTestCase {
   }
 
   func testUnterminatedString3() {
-    AssertParse(
+    assertParse(
       #"""
       "abc1️⃣
       \(def)2️⃣"3️⃣
@@ -1707,7 +1707,7 @@ final class StatementExpressionTests: XCTestCase {
   }
 
   func testUnterminatedString4() {
-    AssertParse(
+    assertParse(
       #"""
       "abc\(def1️⃣2️⃣
       3️⃣)"
@@ -1721,7 +1721,7 @@ final class StatementExpressionTests: XCTestCase {
   }
 
   func testUnterminatedString5() {
-    AssertParse(
+    assertParse(
       #"""
       "abc\(1️⃣2️⃣
       def3️⃣)"
@@ -1735,7 +1735,7 @@ final class StatementExpressionTests: XCTestCase {
   }
 
   func testUnterminatedString6() {
-    AssertParse(
+    assertParse(
       #"""
       "abc1️⃣\2️⃣
       (def)3️⃣"4️⃣
@@ -1750,7 +1750,7 @@ final class StatementExpressionTests: XCTestCase {
   }
 
   func testUnterminatedString7() {
-    AssertParse(
+    assertParse(
       #"""
       #1️⃣
       "abc"2️⃣#3️⃣
@@ -1764,7 +1764,7 @@ final class StatementExpressionTests: XCTestCase {
   }
 
   func testUnterminatedString8() {
-    AssertParse(
+    assertParse(
       #"""
       #"1️⃣
       abc2️⃣"#3️⃣
@@ -1778,7 +1778,7 @@ final class StatementExpressionTests: XCTestCase {
   }
 
   func testUnterminatedString9() {
-    AssertParse(
+    assertParse(
       #"""
       #"abc1️⃣
       "#2️⃣
@@ -1791,7 +1791,7 @@ final class StatementExpressionTests: XCTestCase {
   }
 
   func testUnterminatedString10() {
-    AssertParse(
+    assertParse(
       #"""
       #"abc"1️⃣
       #2️⃣
@@ -1804,15 +1804,96 @@ final class StatementExpressionTests: XCTestCase {
   }
 
   func testTriviaEndingInterpolation() {
-    AssertParse(
+    assertParse(
       #"""
       "abc\(def )"
       """#
     )
   }
 
+  func testConsecutiveStatements1() {
+    assertParse(
+      "{a1️⃣ b2️⃣ c}",
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'"),
+      ]
+    )
+  }
+
+  func testConsecutiveStatements2() {
+    assertParse(
+      "switch x {case y: a1️⃣ b2️⃣ c}",
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'"),
+      ]
+    )
+  }
+
+  func testConsecutiveStatements3() {
+    assertParse(
+      """
+      var i: Int { a1️⃣ b2️⃣ c }
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'"),
+      ]
+    )
+  }
+
+  func testConsecutiveStatements4() {
+    assertParse(
+      """
+      var i: Int { get {a1️⃣ b} set {c2️⃣ d} }
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'"),
+      ]
+    )
+  }
+
+  func testInitCallInPoundIf() {
+    // Make sure we parse 'init()' as an expr, not a decl.
+    assertParse(
+      """
+      class C {
+      init() {
+      #if true
+        init()
+      #endif
+      }
+      }
+      """,
+      substructure: Syntax(
+        FunctionCallExprSyntax(
+          calledExpression: IdentifierExprSyntax(identifier: .keyword(.init("init")!)),
+          leftParen: .leftParenToken(),
+          argumentList: TupleExprElementListSyntax([]),
+          rightParen: .rightParenToken()
+        )
+      )
+    )
+  }
+
+  func testUnexpectedCloseBraceInPoundIf() {
+    assertParse(
+      """
+      #if true
+      1️⃣}
+      class C {}
+      #endif
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected brace before class")
+      ]
+    )
+  }
+
   func testStringLiteralAfterKeyPath() {
-    AssertParse(
+    assertParse(
       #"""
       \String.?1️⃣""
       """#,

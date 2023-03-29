@@ -16,7 +16,7 @@ import XCTest
 
 final class GuardTests: XCTestCase {
   func testGuard1() {
-    AssertParse(
+    assertParse(
       """
       func noConditionNoElse() {
         guard {} 1️⃣
@@ -29,7 +29,7 @@ final class GuardTests: XCTestCase {
   }
 
   func testGuard2() {
-    AssertParse(
+    assertParse(
       """
       func noCondition() {
         guard 1️⃣else {}

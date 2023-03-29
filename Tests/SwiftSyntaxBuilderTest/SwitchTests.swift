@@ -27,7 +27,7 @@ final class SwitchTests: XCTestCase {
       }
     }
 
-    AssertBuildResult(
+    assertBuildResult(
       syntax,
       """
       switch count {
@@ -54,7 +54,7 @@ final class SwitchTests: XCTestCase {
       }
     }
 
-    AssertBuildResult(
+    assertBuildResult(
       syntax,
       """
       switch count {

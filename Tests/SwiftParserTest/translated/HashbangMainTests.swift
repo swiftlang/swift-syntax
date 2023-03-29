@@ -16,7 +16,7 @@ import XCTest
 
 final class HashbangMainTests: XCTestCase {
   func testHashbangMain1() {
-    AssertParse(
+    assertParse(
       """
       #!/usr/bin/swift
       let x = 42

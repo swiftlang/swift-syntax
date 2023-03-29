@@ -18,7 +18,7 @@ import XCTest
 
 final class ErrorsTests: XCTestCase {
   func testErrors1() {
-    AssertParse(
+    assertParse(
       #"""
       enum MSV : Error {
         case Foo, Bar, Baz
@@ -31,7 +31,7 @@ final class ErrorsTests: XCTestCase {
   }
 
   func testErrors2() {
-    AssertParse(
+    assertParse(
       """
       func opaque_error() -> Error { return MSV.Foo }
       """
@@ -39,7 +39,7 @@ final class ErrorsTests: XCTestCase {
   }
 
   func testErrors3() {
-    AssertParse(
+    assertParse(
       """
       func one() {
         do {
@@ -92,7 +92,7 @@ final class ErrorsTests: XCTestCase {
   }
 
   func testErrors4() {
-    AssertParse(
+    assertParse(
       """
       func takesAutoclosure(_ fn : @autoclosure () -> Int) {}
       func takesThrowingAutoclosure(_ fn : @autoclosure () throws -> Int) {}
@@ -101,7 +101,7 @@ final class ErrorsTests: XCTestCase {
   }
 
   func testErrors5() {
-    AssertParse(
+    assertParse(
       """
       func genError() throws -> Int { throw MSV.Foo }
       func genNoError() -> Int { return 0 }
@@ -110,7 +110,7 @@ final class ErrorsTests: XCTestCase {
   }
 
   func testErrors6() {
-    AssertParse(
+    assertParse(
       """
       func testAutoclosures() throws {
         takesAutoclosure(genError())
@@ -131,7 +131,7 @@ final class ErrorsTests: XCTestCase {
   }
 
   func testErrors7() {
-    AssertParse(
+    assertParse(
       """
       func illformed() throws {
           do {
@@ -147,7 +147,7 @@ final class ErrorsTests: XCTestCase {
   }
 
   func testErrors8() {
-    AssertParse(
+    assertParse(
       """
       func postThrows() -> Int 1️⃣throws {
         return 5
@@ -165,7 +165,7 @@ final class ErrorsTests: XCTestCase {
   }
 
   func testErrors9() {
-    AssertParse(
+    assertParse(
       """
       func postThrows2() -> 1️⃣throws Int {
         return try postThrows()
@@ -178,7 +178,7 @@ final class ErrorsTests: XCTestCase {
   }
 
   func testErrors10() {
-    AssertParse(
+    assertParse(
       """
       func postRethrows(_ f: () throws -> Int) -> Int 1️⃣rethrows {
         return try f()
@@ -196,7 +196,7 @@ final class ErrorsTests: XCTestCase {
   }
 
   func testErrors11() {
-    AssertParse(
+    assertParse(
       """
       func postRethrows2(_ f: () throws -> Int) -> 1️⃣rethrows Int {
         return try f()
@@ -209,7 +209,7 @@ final class ErrorsTests: XCTestCase {
   }
 
   func testErrors12() {
-    AssertParse(
+    assertParse(
       """
       func postThrows3() {
         _ = { () -> Int 1️⃣throws in }
@@ -222,7 +222,7 @@ final class ErrorsTests: XCTestCase {
   }
 
   func testErrors13() {
-    AssertParse(
+    assertParse(
       """
       func dupThrows1() throws 1️⃣rethrows -> 2️⃣throws Int 3️⃣throw {}
       """,
@@ -238,7 +238,7 @@ final class ErrorsTests: XCTestCase {
   }
 
   func testErrors14() {
-    AssertParse(
+    assertParse(
       """
       func dupThrows2(_ f: () throws -> 1️⃣rethrows Int) {}
       """,
@@ -252,7 +252,7 @@ final class ErrorsTests: XCTestCase {
   }
 
   func testErrors15a() {
-    AssertParse(
+    assertParse(
       """
       _ = { () 1️⃣try throws in }
       """,
@@ -266,7 +266,7 @@ final class ErrorsTests: XCTestCase {
   }
 
   func testErrors15b() {
-    AssertParse(
+    assertParse(
       """
       _ = { () throws -> Int 1️⃣throws in }
       """,
@@ -280,7 +280,7 @@ final class ErrorsTests: XCTestCase {
   }
 
   func testErrors16() {
-    AssertParse(
+    assertParse(
       """
       func incompleteThrowType() {
         let _: () 1️⃣throws
@@ -316,7 +316,7 @@ final class ErrorsTests: XCTestCase {
 
   func testErrors17a() {
     // rdar://21328447
-    AssertParse(
+    assertParse(
       """
       func fixitThrow0() 1️⃣throw {}
       """,
@@ -330,7 +330,7 @@ final class ErrorsTests: XCTestCase {
   }
 
   func testErrors17b() {
-    AssertParse(
+    assertParse(
       """
       func fixitThrow1() 1️⃣throw -> Int {}
       """,
@@ -344,7 +344,7 @@ final class ErrorsTests: XCTestCase {
   }
 
   func testErrors17c() {
-    AssertParse(
+    assertParse(
       """
       func fixitThrow2() throws {
         var _: (Int)
@@ -366,7 +366,7 @@ final class ErrorsTests: XCTestCase {
   }
 
   func testErrors18() {
-    AssertParse(
+    assertParse(
       """
       let fn: () -> 1️⃣throws Void
       """,
@@ -380,7 +380,7 @@ final class ErrorsTests: XCTestCase {
   }
 
   func testErrors19() {
-    AssertParse(
+    assertParse(
       """
       // https://github.com/apple/swift/issues/53979
       """
@@ -388,7 +388,7 @@ final class ErrorsTests: XCTestCase {
   }
 
   func testErrors20() {
-    AssertParse(
+    assertParse(
       """
       func fixitTry0<T>(a: T) 1️⃣try where T:ExpressibleByStringLiteral {}
       """,
@@ -399,7 +399,7 @@ final class ErrorsTests: XCTestCase {
   }
 
   func testErrors21() {
-    AssertParse(
+    assertParse(
       """
       func fixitTry1<T>(a: T) 1️⃣try {}
       """,
@@ -413,7 +413,7 @@ final class ErrorsTests: XCTestCase {
   }
 
   func testErrors22() {
-    AssertParse(
+    assertParse(
       """
       func fixitTry2() 1️⃣try {}
       """,
@@ -424,7 +424,7 @@ final class ErrorsTests: XCTestCase {
   }
 
   func testErrors23() {
-    AssertParse(
+    assertParse(
       """
       let fixitTry3 : () 1️⃣try -> Int
       """,
@@ -435,7 +435,7 @@ final class ErrorsTests: XCTestCase {
   }
 
   func testErrors24() {
-    AssertParse(
+    assertParse(
       """
       func fixitAwait0() 1️⃣await { }
       """,
@@ -449,7 +449,7 @@ final class ErrorsTests: XCTestCase {
   }
 
   func testErrors25() {
-    AssertParse(
+    assertParse(
       """
       func fixitAwait1() 1️⃣await -> Int { }
       """,
@@ -463,7 +463,7 @@ final class ErrorsTests: XCTestCase {
   }
 
   func testErrors26() {
-    AssertParse(
+    assertParse(
       """
       func fixitAwait2() throws 1️⃣await -> Int { }
       """,
@@ -477,7 +477,7 @@ final class ErrorsTests: XCTestCase {
   }
 
   func testAwaitBetwenAsyncAndThrows() {
-    AssertParse(
+    assertParse(
       """
       func fixitAwait2() async 1️⃣await throws -> Int { }
       """,
@@ -491,7 +491,7 @@ final class ErrorsTests: XCTestCase {
   }
 
   func testAsyncAwait() {
-    AssertParse(
+    assertParse(
       """
       func fixitAwait2() async 1️⃣await -> Int { }
       """,

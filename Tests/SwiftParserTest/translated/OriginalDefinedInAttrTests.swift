@@ -16,7 +16,7 @@ import XCTest
 
 final class OriginalDefinedInAttrTests: XCTestCase {
   func testOriginalDefinedInAttr1() {
-    AssertParse(
+    assertParse(
       #"""
       @_originallyDefinedIn(module: "foo", OSX 13.13)
       public func foo() {}
@@ -25,7 +25,7 @@ final class OriginalDefinedInAttrTests: XCTestCase {
   }
 
   func testOriginalDefinedInAttr2() {
-    AssertParse(
+    assertParse(
       #"""
       @_originallyDefinedIn(1️⃣modulename: "foo", OSX 13.13)
       public func foo1() {}
@@ -38,7 +38,7 @@ final class OriginalDefinedInAttrTests: XCTestCase {
   }
 
   func testOriginalDefinedInAttr3() {
-    AssertParse(
+    assertParse(
       #"""
       @_originallyDefinedIn(module: "foo", OSX 13.13.3)
       public class ToplevelClass {}
@@ -47,7 +47,7 @@ final class OriginalDefinedInAttrTests: XCTestCase {
   }
 
   func testOriginalDefinedInAttr4() {
-    AssertParse(
+    assertParse(
       #"""
       @_originallyDefinedIn(module: "foo"1️⃣)
       public class ToplevelClass1 {}
@@ -59,7 +59,7 @@ final class OriginalDefinedInAttrTests: XCTestCase {
   }
 
   func testOriginalDefinedInAttr5() {
-    AssertParse(
+    assertParse(
       """
       @_originallyDefinedIn(1️⃣OSX 13.13.3)
       public class ToplevelClass2 {}
@@ -71,7 +71,7 @@ final class OriginalDefinedInAttrTests: XCTestCase {
   }
 
   func testOriginalDefinedInAttr6() {
-    AssertParse(
+    assertParse(
       #"""
       @_originallyDefinedIn(module: "foo",1️⃣
       public class ToplevelClass3 {}
@@ -84,7 +84,7 @@ final class OriginalDefinedInAttrTests: XCTestCase {
   }
 
   func testOriginalDefinedInAttr7() {
-    AssertParse(
+    assertParse(
       #"""
       @available(OSX 13.10, *)
       @_originallyDefinedIn(module: "foo", * 13.13)
@@ -92,7 +92,7 @@ final class OriginalDefinedInAttrTests: XCTestCase {
       """#
     )
 
-    AssertParse(
+    assertParse(
       #"""
       @available(OSX 13.10, *)
       @_originallyDefinedIn(module: "foo", OSX 13.13, iOS 7.0)
@@ -100,7 +100,7 @@ final class OriginalDefinedInAttrTests: XCTestCase {
       """#
     )
 
-    AssertParse(
+    assertParse(
       #"""
       @available(OSX 13.10, *)
       @_originallyDefinedIn(module: "foo", OSX 13.14, * 7.0)
@@ -108,7 +108,7 @@ final class OriginalDefinedInAttrTests: XCTestCase {
       """#
     )
 
-    AssertParse(
+    assertParse(
       #"""
       public class ToplevelClass4 {
         @_originallyDefinedIn(module: "foo", OSX 13.13)
@@ -122,7 +122,7 @@ final class OriginalDefinedInAttrTests: XCTestCase {
   }
 
   func testOriginalDefinedInAttr8() {
-    AssertParse(
+    assertParse(
       #"""
       @available(OSX 13.10, *)
       @_originallyDefinedIn(module: "foo", OSX 13.13)
@@ -133,7 +133,7 @@ final class OriginalDefinedInAttrTests: XCTestCase {
   }
 
   func testOriginalDefinedInAttr9() {
-    AssertParse(
+    assertParse(
       #"""
       @available(OSX 13.10, *)
       @_originallyDefinedIn(module: "foo", OSX 13.13)
@@ -144,7 +144,7 @@ final class OriginalDefinedInAttrTests: XCTestCase {
   }
 
   func testOriginalDefinedInAttr10() {
-    AssertParse(
+    assertParse(
       #"""
       @available(OSX 13.10, *)
       @_originallyDefinedIn(module: "foo", OSX 13.13)
@@ -155,7 +155,7 @@ final class OriginalDefinedInAttrTests: XCTestCase {
   }
 
   func testOriginalDefinedInAttr11() {
-    AssertParse(
+    assertParse(
       #"""
       @available(OSX 13.10, *)
       @_originallyDefinedIn(module: "foo", OSX 13.13, iOS 7.0)
@@ -165,7 +165,7 @@ final class OriginalDefinedInAttrTests: XCTestCase {
   }
 
   func testOrinalDefinedInAttr12() {
-    AssertParse(
+    assertParse(
       """
       @_originallyDefinedIn(module: "ToasterKit", _iOS13Aligned)
       struct Vehicle {}

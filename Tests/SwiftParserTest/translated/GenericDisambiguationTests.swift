@@ -18,7 +18,7 @@ import XCTest
 
 final class GenericDisambiguationTests: XCTestCase {
   func testGenericDisambiguation1() {
-    AssertParse(
+    assertParse(
       """
       struct A<B> {
         init(x:Int) {}
@@ -35,7 +35,7 @@ final class GenericDisambiguationTests: XCTestCase {
   }
 
   func testGenericDisambiguation2() {
-    AssertParse(
+    assertParse(
       """
       protocol Runcible {}
       protocol Fungible {}
@@ -44,7 +44,7 @@ final class GenericDisambiguationTests: XCTestCase {
   }
 
   func testGenericDisambiguation3() {
-    AssertParse(
+    assertParse(
       """
       func meta<T>(_ m: T.Type) {}
       func meta2<T>(_ m: T.Type, _ x: Int) {}
@@ -53,7 +53,7 @@ final class GenericDisambiguationTests: XCTestCase {
   }
 
   func testGenericDisambiguation4() {
-    AssertParse(
+    assertParse(
       """
       func generic<T>(_ x: T) {}
       """
@@ -61,7 +61,7 @@ final class GenericDisambiguationTests: XCTestCase {
   }
 
   func testGenericDisambiguation5() {
-    AssertParse(
+    assertParse(
       """
       var a, b, c, d : Int
       """
@@ -69,7 +69,7 @@ final class GenericDisambiguationTests: XCTestCase {
   }
 
   func testGenericDisambiguation6a() {
-    AssertParse(
+    assertParse(
       """
       _ = a < b
       """
@@ -77,7 +77,7 @@ final class GenericDisambiguationTests: XCTestCase {
   }
 
   func testGenericDisambiguation6b() {
-    AssertParse(
+    assertParse(
       """
       _ = (a < b, c > d)
       """
@@ -86,7 +86,7 @@ final class GenericDisambiguationTests: XCTestCase {
 
   func testGenericDisambiguation6c() {
     // Parses as generic because of lparen after '>'
-    AssertParse(
+    assertParse(
       """
       (a < b, c > (d))
       """,
@@ -106,7 +106,7 @@ final class GenericDisambiguationTests: XCTestCase {
 
   func testGenericDisambiguation6d() {
     // Parses as generic because of lparen after '>'
-    AssertParse(
+    assertParse(
       """
       (a<b, c>(d))
       """,
@@ -125,7 +125,7 @@ final class GenericDisambiguationTests: XCTestCase {
   }
 
   func testGenericDisambiguation6e() {
-    AssertParse(
+    assertParse(
       """
       _ = a>(b)
       """
@@ -133,7 +133,7 @@ final class GenericDisambiguationTests: XCTestCase {
   }
 
   func testGenericDisambiguation6f() {
-    AssertParse(
+    assertParse(
       """
       _ = a > (b)
       """
@@ -141,7 +141,7 @@ final class GenericDisambiguationTests: XCTestCase {
   }
 
   func testGenericDisambiguation7() {
-    AssertParse(
+    assertParse(
       """
       generic<Int>(0)
       """
@@ -149,7 +149,7 @@ final class GenericDisambiguationTests: XCTestCase {
   }
 
   func testGenericDisambiguation8() {
-    AssertParse(
+    assertParse(
       """
       A<B>.c()
       A<A<B>>.c()
@@ -169,7 +169,7 @@ final class GenericDisambiguationTests: XCTestCase {
   }
 
   func testGenericDisambiguation9() {
-    AssertParse(
+    assertParse(
       """
       A<B>(x: 0)
       """
@@ -177,7 +177,7 @@ final class GenericDisambiguationTests: XCTestCase {
   }
 
   func testGenericDisambiguation10() {
-    AssertParse(
+    assertParse(
       """
       meta(A<B>.self)
       """
@@ -185,7 +185,7 @@ final class GenericDisambiguationTests: XCTestCase {
   }
 
   func testGenericDisambiguation11() {
-    AssertParse(
+    assertParse(
       """
       meta2(A<B>.self, 0)
       """
@@ -193,7 +193,7 @@ final class GenericDisambiguationTests: XCTestCase {
   }
 
   func testGenericDisambiguation12() {
-    AssertParse(
+    assertParse(
       """
       // FIXME: Nested generic types. Need to be able to express $T0<A, B, C> in the
       // typechecker.
@@ -204,7 +204,7 @@ final class GenericDisambiguationTests: XCTestCase {
   }
 
   func testGenericDisambiguation13() {
-    AssertParse(
+    assertParse(
       """
       A<B>.C<D>(0)
       """
@@ -212,7 +212,7 @@ final class GenericDisambiguationTests: XCTestCase {
   }
 
   func testGenericDisambiguation14() {
-    AssertParse(
+    assertParse(
       """
       meta(A<B>.C<D>.self)
       meta2(A<B>.C<D>.self, 0)
@@ -226,7 +226,7 @@ final class GenericDisambiguationTests: XCTestCase {
 
   func testGenericDisambiguation15() {
     // TODO: parse empty <> list
-    AssertParse(
+    assertParse(
       """
       A<>.c()
       """
@@ -234,7 +234,7 @@ final class GenericDisambiguationTests: XCTestCase {
   }
 
   func testGenericDisambiguation16() {
-    AssertParse(
+    assertParse(
       """
       A<B, D>.c()
       """
@@ -242,7 +242,7 @@ final class GenericDisambiguationTests: XCTestCase {
   }
 
   func testGenericDisambiguation17() {
-    AssertParse(
+    assertParse(
       """
       A<B?>(x: 0) // parses as type
       _ = a < b ? c : d
@@ -251,7 +251,7 @@ final class GenericDisambiguationTests: XCTestCase {
   }
 
   func testGenericDisambiguation18() {
-    AssertParse(
+    assertParse(
       """
       A<(B) throws -> D>(x: 0)
       """

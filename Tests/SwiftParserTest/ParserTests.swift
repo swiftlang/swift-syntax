@@ -26,7 +26,7 @@ public class ParserTests: XCTestCase {
       // Debug builds overflow with any stack size bigger than 25-ish.
       Parser.parse(source: buffer.bindMemory(to: UInt8.self), maximumNestingLevel: 25)
     })
-    AssertDataEqualWithDiff(
+    assertDataEqualWithDiff(
       Data(parsed.syntaxTextBytes),
       fileContents,
       additionalInfo: "Failed in file \(fileURL)"

@@ -16,7 +16,7 @@ import XCTest
 
 final class PlaygroundLvaluesTests: XCTestCase {
   func testPlaygroundLvalues1() {
-    AssertParse(
+    assertParse(
       """
       var a = 1, b = 2
       let z = 3
@@ -25,7 +25,7 @@ final class PlaygroundLvaluesTests: XCTestCase {
   }
 
   func testPlaygroundLvalues2() {
-    AssertParse(
+    assertParse(
       """
       a
       (a, b)

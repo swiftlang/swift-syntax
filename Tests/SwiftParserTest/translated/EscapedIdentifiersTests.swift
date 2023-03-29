@@ -16,7 +16,7 @@ import XCTest
 
 final class EscapedIdentifiersTests: XCTestCase {
   func testEscapedIdentifiers1() {
-    AssertParse(
+    assertParse(
       """
       func `protocol`() {}
       """
@@ -24,7 +24,7 @@ final class EscapedIdentifiersTests: XCTestCase {
   }
 
   func testEscapedIdentifiers2() {
-    AssertParse(
+    assertParse(
       """
       `protocol`()
       """
@@ -32,7 +32,7 @@ final class EscapedIdentifiersTests: XCTestCase {
   }
 
   func testEscapedIdentifiers3() {
-    AssertParse(
+    assertParse(
       """
       class `Type` {}
       """
@@ -40,7 +40,7 @@ final class EscapedIdentifiersTests: XCTestCase {
   }
 
   func testEscapedIdentifiers4() {
-    AssertParse(
+    assertParse(
       """
       var `class` = `Type`.self
       """
@@ -48,7 +48,7 @@ final class EscapedIdentifiersTests: XCTestCase {
   }
 
   func testEscapedIdentifiers5() {
-    AssertParse(
+    assertParse(
       """
       func foo() {}
       """
@@ -56,7 +56,7 @@ final class EscapedIdentifiersTests: XCTestCase {
   }
 
   func testEscapedIdentifiers6() {
-    AssertParse(
+    assertParse(
       """
       `foo`()
       """
@@ -64,7 +64,7 @@ final class EscapedIdentifiersTests: XCTestCase {
   }
 
   func testEscapedIdentifiers7() {
-    AssertParse(
+    assertParse(
       """
       // Escaping suppresses identifier contextualization.
       var get: (() -> ()) -> () = { $0() }
@@ -73,7 +73,7 @@ final class EscapedIdentifiersTests: XCTestCase {
   }
 
   func testEscapedIdentifiers8() {
-    AssertParse(
+    assertParse(
       """
       var applyGet: Int {
         `get` { }
@@ -84,7 +84,7 @@ final class EscapedIdentifiersTests: XCTestCase {
   }
 
   func testEscapedIdentifiers9() {
-    AssertParse(
+    assertParse(
       """
       enum `switch` {}
       """
@@ -92,7 +92,7 @@ final class EscapedIdentifiersTests: XCTestCase {
   }
 
   func testEscapedIdentifiers10() {
-    AssertParse(
+    assertParse(
       """
       typealias `Self` = Int
       """

@@ -17,7 +17,7 @@ import SwiftSyntax
 
 final class IfconfigExprTests: XCTestCase {
   func testIfconfigExpr1() {
-    AssertParse(
+    assertParse(
       """
       postfix operator ++
       postfix func ++ (_: Int) -> Int { 0 }
@@ -26,7 +26,7 @@ final class IfconfigExprTests: XCTestCase {
   }
 
   func testIfconfigExpr2() {
-    AssertParse(
+    assertParse(
       """
       struct OneResult {}
       struct TwoResult {}
@@ -35,7 +35,7 @@ final class IfconfigExprTests: XCTestCase {
   }
 
   func testIfconfigExpr3() {
-    AssertParse(
+    assertParse(
       """
       protocol MyProto {
           func optionalMethod() -> [Int]?
@@ -50,7 +50,7 @@ final class IfconfigExprTests: XCTestCase {
   }
 
   func testIfconfigExpr4() {
-    AssertParse(
+    assertParse(
       """
       func globalFunc<T>(_ arg: T) -> T { arg }
       """
@@ -58,7 +58,7 @@ final class IfconfigExprTests: XCTestCase {
   }
 
   func testIfconfigExpr5() {
-    AssertParse(
+    assertParse(
       """
       func testBasic(baseExpr: MyStruct) {
           baseExpr
@@ -73,7 +73,7 @@ final class IfconfigExprTests: XCTestCase {
   }
 
   func testIfconfigExpr6() {
-    AssertParse(
+    assertParse(
       """
       MyStruct()
       #if CONDITION_1
@@ -86,7 +86,7 @@ final class IfconfigExprTests: XCTestCase {
   }
 
   func testIfconfigExpr7() {
-    AssertParse(
+    assertParse(
       #"""
       func testInvalidContent(baseExpr: MyStruct, otherExpr: Int) {
         baseExpr
@@ -112,7 +112,7 @@ final class IfconfigExprTests: XCTestCase {
   }
 
   func testIfconfigExpr8() {
-    AssertParse(
+    assertParse(
       """
       func testExprKind(baseExpr: MyStruct, idx: Int) {
         baseExpr
@@ -136,7 +136,7 @@ final class IfconfigExprTests: XCTestCase {
   }
 
   func testIfconfigExpr9() {
-    AssertParse(
+    assertParse(
       """
       func emptyElse(baseExpr: MyStruct) {
         baseExpr
@@ -160,7 +160,7 @@ final class IfconfigExprTests: XCTestCase {
   }
 
   func testIfconfigExpr10() {
-    AssertParse(
+    assertParse(
       """
       func consecutiveIfConfig(baseExpr: MyStruct) {
           baseExpr
@@ -177,7 +177,7 @@ final class IfconfigExprTests: XCTestCase {
   }
 
   func testIfconfigExpr11() {
-    AssertParse(
+    assertParse(
       """
       func nestedIfConfig(baseExpr: MyStruct) {
         baseExpr
@@ -200,7 +200,7 @@ final class IfconfigExprTests: XCTestCase {
   }
 
   func testIfconfigExpr12() {
-    AssertParse(
+    assertParse(
       """
       func ifconfigExprInExpr(baseExpr: MyStruct) {
         globalFunc(
@@ -217,7 +217,7 @@ final class IfconfigExprTests: XCTestCase {
   }
 
   func testIfconfigExpr13() {
-    AssertParse(
+    assertParse(
       """
       #if canImport(A, _version: 2)
         let a = 1
@@ -227,7 +227,7 @@ final class IfconfigExprTests: XCTestCase {
   }
 
   func testIfconfigExpr14() {
-    AssertParse(
+    assertParse(
       """
       #if canImport(A, _version: 2.2)
         let a = 1
@@ -237,7 +237,7 @@ final class IfconfigExprTests: XCTestCase {
   }
 
   func testIfconfigExpr15() {
-    AssertParse(
+    assertParse(
       """
       #if canImport(A, _version: 2.2.2)
         let a = 1
@@ -247,7 +247,7 @@ final class IfconfigExprTests: XCTestCase {
   }
 
   func testIfconfigExpr16() {
-    AssertParse(
+    assertParse(
       """
       #if canImport(A, _version: 2.2.2.2)
         let a = 1
@@ -257,7 +257,7 @@ final class IfconfigExprTests: XCTestCase {
   }
 
   func testIfconfigExpr17() {
-    AssertParse(
+    assertParse(
       """
       #if canImport(A, _version: 2.2.2.2.2)
         let a = 1
@@ -270,7 +270,7 @@ final class IfconfigExprTests: XCTestCase {
   }
 
   func testIfconfigExpr18() {
-    AssertParse(
+    assertParse(
       """
       #if canImport(A, _underlyingVersion: 4)
         let a = 1
@@ -280,7 +280,7 @@ final class IfconfigExprTests: XCTestCase {
   }
 
   func testIfconfigExpr19() {
-    AssertParse(
+    assertParse(
       """
       #if canImport(A, _underlyingVersion: 2.200)
         let a = 1
@@ -290,7 +290,7 @@ final class IfconfigExprTests: XCTestCase {
   }
 
   func testIfconfigExpr20() {
-    AssertParse(
+    assertParse(
       """
       #if canImport(A, _underlyingVersion: 2.200.1)
         let a = 1
@@ -300,7 +300,7 @@ final class IfconfigExprTests: XCTestCase {
   }
 
   func testIfconfigExpr21() {
-    AssertParse(
+    assertParse(
       """
       #if canImport(A, _underlyingVersion: 2.200.1.3)
         let a = 1
@@ -310,7 +310,7 @@ final class IfconfigExprTests: XCTestCase {
   }
 
   func testIfconfigExpr22() {
-    AssertParse(
+    assertParse(
       """
       #if canImport(A, unknown: 2.2)
         let a = 1
@@ -323,7 +323,7 @@ final class IfconfigExprTests: XCTestCase {
   }
 
   func testIfconfigExpr23() {
-    AssertParse(
+    assertParse(
       """
       #if canImport(A,1️⃣)
         let a = 1
@@ -336,7 +336,7 @@ final class IfconfigExprTests: XCTestCase {
   }
 
   func testIfconfigExpr24() {
-    AssertParse(
+    assertParse(
       """
       #if canImport(A, 2.2)
         let a = 1
@@ -349,7 +349,7 @@ final class IfconfigExprTests: XCTestCase {
   }
 
   func testIfconfigExpr25() {
-    AssertParse(
+    assertParse(
       """
       #if canImport(A, 2.2, 1.1)
         let a = 1
@@ -362,7 +362,7 @@ final class IfconfigExprTests: XCTestCase {
   }
 
   func testIfconfigExpr26() {
-    AssertParse(
+    assertParse(
       """
       #if canImport(A, _version:1️⃣)
         let a = 1
@@ -375,7 +375,7 @@ final class IfconfigExprTests: XCTestCase {
   }
 
   func testIfconfigExpr27() {
-    AssertParse(
+    assertParse(
       #"""
       #if canImport(A, _version: "")
         let a = 1
@@ -388,7 +388,7 @@ final class IfconfigExprTests: XCTestCase {
   }
 
   func testIfconfigExpr28() {
-    AssertParse(
+    assertParse(
       """
       #if canImport(A, _version: >=2.2)
         let a = 1
@@ -401,7 +401,7 @@ final class IfconfigExprTests: XCTestCase {
   }
 
   func testIfconfigExpr29() {
-    AssertParse(
+    assertParse(
       """
       #if canImport(A, _version: 201️⃣A301)
         let a = 1
@@ -414,7 +414,7 @@ final class IfconfigExprTests: XCTestCase {
   }
 
   func testIfconfigExpr30() {
-    AssertParse(
+    assertParse(
       #"""
       #if canImport(A, _version: "20A301")
         let a = 1
@@ -427,7 +427,7 @@ final class IfconfigExprTests: XCTestCase {
   }
 
   func testIfconfigExpr31() {
-    AssertParse(
+    assertParse(
       """
       #if arch(x86_64)
         debugPrint("x86_64")
@@ -456,7 +456,7 @@ final class IfconfigExprTests: XCTestCase {
   }
 
   func testUnknownPlatform1() {
-    AssertParse(
+    assertParse(
       """
       #if hasGreeble(blah)
       #endif
@@ -465,7 +465,7 @@ final class IfconfigExprTests: XCTestCase {
   }
 
   func testUnknownPlatform2() {
-    AssertParse(
+    assertParse(
       """
       // Future compiler, short-circuit right-hand side
       #if compiler(>=10.0) && hasGreeble(blah)
@@ -475,7 +475,7 @@ final class IfconfigExprTests: XCTestCase {
   }
 
   func testUnknownPlatform3() {
-    AssertParse(
+    assertParse(
       """
       // Current compiler, short-circuit right-hand side
       #if compiler(<10.0) || hasGreeble(blah)
@@ -500,7 +500,7 @@ final class IfconfigExprTests: XCTestCase {
   }
 
   func testUnknownPlatform4() {
-    AssertParse(
+    assertParse(
       """
       // This compiler, don't short-circuit.
       #if compiler(>=5.7) && hasGreeble(blah)
@@ -510,7 +510,7 @@ final class IfconfigExprTests: XCTestCase {
   }
 
   func testUnknownPlatform5() {
-    AssertParse(
+    assertParse(
       """
       // This compiler, don't short-circuit.
       #if compiler(<5.8) || hasGreeble(blah)
@@ -520,7 +520,7 @@ final class IfconfigExprTests: XCTestCase {
   }
 
   func testUnknownPlatform6() {
-    AssertParse(
+    assertParse(
       #"""
       // Not a "version" check, so don't short-circuit.
       #if os(macOS) && hasGreeble(blah)
@@ -530,7 +530,7 @@ final class IfconfigExprTests: XCTestCase {
   }
 
   func testUpcomingFeature1() {
-    AssertParse(
+    assertParse(
       """
       #if hasFeature(17)
       #endif

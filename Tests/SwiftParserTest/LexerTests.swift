@@ -32,7 +32,7 @@ fileprivate func lex(_ sourceBytes: [UInt8], body: ([Lexer.Lexeme]) throws -> Vo
 /// values for trivia and text. While this is good for most cases, string
 /// literals can't contain invalid UTF-8. Thus, we need a different assert
 /// function working on byte arrays to test source code containing invalid UTF-8.
-fileprivate func AssertRawBytesLexeme(
+fileprivate func assertRawBytesLexeme(
   _ lexeme: Lexer.Lexeme,
   kind: RawTokenKind,
   leadingTrivia: [UInt8] = [],
@@ -57,7 +57,7 @@ fileprivate func AssertRawBytesLexeme(
 
 public class LexerTests: XCTestCase {
   func testIdentifiers() {
-    AssertLexemes(
+    assertLexemes(
       "Hello World",
       lexemes: [
         LexemeSpec(.identifier, text: "Hello", trailing: " "),
@@ -67,7 +67,7 @@ public class LexerTests: XCTestCase {
   }
 
   func testEscapedIdentifiers() {
-    AssertLexemes(
+    assertLexemes(
       "`Hello` `World` `$`",
       lexemes: [
         LexemeSpec(.identifier, text: "`Hello`", trailing: " "),
@@ -78,7 +78,7 @@ public class LexerTests: XCTestCase {
   }
 
   func testBlockComments() {
-    AssertLexemes(
+    assertLexemes(
       """
       /*/ */
       func not_doc5() {}
@@ -93,7 +93,7 @@ public class LexerTests: XCTestCase {
       ]
     )
 
-    AssertLexemes(
+    assertLexemes(
       """
       /* */
       /**/
@@ -106,7 +106,7 @@ public class LexerTests: XCTestCase {
   }
 
   func testDeepTupleAccess() {
-    AssertLexemes(
+    assertLexemes(
       "x.1.0",
       lexemes: [
         LexemeSpec(.identifier, text: "x"),
@@ -119,7 +119,7 @@ public class LexerTests: XCTestCase {
   }
 
   func testUnicodeLiteral() {
-    AssertLexemes(
+    assertLexemes(
       #"""
       "\u{1234}"
       """#,
@@ -130,7 +130,7 @@ public class LexerTests: XCTestCase {
       ]
     )
 
-    AssertLexemes(
+    assertLexemes(
       #"""
       "1️⃣\u{12341234}"
       """#,
@@ -143,69 +143,69 @@ public class LexerTests: XCTestCase {
   }
 
   func testNumberLiterals() {
-    AssertLexemes(
+    assertLexemes(
       "1234567890",
       lexemes: [
         LexemeSpec(.integerLiteral, text: "1234567890")
       ]
     )
-    AssertLexemes(
+    assertLexemes(
       "0b1010101",
       lexemes: [
         LexemeSpec(.integerLiteral, text: "0b1010101")
       ]
     )
-    AssertLexemes(
+    assertLexemes(
       "0xABC",
       lexemes: [
         LexemeSpec(.integerLiteral, text: "0xABC")
       ]
     )
-    AssertLexemes(
+    assertLexemes(
       "1.0",
       lexemes: [
         LexemeSpec(.floatingLiteral, text: "1.0")
       ]
     )
-    AssertLexemes(
+    assertLexemes(
       "1.0e10",
       lexemes: [
         LexemeSpec(.floatingLiteral, text: "1.0e10")
       ]
     )
-    AssertLexemes(
+    assertLexemes(
       "1.0E10",
       lexemes: [
         LexemeSpec(.floatingLiteral, text: "1.0E10")
       ]
     )
-    AssertLexemes(
+    assertLexemes(
       "0xfeed_beef",
       lexemes: [
         LexemeSpec(.integerLiteral, text: "0xfeed_beef")
       ]
     )
-    AssertLexemes(
+    assertLexemes(
       "0xff.0p2",
       lexemes: [
         LexemeSpec(.floatingLiteral, text: "0xff.0p2")
       ]
     )
-    AssertLexemes(
+    assertLexemes(
       "-0xff.0p2",
       lexemes: [
         LexemeSpec(.prefixOperator, text: "-"),
         LexemeSpec(.floatingLiteral, text: "0xff.0p2"),
       ]
     )
-    AssertLexemes(
+    assertLexemes(
       "+0xff.0p2",
       lexemes: [
         LexemeSpec(.prefixOperator, text: "+"),
         LexemeSpec(.floatingLiteral, text: "0xff.0p2"),
       ]
     )
-    AssertLexemes(
+    assertLexemes(
       "0x1.921fb4p1",
       lexemes: [
         LexemeSpec(.floatingLiteral, text: "0x1.921fb4p1")
@@ -214,7 +214,7 @@ public class LexerTests: XCTestCase {
   }
 
   func testRawStringLiterals() {
-    AssertLexemes(
+    assertLexemes(
       """
       ###"this is a ##"raw"## string"###
       """,
@@ -227,7 +227,7 @@ public class LexerTests: XCTestCase {
       ]
     )
 
-    AssertLexemes(
+    assertLexemes(
       """
       #"#"abc"#
       """,
@@ -240,7 +240,7 @@ public class LexerTests: XCTestCase {
       ]
     )
 
-    AssertLexemes(
+    assertLexemes(
       """
       ###"##"abc"###
       """,
@@ -253,7 +253,7 @@ public class LexerTests: XCTestCase {
       ]
     )
 
-    AssertLexemes(
+    assertLexemes(
       #####"""
       ##"""abc"####
       """#####,
@@ -268,7 +268,7 @@ public class LexerTests: XCTestCase {
   }
 
   func testShebang() {
-    AssertLexemes(
+    assertLexemes(
       """
       #!/usr/bin/swiftc
       let x = 42
@@ -283,7 +283,7 @@ public class LexerTests: XCTestCase {
   }
 
   func testDocComment() {
-    AssertLexemes(
+    assertLexemes(
       """
       /** hello */
       var x: Int
@@ -300,7 +300,7 @@ public class LexerTests: XCTestCase {
   }
 
   func testMain() {
-    AssertLexemes(
+    assertLexemes(
       """
       /* TestApp */
       @main struct TestApp {
@@ -334,25 +334,25 @@ public class LexerTests: XCTestCase {
   }
 
   func testRegexLexing() {
-    AssertLexemes(
+    assertLexemes(
       "/abc/",
       lexemes: [
         LexemeSpec(.regexLiteral, text: "/abc/")
       ]
     )
-    AssertLexemes(
+    assertLexemes(
       "#/abc/#",
       lexemes: [
         LexemeSpec(.regexLiteral, text: "#/abc/#")
       ]
     )
-    AssertLexemes(
+    assertLexemes(
       "###/abc/###",
       lexemes: [
         LexemeSpec(.regexLiteral, text: "###/abc/###")
       ]
     )
-    AssertLexemes(
+    assertLexemes(
       """
       #/
       a
@@ -363,37 +363,37 @@ public class LexerTests: XCTestCase {
         LexemeSpec(.regexLiteral, text: "#/\na\nb\n/#")
       ]
     )
-    AssertLexemes(
+    assertLexemes(
       "#/ \na\nb\n  /#",
       lexemes: [
         LexemeSpec(.regexLiteral, text: "#/ \na\nb\n  /#")
       ]
     )
-    AssertLexemes(
+    assertLexemes(
       "##/ \na\nb\n  /##",
       lexemes: [
         LexemeSpec(.regexLiteral, text: "##/ \na\nb\n  /##")
       ]
     )
-    AssertLexemes(
+    assertLexemes(
       "#/abc/def/#",
       lexemes: [
         LexemeSpec(.regexLiteral, text: "#/abc/def/#")
       ]
     )
-    AssertLexemes(
+    assertLexemes(
       "#/abc\\/#def/#",
       lexemes: [
         LexemeSpec(.regexLiteral, text: "#/abc\\/#def/#")
       ]
     )
-    AssertLexemes(
+    assertLexemes(
       "#/abc|#def/#",
       lexemes: [
         LexemeSpec(.regexLiteral, text: "#/abc|#def/#")
       ]
     )
-    AssertLexemes(
+    assertLexemes(
       "#/abc\n/#",
       lexemes: [
         LexemeSpec(.pound, text: "#"),
@@ -403,7 +403,7 @@ public class LexerTests: XCTestCase {
         LexemeSpec(.pound, text: "#"),
       ]
     )
-    AssertLexemes(
+    assertLexemes(
       "#/abc\r/#",
       lexemes: [
         LexemeSpec(.pound, text: "#"),
@@ -413,7 +413,7 @@ public class LexerTests: XCTestCase {
         LexemeSpec(.pound, text: "#"),
       ]
     )
-    AssertLexemes(
+    assertLexemes(
       "/a)/",
       lexemes: [
         LexemeSpec(.prefixOperator, text: "/"),
@@ -425,7 +425,7 @@ public class LexerTests: XCTestCase {
   }
 
   func testUnexpectedLexing() {
-    AssertLexemes(
+    assertLexemes(
       "static func 1️⃣�() {}",
       lexemes: [
         LexemeSpec(.keyword, text: "static", trailing: " "),
@@ -440,7 +440,7 @@ public class LexerTests: XCTestCase {
 
   func testBOMLexing() {
     let bom: Unicode.Scalar = "\u{feff}"
-    AssertLexemes(
+    assertLexemes(
       "\(bom)Hello",
       lexemes: [
         LexemeSpec(.identifier, leading: "\u{feff}", text: "Hello")
@@ -449,7 +449,7 @@ public class LexerTests: XCTestCase {
   }
 
   func testConflictLexing() {
-    AssertLexemes(
+    assertLexemes(
       """
       // diff3-style conflict markers
 
@@ -483,7 +483,7 @@ public class LexerTests: XCTestCase {
       ]
     )
 
-    AssertLexemes(
+    assertLexemes(
       """
       // Perforce-style conflict markers
 
@@ -527,7 +527,7 @@ public class LexerTests: XCTestCase {
   }
 
   func testUnicodeStringLiteralLexing() {
-    AssertLexemes(
+    assertLexemes(
       #"""
       "\\)|[^\\s`!()\\[\\]{};:'\".,<>?«»“”‘’]))"
       """#,
@@ -540,7 +540,7 @@ public class LexerTests: XCTestCase {
   }
 
   func testNotARegex() {
-    AssertLexemes(
+    assertLexemes(
       "min(reduced.count / 2, chunkSize / 2)",
       lexemes: [
         LexemeSpec(.identifier, text: "min"),
@@ -557,7 +557,7 @@ public class LexerTests: XCTestCase {
         LexemeSpec(.rightParen, text: ")"),
       ]
     )
-    AssertLexemes(
+    assertLexemes(
       """
       var x: Int {
         return 0 /
@@ -581,7 +581,7 @@ public class LexerTests: XCTestCase {
       ]
     )
 
-    AssertLexemes(
+    assertLexemes(
       "n /= 2 // foo",
       lexemes: [
         LexemeSpec(.identifier, text: "n", trailing: " "),
@@ -590,7 +590,7 @@ public class LexerTests: XCTestCase {
       ]
     )
 
-    AssertLexemes(
+    assertLexemes(
       "UIColor(white: 216.0/255.0, alpha: 44.0/255.0)",
       lexemes: [
         LexemeSpec(.identifier, text: "UIColor"),
@@ -610,7 +610,7 @@ public class LexerTests: XCTestCase {
       ]
     )
 
-    AssertLexemes(
+    assertLexemes(
       "#/abc|#def/",
       lexemes: [
         LexemeSpec(.pound, text: "#"),
@@ -625,7 +625,7 @@ public class LexerTests: XCTestCase {
   }
 
   func testUnicodeReplcementsInStream() {
-    AssertLexemes(
+    assertLexemes(
       "() -> (\u{feff})",
       lexemes: [
         LexemeSpec(.leftParen, text: "("),
@@ -636,7 +636,7 @@ public class LexerTests: XCTestCase {
       ]
     )
 
-    AssertLexemes(
+    assertLexemes(
       "y1️⃣\u{fffe} + z",
       lexemes: [
         LexemeSpec(.identifier, text: "y", trailing: "\u{fffe} ", diagnostic: "invalid character in source file"),
@@ -647,7 +647,7 @@ public class LexerTests: XCTestCase {
   }
 
   func testOperators() {
-    AssertLexemes(
+    assertLexemes(
       """
       myString==""
       """,
@@ -662,7 +662,7 @@ public class LexerTests: XCTestCase {
   }
 
   func testEditorPlaceholders() {
-    AssertLexemes(
+    assertLexemes(
       "!<#b1#> && !<#b2#>",
       lexemes: [
         LexemeSpec(.prefixOperator, text: "!"),
@@ -673,7 +673,7 @@ public class LexerTests: XCTestCase {
       ]
     )
 
-    AssertLexemes(
+    assertLexemes(
       "<##>",
       lexemes: [
         LexemeSpec(.identifier, text: "<##>", trailing: "")
@@ -682,7 +682,7 @@ public class LexerTests: XCTestCase {
   }
 
   func testCommentAttribution() {
-    AssertLexemes(
+    assertLexemes(
       """
       func foo() { // comment
           // new comment
@@ -715,7 +715,7 @@ public class LexerTests: XCTestCase {
 
   func testCommentAttribution2() {
     // Example from https://forums.swift.org/t/changing-comment-trivia-attribution-from-trailing-trivia-to-leading-trivia/50773
-    AssertLexemes(
+    assertLexemes(
       "/*X_START*/x/*X_END*/ + /*Y_START*/y/*Y_END*/",
       lexemes: [
         LexemeSpec(.identifier, leading: "/*X_START*/", text: "x", trailing: "/*X_END*/ "),
@@ -726,42 +726,42 @@ public class LexerTests: XCTestCase {
   }
 
   func testNumericLiteralDiagnostics() {
-    AssertLexemes(
+    assertLexemes(
       " 0x1.01️⃣",
       lexemes: [LexemeSpec(.integerLiteral, leading: " ", text: "0x1.0", diagnostic: "hexadecimal floating point literal must end with an exponent")]
     )
-    AssertLexemes(
+    assertLexemes(
       " 0x1p1️⃣_",
       lexemes: [LexemeSpec(.floatingLiteral, leading: " ", text: "0x1p_", diagnostic: "'_' is not a valid first character in floating point exponent")]
     )
-    AssertLexemes(
+    assertLexemes(
       "01️⃣QWERTY",
       lexemes: [LexemeSpec(.integerLiteral, text: "0QWERTY", diagnostic: "'Q' is not a valid digit in integer literal")]
     )
-    AssertLexemes(
+    assertLexemes(
       "0b1️⃣QWERTY",
       lexemes: [LexemeSpec(.integerLiteral, text: "0bQWERTY", diagnostic: "'Q' is not a valid binary digit (0 or 1) in integer literal")]
     )
-    AssertLexemes(
+    assertLexemes(
       "0x1️⃣QWERTY",
       lexemes: [LexemeSpec(.integerLiteral, text: "0xQWERTY", diagnostic: "'Q' is not a valid hexadecimal digit (0-9, A-F) in integer literal")]
     )
-    AssertLexemes(
+    assertLexemes(
       "0o1️⃣QWERTY",
       lexemes: [LexemeSpec(.integerLiteral, text: "0oQWERTY", diagnostic: "'Q' is not a valid octal digit (0-7) in integer literal")]
     )
-    AssertLexemes(
+    assertLexemes(
       "1.0e+1️⃣QWERTY",
       lexemes: [LexemeSpec(.floatingLiteral, text: "1.0e+QWERTY", diagnostic: "'Q' is not a valid digit in floating point exponent")]
     )
-    AssertLexemes(
+    assertLexemes(
       "0x1p+1️⃣QWERTY",
       lexemes: [LexemeSpec(.floatingLiteral, text: "0x1p+QWERTY", diagnostic: "'Q' is not a valid digit in floating point exponent")]
     )
   }
 
   func testInvalidCharacterSpanningMultipleBytes() {
-    AssertLexemes(
+    assertLexemes(
       "121️⃣😡",
       lexemes: [
         LexemeSpec(.integerLiteral, text: "12😡", diagnostic: "'😡' is not a valid digit in integer literal")
@@ -770,30 +770,30 @@ public class LexerTests: XCTestCase {
   }
 
   func testBadNumericLiteralDigits() {
-    AssertLexemes(
+    assertLexemes(
       "01️⃣a1234567",
       lexemes: [LexemeSpec(.integerLiteral, text: "0a1234567", diagnostic: "'a' is not a valid digit in integer literal")]
     )
-    AssertLexemes(
+    assertLexemes(
       "01231️⃣A5678",
       lexemes: [LexemeSpec(.integerLiteral, text: "0123A5678", diagnostic: "'A' is not a valid digit in integer literal")]
     )
-    AssertLexemes(
+    assertLexemes(
       "0b101️⃣20101",
       lexemes: [LexemeSpec(.integerLiteral, text: "0b1020101", diagnostic: "'2' is not a valid binary digit (0 or 1) in integer literal")]
     )
-    AssertLexemes(
+    assertLexemes(
       "0o13571️⃣864",
       lexemes: [LexemeSpec(.integerLiteral, text: "0o1357864", diagnostic: "'8' is not a valid octal digit (0-7) in integer literal")]
     )
-    AssertLexemes(
+    assertLexemes(
       "0x147AD1️⃣G0",
       lexemes: [LexemeSpec(.integerLiteral, text: "0x147ADG0", diagnostic: "'G' is not a valid hexadecimal digit (0-9, A-F) in integer literal")]
     )
   }
 
   func testStringLiteralWithBlockCommentStart() {
-    AssertLexemes(
+    assertLexemes(
       """
       "/*"
       """,
@@ -812,7 +812,7 @@ public class LexerTests: XCTestCase {
         return XCTFail("Expected 1 lexeme, got \(lexemes.count)")
       }
 
-      AssertRawBytesLexeme(
+      assertRawBytesLexeme(
         lexemes[0],
         kind: .eof,
         leadingTrivia: sourceBytes,
@@ -828,7 +828,7 @@ public class LexerTests: XCTestCase {
         return XCTFail("Expected 2 lexemes, got \(lexemes.count)")
       }
 
-      AssertRawBytesLexeme(
+      assertRawBytesLexeme(
         lexemes[0],
         kind: .identifier,
         text: sourceBytes
@@ -843,7 +843,7 @@ public class LexerTests: XCTestCase {
         return XCTFail("Expected 4 lexemes, got \(lexemes.count)")
       }
 
-      AssertRawBytesLexeme(
+      assertRawBytesLexeme(
         lexemes[1],
         kind: .binaryOperator,
         text: [UInt8(ascii: "+")],
@@ -859,7 +859,7 @@ public class LexerTests: XCTestCase {
       guard lexemes.count == 1 else {
         return XCTFail("Expected 1 lexeme, got \(lexemes.count)")
       }
-      AssertRawBytesLexeme(
+      assertRawBytesLexeme(
         lexemes[0],
         kind: .eof,
         leadingTrivia: sourceBytes,
@@ -876,7 +876,7 @@ public class LexerTests: XCTestCase {
       guard lexemes.count == 1 else {
         return XCTFail("Expected 1 lexeme, got \(lexemes.count)")
       }
-      AssertRawBytesLexeme(
+      assertRawBytesLexeme(
         lexemes[0],
         kind: .eof,
         leadingTrivia: sourceBytes,
@@ -893,7 +893,7 @@ public class LexerTests: XCTestCase {
       guard lexemes.count == 2 else {
         return XCTFail("Expected 2 lexemes, got \(lexemes.count)")
       }
-      AssertRawBytesLexeme(
+      assertRawBytesLexeme(
         lexemes[0],
         kind: .identifier,
         leadingTrivia: [0xfd],
@@ -904,7 +904,7 @@ public class LexerTests: XCTestCase {
   }
 
   func testInterpolatedString() {
-    AssertLexemes(
+    assertLexemes(
       #"""
       "\("message")"
       """#,
@@ -924,7 +924,7 @@ public class LexerTests: XCTestCase {
   }
 
   func testBackslashInFrontOfStringInterpolation() {
-    AssertLexemes(
+    assertLexemes(
       #"""
       "\"\(text)"
       """#,
@@ -942,7 +942,7 @@ public class LexerTests: XCTestCase {
   }
 
   func testUnterminatedSingleLineStringLiteral() {
-    AssertLexemes(
+    assertLexemes(
       ##"""
       "bar
 
@@ -956,7 +956,7 @@ public class LexerTests: XCTestCase {
   }
 
   func testUnclosedStringInterpolationWithNewline() {
-    AssertLexemes(
+    assertLexemes(
       #"""
       "\(
 
@@ -973,7 +973,7 @@ public class LexerTests: XCTestCase {
   }
 
   func testNewlineInInterpolationOfSingleLineString() {
-    AssertLexemes(
+    assertLexemes(
       #"""
       "test \(label:
       foo)"
@@ -994,7 +994,7 @@ public class LexerTests: XCTestCase {
   }
 
   func testMultilineStringLiteral() {
-    AssertLexemes(
+    assertLexemes(
       #"""
         """
         line 1
@@ -1010,7 +1010,7 @@ public class LexerTests: XCTestCase {
       ]
     )
 
-    AssertLexemes(
+    assertLexemes(
       #"""
         """
         line 1 \
@@ -1028,7 +1028,7 @@ public class LexerTests: XCTestCase {
   }
 
   func testMultiDigitTupleAccess() {
-    AssertLexemes(
+    assertLexemes(
       "x.13.1",
       lexemes: [
         LexemeSpec(.identifier, text: "x"),
@@ -1041,7 +1041,7 @@ public class LexerTests: XCTestCase {
   }
 
   func testFloatingPointNumberAfterRangeOperator() {
-    AssertLexemes(
+    assertLexemes(
       "0.1...0.2",
       lexemes: [
         LexemeSpec(.floatingLiteral, text: "0.1"),
@@ -1052,7 +1052,7 @@ public class LexerTests: XCTestCase {
   }
 
   func testUnterminatedFloatLiteral() {
-    AssertLexemes(
+    assertLexemes(
       "0.",
       lexemes: [
         LexemeSpec(.integerLiteral, text: "0"),
@@ -1062,7 +1062,7 @@ public class LexerTests: XCTestCase {
   }
 
   func testNullCharacterInStringLiteral() {
-    AssertLexemes(
+    assertLexemes(
       """
       "1️⃣\0"
       """,
@@ -1080,7 +1080,7 @@ public class LexerTests: XCTestCase {
         return XCTFail("Expected 4 lexemes")
       }
 
-      AssertRawBytesLexeme(
+      assertRawBytesLexeme(
         lexemes[1],
         kind: .stringSegment,
         text: [0xef],
@@ -1090,7 +1090,7 @@ public class LexerTests: XCTestCase {
   }
 
   func testInvalidUnicodeEscapeSequence() {
-    AssertLexemes(
+    assertLexemes(
       #"""
       "1️⃣\u"
       """#,
@@ -1101,7 +1101,7 @@ public class LexerTests: XCTestCase {
       ]
     )
 
-    AssertLexemes(
+    assertLexemes(
       #"""
       "1️⃣\u{"
       """#,
@@ -1112,7 +1112,7 @@ public class LexerTests: XCTestCase {
       ]
     )
 
-    AssertLexemes(
+    assertLexemes(
       #"""
       "1️⃣\u{12"
       """#,
@@ -1123,7 +1123,7 @@ public class LexerTests: XCTestCase {
       ]
     )
 
-    AssertLexemes(
+    assertLexemes(
       #"""
       "1️⃣\u{}"
       """#,
@@ -1134,7 +1134,7 @@ public class LexerTests: XCTestCase {
       ]
     )
 
-    AssertLexemes(
+    assertLexemes(
       #"""
       "1️⃣\u{hello}"
       """#,
@@ -1145,7 +1145,7 @@ public class LexerTests: XCTestCase {
       ]
     )
 
-    AssertLexemes(
+    assertLexemes(
       #"""
       "1️⃣\u{fffffffff}"
       """#,
@@ -1158,7 +1158,7 @@ public class LexerTests: XCTestCase {
   }
 
   func testCloseBlockCommentWithoutOpen() {
-    AssertLexemes(
+    assertLexemes(
       """
       1️⃣*/
       """,
@@ -1167,7 +1167,7 @@ public class LexerTests: XCTestCase {
       ]
     )
 
-    AssertLexemes(
+    assertLexemes(
       """
       /**/1️⃣*/
       """,
@@ -1176,7 +1176,7 @@ public class LexerTests: XCTestCase {
       ]
     )
 
-    AssertLexemes(
+    assertLexemes(
       """
       /**/a1️⃣*/
       """,
@@ -1188,7 +1188,7 @@ public class LexerTests: XCTestCase {
   }
 
   func testCurlyQuotes() {
-    AssertLexemes(
+    assertLexemes(
       """
       a 1️⃣“curly string” b
       """,
@@ -1202,14 +1202,14 @@ public class LexerTests: XCTestCase {
 
   func testInvalidIdentifierStart() {
     // Verify that U+0330 (combining tilde below) is a valid identifier continuation
-    AssertLexemes(
+    assertLexemes(
       "a\u{0330}",
       lexemes: [
         LexemeSpec(.identifier, text: "a\u{0330}")
       ]
     )
 
-    AssertLexemes(
+    assertLexemes(
       "\u{0330}",
       lexemes: [
         LexemeSpec(.identifier, text: "\u{0330}", errorLocationMarker: "START", diagnostic: "an identifier cannot begin with this character")
@@ -1218,7 +1218,7 @@ public class LexerTests: XCTestCase {
   }
 
   func testNonBreakingSpace() {
-    AssertLexemes(
+    assertLexemes(
       "a 1️⃣\u{a0} b",
       lexemes: [
         LexemeSpec(.identifier, text: "a", trailing: " \u{a0} ", diagnostic: "non-breaking space (U+00A0) used instead of regular space"),
@@ -1228,14 +1228,14 @@ public class LexerTests: XCTestCase {
   }
 
   func testHexLiteralWithoutNumbers() {
-    AssertLexemes(
+    assertLexemes(
       "0x1️⃣",
       lexemes: [
         LexemeSpec(.integerLiteral, text: "0x", diagnostic: "expected hexadecimal digit (0-9, A-F) in integer literal")
       ]
     )
 
-    AssertLexemes(
+    assertLexemes(
       "0x1️⃣ ",
       lexemes: [
         LexemeSpec(.integerLiteral, text: "0x", trailing: " ", diagnostic: "expected hexadecimal digit (0-9, A-F) in integer literal")
@@ -1244,7 +1244,7 @@ public class LexerTests: XCTestCase {
   }
 
   func testUnprintableAsciiCharactersInStringLiteral() {
-    AssertLexemes(
+    assertLexemes(
       """
       "1️⃣\u{7}"
       """,
@@ -1259,7 +1259,7 @@ public class LexerTests: XCTestCase {
   func testLexerErrorOverridesLexerWarning() {
     // Make sure we output the error about the malformed hex literal instead of
     // the warning about the non-breaking whitespace.
-    AssertLexemes(
+    assertLexemes(
       "\u{a0}0x1️⃣r",
       lexemes: [
         LexemeSpec(.integerLiteral, leading: "\u{a0}", text: "0xr", diagnostic: "'r' is not a valid hexadecimal digit (0-9, A-F) in integer literal")

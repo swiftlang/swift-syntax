@@ -16,7 +16,7 @@ import XCTest
 
 final class PoundAssertTests: XCTestCase {
   func testPoundAssert1() {
-    AssertParse(
+    assertParse(
       """
       #assert(true, 1️⃣123)
       """
@@ -24,7 +24,7 @@ final class PoundAssertTests: XCTestCase {
   }
 
   func testPoundAssert2() {
-    AssertParse(
+    assertParse(
       #"""
       #assert(true, "error \(1) message")
       """#
@@ -32,7 +32,7 @@ final class PoundAssertTests: XCTestCase {
   }
 
   func testPoundAssert3() {
-    AssertParse(
+    assertParse(
       #"""
       #assert1️⃣ true2️⃣, "error message")
       """#,
@@ -44,7 +44,7 @@ final class PoundAssertTests: XCTestCase {
   }
 
   func testPoundAssert4() {
-    AssertParse(
+    assertParse(
       #"""
       #assert(1️⃣, "error message")
       """#,
@@ -55,7 +55,7 @@ final class PoundAssertTests: XCTestCase {
   }
 
   func testPoundAssert5() {
-    AssertParse(
+    assertParse(
       """
       func unbalanced1() {
         #assertℹ️(true 1️⃣
@@ -73,7 +73,7 @@ final class PoundAssertTests: XCTestCase {
   }
 
   func testPoundAssert6() {
-    AssertParse(
+    assertParse(
       #"""
       func unbalanced2() {
         #assertℹ️(true, "hello world" 1️⃣

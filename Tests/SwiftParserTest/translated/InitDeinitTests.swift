@@ -18,7 +18,7 @@ import XCTest
 
 final class InitDeinitTests: XCTestCase {
   func testInitDeinit1() {
-    AssertParse(
+    assertParse(
       """
       struct FooStructConstructorA {
         init 1️⃣
@@ -31,7 +31,7 @@ final class InitDeinitTests: XCTestCase {
   }
 
   func testInitDeinit2() {
-    AssertParse(
+    assertParse(
       """
       struct FooStructConstructorB {
         init()
@@ -41,7 +41,7 @@ final class InitDeinitTests: XCTestCase {
   }
 
   func testInitDeinit3a() {
-    AssertParse(
+    assertParse(
       """
       struct FooStructConstructorC {
         init 1️⃣{}
@@ -54,7 +54,7 @@ final class InitDeinitTests: XCTestCase {
   }
 
   func testInitDeinit3b() {
-    AssertParse(
+    assertParse(
       """
       struct FooStructConstructorC {
         init<T> 1️⃣{}
@@ -67,7 +67,7 @@ final class InitDeinitTests: XCTestCase {
   }
 
   func testInitDeinit3c() {
-    AssertParse(
+    assertParse(
       """
       struct FooStructConstructorC {
         init? 1️⃣{ self.init() }
@@ -80,7 +80,7 @@ final class InitDeinitTests: XCTestCase {
   }
 
   func testInitDeinit4() {
-    AssertParse(
+    assertParse(
       """
       struct FooStructConstructorD {
         init() 1️⃣-> FooStructConstructorD { }
@@ -93,7 +93,7 @@ final class InitDeinitTests: XCTestCase {
   }
 
   func testInitDeinit5a() {
-    AssertParse(
+    assertParse(
       """
       struct FooStructDeinitializerA {
         deinit
@@ -103,7 +103,7 @@ final class InitDeinitTests: XCTestCase {
   }
 
   func testInitDeinit5b() {
-    AssertParse(
+    assertParse(
       """
       struct FooStructDeinitializerA {
         deinit 1️⃣x
@@ -121,7 +121,7 @@ final class InitDeinitTests: XCTestCase {
   }
 
   func testInitDeinit5c() {
-    AssertParse(
+    assertParse(
       """
       struct FooStructDeinitializerA {
         deinit 1️⃣x2️⃣()
@@ -140,7 +140,7 @@ final class InitDeinitTests: XCTestCase {
   }
 
   func testInitDeinit6() {
-    AssertParse(
+    assertParse(
       """
       struct FooStructDeinitializerB {
         deinit
@@ -150,7 +150,7 @@ final class InitDeinitTests: XCTestCase {
   }
 
   func testInitDeinit7() {
-    AssertParse(
+    assertParse(
       """
       struct FooStructDeinitializerC {
         deinit {}
@@ -160,7 +160,7 @@ final class InitDeinitTests: XCTestCase {
   }
 
   func testInitDeinit8() {
-    AssertParse(
+    assertParse(
       """
       class FooClassDeinitializerA {
         deinit1️⃣(a : Int) {}
@@ -178,7 +178,7 @@ final class InitDeinitTests: XCTestCase {
   }
 
   func testInitDeinit9() {
-    AssertParse(
+    assertParse(
       """
       class FooClassDeinitializerB {
         deinit { }
@@ -188,7 +188,7 @@ final class InitDeinitTests: XCTestCase {
   }
 
   func testInitDeinit10() {
-    AssertParse(
+    assertParse(
       """
       class FooClassDeinitializerC {
         deinit 1️⃣x 2️⃣(a : Int) {}
@@ -207,7 +207,7 @@ final class InitDeinitTests: XCTestCase {
   }
 
   func testInitDeinit11() {
-    AssertParse(
+    assertParse(
       """
       init 1️⃣{}
       init()
@@ -220,7 +220,7 @@ final class InitDeinitTests: XCTestCase {
   }
 
   func testInitDeinit12() {
-    AssertParse(
+    assertParse(
       """
       deinit {}
       deinit
@@ -230,7 +230,7 @@ final class InitDeinitTests: XCTestCase {
   }
 
   func testInitDeinit13() {
-    AssertParse(
+    assertParse(
       """
       struct BarStruct {
         init() {}
@@ -241,7 +241,7 @@ final class InitDeinitTests: XCTestCase {
   }
 
   func testInitDeinit14() {
-    AssertParse(
+    assertParse(
       """
       extension BarStruct {
         init(x : Int) {}
@@ -253,7 +253,7 @@ final class InitDeinitTests: XCTestCase {
   }
 
   func testInitDeinit15() {
-    AssertParse(
+    assertParse(
       """
       enum BarUnion {
         init() {}
@@ -264,7 +264,7 @@ final class InitDeinitTests: XCTestCase {
   }
 
   func testInitDeinit16() {
-    AssertParse(
+    assertParse(
       """
       extension BarUnion {
         init(x : Int) {}
@@ -275,7 +275,7 @@ final class InitDeinitTests: XCTestCase {
   }
 
   func testInitDeinit17() {
-    AssertParse(
+    assertParse(
       """
       class BarClass {
         init() {}
@@ -286,7 +286,7 @@ final class InitDeinitTests: XCTestCase {
   }
 
   func testInitDeinit18() {
-    AssertParse(
+    assertParse(
       """
       extension BarClass {
         convenience init(x : Int) { self.init() }
@@ -297,7 +297,7 @@ final class InitDeinitTests: XCTestCase {
   }
 
   func testInitDeinit19() {
-    AssertParse(
+    assertParse(
       """
       protocol BarProtocol {
         init() {}
@@ -308,7 +308,7 @@ final class InitDeinitTests: XCTestCase {
   }
 
   func testInitDeinit20() {
-    AssertParse(
+    assertParse(
       """
       extension BarProtocol {
         init(x : Int) {}
@@ -319,7 +319,7 @@ final class InitDeinitTests: XCTestCase {
   }
 
   func testInitDeinit21() {
-    AssertParse(
+    assertParse(
       """
       func fooFunc() {
         init() {}
@@ -330,7 +330,7 @@ final class InitDeinitTests: XCTestCase {
   }
 
   func testInitDeinit22() {
-    AssertParse(
+    assertParse(
       """
       func barFunc() {
         var x : () = { () -> () in
@@ -348,7 +348,7 @@ final class InitDeinitTests: XCTestCase {
 
   func testInitDeinit24() {
     // https://github.com/apple/swift/issues/43464
-    AssertParse(
+    assertParse(
       """
       class Aaron {
         convenience init() { init(x: 1) }
@@ -358,7 +358,7 @@ final class InitDeinitTests: XCTestCase {
   }
 
   func testInitDeinit25() {
-    AssertParse(
+    assertParse(
       """
       class Theodosia: Aaron {
         init() {
@@ -370,7 +370,7 @@ final class InitDeinitTests: XCTestCase {
   }
 
   func testInitDeinit26() {
-    AssertParse(
+    assertParse(
       """
       struct AaronStruct {
         init(x: Int) {}
@@ -381,7 +381,7 @@ final class InitDeinitTests: XCTestCase {
   }
 
   func testInitDeinit27() {
-    AssertParse(
+    assertParse(
       """
       enum AaronEnum: Int {
         case A = 1
@@ -392,7 +392,7 @@ final class InitDeinitTests: XCTestCase {
   }
 
   func testInitDeinit28() {
-    AssertParse(
+    assertParse(
       """
       init(_ foo: T) 1️⃣-> Int where T: Comparable {} 
       """,
@@ -403,7 +403,7 @@ final class InitDeinitTests: XCTestCase {
   }
 
   func testDeinitInSwiftinterfaceIsFollowedByFinalFunc() {
-    AssertParse(
+    assertParse(
       """
       class Foo {
         deinit

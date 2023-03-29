@@ -107,7 +107,7 @@ final class MacroReplacementTests: XCTestCase {
       definition: expansion,
       replacements: replacements
     )
-    AssertStringsEqualWithDiff(
+    assertStringsEqualWithDiff(
       expandedSyntax.description,
       """
       #otherMacro(first: 17, second: ["a": 5], third: [3.14159, 2.71828], fourth: 4)

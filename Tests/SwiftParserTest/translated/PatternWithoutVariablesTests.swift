@@ -16,7 +16,7 @@ import XCTest
 
 final class PatternWithoutVariablesTests: XCTestCase {
   func testPatternWithoutVariables1() {
-    AssertParse(
+    assertParse(
       """
       let _ = 1
       inout _ = 1
@@ -25,7 +25,7 @@ final class PatternWithoutVariablesTests: XCTestCase {
   }
 
   func testPatternWithoutVariables2() {
-    AssertParse(
+    assertParse(
       """
       func foo() {
         let _ = 1 // OK
@@ -36,7 +36,7 @@ final class PatternWithoutVariablesTests: XCTestCase {
   }
 
   func testPatternWithoutVariables3() {
-    AssertParse(
+    assertParse(
       """
       struct Foo {
         let _ = 1
@@ -51,7 +51,7 @@ final class PatternWithoutVariablesTests: XCTestCase {
   }
 
   func testPatternWithoutVariables4() {
-    AssertParse(
+    assertParse(
       #"""
       // <rdar://problem/19786845> Warn on "let" and "var" when no data is bound in a pattern
       enum SimpleEnum { case Bar }
@@ -60,7 +60,7 @@ final class PatternWithoutVariablesTests: XCTestCase {
   }
 
   func testPatternWithoutVariables5() {
-    AssertParse(
+    assertParse(
       #"""
       func testVarLetPattern(a : SimpleEnum) {
         switch a {
@@ -85,7 +85,7 @@ final class PatternWithoutVariablesTests: XCTestCase {
   }
 
   func testPatternWithoutVariables6() {
-    AssertParse(
+    assertParse(
       """
       // https://github.com/apple/swift/issues/53293
       class C_53293 {

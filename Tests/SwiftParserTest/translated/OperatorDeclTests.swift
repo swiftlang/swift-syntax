@@ -16,7 +16,7 @@ import XCTest
 
 final class OperatorDeclTests: XCTestCase {
   func testOperatorDecl1a() {
-    AssertParse(
+    assertParse(
       """
       prefix operator +++ 1️⃣{}
       """,
@@ -28,7 +28,7 @@ final class OperatorDeclTests: XCTestCase {
   }
 
   func testOperatorDecl1b() {
-    AssertParse(
+    assertParse(
       """
       postfix operator +++ 1️⃣{}
       """,
@@ -39,7 +39,7 @@ final class OperatorDeclTests: XCTestCase {
   }
 
   func testOperatorDecl1c() {
-    AssertParse(
+    assertParse(
       """
       infix operator +++ 1️⃣{}
       """,
@@ -50,7 +50,7 @@ final class OperatorDeclTests: XCTestCase {
   }
 
   func testOperatorDecl1d() {
-    AssertParse(
+    assertParse(
       """
       infix operator +++* 1️⃣{
         associativity right
@@ -66,7 +66,7 @@ final class OperatorDeclTests: XCTestCase {
   }
 
   func testOperatorDecl1e() {
-    AssertParse(
+    assertParse(
       """
       infix operator +++*+ : A 1️⃣{ }
       """,
@@ -77,7 +77,7 @@ final class OperatorDeclTests: XCTestCase {
   }
 
   func testOperatorDecl2() {
-    AssertParse(
+    assertParse(
       """
       prefix operator +++** : A 1️⃣{ }
       """,
@@ -88,7 +88,7 @@ final class OperatorDeclTests: XCTestCase {
   }
 
   func testOperatorDecl3() {
-    AssertParse(
+    assertParse(
       """
       prefix operator ++*++ : A
       """
@@ -96,7 +96,7 @@ final class OperatorDeclTests: XCTestCase {
   }
 
   func testOperatorDecl4() {
-    AssertParse(
+    assertParse(
       """
       postfix operator ++*+* : A 1️⃣{ }
       """,
@@ -107,7 +107,7 @@ final class OperatorDeclTests: XCTestCase {
   }
 
   func testOperatorDecl5() {
-    AssertParse(
+    assertParse(
       """
       postfix operator ++**+ : A
       """
@@ -115,7 +115,7 @@ final class OperatorDeclTests: XCTestCase {
   }
 
   func testOperatorDecl6() {
-    AssertParse(
+    assertParse(
       """
       operator ++*** : A
       """,
@@ -126,7 +126,7 @@ final class OperatorDeclTests: XCTestCase {
   }
 
   func testOperatorDecl7() {
-    AssertParse(
+    assertParse(
       """
       operator +*+++ 1️⃣{ }
       """,
@@ -138,7 +138,7 @@ final class OperatorDeclTests: XCTestCase {
   }
 
   func testOperatorDecl8() {
-    AssertParse(
+    assertParse(
       """
       operator +*++* : A 1️⃣{ }
       """,
@@ -150,7 +150,7 @@ final class OperatorDeclTests: XCTestCase {
   }
 
   func testOperatorDecl9() {
-    AssertParse(
+    assertParse(
       """
       prefix operator1️⃣
       """,
@@ -161,7 +161,7 @@ final class OperatorDeclTests: XCTestCase {
   }
 
   func testOperatorDecl10() {
-    AssertParse(
+    assertParse(
       """
       1️⃣;
       prefix operator %%+
@@ -173,7 +173,7 @@ final class OperatorDeclTests: XCTestCase {
   }
 
   func testOperatorDecl11a() {
-    AssertParse(
+    assertParse(
       """
       prefix operator ??
       """
@@ -181,7 +181,7 @@ final class OperatorDeclTests: XCTestCase {
   }
 
   func testOperatorDecl11b() {
-    AssertParse(
+    assertParse(
       """
       postfix operator ??
       """
@@ -189,7 +189,7 @@ final class OperatorDeclTests: XCTestCase {
   }
 
   func testOperatorDecl11c() {
-    AssertParse(
+    assertParse(
       """
       prefix operator !!
       """
@@ -197,7 +197,7 @@ final class OperatorDeclTests: XCTestCase {
   }
 
   func testOperatorDecl11d() {
-    AssertParse(
+    assertParse(
       """
       postfix operator !!
       """
@@ -205,7 +205,7 @@ final class OperatorDeclTests: XCTestCase {
   }
 
   func testOperatorDecl11e() {
-    AssertParse(
+    assertParse(
       """
       postfix operator ?1️⃣$$
       """,
@@ -217,7 +217,7 @@ final class OperatorDeclTests: XCTestCase {
   }
 
   func testOperatorDecl12a() {
-    AssertParse(
+    assertParse(
       """
       infix operator --1️⃣aa
       """,
@@ -229,7 +229,7 @@ final class OperatorDeclTests: XCTestCase {
   }
 
   func testOperatorDecl12b() {
-    AssertParse(
+    assertParse(
       """
       infix operator 1️⃣aa--: A
       """,
@@ -241,7 +241,7 @@ final class OperatorDeclTests: XCTestCase {
   }
 
   func testOperatorDecl12c() {
-    AssertParse(
+    assertParse(
       """
       infix operator <<1️⃣$$@<
       """,
@@ -253,7 +253,7 @@ final class OperatorDeclTests: XCTestCase {
   }
 
   func testOperatorDecl12d() {
-    AssertParse(
+    assertParse(
       """
       infix operator !!1️⃣@aa2️⃣
       """,
@@ -264,7 +264,7 @@ final class OperatorDeclTests: XCTestCase {
   }
 
   func testOperatorDecl12e() {
-    AssertParse(
+    assertParse(
       """
       infix operator 1️⃣#++=
       """,
@@ -276,7 +276,7 @@ final class OperatorDeclTests: XCTestCase {
   }
 
   func testOperatorDecl12f() {
-    AssertParse(
+    assertParse(
       """
       infix operator ++=1️⃣#
       """,
@@ -287,7 +287,7 @@ final class OperatorDeclTests: XCTestCase {
   }
 
   func testOperatorDecl12g() {
-    AssertParse(
+    assertParse(
       """
       infix operator ->1️⃣#
       """,
@@ -298,7 +298,7 @@ final class OperatorDeclTests: XCTestCase {
   }
 
   func testOperatorDecl13() {
-    AssertParse(
+    assertParse(
       """
       // FIXME: Ideally, we shouldn't emit the «consistent whitespace» diagnostic
       // where = cannot possibly mean an assignment.
@@ -311,7 +311,7 @@ final class OperatorDeclTests: XCTestCase {
   }
 
   func testOperatorDecl14() {
-    AssertParse(
+    assertParse(
       """
       infix operator +++=
       infix operator *** : A
@@ -324,7 +324,7 @@ final class OperatorDeclTests: XCTestCase {
   }
 
   func testOperatorDecl15a() {
-    AssertParse(
+    assertParse(
       """
       precedencegroup 1️⃣{
         associativity: right
@@ -337,7 +337,7 @@ final class OperatorDeclTests: XCTestCase {
   }
 
   func testOperatorDecl15b() {
-    AssertParse(
+    assertParse(
       """
       precedencegroup A {
         associativity 1️⃣right
@@ -350,7 +350,7 @@ final class OperatorDeclTests: XCTestCase {
   }
 
   func testOperatorDecl15c() {
-    AssertParse(
+    assertParse(
       """
       precedencegroup B {
         1️⃣precedence 123
@@ -363,7 +363,7 @@ final class OperatorDeclTests: XCTestCase {
   }
 
   func testOperatorDecl15d() {
-    AssertParse(
+    assertParse(
       """
       precedencegroup C {
         associativity: 1️⃣sinister
@@ -376,7 +376,7 @@ final class OperatorDeclTests: XCTestCase {
   }
 
   func testOperatorDecl15e() {
-    AssertParse(
+    assertParse(
       """
       precedencegroup D {
         assignment: 1️⃣no
@@ -389,7 +389,7 @@ final class OperatorDeclTests: XCTestCase {
   }
 
   func testOperatorDecl15() {
-    AssertParse(
+    assertParse(
       """
       precedencegroup E {
         higherThan:1️⃣
@@ -402,7 +402,7 @@ final class OperatorDeclTests: XCTestCase {
   }
 
   func testOperatorDecl16() {
-    AssertParse(
+    assertParse(
       """
       precedencegroup F {
         higherThan: A, B, C
@@ -412,7 +412,7 @@ final class OperatorDeclTests: XCTestCase {
   }
 
   func testOperatorDecl17() {
-    AssertParse(
+    assertParse(
       """
       precedencegroup BangBangBang {
         associativity: none
@@ -423,7 +423,7 @@ final class OperatorDeclTests: XCTestCase {
   }
 
   func testOperatorDecl18() {
-    AssertParse(
+    assertParse(
       """
       precedencegroup CaretCaretCaret {
         assignment: true
@@ -434,7 +434,7 @@ final class OperatorDeclTests: XCTestCase {
   }
 
   func testOperatorDecl19() {
-    AssertParse(
+    assertParse(
       """
       class Foo {
         infix operator |||
@@ -444,7 +444,7 @@ final class OperatorDeclTests: XCTestCase {
   }
 
   func testOperatorDecl20() {
-    AssertParse(
+    assertParse(
       """
       infix operator **<< : UndeclaredPrecedenceGroup
       """
@@ -453,7 +453,7 @@ final class OperatorDeclTests: XCTestCase {
 
   func testOperatorDecl21() {
     // TODO: We should not allow specification of multiple precedence groups
-    AssertParse(
+    assertParse(
       """
       protocol Proto {}
       infix operator *<*< : F, Proto
@@ -462,7 +462,7 @@ final class OperatorDeclTests: XCTestCase {
   }
 
   func testOperatorDecl22() {
-    AssertParse(
+    assertParse(
       """
       // https://github.com/apple/swift/issues/60932
       """
@@ -470,7 +470,7 @@ final class OperatorDeclTests: XCTestCase {
   }
 
   func testOperatorDecl23() {
-    AssertParse(
+    assertParse(
       """
       postfix operator ++:1️⃣
       """,
@@ -481,7 +481,7 @@ final class OperatorDeclTests: XCTestCase {
   }
 
   func testIdentifierAsOperatorName() {
-    AssertParse(
+    assertParse(
       "postfix operator 1️⃣aa",
       diagnostics: [
         DiagnosticSpec(message: "'aa' is considered an identifier and must not appear within an operator name")
@@ -490,6 +490,6 @@ final class OperatorDeclTests: XCTestCase {
   }
 
   func testRegexLikeOperator() {
-    AssertParse("prefix operator /^/")
+    assertParse("prefix operator /^/")
   }
 }

@@ -16,7 +16,7 @@ import XCTest
 
 final class ForeachTests: XCTestCase {
   func testForeach1() {
-    AssertParse(
+    assertParse(
       """
       struct IntRange<Int> : Sequence, IteratorProtocol {
         typealias Element = (Int, Int)
@@ -29,7 +29,7 @@ final class ForeachTests: XCTestCase {
   }
 
   func testForeach2() {
-    AssertParse(
+    assertParse(
       """
       func for_each(r: Range<Int>, iir: IntRange<Int>) {
         var sum = 0

@@ -190,7 +190,11 @@ class PerformanceTest: ParsableCommand {
     let endDate = Date()
 
     print("Time:         \(endDate.timeIntervalSince(start) / Double(self.iterations) * 1000)ms")
-    print("Instructions: \(Double(endInstructions - startInstructions) / Double(self.iterations))")
+    if endInstructions != startInstructions {
+      // endInstructions == startInstructions only happens if we are on non-macOS
+      // platforms that don't support `getInstructionsExecuted`. Don't display anything.
+      print("Instructions: \(Double(endInstructions - startInstructions) / Double(self.iterations))")
+    }
   }
 }
 

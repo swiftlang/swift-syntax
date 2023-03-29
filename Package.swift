@@ -5,13 +5,13 @@ import Foundation
 
 /// If we are in a controlled CI environment, we can use internal compiler flags
 /// to speed up the build or improve it.
-let swiftSyntaxSwiftSettings: [SwiftSetting]
+var swiftSyntaxSwiftSettings: [SwiftSetting] = []
 if ProcessInfo.processInfo.environment["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] != nil {
   let groupFile = URL(fileURLWithPath: #file)
     .deletingLastPathComponent()
     .appendingPathComponent("utils")
     .appendingPathComponent("group.json")
-  swiftSyntaxSwiftSettings = [
+  swiftSyntaxSwiftSettings += [
     .define("SWIFTSYNTAX_ENABLE_ASSERTIONS"),
     .unsafeFlags([
       "-Xfrontend", "-group-info-path",
@@ -21,8 +21,11 @@ if ProcessInfo.processInfo.environment["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] != nil 
       "-enforce-exclusivity=unchecked",
     ]),
   ]
-} else {
-  swiftSyntaxSwiftSettings = []
+}
+if ProcessInfo.processInfo.environment["SWIFTSYNTAX_ENABLE_RAWSYNTAX_VALIDATION"] != nil {
+  swiftSyntaxSwiftSettings += [
+    .define("SWIFTSYNTAX_ENABLE_RAWSYNTAX_VALIDATION")
+  ]
 }
 
 let package = Package(

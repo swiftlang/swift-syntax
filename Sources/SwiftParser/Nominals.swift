@@ -150,7 +150,7 @@ extension Parser {
     introucerHandle: RecoveryConsumptionHandle
   ) -> T where T: NominalTypeDeclarationTrait {
     let (unexpectedBeforeIntroducerKeyword, introducerKeyword) = self.eat(introucerHandle)
-    let (unexpectedBeforeName, name) = self.expectIdentifier(allowIdentifierLikeKeywords: false, keywordRecovery: true)
+    let (unexpectedBeforeName, name) = self.expectIdentifier(keywordRecovery: true)
     if unexpectedBeforeName == nil && name.isMissing && self.currentToken.isAtStartOfLine {
       return T.init(
         attributes: attrs.attributes,
@@ -258,7 +258,7 @@ extension Parser {
       var loopProgress = LoopProgressCondition()
       repeat {
         // Parse the name of the parameter.
-        let (unexpectedBeforeName, name) = self.expectIdentifier()
+        let (unexpectedBeforeName, name) = self.expectIdentifier(allowSelfOrCapitalSelfAsIdentifier: true)
         keepGoing = self.consume(if: .comma)
         associatedTypes.append(
           RawPrimaryAssociatedTypeSyntax(

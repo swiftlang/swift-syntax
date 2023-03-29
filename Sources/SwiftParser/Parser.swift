@@ -417,18 +417,20 @@ extension Parser {
   /// incorrectly used a keyword as an identifier.
   /// This should be set if keywords aren't strong recovery marker at this
   /// position, e.g. because the parser expects a punctuator next.
+  ///
+  /// If `allowSelfOrCapitalSelfAsIdentifier` is `true`, then `self` and `Self`
+  /// are also accepted and remapped to identifiers. This is exclusively used
+  /// to maintain compatibility with the C++ parser. No new uses of this should
+  /// be introduced.
   mutating func expectIdentifier(
-    allowIdentifierLikeKeywords: Bool = true,
-    keywordRecovery: Bool = false
+    keywordRecovery: Bool = false,
+    allowSelfOrCapitalSelfAsIdentifier: Bool = false
   ) -> (RawUnexpectedNodesSyntax?, RawTokenSyntax) {
-    if allowIdentifierLikeKeywords {
-      if let (_, handle) = self.canRecoverTo(anyIn: IdentifierTokens.self) {
-        return self.eat(handle)
-      }
-    } else {
-      if let identifier = self.consume(if: .identifier) {
-        return (nil, identifier)
-      }
+    if let identifier = self.consume(if: .identifier) {
+      return (nil, identifier)
+    }
+    if allowSelfOrCapitalSelfAsIdentifier, let selfOrCapitalSelf = self.consume(if: TokenSpec(.self, remapping: .identifier), TokenSpec(.Self, remapping: .identifier)) {
+      return (nil, selfOrCapitalSelf)
     }
     if let unknown = self.consume(if: .unknown) {
       return (
@@ -448,22 +450,6 @@ extension Parser {
       let keyword = self.consumeAnyToken()
       return (
         RawUnexpectedNodesSyntax(elements: [RawSyntax(keyword)], arena: self.arena),
-        self.missingToken(.identifier)
-      )
-    }
-    return (
-      nil,
-      self.missingToken(.identifier)
-    )
-  }
-
-  mutating func expectIdentifierOrRethrows() -> (RawUnexpectedNodesSyntax?, RawTokenSyntax) {
-    if let (_, handle) = self.canRecoverTo(anyIn: IdentifierOrRethrowsTokens.self) {
-      return self.eat(handle)
-    }
-    if let unknown = self.consume(if: .unknown) {
-      return (
-        RawUnexpectedNodesSyntax(elements: [RawSyntax(unknown)], arena: self.arena),
         self.missingToken(.identifier)
       )
     }

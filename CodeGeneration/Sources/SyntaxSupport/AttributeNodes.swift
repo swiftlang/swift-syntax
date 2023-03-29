@@ -301,7 +301,7 @@ public let ATTRIBUTE_NODES: [Node] = [
     children: [
       Child(
         name: "DeclBaseName",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "PrefixOperatorToken"), .keyword(text: "init")]),
+        kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "BinaryOperatorToken"), .keyword(text: "init"), .keyword(text: "self"), .keyword(text: "Self")]),
         nameForDiagnostics: "base name",
         description: "The base name of the protocol's requirement."
       ),
@@ -468,7 +468,7 @@ public let ATTRIBUTE_NODES: [Node] = [
     children: [
       Child(
         name: "DiffKind",
-        kind: .token(choices: [.keyword(text: "forward"), .keyword(text: "reverse"), .keyword(text: "linear")]),
+        kind: .token(choices: [.keyword(text: "_forward"), .keyword(text: "reverse"), .keyword(text: "_linear")]),
         isOptional: true
       ),
       Child(
@@ -644,7 +644,7 @@ public let ATTRIBUTE_NODES: [Node] = [
     children: [
       Child(
         name: "Label",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .keyword(text: "available"), .keyword(text: "exported"), .keyword(text: "kind"), .keyword(text: "spi"), .keyword(text: "spiModule")]),
+        kind: .node(kind: "Token"),
         nameForDiagnostics: "label",
         description: "The label of the argument"
       ),
@@ -677,7 +677,7 @@ public let ATTRIBUTE_NODES: [Node] = [
     children: [
       Child(
         name: "Name",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+        kind: .node(kind: "Token"),
         nameForDiagnostics: "name",
         isOptional: true
       ),
@@ -779,7 +779,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "Name",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "BinaryOperatorToken"), .token(tokenKind: "PrefixOperatorToken"), .token(tokenKind: "PostfixOperatorToken")]),
+        kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .keyword(text: "self"), .keyword(text: "Self"), .keyword(text: "init"), .token(tokenKind: "BinaryOperatorToken")]),
         nameForDiagnostics: "base name",
         description: "The base name of the referenced function."
       ),

@@ -575,11 +575,12 @@ extension Parser {
     let (unexpectedBetweenOfLabelAndColon, colon) = self.expect(.colon)
     let originalDeclName = self.parseQualifiedDeclarationName()
     let period = self.consume(if: .period)
+    let unexpectedBeforeAccessor: RawUnexpectedNodesSyntax?
     let accessor: RawTokenSyntax?
     if period != nil {
-      accessor = self.parseAnyIdentifier()
+      (unexpectedBeforeAccessor, accessor) = self.expect(.keyword(.get), .keyword(.set), default: .keyword(.get))
     } else {
-      accessor = nil
+      (unexpectedBeforeAccessor, accessor) = (nil, nil)
     }
     let comma = self.consume(if: .comma)
     let diffParams: RawDifferentiabilityParamsClauseSyntax?
@@ -595,6 +596,7 @@ extension Parser {
       colon: colon,
       originalDeclName: originalDeclName,
       period: period,
+      unexpectedBeforeAccessor,
       accessorKind: accessor,
       comma: comma,
       diffParams: diffParams,

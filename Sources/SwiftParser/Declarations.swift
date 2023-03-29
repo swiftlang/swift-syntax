@@ -476,7 +476,7 @@ extension Parser {
         // Parse the 'each' keyword for a type parameter pack 'each T'.
         var each = self.consume(if: .keyword(.each))
 
-        let (unexpectedBetweenEachAndName, name) = self.expectIdentifier()
+        let (unexpectedBetweenEachAndName, name) = self.expectIdentifier(allowSelfOrCapitalSelfAsIdentifier: true)
         if attributes == nil && each == nil && unexpectedBetweenEachAndName == nil && name.isMissing && elements.isEmpty {
           break
         }
@@ -631,7 +631,7 @@ extension Parser {
               body: .sameTypeRequirement(
                 RawSameTypeRequirementSyntax(
                   leftTypeIdentifier: RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)),
-                  equalityToken: missingToken(.equal),
+                  equalityToken: missingToken(.binaryOperator, text: "=="),
                   rightTypeIdentifier: RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)),
                   arena: self.arena
                 )
@@ -890,7 +890,7 @@ extension Parser {
       var loopProgress = LoopProgressCondition()
       repeat {
         let unexpectedPeriod = self.consume(if: .period)
-        let (unexpectedBeforeName, name) = self.expectIdentifier(allowIdentifierLikeKeywords: false, keywordRecovery: true)
+        let (unexpectedBeforeName, name) = self.expectIdentifier(keywordRecovery: true)
 
         let associatedValue: RawParameterClauseSyntax?
         if self.at(TokenSpec(.leftParen, allowAtStartOfLine: false)) {
@@ -1916,7 +1916,7 @@ extension Parser {
     // checking.
     let precedenceAndTypes: RawOperatorPrecedenceAndTypesSyntax?
     if let colon = self.consume(if: .colon) {
-      let (unexpectedBeforeIdentifier, identifier) = self.expectIdentifier(keywordRecovery: true)
+      let (unexpectedBeforeIdentifier, identifier) = self.expectIdentifier(allowSelfOrCapitalSelfAsIdentifier: true)
       var types = [RawDesignatedTypeElementSyntax]()
       while let comma = self.consume(if: .comma) {
         // FIXME: The compiler accepts... anything here. This is a bug.
@@ -2001,7 +2001,7 @@ extension Parser {
     _ handle: RecoveryConsumptionHandle
   ) -> RawPrecedenceGroupDeclSyntax {
     let (unexpectedBeforeGroup, group) = self.eat(handle)
-    let (unexpectedBeforeIdentifier, identifier) = self.expectIdentifier(keywordRecovery: true)
+    let (unexpectedBeforeIdentifier, identifier) = self.expectIdentifier(allowSelfOrCapitalSelfAsIdentifier: true)
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
 
     let groupAttributes = self.parsePrecedenceGroupAttributeListSyntax()

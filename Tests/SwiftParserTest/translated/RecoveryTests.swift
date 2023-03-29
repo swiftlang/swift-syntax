@@ -747,7 +747,7 @@ final class RecoveryTests: XCTestCase {
       protocol Multi 1️⃣ident {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "found an unexpected second identifier in protocol")
+        DiagnosticSpec(message: "found an unexpected second identifier in protocol", highlight: "ident")
       ]
     )
   }
@@ -1958,34 +1958,46 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery163() {
+    // <rdar://problem/22387625> QoI: Common errors: 'let x= 5' and 'let x =5' could use Fix-its
     assertParse(
       """
-      // <rdar://problem/22387625> QoI: Common errors: 'let x= 5' and 'let x =5' could use Fix-its
       func r22387625() {
-        let _= 5
-        let _ =5
+        let _1️⃣= 5
+        let _ =2️⃣5
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: '=' must have consistent whitespace on both sides, Fix-It replacements: 8 - 8 = ' '
-        // TODO: Old parser expected error on line 4: '=' must have consistent whitespace on both sides, Fix-It replacements: 10 - 10 = ' '
-      ]
+        DiagnosticSpec(locationMarker: "1️⃣", message: "'=' must have consistent whitespace on both sides", fixIts: ["insert whitespace"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "'=' must have consistent whitespace on both sides", fixIts: ["insert whitespace"]),
+      ],
+      fixedSource: """
+        func r22387625() {
+          let _ = 5
+          let _ = 5
+        }
+        """
     )
   }
 
   func testRecovery164() {
+    // https://github.com/apple/swift/issues/45723
     assertParse(
       """
-      // https://github.com/apple/swift/issues/45723
       do {
-        let _: Int= 5
-        let _: Array<Int>= []
+        let _: Int1️⃣= 5
+        let _: Array<Int>2️⃣= []
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: '=' must have consistent whitespace on both sides, Fix-It replacements: 13 - 13 = ' '
-        // TODO: Old parser expected error on line 4: '=' must have consistent whitespace on both sides, Fix-It replacements: 20 - 20 = ' '
-      ]
+        DiagnosticSpec(locationMarker: "1️⃣", message: "'=' must have consistent whitespace on both sides", fixIts: ["insert whitespace"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "'=' must have consistent whitespace on both sides", fixIts: ["insert whitespace"]),
+      ],
+      fixedSource: """
+        do {
+          let _: Int = 5
+          let _: Array<Int> = []
+        }
+        """
     )
   }
 
@@ -2139,16 +2151,18 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery176() {
+    // rdar://problem/22478168
+    // https://github.com/apple/swift/issues/53396
     assertParse(
       """
-      // rdar://problem/22478168
-      // https://github.com/apple/swift/issues/53396
       func f_53396(a: Int 1️⃣== 0) {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: expected '=' instead of '==' to assign default value for parameter, Fix-It replacements: 21 - 23 = '='
-        DiagnosticSpec(message: "unexpected code '== 0' in parameter clause")
-      ]
+        DiagnosticSpec(message: "expected '=' instead of '==' to assign default value for parameter", fixIts: ["replace '==' with '='"])
+      ],
+      fixedSource: """
+        func f_53396(a: Int = 0) {}
+        """
     )
   }
 
@@ -2202,8 +2216,7 @@ final class RecoveryTests: XCTestCase {
       }2️⃣
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected '{' or 'if' after 'else'
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' in 'if' statement"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' or 'if' after 'else'"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end function"),
       ]
     )

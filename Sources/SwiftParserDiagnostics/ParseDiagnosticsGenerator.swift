@@ -84,11 +84,12 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
   // MARK: - Private helper functions
 
   /// Produce a diagnostic.
+  /// If `highlights` is `nil` the `node` will be highlighted.
   func addDiagnostic<T: SyntaxProtocol>(
     _ node: T,
     position: AbsolutePosition? = nil,
     _ message: DiagnosticMessage,
-    highlights: [Syntax] = [],
+    highlights: [Syntax]? = nil,
     notes: [Note] = [],
     fixIts: [FixIt] = [],
     handledNodes: [SyntaxIdentifier] = []
@@ -497,6 +498,28 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         message: { _ in .joinConditionsUsingComma },
         moveFixIt: { ReplaceTokensFixIt(replaceTokens: $0, replacement: trailingComma) }
       )
+    } else if let unexpected = node.unexpectedBetweenConditionAndTrailingComma,
+      let availability = node.condition.as(AvailabilityConditionSyntax.self),
+      let comparisonOperator = unexpected.oneTokenSatisfying(satisfying: { $0.tokenKind == .binaryOperator("==") }),
+      let falseKeyword = unexpected.oneTokenSatisfying(satisfying: { $0.tokenKind == .keyword(.false) })
+    {
+      // Diagnose #available used as an expression
+      let negatedAvailabilityKeyword = availability.availabilityKeyword.negatedAvailabilityKeyword
+      addDiagnostic(
+        unexpected,
+        AvailabilityConditionAsExpression(availabilityCondition: availability.availabilityKeyword, unavailabilityCondition: negatedAvailabilityKeyword),
+        fixIts: [
+          FixIt(
+            message: ReplaceTokensFixIt(replaceTokens: [comparisonOperator], replacement: negatedAvailabilityKeyword),
+            changes: [
+              .makeMissing([comparisonOperator]),
+              .makePresent(negatedAvailabilityKeyword),
+            ]
+          ),
+          FixIt(message: RemoveNodesFixIt([comparisonOperator, falseKeyword]), changes: .makeMissing([comparisonOperator, falseKeyword])),
+        ],
+        handledNodes: [unexpected.id]
+      )
     }
     return .visitChildren
   }
@@ -791,6 +814,10 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       addDiagnostic(node.conditions, MissingConditionInStatement(node: node), handledNodes: [node.conditions.id])
     }
 
+    if let leftBrace = node.elseBody?.as(CodeBlockSyntax.self)?.leftBrace, leftBrace.presence == .missing {
+      addDiagnostic(leftBrace, .expectedLeftBraceOrIfAfterElse, handledNodes: [leftBrace.id])
+    }
+
     return .visitChildren
   }
 
@@ -798,6 +825,23 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if shouldSkip(node) {
       return .skipChildren
     }
+
+    if let unexpected = node.unexpectedBeforeEqual,
+      unexpected.first?.as(TokenSyntax.self)?.tokenKind == .binaryOperator("==")
+    {
+      addDiagnostic(
+        unexpected,
+        .expectedAssignmentInsteadOfComparisonOperator,
+        fixIts: [
+          FixIt(
+            message: ReplaceTokensFixIt(replaceTokens: [.binaryOperator("==")], replacement: node.equal),
+            changes: [.makeMissing(unexpected), .makePresent(node.equal, leadingTrivia: [])]
+          )
+        ],
+        handledNodes: [unexpected.id, node.equal.id]
+      )
+    }
+
     if node.equal.presence == .missing {
       exchangeTokens(
         unexpected: node.unexpectedBeforeEqual,

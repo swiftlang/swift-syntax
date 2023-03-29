@@ -128,9 +128,21 @@ public let AVAILABILITY_NODES: [Node] = [
     kind: "Syntax",
     children: [
       Child(
-        name: "MajorMinor",
-        kind: .token(choices: [.token(tokenKind: "IntegerLiteralToken"), .token(tokenKind: "FloatingLiteralToken")]),
-        description: "In case the version consists only of the major version, an integer literal that specifies the major version. In case the version consists of major and minor version number, a floating literal in which the decimal part is interpreted as the minor version."
+        name: "Major",
+        kind: .token(choices: [.token(tokenKind: "IntegerLiteralToken")]),
+        description: "The major version."
+      ),
+      Child(
+        name: "MinorPeriod",
+        kind: .token(choices: [.token(tokenKind: "PeriodToken")]),
+        description: "If the version contains a minor number, the period separating the major from the minor number.",
+        isOptional: true
+      ),
+      Child(
+        name: "Minor",
+        kind: .token(choices: [.token(tokenKind: "IntegerLiteralToken")]),
+        description: "The minor version if specified.",
+        isOptional: true
       ),
       Child(
         name: "PatchPeriod",
@@ -139,7 +151,7 @@ public let AVAILABILITY_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "PatchVersion",
+        name: "Patch",
         kind: .token(choices: [.token(tokenKind: "IntegerLiteralToken")]),
         description: "The patch version if specified.",
         isOptional: true

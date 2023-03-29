@@ -132,7 +132,13 @@ class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
         let macro = macroSystem.macros[exprExpansion.macro.text]
       {
         do {
-          if let macro = macro as? DeclarationMacro.Type {
+          if let macro = macro as? CodeItemMacro.Type {
+            let expandedItemList = try macro.expansion(
+              of: exprExpansion,
+              in: context
+            )
+            newItems.append(contentsOf: expandedItemList)
+          } else if let macro = macro as? DeclarationMacro.Type {
             let expandedItemList = try macro.expansion(
               of: exprExpansion,
               in: context

@@ -439,7 +439,7 @@ extension Parser {
     if let number = self.consume(if: .integerLiteral, .floatingLiteral, .dollarIdentifier) {
       return (
         RawUnexpectedNodesSyntax(elements: [RawSyntax(number)], arena: self.arena),
-        self.missingToken(.identifier, text: nil)
+        self.missingToken(.identifier)
       )
     } else if keywordRecovery,
       (self.currentToken.isLexerClassifiedKeyword || self.currentToken.rawTokenKind == .wildcard),
@@ -448,7 +448,7 @@ extension Parser {
       let keyword = self.consumeAnyToken()
       return (
         RawUnexpectedNodesSyntax(elements: [RawSyntax(keyword)], arena: self.arena),
-        self.missingToken(.identifier, text: nil)
+        self.missingToken(.identifier)
       )
     }
     return (
@@ -505,7 +505,7 @@ extension Parser {
     var lookahead = self.lookahead()
     guard let recoveryHandle = lookahead.canRecoverTo(.rightBrace) else {
       // We can't recover to '}'. Synthesize it.
-      return (nil, self.missingToken(.rightBrace, text: nil))
+      return (nil, self.missingToken(.rightBrace))
     }
 
     // We can recover to a '}'. Decide whether we want to eat it based on its indentation.
@@ -513,13 +513,13 @@ extension Parser {
     switch (indentation(introducer.leadingTriviaPieces), indentation(rightBraceTrivia)) {
     // Catch cases where the brace has known indentation that is less than that of `introducer`, in which case we don't want to consume it.
     case (.spaces(let introducerSpaces), .spaces(let rightBraceSpaces)) where rightBraceSpaces < introducerSpaces:
-      return (nil, self.missingToken(.rightBrace, text: nil))
+      return (nil, self.missingToken(.rightBrace))
     case (.tabs(let introducerTabs), .tabs(let rightBraceTabs)) where rightBraceTabs < introducerTabs:
-      return (nil, self.missingToken(.rightBrace, text: nil))
+      return (nil, self.missingToken(.rightBrace))
     case (.spaces, .tabs(0)):
-      return (nil, self.missingToken(.rightBrace, text: nil))
+      return (nil, self.missingToken(.rightBrace))
     case (.tabs, .spaces(0)):
-      return (nil, self.missingToken(.rightBrace, text: nil))
+      return (nil, self.missingToken(.rightBrace))
     default:
       return self.eat(recoveryHandle)
     }

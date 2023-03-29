@@ -43,20 +43,7 @@ extension Lexer {
 
     mutating func advance() -> Lexer.Lexeme {
       defer {
-        if self.cursor.isAtEndOfFile {
-          self.nextToken = Lexeme(
-            tokenKind: .eof,
-            flags: [],
-            diagnostic: nil,
-            start: self.cursor.pointer,
-            leadingTriviaLength: 0,
-            textLength: 0,
-            trailingTriviaLength: 0,
-            cursor: self.cursor
-          )
-        } else {
-          self.nextToken = self.cursor.nextToken(sourceBufferStart: self.sourceBufferStart, stateAllocator: lexerStateAllocator)
-        }
+        self.nextToken = self.cursor.nextToken(sourceBufferStart: self.sourceBufferStart, stateAllocator: lexerStateAllocator)
       }
       return self.nextToken
     }

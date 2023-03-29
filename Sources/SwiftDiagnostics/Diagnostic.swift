@@ -33,18 +33,20 @@ public struct Diagnostic: CustomDebugStringConvertible {
   /// Each Fix-It offers a different way to resolve the diagnostic. Usually, there's only one.
   public let fixIts: [FixIt]
 
+  /// If `highlights` is `nil` then `node` will be highlighted. This is a
+  /// reasonable default for almost all diagnostics.
   public init(
     node: Syntax,
     position: AbsolutePosition? = nil,
     message: DiagnosticMessage,
-    highlights: [Syntax] = [],
+    highlights: [Syntax]? = nil,
     notes: [Note] = [],
     fixIts: [FixIt] = []
   ) {
     self.node = node
     self.position = position ?? node.positionAfterSkippingLeadingTrivia
     self.diagMessage = message
-    self.highlights = highlights
+    self.highlights = highlights ?? [node]
     self.notes = notes
     self.fixIts = fixIts
   }

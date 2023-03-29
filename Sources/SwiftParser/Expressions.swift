@@ -1671,7 +1671,18 @@ extension Parser {
 extension Parser {
   @_spi(RawSyntax)
   public mutating func parseDefaultArgument() -> RawInitializerClauseSyntax {
-    let (unexpectedBeforeEq, eq) = self.expect(.equal)
+    let unexpectedBeforeEq: RawUnexpectedNodesSyntax?
+    let eq: RawTokenSyntax
+    if let comparison = self.consumeIfContextualPunctuator("==") {
+      unexpectedBeforeEq = RawUnexpectedNodesSyntax(
+        elements: [RawSyntax(comparison)],
+        arena: self.arena
+      )
+      eq = missingToken(.equal)
+    } else {
+      (unexpectedBeforeEq, eq) = self.expect(.equal)
+    }
+
     let expr = self.parseExpression()
     return RawInitializerClauseSyntax(
       unexpectedBeforeEq,
@@ -1710,13 +1721,7 @@ extension Parser {
     let signature = self.parseClosureSignatureIfPresent()
 
     // Parse the body.
-    var elements = [RawCodeBlockItemSyntax]()
-    do {
-      var loopProgress = LoopProgressCondition()
-      while !self.at(.rightBrace), let newItem = self.parseCodeBlockItem(), loopProgress.evaluate(currentToken) {
-        elements.append(newItem)
-      }
-    }
+    let elements = parseCodeBlockItemList(until: { $0.at(.rightBrace) })
 
     // Parse the closing '}'.
     let (unexpectedBeforeRBrace, rbrace) = self.expect(.rightBrace)
@@ -1724,7 +1729,7 @@ extension Parser {
       unexpectedBeforeLBrace,
       leftBrace: lbrace,
       signature: signature,
-      statements: RawCodeBlockItemListSyntax(elements: elements, arena: arena),
+      statements: elements,
       unexpectedBeforeRBrace,
       rightBrace: rbrace,
       arena: self.arena
@@ -2320,7 +2325,7 @@ extension Parser {
                       RawCaseItemSyntax(
                         pattern: RawPatternSyntax(
                           RawIdentifierPatternSyntax(
-                            identifier: missingToken(.identifier, text: nil),
+                            identifier: missingToken(.identifier),
                             arena: self.arena
                           )
                         ),
@@ -2331,7 +2336,7 @@ extension Parser {
                     ],
                     arena: self.arena
                   ),
-                  colon: missingToken(.colon, text: nil),
+                  colon: missingToken(.colon),
                   arena: self.arena
                 )
               ),
@@ -2350,16 +2355,9 @@ extension Parser {
   }
 
   mutating func parseSwitchCaseBody() -> RawCodeBlockItemListSyntax {
-    var items = [RawCodeBlockItemSyntax]()
-    var loopProgress = LoopProgressCondition()
-    while !self.at(.rightBrace) && !self.at(.poundEndifKeyword, .poundElseifKeyword, .poundElseKeyword)
-      && !self.withLookahead({ $0.isStartOfConditionalSwitchCases() }),
-      let newItem = self.parseCodeBlockItem(),
-      loopProgress.evaluate(currentToken)
-    {
-      items.append(newItem)
-    }
-    return RawCodeBlockItemListSyntax(elements: items, arena: self.arena)
+    parseCodeBlockItemList(until: {
+      $0.at(.rightBrace) || $0.at(.poundEndifKeyword, .poundElseifKeyword, .poundElseKeyword) || $0.withLookahead({ $0.isStartOfConditionalSwitchCases() })
+    })
   }
 
   /// Parse a single switch case clause.

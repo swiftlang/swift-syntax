@@ -192,7 +192,7 @@ extension Parser {
             lastElement.unexpectedBeforeDecl,
             decl: lastElement.decl,
             lastElement.unexpectedBetweenDeclAndSemicolon,
-            semicolon: parser.missingToken(.semicolon, text: nil),
+            semicolon: parser.missingToken(.semicolon),
             lastElement.unexpectedAfterSemicolon,
             arena: parser.arena
           )
@@ -835,7 +835,7 @@ extension Parser {
             lastItem.unexpectedBeforeDecl,
             decl: lastItem.decl,
             lastItem.unexpectedBetweenDeclAndSemicolon,
-            semicolon: self.missingToken(.semicolon, text: nil),
+            semicolon: self.missingToken(.semicolon),
             lastItem.unexpectedAfterSemicolon,
             arena: self.arena
           )
@@ -1229,7 +1229,7 @@ extension Parser {
     }
 
     let defaultArgument: RawInitializerClauseSyntax?
-    if self.at(.equal) {
+    if self.at(.equal) || self.atContextualPunctuator("==") {
       defaultArgument = self.parseDefaultArgument()
     } else {
       defaultArgument = nil
@@ -1575,7 +1575,7 @@ extension Parser {
               typeAnnotationUnwrapped.unexpectedBetweenColonAndType,
               arena: self.arena
             ),
-            equal: missingToken(.equal, text: nil),
+            equal: missingToken(.equal),
             value: initExpr,
             arena: self.arena
           )
@@ -1742,7 +1742,7 @@ extension Parser {
     let lbrace: RawTokenSyntax
     if self.at(anyIn: AccessorKind.self) != nil {
       unexpectedBeforeLBrace = nil
-      lbrace = missingToken(.leftBrace, text: nil)
+      lbrace = missingToken(.leftBrace)
     } else {
       (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
     }
@@ -1768,20 +1768,14 @@ extension Parser {
             )
           }
 
-          var body = [RawCodeBlockItemSyntax]()
-          var codeBlockProgress = LoopProgressCondition()
-          while !self.at(.rightBrace),
-            let newItem = self.parseCodeBlockItem(),
-            codeBlockProgress.evaluate(currentToken)
-          {
-            body.append(newItem)
-          }
+          let body = parseCodeBlockItemList(until: { $0.at(.rightBrace) })
+
           let (unexpectedBeforeRBrace, rbrace) = self.expect(.rightBrace)
           return .getter(
             RawCodeBlockSyntax(
               unexpectedBeforeLBrace,
               leftBrace: lbrace,
-              statements: RawCodeBlockItemListSyntax(elements: body, arena: self.arena),
+              statements: body,
               unexpectedBeforeRBrace,
               rightBrace: rbrace,
               arena: self.arena
@@ -1837,7 +1831,7 @@ extension Parser {
     let equal: RawTokenSyntax
     if let colon = self.consume(if: .colon) {
       unexpectedBeforeEqual = RawUnexpectedNodesSyntax(elements: [RawSyntax(colon)], arena: self.arena)
-      equal = missingToken(.equal, text: nil)
+      equal = missingToken(.equal)
     } else {
       (unexpectedBeforeEqual, equal) = self.expect(.equal)
     }
@@ -1901,7 +1895,7 @@ extension Parser {
       } else {
         unexpectedBeforeName = nil
       }
-      name = missingToken(.binaryOperator, text: nil)
+      name = missingToken(.binaryOperator)
     }
 
     // Eat any subsequent tokens that are not separated to the operator by trivia.

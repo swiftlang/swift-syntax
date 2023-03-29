@@ -99,4 +99,93 @@ final class AvailabilityTests: XCTestCase {
       """
     )
   }
+
+  func testVersionParsing() {
+    assertParse(
+      """
+      @available(OSX 10)
+      func test() {}
+      """,
+      substructure: Syntax(
+        VersionTupleSyntax(
+          major: .integerLiteral("10")
+        )
+      )
+    )
+
+    assertParse(
+      """
+      @available(OSX 10.0)
+      func test() {}
+      """,
+      substructure: Syntax(
+        VersionTupleSyntax(
+          major: .integerLiteral("10"),
+          minorPeriod: .periodToken(),
+          minor: .integerLiteral("0")
+        )
+      )
+    )
+
+    assertParse(
+      """
+      @available(OSX 10.0.1)
+      func test() {}
+      """,
+      substructure: Syntax(
+        VersionTupleSyntax(
+          major: .integerLiteral("10"),
+          minorPeriod: .periodToken(),
+          minor: .integerLiteral("0"),
+          patchPeriod: .periodToken(),
+          patch: .integerLiteral("1")
+        )
+      )
+    )
+
+    assertParse(
+      """
+      @available(OSX 1️⃣10e10)
+      func test() {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected version tuple in version restriction"),
+        DiagnosticSpec(message: "unexpected code '10e10' in attribute"),
+      ]
+    )
+
+    assertParse(
+      """
+      @available(OSX 10.1️⃣0e10)
+      func test() {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected integer literal in version tuple"),
+        DiagnosticSpec(message: "unexpected code '0e10' in attribute"),
+      ]
+    )
+
+    assertParse(
+      """
+      @available(OSX 1️⃣0xff)
+      func test() {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected version tuple in version restriction"),
+        DiagnosticSpec(message: "unexpected code '0xff' in attribute"),
+      ]
+    )
+
+    assertParse(
+      """
+      @available(OSX 1.0.1️⃣0xff)
+      func test() {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected integer literal in version tuple"),
+        DiagnosticSpec(message: "unexpected code '0xff' in attribute"),
+      ]
+    )
+
+  }
 }

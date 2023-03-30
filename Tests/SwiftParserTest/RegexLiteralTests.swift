@@ -72,10 +72,10 @@ final class RegexLiteralTests: XCTestCase {
   func testUnterminated2() {
     assertParse(
       #"""
-      1️⃣/
+      /1️⃣
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "extraneous code '/' at top level")
+        DiagnosticSpec(message: "expected '/' to end regex literal")
       ]
     )
   }
@@ -358,10 +358,10 @@ final class RegexLiteralTests: XCTestCase {
   func testOpeningSpace1() {
     assertParse(
       """
-      1️⃣/ a/
+      /1️⃣ a/
       """,
       diagnostics: [
-        DiagnosticSpec(message: "extraneous code '/ a/' at top level")
+        DiagnosticSpec(message: "bare slash regex literal may not start with space")
       ]
     )
   }
@@ -418,10 +418,10 @@ final class RegexLiteralTests: XCTestCase {
   func testOpeningAndClosingSpace1() {
     assertParse(
       """
-      1️⃣/  /
+      /1️⃣  /
       """,
       diagnostics: [
-        DiagnosticSpec(message: "extraneous code '/  /' at top level")
+        DiagnosticSpec(message: "bare slash regex literal may not start with space")
       ]
     )
   }
@@ -448,10 +448,10 @@ final class RegexLiteralTests: XCTestCase {
   func testOpeningAndClosingSpace4() {
     assertParse(
       """
-      1️⃣/ /
+      /1️⃣ /
       """,
       diagnostics: [
-        DiagnosticSpec(message: "extraneous code '/ /' at top level")
+        DiagnosticSpec(message: "bare slash regex literal may not start with space")
       ]
     )
   }
@@ -908,6 +908,221 @@ final class RegexLiteralTests: XCTestCase {
       #endif
       /^ }}x/
       """
+    )
+  }
+
+  func testBinOpDisambiguation51() {
+    // Unapplied operators, not regex.
+    assertParse(
+      """
+      foo(a: /, /)
+      """,
+      substructure: Syntax(
+        TupleExprElementListSyntax([
+          .init(
+            label: "a",
+            colon: .colonToken(),
+            expression: IdentifierExprSyntax(identifier: .binaryOperator("/")),
+            trailingComma: .commaToken()
+          ),
+          .init(
+            expression: IdentifierExprSyntax(identifier: .binaryOperator("/"))
+          ),
+        ])
+      )
+    )
+  }
+
+  func testBinOpDisambiguation52() {
+    // Unapplied operators, not regex.
+    assertParse(
+      """
+      foo(a, /, /)
+      """,
+      substructure: Syntax(
+        TupleExprElementListSyntax([
+          .init(
+            expression: IdentifierExprSyntax(identifier: "a"),
+            trailingComma: .commaToken()
+          ),
+          .init(
+            expression: IdentifierExprSyntax(identifier: .binaryOperator("/")),
+            trailingComma: .commaToken()
+          ),
+          .init(
+            expression: IdentifierExprSyntax(identifier: .binaryOperator("/"))
+          ),
+        ])
+      )
+    )
+  }
+
+  func testBinOpDisambiguation53() {
+    // Unapplied operators, not regex.
+    assertParse(
+      """
+      foo(a, ^/, /)
+      """,
+      substructure: Syntax(
+        TupleExprElementListSyntax([
+          .init(
+            expression: IdentifierExprSyntax(identifier: "a"),
+            trailingComma: .commaToken()
+          ),
+          .init(
+            expression: IdentifierExprSyntax(identifier: .binaryOperator("^/")),
+            trailingComma: .commaToken()
+          ),
+          .init(
+            expression: IdentifierExprSyntax(identifier: .binaryOperator("/"))
+          ),
+        ])
+      )
+    )
+  }
+
+  func testBinOpDisambiguation54() {
+    // Unapplied operators, not regex.
+    assertParse(
+      """
+      foo(a: ^/, /)
+      """,
+      substructure: Syntax(
+        TupleExprElementListSyntax([
+          .init(
+            label: "a",
+            colon: .colonToken(),
+            expression: IdentifierExprSyntax(identifier: .binaryOperator("^/")),
+            trailingComma: .commaToken()
+          ),
+          .init(
+            expression: IdentifierExprSyntax(identifier: .binaryOperator("/"))
+          ),
+        ])
+      )
+    )
+  }
+
+  func testBinOpDisambiguation55() {
+    // Unapplied operators, not regex.
+    assertParse(
+      """
+      foo(^/, /)
+      """,
+      substructure: Syntax(
+        TupleExprElementListSyntax([
+          .init(
+            expression: IdentifierExprSyntax(identifier: .binaryOperator("^/")),
+            trailingComma: .commaToken()
+          ),
+          .init(
+            expression: IdentifierExprSyntax(identifier: .binaryOperator("/"))
+          ),
+        ])
+      )
+    )
+  }
+
+  func testBinOpDisambiguation56() {
+    // Unapplied operators, not regex.
+    assertParse(
+      """
+      (^/, /)
+      """,
+      substructure: Syntax(
+        TupleExprElementListSyntax([
+          .init(
+            expression: IdentifierExprSyntax(identifier: .binaryOperator("^/")),
+            trailingComma: .commaToken()
+          ),
+          .init(
+            expression: IdentifierExprSyntax(identifier: .binaryOperator("/"))
+          ),
+        ])
+      )
+    )
+  }
+
+  func testBinOpDisambiguation57() {
+    // Unapplied operators, not regex.
+    assertParse(
+      """
+      (/, /)
+      """,
+      substructure: Syntax(
+        TupleExprElementListSyntax([
+          .init(
+            expression: IdentifierExprSyntax(identifier: .binaryOperator("/")),
+            trailingComma: .commaToken()
+          ),
+          .init(
+            expression: IdentifierExprSyntax(identifier: .binaryOperator("/"))
+          ),
+        ])
+      )
+    )
+  }
+
+  func testBinOpDisambiguation58() {
+    // Unapplied operators, not regex.
+    assertParse(
+      """
+      x[/, /]
+      """,
+      substructure: Syntax(
+        TupleExprElementListSyntax([
+          .init(
+            expression: IdentifierExprSyntax(identifier: .binaryOperator("/")),
+            trailingComma: .commaToken()
+          ),
+          .init(
+            expression: IdentifierExprSyntax(identifier: .binaryOperator("/"))
+          ),
+        ])
+      )
+    )
+  }
+
+  func testBinOpDisambiguation59() {
+    // Unapplied operators, not regex.
+    assertParse(
+      """
+      x[^/, /]
+      """,
+      substructure: Syntax(
+        TupleExprElementListSyntax([
+          .init(
+            expression: IdentifierExprSyntax(identifier: .binaryOperator("^/")),
+            trailingComma: .commaToken()
+          ),
+          .init(
+            expression: IdentifierExprSyntax(identifier: .binaryOperator("/"))
+          ),
+        ])
+      )
+    )
+  }
+
+  func testBinOpDisambiguation60() {
+    // Invalid. We can't confidently lex as a regex (as the lexer thinks it
+    // could be a subscript), so we get a parser error.
+    assertParse(
+      """
+      [1️⃣/, /]
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected code '/, /' in array")
+      ]
+    )
+  }
+
+  func testBinOpDisambiguation61() {
+    // Fine if there's no trailing space though.
+    assertParse(
+      """
+      [/,/]
+      """,
+      substructure: Syntax(RegexLiteralExprSyntax(regexPattern: .regexLiteralPattern(",")))
     )
   }
 

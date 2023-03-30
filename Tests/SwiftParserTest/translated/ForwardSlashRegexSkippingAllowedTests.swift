@@ -31,10 +31,10 @@ final class ForwardSlashRegexSkippingAllowedTests: XCTestCase {
     // Balanced `{}`, so okay.
     assertParse(
       """
-      func a() { 1️⃣/ {}/ }
+      func a() { /1️⃣ {}/ }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code '/ {}/' in function")
+        DiagnosticSpec(message: "bare slash regex literal may not start with space")
       ]
     )
   }
@@ -42,10 +42,10 @@ final class ForwardSlashRegexSkippingAllowedTests: XCTestCase {
   func testForwardSlashRegexSkippingAllowed5() {
     assertParse(
       #"""
-      func b() { 1️⃣/ \{}/ }
+      func b() { /1️⃣ \{}/ }
       """#,
       diagnostics: [
-        DiagnosticSpec(message: #"unexpected code '/ \{}/' in function"#)
+        DiagnosticSpec(message: "bare slash regex literal may not start with space")
       ]
     )
   }
@@ -53,10 +53,10 @@ final class ForwardSlashRegexSkippingAllowedTests: XCTestCase {
   func testForwardSlashRegexSkippingAllowed6() {
     assertParse(
       #"""
-      func c() { 1️⃣/ {"{"}/ }
+      func c() { /1️⃣ {"{"}/ }
       """#,
       diagnostics: [
-        DiagnosticSpec(message: #"unexpected code '/ {"{"}/' in function"#)
+        DiagnosticSpec(message: "bare slash regex literal may not start with space")
       ]
     )
   }

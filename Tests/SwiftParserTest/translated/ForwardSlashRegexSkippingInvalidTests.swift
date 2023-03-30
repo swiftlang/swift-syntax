@@ -178,15 +178,13 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkippingInvalid13() {
+    // Unbalanced `}`, make sure we don't consider the string literal `{`.
     assertParse(
       #"""
-      // Unbalanced `}`, make sure we don't consider the string literal `{`.
-      func n() { 2️⃣/ "{"}3️⃣/ }
+      func n() { /1️⃣ "{"}/ }
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: regex literal may not start with space; add backslash to escape
-        DiagnosticSpec(locationMarker: "2️⃣", message: #"unexpected code '/ "{"' in function"#),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous code '/ }' at top level"),
+        DiagnosticSpec(message: "bare slash regex literal may not start with space")
       ]
     )
   }

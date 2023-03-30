@@ -15,9 +15,17 @@
 /// A separate lexer specifically for regex literals.
 fileprivate struct RegexLiteralLexer {
   enum LexResult {
+    /// Continue the lex, this is returned from `lexPatternCharacter` when
+    /// it successfully lexed a character.
     case `continue`
+
+    /// The lexing has finished successfully.
     case done
+
+    /// This is not, in fact, a regex.
     case notARegex
+
+    /// We have an unterminated regex.
     case unterminated
   }
 
@@ -29,10 +37,14 @@ fileprivate struct RegexLiteralLexer {
   private var firstNewline: Lexer.Cursor?
   private var isMultiline: Bool { firstNewline != nil }
 
-  /// Tracks the current group depth, used to enforce the heuristic that a bare
-  /// slash regex literal with an unbalanced ')' should be treated as an
+  /// Tracks the current group '(' depth, used to enforce the heuristic that a
+  /// bare slash regex literal with an unbalanced ')' should be treated as an
   /// operator instead.
   private var groupDepth = 0
+
+  /// Tracks the current '[' custom character class depth, used to ensure we
+  /// don't count '(' and ')' characters in a custom character class as counting
+  /// as group characters.
   private var customCharacterClassDepth = 0
 
   /// Tracks the last unescaped space or tab character, used to enforce that a
@@ -58,7 +70,7 @@ fileprivate struct RegexLiteralLexer {
   }
 
   /// Attempt to lex a character of the regex pattern.
-  mutating func lexPatternCharacter(escaped: Bool = false) -> LexResult {
+  private mutating func lexPatternCharacter(escaped: Bool) -> LexResult {
     if cursor.isAtEndOfFile {
       // We've hit the end of the buffer. In multi-line mode, we don't want to
       // skip over what is likely otherwise valid Swift code, so resume from the
@@ -136,7 +148,7 @@ fileprivate struct RegexLiteralLexer {
   }
 
   /// Attempt to eat a the closing delimiter.
-  mutating func tryEatEnding() -> LexResult? {
+  private mutating func tryEatEnding() -> LexResult? {
     let openPoundCount = builder.numOpenPounds
     let slashBegin = cursor
     var newCursor = cursor
@@ -209,7 +221,7 @@ fileprivate struct RegexLiteralLexer {
     return .done
   }
 
-  mutating func lexImpl() -> LexResult {
+  private mutating func lexImpl() -> LexResult {
     // We can consume any number of pound signs.
     var poundCount = 0
     while cursor.advance(matching: "#") {
@@ -276,7 +288,7 @@ fileprivate struct RegexLiteralLexer {
       if let result = tryEatEnding() {
         return result
       }
-      switch lexPatternCharacter() {
+      switch lexPatternCharacter(escaped: false) {
       case .continue:
         continue
       case let result:
@@ -288,7 +300,7 @@ fileprivate struct RegexLiteralLexer {
   mutating func lex() -> RegexLiteralLexemes? {
     switch lexImpl() {
     case .continue:
-      fatalError("Not a valid result")
+      preconditionFailure("Not a valid result")
     case .notARegex:
       return nil
     case .unterminated where !mustBeRegex:
@@ -337,6 +349,7 @@ extension RegexLiteralLexemes.Element {
     case closingSlash
     case closingPounds
   }
+
   /// Retrieve the actual token kind.
   var tokenKind: RawTokenKind {
     switch kind {
@@ -370,7 +383,8 @@ extension RegexLiteralLexemes {
   /// A builder type for the regex literal lexer.
   ///
   /// NOTE: This is stored for the regex literal lexer state, so should be kept
-  /// as small as possible.
+  /// as small as possible. Additionally, it is allocated using a bump pointer
+  /// allocator, so must remain a POD type (i.e no classes).
   fileprivate struct Builder {
     private(set) var numOpenPounds: Int = 0
     private(set) var patternByteLength: Int = 0
@@ -415,6 +429,7 @@ extension RegexLiteralLexemes {
         _patternErrorOffset = start.distance(to: newValue.position)
       }
     }
+
     var hasPounds: Bool { numOpenPounds > 0 }
   }
 }
@@ -487,7 +502,12 @@ extension RegexLiteralLexemes.Builder {
     at cursor: Lexer.Cursor
   ) {
     precondition(lastLexemeKind == .openingSlash)
-    patternError = .init(kind, position: cursor)
+
+    // Only record if we don't already have a pattern error, we want to prefer
+    // the first error we encounter.
+    if patternError == nil {
+      patternError = .init(kind, position: cursor)
+    }
   }
 
   /// Finish regex literal lexing.

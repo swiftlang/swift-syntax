@@ -1,13 +1,25 @@
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2023 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
 // This test file has been translated from swift/test/StringProcessing/Parse/forward-slash-regex-skipping-invalid.swift
 
 import XCTest
 
 final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
   func testForwardSlashRegexSkippingInvalid1() {
+    // We don't consider this a regex literal when skipping as it has an initial
+    // space.
     assertParse(
       """
-      // We don't consider this a regex literal when skipping as it has an initial
-      // space.
       func a() { _ = /1️⃣ x*/ }
       """,
       diagnostics: [
@@ -17,9 +29,9 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkippingInvalid2() {
+    // Same because of unbalanced ')'
     assertParse(
       """
-      // Same because of unbalanced ')'
       func b() { _ = /x1️⃣)*/ }
       """,
       diagnostics: [
@@ -29,9 +41,9 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkippingInvalid3() {
+    // These also fail the heuristic, but have unbalanced `{` `}`, so we don't skip.
     assertParse(
       """
-      // These also fail the heuristic, but have unbalanced `{` `}`, so we don't skip.
       func c() { _ = /1️⃣ x}*/ }
       func d() { _ = /2️⃣ x{*/ }
       """,
@@ -43,9 +55,9 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkippingInvalid4() {
+    // Unterminated, and unbalanced `{}`.
     assertParse(
       """
-      // Unterminated, and unbalanced `{}`.
       func e() {
         _ = /1️⃣         }2️⃣
       }
@@ -191,14 +203,7 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 4: extraneous '}' at top level
-        // TODO: Old parser expected error on line 4: consecutive statements on a line must be separated by ';'
-        // TODO: Old parser expected error on line 4: unterminated regex literal
-        // TODO: Old parser expected warning on line 4: regular expression literal is unused
         DiagnosticSpec(message: "extraneous code at top level")
-        // TODO: Old parser expected warning on line 5: integer literal is unused
-        // TODO: Old parser expected error on line 6: extraneous '}' at top level
-        // TODO: Old parser expected error on line 7: extraneous '}' at top level
       ]
     )
   }
@@ -213,10 +218,6 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: consecutive statements on a line must be separated by ';'
-        // TODO: Old parser expected error on line 3: unterminated regex literal
-        // TODO: Old parser expected error on line 4: value of type 'Regex<Substring>' has no member 'bitWidth'
-        // TODO: Old parser expected error on line 5: extraneous '}' at top level
         DiagnosticSpec(message: "extraneous code at top level")
       ]
     )
@@ -276,5 +277,4 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
       ]
     )
   }
-
 }

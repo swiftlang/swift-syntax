@@ -57,9 +57,10 @@ extension Lexer.Cursor {
 
     /// A narrow mode that's used for 'try?' and 'try!' to ensure we prefer to
     /// lex a regex literal rather than a binary operator. This is needed as the
-    /// last token will be a postfix operator, which would normally indicate a
-    /// binary operator is expected next, but in this case we know it must be an
-    /// expression. See the comment in `tryScanOperatorAsRegexLiteral` for more info.
+    /// `previousTokenKind` will be `.postfixOperator`, which would normally
+    /// indicate a binary operator is expected next, but in this case we know it
+    /// must be an expression. See the comment in
+    /// `tryScanOperatorAsRegexLiteral` for more info.
     /// NOTE: This is a complete hack, do not add new uses of this.
     case preferRegexOverBinaryOperator
 
@@ -93,7 +94,8 @@ extension Lexer.Cursor {
     case inStringInterpolation(stringLiteralKind: StringLiteralKind, parenCount: Int)
 
     /// We have encountered a regex literal, and have its tokens to work
-    /// through.
+    /// through. `lexemes` is a pointer to the lexemes allocated in the state
+    /// stack bump pointer allocator.
     case inRegexLiteral(index: UInt8, lexemes: UnsafePointer<RegexLiteralLexemes>)
 
     /// The mode in which leading trivia should be lexed for this state or `nil`
@@ -212,6 +214,7 @@ extension Lexer.Cursor {
       self.kind = kind
       self.position = position
     }
+
     init(_ kind: TokenDiagnostic.Kind, position: Lexer.Cursor) {
       self.init(kind, position: position.position)
     }
@@ -239,6 +242,9 @@ extension Lexer {
 
     /// If we have already lexed a token, the kind of the previously lexed token
     var previousTokenKind: RawTokenKind?
+
+    /// If the `previousTokenKind` is `.keyword`, the keyword kind. Otherwise
+    /// `nil`.
     var previousKeyword: Keyword?
 
     private var stateStack: StateStack = StateStack()
@@ -309,6 +315,28 @@ extension Lexer {
     /// for this lexeme.
     let trailingTriviaLexingMode: Lexer.Cursor.TriviaLexingMode?
 
+    /// If `tokenKind` is `.keyword`, the kind of keyword produced, otherwise
+    /// `nil`.
+    let keywordKind: Keyword?
+
+    private init(
+      _ tokenKind: RawTokenKind,
+      flags: Lexer.Lexeme.Flags,
+      error: Cursor.LexingDiagnostic?,
+      stateTransition: StateTransition?,
+      trailingTriviaLexingMode: Lexer.Cursor.TriviaLexingMode?,
+      keywordKind: Keyword?
+    ) {
+      self.tokenKind = tokenKind
+      self.flags = flags
+      self.error = error
+      self.stateTransition = stateTransition
+      self.trailingTriviaLexingMode = trailingTriviaLexingMode
+      self.keywordKind = keywordKind
+    }
+
+    /// Create a lexer result. Note that keywords should use `Result.keyword`
+    /// instead.
     init(
       _ tokenKind: RawTokenKind,
       flags: Lexer.Lexeme.Flags = [],
@@ -316,11 +344,27 @@ extension Lexer {
       stateTransition: StateTransition? = nil,
       trailingTriviaLexingMode: Lexer.Cursor.TriviaLexingMode? = nil
     ) {
-      self.tokenKind = tokenKind
-      self.flags = flags
-      self.error = error
-      self.stateTransition = stateTransition
-      self.trailingTriviaLexingMode = trailingTriviaLexingMode
+      precondition(tokenKind != .keyword, "Use Result.keyword instead")
+      self.init(
+        tokenKind,
+        flags: flags,
+        error: error,
+        stateTransition: stateTransition,
+        trailingTriviaLexingMode: trailingTriviaLexingMode,
+        keywordKind: nil
+      )
+    }
+
+    /// Produce a lexer result for a given keyword.
+    static func keyword(_ kind: Keyword) -> Self {
+      Self(
+        .keyword,
+        flags: [],
+        error: nil,
+        stateTransition: nil,
+        trailingTriviaLexingMode: nil,
+        keywordKind: kind
+      )
     }
   }
 }
@@ -366,7 +410,7 @@ extension Lexer.Cursor {
     let result: Lexer.Result
     switch currentState {
     case .normal:
-      result = lexNormal(sourceBufferStart: sourceBufferStart)
+      result = lexNormal(sourceBufferStart: sourceBufferStart, preferRegexOverBinaryOperator: false)
     case .preferRegexOverBinaryOperator:
       // In this state we lex a single token with the flag set, and then pop the state.
       result = lexNormal(sourceBufferStart: sourceBufferStart, preferRegexOverBinaryOperator: true)
@@ -420,7 +464,7 @@ extension Lexer.Cursor {
       cursor: cursor
     )
     self.previousTokenKind = result.tokenKind
-    self.previousKeyword = result.tokenKind == .keyword ? Keyword(lexeme.tokenText)! : nil
+    self.previousKeyword = result.keywordKind
 
     return lexeme
   }
@@ -554,6 +598,7 @@ extension Lexer.Cursor.Position {
     self.input = UnsafeBufferPointer(rebasing: input)
     return c
   }
+
   /// Advance the cursor position by `n` bytes. The offset must be valid.
   func advanced(by n: Int) -> Self {
     precondition(n > 0)
@@ -824,7 +869,7 @@ extension Lexer.Cursor {
 extension Lexer.Cursor {
   private mutating func lexNormal(
     sourceBufferStart: Lexer.Cursor,
-    preferRegexOverBinaryOperator: Bool = false
+    preferRegexOverBinaryOperator: Bool
   ) -> Lexer.Result {
     switch self.peek() {
     case UInt8(ascii: "@"): _ = self.advance(); return Lexer.Result(.atSign)
@@ -1010,7 +1055,7 @@ extension Lexer.Cursor {
       return Lexer.Result(.stringSegment, stateTransition: .pop)
     default:
       // If we haven't reached the end of the string interpolation, lex as if we were in a normal expression.
-      return self.lexNormal(sourceBufferStart: sourceBufferStart)
+      return self.lexNormal(sourceBufferStart: sourceBufferStart, preferRegexOverBinaryOperator: false)
     }
   }
 }
@@ -1916,7 +1961,7 @@ extension Lexer.Cursor {
 
     let text = tokStart.text(upTo: self)
     if let keyword = Keyword(text), keyword.isLexerClassified {
-      return Lexer.Result(.keyword)
+      return Lexer.Result.keyword(keyword)
     } else if text == "_" {
       return Lexer.Result(.wildcard)
     } else {
@@ -1977,7 +2022,7 @@ extension Lexer.Cursor {
       case UInt8(ascii: "?"):
         return .postfixQuestionMark
       default:
-        fatalError("Must be at '!' or '?'")
+        preconditionFailure("Must be at '!' or '?'")
       }
     }()
     _ = self.advance()
@@ -2006,17 +2051,17 @@ extension Lexer.Cursor {
 
     // Check to see if we have a regex literal starting in the operator.
     do {
-      var ptr = tokStart
-      while ptr.input.baseAddress! < self.input.baseAddress! {
+      var regexScan = tokStart
+      while regexScan.input.baseAddress! < self.input.baseAddress! {
         // Scan for the first '/' in the operator to see if it starts a regex
         // literal.
-        guard ptr.is(at: "/") else {
-          _ = ptr.advance()
+        guard regexScan.is(at: "/") else {
+          _ = regexScan.advance()
           continue
         }
         guard
           let result = self.tryLexOperatorAsRegexLiteral(
-            at: ptr,
+            at: regexScan,
             operatorStart: tokStart,
             operatorEnd: self,
             sourceBufferStart: sourceBufferStart,

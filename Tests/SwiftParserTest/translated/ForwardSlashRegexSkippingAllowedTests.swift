@@ -1,31 +1,24 @@
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2023 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
 // This test file has been translated from swift/test/StringProcessing/Parse/forward-slash-regex-skipping-allowed.swift
 
 import XCTest
 
 final class ForwardSlashRegexSkippingAllowedTests: XCTestCase {
-  func testForwardSlashRegexSkippingAllowed1() {
-    assertParse(
-      """
-      // Make sure we can skip in all of the below cases.
-      """
-    )
-  }
-
-  func testForwardSlashRegexSkippingAllowed2() {
-    assertParse(
-      #"""
-      // The printing implementation differs in asserts and no-asserts builds, it will
-      // either print `"Parse.NumFunctionsParsed" 0` or not print it at all. Make sure
-      // we don't output any non-zero value.
-      // CHECK-NOT: {{"Parse.NumFunctionsParsed" [^0]}}
-      """#
-    )
-  }
-
   func testForwardSlashRegexSkippingAllowed3() {
+    // Ensures there is a parse error
     assertParse(
       """
-      // Ensures there is a parse error
       var 1️⃣: Int
       """,
       diagnostics: [
@@ -35,9 +28,9 @@ final class ForwardSlashRegexSkippingAllowedTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkippingAllowed4() {
+    // Balanced `{}`, so okay.
     assertParse(
       """
-      // Balanced `{}`, so okay.
       func a() { 1️⃣/ {}/ }
       """,
       diagnostics: [
@@ -69,9 +62,9 @@ final class ForwardSlashRegexSkippingAllowedTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkippingAllowed7() {
+    // Some cases of infix '/' that we should continue to skip.
     assertParse(
       """
-      // Some cases of infix '/' that we should continue to skip.
       func d() {
         _ = 1 / 2 + 3 * 4
         _ = 1 / 2 / 3 / 4
@@ -94,22 +87,11 @@ final class ForwardSlashRegexSkippingAllowedTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkippingAllowed9() {
+    // Some cases of prefix '/' that we should continue to skip.
     assertParse(
       """
-      // Some cases of prefix '/' that we should continue to skip.
       prefix operator /
       prefix func / <T> (_ x: T) -> T { x }
-      """
-    )
-  }
-
-  func testForwardSlashRegexSkippingAllowed10() {
-    assertParse(
-      """
-      enum E {
-        case e
-        func foo<T>(_ x: T) {}
-      }
       """
     )
   }
@@ -141,9 +123,9 @@ final class ForwardSlashRegexSkippingAllowedTests: XCTestCase {
   }
 
   func testForwardSlashRegexSkippingAllowed13() {
+    // Some cases of postfix '/' that we should continue to skip.
     assertParse(
       """
-      // Some cases of postfix '/' that we should continue to skip.
       func g() {
           _ = 0/
           _ = 0/ / 1/
@@ -153,5 +135,4 @@ final class ForwardSlashRegexSkippingAllowedTests: XCTestCase {
       """
     )
   }
-
 }

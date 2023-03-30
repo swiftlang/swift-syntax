@@ -1,3 +1,15 @@
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2023 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
 // This test file has been translated from swift/test/StringProcessing/Parse/regex_parse_error.swift
 
 import XCTest
@@ -159,16 +171,6 @@ final class RegexParseErrorTests: XCTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '/#' to end regex literal"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in macro expansion"),
       ]
-    )
-  }
-
-  func testRegexParseError18() {
-    assertParse(
-      """
-      func foo<T>(
-        _ x: T, 
-      _ y: T) {}
-      """
     )
   }
 

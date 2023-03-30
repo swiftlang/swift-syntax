@@ -1442,6 +1442,11 @@ extension Parser {
     // Parse the opening slash.
     let (unexpectedBeforeSlash, openSlash) = self.expect(.regexSlash)
 
+    // If we had opening pounds, there should be no trivia for the slash.
+    if let openPounds = openPounds {
+      precondition(openPounds.trailingTriviaByteLength == 0 && openSlash.leadingTriviaByteLength == 0)
+    }
+
     // Parse the pattern and closing slash, avoiding recovery or leading trivia
     // as the lexer should provide the tokens exactly in order without trivia,
     // otherwise they should be treated as missing.

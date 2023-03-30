@@ -1,5 +1,19 @@
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2023 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
 // This test file has been translated from swift/test/StringProcessing/Parse/forward-slash-regex.swift
 
+@_spi(RawSyntax) import SwiftSyntax
+@_spi(RawSyntax) import SwiftParser
 import XCTest
 
 final class ForwardSlashRegexTests: XCTestCase {
@@ -22,10 +36,10 @@ final class ForwardSlashRegexTests: XCTestCase {
   }
 
   func testForwardSlashRegex8() {
+    // The divisions in the body of the below operators make sure we don't try and
+    // consider them to be ending delimiters of a regex.
     assertParse(
       """
-      // The divisions in the body of the below operators make sure we don't try and
-      // consider them to be ending delimiters of a regex.
       infix operator /^/ : P
       func /^/ (lhs: Int, rhs: Int) -> Int { 1 / 2 }
       """
@@ -99,10 +113,10 @@ final class ForwardSlashRegexTests: XCTestCase {
   }
 
   func testForwardSlashRegex18() {
+    // These unfortunately become prefix `=` and infix `=/` respectively. We could
+    // likely improve the diagnostic though.
     assertParse(
       """
-      // These unfortunately become prefix `=` and infix `=/` respectively. We could
-      // likely improve the diagnostic though.
       do {
         let z1️⃣=/0/
       }
@@ -153,7 +167,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       _ = !/1️⃣ /
       """,
       diagnostics: [
-        DiagnosticSpec(message: "bare slash regex literal may not end with space")
+        DiagnosticSpec(message: "bare slash regex literal may not start with space")
       ]
     )
   }
@@ -164,7 +178,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       _ = !!/1️⃣ /
       """,
       diagnostics: [
-        DiagnosticSpec(message: "bare slash regex literal may not end with space")
+        DiagnosticSpec(message: "bare slash regex literal may not start with space")
       ]
     )
   }
@@ -244,7 +258,8 @@ final class ForwardSlashRegexTests: XCTestCase {
         _ = /x /?
           .blah
       }
-      """
+      """,
+      substructure: Syntax(BinaryOperatorExprSyntax(operatorToken: .binaryOperator("/?")))
     )
   }
 
@@ -310,7 +325,6 @@ final class ForwardSlashRegexTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: unary operator cannot be separated from its operand
         DiagnosticSpec(message: "expected expression after operator"),
         DiagnosticSpec(message: "unexpected code '?? /x /' in 'do' statement"),
       ]
@@ -318,11 +332,26 @@ final class ForwardSlashRegexTests: XCTestCase {
   }
 
   func testForwardSlashRegex41() {
-    // This parses as /x/ ??/ x/
+    // This parses as /x/?? / x/
     assertParse(
       """
       _ = /x/??/x/
-      """
+      """,
+      substructure: Syntax(
+        SequenceExprSyntax(
+          elements: .init([
+            DiscardAssignmentExprSyntax(),
+            AssignmentExprSyntax(),
+            OptionalChainingExprSyntax(
+              expression: OptionalChainingExprSyntax(
+                expression: RegexLiteralExprSyntax(regexPattern: .regexLiteralPattern("x"))
+              )
+            ),
+            BinaryOperatorExprSyntax(operatorToken: .binaryOperator("/")),
+            PostfixUnaryExprSyntax(expression: IdentifierExprSyntax(identifier: "x"), operatorToken: .postfixOperator("/")),
+          ])
+        )
+      )
     )
   }
 
@@ -339,7 +368,8 @@ final class ForwardSlashRegexTests: XCTestCase {
     assertParse(
       """
       _ = /x/.../y/
-      """
+      """,
+      substructure: Syntax(BinaryOperatorExprSyntax(operatorToken: .binaryOperator(".../")))
     )
   }
 
@@ -360,7 +390,6 @@ final class ForwardSlashRegexTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: operator with postfix spacing cannot start a subexpression
         DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression in operator"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '...' in 'do' statement"),
@@ -397,14 +426,6 @@ final class ForwardSlashRegexTests: XCTestCase {
     )
   }
 
-  func testForwardSlashRegex49() {
-    assertParse(
-      """
-      func foo<T>(_ x: T, y: T) {}
-      """
-    )
-  }
-
   func testForwardSlashRegex50() {
     assertParse(
       """
@@ -428,17 +449,6 @@ final class ForwardSlashRegexTests: XCTestCase {
     assertParse(
       """
       bar(&/x/)
-      """
-    )
-  }
-
-  func testForwardSlashRegex54() {
-    assertParse(
-      """
-      struct S {
-        subscript(x: Regex<Substring>) -> Void { () } 
-        subscript(fn: (Int, Int) -> Int) -> Int { 0 }
-      }
       """
     )
   }
@@ -515,7 +525,19 @@ final class ForwardSlashRegexTests: XCTestCase {
     assertParse(
       """
       _ = [/abc/:/abc/]
-      """
+      """,
+      substructure: Syntax(
+        DictionaryExprSyntax(
+          content: .elements(
+            .init([
+              .init(
+                keyExpression: RegexLiteralExprSyntax(regexPattern: .regexLiteralPattern("abc")),
+                valueExpression: RegexLiteralExprSyntax(regexPattern: .regexLiteralPattern("abc"))
+              )
+            ])
+          )
+        )
+      )
     )
   }
 
@@ -530,7 +552,7 @@ final class ForwardSlashRegexTests: XCTestCase {
   func testForwardSlashRegex62() {
     assertParse(
       """
-      _ = [/abc/:/abc/]
+      _ = [/abc/ :/abc/]
       """
     )
   }
@@ -611,7 +633,8 @@ final class ForwardSlashRegexTests: XCTestCase {
         /1 / 
         2
       }
-      """
+      """,
+      substructure: Syntax(BinaryOperatorExprSyntax(operatorToken: .binaryOperator("/")))
     )
   }
 
@@ -633,7 +656,8 @@ final class ForwardSlashRegexTests: XCTestCase {
       """
       _ = 2
       / 1 / .bitWidth
-      """
+      """,
+      substructure: Syntax(BinaryOperatorExprSyntax(operatorToken: .binaryOperator("/")))
     )
   }
 
@@ -643,7 +667,8 @@ final class ForwardSlashRegexTests: XCTestCase {
       """
       _ = 2
       /1/ .bitWidth
-      """
+      """,
+      substructure: Syntax(RegexLiteralExprSyntax(regexPattern: .regexLiteralPattern("1")))
     )
   }
 
@@ -654,7 +679,8 @@ final class ForwardSlashRegexTests: XCTestCase {
       _ = 2
       / 1 /
         .bitWidth
-      """
+      """,
+      substructure: Syntax(BinaryOperatorExprSyntax(operatorToken: .binaryOperator("/")))
     )
   }
 
@@ -665,7 +691,8 @@ final class ForwardSlashRegexTests: XCTestCase {
       _ = 2
       /1 /
         .bitWidth
-      """
+      """,
+      substructure: Syntax(BinaryOperatorExprSyntax(operatorToken: .binaryOperator("/")))
     )
   }
 
@@ -674,7 +701,16 @@ final class ForwardSlashRegexTests: XCTestCase {
     assertParse(
       """
       _ = !!/1/ .bitWidth
-      """
+      """,
+      substructure: Syntax(
+        PrefixOperatorExprSyntax(
+          operatorToken: .prefixOperator("!!"),
+          postfixExpression: MemberAccessExprSyntax(
+            base: RegexLiteralExprSyntax(regexPattern: .regexLiteralPattern("1")),
+            name: "bitWidth"
+          )
+        )
+      )
     )
   }
 
@@ -683,7 +719,8 @@ final class ForwardSlashRegexTests: XCTestCase {
     assertParse(
       """
       _ = !!/1 / .bitWidth
-      """
+      """,
+      substructure: Syntax(BinaryOperatorExprSyntax(operatorToken: .binaryOperator("/")))
     )
   }
 
@@ -692,7 +729,8 @@ final class ForwardSlashRegexTests: XCTestCase {
       """
       let z =
       /y/
-      """
+      """,
+      substructure: Syntax(RegexLiteralExprSyntax(regexPattern: .regexLiteralPattern("y")))
     )
   }
 
@@ -886,7 +924,8 @@ final class ForwardSlashRegexTests: XCTestCase {
     assertParse(
       """
       _ = /x// comment
-      """
+      """,
+      substructure: Syntax(PrefixOperatorExprSyntax(operatorToken: .prefixOperator("/"), postfixExpression: IdentifierExprSyntax(identifier: "x")))
     )
   }
 
@@ -894,7 +933,8 @@ final class ForwardSlashRegexTests: XCTestCase {
     assertParse(
       """
       _ = /x // comment
-      """
+      """,
+      substructure: Syntax(PrefixOperatorExprSyntax(operatorToken: .prefixOperator("/"), postfixExpression: IdentifierExprSyntax(identifier: "x")))
     )
   }
 
@@ -902,7 +942,8 @@ final class ForwardSlashRegexTests: XCTestCase {
     assertParse(
       """
       _ = /x/*comment*/
-      """
+      """,
+      substructure: Syntax(PrefixOperatorExprSyntax(operatorToken: .prefixOperator("/"), postfixExpression: IdentifierExprSyntax(identifier: "x")))
     )
   }
 
@@ -911,8 +952,19 @@ final class ForwardSlashRegexTests: XCTestCase {
     assertParse(
       """
       baz(/, /)
-      baz(/,/)
+      """,
+      substructure: Syntax(
+        TupleExprElementListSyntax([
+          .init(expression: IdentifierExprSyntax(identifier: .binaryOperator("/")), trailingComma: .commaToken()),
+          .init(expression: IdentifierExprSyntax(identifier: .binaryOperator("/"))),
+        ])
+      )
+    )
+    assertParse(
       """
+      baz(/,/)
+      """,
+      substructure: Syntax(RegexLiteralExprSyntax(regexPattern: .regexLiteralPattern(",")))
     )
   }
 
@@ -920,7 +972,20 @@ final class ForwardSlashRegexTests: XCTestCase {
     assertParse(
       """
       baz((/), /)
-      """
+      """,
+      substructure: Syntax(
+        TupleExprElementListSyntax([
+          .init(
+            expression: TupleExprSyntax(
+              elementList: .init([
+                .init(expression: IdentifierExprSyntax(identifier: .binaryOperator("/")))
+              ])
+            ),
+            trailingComma: .commaToken()
+          ),
+          .init(expression: IdentifierExprSyntax(identifier: .binaryOperator("/"))),
+        ])
+      )
     )
   }
 
@@ -928,8 +993,19 @@ final class ForwardSlashRegexTests: XCTestCase {
     assertParse(
       """
       baz(/^, /)
-      baz(/^,/)
+      """,
+      substructure: Syntax(
+        TupleExprElementListSyntax([
+          .init(expression: IdentifierExprSyntax(identifier: .binaryOperator("/^")), trailingComma: .commaToken()),
+          .init(expression: IdentifierExprSyntax(identifier: .binaryOperator("/"))),
+        ])
+      )
+    )
+    assertParse(
       """
+      baz(/^,/)
+      """,
+      substructure: Syntax(RegexLiteralExprSyntax(regexPattern: .regexLiteralPattern("^,")))
     )
   }
 
@@ -937,7 +1013,20 @@ final class ForwardSlashRegexTests: XCTestCase {
     assertParse(
       """
       baz((/^), /)
-      """
+      """,
+      substructure: Syntax(
+        TupleExprElementListSyntax([
+          .init(
+            expression: TupleExprSyntax(
+              elementList: .init([
+                .init(expression: IdentifierExprSyntax(identifier: .binaryOperator("/^")))
+              ])
+            ),
+            trailingComma: .commaToken()
+          ),
+          .init(expression: IdentifierExprSyntax(identifier: .binaryOperator("/"))),
+        ])
+      )
     )
   }
 
@@ -1166,12 +1255,16 @@ final class ForwardSlashRegexTests: XCTestCase {
     assertParse(
       #"""
       do {
-        let _: Regex = (/whatever\)/1️⃣
+        let _: Regex = ℹ️(/whatever\)/1️⃣
       }
       """#,
       diagnostics: [
-        // TODO: Old parser expected note on line 2: to match this opening '('
-        DiagnosticSpec(message: "expected ')' to end tuple")
+        DiagnosticSpec(
+          message: "expected ')' to end tuple",
+          notes: [
+            NoteSpec(message: "to match this opening '('")
+          ]
+        )
       ]
     )
   }
@@ -1295,7 +1388,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       _ = /1️⃣ /
       """,
       diagnostics: [
-        DiagnosticSpec(message: "bare slash regex literal may not end with space")
+        DiagnosticSpec(message: "bare slash regex literal may not start with space")
       ]
     )
   }
@@ -1303,10 +1396,10 @@ final class ForwardSlashRegexTests: XCTestCase {
   func testForwardSlashRegex159() {
     assertParse(
       """
-      _ = / 1️⃣ /
+      _ = /1️⃣  /
       """,
       diagnostics: [
-        DiagnosticSpec(message: "bare slash regex literal may not end with space")
+        DiagnosticSpec(message: "bare slash regex literal may not start with space")
       ]
     )
   }
@@ -1543,5 +1636,4 @@ final class ForwardSlashRegexTests: XCTestCase {
       """
     )
   }
-
 }

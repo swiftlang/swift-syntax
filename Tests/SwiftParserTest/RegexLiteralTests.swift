@@ -1,3 +1,15 @@
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2023 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
 @_spi(RawSyntax) import SwiftSyntax
 @_spi(RawSyntax) import SwiftParser
 import XCTest
@@ -10,6 +22,7 @@ final class RegexLiteralTests: XCTestCase {
       """#
     )
   }
+
   func testForwardSlash2() {
     assertParse(
       """
@@ -55,6 +68,7 @@ final class RegexLiteralTests: XCTestCase {
       ]
     )
   }
+
   func testUnterminated2() {
     assertParse(
       #"""
@@ -65,6 +79,7 @@ final class RegexLiteralTests: XCTestCase {
       ]
     )
   }
+
   func testUnterminated3() {
     assertParse(
       #"""
@@ -75,6 +90,7 @@ final class RegexLiteralTests: XCTestCase {
       ]
     )
   }
+
   func testUnterminated4() {
     assertParse(
       #"""
@@ -85,6 +101,7 @@ final class RegexLiteralTests: XCTestCase {
       ]
     )
   }
+
   func testUnterminated5() {
     assertParse(
       #"""
@@ -95,6 +112,7 @@ final class RegexLiteralTests: XCTestCase {
       ]
     )
   }
+
   func testUnterminated6() {
     assertParse(
       #"""
@@ -105,6 +123,7 @@ final class RegexLiteralTests: XCTestCase {
       ]
     )
   }
+
   func testUnterminated7() {
     assertParse(
       #"""
@@ -115,6 +134,7 @@ final class RegexLiteralTests: XCTestCase {
       ]
     )
   }
+
   func testUnterminated8() {
     assertParse(
       #"""
@@ -125,6 +145,7 @@ final class RegexLiteralTests: XCTestCase {
       ]
     )
   }
+
   func testUnterminated9() {
     assertParse(
       #"""
@@ -135,6 +156,7 @@ final class RegexLiteralTests: XCTestCase {
       ]
     )
   }
+
   func testUnterminated10() {
     assertParse(
       #"""
@@ -146,6 +168,7 @@ final class RegexLiteralTests: XCTestCase {
       fixedSource: "##/##/##"
     )
   }
+
   func testUnterminated11() {
     assertParse(
       #"""
@@ -157,6 +180,7 @@ final class RegexLiteralTests: XCTestCase {
       fixedSource: "##/###/##"
     )
   }
+
   func testUnterminated12() {
     assertParse(
       #"""
@@ -168,6 +192,7 @@ final class RegexLiteralTests: XCTestCase {
       fixedSource: #"#/\/#/#"#
     )
   }
+
   func testUnterminated13() {
     assertParse(
       #"""
@@ -179,6 +204,7 @@ final class RegexLiteralTests: XCTestCase {
       fixedSource: "##/abc/#def/##"
     )
   }
+
   func testUnterminated14() {
     assertParse(
       #"""
@@ -198,6 +224,7 @@ final class RegexLiteralTests: XCTestCase {
       """#
     )
   }
+
   func testTerminated2() {
     assertParse(
       #"""
@@ -205,6 +232,7 @@ final class RegexLiteralTests: XCTestCase {
       """#
     )
   }
+
   func testTerminated3() {
     assertParse(
       #"""
@@ -212,6 +240,7 @@ final class RegexLiteralTests: XCTestCase {
       """#
     )
   }
+
   func testTerminated4() {
     assertParse(
       #"""
@@ -219,6 +248,7 @@ final class RegexLiteralTests: XCTestCase {
       """#
     )
   }
+
   func testTerminated5() {
     assertParse(
       #"""
@@ -226,6 +256,7 @@ final class RegexLiteralTests: XCTestCase {
       """#
     )
   }
+
   func testTerminated6() {
     assertParse(
       #"""
@@ -233,6 +264,7 @@ final class RegexLiteralTests: XCTestCase {
       """#
     )
   }
+
   func testTerminated7() {
     assertParse(
       #"""
@@ -251,6 +283,7 @@ final class RegexLiteralTests: XCTestCase {
       ]
     )
   }
+
   func testUnprintable2() {
     assertParse(
       """
@@ -273,6 +306,7 @@ final class RegexLiteralTests: XCTestCase {
       ]
     )
   }
+
   func testMultiline2() {
     assertParse(
       """
@@ -285,6 +319,7 @@ final class RegexLiteralTests: XCTestCase {
       ]
     )
   }
+
   func testMultiline3() {
     assertParse(
       """
@@ -297,6 +332,7 @@ final class RegexLiteralTests: XCTestCase {
       ]
     )
   }
+
   func testMultiline4() {
     assertParse(
       """
@@ -306,6 +342,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testMultiline5() {
     assertParse(
       """
@@ -317,6 +354,7 @@ final class RegexLiteralTests: XCTestCase {
       ]
     )
   }
+
   func testOpeningSpace1() {
     assertParse(
       """
@@ -327,6 +365,7 @@ final class RegexLiteralTests: XCTestCase {
       ]
     )
   }
+
   func testOpeningSpace2() {
     assertParse(
       """
@@ -337,6 +376,7 @@ final class RegexLiteralTests: XCTestCase {
       ]
     )
   }
+
   func testOpeningSpace3() {
     assertParse(
       """
@@ -344,6 +384,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testClosingSpace1() {
     assertParse(
       """
@@ -354,6 +395,7 @@ final class RegexLiteralTests: XCTestCase {
       ]
     )
   }
+
   func testClosingSpace2() {
     assertParse(
       """
@@ -364,6 +406,7 @@ final class RegexLiteralTests: XCTestCase {
       ]
     )
   }
+
   func testClosingSpace3() {
     assertParse(
       """
@@ -371,6 +414,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testOpeningAndClosingSpace1() {
     assertParse(
       """
@@ -381,16 +425,18 @@ final class RegexLiteralTests: XCTestCase {
       ]
     )
   }
+
   func testOpeningAndClosingSpace2() {
     assertParse(
       """
-      x += / 1️⃣ /
+      x += /1️⃣  /
       """,
       diagnostics: [
-        DiagnosticSpec(message: "bare slash regex literal may not end with space")
+        DiagnosticSpec(message: "bare slash regex literal may not start with space")
       ]
     )
   }
+
   func testOpeningAndClosingSpace3() {
     assertParse(
       """
@@ -398,6 +444,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testOpeningAndClosingSpace4() {
     assertParse(
       """
@@ -408,16 +455,18 @@ final class RegexLiteralTests: XCTestCase {
       ]
     )
   }
+
   func testOpeningAndClosingSpace5() {
     assertParse(
       """
       let x = /1️⃣ /
       """,
       diagnostics: [
-        DiagnosticSpec(message: "bare slash regex literal may not end with space")
+        DiagnosticSpec(message: "bare slash regex literal may not start with space")
       ]
     )
   }
+
   func testOpeningAndClosingSpace6() {
     assertParse(
       """
@@ -425,11 +474,12 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testSingleLineTabChar() {
-    // We currently only keep track of one lexer error, so only diagnose the second.
+    // We currently only keep track of one lexer error, so only diagnose the first.
     assertParse(
       """
-      #/\t1️⃣\t/#
+      #/1️⃣\t\t/#
       """,
       diagnostics: [
         DiagnosticSpec(message: "unprintable ASCII character found in source file")
@@ -444,6 +494,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation2() {
     assertParse(
       """
@@ -451,6 +502,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation3() {
     assertParse(
       """
@@ -458,6 +510,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation4() {
     assertParse(
       """
@@ -465,6 +518,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation5() {
     assertParse(
       """
@@ -472,6 +526,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation6() {
     assertParse(
       """
@@ -479,6 +534,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation7() {
     assertParse(
       """
@@ -486,6 +542,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation8() {
     assertParse(
       """
@@ -493,6 +550,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation9() {
     assertParse(
       """
@@ -500,6 +558,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation10() {
     assertParse(
       """
@@ -507,6 +566,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation11() {
     assertParse(
       """
@@ -514,6 +574,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation12() {
     assertParse(
       """
@@ -521,6 +582,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation13() {
     assertParse(
       """
@@ -528,6 +590,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation14() {
     assertParse(
       """
@@ -535,6 +598,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation15() {
     assertParse(
       """
@@ -542,6 +606,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation16() {
     assertParse(
       """
@@ -549,6 +614,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation17() {
     assertParse(
       """
@@ -556,6 +622,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation18() {
     assertParse(
       """
@@ -563,6 +630,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation19() {
     assertParse(
       """
@@ -570,6 +638,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation20() {
     assertParse(
       """
@@ -577,6 +646,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation21() {
     assertParse(
       """
@@ -584,6 +654,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation22() {
     assertParse(
       """
@@ -591,6 +662,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation23() {
     assertParse(
       """
@@ -598,6 +670,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation24() {
     assertParse(
       """
@@ -605,6 +678,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation25() {
     assertParse(
       """
@@ -615,6 +689,7 @@ final class RegexLiteralTests: XCTestCase {
       ]
     )
   }
+
   func testBinOpDisambiguation26() {
     // FIXME: The diagnostic should be one character back
     assertParse(
@@ -626,6 +701,7 @@ final class RegexLiteralTests: XCTestCase {
       ]
     )
   }
+
   func testBinOpDisambiguation27() {
     assertParse(
       """
@@ -633,6 +709,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation28() {
     // FIXME: The diagnostic should be one character back
     assertParse(
@@ -644,6 +721,7 @@ final class RegexLiteralTests: XCTestCase {
       ]
     )
   }
+
   func testBinOpDisambiguation29() {
     assertParse(
       """
@@ -651,6 +729,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation30() {
     assertParse(
       """
@@ -658,6 +737,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation31() {
     assertParse(
       """
@@ -665,6 +745,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation32() {
     assertParse(
       """
@@ -672,6 +753,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation33() {
     assertParse(
       """
@@ -679,6 +761,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation34() {
     assertParse(
       """
@@ -686,6 +769,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation35() {
     assertParse(
       """
@@ -693,6 +777,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation36() {
     assertParse(
       """
@@ -700,6 +785,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation37() {
     assertParse(
       """
@@ -707,6 +793,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation38() {
     assertParse(
       """
@@ -714,6 +801,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation39() {
     assertParse(
       """
@@ -721,6 +809,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation40() {
     assertParse(
       """
@@ -728,6 +817,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation41() {
     // await is a contextual keyword, so we can't assume it must be a regex.
     assertParse(
@@ -739,6 +829,7 @@ final class RegexLiteralTests: XCTestCase {
       ]
     )
   }
+
   func testBinOpDisambiguation42() {
     // await is a contextual keyword, so we can't assume it must be a regex.
     assertParse(
@@ -747,6 +838,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation43() {
     assertParse(
       """
@@ -754,6 +846,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation44() {
     assertParse(
       """
@@ -761,6 +854,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation45() {
     assertParse(
       """
@@ -768,6 +862,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation46() {
     assertParse(
       """
@@ -775,6 +870,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation47() {
     assertParse(
       """
@@ -783,6 +879,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation48() {
     assertParse(
       """
@@ -793,6 +890,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation49() {
     assertParse(
       """
@@ -802,6 +900,7 @@ final class RegexLiteralTests: XCTestCase {
       """
     )
   }
+
   func testBinOpDisambiguation50() {
     assertParse(
       """
@@ -820,6 +919,7 @@ final class RegexLiteralTests: XCTestCase {
       ]
     )
   }
+
   func testEmoji() {
     assertParse("/👍/")
   }

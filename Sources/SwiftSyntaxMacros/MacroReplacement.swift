@@ -14,7 +14,7 @@ enum MacroExpanderError: DiagnosticMessage {
       return "macro expansion requires a definition"
 
     case .definitionNotMacroExpansion:
-      return "macro definition must itself by a macro expansion expression (starting with '#')"
+      return "macro must itself be defined by a macro expansion expression (starting with '#')"
 
     case .nonParameterReference(let name):
       return "reference to value '\(name.text)' that is not a macro parameter in expansion"

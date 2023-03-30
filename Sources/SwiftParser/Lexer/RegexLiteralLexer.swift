@@ -232,6 +232,7 @@ fileprivate struct RegexLiteralLexer {
     }
 
     // Try to lex the opening delimiter.
+    let openSlash = cursor
     guard cursor.advance(matching: "/") else {
       return .notARegex
     }
@@ -262,6 +263,10 @@ fileprivate struct RegexLiteralLexer {
         default:
           break
         }
+      }
+      if openSlash.previous == UInt8(ascii: "*") {
+        // End of block comment, not a regex.
+        return .notARegex
       }
     }
 
@@ -719,15 +724,17 @@ extension Lexer.Cursor {
       if !mustBeRegex && !operatorStart.isInRegexLiteralPosition() {
         return nil
       }
-      // For better recovery, we can confidently lex a regex literal if the
-      // previous token was a binary operator and we're in a binary operator
-      // position, as that would otherwise be illegal.
-      // TODO: We could probably expand this to other token kinds (or rely on
-      // `isInRegexLiteralPosition`) for better recovery, but we'd need to be
-      // wary not to interfere with unapplied operator parsing, which are binary
-      // operators in expression position. For now, this handles the most common
-      // case.
-      if self.previousTokenKind?.is(.binaryOperator, .equal) == true {
+      // For better recovery, we can confidently lex a regex literal if we're in
+      // regex literal position, and the '/' is part of what looks like a binary
+      // operator. This would otherwise be illegal code, as binary operators
+      // cannot appear in expression position. The only exception to this is if
+      // the previous token indicates we're in an argument list, in which case
+      // an unapplied operator is legal, and we should prefer to lex as that
+      // instead.
+      switch previousTokenKind {
+      case .leftParen, .leftSquareBracket, .comma, .colon:
+        break
+      default:
         mustBeRegex = true
       }
     }

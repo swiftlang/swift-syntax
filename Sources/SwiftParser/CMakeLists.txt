@@ -18,6 +18,7 @@ add_swift_host_library(SwiftParser
   Modifiers.swift
   Names.swift
   Nominals.swift
+  Parameters.swift
   Parser.swift
   Patterns.swift
   TokenSpec.swift

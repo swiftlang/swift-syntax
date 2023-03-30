@@ -19,14 +19,10 @@ extension FunctionParameterSyntax {
       return secondName
     }
 
-    if let firstName = firstName {
-      if firstName.text == "_" {
-        return nil
-      }
-
-      return firstName
+    if firstName.text == "_" {
+      return nil
     }
 
-    return nil
+    return firstName
   }
 }

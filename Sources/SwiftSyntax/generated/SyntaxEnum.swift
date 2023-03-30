@@ -63,6 +63,9 @@ public enum SyntaxEnum {
   case closureExpr(ClosureExprSyntax)
   case closureParamList(ClosureParamListSyntax)
   case closureParam(ClosureParamSyntax)
+  case closureParameterClause(ClosureParameterClauseSyntax)
+  case closureParameterList(ClosureParameterListSyntax)
+  case closureParameter(ClosureParameterSyntax)
   case closureSignature(ClosureSignatureSyntax)
   case codeBlockItemList(CodeBlockItemListSyntax)
   case codeBlockItem(CodeBlockItemSyntax)
@@ -109,6 +112,9 @@ public enum SyntaxEnum {
   case enumCaseDecl(EnumCaseDeclSyntax)
   case enumCaseElementList(EnumCaseElementListSyntax)
   case enumCaseElement(EnumCaseElementSyntax)
+  case enumCaseParameterClause(EnumCaseParameterClauseSyntax)
+  case enumCaseParameterList(EnumCaseParameterListSyntax)
+  case enumCaseParameter(EnumCaseParameterSyntax)
   case enumDecl(EnumDeclSyntax)
   case exposeAttributeArguments(ExposeAttributeArgumentsSyntax)
   case exprList(ExprListSyntax)
@@ -379,6 +385,12 @@ public extension Syntax {
       return .closureParamList(ClosureParamListSyntax(self)!)
     case .closureParam:
       return .closureParam(ClosureParamSyntax(self)!)
+    case .closureParameterClause:
+      return .closureParameterClause(ClosureParameterClauseSyntax(self)!)
+    case .closureParameterList:
+      return .closureParameterList(ClosureParameterListSyntax(self)!)
+    case .closureParameter:
+      return .closureParameter(ClosureParameterSyntax(self)!)
     case .closureSignature:
       return .closureSignature(ClosureSignatureSyntax(self)!)
     case .codeBlockItemList:
@@ -471,6 +483,12 @@ public extension Syntax {
       return .enumCaseElementList(EnumCaseElementListSyntax(self)!)
     case .enumCaseElement:
       return .enumCaseElement(EnumCaseElementSyntax(self)!)
+    case .enumCaseParameterClause:
+      return .enumCaseParameterClause(EnumCaseParameterClauseSyntax(self)!)
+    case .enumCaseParameterList:
+      return .enumCaseParameterList(EnumCaseParameterListSyntax(self)!)
+    case .enumCaseParameter:
+      return .enumCaseParameter(EnumCaseParameterSyntax(self)!)
     case .enumDecl:
       return .enumDecl(EnumDeclSyntax(self)!)
     case .exposeAttributeArguments:

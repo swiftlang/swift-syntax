@@ -378,15 +378,11 @@ public struct AddCompletionHandler: PeerMacro {
       newParameterList = parameterList.appending(completionHandlerParam)
     }
 
-    let callArguments: [String] = try parameterList.map { param in
-      guard let argName = param.secondName ?? param.firstName else {
-        throw CustomError.message(
-          "@addCompletionHandler argument must have a name"
-        )
-      }
+    let callArguments: [String] = parameterList.map { param in
+      let argName = param.secondName ?? param.firstName
 
-      if let paramName = param.firstName, paramName.text != "_" {
-        return "\(paramName.text): \(argName.text)"
+      if param.firstName.text != "_" {
+        return "\(param.firstName.text): \(argName.text)"
       }
 
       return "\(argName.text)"

@@ -892,9 +892,11 @@ extension Parser {
         let unexpectedPeriod = self.consume(if: .period)
         let (unexpectedBeforeName, name) = self.expectIdentifier(allowIdentifierLikeKeywords: false, keywordRecovery: true)
 
-        let associatedValue: RawParameterClauseSyntax?
+        let associatedValue: RawEnumCaseParameterClauseSyntax?
         if self.at(TokenSpec(.leftParen, allowAtStartOfLine: false)) {
-          associatedValue = self.parseParameterClause(for: .enumCase)
+          associatedValue = self.parseParameterClause(RawEnumCaseParameterClauseSyntax.self) { parser in
+            parser.parseEnumCaseParameter()
+          }
         } else {
           associatedValue = nil
         }
@@ -1115,182 +1117,6 @@ extension Parser {
 }
 
 extension Parser {
-  public enum ParameterSubject {
-    case closure
-    case enumCase
-    case functionParameters
-    case indices
-
-    var isClosure: Bool {
-      switch self {
-      case .closure: return true
-      case .enumCase: return false
-      case .functionParameters: return false
-      case .indices: return false
-      }
-    }
-  }
-
-  mutating func parseParameterModifiers(for subject: ParameterSubject) -> RawModifierListSyntax? {
-    var elements = [RawDeclModifierSyntax]()
-    var loopCondition = LoopProgressCondition()
-    MODIFIER_LOOP: while loopCondition.evaluate(currentToken) {
-      switch self.at(anyIn: ParameterModifier.self) {
-      case (._const, let handle)?:
-        elements.append(RawDeclModifierSyntax(name: self.eat(handle), detail: nil, arena: self.arena))
-      case (.isolated, let handle)? where self.withLookahead({ !$0.startsParameterName(isClosure: subject.isClosure, allowMisplacedSpecifierRecovery: false) }):
-        elements.append(RawDeclModifierSyntax(name: self.eat(handle), detail: nil, arena: self.arena))
-      default:
-        break MODIFIER_LOOP
-      }
-    }
-    if elements.isEmpty {
-      return nil
-    } else {
-      return RawModifierListSyntax(elements: elements, arena: self.arena)
-    }
-  }
-
-  @_spi(RawSyntax)
-  public mutating func parseFunctionParameter(for subject: ParameterSubject) -> RawFunctionParameterSyntax {
-    // Parse any declaration attributes. The exception here is enum cases
-    // which only allow types, so we do not consume attributes to allow the
-    // type attribute grammar a chance to examine them.
-    let attrs: RawAttributeListSyntax?
-    if case .enumCase = subject {
-      attrs = nil
-    } else {
-      attrs = self.parseAttributeList()
-    }
-
-    let modifiers = parseParameterModifiers(for: subject)
-
-    var misplacedSpecifiers: [RawTokenSyntax] = []
-    if self.withLookahead({ !$0.startsParameterName(isClosure: subject.isClosure, allowMisplacedSpecifierRecovery: false) }) {
-      while canHaveParameterSpecifier,
-        let specifier = self.consume(ifAnyIn: TypeSpecifier.self)
-      {
-        misplacedSpecifiers.append(specifier)
-      }
-    }
-
-    let unexpectedBeforeFirstName: RawUnexpectedNodesSyntax?
-    let firstName: RawTokenSyntax?
-    let unexpectedBeforeSecondName: RawUnexpectedNodesSyntax?
-    let secondName: RawTokenSyntax?
-    let unexpectedBeforeColon: RawUnexpectedNodesSyntax?
-    let colon: RawTokenSyntax?
-    let shouldParseType: Bool
-
-    if self.withLookahead({ $0.startsParameterName(isClosure: subject.isClosure, allowMisplacedSpecifierRecovery: false) }) {
-      if self.currentToken.canBeArgumentLabel(allowDollarIdentifier: true) {
-        (unexpectedBeforeFirstName, firstName) = self.parseArgumentLabel()
-      } else {
-        unexpectedBeforeFirstName = nil
-        firstName = nil
-      }
-
-      if self.currentToken.canBeArgumentLabel(allowDollarIdentifier: true) {
-        (unexpectedBeforeSecondName, secondName) = self.parseArgumentLabel()
-      } else {
-        unexpectedBeforeSecondName = nil
-        secondName = nil
-      }
-      if subject.isClosure {
-        unexpectedBeforeColon = nil
-        colon = self.consume(if: .colon)
-        shouldParseType = (colon != nil)
-      } else {
-        (unexpectedBeforeColon, colon) = self.expect(.colon)
-        shouldParseType = true
-      }
-    } else {
-      unexpectedBeforeFirstName = nil
-      firstName = nil
-      unexpectedBeforeSecondName = nil
-      secondName = nil
-      unexpectedBeforeColon = nil
-      colon = nil
-      shouldParseType = true
-    }
-
-    let type: RawTypeSyntax?
-    if shouldParseType {
-      type = self.parseType(misplacedSpecifiers: misplacedSpecifiers)
-    } else {
-      type = nil
-    }
-
-    let ellipsis: RawTokenSyntax?
-    if self.atContextualPunctuator("...") {
-      ellipsis = self.consumeAnyToken(remapping: .ellipsis)
-    } else {
-      ellipsis = nil
-    }
-
-    let defaultArgument: RawInitializerClauseSyntax?
-    if self.at(.equal) || self.atContextualPunctuator("==") {
-      defaultArgument = self.parseDefaultArgument()
-    } else {
-      defaultArgument = nil
-    }
-
-    let trailingComma = self.consume(if: .comma)
-    return RawFunctionParameterSyntax(
-      attributes: attrs,
-      modifiers: modifiers,
-      RawUnexpectedNodesSyntax(combining: misplacedSpecifiers, unexpectedBeforeFirstName, arena: self.arena),
-      firstName: firstName,
-      unexpectedBeforeSecondName,
-      secondName: secondName,
-      unexpectedBeforeColon,
-      colon: colon,
-      type: type,
-      ellipsis: ellipsis,
-      defaultArgument: defaultArgument,
-      trailingComma: trailingComma,
-      arena: self.arena
-    )
-  }
-
-  @_spi(RawSyntax)
-  public mutating func parseParameterClause(for subject: ParameterSubject) -> RawParameterClauseSyntax {
-    let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
-    var elements = [RawFunctionParameterSyntax]()
-    // If we are missing the left parenthesis and the next token doesn't appear
-    // to be an argument label, don't parse any parameters.
-    let shouldSkipParameterParsing = lparen.isMissing && (!currentToken.canBeArgumentLabel(allowDollarIdentifier: true) || currentToken.isLexerClassifiedKeyword)
-    if !shouldSkipParameterParsing {
-      var keepGoing = true
-      var loopProgress = LoopProgressCondition()
-      while !self.at(.eof, .rightParen)
-        && keepGoing
-        && loopProgress.evaluate(currentToken)
-      {
-        let parameter = parseFunctionParameter(for: subject)
-        keepGoing = parameter.trailingComma != nil
-        elements.append(parameter)
-      }
-    }
-    let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
-
-    let parameters: RawFunctionParameterListSyntax
-    if elements.isEmpty && (lparen.isMissing || rparen.isMissing) {
-      parameters = RawFunctionParameterListSyntax(elements: [], arena: self.arena)
-    } else {
-      parameters = RawFunctionParameterListSyntax(elements: elements, arena: self.arena)
-    }
-
-    return RawParameterClauseSyntax(
-      unexpectedBeforeLParen,
-      leftParen: lparen,
-      parameterList: parameters,
-      unexpectedBeforeRParen,
-      rightParen: rparen,
-      arena: self.arena
-    )
-  }
-
   /// If a `throws` keyword appears right in front of the `arrow`, it is returned as `misplacedThrowsKeyword` so it can be synthesized in front of the arrow.
   mutating func parseFunctionReturnClause<S: RawEffectSpecifiersTrait>(effectSpecifiers: inout S?, allowNamedOpaqueResultType: Bool) -> RawReturnClauseSyntax {
     let (unexpectedBeforeArrow, arrow) = self.expect(.arrow)
@@ -1390,7 +1216,9 @@ extension Parser {
 
   @_spi(RawSyntax)
   public mutating func parseFunctionSignature(allowOutput: Bool = true) -> RawFunctionSignatureSyntax {
-    let input = self.parseParameterClause(for: .functionParameters)
+    let input = self.parseParameterClause(RawParameterClauseSyntax.self) { parser in
+      parser.parseFunctionParameter()
+    }
 
     var effectSpecifiers = self.parseDeclEffectSpecifiers()
 
@@ -1454,7 +1282,9 @@ extension Parser {
       genericParameterClause = nil
     }
 
-    let indices = self.parseParameterClause(for: .indices)
+    let indices = self.parseParameterClause(RawParameterClauseSyntax.self) { parser in
+      parser.parseFunctionParameter()
+    }
 
     var misplacedEffectSpecifiers: RawDeclEffectSpecifiersSyntax?
     let result = self.parseFunctionReturnClause(effectSpecifiers: &misplacedEffectSpecifiers, allowNamedOpaqueResultType: true)

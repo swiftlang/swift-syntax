@@ -289,13 +289,12 @@ final class EnumTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in enum case"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected ':' and type in parameter"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected type in parameter"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code '0' in parameter clause"),
         DiagnosticSpec(locationMarker: "4️⃣", message: "unexpected code ':' in enum"),
       ],
       fixedSource: """
         enum SwitchEnvy {
-          case <#identifier#>(_, var x: <#type#>, <#type#>0):
+          case <#identifier#>(_, var x: <#type#>, 0):
         }
         """
     )
@@ -1348,4 +1347,13 @@ final class EnumTests: XCTestCase {
     )
   }
 
+  func testEnumCaseWithWildcardAsFirstName() {
+    assertParse(
+      #"""
+      enum Foo {
+        case a(_ x: Int)
+      }
+      """#
+    )
+  }
 }

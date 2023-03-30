@@ -189,22 +189,23 @@ private struct ThrownErrorDiagnostic: DiagnosticMessage {
 extension MacroExpansionContext {
   /// Add diagnostics from the error thrown during macro expansion.
   public func addDiagnostics<S: SyntaxProtocol>(from error: Error, node: S) {
-    guard let diagnosticsError = error as? DiagnosticsError else {
-      diagnose(
-        Diagnostic(
-          node: Syntax(node),
-          message: ThrownErrorDiagnostic(message: String(describing: error))
-        )
-      )
-      return
+    // Inspect the error to form an appropriate set of diagnostics.
+    var diagnostics: [Diagnostic]
+    if let diagnosticsError = error as? DiagnosticsError {
+      diagnostics = diagnosticsError.diagnostics
+    } else if let message = error as? DiagnosticMessage {
+      diagnostics = [Diagnostic(node: Syntax(node), message: message)]
+    } else {
+      diagnostics = [Diagnostic(node: Syntax(node), message: ThrownErrorDiagnostic(message: String(describing: error)))]
     }
 
-    for diagnostic in diagnosticsError.diagnostics {
+    // Emit the diagnostics.
+    for diagnostic in diagnostics {
       diagnose(diagnostic)
     }
 
-    // handle possibility that none of the diagnostics was an error
-    if !diagnosticsError.diagnostics.contains(
+    // Handle possibility that none of the diagnostics was an error.
+    if !diagnostics.contains(
       where: { $0.diagMessage.severity == .error }
     ) {
       diagnose(

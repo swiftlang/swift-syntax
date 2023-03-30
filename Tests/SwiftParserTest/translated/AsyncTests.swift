@@ -59,7 +59,7 @@ final class AsyncTests: XCTestCase {
     assertParse(
       "func asyncGlobal5() -> Int 1️⃣async throws { }",
       diagnostics: [
-        DiagnosticSpec(message: "'async throws' must preceed '->'")
+        DiagnosticSpec(message: "'async throws' must preceed '->'", fixIts: ["move 'async throws' in front of '->'"])
       ],
       fixedSource: "func asyncGlobal5() async throws -> Int { }"
     )
@@ -79,7 +79,7 @@ final class AsyncTests: XCTestCase {
     assertParse(
       "func asyncGlobal7() throws -> Int 1️⃣async { }",
       diagnostics: [
-        DiagnosticSpec(message: "'async' must preceed '->'")
+        DiagnosticSpec(message: "'async' must preceed '->'", fixIts: ["move 'async' in front of '->'"])
       ],
       fixedSource: "func asyncGlobal7() async throws -> Int { }"
     )
@@ -118,7 +118,7 @@ final class AsyncTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "deinitializers cannot have a name"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "deinitializers cannot have a name", fixIts: ["remove 'async'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code 'async' in subscript"),
       ]
     )
@@ -144,7 +144,7 @@ final class AsyncTests: XCTestCase {
     assertParse(
       "typealias AsyncFunc3 = () throws 1️⃣async -> ()",
       diagnostics: [
-        DiagnosticSpec(message: "'async' must precede 'throws'")
+        DiagnosticSpec(message: "'async' must precede 'throws'", fixIts: ["move 'async' in front of 'throws'"])
       ],
       fixedSource: "typealias AsyncFunc3 = () async throws -> ()"
     )
@@ -170,7 +170,7 @@ final class AsyncTests: XCTestCase {
     assertParse(
       "let _ = [() throws 1️⃣async -> ()]()",
       diagnostics: [
-        DiagnosticSpec(message: "'async' must precede 'throws'")
+        DiagnosticSpec(message: "'async' must precede 'throws'", fixIts: ["move 'async' in front of 'throws'"])
       ],
       fixedSource: "let _ = [() async throws -> ()]()"
     )
@@ -182,8 +182,11 @@ final class AsyncTests: XCTestCase {
       let _ = [() -> 1️⃣async ()]()
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'async' must preceed '->'")
-      ]
+        DiagnosticSpec(message: "'async' must preceed '->'", fixIts: ["move 'async' in front of '->'"])
+      ],
+      fixedSource: """
+        let _ = [() async -> ()]()
+        """
     )
   }
 

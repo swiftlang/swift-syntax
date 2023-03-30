@@ -29,8 +29,11 @@ final class UnclosedStringInterpolationTests: XCTestCase {
       _ = "mid == \(pete1️⃣"
       """##,
       diagnostics: [
-        DiagnosticSpec(message: "expected ')' in string literal")
-      ]
+        DiagnosticSpec(message: "expected ')' in string literal", fixIts: ["insert ')'"])
+      ],
+      fixedSource: ##"""
+        _ = "mid == \(pete)"
+        """##
     )
   }
 
@@ -40,9 +43,9 @@ final class UnclosedStringInterpolationTests: XCTestCase {
       let theGoat = "kanye \("1️⃣
       """##,
       diagnostics: [
-        DiagnosticSpec(message: #"expected '"' to end string literal"#),
-        DiagnosticSpec(message: "expected ')' in string literal"),
-        DiagnosticSpec(message: #"expected '"' to end string literal"#),
+        DiagnosticSpec(message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
+        DiagnosticSpec(message: "expected ')' in string literal", fixIts: ["insert ')'"]),
+        DiagnosticSpec(message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
       ]
     )
   }
@@ -53,7 +56,7 @@ final class UnclosedStringInterpolationTests: XCTestCase {
       let equation1 = "2 + 2 = \(2 + 21️⃣"
       """##,
       diagnostics: [
-        DiagnosticSpec(message: "expected ')' in string literal")
+        DiagnosticSpec(message: "expected ')' in string literal", fixIts: ["insert ')'"])
       ]
     )
   }
@@ -64,7 +67,7 @@ final class UnclosedStringInterpolationTests: XCTestCase {
       let s = "\(x1️⃣"; print(x)
       """##,
       diagnostics: [
-        DiagnosticSpec(message: "expected ')' in string literal")
+        DiagnosticSpec(message: "expected ')' in string literal", fixIts: ["insert ')'"])
       ]
     )
   }
@@ -76,7 +79,7 @@ final class UnclosedStringInterpolationTests: XCTestCase {
       """##,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '; print(x' in string literal"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#),
+        DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
       ]
     )
   }
@@ -87,8 +90,8 @@ final class UnclosedStringInterpolationTests: XCTestCase {
       let goatedAlbum = "The Life Of \("Pablo"1️⃣
       """##,
       diagnostics: [
-        DiagnosticSpec(message: "expected ')' in string literal"),
-        DiagnosticSpec(message: #"expected '"' to end string literal"#),
+        DiagnosticSpec(message: "expected ')' in string literal", fixIts: ["insert ')'"]),
+        DiagnosticSpec(message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
       ]
     )
   }
@@ -101,9 +104,9 @@ final class UnclosedStringInterpolationTests: XCTestCase {
       """1️⃣
       """##,
       diagnostics: [
-        DiagnosticSpec(message: #"expected '"""' to end string literal"#),
-        DiagnosticSpec(message: "expected ')' in string literal"),
-        DiagnosticSpec(message: #"expected '"""' to end string literal"#),
+        DiagnosticSpec(message: #"expected '"""' to end string literal"#, fixIts: [#"insert '"""'"#]),
+        DiagnosticSpec(message: "expected ')' in string literal", fixIts: ["insert ')'"]),
+        DiagnosticSpec(message: #"expected '"""' to end string literal"#, fixIts: [#"insert '"""'"#]),
       ]
     )
   }
@@ -115,7 +118,7 @@ final class UnclosedStringInterpolationTests: XCTestCase {
       """#,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code 'H(' in string literal"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#),
+        DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
       ]
     )
   }
@@ -126,9 +129,9 @@ final class UnclosedStringInterpolationTests: XCTestCase {
       "\("1️⃣
       """#,
       diagnostics: [
-        DiagnosticSpec(message: #"expected '"' to end string literal"#),
-        DiagnosticSpec(message: #"expected ')' in string literal"#),
-        DiagnosticSpec(message: #"expected '"' to end string literal"#),
+        DiagnosticSpec(message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
+        DiagnosticSpec(message: "expected ')' in string literal", fixIts: ["insert ')'"]),
+        DiagnosticSpec(message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
       ]
     )
   }

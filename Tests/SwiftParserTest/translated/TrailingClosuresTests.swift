@@ -210,7 +210,7 @@ final class TrailingClosuresTests: XCTestCase {
       _ = produce { 2 } `default`: { 3 }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "'default' label can only appear inside a 'switch' statement"),
       ]
     )

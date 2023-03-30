@@ -33,8 +33,8 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression and '{}' to end 'switch' statement"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier and function signature in function"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression and '{}' to end 'switch' statement", fixIts: ["insert expression and '{}'"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier and function signature in function", fixIts: ["insert identifier and function signature"]),
       ]
     )
   }
@@ -47,7 +47,7 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{}' in 'switch' statement")
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{}' in 'switch' statement", fixIts: ["insert '{}'"])
       ]
     )
   }
@@ -62,7 +62,7 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected expression and ':' in switch case")
+        DiagnosticSpec(message: "expected expression and ':' in switch case", fixIts: ["insert expression and ':'"])
       ]
     )
   }
@@ -77,8 +77,8 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected expression in 'where' clause"),
-        DiagnosticSpec(message: "expected ':' in switch case"),
+        DiagnosticSpec(message: "expected expression in 'where' clause", fixIts: ["insert expression"]),
+        DiagnosticSpec(message: "expected ':' in switch case", fixIts: ["insert ':'"]),
       ]
     )
   }
@@ -93,7 +93,7 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ':' in switch case")
+        DiagnosticSpec(message: "expected ':' in switch case", fixIts: ["insert ':'"])
       ]
     )
   }
@@ -108,7 +108,7 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ':' in switch case")
+        DiagnosticSpec(message: "expected ':' in switch case", fixIts: ["insert ':'"])
       ]
     )
   }
@@ -250,7 +250,7 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "all statements inside a switch must be covered by a 'case' or 'default' label")
+        DiagnosticSpec(message: "all statements inside a switch must be covered by a 'case' or 'default' label", fixIts: ["insert label"])
       ]
     )
   }
@@ -299,7 +299,7 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "all statements inside a switch must be covered by a 'case' or 'default' label")
+        DiagnosticSpec(message: "all statements inside a switch must be covered by a 'case' or 'default' label", fixIts: ["insert label"])
       ]
     )
   }
@@ -313,7 +313,7 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "all statements inside a switch must be covered by a 'case' or 'default' label")
+        DiagnosticSpec(message: "all statements inside a switch must be covered by a 'case' or 'default' label", fixIts: ["insert label"])
       ]
     )
   }
@@ -1190,7 +1190,7 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ':' in switch case")
+        DiagnosticSpec(message: "expected ':' in switch case", fixIts: ["insert ':'"])
       ]
     )
   }
@@ -1207,7 +1207,7 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected label in switch case")
+        DiagnosticSpec(message: "expected label in switch case", fixIts: ["insert label"])
       ]
     )
   }
@@ -1229,7 +1229,8 @@ final class SwitchTests: XCTestCase {
           message: "expected ']' to end array",
           notes: [
             NoteSpec(message: "to match this opening '['")
-          ]
+          ],
+          fixIts: ["insert ']'"]
         )
       ]
     )

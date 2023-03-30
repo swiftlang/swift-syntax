@@ -86,7 +86,7 @@ final class ErrorsTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression after ternary operator")
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression after ternary operator", fixIts: ["insert expression"])
       ]
     )
   }
@@ -154,7 +154,7 @@ final class ErrorsTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'throws' must preceed '->'")
+        DiagnosticSpec(message: "'throws' must preceed '->'", fixIts: ["move 'throws' in front of '->'"])
       ],
       fixedSource: """
         func postThrows() throws -> Int {
@@ -172,7 +172,7 @@ final class ErrorsTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'throws' must preceed '->'")
+        DiagnosticSpec(message: "'throws' must preceed '->'", fixIts: ["move 'throws' in front of '->'"])
       ]
     )
   }
@@ -185,7 +185,7 @@ final class ErrorsTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'rethrows' must preceed '->'")
+        DiagnosticSpec(message: "'rethrows' must preceed '->'", fixIts: ["move 'rethrows' in front of '->'"])
       ],
       fixedSource: """
         func postRethrows(_ f: () throws -> Int) rethrows -> Int {
@@ -203,7 +203,7 @@ final class ErrorsTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'rethrows' must preceed '->'")
+        DiagnosticSpec(message: "'rethrows' must preceed '->'", fixIts: ["move 'rethrows' in front of '->'"])
       ]
     )
   }
@@ -216,7 +216,7 @@ final class ErrorsTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'throws' must preceed '->'")
+        DiagnosticSpec(message: "'throws' must preceed '->'", fixIts: ["move 'throws' in front of '->'"])
       ]
     )
   }
@@ -227,7 +227,7 @@ final class ErrorsTests: XCTestCase {
       func dupThrows1() throws 1️⃣rethrows -> 2️⃣throws Int 3️⃣throw {}
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "'rethrows' conflicts with 'throws'"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "'rethrows' conflicts with 'throws'", fixIts: ["remove redundant 'rethrows'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "'throws' must preceed '->'", fixIts: ["remove redundant 'throws'"]),
         DiagnosticSpec(locationMarker: "3️⃣", message: "'throw' must preceed '->'", fixIts: ["remove redundant 'throw'"]),
       ],
@@ -335,7 +335,7 @@ final class ErrorsTests: XCTestCase {
       func fixitThrow1() 1️⃣throw -> Int {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected throwing specifier; did you mean 'throws'?")
+        DiagnosticSpec(message: "expected throwing specifier; did you mean 'throws'?", fixIts: ["replace 'throw' with 'throws'"])
       ],
       fixedSource: """
         func fixitThrow1() throws -> Int {}
@@ -353,7 +353,7 @@ final class ErrorsTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected throwing specifier; did you mean 'throws'?")
+        DiagnosticSpec(message: "expected throwing specifier; did you mean 'throws'?", fixIts: ["replace 'throw' with 'throws'"])
       ],
       fixedSource: """
         func fixitThrow2() throws {
@@ -371,7 +371,7 @@ final class ErrorsTests: XCTestCase {
       let fn: () -> 1️⃣throws Void
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'throws' must preceed '->'")
+        DiagnosticSpec(message: "'throws' must preceed '->'", fixIts: ["move 'throws' in front of '->'"])
       ],
       fixedSource: """
         let fn: () throws -> Void
@@ -393,7 +393,7 @@ final class ErrorsTests: XCTestCase {
       func fixitTry0<T>(a: T) 1️⃣try where T:ExpressibleByStringLiteral {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected throwing specifier; did you mean 'throws'?")
+        DiagnosticSpec(message: "expected throwing specifier; did you mean 'throws'?", fixIts: ["replace 'try' with 'throws'"])
       ]
     )
   }
@@ -404,7 +404,7 @@ final class ErrorsTests: XCTestCase {
       func fixitTry1<T>(a: T) 1️⃣try {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected throwing specifier; did you mean 'throws'?")
+        DiagnosticSpec(message: "expected throwing specifier; did you mean 'throws'?", fixIts: ["replace 'try' with 'throws'"])
       ],
       fixedSource: """
         func fixitTry1<T>(a: T) throws {}
@@ -418,7 +418,7 @@ final class ErrorsTests: XCTestCase {
       func fixitTry2() 1️⃣try {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected throwing specifier; did you mean 'throws'?")
+        DiagnosticSpec(message: "expected throwing specifier; did you mean 'throws'?", fixIts: ["replace 'try' with 'throws'"])
       ]
     )
   }
@@ -429,7 +429,7 @@ final class ErrorsTests: XCTestCase {
       let fixitTry3 : () 1️⃣try -> Int
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected throwing specifier; did you mean 'throws'?")
+        DiagnosticSpec(message: "expected throwing specifier; did you mean 'throws'?", fixIts: ["replace 'try' with 'throws'"])
       ]
     )
   }
@@ -454,7 +454,7 @@ final class ErrorsTests: XCTestCase {
       func fixitAwait1() 1️⃣await -> Int { }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected async specifier; did you mean 'async'?")
+        DiagnosticSpec(message: "expected async specifier; did you mean 'async'?", fixIts: ["replace 'await' with 'async'"])
       ],
       fixedSource: """
         func fixitAwait1() async -> Int { }
@@ -482,7 +482,7 @@ final class ErrorsTests: XCTestCase {
       func fixitAwait2() async 1️⃣await throws -> Int { }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'await' conflicts with 'async'")
+        DiagnosticSpec(message: "'await' conflicts with 'async'", fixIts: ["remove redundant 'await'"])
       ],
       fixedSource: """
         func fixitAwait2() async throws -> Int { }
@@ -496,7 +496,7 @@ final class ErrorsTests: XCTestCase {
       func fixitAwait2() async 1️⃣await -> Int { }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'await' conflicts with 'async'")
+        DiagnosticSpec(message: "'await' conflicts with 'async'", fixIts: ["remove redundant 'await'"])
       ],
       fixedSource: """
         func fixitAwait2() async -> Int { }

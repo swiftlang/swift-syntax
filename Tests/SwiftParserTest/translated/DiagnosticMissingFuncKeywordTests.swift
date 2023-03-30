@@ -43,7 +43,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected 'var' in variable")
+        DiagnosticSpec(message: "expected 'var' in variable", fixIts: ["insert 'var'"])
       ],
       fixedSource: """
         protocol Brew {
@@ -100,8 +100,8 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'var' in variable"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected 'var' in variable"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'var' in variable", fixIts: ["insert 'var'"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected 'var' in variable", fixIts: ["insert 'var'"]),
       ],
       fixedSource: """
         protocol Brew {
@@ -120,8 +120,8 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'var' in variable"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected 'var' in variable"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'var' in variable", fixIts: ["insert 'var'"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected 'var' in variable", fixIts: ["insert 'var'"]),
       ],
       fixedSource: """
         protocol Brew {
@@ -147,7 +147,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected 'var' in variable")
+        DiagnosticSpec(message: "expected 'var' in variable", fixIts: ["insert 'var'"])
       ]
     )
   }
@@ -175,7 +175,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected 'var' in variable")
+        DiagnosticSpec(message: "expected 'var' in variable", fixIts: ["insert 'var'"])
       ]
     )
   }
@@ -188,7 +188,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected 'var' in variable")
+        DiagnosticSpec(message: "expected 'var' in variable", fixIts: ["insert 'var'"])
       ]
     )
   }
@@ -219,7 +219,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected 'func' in function")
+        DiagnosticSpec(message: "expected 'func' in function", fixIts: ["insert 'func'"])
       ]
     )
   }
@@ -232,7 +232,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected 'func' in function")
+        DiagnosticSpec(message: "expected 'func' in function", fixIts: ["insert 'func'"])
       ]
     )
   }
@@ -245,7 +245,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected 'var' in variable")
+        DiagnosticSpec(message: "expected 'var' in variable", fixIts: ["insert 'var'"])
       ]
     )
   }
@@ -258,7 +258,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected 'var' in variable")
+        DiagnosticSpec(message: "expected 'var' in variable", fixIts: ["insert 'var'"])
       ]
     )
   }

@@ -25,7 +25,7 @@ final class InitDeinitTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected parameter clause in function signature")
+        DiagnosticSpec(message: "expected parameter clause in function signature", fixIts: ["insert parameter clause"])
       ]
     )
   }
@@ -48,7 +48,7 @@ final class InitDeinitTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected parameter clause in function signature")
+        DiagnosticSpec(message: "expected parameter clause in function signature", fixIts: ["insert parameter clause"])
       ]
     )
   }
@@ -61,7 +61,7 @@ final class InitDeinitTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected parameter clause in function signature")
+        DiagnosticSpec(message: "expected parameter clause in function signature", fixIts: ["insert parameter clause"])
       ]
     )
   }
@@ -74,7 +74,7 @@ final class InitDeinitTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected parameter clause in function signature")
+        DiagnosticSpec(message: "expected parameter clause in function signature", fixIts: ["insert parameter clause"])
       ]
     )
   }
@@ -195,8 +195,8 @@ final class InitDeinitTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "deinitializers cannot have a name"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "deinitializers cannot have parameters"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "deinitializers cannot have a name", fixIts: ["remove 'x'"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "deinitializers cannot have parameters", fixIts: ["remove function signature"]),
       ],
       fixedSource: """
         class FooClassDeinitializerC {
@@ -214,7 +214,7 @@ final class InitDeinitTests: XCTestCase {
       init() {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected parameter clause in function signature")
+        DiagnosticSpec(message: "expected parameter clause in function signature", fixIts: ["insert parameter clause"])
       ]
     )
   }

@@ -21,7 +21,7 @@ final class ActorTests: XCTestCase {
       actor MyActor11️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected member block in actor")
+        DiagnosticSpec(message: "expected member block in actor", fixIts: ["insert member block"])
       ]
     )
   }
@@ -39,7 +39,8 @@ final class ActorTests: XCTestCase {
           message: "expected '}' to end actor",
           notes: [
             NoteSpec(message: "to match this opening '{'")
-          ]
+          ],
+          fixIts: ["insert '}'"]
         )
       ]
     )

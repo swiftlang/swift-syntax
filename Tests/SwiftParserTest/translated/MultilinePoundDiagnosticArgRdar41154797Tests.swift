@@ -21,8 +21,8 @@ final class MultilinePoundDiagnosticArgRdar41154797Tests: XCTestCase {
       #error("""1️⃣
       """##,
       diagnostics: [
-        DiagnosticSpec(message: #"expected '"""' to end string literal"#),
-        DiagnosticSpec(message: "expected ')' to end macro expansion"),
+        DiagnosticSpec(message: #"expected '"""' to end string literal"#, fixIts: [#"insert '"""'"#]),
+        DiagnosticSpec(message: "expected ')' to end macro expansion", fixIts: ["insert ')'"]),
       ]
     )
   }

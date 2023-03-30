@@ -61,7 +61,7 @@ public class EntryTests: XCTestCase {
       substructureAfterMarker: "2️⃣",
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "'test' is considered an identifier and must not appear within an operator name"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "operator should not be declared with body"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "operator should not be declared with body", fixIts: ["remove operator body"]),
       ]
     )
   }

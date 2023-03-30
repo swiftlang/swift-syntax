@@ -109,7 +109,11 @@ final class AvailabilityQueryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(', '@availability' arguments, and ')' in availability condition")
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '(', '@availability' arguments, and ')' in availability condition",
+          fixIts: ["insert '(', '@availability' arguments, and ')'"]
+        )
       ]
     )
   }
@@ -121,8 +125,8 @@ final class AvailabilityQueryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected version restriction in availability argument"),
-        DiagnosticSpec(message: "expected ')' to end availability condition"),
+        DiagnosticSpec(message: "expected version restriction in availability argument", fixIts: ["insert version restriction"]),
+        DiagnosticSpec(message: "expected ')' to end availability condition", fixIts: ["insert ')'"]),
       ]
     )
   }
@@ -134,7 +138,7 @@ final class AvailabilityQueryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected version restriction in availability argument")
+        DiagnosticSpec(message: "expected version restriction in availability argument", fixIts: ["insert version restriction"])
       ]
     )
   }
@@ -150,7 +154,8 @@ final class AvailabilityQueryTests: XCTestCase {
           message: "expected ')' to end availability condition",
           notes: [
             NoteSpec(message: "to match this opening '('")
-          ]
+          ],
+          fixIts: ["insert ')'"]
         )
       ]
     )
@@ -176,7 +181,8 @@ final class AvailabilityQueryTests: XCTestCase {
           message: "expected ')' to end availability condition",
           notes: [
             NoteSpec(message: "to match this opening '('")
-          ]
+          ],
+          fixIts: ["insert ')'"]
         )
       ]
     )
@@ -300,7 +306,8 @@ final class AvailabilityQueryTests: XCTestCase {
           message: "expected ')' to end availability condition",
           notes: [
             NoteSpec(message: "to match this opening '('")
-          ]
+          ],
+          fixIts: ["insert ')'"]
         )
       ]
     )
@@ -323,8 +330,8 @@ final class AvailabilityQueryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected version restriction in availability argument"),
-        DiagnosticSpec(message: "expected ')' to end availability condition"),
+        DiagnosticSpec(message: "expected version restriction in availability argument", fixIts: ["insert version restriction"]),
+        DiagnosticSpec(message: "expected ')' to end availability condition", fixIts: ["insert ')'"]),
       ]
     )
   }
@@ -336,7 +343,7 @@ final class AvailabilityQueryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected version restriction in availability argument")
+        DiagnosticSpec(message: "expected version restriction in availability argument", fixIts: ["insert version restriction"])
       ]
     )
   }
@@ -352,7 +359,8 @@ final class AvailabilityQueryTests: XCTestCase {
           message: "expected ')' to end availability condition",
           notes: [
             NoteSpec(message: "to match this opening '('")
-          ]
+          ],
+          fixIts: ["insert ')'"]
         )
       ]
     )

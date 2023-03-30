@@ -60,7 +60,7 @@ final class VariadicGenericsTests: XCTestCase {
       func invalid<each T>() -> (each any 1️⃣T) {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ',' in tuple type")
+        DiagnosticSpec(message: "expected ',' in tuple type", fixIts: ["insert ','"])
       ]
     )
 
@@ -561,8 +561,11 @@ final class TypeParameterPackTests: XCTestCase {
       var foo: (bar: Int 1️⃣bar2: Int)
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ',' in tuple type")
-      ]
+        DiagnosticSpec(message: "expected ',' in tuple type", fixIts: ["insert ','"])
+      ],
+      fixedSource: """
+        var foo: (bar: Int, bar2: Int)
+        """
     )
 
     assertParse(
@@ -570,7 +573,7 @@ final class TypeParameterPackTests: XCTestCase {
       var foo: (bar: Int 1️⃣Int)
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ',' in tuple type")
+        DiagnosticSpec(message: "expected ',' in tuple type", fixIts: ["insert ','"])
       ]
     )
 
@@ -579,8 +582,11 @@ final class TypeParameterPackTests: XCTestCase {
       var foo: (a 1️⃣Int)
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ':' in tuple type")
-      ]
+        DiagnosticSpec(message: "expected ':' in tuple type", fixIts: ["insert ':'"])
+      ],
+      fixedSource: """
+        var foo: (a: Int)
+        """
     )
 
     assertParse(
@@ -588,7 +594,7 @@ final class TypeParameterPackTests: XCTestCase {
       var foo: (A 1️⃣Int)
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ',' in tuple type")
+        DiagnosticSpec(message: "expected ',' in tuple type", fixIts: ["insert ','"])
       ]
     )
 
@@ -597,8 +603,8 @@ final class TypeParameterPackTests: XCTestCase {
       var foo: (_ 1️⃣a 2️⃣Int)
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' in tuple type"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ',' in tuple type"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' in tuple type", fixIts: ["insert ':'"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ',' in tuple type", fixIts: ["insert ','"]),
       ]
     )
 
@@ -607,8 +613,11 @@ final class TypeParameterPackTests: XCTestCase {
       var foo: (Array<Foo> 1️⃣Array<Bar>)
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ',' in tuple type")
-      ]
+        DiagnosticSpec(message: "expected ',' in tuple type", fixIts: ["insert ','"])
+      ],
+      fixedSource: """
+        var foo: (Array<Foo> , Array<Bar>)
+        """
     )
 
     assertParse(
@@ -616,8 +625,11 @@ final class TypeParameterPackTests: XCTestCase {
       var foo: (a 1️⃣Array<Bar>)
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ':' in tuple type")
-      ]
+        DiagnosticSpec(message: "expected ':' in tuple type", fixIts: ["insert ':'"])
+      ],
+      fixedSource: """
+        var foo: (a: Array<Bar>)
+        """
     )
 
     assertParse(
@@ -625,8 +637,11 @@ final class TypeParameterPackTests: XCTestCase {
       var foo: (Array<Foo> 1️⃣a)
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ',' in tuple type")
-      ]
+        DiagnosticSpec(message: "expected ',' in tuple type", fixIts: ["insert ','"])
+      ],
+      fixedSource: """
+        var foo: (Array<Foo> , a)
+        """
     )
   }
 }

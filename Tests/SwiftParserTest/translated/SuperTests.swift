@@ -115,7 +115,7 @@ final class SuperTests: XCTestCase {
       }
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "expected name in member access")
+        DiagnosticSpec(message: "expected name in member access", fixIts: ["insert name"])
       ]
     )
   }

@@ -242,7 +242,7 @@ struct DiagnosticSpec {
   let notes: [NoteSpec]?
   /// If not `nil`, assert that the diagnostic contains fix-its with these messages.
   /// Use the `fixedSource` parameter on `AssertParse` to check that applying the Fix-It yields the expected result.
-  let fixIts: [String]?
+  let fixIts: [String]
 
   /// The file and line at which this `DiagnosticSpec` was created, so that assertion failures can be reported at its location.
   let file: StaticString
@@ -255,7 +255,7 @@ struct DiagnosticSpec {
     severity: DiagnosticSeverity = .error,
     highlight: String? = nil,
     notes: [NoteSpec]? = nil,
-    fixIts: [String]? = nil,
+    fixIts: [String] = [],
     file: StaticString = #file,
     line: UInt = #line
   ) {
@@ -434,15 +434,23 @@ func assertDiagnostic<T: SyntaxProtocol>(
       }
     }
   }
-  if let fixIts = spec.fixIts {
-    if fixIts != diag.fixIts.map(\.message.message) {
-      failStringsEqualWithDiff(
-        diag.fixIts.map(\.message.message).joined(separator: "\n"),
-        fixIts.joined(separator: "\n"),
-        file: file,
-        line: line
-      )
-    }
+
+  if diag.fixIts.count != spec.fixIts.count {
+    XCTFail(
+      """
+      Expected \(spec.fixIts.count) fix its but received \(diag.fixIts.count):
+      \(diag.fixIts.map { $0.message.message }.joined(separator: "\n"))
+      """,
+      file: file,
+      line: line
+    )
+  } else if spec.fixIts != diag.fixIts.map(\.message.message) {
+    failStringsEqualWithDiff(
+      diag.fixIts.map(\.message.message).joined(separator: "\n"),
+      spec.fixIts.joined(separator: "\n"),
+      file: file,
+      line: line
+    )
   }
 }
 

@@ -41,8 +41,8 @@ final class ImplicitGetterIncompleteTests: XCTestCase {
       }1️⃣
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "expected '}' to end variable"),
-        DiagnosticSpec(message: "expected '}' to end function"),
+        DiagnosticSpec(message: "expected '}' to end variable", fixIts: ["insert '}'"]),
+        DiagnosticSpec(message: "expected '}' to end function", fixIts: ["insert '}'"]),
       ]
     )
   }

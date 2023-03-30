@@ -35,7 +35,7 @@ final class DollarIdentifierTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'$' is not a valid identifier")
+        DiagnosticSpec(message: "'$' is not a valid identifier", fixIts: ["if this name is unavoidable, use backticks to escape it"])
       ]
     )
   }
@@ -80,7 +80,7 @@ final class DollarIdentifierTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'$' is not a valid identifier")
+        DiagnosticSpec(message: "'$' is not a valid identifier", fixIts: ["if this name is unavoidable, use backticks to escape it"])
       ]
     )
   }
@@ -93,7 +93,7 @@ final class DollarIdentifierTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'$' is not a valid identifier")
+        DiagnosticSpec(message: "'$' is not a valid identifier", fixIts: ["if this name is unavoidable, use backticks to escape it"])
       ]
     )
   }
@@ -104,8 +104,8 @@ final class DollarIdentifierTests: XCTestCase {
       func 1️⃣$(2️⃣$ dollarParam: Int) {}
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "'$' is not a valid identifier"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "'$' is not a valid identifier"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "'$' is not a valid identifier", fixIts: ["if this name is unavoidable, use backticks to escape it"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "'$' is not a valid identifier", fixIts: ["if this name is unavoidable, use backticks to escape it"]),
       ],
       fixedSource: "func `$`(`$` dollarParam: Int) {}"
     )
@@ -117,7 +117,7 @@ final class DollarIdentifierTests: XCTestCase {
       $(1️⃣$: 24)
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'$' is not a valid identifier")
+        DiagnosticSpec(message: "'$' is not a valid identifier", fixIts: ["if this name is unavoidable, use backticks to escape it"])
       ]
     )
   }

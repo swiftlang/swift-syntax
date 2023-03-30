@@ -200,11 +200,11 @@ final class SubscriptingTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(' to start parameter clause"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '(' to start function type"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected ')' in function type"),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "expected ')' to end parameter clause"),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "expected '->' and return type in subscript"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(' to start parameter clause", fixIts: ["insert '('"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '(' to start function type", fixIts: ["insert '('"]),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected ')' in function type", fixIts: ["insert ')'"]),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "expected ')' to end parameter clause", fixIts: ["insert ')'"]),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "expected '->' and return type in subscript", fixIts: ["insert '->' and return type"]),
       ],
       fixedSource: """
         struct A0 {
@@ -234,7 +234,7 @@ final class SubscriptingTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected parameter clause in subscript")
+        DiagnosticSpec(message: "expected parameter clause in subscript", fixIts: ["insert parameter clause"])
       ]
     )
   }
@@ -255,7 +255,7 @@ final class SubscriptingTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '->' in subscript")
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '->' in subscript", fixIts: ["insert '->'"])
       ]
     )
   }
@@ -276,7 +276,7 @@ final class SubscriptingTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected return type in subscript")
+        DiagnosticSpec(message: "expected return type in subscript", fixIts: ["insert return type"])
       ]
     )
   }
@@ -294,7 +294,7 @@ final class SubscriptingTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '->' and return type in subscript")
+        DiagnosticSpec(message: "expected '->' and return type in subscript", fixIts: ["insert '->' and return type"])
       ]
     )
   }
@@ -311,7 +311,7 @@ final class SubscriptingTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '->' and return type in subscript")
+        DiagnosticSpec(message: "expected '->' and return type in subscript", fixIts: ["insert '->' and return type"])
       ]
     )
   }
@@ -385,8 +385,8 @@ final class SubscriptingTests: XCTestCase {
         }2️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' in subscript"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end struct"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' in subscript", fixIts: ["insert '{'"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end struct", fixIts: ["insert '}'"]),
       ]
     )
   }
@@ -452,11 +452,11 @@ final class SubscriptingTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(' to start parameter clause"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '(' to start function type"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected ')' in function type"),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "expected ')' to end parameter clause"),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "expected '->' and return type in subscript"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(' to start parameter clause", fixIts: ["insert '('"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '(' to start function type", fixIts: ["insert '('"]),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected ')' in function type", fixIts: ["insert ')'"]),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "expected ')' to end parameter clause", fixIts: ["insert ')'"]),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "expected '->' and return type in subscript", fixIts: ["insert '->' and return type"]),
       ],
       fixedSource: """
         struct A11 {

@@ -34,7 +34,7 @@ final class InvalidTests: XCTestCase {
       func test2(1️⃣inout let x : Int) {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'inout' before a parameter name is not allowed")
+        DiagnosticSpec(message: "'inout' before a parameter name is not allowed", fixIts: ["move 'inout' in front of type"])
       ]
     )
   }
@@ -57,7 +57,7 @@ final class InvalidTests: XCTestCase {
       func test1s(1️⃣__shared var x : Int) {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'__shared' before a parameter name is not allowed")
+        DiagnosticSpec(message: "'__shared' before a parameter name is not allowed", fixIts: ["move '__shared' in front of type"])
       ]
     )
   }
@@ -68,7 +68,7 @@ final class InvalidTests: XCTestCase {
       func test2s(1️⃣__shared let x : Int) {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'__shared' before a parameter name is not allowed")
+        DiagnosticSpec(message: "'__shared' before a parameter name is not allowed", fixIts: ["move '__shared' in front of type"])
       ]
     )
   }
@@ -79,7 +79,7 @@ final class InvalidTests: XCTestCase {
       func test1o(1️⃣__owned var x : Int) {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'__owned' before a parameter name is not allowed")
+        DiagnosticSpec(message: "'__owned' before a parameter name is not allowed", fixIts: ["move '__owned' in front of type"])
       ]
     )
   }
@@ -90,7 +90,7 @@ final class InvalidTests: XCTestCase {
       func test2o(1️⃣__owned let x : Int) {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'__owned' before a parameter name is not allowed")
+        DiagnosticSpec(message: "'__owned' before a parameter name is not allowed", fixIts: ["move '__owned' in front of type"])
       ]
     )
   }
@@ -103,7 +103,7 @@ final class InvalidTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected value and ')' to end function call")
+        DiagnosticSpec(message: "expected value and ')' to end function call", fixIts: ["insert value and ')'"])
       ]
     )
   }
@@ -126,7 +126,7 @@ final class InvalidTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ')' to end function call")
+        DiagnosticSpec(message: "expected ')' to end function call", fixIts: ["insert ')'"])
       ]
     )
   }
@@ -149,7 +149,7 @@ final class InvalidTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "all statements inside a switch must be covered by a 'case' or 'default' label")
+        DiagnosticSpec(message: "all statements inside a switch must be covered by a 'case' or 'default' label", fixIts: ["insert label"])
       ]
     )
   }
@@ -174,8 +174,8 @@ final class InvalidTests: XCTestCase {
       }
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "all statements inside a switch must be covered by a 'case' or 'default' label"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "all statements inside a switch must be covered by a 'case' or 'default' label", fixIts: ["insert label"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
       ]
     )
   }
@@ -190,7 +190,7 @@ final class InvalidTests: XCTestCase {
       """##,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace in string literal"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end function"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end function", fixIts: ["insert '}'"]),
       ]
     )
   }
@@ -202,10 +202,10 @@ final class InvalidTests: XCTestCase {
       func d(_ b: 1️⃣String 2️⃣-> 3️⃣<T>() -> T4️⃣) {}
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(' to start function type"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' in function type"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected return type in function type"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected ')' to end parameter clause"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(' to start function type", fixIts: ["insert '('"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' in function type", fixIts: ["insert ')'"]),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected return type in function type", fixIts: ["insert return type"]),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected ')' to end parameter clause", fixIts: ["insert ')'"]),
         DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code '<T>() -> T)' in function"),
       ]
     )
@@ -236,7 +236,7 @@ final class InvalidTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ':' and type in parameter")
+        DiagnosticSpec(message: "expected ':' and type in parameter", fixIts: ["insert ':' and type"])
       ]
     )
   }
@@ -251,7 +251,7 @@ final class InvalidTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected value in function call")
+        DiagnosticSpec(message: "expected value in function call", fixIts: ["insert value"])
       ]
     )
   }
@@ -305,7 +305,7 @@ final class InvalidTests: XCTestCase {
       func f4_43591(1️⃣inout x: inout String) {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'inout' before a parameter name is not allowed")
+        DiagnosticSpec(message: "'inout' before a parameter name is not allowed", fixIts: ["remove redundant 'inout'"])
       ]
     )
   }
@@ -316,7 +316,7 @@ final class InvalidTests: XCTestCase {
       func f5_43591(1️⃣inout i: inout Int) {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'inout' before a parameter name is not allowed")
+        DiagnosticSpec(message: "'inout' before a parameter name is not allowed", fixIts: ["remove redundant 'inout'"])
       ]
     )
   }
@@ -327,7 +327,7 @@ final class InvalidTests: XCTestCase {
       func 1️⃣repeat() {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "keyword 'repeat' cannot be used as an identifier here")
+        DiagnosticSpec(message: "keyword 'repeat' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"])
       ]
     )
   }
@@ -338,7 +338,7 @@ final class InvalidTests: XCTestCase {
       let 1️⃣for = 2
       """,
       diagnostics: [
-        DiagnosticSpec(message: "keyword 'for' cannot be used as an identifier here")
+        DiagnosticSpec(message: "keyword 'for' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"])
       ]
     )
   }
@@ -349,7 +349,7 @@ final class InvalidTests: XCTestCase {
       func f4_43591(1️⃣inout x: inout String) {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'inout' before a parameter name is not allowed")
+        DiagnosticSpec(message: "'inout' before a parameter name is not allowed", fixIts: ["remove redundant 'inout'"])
       ]
     )
   }
@@ -372,7 +372,7 @@ final class InvalidTests: XCTestCase {
       func 1️⃣repeat() {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "keyword 'repeat' cannot be used as an identifier here")
+        DiagnosticSpec(message: "keyword 'repeat' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"])
       ]
     )
   }
@@ -383,7 +383,7 @@ final class InvalidTests: XCTestCase {
       let 1️⃣for = 2
       """,
       diagnostics: [
-        DiagnosticSpec(message: "keyword 'for' cannot be used as an identifier here")
+        DiagnosticSpec(message: "keyword 'for' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"])
       ]
     )
   }
@@ -476,9 +476,9 @@ final class InvalidTests: XCTestCase {
       wolf2️⃣() 3️⃣{}
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(' to start parameter clause"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ':' in parameter"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected ')' to end parameter clause"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(' to start parameter clause", fixIts: ["insert '('"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ':' in parameter", fixIts: ["insert ':'"]),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected ')' to end parameter clause", fixIts: ["insert ')'"]),
       ],
       fixedSource: """
         func were(
@@ -494,9 +494,9 @@ final class InvalidTests: XCTestCase {
       leavings2️⃣<T>(x: T) {}
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(' to start parameter clause"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ':' and type in parameter"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end parameter clause"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(' to start parameter clause", fixIts: ["insert '('"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ':' and type in parameter", fixIts: ["insert ':' and type"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end parameter clause", fixIts: ["insert ')'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '<T>(x: T)' in function"),
       ]
     )

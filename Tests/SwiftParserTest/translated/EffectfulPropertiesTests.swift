@@ -179,8 +179,15 @@ final class EffectfulPropertiesTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected throwing specifier; did you mean 'throws'?"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected throwing specifier; did you mean 'throws'?"),
+        DiagnosticSpec(
+          message: "expected throwing specifier; did you mean 'throws'?",
+          fixIts: ["replace 'rethrows' with 'throws'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected throwing specifier; did you mean 'throws'?",
+          fixIts: ["replace 'rethrows' with 'throws'"]
+        ),
       ]
     )
   }
@@ -194,8 +201,16 @@ final class EffectfulPropertiesTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected async specifier; did you mean 'async'?"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected async specifier; did you mean 'async'?"),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected async specifier; did you mean 'async'?",
+          fixIts: ["replace 'reasync' with 'async'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected async specifier; did you mean 'async'?",
+          fixIts: ["replace 'reasync' with 'async'"]
+        ),
       ]
     )
   }
@@ -219,8 +234,17 @@ final class EffectfulPropertiesTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected async specifier; did you mean 'async'?", fixIts: ["replace 'reasync' with 'async'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "'rethrows' conflicts with 'throws'", notes: [NoteSpec(locationMarker: "3️⃣", message: "'throws' declared here")], fixIts: ["remove redundant 'rethrows'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected async specifier; did you mean 'async'?",
+          fixIts: ["replace 'reasync' with 'async'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "'rethrows' conflicts with 'throws'",
+          notes: [NoteSpec(locationMarker: "3️⃣", message: "'throws' declared here")],
+          fixIts: ["remove redundant 'rethrows'"]
+        ),
       ]
     )
   }
@@ -259,7 +283,11 @@ final class EffectfulPropertiesTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected throwing specifier; did you mean 'throws'?"),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected throwing specifier; did you mean 'throws'?",
+          fixIts: ["replace 'rethrows' with 'throws'"]
+        ),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '-> Int' in accessor"),
       ]
     )
@@ -273,7 +301,7 @@ final class EffectfulPropertiesTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'async' must precede 'throws'")
+        DiagnosticSpec(message: "'async' must precede 'throws'", fixIts: ["move 'async' in front of 'throws'"])
       ]
     )
   }
@@ -287,7 +315,7 @@ final class EffectfulPropertiesTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'async' must precede 'throws'")
+        DiagnosticSpec(message: "'async' must precede 'throws'", fixIts: ["move 'async' in front of 'throws'"])
       ]
     )
   }
@@ -304,13 +332,24 @@ final class EffectfulPropertiesTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code 'bogus rethrows set' in variable"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected throwing specifier; did you mean 'throws'?"),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected throwing specifier; did you mean 'throws'?",
+          fixIts: ["replace 'rethrows' with 'throws'"]
+        ),
         DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code 'bogus set' in variable"),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "expected async specifier; did you mean 'async'?"),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "expected async specifier; did you mean 'async'?",
+          fixIts: ["replace 'reasync' with 'async'"]
+        ),
         DiagnosticSpec(locationMarker: "5️⃣", message: "unexpected code 'bogus set' in variable"),
-        DiagnosticSpec(locationMarker: "6️⃣", message: "'async' must precede 'throws'"),
+        DiagnosticSpec(
+          locationMarker: "6️⃣",
+          message: "'async' must precede 'throws'",
+          fixIts: ["move 'async' in front of 'throws'"]
+        ),
       ]
     )
   }
-
 }

@@ -16,10 +16,10 @@ import XCTest
 
 final class SwitchIncompleteTests: XCTestCase {
   func testSwitchIncomplete1() {
+    // <rdar://problem/15971438> Incomplete switch was parsing to an AST that
+    // triggered an assertion failure.
     assertParse(
       """
-      // <rdar://problem/15971438> Incomplete switch was parsing to an AST that
-      // triggered an assertion failure.
       switch 1 ℹ️{
       case 1:1️⃣
       """,
@@ -28,10 +28,10 @@ final class SwitchIncompleteTests: XCTestCase {
           message: "expected '}' to end 'switch' statement",
           notes: [
             NoteSpec(message: "to match this opening '{'")
-          ]
+          ],
+          fixIts: ["insert '}'"]
         )
       ]
     )
   }
-
 }

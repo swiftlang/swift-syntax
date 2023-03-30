@@ -78,7 +78,7 @@ final class StatementTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected expression, '=', and expression in pattern matching"),
+        DiagnosticSpec(message: "expected expression, '=', and expression in pattern matching", fixIts: ["insert expression, '=', and expression"]),
         DiagnosticSpec(message: "unexpected code '* ! = x' in 'if' statement"),
       ]
     )
@@ -285,7 +285,7 @@ final class StatementTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code 'foo()' before conditional compilation clause"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "all statements inside a switch must be covered by a 'case' or 'default' label"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "all statements inside a switch must be covered by a 'case' or 'default' label", fixIts: ["insert label"]),
       ]
     )
 
@@ -613,7 +613,7 @@ final class StatementTests: XCTestCase {
       _forget 1️⃣case
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression in 'forget' statement"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression in 'forget' statement", fixIts: ["insert expression"]),
         DiagnosticSpec(locationMarker: "1️⃣", message: "'case' can only appear inside a 'switch' statement or 'enum' declaration"),
       ]
     )
@@ -681,7 +681,7 @@ final class StatementTests: XCTestCase {
       if p{""1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '}' to end 'if' statement")
+        DiagnosticSpec(message: "expected '}' to end 'if' statement", fixIts: ["insert '}'"])
       ]
     )
   }
@@ -692,9 +692,9 @@ final class StatementTests: XCTestCase {
       subscript(1️⃣{2️⃣@self _modify
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ')' to end parameter clause"),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '->' and return type in subscript"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end subscript"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ')' to end parameter clause", fixIts: ["insert ')'"]),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '->' and return type in subscript", fixIts: ["insert '->' and return type"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end subscript", fixIts: ["insert '}'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code '@self _modify' at top level"),
       ]
     )

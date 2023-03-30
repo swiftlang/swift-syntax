@@ -53,7 +53,7 @@ final class RegexParseErrorTests: XCTestCase {
       _ = #/\\/''/1️⃣
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "expected '#' to end regex literal")
+        DiagnosticSpec(message: "expected '#' to end regex literal", fixIts: ["insert '#'"])
       ]
     )
   }
@@ -64,7 +64,7 @@ final class RegexParseErrorTests: XCTestCase {
       _ = #/\|1️⃣
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "expected '/#' to end regex literal")
+        DiagnosticSpec(message: "expected '/#' to end regex literal", fixIts: ["insert '/#'"])
       ]
     )
   }
@@ -75,7 +75,7 @@ final class RegexParseErrorTests: XCTestCase {
       _ = #//1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '#' to end regex literal")
+        DiagnosticSpec(message: "expected '#' to end regex literal", fixIts: ["insert '#'"])
       ]
     )
   }
@@ -86,7 +86,7 @@ final class RegexParseErrorTests: XCTestCase {
       _ = #/xy1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '/#' to end regex literal")
+        DiagnosticSpec(message: "expected '/#' to end regex literal", fixIts: ["insert '/#'"])
       ]
     )
   }
@@ -131,7 +131,7 @@ final class RegexParseErrorTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '/#' to end regex literal")
+        DiagnosticSpec(message: "expected '/#' to end regex literal", fixIts: ["insert '/#'"])
       ]
     )
   }
@@ -153,8 +153,8 @@ final class RegexParseErrorTests: XCTestCase {
       }
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected root in key path"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression after operator"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected root in key path", fixIts: ["insert root"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression after operator", fixIts: ["insert expression"]),
       ]
     )
   }
@@ -168,8 +168,8 @@ final class RegexParseErrorTests: XCTestCase {
       }
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '/#' to end regex literal"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in macro expansion"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '/#' to end regex literal", fixIts: ["insert '/#'"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in macro expansion", fixIts: ["insert identifier"]),
       ]
     )
   }

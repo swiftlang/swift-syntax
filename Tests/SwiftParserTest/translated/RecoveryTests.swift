@@ -1439,7 +1439,6 @@ final class RecoveryTests: XCTestCase {
       """#,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'func' in function"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected type in parameter"),
         DiagnosticSpec(locationMarker: "2️⃣", message: #"unexpected code '"No one else was in the room where it happened"' in parameter clause"#),
       ]
     )
@@ -1454,7 +1453,6 @@ final class RecoveryTests: XCTestCase {
       """#,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'func' in function"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected type in parameter"),
         DiagnosticSpec(locationMarker: "2️⃣", message: #"unexpected code '"The room where it happened, the room where it happened"' in parameter clause"#),
       ]
     )
@@ -1618,11 +1616,12 @@ final class RecoveryTests: XCTestCase {
       // <rdar://problem/18634543> Parser hangs at swift::Parser::parseType
       public enum TestA {
         public static func convertFromExtenndition(
-          s._core.count 1️⃣!= 0, "Can't form a Character from an empty String")
+          s1️⃣._core.count != 0, "Can't form a Character from an empty String")
       }
       """#,
       diagnostics: [
-        DiagnosticSpec(message: #"unexpected code '!= 0, "Can't form a Character from an empty String"' in parameter clause"#)
+        DiagnosticSpec(message: "expected ':' and type in parameter"),
+        DiagnosticSpec(message: #"unexpected code '._core.count != 0, "Can't form a Character from an empty String"' in parameter clause"#),
       ]
     )
   }
@@ -1632,11 +1631,12 @@ final class RecoveryTests: XCTestCase {
       #"""
       public enum TestB {
         public static func convertFromExtenndition(
-          s._core.count 1️⃣?= 0, "Can't form a Character from an empty String")
+          s1️⃣._core.count ?= 0, "Can't form a Character from an empty String")
       }
       """#,
       diagnostics: [
-        DiagnosticSpec(message: #"unexpected code '?= 0, "Can't form a Character from an empty String"' in parameter clause"#)
+        DiagnosticSpec(message: "expected ':' and type in parameter"),
+        DiagnosticSpec(message: #"unexpected code '._core.count ?= 0, "Can't form a Character from an empty String"' in parameter clause"#),
       ]
     )
   }
@@ -1654,10 +1654,11 @@ final class RecoveryTests: XCTestCase {
     assertParse(
       """
       var baz: bar
-      func foo1(bar!=baz) {}
+      func foo1(bar1️⃣!=baz) {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: unnamed parameters must be written with the empty name '_'
+        DiagnosticSpec(message: "expected ':' and type in parameter"),
+        DiagnosticSpec(message: "unexpected code '!=baz' in parameter clause"),
       ]
     )
   }
@@ -1665,10 +1666,11 @@ final class RecoveryTests: XCTestCase {
   func testRecovery137() {
     assertParse(
       """
-      func foo2(bar! = baz) {}
+      func foo2(bar1️⃣! = baz) {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: unnamed parameters must be written with the empty name '_'
+        DiagnosticSpec(message: "expected ':' and type in parameter"),
+        DiagnosticSpec(message: "unexpected code '! = baz' in parameter clause"),
       ]
     )
   }
@@ -1721,7 +1723,7 @@ final class RecoveryTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '>' to end generic parameter clause"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected type and ')' to end parameter clause"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end parameter clause"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code ')}' before struct"),
         DiagnosticSpec(locationMarker: "4️⃣", message: "initializers cannot have a name", fixIts: ["remove 'x'"]),
       ]

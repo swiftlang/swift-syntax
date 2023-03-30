@@ -475,6 +475,10 @@ extension ClosureExprSyntax: BracedSyntax, WithStatementsSyntax {}
 
 extension ClosureParamSyntax: WithTrailingCommaSyntax {}
 
+extension ClosureParameterClauseSyntax: ParenthesizedSyntax {}
+
+extension ClosureParameterSyntax: WithTrailingCommaSyntax {}
+
 extension ClosureSignatureSyntax: AttributedSyntax {}
 
 extension CodeBlockSyntax: BracedSyntax, WithStatementsSyntax {}
@@ -502,6 +506,10 @@ extension DocumentationAttributeArgumentSyntax: WithTrailingCommaSyntax {}
 extension EnumCaseDeclSyntax: AttributedSyntax {}
 
 extension EnumCaseElementSyntax: WithTrailingCommaSyntax {}
+
+extension EnumCaseParameterClauseSyntax: ParenthesizedSyntax {}
+
+extension EnumCaseParameterSyntax: WithTrailingCommaSyntax {}
 
 extension EnumDeclSyntax: DeclGroupSyntax, IdentifiedDeclSyntax, AttributedSyntax {}
 

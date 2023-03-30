@@ -480,13 +480,17 @@ final class InvalidTests: XCTestCase {
     assertParse(
       """
       func were1️⃣
-      wolf2️⃣() {}
+      wolf2️⃣() 3️⃣{}
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(' to start parameter clause"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end parameter clause"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '()' in function"),
-      ]
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ':' in parameter"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected ')' to end parameter clause"),
+      ],
+      fixedSource: """
+        func were(
+        wolf: () ){}
+        """
     )
   }
 
@@ -494,12 +498,13 @@ final class InvalidTests: XCTestCase {
     assertParse(
       """
       func hammer1️⃣
-      leavings<T>2️⃣(x: T) {}
+      leavings2️⃣<T>(x: T) {}
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(' to start parameter clause"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ':' and type in parameter"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end parameter clause"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '(x: T)' in function"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '<T>(x: T)' in function"),
       ]
     )
   }

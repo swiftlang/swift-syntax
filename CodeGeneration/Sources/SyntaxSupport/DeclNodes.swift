@@ -429,6 +429,94 @@ public let DECL_NODES: [Node] = [
   ),
 
   Node(
+    name: "EnumCaseParameterClause",
+    nameForDiagnostics: "parameter clause",
+    kind: "Syntax",
+    traits: [
+      "Parenthesized"
+    ],
+    children: [
+      Child(
+        name: "LeftParen",
+        kind: .token(choices: [.token(tokenKind: "LeftParenToken")]),
+        description: "The '(' to open the parameter clause."
+      ),
+      Child(
+        name: "ParameterList",
+        kind: .collection(kind: "EnumCaseParameterList", collectionElementName: "Parameter"),
+        nameForDiagnostics: "parameters",
+        description: "The actual parameters.",
+        isIndented: true
+      ),
+      Child(
+        name: "RightParen",
+        kind: .token(choices: [.token(tokenKind: "RightParenToken")]),
+        description: "The ')' to close the parameter clause."
+      ),
+    ]
+  ),
+
+  Node(
+    name: "EnumCaseParameterList",
+    nameForDiagnostics: "parameter list",
+    kind: "SyntaxCollection",
+    element: "EnumCaseParameter"
+  ),
+
+  Node(
+    name: "EnumCaseParameter",
+    nameForDiagnostics: "parameter",
+    kind: "Syntax",
+    traits: [
+      "WithTrailingComma"
+    ],
+    parserFunction: "parseEnumCaseParameter",
+    children: [
+      Child(
+        name: "Modifiers",
+        kind: .collection(kind: "ModifierList", collectionElementName: "Modifier"),
+        nameForDiagnostics: "modifiers",
+        isOptional: true
+      ),
+      Child(
+        name: "FirstName",
+        kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "WildcardToken")]),
+        isOptional: true
+      ),
+      Child(
+        name: "SecondName",
+        kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "WildcardToken")]),
+        isOptional: true
+      ),
+      Child(
+        name: "Colon",
+        kind: .token(choices: [.token(tokenKind: "ColonToken")]),
+        description: "If the parameter has a label, the colon separating the label from the type.",
+        isOptional: true
+      ),
+      Child(
+        name: "Type",
+        kind: .node(kind: "Type"),
+        nameForDiagnostics: "type",
+        description: "The parameter's type."
+      ),
+      Child(
+        name: "DefaultArgument",
+        kind: .node(kind: "InitializerClause"),
+        nameForDiagnostics: "default argument",
+        description: "If the parameter has a default value, the initializer clause describing the default value.",
+        isOptional: true
+      ),
+      Child(
+        name: "TrailingComma",
+        kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+        description: "If the parameter is followed by another parameter, the comma separating them.",
+        isOptional: true
+      ),
+    ]
+  ),
+
+  Node(
     name: "EnumCaseDecl",
     nameForDiagnostics: "enum case",
     description: "A `case` declaration of a Swift `enum`. It can have 1 or more `EnumCaseElement`s inside, each declaring a different case of the enum.",
@@ -489,7 +577,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "AssociatedValue",
-        kind: .node(kind: "ParameterClause"),
+        kind: .node(kind: "EnumCaseParameterClause"),
         nameForDiagnostics: "associated values",
         description: "The set of associated values of the case.",
         isOptional: true
@@ -699,6 +787,7 @@ public let DECL_NODES: [Node] = [
       "WithTrailingComma",
       "Attributed",
     ],
+    parserFunction: "parseFunctionParameter",
     children: [
       Child(
         name: "Attributes",
@@ -714,8 +803,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "FirstName",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "WildcardToken")]),
-        isOptional: true
+        kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "WildcardToken")])
       ),
       // One of these two names needs be optional, we choose the second
       // name to avoid backtracking.
@@ -727,14 +815,12 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "Colon",
-        kind: .token(choices: [.token(tokenKind: "ColonToken")]),
-        isOptional: true
+        kind: .token(choices: [.token(tokenKind: "ColonToken")])
       ),
       Child(
         name: "Type",
         kind: .node(kind: "Type"),
-        nameForDiagnostics: "type",
-        isOptional: true
+        nameForDiagnostics: "type"
       ),
       Child(
         name: "Ellipsis",

@@ -91,6 +91,13 @@ extension ClosureParamListSyntax: ExpressibleByArrayLiteral {
   }
 }
 
+/// `ClosureParameterList` represents a collection of `ClosureParameterSyntax`
+extension ClosureParameterListSyntax: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: Element...) {
+    self.init(elements)
+  }
+}
+
 /// `CodeBlockItemList` represents a collection of `CodeBlockItemSyntax`
 extension CodeBlockItemListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
@@ -156,6 +163,13 @@ extension EffectsArgumentsSyntax: ExpressibleByArrayLiteral {
 
 /// A collection of 0 or more `EnumCaseElement`s.
 extension EnumCaseElementListSyntax: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: Element...) {
+    self.init(elements)
+  }
+}
+
+/// `EnumCaseParameterList` represents a collection of `EnumCaseParameterSyntax`
+extension EnumCaseParameterListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }

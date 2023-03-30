@@ -63,6 +63,9 @@ extension Syntax {
           .node(ClosureExprSyntax.self), 
           .node(ClosureParamListSyntax.self), 
           .node(ClosureParamSyntax.self), 
+          .node(ClosureParameterClauseSyntax.self), 
+          .node(ClosureParameterListSyntax.self), 
+          .node(ClosureParameterSyntax.self), 
           .node(ClosureSignatureSyntax.self), 
           .node(CodeBlockItemListSyntax.self), 
           .node(CodeBlockItemSyntax.self), 
@@ -109,6 +112,9 @@ extension Syntax {
           .node(EnumCaseDeclSyntax.self), 
           .node(EnumCaseElementListSyntax.self), 
           .node(EnumCaseElementSyntax.self), 
+          .node(EnumCaseParameterClauseSyntax.self), 
+          .node(EnumCaseParameterListSyntax.self), 
+          .node(EnumCaseParameterSyntax.self), 
           .node(EnumDeclSyntax.self), 
           .node(ExposeAttributeArgumentsSyntax.self), 
           .node(ExprListSyntax.self), 
@@ -380,6 +386,12 @@ extension SyntaxKind {
       return ClosureParamListSyntax.self
     case .closureParam:
       return ClosureParamSyntax.self
+    case .closureParameterClause:
+      return ClosureParameterClauseSyntax.self
+    case .closureParameterList:
+      return ClosureParameterListSyntax.self
+    case .closureParameter:
+      return ClosureParameterSyntax.self
     case .closureSignature:
       return ClosureSignatureSyntax.self
     case .codeBlockItemList:
@@ -472,6 +484,12 @@ extension SyntaxKind {
       return EnumCaseElementListSyntax.self
     case .enumCaseElement:
       return EnumCaseElementSyntax.self
+    case .enumCaseParameterClause:
+      return EnumCaseParameterClauseSyntax.self
+    case .enumCaseParameterList:
+      return EnumCaseParameterListSyntax.self
+    case .enumCaseParameter:
+      return EnumCaseParameterSyntax.self
     case .enumDecl:
       return EnumDeclSyntax.self
     case .exposeAttributeArguments:
@@ -909,6 +927,12 @@ extension SyntaxKind {
       return nil
     case .closureParam:
       return "closure parameter"
+    case .closureParameterClause:
+      return "parameter clause"
+    case .closureParameterList:
+      return "parameter list"
+    case .closureParameter:
+      return "parameter"
     case .closureSignature:
       return "closure signature"
     case .codeBlockItemList:
@@ -1001,6 +1025,12 @@ extension SyntaxKind {
       return nil
     case .enumCaseElement:
       return nil
+    case .enumCaseParameterClause:
+      return "parameter clause"
+    case .enumCaseParameterList:
+      return "parameter list"
+    case .enumCaseParameter:
+      return "parameter"
     case .enumDecl:
       return "enum"
     case .exposeAttributeArguments:

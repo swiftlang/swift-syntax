@@ -354,6 +354,27 @@ open class SyntaxRewriter {
     return Syntax(visitChildren(node)).cast(ClosureParamSyntax.self)
   }
   
+  /// Visit a `ClosureParameterClauseSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: ClosureParameterClauseSyntax) -> ClosureParameterClauseSyntax {
+    return Syntax(visitChildren(node)).cast(ClosureParameterClauseSyntax.self)
+  }
+  
+  /// Visit a `ClosureParameterListSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: ClosureParameterListSyntax) -> ClosureParameterListSyntax {
+    return Syntax(visitChildren(node)).cast(ClosureParameterListSyntax.self)
+  }
+  
+  /// Visit a `ClosureParameterSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: ClosureParameterSyntax) -> ClosureParameterSyntax {
+    return Syntax(visitChildren(node)).cast(ClosureParameterSyntax.self)
+  }
+  
   /// Visit a `ClosureSignatureSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -674,6 +695,27 @@ open class SyntaxRewriter {
   ///   - Returns: the rewritten node
   open func visit(_ node: EnumCaseElementSyntax) -> EnumCaseElementSyntax {
     return Syntax(visitChildren(node)).cast(EnumCaseElementSyntax.self)
+  }
+  
+  /// Visit a `EnumCaseParameterClauseSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: EnumCaseParameterClauseSyntax) -> EnumCaseParameterClauseSyntax {
+    return Syntax(visitChildren(node)).cast(EnumCaseParameterClauseSyntax.self)
+  }
+  
+  /// Visit a `EnumCaseParameterListSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: EnumCaseParameterListSyntax) -> EnumCaseParameterListSyntax {
+    return Syntax(visitChildren(node)).cast(EnumCaseParameterListSyntax.self)
+  }
+  
+  /// Visit a `EnumCaseParameterSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: EnumCaseParameterSyntax) -> EnumCaseParameterSyntax {
+    return Syntax(visitChildren(node)).cast(EnumCaseParameterSyntax.self)
   }
   
   /// Visit a `EnumDeclSyntax`.
@@ -2585,6 +2627,48 @@ open class SyntaxRewriter {
   }
   
   /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplClosureParameterClauseSyntax(_ data: SyntaxData) -> Syntax {
+    let node = ClosureParameterClauseSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { 
+      visitPost(node._syntaxNode) 
+    }
+    if let newNode = visitAny(node._syntaxNode) { 
+      return newNode 
+    }
+    return Syntax(visit(node))
+  }
+  
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplClosureParameterListSyntax(_ data: SyntaxData) -> Syntax {
+    let node = ClosureParameterListSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { 
+      visitPost(node._syntaxNode) 
+    }
+    if let newNode = visitAny(node._syntaxNode) { 
+      return newNode 
+    }
+    return Syntax(visit(node))
+  }
+  
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplClosureParameterSyntax(_ data: SyntaxData) -> Syntax {
+    let node = ClosureParameterSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { 
+      visitPost(node._syntaxNode) 
+    }
+    if let newNode = visitAny(node._syntaxNode) { 
+      return newNode 
+    }
+    return Syntax(visit(node))
+  }
+  
+  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplClosureSignatureSyntax(_ data: SyntaxData) -> Syntax {
     let node = ClosureSignatureSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -3217,6 +3301,48 @@ open class SyntaxRewriter {
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplEnumCaseElementSyntax(_ data: SyntaxData) -> Syntax {
     let node = EnumCaseElementSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { 
+      visitPost(node._syntaxNode) 
+    }
+    if let newNode = visitAny(node._syntaxNode) { 
+      return newNode 
+    }
+    return Syntax(visit(node))
+  }
+  
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplEnumCaseParameterClauseSyntax(_ data: SyntaxData) -> Syntax {
+    let node = EnumCaseParameterClauseSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { 
+      visitPost(node._syntaxNode) 
+    }
+    if let newNode = visitAny(node._syntaxNode) { 
+      return newNode 
+    }
+    return Syntax(visit(node))
+  }
+  
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplEnumCaseParameterListSyntax(_ data: SyntaxData) -> Syntax {
+    let node = EnumCaseParameterListSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { 
+      visitPost(node._syntaxNode) 
+    }
+    if let newNode = visitAny(node._syntaxNode) { 
+      return newNode 
+    }
+    return Syntax(visit(node))
+  }
+  
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplEnumCaseParameterSyntax(_ data: SyntaxData) -> Syntax {
+    let node = EnumCaseParameterSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer { 
@@ -5716,6 +5842,12 @@ open class SyntaxRewriter {
       return visitImplClosureParamListSyntax
     case .closureParam:
       return visitImplClosureParamSyntax
+    case .closureParameterClause:
+      return visitImplClosureParameterClauseSyntax
+    case .closureParameterList:
+      return visitImplClosureParameterListSyntax
+    case .closureParameter:
+      return visitImplClosureParameterSyntax
     case .closureSignature:
       return visitImplClosureSignatureSyntax
     case .codeBlockItemList:
@@ -5808,6 +5940,12 @@ open class SyntaxRewriter {
       return visitImplEnumCaseElementListSyntax
     case .enumCaseElement:
       return visitImplEnumCaseElementSyntax
+    case .enumCaseParameterClause:
+      return visitImplEnumCaseParameterClauseSyntax
+    case .enumCaseParameterList:
+      return visitImplEnumCaseParameterListSyntax
+    case .enumCaseParameter:
+      return visitImplEnumCaseParameterSyntax
     case .enumDecl:
       return visitImplEnumDeclSyntax
     case .exposeAttributeArguments:
@@ -6248,6 +6386,12 @@ open class SyntaxRewriter {
       return visitImplClosureParamListSyntax(data)
     case .closureParam:
       return visitImplClosureParamSyntax(data)
+    case .closureParameterClause:
+      return visitImplClosureParameterClauseSyntax(data)
+    case .closureParameterList:
+      return visitImplClosureParameterListSyntax(data)
+    case .closureParameter:
+      return visitImplClosureParameterSyntax(data)
     case .closureSignature:
       return visitImplClosureSignatureSyntax(data)
     case .codeBlockItemList:
@@ -6340,6 +6484,12 @@ open class SyntaxRewriter {
       return visitImplEnumCaseElementListSyntax(data)
     case .enumCaseElement:
       return visitImplEnumCaseElementSyntax(data)
+    case .enumCaseParameterClause:
+      return visitImplEnumCaseParameterClauseSyntax(data)
+    case .enumCaseParameterList:
+      return visitImplEnumCaseParameterListSyntax(data)
+    case .enumCaseParameter:
+      return visitImplEnumCaseParameterSyntax(data)
     case .enumDecl:
       return visitImplEnumDeclSyntax(data)
     case .exposeAttributeArguments:

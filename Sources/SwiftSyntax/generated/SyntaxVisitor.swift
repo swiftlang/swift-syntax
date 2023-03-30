@@ -598,6 +598,42 @@ open class SyntaxVisitor {
   open func visitPost(_ node: ClosureParamSyntax) {
   }
   
+  /// Visiting `ClosureParameterClauseSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: ClosureParameterClauseSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting `ClosureParameterClauseSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: ClosureParameterClauseSyntax) {
+  }
+  
+  /// Visiting `ClosureParameterListSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: ClosureParameterListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting `ClosureParameterListSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: ClosureParameterListSyntax) {
+  }
+  
+  /// Visiting `ClosureParameterSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: ClosureParameterSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting `ClosureParameterSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: ClosureParameterSyntax) {
+  }
+  
   /// Visiting `ClosureSignatureSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -1148,6 +1184,42 @@ open class SyntaxVisitor {
   /// The function called after visiting `EnumCaseElementSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: EnumCaseElementSyntax) {
+  }
+  
+  /// Visiting `EnumCaseParameterClauseSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: EnumCaseParameterClauseSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting `EnumCaseParameterClauseSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: EnumCaseParameterClauseSyntax) {
+  }
+  
+  /// Visiting `EnumCaseParameterListSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: EnumCaseParameterListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting `EnumCaseParameterListSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: EnumCaseParameterListSyntax) {
+  }
+  
+  /// Visiting `EnumCaseParameterSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: EnumCaseParameterSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting `EnumCaseParameterSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: EnumCaseParameterSyntax) {
   }
   
   /// Visiting `EnumDeclSyntax` specifically.
@@ -3696,6 +3768,39 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplClosureParameterClauseSyntax(_ data: SyntaxData) {
+    let node = ClosureParameterClauseSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplClosureParameterListSyntax(_ data: SyntaxData) {
+    let node = ClosureParameterListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplClosureParameterSyntax(_ data: SyntaxData) {
+    let node = ClosureParameterSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplClosureSignatureSyntax(_ data: SyntaxData) {
     let node = ClosureSignatureSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -4193,6 +4298,39 @@ open class SyntaxVisitor {
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplEnumCaseElementSyntax(_ data: SyntaxData) {
     let node = EnumCaseElementSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplEnumCaseParameterClauseSyntax(_ data: SyntaxData) {
+    let node = EnumCaseParameterClauseSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplEnumCaseParameterListSyntax(_ data: SyntaxData) {
+    let node = EnumCaseParameterListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplEnumCaseParameterSyntax(_ data: SyntaxData) {
+    let node = EnumCaseParameterSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -6150,6 +6288,12 @@ open class SyntaxVisitor {
       visitImplClosureParamListSyntax(data)
     case .closureParam:
       visitImplClosureParamSyntax(data)
+    case .closureParameterClause:
+      visitImplClosureParameterClauseSyntax(data)
+    case .closureParameterList:
+      visitImplClosureParameterListSyntax(data)
+    case .closureParameter:
+      visitImplClosureParameterSyntax(data)
     case .closureSignature:
       visitImplClosureSignatureSyntax(data)
     case .codeBlockItemList:
@@ -6242,6 +6386,12 @@ open class SyntaxVisitor {
       visitImplEnumCaseElementListSyntax(data)
     case .enumCaseElement:
       visitImplEnumCaseElementSyntax(data)
+    case .enumCaseParameterClause:
+      visitImplEnumCaseParameterClauseSyntax(data)
+    case .enumCaseParameterList:
+      visitImplEnumCaseParameterListSyntax(data)
+    case .enumCaseParameter:
+      visitImplEnumCaseParameterSyntax(data)
     case .enumDecl:
       visitImplEnumDeclSyntax(data)
     case .exposeAttributeArguments:

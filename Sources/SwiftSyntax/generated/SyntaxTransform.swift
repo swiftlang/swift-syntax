@@ -254,6 +254,21 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ClosureParamSyntax) -> ResultType
   
+  /// Visiting `ClosureParameterClauseSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: ClosureParameterClauseSyntax) -> ResultType
+  
+  /// Visiting `ClosureParameterListSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: ClosureParameterListSyntax) -> ResultType
+  
+  /// Visiting `ClosureParameterSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: ClosureParameterSyntax) -> ResultType
+  
   /// Visiting `ClosureSignatureSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -483,6 +498,21 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: EnumCaseElementSyntax) -> ResultType
+  
+  /// Visiting `EnumCaseParameterClauseSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: EnumCaseParameterClauseSyntax) -> ResultType
+  
+  /// Visiting `EnumCaseParameterListSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: EnumCaseParameterListSyntax) -> ResultType
+  
+  /// Visiting `EnumCaseParameterSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: EnumCaseParameterSyntax) -> ResultType
   
   /// Visiting `EnumDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -1659,6 +1689,27 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
+  /// Visiting `ClosureParameterClauseSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: ClosureParameterClauseSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting `ClosureParameterListSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: ClosureParameterListSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting `ClosureParameterSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: ClosureParameterSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
   /// Visiting `ClosureSignatureSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -1978,6 +2029,27 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: EnumCaseElementSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting `EnumCaseParameterClauseSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: EnumCaseParameterClauseSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting `EnumCaseParameterListSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: EnumCaseParameterListSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting `EnumCaseParameterSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: EnumCaseParameterSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -3255,6 +3327,12 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .closureParam(let derived):
       return visit(derived)
+    case .closureParameterClause(let derived):
+      return visit(derived)
+    case .closureParameterList(let derived):
+      return visit(derived)
+    case .closureParameter(let derived):
+      return visit(derived)
     case .closureSignature(let derived):
       return visit(derived)
     case .codeBlockItemList(let derived):
@@ -3346,6 +3424,12 @@ extension SyntaxTransformVisitor {
     case .enumCaseElementList(let derived):
       return visit(derived)
     case .enumCaseElement(let derived):
+      return visit(derived)
+    case .enumCaseParameterClause(let derived):
+      return visit(derived)
+    case .enumCaseParameterList(let derived):
+      return visit(derived)
+    case .enumCaseParameter(let derived):
       return visit(derived)
     case .enumDecl(let derived):
       return visit(derived)

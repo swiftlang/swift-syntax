@@ -16,7 +16,7 @@ import SyntaxSupport
 import Utils
 
 let tokenSpecStaticMembersFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
-  DeclSyntax("import SwiftSyntax")
+  DeclSyntax("@_spi(RawSyntax) import SwiftSyntax")
 
   try! ExtensionDeclSyntax("extension TokenSpec") {
     DeclSyntax("static var eof: TokenSpec { return TokenSpec(.eof) }")

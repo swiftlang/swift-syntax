@@ -474,6 +474,7 @@ extension TokenKind: Equatable {
 // `RawTokenBaseKind` for equality. With the raw value, it compiles down to
 // a primitive integer compare, without, it calls into `__derived_enum_equals`.
 @frozen // FIXME: Not actually stable, works around a miscompile
+@_spi(RawSyntax)
 public enum RawTokenKind: UInt8, Equatable, Hashable {
   case eof
   case arrow

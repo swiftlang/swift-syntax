@@ -29,7 +29,7 @@ extension Lexer {
     ///
     /// The memory footpring of not freeing past lexer states is neglible. It's
     /// usually less than 0.1% of the memory allocated by the syntax arena.
-    var lexerStateAllocator = BumpPtrAllocator(slabSize: 512)
+    var lexerStateAllocator = BumpPtrAllocator(slabSize: 256)
 
     fileprivate init(sourceBufferStart: Lexer.Cursor, cursor: Lexer.Cursor) {
       self.sourceBufferStart = sourceBufferStart

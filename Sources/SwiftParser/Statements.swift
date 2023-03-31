@@ -186,7 +186,7 @@ extension Parser {
     var keepGoing: RawTokenSyntax? = nil
     var loopProgress = LoopProgressCondition()
     repeat {
-      let condition = self.parseConditionElement()
+      let condition = self.parseConditionElement(lastBindingKind: elements.last?.condition.as(RawOptionalBindingConditionSyntax.self)?.bindingKeyword)
       let unexpectedBeforeKeepGoing: RawUnexpectedNodesSyntax?
       keepGoing = self.consume(if: .comma)
       if keepGoing == nil, let andOperator = self.consumeIfContextualPunctuator("&&") {
@@ -219,7 +219,8 @@ extension Parser {
   ///     optional-binding-condition → 'let' pattern initializer? | 'var' pattern initializer? |
   ///                                  'inout' pattern initializer?
   @_spi(RawSyntax)
-  public mutating func parseConditionElement() -> RawConditionElementSyntax.Condition {
+  /// `lastBindingKind` will be used to get a correct fall back, when there is missing `var` or `let` in a `if` statement etc.
+  public mutating func parseConditionElement(lastBindingKind: RawTokenSyntax?) -> RawConditionElementSyntax.Condition {
     // Parse a leading #available/#unavailable condition if present.
     if self.at(.poundAvailableKeyword, .poundUnavailableKeyword) {
       return self.parsePoundAvailableConditionElement()
@@ -227,7 +228,7 @@ extension Parser {
 
     // Parse the basic expression case.  If we have a leading let, var, inout,
     // borrow, case keyword or an assignment, then we know this is a binding.
-    guard self.at(.keyword(.let), .keyword(.var), .keyword(.case)) || self.at(.keyword(.inout)) else {
+    guard self.at(.keyword(.let), .keyword(.var), .keyword(.case)) || self.at(.keyword(.inout)) || (lastBindingKind != nil && self.peek().rawTokenKind == .equal) else {
       // If we lack it, then this is theoretically a boolean condition.
       // However, we also need to handle migrating from Swift 2 syntax, in
       // which a comma followed by an expression could actually be a pattern
@@ -244,10 +245,9 @@ extension Parser {
     }
 
     // We're parsing a conditional binding.
-    precondition(self.at(.keyword(.let), .keyword(.var)) || self.at(.keyword(.inout), .keyword(.case)))
     enum BindingKind {
       case pattern(RawTokenSyntax, RawPatternSyntax)
-      case optional(RawTokenSyntax, RawPatternSyntax)
+      case optional(RawUnexpectedNodesSyntax?, RawTokenSyntax, RawPatternSyntax)
     }
 
     let kind: BindingKind
@@ -255,9 +255,18 @@ extension Parser {
       let pattern = self.parseMatchingPattern(context: .matching)
       kind = .pattern(caseKeyword, pattern)
     } else {
-      let letOrVar = self.consumeAnyToken()
+      let unexpectedBeforeBindingKeyword: RawUnexpectedNodesSyntax?
+      let letOrVar: RawTokenSyntax
+
+      if self.at(.identifier), let lastBindingKind = lastBindingKind {
+        (unexpectedBeforeBindingKeyword, letOrVar) = self.expect(.keyword(.let), .keyword(.var), default: .keyword(Keyword(lastBindingKind.tokenText) ?? .let))
+      } else {
+        letOrVar = self.consume(if: TokenSpec.keyword(.let), .keyword(.var)) ?? self.missingToken(.let)
+        unexpectedBeforeBindingKeyword = nil
+      }
+
       let pattern = self.parseMatchingPattern(context: .bindingIntroducer)
-      kind = .optional(letOrVar, pattern)
+      kind = .optional(unexpectedBeforeBindingKeyword, letOrVar, pattern)
     }
 
     // Now parse an optional type annotation.
@@ -289,9 +298,10 @@ extension Parser {
     }
 
     switch kind {
-    case let .optional(bindingKeyword, pattern):
+    case let .optional(unexpectedBeforeBindingKeyword, bindingKeyword, pattern):
       return .optionalBinding(
         RawOptionalBindingConditionSyntax(
+          unexpectedBeforeBindingKeyword,
           bindingKeyword: bindingKeyword,
           pattern: pattern,
           typeAnnotation: annotation,

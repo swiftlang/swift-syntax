@@ -1841,13 +1841,18 @@ final class RecoveryTests: XCTestCase {
   func testRecovery153() {
     assertParse(
       """
-      if var y = x, z = x {
+      if var y = x, 1️⃣z = x {
         z = y; y = z
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected 'var' in conditional, Fix-It replacements: 17 - 17 = 'var '
-      ]
+        DiagnosticSpec(message: "expected 'var' in optional binding", fixIts: ["insert 'var'"])
+      ],
+      fixedSource: """
+        if var y = x, var z = x {
+          z = y; y = z
+        }
+        """
     )
   }
 

@@ -25,21 +25,9 @@ public struct Trivia {
     self.pieces = Array(pieces)
   }
 
-  /// Creates Trivia with no pieces.
-  public static var zero: Trivia {
-    return Trivia(pieces: [])
-  }
-
   /// Whether the Trivia contains no pieces.
   public var isEmpty: Bool {
     pieces.isEmpty
-  }
-
-  /// Creates a new `Trivia` by appending the provided `TriviaPiece` to the end.
-  public func appending(_ piece: TriviaPiece) -> Trivia {
-    var copy = pieces
-    copy.append(piece)
-    return Trivia(pieces: copy)
   }
 
   public var sourceLength: SourceLength {
@@ -51,14 +39,48 @@ public struct Trivia {
     return sourceLength.utf8Length
   }
 
+  /// Creates a new `Trivia` by appending the provided `TriviaPiece` to the end.
+  public func appending(_ piece: TriviaPiece) -> Trivia {
+    var copy = pieces
+    copy.append(piece)
+    return Trivia(pieces: copy)
+  }
+
+  /// Creates a new `Trivia` by appending the given trivia to the end.
+  public func appending(_ trivia: Trivia) -> Trivia {
+    var copy = pieces
+    copy.append(contentsOf: trivia.pieces)
+    return Trivia(pieces: copy)
+  }
+
+  /// Creates a new `Trivia` by merging in the given trivia. Only includes one
+  /// copy of a common prefix of `self` and `trivia`.
+  public func merging(_ trivia: Trivia) -> Trivia {
+    let lhs = self.decomposed
+    let rhs = trivia.decomposed
+    for infixLength in (0...Swift.min(lhs.count, rhs.count)).reversed() {
+      if lhs.suffix(infixLength) == rhs.suffix(infixLength) {
+        return lhs.appending(Trivia(pieces: Array(rhs.dropFirst(infixLength))))
+      }
+    }
+    return lhs.appending(rhs)
+  }
+
+  /// Creates a new `Trivia` by merging the leading and trailing `Trivia`
+  /// of `triviaOf` into the end of `self`. Only includes one copy of any
+  /// common prefixes.
+  public func merging<T: SyntaxProtocol>(triviaOf node: T) -> Trivia {
+    return merging(node.leadingTrivia).merging(node.trailingTrivia)
+  }
+
   /// Concatenates two collections of `Trivia` into one collection.
-  public static func +(lhs: Trivia, rhs: Trivia) -> Trivia {
-    return Trivia(pieces: lhs.pieces + rhs.pieces)
+  public static func + (lhs: Trivia, rhs: Trivia) -> Trivia {
+    return lhs.appending(rhs)
   }
 
   /// Concatenates two collections of `Trivia` into the left-hand side.
-  public static func +=(lhs: inout Trivia, rhs: Trivia) {
-    lhs = lhs + rhs
+  public static func += (lhs: inout Trivia, rhs: Trivia) {
+    lhs = lhs.appending(rhs)
   }
 }
 
@@ -118,13 +140,45 @@ extension Trivia: CustomDebugStringConvertible {
   }
 }
 
+extension Trivia {
+  /// Decomposes the trivia into pieces that all have count 1
+  @_spi(RawSyntax)
+  public var decomposed: Trivia {
+    let pieces = self.flatMap({ (piece: TriviaPiece) -> [TriviaPiece] in
+      switch piece {
+      case .spaces(let count):
+        return Array(repeating: TriviaPiece.spaces(1), count: count)
+      case .tabs(let count):
+        return Array(repeating: TriviaPiece.tabs(1), count: count)
+      case .verticalTabs(let count):
+        return Array(repeating: TriviaPiece.verticalTabs(1), count: count)
+      case .formfeeds(let count):
+        return Array(repeating: TriviaPiece.formfeeds(1), count: count)
+      case .newlines(let count):
+        return Array(repeating: TriviaPiece.newlines(1), count: count)
+      case .backslashes(let count):
+        return Array(repeating: TriviaPiece.backslashes(1), count: count)
+      case .pounds(let count):
+        return Array(repeating: TriviaPiece.pounds(1), count: count)
+      case .carriageReturns(let count):
+        return Array(repeating: TriviaPiece.carriageReturns(1), count: count)
+      case .carriageReturnLineFeeds(let count):
+        return Array(repeating: TriviaPiece.carriageReturnLineFeeds(1), count: count)
+      case .lineComment, .blockComment, .docLineComment, .docBlockComment, .unexpectedText, .shebang:
+        return [piece]
+      }
+    })
+    return Trivia(pieces: pieces)
+  }
+}
+
 extension TriviaPiece {
   /// Returns true if the trivia is `.newlines`, `.carriageReturns` or `.carriageReturnLineFeeds`
   public var isNewline: Bool {
     switch self {
     case .newlines,
-        .carriageReturns,
-        .carriageReturnLineFeeds:
+      .carriageReturns,
+      .carriageReturnLineFeeds:
       return true
     default:
       return false
@@ -137,8 +191,8 @@ extension RawTriviaPiece {
   public var isNewline: Bool {
     switch self {
     case .newlines,
-        .carriageReturns,
-        .carriageReturnLineFeeds:
+      .carriageReturns,
+      .carriageReturnLineFeeds:
       return true
     default:
       return false

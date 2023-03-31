@@ -911,6 +911,73 @@ final class RegexLiteralTests: XCTestCase {
     )
   }
 
+  func testPrefixOpSplitting1() {
+    assertParse(
+      """
+      let x =1️⃣/abc/
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "'=' must have consistent whitespace on both sides")
+      ]
+    )
+  }
+
+  func testPrefixOpSplitting2() {
+    assertParse(
+      """
+      let x1️⃣ .2️⃣/abc/
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected name in member access"),
+      ]
+    )
+  }
+
+  func testPrefixOpSplitting3() {
+    assertParse(
+      """
+      let x = true?/abc/1️⃣:/def/
+      """,
+      substructure: Syntax(BinaryOperatorExprSyntax(operatorToken: .binaryOperator("/"))),
+      diagnostics: [
+        DiagnosticSpec(message: "extraneous code ':/def/' at top level")
+      ]
+    )
+  }
+
+  func testPrefixOpSplitting4() {
+    assertParse(
+      """
+      let x = true ?/abc/ : /def/
+      """,
+      substructure: Syntax(
+        SequenceExprSyntax(
+          elements: .init([
+            BooleanLiteralExprSyntax(booleanLiteral: true),
+            UnresolvedTernaryExprSyntax(firstChoice: RegexLiteralExprSyntax(regexPattern: .regexLiteralPattern("abc"))),
+            RegexLiteralExprSyntax(regexPattern: .regexLiteralPattern("def")),
+          ])
+        )
+      )
+    )
+  }
+
+  func testPrefixOpSplitting5() {
+    assertParse(
+      """
+      let x = &/abc/
+      """,
+      substructure: Syntax(
+        InOutExprSyntax(
+          expression: RegexLiteralExprSyntax(
+            regexPattern: .regexLiteralPattern("abc")
+          )
+        )
+      )
+    )
+  }
+
   func testNulCharacter() {
     assertParse(
       "/1️⃣\0/",

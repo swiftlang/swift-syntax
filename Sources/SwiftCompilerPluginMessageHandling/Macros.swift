@@ -62,14 +62,8 @@ extension CompilerPluginMessageHandler {
         throw MacroExpansionError.unmathedMacroRole
       }
     } catch {
-      let diagMessage: DiagnosticMessage
-      if let message = error as? DiagnosticMessage, message.severity == .error {
-        diagMessage = message
-      } else {
-        diagMessage = ThrownErrorDiagnostic(message: String(describing: error))
-      }
+      context.addDiagnostics(from: error, node: syntax)
       expandedSource = ""
-      context.diagnose(Diagnostic(node: syntax, message: diagMessage))
     }
 
     let diagnostics = context.diagnostics.map {
@@ -221,14 +215,8 @@ extension CompilerPluginMessageHandler {
         throw MacroExpansionError.unmathedMacroRole
       }
     } catch {
-      let diagMessage: DiagnosticMessage
-      if let message = error as? DiagnosticMessage, message.severity == .error {
-        diagMessage = message
-      } else {
-        diagMessage = ThrownErrorDiagnostic(message: String(describing: error))
-      }
+      context.addDiagnostics(from: error, node: attributeNode)
       expandedSources = []
-      context.diagnose(Diagnostic(node: Syntax(attributeNode), message: diagMessage))
     }
 
     let diagnostics = context.diagnostics.map {
@@ -237,16 +225,5 @@ extension CompilerPluginMessageHandler {
     try self.sendMessage(
       .expandAttachedMacroResult(expandedSources: expandedSources, diagnostics: diagnostics)
     )
-  }
-}
-
-/// Diagnostic message used for thrown errors.
-fileprivate struct ThrownErrorDiagnostic: DiagnosticMessage {
-  let message: String
-
-  var severity: DiagnosticSeverity { .error }
-
-  var diagnosticID: MessageID {
-    .init(domain: "SwiftSyntaxMacros", id: "ThrownErrorDiagnostic")
   }
 }

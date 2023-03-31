@@ -15,16 +15,7 @@ import SwiftSyntaxBuilder
 import SyntaxSupport
 import Utils
 
-let triviaFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
-  DeclSyntax(
-    """
-    public enum TriviaPosition {
-      case leading
-      case trailing
-    }
-    """
-  )
-
+let triviaPiecesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   try! EnumDeclSyntax(
     """
     /// A contiguous stretch of a single kind of trivia. The constituent part of
@@ -115,88 +106,11 @@ let triviaFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     }
   }
 
-  DeclSyntax(
+  try! ExtensionDeclSyntax(
     """
-    extension TriviaPiece {
-      /// Returns true if the trivia is `.newlines`, `.carriageReturns` or `.carriageReturnLineFeeds`
-      public var isNewline: Bool {
-        switch self {
-        case .newlines,
-            .carriageReturns,
-            .carriageReturnLineFeeds:
-          return true
-        default:
-          return false
-        }
-      }
-    }
-    """
-  )
-
-  try! StructDeclSyntax(
-    """
-    /// A collection of leading or trailing trivia. This is the main data structure
-    /// for thinking about trivia.
-    public struct Trivia
+    extension Trivia
     """
   ) {
-    DeclSyntax("public let pieces: [TriviaPiece]")
-
-    DeclSyntax(
-      """
-      /// Creates Trivia with the provided underlying pieces.
-      public init<S: Sequence>(pieces: S) where S.Element == TriviaPiece {
-        self.pieces = Array(pieces)
-      }
-      """
-    )
-
-    DeclSyntax(
-      """
-      /// Creates Trivia with no pieces.
-      public static var zero: Trivia {
-        return Trivia(pieces: [])
-      }
-      """
-    )
-
-    DeclSyntax(
-      """
-      /// Whether the Trivia contains no pieces.
-      public var isEmpty: Bool {
-        pieces.isEmpty
-      }
-      """
-    )
-
-    DeclSyntax(
-      """
-      /// Creates a new `Trivia` by appending the provided `TriviaPiece` to the end.
-      public func appending(_ piece: TriviaPiece) -> Trivia {
-        var copy = pieces
-        copy.append(piece)
-        return Trivia(pieces: copy)
-      }
-      """
-    )
-
-    DeclSyntax(
-      """
-      public var sourceLength: SourceLength {
-        return pieces.map({ $0.sourceLength }).reduce(.zero, +)
-      }
-      """
-    )
-
-    DeclSyntax(
-      """
-      /// Get the byteSize of this trivia
-      public var byteSize: Int {
-        return sourceLength.utf8Length
-      }
-      """
-    )
-
     for trivia in TRIVIAS {
       if trivia.isCollection {
         let joined = trivia.characters.map { "\($0)" }.joined()
@@ -230,99 +144,6 @@ let triviaFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       }
     }
   }
-
-  DeclSyntax(
-    #"""
-    extension Trivia: CustomDebugStringConvertible {
-      public var debugDescription: String {
-        if count == 1, let first = first {
-          return first.debugDescription
-        }
-        return "[" + map(\.debugDescription).joined(separator: ", ") + "]"
-      }
-    }
-    """#
-  )
-
-  DeclSyntax("extension Trivia: Equatable {}")
-
-  DeclSyntax(
-    """
-    /// Conformance for Trivia to the Collection protocol.
-    extension Trivia: Collection {
-      public var startIndex: Int {
-        return pieces.startIndex
-      }
-
-      public var endIndex: Int {
-        return pieces.endIndex
-      }
-
-      public func index(after i: Int) -> Int {
-        return pieces.index(after: i)
-      }
-
-      public subscript(_ index: Int) -> TriviaPiece {
-        return pieces[index]
-      }
-    }
-    """
-  )
-
-  DeclSyntax(
-    """
-    extension Trivia: ExpressibleByArrayLiteral {
-      /// Creates Trivia from the provided pieces.
-      public init(arrayLiteral elements: TriviaPiece...) {
-        self.pieces = elements
-      }
-    }
-    """
-  )
-
-  DeclSyntax(
-    """
-    extension Trivia: TextOutputStreamable {
-      /// Prints the provided trivia as they would be written in a source file.
-      ///
-      /// - Parameter stream: The stream to which to print the trivia.
-      public func write<Target>(to target: inout Target)
-      where Target: TextOutputStream {
-        for piece in pieces {
-          piece.write(to: &target)
-        }
-      }
-    }
-    """
-  )
-
-  DeclSyntax(
-    """
-    extension Trivia: CustomStringConvertible {
-      public var description: String {
-        var description = ""
-        self.write(to: &description)
-        return description
-      }
-    }
-    """
-  )
-
-  DeclSyntax(
-    """
-    extension Trivia {
-      /// Concatenates two collections of `Trivia` into one collection.
-      public static func +(lhs: Trivia, rhs: Trivia) -> Trivia {
-        return Trivia(pieces: lhs.pieces + rhs.pieces)
-      }
-
-      /// Concatenates two collections of `Trivia` into the left-hand side.
-      public static func +=(lhs: inout Trivia, rhs: Trivia) {
-        lhs = lhs + rhs
-      }
-    }
-    """
-  )
 
   DeclSyntax("extension TriviaPiece: Equatable {}")
 
@@ -388,26 +209,6 @@ let triviaFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     }
   }
 
-  DeclSyntax(
-    """
-    extension RawTriviaPiece: TextOutputStreamable {
-      public func write<Target: TextOutputStream>(to target: inout Target) {
-        TriviaPiece(raw: self).write(to: &target)
-      }
-    }
-    """
-  )
-
-  DeclSyntax(
-    """
-    extension RawTriviaPiece: CustomDebugStringConvertible {
-      public var debugDescription: String {
-        TriviaPiece(raw: self).debugDescription
-      }
-    }
-    """
-  )
-
   try! ExtensionDeclSyntax("extension TriviaPiece") {
     try InitializerDeclSyntax("@_spi(RawSyntax) public init(raw: RawTriviaPiece)") {
       try SwitchExprSyntax("switch raw") {
@@ -463,22 +264,4 @@ let triviaFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       }
     }
   }
-
-  DeclSyntax(
-    """
-    extension RawTriviaPiece {
-      /// Returns true if the trivia is `.newlines`, `.carriageReturns` or `.carriageReturnLineFeeds`
-      public var isNewline: Bool {
-        switch self {
-        case .newlines,
-            .carriageReturns,
-            .carriageReturnLineFeeds:
-          return true
-        default:
-          return false
-        }
-      }
-    }
-    """
-  )
 }

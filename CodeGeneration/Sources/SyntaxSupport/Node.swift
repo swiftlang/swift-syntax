@@ -162,6 +162,6 @@ public class Node {
     self.elementsSeparatedByNewline = elementsSeparatedByNewline
 
     // For SyntaxCollections make sure that the elementName is set.
-    assert(!isSyntaxCollection || elementName != nil || element != "")
+    precondition(!isSyntaxCollection || elementName != nil || element != "")
   }
 }

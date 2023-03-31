@@ -271,7 +271,7 @@ extension Parser {
             )
           )
         } else {
-          let (name, generics) = self.parseTypeNameWithGenerics(include: .keywords)
+          let (name, generics) = self.parseTypeNameWithGenerics(allowKeywordAsName: true)
           base = RawTypeSyntax(
             RawMemberTypeIdentifierSyntax(
               baseType: base,
@@ -337,8 +337,15 @@ extension Parser {
     )
   }
 
-  mutating func parseTypeNameWithGenerics(include flags: DeclNameOptions = []) -> (RawTokenSyntax, RawGenericArgumentClauseSyntax?) {
-    let (name, _) = self.parseDeclNameRef(flags)
+  mutating func parseTypeNameWithGenerics(allowKeywordAsName: Bool) -> (RawTokenSyntax, RawGenericArgumentClauseSyntax?) {
+    let name: RawTokenSyntax
+    if let identOrSelf = self.consume(if: .identifier, .keyword(.self), .keyword(.Self)) {
+      name = identOrSelf
+    } else if allowKeywordAsName && self.currentToken.isLexerClassifiedKeyword {
+      name = self.consumeAnyToken(remapping: .identifier)
+    } else {
+      name = missingToken(.identifier)
+    }
     if self.atContextualPunctuator("<") {
       return (name, self.parseGenericArguments())
     }
@@ -356,7 +363,7 @@ extension Parser {
       return RawTypeSyntax(self.parseAnyType())
     }
 
-    let (name, generics) = parseTypeNameWithGenerics()
+    let (name, generics) = parseTypeNameWithGenerics(allowKeywordAsName: false)
     return RawTypeSyntax(
       RawSimpleTypeIdentifierSyntax(
         name: name,
@@ -413,7 +420,7 @@ extension Parser {
   ///     generic-argument → type
   @_spi(RawSyntax)
   public mutating func parseGenericArguments() -> RawGenericArgumentClauseSyntax {
-    assert(self.currentToken.starts(with: "<"))
+    precondition(self.currentToken.starts(with: "<"))
     let langle = self.consumePrefix("<", as: .leftAngle)
     var arguments = [RawGenericArgumentSyntax]()
     do {

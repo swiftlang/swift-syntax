@@ -192,7 +192,7 @@ extension Parser {
             lastElement.unexpectedBeforeDecl,
             decl: lastElement.decl,
             lastElement.unexpectedBetweenDeclAndSemicolon,
-            semicolon: parser.missingToken(.semicolon, text: nil),
+            semicolon: parser.missingToken(.semicolon),
             lastElement.unexpectedAfterSemicolon,
             arena: parser.arena
           )
@@ -464,7 +464,7 @@ extension Parser {
       )
     }
 
-    assert(self.currentToken.starts(with: "<"))
+    precondition(self.currentToken.starts(with: "<"))
     let langle = self.consumeAnyToken(remapping: .leftAngle)
     var elements = [RawGenericParameterSyntax]()
     do {
@@ -476,7 +476,7 @@ extension Parser {
         // Parse the 'each' keyword for a type parameter pack 'each T'.
         var each = self.consume(if: .keyword(.each))
 
-        let (unexpectedBetweenEachAndName, name) = self.expectIdentifier()
+        let (unexpectedBetweenEachAndName, name) = self.expectIdentifier(allowSelfOrCapitalSelfAsIdentifier: true)
         if attributes == nil && each == nil && unexpectedBetweenEachAndName == nil && name.isMissing && elements.isEmpty {
           break
         }
@@ -631,7 +631,7 @@ extension Parser {
               body: .sameTypeRequirement(
                 RawSameTypeRequirementSyntax(
                   leftTypeIdentifier: RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)),
-                  equalityToken: missingToken(.equal),
+                  equalityToken: missingToken(.binaryOperator, text: "=="),
                   rightTypeIdentifier: RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)),
                   arena: self.arena
                 )
@@ -835,7 +835,7 @@ extension Parser {
             lastItem.unexpectedBeforeDecl,
             decl: lastItem.decl,
             lastItem.unexpectedBetweenDeclAndSemicolon,
-            semicolon: self.missingToken(.semicolon, text: nil),
+            semicolon: self.missingToken(.semicolon),
             lastItem.unexpectedAfterSemicolon,
             arena: self.arena
           )
@@ -890,7 +890,7 @@ extension Parser {
       var loopProgress = LoopProgressCondition()
       repeat {
         let unexpectedPeriod = self.consume(if: .period)
-        let (unexpectedBeforeName, name) = self.expectIdentifier(allowIdentifierLikeKeywords: false, keywordRecovery: true)
+        let (unexpectedBeforeName, name) = self.expectIdentifier(keywordRecovery: true)
 
         let associatedValue: RawParameterClauseSyntax?
         if self.at(TokenSpec(.leftParen, allowAtStartOfLine: false)) {
@@ -1229,7 +1229,7 @@ extension Parser {
     }
 
     let defaultArgument: RawInitializerClauseSyntax?
-    if self.at(.equal) {
+    if self.at(.equal) || self.atContextualPunctuator("==") {
       defaultArgument = self.parseDefaultArgument()
     } else {
       defaultArgument = nil
@@ -1575,7 +1575,7 @@ extension Parser {
               typeAnnotationUnwrapped.unexpectedBetweenColonAndType,
               arena: self.arena
             ),
-            equal: missingToken(.equal, text: nil),
+            equal: missingToken(.equal),
             value: initExpr,
             arena: self.arena
           )
@@ -1742,7 +1742,7 @@ extension Parser {
     let lbrace: RawTokenSyntax
     if self.at(anyIn: AccessorKind.self) != nil {
       unexpectedBeforeLBrace = nil
-      lbrace = missingToken(.leftBrace, text: nil)
+      lbrace = missingToken(.leftBrace)
     } else {
       (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
     }
@@ -1831,7 +1831,7 @@ extension Parser {
     let equal: RawTokenSyntax
     if let colon = self.consume(if: .colon) {
       unexpectedBeforeEqual = RawUnexpectedNodesSyntax(elements: [RawSyntax(colon)], arena: self.arena)
-      equal = missingToken(.equal, text: nil)
+      equal = missingToken(.equal)
     } else {
       (unexpectedBeforeEqual, equal) = self.expect(.equal)
     }
@@ -1895,7 +1895,7 @@ extension Parser {
       } else {
         unexpectedBeforeName = nil
       }
-      name = missingToken(.binaryOperator, text: nil)
+      name = missingToken(.binaryOperator)
     }
 
     // Eat any subsequent tokens that are not separated to the operator by trivia.
@@ -1916,7 +1916,7 @@ extension Parser {
     // checking.
     let precedenceAndTypes: RawOperatorPrecedenceAndTypesSyntax?
     if let colon = self.consume(if: .colon) {
-      let (unexpectedBeforeIdentifier, identifier) = self.expectIdentifier(keywordRecovery: true)
+      let (unexpectedBeforeIdentifier, identifier) = self.expectIdentifier(allowSelfOrCapitalSelfAsIdentifier: true)
       var types = [RawDesignatedTypeElementSyntax]()
       while let comma = self.consume(if: .comma) {
         // FIXME: The compiler accepts... anything here. This is a bug.
@@ -2001,7 +2001,7 @@ extension Parser {
     _ handle: RecoveryConsumptionHandle
   ) -> RawPrecedenceGroupDeclSyntax {
     let (unexpectedBeforeGroup, group) = self.eat(handle)
-    let (unexpectedBeforeIdentifier, identifier) = self.expectIdentifier(keywordRecovery: true)
+    let (unexpectedBeforeIdentifier, identifier) = self.expectIdentifier(allowSelfOrCapitalSelfAsIdentifier: true)
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
 
     let groupAttributes = self.parsePrecedenceGroupAttributeListSyntax()

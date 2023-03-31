@@ -206,7 +206,7 @@ public struct MissingNodesError: ParserError {
   public let missingNodes: [Syntax]
 
   init(missingNodes: [Syntax]) {
-    assert(!missingNodes.isEmpty)
+    precondition(!missingNodes.isEmpty)
     self.missingNodes = missingNodes
   }
 
@@ -301,7 +301,7 @@ public struct InsertTokenFixIt: ParserFixIt {
   public let missingNodes: [Syntax]
 
   init(missingNodes: [Syntax]) {
-    assert(!missingNodes.isEmpty)
+    precondition(!missingNodes.isEmpty)
     self.missingNodes = missingNodes
   }
 

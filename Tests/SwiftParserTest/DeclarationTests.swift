@@ -145,7 +145,7 @@ final class DeclarationTests: XCTestCase {
       actor Foo {
         nonisolated init?() {
           for (x, y, z) in self.triples {
-            assert(isSafe)
+            precondition(isSafe)
           }
         }
         subscript(_ param: String) -> Int {
@@ -1385,12 +1385,15 @@ final class DeclarationTests: XCTestCase {
     assertParse(
       """
       class Foo {
-        <#code#>
+        1️⃣<#code#>
       }
       """,
       substructure: Syntax(
         MemberDeclListItemSyntax(decl: EditorPlaceholderDeclSyntax(identifier: .identifier("<#code#>")))
-      )
+      ),
+      diagnostics: [
+        DiagnosticSpec(message: "editor placeholder in source file")
+      ]
     )
   }
 

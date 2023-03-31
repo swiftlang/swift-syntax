@@ -128,6 +128,15 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var expectedExpressionAfterTry: Self {
     .init("expected expression after 'try'")
   }
+  public static var expectedAssignmentInsteadOfComparisonOperator: Self {
+    .init("expected '=' instead of '==' to assign default value for parameter")
+  }
+  public static var expectedLeftBraceOrIfAfterElse: Self {
+    .init("expected '{' or 'if' after 'else'")
+  }
+  public static var expectedSequenceExpressionInForEachLoop: Self {
+    .init("expected Sequence expression for for-each loop")
+  }
   public static var initializerInPattern: Self {
     .init("unexpected initializer in pattern; did you mean to use '='?")
   }
@@ -330,6 +339,30 @@ public struct MissingAttributeArgument: ParserError {
   }
 }
 
+public struct MissingConditionInStatement: ParserError {
+  let node: SyntaxProtocol
+
+  public var message: String {
+    if let name = node.nodeTypeNameForDiagnostics(allowBlockNames: false) {
+      return "missing condition in \(name)"
+    } else {
+      return "missing condition in statement"
+    }
+  }
+}
+
+public struct MissingExpressionInStatement: ParserError {
+  let node: SyntaxProtocol
+
+  public var message: String {
+    if let name = node.nodeTypeNameForDiagnostics(allowBlockNames: false) {
+      return "expected expression in \(name)"
+    } else {
+      return "expected expression in statement"
+    }
+  }
+}
+
 public struct NegatedAvailabilityCondition: ParserError {
   public let avaialabilityCondition: AvailabilityConditionSyntax
   public let negatedAvailabilityKeyword: TokenSyntax
@@ -470,6 +503,9 @@ extension FixItMessage where Self == StaticParserFixIt {
   }
   public static var insertNewline: Self {
     .init("insert newline")
+  }
+  public static var insertWhitespace: Self {
+    .init("insert whitespace")
   }
   public static var joinIdentifiers: Self {
     .init("join the identifiers together")

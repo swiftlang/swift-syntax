@@ -151,7 +151,7 @@ public struct Parser {
     if let arena = arena {
       self.arena = arena
       sourceBuffer = input
-      assert(arena.contains(text: SyntaxText(baseAddress: input.baseAddress, count: input.count)))
+      precondition(arena.contains(text: SyntaxText(baseAddress: input.baseAddress, count: input.count)))
     } else {
       self.arena = ParsingSyntaxArena(
         parseTriviaFunction: TriviaParser.parseTrivia(_:position:)
@@ -417,18 +417,20 @@ extension Parser {
   /// incorrectly used a keyword as an identifier.
   /// This should be set if keywords aren't strong recovery marker at this
   /// position, e.g. because the parser expects a punctuator next.
+  ///
+  /// If `allowSelfOrCapitalSelfAsIdentifier` is `true`, then `self` and `Self`
+  /// are also accepted and remapped to identifiers. This is exclusively used
+  /// to maintain compatibility with the C++ parser. No new uses of this should
+  /// be introduced.
   mutating func expectIdentifier(
-    allowIdentifierLikeKeywords: Bool = true,
-    keywordRecovery: Bool = false
+    keywordRecovery: Bool = false,
+    allowSelfOrCapitalSelfAsIdentifier: Bool = false
   ) -> (RawUnexpectedNodesSyntax?, RawTokenSyntax) {
-    if allowIdentifierLikeKeywords {
-      if let (_, handle) = self.canRecoverTo(anyIn: IdentifierTokens.self) {
-        return self.eat(handle)
-      }
-    } else {
-      if let identifier = self.consume(if: .identifier) {
-        return (nil, identifier)
-      }
+    if let identifier = self.consume(if: .identifier) {
+      return (nil, identifier)
+    }
+    if allowSelfOrCapitalSelfAsIdentifier, let selfOrCapitalSelf = self.consume(if: TokenSpec(.self, remapping: .identifier), TokenSpec(.Self, remapping: .identifier)) {
+      return (nil, selfOrCapitalSelf)
     }
     if let unknown = self.consume(if: .unknown) {
       return (
@@ -439,7 +441,7 @@ extension Parser {
     if let number = self.consume(if: .integerLiteral, .floatingLiteral, .dollarIdentifier) {
       return (
         RawUnexpectedNodesSyntax(elements: [RawSyntax(number)], arena: self.arena),
-        self.missingToken(.identifier, text: nil)
+        self.missingToken(.identifier)
       )
     } else if keywordRecovery,
       (self.currentToken.isLexerClassifiedKeyword || self.currentToken.rawTokenKind == .wildcard),
@@ -448,22 +450,6 @@ extension Parser {
       let keyword = self.consumeAnyToken()
       return (
         RawUnexpectedNodesSyntax(elements: [RawSyntax(keyword)], arena: self.arena),
-        self.missingToken(.identifier, text: nil)
-      )
-    }
-    return (
-      nil,
-      self.missingToken(.identifier)
-    )
-  }
-
-  mutating func expectIdentifierOrRethrows() -> (RawUnexpectedNodesSyntax?, RawTokenSyntax) {
-    if let (_, handle) = self.canRecoverTo(anyIn: IdentifierOrRethrowsTokens.self) {
-      return self.eat(handle)
-    }
-    if let unknown = self.consume(if: .unknown) {
-      return (
-        RawUnexpectedNodesSyntax(elements: [RawSyntax(unknown)], arena: self.arena),
         self.missingToken(.identifier)
       )
     }
@@ -505,7 +491,7 @@ extension Parser {
     var lookahead = self.lookahead()
     guard let recoveryHandle = lookahead.canRecoverTo(.rightBrace) else {
       // We can't recover to '}'. Synthesize it.
-      return (nil, self.missingToken(.rightBrace, text: nil))
+      return (nil, self.missingToken(.rightBrace))
     }
 
     // We can recover to a '}'. Decide whether we want to eat it based on its indentation.
@@ -513,13 +499,13 @@ extension Parser {
     switch (indentation(introducer.leadingTriviaPieces), indentation(rightBraceTrivia)) {
     // Catch cases where the brace has known indentation that is less than that of `introducer`, in which case we don't want to consume it.
     case (.spaces(let introducerSpaces), .spaces(let rightBraceSpaces)) where rightBraceSpaces < introducerSpaces:
-      return (nil, self.missingToken(.rightBrace, text: nil))
+      return (nil, self.missingToken(.rightBrace))
     case (.tabs(let introducerTabs), .tabs(let rightBraceTabs)) where rightBraceTabs < introducerTabs:
-      return (nil, self.missingToken(.rightBrace, text: nil))
+      return (nil, self.missingToken(.rightBrace))
     case (.spaces, .tabs(0)):
-      return (nil, self.missingToken(.rightBrace, text: nil))
+      return (nil, self.missingToken(.rightBrace))
     case (.tabs, .spaces(0)):
-      return (nil, self.missingToken(.rightBrace, text: nil))
+      return (nil, self.missingToken(.rightBrace))
     default:
       return self.eat(recoveryHandle)
     }
@@ -545,7 +531,7 @@ extension Parser {
     if tokenText == prefix {
       return self.consumeAnyToken(remapping: tokenKind)
     }
-    assert(tokenText.hasPrefix(prefix))
+    precondition(tokenText.hasPrefix(prefix))
 
     let endIndex = current.textRange.lowerBound.advanced(by: prefix.count)
     var tokenDiagnostic = current.diagnostic
@@ -589,7 +575,7 @@ extension Parser {
   ///     period. If there is a newline also set `skipMember` to inform
   ///     callers to not parse any futher member names.
   mutating func consumeMemberPeriod<R: RawSyntaxNodeProtocol>(previousNode: R?) -> (unexpected: RawUnexpectedNodesSyntax?, period: RawTokenSyntax, skipMemberName: Bool) {
-    assert(self.at(.period))
+    precondition(self.at(.period))
 
     let beforePeriodWhitespace = previousNode?.raw.trailingTriviaByteLength ?? 0 > 0 || self.currentToken.leadingTriviaByteLength > 0
     let afterPeriodWhitespace = self.currentToken.trailingTriviaByteLength > 0 || self.peek().leadingTriviaByteLength > 0

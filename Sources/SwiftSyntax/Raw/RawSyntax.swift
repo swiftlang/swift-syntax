@@ -499,7 +499,7 @@ extension RawSyntax {
   /// this.
   var contentByteLength: Int {
     let result = byteLength - leadingTriviaByteLength - trailingTriviaByteLength
-    assert(result >= 0)
+    precondition(result >= 0)
     return result
   }
 
@@ -551,7 +551,7 @@ extension RawSyntax {
       presence: presence,
       tokenDiagnostic: tokenDiagnostic
     )
-    assert(kind != .keyword || Keyword(payload.tokenText) != nil, "If kind is keyword, the text must be a known token kind")
+    precondition(kind != .keyword || Keyword(payload.tokenText) != nil, "If kind is keyword, the text must be a known token kind")
     return RawSyntax(arena: arena, payload: .parsedToken(payload))
   }
 
@@ -588,7 +588,7 @@ extension RawSyntax {
       presence: presence,
       tokenDiagnostic: tokenDiagnostic
     )
-    assert(kind != .keyword || Keyword(text) != nil, "If kind is keyword, the text must be a known token kind")
+    precondition(kind != .keyword || Keyword(text) != nil, "If kind is keyword, the text must be a known token kind")
     return RawSyntax(arena: arena, payload: .materializedToken(payload))
   }
 
@@ -614,7 +614,7 @@ extension RawSyntax {
     initializingLeadingTriviaWith: (UnsafeMutableBufferPointer<RawTriviaPiece>) -> Void,
     initializingTrailingTriviaWith: (UnsafeMutableBufferPointer<RawTriviaPiece>) -> Void
   ) -> RawSyntax {
-    assert(kind.defaultText == nil || text.isEmpty || kind.defaultText == text)
+    precondition(kind.defaultText == nil || text.isEmpty || kind.defaultText == text)
     let totalTriviaCount = leadingTriviaPieceCount + trailingTriviaPieceCount
     let triviaBuffer = arena.allocateRawTriviaPieceBuffer(count: totalTriviaCount)
     initializingLeadingTriviaWith(

@@ -29,7 +29,7 @@ public struct ArrayExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .arrayExpr)
+    precondition(data.raw.kind == .arrayExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -224,7 +224,7 @@ public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .arrowExpr)
+    precondition(data.raw.kind == .arrowExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -368,7 +368,7 @@ public struct AsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .asExpr)
+    precondition(data.raw.kind == .asExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -576,7 +576,7 @@ public struct AssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .assignmentExpr)
+    precondition(data.raw.kind == .assignmentExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -675,7 +675,7 @@ public struct AwaitExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .awaitExpr)
+    precondition(data.raw.kind == .awaitExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -819,7 +819,7 @@ public struct BinaryOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .binaryOperatorExpr)
+    precondition(data.raw.kind == .binaryOperatorExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -918,7 +918,7 @@ public struct BooleanLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .booleanLiteralExpr)
+    precondition(data.raw.kind == .booleanLiteralExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -1017,7 +1017,7 @@ public struct BorrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .borrowExpr)
+    precondition(data.raw.kind == .borrowExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -1161,7 +1161,7 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .closureExpr)
+    precondition(data.raw.kind == .closureExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -1430,7 +1430,7 @@ public struct DictionaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .dictionaryExpr)
+    precondition(data.raw.kind == .dictionaryExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -1606,7 +1606,7 @@ public struct DiscardAssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .discardAssignmentExpr)
+    precondition(data.raw.kind == .discardAssignmentExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -1705,7 +1705,7 @@ public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .editorPlaceholderExpr)
+    precondition(data.raw.kind == .editorPlaceholderExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -1804,7 +1804,7 @@ public struct FloatLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .floatLiteralExpr)
+    precondition(data.raw.kind == .floatLiteralExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -1903,7 +1903,7 @@ public struct ForcedValueExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .forcedValueExpr)
+    precondition(data.raw.kind == .forcedValueExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -2047,7 +2047,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .functionCallExpr)
+    precondition(data.raw.kind == .functionCallExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -2357,7 +2357,7 @@ public struct IdentifierExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .identifierExpr)
+    precondition(data.raw.kind == .identifierExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -2543,7 +2543,7 @@ public struct IfExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .ifExpr)
+    precondition(data.raw.kind == .ifExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -2802,7 +2802,7 @@ public struct InOutExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .inOutExpr)
+    precondition(data.raw.kind == .inOutExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -2946,7 +2946,7 @@ public struct InfixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .infixOperatorExpr)
+    precondition(data.raw.kind == .infixOperatorExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -3122,7 +3122,7 @@ public struct IntegerLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .integerLiteralExpr)
+    precondition(data.raw.kind == .integerLiteralExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -3221,7 +3221,7 @@ public struct IsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .isExpr)
+    precondition(data.raw.kind == .isExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -3397,7 +3397,7 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .keyPathExpr)
+    precondition(data.raw.kind == .keyPathExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -3627,7 +3627,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .macroExpansionExpr)
+    precondition(data.raw.kind == .macroExpansionExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -4002,7 +4002,7 @@ public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .memberAccessExpr)
+    precondition(data.raw.kind == .memberAccessExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -4249,7 +4249,7 @@ public struct MissingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .missingExpr)
+    precondition(data.raw.kind == .missingExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -4321,7 +4321,7 @@ public struct MoveExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .moveExpr)
+    precondition(data.raw.kind == .moveExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -4465,7 +4465,7 @@ public struct NilLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .nilLiteralExpr)
+    precondition(data.raw.kind == .nilLiteralExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -4564,7 +4564,7 @@ public struct OptionalChainingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .optionalChainingExpr)
+    precondition(data.raw.kind == .optionalChainingExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -4708,7 +4708,7 @@ public struct PackElementExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .packElementExpr)
+    precondition(data.raw.kind == .packElementExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -4852,7 +4852,7 @@ public struct PackExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .packExpansionExpr)
+    precondition(data.raw.kind == .packExpansionExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -4996,7 +4996,7 @@ public struct PostfixIfConfigExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .postfixIfConfigExpr)
+    precondition(data.raw.kind == .postfixIfConfigExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -5171,7 +5171,7 @@ public struct PostfixUnaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .postfixUnaryExpr)
+    precondition(data.raw.kind == .postfixUnaryExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -5315,7 +5315,7 @@ public struct PrefixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .prefixOperatorExpr)
+    precondition(data.raw.kind == .prefixOperatorExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -5459,7 +5459,7 @@ public struct RegexLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .regexLiteralExpr)
+    precondition(data.raw.kind == .regexLiteralExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -5558,7 +5558,7 @@ public struct SequenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .sequenceExpr)
+    precondition(data.raw.kind == .sequenceExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -5676,7 +5676,7 @@ public struct SpecializeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .specializeExpr)
+    precondition(data.raw.kind == .specializeExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -5820,7 +5820,7 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .stringLiteralExpr)
+    precondition(data.raw.kind == .stringLiteralExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -6079,7 +6079,7 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .subscriptExpr)
+    precondition(data.raw.kind == .subscriptExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -6389,7 +6389,7 @@ public struct SuperRefExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .superRefExpr)
+    precondition(data.raw.kind == .superRefExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -6488,7 +6488,7 @@ public struct SwitchExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .switchExpr)
+    precondition(data.raw.kind == .switchExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -6747,7 +6747,7 @@ public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .ternaryExpr)
+    precondition(data.raw.kind == .ternaryExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -6987,7 +6987,7 @@ public struct TryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .tryExpr)
+    precondition(data.raw.kind == .tryExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -7163,7 +7163,7 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .tupleExpr)
+    precondition(data.raw.kind == .tupleExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -7358,7 +7358,7 @@ public struct TypeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .typeExpr)
+    precondition(data.raw.kind == .typeExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -7457,7 +7457,7 @@ public struct UnresolvedAsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .unresolvedAsExpr)
+    precondition(data.raw.kind == .unresolvedAsExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -7601,7 +7601,7 @@ public struct UnresolvedIsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .unresolvedIsExpr)
+    precondition(data.raw.kind == .unresolvedIsExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -7700,7 +7700,7 @@ public struct UnresolvedPatternExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .unresolvedPatternExpr)
+    precondition(data.raw.kind == .unresolvedPatternExpr)
     self._syntaxNode = Syntax(data)
   }
   
@@ -7799,7 +7799,7 @@ public struct UnresolvedTernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .unresolvedTernaryExpr)
+    precondition(data.raw.kind == .unresolvedTernaryExpr)
     self._syntaxNode = Syntax(data)
   }
   

@@ -57,7 +57,7 @@ public struct FixIt {
   public let changes: Changes
 
   public init(message: FixItMessage, changes: Changes) {
-    assert(!changes.changes.isEmpty, "A Fix-It must have at least one change associated with it")
+    precondition(!changes.changes.isEmpty, "A Fix-It must have at least one change associated with it")
     self.message = message
     self.changes = changes
   }

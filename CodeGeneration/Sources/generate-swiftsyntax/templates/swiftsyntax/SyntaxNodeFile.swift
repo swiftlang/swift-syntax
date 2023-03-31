@@ -59,7 +59,7 @@ func syntaxNode(emitKind: String) -> SourceFileSyntax {
           /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
           /// is undefined.
           internal init(_ data: SyntaxData) {
-            assert(data.raw.kind == .\(raw: node.swiftSyntaxKind))
+            precondition(data.raw.kind == .\(raw: node.swiftSyntaxKind))
             self._syntaxNode = Syntax(data)
           }
           """

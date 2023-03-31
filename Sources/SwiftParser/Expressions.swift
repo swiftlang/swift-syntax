@@ -192,7 +192,7 @@ extension Parser {
       return lastElement
     }
 
-    assert(
+    precondition(
       elements.count.isMultiple(of: 2),
       "elements must have a even number of elements"
     )
@@ -619,7 +619,7 @@ extension Parser {
     declNameArgs: RawDeclNameArgumentsSyntax?,
     generics: RawGenericArgumentClauseSyntax?
   ) {
-    assert(self.at(.period))
+    precondition(self.at(.period))
     let (unexpectedPeriod, period, skipMemberName) = self.consumeMemberPeriod(previousNode: previousNode)
     if skipMemberName {
       let missingIdentifier = missingToken(.identifier)
@@ -685,7 +685,7 @@ extension Parser {
     _ flavor: ExprFlavor,
     forDirective: Bool
   ) -> RawExprSyntax {
-    assert(self.at(.poundIfKeyword))
+    precondition(self.at(.poundIfKeyword))
 
     let config = self.parsePoundIfDirective { (parser, isFirstElement) -> RawExprSyntax? in
       if !isFirstElement {
@@ -978,7 +978,7 @@ extension Parser {
       if self.currentToken.starts(with: "!") {
         questionOrExclaim = self.consumePrefix("!", as: .exclamationMark)
       } else {
-        assert(self.currentToken.starts(with: "?"))
+        precondition(self.currentToken.starts(with: "?"))
         questionOrExclaim = self.consumePrefix("?", as: .postfixQuestionMark)
       }
 
@@ -1044,7 +1044,7 @@ extension Parser {
           period = nil
         }
 
-        assert(self.at(.leftSquareBracket))
+        precondition(self.at(.leftSquareBracket))
         let lsquare = self.consumeAnyToken()
         let args: [RawTupleExprElementSyntax]
         if self.at(.rightSquareBracket) {
@@ -1671,7 +1671,18 @@ extension Parser {
 extension Parser {
   @_spi(RawSyntax)
   public mutating func parseDefaultArgument() -> RawInitializerClauseSyntax {
-    let (unexpectedBeforeEq, eq) = self.expect(.equal)
+    let unexpectedBeforeEq: RawUnexpectedNodesSyntax?
+    let eq: RawTokenSyntax
+    if let comparison = self.consumeIfContextualPunctuator("==") {
+      unexpectedBeforeEq = RawUnexpectedNodesSyntax(
+        elements: [RawSyntax(comparison)],
+        arena: self.arena
+      )
+      eq = missingToken(.equal)
+    } else {
+      (unexpectedBeforeEq, eq) = self.expect(.equal)
+    }
+
     let expr = self.parseExpression()
     return RawInitializerClauseSyntax(
       unexpectedBeforeEq,
@@ -1785,7 +1796,7 @@ extension Parser {
           let expression: RawExprSyntax
           if self.peek().rawTokenKind == .equal {
             // The name is a new declaration.
-            (unexpectedBeforeName, name) = self.expectIdentifier()
+            (unexpectedBeforeName, name) = self.expect(.identifier, TokenSpec(.self, remapping: .identifier), default: .identifier)
             (unexpectedBeforeAssignToken, assignToken) = self.expect(.equal)
             expression = self.parseExpression()
           } else {
@@ -2079,7 +2090,7 @@ extension Parser.Lookahead {
   /// handle this by doing some lookahead in common situations. And later, Sema
   /// will emit a diagnostic with a fixit to add wrapping parens.
   mutating func isValidTrailingClosure(_ flavor: Parser.ExprFlavor) -> Bool {
-    assert(self.at(.leftBrace), "Couldn't be a trailing closure")
+    precondition(self.at(.leftBrace), "Couldn't be a trailing closure")
 
     // If this is the start of a get/set accessor, then it isn't a trailing
     // closure.
@@ -2168,9 +2179,24 @@ extension Parser {
     ifHandle: RecoveryConsumptionHandle
   ) -> RawIfExprSyntax {
     let (unexpectedBeforeIfKeyword, ifKeyword) = self.eat(ifHandle)
-    // A scope encloses the condition and true branch for any variables bound
-    // by a conditional binding. The else branch does *not* see these variables.
-    let conditions = self.parseConditionList()
+
+    let conditions: RawConditionElementListSyntax
+
+    if self.at(.leftBrace) {
+      conditions = RawConditionElementListSyntax(
+        elements: [
+          RawConditionElementSyntax(
+            condition: .expression(RawExprSyntax(RawMissingExprSyntax(arena: self.arena))),
+            trailingComma: nil,
+            arena: self.arena
+          )
+        ],
+        arena: self.arena
+      )
+    } else {
+      conditions = self.parseConditionList()
+    }
+
     let body = self.parseCodeBlock(introducer: ifKeyword)
 
     // The else branch, if any, is outside of the scope of the condition.
@@ -2216,7 +2242,16 @@ extension Parser {
   ) -> RawSwitchExprSyntax {
     let (unexpectedBeforeSwitchKeyword, switchKeyword) = self.eat(switchHandle)
 
-    let subject = self.parseExpression(.basic)
+    // If there is no expression, like `switch { default: return false }` then left brace would parsed as
+    // a `RawClosureExprSyntax` in the condition, which is most likely not what the user meant.
+    // Create a missing condition instead and use the `{` for the start of the body.
+    let subject: RawExprSyntax
+    if self.at(.leftBrace) {
+      subject = RawExprSyntax(RawMissingExprSyntax(arena: self.arena))
+    } else {
+      subject = self.parseExpression(.basic)
+    }
+
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
 
     let cases = self.parseSwitchCases(allowStandaloneStmtRecovery: !lbrace.isMissing)
@@ -2264,7 +2299,7 @@ extension Parser {
               { (parser, _) in parser.parseSwitchCases(allowStandaloneStmtRecovery: allowStandaloneStmtRecovery) },
               syntax: { parser, cases in
                 guard cases.count == 1, let firstCase = cases.first else {
-                  assert(cases.isEmpty)
+                  precondition(cases.isEmpty)
                   return .switchCases(RawSwitchCaseListSyntax(elements: [], arena: parser.arena))
                 }
                 return .switchCases(firstCase)
@@ -2290,7 +2325,7 @@ extension Parser {
                       RawCaseItemSyntax(
                         pattern: RawPatternSyntax(
                           RawIdentifierPatternSyntax(
-                            identifier: missingToken(.identifier, text: nil),
+                            identifier: missingToken(.identifier),
                             arena: self.arena
                           )
                         ),
@@ -2301,7 +2336,7 @@ extension Parser {
                     ],
                     arena: self.arena
                   ),
-                  colon: missingToken(.colon, text: nil),
+                  colon: missingToken(.colon),
                   arena: self.arena
                 )
               ),

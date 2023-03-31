@@ -127,7 +127,7 @@ class SourceManager {
     }
     let localStartPosition = node.position(at: startKind)
     let localEndPosition = node.position(at: endKind)
-    assert(localStartPosition <= localEndPosition)
+    precondition(localStartPosition <= localEndPosition)
 
     let positionOffset = base.location.offset
 

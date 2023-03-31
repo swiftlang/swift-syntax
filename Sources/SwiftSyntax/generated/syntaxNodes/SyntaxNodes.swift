@@ -29,14 +29,14 @@ public struct AccessPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .accessPathComponent)
+    precondition(data.raw.kind == .accessPathComponent)
     self._syntaxNode = Syntax(data)
   }
   
   public init(
       leadingTrivia: Trivia? = nil, 
       _ unexpectedBeforeName: UnexpectedNodesSyntax? = nil, 
-      name: TokenSyntax = .identifier("IdentifierToken"), 
+      name: TokenSyntax, 
       _ unexpectedBetweenNameAndTrailingDot: UnexpectedNodesSyntax? = nil, 
       trailingDot: TokenSyntax? = nil, 
       _ unexpectedAfterTrailingDot: UnexpectedNodesSyntax? = nil, 
@@ -173,7 +173,7 @@ public struct AccessorBlockSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .accessorBlock)
+    precondition(data.raw.kind == .accessorBlock)
     self._syntaxNode = Syntax(data)
   }
   
@@ -368,7 +368,7 @@ public struct AccessorParameterSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .accessorParameter)
+    precondition(data.raw.kind == .accessorParameter)
     self._syntaxNode = Syntax(data)
   }
   
@@ -544,7 +544,7 @@ public struct ArrayElementSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .arrayElement)
+    precondition(data.raw.kind == .arrayElement)
     self._syntaxNode = Syntax(data)
   }
   
@@ -949,7 +949,7 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .attribute)
+    precondition(data.raw.kind == .attribute)
     self._syntaxNode = Syntax(data)
   }
   
@@ -1247,7 +1247,7 @@ public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .availabilityArgument)
+    precondition(data.raw.kind == .availabilityArgument)
     self._syntaxNode = Syntax(data)
   }
   
@@ -1393,7 +1393,7 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .availabilityCondition)
+    precondition(data.raw.kind == .availabilityCondition)
     self._syntaxNode = Syntax(data)
   }
   
@@ -1620,7 +1620,7 @@ public struct AvailabilityEntrySyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .availabilityEntry)
+    precondition(data.raw.kind == .availabilityEntry)
     self._syntaxNode = Syntax(data)
   }
   
@@ -1891,7 +1891,7 @@ public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable 
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .availabilityLabeledArgument)
+    precondition(data.raw.kind == .availabilityLabeledArgument)
     self._syntaxNode = Syntax(data)
   }
   
@@ -2070,7 +2070,7 @@ public struct AvailabilityVersionRestrictionListEntrySyntax: SyntaxProtocol, Syn
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .availabilityVersionRestrictionListEntry)
+    precondition(data.raw.kind == .availabilityVersionRestrictionListEntry)
     self._syntaxNode = Syntax(data)
   }
   
@@ -2215,7 +2215,7 @@ public struct AvailabilityVersionRestrictionSyntax: SyntaxProtocol, SyntaxHashab
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .availabilityVersionRestriction)
+    precondition(data.raw.kind == .availabilityVersionRestriction)
     self._syntaxNode = Syntax(data)
   }
   
@@ -2360,7 +2360,7 @@ public struct BackDeployedAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashabl
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .backDeployedAttributeSpecList)
+    precondition(data.raw.kind == .backDeployedAttributeSpecList)
     self._syntaxNode = Syntax(data)
   }
   
@@ -2558,7 +2558,7 @@ public struct CaseItemSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .caseItem)
+    precondition(data.raw.kind == .caseItem)
     self._syntaxNode = Syntax(data)
   }
   
@@ -2734,7 +2734,7 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .catchClause)
+    precondition(data.raw.kind == .catchClause)
     self._syntaxNode = Syntax(data)
   }
   
@@ -2929,7 +2929,7 @@ public struct CatchItemSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .catchItem)
+    precondition(data.raw.kind == .catchItem)
     self._syntaxNode = Syntax(data)
   }
   
@@ -3140,7 +3140,7 @@ public struct ClosureCaptureItemSpecifierSyntax: SyntaxProtocol, SyntaxHashable 
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .closureCaptureItemSpecifier)
+    precondition(data.raw.kind == .closureCaptureItemSpecifier)
     self._syntaxNode = Syntax(data)
   }
   
@@ -3348,7 +3348,7 @@ public struct ClosureCaptureItemSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .closureCaptureItem)
+    precondition(data.raw.kind == .closureCaptureItem)
     self._syntaxNode = Syntax(data)
   }
   
@@ -3588,7 +3588,7 @@ public struct ClosureCaptureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .closureCaptureSignature)
+    precondition(data.raw.kind == .closureCaptureSignature)
     self._syntaxNode = Syntax(data)
   }
   
@@ -3783,7 +3783,7 @@ public struct ClosureParamSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .closureParam)
+    precondition(data.raw.kind == .closureParam)
     self._syntaxNode = Syntax(data)
   }
   
@@ -3969,7 +3969,7 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .closureSignature)
+    precondition(data.raw.kind == .closureSignature)
     self._syntaxNode = Syntax(data)
   }
   
@@ -4313,7 +4313,7 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .codeBlockItem)
+    precondition(data.raw.kind == .codeBlockItem)
     self._syntaxNode = Syntax(data)
   }
   
@@ -4459,7 +4459,7 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .codeBlock)
+    precondition(data.raw.kind == .codeBlock)
     self._syntaxNode = Syntax(data)
   }
   
@@ -4654,7 +4654,7 @@ public struct CompositionTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .compositionTypeElement)
+    precondition(data.raw.kind == .compositionTypeElement)
     self._syntaxNode = Syntax(data)
   }
   
@@ -4867,7 +4867,7 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .conditionElement)
+    precondition(data.raw.kind == .conditionElement)
     self._syntaxNode = Syntax(data)
   }
   
@@ -5011,7 +5011,7 @@ public struct ConformanceRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .conformanceRequirement)
+    precondition(data.raw.kind == .conformanceRequirement)
     self._syntaxNode = Syntax(data)
   }
   
@@ -5187,7 +5187,7 @@ public struct ConventionAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .conventionAttributeArguments)
+    precondition(data.raw.kind == .conventionAttributeArguments)
     self._syntaxNode = Syntax(data)
   }
   
@@ -5428,7 +5428,7 @@ public struct ConventionWitnessMethodAttributeArgumentsSyntax: SyntaxProtocol, S
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .conventionWitnessMethodAttributeArguments)
+    precondition(data.raw.kind == .conventionWitnessMethodAttributeArguments)
     self._syntaxNode = Syntax(data)
   }
   
@@ -5604,7 +5604,7 @@ public struct DeclEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .declEffectSpecifiers)
+    precondition(data.raw.kind == .declEffectSpecifiers)
     self._syntaxNode = Syntax(data)
   }
   
@@ -5748,7 +5748,7 @@ public struct DeclModifierDetailSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .declModifierDetail)
+    precondition(data.raw.kind == .declModifierDetail)
     self._syntaxNode = Syntax(data)
   }
   
@@ -5924,7 +5924,7 @@ public struct DeclModifierSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .declModifier)
+    precondition(data.raw.kind == .declModifier)
     self._syntaxNode = Syntax(data)
   }
   
@@ -6068,7 +6068,7 @@ public struct DeclNameArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .declNameArgument)
+    precondition(data.raw.kind == .declNameArgument)
     self._syntaxNode = Syntax(data)
   }
   
@@ -6212,7 +6212,7 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .declNameArguments)
+    precondition(data.raw.kind == .declNameArguments)
     self._syntaxNode = Syntax(data)
   }
   
@@ -6407,7 +6407,7 @@ public struct DeclNameSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .declName)
+    precondition(data.raw.kind == .declName)
     self._syntaxNode = Syntax(data)
   }
   
@@ -6553,7 +6553,7 @@ public struct DerivativeRegistrationAttributeArgumentsSyntax: SyntaxProtocol, Sy
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .derivativeRegistrationAttributeArguments)
+    precondition(data.raw.kind == .derivativeRegistrationAttributeArguments)
     self._syntaxNode = Syntax(data)
   }
   
@@ -6862,7 +6862,7 @@ public struct DesignatedTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .designatedTypeElement)
+    precondition(data.raw.kind == .designatedTypeElement)
     self._syntaxNode = Syntax(data)
   }
   
@@ -7006,7 +7006,7 @@ public struct DictionaryElementSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .dictionaryElement)
+    precondition(data.raw.kind == .dictionaryElement)
     self._syntaxNode = Syntax(data)
   }
   
@@ -7214,7 +7214,7 @@ public struct DifferentiabilityParamSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .differentiabilityParam)
+    precondition(data.raw.kind == .differentiabilityParam)
     self._syntaxNode = Syntax(data)
   }
   
@@ -7400,7 +7400,7 @@ public struct DifferentiabilityParamsClauseSyntax: SyntaxProtocol, SyntaxHashabl
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .differentiabilityParamsClause)
+    precondition(data.raw.kind == .differentiabilityParamsClause)
     self._syntaxNode = Syntax(data)
   }
   
@@ -7578,7 +7578,7 @@ public struct DifferentiabilityParamsSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .differentiabilityParams)
+    precondition(data.raw.kind == .differentiabilityParams)
     self._syntaxNode = Syntax(data)
   }
   
@@ -7774,7 +7774,7 @@ public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHash
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .differentiableAttributeArguments)
+    precondition(data.raw.kind == .differentiableAttributeArguments)
     self._syntaxNode = Syntax(data)
   }
   
@@ -8058,7 +8058,7 @@ public struct DocumentationAttributeArgumentSyntax: SyntaxProtocol, SyntaxHashab
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .documentationAttributeArgument)
+    precondition(data.raw.kind == .documentationAttributeArgument)
     self._syntaxNode = Syntax(data)
   }
   
@@ -8267,7 +8267,7 @@ public struct DynamicReplacementArgumentsSyntax: SyntaxProtocol, SyntaxHashable 
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .dynamicReplacementArguments)
+    precondition(data.raw.kind == .dynamicReplacementArguments)
     self._syntaxNode = Syntax(data)
   }
   
@@ -8443,7 +8443,7 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .enumCaseElement)
+    precondition(data.raw.kind == .enumCaseElement)
     self._syntaxNode = Syntax(data)
   }
   
@@ -8655,7 +8655,7 @@ public struct ExposeAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .exposeAttributeArguments)
+    precondition(data.raw.kind == .exposeAttributeArguments)
     self._syntaxNode = Syntax(data)
   }
   
@@ -8831,7 +8831,7 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .expressionSegment)
+    precondition(data.raw.kind == .expressionSegment)
     self._syntaxNode = Syntax(data)
   }
   
@@ -9090,7 +9090,7 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .functionParameter)
+    precondition(data.raw.kind == .functionParameter)
     self._syntaxNode = Syntax(data)
   }
   
@@ -9555,7 +9555,7 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .functionSignature)
+    precondition(data.raw.kind == .functionSignature)
     self._syntaxNode = Syntax(data)
   }
   
@@ -9731,7 +9731,7 @@ public struct GenericArgumentClauseSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .genericArgumentClause)
+    precondition(data.raw.kind == .genericArgumentClause)
     self._syntaxNode = Syntax(data)
   }
   
@@ -9926,7 +9926,7 @@ public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .genericArgument)
+    precondition(data.raw.kind == .genericArgument)
     self._syntaxNode = Syntax(data)
   }
   
@@ -10070,7 +10070,7 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .genericParameterClause)
+    precondition(data.raw.kind == .genericParameterClause)
     self._syntaxNode = Syntax(data)
   }
   
@@ -10297,7 +10297,7 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .genericParameter)
+    precondition(data.raw.kind == .genericParameter)
     self._syntaxNode = Syntax(data)
   }
   
@@ -10688,7 +10688,7 @@ public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .genericRequirement)
+    precondition(data.raw.kind == .genericRequirement)
     self._syntaxNode = Syntax(data)
   }
   
@@ -10832,7 +10832,7 @@ public struct GenericWhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .genericWhereClause)
+    precondition(data.raw.kind == .genericWhereClause)
     self._syntaxNode = Syntax(data)
   }
   
@@ -11076,7 +11076,7 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .ifConfigClause)
+    precondition(data.raw.kind == .ifConfigClause)
     self._syntaxNode = Syntax(data)
   }
   
@@ -11287,7 +11287,7 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .implementsAttributeArguments)
+    precondition(data.raw.kind == .implementsAttributeArguments)
     self._syntaxNode = Syntax(data)
   }
   
@@ -11499,7 +11499,7 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .inheritedType)
+    precondition(data.raw.kind == .inheritedType)
     self._syntaxNode = Syntax(data)
   }
   
@@ -11643,7 +11643,7 @@ public struct InitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .initializerClause)
+    precondition(data.raw.kind == .initializerClause)
     self._syntaxNode = Syntax(data)
   }
   
@@ -11840,7 +11840,7 @@ public struct KeyPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .keyPathComponent)
+    precondition(data.raw.kind == .keyPathComponent)
     self._syntaxNode = Syntax(data)
   }
   
@@ -11984,7 +11984,7 @@ public struct KeyPathOptionalComponentSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .keyPathOptionalComponent)
+    precondition(data.raw.kind == .keyPathOptionalComponent)
     self._syntaxNode = Syntax(data)
   }
   
@@ -12083,7 +12083,7 @@ public struct KeyPathPropertyComponentSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .keyPathPropertyComponent)
+    precondition(data.raw.kind == .keyPathPropertyComponent)
     self._syntaxNode = Syntax(data)
   }
   
@@ -12259,7 +12259,7 @@ public struct KeyPathSubscriptComponentSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .keyPathSubscriptComponent)
+    precondition(data.raw.kind == .keyPathSubscriptComponent)
     self._syntaxNode = Syntax(data)
   }
   
@@ -12454,7 +12454,7 @@ public struct LabeledSpecializeEntrySyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .labeledSpecializeEntry)
+    precondition(data.raw.kind == .labeledSpecializeEntry)
     self._syntaxNode = Syntax(data)
   }
   
@@ -12666,7 +12666,7 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .layoutRequirement)
+    precondition(data.raw.kind == .layoutRequirement)
     self._syntaxNode = Syntax(data)
   }
   
@@ -13002,7 +13002,7 @@ public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .matchingPatternCondition)
+    precondition(data.raw.kind == .matchingPatternCondition)
     self._syntaxNode = Syntax(data)
   }
   
@@ -13210,7 +13210,7 @@ public struct MemberDeclBlockSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .memberDeclBlock)
+    precondition(data.raw.kind == .memberDeclBlock)
     self._syntaxNode = Syntax(data)
   }
   
@@ -13405,7 +13405,7 @@ public struct MemberDeclListItemSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .memberDeclListItem)
+    precondition(data.raw.kind == .memberDeclListItem)
     self._syntaxNode = Syntax(data)
   }
   
@@ -13551,7 +13551,7 @@ public struct MissingSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .missing)
+    precondition(data.raw.kind == .missing)
     self._syntaxNode = Syntax(data)
   }
   
@@ -13623,7 +13623,7 @@ public struct MultipleTrailingClosureElementSyntax: SyntaxProtocol, SyntaxHashab
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .multipleTrailingClosureElement)
+    precondition(data.raw.kind == .multipleTrailingClosureElement)
     self._syntaxNode = Syntax(data)
   }
   
@@ -13799,7 +13799,7 @@ public struct ObjCSelectorPieceSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .objCSelectorPiece)
+    precondition(data.raw.kind == .objCSelectorPiece)
     self._syntaxNode = Syntax(data)
   }
   
@@ -13943,7 +13943,7 @@ public struct OpaqueReturnTypeOfAttributeArgumentsSyntax: SyntaxProtocol, Syntax
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .opaqueReturnTypeOfAttributeArguments)
+    precondition(data.raw.kind == .opaqueReturnTypeOfAttributeArguments)
     self._syntaxNode = Syntax(data)
   }
   
@@ -14121,7 +14121,7 @@ public struct OperatorPrecedenceAndTypesSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .operatorPrecedenceAndTypes)
+    precondition(data.raw.kind == .operatorPrecedenceAndTypes)
     self._syntaxNode = Syntax(data)
   }
   
@@ -14318,7 +14318,7 @@ public struct OptionalBindingConditionSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .optionalBindingCondition)
+    precondition(data.raw.kind == .optionalBindingCondition)
     self._syntaxNode = Syntax(data)
   }
   
@@ -14526,7 +14526,7 @@ public struct OriginallyDefinedInArgumentsSyntax: SyntaxProtocol, SyntaxHashable
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .originallyDefinedInArguments)
+    precondition(data.raw.kind == .originallyDefinedInArguments)
     self._syntaxNode = Syntax(data)
   }
   
@@ -14785,7 +14785,7 @@ public struct ParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .parameterClause)
+    precondition(data.raw.kind == .parameterClause)
     self._syntaxNode = Syntax(data)
   }
   
@@ -15022,7 +15022,7 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .patternBinding)
+    precondition(data.raw.kind == .patternBinding)
     self._syntaxNode = Syntax(data)
   }
   
@@ -15262,7 +15262,7 @@ public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .poundSourceLocationArgs)
+    precondition(data.raw.kind == .poundSourceLocationArgs)
     self._syntaxNode = Syntax(data)
   }
   
@@ -15566,7 +15566,7 @@ public struct PrecedenceGroupAssignmentSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .precedenceGroupAssignment)
+    precondition(data.raw.kind == .precedenceGroupAssignment)
     self._syntaxNode = Syntax(data)
   }
   
@@ -15743,7 +15743,7 @@ public struct PrecedenceGroupAssociativitySyntax: SyntaxProtocol, SyntaxHashable
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .precedenceGroupAssociativity)
+    precondition(data.raw.kind == .precedenceGroupAssociativity)
     self._syntaxNode = Syntax(data)
   }
   
@@ -15920,7 +15920,7 @@ public struct PrecedenceGroupNameElementSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .precedenceGroupNameElement)
+    precondition(data.raw.kind == .precedenceGroupNameElement)
     self._syntaxNode = Syntax(data)
   }
   
@@ -16064,7 +16064,7 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .precedenceGroupRelation)
+    precondition(data.raw.kind == .precedenceGroupRelation)
     self._syntaxNode = Syntax(data)
   }
   
@@ -16261,7 +16261,7 @@ public struct PrimaryAssociatedTypeClauseSyntax: SyntaxProtocol, SyntaxHashable 
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .primaryAssociatedTypeClause)
+    precondition(data.raw.kind == .primaryAssociatedTypeClause)
     self._syntaxNode = Syntax(data)
   }
   
@@ -16456,7 +16456,7 @@ public struct PrimaryAssociatedTypeSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .primaryAssociatedType)
+    precondition(data.raw.kind == .primaryAssociatedType)
     self._syntaxNode = Syntax(data)
   }
   
@@ -16600,7 +16600,7 @@ public struct QualifiedDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .qualifiedDeclName)
+    precondition(data.raw.kind == .qualifiedDeclName)
     self._syntaxNode = Syntax(data)
   }
   
@@ -16850,7 +16850,7 @@ public struct ReturnClauseSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .returnClause)
+    precondition(data.raw.kind == .returnClause)
     self._syntaxNode = Syntax(data)
   }
   
@@ -16994,7 +16994,7 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .sameTypeRequirement)
+    precondition(data.raw.kind == .sameTypeRequirement)
     self._syntaxNode = Syntax(data)
   }
   
@@ -17170,7 +17170,7 @@ public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .sourceFile)
+    precondition(data.raw.kind == .sourceFile)
     self._syntaxNode = Syntax(data)
   }
   
@@ -17333,7 +17333,7 @@ public struct StringSegmentSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .stringSegment)
+    precondition(data.raw.kind == .stringSegment)
     self._syntaxNode = Syntax(data)
   }
   
@@ -17432,7 +17432,7 @@ public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .switchCaseLabel)
+    precondition(data.raw.kind == .switchCaseLabel)
     self._syntaxNode = Syntax(data)
   }
   
@@ -17669,7 +17669,7 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .switchCase)
+    precondition(data.raw.kind == .switchCase)
     self._syntaxNode = Syntax(data)
   }
   
@@ -17864,7 +17864,7 @@ public struct SwitchDefaultLabelSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .switchDefaultLabel)
+    precondition(data.raw.kind == .switchDefaultLabel)
     self._syntaxNode = Syntax(data)
   }
   
@@ -18008,7 +18008,7 @@ public struct TargetFunctionEntrySyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .targetFunctionEntry)
+    precondition(data.raw.kind == .targetFunctionEntry)
     self._syntaxNode = Syntax(data)
   }
   
@@ -18220,7 +18220,7 @@ public struct TupleExprElementSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .tupleExprElement)
+    precondition(data.raw.kind == .tupleExprElement)
     self._syntaxNode = Syntax(data)
   }
   
@@ -18428,7 +18428,7 @@ public struct TuplePatternElementSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .tuplePatternElement)
+    precondition(data.raw.kind == .tuplePatternElement)
     self._syntaxNode = Syntax(data)
   }
   
@@ -18636,7 +18636,7 @@ public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .tupleTypeElement)
+    precondition(data.raw.kind == .tupleTypeElement)
     self._syntaxNode = Syntax(data)
   }
   
@@ -18972,7 +18972,7 @@ public struct TypeAnnotationSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .typeAnnotation)
+    precondition(data.raw.kind == .typeAnnotation)
     self._syntaxNode = Syntax(data)
   }
   
@@ -19116,7 +19116,7 @@ public struct TypeEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .typeEffectSpecifiers)
+    precondition(data.raw.kind == .typeEffectSpecifiers)
     self._syntaxNode = Syntax(data)
   }
   
@@ -19260,7 +19260,7 @@ public struct TypeInheritanceClauseSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .typeInheritanceClause)
+    precondition(data.raw.kind == .typeInheritanceClause)
     self._syntaxNode = Syntax(data)
   }
   
@@ -19423,7 +19423,7 @@ public struct TypeInitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .typeInitializerClause)
+    precondition(data.raw.kind == .typeInitializerClause)
     self._syntaxNode = Syntax(data)
   }
   
@@ -19567,7 +19567,7 @@ public struct UnavailableFromAsyncArgumentsSyntax: SyntaxProtocol, SyntaxHashabl
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .unavailableFromAsyncArguments)
+    precondition(data.raw.kind == .unavailableFromAsyncArguments)
     self._syntaxNode = Syntax(data)
   }
   
@@ -19743,7 +19743,7 @@ public struct UnderscorePrivateAttributeArgumentsSyntax: SyntaxProtocol, SyntaxH
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .underscorePrivateAttributeArguments)
+    precondition(data.raw.kind == .underscorePrivateAttributeArguments)
     self._syntaxNode = Syntax(data)
   }
   
@@ -19919,41 +19919,53 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .versionTuple)
+    precondition(data.raw.kind == .versionTuple)
     self._syntaxNode = Syntax(data)
   }
   
   public init(
       leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeMajorMinor: UnexpectedNodesSyntax? = nil, 
-      majorMinor: TokenSyntax, 
-      _ unexpectedBetweenMajorMinorAndPatchPeriod: UnexpectedNodesSyntax? = nil, 
+      _ unexpectedBeforeMajor: UnexpectedNodesSyntax? = nil, 
+      major: TokenSyntax = .integerLiteral("IntegerLiteralToken"), 
+      _ unexpectedBetweenMajorAndMinorPeriod: UnexpectedNodesSyntax? = nil, 
+      minorPeriod: TokenSyntax? = nil, 
+      _ unexpectedBetweenMinorPeriodAndMinor: UnexpectedNodesSyntax? = nil, 
+      minor: TokenSyntax? = nil, 
+      _ unexpectedBetweenMinorAndPatchPeriod: UnexpectedNodesSyntax? = nil, 
       patchPeriod: TokenSyntax? = nil, 
-      _ unexpectedBetweenPatchPeriodAndPatchVersion: UnexpectedNodesSyntax? = nil, 
-      patchVersion: TokenSyntax? = nil, 
-      _ unexpectedAfterPatchVersion: UnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenPatchPeriodAndPatch: UnexpectedNodesSyntax? = nil, 
+      patch: TokenSyntax? = nil, 
+      _ unexpectedAfterPatch: UnexpectedNodesSyntax? = nil, 
       trailingTrivia: Trivia? = nil
     
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeMajorMinor, 
-            majorMinor, 
-            unexpectedBetweenMajorMinorAndPatchPeriod, 
+            unexpectedBeforeMajor, 
+            major, 
+            unexpectedBetweenMajorAndMinorPeriod, 
+            minorPeriod, 
+            unexpectedBetweenMinorPeriodAndMinor, 
+            minor, 
+            unexpectedBetweenMinorAndPatchPeriod, 
             patchPeriod, 
-            unexpectedBetweenPatchPeriodAndPatchVersion, 
-            patchVersion, 
-            unexpectedAfterPatchVersion
+            unexpectedBetweenPatchPeriodAndPatch, 
+            patch, 
+            unexpectedAfterPatch
           ))) {(arena, _) in 
       let layout: [RawSyntax?] = [
-          unexpectedBeforeMajorMinor?.raw, 
-          majorMinor.raw, 
-          unexpectedBetweenMajorMinorAndPatchPeriod?.raw, 
+          unexpectedBeforeMajor?.raw, 
+          major.raw, 
+          unexpectedBetweenMajorAndMinorPeriod?.raw, 
+          minorPeriod?.raw, 
+          unexpectedBetweenMinorPeriodAndMinor?.raw, 
+          minor?.raw, 
+          unexpectedBetweenMinorAndPatchPeriod?.raw, 
           patchPeriod?.raw, 
-          unexpectedBetweenPatchPeriodAndPatchVersion?.raw, 
-          patchVersion?.raw, 
-          unexpectedAfterPatchVersion?.raw
+          unexpectedBetweenPatchPeriodAndPatch?.raw, 
+          patch?.raw, 
+          unexpectedAfterPatch?.raw
         ]
       let raw = RawSyntax.makeLayout(
           kind: SyntaxKind.versionTuple, 
@@ -19967,7 +19979,7 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
   
-  public var unexpectedBeforeMajorMinor: UnexpectedNodesSyntax? {
+  public var unexpectedBeforeMajor: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -19976,8 +19988,8 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// In case the version consists only of the major version, an integer literal that specifies the major version. In case the version consists of major and minor version number, a floating literal in which the decimal part is interpreted as the minor version.
-  public var majorMinor: TokenSyntax {
+  /// The major version.
+  public var major: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
@@ -19986,7 +19998,7 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenMajorMinorAndPatchPeriod: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenMajorAndMinorPeriod: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -19995,8 +20007,8 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// If the version contains a patch number, the period separating the minor from the patch number.
-  public var patchPeriod: TokenSyntax? {
+  /// If the version contains a minor number, the period separating the major from the minor number.
+  public var minorPeriod: TokenSyntax? {
     get {
       return data.child(at: 3, parent: Syntax(self)).map(TokenSyntax.init)
     }
@@ -20005,7 +20017,7 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenPatchPeriodAndPatchVersion: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenMinorPeriodAndMinor: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -20014,8 +20026,8 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// The patch version if specified.
-  public var patchVersion: TokenSyntax? {
+  /// The minor version if specified.
+  public var minor: TokenSyntax? {
     get {
       return data.child(at: 5, parent: Syntax(self)).map(TokenSyntax.init)
     }
@@ -20024,7 +20036,7 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedAfterPatchVersion: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenMinorAndPatchPeriod: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -20033,15 +20045,57 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// If the version contains a patch number, the period separating the minor from the patch number.
+  public var patchPeriod: TokenSyntax? {
+    get {
+      return data.child(at: 7, parent: Syntax(self)).map(TokenSyntax.init)
+    }
+    set(value) {
+      self = VersionTupleSyntax(data.replacingChild(at: 7, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenPatchPeriodAndPatch: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = VersionTupleSyntax(data.replacingChild(at: 8, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  /// The patch version if specified.
+  public var patch: TokenSyntax? {
+    get {
+      return data.child(at: 9, parent: Syntax(self)).map(TokenSyntax.init)
+    }
+    set(value) {
+      self = VersionTupleSyntax(data.replacingChild(at: 9, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedAfterPatch: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 10, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = VersionTupleSyntax(data.replacingChild(at: 10, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
   public static var structure: SyntaxNodeStructure {
     return .layout([
-          \Self.unexpectedBeforeMajorMinor, 
-          \Self.majorMinor, 
-          \Self.unexpectedBetweenMajorMinorAndPatchPeriod, 
+          \Self.unexpectedBeforeMajor, 
+          \Self.major, 
+          \Self.unexpectedBetweenMajorAndMinorPeriod, 
+          \Self.minorPeriod, 
+          \Self.unexpectedBetweenMinorPeriodAndMinor, 
+          \Self.minor, 
+          \Self.unexpectedBetweenMinorAndPatchPeriod, 
           \Self.patchPeriod, 
-          \Self.unexpectedBetweenPatchPeriodAndPatchVersion, 
-          \Self.patchVersion, 
-          \Self.unexpectedAfterPatchVersion
+          \Self.unexpectedBetweenPatchPeriodAndPatch, 
+          \Self.patch, 
+          \Self.unexpectedAfterPatch
         ])
   }
   
@@ -20061,6 +20115,14 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
       return nil
     case 6:
       return nil
+    case 7:
+      return nil
+    case 8:
+      return nil
+    case 9:
+      return nil
+    case 10:
+      return nil
     default:
       fatalError("Invalid index")
     }
@@ -20070,13 +20132,17 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
 extension VersionTupleSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-          "unexpectedBeforeMajorMinor": unexpectedBeforeMajorMinor.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "majorMinor": Syntax(majorMinor).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenMajorMinorAndPatchPeriod": unexpectedBetweenMajorMinorAndPatchPeriod.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "unexpectedBeforeMajor": unexpectedBeforeMajor.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "major": Syntax(major).asProtocol(SyntaxProtocol.self), 
+          "unexpectedBetweenMajorAndMinorPeriod": unexpectedBetweenMajorAndMinorPeriod.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "minorPeriod": minorPeriod.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "unexpectedBetweenMinorPeriodAndMinor": unexpectedBetweenMinorPeriodAndMinor.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "minor": minor.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "unexpectedBetweenMinorAndPatchPeriod": unexpectedBetweenMinorAndPatchPeriod.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
           "patchPeriod": patchPeriod.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenPatchPeriodAndPatchVersion": unexpectedBetweenPatchPeriodAndPatchVersion.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "patchVersion": patchVersion.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedAfterPatchVersion": unexpectedAfterPatchVersion.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
+          "unexpectedBetweenPatchPeriodAndPatch": unexpectedBetweenPatchPeriodAndPatch.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "patch": patch.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "unexpectedAfterPatch": unexpectedAfterPatch.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
         ])
   }
 }
@@ -20098,7 +20164,7 @@ public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .whereClause)
+    precondition(data.raw.kind == .whereClause)
     self._syntaxNode = Syntax(data)
   }
   
@@ -20242,7 +20308,7 @@ public struct YieldExprListElementSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .yieldExprListElement)
+    precondition(data.raw.kind == .yieldExprListElement)
     self._syntaxNode = Syntax(data)
   }
   
@@ -20386,7 +20452,7 @@ public struct YieldListSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .yieldList)
+    precondition(data.raw.kind == .yieldList)
     self._syntaxNode = Syntax(data)
   }
   

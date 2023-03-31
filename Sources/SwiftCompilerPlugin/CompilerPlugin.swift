@@ -179,7 +179,7 @@ internal struct PluginHostConnection: MessageConnection {
     // Write the header (a 64-bit length field in little endian byte order).
     var count = UInt64(payload.count).littleEndian
     let header = Swift.withUnsafeBytes(of: &count) { Data($0) }
-    assert(header.count == 8)
+    precondition(header.count == 8)
 
     // Write the header and payload.
     try outputStream._write(contentsOf: header)

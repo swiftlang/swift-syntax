@@ -129,7 +129,15 @@ let rawSyntaxNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       DeclSyntax(
         """
         init(raw: RawSyntax) {
-          assert(Self.isKindOf(raw))
+          precondition(Self.isKindOf(raw))
+          self.raw = raw
+        }
+        """
+      )
+
+      DeclSyntax(
+        """
+        private init(unchecked raw: RawSyntax) {
           self.raw = raw
         }
         """
@@ -139,7 +147,7 @@ let rawSyntaxNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         """
         public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
           guard Self.isKindOf(other.raw) else { return nil }
-          self.init(raw: other.raw)
+          self.init(unchecked: other.raw)
         }
         """
       )
@@ -148,7 +156,7 @@ let rawSyntaxNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         DeclSyntax(
           """
           public init<Node: Raw\(raw: node.name)NodeProtocol>(_ other: Node) {
-            self.init(raw: other.raw)
+            self.init(unchecked: other.raw)
           }
           """
         )
@@ -167,7 +175,7 @@ let rawSyntaxNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
                     ptr += 1
                   }
             }
-            self.init(raw: raw)
+            self.init(unchecked: raw)
           }
           """
         )
@@ -217,7 +225,7 @@ let rawSyntaxNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           } else {
             DeclSyntax("let raw = RawSyntax.makeEmptyLayout(kind: .\(raw: node.swiftSyntaxKind), arena: arena)")
           }
-          ExprSyntax("self.init(raw: raw)")
+          ExprSyntax("self.init(unchecked: raw)")
         }
 
         for (index, child) in node.children.enumerated() {

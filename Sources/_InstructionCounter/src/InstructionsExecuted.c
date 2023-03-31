@@ -10,7 +10,16 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if __APPLE__
+#include <TargetConditionals.h>
+#if TARGET_OS_MAC && !TARGET_OS_IPHONE
+#define TARGET_IS_MACOS 1
+#endif
+#endif
+
 #include "InstructionsExecuted.h"
+
+#ifdef TARGET_IS_MACOS
 #include <libproc.h>
 #include <sys/resource.h>
 
@@ -21,3 +30,8 @@ uint64_t getInstructionsExecuted() {
   }
   return 0;
 }
+#else
+uint64_t getInstructionsExecuted() {
+  return 0;
+}
+#endif

@@ -94,7 +94,7 @@ extension TokenConsumer {
   @inline(__always)
   mutating func at<SpecSet: TokenSpecSet>(anyIn specSet: SpecSet.Type) -> (SpecSet, TokenConsumptionHandle)? {
     if let matchedKind = SpecSet(lexeme: self.currentToken) {
-      assert(matchedKind.spec ~= self.currentToken)
+      precondition(matchedKind.spec ~= self.currentToken)
       return (
         matchedKind,
         TokenConsumptionHandle(spec: matchedKind.spec)
@@ -219,22 +219,6 @@ extension TokenConsumer {
 // MARK: Convenience functions
 
 extension TokenConsumer {
-  @inline(__always)
-  mutating func expectIdentifierWithoutRecovery() -> Token {
-    if let (_, handle) = self.at(anyIn: IdentifierTokens.self) {
-      return self.eat(handle)
-    }
-    return missingToken(.identifier, text: nil)
-  }
-
-  @inline(__always)
-  mutating func expectIdentifierOrRethrowsWithoutRecovery() -> Token {
-    if let (_, handle) = self.at(anyIn: IdentifierOrRethrowsTokens.self) {
-      return self.eat(handle)
-    }
-    return missingToken(.identifier, text: nil)
-  }
-
   var canHaveParameterSpecifier: Bool {
     // The parameter specifiers like `isolated`, `consuming`, `borrowing` are
     // also valid identifiers and could be the name of a type. Check whether

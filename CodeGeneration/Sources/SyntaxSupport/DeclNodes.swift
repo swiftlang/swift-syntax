@@ -1026,18 +1026,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "Signature",
-        kind: .nodeChoices(choices: [
-          Child(
-            name: "FunctionLike",
-            kind: .node(kind: "FunctionSignature"),
-            nameForDiagnostics: "macro signature"
-          ),
-          Child(
-            name: "ValueLike",
-            kind: .node(kind: "TypeAnnotation"),
-            nameForDiagnostics: "macro signature"
-          ),
-        ]),
+        kind: .node(kind: "FunctionSignature"),
         nameForDiagnostics: "macro signature"
       ),
       Child(

@@ -471,24 +471,24 @@ public extension SyntaxProtocol {
   /// The leading trivia of this syntax node. Leading trivia is attached to
   /// the first token syntax contained by this node. Without such token, this
   /// property will return nil.
-  var leadingTrivia: Trivia? {
+  var leadingTrivia: Trivia {
     get {
       return raw.formLeadingTrivia()
     }
     set {
-      self = Self(Syntax(data.withLeadingTrivia(newValue ?? [], arena: SyntaxArena())))!
+      self = Self(Syntax(data.withLeadingTrivia(newValue, arena: SyntaxArena())))!
     }
   }
 
   /// The trailing trivia of this syntax node. Trailing trivia is attached to
   /// the last token syntax contained by this node. Without such token, this
   /// property will return nil.
-  var trailingTrivia: Trivia? {
+  var trailingTrivia: Trivia {
     get {
       return raw.formTrailingTrivia()
     }
     set {
-      self = Self(Syntax(data.withTrailingTrivia(newValue ?? [], arena: SyntaxArena())))!
+      self = Self(Syntax(data.withTrailingTrivia(newValue, arena: SyntaxArena())))!
     }
   }
 
@@ -510,7 +510,7 @@ public extension SyntaxProtocol {
   /// When isImplicit is true, the syntax node doesn't include any
   /// underlying tokens, e.g. an empty CodeBlockItemList.
   var isImplicit: Bool {
-    return leadingTrivia == nil
+    return raw.isEmpty
   }
 
   /// The textual byte length of this node exluding leading and trailing trivia.
@@ -636,10 +636,10 @@ public extension SyntaxProtocol {
     if let token = Syntax(self).as(TokenSyntax.self) {
       target.write(String(describing: token.tokenKind))
       if includeTrivia {
-        if let leadingTrivia = leadingTrivia, !leadingTrivia.isEmpty {
+        if !leadingTrivia.isEmpty {
           target.write(" leadingTrivia=\(leadingTrivia.debugDescription)")
         }
-        if let trailingTrivia = trailingTrivia, !trailingTrivia.isEmpty {
+        if !trailingTrivia.isEmpty {
           target.write(" trailingTrivia=\(trailingTrivia.debugDescription)")
         }
       }

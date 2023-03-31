@@ -96,7 +96,7 @@ extension FixIt.Changes {
         ),
         .replaceLeadingTrivia(token: nextToken, newTrivia: []),
       ]
-    } else if node.leadingTrivia?.isEmpty ?? true,
+    } else if node.leadingTrivia.isEmpty,
       let previousToken = node.previousToken(viewMode: .fixedUp),
       previousToken.presence == .present,
       previousToken.trailingTrivia.isEmpty,

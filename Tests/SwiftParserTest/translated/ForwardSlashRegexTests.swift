@@ -449,7 +449,14 @@ final class ForwardSlashRegexTests: XCTestCase {
     assertParse(
       """
       bar(&/x/)
-      """
+      """,
+      substructure: Syntax(
+        InOutExprSyntax(
+          expression: RegexLiteralExprSyntax(
+            regexPattern: .regexLiteralPattern("x")
+          )
+        )
+      )
     )
   }
 

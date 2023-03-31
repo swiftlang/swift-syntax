@@ -766,8 +766,14 @@ extension Lexer.Cursor {
       // If we started lexing in the middle of an operator, split off the prefix
       // operator, and move the cursor to where the regex literal starts.
       self.position = regexStart.position
+      let (kind, error) = Self.classifyOperatorToken(
+        operStart: operatorStart,
+        operEnd: regexStart,
+        sourceBufferStart: sourceBufferStart
+      )
       return Lexer.Result(
-        .prefixOperator,
+        kind,
+        error: error,
         stateTransition: .pushRegexLexemes(index: 0, lexemes: lexemes)
       )
     } else {

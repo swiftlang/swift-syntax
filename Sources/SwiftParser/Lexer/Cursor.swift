@@ -2029,6 +2029,80 @@ extension Lexer.Cursor {
     return Lexer.Result(kind, stateTransition: transition)
   }
 
+  /// Classify an operator token given its start and ending cursor.
+  static func classifyOperatorToken(
+    operStart: Lexer.Cursor,
+    operEnd: Lexer.Cursor,
+    sourceBufferStart: Lexer.Cursor
+  ) -> (RawTokenKind, error: LexingDiagnostic?) {
+    // Decide between the binary, prefix, and postfix cases.
+    // It's binary if either both sides are bound or both sides are not bound.
+    // Otherwise, it's postfix if left-bound and prefix if right-bound.
+    let leftBound = operStart.isLeftBound(sourceBufferStart: sourceBufferStart)
+    let rightBound = operEnd.isRightBound(isLeftBound: leftBound)
+
+    // Match various reserved words.
+    if operEnd.input.baseAddress! - operStart.input.baseAddress! == 1 {
+      switch operStart.peek() {
+      case UInt8(ascii: "="):
+        if leftBound != rightBound {
+          var errorPos = operStart
+
+          if rightBound {
+            _ = errorPos.advance()
+          }
+
+          return (
+            .equal,
+            error: LexingDiagnostic(
+              .equalMustHaveConsistentWhitespaceOnBothSides,
+              position: errorPos
+            )
+          )
+        } else {
+          return (.equal, error: nil)
+        }
+      case UInt8(ascii: "&"):
+        if leftBound == rightBound || leftBound {
+          break
+        }
+        return (.prefixAmpersand, error: nil)
+      case UInt8(ascii: "."):
+        return (.period, error: nil)
+      case UInt8(ascii: "?"):
+        if (leftBound) {
+          return (.postfixQuestionMark, error: nil)
+        }
+        return (.infixQuestionMark, error: nil)
+      default:
+        break
+      }
+    } else if (operEnd.input.baseAddress! - operStart.input.baseAddress! == 2) {
+      switch (operStart.peek(), operStart.peek(at: 1)) {
+      case (UInt8(ascii: "-"), UInt8(ascii: ">")):  // ->
+        return (.arrow, error: nil)
+      case (UInt8(ascii: "*"), UInt8(ascii: "/")):  // */
+        return (.unknown, error: LexingDiagnostic(.unexpectedBlockCommentEnd, position: operStart))
+      default:
+        break
+      }
+    } else {
+      // Verify there is no "*/" in the middle of the identifier token, we reject
+      // it as potentially ending a block comment.
+      if operStart.text(upTo: operEnd).contains("*/") {
+        return (.unknown, error: LexingDiagnostic(.unexpectedBlockCommentEnd, position: operStart))
+      }
+    }
+
+    if leftBound == rightBound {
+      return (.binaryOperator, error: nil)
+    } else if leftBound {
+      return (.postfixOperator, error: nil)
+    } else {
+      return (.prefixOperator, error: nil)
+    }
+  }
+
   mutating func lexOperatorIdentifier(
     sourceBufferStart: Lexer.Cursor,
     preferRegexOverBinaryOperator: Bool
@@ -2087,73 +2161,12 @@ extension Lexer.Cursor {
         _ = ptr.advance()
       }
     }
-
-    // Decide between the binary, prefix, and postfix cases.
-    // It's binary if either both sides are bound or both sides are not bound.
-    // Otherwise, it's postfix if left-bound and prefix if right-bound.
-    let leftBound = tokStart.isLeftBound(sourceBufferStart: sourceBufferStart)
-    let rightBound = self.isRightBound(isLeftBound: leftBound)
-
-    // Match various reserved words.
-    if self.input.baseAddress! - tokStart.input.baseAddress! == 1 {
-      switch tokStart.peek() {
-      case UInt8(ascii: "="):
-        if leftBound != rightBound {
-          var errorPos = tokStart
-
-          if rightBound {
-            _ = errorPos.advance()
-          }
-
-          return Lexer.Result(
-            .equal,
-            error: LexingDiagnostic(
-              .equalMustHaveConsistentWhitespaceOnBothSides,
-              position: errorPos
-            )
-          )
-        } else {
-          return Lexer.Result(.equal)
-        }
-      case UInt8(ascii: "&"):
-        if leftBound == rightBound || leftBound {
-          break
-        }
-        return Lexer.Result(.prefixAmpersand)
-      case UInt8(ascii: "."):
-        return Lexer.Result(.period)
-      case UInt8(ascii: "?"):
-        if (leftBound) {
-          return Lexer.Result(.postfixQuestionMark)
-        }
-        return Lexer.Result(.infixQuestionMark)
-      default:
-        break
-      }
-    } else if (self.input.baseAddress! - tokStart.input.baseAddress! == 2) {
-      switch (tokStart.peek(), tokStart.peek(at: 1)) {
-      case (UInt8(ascii: "-"), UInt8(ascii: ">")):  // ->
-        return Lexer.Result(.arrow)
-      case (UInt8(ascii: "*"), UInt8(ascii: "/")):  // */
-        return Lexer.Result(.unknown, error: LexingDiagnostic(.unexpectedBlockCommentEnd, position: tokStart))
-      default:
-        break
-      }
-    } else {
-      // Verify there is no "*/" in the middle of the identifier token, we reject
-      // it as potentially ending a block comment.
-      if tokStart.text(upTo: self).contains("*/") {
-        return Lexer.Result(.unknown, error: LexingDiagnostic(.unexpectedBlockCommentEnd, position: tokStart))
-      }
-    }
-
-    if leftBound == rightBound {
-      return Lexer.Result(.binaryOperator)
-    } else if leftBound {
-      return Lexer.Result(.postfixOperator)
-    } else {
-      return Lexer.Result(.prefixOperator)
-    }
+    let (kind, error) = Self.classifyOperatorToken(
+      operStart: tokStart,
+      operEnd: self,
+      sourceBufferStart: sourceBufferStart
+    )
+    return Lexer.Result(kind, error: error)
   }
 
   mutating func lexDollarIdentifier() -> Lexer.Result {

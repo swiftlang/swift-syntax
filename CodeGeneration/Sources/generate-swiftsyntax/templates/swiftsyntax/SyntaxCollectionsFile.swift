@@ -136,8 +136,7 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
       DeclSyntax(
         """
-        @_spi(RawSyntax)
-        public var layoutView: RawSyntaxLayoutView {
+        private var layoutView: RawSyntaxLayoutView {
           data.raw.layoutView!
         }
         """
@@ -180,7 +179,7 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       DeclSyntax(
         """
         /// The number of elements, `present` or `missing`, in this collection.
-        public var count: Int { return raw.layoutView!.children.count }
+        public var count: Int { return layoutView.children.count }
         """
       )
 

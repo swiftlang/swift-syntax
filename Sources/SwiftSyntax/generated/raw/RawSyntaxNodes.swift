@@ -16805,31 +16805,79 @@ public struct RawRegexLiteralExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init(
-      _ unexpectedBeforeRegex: RawUnexpectedNodesSyntax? = nil, 
-      regex: RawTokenSyntax, 
-      _ unexpectedAfterRegex: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBeforeOpeningPounds: RawUnexpectedNodesSyntax? = nil, 
+      openingPounds: RawTokenSyntax?, 
+      _ unexpectedBetweenOpeningPoundsAndOpenSlash: RawUnexpectedNodesSyntax? = nil, 
+      openSlash: RawTokenSyntax, 
+      _ unexpectedBetweenOpenSlashAndRegexPattern: RawUnexpectedNodesSyntax? = nil, 
+      regexPattern: RawTokenSyntax, 
+      _ unexpectedBetweenRegexPatternAndCloseSlash: RawUnexpectedNodesSyntax? = nil, 
+      closeSlash: RawTokenSyntax, 
+      _ unexpectedBetweenCloseSlashAndClosingPounds: RawUnexpectedNodesSyntax? = nil, 
+      closingPounds: RawTokenSyntax?, 
+      _ unexpectedAfterClosingPounds: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .regexLiteralExpr, uninitializedCount: 3, arena: arena) { layout in 
+      kind: .regexLiteralExpr, uninitializedCount: 11, arena: arena) { layout in 
       layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeRegex?.raw
-      layout[1] = regex.raw
-      layout[2] = unexpectedAfterRegex?.raw
+      layout[0] = unexpectedBeforeOpeningPounds?.raw
+      layout[1] = openingPounds?.raw
+      layout[2] = unexpectedBetweenOpeningPoundsAndOpenSlash?.raw
+      layout[3] = openSlash.raw
+      layout[4] = unexpectedBetweenOpenSlashAndRegexPattern?.raw
+      layout[5] = regexPattern.raw
+      layout[6] = unexpectedBetweenRegexPatternAndCloseSlash?.raw
+      layout[7] = closeSlash.raw
+      layout[8] = unexpectedBetweenCloseSlashAndClosingPounds?.raw
+      layout[9] = closingPounds?.raw
+      layout[10] = unexpectedAfterClosingPounds?.raw
     }
     self.init(unchecked: raw)
   }
   
-  public var unexpectedBeforeRegex: RawUnexpectedNodesSyntax? {
+  public var unexpectedBeforeOpeningPounds: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var regex: RawTokenSyntax {
-    layoutView.children[1].map(RawTokenSyntax.init(raw:))!
+  public var openingPounds: RawTokenSyntax? {
+    layoutView.children[1].map(RawTokenSyntax.init(raw:))
   }
   
-  public var unexpectedAfterRegex: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenOpeningPoundsAndOpenSlash: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  
+  public var openSlash: RawTokenSyntax {
+    layoutView.children[3].map(RawTokenSyntax.init(raw:))!
+  }
+  
+  public var unexpectedBetweenOpenSlashAndRegexPattern: RawUnexpectedNodesSyntax? {
+    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  
+  public var regexPattern: RawTokenSyntax {
+    layoutView.children[5].map(RawTokenSyntax.init(raw:))!
+  }
+  
+  public var unexpectedBetweenRegexPatternAndCloseSlash: RawUnexpectedNodesSyntax? {
+    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  
+  public var closeSlash: RawTokenSyntax {
+    layoutView.children[7].map(RawTokenSyntax.init(raw:))!
+  }
+  
+  public var unexpectedBetweenCloseSlashAndClosingPounds: RawUnexpectedNodesSyntax? {
+    layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  
+  public var closingPounds: RawTokenSyntax? {
+    layoutView.children[9].map(RawTokenSyntax.init(raw:))
+  }
+  
+  public var unexpectedAfterClosingPounds: RawUnexpectedNodesSyntax? {
+    layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 

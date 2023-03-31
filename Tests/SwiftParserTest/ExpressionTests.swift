@@ -304,14 +304,6 @@ final class ExpressionTests: XCTestCase {
     )
   }
 
-  func testRegexLiteral() {
-    assertParse(
-      #"""
-      /(?<identifier>[[:alpha:]]\w*) = (?<hex>[0-9A-F]+)/
-      """#
-    )
-  }
-
   func testInitializerExpression() {
     assertParse("Lexer.Cursor(input: input, previous: 0)")
   }

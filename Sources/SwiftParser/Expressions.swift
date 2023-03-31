@@ -1170,7 +1170,7 @@ extension Parser {
       )
     case (.rawStringDelimiter, _)?, (.stringQuote, _)?, (.multilineStringQuote, _)?, (.singleQuote, _)?:
       return RawExprSyntax(self.parseStringLiteral())
-    case (.regexLiteral, _)?:
+    case (.extendedRegexDelimiter, _)?, (.regexSlash, _)?:
       return RawExprSyntax(self.parseRegexLiteral())
     case (.nilKeyword, let handle)?:
       let nilKeyword = self.eat(handle)
@@ -1433,13 +1433,37 @@ extension Parser {
   /// Grammar
   /// =======
   ///
-  ///     regular-expression-literal → '\' `Any valid regular expression characters` '\'
+  ///     regular-expression-literal → '#'* '/' `Any valid regular expression characters` '/' '#'*
   @_spi(RawSyntax)
   public mutating func parseRegexLiteral() -> RawRegexLiteralExprSyntax {
-    let (unexpectedBeforeLiteral, literal) = self.expect(.regexLiteral)
+    // See if we have an opening set of pounds.
+    let openPounds = self.consume(if: .extendedRegexDelimiter)
+
+    // Parse the opening slash.
+    let (unexpectedBeforeSlash, openSlash) = self.expect(.regexSlash)
+
+    // If we had opening pounds, there should be no trivia for the slash.
+    if let openPounds = openPounds {
+      precondition(openPounds.trailingTriviaByteLength == 0 && openSlash.leadingTriviaByteLength == 0)
+    }
+
+    // Parse the pattern and closing slash, avoiding recovery or leading trivia
+    // as the lexer should provide the tokens exactly in order without trivia,
+    // otherwise they should be treated as missing.
+    let pattern = self.expectWithoutRecoveryOrLeadingTrivia(.regexLiteralPattern)
+    let closeSlash = self.expectWithoutRecoveryOrLeadingTrivia(.regexSlash)
+
+    // Finally, parse a closing set of pounds.
+    let (unexpectedBeforeClosePounds, closePounds) = parsePoundDelimiter(.extendedRegexDelimiter, matching: openPounds)
+
     return RawRegexLiteralExprSyntax(
-      unexpectedBeforeLiteral,
-      regex: literal,
+      openingPounds: openPounds,
+      unexpectedBeforeSlash,
+      openSlash: openSlash,
+      regexPattern: pattern,
+      closeSlash: closeSlash,
+      unexpectedBeforeClosePounds,
+      closingPounds: closePounds,
       arena: self.arena
     )
   }

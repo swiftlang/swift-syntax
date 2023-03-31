@@ -47,6 +47,8 @@ public enum SyntaxClassification {
   case operatorIdentifier
   /// A `#` keyword like `#warning`.
   case poundDirectiveKeyword
+  /// A regex literal, including multiline regex literals.
+  case regexLiteral
   /// The opening and closing parenthesis of string interpolation.
   case stringInterpolationAnchor
   /// A string literal including multiline string literals.
@@ -138,6 +140,8 @@ extension RawTokenKind {
       return .none
     case .exclamationMark:
       return .none
+    case .extendedRegexDelimiter:
+      return .regexLiteral
     case .floatingLiteral:
       return .floatingLiteral
     case .identifier:
@@ -186,8 +190,10 @@ extension RawTokenKind {
       return .operatorIdentifier
     case .rawStringDelimiter:
       return .none
-    case .regexLiteral:
-      return .none
+    case .regexLiteralPattern:
+      return .regexLiteral
+    case .regexSlash:
+      return .regexLiteral
     case .rightAngle:
       return .none
     case .rightBrace:

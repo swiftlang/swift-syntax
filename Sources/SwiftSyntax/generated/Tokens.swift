@@ -171,6 +171,22 @@ extension TokenSyntax {
     )
   }
   
+  public static func extendedRegexDelimiter(
+      _ text: String, 
+      leadingTrivia: Trivia = [], 
+      trailingTrivia: Trivia = [], 
+      presence: SourcePresence = .present
+    
+  ) -> TokenSyntax {
+    return TokenSyntax(
+        .extendedRegexDelimiter(text), 
+        leadingTrivia: leadingTrivia, 
+        trailingTrivia: trailingTrivia, 
+        presence: presence
+      
+    )
+  }
+  
   public static func floatingLiteral(
       _ text: String, 
       leadingTrivia: Trivia = [], 
@@ -521,7 +537,7 @@ extension TokenSyntax {
     )
   }
   
-  public static func regexLiteral(
+  public static func regexLiteralPattern(
       _ text: String, 
       leadingTrivia: Trivia = [], 
       trailingTrivia: Trivia = [], 
@@ -529,7 +545,21 @@ extension TokenSyntax {
     
   ) -> TokenSyntax {
     return TokenSyntax(
-        .regexLiteral(text), 
+        .regexLiteralPattern(text), 
+        leadingTrivia: leadingTrivia, 
+        trailingTrivia: trailingTrivia, 
+        presence: presence
+      
+    )
+  }
+  
+  public static func regexSlashToken(
+    leadingTrivia: Trivia = [], 
+    trailingTrivia: Trivia = [], 
+    presence: SourcePresence = .present
+  ) -> TokenSyntax {
+    return TokenSyntax(
+        .regexSlash, 
         leadingTrivia: leadingTrivia, 
         trailingTrivia: trailingTrivia, 
         presence: presence

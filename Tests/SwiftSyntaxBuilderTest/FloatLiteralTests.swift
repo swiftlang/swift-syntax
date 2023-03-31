@@ -19,8 +19,8 @@ final class FloatLiteralTests: XCTestCase {
     let testCases: [UInt: (FloatLiteralExprSyntax, String)] = [
       #line: (FloatLiteralExprSyntax(floatingDigits: .floatingLiteral(String(123.321))), "123.321"),
       #line: (FloatLiteralExprSyntax(floatingDigits: .floatingLiteral(String(-123.321))), "-123.321"),
-      #line: (FloatLiteralExprSyntax(floatingDigits: "2_123.321"), "2_123.321"),
-      #line: (FloatLiteralExprSyntax(floatingDigits: "-2_123.321"), "-2_123.321"),
+      #line: (FloatLiteralExprSyntax(floatingDigits: .floatingLiteral("2_123.321")), "2_123.321"),
+      #line: (FloatLiteralExprSyntax(floatingDigits: .floatingLiteral("-2_123.321")), "-2_123.321"),
       #line: (FloatLiteralExprSyntax(2_123.321), "2123.321"),
       #line: (FloatLiteralExprSyntax(-2_123.321), "-2123.321"),
       #line: (2_123.321, "2123.321"),

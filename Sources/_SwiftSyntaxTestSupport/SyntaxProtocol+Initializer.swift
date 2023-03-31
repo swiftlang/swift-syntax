@@ -23,10 +23,10 @@ private class InitializerExprFormat: BasicFormat {
       self.visit($0).as(SyntaxType.self)!
     }
     formattedChildren = formattedChildren.map {
-      if $0.leadingTrivia?.first?.isNewline == true {
+      if $0.leadingTrivia.first?.isNewline == true {
         return $0
       } else {
-        return $0.with(\.leadingTrivia, indentedNewline + ($0.leadingTrivia ?? []))
+        return $0.with(\.leadingTrivia, indentedNewline + $0.leadingTrivia)
       }
     }
     indentationLevel -= 1

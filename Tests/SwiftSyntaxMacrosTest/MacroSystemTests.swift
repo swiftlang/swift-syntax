@@ -75,10 +75,7 @@ public struct ColorLiteralMacro: ExpressionMacro {
       with: "_colorLiteralRed"
     )
     let initSyntax: ExprSyntax = ".init(\(argList))"
-    if let leadingTrivia = macro.leadingTrivia {
-      return initSyntax.with(\.leadingTrivia, leadingTrivia)
-    }
-    return initSyntax
+    return initSyntax.with(\.leadingTrivia, macro.leadingTrivia)
   }
 }
 
@@ -95,10 +92,7 @@ public struct FileLiteralMacro: ExpressionMacro {
       with: "fileReferenceLiteralResourceName"
     )
     let initSyntax: ExprSyntax = ".init(\(argList))"
-    if let leadingTrivia = macro.leadingTrivia {
-      return initSyntax.with(\.leadingTrivia, leadingTrivia)
-    }
-    return initSyntax
+    return initSyntax.with(\.leadingTrivia, macro.leadingTrivia)
   }
 }
 
@@ -115,10 +109,7 @@ public struct ImageLiteralMacro: ExpressionMacro {
       with: "imageLiteralResourceName"
     )
     let initSyntax: ExprSyntax = ".init(\(argList))"
-    if let leadingTrivia = macro.leadingTrivia {
-      return initSyntax.with(\.leadingTrivia, leadingTrivia)
-    }
-    return initSyntax
+    return initSyntax.with(\.leadingTrivia, macro.leadingTrivia)
   }
 }
 
@@ -134,11 +125,7 @@ public struct ColumnMacro: ExpressionMacro {
     else {
       throw CustomError.message("can't find location for macro")
     }
-
-    if let leadingTrivia = macro.leadingTrivia {
-      return sourceLoc.column.with(\.leadingTrivia, leadingTrivia)
-    }
-    return sourceLoc.column
+    return sourceLoc.column.with(\.leadingTrivia, macro.leadingTrivia)
   }
 }
 
@@ -154,11 +141,7 @@ public struct FileIDMacro: ExpressionMacro {
     else {
       throw CustomError.message("can't find location for macro")
     }
-
-    if let leadingTrivia = macro.leadingTrivia {
-      return sourceLoc.file.with(\.leadingTrivia, leadingTrivia)
-    }
-    return sourceLoc.file
+    return sourceLoc.file.with(\.leadingTrivia, macro.leadingTrivia)
   }
 }
 

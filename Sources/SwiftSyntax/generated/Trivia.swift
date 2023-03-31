@@ -165,11 +165,6 @@ public struct Trivia {
     self.pieces = Array(pieces)
   }
   
-  /// Creates Trivia with no pieces.
-  public static var zero: Trivia {
-    return Trivia(pieces: [])
-  }
-  
   /// Whether the Trivia contains no pieces.
   public var isEmpty: Bool {
     pieces.isEmpty

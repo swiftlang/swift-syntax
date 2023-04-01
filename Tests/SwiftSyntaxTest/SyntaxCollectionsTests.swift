@@ -32,7 +32,7 @@ public class SyntaxCollectionsTests: XCTestCase {
     XCTAssert(newArrayElementList.kind.isSyntaxCollection)
     XCTAssertEqual(newArrayElementList.count, 2)
     XCTAssertNotNil(newArrayElementList.child(at: 1))
-    XCTAssert(!newArrayElementList.child(at: 1)!.isCollection)
+    XCTAssert(!newArrayElementList.child(at: 1)!.kind.isSyntaxCollection)
     XCTAssertEqual("\(newArrayElementList.child(at: 1)!)", "1")
   }
 

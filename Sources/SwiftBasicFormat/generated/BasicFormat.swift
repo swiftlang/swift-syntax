@@ -30,7 +30,7 @@ open class BasicFormat: SyntaxRewriter {
   private var putNextTokenOnNewLine: Bool = false
   
   open override func visitPre(_ node: Syntax) {
-    if let keyPath = getKeyPath(node), shouldIndent(keyPath) {
+    if let keyPath = node.keyPathInParent, shouldIndent(keyPath) {
       indentationLevel += 1
     }
     if let parent = node.parent, childrenSeparatedByNewline(parent) {
@@ -39,7 +39,7 @@ open class BasicFormat: SyntaxRewriter {
   }
   
   open override func visitPost(_ node: Syntax) {
-    if let keyPath = getKeyPath(node), shouldIndent(keyPath) {
+    if let keyPath = node.keyPathInParent, shouldIndent(keyPath) {
       indentationLevel -= 1
     }
   }
@@ -53,7 +53,7 @@ open class BasicFormat: SyntaxRewriter {
     if requiresTrailingSpace(node) && trailingTrivia.isEmpty {
       trailingTrivia += .space
     }
-    if let keyPath = getKeyPath(Syntax(node)), requiresLeadingNewline(keyPath), !(leadingTrivia.first?.isNewline ?? false), !shouldOmitNewline(node) {
+    if let keyPath = node.keyPathInParent, requiresLeadingNewline(keyPath), !(leadingTrivia.first?.isNewline ?? false), !shouldOmitNewline(node) {
       leadingTrivia = .newline + leadingTrivia
     }
     var isOnNewline: Bool = (lastRewrittenToken?.trailingTrivia.pieces.last?.isNewline == true)
@@ -176,7 +176,7 @@ open class BasicFormat: SyntaxRewriter {
   }
   
   open func requiresLeadingSpace(_ token: TokenSyntax) -> Bool {
-    if let keyPath = getKeyPath(token), let requiresLeadingSpace = requiresLeadingSpace(keyPath) {
+    if let keyPath = token.keyPathInParent, let requiresLeadingSpace = requiresLeadingSpace(keyPath) {
       return requiresLeadingSpace
     }
     switch (token.previousToken(viewMode: .sourceAccurate)?.tokenKind, token.tokenKind) {
@@ -231,7 +231,7 @@ open class BasicFormat: SyntaxRewriter {
   }
   
   open func requiresTrailingSpace(_ token: TokenSyntax) -> Bool {
-    if let keyPath = getKeyPath(token), let requiresTrailingSpace = requiresTrailingSpace(keyPath) {
+    if let keyPath = token.keyPathInParent, let requiresTrailingSpace = requiresTrailingSpace(keyPath) {
       return requiresTrailingSpace
     }
     switch (token.tokenKind, token.nextToken(viewMode: .sourceAccurate)?.tokenKind) {
@@ -362,15 +362,5 @@ open class BasicFormat: SyntaxRewriter {
     default:
       return false
     }
-  }
-  
-  private func getKeyPath<T: SyntaxProtocol>(_ node: T) -> AnyKeyPath? {
-    guard let parent = node.parent else {
-      return nil
-    }
-    guard case .layout(let childrenKeyPaths) = parent.kind.syntaxNodeType.structure else {
-      return nil
-    }
-    return childrenKeyPaths[node.indexInParent]
   }
 }

@@ -271,14 +271,19 @@ public extension SyntaxProtocol {
     return data.parent.map(Syntax.init(_:))
   }
 
-  /// The index of this node in the parent's children.
-  var indexInParent: Int {
-    return data.indexInParent
-  }
-
   /// Whether or not this node has a parent.
   var hasParent: Bool {
     return parent != nil
+  }
+
+  var keyPathInParent: AnyKeyPath? {
+    guard let parent = self.parent else {
+      return nil
+    }
+    guard case .layout(let childrenKeyPaths) = parent.kind.syntaxNodeType.structure else {
+      return nil
+    }
+    return childrenKeyPaths[data.indexInParent]
   }
 
   /// Recursively walks through the tree to find the token semantically before

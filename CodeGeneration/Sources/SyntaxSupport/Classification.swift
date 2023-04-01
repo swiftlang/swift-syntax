@@ -28,16 +28,15 @@ public class SyntaxClassification {
 public class ChildClassification {
   public let parent: Node
   public let childIndex: Int
-  public let isToken: Bool
-  public let classification: SyntaxClassification?
-  public let force: Bool
+  public let child: Child
+  public var isToken: Bool { child.isToken }
+  public var classification: SyntaxClassification? { child.classification }
+  public var force: Bool { child.forceClassification }
 
   public init(node: Node, childIndex: Int, child: Child) {
     self.parent = node
     self.childIndex = childIndex
-    self.isToken = child.syntaxKind.hasSuffix("Token")
-    self.classification = child.classification
-    self.force = child.forceClassification
+    self.child = child
   }
 }
 

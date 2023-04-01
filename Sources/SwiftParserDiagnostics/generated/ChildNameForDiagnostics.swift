@@ -367,19 +367,9 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
   }
 }
 
-private func getKeyPath<T: SyntaxProtocol>(_ node: T) -> AnyKeyPath? {
-  guard let parent = node.parent else {
-    return nil
-  }
-  guard case .layout(let childrenKeyPaths) = parent.kind.syntaxNodeType.structure else {
-    return nil
-  }
-  return childrenKeyPaths[node.indexInParent]
-}
-
 extension SyntaxProtocol {
   var childNameInParent: String? {
-    guard let keyPath = getKeyPath(self) else {
+    guard let keyPath = self.keyPathInParent else {
       return nil
     }
     return childNameForDiagnostics(keyPath)

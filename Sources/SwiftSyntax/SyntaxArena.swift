@@ -135,8 +135,7 @@ public class SyntaxArena {
   ///
   /// "managed" means it's empty, a part of "source buffer", or in the memory
   /// allocated by the underlying arena.
-  @_spi(RawSyntax)
-  public func contains(text: SyntaxText) -> Bool {
+  func contains(text: SyntaxText) -> Bool {
     return (text.isEmpty || allocator.contains(address: text.baseAddress!))
   }
 }
@@ -165,6 +164,7 @@ public class ParsingSyntaxArena: SyntaxArena {
   /// The interned buffer is guaranteed to be null-terminated.
   /// `contains(address _:)` is faster if the address is inside the memory
   /// range this function returned.
+  @_spi(RawSyntax)
   public func internSourceBuffer(_ buffer: UnsafeBufferPointer<UInt8>) -> UnsafeBufferPointer<UInt8> {
     let allocated = allocator.allocate(
       UInt8.self,

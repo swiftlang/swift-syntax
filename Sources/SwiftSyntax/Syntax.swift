@@ -243,19 +243,6 @@ public extension SyntaxProtocol {
     return SyntaxChildrenIndex(self.data.absoluteInfo)
   }
 
-  /// Whether or not this node is a token one.
-  var isToken: Bool {
-    return raw.isToken
-  }
-
-  /// Whether or not this node represents an SyntaxCollection.
-  var isCollection: Bool {
-    // We need to provide a custom implementation for is(SyntaxCollection.self)
-    // since SyntaxCollection has generic or self requirements and can thus
-    // not be used as a method argument.
-    return raw.kind.isSyntaxCollection
-  }
-
   /// Whether the tree contained by this layout has any
   ///  - missing nodes or
   ///  - unexpected nodes or

@@ -114,7 +114,7 @@ extension SyntaxProtocol {
 
   private func debugInitCallExpr(includeTrivia: Bool) -> ExprSyntax {
     let mirror = Mirror(reflecting: self)
-    if self.isCollection {
+    if self.kind.isSyntaxCollection {
       let typeName = String(describing: type(of: self))
       return ExprSyntax(
         FunctionCallExprSyntax(callee: IdentifierExprSyntax(identifier: .identifier(typeName))) {

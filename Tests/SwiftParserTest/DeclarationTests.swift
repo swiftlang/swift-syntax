@@ -1549,6 +1549,16 @@ final class DeclarationTests: XCTestCase {
       """
     )
   }
+
+  func testSuppressedImplicitConformance() {
+    assertParse(
+      """
+      struct Hello: ~Copyable {}
+
+      enum Whatever: Int, ~ Hashable, Equatable {}
+      """
+    )
+  }
 }
 
 extension Parser.DeclAttributes {

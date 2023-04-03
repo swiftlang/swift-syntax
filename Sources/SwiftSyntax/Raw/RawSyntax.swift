@@ -474,12 +474,12 @@ extension RawSyntax {
     }
   }
 
-  func formLeadingTrivia() -> Trivia? {
-    firstToken(viewMode: .sourceAccurate)?.formLeadingTrivia()
+  func formLeadingTrivia() -> Trivia {
+    firstToken(viewMode: .sourceAccurate)?.formLeadingTrivia() ?? []
   }
 
-  func formTrailingTrivia() -> Trivia? {
-    lastToken(viewMode: .sourceAccurate)?.formTrailingTrivia()
+  func formTrailingTrivia() -> Trivia {
+    lastToken(viewMode: .sourceAccurate)?.formTrailingTrivia() ?? []
   }
 }
 

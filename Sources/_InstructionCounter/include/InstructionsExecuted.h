@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include <unistd.h>
+#include <stdint.h>
 
 /// On macOS returns the number of instructions the process has executed since
 /// it was launched, on all other platforms returns 0.

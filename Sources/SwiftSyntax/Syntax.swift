@@ -471,6 +471,12 @@ public extension SyntaxProtocol {
   /// The leading trivia of this syntax node. Leading trivia is attached to
   /// the first token syntax contained by this node. Without such token, this
   /// property will return nil.
+  ///
+  /// Note: `Trivia` is not able to represent invalid UTF-8 sequences. To get
+  /// the leading trivia text including all invalid UTF-8 sequences, use
+  /// ```
+  /// node.syntaxTextBytes.prefix(self.leadingTriviaLength.utf8Length)
+  /// ```
   var leadingTrivia: Trivia {
     get {
       return raw.formLeadingTrivia()
@@ -483,6 +489,12 @@ public extension SyntaxProtocol {
   /// The trailing trivia of this syntax node. Trailing trivia is attached to
   /// the last token syntax contained by this node. Without such token, this
   /// property will return nil.
+  ///
+  /// Note: `Trivia` is not able to represent invalid UTF-8 sequences. To get
+  /// the leading trivia text including all invalid UTF-8 sequences, use
+  /// ```
+  /// node.syntaxTextBytes[(node.byteSize - node.trailingTriviaLength.utf8Length)...]
+  /// ```
   var trailingTrivia: Trivia {
     get {
       return raw.formTrailingTrivia()

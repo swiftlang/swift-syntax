@@ -149,14 +149,14 @@ public class AbsolutePositionTests: XCTestCase {
   public func testTrivias() {
     let idx = 5
     let root = self.createSourceFile(idx + 1)
-    XCTAssertEqual(3, root.leadingTrivia!.count)
-    XCTAssertEqual(0, root.trailingTrivia!.count)
+    XCTAssertEqual(3, root.leadingTrivia.count)
+    XCTAssertEqual(0, root.trailingTrivia.count)
     let state = root.statements[idx]
-    XCTAssertEqual(3, state.leadingTrivia!.count)
-    XCTAssertEqual(2, state.trailingTrivia!.count)
+    XCTAssertEqual(3, state.leadingTrivia.count)
+    XCTAssertEqual(2, state.trailingTrivia.count)
     XCTAssertEqual(
       state.byteSize,
-      state.leadingTrivia!.byteSize + state.trailingTrivia!.byteSize
+      state.leadingTrivia.byteSize + state.trailingTrivia.byteSize
         + state.byteSizeAfterTrimmingTrivia
     )
     XCTAssertFalse(root.statements.isImplicit)

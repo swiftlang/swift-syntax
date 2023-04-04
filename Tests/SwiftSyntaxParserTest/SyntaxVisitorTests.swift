@@ -122,7 +122,7 @@ public class SyntaxVisitorTests: XCTestCase {
   public func testRewriteTrivia() {
     class TriviaRemover: SyntaxRewriter {
       override func visit(_ token: TokenSyntax) -> TokenSyntax {
-        return token.with(\.trailingTrivia, .zero)
+        return token.with(\.trailingTrivia, [])
       }
     }
 

@@ -821,7 +821,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
             message: RemoveNodesFixIt(unexpectedName),
             changes: [
               .makeMissing(unexpectedName),
-              FixIt.Changes(changes: [.replaceTrailingTrivia(token: previous, newTrivia: .zero)]),
+              FixIt.Changes(changes: [.replaceTrailingTrivia(token: previous, newTrivia: [])]),
             ]
           )
         ],
@@ -1008,7 +1008,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         message: ReplaceTokensFixIt(replaceTokens: [singleQuote], replacement: node.openQuote),
         changes: [
           .makeMissing(singleQuote, transferTrivia: false),
-          .makePresent(node.openQuote, leadingTrivia: singleQuote.leadingTrivia ?? []),
+          .makePresent(node.openQuote, leadingTrivia: singleQuote.leadingTrivia),
           .makeMissing(node.unexpectedBetweenSegmentsAndCloseQuote, transferTrivia: false),
           .makePresent(node.closeQuote, trailingTrivia: node.unexpectedBetweenSegmentsAndCloseQuote?.trailingTrivia ?? []),
         ]

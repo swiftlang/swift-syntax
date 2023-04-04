@@ -232,14 +232,6 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
         StmtSyntax("return .choices(\(choices))")
       }
-
-      DeclSyntax(
-        """
-        public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-          return Syntax(self).childNameForDiagnostics(index)
-        }
-        """
-      )
     }
 
     DeclSyntax(

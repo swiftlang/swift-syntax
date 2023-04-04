@@ -168,10 +168,6 @@ public struct AccessPathSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `AccessPathSyntax` to the `BidirectionalCollection` protocol.
@@ -383,10 +379,6 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `AccessorListSyntax` to the `BidirectionalCollection` protocol.
@@ -597,10 +589,6 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
   }
 }
 
@@ -856,10 +844,6 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `AttributeListSyntax` to the `BidirectionalCollection` protocol.
@@ -1070,10 +1054,6 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
   }
 }
 
@@ -1286,10 +1266,6 @@ public struct AvailabilityVersionRestrictionListSyntax: SyntaxCollection, Syntax
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `AvailabilityVersionRestrictionListSyntax` to the `BidirectionalCollection` protocol.
@@ -1500,10 +1476,6 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
   }
 }
 
@@ -1716,10 +1688,6 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `CatchClauseListSyntax` to the `BidirectionalCollection` protocol.
@@ -1930,10 +1898,6 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
   }
 }
 
@@ -2146,10 +2110,6 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `ClosureCaptureItemListSyntax` to the `BidirectionalCollection` protocol.
@@ -2360,10 +2320,6 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
   }
 }
 
@@ -2576,10 +2532,6 @@ public struct ClosureParameterListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `ClosureParameterListSyntax` to the `BidirectionalCollection` protocol.
@@ -2790,10 +2742,6 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
   }
 }
 
@@ -3006,10 +2954,6 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `CompositionTypeElementListSyntax` to the `BidirectionalCollection` protocol.
@@ -3220,10 +3164,6 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
   }
 }
 
@@ -3436,10 +3376,6 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `DeclNameArgumentListSyntax` to the `BidirectionalCollection` protocol.
@@ -3650,10 +3586,6 @@ public struct DesignatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
   }
 }
 
@@ -3866,10 +3798,6 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `DictionaryElementListSyntax` to the `BidirectionalCollection` protocol.
@@ -4081,10 +4009,6 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `DifferentiabilityParamListSyntax` to the `BidirectionalCollection` protocol.
@@ -4292,10 +4216,6 @@ public struct DocumentationAttributeArgumentsSyntax: SyntaxCollection, SyntaxHas
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
   }
 }
 
@@ -4505,10 +4425,6 @@ public struct EffectsArgumentsSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `EffectsArgumentsSyntax` to the `BidirectionalCollection` protocol.
@@ -4716,10 +4632,6 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
   }
 }
 
@@ -4932,10 +4844,6 @@ public struct EnumCaseParameterListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `EnumCaseParameterListSyntax` to the `BidirectionalCollection` protocol.
@@ -5143,10 +5051,6 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
   }
 }
 
@@ -5359,10 +5263,6 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `FunctionParameterListSyntax` to the `BidirectionalCollection` protocol.
@@ -5573,10 +5473,6 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
   }
 }
 
@@ -5789,10 +5685,6 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `GenericParameterListSyntax` to the `BidirectionalCollection` protocol.
@@ -6003,10 +5895,6 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
   }
 }
 
@@ -6219,10 +6107,6 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `IfConfigClauseListSyntax` to the `BidirectionalCollection` protocol.
@@ -6433,10 +6317,6 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
   }
 }
 
@@ -6649,10 +6529,6 @@ public struct KeyPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `KeyPathComponentListSyntax` to the `BidirectionalCollection` protocol.
@@ -6863,10 +6739,6 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
   }
 }
 
@@ -7079,10 +6951,6 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `ModifierListSyntax` to the `BidirectionalCollection` protocol.
@@ -7293,10 +7161,6 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
   }
 }
 
@@ -7509,10 +7373,6 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `ObjCSelectorSyntax` to the `BidirectionalCollection` protocol.
@@ -7723,10 +7583,6 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
   }
 }
 
@@ -7994,10 +7850,6 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `PrecedenceGroupAttributeListSyntax` to the `BidirectionalCollection` protocol.
@@ -8209,10 +8061,6 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `PrecedenceGroupNameListSyntax` to the `BidirectionalCollection` protocol.
@@ -8423,10 +8271,6 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
   }
 }
 
@@ -8704,10 +8548,6 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `SpecializeAttributeSpecListSyntax` to the `BidirectionalCollection` protocol.
@@ -8961,10 +8801,6 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
   }
 }
 
@@ -9220,10 +9056,6 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `SwitchCaseListSyntax` to the `BidirectionalCollection` protocol.
@@ -9434,10 +9266,6 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
   }
 }
 
@@ -9650,10 +9478,6 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `TuplePatternElementListSyntax` to the `BidirectionalCollection` protocol.
@@ -9865,10 +9689,6 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `TupleTypeElementListSyntax` to the `BidirectionalCollection` protocol.
@@ -10076,10 +9896,6 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
   }
 }
 
@@ -10291,10 +10107,6 @@ public struct YieldExprListSyntax: SyntaxCollection, SyntaxHashable {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
   }
 }
 

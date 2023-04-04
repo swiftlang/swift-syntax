@@ -12,13 +12,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-/// Make `StaticString` equatable so we can use it as the raw value for Keyword.
-extension StaticString: Equatable {
-  public static func == (lhs: StaticString, rhs: StaticString) -> Bool {
-    return SyntaxText(lhs) == SyntaxText(rhs)
-  }
-}
-
 @frozen  // FIXME: Not actually stable, works around a miscompile
 public enum Keyword: UInt8, Hashable {
   case __consuming

@@ -139,10 +139,6 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
     return .layout([])
   }
 
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
-
   /// If the token has a lexical error, the type of the error.
   public var tokenDiagnostic: TokenDiagnostic? {
     return tokenView.tokenDiagnostic

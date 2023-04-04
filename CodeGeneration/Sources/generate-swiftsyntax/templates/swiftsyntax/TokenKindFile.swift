@@ -96,23 +96,6 @@ let tokenKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       }
     }
 
-    try! VariableDeclSyntax("public var nameForDiagnostics: String") {
-      try! SwitchExprSyntax("switch self") {
-        SwitchCaseSyntax("case .eof:") {
-          StmtSyntax(#"return "end of file""#)
-        }
-
-        for token in SYNTAX_TOKENS where token.swiftKind != "keyword" {
-          SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
-            StmtSyntax("return #\"\(raw: token.nameForDiagnostics)\"#")
-          }
-        }
-        SwitchCaseSyntax("case .keyword(let keyword):") {
-          StmtSyntax("return String(syntaxText: keyword.defaultText)")
-        }
-      }
-    }
-
     try VariableDeclSyntax(
       """
       /// Returns `true` if the token is a Swift keyword.

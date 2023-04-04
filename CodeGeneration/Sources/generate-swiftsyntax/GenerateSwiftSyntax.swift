@@ -22,6 +22,7 @@ private let generatedDirName = "generated"
 private let swiftBasicFormatGeneratedDir = ["SwiftBasicFormat", generatedDirName]
 private let ideUtilsGeneratedDir = ["IDEUtils", generatedDirName]
 private let swiftParserGeneratedDir = ["SwiftParser", generatedDirName]
+private let swiftParserDiagnosticsGeneratedDir = ["SwiftParserDiagnostics", generatedDirName]
 private let swiftSyntaxGeneratedDir = ["SwiftSyntax", generatedDirName]
 private let swiftSyntaxBuilderGeneratedDir = ["SwiftSyntaxBuilder", generatedDirName]
 private let BASE_KIND_FILES = [
@@ -89,6 +90,11 @@ struct GenerateSwiftSyntax: ParsableCommand {
         GeneratedFileSpec(swiftParserGeneratedDir + ["Parser+Entry.swift"], parserEntryFile),
         GeneratedFileSpec(swiftParserGeneratedDir + ["TokenSpecStaticMembers.swift"], tokenSpecStaticMembersFile),
         GeneratedFileSpec(swiftParserGeneratedDir + ["TypeAttribute.swift"], typeAttributeFile),
+
+        // SwiftParserDiagnostics
+        GeneratedFileSpec(swiftParserDiagnosticsGeneratedDir + ["ChildNameForDiagnostics.swift"], childNameForDiagnosticFile),
+        GeneratedFileSpec(swiftParserDiagnosticsGeneratedDir + ["SyntaxKindNameForDiagnostics.swift"], syntaxKindNameForDiagnosticFile),
+        GeneratedFileSpec(swiftParserDiagnosticsGeneratedDir + ["TokenNameForDiagnostics.swift"], tokenNameForDiagnosticFile),
 
         // SwiftSyntax
         GeneratedFileSpec(swiftSyntaxGeneratedDir + ["Keyword.swift"], keywordFile),

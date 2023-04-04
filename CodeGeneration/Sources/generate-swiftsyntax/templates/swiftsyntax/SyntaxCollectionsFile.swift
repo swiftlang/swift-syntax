@@ -314,14 +314,6 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         }
         """
       )
-
-      DeclSyntax(
-        """
-        public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-          return nil
-        }
-        """
-      )
     }
 
     try! ExtensionDeclSyntax(

@@ -95,10 +95,6 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
     return self.raw.kind.syntaxNodeType.init(self)!
   }
 
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return self.raw.kind.syntaxNodeType.init(self)!.childNameForDiagnostics(index)
-  }
-
   public func hash(into hasher: inout Hasher) {
     return data.nodeId.hash(into: &hasher)
   }
@@ -174,12 +170,6 @@ public protocol SyntaxProtocol: CustomStringConvertible,
 
   /// The statically allowed structure of the syntax node.
   static var structure: SyntaxNodeStructure { get }
-
-  /// Return a name with which the child at the given `index` can be referred to
-  /// in diagnostics.
-  /// Typically, you want to use `childNameInParent` on the child instead of
-  /// calling this method on the parent.
-  func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String?
 }
 
 // Casting functions to specialized syntax nodes.
@@ -213,18 +203,6 @@ public extension SyntaxProtocol {
     var copy = self
     copy[keyPath: keyPath] = value
     return copy
-  }
-}
-
-public extension SyntaxProtocol {
-  /// If the parent has a dedicated "name for diagnostics" for this node, return it.
-  /// Otherwise, return `nil`.
-  var childNameInParent: String? {
-    if let parent = self.parent, let childName = parent.childNameForDiagnostics(self.index) {
-      return childName
-    } else {
-      return nil
-    }
   }
 }
 
@@ -701,12 +679,6 @@ public extension SyntaxProtocol {
 /// Protocol for the enums nested inside `Syntax` nodes that enumerate all the
 /// possible types a child node might have.
 public protocol SyntaxChildChoices: SyntaxProtocol {}
-
-public extension SyntaxChildChoices {
-  func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return Syntax(self).childNameForDiagnostics(index)
-  }
-}
 
 /// Sequence of tokens that are part of the provided Syntax node.
 public struct TokenSequence: Sequence {

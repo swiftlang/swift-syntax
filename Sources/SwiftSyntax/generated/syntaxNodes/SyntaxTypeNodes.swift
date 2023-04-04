@@ -151,27 +151,6 @@ public struct ArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterRightSquareBracket
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension ArrayTypeSyntax: CustomReflectable {
@@ -346,27 +325,6 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterBaseType
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension AttributedTypeSyntax: CustomReflectable {
@@ -457,19 +415,6 @@ public struct ClassRestrictionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([\Self.unexpectedBeforeClassKeyword, \Self.classKeyword, \Self.unexpectedAfterClassKeyword])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -575,19 +520,6 @@ public struct CompositionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([\Self.unexpectedBeforeElements, \Self.elements, \Self.unexpectedAfterElements])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -712,23 +644,6 @@ public struct ConstrainedSugarTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
           \Self.baseType, 
           \Self.unexpectedAfterBaseType
         ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -934,35 +849,6 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
           \Self.rightSquareBracket, 
           \Self.unexpectedAfterRightSquareBracket
         ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return "key type"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return "value type"
-    case 8:
-      return nil
-    case 9:
-      return nil
-    case 10:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -1194,35 +1080,6 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterOutput
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    case 9:
-      return nil
-    case 10:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension FunctionTypeSyntax: CustomReflectable {
@@ -1355,23 +1212,6 @@ public struct ImplicitlyUnwrappedOptionalTypeSyntax: TypeSyntaxProtocol, SyntaxH
           \Self.exclamationMark, 
           \Self.unexpectedAfterExclamationMark
         ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -1552,31 +1392,6 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterGenericArgumentClause
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "base type"
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    case 5:
-      return "name"
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension MemberTypeIdentifierSyntax: CustomReflectable {
@@ -1734,27 +1549,6 @@ public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterTypeOrProtocol
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "base type"
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension MetatypeTypeSyntax: CustomReflectable {
@@ -1824,15 +1618,6 @@ public struct MissingTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([\Self.unexpected])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -1955,23 +1740,6 @@ public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
           \Self.baseType, 
           \Self.unexpectedAfterBaseType
         ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -2100,23 +1868,6 @@ public struct OptionalTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterQuestionMark
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension OptionalTypeSyntax: CustomReflectable {
@@ -2243,23 +1994,6 @@ public struct PackExpansionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
           \Self.patternType, 
           \Self.unexpectedAfterPatternType
         ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -2388,23 +2122,6 @@ public struct PackReferenceTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterPackType
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension PackReferenceTypeSyntax: CustomReflectable {
@@ -2531,23 +2248,6 @@ public struct SimpleTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
           \Self.genericArgumentClause, 
           \Self.unexpectedAfterGenericArgumentClause
         ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -2720,27 +2420,6 @@ public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
           \Self.rightParen, 
           \Self.unexpectedAfterRightParen
         ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 

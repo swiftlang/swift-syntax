@@ -50,23 +50,5 @@ let miscFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         }
       }
     }
-
-    try VariableDeclSyntax("public var nameForDiagnostics: String?") {
-      try SwitchExprSyntax("switch self") {
-        SwitchCaseSyntax("case .token:") {
-          StmtSyntax(#"return "token""#)
-        }
-
-        for node in NON_BASE_SYNTAX_NODES {
-          SwitchCaseSyntax("case .\(raw: node.swiftSyntaxKind):") {
-            if let nameForDiagnostics = node.nameForDiagnostics {
-              StmtSyntax("return \"\(raw: nameForDiagnostics)\"")
-            } else {
-              StmtSyntax("return nil")
-            }
-          }
-        }
-      }
-    }
   }
 }

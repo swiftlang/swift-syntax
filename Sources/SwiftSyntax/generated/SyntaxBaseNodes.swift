@@ -147,10 +147,6 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           .node(VariableDeclSyntax.self)
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return Syntax(self).childNameForDiagnostics(index)
-  }
 }
 
 extension DeclSyntax: CustomReflectable {
@@ -320,10 +316,6 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           .node(UnresolvedTernaryExprSyntax.self)
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return Syntax(self).childNameForDiagnostics(index)
-  }
 }
 
 extension ExprSyntax: CustomReflectable {
@@ -451,10 +443,6 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
           .node(ValueBindingPatternSyntax.self), 
           .node(WildcardPatternSyntax.self)
         ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return Syntax(self).childNameForDiagnostics(index)
   }
 }
 
@@ -593,10 +581,6 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           .node(YieldStmtSyntax.self)
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return Syntax(self).childNameForDiagnostics(index)
-  }
 }
 
 extension StmtSyntax: CustomReflectable {
@@ -734,10 +718,6 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
           .node(SimpleTypeIdentifierSyntax.self), 
           .node(TupleTypeSyntax.self)
         ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return Syntax(self).childNameForDiagnostics(index)
   }
 }
 

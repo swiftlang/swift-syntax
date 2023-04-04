@@ -50,23 +50,6 @@ let keywordFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       }
     }
 
-    try! VariableDeclSyntax(
-      """
-      /// Whether the token kind is switched from being an identifier to being a keyword in the lexer.
-      /// This is true for keywords that used to be considered non-contextual.
-      public var isLexerClassified: Bool
-      """
-    ) {
-      try! SwitchExprSyntax("switch self") {
-        for keyword in KEYWORDS {
-          if keyword.isLexerClassified {
-            SwitchCaseSyntax("case .\(raw: keyword.escapedName): return true")
-          }
-        }
-        SwitchCaseSyntax("default: return false")
-      }
-    }
-
     DeclSyntax(
       """
       /// This is really unfortunate. Really, we should have a `switch` in

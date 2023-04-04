@@ -35,6 +35,7 @@ add_swift_host_library(SwiftParser
   Types.swift
 
   generated/DeclarationModifier.swift
+  generated/IsLexerClassified.swift
   generated/Parser+Entry.swift
   generated/TokenSpecStaticMembers.swift
   generated/TypeAttribute.swift

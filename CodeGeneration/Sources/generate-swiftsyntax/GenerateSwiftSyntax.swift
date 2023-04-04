@@ -87,6 +87,7 @@ struct GenerateSwiftSyntax: ParsableCommand {
 
         // SwiftParser
         GeneratedFileSpec(swiftParserGeneratedDir + ["DeclarationModifier.swift"], declarationModifierFile),
+        GeneratedFileSpec(swiftParserGeneratedDir + ["IsLexerClassified.swift"], isLexerClassifiedFile),
         GeneratedFileSpec(swiftParserGeneratedDir + ["Parser+Entry.swift"], parserEntryFile),
         GeneratedFileSpec(swiftParserGeneratedDir + ["TokenSpecStaticMembers.swift"], tokenSpecStaticMembersFile),
         GeneratedFileSpec(swiftParserGeneratedDir + ["TypeAttribute.swift"], typeAttributeFile),

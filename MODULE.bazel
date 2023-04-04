@@ -1,6 +1,6 @@
 module(
     name = "swift-syntax",
-    version = "0.50800.0",
+    version = "0",  # Update on release/* branches
     compatibility_level = 1,
 )
 

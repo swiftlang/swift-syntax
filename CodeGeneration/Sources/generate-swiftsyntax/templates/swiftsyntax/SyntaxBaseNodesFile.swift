@@ -246,4 +246,25 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       """
     )
   }
+
+  try! ExtensionDeclSyntax("extension Syntax") {
+    try VariableDeclSyntax("public static var structure: SyntaxNodeStructure") {
+      let choices = ArrayExprSyntax {
+        ArrayElementSyntax(
+          leadingTrivia: .newline,
+          expression: ExprSyntax(".node(TokenSyntax.self)")
+        )
+
+        for node in NON_BASE_SYNTAX_NODES {
+          ArrayElementSyntax(
+            leadingTrivia: .newline,
+            expression: ExprSyntax(".node(\(raw: node.name).self)")
+          )
+        }
+      }
+
+      StmtSyntax("return .choices(\(choices))")
+    }
+  }
+
 }

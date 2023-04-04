@@ -43,7 +43,6 @@
     "SyntaxTransform.swift",
     "SyntaxText.swift",
     "SyntaxVisitor.swift",
-    "Misc.swift",
   ],
   "Position": [
     "AbsolutePosition.swift",

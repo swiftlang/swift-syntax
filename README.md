@@ -95,6 +95,17 @@ Start contributing to SwiftSyntax see [this guide](CONTRIBUTING.md) for more inf
 
 If you should hit any issues while using SwiftSyntax, we appreciate bug reports on [GitHub Issue](https://github.com/apple/swift-syntax/issues).
 
+## Bazel
+
+SwiftSyntax provides an experimental [Bazel](https://bazel.build) build configuration, maintained by Keith Smiley. 
+To use it you can pull the source archive from the relevant release tag
+into your `WORKSPACE` and depend on the libraries you need from the
+[`BUILD.bazel`](BUILD.bazel) file. Each library also has an associated
+`Library_opt` target (such as `SwiftSyntax_opt`) which forces
+SwiftSyntax to always build with optimizations enabled. This may help
+local runtime performance at the cost of debuggability, and initial
+build time. Please tag any [issues](https://github.com/apple/swift-syntax/issues) related to the Bazel configuration with the label "Bazel".
+
 ## License
 
 Please see [LICENSE](LICENSE.txt) for more information.

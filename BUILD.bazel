@@ -1,0 +1,60 @@
+load("//utils/bazel:swift_syntax_library.bzl", "swift_syntax_library")
+
+package(default_visibility = ["//visibility:public"])
+
+swift_syntax_library(
+    name = "SwiftSyntax",
+    deps = [],
+)
+
+swift_syntax_library(
+    name = "SwiftBasicFormat",
+    deps = [
+        ":SwiftSyntax",
+    ],
+)
+
+swift_syntax_library(
+    name = "SwiftDiagnostics",
+    deps = [
+        ":SwiftSyntax",
+    ],
+)
+
+swift_syntax_library(
+    name = "SwiftParser",
+    deps = [
+        ":SwiftBasicFormat",
+        ":SwiftDiagnostics",
+        ":SwiftSyntax",
+    ],
+)
+
+swift_syntax_library(
+    name = "SwiftParserDiagnostics",
+    deps = [
+        ":SwiftBasicFormat",
+        ":SwiftDiagnostics",
+        ":SwiftParser",
+        ":SwiftSyntax",
+    ],
+)
+
+swift_syntax_library(
+    name = "SwiftSyntaxBuilder",
+    deps = [
+        ":SwiftBasicFormat",
+        ":SwiftParser",
+        ":SwiftParserDiagnostics",
+        ":SwiftSyntax",
+    ],
+)
+
+swift_syntax_library(
+    name = "SwiftOperators",
+    deps = [
+        ":SwiftDiagnostics",
+        ":SwiftParser",
+        ":SwiftSyntax",
+    ],
+)

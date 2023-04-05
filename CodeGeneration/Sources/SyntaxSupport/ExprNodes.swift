@@ -302,6 +302,101 @@ public let EXPR_NODES: [Node] = [
   ),
 
   Node(
+    name: "ClosureParameter",
+    nameForDiagnostics: "parameter",
+    kind: "Syntax",
+    traits: [
+      "WithTrailingComma"
+    ],
+    parserFunction: "parseClosureParameter",
+    children: [
+      Child(
+        name: "Attributes",
+        kind: .collection(kind: "AttributeList", collectionElementName: "Attribute"),
+        nameForDiagnostics: "attributes",
+        isOptional: true
+      ),
+      Child(
+        name: "Modifiers",
+        kind: .collection(kind: "ModifierList", collectionElementName: "Modifier"),
+        nameForDiagnostics: "modifiers",
+        isOptional: true
+      ),
+      Child(
+        name: "FirstName",
+        kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "WildcardToken")]),
+        description: "The label of this parameter that will be used when the closure is called."
+      ),
+      Child(
+        name: "SecondName",
+        kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "WildcardToken")]),
+        description: "If this is specified, it is the name by which the parameter can be referenced inside the closure body. If it is `nil`, the closure parameter is referenced by the first name.",
+        isOptional: true
+      ),
+      Child(
+        name: "Colon",
+        kind: .token(choices: [.token(tokenKind: "ColonToken")]),
+        description: "The colon separating the parameter's name and type.",
+        isOptional: true
+      ),
+      Child(
+        name: "Type",
+        kind: .node(kind: "Type"),
+        nameForDiagnostics: "type",
+        description: "The type of the parameter.",
+        isOptional: true
+      ),
+      Child(
+        name: "Ellipsis",
+        kind: .token(choices: [.token(tokenKind: "EllipsisToken")]),
+        description: "If the parameter is variadic, `...` to indicate that.",
+        isOptional: true
+      ),
+      Child(
+        name: "TrailingComma",
+        kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+        description: "If the parameter is followed by another parameter, the comma separating them.",
+        isOptional: true
+      ),
+    ]
+  ),
+
+  Node(
+    name: "ClosureParameterList",
+    nameForDiagnostics: "parameter list",
+    kind: "SyntaxCollection",
+    element: "ClosureParameter"
+  ),
+
+  Node(
+    name: "ClosureParameterClause",
+    nameForDiagnostics: "parameter clause",
+    kind: "Syntax",
+    traits: [
+      "Parenthesized"
+    ],
+    children: [
+      Child(
+        name: "LeftParen",
+        kind: .token(choices: [.token(tokenKind: "LeftParenToken")]),
+        description: "The '(' to open the parameter clause."
+      ),
+      Child(
+        name: "ParameterList",
+        kind: .collection(kind: "ClosureParameterList", collectionElementName: "Parameter"),
+        nameForDiagnostics: "parameters",
+        description: "The actual parameters.",
+        isIndented: true
+      ),
+      Child(
+        name: "RightParen",
+        kind: .token(choices: [.token(tokenKind: "RightParenToken")]),
+        description: "The ')' to close the parameter clause."
+      ),
+    ]
+  ),
+
+  Node(
     name: "ClosureExpr",
     nameForDiagnostics: "closure",
     kind: "Expr",
@@ -389,7 +484,7 @@ public let EXPR_NODES: [Node] = [
           ),
           Child(
             name: "Input",
-            kind: .node(kind: "ParameterClause")
+            kind: .node(kind: "ClosureParameterClause")
           ),
         ]),
         isOptional: true

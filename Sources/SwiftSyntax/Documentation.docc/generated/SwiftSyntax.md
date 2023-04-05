@@ -214,6 +214,8 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/ClosureCaptureItemSyntax>
 - <doc:SwiftSyntax/ClosureParamListSyntax>
 - <doc:SwiftSyntax/ClosureParamSyntax>
+- <doc:SwiftSyntax/ClosureParameterListSyntax>
+- <doc:SwiftSyntax/ClosureParameterSyntax>
 - <doc:SwiftSyntax/CodeBlockItemListSyntax>
 - <doc:SwiftSyntax/CodeBlockItemSyntax>
 - <doc:SwiftSyntax/CompositionTypeElementListSyntax>
@@ -233,6 +235,8 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/EffectsArgumentsSyntax>
 - <doc:SwiftSyntax/EnumCaseElementListSyntax>
 - <doc:SwiftSyntax/EnumCaseElementSyntax>
+- <doc:SwiftSyntax/EnumCaseParameterListSyntax>
+- <doc:SwiftSyntax/EnumCaseParameterSyntax>
 - <doc:SwiftSyntax/ExprListSyntax>
 - <doc:SwiftSyntax/ExprSyntax>
 - <doc:SwiftSyntax/FunctionParameterListSyntax>
@@ -289,6 +293,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/BackDeployedAttributeSpecListSyntax>
 - <doc:SwiftSyntax/ClosureCaptureItemSpecifierSyntax>
 - <doc:SwiftSyntax/ClosureCaptureSignatureSyntax>
+- <doc:SwiftSyntax/ClosureParameterClauseSyntax>
 - <doc:SwiftSyntax/ClosureSignatureSyntax>
 - <doc:SwiftSyntax/CodeBlockSyntax>
 - <doc:SwiftSyntax/ConformanceRequirementSyntax>
@@ -303,6 +308,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/DifferentiabilityParamsSyntax>
 - <doc:SwiftSyntax/DifferentiableAttributeArgumentsSyntax>
 - <doc:SwiftSyntax/DynamicReplacementArgumentsSyntax>
+- <doc:SwiftSyntax/EnumCaseParameterClauseSyntax>
 - <doc:SwiftSyntax/ExposeAttributeArgumentsSyntax>
 - <doc:SwiftSyntax/ExpressionSegmentSyntax>
 - <doc:SwiftSyntax/FunctionSignatureSyntax>

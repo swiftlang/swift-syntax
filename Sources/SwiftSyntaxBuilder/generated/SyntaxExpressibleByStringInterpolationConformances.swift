@@ -32,9 +32,15 @@ extension AttributeSyntax: SyntaxExpressibleByStringInterpolation {}
 
 extension CatchClauseSyntax: SyntaxExpressibleByStringInterpolation {}
 
+extension ClosureParameterSyntax: SyntaxExpressibleByStringInterpolation {}
+
 extension DeclSyntax: SyntaxExpressibleByStringInterpolation {}
 
+extension EnumCaseParameterSyntax: SyntaxExpressibleByStringInterpolation {}
+
 extension ExprSyntax: SyntaxExpressibleByStringInterpolation {}
+
+extension FunctionParameterSyntax: SyntaxExpressibleByStringInterpolation {}
 
 extension GenericParameterClauseSyntax: SyntaxExpressibleByStringInterpolation {}
 

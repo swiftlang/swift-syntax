@@ -63,6 +63,9 @@ public enum SyntaxKind {
   case closureExpr
   case closureParamList
   case closureParam
+  case closureParameterClause
+  case closureParameterList
+  case closureParameter
   case closureSignature
   case codeBlockItemList
   case codeBlockItem
@@ -109,6 +112,9 @@ public enum SyntaxKind {
   case enumCaseDecl
   case enumCaseElementList
   case enumCaseElement
+  case enumCaseParameterClause
+  case enumCaseParameterList
+  case enumCaseParameter
   case enumDecl
   case exposeAttributeArguments
   case exprList
@@ -302,6 +308,8 @@ public enum SyntaxKind {
       return true
     case .closureParamList:
       return true
+    case .closureParameterList:
+      return true
     case .codeBlockItemList:
       return true
     case .compositionTypeElementList:
@@ -321,6 +329,8 @@ public enum SyntaxKind {
     case .effectsArguments:
       return true
     case .enumCaseElementList:
+      return true
+    case .enumCaseParameterList:
       return true
     case .exprList:
       return true

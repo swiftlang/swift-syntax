@@ -65,6 +65,14 @@ extension CatchClauseSyntax: SyntaxParseable {
   }
 }
 
+extension ClosureParameterSyntax: SyntaxParseable {
+  public static func parse(from parser: inout Parser) -> Self {
+    let node = parser.parseClosureParameter()
+    let raw = RawSyntax(parser.parseRemainder(into: node))
+    return Syntax(raw: raw).cast(Self.self)
+  }
+}
+
 extension DeclSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
     let node = parser.parseDeclaration()
@@ -73,9 +81,25 @@ extension DeclSyntax: SyntaxParseable {
   }
 }
 
+extension EnumCaseParameterSyntax: SyntaxParseable {
+  public static func parse(from parser: inout Parser) -> Self {
+    let node = parser.parseEnumCaseParameter()
+    let raw = RawSyntax(parser.parseRemainder(into: node))
+    return Syntax(raw: raw).cast(Self.self)
+  }
+}
+
 extension ExprSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
     let node = parser.parseExpression()
+    let raw = RawSyntax(parser.parseRemainder(into: node))
+    return Syntax(raw: raw).cast(Self.self)
+  }
+}
+
+extension FunctionParameterSyntax: SyntaxParseable {
+  public static func parse(from parser: inout Parser) -> Self {
+    let node = parser.parseFunctionParameter()
     let raw = RawSyntax(parser.parseRemainder(into: node))
     return Syntax(raw: raw).cast(Self.self)
   }

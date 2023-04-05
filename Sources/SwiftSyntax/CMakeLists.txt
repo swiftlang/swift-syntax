@@ -19,10 +19,10 @@ add_swift_host_library(SwiftSyntax
   SyntaxArena.swift
   SyntaxChildren.swift
   SyntaxData.swift
-  SyntaxOtherNodes.swift
   SyntaxText.swift
   SyntaxTreeViewMode.swift
   TokenDiagnostic.swift
+  TokenSyntax.swift
   Utils.swift
 
   Raw/RawSyntax.swift

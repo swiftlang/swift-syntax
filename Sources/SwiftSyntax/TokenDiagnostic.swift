@@ -49,6 +49,9 @@ public struct TokenDiagnostic: Hashable {
     case unexpectedBlockCommentEnd
     case unicodeCurlyQuote
     case unprintableAsciiCharacter
+    case spaceAtStartOfRegexLiteral
+    case spaceAtEndOfRegexLiteral
+    case multilineRegexClosingNotOnNewline
   }
 
   public let kind: Kind
@@ -122,6 +125,9 @@ public struct TokenDiagnostic: Hashable {
     case .unexpectedBlockCommentEnd: return .error
     case .unicodeCurlyQuote: return .error
     case .unprintableAsciiCharacter: return .error
+    case .spaceAtStartOfRegexLiteral: return .error
+    case .spaceAtEndOfRegexLiteral: return .error
+    case .multilineRegexClosingNotOnNewline: return .error
     }
   }
 }

@@ -58,6 +58,7 @@ public let SYNTAX_CLASSIFICATIONS: [SyntaxClassification] = [
   SyntaxClassification(name: "ObjectLiteral", description: "An image, color, etc. literal."),
   SyntaxClassification(name: "OperatorIdentifier", description: "An identifier referring to an operator."),
   SyntaxClassification(name: "PoundDirectiveKeyword", description: "A `#` keyword like `#warning`."),
+  SyntaxClassification(name: "RegexLiteral", description: "A regex literal, including multiline regex literals."),
   SyntaxClassification(name: "StringInterpolationAnchor", description: "The opening and closing parenthesis of string interpolation."),
   SyntaxClassification(name: "StringLiteral", description: "A string literal including multiline string literals."),
   SyntaxClassification(name: "TypeIdentifier", description: "An identifier referring to a type."),

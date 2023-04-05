@@ -337,19 +337,29 @@ public class LexerTests: XCTestCase {
     assertLexemes(
       "/abc/",
       lexemes: [
-        LexemeSpec(.regexLiteral, text: "/abc/")
+        LexemeSpec(.regexSlash, text: "/"),
+        LexemeSpec(.regexLiteralPattern, text: "abc"),
+        LexemeSpec(.regexSlash, text: "/"),
       ]
     )
     assertLexemes(
       "#/abc/#",
       lexemes: [
-        LexemeSpec(.regexLiteral, text: "#/abc/#")
+        LexemeSpec(.extendedRegexDelimiter, text: "#"),
+        LexemeSpec(.regexSlash, text: "/"),
+        LexemeSpec(.regexLiteralPattern, text: "abc"),
+        LexemeSpec(.regexSlash, text: "/"),
+        LexemeSpec(.extendedRegexDelimiter, text: "#"),
       ]
     )
     assertLexemes(
       "###/abc/###",
       lexemes: [
-        LexemeSpec(.regexLiteral, text: "###/abc/###")
+        LexemeSpec(.extendedRegexDelimiter, text: "###"),
+        LexemeSpec(.regexSlash, text: "/"),
+        LexemeSpec(.regexLiteralPattern, text: "abc"),
+        LexemeSpec(.regexSlash, text: "/"),
+        LexemeSpec(.extendedRegexDelimiter, text: "###"),
       ]
     )
     assertLexemes(
@@ -360,45 +370,69 @@ public class LexerTests: XCTestCase {
       /#
       """,
       lexemes: [
-        LexemeSpec(.regexLiteral, text: "#/\na\nb\n/#")
+        LexemeSpec(.extendedRegexDelimiter, text: "#"),
+        LexemeSpec(.regexSlash, text: "/"),
+        LexemeSpec(.regexLiteralPattern, text: "\na\nb\n"),
+        LexemeSpec(.regexSlash, text: "/"),
+        LexemeSpec(.extendedRegexDelimiter, text: "#"),
       ]
     )
     assertLexemes(
       "#/ \na\nb\n  /#",
       lexemes: [
-        LexemeSpec(.regexLiteral, text: "#/ \na\nb\n  /#")
+        LexemeSpec(.extendedRegexDelimiter, text: "#"),
+        LexemeSpec(.regexSlash, text: "/"),
+        LexemeSpec(.regexLiteralPattern, text: " \na\nb\n  "),
+        LexemeSpec(.regexSlash, text: "/"),
+        LexemeSpec(.extendedRegexDelimiter, text: "#"),
       ]
     )
     assertLexemes(
       "##/ \na\nb\n  /##",
       lexemes: [
-        LexemeSpec(.regexLiteral, text: "##/ \na\nb\n  /##")
+        LexemeSpec(.extendedRegexDelimiter, text: "##"),
+        LexemeSpec(.regexSlash, text: "/"),
+        LexemeSpec(.regexLiteralPattern, text: " \na\nb\n  "),
+        LexemeSpec(.regexSlash, text: "/"),
+        LexemeSpec(.extendedRegexDelimiter, text: "##"),
       ]
     )
     assertLexemes(
       "#/abc/def/#",
       lexemes: [
-        LexemeSpec(.regexLiteral, text: "#/abc/def/#")
+        LexemeSpec(.extendedRegexDelimiter, text: "#"),
+        LexemeSpec(.regexSlash, text: "/"),
+        LexemeSpec(.regexLiteralPattern, text: "abc/def"),
+        LexemeSpec(.regexSlash, text: "/"),
+        LexemeSpec(.extendedRegexDelimiter, text: "#"),
       ]
     )
     assertLexemes(
       "#/abc\\/#def/#",
       lexemes: [
-        LexemeSpec(.regexLiteral, text: "#/abc\\/#def/#")
+        LexemeSpec(.extendedRegexDelimiter, text: "#"),
+        LexemeSpec(.regexSlash, text: "/"),
+        LexemeSpec(.regexLiteralPattern, text: "abc\\/#def"),
+        LexemeSpec(.regexSlash, text: "/"),
+        LexemeSpec(.extendedRegexDelimiter, text: "#"),
       ]
     )
     assertLexemes(
       "#/abc|#def/#",
       lexemes: [
-        LexemeSpec(.regexLiteral, text: "#/abc|#def/#")
+        LexemeSpec(.extendedRegexDelimiter, text: "#"),
+        LexemeSpec(.regexSlash, text: "/"),
+        LexemeSpec(.regexLiteralPattern, text: "abc|#def"),
+        LexemeSpec(.regexSlash, text: "/"),
+        LexemeSpec(.extendedRegexDelimiter, text: "#"),
       ]
     )
     assertLexemes(
       "#/abc\n/#",
       lexemes: [
-        LexemeSpec(.pound, text: "#"),
-        LexemeSpec(.binaryOperator, text: "/"),
-        LexemeSpec(.identifier, text: "abc"),
+        LexemeSpec(.extendedRegexDelimiter, text: "#"),
+        LexemeSpec(.regexSlash, text: "/"),
+        LexemeSpec(.regexLiteralPattern, text: "abc"),
         LexemeSpec(.prefixOperator, leading: "\n", text: "/", flags: [.isAtStartOfLine]),
         LexemeSpec(.pound, text: "#"),
       ]
@@ -406,9 +440,9 @@ public class LexerTests: XCTestCase {
     assertLexemes(
       "#/abc\r/#",
       lexemes: [
-        LexemeSpec(.pound, text: "#"),
-        LexemeSpec(.binaryOperator, text: "/"),
-        LexemeSpec(.identifier, text: "abc"),
+        LexemeSpec(.extendedRegexDelimiter, text: "#"),
+        LexemeSpec(.regexSlash, text: "/"),
+        LexemeSpec(.regexLiteralPattern, text: "abc"),
         LexemeSpec(.prefixOperator, leading: "\r", text: "/", flags: [.isAtStartOfLine]),
         LexemeSpec(.pound, text: "#"),
       ]
@@ -420,6 +454,117 @@ public class LexerTests: XCTestCase {
         LexemeSpec(.identifier, text: "a"),
         LexemeSpec(.rightParen, text: ")"),
         LexemeSpec(.postfixOperator, text: "/"),
+      ]
+    )
+    // Make sure if we have an unterminated extended literal, we stop at the
+    // first newline
+    assertLexemes(
+      """
+      #/
+      abc
+      """,
+      lexemes: [
+        LexemeSpec(.extendedRegexDelimiter, text: "#"),
+        LexemeSpec(.regexSlash, text: "/"),
+        LexemeSpec(.regexLiteralPattern, text: ""),
+        LexemeSpec(.identifier, leading: "\n", text: "abc", flags: .isAtStartOfLine),
+      ]
+    )
+    // Check that we can split operators okay.
+    assertLexemes(
+      "!/abc/",
+      lexemes: [
+        LexemeSpec(.prefixOperator, text: "!"),
+        LexemeSpec(.regexSlash, text: "/"),
+        LexemeSpec(.regexLiteralPattern, text: "abc"),
+        LexemeSpec(.regexSlash, text: "/"),
+      ]
+    )
+    assertLexemes(
+      "!^/abc/",
+      lexemes: [
+        LexemeSpec(.prefixOperator, text: "!^"),
+        LexemeSpec(.regexSlash, text: "/"),
+        LexemeSpec(.regexLiteralPattern, text: "abc"),
+        LexemeSpec(.regexSlash, text: "/"),
+      ]
+    )
+    assertLexemes(
+      "!#/abc/#",
+      lexemes: [
+        LexemeSpec(.prefixOperator, text: "!"),
+        LexemeSpec(.extendedRegexDelimiter, text: "#"),
+        LexemeSpec(.regexSlash, text: "/"),
+        LexemeSpec(.regexLiteralPattern, text: "abc"),
+        LexemeSpec(.regexSlash, text: "/"),
+        LexemeSpec(.extendedRegexDelimiter, text: "#"),
+      ]
+    )
+    // Make sure we don't lex this as a regex.
+    assertLexemes(
+      """
+      func /^ () { y/ }
+      """,
+      lexemes: [
+        LexemeSpec(.keyword, text: "func", trailing: " "),
+        LexemeSpec(.binaryOperator, text: "/^", trailing: " "),
+        LexemeSpec(.leftParen, text: "("),
+        LexemeSpec(.rightParen, text: ")", trailing: " "),
+        LexemeSpec(.leftBrace, text: "{", trailing: " "),
+        LexemeSpec(.identifier, text: "y"),
+        LexemeSpec(.postfixOperator, text: "/", trailing: " "),
+        LexemeSpec(.rightBrace, text: "}"),
+      ]
+    )
+    assertLexemes(
+      "^^/!*/",
+      lexemes: [
+        LexemeSpec(.prefixOperator, text: "^^"),
+        LexemeSpec(.regexSlash, text: "/"),
+        LexemeSpec(.regexLiteralPattern, text: "!*"),
+        LexemeSpec(.regexSlash, text: "/"),
+      ]
+    )
+    assertLexemes(
+      "/!*/",
+      lexemes: [
+        LexemeSpec(.regexSlash, text: "/"),
+        LexemeSpec(.regexLiteralPattern, text: "!*"),
+        LexemeSpec(.regexSlash, text: "/"),
+      ]
+    )
+
+    // Regex literal, even though it's in operator position.
+    assertLexemes(
+      "x /y/",
+      lexemes: [
+        LexemeSpec(.identifier, text: "x", trailing: " "),
+        LexemeSpec(.regexSlash, text: "/"),
+        LexemeSpec(.regexLiteralPattern, text: "y"),
+        LexemeSpec(.regexSlash, text: "/"),
+      ]
+    )
+    assertLexemes(
+      "x /.^ y/",
+      lexemes: [
+        LexemeSpec(.identifier, text: "x", trailing: " "),
+        LexemeSpec(.regexSlash, text: "/"),
+        LexemeSpec(.regexLiteralPattern, text: ".^ y"),
+        LexemeSpec(.regexSlash, text: "/"),
+      ]
+    )
+
+    // Comments, not regex literals
+    assertLexemes(
+      "^//",
+      lexemes: [
+        LexemeSpec(.binaryOperator, text: "^", trailing: "//")
+      ]
+    )
+    assertLexemes(
+      "^/*/",
+      lexemes: [
+        LexemeSpec(.binaryOperator, text: "^", trailing: "/*/")
       ]
     )
   }
@@ -613,13 +758,29 @@ public class LexerTests: XCTestCase {
     assertLexemes(
       "#/abc|#def/",
       lexemes: [
-        LexemeSpec(.pound, text: "#"),
-        LexemeSpec(.binaryOperator, text: "/"),
-        LexemeSpec(.identifier, text: "abc"),
-        LexemeSpec(.binaryOperator, text: "|"),
-        LexemeSpec(.pound, text: "#"),
-        LexemeSpec(.identifier, text: "def"),
-        LexemeSpec(.postfixOperator, text: "/"),
+        LexemeSpec(.extendedRegexDelimiter, text: "#"),
+        LexemeSpec(.regexSlash, text: "/"),
+        LexemeSpec(.regexLiteralPattern, text: "abc|#def"),
+        LexemeSpec(.regexSlash, text: "/"),
+      ]
+    )
+
+    assertLexemes(
+      "#/abc|#def//",
+      lexemes: [
+        LexemeSpec(.extendedRegexDelimiter, text: "#"),
+        LexemeSpec(.regexSlash, text: "/"),
+        LexemeSpec(.regexLiteralPattern, text: "abc|#def/"),
+        LexemeSpec(.regexSlash, text: "/"),
+      ]
+    )
+    // This is an operator, not a regex.
+    assertLexemes(
+      "lhs /==/ rhs",
+      lexemes: [
+        LexemeSpec(.identifier, text: "lhs", trailing: " "),
+        LexemeSpec(.binaryOperator, text: "/==/", trailing: " "),
+        LexemeSpec(.identifier, text: "rhs"),
       ]
     )
   }
@@ -899,6 +1060,24 @@ public class LexerTests: XCTestCase {
         leadingTrivia: [0xfd],
         text: [0x41],
         error: TokenDiagnostic(.invalidUtf8, byteOffset: 0)
+      )
+    }
+  }
+
+  func testInvalidUTF8RegexLiteral() {
+    let slashByte = UInt8(UnicodeScalar("/").value)
+    let sourceBytes: [UInt8] = [slashByte, 0xfd, slashByte]
+
+    lex(sourceBytes) { lexemes in
+      guard lexemes.count == 4 else {
+        return XCTFail("Expected 4 lexemes, got \(lexemes.count)")
+      }
+      assertRawBytesLexeme(
+        lexemes[1],
+        kind: .regexLiteralPattern,
+        leadingTrivia: [],
+        text: [0xfd],
+        error: TokenDiagnostic(.invalidUtf8, byteOffset: 1)
       )
     }
   }

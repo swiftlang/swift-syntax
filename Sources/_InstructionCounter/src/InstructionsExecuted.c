@@ -22,6 +22,7 @@
 #ifdef TARGET_IS_MACOS
 #include <libproc.h>
 #include <sys/resource.h>
+#include <unistd.h>
 
 uint64_t getInstructionsExecuted() {
   struct rusage_info_v4 ru;

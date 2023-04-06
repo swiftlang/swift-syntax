@@ -286,8 +286,7 @@ public extension SyntaxProtocol {
     return childrenKeyPaths[data.indexInParent]
   }
 
-  /// Recursively walks through the tree to find the token semantically before
-  /// this node.
+  @available(*, deprecated, message: "Use previousToken(viewMode:) instead")
   var previousToken: TokenSyntax? {
     return self.previousToken(viewMode: .sourceAccurate)
   }
@@ -312,8 +311,7 @@ public extension SyntaxProtocol {
     return parent.previousToken(viewMode: viewMode)
   }
 
-  /// Recursively walks through the tree to find the next token semantically
-  /// after this node.
+  @available(*, deprecated, message: "Use nextToken(viewMode:) instead")
   var nextToken: TokenSyntax? {
     return self.nextToken(viewMode: .sourceAccurate)
   }
@@ -335,8 +333,7 @@ public extension SyntaxProtocol {
     return parent.nextToken(viewMode: viewMode)
   }
 
-  /// Returns the first token in this syntax node in the source accurate view of
-  /// the syntax tree.
+  @available(*, deprecated, message: "Use firstToken(viewMode: .sourceAccurate) instead")
   var firstToken: TokenSyntax? {
     return self.firstToken(viewMode: .sourceAccurate)
   }
@@ -356,7 +353,7 @@ public extension SyntaxProtocol {
     return nil
   }
 
-  /// Returns the last token node that is part of this syntax node.
+  @available(*, deprecated, message: "Use lastToken(viewMode: .sourceAccurate) instead")
   var lastToken: TokenSyntax? {
     return self.lastToken(viewMode: .sourceAccurate)
   }

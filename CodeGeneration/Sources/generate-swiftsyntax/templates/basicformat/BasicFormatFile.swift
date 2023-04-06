@@ -66,7 +66,7 @@ let basicFormatFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           indentationLevel += 1
         }
         if let parent = node.parent, childrenSeparatedByNewline(parent) {
-          putNextTokenOnNewLine = true && node.previousToken != nil
+          putNextTokenOnNewLine = true && node.previousToken(viewMode: .sourceAccurate) != nil
         }
       }
       """

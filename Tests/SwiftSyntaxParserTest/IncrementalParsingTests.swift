@@ -29,7 +29,7 @@ public class IncrementalParsingTests: XCTestCase {
   }
 
   public func testReusedNode() throws {
-    throw XCTSkip("Swift parser does not handle node reuse yet")
+    try XCTSkipIf(true, "Swift parser does not handle node reuse yet")
 
     let original = "struct A {}\nstruct B {}\n"
     let step: (String, (Int, Int, String)) =

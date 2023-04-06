@@ -12,16 +12,26 @@
 
 import SwiftSyntax
 
+fileprivate extension OperatorKind {
+  var keyword: Keyword {
+    switch self {
+    case .infix: return .infix
+    case .prefix: return .prefix
+    case .postfix: return .postfix
+    }
+  }
+}
+
 extension Operator {
   /// Synthesize a syntactic representation of this operator based on its
   /// semantic definition.
   public func synthesizedSyntax() -> OperatorDeclSyntax {
     let modifiers = ModifierListSyntax(
-      [DeclModifierSyntax(name: .identifier("\(kind)"))]
+      [DeclModifierSyntax(name: .keyword(kind.keyword))]
     )
     let operatorKeyword = TokenSyntax.keyword(.operator, leadingTrivia: .space)
     let identifierSyntax =
-      TokenSyntax.identifier(name, leadingTrivia: .space)
+      TokenSyntax.binaryOperator(name, leadingTrivia: .space)
     let precedenceGroupSyntax = precedenceGroup.map { groupName in
       OperatorPrecedenceAndTypesSyntax(
         colon: .colonToken(),
@@ -64,6 +74,16 @@ extension PrecedenceRelation {
   }
 }
 
+fileprivate extension Associativity {
+  var keyword: Keyword {
+    switch self {
+    case .none: return .none
+    case .left: return .left
+    case .right: return .right
+    }
+  }
+}
+
 extension PrecedenceGroup {
   /// Synthesize a syntactic representation of this precedence group based on
   /// its semantic definition.
@@ -83,12 +103,12 @@ extension PrecedenceGroup {
         .init(
           PrecedenceGroupAssociativitySyntax(
             associativityKeyword:
-              .identifier(
-                "associativity",
+              .keyword(
+                .associativity,
                 leadingTrivia: [.newlines(1), .spaces(indentation)]
               ),
             colon: .colonToken(),
-            value: .identifier("\(associativity)", leadingTrivia: .space)
+            value: .keyword(associativity.keyword, leadingTrivia: .space)
           )
         )
       )
@@ -103,8 +123,8 @@ extension PrecedenceGroup {
         .init(
           PrecedenceGroupAssignmentSyntax(
             assignmentKeyword:
-              .identifier(
-                "assignment",
+              .keyword(
+                .assignment,
                 leadingTrivia: [.newlines(1), .spaces(indentation)]
               ),
             colon: .colonToken(),

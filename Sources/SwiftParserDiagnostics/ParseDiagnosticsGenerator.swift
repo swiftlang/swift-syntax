@@ -20,9 +20,9 @@ fileprivate extension TokenSyntax {
   var negatedAvailabilityKeyword: TokenSyntax {
     switch self.tokenKind {
     case .poundAvailableKeyword:
-      return self.withKind(.poundUnavailableKeyword)
+      return self.with(\.tokenKind, .poundUnavailableKeyword)
     case .poundUnavailableKeyword:
-      return self.withKind(.poundAvailableKeyword)
+      return self.with(\.tokenKind, .poundAvailableKeyword)
     default:
       preconditionFailure("The availability token of an AvailabilityConditionSyntax should always be #available or #unavailable")
     }

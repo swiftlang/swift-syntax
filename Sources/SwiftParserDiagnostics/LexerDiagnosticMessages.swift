@@ -204,7 +204,7 @@ public extension SwiftSyntax.TokenDiagnostic {
         .replacingFirstOccurence(of: "“", with: #"""#)
         .replacingLastOccurence(of: "”", with: #"""#)
 
-      let fixedToken = token.withKind(TokenKind.fromRaw(kind: rawKind, text: replacedText))
+      let fixedToken = token.with(\.tokenKind, TokenKind.fromRaw(kind: rawKind, text: replacedText))
       return [
         FixIt(message: .replaceCurlyQuoteByNormalQuote, changes: [.replace(oldNode: Syntax(token), newNode: Syntax(fixedToken))])
       ]

@@ -15,9 +15,38 @@ swift_syntax_library(
 )
 
 swift_syntax_library(
+    name = "SwiftCompilerPlugin",
+    deps = [
+        ":SwiftCompilerPluginMessageHandling",
+        ":SwiftSyntaxMacros",
+    ],
+)
+
+swift_syntax_library(
+    name = "SwiftCompilerPluginMessageHandling",
+    deps = [
+        ":SwiftDiagnostics",
+        ":SwiftOperators",
+        ":SwiftParser",
+        ":SwiftSyntax",
+        ":SwiftSyntaxMacros",
+    ],
+)
+
+swift_syntax_library(
     name = "SwiftDiagnostics",
     deps = [
         ":SwiftSyntax",
+    ],
+)
+
+swift_syntax_library(
+    name = "SwiftSyntaxMacros",
+    deps = [
+        ":SwiftDiagnostics",
+        ":SwiftParser",
+        ":SwiftSyntax",
+        ":SwiftSyntaxBuilder",
     ],
 )
 

@@ -1913,4 +1913,34 @@ final class StatementExpressionTests: XCTestCase {
       ]
     )
   }
+
+  func testClosureParameterWithModifier() {
+    assertParse(
+      """
+      _ = { (_const x: Int) in }
+      """
+    )
+  }
+
+  func testClosureWithExternalParameterName() {
+    assertParse(
+      """
+      _ = { (_ x: MyType) in }
+      """
+    )
+
+    // Using anything but '_' for the first parameter name is valid in SwiftSyntax
+    // but should be diagnosed in the compiler.
+    assertParse(
+      """
+      _ = { (x y: MyType) in }
+      """
+    )
+  }
+
+  func testClosureParameterWithAttribute() {
+    assertParse("_ = { (@_noImplicitCopy _ x: Int) -> () in }")
+
+    assertParse("_ = { (@Wrapper x) in }")
+  }
 }

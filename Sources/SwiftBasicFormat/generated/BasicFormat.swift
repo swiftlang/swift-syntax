@@ -99,11 +99,15 @@ open class BasicFormat: SyntaxRewriter {
       return true
     case \ClosureExprSyntax.statements:
       return true
+    case \ClosureParameterClauseSyntax.parameterList:
+      return true
     case \CodeBlockSyntax.statements:
       return true
     case \DictionaryElementSyntax.valueExpression:
       return true
     case \DictionaryExprSyntax.content:
+      return true
+    case \EnumCaseParameterClauseSyntax.parameterList:
       return true
     case \FunctionCallExprSyntax.argumentList:
       return true

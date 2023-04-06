@@ -3910,13 +3910,646 @@ extension ClosureParamSyntax: CustomReflectable {
   }
 }
 
+// MARK: - ClosureParameterClauseSyntax
+
+
+public struct ClosureParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+  
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .closureParameterClause else { 
+      return nil 
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+  
+  /// Creates a `ClosureParameterClauseSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    precondition(data.raw.kind == .closureParameterClause)
+    self._syntaxNode = Syntax(data)
+  }
+  
+  public init(
+      leadingTrivia: Trivia? = nil, 
+      _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil, 
+      leftParen: TokenSyntax = .leftParenToken(), 
+      _ unexpectedBetweenLeftParenAndParameterList: UnexpectedNodesSyntax? = nil, 
+      parameterList: ClosureParameterListSyntax, 
+      _ unexpectedBetweenParameterListAndRightParen: UnexpectedNodesSyntax? = nil, 
+      rightParen: TokenSyntax = .rightParenToken(), 
+      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil, 
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
+            unexpectedBeforeLeftParen, 
+            leftParen, 
+            unexpectedBetweenLeftParenAndParameterList, 
+            parameterList, 
+            unexpectedBetweenParameterListAndRightParen, 
+            rightParen, 
+            unexpectedAfterRightParen
+          ))) {(arena, _) in 
+      let layout: [RawSyntax?] = [
+          unexpectedBeforeLeftParen?.raw, 
+          leftParen.raw, 
+          unexpectedBetweenLeftParenAndParameterList?.raw, 
+          parameterList.raw, 
+          unexpectedBetweenParameterListAndRightParen?.raw, 
+          rightParen.raw, 
+          unexpectedAfterRightParen?.raw
+        ]
+      let raw = RawSyntax.makeLayout(
+          kind: SyntaxKind.closureParameterClause, 
+          from: layout, 
+          arena: arena, 
+          leadingTrivia: leadingTrivia, 
+          trailingTrivia: trailingTrivia
+        )
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+  
+  public var unexpectedBeforeLeftParen: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = ClosureParameterClauseSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  /// The '(' to open the parameter clause.
+  public var leftParen: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = ClosureParameterClauseSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenLeftParenAndParameterList: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = ClosureParameterClauseSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  /// The actual parameters.
+  public var parameterList: ClosureParameterListSyntax {
+    get {
+      return ClosureParameterListSyntax(data.child(at: 3, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = ClosureParameterClauseSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  /// Adds the provided `Parameter` to the node's `parameterList`
+  /// collection.
+  /// - param element: The new `Parameter` to add to the node's
+  ///                  `parameterList` collection.
+  /// - returns: A copy of the receiver with the provided `Parameter`
+  ///            appended to its `parameterList` collection.
+  public func addParameter(_ element: ClosureParameterSyntax) -> ClosureParameterClauseSyntax {
+    var collection: RawSyntax
+    let arena = SyntaxArena()
+    if let col = raw.layoutView!.children[3] {
+      collection = col.layoutView!.appending(element.raw, arena: arena)
+    } else {
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.closureParameterList, 
+                                      from: [element.raw], arena: arena)
+    }
+    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
+    return ClosureParameterClauseSyntax(newData)
+  }
+  
+  public var unexpectedBetweenParameterListAndRightParen: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = ClosureParameterClauseSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  /// The ')' to close the parameter clause.
+  public var rightParen: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = ClosureParameterClauseSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedAfterRightParen: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = ClosureParameterClauseSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+          \Self.unexpectedBeforeLeftParen, 
+          \Self.leftParen, 
+          \Self.unexpectedBetweenLeftParenAndParameterList, 
+          \Self.parameterList, 
+          \Self.unexpectedBetweenParameterListAndRightParen, 
+          \Self.rightParen, 
+          \Self.unexpectedAfterRightParen
+        ])
+  }
+  
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return "parameters"
+    case 4:
+      return nil
+    case 5:
+      return nil
+    case 6:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
+}
+
+extension ClosureParameterClauseSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+          "unexpectedBeforeLeftParen": unexpectedBeforeLeftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "leftParen": Syntax(leftParen).asProtocol(SyntaxProtocol.self), 
+          "unexpectedBetweenLeftParenAndParameterList": unexpectedBetweenLeftParenAndParameterList.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "parameterList": Syntax(parameterList).asProtocol(SyntaxProtocol.self), 
+          "unexpectedBetweenParameterListAndRightParen": unexpectedBetweenParameterListAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "rightParen": Syntax(rightParen).asProtocol(SyntaxProtocol.self), 
+          "unexpectedAfterRightParen": unexpectedAfterRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
+        ])
+  }
+}
+
+// MARK: - ClosureParameterSyntax
+
+
+public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+  
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .closureParameter else { 
+      return nil 
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+  
+  /// Creates a `ClosureParameterSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    precondition(data.raw.kind == .closureParameter)
+    self._syntaxNode = Syntax(data)
+  }
+  
+  public init<T: TypeSyntaxProtocol>(
+      leadingTrivia: Trivia? = nil, 
+      _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, 
+      attributes: AttributeListSyntax? = nil, 
+      _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, 
+      modifiers: ModifierListSyntax? = nil, 
+      _ unexpectedBetweenModifiersAndFirstName: UnexpectedNodesSyntax? = nil, 
+      firstName: TokenSyntax, 
+      _ unexpectedBetweenFirstNameAndSecondName: UnexpectedNodesSyntax? = nil, 
+      secondName: TokenSyntax? = nil, 
+      _ unexpectedBetweenSecondNameAndColon: UnexpectedNodesSyntax? = nil, 
+      colon: TokenSyntax? = nil, 
+      _ unexpectedBetweenColonAndType: UnexpectedNodesSyntax? = nil, 
+      type: T? = nil, 
+      _ unexpectedBetweenTypeAndEllipsis: UnexpectedNodesSyntax? = nil, 
+      ellipsis: TokenSyntax? = nil, 
+      _ unexpectedBetweenEllipsisAndTrailingComma: UnexpectedNodesSyntax? = nil, 
+      trailingComma: TokenSyntax? = nil, 
+      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil, 
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
+            unexpectedBeforeAttributes, 
+            attributes, 
+            unexpectedBetweenAttributesAndModifiers, 
+            modifiers, 
+            unexpectedBetweenModifiersAndFirstName, 
+            firstName, 
+            unexpectedBetweenFirstNameAndSecondName, 
+            secondName, 
+            unexpectedBetweenSecondNameAndColon, 
+            colon, 
+            unexpectedBetweenColonAndType, 
+            type, 
+            unexpectedBetweenTypeAndEllipsis, 
+            ellipsis, 
+            unexpectedBetweenEllipsisAndTrailingComma, 
+            trailingComma, 
+            unexpectedAfterTrailingComma
+          ))) {(arena, _) in 
+      let layout: [RawSyntax?] = [
+          unexpectedBeforeAttributes?.raw, 
+          attributes?.raw, 
+          unexpectedBetweenAttributesAndModifiers?.raw, 
+          modifiers?.raw, 
+          unexpectedBetweenModifiersAndFirstName?.raw, 
+          firstName.raw, 
+          unexpectedBetweenFirstNameAndSecondName?.raw, 
+          secondName?.raw, 
+          unexpectedBetweenSecondNameAndColon?.raw, 
+          colon?.raw, 
+          unexpectedBetweenColonAndType?.raw, 
+          type?.raw, 
+          unexpectedBetweenTypeAndEllipsis?.raw, 
+          ellipsis?.raw, 
+          unexpectedBetweenEllipsisAndTrailingComma?.raw, 
+          trailingComma?.raw, 
+          unexpectedAfterTrailingComma?.raw
+        ]
+      let raw = RawSyntax.makeLayout(
+          kind: SyntaxKind.closureParameter, 
+          from: layout, 
+          arena: arena, 
+          leadingTrivia: leadingTrivia, 
+          trailingTrivia: trailingTrivia
+        )
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+  
+  /// This initializer exists solely because Swift 5.6 does not support
+  /// `Optional<ConcreteType>.none` as a default value of a generic parameter.
+  /// The above initializer thus defaults to `nil` instead, but that means it
+  /// is not actually callable when either not passing the defaulted parameter,
+  /// or passing `nil`.
+  ///
+  /// Hack around that limitation using this initializer, which takes a
+  /// `Missing*` syntax node instead. `Missing*` is used over the base type as
+  /// the base type would allow implicit conversion from a string literal,
+  /// which the above initializer doesn't support.
+  public init(
+      leadingTrivia: Trivia? = nil, 
+      _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, 
+      attributes: AttributeListSyntax? = nil, 
+      _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, 
+      modifiers: ModifierListSyntax? = nil, 
+      _ unexpectedBetweenModifiersAndFirstName: UnexpectedNodesSyntax? = nil, 
+      firstName: TokenSyntax, 
+      _ unexpectedBetweenFirstNameAndSecondName: UnexpectedNodesSyntax? = nil, 
+      secondName: TokenSyntax? = nil, 
+      _ unexpectedBetweenSecondNameAndColon: UnexpectedNodesSyntax? = nil, 
+      colon: TokenSyntax? = nil, 
+      _ unexpectedBetweenColonAndType: UnexpectedNodesSyntax? = nil, 
+      type: MissingTypeSyntax? = nil, 
+      _ unexpectedBetweenTypeAndEllipsis: UnexpectedNodesSyntax? = nil, 
+      ellipsis: TokenSyntax? = nil, 
+      _ unexpectedBetweenEllipsisAndTrailingComma: UnexpectedNodesSyntax? = nil, 
+      trailingComma: TokenSyntax? = nil, 
+      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil, 
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeAttributes, 
+        attributes: attributes, 
+        unexpectedBetweenAttributesAndModifiers, 
+        modifiers: modifiers, 
+        unexpectedBetweenModifiersAndFirstName, 
+        firstName: firstName, 
+        unexpectedBetweenFirstNameAndSecondName, 
+        secondName: secondName, 
+        unexpectedBetweenSecondNameAndColon, 
+        colon: colon, 
+        unexpectedBetweenColonAndType, 
+        type: Optional<TypeSyntax>.none, 
+        unexpectedBetweenTypeAndEllipsis, 
+        ellipsis: ellipsis, 
+        unexpectedBetweenEllipsisAndTrailingComma, 
+        trailingComma: trailingComma, 
+        unexpectedAfterTrailingComma, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+  
+  public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = ClosureParameterSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var attributes: AttributeListSyntax? {
+    get {
+      return data.child(at: 1, parent: Syntax(self)).map(AttributeListSyntax.init)
+    }
+    set(value) {
+      self = ClosureParameterSyntax(data.replacingChild(at: 1, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  /// Adds the provided `Attribute` to the node's `attributes`
+  /// collection.
+  /// - param element: The new `Attribute` to add to the node's
+  ///                  `attributes` collection.
+  /// - returns: A copy of the receiver with the provided `Attribute`
+  ///            appended to its `attributes` collection.
+  public func addAttribute(_ element: Syntax) -> ClosureParameterSyntax {
+    var collection: RawSyntax
+    let arena = SyntaxArena()
+    if let col = raw.layoutView!.children[1] {
+      collection = col.layoutView!.appending(element.raw, arena: arena)
+    } else {
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList, 
+                                      from: [element.raw], arena: arena)
+    }
+    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
+    return ClosureParameterSyntax(newData)
+  }
+  
+  public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = ClosureParameterSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var modifiers: ModifierListSyntax? {
+    get {
+      return data.child(at: 3, parent: Syntax(self)).map(ModifierListSyntax.init)
+    }
+    set(value) {
+      self = ClosureParameterSyntax(data.replacingChild(at: 3, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  /// Adds the provided `Modifier` to the node's `modifiers`
+  /// collection.
+  /// - param element: The new `Modifier` to add to the node's
+  ///                  `modifiers` collection.
+  /// - returns: A copy of the receiver with the provided `Modifier`
+  ///            appended to its `modifiers` collection.
+  public func addModifier(_ element: DeclModifierSyntax) -> ClosureParameterSyntax {
+    var collection: RawSyntax
+    let arena = SyntaxArena()
+    if let col = raw.layoutView!.children[3] {
+      collection = col.layoutView!.appending(element.raw, arena: arena)
+    } else {
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList, 
+                                      from: [element.raw], arena: arena)
+    }
+    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
+    return ClosureParameterSyntax(newData)
+  }
+  
+  public var unexpectedBetweenModifiersAndFirstName: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = ClosureParameterSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  /// The label of this parameter that will be used when the closure is called.
+  public var firstName: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = ClosureParameterSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenFirstNameAndSecondName: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = ClosureParameterSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  /// If this is specified, it is the name by which the parameter can be referenced inside the closure body. If it is `nil`, the closure parameter is referenced by the first name.
+  public var secondName: TokenSyntax? {
+    get {
+      return data.child(at: 7, parent: Syntax(self)).map(TokenSyntax.init)
+    }
+    set(value) {
+      self = ClosureParameterSyntax(data.replacingChild(at: 7, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenSecondNameAndColon: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = ClosureParameterSyntax(data.replacingChild(at: 8, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  /// The colon separating the parameter's name and type.
+  public var colon: TokenSyntax? {
+    get {
+      return data.child(at: 9, parent: Syntax(self)).map(TokenSyntax.init)
+    }
+    set(value) {
+      self = ClosureParameterSyntax(data.replacingChild(at: 9, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenColonAndType: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 10, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = ClosureParameterSyntax(data.replacingChild(at: 10, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  /// The type of the parameter.
+  public var type: TypeSyntax? {
+    get {
+      return data.child(at: 11, parent: Syntax(self)).map(TypeSyntax.init)
+    }
+    set(value) {
+      self = ClosureParameterSyntax(data.replacingChild(at: 11, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenTypeAndEllipsis: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 12, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = ClosureParameterSyntax(data.replacingChild(at: 12, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  /// If the parameter is variadic, `...` to indicate that.
+  public var ellipsis: TokenSyntax? {
+    get {
+      return data.child(at: 13, parent: Syntax(self)).map(TokenSyntax.init)
+    }
+    set(value) {
+      self = ClosureParameterSyntax(data.replacingChild(at: 13, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenEllipsisAndTrailingComma: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 14, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = ClosureParameterSyntax(data.replacingChild(at: 14, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  /// If the parameter is followed by another parameter, the comma separating them.
+  public var trailingComma: TokenSyntax? {
+    get {
+      return data.child(at: 15, parent: Syntax(self)).map(TokenSyntax.init)
+    }
+    set(value) {
+      self = ClosureParameterSyntax(data.replacingChild(at: 15, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedAfterTrailingComma: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 16, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = ClosureParameterSyntax(data.replacingChild(at: 16, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+          \Self.unexpectedBeforeAttributes, 
+          \Self.attributes, 
+          \Self.unexpectedBetweenAttributesAndModifiers, 
+          \Self.modifiers, 
+          \Self.unexpectedBetweenModifiersAndFirstName, 
+          \Self.firstName, 
+          \Self.unexpectedBetweenFirstNameAndSecondName, 
+          \Self.secondName, 
+          \Self.unexpectedBetweenSecondNameAndColon, 
+          \Self.colon, 
+          \Self.unexpectedBetweenColonAndType, 
+          \Self.type, 
+          \Self.unexpectedBetweenTypeAndEllipsis, 
+          \Self.ellipsis, 
+          \Self.unexpectedBetweenEllipsisAndTrailingComma, 
+          \Self.trailingComma, 
+          \Self.unexpectedAfterTrailingComma
+        ])
+  }
+  
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return "attributes"
+    case 2:
+      return nil
+    case 3:
+      return "modifiers"
+    case 4:
+      return nil
+    case 5:
+      return nil
+    case 6:
+      return nil
+    case 7:
+      return nil
+    case 8:
+      return nil
+    case 9:
+      return nil
+    case 10:
+      return nil
+    case 11:
+      return "type"
+    case 12:
+      return nil
+    case 13:
+      return nil
+    case 14:
+      return nil
+    case 15:
+      return nil
+    case 16:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
+}
+
+extension ClosureParameterSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+          "unexpectedBeforeAttributes": unexpectedBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "unexpectedBetweenAttributesAndModifiers": unexpectedBetweenAttributesAndModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "unexpectedBetweenModifiersAndFirstName": unexpectedBetweenModifiersAndFirstName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "firstName": Syntax(firstName).asProtocol(SyntaxProtocol.self), 
+          "unexpectedBetweenFirstNameAndSecondName": unexpectedBetweenFirstNameAndSecondName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "secondName": secondName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "unexpectedBetweenSecondNameAndColon": unexpectedBetweenSecondNameAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "colon": colon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "unexpectedBetweenColonAndType": unexpectedBetweenColonAndType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "type": type.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "unexpectedBetweenTypeAndEllipsis": unexpectedBetweenTypeAndEllipsis.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "ellipsis": ellipsis.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "unexpectedBetweenEllipsisAndTrailingComma": unexpectedBetweenEllipsisAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "trailingComma": trailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "unexpectedAfterTrailingComma": unexpectedAfterTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
+        ])
+  }
+}
+
 // MARK: - ClosureSignatureSyntax
 
 
 public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   public enum Input: SyntaxChildChoices {
     case `simpleInput`(ClosureParamListSyntax)
-    case `input`(ParameterClauseSyntax)
+    case `input`(ClosureParameterClauseSyntax)
     
     public var _syntaxNode: Syntax {
       switch self {
@@ -3935,7 +4568,7 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
       self = .simpleInput(node)
     }
     
-    public init(_ node: ParameterClauseSyntax) {
+    public init(_ node: ClosureParameterClauseSyntax) {
       self = .input(node)
     }
     
@@ -3944,7 +4577,7 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
         self = .simpleInput(node)
         return 
       }
-      if let node = node.as(ParameterClauseSyntax.self) {
+      if let node = node.as(ClosureParameterClauseSyntax.self) {
         self = .input(node)
         return 
       }
@@ -3952,7 +4585,7 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
     }
     
     public static var structure: SyntaxNodeStructure {
-      return .choices([.node(ClosureParamListSyntax.self), .node(ParameterClauseSyntax.self)])
+      return .choices([.node(ClosureParamListSyntax.self), .node(ClosureParameterClauseSyntax.self)])
     }
   }
   
@@ -8452,7 +9085,7 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable {
       _ unexpectedBeforeIdentifier: UnexpectedNodesSyntax? = nil, 
       identifier: TokenSyntax = .identifier("IdentifierToken"), 
       _ unexpectedBetweenIdentifierAndAssociatedValue: UnexpectedNodesSyntax? = nil, 
-      associatedValue: ParameterClauseSyntax? = nil, 
+      associatedValue: EnumCaseParameterClauseSyntax? = nil, 
       _ unexpectedBetweenAssociatedValueAndRawValue: UnexpectedNodesSyntax? = nil, 
       rawValue: InitializerClauseSyntax? = nil, 
       _ unexpectedBetweenRawValueAndTrailingComma: UnexpectedNodesSyntax? = nil, 
@@ -8526,9 +9159,9 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   /// The set of associated values of the case.
-  public var associatedValue: ParameterClauseSyntax? {
+  public var associatedValue: EnumCaseParameterClauseSyntax? {
     get {
-      return data.child(at: 3, parent: Syntax(self)).map(ParameterClauseSyntax.init)
+      return data.child(at: 3, parent: Syntax(self)).map(EnumCaseParameterClauseSyntax.init)
     }
     set(value) {
       self = EnumCaseElementSyntax(data.replacingChild(at: 3, with: value?.raw, arena: SyntaxArena()))
@@ -8632,6 +9265,531 @@ extension EnumCaseElementSyntax: CustomReflectable {
           "unexpectedBetweenAssociatedValueAndRawValue": unexpectedBetweenAssociatedValueAndRawValue.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
           "rawValue": rawValue.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
           "unexpectedBetweenRawValueAndTrailingComma": unexpectedBetweenRawValueAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "trailingComma": trailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "unexpectedAfterTrailingComma": unexpectedAfterTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
+        ])
+  }
+}
+
+// MARK: - EnumCaseParameterClauseSyntax
+
+
+public struct EnumCaseParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+  
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .enumCaseParameterClause else { 
+      return nil 
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+  
+  /// Creates a `EnumCaseParameterClauseSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    precondition(data.raw.kind == .enumCaseParameterClause)
+    self._syntaxNode = Syntax(data)
+  }
+  
+  public init(
+      leadingTrivia: Trivia? = nil, 
+      _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil, 
+      leftParen: TokenSyntax = .leftParenToken(), 
+      _ unexpectedBetweenLeftParenAndParameterList: UnexpectedNodesSyntax? = nil, 
+      parameterList: EnumCaseParameterListSyntax, 
+      _ unexpectedBetweenParameterListAndRightParen: UnexpectedNodesSyntax? = nil, 
+      rightParen: TokenSyntax = .rightParenToken(), 
+      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil, 
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
+            unexpectedBeforeLeftParen, 
+            leftParen, 
+            unexpectedBetweenLeftParenAndParameterList, 
+            parameterList, 
+            unexpectedBetweenParameterListAndRightParen, 
+            rightParen, 
+            unexpectedAfterRightParen
+          ))) {(arena, _) in 
+      let layout: [RawSyntax?] = [
+          unexpectedBeforeLeftParen?.raw, 
+          leftParen.raw, 
+          unexpectedBetweenLeftParenAndParameterList?.raw, 
+          parameterList.raw, 
+          unexpectedBetweenParameterListAndRightParen?.raw, 
+          rightParen.raw, 
+          unexpectedAfterRightParen?.raw
+        ]
+      let raw = RawSyntax.makeLayout(
+          kind: SyntaxKind.enumCaseParameterClause, 
+          from: layout, 
+          arena: arena, 
+          leadingTrivia: leadingTrivia, 
+          trailingTrivia: trailingTrivia
+        )
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+  
+  public var unexpectedBeforeLeftParen: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = EnumCaseParameterClauseSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  /// The '(' to open the parameter clause.
+  public var leftParen: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = EnumCaseParameterClauseSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenLeftParenAndParameterList: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = EnumCaseParameterClauseSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  /// The actual parameters.
+  public var parameterList: EnumCaseParameterListSyntax {
+    get {
+      return EnumCaseParameterListSyntax(data.child(at: 3, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = EnumCaseParameterClauseSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  /// Adds the provided `Parameter` to the node's `parameterList`
+  /// collection.
+  /// - param element: The new `Parameter` to add to the node's
+  ///                  `parameterList` collection.
+  /// - returns: A copy of the receiver with the provided `Parameter`
+  ///            appended to its `parameterList` collection.
+  public func addParameter(_ element: EnumCaseParameterSyntax) -> EnumCaseParameterClauseSyntax {
+    var collection: RawSyntax
+    let arena = SyntaxArena()
+    if let col = raw.layoutView!.children[3] {
+      collection = col.layoutView!.appending(element.raw, arena: arena)
+    } else {
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.enumCaseParameterList, 
+                                      from: [element.raw], arena: arena)
+    }
+    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
+    return EnumCaseParameterClauseSyntax(newData)
+  }
+  
+  public var unexpectedBetweenParameterListAndRightParen: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = EnumCaseParameterClauseSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  /// The ')' to close the parameter clause.
+  public var rightParen: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = EnumCaseParameterClauseSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedAfterRightParen: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = EnumCaseParameterClauseSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+          \Self.unexpectedBeforeLeftParen, 
+          \Self.leftParen, 
+          \Self.unexpectedBetweenLeftParenAndParameterList, 
+          \Self.parameterList, 
+          \Self.unexpectedBetweenParameterListAndRightParen, 
+          \Self.rightParen, 
+          \Self.unexpectedAfterRightParen
+        ])
+  }
+  
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return "parameters"
+    case 4:
+      return nil
+    case 5:
+      return nil
+    case 6:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
+}
+
+extension EnumCaseParameterClauseSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+          "unexpectedBeforeLeftParen": unexpectedBeforeLeftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "leftParen": Syntax(leftParen).asProtocol(SyntaxProtocol.self), 
+          "unexpectedBetweenLeftParenAndParameterList": unexpectedBetweenLeftParenAndParameterList.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "parameterList": Syntax(parameterList).asProtocol(SyntaxProtocol.self), 
+          "unexpectedBetweenParameterListAndRightParen": unexpectedBetweenParameterListAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "rightParen": Syntax(rightParen).asProtocol(SyntaxProtocol.self), 
+          "unexpectedAfterRightParen": unexpectedAfterRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
+        ])
+  }
+}
+
+// MARK: - EnumCaseParameterSyntax
+
+
+public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+  
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .enumCaseParameter else { 
+      return nil 
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+  
+  /// Creates a `EnumCaseParameterSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    precondition(data.raw.kind == .enumCaseParameter)
+    self._syntaxNode = Syntax(data)
+  }
+  
+  public init<T: TypeSyntaxProtocol>(
+      leadingTrivia: Trivia? = nil, 
+      _ unexpectedBeforeModifiers: UnexpectedNodesSyntax? = nil, 
+      modifiers: ModifierListSyntax? = nil, 
+      _ unexpectedBetweenModifiersAndFirstName: UnexpectedNodesSyntax? = nil, 
+      firstName: TokenSyntax? = nil, 
+      _ unexpectedBetweenFirstNameAndSecondName: UnexpectedNodesSyntax? = nil, 
+      secondName: TokenSyntax? = nil, 
+      _ unexpectedBetweenSecondNameAndColon: UnexpectedNodesSyntax? = nil, 
+      colon: TokenSyntax? = nil, 
+      _ unexpectedBetweenColonAndType: UnexpectedNodesSyntax? = nil, 
+      type: T, 
+      _ unexpectedBetweenTypeAndDefaultArgument: UnexpectedNodesSyntax? = nil, 
+      defaultArgument: InitializerClauseSyntax? = nil, 
+      _ unexpectedBetweenDefaultArgumentAndTrailingComma: UnexpectedNodesSyntax? = nil, 
+      trailingComma: TokenSyntax? = nil, 
+      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil, 
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
+            unexpectedBeforeModifiers, 
+            modifiers, 
+            unexpectedBetweenModifiersAndFirstName, 
+            firstName, 
+            unexpectedBetweenFirstNameAndSecondName, 
+            secondName, 
+            unexpectedBetweenSecondNameAndColon, 
+            colon, 
+            unexpectedBetweenColonAndType, 
+            type, 
+            unexpectedBetweenTypeAndDefaultArgument, 
+            defaultArgument, 
+            unexpectedBetweenDefaultArgumentAndTrailingComma, 
+            trailingComma, 
+            unexpectedAfterTrailingComma
+          ))) {(arena, _) in 
+      let layout: [RawSyntax?] = [
+          unexpectedBeforeModifiers?.raw, 
+          modifiers?.raw, 
+          unexpectedBetweenModifiersAndFirstName?.raw, 
+          firstName?.raw, 
+          unexpectedBetweenFirstNameAndSecondName?.raw, 
+          secondName?.raw, 
+          unexpectedBetweenSecondNameAndColon?.raw, 
+          colon?.raw, 
+          unexpectedBetweenColonAndType?.raw, 
+          type.raw, 
+          unexpectedBetweenTypeAndDefaultArgument?.raw, 
+          defaultArgument?.raw, 
+          unexpectedBetweenDefaultArgumentAndTrailingComma?.raw, 
+          trailingComma?.raw, 
+          unexpectedAfterTrailingComma?.raw
+        ]
+      let raw = RawSyntax.makeLayout(
+          kind: SyntaxKind.enumCaseParameter, 
+          from: layout, 
+          arena: arena, 
+          leadingTrivia: leadingTrivia, 
+          trailingTrivia: trailingTrivia
+        )
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+  
+  public var unexpectedBeforeModifiers: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = EnumCaseParameterSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var modifiers: ModifierListSyntax? {
+    get {
+      return data.child(at: 1, parent: Syntax(self)).map(ModifierListSyntax.init)
+    }
+    set(value) {
+      self = EnumCaseParameterSyntax(data.replacingChild(at: 1, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  /// Adds the provided `Modifier` to the node's `modifiers`
+  /// collection.
+  /// - param element: The new `Modifier` to add to the node's
+  ///                  `modifiers` collection.
+  /// - returns: A copy of the receiver with the provided `Modifier`
+  ///            appended to its `modifiers` collection.
+  public func addModifier(_ element: DeclModifierSyntax) -> EnumCaseParameterSyntax {
+    var collection: RawSyntax
+    let arena = SyntaxArena()
+    if let col = raw.layoutView!.children[1] {
+      collection = col.layoutView!.appending(element.raw, arena: arena)
+    } else {
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList, 
+                                      from: [element.raw], arena: arena)
+    }
+    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
+    return EnumCaseParameterSyntax(newData)
+  }
+  
+  public var unexpectedBetweenModifiersAndFirstName: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = EnumCaseParameterSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var firstName: TokenSyntax? {
+    get {
+      return data.child(at: 3, parent: Syntax(self)).map(TokenSyntax.init)
+    }
+    set(value) {
+      self = EnumCaseParameterSyntax(data.replacingChild(at: 3, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenFirstNameAndSecondName: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = EnumCaseParameterSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var secondName: TokenSyntax? {
+    get {
+      return data.child(at: 5, parent: Syntax(self)).map(TokenSyntax.init)
+    }
+    set(value) {
+      self = EnumCaseParameterSyntax(data.replacingChild(at: 5, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenSecondNameAndColon: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = EnumCaseParameterSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  /// If the parameter has a label, the colon separating the label from the type.
+  public var colon: TokenSyntax? {
+    get {
+      return data.child(at: 7, parent: Syntax(self)).map(TokenSyntax.init)
+    }
+    set(value) {
+      self = EnumCaseParameterSyntax(data.replacingChild(at: 7, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenColonAndType: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = EnumCaseParameterSyntax(data.replacingChild(at: 8, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  /// The parameter's type.
+  public var type: TypeSyntax {
+    get {
+      return TypeSyntax(data.child(at: 9, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = EnumCaseParameterSyntax(data.replacingChild(at: 9, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenTypeAndDefaultArgument: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 10, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = EnumCaseParameterSyntax(data.replacingChild(at: 10, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  /// If the parameter has a default value, the initializer clause describing the default value.
+  public var defaultArgument: InitializerClauseSyntax? {
+    get {
+      return data.child(at: 11, parent: Syntax(self)).map(InitializerClauseSyntax.init)
+    }
+    set(value) {
+      self = EnumCaseParameterSyntax(data.replacingChild(at: 11, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenDefaultArgumentAndTrailingComma: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 12, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = EnumCaseParameterSyntax(data.replacingChild(at: 12, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  /// If the parameter is followed by another parameter, the comma separating them.
+  public var trailingComma: TokenSyntax? {
+    get {
+      return data.child(at: 13, parent: Syntax(self)).map(TokenSyntax.init)
+    }
+    set(value) {
+      self = EnumCaseParameterSyntax(data.replacingChild(at: 13, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedAfterTrailingComma: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 14, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = EnumCaseParameterSyntax(data.replacingChild(at: 14, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+          \Self.unexpectedBeforeModifiers, 
+          \Self.modifiers, 
+          \Self.unexpectedBetweenModifiersAndFirstName, 
+          \Self.firstName, 
+          \Self.unexpectedBetweenFirstNameAndSecondName, 
+          \Self.secondName, 
+          \Self.unexpectedBetweenSecondNameAndColon, 
+          \Self.colon, 
+          \Self.unexpectedBetweenColonAndType, 
+          \Self.type, 
+          \Self.unexpectedBetweenTypeAndDefaultArgument, 
+          \Self.defaultArgument, 
+          \Self.unexpectedBetweenDefaultArgumentAndTrailingComma, 
+          \Self.trailingComma, 
+          \Self.unexpectedAfterTrailingComma
+        ])
+  }
+  
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return "modifiers"
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    case 5:
+      return nil
+    case 6:
+      return nil
+    case 7:
+      return nil
+    case 8:
+      return nil
+    case 9:
+      return "type"
+    case 10:
+      return nil
+    case 11:
+      return "default argument"
+    case 12:
+      return nil
+    case 13:
+      return nil
+    case 14:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
+}
+
+extension EnumCaseParameterSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+          "unexpectedBeforeModifiers": unexpectedBeforeModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "unexpectedBetweenModifiersAndFirstName": unexpectedBetweenModifiersAndFirstName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "firstName": firstName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "unexpectedBetweenFirstNameAndSecondName": unexpectedBetweenFirstNameAndSecondName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "secondName": secondName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "unexpectedBetweenSecondNameAndColon": unexpectedBetweenSecondNameAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "colon": colon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "unexpectedBetweenColonAndType": unexpectedBetweenColonAndType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "type": Syntax(type).asProtocol(SyntaxProtocol.self), 
+          "unexpectedBetweenTypeAndDefaultArgument": unexpectedBetweenTypeAndDefaultArgument.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "defaultArgument": defaultArgument.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "unexpectedBetweenDefaultArgumentAndTrailingComma": unexpectedBetweenDefaultArgumentAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
           "trailingComma": trailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
           "unexpectedAfterTrailingComma": unexpectedAfterTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
         ])
@@ -9101,13 +10259,13 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, 
       modifiers: ModifierListSyntax? = nil, 
       _ unexpectedBetweenModifiersAndFirstName: UnexpectedNodesSyntax? = nil, 
-      firstName: TokenSyntax? = nil, 
+      firstName: TokenSyntax, 
       _ unexpectedBetweenFirstNameAndSecondName: UnexpectedNodesSyntax? = nil, 
       secondName: TokenSyntax? = nil, 
       _ unexpectedBetweenSecondNameAndColon: UnexpectedNodesSyntax? = nil, 
-      colon: TokenSyntax? = nil, 
+      colon: TokenSyntax = .colonToken(), 
       _ unexpectedBetweenColonAndType: UnexpectedNodesSyntax? = nil, 
-      type: T? = nil, 
+      type: T, 
       _ unexpectedBetweenTypeAndEllipsis: UnexpectedNodesSyntax? = nil, 
       ellipsis: TokenSyntax? = nil, 
       _ unexpectedBetweenEllipsisAndDefaultArgument: UnexpectedNodesSyntax? = nil, 
@@ -9147,13 +10305,13 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedBetweenAttributesAndModifiers?.raw, 
           modifiers?.raw, 
           unexpectedBetweenModifiersAndFirstName?.raw, 
-          firstName?.raw, 
+          firstName.raw, 
           unexpectedBetweenFirstNameAndSecondName?.raw, 
           secondName?.raw, 
           unexpectedBetweenSecondNameAndColon?.raw, 
-          colon?.raw, 
+          colon.raw, 
           unexpectedBetweenColonAndType?.raw, 
-          type?.raw, 
+          type.raw, 
           unexpectedBetweenTypeAndEllipsis?.raw, 
           ellipsis?.raw, 
           unexpectedBetweenEllipsisAndDefaultArgument?.raw, 
@@ -9172,65 +10330,6 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
-  }
-  
-  /// This initializer exists solely because Swift 5.6 does not support
-  /// `Optional<ConcreteType>.none` as a default value of a generic parameter.
-  /// The above initializer thus defaults to `nil` instead, but that means it
-  /// is not actually callable when either not passing the defaulted parameter,
-  /// or passing `nil`.
-  ///
-  /// Hack around that limitation using this initializer, which takes a
-  /// `Missing*` syntax node instead. `Missing*` is used over the base type as
-  /// the base type would allow implicit conversion from a string literal,
-  /// which the above initializer doesn't support.
-  public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, 
-      attributes: AttributeListSyntax? = nil, 
-      _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, 
-      modifiers: ModifierListSyntax? = nil, 
-      _ unexpectedBetweenModifiersAndFirstName: UnexpectedNodesSyntax? = nil, 
-      firstName: TokenSyntax? = nil, 
-      _ unexpectedBetweenFirstNameAndSecondName: UnexpectedNodesSyntax? = nil, 
-      secondName: TokenSyntax? = nil, 
-      _ unexpectedBetweenSecondNameAndColon: UnexpectedNodesSyntax? = nil, 
-      colon: TokenSyntax? = nil, 
-      _ unexpectedBetweenColonAndType: UnexpectedNodesSyntax? = nil, 
-      type: MissingTypeSyntax? = nil, 
-      _ unexpectedBetweenTypeAndEllipsis: UnexpectedNodesSyntax? = nil, 
-      ellipsis: TokenSyntax? = nil, 
-      _ unexpectedBetweenEllipsisAndDefaultArgument: UnexpectedNodesSyntax? = nil, 
-      defaultArgument: InitializerClauseSyntax? = nil, 
-      _ unexpectedBetweenDefaultArgumentAndTrailingComma: UnexpectedNodesSyntax? = nil, 
-      trailingComma: TokenSyntax? = nil, 
-      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil, 
-      trailingTrivia: Trivia? = nil
-    
-  ) {
-    self.init(
-        leadingTrivia: leadingTrivia, 
-        unexpectedBeforeAttributes, 
-        attributes: attributes, 
-        unexpectedBetweenAttributesAndModifiers, 
-        modifiers: modifiers, 
-        unexpectedBetweenModifiersAndFirstName, 
-        firstName: firstName, 
-        unexpectedBetweenFirstNameAndSecondName, 
-        secondName: secondName, 
-        unexpectedBetweenSecondNameAndColon, 
-        colon: colon, 
-        unexpectedBetweenColonAndType, 
-        type: Optional<TypeSyntax>.none, 
-        unexpectedBetweenTypeAndEllipsis, 
-        ellipsis: ellipsis, 
-        unexpectedBetweenEllipsisAndDefaultArgument, 
-        defaultArgument: defaultArgument, 
-        unexpectedBetweenDefaultArgumentAndTrailingComma, 
-        trailingComma: trailingComma, 
-        unexpectedAfterTrailingComma, 
-        trailingTrivia: trailingTrivia
-      )
   }
   
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
@@ -9316,12 +10415,12 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var firstName: TokenSyntax? {
+  public var firstName: TokenSyntax {
     get {
-      return data.child(at: 5, parent: Syntax(self)).map(TokenSyntax.init)
+      return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
-      self = FunctionParameterSyntax(data.replacingChild(at: 5, with: value?.raw, arena: SyntaxArena()))
+      self = FunctionParameterSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
     }
   }
   
@@ -9352,12 +10451,12 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var colon: TokenSyntax? {
+  public var colon: TokenSyntax {
     get {
-      return data.child(at: 9, parent: Syntax(self)).map(TokenSyntax.init)
+      return TokenSyntax(data.child(at: 9, parent: Syntax(self))!)
     }
     set(value) {
-      self = FunctionParameterSyntax(data.replacingChild(at: 9, with: value?.raw, arena: SyntaxArena()))
+      self = FunctionParameterSyntax(data.replacingChild(at: 9, with: value.raw, arena: SyntaxArena()))
     }
   }
   
@@ -9370,12 +10469,12 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var type: TypeSyntax? {
+  public var type: TypeSyntax {
     get {
-      return data.child(at: 11, parent: Syntax(self)).map(TypeSyntax.init)
+      return TypeSyntax(data.child(at: 11, parent: Syntax(self))!)
     }
     set(value) {
-      self = FunctionParameterSyntax(data.replacingChild(at: 11, with: value?.raw, arena: SyntaxArena()))
+      self = FunctionParameterSyntax(data.replacingChild(at: 11, with: value.raw, arena: SyntaxArena()))
     }
   }
   
@@ -9520,13 +10619,13 @@ extension FunctionParameterSyntax: CustomReflectable {
           "unexpectedBetweenAttributesAndModifiers": unexpectedBetweenAttributesAndModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
           "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
           "unexpectedBetweenModifiersAndFirstName": unexpectedBetweenModifiersAndFirstName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "firstName": firstName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "firstName": Syntax(firstName).asProtocol(SyntaxProtocol.self), 
           "unexpectedBetweenFirstNameAndSecondName": unexpectedBetweenFirstNameAndSecondName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
           "secondName": secondName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
           "unexpectedBetweenSecondNameAndColon": unexpectedBetweenSecondNameAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "colon": colon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "colon": Syntax(colon).asProtocol(SyntaxProtocol.self), 
           "unexpectedBetweenColonAndType": unexpectedBetweenColonAndType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "type": type.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "type": Syntax(type).asProtocol(SyntaxProtocol.self), 
           "unexpectedBetweenTypeAndEllipsis": unexpectedBetweenTypeAndEllipsis.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
           "ellipsis": ellipsis.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
           "unexpectedBetweenEllipsisAndDefaultArgument": unexpectedBetweenEllipsisAndDefaultArgument.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 

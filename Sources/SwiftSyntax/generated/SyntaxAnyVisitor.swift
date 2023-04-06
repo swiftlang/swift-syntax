@@ -429,6 +429,30 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
+  override open func visit(_ node: ClosureParameterClauseSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: ClosureParameterClauseSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
+  override open func visit(_ node: ClosureParameterListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: ClosureParameterListSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
+  override open func visit(_ node: ClosureParameterSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: ClosureParameterSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
   override open func visit(_ node: ClosureSignatureSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
@@ -794,6 +818,30 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   }
   
   override open func visitPost(_ node: EnumCaseElementSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
+  override open func visit(_ node: EnumCaseParameterClauseSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: EnumCaseParameterClauseSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
+  override open func visit(_ node: EnumCaseParameterListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: EnumCaseParameterListSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
+  override open func visit(_ node: EnumCaseParameterSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: EnumCaseParameterSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   

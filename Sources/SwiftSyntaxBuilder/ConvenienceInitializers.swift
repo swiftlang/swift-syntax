@@ -163,29 +163,6 @@ extension FunctionCallExprSyntax {
   }
 }
 
-// MARK: - FunctionParameter
-
-// TODO: We should split FunctionParameter into separate nodes
-//
-// This would allow them to be both `SyntaxParseable` and
-// `SyntaxExpressibleByStringInterpolation`, allowing this initializer to be
-// removed. In general we shouldn't allow the builder to take arbitrary
-// strings, only literals.
-extension FunctionParameterSyntax {
-  public init(
-    _ source: PartialSyntaxNodeString,
-    for subject: Parser.ParameterSubject
-  ) {
-    self = performParse(
-      source: source.sourceText,
-      parse: {
-        let raw = RawSyntax($0.parseFunctionParameter(for: subject))
-        return Syntax(raw: raw).cast(FunctionParameterSyntax.self)
-      }
-    )
-  }
-}
-
 // MARK: - IntegerLiteralExpr
 
 extension IntegerLiteralExprSyntax: ExpressibleByIntegerLiteral {

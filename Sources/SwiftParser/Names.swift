@@ -24,7 +24,9 @@ extension Parser {
   }
 
   mutating func parseArgumentLabel() -> (RawUnexpectedNodesSyntax?, RawTokenSyntax) {
-    precondition(self.currentToken.canBeArgumentLabel(allowDollarIdentifier: true))
+    guard self.currentToken.canBeArgumentLabel(allowDollarIdentifier: true) else {
+      return (nil, missingToken(.identifier))
+    }
     if let dollarIdent = self.consume(if: .dollarIdentifier) {
       return (
         RawUnexpectedNodesSyntax(elements: [RawSyntax(dollarIdent)], arena: self.arena),

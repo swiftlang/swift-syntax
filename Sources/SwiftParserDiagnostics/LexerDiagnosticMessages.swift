@@ -192,7 +192,7 @@ public extension SwiftSyntax.TokenDiagnostic {
         .with(\.leadingTrivia, Trivia(pieces: token.leadingTrivia.map(replaceNonBreakingSpace)))
         .with(\.trailingTrivia, Trivia(pieces: token.trailingTrivia.map(replaceNonBreakingSpace)))
       return [
-        FixIt(message: .replaceNonBreakingSpaceBySpace, changes: [[.replace(oldNode: Syntax(token), newNode: Syntax(fixedToken))]])
+        FixIt(message: .replaceNonBreakingSpaceBySpace, changes: [.replace(oldNode: Syntax(token), newNode: Syntax(fixedToken))])
       ]
     case .unicodeCurlyQuote:
       let (rawKind, text) = token.tokenKind.decomposeToRaw()
@@ -206,7 +206,7 @@ public extension SwiftSyntax.TokenDiagnostic {
 
       let fixedToken = token.withKind(TokenKind.fromRaw(kind: rawKind, text: replacedText))
       return [
-        FixIt(message: .replaceCurlyQuoteByNormalQuote, changes: [[.replace(oldNode: Syntax(token), newNode: Syntax(fixedToken))]])
+        FixIt(message: .replaceCurlyQuoteByNormalQuote, changes: [.replace(oldNode: Syntax(token), newNode: Syntax(fixedToken))])
       ]
     case .equalMustHaveConsistentWhitespaceOnBothSides:
       let hasLeadingSpace = token.previousToken(viewMode: .all)?.trailingTrivia.contains(where: { $0.isSpaceOrTab }) ?? false
@@ -226,7 +226,7 @@ public extension SwiftSyntax.TokenDiagnostic {
       }
 
       return [
-        FixIt(message: .insertWhitespace, changes: FixIt.Changes(changes: changes))
+        FixIt(message: .insertWhitespace, changes: changes)
       ]
     default:
       return []

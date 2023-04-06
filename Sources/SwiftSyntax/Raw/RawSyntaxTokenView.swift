@@ -197,6 +197,21 @@ public struct RawSyntaxTokenView {
     }
   }
 
+  /// Returns a `RawSyntax` node with the presence changed to `newValue`.
+  @_spi(RawSyntax)
+  public func withPresence(_ newValue: SourcePresence, arena: SyntaxArena) -> RawSyntax {
+    switch raw.rawData.payload {
+    case .parsedToken(var payload):
+      payload.presence = newValue
+      return RawSyntax(arena: arena, payload: .parsedToken(payload))
+    case .materializedToken(var payload):
+      payload.presence = newValue
+      return RawSyntax(arena: arena, payload: .materializedToken(payload))
+    default:
+      preconditionFailure("'withKind()' is called on non-token raw syntax")
+    }
+  }
+
   /// The length of the token without leading or trailing trivia, assuming this
   /// is a token node.
   @_spi(RawSyntax)

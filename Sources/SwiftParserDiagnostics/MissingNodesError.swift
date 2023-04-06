@@ -316,7 +316,7 @@ extension ParseDiagnosticsGenerator {
   func handleMissingSyntax<T: SyntaxProtocol>(
     _ node: T,
     overridePosition: AbsolutePosition? = nil,
-    additionalChanges: [FixIt.Changes] = [],
+    additionalChanges: [FixIt.MultiNodeChange] = [],
     additionalHandledNodes: [SyntaxIdentifier] = []
   ) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
@@ -356,7 +356,7 @@ extension ParseDiagnosticsGenerator {
       }
     }
 
-    let changes = missingNodes.enumerated().map { (index, missingNode) -> FixIt.Changes in
+    let changes = missingNodes.enumerated().map { (index, missingNode) -> FixIt.MultiNodeChange in
       if index == 0,
         let token = missingNode.as(TokenSyntax.self),
         let previousTokenKind = missingNode.previousToken(viewMode: .sourceAccurate)?.tokenKind

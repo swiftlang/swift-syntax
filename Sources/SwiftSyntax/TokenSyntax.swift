@@ -55,7 +55,12 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public var presence: SourcePresence {
-    return tokenView.presence
+    get {
+      return tokenView.presence
+    }
+    set {
+      self = TokenSyntax(data.withPresence(newValue, arena: SyntaxArena()))
+    }
   }
 
   /// The text of the token as written in the source code, without any trivia.

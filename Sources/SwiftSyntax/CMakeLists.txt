@@ -12,6 +12,7 @@ add_swift_host_library(SwiftSyntax
   BumpPtrAllocator.swift
   CommonAncestor.swift
   IncrementalParseTransition.swift
+  Trivia.swift
   SourceLength.swift
   SourceLocation.swift
   SourcePresence.swift
@@ -46,7 +47,7 @@ add_swift_host_library(SwiftSyntax
   generated/SyntaxVisitor.swift
   generated/TokenKind.swift
   generated/Tokens.swift
-  generated/Trivia.swift
+  generated/TriviaPieces.swift
 
   generated/syntaxNodes/SyntaxDeclNodes.swift
   generated/syntaxNodes/SyntaxExprNodes.swift

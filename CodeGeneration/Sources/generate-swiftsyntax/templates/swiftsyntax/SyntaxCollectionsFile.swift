@@ -418,16 +418,4 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       )
     }
   }
-
-  for node in SYNTAX_NODES where node.isSyntaxCollection {
-    DeclSyntax(
-      """
-      extension \(raw: node.name): CustomReflectable {
-        public var customMirror: Mirror {
-          return Mirror(self, unlabeledChildren: self.map{ $0 })
-        }
-      }
-      """
-    )
-  }
 }

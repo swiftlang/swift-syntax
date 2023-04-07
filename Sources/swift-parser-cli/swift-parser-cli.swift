@@ -271,7 +271,7 @@ class PrintTree: ParsableCommand {
         resultTree = Syntax(tree)
       }
 
-      print(resultTree.debugDescription(includeChildren: true, includeTrivia: includeTrivia))
+      print(resultTree.debugDescription(includeTrivia: includeTrivia))
     }
   }
 }

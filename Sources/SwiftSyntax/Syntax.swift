@@ -104,14 +104,6 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   }
 }
 
-extension Syntax: CustomReflectable {
-  /// Reconstructs the real syntax type for this type from the node's kind and
-  /// provides a mirror that reflects this type.
-  public var customMirror: Mirror {
-    return Mirror(reflecting: self.asProtocol(SyntaxProtocol.self))
-  }
-}
-
 extension Syntax: Identifiable {
   public typealias ID = SyntaxIdentifier
 }
@@ -157,7 +149,7 @@ public extension SyntaxHashable {
 /// protocol to provide common functionality for all syntax nodes.
 /// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
 public protocol SyntaxProtocol: CustomStringConvertible,
-  CustomDebugStringConvertible, TextOutputStreamable
+  CustomDebugStringConvertible, TextOutputStreamable, CustomReflectable
 {
 
   /// Retrieve the generic syntax node that is represented by this node.
@@ -565,14 +557,14 @@ public extension SyntaxProtocol {
     debugDescription()
   }
 
-  /// Same as `debugDescription` but includes all children.
-  var recursiveDescription: String {
-    debugDescription(includeChildren: true)
+  var customMirror: Mirror {
+    // Suppress printing of children when doing `po node` in the debugger.
+    // `debugDescription` already prints them in a nicer way.
+    return Mirror(self, children: [:])
   }
 
   /// Returns a summarized dump of this node.
   /// - Parameters:
-  ///   - includeChildren: Whether to also dump children, false by default.
   ///   - includeTrivia: Add trivia to each dumped node, which the default
   ///   dump skips.
   ///   - converter: The location converter for the root of the tree. Adds
@@ -582,31 +574,28 @@ public extension SyntaxProtocol {
   ///   - indentLevel: The starting indent level, 0 by default. Each level is 2
   ///   spaces.
   func debugDescription(
-    includeChildren: Bool = false,
     includeTrivia: Bool = false,
     converter: SourceLocationConverter? = nil,
     mark: SyntaxProtocol? = nil,
-    indentLevel: Int = 0
+    indentString: String = ""
   ) -> String {
     var str = ""
     debugWrite(
       to: &str,
-      includeChildren: includeChildren,
       includeTrivia: includeTrivia,
       converter: converter,
       mark: mark,
-      indentLevel: indentLevel
+      indentString: indentString
     )
     return str
   }
 
   private func debugWrite<Target: TextOutputStream>(
     to target: inout Target,
-    includeChildren: Bool,
     includeTrivia: Bool,
     converter: SourceLocationConverter? = nil,
     mark: SyntaxProtocol? = nil,
-    indentLevel: Int
+    indentString: String
   ) {
     if let mark = mark, self.id == mark.id {
       target.write("*** ")
@@ -627,11 +616,6 @@ public extension SyntaxProtocol {
     }
 
     let allChildren = children(viewMode: .all)
-    if includeChildren {
-      if !allChildren.isEmpty {
-        target.write(" children=\(allChildren.count)")
-      }
-    }
 
     if let converter = converter {
       let range = sourceRange(converter: converter)
@@ -646,21 +630,19 @@ public extension SyntaxProtocol {
       target.write(" ***")
     }
 
-    if includeChildren {
-      let childIndentLevel = indentLevel + 1
-      for (num, child) in allChildren.enumerated() {
-        target.write("\n")
-        target.write(String(repeating: " ", count: childIndentLevel * 2))
-        target.write("\(num): ")
-        child.debugWrite(
-          to: &target,
-          includeChildren: includeChildren,
-          includeTrivia: includeTrivia,
-          converter: converter,
-          mark: mark,
-          indentLevel: childIndentLevel
-        )
-      }
+    for (num, child) in allChildren.enumerated() {
+      let isLastChild = num == allChildren.count - 1
+      target.write("\n")
+      target.write(indentString)
+      target.write(isLastChild ? "╰─" : "├─")
+      let childIndentString = indentString + (isLastChild ? "  " : "│ ")
+      child.debugWrite(
+        to: &target,
+        includeTrivia: includeTrivia,
+        converter: converter,
+        mark: mark,
+        indentString: childIndentString
+      )
     }
   }
 }
@@ -760,15 +742,6 @@ public struct ReversedTokenSequence: Sequence {
 extension ReversedTokenSequence: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, unlabeledChildren: self.map { $0 })
-  }
-}
-
-/// Expose `recursiveDescription` on raw nodes for debugging purposes.
-extension RawSyntaxNodeProtocol {
-  /// Print this raw syntax node including all of its children.
-  /// Intended for debugging purposes only.
-  var recursiveDescription: String {
-    return Syntax(raw: raw).recursiveDescription
   }
 }
 

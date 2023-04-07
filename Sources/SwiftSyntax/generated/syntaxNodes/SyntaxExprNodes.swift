@@ -172,20 +172,6 @@ public struct ArrayExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   }
 }
 
-extension ArrayExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeLeftSquare": unexpectedBeforeLeftSquare.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "leftSquare": Syntax(leftSquare).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenLeftSquareAndElements": unexpectedBetweenLeftSquareAndElements.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "elements": Syntax(elements).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenElementsAndRightSquare": unexpectedBetweenElementsAndRightSquare.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "rightSquare": Syntax(rightSquare).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterRightSquare": unexpectedAfterRightSquare.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
-        ])
-  }
-}
-
 // MARK: - ArrowExprSyntax
 
 
@@ -297,18 +283,6 @@ public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedBetweenEffectSpecifiersAndArrowToken, 
           \Self.arrowToken, 
           \Self.unexpectedAfterArrowToken
-        ])
-  }
-}
-
-extension ArrowExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeEffectSpecifiers": unexpectedBeforeEffectSpecifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "effectSpecifiers": effectSpecifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenEffectSpecifiersAndArrowToken": unexpectedBetweenEffectSpecifiersAndArrowToken.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "arrowToken": Syntax(arrowToken).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterArrowToken": unexpectedAfterArrowToken.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
         ])
   }
 }
@@ -480,22 +454,6 @@ public struct AsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   }
 }
 
-extension AsExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeExpression": unexpectedBeforeExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "expression": Syntax(expression).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenExpressionAndAsTok": unexpectedBetweenExpressionAndAsTok.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "asTok": Syntax(asTok).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenAsTokAndQuestionOrExclamationMark": unexpectedBetweenAsTokAndQuestionOrExclamationMark.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "questionOrExclamationMark": questionOrExclamationMark.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenQuestionOrExclamationMarkAndTypeName": unexpectedBetweenQuestionOrExclamationMarkAndTypeName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "typeName": Syntax(typeName).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterTypeName": unexpectedAfterTypeName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
-        ])
-  }
-}
-
 // MARK: - AssignmentExprSyntax
 
 
@@ -570,15 +528,6 @@ public struct AssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([\Self.unexpectedBeforeAssignToken, \Self.assignToken, \Self.unexpectedAfterAssignToken])
-  }
-}
-
-extension AssignmentExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-        "unexpectedBeforeAssignToken": unexpectedBeforeAssignToken.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-        "assignToken": Syntax(assignToken).asProtocol(SyntaxProtocol.self), 
-        "unexpectedAfterAssignToken": unexpectedAfterAssignToken.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any ])
   }
 }
 
@@ -697,18 +646,6 @@ public struct AwaitExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   }
 }
 
-extension AwaitExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeAwaitKeyword": unexpectedBeforeAwaitKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "awaitKeyword": Syntax(awaitKeyword).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenAwaitKeywordAndExpression": unexpectedBetweenAwaitKeywordAndExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "expression": Syntax(expression).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterExpression": unexpectedAfterExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
-        ])
-  }
-}
-
 // MARK: - BinaryOperatorExprSyntax
 
 
@@ -786,15 +723,6 @@ public struct BinaryOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   }
 }
 
-extension BinaryOperatorExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-        "unexpectedBeforeOperatorToken": unexpectedBeforeOperatorToken.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-        "operatorToken": Syntax(operatorToken).asProtocol(SyntaxProtocol.self), 
-        "unexpectedAfterOperatorToken": unexpectedAfterOperatorToken.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any ])
-  }
-}
-
 // MARK: - BooleanLiteralExprSyntax
 
 
@@ -869,15 +797,6 @@ public struct BooleanLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([\Self.unexpectedBeforeBooleanLiteral, \Self.booleanLiteral, \Self.unexpectedAfterBooleanLiteral])
-  }
-}
-
-extension BooleanLiteralExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-        "unexpectedBeforeBooleanLiteral": unexpectedBeforeBooleanLiteral.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-        "booleanLiteral": Syntax(booleanLiteral).asProtocol(SyntaxProtocol.self), 
-        "unexpectedAfterBooleanLiteral": unexpectedAfterBooleanLiteral.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any ])
   }
 }
 
@@ -992,18 +911,6 @@ public struct BorrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedBetweenBorrowKeywordAndExpression, 
           \Self.expression, 
           \Self.unexpectedAfterExpression
-        ])
-  }
-}
-
-extension BorrowExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeBorrowKeyword": unexpectedBeforeBorrowKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "borrowKeyword": Syntax(borrowKeyword).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenBorrowKeywordAndExpression": unexpectedBetweenBorrowKeywordAndExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "expression": Syntax(expression).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterExpression": unexpectedAfterExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
         ])
   }
 }
@@ -1194,22 +1101,6 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   }
 }
 
-extension ClosureExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeLeftBrace": unexpectedBeforeLeftBrace.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "leftBrace": Syntax(leftBrace).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenLeftBraceAndSignature": unexpectedBetweenLeftBraceAndSignature.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "signature": signature.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenSignatureAndStatements": unexpectedBetweenSignatureAndStatements.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "statements": Syntax(statements).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenStatementsAndRightBrace": unexpectedBetweenStatementsAndRightBrace.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "rightBrace": Syntax(rightBrace).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterRightBrace": unexpectedAfterRightBrace.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
-        ])
-  }
-}
-
 // MARK: - DictionaryExprSyntax
 
 
@@ -1393,20 +1284,6 @@ public struct DictionaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   }
 }
 
-extension DictionaryExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeLeftSquare": unexpectedBeforeLeftSquare.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "leftSquare": Syntax(leftSquare).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenLeftSquareAndContent": unexpectedBetweenLeftSquareAndContent.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "content": Syntax(content).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenContentAndRightSquare": unexpectedBetweenContentAndRightSquare.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "rightSquare": Syntax(rightSquare).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterRightSquare": unexpectedAfterRightSquare.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
-        ])
-  }
-}
-
 // MARK: - DiscardAssignmentExprSyntax
 
 
@@ -1481,15 +1358,6 @@ public struct DiscardAssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([\Self.unexpectedBeforeWildcard, \Self.wildcard, \Self.unexpectedAfterWildcard])
-  }
-}
-
-extension DiscardAssignmentExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-        "unexpectedBeforeWildcard": unexpectedBeforeWildcard.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-        "wildcard": Syntax(wildcard).asProtocol(SyntaxProtocol.self), 
-        "unexpectedAfterWildcard": unexpectedAfterWildcard.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any ])
   }
 }
 
@@ -1570,15 +1438,6 @@ public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   }
 }
 
-extension EditorPlaceholderExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-        "unexpectedBeforeIdentifier": unexpectedBeforeIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-        "identifier": Syntax(identifier).asProtocol(SyntaxProtocol.self), 
-        "unexpectedAfterIdentifier": unexpectedAfterIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any ])
-  }
-}
-
 // MARK: - FloatLiteralExprSyntax
 
 
@@ -1653,15 +1512,6 @@ public struct FloatLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([\Self.unexpectedBeforeFloatingDigits, \Self.floatingDigits, \Self.unexpectedAfterFloatingDigits])
-  }
-}
-
-extension FloatLiteralExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-        "unexpectedBeforeFloatingDigits": unexpectedBeforeFloatingDigits.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-        "floatingDigits": Syntax(floatingDigits).asProtocol(SyntaxProtocol.self), 
-        "unexpectedAfterFloatingDigits": unexpectedAfterFloatingDigits.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any ])
   }
 }
 
@@ -1776,18 +1626,6 @@ public struct ForcedValueExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedBetweenExpressionAndExclamationMark, 
           \Self.exclamationMark, 
           \Self.unexpectedAfterExclamationMark
-        ])
-  }
-}
-
-extension ForcedValueExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeExpression": unexpectedBeforeExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "expression": Syntax(expression).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenExpressionAndExclamationMark": unexpectedBetweenExpressionAndExclamationMark.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "exclamationMark": Syntax(exclamationMark).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterExclamationMark": unexpectedAfterExclamationMark.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
         ])
   }
 }
@@ -2049,26 +1887,6 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   }
 }
 
-extension FunctionCallExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeCalledExpression": unexpectedBeforeCalledExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "calledExpression": Syntax(calledExpression).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenCalledExpressionAndLeftParen": unexpectedBetweenCalledExpressionAndLeftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "leftParen": leftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenLeftParenAndArgumentList": unexpectedBetweenLeftParenAndArgumentList.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "argumentList": Syntax(argumentList).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenArgumentListAndRightParen": unexpectedBetweenArgumentListAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "rightParen": rightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenRightParenAndTrailingClosure": unexpectedBetweenRightParenAndTrailingClosure.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "trailingClosure": trailingClosure.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures": unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "additionalTrailingClosures": additionalTrailingClosures.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedAfterAdditionalTrailingClosures": unexpectedAfterAdditionalTrailingClosures.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
-        ])
-  }
-}
-
 // MARK: - IdentifierExprSyntax
 
 
@@ -2180,18 +1998,6 @@ public struct IdentifierExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedBetweenIdentifierAndDeclNameArguments, 
           \Self.declNameArguments, 
           \Self.unexpectedAfterDeclNameArguments
-        ])
-  }
-}
-
-extension IdentifierExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeIdentifier": unexpectedBeforeIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "identifier": Syntax(identifier).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenIdentifierAndDeclNameArguments": unexpectedBetweenIdentifierAndDeclNameArguments.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "declNameArguments": declNameArguments.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedAfterDeclNameArguments": unexpectedAfterDeclNameArguments.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
         ])
   }
 }
@@ -2450,24 +2256,6 @@ public struct IfExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   }
 }
 
-extension IfExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeIfKeyword": unexpectedBeforeIfKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "ifKeyword": Syntax(ifKeyword).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenIfKeywordAndConditions": unexpectedBetweenIfKeywordAndConditions.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "conditions": Syntax(conditions).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenConditionsAndBody": unexpectedBetweenConditionsAndBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "body": Syntax(body).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenBodyAndElseKeyword": unexpectedBetweenBodyAndElseKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "elseKeyword": elseKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenElseKeywordAndElseBody": unexpectedBetweenElseKeywordAndElseBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "elseBody": elseBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedAfterElseBody": unexpectedAfterElseBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
-        ])
-  }
-}
-
 // MARK: - InOutExprSyntax
 
 
@@ -2579,18 +2367,6 @@ public struct InOutExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedBetweenAmpersandAndExpression, 
           \Self.expression, 
           \Self.unexpectedAfterExpression
-        ])
-  }
-}
-
-extension InOutExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeAmpersand": unexpectedBeforeAmpersand.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "ampersand": Syntax(ampersand).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenAmpersandAndExpression": unexpectedBetweenAmpersandAndExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "expression": Syntax(expression).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterExpression": unexpectedAfterExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
         ])
   }
 }
@@ -2736,20 +2512,6 @@ public struct InfixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   }
 }
 
-extension InfixOperatorExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeLeftOperand": unexpectedBeforeLeftOperand.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "leftOperand": Syntax(leftOperand).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenLeftOperandAndOperatorOperand": unexpectedBetweenLeftOperandAndOperatorOperand.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "operatorOperand": Syntax(operatorOperand).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenOperatorOperandAndRightOperand": unexpectedBetweenOperatorOperandAndRightOperand.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "rightOperand": Syntax(rightOperand).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterRightOperand": unexpectedAfterRightOperand.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
-        ])
-  }
-}
-
 // MARK: - IntegerLiteralExprSyntax
 
 
@@ -2824,15 +2586,6 @@ public struct IntegerLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([\Self.unexpectedBeforeDigits, \Self.digits, \Self.unexpectedAfterDigits])
-  }
-}
-
-extension IntegerLiteralExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-        "unexpectedBeforeDigits": unexpectedBeforeDigits.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-        "digits": Syntax(digits).asProtocol(SyntaxProtocol.self), 
-        "unexpectedAfterDigits": unexpectedAfterDigits.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any ])
   }
 }
 
@@ -2973,20 +2726,6 @@ public struct IsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedBetweenIsTokAndTypeName, 
           \Self.typeName, 
           \Self.unexpectedAfterTypeName
-        ])
-  }
-}
-
-extension IsExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeExpression": unexpectedBeforeExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "expression": Syntax(expression).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenExpressionAndIsTok": unexpectedBetweenExpressionAndIsTok.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "isTok": Syntax(isTok).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenIsTokAndTypeName": unexpectedBetweenIsTokAndTypeName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "typeName": Syntax(typeName).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterTypeName": unexpectedAfterTypeName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
         ])
   }
 }
@@ -3182,20 +2921,6 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedBetweenRootAndComponents, 
           \Self.components, 
           \Self.unexpectedAfterComponents
-        ])
-  }
-}
-
-extension KeyPathExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeBackslash": unexpectedBeforeBackslash.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "backslash": Syntax(backslash).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenBackslashAndRoot": unexpectedBetweenBackslashAndRoot.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "root": root.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenRootAndComponents": unexpectedBetweenRootAndComponents.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "components": Syntax(components).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterComponents": unexpectedAfterComponents.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
         ])
   }
 }
@@ -3510,30 +3235,6 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   }
 }
 
-extension MacroExpansionExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforePoundToken": unexpectedBeforePoundToken.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "poundToken": Syntax(poundToken).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenPoundTokenAndMacro": unexpectedBetweenPoundTokenAndMacro.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "macro": Syntax(macro).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenMacroAndGenericArguments": unexpectedBetweenMacroAndGenericArguments.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "genericArguments": genericArguments.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenGenericArgumentsAndLeftParen": unexpectedBetweenGenericArgumentsAndLeftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "leftParen": leftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenLeftParenAndArgumentList": unexpectedBetweenLeftParenAndArgumentList.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "argumentList": Syntax(argumentList).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenArgumentListAndRightParen": unexpectedBetweenArgumentListAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "rightParen": rightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenRightParenAndTrailingClosure": unexpectedBetweenRightParenAndTrailingClosure.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "trailingClosure": trailingClosure.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures": unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "additionalTrailingClosures": additionalTrailingClosures.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedAfterAdditionalTrailingClosures": unexpectedAfterAdditionalTrailingClosures.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
-        ])
-  }
-}
-
 // MARK: - MemberAccessExprSyntax
 
 
@@ -3740,22 +3441,6 @@ public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   }
 }
 
-extension MemberAccessExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeBase": unexpectedBeforeBase.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "base": base.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenBaseAndDot": unexpectedBetweenBaseAndDot.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "dot": Syntax(dot).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenDotAndName": unexpectedBetweenDotAndName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "name": Syntax(name).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenNameAndDeclNameArguments": unexpectedBetweenNameAndDeclNameArguments.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "declNameArguments": declNameArguments.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedAfterDeclNameArguments": unexpectedAfterDeclNameArguments.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
-        ])
-  }
-}
-
 // MARK: - MissingExprSyntax
 
 
@@ -3809,13 +3494,6 @@ public struct MissingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([\Self.unexpected])
-  }
-}
-
-extension MissingExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-        "unexpected": unexpected.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any ])
   }
 }
 
@@ -3934,18 +3612,6 @@ public struct MoveExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   }
 }
 
-extension MoveExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeMoveKeyword": unexpectedBeforeMoveKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "moveKeyword": Syntax(moveKeyword).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenMoveKeywordAndExpression": unexpectedBetweenMoveKeywordAndExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "expression": Syntax(expression).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterExpression": unexpectedAfterExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
-        ])
-  }
-}
-
 // MARK: - NilLiteralExprSyntax
 
 
@@ -4020,15 +3686,6 @@ public struct NilLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([\Self.unexpectedBeforeNilKeyword, \Self.nilKeyword, \Self.unexpectedAfterNilKeyword])
-  }
-}
-
-extension NilLiteralExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-        "unexpectedBeforeNilKeyword": unexpectedBeforeNilKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-        "nilKeyword": Syntax(nilKeyword).asProtocol(SyntaxProtocol.self), 
-        "unexpectedAfterNilKeyword": unexpectedAfterNilKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any ])
   }
 }
 
@@ -4143,18 +3800,6 @@ public struct OptionalChainingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedBetweenExpressionAndQuestionMark, 
           \Self.questionMark, 
           \Self.unexpectedAfterQuestionMark
-        ])
-  }
-}
-
-extension OptionalChainingExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeExpression": unexpectedBeforeExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "expression": Syntax(expression).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenExpressionAndQuestionMark": unexpectedBetweenExpressionAndQuestionMark.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "questionMark": Syntax(questionMark).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterQuestionMark": unexpectedAfterQuestionMark.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
         ])
   }
 }
@@ -4274,18 +3919,6 @@ public struct PackElementExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   }
 }
 
-extension PackElementExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeEachKeyword": unexpectedBeforeEachKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "eachKeyword": Syntax(eachKeyword).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenEachKeywordAndPackRefExpr": unexpectedBetweenEachKeywordAndPackRefExpr.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "packRefExpr": Syntax(packRefExpr).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterPackRefExpr": unexpectedAfterPackRefExpr.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
-        ])
-  }
-}
-
 // MARK: - PackExpansionExprSyntax
 
 
@@ -4397,18 +4030,6 @@ public struct PackExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedBetweenRepeatKeywordAndPatternExpr, 
           \Self.patternExpr, 
           \Self.unexpectedAfterPatternExpr
-        ])
-  }
-}
-
-extension PackExpansionExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeRepeatKeyword": unexpectedBeforeRepeatKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "repeatKeyword": Syntax(repeatKeyword).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenRepeatKeywordAndPatternExpr": unexpectedBetweenRepeatKeywordAndPatternExpr.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "patternExpr": Syntax(patternExpr).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterPatternExpr": unexpectedAfterPatternExpr.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
         ])
   }
 }
@@ -4559,18 +4180,6 @@ public struct PostfixIfConfigExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   }
 }
 
-extension PostfixIfConfigExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeBase": unexpectedBeforeBase.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "base": base.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenBaseAndConfig": unexpectedBetweenBaseAndConfig.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "config": Syntax(config).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterConfig": unexpectedAfterConfig.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
-        ])
-  }
-}
-
 // MARK: - PostfixUnaryExprSyntax
 
 
@@ -4686,18 +4295,6 @@ public struct PostfixUnaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   }
 }
 
-extension PostfixUnaryExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeExpression": unexpectedBeforeExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "expression": Syntax(expression).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenExpressionAndOperatorToken": unexpectedBetweenExpressionAndOperatorToken.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "operatorToken": Syntax(operatorToken).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterOperatorToken": unexpectedAfterOperatorToken.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
-        ])
-  }
-}
-
 // MARK: - PrefixOperatorExprSyntax
 
 
@@ -4809,18 +4406,6 @@ public struct PrefixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedBetweenOperatorTokenAndPostfixExpression, 
           \Self.postfixExpression, 
           \Self.unexpectedAfterPostfixExpression
-        ])
-  }
-}
-
-extension PrefixOperatorExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeOperatorToken": unexpectedBeforeOperatorToken.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "operatorToken": operatorToken.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenOperatorTokenAndPostfixExpression": unexpectedBetweenOperatorTokenAndPostfixExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "postfixExpression": Syntax(postfixExpression).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterPostfixExpression": unexpectedAfterPostfixExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
         ])
   }
 }
@@ -5018,24 +4603,6 @@ public struct RegexLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   }
 }
 
-extension RegexLiteralExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeOpeningPounds": unexpectedBeforeOpeningPounds.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "openingPounds": openingPounds.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenOpeningPoundsAndOpenSlash": unexpectedBetweenOpeningPoundsAndOpenSlash.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "openSlash": Syntax(openSlash).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenOpenSlashAndRegexPattern": unexpectedBetweenOpenSlashAndRegexPattern.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "regexPattern": Syntax(regexPattern).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenRegexPatternAndCloseSlash": unexpectedBetweenRegexPatternAndCloseSlash.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "closeSlash": Syntax(closeSlash).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenCloseSlashAndClosingPounds": unexpectedBetweenCloseSlashAndClosingPounds.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "closingPounds": closingPounds.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedAfterClosingPounds": unexpectedAfterClosingPounds.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
-        ])
-  }
-}
-
 // MARK: - SequenceExprSyntax
 
 
@@ -5129,15 +4696,6 @@ public struct SequenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([\Self.unexpectedBeforeElements, \Self.elements, \Self.unexpectedAfterElements])
-  }
-}
-
-extension SequenceExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-        "unexpectedBeforeElements": unexpectedBeforeElements.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-        "elements": Syntax(elements).asProtocol(SyntaxProtocol.self), 
-        "unexpectedAfterElements": unexpectedAfterElements.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any ])
   }
 }
 
@@ -5252,18 +4810,6 @@ public struct SpecializeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedBetweenExpressionAndGenericArgumentClause, 
           \Self.genericArgumentClause, 
           \Self.unexpectedAfterGenericArgumentClause
-        ])
-  }
-}
-
-extension SpecializeExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeExpression": unexpectedBeforeExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "expression": Syntax(expression).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenExpressionAndGenericArgumentClause": unexpectedBetweenExpressionAndGenericArgumentClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "genericArgumentClause": Syntax(genericArgumentClause).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterGenericArgumentClause": unexpectedAfterGenericArgumentClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
         ])
   }
 }
@@ -5476,24 +5022,6 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedBetweenCloseQuoteAndCloseDelimiter, 
           \Self.closeDelimiter, 
           \Self.unexpectedAfterCloseDelimiter
-        ])
-  }
-}
-
-extension StringLiteralExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeOpenDelimiter": unexpectedBeforeOpenDelimiter.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "openDelimiter": openDelimiter.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenOpenDelimiterAndOpenQuote": unexpectedBetweenOpenDelimiterAndOpenQuote.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "openQuote": Syntax(openQuote).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenOpenQuoteAndSegments": unexpectedBetweenOpenQuoteAndSegments.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "segments": Syntax(segments).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenSegmentsAndCloseQuote": unexpectedBetweenSegmentsAndCloseQuote.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "closeQuote": Syntax(closeQuote).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenCloseQuoteAndCloseDelimiter": unexpectedBetweenCloseQuoteAndCloseDelimiter.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "closeDelimiter": closeDelimiter.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedAfterCloseDelimiter": unexpectedAfterCloseDelimiter.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
         ])
   }
 }
@@ -5755,26 +5283,6 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   }
 }
 
-extension SubscriptExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeCalledExpression": unexpectedBeforeCalledExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "calledExpression": Syntax(calledExpression).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenCalledExpressionAndLeftBracket": unexpectedBetweenCalledExpressionAndLeftBracket.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "leftBracket": Syntax(leftBracket).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenLeftBracketAndArgumentList": unexpectedBetweenLeftBracketAndArgumentList.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "argumentList": Syntax(argumentList).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenArgumentListAndRightBracket": unexpectedBetweenArgumentListAndRightBracket.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "rightBracket": Syntax(rightBracket).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenRightBracketAndTrailingClosure": unexpectedBetweenRightBracketAndTrailingClosure.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "trailingClosure": trailingClosure.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures": unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "additionalTrailingClosures": additionalTrailingClosures.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedAfterAdditionalTrailingClosures": unexpectedAfterAdditionalTrailingClosures.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
-        ])
-  }
-}
-
 // MARK: - SuperRefExprSyntax
 
 
@@ -5849,15 +5357,6 @@ public struct SuperRefExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([\Self.unexpectedBeforeSuperKeyword, \Self.superKeyword, \Self.unexpectedAfterSuperKeyword])
-  }
-}
-
-extension SuperRefExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-        "unexpectedBeforeSuperKeyword": unexpectedBeforeSuperKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-        "superKeyword": Syntax(superKeyword).asProtocol(SyntaxProtocol.self), 
-        "unexpectedAfterSuperKeyword": unexpectedAfterSuperKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any ])
   }
 }
 
@@ -6073,24 +5572,6 @@ public struct SwitchExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   }
 }
 
-extension SwitchExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeSwitchKeyword": unexpectedBeforeSwitchKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "switchKeyword": Syntax(switchKeyword).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenSwitchKeywordAndExpression": unexpectedBetweenSwitchKeywordAndExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "expression": Syntax(expression).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenExpressionAndLeftBrace": unexpectedBetweenExpressionAndLeftBrace.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "leftBrace": Syntax(leftBrace).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenLeftBraceAndCases": unexpectedBetweenLeftBraceAndCases.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "cases": Syntax(cases).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenCasesAndRightBrace": unexpectedBetweenCasesAndRightBrace.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "rightBrace": Syntax(rightBrace).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterRightBrace": unexpectedAfterRightBrace.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
-        ])
-  }
-}
-
 // MARK: - TernaryExprSyntax
 
 
@@ -6284,24 +5765,6 @@ public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   }
 }
 
-extension TernaryExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeConditionExpression": unexpectedBeforeConditionExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "conditionExpression": Syntax(conditionExpression).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenConditionExpressionAndQuestionMark": unexpectedBetweenConditionExpressionAndQuestionMark.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "questionMark": Syntax(questionMark).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenQuestionMarkAndFirstChoice": unexpectedBetweenQuestionMarkAndFirstChoice.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "firstChoice": Syntax(firstChoice).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenFirstChoiceAndColonMark": unexpectedBetweenFirstChoiceAndColonMark.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "colonMark": Syntax(colonMark).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenColonMarkAndSecondChoice": unexpectedBetweenColonMarkAndSecondChoice.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "secondChoice": Syntax(secondChoice).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterSecondChoice": unexpectedAfterSecondChoice.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
-        ])
-  }
-}
-
 // MARK: - TryExprSyntax
 
 
@@ -6439,20 +5902,6 @@ public struct TryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedBetweenQuestionOrExclamationMarkAndExpression, 
           \Self.expression, 
           \Self.unexpectedAfterExpression
-        ])
-  }
-}
-
-extension TryExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeTryKeyword": unexpectedBeforeTryKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "tryKeyword": Syntax(tryKeyword).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenTryKeywordAndQuestionOrExclamationMark": unexpectedBetweenTryKeywordAndQuestionOrExclamationMark.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "questionOrExclamationMark": questionOrExclamationMark.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenQuestionOrExclamationMarkAndExpression": unexpectedBetweenQuestionOrExclamationMarkAndExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "expression": Syntax(expression).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterExpression": unexpectedAfterExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
         ])
   }
 }
@@ -6617,20 +6066,6 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   }
 }
 
-extension TupleExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeLeftParen": unexpectedBeforeLeftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "leftParen": Syntax(leftParen).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenLeftParenAndElementList": unexpectedBetweenLeftParenAndElementList.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "elementList": Syntax(elementList).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenElementListAndRightParen": unexpectedBetweenElementListAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "rightParen": Syntax(rightParen).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterRightParen": unexpectedAfterRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
-        ])
-  }
-}
-
 // MARK: - TypeExprSyntax
 
 
@@ -6705,15 +6140,6 @@ public struct TypeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([\Self.unexpectedBeforeType, \Self.type, \Self.unexpectedAfterType])
-  }
-}
-
-extension TypeExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-        "unexpectedBeforeType": unexpectedBeforeType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-        "type": Syntax(type).asProtocol(SyntaxProtocol.self), 
-        "unexpectedAfterType": unexpectedAfterType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any ])
   }
 }
 
@@ -6832,18 +6258,6 @@ public struct UnresolvedAsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   }
 }
 
-extension UnresolvedAsExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeAsTok": unexpectedBeforeAsTok.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "asTok": Syntax(asTok).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenAsTokAndQuestionOrExclamationMark": unexpectedBetweenAsTokAndQuestionOrExclamationMark.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "questionOrExclamationMark": questionOrExclamationMark.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedAfterQuestionOrExclamationMark": unexpectedAfterQuestionOrExclamationMark.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
-        ])
-  }
-}
-
 // MARK: - UnresolvedIsExprSyntax
 
 
@@ -6921,15 +6335,6 @@ public struct UnresolvedIsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   }
 }
 
-extension UnresolvedIsExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-        "unexpectedBeforeIsTok": unexpectedBeforeIsTok.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-        "isTok": Syntax(isTok).asProtocol(SyntaxProtocol.self), 
-        "unexpectedAfterIsTok": unexpectedAfterIsTok.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any ])
-  }
-}
-
 // MARK: - UnresolvedPatternExprSyntax
 
 
@@ -7004,15 +6409,6 @@ public struct UnresolvedPatternExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([\Self.unexpectedBeforePattern, \Self.pattern, \Self.unexpectedAfterPattern])
-  }
-}
-
-extension UnresolvedPatternExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-        "unexpectedBeforePattern": unexpectedBeforePattern.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-        "pattern": Syntax(pattern).asProtocol(SyntaxProtocol.self), 
-        "unexpectedAfterPattern": unexpectedAfterPattern.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any ])
   }
 }
 
@@ -7153,20 +6549,6 @@ public struct UnresolvedTernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedBetweenFirstChoiceAndColonMark, 
           \Self.colonMark, 
           \Self.unexpectedAfterColonMark
-        ])
-  }
-}
-
-extension UnresolvedTernaryExprSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeQuestionMark": unexpectedBeforeQuestionMark.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "questionMark": Syntax(questionMark).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenQuestionMarkAndFirstChoice": unexpectedBetweenQuestionMarkAndFirstChoice.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "firstChoice": Syntax(firstChoice).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenFirstChoiceAndColonMark": unexpectedBetweenFirstChoiceAndColonMark.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "colonMark": Syntax(colonMark).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterColonMark": unexpectedAfterColonMark.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
         ])
   }
 }

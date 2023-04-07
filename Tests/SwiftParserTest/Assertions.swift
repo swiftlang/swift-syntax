@@ -565,7 +565,7 @@ func assertParse<S: SyntaxProtocol>(
       Source failed to round-trip.
 
       Actual syntax tree:
-      \(tree.recursiveDescription)
+      \(tree.debugDescription)
       """,
     file: file,
     line: line

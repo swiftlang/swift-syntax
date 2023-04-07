@@ -149,14 +149,6 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
 }
 
-extension DeclSyntax: CustomReflectable {
-  /// Reconstructs the real syntax type for this type from the node's kind and
-  /// provides a mirror that reflects this type.
-  public var customMirror: Mirror {
-    return Mirror(reflecting: Syntax(self).asProtocol(SyntaxProtocol.self))
-  }
-}
-
 // MARK: - ExprSyntax
 
 /// Protocol to which all `ExprSyntax` nodes conform. Extension point to add
@@ -318,14 +310,6 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   }
 }
 
-extension ExprSyntax: CustomReflectable {
-  /// Reconstructs the real syntax type for this type from the node's kind and
-  /// provides a mirror that reflects this type.
-  public var customMirror: Mirror {
-    return Mirror(reflecting: Syntax(self).asProtocol(SyntaxProtocol.self))
-  }
-}
-
 // MARK: - PatternSyntax
 
 /// Protocol to which all `PatternSyntax` nodes conform. Extension point to add
@@ -443,14 +427,6 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
           .node(ValueBindingPatternSyntax.self), 
           .node(WildcardPatternSyntax.self)
         ])
-  }
-}
-
-extension PatternSyntax: CustomReflectable {
-  /// Reconstructs the real syntax type for this type from the node's kind and
-  /// provides a mirror that reflects this type.
-  public var customMirror: Mirror {
-    return Mirror(reflecting: Syntax(self).asProtocol(SyntaxProtocol.self))
   }
 }
 
@@ -583,14 +559,6 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   }
 }
 
-extension StmtSyntax: CustomReflectable {
-  /// Reconstructs the real syntax type for this type from the node's kind and
-  /// provides a mirror that reflects this type.
-  public var customMirror: Mirror {
-    return Mirror(reflecting: Syntax(self).asProtocol(SyntaxProtocol.self))
-  }
-}
-
 // MARK: - TypeSyntax
 
 /// Protocol to which all `TypeSyntax` nodes conform. Extension point to add
@@ -718,14 +686,6 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
           .node(SimpleTypeIdentifierSyntax.self), 
           .node(TupleTypeSyntax.self)
         ])
-  }
-}
-
-extension TypeSyntax: CustomReflectable {
-  /// Reconstructs the real syntax type for this type from the node's kind and
-  /// provides a mirror that reflects this type.
-  public var customMirror: Mirror {
-    return Mirror(reflecting: Syntax(self).asProtocol(SyntaxProtocol.self))
   }
 }
 

@@ -17,3 +17,9 @@
 # SwiftOperators
 /Sources/SwiftOperators @DougGregor
 /Tests/SwiftOperatorsTest @DougGregor
+
+/utils/bazel @keith
+*.bazel @keith
+WORKSPACE @keith
+.bazelrc @keith
+.bazelversion @keith

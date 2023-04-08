@@ -635,6 +635,11 @@ public extension SyntaxProtocol {
       target.write("\n")
       target.write(indentString)
       target.write(isLastChild ? "╰─" : "├─")
+      if let keyPath = child.keyPathInParent, let name = childName(keyPath) {
+        target.write("\(name): ")
+      } else if self.kind.isSyntaxCollection {
+        target.write("[\(num)]: ")
+      }
       let childIndentString = indentString + (isLastChild ? "  " : "│ ")
       child.debugWrite(
         to: &target,

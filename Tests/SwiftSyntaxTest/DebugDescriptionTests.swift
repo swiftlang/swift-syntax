@@ -21,8 +21,7 @@ private extension String {
   }
 }
 
-public class CustomReflectableTests: XCTestCase {
-
+public class DebugDescriptionTests: XCTestCase {
   public func testDump() {
     struct TestCase {
       let syntax: Any
@@ -120,12 +119,12 @@ public class CustomReflectableTests: XCTestCase {
           syntax: tuples,
           expectedDumped: """
             - TupleExprElementListSyntax
-            ├─TupleExprElementSyntax
-            │ ╰─IntegerLiteralExprSyntax
-            │   ╰─integerLiteral("1")
-            ╰─TupleExprElementSyntax
-              ╰─IntegerLiteralExprSyntax
-                ╰─integerLiteral("2")
+            ├─[0]: TupleExprElementSyntax
+            │ ╰─expression: IntegerLiteralExprSyntax
+            │   ╰─digits: integerLiteral("1")
+            ╰─[1]: TupleExprElementSyntax
+              ╰─expression: IntegerLiteralExprSyntax
+                ╰─digits: integerLiteral("2")
 
             """
         )
@@ -145,12 +144,12 @@ public class CustomReflectableTests: XCTestCase {
           expectedDumped: """
             ▿ Swift.ReversedCollection<SwiftSyntax.TupleExprElementListSyntax>
               - _base: TupleExprElementListSyntax
-            ├─TupleExprElementSyntax
-            │ ╰─IntegerLiteralExprSyntax
-            │   ╰─integerLiteral("1")
-            ╰─TupleExprElementSyntax
-              ╰─IntegerLiteralExprSyntax
-                ╰─integerLiteral("2")
+            ├─[0]: TupleExprElementSyntax
+            │ ╰─expression: IntegerLiteralExprSyntax
+            │   ╰─digits: integerLiteral("1")
+            ╰─[1]: TupleExprElementSyntax
+              ╰─expression: IntegerLiteralExprSyntax
+                ╰─digits: integerLiteral("2")
 
             """
         )
@@ -160,7 +159,11 @@ public class CustomReflectableTests: XCTestCase {
     testCases.forEach { keyAndValue in
       let (key:line, value:testCase) = keyAndValue
       let actualDumped = dumped(testCase.syntax)
-      XCTAssertEqual(testCase.expectedDumped.trimmingTrailingWhitespace(), actualDumped.trimmingTrailingWhitespace(), line: line)
+      assertStringsEqualWithDiff(
+        actualDumped.trimmingTrailingWhitespace(),
+        testCase.expectedDumped.trimmingTrailingWhitespace(),
+        line: line
+      )
     }
   }
 

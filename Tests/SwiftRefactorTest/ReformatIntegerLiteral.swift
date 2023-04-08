@@ -33,8 +33,7 @@ final class ReformatIntegerLiteralTest: XCTestCase {
     ]
 
     for (line, literal, expectation) in tests {
-      let refactored = try XCTUnwrap(AddSeparatorsToIntegerLiteral.refactor(syntax: literal))
-      assertStringsEqualWithDiff(refactored.description, expectation.description, line: UInt(line))
+      try assertRefactor(literal, context: (), provider: AddSeparatorsToIntegerLiteral.self, expected: expectation, line: UInt(line))
     }
   }
 
@@ -49,8 +48,7 @@ final class ReformatIntegerLiteralTest: XCTestCase {
     ]
 
     for (line, literal, expectation) in tests {
-      let refactored = try XCTUnwrap(RemoveSeparatorsFromIntegerLiteral.refactor(syntax: literal))
-      assertStringsEqualWithDiff(refactored.description, expectation.description, line: UInt(line))
+      try assertRefactor(literal, context: (), provider: RemoveSeparatorsFromIntegerLiteral.self, expected: expectation, line: UInt(line))
     }
   }
 }

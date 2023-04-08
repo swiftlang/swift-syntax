@@ -33,9 +33,7 @@ final class OpaqueParameterToGenericTest: XCTestCase {
       ) -> some Equatable { }
       """
 
-    let refactored = try XCTUnwrap(OpaqueParameterToGeneric.refactor(syntax: baseline))
-
-    assertStringsEqualWithDiff(expected.description, refactored.description)
+    try assertRefactor(baseline, context: (), provider: OpaqueParameterToGeneric.self, expected: expected)
   }
 
   func testRefactoringInit() throws {
@@ -53,9 +51,7 @@ final class OpaqueParameterToGenericTest: XCTestCase {
       ) { }
       """
 
-    let refactored = try XCTUnwrap(OpaqueParameterToGeneric.refactor(syntax: baseline))
-
-    assertStringsEqualWithDiff(expected.description, refactored.description)
+    try assertRefactor(baseline, context: (), provider: OpaqueParameterToGeneric.self, expected: expected)
   }
 
   func testRefactoringSubscript() throws {
@@ -67,8 +63,6 @@ final class OpaqueParameterToGenericTest: XCTestCase {
       subscript<T1: Hashable>(index: T1) -> String
       """
 
-    let refactored = try XCTUnwrap(OpaqueParameterToGeneric.refactor(syntax: baseline))
-
-    assertStringsEqualWithDiff(expected.description, refactored.description)
+    try assertRefactor(baseline, context: (), provider: OpaqueParameterToGeneric.self, expected: expected)
   }
 }

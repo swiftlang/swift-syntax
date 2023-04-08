@@ -11,7 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftDiagnostics
-import SwiftSyntax
+@_spi(RawSyntax) import SwiftSyntax
 
 /// A diagnostic that `MultiLineStringLiteralIndentatinDiagnosticsGenerator` is building.
 /// As indentation errors are found on more lines, this diagnostic is modified

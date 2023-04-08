@@ -169,9 +169,9 @@ extension FixIt.MultiNodeChange {
   /// where it makes sense and refusing to add e.g. a space after punctuation,
   /// where it usually doesn't make sense.
   static func transferTriviaAtSides<SyntaxType: SyntaxProtocol>(from nodes: [SyntaxType]) -> Self {
-    let removedTriviaAtSides = Trivia.merged(nodes.first?.leadingTrivia ?? [], nodes.last?.trailingTrivia ?? [])
+    let removedTriviaAtSides = (nodes.first?.leadingTrivia ?? []).merging(nodes.last?.trailingTrivia ?? [])
     if !removedTriviaAtSides.isEmpty, let previousToken = nodes.first?.previousToken(viewMode: .sourceAccurate) {
-      let mergedTrivia = Trivia.merged(previousToken.trailingTrivia, removedTriviaAtSides)
+      let mergedTrivia = previousToken.trailingTrivia.merging(removedTriviaAtSides)
       if previousToken.tokenKind.isPunctuation, mergedTrivia.allSatisfy({ $0.isSpaceOrTab }) {
         // Punctuation is generally not followed by spaces in Swift.
         // If this action would only add spaces to the punctuation, drop it.
@@ -182,49 +182,6 @@ extension FixIt.MultiNodeChange {
     } else {
       return FixIt.MultiNodeChange()
     }
-  }
-}
-
-extension Trivia {
-  /// Decomposes the trivia into pieces that all have count 1
-  var decomposed: Trivia {
-    let pieces = self.flatMap({ (piece: TriviaPiece) -> [TriviaPiece] in
-      switch piece {
-      case .spaces(let count):
-        return Array(repeating: TriviaPiece.spaces(1), count: count)
-      case .tabs(let count):
-        return Array(repeating: TriviaPiece.tabs(1), count: count)
-      case .verticalTabs(let count):
-        return Array(repeating: TriviaPiece.verticalTabs(1), count: count)
-      case .formfeeds(let count):
-        return Array(repeating: TriviaPiece.formfeeds(1), count: count)
-      case .newlines(let count):
-        return Array(repeating: TriviaPiece.newlines(1), count: count)
-      case .backslashes(let count):
-        return Array(repeating: TriviaPiece.backslashes(1), count: count)
-      case .pounds(let count):
-        return Array(repeating: TriviaPiece.pounds(1), count: count)
-      case .carriageReturns(let count):
-        return Array(repeating: TriviaPiece.carriageReturns(1), count: count)
-      case .carriageReturnLineFeeds(let count):
-        return Array(repeating: TriviaPiece.carriageReturnLineFeeds(1), count: count)
-      case .lineComment, .blockComment, .docLineComment, .docBlockComment, .unexpectedText, .shebang:
-        return [piece]
-      }
-    })
-    return Trivia(pieces: pieces)
-  }
-
-  /// Concatenate `lhs` and `rhs`, merging an infix that is shared between both trivia pieces.
-  static func merged(_ lhs: Trivia, _ rhs: Trivia) -> Self {
-    let lhs = lhs.decomposed
-    let rhs = rhs.decomposed
-    for infixLength in (0...Swift.min(lhs.count, rhs.count)).reversed() {
-      if lhs.suffix(infixLength) == rhs.suffix(infixLength) {
-        return lhs + Trivia(pieces: Array(rhs.dropFirst(infixLength)))
-      }
-    }
-    return lhs + rhs
   }
 }
 

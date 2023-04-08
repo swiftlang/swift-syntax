@@ -34,8 +34,7 @@ final class FormatRawStringLiteralTest: XCTestCase {
     for (line, literal, expectation) in tests {
       let literal = try XCTUnwrap(StringLiteralExprSyntax.parseWithoutDiagnostics(from: literal))
       let expectation = try XCTUnwrap(StringLiteralExprSyntax.parseWithoutDiagnostics(from: expectation))
-      let refactored = try XCTUnwrap(FormatRawStringLiteral.refactor(syntax: literal))
-      assertStringsEqualWithDiff(refactored.description, expectation.description, line: UInt(line))
+      try assertRefactor(literal, context: (), provider: FormatRawStringLiteral.self, expected: expectation, line: UInt(line))
     }
   }
 }

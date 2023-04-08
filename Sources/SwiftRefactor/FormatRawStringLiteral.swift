@@ -30,7 +30,7 @@ import SwiftSyntax
 /// ##"Hello \#(world)"##
 /// "Hello World"
 /// ```
-public struct FormatRawStringLiteral: RefactoringProvider {
+public struct FormatRawStringLiteral: SyntaxRefactoringProvider {
   public static func refactor(syntax lit: StringLiteralExprSyntax, in context: Void) -> StringLiteralExprSyntax? {
     var maximumHashes = 0
     for segment in lit.segments {

@@ -194,6 +194,9 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var standaloneSemicolonStatement: Self {
     .init("standalone ';' statements are not allowed")
   }
+  public static var stringLiteralAtSign: Self {
+    .init("string literals in Swift are not preceded by an '@' sign")
+  }
   public static var subscriptsCannotHaveNames: Self {
     .init("subscripts cannot have a name")
   }

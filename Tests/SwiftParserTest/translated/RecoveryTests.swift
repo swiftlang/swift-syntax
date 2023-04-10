@@ -1881,16 +1881,20 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery157() {
+    // <rdar://problem/19833424> QoI: Bad error message when using Objective-C literals (@"Hello")
     assertParse(
       #"""
-      // <rdar://problem/19833424> QoI: Bad error message when using Objective-C literals (@"Hello") in Swift files
       let myString = 1️⃣@"foo"
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: string literals in Swift are not preceded by an '@' sign, Fix-It replacements: 16 - 17 = ''
-        DiagnosticSpec(message: "expected expression in variable"),
-        DiagnosticSpec(message: #"extraneous code '@"foo"' at top level"#),
-      ]
+        DiagnosticSpec(
+          message: "string literals in Swift are not preceded by an '@' sign",
+          fixIts: ["remove '@'"]
+        )
+      ],
+      fixedSource: """
+        let myString = "foo"
+        """
     )
   }
 

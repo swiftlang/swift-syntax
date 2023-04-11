@@ -35,7 +35,6 @@ add_swift_host_library(SwiftSyntax
   generated/raw/RawSyntaxValidation.swift
 
   generated/Keyword.swift
-  generated/Misc.swift
   generated/SyntaxAnyVisitor.swift
   generated/SyntaxBaseNodes.swift
   generated/SyntaxCollections.swift

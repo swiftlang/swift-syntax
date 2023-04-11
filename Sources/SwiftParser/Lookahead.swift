@@ -90,6 +90,7 @@ extension Parser.Lookahead {
     self.currentToken = self.lexemes.advance()
   }
 
+  @_spi(RawSyntax)
   public mutating func consumeAnyToken(remapping: RawTokenKind) {
     self.consumeAnyToken()
   }

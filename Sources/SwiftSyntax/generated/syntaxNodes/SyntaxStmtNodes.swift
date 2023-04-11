@@ -125,23 +125,6 @@ public struct BreakStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterLabel
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return "label"
-    case 4:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension BreakStmtSyntax: CustomReflectable {
@@ -269,23 +252,6 @@ public struct ContinueStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterLabel
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return "label"
-    case 4:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension ContinueStmtSyntax: CustomReflectable {
@@ -412,23 +378,6 @@ public struct DeferStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           \Self.body, 
           \Self.unexpectedAfterBody
         ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -602,27 +551,6 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterCatchClauses
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return "body"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension DoStmtSyntax: CustomReflectable {
@@ -714,19 +642,6 @@ public struct ExpressionStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public static var structure: SyntaxNodeStructure {
     return .layout([\Self.unexpectedBeforeExpression, \Self.expression, \Self.unexpectedAfterExpression])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension ExpressionStmtSyntax: CustomReflectable {
@@ -812,19 +727,6 @@ public struct FallthroughStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([\Self.unexpectedBeforeFallthroughKeyword, \Self.fallthroughKeyword, \Self.unexpectedAfterFallthroughKeyword])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -1158,55 +1060,6 @@ public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterBody
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    case 9:
-      return nil
-    case 10:
-      return nil
-    case 11:
-      return nil
-    case 12:
-      return nil
-    case 13:
-      return nil
-    case 14:
-      return nil
-    case 15:
-      return nil
-    case 16:
-      return nil
-    case 17:
-      return nil
-    case 18:
-      return nil
-    case 19:
-      return "body"
-    case 20:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension ForInStmtSyntax: CustomReflectable {
@@ -1349,23 +1202,6 @@ public struct ForgetStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           \Self.expression, 
           \Self.unexpectedAfterExpression
         ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -1565,31 +1401,6 @@ public struct GuardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterBody
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return "condition"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return "body"
-    case 8:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension GuardStmtSyntax: CustomReflectable {
@@ -1747,27 +1558,6 @@ public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterStatement
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "label name"
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension LabeledStmtSyntax: CustomReflectable {
@@ -1837,15 +1627,6 @@ public struct MissingStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([\Self.unexpected])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -2021,31 +1802,6 @@ public struct RepeatWhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterCondition
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return "body"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return "condition"
-    case 8:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension RepeatWhileStmtSyntax: CustomReflectable {
@@ -2208,23 +1964,6 @@ public struct ReturnStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterExpression
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension ReturnStmtSyntax: CustomReflectable {
@@ -2351,23 +2090,6 @@ public struct ThrowStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           \Self.expression, 
           \Self.unexpectedAfterExpression
         ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -2541,27 +2263,6 @@ public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterBody
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension WhileStmtSyntax: CustomReflectable {
@@ -2732,23 +2433,6 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           \Self.yields, 
           \Self.unexpectedAfterYields
         ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 

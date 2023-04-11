@@ -65,52 +65,42 @@ extension SyntaxClassification {
   ///   - childKind: The node syntax kind.
   /// - Returns: A pair of classification and whether it is "forced", or nil if
   ///   no classification is attached.
-  internal static func classify(
-    parentKind: SyntaxKind, indexInParent: Int, childKind: SyntaxKind
-  ) -> (SyntaxClassification, Bool)? {
-    // Separate checks for token nodes (most common checks) versus checks for layout nodes.
-    if childKind == .token {
-      switch (parentKind, indexInParent) {
-      case (.availabilityVersionRestriction, 1):
-        return (.keyword, false)
-      case (.declModifier, 1):
-        return (.attribute, false)
-      case (.expressionSegment, 5):
-        return (.stringInterpolationAnchor, true)
-      case (.expressionSegment, 9):
-        return (.stringInterpolationAnchor, true)
-      case (.forInStmt, 5):
-        return (.keyword, false)
-      case (.ifConfigClause, 1):
-        return (.buildConfigId, false)
-      case (.ifConfigDecl, 3):
-        return (.buildConfigId, false)
-      case (.memberTypeIdentifier, 5):
-        return (.typeIdentifier, false)
-      case (.operatorDecl, 7):
-        return (.operatorIdentifier, false)
-      case (.precedenceGroupAssociativity, 1):
-        return (.keyword, false)
-      case (.precedenceGroupRelation, 1):
-        return (.keyword, false)
-      case (.simpleTypeIdentifier, 1):
-        return (.typeIdentifier, false)
-      default: 
-        return nil
-      }
-    }else {
-      switch (parentKind, indexInParent) {
-      case (.attribute, 3):
-        return (.attribute, false)
-      case (.availabilityVersionRestrictionListEntry, 1):
-        return (.keyword, false)
-      case (.ifConfigClause, 3):
-        return (.buildConfigId, false)
-      case (.operatorDecl, 3):
-        return (.attribute, false)
-      default: 
-        return nil
-      }
+  internal static func classify(_ keyPath: AnyKeyPath) -> (SyntaxClassification, Bool)? {
+    switch keyPath {
+    case \AttributeSyntax.attributeName:
+      return (.attribute, false)
+    case \AvailabilityVersionRestrictionListEntrySyntax.availabilityVersionRestriction:
+      return (.keyword, false)
+    case \AvailabilityVersionRestrictionSyntax.platform:
+      return (.keyword, false)
+    case \DeclModifierSyntax.name:
+      return (.attribute, false)
+    case \ExpressionSegmentSyntax.leftParen:
+      return (.stringInterpolationAnchor, true)
+    case \ExpressionSegmentSyntax.rightParen:
+      return (.stringInterpolationAnchor, true)
+    case \ForInStmtSyntax.awaitKeyword:
+      return (.keyword, false)
+    case \IfConfigClauseSyntax.poundKeyword:
+      return (.buildConfigId, false)
+    case \IfConfigClauseSyntax.condition:
+      return (.buildConfigId, false)
+    case \IfConfigDeclSyntax.poundEndif:
+      return (.buildConfigId, false)
+    case \MemberTypeIdentifierSyntax.name:
+      return (.typeIdentifier, false)
+    case \OperatorDeclSyntax.modifiers:
+      return (.attribute, false)
+    case \OperatorDeclSyntax.identifier:
+      return (.operatorIdentifier, false)
+    case \PrecedenceGroupAssociativitySyntax.associativityKeyword:
+      return (.keyword, false)
+    case \PrecedenceGroupRelationSyntax.higherThanOrLowerThan:
+      return (.keyword, false)
+    case \SimpleTypeIdentifierSyntax.name:
+      return (.typeIdentifier, false)
+    default:
+      return nil
     }
   }
 }

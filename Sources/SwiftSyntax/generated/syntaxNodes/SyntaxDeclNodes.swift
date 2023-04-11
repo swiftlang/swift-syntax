@@ -248,39 +248,6 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterBody
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "attributes"
-    case 2:
-      return nil
-    case 3:
-      return "modifiers"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return "parameter"
-    case 8:
-      return nil
-    case 9:
-      return nil
-    case 10:
-      return nil
-    case 11:
-      return nil
-    case 12:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension AccessorDeclSyntax: CustomReflectable {
@@ -610,47 +577,6 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterMembers
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "attributes"
-    case 2:
-      return nil
-    case 3:
-      return "modifiers"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    case 9:
-      return "generic parameter clause"
-    case 10:
-      return nil
-    case 11:
-      return "type inheritance clause"
-    case 12:
-      return nil
-    case 13:
-      return "generic where clause"
-    case 14:
-      return nil
-    case 15:
-      return nil
-    case 16:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension ActorDeclSyntax: CustomReflectable {
@@ -957,43 +883,6 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.genericWhereClause, 
           \Self.unexpectedAfterGenericWhereClause
         ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "attributes"
-    case 2:
-      return nil
-    case 3:
-      return "modifiers"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    case 9:
-      return "inheritance clause"
-    case 10:
-      return nil
-    case 11:
-      return nil
-    case 12:
-      return nil
-    case 13:
-      return "generic where clause"
-    case 14:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -1326,47 +1215,6 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterMembers
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "attributes"
-    case 2:
-      return nil
-    case 3:
-      return "modifiers"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    case 9:
-      return "generic parameter clause"
-    case 10:
-      return nil
-    case 11:
-      return "inheritance clause"
-    case 12:
-      return nil
-    case 13:
-      return "generic where clause"
-    case 14:
-      return nil
-    case 15:
-      return nil
-    case 16:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension ClassDeclSyntax: CustomReflectable {
@@ -1596,31 +1444,6 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterBody
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "attributes"
-    case 2:
-      return nil
-    case 3:
-      return "modifiers"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension DeinitializerDeclSyntax: CustomReflectable {
@@ -1713,19 +1536,6 @@ public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([\Self.unexpectedBeforeIdentifier, \Self.identifier, \Self.unexpectedAfterIdentifier])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -1963,31 +1773,6 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.elements, 
           \Self.unexpectedAfterElements
         ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "attributes"
-    case 2:
-      return nil
-    case 3:
-      return "modifiers"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return "elements"
-    case 8:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -2322,47 +2107,6 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterMembers
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "attributes"
-    case 2:
-      return nil
-    case 3:
-      return "modifiers"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    case 9:
-      return "generic parameter clause"
-    case 10:
-      return nil
-    case 11:
-      return "inheritance clause"
-    case 12:
-      return nil
-    case 13:
-      return "generic where clause"
-    case 14:
-      return nil
-    case 15:
-      return nil
-    case 16:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension EnumDeclSyntax: CustomReflectable {
@@ -2669,43 +2413,6 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.members, 
           \Self.unexpectedAfterMembers
         ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "attributes"
-    case 2:
-      return nil
-    case 3:
-      return "modifiers"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    case 9:
-      return "inheritance clause"
-    case 10:
-      return nil
-    case 11:
-      return "generic where clause"
-    case 12:
-      return nil
-    case 13:
-      return nil
-    case 14:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -3038,47 +2745,6 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterBody
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "attributes"
-    case 2:
-      return nil
-    case 3:
-      return "modifiers"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    case 9:
-      return "generic parameter clause"
-    case 10:
-      return nil
-    case 11:
-      return "function signature"
-    case 12:
-      return nil
-    case 13:
-      return "generic where clause"
-    case 14:
-      return nil
-    case 15:
-      return nil
-    case 16:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension FunctionDeclSyntax: CustomReflectable {
@@ -3236,23 +2902,6 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.poundEndif, 
           \Self.unexpectedAfterPoundEndif
         ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -3515,35 +3164,6 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.path, 
           \Self.unexpectedAfterPath
         ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "attributes"
-    case 2:
-      return nil
-    case 3:
-      return "modifiers"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    case 9:
-      return nil
-    case 10:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -3871,47 +3491,6 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.body, 
           \Self.unexpectedAfterBody
         ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "attributes"
-    case 2:
-      return nil
-    case 3:
-      return "modifiers"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    case 9:
-      return "generic parameter clause"
-    case 10:
-      return nil
-    case 11:
-      return "function signature"
-    case 12:
-      return nil
-    case 13:
-      return "generic where clause"
-    case 14:
-      return nil
-    case 15:
-      return nil
-    case 16:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -4245,47 +3824,6 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.genericWhereClause, 
           \Self.unexpectedAfterGenericWhereClause
         ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "attributes"
-    case 2:
-      return nil
-    case 3:
-      return "modifiers"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    case 9:
-      return "generic parameter clause"
-    case 10:
-      return nil
-    case 11:
-      return "macro signature"
-    case 12:
-      return nil
-    case 13:
-      return "macro definition"
-    case 14:
-      return nil
-    case 15:
-      return "generic where clause"
-    case 16:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -4621,47 +4159,6 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterAdditionalTrailingClosures
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    case 9:
-      return nil
-    case 10:
-      return nil
-    case 11:
-      return nil
-    case 12:
-      return nil
-    case 13:
-      return nil
-    case 14:
-      return nil
-    case 15:
-      return nil
-    case 16:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension MacroExpansionDeclSyntax: CustomReflectable {
@@ -4838,23 +4335,6 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.modifiers, 
           \Self.unexpectedAfterModifiers
         ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -5102,35 +4582,6 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterOperatorPrecedenceAndTypes
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "attributes"
-    case 2:
-      return nil
-    case 3:
-      return "modifiers"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    case 9:
-      return nil
-    case 10:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension OperatorDeclSyntax: CustomReflectable {
@@ -5315,31 +4766,6 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.rightParen, 
           \Self.unexpectedAfterRightParen
         ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    case 5:
-      return "arguments"
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -5662,43 +5088,6 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.rightBrace, 
           \Self.unexpectedAfterRightBrace
         ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "attributes"
-    case 2:
-      return nil
-    case 3:
-      return "modifiers"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    case 9:
-      return nil
-    case 10:
-      return nil
-    case 11:
-      return nil
-    case 12:
-      return nil
-    case 13:
-      return nil
-    case 14:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -6030,47 +5419,6 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.members, 
           \Self.unexpectedAfterMembers
         ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "attributes"
-    case 2:
-      return nil
-    case 3:
-      return "modifiers"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    case 9:
-      return "primary associated type clause"
-    case 10:
-      return nil
-    case 11:
-      return "inheritance clause"
-    case 12:
-      return nil
-    case 13:
-      return "generic where clause"
-    case 14:
-      return nil
-    case 15:
-      return nil
-    case 16:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -6404,47 +5752,6 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.members, 
           \Self.unexpectedAfterMembers
         ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "attributes"
-    case 2:
-      return nil
-    case 3:
-      return "modifiers"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    case 9:
-      return "generic parameter clause"
-    case 10:
-      return nil
-    case 11:
-      return "type inheritance clause"
-    case 12:
-      return nil
-    case 13:
-      return "generic where clause"
-    case 14:
-      return nil
-    case 15:
-      return nil
-    case 16:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -6821,47 +6128,6 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterAccessor
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "attributes"
-    case 2:
-      return nil
-    case 3:
-      return "modifiers"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return "generic parameter clause"
-    case 8:
-      return nil
-    case 9:
-      return nil
-    case 10:
-      return nil
-    case 11:
-      return nil
-    case 12:
-      return nil
-    case 13:
-      return "generic where clause"
-    case 14:
-      return nil
-    case 15:
-      return nil
-    case 16:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension SubscriptDeclSyntax: CustomReflectable {
@@ -7169,43 +6435,6 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterGenericWhereClause
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "attributes"
-    case 2:
-      return nil
-    case 3:
-      return "modifiers"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    case 9:
-      return "generic parameter clause"
-    case 10:
-      return nil
-    case 11:
-      return nil
-    case 12:
-      return nil
-    case 13:
-      return "generic where clause"
-    case 14:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension TypealiasDeclSyntax: CustomReflectable {
@@ -7451,31 +6680,6 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.bindings, 
           \Self.unexpectedAfterBindings
         ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "attributes"
-    case 2:
-      return nil
-    case 3:
-      return "modifiers"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 

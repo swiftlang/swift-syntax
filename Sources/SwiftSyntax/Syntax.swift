@@ -95,10 +95,6 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
     return self.raw.kind.syntaxNodeType.init(self)!
   }
 
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return self.raw.kind.syntaxNodeType.init(self)!.childNameForDiagnostics(index)
-  }
-
   public func hash(into hasher: inout Hasher) {
     return data.nodeId.hash(into: &hasher)
   }
@@ -174,12 +170,6 @@ public protocol SyntaxProtocol: CustomStringConvertible,
 
   /// The statically allowed structure of the syntax node.
   static var structure: SyntaxNodeStructure { get }
-
-  /// Return a name with which the child at the given `index` can be referred to
-  /// in diagnostics.
-  /// Typically, you want to use `childNameInParent` on the child instead of
-  /// calling this method on the parent.
-  func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String?
 }
 
 // Casting functions to specialized syntax nodes.
@@ -213,18 +203,6 @@ public extension SyntaxProtocol {
     var copy = self
     copy[keyPath: keyPath] = value
     return copy
-  }
-}
-
-public extension SyntaxProtocol {
-  /// If the parent has a dedicated "name for diagnostics" for this node, return it.
-  /// Otherwise, return `nil`.
-  var childNameInParent: String? {
-    if let parent = self.parent, let childName = parent.childNameForDiagnostics(self.index) {
-      return childName
-    } else {
-      return nil
-    }
   }
 }
 
@@ -265,19 +243,6 @@ public extension SyntaxProtocol {
     return SyntaxChildrenIndex(self.data.absoluteInfo)
   }
 
-  /// Whether or not this node is a token one.
-  var isToken: Bool {
-    return raw.isToken
-  }
-
-  /// Whether or not this node represents an SyntaxCollection.
-  var isCollection: Bool {
-    // We need to provide a custom implementation for is(SyntaxCollection.self)
-    // since SyntaxCollection has generic or self requirements and can thus
-    // not be used as a method argument.
-    return raw.kind.isSyntaxCollection
-  }
-
   /// Whether the tree contained by this layout has any
   ///  - missing nodes or
   ///  - unexpected nodes or
@@ -306,18 +271,22 @@ public extension SyntaxProtocol {
     return data.parent.map(Syntax.init(_:))
   }
 
-  /// The index of this node in the parent's children.
-  var indexInParent: Int {
-    return data.indexInParent
-  }
-
   /// Whether or not this node has a parent.
   var hasParent: Bool {
     return parent != nil
   }
 
-  /// Recursively walks through the tree to find the token semantically before
-  /// this node.
+  var keyPathInParent: AnyKeyPath? {
+    guard let parent = self.parent else {
+      return nil
+    }
+    guard case .layout(let childrenKeyPaths) = parent.kind.syntaxNodeType.structure else {
+      return nil
+    }
+    return childrenKeyPaths[data.indexInParent]
+  }
+
+  @available(*, deprecated, message: "Use previousToken(viewMode:) instead")
   var previousToken: TokenSyntax? {
     return self.previousToken(viewMode: .sourceAccurate)
   }
@@ -342,8 +311,7 @@ public extension SyntaxProtocol {
     return parent.previousToken(viewMode: viewMode)
   }
 
-  /// Recursively walks through the tree to find the next token semantically
-  /// after this node.
+  @available(*, deprecated, message: "Use nextToken(viewMode:) instead")
   var nextToken: TokenSyntax? {
     return self.nextToken(viewMode: .sourceAccurate)
   }
@@ -365,8 +333,7 @@ public extension SyntaxProtocol {
     return parent.nextToken(viewMode: viewMode)
   }
 
-  /// Returns the first token in this syntax node in the source accurate view of
-  /// the syntax tree.
+  @available(*, deprecated, message: "Use firstToken(viewMode: .sourceAccurate) instead")
   var firstToken: TokenSyntax? {
     return self.firstToken(viewMode: .sourceAccurate)
   }
@@ -386,7 +353,7 @@ public extension SyntaxProtocol {
     return nil
   }
 
-  /// Returns the last token node that is part of this syntax node.
+  @available(*, deprecated, message: "Use lastToken(viewMode: .sourceAccurate) instead")
   var lastToken: TokenSyntax? {
     return self.lastToken(viewMode: .sourceAccurate)
   }
@@ -701,12 +668,6 @@ public extension SyntaxProtocol {
 /// Protocol for the enums nested inside `Syntax` nodes that enumerate all the
 /// possible types a child node might have.
 public protocol SyntaxChildChoices: SyntaxProtocol {}
-
-public extension SyntaxChildChoices {
-  func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return Syntax(self).childNameForDiagnostics(index)
-  }
-}
 
 /// Sequence of tokens that are part of the provided Syntax node.
 public struct TokenSequence: Sequence {

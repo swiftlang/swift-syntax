@@ -14,16 +14,17 @@ import XCTest
 import SwiftSyntax
 import SwiftSyntaxBuilder
 
-final class ImportTests: XCTestCase {
-  func testImport() {
-    let leadingTrivia = Trivia.unexpectedText("␣")
-    let identifier = TokenSyntax.identifier("SwiftSyntax")
-
-    let importDecl = ImportDeclSyntax(
-      leadingTrivia: leadingTrivia,
-      path: AccessPathSyntax([AccessPathComponentSyntax(name: identifier)])
+final class AttributeListSyntaxTests: XCTestCase {
+  func testAttributeListSyntaxSpacing() {
+    let buildable = AttributeListSyntax {
+      AttributeSyntax("@inlinable")
+      AttributeSyntax("@discardableResult")
+    }
+    assertBuildResult(
+      buildable,
+      """
+      @inlinable @discardableResult
+      """
     )
-
-    assertBuildResult(importDecl, "␣import SwiftSyntax")
   }
 }

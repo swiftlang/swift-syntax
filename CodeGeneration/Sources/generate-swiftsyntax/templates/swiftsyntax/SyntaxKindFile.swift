@@ -55,5 +55,19 @@ let syntaxKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         }
       }
     }
+
+    try VariableDeclSyntax("public var syntaxNodeType: SyntaxProtocol.Type") {
+      try SwitchExprSyntax("switch self") {
+        SwitchCaseSyntax("case .token:") {
+          StmtSyntax("return TokenSyntax.self")
+        }
+
+        for node in NON_BASE_SYNTAX_NODES {
+          SwitchCaseSyntax("case .\(raw: node.swiftSyntaxKind):") {
+            StmtSyntax("return \(raw: node.name).self")
+          }
+        }
+      }
+    }
   }
 }

@@ -34,8 +34,7 @@ public struct AccessPathSyntax: SyntaxCollection, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -67,7 +66,7 @@ public struct AccessPathSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `AccessPathSyntax` by replacing the underlying layout with
@@ -168,10 +167,6 @@ public struct AccessPathSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `AccessPathSyntax` to the `BidirectionalCollection` protocol.
@@ -249,8 +244,7 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -282,7 +276,7 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `AccessorListSyntax` by replacing the underlying layout with
@@ -383,10 +377,6 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `AccessorListSyntax` to the `BidirectionalCollection` protocol.
@@ -464,8 +454,7 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -497,7 +486,7 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `ArrayElementListSyntax` by replacing the underlying layout with
@@ -597,10 +586,6 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
   }
 }
 
@@ -722,8 +707,7 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -755,7 +739,7 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `AttributeListSyntax` by replacing the underlying layout with
@@ -856,10 +840,6 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `AttributeListSyntax` to the `BidirectionalCollection` protocol.
@@ -937,8 +917,7 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -970,7 +949,7 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `AvailabilitySpecListSyntax` by replacing the underlying layout with
@@ -1071,10 +1050,6 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `AvailabilitySpecListSyntax` to the `BidirectionalCollection` protocol.
@@ -1152,8 +1127,7 @@ public struct AvailabilityVersionRestrictionListSyntax: SyntaxCollection, Syntax
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -1185,7 +1159,7 @@ public struct AvailabilityVersionRestrictionListSyntax: SyntaxCollection, Syntax
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `AvailabilityVersionRestrictionListSyntax` by replacing the underlying layout with
@@ -1286,10 +1260,6 @@ public struct AvailabilityVersionRestrictionListSyntax: SyntaxCollection, Syntax
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `AvailabilityVersionRestrictionListSyntax` to the `BidirectionalCollection` protocol.
@@ -1367,8 +1337,7 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -1400,7 +1369,7 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `CaseItemListSyntax` by replacing the underlying layout with
@@ -1501,10 +1470,6 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `CaseItemListSyntax` to the `BidirectionalCollection` protocol.
@@ -1582,8 +1547,7 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -1615,7 +1579,7 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `CatchClauseListSyntax` by replacing the underlying layout with
@@ -1716,10 +1680,6 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `CatchClauseListSyntax` to the `BidirectionalCollection` protocol.
@@ -1797,8 +1757,7 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -1830,7 +1789,7 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `CatchItemListSyntax` by replacing the underlying layout with
@@ -1931,10 +1890,6 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `CatchItemListSyntax` to the `BidirectionalCollection` protocol.
@@ -2012,8 +1967,7 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -2045,7 +1999,7 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `ClosureCaptureItemListSyntax` by replacing the underlying layout with
@@ -2146,10 +2100,6 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `ClosureCaptureItemListSyntax` to the `BidirectionalCollection` protocol.
@@ -2227,8 +2177,7 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -2260,7 +2209,7 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `ClosureParamListSyntax` by replacing the underlying layout with
@@ -2361,10 +2310,6 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `ClosureParamListSyntax` to the `BidirectionalCollection` protocol.
@@ -2442,8 +2387,7 @@ public struct ClosureParameterListSyntax: SyntaxCollection, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -2475,7 +2419,7 @@ public struct ClosureParameterListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `ClosureParameterListSyntax` by replacing the underlying layout with
@@ -2576,10 +2520,6 @@ public struct ClosureParameterListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `ClosureParameterListSyntax` to the `BidirectionalCollection` protocol.
@@ -2657,8 +2597,7 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -2690,7 +2629,7 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `CodeBlockItemListSyntax` by replacing the underlying layout with
@@ -2791,10 +2730,6 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `CodeBlockItemListSyntax` to the `BidirectionalCollection` protocol.
@@ -2872,8 +2807,7 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -2905,7 +2839,7 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `CompositionTypeElementListSyntax` by replacing the underlying layout with
@@ -3006,10 +2940,6 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `CompositionTypeElementListSyntax` to the `BidirectionalCollection` protocol.
@@ -3087,8 +3017,7 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -3120,7 +3049,7 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `ConditionElementListSyntax` by replacing the underlying layout with
@@ -3221,10 +3150,6 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `ConditionElementListSyntax` to the `BidirectionalCollection` protocol.
@@ -3302,8 +3227,7 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -3335,7 +3259,7 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `DeclNameArgumentListSyntax` by replacing the underlying layout with
@@ -3436,10 +3360,6 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `DeclNameArgumentListSyntax` to the `BidirectionalCollection` protocol.
@@ -3517,8 +3437,7 @@ public struct DesignatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -3550,7 +3469,7 @@ public struct DesignatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `DesignatedTypeListSyntax` by replacing the underlying layout with
@@ -3651,10 +3570,6 @@ public struct DesignatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `DesignatedTypeListSyntax` to the `BidirectionalCollection` protocol.
@@ -3732,8 +3647,7 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -3765,7 +3679,7 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `DictionaryElementListSyntax` by replacing the underlying layout with
@@ -3866,10 +3780,6 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `DictionaryElementListSyntax` to the `BidirectionalCollection` protocol.
@@ -3947,8 +3857,7 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -3980,7 +3889,7 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `DifferentiabilityParamListSyntax` by replacing the underlying layout with
@@ -4081,10 +3990,6 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `DifferentiabilityParamListSyntax` to the `BidirectionalCollection` protocol.
@@ -4159,8 +4064,7 @@ public struct DocumentationAttributeArgumentsSyntax: SyntaxCollection, SyntaxHas
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -4192,7 +4096,7 @@ public struct DocumentationAttributeArgumentsSyntax: SyntaxCollection, SyntaxHas
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `DocumentationAttributeArgumentsSyntax` by replacing the underlying layout with
@@ -4293,10 +4197,6 @@ public struct DocumentationAttributeArgumentsSyntax: SyntaxCollection, SyntaxHas
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `DocumentationAttributeArgumentsSyntax` to the `BidirectionalCollection` protocol.
@@ -4371,8 +4271,7 @@ public struct EffectsArgumentsSyntax: SyntaxCollection, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -4404,7 +4303,7 @@ public struct EffectsArgumentsSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `EffectsArgumentsSyntax` by replacing the underlying layout with
@@ -4505,10 +4404,6 @@ public struct EffectsArgumentsSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `EffectsArgumentsSyntax` to the `BidirectionalCollection` protocol.
@@ -4583,8 +4478,7 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -4616,7 +4510,7 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `EnumCaseElementListSyntax` by replacing the underlying layout with
@@ -4717,10 +4611,6 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `EnumCaseElementListSyntax` to the `BidirectionalCollection` protocol.
@@ -4798,8 +4688,7 @@ public struct EnumCaseParameterListSyntax: SyntaxCollection, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -4831,7 +4720,7 @@ public struct EnumCaseParameterListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `EnumCaseParameterListSyntax` by replacing the underlying layout with
@@ -4932,10 +4821,6 @@ public struct EnumCaseParameterListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `EnumCaseParameterListSyntax` to the `BidirectionalCollection` protocol.
@@ -5010,8 +4895,7 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -5043,7 +4927,7 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `ExprListSyntax` by replacing the underlying layout with
@@ -5144,10 +5028,6 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `ExprListSyntax` to the `BidirectionalCollection` protocol.
@@ -5225,8 +5105,7 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -5258,7 +5137,7 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `FunctionParameterListSyntax` by replacing the underlying layout with
@@ -5359,10 +5238,6 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `FunctionParameterListSyntax` to the `BidirectionalCollection` protocol.
@@ -5440,8 +5315,7 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -5473,7 +5347,7 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `GenericArgumentListSyntax` by replacing the underlying layout with
@@ -5574,10 +5448,6 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `GenericArgumentListSyntax` to the `BidirectionalCollection` protocol.
@@ -5655,8 +5525,7 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -5688,7 +5557,7 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `GenericParameterListSyntax` by replacing the underlying layout with
@@ -5789,10 +5658,6 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `GenericParameterListSyntax` to the `BidirectionalCollection` protocol.
@@ -5870,8 +5735,7 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -5903,7 +5767,7 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `GenericRequirementListSyntax` by replacing the underlying layout with
@@ -6004,10 +5868,6 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `GenericRequirementListSyntax` to the `BidirectionalCollection` protocol.
@@ -6085,8 +5945,7 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -6118,7 +5977,7 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `IfConfigClauseListSyntax` by replacing the underlying layout with
@@ -6219,10 +6078,6 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `IfConfigClauseListSyntax` to the `BidirectionalCollection` protocol.
@@ -6300,8 +6155,7 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -6333,7 +6187,7 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `InheritedTypeListSyntax` by replacing the underlying layout with
@@ -6434,10 +6288,6 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `InheritedTypeListSyntax` to the `BidirectionalCollection` protocol.
@@ -6515,8 +6365,7 @@ public struct KeyPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -6548,7 +6397,7 @@ public struct KeyPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `KeyPathComponentListSyntax` by replacing the underlying layout with
@@ -6649,10 +6498,6 @@ public struct KeyPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `KeyPathComponentListSyntax` to the `BidirectionalCollection` protocol.
@@ -6730,8 +6575,7 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -6763,7 +6607,7 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `MemberDeclListSyntax` by replacing the underlying layout with
@@ -6864,10 +6708,6 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `MemberDeclListSyntax` to the `BidirectionalCollection` protocol.
@@ -6945,8 +6785,7 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -6978,7 +6817,7 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `ModifierListSyntax` by replacing the underlying layout with
@@ -7079,10 +6918,6 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `ModifierListSyntax` to the `BidirectionalCollection` protocol.
@@ -7160,8 +6995,7 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -7193,7 +7027,7 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `MultipleTrailingClosureElementListSyntax` by replacing the underlying layout with
@@ -7294,10 +7128,6 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `MultipleTrailingClosureElementListSyntax` to the `BidirectionalCollection` protocol.
@@ -7375,8 +7205,7 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -7408,7 +7237,7 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `ObjCSelectorSyntax` by replacing the underlying layout with
@@ -7509,10 +7338,6 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `ObjCSelectorSyntax` to the `BidirectionalCollection` protocol.
@@ -7590,8 +7415,7 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -7623,7 +7447,7 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `PatternBindingListSyntax` by replacing the underlying layout with
@@ -7723,10 +7547,6 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
   }
 }
 
@@ -7860,8 +7680,7 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -7893,7 +7712,7 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `PrecedenceGroupAttributeListSyntax` by replacing the underlying layout with
@@ -7994,10 +7813,6 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `PrecedenceGroupAttributeListSyntax` to the `BidirectionalCollection` protocol.
@@ -8075,8 +7890,7 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -8108,7 +7922,7 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `PrecedenceGroupNameListSyntax` by replacing the underlying layout with
@@ -8209,10 +8023,6 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `PrecedenceGroupNameListSyntax` to the `BidirectionalCollection` protocol.
@@ -8290,8 +8100,7 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -8323,7 +8132,7 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `PrimaryAssociatedTypeListSyntax` by replacing the underlying layout with
@@ -8423,10 +8232,6 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
   }
 }
 
@@ -8570,8 +8375,7 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -8603,7 +8407,7 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `SpecializeAttributeSpecListSyntax` by replacing the underlying layout with
@@ -8703,10 +8507,6 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
   }
 }
 
@@ -8828,8 +8628,7 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -8861,7 +8660,7 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `StringLiteralSegmentsSyntax` by replacing the underlying layout with
@@ -8961,10 +8760,6 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
   }
 }
 
@@ -9086,8 +8881,7 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -9119,7 +8913,7 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `SwitchCaseListSyntax` by replacing the underlying layout with
@@ -9220,10 +9014,6 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `SwitchCaseListSyntax` to the `BidirectionalCollection` protocol.
@@ -9301,8 +9091,7 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -9334,7 +9123,7 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `TupleExprElementListSyntax` by replacing the underlying layout with
@@ -9435,10 +9224,6 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `TupleExprElementListSyntax` to the `BidirectionalCollection` protocol.
@@ -9516,8 +9301,7 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -9549,7 +9333,7 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `TuplePatternElementListSyntax` by replacing the underlying layout with
@@ -9650,10 +9434,6 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `TuplePatternElementListSyntax` to the `BidirectionalCollection` protocol.
@@ -9731,8 +9511,7 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -9764,7 +9543,7 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `TupleTypeElementListSyntax` by replacing the underlying layout with
@@ -9865,10 +9644,6 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `TupleTypeElementListSyntax` to the `BidirectionalCollection` protocol.
@@ -9943,8 +9718,7 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -9976,7 +9750,7 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `UnexpectedNodesSyntax` by replacing the underlying layout with
@@ -10077,10 +9851,6 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
 }
 
 /// Conformance for `UnexpectedNodesSyntax` to the `BidirectionalCollection` protocol.
@@ -10158,8 +9928,7 @@ public struct YieldExprListSyntax: SyntaxCollection, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -10191,7 +9960,7 @@ public struct YieldExprListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `YieldExprListSyntax` by replacing the underlying layout with
@@ -10291,10 +10060,6 @@ public struct YieldExprListSyntax: SyntaxCollection, SyntaxHashable {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
   }
 }
 

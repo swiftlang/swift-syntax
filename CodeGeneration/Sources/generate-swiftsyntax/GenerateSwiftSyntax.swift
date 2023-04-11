@@ -22,6 +22,7 @@ private let generatedDirName = "generated"
 private let swiftBasicFormatGeneratedDir = ["SwiftBasicFormat", generatedDirName]
 private let ideUtilsGeneratedDir = ["IDEUtils", generatedDirName]
 private let swiftParserGeneratedDir = ["SwiftParser", generatedDirName]
+private let swiftParserDiagnosticsGeneratedDir = ["SwiftParserDiagnostics", generatedDirName]
 private let swiftSyntaxGeneratedDir = ["SwiftSyntax", generatedDirName]
 private let swiftSyntaxBuilderGeneratedDir = ["SwiftSyntaxBuilder", generatedDirName]
 private let BASE_KIND_FILES = [
@@ -86,13 +87,18 @@ struct GenerateSwiftSyntax: ParsableCommand {
 
         // SwiftParser
         GeneratedFileSpec(swiftParserGeneratedDir + ["DeclarationModifier.swift"], declarationModifierFile),
+        GeneratedFileSpec(swiftParserGeneratedDir + ["IsLexerClassified.swift"], isLexerClassifiedFile),
         GeneratedFileSpec(swiftParserGeneratedDir + ["Parser+Entry.swift"], parserEntryFile),
         GeneratedFileSpec(swiftParserGeneratedDir + ["TokenSpecStaticMembers.swift"], tokenSpecStaticMembersFile),
         GeneratedFileSpec(swiftParserGeneratedDir + ["TypeAttribute.swift"], typeAttributeFile),
 
+        // SwiftParserDiagnostics
+        GeneratedFileSpec(swiftParserDiagnosticsGeneratedDir + ["ChildNameForDiagnostics.swift"], childNameForDiagnosticFile),
+        GeneratedFileSpec(swiftParserDiagnosticsGeneratedDir + ["SyntaxKindNameForDiagnostics.swift"], syntaxKindNameForDiagnosticFile),
+        GeneratedFileSpec(swiftParserDiagnosticsGeneratedDir + ["TokenNameForDiagnostics.swift"], tokenNameForDiagnosticFile),
+
         // SwiftSyntax
         GeneratedFileSpec(swiftSyntaxGeneratedDir + ["Keyword.swift"], keywordFile),
-        GeneratedFileSpec(swiftSyntaxGeneratedDir + ["Misc.swift"], miscFile),
         GeneratedFileSpec(swiftSyntaxGeneratedDir + ["raw", "RawSyntaxNodes.swift"], rawSyntaxNodesFile),
         GeneratedFileSpec(swiftSyntaxGeneratedDir + ["raw", "RawSyntaxValidation.swift"], rawSyntaxValidationFile),
         GeneratedFileSpec(swiftSyntaxGeneratedDir + ["SyntaxAnyVisitor.swift"], syntaxAnyVisitorFile),

@@ -15,7 +15,7 @@
 /// Describes how distinctive a token is for parser recovery. When expecting a
 /// token, tokens with a lower token precedence may be skipped and considered
 /// unexpected.
-public enum TokenPrecedence: Comparable {
+enum TokenPrecedence: Comparable {
   /// An unknown token. This is known garbage and should always be allowed to be skipped.
   case unknownToken
   /// Tokens that can be used similar to variable names or literals

@@ -258,27 +258,6 @@ func syntaxNode(emitKind: String) -> SourceFileSyntax {
 
           StmtSyntax("return .layout(\(layout))")
         }
-
-        try! FunctionDeclSyntax("public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String?") {
-          try! SwitchExprSyntax("switch index.data?.indexInParent") {
-            for (index, child) in node.children.enumerated() {
-              SwitchCaseSyntax("case \(raw: index):") {
-                if let nameForDiagnostics = child.nameForDiagnostics {
-                  StmtSyntax(#"return "\#(raw: nameForDiagnostics)""#)
-                } else {
-                  StmtSyntax("return nil")
-                }
-              }
-            }
-
-            SwitchCaseSyntax(
-              """
-              default:
-                fatalError("Invalid index")
-              """
-            )
-          }
-        }
       }
 
       try! ExtensionDeclSyntax("extension \(raw: node.name): CustomReflectable") {

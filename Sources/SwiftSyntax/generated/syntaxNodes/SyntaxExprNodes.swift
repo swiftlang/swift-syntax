@@ -170,27 +170,6 @@ public struct ArrayExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterRightSquare
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension ArrayExprSyntax: CustomReflectable {
@@ -319,23 +298,6 @@ public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.arrowToken, 
           \Self.unexpectedAfterArrowToken
         ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -516,31 +478,6 @@ public struct AsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterTypeName
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension AsExprSyntax: CustomReflectable {
@@ -633,19 +570,6 @@ public struct AssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([\Self.unexpectedBeforeAssignToken, \Self.assignToken, \Self.unexpectedAfterAssignToken])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -771,23 +695,6 @@ public struct AwaitExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterExpression
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension AwaitExprSyntax: CustomReflectable {
@@ -877,19 +784,6 @@ public struct BinaryOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public static var structure: SyntaxNodeStructure {
     return .layout([\Self.unexpectedBeforeOperatorToken, \Self.operatorToken, \Self.unexpectedAfterOperatorToken])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension BinaryOperatorExprSyntax: CustomReflectable {
@@ -975,19 +869,6 @@ public struct BooleanLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([\Self.unexpectedBeforeBooleanLiteral, \Self.booleanLiteral, \Self.unexpectedAfterBooleanLiteral])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -1112,23 +993,6 @@ public struct BorrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.expression, 
           \Self.unexpectedAfterExpression
         ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -1327,31 +1191,6 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.rightBrace, 
           \Self.unexpectedAfterRightBrace
         ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -1552,27 +1391,6 @@ public struct DictionaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterRightSquare
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension DictionaryExprSyntax: CustomReflectable {
@@ -1664,19 +1482,6 @@ public struct DiscardAssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public static var structure: SyntaxNodeStructure {
     return .layout([\Self.unexpectedBeforeWildcard, \Self.wildcard, \Self.unexpectedAfterWildcard])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension DiscardAssignmentExprSyntax: CustomReflectable {
@@ -1763,19 +1568,6 @@ public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public static var structure: SyntaxNodeStructure {
     return .layout([\Self.unexpectedBeforeIdentifier, \Self.identifier, \Self.unexpectedAfterIdentifier])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension EditorPlaceholderExprSyntax: CustomReflectable {
@@ -1861,19 +1653,6 @@ public struct FloatLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([\Self.unexpectedBeforeFloatingDigits, \Self.floatingDigits, \Self.unexpectedAfterFloatingDigits])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -1998,23 +1777,6 @@ public struct ForcedValueExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.exclamationMark, 
           \Self.unexpectedAfterExclamationMark
         ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -2285,39 +2047,6 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterAdditionalTrailingClosures
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "called expression"
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    case 5:
-      return "arguments"
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    case 9:
-      return "trailing closure"
-    case 10:
-      return nil
-    case 11:
-      return "trailing closures"
-    case 12:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension FunctionCallExprSyntax: CustomReflectable {
@@ -2452,23 +2181,6 @@ public struct IdentifierExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.declNameArguments, 
           \Self.unexpectedAfterDeclNameArguments
         ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -2736,35 +2448,6 @@ public struct IfExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterElseBody
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    case 5:
-      return "body"
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    case 9:
-      return "else body"
-    case 10:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension IfExprSyntax: CustomReflectable {
@@ -2897,23 +2580,6 @@ public struct InOutExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.expression, 
           \Self.unexpectedAfterExpression
         ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -3068,27 +2734,6 @@ public struct InfixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterRightOperand
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension InfixOperatorExprSyntax: CustomReflectable {
@@ -3179,19 +2824,6 @@ public struct IntegerLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([\Self.unexpectedBeforeDigits, \Self.digits, \Self.unexpectedAfterDigits])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -3342,27 +2974,6 @@ public struct IsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.typeName, 
           \Self.unexpectedAfterTypeName
         ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -3572,27 +3183,6 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.components, 
           \Self.unexpectedAfterComponents
         ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return "root"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -3918,47 +3508,6 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterAdditionalTrailingClosures
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    case 9:
-      return nil
-    case 10:
-      return nil
-    case 11:
-      return nil
-    case 12:
-      return nil
-    case 13:
-      return nil
-    case 14:
-      return nil
-    case 15:
-      return nil
-    case 16:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension MacroExpansionExprSyntax: CustomReflectable {
@@ -4189,31 +3738,6 @@ public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterDeclNameArguments
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "base"
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    case 5:
-      return "name"
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension MemberAccessExprSyntax: CustomReflectable {
@@ -4285,15 +3809,6 @@ public struct MissingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([\Self.unexpected])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -4417,23 +3932,6 @@ public struct MoveExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterExpression
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension MoveExprSyntax: CustomReflectable {
@@ -4522,19 +4020,6 @@ public struct NilLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([\Self.unexpectedBeforeNilKeyword, \Self.nilKeyword, \Self.unexpectedAfterNilKeyword])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -4659,23 +4144,6 @@ public struct OptionalChainingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.questionMark, 
           \Self.unexpectedAfterQuestionMark
         ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -4804,23 +4272,6 @@ public struct PackElementExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterPackRefExpr
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension PackElementExprSyntax: CustomReflectable {
@@ -4947,23 +4398,6 @@ public struct PackExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.patternExpr, 
           \Self.unexpectedAfterPatternExpr
         ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -5123,23 +4557,6 @@ public struct PostfixIfConfigExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterConfig
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension PostfixIfConfigExprSyntax: CustomReflectable {
@@ -5267,23 +4684,6 @@ public struct PostfixUnaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterOperatorToken
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension PostfixUnaryExprSyntax: CustomReflectable {
@@ -5410,23 +4810,6 @@ public struct PrefixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.postfixExpression, 
           \Self.unexpectedAfterPostfixExpression
         ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -5633,35 +5016,6 @@ public struct RegexLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterClosingPounds
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    case 9:
-      return nil
-    case 10:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension RegexLiteralExprSyntax: CustomReflectable {
@@ -5775,19 +5129,6 @@ public struct SequenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([\Self.unexpectedBeforeElements, \Self.elements, \Self.unexpectedAfterElements])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -5912,23 +5253,6 @@ public struct SpecializeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.genericArgumentClause, 
           \Self.unexpectedAfterGenericArgumentClause
         ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -6153,35 +5477,6 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.closeDelimiter, 
           \Self.unexpectedAfterCloseDelimiter
         ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    case 9:
-      return nil
-    case 10:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -6458,39 +5753,6 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterAdditionalTrailingClosures
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "called expression"
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    case 5:
-      return "arguments"
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    case 9:
-      return "trailing closure"
-    case 10:
-      return nil
-    case 11:
-      return "trailing closures"
-    case 12:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension SubscriptExprSyntax: CustomReflectable {
@@ -6587,19 +5849,6 @@ public struct SuperRefExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([\Self.unexpectedBeforeSuperKeyword, \Self.superKeyword, \Self.unexpectedAfterSuperKeyword])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -6822,35 +6071,6 @@ public struct SwitchExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterRightBrace
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    case 9:
-      return nil
-    case 10:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension SwitchExprSyntax: CustomReflectable {
@@ -7062,35 +6282,6 @@ public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterSecondChoice
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "condition"
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    case 5:
-      return "first choice"
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    case 9:
-      return "second choice"
-    case 10:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension TernaryExprSyntax: CustomReflectable {
@@ -7249,27 +6440,6 @@ public struct TryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.expression, 
           \Self.unexpectedAfterExpression
         ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -7445,27 +6615,6 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterRightParen
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension TupleExprSyntax: CustomReflectable {
@@ -7556,19 +6705,6 @@ public struct TypeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([\Self.unexpectedBeforeType, \Self.type, \Self.unexpectedAfterType])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -7694,23 +6830,6 @@ public struct UnresolvedAsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterQuestionOrExclamationMark
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension UnresolvedAsExprSyntax: CustomReflectable {
@@ -7800,19 +6919,6 @@ public struct UnresolvedIsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public static var structure: SyntaxNodeStructure {
     return .layout([\Self.unexpectedBeforeIsTok, \Self.isTok, \Self.unexpectedAfterIsTok])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
 }
 
 extension UnresolvedIsExprSyntax: CustomReflectable {
@@ -7898,19 +7004,6 @@ public struct UnresolvedPatternExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([\Self.unexpectedBeforePattern, \Self.pattern, \Self.unexpectedAfterPattern])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 
@@ -8061,27 +7154,6 @@ public struct UnresolvedTernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.colonMark, 
           \Self.unexpectedAfterColonMark
         ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
   }
 }
 

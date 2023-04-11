@@ -232,14 +232,6 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
         StmtSyntax("return .choices(\(choices))")
       }
-
-      DeclSyntax(
-        """
-        public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-          return Syntax(self).childNameForDiagnostics(index)
-        }
-        """
-      )
     }
 
     DeclSyntax(
@@ -254,4 +246,25 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       """
     )
   }
+
+  try! ExtensionDeclSyntax("extension Syntax") {
+    try VariableDeclSyntax("public static var structure: SyntaxNodeStructure") {
+      let choices = ArrayExprSyntax {
+        ArrayElementSyntax(
+          leadingTrivia: .newline,
+          expression: ExprSyntax(".node(TokenSyntax.self)")
+        )
+
+        for node in NON_BASE_SYNTAX_NODES {
+          ArrayElementSyntax(
+            leadingTrivia: .newline,
+            expression: ExprSyntax(".node(\(raw: node.name).self)")
+          )
+        }
+      }
+
+      StmtSyntax("return .choices(\(choices))")
+    }
+  }
+
 }

@@ -12,7 +12,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-import SwiftSyntax
+@_spi(RawSyntax) import SwiftSyntax
 
 extension TokenSpec {
   static var eof: TokenSpec { 

@@ -96,50 +96,6 @@ let tokenKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       }
     }
 
-    try! VariableDeclSyntax("public var nameForDiagnostics: String") {
-      try! SwitchExprSyntax("switch self") {
-        SwitchCaseSyntax("case .eof:") {
-          StmtSyntax(#"return "end of file""#)
-        }
-
-        for token in SYNTAX_TOKENS where token.swiftKind != "keyword" {
-          SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
-            StmtSyntax("return #\"\(raw: token.nameForDiagnostics)\"#")
-          }
-        }
-        SwitchCaseSyntax("case .keyword(let keyword):") {
-          StmtSyntax("return String(syntaxText: keyword.defaultText)")
-        }
-      }
-    }
-
-    try VariableDeclSyntax(
-      """
-      /// Returns `true` if the token is a Swift keyword.
-      ///
-      /// Keywords are reserved unconditionally for use by Swift and may not
-      /// appear as identifiers in any position without being escaped. For example,
-      /// `class`, `func`, or `import`.
-      public var isLexerClassifiedKeyword: Bool
-      """
-    ) {
-      try SwitchExprSyntax("switch self") {
-        SwitchCaseSyntax("case .eof:") {
-          StmtSyntax("return false")
-        }
-
-        for token in SYNTAX_TOKENS where token.swiftKind != "keyword" {
-          SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
-            StmtSyntax("return \(raw: token.isKeyword)")
-          }
-        }
-
-        SwitchCaseSyntax("case .keyword(let keyword):") {
-          StmtSyntax("return keyword.isLexerClassified")
-        }
-      }
-    }
-
     try VariableDeclSyntax(
       """
       /// Returns `true` if the token is a Swift punctuator.
@@ -197,6 +153,7 @@ let tokenKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     // `RawTokenBaseKind` for equality. With the raw value, it compiles down to
     // a primitive integer compare, without, it calls into `__derived_enum_equals`.
     @frozen // FIXME: Not actually stable, works around a miscompile
+    @_spi(RawSyntax)
     public enum RawTokenKind: UInt8, Equatable, Hashable
     """
   ) {

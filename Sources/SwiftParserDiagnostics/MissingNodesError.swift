@@ -347,7 +347,7 @@ extension ParseDiagnosticsGenerator {
           missingNodes += [sibling]
         } else if sibling.isMissingAllTokens && sibling.hasTokens {
           missingNodes += [sibling]
-        } else if sibling.isCollection && sibling.children(viewMode: .sourceAccurate).count == 0 {
+        } else if sibling.kind.isSyntaxCollection && sibling.children(viewMode: .sourceAccurate).count == 0 {
           // Skip over any syntax collections without any elements while looking ahead for further missing nodes.
         } else {
           // Otherwise we have found a present node, so stop looking ahead.

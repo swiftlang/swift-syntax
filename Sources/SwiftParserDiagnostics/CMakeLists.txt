@@ -16,7 +16,12 @@ add_swift_host_library(SwiftParserDiagnostics
   ParseDiagnosticsGenerator.swift
   PresenceUtils.swift
   SyntaxExtensions.swift
-  Utils.swift)
+  Utils.swift
+
+  generated/ChildNameForDiagnostics.swift
+  generated/SyntaxKindNameForDiagnostics.swift
+  generated/TokenNameForDiagnostics.swift
+)
 
 target_link_libraries(SwiftParserDiagnostics PUBLIC
   SwiftBasicFormat

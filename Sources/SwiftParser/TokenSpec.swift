@@ -137,7 +137,7 @@ struct TokenSpec {
   @inline(__always)
   static func ~= (kind: TokenSpec, token: TokenSyntax) -> Bool {
     return kind.matches(
-      rawTokenKind: token.rawTokenKind,
+      rawTokenKind: token.tokenView.rawKind,
       keyword: Keyword(token.tokenView.rawText),
       atStartOfLine: token.leadingTrivia.contains(where: { $0.isNewline })
     )

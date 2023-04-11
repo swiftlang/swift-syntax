@@ -51,7 +51,7 @@ public struct AddSeparatorsToIntegerLiteral: RefactoringProvider {
     formattedText += value.byAddingGroupSeparators(at: lit.idealGroupSize)
     return
       lit
-      .with(\.digits, lit.digits.withKind(.integerLiteral(formattedText)))
+      .with(\.digits, lit.digits.with(\.tokenKind, .integerLiteral(formattedText)))
   }
 }
 

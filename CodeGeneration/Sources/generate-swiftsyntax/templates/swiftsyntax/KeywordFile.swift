@@ -22,17 +22,6 @@ let lookupTable = ArrayExprSyntax(leftSquare: .leftSquareBracketToken(trailingTr
 }
 
 let keywordFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
-  DeclSyntax(
-    """
-    /// Make `StaticString` equatable so we can use it as the raw value for Keyword.
-    extension StaticString: Equatable {
-      public static func == (lhs: StaticString, rhs: StaticString) -> Bool {
-        return SyntaxText(lhs) == SyntaxText(rhs)
-      }
-    }
-    """
-  )
-
   try! EnumDeclSyntax(
     """
     @frozen  // FIXME: Not actually stable, works around a miscompile
@@ -58,23 +47,6 @@ let keywordFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           }
         }
         SwitchCaseSyntax("default: return nil")
-      }
-    }
-
-    try! VariableDeclSyntax(
-      """
-      /// Whether the token kind is switched from being an identifier to being a keyword in the lexer.
-      /// This is true for keywords that used to be considered non-contextual.
-      public var isLexerClassified: Bool
-      """
-    ) {
-      try! SwitchExprSyntax("switch self") {
-        for keyword in KEYWORDS {
-          if keyword.isLexerClassified {
-            SwitchCaseSyntax("case .\(raw: keyword.escapedName): return true")
-          }
-        }
-        SwitchCaseSyntax("default: return false")
       }
     }
 

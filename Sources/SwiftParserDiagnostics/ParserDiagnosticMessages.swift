@@ -383,9 +383,9 @@ public struct SpaceSeparatedIdentifiersError: ParserError {
     if let name = firstToken.parent?.ancestorOrSelf(mapping: {
       $0.nodeTypeNameForDiagnostics(allowBlockNames: false)
     }) {
-      return "found an unexpected second identifier in \(name)"
+      return "found an unexpected second identifier in \(name); is there an accidental break?"
     } else {
-      return "found an unexpected second identifier"
+      return "found an unexpected second identifier; is there an accidental break?"
     }
   }
 }

@@ -54,7 +54,7 @@ public class ParserTests: XCTestCase {
     }
   }
 
-  /// Run parsr tests on all of the Swift files in the given path, recursively.
+  /// Run parser tests on all of the Swift files in the given path, recursively.
   func runParserTests(
     name: String,
     path: URL,

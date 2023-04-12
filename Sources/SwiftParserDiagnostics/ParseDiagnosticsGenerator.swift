@@ -327,7 +327,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         FixIt(
           message: .joinIdentifiers,
           changes: [
-            FixIt.MultiNodeChange(.replace(oldNode: Syntax(previousToken), newNode: Syntax(TokenSyntax(.identifier(joined), presence: .present)))),
+            FixIt.MultiNodeChange(.replace(oldNode: Syntax(previousToken), newNode: Syntax(TokenSyntax(.identifier(joined), trailingTrivia: tokens.last?.trailingTrivia ?? [], presence: .present)))),
             .makeMissing(tokens),
           ]
         )
@@ -338,7 +338,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
           FixIt(
             message: .joinIdentifiersWithCamelCase,
             changes: [
-              FixIt.MultiNodeChange(.replace(oldNode: Syntax(previousToken), newNode: Syntax(TokenSyntax(.identifier(joinedUsingCamelCase), presence: .present)))),
+              FixIt.MultiNodeChange(.replace(oldNode: Syntax(previousToken), newNode: Syntax(TokenSyntax(.identifier(joinedUsingCamelCase), trailingTrivia: tokens.last?.trailingTrivia ?? [], presence: .present)))),
               .makeMissing(tokens),
             ]
           )

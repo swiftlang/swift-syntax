@@ -290,17 +290,17 @@ public let STMT_NODES: [Node] = [
       ),
       Child(
         name: "TryKeyword",
-        kind: .node(kind: "TryToken"),
+        kind: .token(choices: [.keyword(text: "try")]),
         isOptional: true
       ),
       Child(
         name: "AwaitKeyword",
-        kind: .node(kind: "AwaitToken"),
+        kind: .token(choices: [.keyword(text: "await")]),
         isOptional: true
       ),
       Child(
         name: "CaseKeyword",
-        kind: .node(kind: "CaseToken"),
+        kind: .token(choices: [.keyword(text: "case")]),
         isOptional: true
       ),
       Child(

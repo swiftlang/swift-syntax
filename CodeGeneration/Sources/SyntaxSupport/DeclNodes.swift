@@ -809,7 +809,7 @@ public let DECL_NODES: [Node] = [
       // name to avoid backtracking.
       Child(
         name: "SecondName",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "WildcardToken")]),
+        kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "WildcardToken")], requiresLeadingSpace: true),
         nameForDiagnostics: "internal name",
         isOptional: true
       ),

@@ -170,6 +170,8 @@ open class BasicFormat: SyntaxRewriter {
     switch keyPath {
     case \AvailabilityArgumentSyntax.entry:
       return false
+    case \FunctionParameterSyntax.secondName:
+      return true
     default:
       return nil
     }

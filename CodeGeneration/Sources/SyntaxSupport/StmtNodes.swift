@@ -295,9 +295,8 @@ public let STMT_NODES: [Node] = [
       ),
       Child(
         name: "AwaitKeyword",
-        kind: .token(choices: [.keyword(text: "await")]),
-        isOptional: true,
-        classification: "Keyword"
+        kind: .node(kind: "AwaitToken"),
+        isOptional: true
       ),
       Child(
         name: "CaseKeyword",

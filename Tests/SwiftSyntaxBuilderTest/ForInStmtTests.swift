@@ -15,6 +15,17 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 
 final class ForInStmtTests: XCTestCase {
+  func testEmptyForInStmtSyntax() throws {
+    let buildable = ForInStmtSyntax(pattern: PatternSyntax("foo"), sequenceExpr: ExprSyntax("bar")) {}
+    assertBuildResult(
+      buildable,
+      """
+      for foo in bar {
+      }
+      """
+    )
+  }
+
   func testForInStmtSyntax() throws {
     let testCases: [UInt: (ForInStmtSyntax, String)] = [
       #line: (

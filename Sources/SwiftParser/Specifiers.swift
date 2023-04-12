@@ -173,7 +173,7 @@ extension RawEffectSpecifiersTrait {
   }
 }
 
-extension RawDeclEffectSpecifiersSyntax: RawEffectSpecifiersTrait {
+extension RawFunctionEffectSpecifiersSyntax: RawEffectSpecifiersTrait {
   enum MisspelledAsyncSpecifiers: TokenSpecSet {
     case await
 
@@ -331,6 +331,86 @@ extension RawTypeEffectSpecifiersSyntax: RawEffectSpecifiersTrait {
   }
 }
 
+extension RawAccessorEffectSpecifiersSyntax: RawEffectSpecifiersTrait {
+  enum MisspelledAsyncSpecifiers: TokenSpecSet {
+    case await
+    case reasync
+
+    init?(lexeme: Lexer.Lexeme) {
+      switch PrepareForKeywordMatch(lexeme) {
+      case TokenSpec(.await, allowAtStartOfLine: false): self = .await
+      case TokenSpec(.reasync): self = .reasync
+      default: return nil
+      }
+    }
+
+    var spec: TokenSpec {
+      switch self {
+      case .await: return TokenSpec(.await, allowAtStartOfLine: false)
+      case .reasync: return .keyword(.reasync)
+      }
+    }
+  }
+
+  enum CorrectAsyncTokenKinds: TokenSpecSet {
+    case async
+
+    init?(lexeme: Lexer.Lexeme) {
+      switch PrepareForKeywordMatch(lexeme) {
+      case TokenSpec(.async): self = .async
+      default: return nil
+      }
+    }
+
+    var spec: TokenSpec {
+      switch self {
+      case .async: return .keyword(.async)
+      }
+    }
+  }
+
+  enum MisspelledThrowsTokenKinds: TokenSpecSet {
+    case `rethrows`
+    case `try`
+    case `throw`
+
+    init?(lexeme: Lexer.Lexeme) {
+      switch PrepareForKeywordMatch(lexeme) {
+      case TokenSpec(.rethrows): self = .rethrows
+      case TokenSpec(.try, allowAtStartOfLine: false): self = .try
+      case TokenSpec(.throw, allowAtStartOfLine: false): self = .throw
+      default: return nil
+      }
+    }
+
+    var spec: TokenSpec {
+      switch self {
+      case .rethrows: return .keyword(.rethrows)
+      case .try: return TokenSpec(.try, allowAtStartOfLine: false)
+      case .throw: return TokenSpec(.throw, allowAtStartOfLine: false)
+      }
+    }
+  }
+
+  enum CorrectThrowsTokenKinds: TokenSpecSet {
+    case `throws`
+
+    init?(lexeme: Lexer.Lexeme) {
+      switch PrepareForKeywordMatch(lexeme) {
+      case TokenSpec(.throws): self = .throws
+      default: return nil
+      }
+    }
+
+    var spec: TokenSpec {
+      switch self {
+      case .throws: return .keyword(.throws)
+      }
+    }
+  }
+
+}
+
 extension TokenConsumer {
   mutating func at<SpecSet1: TokenSpecSet, SpecSet2: TokenSpecSet>(anyIn specSet1: SpecSet1.Type, or specSet2: SpecSet2.Type) -> (TokenSpec, TokenConsumptionHandle)? {
     if let (spec, handle) = self.at(anyIn: specSet1) {
@@ -423,8 +503,12 @@ extension Parser {
     return parseEffectSpecifiers(RawTypeEffectSpecifiersSyntax.self)
   }
 
-  mutating func parseDeclEffectSpecifiers() -> RawDeclEffectSpecifiersSyntax? {
-    return parseEffectSpecifiers(RawDeclEffectSpecifiersSyntax.self)
+  mutating func parseFunctionEffectSpecifiers() -> RawFunctionEffectSpecifiersSyntax? {
+    return parseEffectSpecifiers(RawFunctionEffectSpecifiersSyntax.self)
+  }
+
+  mutating func parseAccessorEffectSpecifiers() -> RawAccessorEffectSpecifiersSyntax? {
+    return parseEffectSpecifiers(RawAccessorEffectSpecifiersSyntax.self)
   }
 
   /// Consume any misplaced effect specifiers and return them in as unexpected tokens.

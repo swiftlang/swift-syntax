@@ -21,6 +21,8 @@ extension SyntaxKind {
       return "token"
     case .accessorDecl:
       return "accessor"
+    case .accessorEffectSpecifiers:
+      return "accessor specifiers"
     case .actorDecl:
       return "actor"
     case .arrayElement:
@@ -105,8 +107,6 @@ extension SyntaxKind {
       return "@convention(...) arguments"
     case .conventionWitnessMethodAttributeArguments:
       return "@convention(...) arguments for witness methods"
-    case .declEffectSpecifiers:
-      return "effect specifiers"
     case .declModifier:
       return "modifier"
     case .declName:
@@ -179,6 +179,8 @@ extension SyntaxKind {
       return "function call"
     case .functionDecl:
       return "function"
+    case .functionEffectSpecifiers:
+      return "effect specifiers"
     case .functionParameterList:
       return "parameter list"
     case .functionParameter:

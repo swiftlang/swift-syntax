@@ -96,7 +96,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "EffectSpecifiers",
-        kind: .node(kind: "DeclEffectSpecifiers"),
+        kind: .node(kind: "AccessorEffectSpecifiers"),
         isOptional: true
       ),
       Child(
@@ -842,7 +842,7 @@ public let DECL_NODES: [Node] = [
   ),
 
   // function-signature ->
-  //   '(' parameter-list? ')' decl-effect-specifiers? return-clause?
+  //   '(' parameter-list? ')' function-effect-specifiers? return-clause?
   Node(
     name: "FunctionSignature",
     nameForDiagnostics: "function signature",
@@ -854,7 +854,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "EffectSpecifiers",
-        kind: .node(kind: "DeclEffectSpecifiers"),
+        kind: .node(kind: "FunctionEffectSpecifiers"),
         isOptional: true
       ),
       Child(

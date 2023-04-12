@@ -27,7 +27,7 @@ extension AccessorDeclSyntax {
       unexpectedBetweenAccessorKindAndParameter: UnexpectedNodesSyntax? = nil, 
       parameter: AccessorParameterSyntax? = nil, 
       unexpectedBetweenParameterAndEffectSpecifiers: UnexpectedNodesSyntax? = nil, 
-      effectSpecifiers: DeclEffectSpecifiersSyntax? = nil, 
+      effectSpecifiers: AccessorEffectSpecifiersSyntax? = nil, 
       unexpectedBetweenEffectSpecifiersAndBody: UnexpectedNodesSyntax? = nil, 
       unexpectedAfterBody: UnexpectedNodesSyntax? = nil, 
       @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax?, 

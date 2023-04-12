@@ -451,6 +451,8 @@ extension AccessorBlockSyntax: BracedSyntax {}
 
 extension AccessorDeclSyntax: AttributedSyntax {}
 
+extension AccessorEffectSpecifiersSyntax: EffectSpecifiersSyntax {}
+
 extension AccessorParameterSyntax: ParenthesizedSyntax {}
 
 extension ActorDeclSyntax: DeclGroupSyntax, IdentifiedDeclSyntax, AttributedSyntax {}
@@ -485,8 +487,6 @@ extension CodeBlockSyntax: BracedSyntax, WithStatementsSyntax {}
 
 extension ConditionElementSyntax: WithTrailingCommaSyntax {}
 
-extension DeclEffectSpecifiersSyntax: EffectSpecifiersSyntax {}
-
 extension DeclModifierDetailSyntax: ParenthesizedSyntax {}
 
 extension DeclNameArgumentsSyntax: ParenthesizedSyntax {}
@@ -520,6 +520,8 @@ extension ExtensionDeclSyntax: DeclGroupSyntax, AttributedSyntax {}
 extension ForInStmtSyntax: WithCodeBlockSyntax {}
 
 extension FunctionDeclSyntax: IdentifiedDeclSyntax, AttributedSyntax {}
+
+extension FunctionEffectSpecifiersSyntax: EffectSpecifiersSyntax {}
 
 extension FunctionParameterSyntax: WithTrailingCommaSyntax, AttributedSyntax {}
 

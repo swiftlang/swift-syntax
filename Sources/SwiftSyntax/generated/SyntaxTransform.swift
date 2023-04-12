@@ -39,6 +39,11 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: AccessorDeclSyntax) -> ResultType
   
+  /// Visiting `AccessorEffectSpecifiersSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: AccessorEffectSpecifiersSyntax) -> ResultType
+  
   /// Visiting `AccessorListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -339,11 +344,6 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ConventionWitnessMethodAttributeArgumentsSyntax) -> ResultType
   
-  /// Visiting `DeclEffectSpecifiersSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: DeclEffectSpecifiersSyntax) -> ResultType
-  
   /// Visiting `DeclModifierDetailSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -583,6 +583,11 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: FunctionDeclSyntax) -> ResultType
+  
+  /// Visiting `FunctionEffectSpecifiersSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: FunctionEffectSpecifiersSyntax) -> ResultType
   
   /// Visiting `FunctionParameterListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -1388,6 +1393,13 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
+  /// Visiting `AccessorEffectSpecifiersSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: AccessorEffectSpecifiersSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
   /// Visiting `AccessorListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -1808,13 +1820,6 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `DeclEffectSpecifiersSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: DeclEffectSpecifiersSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
   /// Visiting `DeclModifierDetailSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -2148,6 +2153,13 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: FunctionDeclSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting `FunctionEffectSpecifiersSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: FunctionEffectSpecifiersSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -3241,6 +3253,8 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .accessorDecl(let derived):
       return visit(derived)
+    case .accessorEffectSpecifiers(let derived):
+      return visit(derived)
     case .accessorList(let derived):
       return visit(derived)
     case .accessorParameter(let derived):
@@ -3361,8 +3375,6 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .conventionWitnessMethodAttributeArguments(let derived):
       return visit(derived)
-    case .declEffectSpecifiers(let derived):
-      return visit(derived)
     case .declModifierDetail(let derived):
       return visit(derived)
     case .declModifier(let derived):
@@ -3458,6 +3470,8 @@ extension SyntaxTransformVisitor {
     case .functionCallExpr(let derived):
       return visit(derived)
     case .functionDecl(let derived):
+      return visit(derived)
+    case .functionEffectSpecifiers(let derived):
       return visit(derived)
     case .functionParameterList(let derived):
       return visit(derived)

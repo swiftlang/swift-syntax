@@ -44,7 +44,7 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       _ unexpectedBetweenAccessorKindAndParameter: UnexpectedNodesSyntax? = nil, 
       parameter: AccessorParameterSyntax? = nil, 
       _ unexpectedBetweenParameterAndEffectSpecifiers: UnexpectedNodesSyntax? = nil, 
-      effectSpecifiers: DeclEffectSpecifiersSyntax? = nil, 
+      effectSpecifiers: AccessorEffectSpecifiersSyntax? = nil, 
       _ unexpectedBetweenEffectSpecifiersAndBody: UnexpectedNodesSyntax? = nil, 
       body: CodeBlockSyntax? = nil, 
       _ unexpectedAfterBody: UnexpectedNodesSyntax? = nil, 
@@ -195,9 +195,9 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var effectSpecifiers: DeclEffectSpecifiersSyntax? {
+  public var effectSpecifiers: AccessorEffectSpecifiersSyntax? {
     get {
-      return data.child(at: 9, parent: Syntax(self)).map(DeclEffectSpecifiersSyntax.init)
+      return data.child(at: 9, parent: Syntax(self)).map(AccessorEffectSpecifiersSyntax.init)
     }
     set(value) {
       self = AccessorDeclSyntax(data.replacingChild(at: 9, with: value?.raw, arena: SyntaxArena()))

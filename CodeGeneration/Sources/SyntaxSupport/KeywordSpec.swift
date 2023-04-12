@@ -122,7 +122,7 @@ public let KEYWORDS: [KeywordSpec] = [
   KeywordSpec("do", isLexerClassified: true),
   KeywordSpec("dynamic"),
   KeywordSpec("each"),
-  KeywordSpec("else", isLexerClassified: true, requiresTrailingSpace: true),
+  KeywordSpec("else", isLexerClassified: true, requiresLeadingSpace: true, requiresTrailingSpace: true),
   KeywordSpec("enum", isLexerClassified: true, requiresTrailingSpace: true),
   KeywordSpec("escaping"),
   KeywordSpec("exclusivity"),

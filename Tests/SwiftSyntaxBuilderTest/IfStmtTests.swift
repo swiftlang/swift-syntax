@@ -46,6 +46,26 @@ final class IfStmtTests: XCTestCase {
         """
       ),
       #line: (
+        ExprSyntax(
+          """
+          if foo == x {
+            return foo
+          }
+          else {
+            return bar
+          }
+          """
+        ).cast(IfExprSyntax.self),
+        """
+        if foo == x {
+            return foo
+        }
+        else {
+            return bar
+        }
+        """
+      ),
+      #line: (
         try IfExprSyntax("if foo == x") { StmtSyntax("return foo") },
         """
         if foo == x {
@@ -62,7 +82,7 @@ final class IfStmtTests: XCTestCase {
         """
         if foo == x {
             return foo
-        }else {
+        } else {
             return bar
         }
         """
@@ -72,7 +92,7 @@ final class IfStmtTests: XCTestCase {
         """
         if foo == x {
             return foo
-        }else if foo == z {
+        } else if foo == z {
             return baz
         }
         """

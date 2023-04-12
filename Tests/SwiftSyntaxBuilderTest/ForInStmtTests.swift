@@ -57,4 +57,28 @@ final class ForInStmtTests: XCTestCase {
       assertBuildResult(builder, expected, line: line)
     }
   }
+
+  func testEffectiveForInStmtSyntax() throws {
+    let buildable = ForInStmtSyntax(
+      tryKeyword: .keyword(.try),
+      awaitKeyword: .keyword(.await),
+      pattern: PatternSyntax("foo"),
+      sequenceExpr: ExprSyntax("bar"),
+      body: CodeBlockSyntax(
+        statements: [
+          .init(item: .decl("let baz = await foo.baz")),
+          .init(item: .expr("print(foo.baz)")),
+        ]
+      )
+    )
+    assertBuildResult(
+      buildable,
+      """
+      for try await foo in bar {
+          let baz = await foo.baz
+          print(foo.baz)
+      }
+      """
+    )
+  }
 }

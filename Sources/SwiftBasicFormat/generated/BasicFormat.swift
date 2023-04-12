@@ -198,6 +198,8 @@ open class BasicFormat: SyntaxRewriter {
       return true
     case .keyword(.`catch`):
       return true
+    case .keyword(.`else`):
+      return true
     case .keyword(.`in`):
       return true
     case .keyword(.`where`):

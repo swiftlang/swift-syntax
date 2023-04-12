@@ -95,7 +95,7 @@ public class SyntaxTests: XCTestCase {
     do {
       let source = "  func f() {}"
       let tree = try! SyntaxParser.parse(source: source)
-      let funcKW = tree.firstToken!
+      let funcKW = tree.firstToken(viewMode: .sourceAccurate)!
       testFuncKw(funcKW)
     }
     do {

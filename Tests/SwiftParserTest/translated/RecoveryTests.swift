@@ -2209,15 +2209,17 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery177() {
+    // rdar://38225184
     assertParse(
       """
-      // rdar://38225184
       extension Collection where Element == Int 1️⃣&& Index == Int {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code '&& Index == Int' in extension")
-        // TODO: Old parser expected error on line 1: expected ',' to separate the requirements of this 'where' clause, Fix-It replacements: 43 - 45 = ','
-      ]
+        DiagnosticSpec(message: "expected ',' to separate the requirements of this 'where' clause", fixIts: ["replace '&&' with ','"])
+      ],
+      fixedSource: """
+        extension Collection where Element == Int, Index == Int {}
+        """
     )
   }
 

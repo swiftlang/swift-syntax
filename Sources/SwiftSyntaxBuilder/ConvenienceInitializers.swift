@@ -249,7 +249,7 @@ extension StringLiteralExprSyntax {
         continue
 
       // Special mode: counting a sequence of pounds until we reach its end.
-      case (true, "#"):
+      case (true, _) where c.unicodeScalars.contains("#"):
         consecutivePounds += 1
         maxPounds = max(maxPounds, consecutivePounds)
       case (true, _):

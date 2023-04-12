@@ -82,6 +82,18 @@ open class SyntaxVisitor {
   open func visitPost(_ node: AccessorDeclSyntax) {
   }
   
+  /// Visiting `AccessorEffectSpecifiersSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: AccessorEffectSpecifiersSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting `AccessorEffectSpecifiersSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: AccessorEffectSpecifiersSyntax) {
+  }
+  
   /// Visiting `AccessorListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -802,18 +814,6 @@ open class SyntaxVisitor {
   open func visitPost(_ node: ConventionWitnessMethodAttributeArgumentsSyntax) {
   }
   
-  /// Visiting `DeclEffectSpecifiersSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: DeclEffectSpecifiersSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting `DeclEffectSpecifiersSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: DeclEffectSpecifiersSyntax) {
-  }
-  
   /// Visiting `DeclModifierDetailSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -1388,6 +1388,18 @@ open class SyntaxVisitor {
   /// The function called after visiting `FunctionDeclSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: FunctionDeclSyntax) {
+  }
+  
+  /// Visiting `FunctionEffectSpecifiersSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: FunctionEffectSpecifiersSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting `FunctionEffectSpecifiersSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: FunctionEffectSpecifiersSyntax) {
   }
   
   /// Visiting `FunctionParameterListSyntax` specifically.
@@ -3295,6 +3307,17 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplAccessorEffectSpecifiersSyntax(_ data: SyntaxData) {
+    let node = AccessorEffectSpecifiersSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplAccessorListSyntax(_ data: SyntaxData) {
     let node = AccessorListSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -3955,17 +3978,6 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDeclEffectSpecifiersSyntax(_ data: SyntaxData) {
-    let node = DeclEffectSpecifiersSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplDeclModifierDetailSyntax(_ data: SyntaxData) {
     let node = DeclModifierDetailSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -4485,6 +4497,17 @@ open class SyntaxVisitor {
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplFunctionDeclSyntax(_ data: SyntaxData) {
     let node = FunctionDeclSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplFunctionEffectSpecifiersSyntax(_ data: SyntaxData) {
+    let node = FunctionEffectSpecifiersSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -6202,6 +6225,8 @@ open class SyntaxVisitor {
       visitImplAccessorBlockSyntax(data)
     case .accessorDecl:
       visitImplAccessorDeclSyntax(data)
+    case .accessorEffectSpecifiers:
+      visitImplAccessorEffectSpecifiersSyntax(data)
     case .accessorList:
       visitImplAccessorListSyntax(data)
     case .accessorParameter:
@@ -6322,8 +6347,6 @@ open class SyntaxVisitor {
       visitImplConventionAttributeArgumentsSyntax(data)
     case .conventionWitnessMethodAttributeArguments:
       visitImplConventionWitnessMethodAttributeArgumentsSyntax(data)
-    case .declEffectSpecifiers:
-      visitImplDeclEffectSpecifiersSyntax(data)
     case .declModifierDetail:
       visitImplDeclModifierDetailSyntax(data)
     case .declModifier:
@@ -6420,6 +6443,8 @@ open class SyntaxVisitor {
       visitImplFunctionCallExprSyntax(data)
     case .functionDecl:
       visitImplFunctionDeclSyntax(data)
+    case .functionEffectSpecifiers:
+      visitImplFunctionEffectSpecifiersSyntax(data)
     case .functionParameterList:
       visitImplFunctionParameterListSyntax(data)
     case .functionParameter:

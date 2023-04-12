@@ -2387,8 +2387,7 @@ public struct ClosureParameterListSyntax: SyntaxCollection, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -2420,7 +2419,7 @@ public struct ClosureParameterListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `ClosureParameterListSyntax` by replacing the underlying layout with
@@ -4689,8 +4688,7 @@ public struct EnumCaseParameterListSyntax: SyntaxCollection, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
+  private var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
   
@@ -4722,7 +4720,7 @@ public struct EnumCaseParameterListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { 
-    return raw.layoutView!.children.count 
+    return layoutView.children.count 
   }
   
   /// Creates a new `EnumCaseParameterListSyntax` by replacing the underlying layout with

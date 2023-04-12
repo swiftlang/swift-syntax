@@ -313,6 +313,133 @@ extension AccessorBlockSyntax: CustomReflectable {
   }
 }
 
+// MARK: - AccessorEffectSpecifiersSyntax
+
+
+public struct AccessorEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+  
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .accessorEffectSpecifiers else { 
+      return nil 
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+  
+  /// Creates a `AccessorEffectSpecifiersSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    precondition(data.raw.kind == .accessorEffectSpecifiers)
+    self._syntaxNode = Syntax(data)
+  }
+  
+  public init(
+      leadingTrivia: Trivia? = nil, 
+      _ unexpectedBeforeAsyncSpecifier: UnexpectedNodesSyntax? = nil, 
+      asyncSpecifier: TokenSyntax? = nil, 
+      _ unexpectedBetweenAsyncSpecifierAndThrowsSpecifier: UnexpectedNodesSyntax? = nil, 
+      throwsSpecifier: TokenSyntax? = nil, 
+      _ unexpectedAfterThrowsSpecifier: UnexpectedNodesSyntax? = nil, 
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
+            unexpectedBeforeAsyncSpecifier, 
+            asyncSpecifier, 
+            unexpectedBetweenAsyncSpecifierAndThrowsSpecifier, 
+            throwsSpecifier, 
+            unexpectedAfterThrowsSpecifier
+          ))) {(arena, _) in 
+      let layout: [RawSyntax?] = [
+          unexpectedBeforeAsyncSpecifier?.raw, 
+          asyncSpecifier?.raw, 
+          unexpectedBetweenAsyncSpecifierAndThrowsSpecifier?.raw, 
+          throwsSpecifier?.raw, 
+          unexpectedAfterThrowsSpecifier?.raw
+        ]
+      let raw = RawSyntax.makeLayout(
+          kind: SyntaxKind.accessorEffectSpecifiers, 
+          from: layout, 
+          arena: arena, 
+          leadingTrivia: leadingTrivia, 
+          trailingTrivia: trailingTrivia
+        )
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+  
+  public var unexpectedBeforeAsyncSpecifier: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = AccessorEffectSpecifiersSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var asyncSpecifier: TokenSyntax? {
+    get {
+      return data.child(at: 1, parent: Syntax(self)).map(TokenSyntax.init)
+    }
+    set(value) {
+      self = AccessorEffectSpecifiersSyntax(data.replacingChild(at: 1, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenAsyncSpecifierAndThrowsSpecifier: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = AccessorEffectSpecifiersSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var throwsSpecifier: TokenSyntax? {
+    get {
+      return data.child(at: 3, parent: Syntax(self)).map(TokenSyntax.init)
+    }
+    set(value) {
+      self = AccessorEffectSpecifiersSyntax(data.replacingChild(at: 3, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedAfterThrowsSpecifier: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = AccessorEffectSpecifiersSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+          \Self.unexpectedBeforeAsyncSpecifier, 
+          \Self.asyncSpecifier, 
+          \Self.unexpectedBetweenAsyncSpecifierAndThrowsSpecifier, 
+          \Self.throwsSpecifier, 
+          \Self.unexpectedAfterThrowsSpecifier
+        ])
+  }
+}
+
+extension AccessorEffectSpecifiersSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+          "unexpectedBeforeAsyncSpecifier": unexpectedBeforeAsyncSpecifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "asyncSpecifier": asyncSpecifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "unexpectedBetweenAsyncSpecifierAndThrowsSpecifier": unexpectedBetweenAsyncSpecifierAndThrowsSpecifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "throwsSpecifier": throwsSpecifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "unexpectedAfterThrowsSpecifier": unexpectedAfterThrowsSpecifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
+        ])
+  }
+}
+
 // MARK: - AccessorParameterSyntax
 
 
@@ -5579,133 +5706,6 @@ extension ConventionWitnessMethodAttributeArgumentsSyntax: CustomReflectable {
   }
 }
 
-// MARK: - DeclEffectSpecifiersSyntax
-
-
-public struct DeclEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable {
-  public let _syntaxNode: Syntax
-  
-  public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .declEffectSpecifiers else { 
-      return nil 
-    }
-    self._syntaxNode = node._syntaxNode
-  }
-  
-  /// Creates a `DeclEffectSpecifiersSyntax` node from the given `SyntaxData`. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
-  internal init(_ data: SyntaxData) {
-    precondition(data.raw.kind == .declEffectSpecifiers)
-    self._syntaxNode = Syntax(data)
-  }
-  
-  public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeAsyncSpecifier: UnexpectedNodesSyntax? = nil, 
-      asyncSpecifier: TokenSyntax? = nil, 
-      _ unexpectedBetweenAsyncSpecifierAndThrowsSpecifier: UnexpectedNodesSyntax? = nil, 
-      throwsSpecifier: TokenSyntax? = nil, 
-      _ unexpectedAfterThrowsSpecifier: UnexpectedNodesSyntax? = nil, 
-      trailingTrivia: Trivia? = nil
-    
-  ) {
-    // Extend the lifetime of all parameters so their arenas don't get destroyed
-    // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeAsyncSpecifier, 
-            asyncSpecifier, 
-            unexpectedBetweenAsyncSpecifierAndThrowsSpecifier, 
-            throwsSpecifier, 
-            unexpectedAfterThrowsSpecifier
-          ))) {(arena, _) in 
-      let layout: [RawSyntax?] = [
-          unexpectedBeforeAsyncSpecifier?.raw, 
-          asyncSpecifier?.raw, 
-          unexpectedBetweenAsyncSpecifierAndThrowsSpecifier?.raw, 
-          throwsSpecifier?.raw, 
-          unexpectedAfterThrowsSpecifier?.raw
-        ]
-      let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.declEffectSpecifiers, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
-        )
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
-  }
-  
-  public var unexpectedBeforeAsyncSpecifier: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = DeclEffectSpecifiersSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-  
-  public var asyncSpecifier: TokenSyntax? {
-    get {
-      return data.child(at: 1, parent: Syntax(self)).map(TokenSyntax.init)
-    }
-    set(value) {
-      self = DeclEffectSpecifiersSyntax(data.replacingChild(at: 1, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-  
-  public var unexpectedBetweenAsyncSpecifierAndThrowsSpecifier: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = DeclEffectSpecifiersSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-  
-  public var throwsSpecifier: TokenSyntax? {
-    get {
-      return data.child(at: 3, parent: Syntax(self)).map(TokenSyntax.init)
-    }
-    set(value) {
-      self = DeclEffectSpecifiersSyntax(data.replacingChild(at: 3, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-  
-  public var unexpectedAfterThrowsSpecifier: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = DeclEffectSpecifiersSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-  
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeAsyncSpecifier, 
-          \Self.asyncSpecifier, 
-          \Self.unexpectedBetweenAsyncSpecifierAndThrowsSpecifier, 
-          \Self.throwsSpecifier, 
-          \Self.unexpectedAfterThrowsSpecifier
-        ])
-  }
-}
-
-extension DeclEffectSpecifiersSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeAsyncSpecifier": unexpectedBeforeAsyncSpecifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "asyncSpecifier": asyncSpecifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenAsyncSpecifierAndThrowsSpecifier": unexpectedBetweenAsyncSpecifierAndThrowsSpecifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "throwsSpecifier": throwsSpecifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedAfterThrowsSpecifier": unexpectedAfterThrowsSpecifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
-        ])
-  }
-}
-
 // MARK: - DeclModifierDetailSyntax
 
 
@@ -9134,6 +9134,133 @@ extension ExpressionSegmentSyntax: CustomReflectable {
   }
 }
 
+// MARK: - FunctionEffectSpecifiersSyntax
+
+
+public struct FunctionEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+  
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .functionEffectSpecifiers else { 
+      return nil 
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+  
+  /// Creates a `FunctionEffectSpecifiersSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    precondition(data.raw.kind == .functionEffectSpecifiers)
+    self._syntaxNode = Syntax(data)
+  }
+  
+  public init(
+      leadingTrivia: Trivia? = nil, 
+      _ unexpectedBeforeAsyncSpecifier: UnexpectedNodesSyntax? = nil, 
+      asyncSpecifier: TokenSyntax? = nil, 
+      _ unexpectedBetweenAsyncSpecifierAndThrowsSpecifier: UnexpectedNodesSyntax? = nil, 
+      throwsSpecifier: TokenSyntax? = nil, 
+      _ unexpectedAfterThrowsSpecifier: UnexpectedNodesSyntax? = nil, 
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
+            unexpectedBeforeAsyncSpecifier, 
+            asyncSpecifier, 
+            unexpectedBetweenAsyncSpecifierAndThrowsSpecifier, 
+            throwsSpecifier, 
+            unexpectedAfterThrowsSpecifier
+          ))) {(arena, _) in 
+      let layout: [RawSyntax?] = [
+          unexpectedBeforeAsyncSpecifier?.raw, 
+          asyncSpecifier?.raw, 
+          unexpectedBetweenAsyncSpecifierAndThrowsSpecifier?.raw, 
+          throwsSpecifier?.raw, 
+          unexpectedAfterThrowsSpecifier?.raw
+        ]
+      let raw = RawSyntax.makeLayout(
+          kind: SyntaxKind.functionEffectSpecifiers, 
+          from: layout, 
+          arena: arena, 
+          leadingTrivia: leadingTrivia, 
+          trailingTrivia: trailingTrivia
+        )
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+  
+  public var unexpectedBeforeAsyncSpecifier: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = FunctionEffectSpecifiersSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var asyncSpecifier: TokenSyntax? {
+    get {
+      return data.child(at: 1, parent: Syntax(self)).map(TokenSyntax.init)
+    }
+    set(value) {
+      self = FunctionEffectSpecifiersSyntax(data.replacingChild(at: 1, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenAsyncSpecifierAndThrowsSpecifier: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = FunctionEffectSpecifiersSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var throwsSpecifier: TokenSyntax? {
+    get {
+      return data.child(at: 3, parent: Syntax(self)).map(TokenSyntax.init)
+    }
+    set(value) {
+      self = FunctionEffectSpecifiersSyntax(data.replacingChild(at: 3, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedAfterThrowsSpecifier: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = FunctionEffectSpecifiersSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+          \Self.unexpectedBeforeAsyncSpecifier, 
+          \Self.asyncSpecifier, 
+          \Self.unexpectedBetweenAsyncSpecifierAndThrowsSpecifier, 
+          \Self.throwsSpecifier, 
+          \Self.unexpectedAfterThrowsSpecifier
+        ])
+  }
+}
+
+extension FunctionEffectSpecifiersSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+          "unexpectedBeforeAsyncSpecifier": unexpectedBeforeAsyncSpecifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "asyncSpecifier": asyncSpecifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "unexpectedBetweenAsyncSpecifierAndThrowsSpecifier": unexpectedBetweenAsyncSpecifierAndThrowsSpecifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "throwsSpecifier": throwsSpecifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
+          "unexpectedAfterThrowsSpecifier": unexpectedAfterThrowsSpecifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
+        ])
+  }
+}
+
 // MARK: - FunctionParameterSyntax
 
 
@@ -9521,7 +9648,7 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable {
       _ unexpectedBeforeInput: UnexpectedNodesSyntax? = nil, 
       input: ParameterClauseSyntax, 
       _ unexpectedBetweenInputAndEffectSpecifiers: UnexpectedNodesSyntax? = nil, 
-      effectSpecifiers: DeclEffectSpecifiersSyntax? = nil, 
+      effectSpecifiers: FunctionEffectSpecifiersSyntax? = nil, 
       _ unexpectedBetweenEffectSpecifiersAndOutput: UnexpectedNodesSyntax? = nil, 
       output: ReturnClauseSyntax? = nil, 
       _ unexpectedAfterOutput: UnexpectedNodesSyntax? = nil, 
@@ -9587,9 +9714,9 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var effectSpecifiers: DeclEffectSpecifiersSyntax? {
+  public var effectSpecifiers: FunctionEffectSpecifiersSyntax? {
     get {
-      return data.child(at: 3, parent: Syntax(self)).map(DeclEffectSpecifiersSyntax.init)
+      return data.child(at: 3, parent: Syntax(self)).map(FunctionEffectSpecifiersSyntax.init)
     }
     set(value) {
       self = FunctionSignatureSyntax(data.replacingChild(at: 3, with: value?.raw, arena: SyntaxArena()))

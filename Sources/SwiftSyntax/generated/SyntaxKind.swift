@@ -20,6 +20,7 @@ public enum SyntaxKind {
   case accessPath
   case accessorBlock
   case accessorDecl
+  case accessorEffectSpecifiers
   case accessorList
   case accessorParameter
   case actorDecl
@@ -80,7 +81,6 @@ public enum SyntaxKind {
   case continueStmt
   case conventionAttributeArguments
   case conventionWitnessMethodAttributeArguments
-  case declEffectSpecifiers
   case declModifierDetail
   case declModifier
   case declNameArgumentList
@@ -129,6 +129,7 @@ public enum SyntaxKind {
   case forgetStmt
   case functionCallExpr
   case functionDecl
+  case functionEffectSpecifiers
   case functionParameterList
   case functionParameter
   case functionSignature
@@ -414,6 +415,8 @@ public enum SyntaxKind {
       return AccessorBlockSyntax.self
     case .accessorDecl:
       return AccessorDeclSyntax.self
+    case .accessorEffectSpecifiers:
+      return AccessorEffectSpecifiersSyntax.self
     case .accessorList:
       return AccessorListSyntax.self
     case .accessorParameter:
@@ -534,8 +537,6 @@ public enum SyntaxKind {
       return ConventionAttributeArgumentsSyntax.self
     case .conventionWitnessMethodAttributeArguments:
       return ConventionWitnessMethodAttributeArgumentsSyntax.self
-    case .declEffectSpecifiers:
-      return DeclEffectSpecifiersSyntax.self
     case .declModifierDetail:
       return DeclModifierDetailSyntax.self
     case .declModifier:
@@ -632,6 +633,8 @@ public enum SyntaxKind {
       return FunctionCallExprSyntax.self
     case .functionDecl:
       return FunctionDeclSyntax.self
+    case .functionEffectSpecifiers:
+      return FunctionEffectSpecifiersSyntax.self
     case .functionParameterList:
       return FunctionParameterListSyntax.self
     case .functionParameter:

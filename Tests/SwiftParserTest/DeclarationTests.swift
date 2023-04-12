@@ -733,9 +733,12 @@ final class DeclarationTests: XCTestCase {
     assertParse(
       """
       var bad2 : Int {
-        get reasync { 0 }
+        get 1️⃣reasync { 0 }
       }
-      """
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected async specifier; did you mean 'async'?")
+      ]
     )
   }
 
@@ -766,18 +769,17 @@ final class DeclarationTests: XCTestCase {
         AccessorBlockSyntax(
           accessors: AccessorListSyntax([
             AccessorDeclSyntax(
-              accessorKind: .keyword(.get),
-              effectSpecifiers: DeclEffectSpecifiersSyntax(
-                UnexpectedNodesSyntax([TokenSyntax.identifier("bogus")]),
-                throwsSpecifier: .keyword(.rethrows)
-              )
-            ),
-            AccessorDeclSyntax(accessorKind: .keyword(.set)),
+              accessorKind: .keyword(.get)
+            )
+          ]),
+          UnexpectedNodesSyntax([
+            TokenSyntax.identifier("bogus"), TokenSyntax.keyword(.rethrows),
+            TokenSyntax.identifier("set"),
           ])
         )
       ),
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code 'bogus' before effect specifiers")
+        DiagnosticSpec(message: "unexpected code 'bogus rethrows set' in variable")
       ]
     )
   }

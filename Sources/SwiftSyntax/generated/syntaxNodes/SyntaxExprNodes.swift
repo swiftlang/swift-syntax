@@ -733,7 +733,7 @@ public struct BinaryOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil, 
       _ unexpectedBeforeOperatorToken: UnexpectedNodesSyntax? = nil, 
-      operatorToken: TokenSyntax = .binaryOperator("BinaryOperatorToken"), 
+      operatorToken: TokenSyntax, 
       _ unexpectedAfterOperatorToken: UnexpectedNodesSyntax? = nil, 
       trailingTrivia: Trivia? = nil
     
@@ -1517,7 +1517,7 @@ public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil, 
       _ unexpectedBeforeIdentifier: UnexpectedNodesSyntax? = nil, 
-      identifier: TokenSyntax = .identifier("IdentifierToken"), 
+      identifier: TokenSyntax, 
       _ unexpectedAfterIdentifier: UnexpectedNodesSyntax? = nil, 
       trailingTrivia: Trivia? = nil
     
@@ -1603,7 +1603,7 @@ public struct FloatLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil, 
       _ unexpectedBeforeFloatingDigits: UnexpectedNodesSyntax? = nil, 
-      floatingDigits: TokenSyntax = .floatingLiteral("FloatingLiteralToken"), 
+      floatingDigits: TokenSyntax, 
       _ unexpectedAfterFloatingDigits: UnexpectedNodesSyntax? = nil, 
       trailingTrivia: Trivia? = nil
     
@@ -2774,7 +2774,7 @@ public struct IntegerLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil, 
       _ unexpectedBeforeDigits: UnexpectedNodesSyntax? = nil, 
-      digits: TokenSyntax = .integerLiteral("IntegerLiteralToken"), 
+      digits: TokenSyntax, 
       _ unexpectedAfterDigits: UnexpectedNodesSyntax? = nil, 
       trailingTrivia: Trivia? = nil
     
@@ -3226,7 +3226,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       _ unexpectedBeforePoundToken: UnexpectedNodesSyntax? = nil, 
       poundToken: TokenSyntax = .poundToken(), 
       _ unexpectedBetweenPoundTokenAndMacro: UnexpectedNodesSyntax? = nil, 
-      macro: TokenSyntax = .identifier("IdentifierToken"), 
+      macro: TokenSyntax, 
       _ unexpectedBetweenMacroAndGenericArguments: UnexpectedNodesSyntax? = nil, 
       genericArguments: GenericArgumentClauseSyntax? = nil, 
       _ unexpectedBetweenGenericArgumentsAndLeftParen: UnexpectedNodesSyntax? = nil, 
@@ -4597,7 +4597,7 @@ public struct PostfixUnaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       _ unexpectedBeforeExpression: UnexpectedNodesSyntax? = nil, 
       expression: E, 
       _ unexpectedBetweenExpressionAndOperatorToken: UnexpectedNodesSyntax? = nil, 
-      operatorToken: TokenSyntax = .postfixOperator("PostfixOperatorToken"), 
+      operatorToken: TokenSyntax, 
       _ unexpectedAfterOperatorToken: UnexpectedNodesSyntax? = nil, 
       trailingTrivia: Trivia? = nil
     
@@ -4853,7 +4853,7 @@ public struct RegexLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       _ unexpectedBetweenOpeningPoundsAndOpenSlash: UnexpectedNodesSyntax? = nil, 
       openSlash: TokenSyntax = .regexSlashToken(), 
       _ unexpectedBetweenOpenSlashAndRegexPattern: UnexpectedNodesSyntax? = nil, 
-      regexPattern: TokenSyntax = .regexLiteralPattern("RegexLiteralPatternToken"), 
+      regexPattern: TokenSyntax, 
       _ unexpectedBetweenRegexPatternAndCloseSlash: UnexpectedNodesSyntax? = nil, 
       closeSlash: TokenSyntax = .regexSlashToken(), 
       _ unexpectedBetweenCloseSlashAndClosingPounds: UnexpectedNodesSyntax? = nil, 

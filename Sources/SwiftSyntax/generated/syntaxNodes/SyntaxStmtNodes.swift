@@ -1443,7 +1443,7 @@ public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public init<S: StmtSyntaxProtocol>(
       leadingTrivia: Trivia? = nil, 
       _ unexpectedBeforeLabelName: UnexpectedNodesSyntax? = nil, 
-      labelName: TokenSyntax = .identifier("IdentifierToken"), 
+      labelName: TokenSyntax, 
       _ unexpectedBetweenLabelNameAndLabelColon: UnexpectedNodesSyntax? = nil, 
       labelColon: TokenSyntax = .colonToken(), 
       _ unexpectedBetweenLabelColonAndStatement: UnexpectedNodesSyntax? = nil, 

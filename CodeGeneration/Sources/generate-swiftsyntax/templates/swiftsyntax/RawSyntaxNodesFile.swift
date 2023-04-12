@@ -197,7 +197,7 @@ let rawSyntaxNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
               secondName: .identifier(child.swiftName),
               colon: .colonToken(),
               type: child.rawParameterType,
-              defaultArgument: child.isUnexpectedNodes ? child.defaultInitialization.map { InitializerClauseSyntax(value: $0) } : nil
+              defaultArgument: child.isUnexpectedNodes ? child.defaultInitialization : nil
             )
           }
 

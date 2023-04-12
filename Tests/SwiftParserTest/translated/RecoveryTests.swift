@@ -742,14 +742,30 @@ final class RecoveryTests: XCTestCase {
 
   //===--- Recovery for multiple identifiers in decls
   func testRecovery58() {
-    assertParse(
-      """
-      protocol Multi 1️⃣ident {}
-      """,
-      diagnostics: [
-        DiagnosticSpec(message: "found an unexpected second identifier in protocol", highlight: "ident")
-      ]
-    )
+    let testCases: [UInt: (fixIt: String, fixedSource: String)] = [
+      #line: ("join the identifiers together", "protocol Multiident {}"),
+      #line: ("join the identifiers together with camel-case", "protocol MultiIdent {}"),
+    ]
+
+    for (line, testCase) in testCases {
+      assertParse(
+        """
+        protocol Multi 1️⃣ident {}
+        """,
+        diagnostics: [
+          DiagnosticSpec(
+            message: "found an unexpected second identifier in protocol; is there an accidental break?",
+            highlight: "ident",
+            fixIts: ["join the identifiers together", "join the identifiers together with camel-case"],
+            line: line
+          )
+        ],
+        applyFixIts: [testCase.fixIt],
+        fixedSource: testCase.fixedSource,
+        line: line
+      )
+    }
+
   }
 
   func testRecovery60() {
@@ -758,7 +774,11 @@ final class RecoveryTests: XCTestCase {
       class CCC 1️⃣CCC<T> {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "found an unexpected second identifier in class")
+        DiagnosticSpec(
+          message: "found an unexpected second identifier in class; is there an accidental break?",
+          highlight: "CCC<T>",
+          fixIts: ["join the identifiers together"]
+        )
       ],
       fixedSource: """
         class CCCCCC<T> {}
@@ -775,7 +795,7 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "found an unexpected second identifier in enum"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "found an unexpected second identifier in enum; is there an accidental break?", fixIts: ["join the identifiers together"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive declarations on a line must be separated by ';'"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code 'a' before enum case"),
       ]
@@ -794,24 +814,39 @@ final class RecoveryTests: XCTestCase {
       }
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "found an unexpected second identifier in struct"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "found an unexpected second identifier in struct; is there an accidental break?", fixIts: ["join the identifiers together"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected ':' in type annotation"),
         DiagnosticSpec(locationMarker: "3️⃣", message: #"unexpected code ': Int = ""' before function"#),
-        // TODO: (good first issue) Old parser expected error on line 4: found an unexpected second identifier in variable declaration; is there an accidental break?
         DiagnosticSpec(locationMarker: "4️⃣", message: "expected ':' in type annotation"),
       ]
     )
   }
 
-  func testRecovery64() {
+  func testRecovery64a() {
     assertParse(
       """
       let (efg 1️⃣hij, foobar) = (5, 6)
       """,
       diagnostics: [
-        // TODO: (good first issue) Old parser expected error on line 1: found an unexpected second identifier in constant declaration; is there an accidental break?
-        DiagnosticSpec(message: "unexpected code 'hij, foobar' in tuple pattern")
-      ]
+        DiagnosticSpec(message: "expected ',' in tuple pattern", fixIts: ["insert ','"])
+      ],
+      fixedSource: """
+        let (efg, hij, foobar) = (5, 6)
+        """
+    )
+  }
+
+  func testRecovery64b() {
+    assertParse(
+      """
+      let (efg 1️⃣Hij, foobar) = (5, 6)
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected ':' in tuple pattern", fixIts: ["insert ':'"])
+      ],
+      fixedSource: """
+        let (efg: Hij, foobar) = (5, 6)
+        """
     )
   }
 

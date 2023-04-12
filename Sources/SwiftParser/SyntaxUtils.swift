@@ -88,6 +88,14 @@ extension SyntaxText {
   var isEditorPlaceholder: Bool {
     return self.starts(with: SyntaxText("<#")) && self.hasSuffix(SyntaxText("#>"))
   }
+
+  var isStartingWithUppercase: Bool {
+    if !self.isEmpty, let firstCharacterByte = self.baseAddress?.pointee {
+      return 65 <= firstCharacterByte && firstCharacterByte <= 90
+    } else {
+      return false
+    }
+  }
 }
 
 extension RawTokenKind {

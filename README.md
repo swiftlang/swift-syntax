@@ -2,8 +2,9 @@
 
 SwiftSyntax is a set of Swift libraries for parsing, inspecting, generating, and transforming Swift source code.
 
-> Note: SwiftSyntax is still in development, and its API is not guaranteed to
-> be stable. It is subject to change without warning.
+## Documentation
+
+You can read SwiftSyntax’s documentation on [swiftpackageindex.com](https://swiftpackageindex.com/apple/swift-syntax/documentation).
 
 ## Adding SwiftSyntax as a Dependency
 
@@ -63,6 +64,7 @@ Replace `<#Specify Release tag#>` by the version of SwiftSyntax that you want to
 
 | Xcode Release | Swift Release Tag | SwiftSyntax Release Tag  |
 |:-------------------:|:-------------------:|:-------------------------:|
+| Xcode 14.3   | swift-5.8-RELEASE   | 508.0.0   |
 | Xcode 14.0   | swift-5.7-RELEASE   | 0.50700.1 |
 | Xcode 13.3   | swift-5.6-RELEASE   | 0.50600.1 |
 | Xcode 13.0   | swift-5.5-RELEASE   | 0.50500.0 |

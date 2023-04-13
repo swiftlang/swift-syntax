@@ -1039,6 +1039,17 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if shouldSkip(node) {
       return .skipChildren
     }
+    // recover from Objective-C style literals
+    if let atSign = node.unexpectedBetweenOpenDelimiterAndOpenQuote?.onlyToken(where: { $0.tokenKind == .atSign }) {
+      addDiagnostic(
+        node,
+        .stringLiteralAtSign,
+        fixIts: [
+          FixIt(message: RemoveNodesFixIt(atSign), changes: .makeMissing(atSign))
+        ],
+        handledNodes: [atSign.id]
+      )
+    }
     if let singleQuote = node.unexpectedBetweenOpenDelimiterAndOpenQuote?.onlyToken(where: { $0.tokenKind == .singleQuote }) {
       let fixIt = FixIt(
         message: ReplaceTokensFixIt(replaceTokens: [singleQuote], replacement: node.openQuote),

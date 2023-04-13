@@ -32,6 +32,8 @@ extension TokenConsumer {
       } else {
         return true
       }
+    case (.primaryExpressionStart(.atSign), let handle)?:
+      break
     case (_, _)?:
       return true
     case nil:
@@ -1168,6 +1170,8 @@ extension Parser {
           arena: self.arena
         )
       )
+    case (.atSign, _)?:
+      return RawExprSyntax(self.parseStringLiteral())
     case (.rawStringDelimiter, _)?, (.stringQuote, _)?, (.multilineStringQuote, _)?, (.singleQuote, _)?:
       return RawExprSyntax(self.parseStringLiteral())
     case (.extendedRegexDelimiter, _)?, (.regexSlash, _)?:

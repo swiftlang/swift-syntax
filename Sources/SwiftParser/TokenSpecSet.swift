@@ -569,6 +569,7 @@ enum ParameterModifier: TokenSpecSet {
 
 enum PrimaryExpressionStart: TokenSpecSet {
   case anyKeyword
+  case atSign  // For recovery
   case capitalSelfKeyword
   case dollarIdentifier
   case falseKeyword
@@ -598,6 +599,7 @@ enum PrimaryExpressionStart: TokenSpecSet {
   init?(lexeme: Lexer.Lexeme) {
     switch PrepareForKeywordMatch(lexeme) {
     case TokenSpec(.Any): self = .anyKeyword
+    case TokenSpec(.atSign): self = .atSign
     case TokenSpec(.Self): self = .capitalSelfKeyword
     case TokenSpec(.dollarIdentifier): self = .dollarIdentifier
     case TokenSpec(.false): self = .falseKeyword
@@ -630,6 +632,7 @@ enum PrimaryExpressionStart: TokenSpecSet {
   var spec: TokenSpec {
     switch self {
     case .anyKeyword: return .keyword(.Any)
+    case .atSign: return .atSign
     case .capitalSelfKeyword: return .keyword(.Self)
     case .dollarIdentifier: return .dollarIdentifier
     case .falseKeyword: return .keyword(.false)

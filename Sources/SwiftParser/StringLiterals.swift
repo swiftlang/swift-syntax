@@ -467,8 +467,12 @@ extension Parser {
     /// Parse opening raw string delimiter if exist.
     let openDelimiter = self.consume(if: .rawStringDelimiter)
 
+    /// Try to parse @ in order to recover from Objective-C style literals
+    let unexpectedAtSign = self.consume(if: .atSign)
+
     /// Parse open quote.
     var (unexpectedBeforeOpenQuote, openQuote) = self.expect(.stringQuote, .multilineStringQuote, default: .stringQuote)
+    unexpectedBeforeOpenQuote = RawUnexpectedNodesSyntax(combining: unexpectedAtSign, unexpectedBeforeOpenQuote, arena: self.arena)
     var openQuoteKind: RawTokenKind = openQuote.tokenKind
     if openQuote.isMissing, let singleQuote = self.consume(if: .singleQuote) {
       unexpectedBeforeOpenQuote = RawUnexpectedNodesSyntax(combining: unexpectedBeforeOpenQuote, singleQuote, arena: self.arena)

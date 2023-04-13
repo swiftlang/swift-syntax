@@ -1031,7 +1031,7 @@ final class RecoveryTests: XCTestCase {
     assertParse(
       """
       // Note: Don't move braces to a different line here.
-      struct ErrorGenericParameterList4< 1️⃣
+      struct ErrorGenericParameterList4<1️⃣
       {
       }
       """,
@@ -2245,4 +2245,34 @@ final class RecoveryTests: XCTestCase {
     )
   }
 
+  // https://github.com/apple/swift-syntax/issues/1483
+  func testRecovery183() {
+    // Can be parsed and produces no diagnostics.
+    assertParse(
+      "func f< 1️⃣>() {}",
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected generic parameter in generic parameter clause",
+          fixIts: ["insert generic parameter"]
+        )
+      ],
+      fixedSource: """
+        func f<<#identifier#> >() {}
+        """
+    )
+
+    // Can be parsed. Printing the node or asking for the diagnostics leads to a crash.
+    assertParse(
+      "func f<1️⃣>() {}",
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected generic parameter in generic parameter clause",
+          fixIts: ["insert generic parameter"]
+        )
+      ],
+      fixedSource: """
+        func f<<#identifier#>>() {}
+        """
+    )
+  }
 }

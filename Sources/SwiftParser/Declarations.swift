@@ -465,7 +465,7 @@ extension Parser {
     }
 
     precondition(self.currentToken.starts(with: "<"))
-    let langle = self.consumeAnyToken(remapping: .leftAngle)
+    let langle = self.consumePrefix("<", as: .leftAngle)
     var elements = [RawGenericParameterSyntax]()
     do {
       var keepGoing: RawTokenSyntax? = nil
@@ -477,7 +477,7 @@ extension Parser {
         var each = self.consume(if: .keyword(.each))
 
         let (unexpectedBetweenEachAndName, name) = self.expectIdentifier(allowSelfOrCapitalSelfAsIdentifier: true)
-        if attributes == nil && each == nil && unexpectedBetweenEachAndName == nil && name.isMissing && elements.isEmpty {
+        if attributes == nil && each == nil && unexpectedBetweenEachAndName == nil && name.isMissing && elements.isEmpty && !self.currentToken.starts(with: ">") {
           break
         }
 

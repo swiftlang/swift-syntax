@@ -79,8 +79,6 @@ extension SyntaxClassification {
       return (.stringInterpolationAnchor, true)
     case \ExpressionSegmentSyntax.rightParen:
       return (.stringInterpolationAnchor, true)
-    case \ForInStmtSyntax.awaitKeyword:
-      return (.keyword, false)
     case \IfConfigClauseSyntax.poundKeyword:
       return (.buildConfigId, false)
     case \IfConfigClauseSyntax.condition:

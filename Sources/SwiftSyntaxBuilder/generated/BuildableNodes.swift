@@ -538,7 +538,7 @@ extension ForInStmtSyntax {
       unexpectedBetweenForKeywordAndTryKeyword: UnexpectedNodesSyntax? = nil, 
       tryKeyword: TokenSyntax? = nil, 
       unexpectedBetweenTryKeywordAndAwaitKeyword: UnexpectedNodesSyntax? = nil, 
-      awaitKeyword: TokenSyntax? = .keyword(.await), 
+      awaitKeyword: TokenSyntax? = nil, 
       unexpectedBetweenAwaitKeywordAndCaseKeyword: UnexpectedNodesSyntax? = nil, 
       caseKeyword: TokenSyntax? = nil, 
       unexpectedBetweenCaseKeywordAndPattern: UnexpectedNodesSyntax? = nil, 

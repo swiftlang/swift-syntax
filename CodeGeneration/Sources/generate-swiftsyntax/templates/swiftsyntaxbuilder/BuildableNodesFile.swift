@@ -83,7 +83,7 @@ private func createConvenienceInitializer(node: Node) throws -> InitializerDeclS
           firstName: .identifier(child.swiftName),
           colon: .colonToken(),
           type: child.parameterType,
-          defaultArgument: child.defaultInitialization.map { InitializerClauseSyntax(value: $0) }
+          defaultArgument: child.defaultInitialization
         )
       )
     }

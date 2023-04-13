@@ -45,21 +45,34 @@ public extension Child {
     flattened(indentedDocumentation: description ?? "")
   }
 
-  var defaultInitialization: ExprSyntax? {
-    switch kind {
-    case .token(choices: let choices, requiresLeadingSpace: _, requiresTrailingSpace: _):
-      if choices.count == 1, case .keyword(text: let text) = choices.first {
-        var textChoice = text
-        if textChoice == "init" {
-          textChoice = "`init`"
-        }
-        return ExprSyntax(".keyword(.\(raw: textChoice))")
-      } else {
-        return type.defaultInitialization
-      }
-    default:
-      return type.defaultInitialization
+  /// If the child node has a default value, return an expression of the form
+  /// ` = default_value` that can be used as the default value to for a
+  /// function parameter. Otherwise, return `nil`.
+  var defaultInitialization: InitializerClauseSyntax? {
+    if isOptional || isUnexpectedNodes {
+      return InitializerClauseSyntax(value: NilLiteralExprSyntax())
     }
+    guard let token = token, isToken else {
+      return type.defaultValue.map { InitializerClauseSyntax(value: $0) }
+    }
+    if token.isKeyword {
+      return InitializerClauseSyntax(value: ExprSyntax(".\(raw: token.swiftKind)()"))
+    }
+    if token.text != nil {
+      return InitializerClauseSyntax(value: ExprSyntax(".\(raw: token.swiftKind)Token()"))
+    }
+    guard case .token(let choices, _, _) = kind, choices.count == 1, token.associatedValueClass != nil else {
+      return nil
+    }
+    var textChoice: String
+    switch choices[0] {
+    case .keyword(let text), .token(let text):
+      textChoice = text
+    }
+    if textChoice == "init" {
+      textChoice = "`init`"
+    }
+    return InitializerClauseSyntax(value: ExprSyntax(".\(raw: token.swiftKind)(.\(raw: textChoice))"))
   }
 
   /// If this node is a token that can't contain arbitrary text, generate a Swift

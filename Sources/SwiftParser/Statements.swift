@@ -614,7 +614,6 @@ extension Parser {
   public mutating func parseForEachStatement(forHandle: RecoveryConsumptionHandle) -> RawForInStmtSyntax {
     let (unexpectedBeforeForKeyword, forKeyword) = self.eat(forHandle)
     let tryKeyword = self.consume(if: .keyword(.try))
-
     let awaitKeyword = self.consume(if: .keyword(.await))
 
     // Parse the pattern.  This is either 'case <refutable pattern>' or just a

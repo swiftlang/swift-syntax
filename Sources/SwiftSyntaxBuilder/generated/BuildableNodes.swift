@@ -819,6 +819,14 @@ extension IfExprSyntax {
   }
 }
 
+/// An initializer declaration like the following.
+/// 
+/// ```swift
+/// init(someParameter: Int) {
+/// }
+/// ```
+/// 
+/// The body is optional because this node also represents initializer requirements inside protocols.
 extension InitializerDeclSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(

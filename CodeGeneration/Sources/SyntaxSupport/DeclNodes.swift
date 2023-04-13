@@ -1024,6 +1024,16 @@ public let DECL_NODES: [Node] = [
   Node(
     name: "InitializerDecl",
     nameForDiagnostics: "initializer",
+    description: """
+      An initializer declaration like the following.
+
+      ```swift
+      init(someParameter: Int) {
+      }
+      ```
+
+      The body is optional because this node also represents initializer requirements inside protocols.
+      """,
     kind: "Decl",
     traits: [
       "Attributed"
@@ -1033,43 +1043,51 @@ public let DECL_NODES: [Node] = [
         name: "Attributes",
         kind: .collection(kind: "AttributeList", collectionElementName: "Attribute"),
         nameForDiagnostics: "attributes",
+        description: "Attributes that are attached to the initializer.",
         isOptional: true
       ),
       Child(
         name: "Modifiers",
         kind: .collection(kind: "ModifierList", collectionElementName: "Modifier"),
         nameForDiagnostics: "modifiers",
+        description: "Modifiers attached to the initializer",
         isOptional: true
       ),
       Child(
         name: "InitKeyword",
-        kind: .token(choices: [.keyword(text: "init")])
+        kind: .token(choices: [.keyword(text: "init")]),
+        description: "The init keyword"
       ),
       Child(
         name: "OptionalMark",
         kind: .token(choices: [.token(tokenKind: "PostfixQuestionMarkToken"), .token(tokenKind: "InfixQuestionMarkToken"), .token(tokenKind: "ExclamationMarkToken")]),
+        description: "If the initializer is failable, a question mark to indicate that.",
         isOptional: true
       ),
       Child(
         name: "GenericParameterClause",
         kind: .node(kind: "GenericParameterClause"),
         nameForDiagnostics: "generic parameter clause",
+        description: "Generic parameters of the initializer.",
         isOptional: true
       ),
       Child(
         name: "Signature",
         kind: .node(kind: "FunctionSignature"),
-        nameForDiagnostics: "function signature"
+        nameForDiagnostics: "function signature",
+        description: "The arguments of the initializer. While the function signature allows specifying an return clause, doing so is not semantically valid."
       ),
       Child(
         name: "GenericWhereClause",
         kind: .node(kind: "GenericWhereClause"),
         nameForDiagnostics: "generic where clause",
+        description: "If the initializer had generic parameters, a where clause that can restrict those",
         isOptional: true
       ),
       Child(
         name: "Body",
         kind: .node(kind: "CodeBlock"),
+        description: "The initializer’s body. Missing if the initialier is a requirement of a protocol declaration.",
         isOptional: true
       ),
     ]

@@ -466,7 +466,7 @@ public struct AccessorParameterSyntax: SyntaxProtocol, SyntaxHashable {
       _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil, 
       leftParen: TokenSyntax = .leftParenToken(), 
       _ unexpectedBetweenLeftParenAndName: UnexpectedNodesSyntax? = nil, 
-      name: TokenSyntax = .identifier("IdentifierToken"), 
+      name: TokenSyntax, 
       _ unexpectedBetweenNameAndRightParen: UnexpectedNodesSyntax? = nil, 
       rightParen: TokenSyntax = .rightParenToken(), 
       _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil, 
@@ -2139,7 +2139,7 @@ public struct AvailabilityVersionRestrictionSyntax: SyntaxProtocol, SyntaxHashab
   public init(
       leadingTrivia: Trivia? = nil, 
       _ unexpectedBeforePlatform: UnexpectedNodesSyntax? = nil, 
-      platform: TokenSyntax = .identifier("IdentifierToken"), 
+      platform: TokenSyntax, 
       _ unexpectedBetweenPlatformAndVersion: UnexpectedNodesSyntax? = nil, 
       version: VersionTupleSyntax? = nil, 
       _ unexpectedAfterVersion: UnexpectedNodesSyntax? = nil, 
@@ -5363,7 +5363,7 @@ public struct ConventionAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
   public init(
       leadingTrivia: Trivia? = nil, 
       _ unexpectedBeforeConventionLabel: UnexpectedNodesSyntax? = nil, 
-      conventionLabel: TokenSyntax = .identifier("IdentifierToken"), 
+      conventionLabel: TokenSyntax, 
       _ unexpectedBetweenConventionLabelAndComma: UnexpectedNodesSyntax? = nil, 
       comma: TokenSyntax? = nil, 
       _ unexpectedBetweenCommaAndCTypeLabel: UnexpectedNodesSyntax? = nil, 
@@ -5579,7 +5579,7 @@ public struct ConventionWitnessMethodAttributeArgumentsSyntax: SyntaxProtocol, S
       _ unexpectedBetweenWitnessMethodLabelAndColon: UnexpectedNodesSyntax? = nil, 
       colon: TokenSyntax = .colonToken(), 
       _ unexpectedBetweenColonAndProtocolName: UnexpectedNodesSyntax? = nil, 
-      protocolName: TokenSyntax = .identifier("IdentifierToken"), 
+      protocolName: TokenSyntax, 
       _ unexpectedAfterProtocolName: UnexpectedNodesSyntax? = nil, 
       trailingTrivia: Trivia? = nil
     
@@ -8119,7 +8119,7 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil, 
       _ unexpectedBeforeIdentifier: UnexpectedNodesSyntax? = nil, 
-      identifier: TokenSyntax = .identifier("IdentifierToken"), 
+      identifier: TokenSyntax, 
       _ unexpectedBetweenIdentifierAndAssociatedValue: UnexpectedNodesSyntax? = nil, 
       associatedValue: EnumCaseParameterClauseSyntax? = nil, 
       _ unexpectedBetweenAssociatedValueAndRawValue: UnexpectedNodesSyntax? = nil, 
@@ -10308,7 +10308,7 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
       _ unexpectedBetweenAttributesAndEach: UnexpectedNodesSyntax? = nil, 
       each: TokenSyntax? = nil, 
       _ unexpectedBetweenEachAndName: UnexpectedNodesSyntax? = nil, 
-      name: TokenSyntax = .identifier("IdentifierToken"), 
+      name: TokenSyntax, 
       _ unexpectedBetweenNameAndColon: UnexpectedNodesSyntax? = nil, 
       colon: TokenSyntax? = nil, 
       _ unexpectedBetweenColonAndInheritedType: UnexpectedNodesSyntax? = nil, 
@@ -10380,7 +10380,7 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
       _ unexpectedBetweenAttributesAndEach: UnexpectedNodesSyntax? = nil, 
       each: TokenSyntax? = nil, 
       _ unexpectedBetweenEachAndName: UnexpectedNodesSyntax? = nil, 
-      name: TokenSyntax = .identifier("IdentifierToken"), 
+      name: TokenSyntax, 
       _ unexpectedBetweenNameAndColon: UnexpectedNodesSyntax? = nil, 
       colon: TokenSyntax? = nil, 
       _ unexpectedBetweenColonAndInheritedType: UnexpectedNodesSyntax? = nil, 
@@ -13559,7 +13559,7 @@ public struct OpaqueReturnTypeOfAttributeArgumentsSyntax: SyntaxProtocol, Syntax
       _ unexpectedBetweenMangledNameAndComma: UnexpectedNodesSyntax? = nil, 
       comma: TokenSyntax = .commaToken(), 
       _ unexpectedBetweenCommaAndOrdinal: UnexpectedNodesSyntax? = nil, 
-      ordinal: TokenSyntax = .integerLiteral("IntegerLiteralToken"), 
+      ordinal: TokenSyntax, 
       _ unexpectedAfterOrdinal: UnexpectedNodesSyntax? = nil, 
       trailingTrivia: Trivia? = nil
     
@@ -13714,7 +13714,7 @@ public struct OperatorPrecedenceAndTypesSyntax: SyntaxProtocol, SyntaxHashable {
       _ unexpectedBeforeColon: UnexpectedNodesSyntax? = nil, 
       colon: TokenSyntax = .colonToken(), 
       _ unexpectedBetweenColonAndPrecedenceGroup: UnexpectedNodesSyntax? = nil, 
-      precedenceGroup: TokenSyntax = .identifier("IdentifierToken"), 
+      precedenceGroup: TokenSyntax, 
       _ unexpectedBetweenPrecedenceGroupAndDesignatedTypes: UnexpectedNodesSyntax? = nil, 
       designatedTypes: DesignatedTypeListSyntax, 
       _ unexpectedAfterDesignatedTypes: UnexpectedNodesSyntax? = nil, 
@@ -14740,7 +14740,7 @@ public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
       _ unexpectedBetweenLineArgLabelAndLineArgColon: UnexpectedNodesSyntax? = nil, 
       lineArgColon: TokenSyntax = .colonToken(), 
       _ unexpectedBetweenLineArgColonAndLineNumber: UnexpectedNodesSyntax? = nil, 
-      lineNumber: TokenSyntax = .integerLiteral("IntegerLiteralToken"), 
+      lineNumber: TokenSyntax, 
       _ unexpectedAfterLineNumber: UnexpectedNodesSyntax? = nil, 
       trailingTrivia: Trivia? = nil
     
@@ -15307,7 +15307,7 @@ public struct PrecedenceGroupNameElementSyntax: SyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil, 
       _ unexpectedBeforeName: UnexpectedNodesSyntax? = nil, 
-      name: TokenSyntax = .identifier("IdentifierToken"), 
+      name: TokenSyntax, 
       _ unexpectedBetweenNameAndTrailingComma: UnexpectedNodesSyntax? = nil, 
       trailingComma: TokenSyntax? = nil, 
       _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil, 
@@ -15784,7 +15784,7 @@ public struct PrimaryAssociatedTypeSyntax: SyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil, 
       _ unexpectedBeforeName: UnexpectedNodesSyntax? = nil, 
-      name: TokenSyntax = .identifier("IdentifierToken"), 
+      name: TokenSyntax, 
       _ unexpectedBetweenNameAndTrailingComma: UnexpectedNodesSyntax? = nil, 
       trailingComma: TokenSyntax? = nil, 
       _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil, 
@@ -16420,7 +16420,7 @@ public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable {
       _ unexpectedBeforeStatements: UnexpectedNodesSyntax? = nil, 
       statements: CodeBlockItemListSyntax, 
       _ unexpectedBetweenStatementsAndEOFToken: UnexpectedNodesSyntax? = nil, 
-      eofToken: TokenSyntax, 
+      eofToken: TokenSyntax = .eof(), 
       _ unexpectedAfterEOFToken: UnexpectedNodesSyntax? = nil, 
       trailingTrivia: Trivia? = nil
     
@@ -16564,7 +16564,7 @@ public struct StringSegmentSyntax: SyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil, 
       _ unexpectedBeforeContent: UnexpectedNodesSyntax? = nil, 
-      content: TokenSyntax = .stringSegment("StringSegmentToken"), 
+      content: TokenSyntax, 
       _ unexpectedAfterContent: UnexpectedNodesSyntax? = nil, 
       trailingTrivia: Trivia? = nil
     
@@ -18852,7 +18852,7 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil, 
       _ unexpectedBeforeMajor: UnexpectedNodesSyntax? = nil, 
-      major: TokenSyntax = .integerLiteral("IntegerLiteralToken"), 
+      major: TokenSyntax, 
       _ unexpectedBetweenMajorAndMinorPeriod: UnexpectedNodesSyntax? = nil, 
       minorPeriod: TokenSyntax? = nil, 
       _ unexpectedBetweenMinorPeriodAndMinor: UnexpectedNodesSyntax? = nil, 

@@ -96,7 +96,7 @@ public let KEYWORDS: [KeywordSpec] = [
   KeywordSpec("autoclosure"),
   KeywordSpec("availability"),
   KeywordSpec("available"),
-  KeywordSpec("await"),
+  KeywordSpec("await", requiresTrailingSpace: true),
   KeywordSpec("backDeployed"),
   KeywordSpec("before"),
   KeywordSpec("block"),

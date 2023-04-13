@@ -50,10 +50,9 @@ public struct SyntaxBuildableType: Hashable {
   }
 
   /// If the type has a default value (because it is optional or a token
-  /// with fixed test), return an expression of the form ` = defaultValue`
-  /// that can be used as the default value for a function parameter.
-  /// Otherwise, return the empty string.
-  public var defaultInitialization: ExprSyntax? {
+  /// with fixed test), return an expression that can be used as the
+  /// default value for a function parameter. Otherwise, return `nil`.
+  public var defaultValue: ExprSyntax? {
     if isOptional {
       return ExprSyntax(NilLiteralExprSyntax())
     } else if let token = token {

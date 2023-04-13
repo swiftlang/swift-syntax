@@ -285,6 +285,8 @@ open class BasicFormat: SyntaxRewriter {
       return true
     case .keyword(.async):
       return true
+    case .keyword(.await):
+      return true
     case .keyword(.`break`):
       return true
     case .keyword(.`case`):

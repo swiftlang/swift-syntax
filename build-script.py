@@ -6,7 +6,6 @@ import platform
 import subprocess
 import sys
 import tempfile
-from concurrent.futures import ThreadPoolExecutor
 from typing import Dict, List, Optional
 
 
@@ -141,6 +140,7 @@ def run_code_generation(
 
     env = dict(os.environ)
     env["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] = "1"
+    env["SWIFTSYNTAX_ENABLE_RAWSYNTAX_VALIDATION"] = "1"
     check_call(swiftpm_call, env=env, verbose=verbose)
 
 
@@ -174,6 +174,7 @@ class Builder(object):
     build_dir: Optional[str]
     multiroot_data_file: Optional[str]
     release: bool
+    enable_rawsyntax_validation: bool
     disable_sandbox: bool
 
     def __init__(
@@ -182,12 +183,14 @@ class Builder(object):
         build_dir: Optional[str],
         multiroot_data_file: Optional[str],
         release: bool,
+        enable_rawsyntax_validation: bool,
         verbose: bool,
         disable_sandbox: bool = False,
     ) -> None:
         self.build_dir = build_dir
         self.multiroot_data_file = multiroot_data_file
         self.release = release
+        self.enable_rawsyntax_validation = enable_rawsyntax_validation
         self.disable_sandbox = disable_sandbox
         self.verbose = verbose
         self.toolchain = toolchain
@@ -221,6 +224,8 @@ class Builder(object):
 
         env = dict(os.environ)
         env["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] = "1"
+        if self.enable_rawsyntax_validation:
+            env["SWIFTSYNTAX_ENABLE_RAWSYNTAX_VALIDATION"] = "1"
         # Tell other projects in the unified build to use local dependencies
         env["SWIFTCI_USE_LOCAL_DEPS"] = "1"
         env["SWIFT_SYNTAX_PARSER_LIB_SEARCH_PATH"] = \
@@ -274,7 +279,8 @@ def check_generated_files_match(self_generated_dir: str,
 
 def run_tests(
     toolchain: str, build_dir: Optional[str], multiroot_data_file: Optional[str],
-    release: bool, filecheck_exec: Optional[str], skip_lit_tests: bool, verbose: bool
+    release: bool, enable_rawsyntax_validation: bool, filecheck_exec: Optional[str], 
+    skip_lit_tests: bool, verbose: bool
 ) -> None:
     print("** Running SwiftSyntax Tests **")
 
@@ -292,6 +298,7 @@ def run_tests(
         build_dir=build_dir,
         multiroot_data_file=multiroot_data_file,
         release=release,
+        enable_rawsyntax_validation=enable_rawsyntax_validation,
         verbose=verbose,
     )
 
@@ -396,6 +403,7 @@ def run_lit_tests(toolchain: str, build_dir: Optional[str], release: bool,
 
 def run_xctests(toolchain: str, build_dir: Optional[str],
                 multiroot_data_file: Optional[str], release: bool,
+                enable_rawsyntax_validation: bool,
                 verbose: bool) -> None:
     print("** Running XCTests **")
     swiftpm_call = get_swiftpm_invocation(
@@ -414,6 +422,8 @@ def run_xctests(toolchain: str, build_dir: Optional[str],
 
     env = dict(os.environ)
     env["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] = "1"
+    if enable_rawsyntax_validation:
+        env["SWIFTSYNTAX_ENABLE_RAWSYNTAX_VALIDATION"] = "1"
     # Tell other projects in the unified build to use local dependencies
     env["SWIFTCI_USE_LOCAL_DEPS"] = "1"
     env["SWIFT_SYNTAX_PARSER_LIB_SEARCH_PATH"] = \
@@ -461,10 +471,11 @@ def verify_source_code_command(args: argparse.Namespace) -> None:
 def build_command(args: argparse.Namespace) -> None:
     try:
         builder = Builder(
-            toolchain=realpath(args.toolchain),
+            toolchain=realpath(args.toolchain), # pyright: ignore
             build_dir=realpath(args.build_dir),
             multiroot_data_file=args.multiroot_data_file,
             release=args.release,
+            enable_rawsyntax_validation=args.enable_rawsyntax_validation,
             verbose=args.verbose,
             disable_sandbox=args.disable_sandbox,
         )
@@ -484,10 +495,11 @@ def build_command(args: argparse.Namespace) -> None:
 def test_command(args: argparse.Namespace) -> None:
     try:
         builder = Builder(
-            toolchain=realpath(args.toolchain),
+            toolchain=realpath(args.toolchain), # pyright: ignore
             build_dir=realpath(args.build_dir),
             multiroot_data_file=args.multiroot_data_file,
             release=args.release,
+            enable_rawsyntax_validation=args.enable_rawsyntax_validation,
             verbose=args.verbose,
             disable_sandbox=args.disable_sandbox,
         )
@@ -496,10 +508,11 @@ def test_command(args: argparse.Namespace) -> None:
         builder.buildExample("ExamplePlugin")
 
         run_tests(
-            toolchain=realpath(args.toolchain),
+            toolchain=realpath(args.toolchain), # pyright: ignore
             build_dir=realpath(args.build_dir),
             multiroot_data_file=args.multiroot_data_file,
             release=args.release,
+            enable_rawsyntax_validation=args.enable_rawsyntax_validation,
             filecheck_exec=realpath(args.filecheck_exec),
             skip_lit_tests=args.skip_lit_tests,
             verbose=args.verbose,
@@ -550,6 +563,16 @@ def parse_args() -> argparse.Namespace:
             Path to an Xcode workspace to create a unified build of SwiftSyntax with
             other projects.
             """,
+        )
+
+        parser.add_argument(
+            "--enable-rawsyntax-validation",
+            action="store_true",
+            help="""
+            When constructing RawSyntax nodes validate that their layout matches that
+            defined in `CodeGeneration` and that TokenSyntax nodes have a `tokenKind`
+            matching the ones specified in `CodeGeneration`.
+            """
         )
 
         parser.add_argument(

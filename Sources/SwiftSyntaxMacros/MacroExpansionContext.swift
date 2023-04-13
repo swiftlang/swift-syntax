@@ -134,18 +134,14 @@ extension MacroExpansionContext {
     at position: PositionInSyntaxNode,
     filePathMode: SourceLocationFilePathMode
   ) -> AbstractSourceLocation? {
-    guard let sourceLoc: SourceLocation = location(of: node, at: position, filePathMode: filePathMode),
-      let file = sourceLoc.file,
-      let line = sourceLoc.line,
-      let column = sourceLoc.column
-    else {
+    guard let sourceLoc: SourceLocation = location(of: node, at: position, filePathMode: filePathMode) else {
       return nil
     }
 
     return AbstractSourceLocation(
-      file: "\(literal: file)",
-      line: "\(literal: line)",
-      column: "\(literal: column)"
+      file: "\(literal: sourceLoc.file)",
+      line: "\(literal: sourceLoc.line)",
+      column: "\(literal: sourceLoc.column)"
     )
   }
 

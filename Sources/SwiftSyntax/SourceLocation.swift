@@ -10,83 +10,32 @@
 //
 //===----------------------------------------------------------------------===//
 
-/// Represent the user-facing part of SourceLocation that can be calculated
-/// on demand.
-struct ComputedLocation: Hashable, Codable, CustomDebugStringConvertible {
-  /// The line in the file where this location resides. 1-based.
-  let line: Int
-
-  /// The UTF-8 byte offset from the beginning of the line where this location
-  /// resides. 1-based.
-  let column: Int
-
-  /// The file in which this location resides.
-  let file: String
-
-  var debugDescription: String {
-    // Print file name?
-    return "\(line):\(column)"
-  }
-
-  init(line: Int, column: Int, file: String) {
-    self.line = line
-    self.column = column
-    self.file = file
-  }
-  init(offset: Int, using converter: SourceLocationConverter) {
-    let loc = converter.location(for: AbsolutePosition(utf8Offset: offset))
-    precondition(loc.offset == offset)
-    self.line = loc.line!
-    self.column = loc.column!
-    self.file = loc.file!
-  }
-}
-
 /// Represents a source location in a Swift file.
 public struct SourceLocation: Hashable, Codable, CustomDebugStringConvertible {
-
-  /// Line and column that can be computed on demand.
-  private var compLoc: ComputedLocation?
 
   /// The UTF-8 byte offset into the file where this location resides.
   public let offset: Int
 
   /// The line in the file where this location resides. 1-based.
-  public var line: Int? {
-    return compLoc?.line
-  }
+  public var line: Int
 
   /// The UTF-8 byte offset from the beginning of the line where this location
   /// resides. 1-based.
-  public var column: Int? {
-    return compLoc?.column
-  }
+  public let column: Int
 
   /// The file in which this location resides.
-  public var file: String? {
-    return compLoc?.file
-  }
+  public let file: String
 
   public var debugDescription: String {
-    guard let compLoc = compLoc else {
-      return "\(offset)"
-    }
-    return compLoc.debugDescription
+    // Print file name?
+    return "\(line):\(column)"
   }
 
   public init(line: Int, column: Int, offset: Int, file: String) {
+    self.line = line
     self.offset = offset
-    self.compLoc = ComputedLocation(line: line, column: column, file: file)
-  }
-
-  /// Initialize SourceLocation with a utf8 offset.
-  /// If a SourceLocationConverter is given, line, column and file will be populated;
-  /// otherwise they will be nil.
-  public init(offset: Int, converter: SourceLocationConverter? = nil) {
-    self.offset = offset
-    if let converter = converter {
-      self.compLoc = ComputedLocation(offset: offset, using: converter)
-    }
+    self.column = column
+    self.file = file
   }
 }
 

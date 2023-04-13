@@ -32,7 +32,7 @@ extension TokenConsumer {
       } else {
         return true
       }
-    case (.primaryExpressionStart(.atSign), let handle)?:
+    case (.primaryExpressionStart(.atSign), _)?:
       break
     case (_, _)?:
       return true

@@ -39,6 +39,22 @@ extension UnexpectedNodesSyntax {
       return nil
     }
   }
+
+  /// If this only contains two tokens, the first satisfying `firstCondition`, and the second satisfying `secondCondition`,
+  /// return these tokens as a tuple, otherwise return `nil`.
+  func twoTokens(
+    firstSatisfying firstCondition: (TokenSyntax) -> Bool,
+    secondSatisfying secondCondition: (TokenSyntax) -> Bool
+  ) -> (first: TokenSyntax, second: TokenSyntax)? {
+    let sourceAccurateChildren = self.children(viewMode: .sourceAccurate).compactMap({ $0.as(TokenSyntax.self) })
+    guard sourceAccurateChildren.count == 2 else {
+      return nil
+    }
+    guard firstCondition(sourceAccurateChildren[0]) && secondCondition(sourceAccurateChildren[1]) else {
+      return nil
+    }
+    return (sourceAccurateChildren[0], sourceAccurateChildren[1])
+  }
 }
 
 extension Syntax {

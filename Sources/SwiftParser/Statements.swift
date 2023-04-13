@@ -187,13 +187,14 @@ extension Parser {
     var loopProgress = LoopProgressCondition()
     repeat {
       let condition = self.parseConditionElement(lastBindingKind: elements.last?.condition.as(RawOptionalBindingConditionSyntax.self)?.bindingKeyword)
-      let unexpectedBeforeKeepGoing: RawUnexpectedNodesSyntax?
+      var unexpectedBeforeKeepGoing: RawUnexpectedNodesSyntax? = nil
+      if let equalOperator = self.consumeIfContextualPunctuator("=="), let falseKeyword = self.consume(if: .keyword(.false)) {
+        unexpectedBeforeKeepGoing = RawUnexpectedNodesSyntax([equalOperator, falseKeyword], arena: self.arena)
+      }
       keepGoing = self.consume(if: .comma)
       if keepGoing == nil, let andOperator = self.consumeIfContextualPunctuator("&&") {
-        unexpectedBeforeKeepGoing = RawUnexpectedNodesSyntax([andOperator], arena: self.arena)
+        unexpectedBeforeKeepGoing = RawUnexpectedNodesSyntax(combining: unexpectedBeforeKeepGoing, andOperator, arena: self.arena)
         keepGoing = missingToken(.comma)
-      } else {
-        unexpectedBeforeKeepGoing = nil
       }
       elements.append(
         RawConditionElementSyntax(

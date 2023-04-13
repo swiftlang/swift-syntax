@@ -259,27 +259,6 @@ func syntaxNode(emitKind: String) -> SourceFileSyntax {
           StmtSyntax("return .layout(\(layout))")
         }
       }
-
-      try! ExtensionDeclSyntax("extension \(raw: node.name): CustomReflectable") {
-        let children = DictionaryExprSyntax {
-          for child in node.children {
-            DictionaryElementSyntax(
-              leadingTrivia: .newline,
-              keyExpression: ExprSyntax(#""\#(raw: child.swiftName)""#),
-              valueExpression: child.isOptional
-                ? ExprSyntax("\(raw: child.swiftName).map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any")
-                : ExprSyntax("Syntax(\(raw: child.swiftName)).asProtocol(SyntaxProtocol.self)")
-            )
-          }
-        }
-        DeclSyntax(
-          """
-          public var customMirror: Mirror {
-            return Mirror(self, children: \(children))
-          }
-          """
-        )
-      }
     }
   }
 }

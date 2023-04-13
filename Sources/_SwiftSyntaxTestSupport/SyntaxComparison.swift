@@ -79,10 +79,10 @@ extension TreeDifference: CustomDebugStringConvertible {
       \(message)
 
       Full Expected Tree:
-      \(baseline.root.debugDescription(includeChildren: true, includeTrivia: includeTrivia, converter: expectedConverter, mark: baseline))
+      \(baseline.root.debugDescription(includeTrivia: includeTrivia, converter: expectedConverter, mark: baseline))
 
       Full Actual Tree:
-      \(node.root.debugDescription(includeChildren: true, includeTrivia: includeTrivia, converter: actualConverter, mark: node))
+      \(node.root.debugDescription(includeTrivia: includeTrivia, converter: actualConverter, mark: node))
       """
   }
 }

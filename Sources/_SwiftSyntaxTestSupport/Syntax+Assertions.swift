@@ -133,7 +133,7 @@ public enum SubtreeError: Error, CustomStringConvertible {
     case let .invalidMarker(name):
       return "Could not find marker with name '\(name)'"
     case let .invalidSubtree(tree, afterUTF8Offset, type):
-      return "Could not find subtree after UTF8 offset \(afterUTF8Offset) with type \(type) in:\n\(tree.debugDescription(includeChildren: true))"
+      return "Could not find subtree after UTF8 offset \(afterUTF8Offset) with type \(type) in:\n\(tree.debugDescription)"
     }
   }
 }

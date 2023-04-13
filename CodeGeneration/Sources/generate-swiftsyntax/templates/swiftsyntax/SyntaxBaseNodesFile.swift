@@ -137,39 +137,29 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         internal init(_ data: SyntaxData)
         """
       ) {
-        IfConfigDeclSyntax(
-          clauses: IfConfigClauseListSyntax {
-            IfConfigClauseSyntax(
-              poundKeyword: .poundIfKeyword(),
-              condition: ExprSyntax("DEBUG"),
-              elements: .statements(
-                CodeBlockItemListSyntax {
-                  try! SwitchExprSyntax("switch data.raw.kind") {
-                    SwitchCaseSyntax(
-                      label: .case(
-                        SwitchCaseLabelSyntax {
-                          for childNode in SYNTAX_NODES where childNode.baseKind == node.syntaxKind {
-                            CaseItemSyntax(
-                              pattern: ExpressionPatternSyntax(
-                                expression: ExprSyntax(".\(raw: childNode.swiftSyntaxKind)")
-                              )
-                            )
-                          }
-                        }
+        CodeBlockItemListSyntax {
+          try! SwitchExprSyntax("switch data.raw.kind") {
+            SwitchCaseSyntax(
+              label: .case(
+                SwitchCaseLabelSyntax {
+                  for childNode in SYNTAX_NODES where childNode.baseKind == node.syntaxKind {
+                    CaseItemSyntax(
+                      pattern: ExpressionPatternSyntax(
+                        expression: ExprSyntax(".\(raw: childNode.swiftSyntaxKind)")
                       )
-                    ) {
-                      BreakStmtSyntax()
-                    }
-
-                    SwitchCaseSyntax("default:") {
-                      ExprSyntax("fatalError(\"Unable to create \(raw: node.name) from \\(data.raw.kind)\")")
-                    }
+                    )
                   }
                 }
               )
-            )
+            ) {
+              BreakStmtSyntax()
+            }
+
+            SwitchCaseSyntax("default:") {
+              ExprSyntax("preconditionFailure(\"Unable to create \(raw: node.name) from \\(data.raw.kind)\")")
+            }
           }
-        )
+        }
 
         ExprSyntax("self._syntaxNode = Syntax(data)")
       }

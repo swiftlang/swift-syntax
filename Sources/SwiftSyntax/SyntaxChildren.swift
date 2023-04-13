@@ -370,13 +370,9 @@ struct NonNilRawSyntaxChildren: BidirectionalCollection {
       {
         return reversedIndex
       }
-      #if DEBUG
       // Reversing any further would result in undefined behaviour of
       // index(before:)
-      if reversedIndex == children.startIndex {
-        fatalError("presentIndex(before:) must not be called if there is no " + "present index before the given one")
-      }
-      #endif
+      precondition(reversedIndex != children.startIndex, "presentIndex(before:) must not be called if there is no " + "present index before the given one")
       reversedIndex = children.index(before: reversedIndex)
     }
   }

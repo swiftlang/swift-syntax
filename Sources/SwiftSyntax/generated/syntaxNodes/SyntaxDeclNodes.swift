@@ -3187,7 +3187,14 @@ extension ImportDeclSyntax: CustomReflectable {
 
 // MARK: - InitializerDeclSyntax
 
-
+/// An initializer declaration like the following.
+/// 
+/// ```swift
+/// init(someParameter: Int) {
+/// }
+/// ```
+/// 
+/// The body is optional because this node also represents initializer requirements inside protocols.
 public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -3289,6 +3296,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// Attributes that are attached to the initializer.
   public var attributes: AttributeListSyntax? {
     get {
       return data.child(at: 1, parent: Syntax(self)).map(AttributeListSyntax.init)
@@ -3326,6 +3334,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// Modifiers attached to the initializer
   public var modifiers: ModifierListSyntax? {
     get {
       return data.child(at: 3, parent: Syntax(self)).map(ModifierListSyntax.init)
@@ -3363,6 +3372,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The init keyword
   public var initKeyword: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
@@ -3381,6 +3391,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// If the initializer is failable, a question mark to indicate that.
   public var optionalMark: TokenSyntax? {
     get {
       return data.child(at: 7, parent: Syntax(self)).map(TokenSyntax.init)
@@ -3399,6 +3410,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// Generic parameters of the initializer.
   public var genericParameterClause: GenericParameterClauseSyntax? {
     get {
       return data.child(at: 9, parent: Syntax(self)).map(GenericParameterClauseSyntax.init)
@@ -3417,6 +3429,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The arguments of the initializer. While the function signature allows specifying an return clause, doing so is not semantically valid.
   public var signature: FunctionSignatureSyntax {
     get {
       return FunctionSignatureSyntax(data.child(at: 11, parent: Syntax(self))!)
@@ -3435,6 +3448,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// If the initializer had generic parameters, a where clause that can restrict those
   public var genericWhereClause: GenericWhereClauseSyntax? {
     get {
       return data.child(at: 13, parent: Syntax(self)).map(GenericWhereClauseSyntax.init)
@@ -3453,6 +3467,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The initializer’s body. Missing if the initialier is a requirement of a protocol declaration.
   public var body: CodeBlockSyntax? {
     get {
       return data.child(at: 15, parent: Syntax(self)).map(CodeBlockSyntax.init)

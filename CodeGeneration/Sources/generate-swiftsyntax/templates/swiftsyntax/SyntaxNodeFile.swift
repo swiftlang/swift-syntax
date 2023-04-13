@@ -23,7 +23,7 @@ func syntaxNode(emitKind: String) -> SourceFileSyntax {
   SourceFileSyntax(leadingTrivia: copyrightHeader) {
     for node in SYNTAX_NODES where !node.isBase && node.collectionElement.isEmpty && node.baseKind == emitKind {
       // We are actually handling this node now
-      let nodeDoc = node.description.map { "/// \($0)" }
+      let nodeDoc = node.description?.split(separator: "\n", omittingEmptySubsequences: false).map { "/// \($0)" }.joined(separator: "\n")
       try! StructDeclSyntax(
         """
         // MARK: - \(raw: node.name)

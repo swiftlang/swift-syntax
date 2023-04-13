@@ -233,18 +233,6 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         StmtSyntax("return .choices(\(choices))")
       }
     }
-
-    DeclSyntax(
-      """
-      extension \(raw: node.name): CustomReflectable {
-        /// Reconstructs the real syntax type for this type from the node's kind and
-        /// provides a mirror that reflects this type.
-        public var customMirror: Mirror {
-          return Mirror(reflecting: Syntax(self).asProtocol(SyntaxProtocol.self))
-        }
-      }
-      """
-    )
   }
 
   try! ExtensionDeclSyntax("extension Syntax") {

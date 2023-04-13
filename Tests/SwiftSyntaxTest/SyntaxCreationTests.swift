@@ -17,7 +17,7 @@ fileprivate func cannedStructDecl() -> StructDeclSyntax {
   let structKW = TokenSyntax.keyword(.struct, trailingTrivia: .space)
   let fooID = TokenSyntax.identifier("Foo", trailingTrivia: .space)
   let rBrace = TokenSyntax.rightBraceToken(leadingTrivia: .newline)
-  let members = MemberDeclBlockSyntax(
+  let memberBlock = MemberDeclBlockSyntax(
     leftBrace: .leftBraceToken(),
     members: MemberDeclListSyntax([]),
     rightBrace: rBrace
@@ -25,7 +25,7 @@ fileprivate func cannedStructDecl() -> StructDeclSyntax {
   return StructDeclSyntax(
     structKeyword: structKW,
     identifier: fooID,
-    members: members
+    memberBlock: memberBlock
   )
 }
 
@@ -48,8 +48,8 @@ public class SyntaxCreationTests: XCTestCase {
 
     let renamed = structDecl.with(\.identifier, forType)
       .with(
-        \.members,
-        structDecl.members
+        \.memberBlock,
+        structDecl.memberBlock
           .with(\.rightBrace, newBrace)
       )
 
@@ -62,14 +62,14 @@ public class SyntaxCreationTests: XCTestCase {
       """
     )
 
-    XCTAssertNotEqual(structDecl.members, renamed.members)
+    XCTAssertNotEqual(structDecl.memberBlock, renamed.memberBlock)
     XCTAssertEqual(structDecl, StructDeclSyntax(structDecl.root))
     XCTAssertNil(structDecl.parent)
-    XCTAssertNotNil(structDecl.members.parent)
-    XCTAssertEqual(structDecl.members.parent.map(StructDeclSyntax.init), structDecl)
+    XCTAssertNotNil(structDecl.memberBlock.parent)
+    XCTAssertEqual(structDecl.memberBlock.parent.map(StructDeclSyntax.init), structDecl)
 
     XCTAssertEqual(
-      "\(structDecl.members.rightBrace)",
+      "\(structDecl.memberBlock.rightBrace)",
       """
 
       }

@@ -93,7 +93,7 @@ extension InitializerDeclSyntax: HasTrailingOptionalCodeBlock {}
 // MARK: HasTrailingMemberDeclBlock
 
 public protocol HasTrailingMemberDeclBlock {
-  var members: MemberDeclBlockSyntax { get set }
+  var memberBlock: MemberDeclBlockSyntax { get set }
 
   init(_ header: PartialSyntaxNodeString, @MemberDeclListBuilder membersBuilder: () throws -> MemberDeclListSyntax) throws
 }
@@ -105,7 +105,7 @@ public extension HasTrailingMemberDeclBlock where Self: DeclSyntaxProtocol {
       throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualNode: decl)
     }
     self = castedDecl
-    self.members = try MemberDeclBlockSyntax(members: membersBuilder())
+    self.memberBlock = try MemberDeclBlockSyntax(members: membersBuilder())
   }
 }
 

@@ -249,9 +249,9 @@ class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
     let expandedDeclGroup = expandMembers(of: declGroup)
 
     // Recurse into member decls.
-    let newMembers = visit(expandedDeclGroup.members)
+    let newMembers = visit(expandedDeclGroup.memberBlock)
 
-    return DeclSyntax(expandedDeclGroup.with(\.members, newMembers))
+    return DeclSyntax(expandedDeclGroup.with(\.memberBlock, newMembers))
   }
 
   override func visit(_ node: ActorDeclSyntax) -> DeclSyntax {
@@ -400,8 +400,8 @@ extension MacroApplication {
 
     // FIXME: Is there a better way to add N members to a decl?
     return decl.with(
-      \.members,
-      newMembers.reduce(decl.members) { partialMembers, newMember in
+      \.memberBlock,
+      newMembers.reduce(decl.memberBlock) { partialMembers, newMember in
         partialMembers.addMember(.init(decl: newMember))
       }
     )

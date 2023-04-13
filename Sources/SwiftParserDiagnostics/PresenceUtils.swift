@@ -78,7 +78,7 @@ class PresentMaker: SyntaxRewriter {
         modifiers: node.modifiers,
         structKeyword: .keyword(.struct, presence: .missing),
         identifier: .identifier("<#declaration#>", leadingTrivia: leadingTriviaBeforePlaceholder),
-        members: MemberDeclBlockSyntax(
+        memberBlock: MemberDeclBlockSyntax(
           leftBrace: .leftBraceToken(presence: .missing),
           members: MemberDeclListSyntax([]),
           rightBrace: .rightBraceToken(presence: .missing)

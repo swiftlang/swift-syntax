@@ -593,9 +593,9 @@ public struct RawActorDeclSyntax: RawDeclSyntaxNodeProtocol {
       inheritanceClause: RawTypeInheritanceClauseSyntax?, 
       _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: RawUnexpectedNodesSyntax? = nil, 
       genericWhereClause: RawGenericWhereClauseSyntax?, 
-      _ unexpectedBetweenGenericWhereClauseAndMembers: RawUnexpectedNodesSyntax? = nil, 
-      members: RawMemberDeclBlockSyntax, 
-      _ unexpectedAfterMembers: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenGenericWhereClauseAndMemberBlock: RawUnexpectedNodesSyntax? = nil, 
+      memberBlock: RawMemberDeclBlockSyntax, 
+      _ unexpectedAfterMemberBlock: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
@@ -615,9 +615,9 @@ public struct RawActorDeclSyntax: RawDeclSyntaxNodeProtocol {
       layout[11] = inheritanceClause?.raw
       layout[12] = unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw
       layout[13] = genericWhereClause?.raw
-      layout[14] = unexpectedBetweenGenericWhereClauseAndMembers?.raw
-      layout[15] = members.raw
-      layout[16] = unexpectedAfterMembers?.raw
+      layout[14] = unexpectedBetweenGenericWhereClauseAndMemberBlock?.raw
+      layout[15] = memberBlock.raw
+      layout[16] = unexpectedAfterMemberBlock?.raw
     }
     self.init(unchecked: raw)
   }
@@ -678,15 +678,15 @@ public struct RawActorDeclSyntax: RawDeclSyntaxNodeProtocol {
     layoutView.children[13].map(RawGenericWhereClauseSyntax.init(raw:))
   }
   
-  public var unexpectedBetweenGenericWhereClauseAndMembers: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenGenericWhereClauseAndMemberBlock: RawUnexpectedNodesSyntax? {
     layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var members: RawMemberDeclBlockSyntax {
+  public var memberBlock: RawMemberDeclBlockSyntax {
     layoutView.children[15].map(RawMemberDeclBlockSyntax.init(raw:))!
   }
   
-  public var unexpectedAfterMembers: RawUnexpectedNodesSyntax? {
+  public var unexpectedAfterMemberBlock: RawUnexpectedNodesSyntax? {
     layoutView.children[16].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
@@ -3250,9 +3250,9 @@ public struct RawClassDeclSyntax: RawDeclSyntaxNodeProtocol {
       inheritanceClause: RawTypeInheritanceClauseSyntax?, 
       _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: RawUnexpectedNodesSyntax? = nil, 
       genericWhereClause: RawGenericWhereClauseSyntax?, 
-      _ unexpectedBetweenGenericWhereClauseAndMembers: RawUnexpectedNodesSyntax? = nil, 
-      members: RawMemberDeclBlockSyntax, 
-      _ unexpectedAfterMembers: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenGenericWhereClauseAndMemberBlock: RawUnexpectedNodesSyntax? = nil, 
+      memberBlock: RawMemberDeclBlockSyntax, 
+      _ unexpectedAfterMemberBlock: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
@@ -3272,9 +3272,9 @@ public struct RawClassDeclSyntax: RawDeclSyntaxNodeProtocol {
       layout[11] = inheritanceClause?.raw
       layout[12] = unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw
       layout[13] = genericWhereClause?.raw
-      layout[14] = unexpectedBetweenGenericWhereClauseAndMembers?.raw
-      layout[15] = members.raw
-      layout[16] = unexpectedAfterMembers?.raw
+      layout[14] = unexpectedBetweenGenericWhereClauseAndMemberBlock?.raw
+      layout[15] = memberBlock.raw
+      layout[16] = unexpectedAfterMemberBlock?.raw
     }
     self.init(unchecked: raw)
   }
@@ -3335,15 +3335,15 @@ public struct RawClassDeclSyntax: RawDeclSyntaxNodeProtocol {
     layoutView.children[13].map(RawGenericWhereClauseSyntax.init(raw:))
   }
   
-  public var unexpectedBetweenGenericWhereClauseAndMembers: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenGenericWhereClauseAndMemberBlock: RawUnexpectedNodesSyntax? {
     layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var members: RawMemberDeclBlockSyntax {
+  public var memberBlock: RawMemberDeclBlockSyntax {
     layoutView.children[15].map(RawMemberDeclBlockSyntax.init(raw:))!
   }
   
-  public var unexpectedAfterMembers: RawUnexpectedNodesSyntax? {
+  public var unexpectedAfterMemberBlock: RawUnexpectedNodesSyntax? {
     layoutView.children[16].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
@@ -8136,9 +8136,9 @@ public struct RawEnumDeclSyntax: RawDeclSyntaxNodeProtocol {
       inheritanceClause: RawTypeInheritanceClauseSyntax?, 
       _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: RawUnexpectedNodesSyntax? = nil, 
       genericWhereClause: RawGenericWhereClauseSyntax?, 
-      _ unexpectedBetweenGenericWhereClauseAndMembers: RawUnexpectedNodesSyntax? = nil, 
-      members: RawMemberDeclBlockSyntax, 
-      _ unexpectedAfterMembers: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenGenericWhereClauseAndMemberBlock: RawUnexpectedNodesSyntax? = nil, 
+      memberBlock: RawMemberDeclBlockSyntax, 
+      _ unexpectedAfterMemberBlock: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
@@ -8158,9 +8158,9 @@ public struct RawEnumDeclSyntax: RawDeclSyntaxNodeProtocol {
       layout[11] = inheritanceClause?.raw
       layout[12] = unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw
       layout[13] = genericWhereClause?.raw
-      layout[14] = unexpectedBetweenGenericWhereClauseAndMembers?.raw
-      layout[15] = members.raw
-      layout[16] = unexpectedAfterMembers?.raw
+      layout[14] = unexpectedBetweenGenericWhereClauseAndMemberBlock?.raw
+      layout[15] = memberBlock.raw
+      layout[16] = unexpectedAfterMemberBlock?.raw
     }
     self.init(unchecked: raw)
   }
@@ -8221,15 +8221,15 @@ public struct RawEnumDeclSyntax: RawDeclSyntaxNodeProtocol {
     layoutView.children[13].map(RawGenericWhereClauseSyntax.init(raw:))
   }
   
-  public var unexpectedBetweenGenericWhereClauseAndMembers: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenGenericWhereClauseAndMemberBlock: RawUnexpectedNodesSyntax? {
     layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var members: RawMemberDeclBlockSyntax {
+  public var memberBlock: RawMemberDeclBlockSyntax {
     layoutView.children[15].map(RawMemberDeclBlockSyntax.init(raw:))!
   }
   
-  public var unexpectedAfterMembers: RawUnexpectedNodesSyntax? {
+  public var unexpectedAfterMemberBlock: RawUnexpectedNodesSyntax? {
     layoutView.children[16].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
@@ -8669,9 +8669,9 @@ public struct RawExtensionDeclSyntax: RawDeclSyntaxNodeProtocol {
       inheritanceClause: RawTypeInheritanceClauseSyntax?, 
       _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: RawUnexpectedNodesSyntax? = nil, 
       genericWhereClause: RawGenericWhereClauseSyntax?, 
-      _ unexpectedBetweenGenericWhereClauseAndMembers: RawUnexpectedNodesSyntax? = nil, 
-      members: RawMemberDeclBlockSyntax, 
-      _ unexpectedAfterMembers: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenGenericWhereClauseAndMemberBlock: RawUnexpectedNodesSyntax? = nil, 
+      memberBlock: RawMemberDeclBlockSyntax, 
+      _ unexpectedAfterMemberBlock: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
@@ -8689,9 +8689,9 @@ public struct RawExtensionDeclSyntax: RawDeclSyntaxNodeProtocol {
       layout[9] = inheritanceClause?.raw
       layout[10] = unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw
       layout[11] = genericWhereClause?.raw
-      layout[12] = unexpectedBetweenGenericWhereClauseAndMembers?.raw
-      layout[13] = members.raw
-      layout[14] = unexpectedAfterMembers?.raw
+      layout[12] = unexpectedBetweenGenericWhereClauseAndMemberBlock?.raw
+      layout[13] = memberBlock.raw
+      layout[14] = unexpectedAfterMemberBlock?.raw
     }
     self.init(unchecked: raw)
   }
@@ -8744,15 +8744,15 @@ public struct RawExtensionDeclSyntax: RawDeclSyntaxNodeProtocol {
     layoutView.children[11].map(RawGenericWhereClauseSyntax.init(raw:))
   }
   
-  public var unexpectedBetweenGenericWhereClauseAndMembers: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenGenericWhereClauseAndMemberBlock: RawUnexpectedNodesSyntax? {
     layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var members: RawMemberDeclBlockSyntax {
+  public var memberBlock: RawMemberDeclBlockSyntax {
     layoutView.children[13].map(RawMemberDeclBlockSyntax.init(raw:))!
   }
   
-  public var unexpectedAfterMembers: RawUnexpectedNodesSyntax? {
+  public var unexpectedAfterMemberBlock: RawUnexpectedNodesSyntax? {
     layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
@@ -17201,9 +17201,9 @@ public struct RawProtocolDeclSyntax: RawDeclSyntaxNodeProtocol {
       inheritanceClause: RawTypeInheritanceClauseSyntax?, 
       _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: RawUnexpectedNodesSyntax? = nil, 
       genericWhereClause: RawGenericWhereClauseSyntax?, 
-      _ unexpectedBetweenGenericWhereClauseAndMembers: RawUnexpectedNodesSyntax? = nil, 
-      members: RawMemberDeclBlockSyntax, 
-      _ unexpectedAfterMembers: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenGenericWhereClauseAndMemberBlock: RawUnexpectedNodesSyntax? = nil, 
+      memberBlock: RawMemberDeclBlockSyntax, 
+      _ unexpectedAfterMemberBlock: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
@@ -17223,9 +17223,9 @@ public struct RawProtocolDeclSyntax: RawDeclSyntaxNodeProtocol {
       layout[11] = inheritanceClause?.raw
       layout[12] = unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw
       layout[13] = genericWhereClause?.raw
-      layout[14] = unexpectedBetweenGenericWhereClauseAndMembers?.raw
-      layout[15] = members.raw
-      layout[16] = unexpectedAfterMembers?.raw
+      layout[14] = unexpectedBetweenGenericWhereClauseAndMemberBlock?.raw
+      layout[15] = memberBlock.raw
+      layout[16] = unexpectedAfterMemberBlock?.raw
     }
     self.init(unchecked: raw)
   }
@@ -17286,15 +17286,15 @@ public struct RawProtocolDeclSyntax: RawDeclSyntaxNodeProtocol {
     layoutView.children[13].map(RawGenericWhereClauseSyntax.init(raw:))
   }
   
-  public var unexpectedBetweenGenericWhereClauseAndMembers: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenGenericWhereClauseAndMemberBlock: RawUnexpectedNodesSyntax? {
     layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var members: RawMemberDeclBlockSyntax {
+  public var memberBlock: RawMemberDeclBlockSyntax {
     layoutView.children[15].map(RawMemberDeclBlockSyntax.init(raw:))!
   }
   
-  public var unexpectedAfterMembers: RawUnexpectedNodesSyntax? {
+  public var unexpectedAfterMemberBlock: RawUnexpectedNodesSyntax? {
     layoutView.children[16].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
@@ -18506,9 +18506,9 @@ public struct RawStructDeclSyntax: RawDeclSyntaxNodeProtocol {
       inheritanceClause: RawTypeInheritanceClauseSyntax?, 
       _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: RawUnexpectedNodesSyntax? = nil, 
       genericWhereClause: RawGenericWhereClauseSyntax?, 
-      _ unexpectedBetweenGenericWhereClauseAndMembers: RawUnexpectedNodesSyntax? = nil, 
-      members: RawMemberDeclBlockSyntax, 
-      _ unexpectedAfterMembers: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenGenericWhereClauseAndMemberBlock: RawUnexpectedNodesSyntax? = nil, 
+      memberBlock: RawMemberDeclBlockSyntax, 
+      _ unexpectedAfterMemberBlock: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
@@ -18528,9 +18528,9 @@ public struct RawStructDeclSyntax: RawDeclSyntaxNodeProtocol {
       layout[11] = inheritanceClause?.raw
       layout[12] = unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw
       layout[13] = genericWhereClause?.raw
-      layout[14] = unexpectedBetweenGenericWhereClauseAndMembers?.raw
-      layout[15] = members.raw
-      layout[16] = unexpectedAfterMembers?.raw
+      layout[14] = unexpectedBetweenGenericWhereClauseAndMemberBlock?.raw
+      layout[15] = memberBlock.raw
+      layout[16] = unexpectedAfterMemberBlock?.raw
     }
     self.init(unchecked: raw)
   }
@@ -18591,15 +18591,15 @@ public struct RawStructDeclSyntax: RawDeclSyntaxNodeProtocol {
     layoutView.children[13].map(RawGenericWhereClauseSyntax.init(raw:))
   }
   
-  public var unexpectedBetweenGenericWhereClauseAndMembers: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenGenericWhereClauseAndMemberBlock: RawUnexpectedNodesSyntax? {
     layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var members: RawMemberDeclBlockSyntax {
+  public var memberBlock: RawMemberDeclBlockSyntax {
     layoutView.children[15].map(RawMemberDeclBlockSyntax.init(raw:))!
   }
   
-  public var unexpectedAfterMembers: RawUnexpectedNodesSyntax? {
+  public var unexpectedAfterMemberBlock: RawUnexpectedNodesSyntax? {
     layoutView.children[16].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }

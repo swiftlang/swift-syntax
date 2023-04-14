@@ -239,7 +239,7 @@ struct DiagnosticSpec {
   /// If not `nil`, assert that the highlighted range has this content.
   let highlight: String?
   /// If not `nil`, assert that the diagnostic contains notes with these messages.
-  let notes: [NoteSpec]?
+  let notes: [NoteSpec]
   /// If not `nil`, assert that the diagnostic contains fix-its with these messages.
   /// Use the `fixedSource` parameter on `AssertParse` to check that applying the Fix-It yields the expected result.
   let fixIts: [String]
@@ -254,7 +254,7 @@ struct DiagnosticSpec {
     message: String?,
     severity: DiagnosticSeverity = .error,
     highlight: String? = nil,
-    notes: [NoteSpec]? = nil,
+    notes: [NoteSpec] = [],
     fixIts: [String] = [],
     file: StaticString = #file,
     line: UInt = #line
@@ -406,20 +406,18 @@ func assertDiagnostic<T: SyntaxProtocol>(
       line: spec.line
     )
   }
-  if let notes = spec.notes {
-    if diag.notes.count != notes.count {
-      XCTFail(
-        """
-        Expected \(notes.count) notes but received \(diag.notes.count):
-        \(diag.notes.map(\.debugDescription).joined(separator: "\n"))
-        """,
-        file: spec.file,
-        line: spec.line
-      )
-    } else {
-      for (note, expectedNote) in zip(diag.notes, notes) {
-        assertNote(note, in: tree, markerLocations: markerLocations, expected: expectedNote)
-      }
+  if diag.notes.count != spec.notes.count {
+    XCTFail(
+      """
+      Expected \(spec.notes.count) notes but received \(diag.notes.count):
+      \(diag.notes.map(\.debugDescription).joined(separator: "\n"))
+      """,
+      file: spec.file,
+      line: spec.line
+    )
+  } else {
+    for (note, expectedNote) in zip(diag.notes, spec.notes) {
+      assertNote(note, in: tree, markerLocations: markerLocations, expected: expectedNote)
     }
   }
 

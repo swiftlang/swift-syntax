@@ -35,14 +35,24 @@ final class ImplicitGetterIncompleteTests: XCTestCase {
     assertParse(
       #"""
       // Would trigger assertion when AST verifier checks source ranges ("child source range not contained within its parent")
-      func test2() {
-        var a : Int {
+      func test2() 1️⃣{
+        var a : Int 2️⃣{
           switch i {
-      }1️⃣
+      }3️⃣
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "expected '}' to end variable", fixIts: ["insert '}'"]),
-        DiagnosticSpec(message: "expected '}' to end function", fixIts: ["insert '}'"]),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "expected '}' to end variable",
+          notes: [NoteSpec(locationMarker: "2️⃣", message: "to match this opening '{'")],
+          fixIts: ["insert '}'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "expected '}' to end function",
+          notes: [NoteSpec(locationMarker: "1️⃣", message: "to match this opening '{'")],
+          fixIts: ["insert '}'"]
+        ),
       ],
       fixedSource: #"""
         // Would trigger assertion when AST verifier checks source ranges ("child source range not contained within its parent")

@@ -338,12 +338,21 @@ final class ExpressionTests: XCTestCase {
 
     assertParse(
       """
-      [1️⃣
+      ℹ️[1️⃣
         ,2️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected value in array element", fixIts: ["insert value"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ']' to end array", fixIts: ["insert ']'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected value in array element",
+          fixIts: ["insert value"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected ']' to end array",
+          notes: [NoteSpec(message: "to match this opening '['")],
+          fixIts: ["insert ']'"]
+        ),
       ],
       fixedSource: """
         [<#expression#>
@@ -353,11 +362,18 @@ final class ExpressionTests: XCTestCase {
 
     assertParse(
       """
-      ([1:1️⃣)
+      (ℹ️[1:1️⃣)
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected value in dictionary element", fixIts: ["insert value"]),
-        DiagnosticSpec(message: "expected ']' to end dictionary", fixIts: ["insert ']'"]),
+        DiagnosticSpec(
+          message: "expected value in dictionary element",
+          fixIts: ["insert value"]
+        ),
+        DiagnosticSpec(
+          message: "expected ']' to end dictionary",
+          notes: [NoteSpec(message: "to match this opening '['")],
+          fixIts: ["insert ']'"]
+        ),
       ],
       fixedSource: """
         ([1: <#expression#>])
@@ -434,11 +450,21 @@ final class ExpressionTests: XCTestCase {
 
     assertParse(
       #"""
-      "\(()1️⃣
+      1️⃣"\2️⃣(()3️⃣
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "expected ')' in string literal", fixIts: ["insert ')'"]),
-        DiagnosticSpec(message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "expected ')' in string literal",
+          notes: [NoteSpec(locationMarker: "2️⃣", message: "to match this opening '('")],
+          fixIts: ["insert ')'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: #"expected '"' to end string literal"#,
+          notes: [NoteSpec(locationMarker: "1️⃣", message: #"to match this opening '"'"#)],
+          fixIts: [#"insert '"'"#]
+        ),
       ],
       fixedSource: #"""
         "\(())"
@@ -583,10 +609,14 @@ final class ExpressionTests: XCTestCase {
 
     assertParse(
       ##"""
-      """""1️⃣
+      ℹ️"""""1️⃣
       """##,
       diagnostics: [
-        DiagnosticSpec(message: #"expected '"""' to end string literal"#, fixIts: [#"insert '"""'"#])
+        DiagnosticSpec(
+          message: #"expected '"""' to end string literal"#,
+          notes: [NoteSpec(message: #"to match this opening '"""'"#)],
+          fixIts: [#"insert '"""'"#]
+        )
       ],
       fixedSource: ##"""
         """"""""
@@ -643,10 +673,18 @@ final class ExpressionTests: XCTestCase {
     )
 
     assertParse(
-      ###""1️⃣\2️⃣"###,
+      ###"ℹ️"1️⃣\2️⃣"###,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "invalid escape sequence in literal"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "invalid escape sequence in literal"
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: #"expected '"' to end string literal"#,
+          notes: [NoteSpec(message: #"to match this opening '"'"#)],
+          fixIts: [#"insert '"'"#]
+        ),
       ],
       fixedSource: ###"""
         "\"
@@ -706,11 +744,20 @@ final class ExpressionTests: XCTestCase {
   func testStringBogusClosingDelimiters() {
     assertParse(
       ##"""
-      \1️⃣\(2️⃣
+      \1️⃣\ℹ️(2️⃣
       """##,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected root in key path", fixIts: ["insert root"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end tuple type", fixIts: ["insert ')'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected root in key path",
+          fixIts: ["insert root"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected ')' to end tuple type",
+          notes: [NoteSpec(message: "to match this opening '('")],
+          fixIts: ["insert ')'"]
+        ),
       ],
       fixedSource: ##"""
         \<#type#>\()
@@ -725,10 +772,14 @@ final class ExpressionTests: XCTestCase {
 
     assertParse(
       #"""
-      "1️⃣
+      ℹ️"1️⃣
       """#,
       diagnostics: [
-        DiagnosticSpec(message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#])
+        DiagnosticSpec(
+          message: #"expected '"' to end string literal"#,
+          notes: [NoteSpec(message: #"to match this opening '"'"#)],
+          fixIts: [#"insert '"'"#]
+        )
       ],
       fixedSource: #"""
         ""
@@ -737,10 +788,14 @@ final class ExpressionTests: XCTestCase {
 
     assertParse(
       #"""
-      "'1️⃣
+      ℹ️"'1️⃣
       """#,
       diagnostics: [
-        DiagnosticSpec(message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#])
+        DiagnosticSpec(
+          message: #"expected '"' to end string literal"#,
+          notes: [NoteSpec(message: #"to match this opening '"'"#)],
+          fixIts: [#"insert '"'"#]
+        )
       ],
       fixedSource: #"""
         "'"
@@ -789,17 +844,36 @@ final class ExpressionTests: XCTestCase {
   func testBogusKeypathBaseRecovery() {
     assertParse(
       #"""
-      func nestThoseIfs() {
+      func nestThoseIfs() 1️⃣{
         \n
-        if false != true {
+        if false != true 2️⃣{
           \n
-          print1️⃣ "\(i)\"\n2️⃣
+          print3️⃣ 4️⃣"\(i)\"\n5️⃣
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end 'if' statement", fixIts: ["insert '}'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end function", fixIts: ["insert '}'"]),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "consecutive statements on a line must be separated by ';'",
+          fixIts: ["insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "5️⃣",
+          message: #"expected '"' to end string literal"#,
+          notes: [NoteSpec(locationMarker: "4️⃣", message: #"to match this opening '"'"#)],
+          fixIts: [#"insert '"'"#]
+        ),
+        DiagnosticSpec(
+          locationMarker: "5️⃣",
+          message: "expected '}' to end 'if' statement",
+          notes: [NoteSpec(locationMarker: "2️⃣", message: "to match this opening '{'")],
+          fixIts: ["insert '}'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "5️⃣",
+          message: "expected '}' to end function",
+          notes: [NoteSpec(locationMarker: "1️⃣", message: "to match this opening '{'")],
+          fixIts: ["insert '}'"]
+        ),
       ],
       fixedSource: #"""
         func nestThoseIfs() {
@@ -813,10 +887,19 @@ final class ExpressionTests: XCTestCase {
     )
 
     assertParse(
-      "#keyPath((b:1️⃣)2️⃣",
+      "#keyPathℹ️((b:1️⃣)2️⃣",
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected value in tuple", fixIts: ["insert value"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end macro expansion", fixIts: ["insert ')'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected value in tuple",
+          fixIts: ["insert value"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected ')' to end macro expansion",
+          notes: [NoteSpec(message: "to match this opening '('")],
+          fixIts: ["insert ')'"]
+        ),
       ],
       fixedSource: """
         #keyPath((b: <#expression#>))
@@ -1020,14 +1103,31 @@ final class ExpressionTests: XCTestCase {
   func testNewlineInInterpolationOfSingleLineString() {
     assertParse(
       #"""
-      "test \(label:1️⃣
-      foo2️⃣)"
+      1️⃣"test \2️⃣(label:3️⃣
+      foo4️⃣)"
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected value in string literal", fixIts: ["insert value"]),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ')' in string literal", fixIts: ["insert ')'"]),
-        DiagnosticSpec(locationMarker: "1️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: #"extraneous code ')"' at top level"#),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "expected value in string literal",
+          fixIts: ["insert value"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "expected ')' in string literal",
+          notes: [NoteSpec(locationMarker: "2️⃣", message: "to match this opening '('")],
+          fixIts: ["insert ')'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: #"expected '"' to end string literal"#,
+          notes: [NoteSpec(locationMarker: "1️⃣", message: #"to match this opening '"'"#)],
+          fixIts: [#"insert '"'"#]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: #"extraneous code ')"' at top level"#
+        ),
       ],
       fixedSource: #"""
         "test \(label: <#expression#>)"
@@ -1039,7 +1139,7 @@ final class ExpressionTests: XCTestCase {
   func testUnterminatedStringLiteral() {
     assertParse(
       """
-      "This is unterminated1️⃣
+      ℹ️"This is unterminated1️⃣
       x
       """,
       substructure: Syntax(
@@ -1052,7 +1152,11 @@ final class ExpressionTests: XCTestCase {
         )
       ),
       diagnostics: [
-        DiagnosticSpec(message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#])
+        DiagnosticSpec(
+          message: #"expected '"' to end string literal"#,
+          notes: [NoteSpec(message: #"to match this opening '"'"#)],
+          fixIts: [#"insert '"'"#]
+        )
       ],
       fixedSource: """
         "This is unterminated"
@@ -1203,10 +1307,14 @@ final class ExpressionTests: XCTestCase {
         line 1
        1️⃣
         line 2
-        """
+        ℹ️"""
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "insufficient indentation of line in multi-line string literal", fixIts: ["change indentation of this line to match closing delimiter"])
+        DiagnosticSpec(
+          message: "insufficient indentation of line in multi-line string literal",
+          notes: [NoteSpec(message: "should match indentation here")],
+          fixIts: ["change indentation of this line to match closing delimiter"]
+        )
       ],
       fixedSource: #"""
           """
@@ -1788,12 +1896,22 @@ final class StatementExpressionTests: XCTestCase {
   func testUnterminatedString1() {
     assertParse(
       #"""
-      "abc1️⃣
-      "2️⃣
+      1️⃣"abc2️⃣
+      3️⃣"4️⃣
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: #"expected '"' to end string literal"#,
+          notes: [NoteSpec(locationMarker: "1️⃣", message: #"to match this opening '"'"#)],
+          fixIts: [#"insert '"'"#]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: #"expected '"' to end string literal"#,
+          notes: [NoteSpec(locationMarker: "3️⃣", message: #"to match this opening '"'"#)],
+          fixIts: [#"insert '"'"#]
+        ),
       ],
       fixedSource: #"""
         "abc"
@@ -1805,12 +1923,22 @@ final class StatementExpressionTests: XCTestCase {
   func testUnterminatedString2() {
     assertParse(
       #"""
-      "1️⃣
-      "2️⃣
+      1️⃣"2️⃣
+      3️⃣"4️⃣
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: #"expected '"' to end string literal"#,
+          notes: [NoteSpec(locationMarker: "1️⃣", message: #"to match this opening '"'"#)],
+          fixIts: [#"insert '"'"#]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: #"expected '"' to end string literal"#,
+          notes: [NoteSpec(locationMarker: "3️⃣", message: #"to match this opening '"'"#)],
+          fixIts: [#"insert '"'"#]
+        ),
       ],
       fixedSource: #"""
         ""
@@ -1822,13 +1950,27 @@ final class StatementExpressionTests: XCTestCase {
   func testUnterminatedString3() {
     assertParse(
       #"""
-      "abc1️⃣
-      \(def)2️⃣"3️⃣
+      1️⃣"abc2️⃣
+      \(def)3️⃣"4️⃣
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
-        DiagnosticSpec(locationMarker: "3️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: #"expected '"' to end string literal"#,
+          notes: [NoteSpec(locationMarker: "1️⃣", message: #"to match this opening '"'"#)],
+          fixIts: [#"insert '"'"#]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "consecutive statements on a line must be separated by ';'",
+          fixIts: ["insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: #"expected '"' to end string literal"#,
+          notes: [NoteSpec(locationMarker: "3️⃣", message: #"to match this opening '"'"#)],
+          fixIts: [#"insert '"'"#]
+        ),
       ],
       fixedSource: #"""
         "abc"
@@ -1840,13 +1982,26 @@ final class StatementExpressionTests: XCTestCase {
   func testUnterminatedString4() {
     assertParse(
       #"""
-      "abc\(def1️⃣2️⃣
-      3️⃣)"
+      1️⃣"abc\2️⃣(def3️⃣
+      4️⃣)"
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ')' in string literal", fixIts: ["insert ')'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
-        DiagnosticSpec(locationMarker: "3️⃣", message: #"extraneous code ')"' at top level"#),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "expected ')' in string literal",
+          notes: [NoteSpec(locationMarker: "2️⃣", message: "to match this opening '('")],
+          fixIts: ["insert ')'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: #"expected '"' to end string literal"#,
+          notes: [NoteSpec(locationMarker: "1️⃣", message: #"to match this opening '"'"#)],
+          fixIts: [#"insert '"'"#]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: #"extraneous code ')"' at top level"#
+        ),
       ],
       fixedSource: #"""
         "abc\(def)"
@@ -1858,13 +2013,25 @@ final class StatementExpressionTests: XCTestCase {
   func testUnterminatedString5() {
     assertParse(
       #"""
-      "abc\(1️⃣2️⃣
+      ℹ️"abc\(1️⃣2️⃣
       def3️⃣)"
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected value and ')' in string literal", fixIts: ["insert value and ')'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
-        DiagnosticSpec(locationMarker: "3️⃣", message: #"extraneous code ')"' at top level"#),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected value and ')' in string literal",
+          fixIts: ["insert value and ')'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: #"expected '"' to end string literal"#,
+          notes: [NoteSpec(message: #"to match this opening '"'"#)],
+          fixIts: [#"insert '"'"#]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: #"extraneous code ')"' at top level"#
+        ),
       ],
       fixedSource: #"""
         "abc\(<#expression#>)"
@@ -1876,14 +2043,31 @@ final class StatementExpressionTests: XCTestCase {
   func testUnterminatedString6() {
     assertParse(
       #"""
-      "abc1️⃣\2️⃣
-      (def)3️⃣"4️⃣
+      1️⃣"abc2️⃣\3️⃣
+      (def)4️⃣"5️⃣
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "invalid escape sequence in literal"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
-        DiagnosticSpec(locationMarker: "4️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "invalid escape sequence in literal"
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: #"expected '"' to end string literal"#,
+          notes: [NoteSpec(locationMarker: "1️⃣", message: #"to match this opening '"'"#)],
+          fixIts: [#"insert '"'"#]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "consecutive statements on a line must be separated by ';'",
+          fixIts: ["insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "5️⃣",
+          message: #"expected '"' to end string literal"#,
+          notes: [NoteSpec(locationMarker: "4️⃣", message: #"to match this opening '"'"#)],
+          fixIts: [#"insert '"'"#]
+        ),
       ],
       fixedSource: #"""
         "abc\"
@@ -1917,9 +2101,22 @@ final class StatementExpressionTests: XCTestCase {
       abc2️⃣"#3️⃣
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: ##"expected '"#' to end string literal"##, fixIts: [##"insert '"#'"##]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
-        DiagnosticSpec(locationMarker: "3️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: ##"expected '"#' to end string literal"##,
+          fixIts: [##"insert '"#'"##]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "consecutive statements on a line must be separated by ';'",
+          fixIts: ["insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: #"expected '"' to end string literal"#,
+          notes: [NoteSpec(locationMarker: "2️⃣", message: #"to match this opening '"'"#)],
+          fixIts: [#"insert '"'"#]
+        ),
       ],
       fixedSource: #"""
         #""#
@@ -1932,11 +2129,20 @@ final class StatementExpressionTests: XCTestCase {
     assertParse(
       #"""
       #"abc1️⃣
-      "#2️⃣
+      ℹ️"#2️⃣
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: ##"expected '"#' to end string literal"##, fixIts: [##"insert '"#'"##]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: ##"expected '"#' to end string literal"##,
+          fixIts: [##"insert '"#'"##]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: #"expected '"' to end string literal"#,
+          notes: [NoteSpec(message: #"to match this opening '"'"#)],
+          fixIts: [#"insert '"'"#]
+        ),
       ],
       fixedSource: #"""
         #"abc"#

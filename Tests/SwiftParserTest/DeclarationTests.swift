@@ -132,11 +132,20 @@ final class DeclarationTests: XCTestCase {
         """
     )
     assertParse(
-      "class B<where g1️⃣",
+      "class Bℹ️<where g1️⃣",
       diagnostics: [
-        DiagnosticSpec(message: "expected ':' or '==' to indicate a conformance or same-type requirement"),
-        DiagnosticSpec(message: "expected '>' to end generic parameter clause", fixIts: ["insert '>'"]),
-        DiagnosticSpec(message: "expected member block in class", fixIts: ["insert member block"]),
+        DiagnosticSpec(
+          message: "expected ':' or '==' to indicate a conformance or same-type requirement"
+        ),
+        DiagnosticSpec(
+          message: "expected '>' to end generic parameter clause",
+          notes: [NoteSpec(message: "to match this opening '<'")],
+          fixIts: ["insert '>'"]
+        ),
+        DiagnosticSpec(
+          message: "expected member block in class",
+          fixIts: ["insert member block"]
+        ),
       ],
       fixedSource: """
         class B<where g> {
@@ -193,11 +202,23 @@ final class DeclarationTests: XCTestCase {
     )
 
     assertParse(
-      "protocol P{1️⃣{}case2️⃣",
+      "protocol Pℹ️{1️⃣{}case2️⃣",
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '{}' before enum case"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in enum case", fixIts: ["insert identifier"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end protocol", fixIts: ["insert '}'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "unexpected code '{}' before enum case"
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected identifier in enum case",
+          fixIts: ["insert identifier"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected '}' to end protocol",
+          notes: [NoteSpec(message: "to match this opening '{'")],
+          fixIts: ["insert '}'"]
+        ),
       ],
       fixedSource: """
         protocol P{{}case <#identifier#>
@@ -672,9 +693,13 @@ final class DeclarationTests: XCTestCase {
 
   func testMissingClosingParenInFunctionSignature() {
     assertParse(
-      "func test(first second: Int1️⃣",
+      "func testℹ️(first second: Int1️⃣",
       diagnostics: [
-        DiagnosticSpec(message: "expected ')' to end parameter clause", fixIts: ["insert ')'"])
+        DiagnosticSpec(
+          message: "expected ')' to end parameter clause",
+          notes: [NoteSpec(message: "to match this opening '('")],
+          fixIts: ["insert ')'"]
+        )
       ],
       fixedSource: """
         func test(first second: Int)
@@ -814,15 +839,31 @@ final class DeclarationTests: XCTestCase {
   func testExpressionMember() {
     assertParse(
       """
-      struct S {1️⃣
-        /2️⃣ ###line 25 "line-directive.swift"3️⃣
-      4️⃣}
+      struct S 1️⃣{2️⃣
+        3️⃣/4️⃣ ###line 25 "line-directive.swift"5️⃣
+      6️⃣}
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '}' to end struct", fixIts: ["insert '}'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "bare slash regex literal may not start with space"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected '/' to end regex literal", fixIts: ["insert '/\'"]),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "extraneous brace at top level"),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected '}' to end struct",
+          notes: [NoteSpec(locationMarker: "1️⃣", message: "to match this opening '{'")],
+          fixIts: ["insert '}'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "bare slash regex literal may not start with space"
+        ),
+        DiagnosticSpec(
+          locationMarker: "5️⃣",
+          message: "expected '/' to end regex literal",
+          notes: [NoteSpec(locationMarker: "3️⃣", message: "to match this opening '/'")],
+          fixIts: ["insert '/\'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "6️⃣",
+          message: "extraneous brace at top level"
+        ),
       ],
       fixedSource: """
         struct S {
@@ -915,7 +956,7 @@ final class DeclarationTests: XCTestCase {
 
   func testDontRecoverFromDeclKeyword() {
     assertParse(
-      "func foo(first second 1️⃣third 2️⃣struct3️⃣: Int4️⃣) {}",
+      "func fooℹ️(first second 1️⃣third 2️⃣struct3️⃣: Int4️⃣) {}",
       substructure: Syntax(
         FunctionParameterSyntax(
           firstName: .identifier("first"),
@@ -925,10 +966,26 @@ final class DeclarationTests: XCTestCase {
         )
       ),
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' in parameter", fixIts: ["insert ':'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end parameter clause", fixIts: ["insert ')'"]),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected identifier in struct", fixIts: ["insert identifier"]),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "unexpected code ')' in struct"),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected ':' in parameter",
+          fixIts: ["insert ':'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected ')' to end parameter clause",
+          notes: [NoteSpec(message: "to match this opening '('")],
+          fixIts: ["insert ')'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "expected identifier in struct",
+          fixIts: ["insert identifier"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "unexpected code ')' in struct"
+        ),
       ],
       fixedSource: """
         func foo(first second: third)struct <#identifier#>: Int) {}
@@ -975,9 +1032,21 @@ final class DeclarationTests: XCTestCase {
         )
       ),
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' in parameter", fixIts: ["insert ':'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ']' to end array type", fixIts: ["insert ']'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code 'fourth: Int' in parameter clause"),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected ':' in parameter",
+          fixIts: ["insert ':'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected ']' to end array type",
+          notes: [NoteSpec(locationMarker: "1️⃣", message: "to match this opening '['")],
+          fixIts: ["insert ']'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "unexpected code 'fourth: Int' in parameter clause"
+        ),
       ],
       fixedSource: """
         func foo(first second: [third]fourth: Int) {}
@@ -988,7 +1057,7 @@ final class DeclarationTests: XCTestCase {
   func testDontRecoverIfNewlineIsBeforeColon() {
     assertParse(
       """
-      func foo(first second 1️⃣third2️⃣
+      func fooℹ️(first second 1️⃣third2️⃣
       3️⃣: Int) {}
       """,
       substructure: Syntax(
@@ -1000,9 +1069,21 @@ final class DeclarationTests: XCTestCase {
         )
       ),
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' in parameter", fixIts: ["insert ':'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end parameter clause", fixIts: ["insert ')'"]),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous code ': Int) {}' at top level"),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected ':' in parameter",
+          fixIts: ["insert ':'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected ')' to end parameter clause",
+          notes: [NoteSpec(message: "to match this opening '('")],
+          fixIts: ["insert ')'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "extraneous code ': Int) {}' at top level"
+        ),
       ],
       fixedSource: """
         func foo(first second: third)
@@ -1261,13 +1342,30 @@ final class DeclarationTests: XCTestCase {
   func testStandaloneAtSignInGenericParameter() {
     assertParse(
       """
-      struct U<@1️⃣
+      struct U1️⃣<@2️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected name in attribute", fixIts: ["insert name"]),
-        DiagnosticSpec(message: "expected name in generic parameter", fixIts: ["insert name"]),
-        DiagnosticSpec(message: "expected '>' to end generic parameter clause", fixIts: ["insert '>'"]),
-        DiagnosticSpec(message: "expected member block in struct", fixIts: ["insert member block"]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected name in attribute",
+          fixIts: ["insert name"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected name in generic parameter",
+          fixIts: ["insert name"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected '>' to end generic parameter clause",
+          notes: [NoteSpec(locationMarker: "1️⃣", message: "to match this opening '<'")],
+          fixIts: ["insert '>'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected member block in struct",
+          fixIts: ["insert member block"]
+        ),
       ],
       fixedSource: """
         struct U<@<#type#> <#identifier#>> {

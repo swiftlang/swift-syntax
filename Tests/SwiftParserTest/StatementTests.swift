@@ -697,10 +697,14 @@ final class StatementTests: XCTestCase {
     // https://github.com/apple/swift-syntax/issues/1247
     assertParse(
       """
-      if p{""1️⃣
+      if pℹ️{""1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '}' to end 'if' statement", fixIts: ["insert '}'"])
+        DiagnosticSpec(
+          message: "expected '}' to end 'if' statement",
+          notes: [NoteSpec(message: "to match this opening '{'")],
+          fixIts: ["insert '}'"]
+        )
       ],
       fixedSource: """
         if p{""
@@ -712,13 +716,30 @@ final class StatementTests: XCTestCase {
   func testRecoveryInFrontOfAccessorIntroducer() {
     assertParse(
       """
-      subscript(1️⃣{2️⃣@self _modify
+      subscript1️⃣(2️⃣{3️⃣@self _modify
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ')' to end parameter clause", fixIts: ["insert ')'"]),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '->' and return type in subscript", fixIts: ["insert '->' and return type"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end subscript", fixIts: ["insert '}'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code '@self _modify' at top level"),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected ')' to end parameter clause",
+          notes: [NoteSpec(locationMarker: "1️⃣", message: "to match this opening '('")],
+          fixIts: ["insert ')'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected '->' and return type in subscript",
+          fixIts: ["insert '->' and return type"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "expected '}' to end subscript",
+          notes: [NoteSpec(locationMarker: "2️⃣", message: "to match this opening '{'")],
+          fixIts: ["insert '}'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "extraneous code '@self _modify' at top level"
+        ),
       ],
       fixedSource: """
         subscript() -> <#type#> {

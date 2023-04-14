@@ -75,10 +75,14 @@ final class RegexLiteralTests: XCTestCase {
   func testUnterminated2() {
     assertParse(
       #"""
-      /1️⃣
+      ℹ️/1️⃣
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "expected '/' to end regex literal", fixIts: ["insert '/'"])
+        DiagnosticSpec(
+          message: "expected '/' to end regex literal",
+          notes: [NoteSpec(message: "to match this opening '/'")],
+          fixIts: ["insert '/'"]
+        )
       ],
       fixedSource: #"""
         //
@@ -117,10 +121,14 @@ final class RegexLiteralTests: XCTestCase {
   func testUnterminated5() {
     assertParse(
       #"""
-      #//1️⃣
+      ℹ️#//1️⃣
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "expected '#' to end regex literal", fixIts: ["insert '#'"])
+        DiagnosticSpec(
+          message: "expected '#' to end regex literal",
+          notes: [NoteSpec(message: "to match this opening '#'")],
+          fixIts: ["insert '#'"]
+        )
       ],
       fixedSource: #"""
         #//#
@@ -131,10 +139,14 @@ final class RegexLiteralTests: XCTestCase {
   func testUnterminated6() {
     assertParse(
       #"""
-      #///1️⃣
+      ℹ️#///1️⃣
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "expected '#' to end regex literal", fixIts: ["insert '#'"])
+        DiagnosticSpec(
+          message: "expected '#' to end regex literal",
+          notes: [NoteSpec(message: "to match this opening '#'")],
+          fixIts: ["insert '#'"]
+        )
       ],
       fixedSource: #"""
         #///#
@@ -145,7 +157,7 @@ final class RegexLiteralTests: XCTestCase {
   func testUnterminated7() {
     assertParse(
       #"""
-      #/#1️⃣
+      ℹ️#/#1️⃣
       """#,
       diagnostics: [
         DiagnosticSpec(message: "expected '/#' to end regex literal", fixIts: ["insert '/#'"])
@@ -173,10 +185,14 @@ final class RegexLiteralTests: XCTestCase {
   func testUnterminated9() {
     assertParse(
       #"""
-      #/##/1️⃣
+      ℹ️#/##/1️⃣
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "expected '#' to end regex literal", fixIts: ["insert '#'"])
+        DiagnosticSpec(
+          message: "expected '#' to end regex literal",
+          notes: [NoteSpec(message: "to match this opening '#'")],
+          fixIts: ["insert '#'"]
+        )
       ],
       fixedSource: #"""
         #/##/#

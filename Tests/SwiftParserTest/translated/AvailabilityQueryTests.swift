@@ -353,12 +353,19 @@ final class AvailabilityQueryTests: XCTestCase {
   func testAvailabilityQuery27() {
     assertParse(
       """
-      if #available(OSX 10.51, 1️⃣{
+      if #availableℹ️(OSX 10.51, 1️⃣{
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected version restriction in availability argument", fixIts: ["insert version restriction"]),
-        DiagnosticSpec(message: "expected ')' to end availability condition", fixIts: ["insert ')'"]),
+        DiagnosticSpec(
+          message: "expected version restriction in availability argument",
+          fixIts: ["insert version restriction"]
+        ),
+        DiagnosticSpec(
+          message: "expected ')' to end availability condition",
+          notes: [NoteSpec(message: "to match this opening '('")],
+          fixIts: ["insert ')'"]
+        ),
       ],
       fixedSource: """
         if #available(OSX 10.51, <#identifier#>) {

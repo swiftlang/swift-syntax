@@ -94,12 +94,24 @@ final class TypeTests: XCTestCase {
     )
 
     assertParse(
-      "{[1️⃣class]in2️⃣",
+      "ℹ️{[1️⃣class]in2️⃣",
       { ExprSyntax.parse(from: &$0) },
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in closure capture item", fixIts: ["insert identifier"]),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected 'class' keyword in closure capture signature"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end closure", fixIts: ["insert '}'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected identifier in closure capture item",
+          fixIts: ["insert identifier"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "unexpected 'class' keyword in closure capture signature"
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected '}' to end closure",
+          notes: [NoteSpec(message: "to match this opening '{'")],
+          fixIts: ["insert '}'"]
+        ),
       ],
       fixedSource: """
         {[<#identifier#>class]in

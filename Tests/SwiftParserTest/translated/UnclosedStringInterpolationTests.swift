@@ -26,10 +26,14 @@ final class UnclosedStringInterpolationTests: XCTestCase {
   func testUnclosedStringInterpolation2() {
     assertParse(
       ##"""
-      _ = "mid == \(pete1️⃣"
+      _ = "mid == \ℹ️(pete1️⃣"
       """##,
       diagnostics: [
-        DiagnosticSpec(message: "expected ')' in string literal", fixIts: ["insert ')'"])
+        DiagnosticSpec(
+          message: "expected ')' in string literal",
+          notes: [NoteSpec(message: "to match this opening '('")],
+          fixIts: ["insert ')'"]
+        )
       ],
       fixedSource: ##"""
         _ = "mid == \(pete)"
@@ -40,12 +44,27 @@ final class UnclosedStringInterpolationTests: XCTestCase {
   func testUnclosedStringInterpolation3() {
     assertParse(
       ##"""
-      let theGoat = "kanye \("1️⃣
+      let theGoat = 1️⃣"kanye \2️⃣(3️⃣"4️⃣
       """##,
       diagnostics: [
-        DiagnosticSpec(message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
-        DiagnosticSpec(message: "expected ')' in string literal", fixIts: ["insert ')'"]),
-        DiagnosticSpec(message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: #"expected '"' to end string literal"#,
+          notes: [NoteSpec(locationMarker: "3️⃣", message: #"to match this opening '"'"#)],
+          fixIts: [#"insert '"'"#]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "expected ')' in string literal",
+          notes: [NoteSpec(locationMarker: "2️⃣", message: "to match this opening '('")],
+          fixIts: ["insert ')'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: #"expected '"' to end string literal"#,
+          notes: [NoteSpec(locationMarker: "1️⃣", message: #"to match this opening '"'"#)],
+          fixIts: [#"insert '"'"#]
+        ),
       ],
       fixedSource: ##"""
         let theGoat = "kanye \("")"
@@ -56,24 +75,33 @@ final class UnclosedStringInterpolationTests: XCTestCase {
   func testUnclosedStringInterpolation4() {
     assertParse(
       ##"""
-      let equation1 = "2 + 2 = \(2 + 21️⃣"
+      let equation1 = "2 + 2 = \ℹ️(2 + 21️⃣"
       """##,
       diagnostics: [
-        DiagnosticSpec(message: "expected ')' in string literal", fixIts: ["insert ')'"])
+        DiagnosticSpec(
+          message: "expected ')' in string literal",
+          notes: [NoteSpec(message: "to match this opening '('")],
+          fixIts: ["insert ')'"]
+        )
       ],
       fixedSource: ##"""
         let equation1 = "2 + 2 = \(2 + 2)"
         """##
+
     )
   }
 
   func testUnclosedStringInterpolation5() {
     assertParse(
       ##"""
-      let s = "\(x1️⃣"; print(x)
+      let s = "\ℹ️(x1️⃣"; print(x)
       """##,
       diagnostics: [
-        DiagnosticSpec(message: "expected ')' in string literal", fixIts: ["insert ')'"])
+        DiagnosticSpec(
+          message: "expected ')' in string literal",
+          notes: [NoteSpec(message: "to match this opening '('")],
+          fixIts: ["insert ')'"]
+        )
       ],
       fixedSource: ##"""
         let s = "\(x)"; print(x)
@@ -84,11 +112,19 @@ final class UnclosedStringInterpolationTests: XCTestCase {
   func testUnclosedStringInterpolation6() {
     assertParse(
       ##"""
-      let zzz = "\(x1️⃣; print(x)2️⃣
+      let zzz = ℹ️"\(x1️⃣; print(x)2️⃣
       """##,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '; print(x' in string literal"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "unexpected code '; print(x' in string literal"
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: #"expected '"' to end string literal"#,
+          notes: [NoteSpec(message: #"to match this opening '"'"#)],
+          fixIts: [#"insert '"'"#]
+        ),
       ],
       fixedSource: ##"""
         let zzz = "\(x; print(x)"
@@ -99,11 +135,21 @@ final class UnclosedStringInterpolationTests: XCTestCase {
   func testUnclosedStringInterpolation7() {
     assertParse(
       ##"""
-      let goatedAlbum = "The Life Of \("Pablo"1️⃣
+      let goatedAlbum = 1️⃣"The Life Of \2️⃣("Pablo"3️⃣
       """##,
       diagnostics: [
-        DiagnosticSpec(message: "expected ')' in string literal", fixIts: ["insert ')'"]),
-        DiagnosticSpec(message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "expected ')' in string literal",
+          notes: [NoteSpec(locationMarker: "2️⃣", message: "to match this opening '('")],
+          fixIts: ["insert ')'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: #"expected '"' to end string literal"#,
+          notes: [NoteSpec(locationMarker: "1️⃣", message: #"to match this opening '"'"#)],
+          fixIts: [#"insert '"'"#]
+        ),
       ],
       fixedSource: ##"""
         let goatedAlbum = "The Life Of \("Pablo")"
@@ -114,14 +160,29 @@ final class UnclosedStringInterpolationTests: XCTestCase {
   func testUnclosedStringInterpolation8() {
     assertParse(
       ##"""
-      _ = """
-      \(
-      """1️⃣
+      _ = 1️⃣"""
+      \2️⃣(
+      3️⃣"""4️⃣
       """##,
       diagnostics: [
-        DiagnosticSpec(message: #"expected '"""' to end string literal"#, fixIts: [#"insert '"""'"#]),
-        DiagnosticSpec(message: "expected ')' in string literal", fixIts: ["insert ')'"]),
-        DiagnosticSpec(message: #"expected '"""' to end string literal"#, fixIts: [#"insert '"""'"#]),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: #"expected '"""' to end string literal"#,
+          notes: [NoteSpec(locationMarker: "3️⃣", message: #"to match this opening '"""'"#)],
+          fixIts: [#"insert '"""'"#]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "expected ')' in string literal",
+          notes: [NoteSpec(locationMarker: "2️⃣", message: "to match this opening '('")],
+          fixIts: ["insert ')'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: #"expected '"""' to end string literal"#,
+          notes: [NoteSpec(locationMarker: "1️⃣", message: #"to match this opening '"""'"#)],
+          fixIts: [#"insert '"""'"#]
+        ),
       ],
       fixedSource: ##"""
         _ = """
@@ -134,11 +195,19 @@ final class UnclosedStringInterpolationTests: XCTestCase {
   func testSkipUnexpectedOpeningParensInStringLiteral() {
     assertParse(
       #"""
-      "\(e 1️⃣H()r2️⃣
+      ℹ️"\(e 1️⃣H()r2️⃣
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code 'H(' in string literal"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "unexpected code 'H(' in string literal"
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: #"expected '"' to end string literal"#,
+          notes: [NoteSpec(message: #"to match this opening '"'"#)],
+          fixIts: [#"insert '"'"#]
+        ),
       ],
       fixedSource: #"""
         "\(e H()r"
@@ -149,12 +218,27 @@ final class UnclosedStringInterpolationTests: XCTestCase {
   func testUnterminatedStringLiteralInInterpolation() {
     assertParse(
       #"""
-      "\("1️⃣
+      1️⃣"\2️⃣(3️⃣"4️⃣
       """#,
       diagnostics: [
-        DiagnosticSpec(message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
-        DiagnosticSpec(message: "expected ')' in string literal", fixIts: ["insert ')'"]),
-        DiagnosticSpec(message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: #"expected '"' to end string literal"#,
+          notes: [NoteSpec(locationMarker: "3️⃣", message: #"to match this opening '"'"#)],
+          fixIts: [#"insert '"'"#]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "expected ')' in string literal",
+          notes: [NoteSpec(locationMarker: "2️⃣", message: "to match this opening '('")],
+          fixIts: ["insert ')'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: #"expected '"' to end string literal"#,
+          notes: [NoteSpec(locationMarker: "1️⃣", message: #"to match this opening '"'"#)],
+          fixIts: [#"insert '"'"#]
+        ),
       ],
       fixedSource: #"""
         "\("")"

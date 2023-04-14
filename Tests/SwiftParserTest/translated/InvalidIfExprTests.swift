@@ -42,11 +42,15 @@ final class InvalidIfExprTests: XCTestCase {
   func testInvalidIfExpr3() {
     assertParse(
       """
-      (a ? b ? c : d1️⃣
+      ℹ️(a ? b ? c : d1️⃣
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected ':' and expression after '? ...' in ternary expression", fixIts: ["insert ':' and expression"]),
-        DiagnosticSpec(message: "expected ')' to end tuple", fixIts: ["insert ')'"]),
+        DiagnosticSpec(
+          message: "expected ')' to end tuple",
+          notes: [NoteSpec(message: "to match this opening '('")],
+          fixIts: ["insert ')'"]
+        ),
       ],
       fixedSource: "(a ? b ? c : d: <#expression#>)"
     )

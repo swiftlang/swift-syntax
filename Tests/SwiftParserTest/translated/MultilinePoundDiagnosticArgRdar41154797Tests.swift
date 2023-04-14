@@ -18,11 +18,21 @@ final class MultilinePoundDiagnosticArgRdar41154797Tests: XCTestCase {
   func testMultilinePoundDiagnosticArgRdar411547971() {
     assertParse(
       ##"""
-      #error("""1️⃣
+      #error1️⃣(2️⃣"""3️⃣
       """##,
       diagnostics: [
-        DiagnosticSpec(message: #"expected '"""' to end string literal"#, fixIts: [#"insert '"""'"#]),
-        DiagnosticSpec(message: "expected ')' to end macro expansion", fixIts: ["insert ')'"]),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: #"expected '"""' to end string literal"#,
+          notes: [NoteSpec(locationMarker: "2️⃣", message: #"to match this opening '"""'"#)],
+          fixIts: [#"insert '"""'"#]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "expected ')' to end macro expansion",
+          notes: [NoteSpec(locationMarker: "1️⃣", message: "to match this opening '('")],
+          fixIts: ["insert ')'"]
+        ),
       ],
       fixedSource: ##"""
         #error("""""")

@@ -21,7 +21,10 @@ final class ActorTests: XCTestCase {
       actor MyActor11️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected member block in actor", fixIts: ["insert member block"])
+        DiagnosticSpec(
+          message: "expected member block in actor",
+          fixIts: ["insert member block"]
+        )
       ],
       fixedSource: """
         actor MyActor1 {

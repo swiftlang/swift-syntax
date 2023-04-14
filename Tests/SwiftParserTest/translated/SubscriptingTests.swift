@@ -427,7 +427,7 @@ final class SubscriptingTests: XCTestCase {
   func testSubscripting21() {
     assertParse(
       """
-      struct A8 {
+      struct A8 ℹ️{
         subscript(i : Int) -> Int1️⃣
           get {
             return stored
@@ -438,8 +438,17 @@ final class SubscriptingTests: XCTestCase {
         }2️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' in subscript", fixIts: ["insert '{'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end struct", fixIts: ["insert '}'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '{' in subscript",
+          fixIts: ["insert '{'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected '}' to end struct",
+          notes: [NoteSpec(message: "to match this opening '{'")],
+          fixIts: ["insert '}'"]
+        ),
       ],
       fixedSource: """
         struct A8 {

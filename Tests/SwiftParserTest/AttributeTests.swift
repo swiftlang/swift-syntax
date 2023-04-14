@@ -18,13 +18,20 @@ final class AttributeTests: XCTestCase {
   func testMissingArgumentToAttribute() {
     assertParse(
       """
-      @_dynamicReplacement(1️⃣
+      @_dynamicReplacementℹ️(1️⃣
       func 2️⃣test_dynamic_replacement_for2() {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected argument for '@_dynamicReplacement' attribute", fixIts: ["insert attribute argument"]),
-        DiagnosticSpec(message: "expected ')' to end attribute", fixIts: ["insert ')'"]),
+        DiagnosticSpec(
+          message: "expected argument for '@_dynamicReplacement' attribute",
+          fixIts: ["insert attribute argument"]
+        ),
+        DiagnosticSpec(
+          message: "expected ')' to end attribute",
+          notes: [NoteSpec(message: "to match this opening '('")],
+          fixIts: ["insert ')'"]
+        ),
       ],
       fixedSource: """
         @_dynamicReplacement(for: <#identifier#>)
@@ -37,14 +44,23 @@ final class AttributeTests: XCTestCase {
   func testMissingGenericTypeToAttribute() {
     assertParse(
       """
-      @differentiable(reverse wrt1️⃣,where T2️⃣
+      @differentiableℹ️(reverse wrt1️⃣,where T2️⃣
       func podcastPlaybackSpeed() {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' and parameters in '@differentiable' argument", fixIts: ["insert ':' and parameters"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected ':' and parameters in '@differentiable' argument",
+          fixIts: ["insert ':' and parameters"]
+        ),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected ':' or '==' to indicate a conformance or same-type requirement"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end attribute", fixIts: ["insert ')'"]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected ')' to end attribute",
+          notes: [NoteSpec(message: "to match this opening '('")],
+          fixIts: ["insert ')'"]
+        ),
       ],
       fixedSource: """
         @differentiable(reverse wrt: <#identifier#>,where T)
@@ -57,12 +73,22 @@ final class AttributeTests: XCTestCase {
   func testMissingClosingParenToAttribute() {
     assertParse(
       """
-      @_specialize(e1️⃣
+      @_specializeℹ️(e1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ':' in attribute argument", fixIts: ["insert ':'"]),
-        DiagnosticSpec(message: "expected ')' to end attribute", fixIts: ["insert ')'"]),
-        DiagnosticSpec(message: "expected declaration after attribute", fixIts: ["insert declaration"]),
+        DiagnosticSpec(
+          message: "expected ':' in attribute argument",
+          fixIts: ["insert ':'"]
+        ),
+        DiagnosticSpec(
+          message: "expected ')' to end attribute",
+          notes: [NoteSpec(message: "to match this opening '('")],
+          fixIts: ["insert ')'"]
+        ),
+        DiagnosticSpec(
+          message: "expected declaration after attribute",
+          fixIts: ["insert declaration"]
+        ),
       ],
       fixedSource: """
         @_specialize(e:) <#declaration#>

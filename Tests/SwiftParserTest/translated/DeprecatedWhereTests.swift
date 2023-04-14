@@ -158,14 +158,34 @@ final class DeprecatedWhereTests: XCTestCase {
   func testDeprecatedWhere12() {
     assertParse(
       """
-      func testCombinedConstraintsOld<T: 2️⃣protocol3️⃣<ProtoA, ProtoB> where T: ProtoC4️⃣>(x: T) {}
+      func testCombinedConstraintsOldℹ️<T: 2️⃣protocol3️⃣<ProtoA, ProtoB> where T: ProtoC4️⃣>(x: T) {}
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected inherited type in generic parameter", fixIts: ["insert inherited type"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '>' to end generic parameter clause", fixIts: ["insert '>'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature", fixIts: ["insert parameter clause"]),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected identifier in protocol", fixIts: ["insert identifier"]),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "unexpected code '>(x: T)' in protocol"),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected inherited type in generic parameter",
+          fixIts: ["insert inherited type"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected '>' to end generic parameter clause",
+          notes: [NoteSpec(message: "to match this opening '<'")],
+          fixIts: ["insert '>'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected parameter clause in function signature",
+          fixIts: ["insert parameter clause"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "expected identifier in protocol",
+          fixIts: ["insert identifier"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "unexpected code '>(x: T)' in protocol"
+        ),
       ],
       fixedSource: """
         func testCombinedConstraintsOld<T: <#type#>>()protocol <#identifier#><ProtoA, ProtoB> where T: ProtoC>(x: T) {}
@@ -176,14 +196,34 @@ final class DeprecatedWhereTests: XCTestCase {
   func testDeprecatedWhere13() {
     assertParse(
       """
-      func testCombinedConstraintsOld<T: 2️⃣protocol3️⃣<ProtoA, ProtoB> where T: ProtoC4️⃣>(x: T) where T: ProtoD {}
+      func testCombinedConstraintsOldℹ️<T: 2️⃣protocol3️⃣<ProtoA, ProtoB> where T: ProtoC4️⃣>(x: T) where T: ProtoD {}
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected inherited type in generic parameter", fixIts: ["insert inherited type"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '>' to end generic parameter clause", fixIts: ["insert '>'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature", fixIts: ["insert parameter clause"]),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected identifier in protocol", fixIts: ["insert identifier"]),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "unexpected code '>(x: T) where T: ProtoD' in protocol"),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected inherited type in generic parameter",
+          fixIts: ["insert inherited type"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected '>' to end generic parameter clause",
+          notes: [NoteSpec(message: "to match this opening '<'")],
+          fixIts: ["insert '>'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected parameter clause in function signature",
+          fixIts: ["insert parameter clause"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "expected identifier in protocol",
+          fixIts: ["insert identifier"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "unexpected code '>(x: T) where T: ProtoD' in protocol"
+        ),
       ],
       fixedSource: """
         func testCombinedConstraintsOld<T: <#type#>>()protocol <#identifier#><ProtoA, ProtoB> where T: ProtoC>(x: T) where T: ProtoD {}

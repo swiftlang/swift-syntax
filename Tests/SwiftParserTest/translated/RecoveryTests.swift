@@ -47,17 +47,36 @@ final class RecoveryTests: XCTestCase {
     assertParse(
       """
       func useContainer() -> () {
-        var a : Container<not 1️⃣a2️⃣ type [skip 3️⃣this greater: >] >4️⃣, b : Int
+        var a : Containerℹ️<not 1️⃣a2️⃣ type [skip 3️⃣this greater: >] >4️⃣, b : Int
         b = 5 // no-warning
         a.exists()
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '>' to end generic argument clause", fixIts: ["insert '>'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code 'this greater: >' in subscript"),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "expected expression after operator", fixIts: ["insert expression"]),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "unexpected code in function"),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '>' to end generic argument clause",
+          notes: [NoteSpec(message: "to match this opening '<'")],
+          fixIts: ["insert '>'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "consecutive statements on a line must be separated by ';'",
+          fixIts: ["insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "unexpected code 'this greater: >' in subscript"
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "expected expression after operator",
+          fixIts: ["insert expression"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "unexpected code in function"
+        ),
       ],
       fixedSource: """
         func useContainer() -> () {
@@ -1063,12 +1082,16 @@ final class RecoveryTests: XCTestCase {
     assertParse(
       """
       struct ErrorTypeInVarDecl3 {
-        var v1 : Int< 1️⃣
+        var v1 : Intℹ️< 1️⃣
         var v2 : Int
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '>' to end generic argument clause", fixIts: ["insert '>'"])
+        DiagnosticSpec(
+          message: "expected '>' to end generic argument clause",
+          notes: [NoteSpec(message: "to match this opening '<'")],
+          fixIts: ["insert '>'"]
+        )
       ],
       fixedSource: """
         struct ErrorTypeInVarDecl3 {
@@ -1083,12 +1106,16 @@ final class RecoveryTests: XCTestCase {
     assertParse(
       """
       struct ErrorTypeInVarDecl4 {
-        var v1 : Int<1️⃣,
+        var v1 : Intℹ️<1️⃣,
         var v2 : Int
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '>' to end generic argument clause", fixIts: ["insert '>'"])
+        DiagnosticSpec(
+          message: "expected '>' to end generic argument clause",
+          notes: [NoteSpec(message: "to match this opening '<'")],
+          fixIts: ["insert '>'"]
+        )
       ],
       fixedSource: """
         struct ErrorTypeInVarDecl4 {
@@ -1103,12 +1130,16 @@ final class RecoveryTests: XCTestCase {
     assertParse(
       """
       struct ErrorTypeInVarDecl5 {
-        var v1 : Int<Int 1️⃣
+        var v1 : Intℹ️<Int 1️⃣
         var v2 : Int
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '>' to end generic argument clause", fixIts: ["insert '>'"])
+        DiagnosticSpec(
+          message: "expected '>' to end generic argument clause",
+          notes: [NoteSpec(message: "to match this opening '<'")],
+          fixIts: ["insert '>'"]
+        )
       ],
       fixedSource: """
         struct ErrorTypeInVarDecl5 {
@@ -1151,13 +1182,20 @@ final class RecoveryTests: XCTestCase {
     assertParse(
       """
       struct ErrorTypeInVarDecl7 {
-        var v1 : Int<Int, 1️⃣
+        var v1 : Intℹ️<Int, 1️⃣
         var v2 : Int
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected type in generic argument", fixIts: ["insert type"]),
-        DiagnosticSpec(message: "expected '>' to end generic argument clause", fixIts: ["insert '>'"]),
+        DiagnosticSpec(
+          message: "expected type in generic argument",
+          fixIts: ["insert type"]
+        ),
+        DiagnosticSpec(
+          message: "expected '>' to end generic argument clause",
+          notes: [NoteSpec(message: "to match this opening '<'")],
+          fixIts: ["insert '>'"]
+        ),
       ],
       fixedSource: """
         struct ErrorTypeInVarDecl7 {
@@ -1245,11 +1283,18 @@ final class RecoveryTests: XCTestCase {
   func testRecovery87() {
     assertParse(
       """
-      struct ErrorGenericParameterList1<1️⃣
+      struct ErrorGenericParameterList1ℹ️<1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '>' to end generic parameter clause", fixIts: ["insert '>'"]),
-        DiagnosticSpec(message: "expected member block in struct", fixIts: ["insert member block"]),
+        DiagnosticSpec(
+          message: "expected '>' to end generic parameter clause",
+          notes: [NoteSpec(message: "to match this opening '<'")],
+          fixIts: ["insert '>'"]
+        ),
+        DiagnosticSpec(
+          message: "expected member block in struct",
+          fixIts: ["insert member block"]
+        ),
       ],
       fixedSource: """
         struct ErrorGenericParameterList1< > {
@@ -1261,12 +1306,22 @@ final class RecoveryTests: XCTestCase {
   func testRecovery87b() {
     assertParse(
       """
-      struct ErrorGenericParameterList1<each1️⃣
+      struct ErrorGenericParameterList1ℹ️<each1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected name in generic parameter", fixIts: ["insert name"]),
-        DiagnosticSpec(message: "expected '>' to end generic parameter clause", fixIts: ["insert '>'"]),
-        DiagnosticSpec(message: "expected member block in struct", fixIts: ["insert member block"]),
+        DiagnosticSpec(
+          message: "expected name in generic parameter",
+          fixIts: ["insert name"]
+        ),
+        DiagnosticSpec(
+          message: "expected '>' to end generic parameter clause",
+          notes: [NoteSpec(message: "to match this opening '<'")],
+          fixIts: ["insert '>'"]
+        ),
+        DiagnosticSpec(
+          message: "expected member block in struct",
+          fixIts: ["insert member block"]
+        ),
       ],
       fixedSource: """
         struct ErrorGenericParameterList1<each <#identifier#>> {
@@ -1278,11 +1333,18 @@ final class RecoveryTests: XCTestCase {
   func testRecovery88() {
     assertParse(
       """
-      struct ErrorGenericParameterList2<T1️⃣
+      struct ErrorGenericParameterList2ℹ️<T1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '>' to end generic parameter clause", fixIts: ["insert '>'"]),
-        DiagnosticSpec(message: "expected member block in struct", fixIts: ["insert member block"]),
+        DiagnosticSpec(
+          message: "expected '>' to end generic parameter clause",
+          notes: [NoteSpec(message: "to match this opening '<'")],
+          fixIts: ["insert '>'"]
+        ),
+        DiagnosticSpec(
+          message: "expected member block in struct",
+          fixIts: ["insert member block"]
+        ),
       ],
       fixedSource: """
         struct ErrorGenericParameterList2<T> {
@@ -1294,12 +1356,22 @@ final class RecoveryTests: XCTestCase {
   func testRecovery89() {
     assertParse(
       """
-      struct ErrorGenericParameterList3<T,1️⃣
+      struct ErrorGenericParameterList3ℹ️<T,1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected generic parameter in generic parameter clause", fixIts: ["insert generic parameter"]),
-        DiagnosticSpec(message: "expected '>' to end generic parameter clause", fixIts: ["insert '>'"]),
-        DiagnosticSpec(message: "expected member block in struct", fixIts: ["insert member block"]),
+        DiagnosticSpec(
+          message: "expected generic parameter in generic parameter clause",
+          fixIts: ["insert generic parameter"]
+        ),
+        DiagnosticSpec(
+          message: "expected '>' to end generic parameter clause",
+          notes: [NoteSpec(message: "to match this opening '<'")],
+          fixIts: ["insert '>'"]
+        ),
+        DiagnosticSpec(
+          message: "expected member block in struct",
+          fixIts: ["insert member block"]
+        ),
       ],
       fixedSource: """
         struct ErrorGenericParameterList3<T, <#identifier#>> {
@@ -1312,12 +1384,16 @@ final class RecoveryTests: XCTestCase {
     // Note: Don't move braces to a different line here.
     assertParse(
       """
-      struct ErrorGenericParameterList4<1️⃣
+      struct ErrorGenericParameterList4ℹ️<1️⃣
       {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '>' to end generic parameter clause", fixIts: ["insert '>'"])
+        DiagnosticSpec(
+          message: "expected '>' to end generic parameter clause",
+          notes: [NoteSpec(message: "to match this opening '<'")],
+          fixIts: ["insert '>'"]
+        )
       ],
       fixedSource: """
         struct ErrorGenericParameterList4< >
@@ -1331,12 +1407,16 @@ final class RecoveryTests: XCTestCase {
     // Note: Don't move braces to a different line here.
     assertParse(
       """
-      struct ErrorGenericParameterList5<T 1️⃣
+      struct ErrorGenericParameterList5ℹ️<T 1️⃣
       {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '>' to end generic parameter clause", fixIts: ["insert '>'"])
+        DiagnosticSpec(
+          message: "expected '>' to end generic parameter clause",
+          notes: [NoteSpec(message: "to match this opening '<'")],
+          fixIts: ["insert '>'"]
+        )
       ],
       fixedSource: """
         struct ErrorGenericParameterList5<T>
@@ -1350,13 +1430,20 @@ final class RecoveryTests: XCTestCase {
     // Note: Don't move braces to a different line here.
     assertParse(
       """
-      struct ErrorGenericParameterList6<T, 1️⃣
+      struct ErrorGenericParameterList6ℹ️<T, 1️⃣
       {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected generic parameter in generic parameter clause", fixIts: ["insert generic parameter"]),
-        DiagnosticSpec(message: "expected '>' to end generic parameter clause", fixIts: ["insert '>'"]),
+        DiagnosticSpec(
+          message: "expected generic parameter in generic parameter clause",
+          fixIts: ["insert generic parameter"]
+        ),
+        DiagnosticSpec(
+          message: "expected '>' to end generic parameter clause",
+          notes: [NoteSpec(message: "to match this opening '<'")],
+          fixIts: ["insert '>'"]
+        ),
       ],
       fixedSource: """
         struct ErrorGenericParameterList6<T, <#identifier#>>
@@ -1412,10 +1499,14 @@ final class RecoveryTests: XCTestCase {
   func testRecovery98b() {
     assertParse(
       """
-      let a2: Set<Int1️⃣]>
+      let a2: Setℹ️<Int1️⃣]>
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '>' to end generic argument clause", fixIts: ["insert '>'"]),
+        DiagnosticSpec(
+          message: "expected '>' to end generic argument clause",
+          notes: [NoteSpec(message: "to match this opening '<'")],
+          fixIts: ["insert '>'"]
+        ),
         DiagnosticSpec(message: "extraneous code ']>' at top level"),
       ],
       fixedSource: """
@@ -1491,20 +1582,37 @@ final class RecoveryTests: XCTestCase {
   func testRecovery100() {
     assertParse(
       """
-      struct ErrorInFunctionSignatureResultArrayType1 {
-        func foo() -> Int1️⃣[ {
+      struct ErrorInFunctionSignatureResultArrayType1 1️⃣{
+        func foo() -> Int2️⃣[ {
           return [0]
-        }  2️⃣
-        func bar() -> Int3️⃣] {
+        }  3️⃣
+        func bar() -> Int4️⃣] {
           return [0]
         }
-      4️⃣}
+      5️⃣}
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '}' to end struct", fixIts: ["insert '}'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ']' to end array", fixIts: ["insert ']'"]),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected ']' in type; did you mean to write an array type?", fixIts: ["insert '['"]),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "extraneous brace at top level"),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected '}' to end struct",
+          notes: [NoteSpec(locationMarker: "1️⃣", message: "to match this opening '{'")],
+          fixIts: ["insert '}'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "expected ']' to end array",
+          notes: [NoteSpec(locationMarker: "2️⃣", message: "to match this opening '['")],
+          fixIts: ["insert ']'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "unexpected ']' in type; did you mean to write an array type?",
+          fixIts: ["insert '['"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "5️⃣",
+          message: "extraneous brace at top level"
+        ),
       ],
       fixedSource: """
         struct ErrorInFunctionSignatureResultArrayType1 {
@@ -1523,18 +1631,31 @@ final class RecoveryTests: XCTestCase {
   func testRecovery101() {
     assertParse(
       """
-      struct ErrorInFunctionSignatureResultArrayType2 {
-        func foo() -> Int1️⃣[0 {
+      struct ErrorInFunctionSignatureResultArrayType2 1️⃣{
+        func foo() -> Int2️⃣[0 {
           return [0]
-        }2️⃣
-      3️⃣}
+        }3️⃣
+      4️⃣}
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: expected ']' in array type
         // TODO: Old parser expected note on line 2: to match this opening '['
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '}' to end struct", fixIts: ["insert '}'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ']' to end array", fixIts: ["insert ']'"]),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous brace at top level"),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected '}' to end struct",
+          notes: [NoteSpec(locationMarker: "1️⃣", message: "to match this opening '{'")],
+          fixIts: ["insert '}'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "expected ']' to end array",
+          notes: [NoteSpec(locationMarker: "2️⃣", message: "to match this opening '['")],
+          fixIts: ["insert ']'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "extraneous brace at top level"
+        ),
       ],
       fixedSource: """
         struct ErrorInFunctionSignatureResultArrayType2 {
@@ -1595,14 +1716,22 @@ final class RecoveryTests: XCTestCase {
   func testRecovery105() {
     assertParse(
       """
-      struct ErrorInFunctionSignatureResultArrayType11 {
+      struct ErrorInFunctionSignatureResultArrayType11 ℹ️{
         func foo() -> Int1️⃣[(a){a++}] {
         }
       2️⃣}
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '}' to end struct", fixIts: ["insert '}'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous brace at top level"),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '}' to end struct",
+          notes: [NoteSpec(message: "to match this opening '{'")],
+          fixIts: ["insert '}'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "extraneous brace at top level"
+        ),
       ],
       fixedSource: """
         struct ErrorInFunctionSignatureResultArrayType11 {
@@ -2060,13 +2189,25 @@ final class RecoveryTests: XCTestCase {
       """
       switch esp {
       case let (jeb):
-        class Ceac<1️⃣}2️⃣> {}
+        class Ceacℹ️<1️⃣}2️⃣> {}
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '>' to end generic parameter clause", fixIts: ["insert '>'"]),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' in class", fixIts: ["insert '{'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '> {}' in 'switch' statement"),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '>' to end generic parameter clause",
+          notes: [NoteSpec(message: "to match this opening '<'")],
+          fixIts: ["insert '>'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '{' in class",
+          fixIts: ["insert '{'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "unexpected code '> {}' in 'switch' statement"
+        ),
       ],
       fixedSource: """
         switch esp {
@@ -2082,17 +2223,38 @@ final class RecoveryTests: XCTestCase {
     assertParse(
       """
       #if true
-      struct Foo19605164 {
-      func a(s: S1️⃣[{{g2️⃣) -> Int {}
-      }}3️⃣}
+      struct Foo19605164 1️⃣{
+      func a2️⃣(s: S3️⃣[{{g4️⃣) -> Int {}
+      }}5️⃣}
       #endif
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ')' to end parameter clause", fixIts: ["insert ')'"]),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '}' to end struct", fixIts: ["insert '}'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code ') -> Int {}' in closure"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected ']' to end array", fixIts: ["insert ']'"]),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected brace in conditional compilation block"),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "expected ')' to end parameter clause",
+          notes: [NoteSpec(locationMarker: "2️⃣", message: "to match this opening '('")],
+          fixIts: ["insert ')'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "expected '}' to end struct",
+          notes: [NoteSpec(locationMarker: "1️⃣", message: "to match this opening '{'")],
+          fixIts: ["insert '}'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "unexpected code ') -> Int {}' in closure"
+        ),
+        DiagnosticSpec(
+          locationMarker: "5️⃣",
+          message: "expected ']' to end array",
+          notes: [NoteSpec(locationMarker: "3️⃣", message: "to match this opening '['")],
+          fixIts: ["insert ']'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "5️⃣",
+          message: "unexpected brace in conditional compilation block"
+        ),
       ],
       fixedSource: """
         #if true
@@ -2109,16 +2271,33 @@ final class RecoveryTests: XCTestCase {
     // rdar://19605567
     assertParse(
       """
-      func F() { init<1️⃣( 2️⃣} 3️⃣)}
+      func F() { init1️⃣<2️⃣( 3️⃣} 4️⃣)}
       struct InitializerWithName {
-        init 4️⃣x() {}5️⃣
+        init 5️⃣x() {}
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '>' to end generic parameter clause", fixIts: ["insert '>'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end parameter clause", fixIts: ["insert ')'"]),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code ')}' before struct"),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "initializers cannot have a name", fixIts: ["remove 'x'"]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected '>' to end generic parameter clause",
+          notes: [NoteSpec(locationMarker: "1️⃣", message: "to match this opening '<'")],
+          fixIts: ["insert '>'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "expected ')' to end parameter clause",
+          notes: [NoteSpec(locationMarker: "2️⃣", message: "to match this opening '('")],
+          fixIts: ["insert ')'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "unexpected code ')}' before struct"
+        ),
+        DiagnosticSpec(
+          locationMarker: "5️⃣",
+          message: "initializers cannot have a name",
+          fixIts: ["remove 'x'"]
+        ),
       ],
       fixedSource: """
         func F() { init< >()} )}
@@ -2538,11 +2717,15 @@ final class RecoveryTests: XCTestCase {
         let a = s.startIndex..<s.startIndex
         _ = a
         // The specific errors produced don't actually matter, but we need to reject this.
-        return "\(s[a1️⃣)"
+        return "\(sℹ️[a1️⃣)"
       }
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "expected ']' to end subscript", fixIts: ["insert ']'"])
+        DiagnosticSpec(
+          message: "expected ']' to end subscript",
+          notes: [NoteSpec(message: "to match this opening '['")],
+          fixIts: ["insert ']'"]
+        )
       ],
       fixedSource: #"""
         func r21712891(s : String) -> String {
@@ -2635,13 +2818,21 @@ final class RecoveryTests: XCTestCase {
   func testRecovery179() {
     assertParse(
       """
-      func testSkipUnbalancedParen() {1️⃣
+      func testSkipUnbalancedParen() ℹ️{1️⃣
         2️⃣?(
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '}' to end function", fixIts: ["insert '}'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code at top level"),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '}' to end function",
+          notes: [NoteSpec(message: "to match this opening '{'")],
+          fixIts: ["insert '}'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "extraneous code at top level"
+        ),
       ],
       fixedSource: """
         func testSkipUnbalancedParen() {
@@ -2655,14 +2846,27 @@ final class RecoveryTests: XCTestCase {
   func testRecovery180() {
     assertParse(
       """
-      func testSkipToFindOpenBrace1() {
+      func testSkipToFindOpenBrace1() ℹ️{
         do { if case 1️⃣}
       }2️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression, '=', and expression in pattern matching", fixIts: ["insert expression, '=', and expression"]),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' in 'if' statement", fixIts: ["insert '{'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end function", fixIts: ["insert '}'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected expression, '=', and expression in pattern matching",
+          fixIts: ["insert expression, '=', and expression"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '{' in 'if' statement",
+          fixIts: ["insert '{'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected '}' to end function",
+          notes: [NoteSpec(message: "to match this opening '{'")],
+          fixIts: ["insert '}'"]
+        ),
       ],
       fixedSource: """
         func testSkipToFindOpenBrace1() {
@@ -2676,13 +2880,21 @@ final class RecoveryTests: XCTestCase {
   func testRecovery181() {
     assertParse(
       """
-      func testSkipToFindOpenBrace2() {
+      func testSkipToFindOpenBrace2() ℹ️{
         do { if true {} else 1️⃣false }
       }2️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' or 'if' after 'else'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end function", fixIts: ["insert '}'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '{' or 'if' after 'else'"
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected '}' to end function",
+          notes: [NoteSpec(message: "to match this opening '{'")],
+          fixIts: ["insert '}'"]
+        ),
       ],
       fixedSource: """
         func testSkipToFindOpenBrace2() {

@@ -19,11 +19,18 @@ final class StringLiteralEofTests: XCTestCase {
     assertParse(
       ##"""
       // NOTE: DO NOT add a newline at EOF.
-      _ = "foo\(1️⃣
+      _ = ℹ️"foo\(1️⃣
       """##,
       diagnostics: [
-        DiagnosticSpec(message: "expected value and ')' in string literal", fixIts: ["insert value and ')'"]),
-        DiagnosticSpec(message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
+        DiagnosticSpec(
+          message: "expected value and ')' in string literal",
+          fixIts: ["insert value and ')'"]
+        ),
+        DiagnosticSpec(
+          message: #"expected '"' to end string literal"#,
+          notes: [NoteSpec(message: #"to match this opening '"'"#)],
+          fixIts: [#"insert '"'"#]
+        ),
       ],
       fixedSource: ##"""
         // NOTE: DO NOT add a newline at EOF.
@@ -64,11 +71,19 @@ final class StringLiteralEofTests: XCTestCase {
   func testStringLiteralEof3() {
     assertParse(
       ##"""
-      _ = "foo 1️⃣\2️⃣
+      _ = ℹ️"foo 1️⃣\2️⃣
       """##,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "invalid escape sequence in literal"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "invalid escape sequence in literal"
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: #"expected '"' to end string literal"#,
+          notes: [NoteSpec(message: #"to match this opening '"'"#)],
+          fixIts: [#"insert '"'"#]
+        ),
       ],
       fixedSource: ##"""
         _ = "foo \"
@@ -80,11 +95,19 @@ final class StringLiteralEofTests: XCTestCase {
     assertParse(
       ##"""
       // NOTE: DO NOT add a newline at EOF.
-      _ = "foo 1️⃣\2️⃣
+      _ = ℹ️"foo 1️⃣\2️⃣
       """##,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "invalid escape sequence in literal"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "invalid escape sequence in literal"
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: #"expected '"' to end string literal"#,
+          notes: [NoteSpec(message: #"to match this opening '"'"#)],
+          fixIts: [#"insert '"'"#]
+        ),
       ],
       fixedSource: ##"""
         // NOTE: DO NOT add a newline at EOF.
@@ -97,11 +120,15 @@ final class StringLiteralEofTests: XCTestCase {
     assertParse(
       #"""
       // NOTE: DO NOT add a newline at EOF.
-      _ = """
+      _ = ℹ️"""
           foo1️⃣
       """#,
       diagnostics: [
-        DiagnosticSpec(message: #"expected '"""' to end string literal"#, fixIts: [#"insert '"""'"#])
+        DiagnosticSpec(
+          message: #"expected '"""' to end string literal"#,
+          notes: [NoteSpec(message: #"to match this opening '"""'"#)],
+          fixIts: [#"insert '"""'"#]
+        )
       ],
       fixedSource: #"""
         // NOTE: DO NOT add a newline at EOF.
@@ -115,13 +142,20 @@ final class StringLiteralEofTests: XCTestCase {
     // NOTE: DO NOT add a newline at EOF.
     assertParse(
       ##"""
-      _ = """
+      _ = ℹ️"""
           foo
           \(1️⃣
       """##,
       diagnostics: [
-        DiagnosticSpec(message: "expected value and ')' in string literal", fixIts: ["insert value and ')'"]),
-        DiagnosticSpec(message: #"expected '"""' to end string literal"#, fixIts: [#"insert '"""'"#]),
+        DiagnosticSpec(
+          message: "expected value and ')' in string literal",
+          fixIts: ["insert value and ')'"]
+        ),
+        DiagnosticSpec(
+          message: #"expected '"""' to end string literal"#,
+          notes: [NoteSpec(message: #"to match this opening '"""'"#)],
+          fixIts: [#"insert '"""'"#]
+        ),
       ],
       fixedSource: ##"""
         _ = """
@@ -136,14 +170,29 @@ final class StringLiteralEofTests: XCTestCase {
     // NOTE: DO NOT add a newline at EOF.
     assertParse(
       ##"""
-      _ = """
+      _ = 1️⃣"""
           foo
-          \("bar1️⃣
+          \2️⃣(3️⃣"bar4️⃣
       """##,
       diagnostics: [
-        DiagnosticSpec(message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
-        DiagnosticSpec(message: "expected ')' in string literal", fixIts: ["insert ')'"]),
-        DiagnosticSpec(message: #"expected '"""' to end string literal"#, fixIts: [#"insert '"""'"#]),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: #"expected '"' to end string literal"#,
+          notes: [NoteSpec(locationMarker: "3️⃣", message: #"to match this opening '"'"#)],
+          fixIts: [#"insert '"'"#]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "expected ')' in string literal",
+          notes: [NoteSpec(locationMarker: "2️⃣", message: "to match this opening '('")],
+          fixIts: ["insert ')'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: #"expected '"""' to end string literal"#,
+          notes: [NoteSpec(locationMarker: "1️⃣", message: #"to match this opening '"""'"#)],
+          fixIts: [#"insert '"""'"#]
+        ),
       ],
       fixedSource: ##"""
         _ = """
@@ -156,15 +205,33 @@ final class StringLiteralEofTests: XCTestCase {
   func testStringLiteralEof8() {
     assertParse(
       ##"""
-      _ = """
-          \("bar1️⃣
-          2️⃣baz3️⃣
+      _ = 1️⃣"""
+          \2️⃣(3️⃣"bar4️⃣
+          5️⃣baz6️⃣
       """##,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code 'baz' in string literal"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected ')' in string literal", fixIts: ["insert ')'"]),
-        DiagnosticSpec(locationMarker: "3️⃣", message: #"expected '"""' to end string literal"#, fixIts: [#"insert '"""'"#]),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: #"expected '"' to end string literal"#,
+          notes: [NoteSpec(locationMarker: "3️⃣", message: #"to match this opening '"'"#)],
+          fixIts: [#"insert '"'"#]
+        ),
+        DiagnosticSpec(
+          locationMarker: "5️⃣",
+          message: "unexpected code 'baz' in string literal"
+        ),
+        DiagnosticSpec(
+          locationMarker: "6️⃣",
+          message: "expected ')' in string literal",
+          notes: [NoteSpec(locationMarker: "2️⃣", message: "to match this opening '('")],
+          fixIts: ["insert ')'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "6️⃣",
+          message: #"expected '"""' to end string literal"#,
+          notes: [NoteSpec(locationMarker: "1️⃣", message: #"to match this opening '"""'"#)],
+          fixIts: [#"insert '"""'"#]
+        ),
       ],
       fixedSource: ##"""
         _ = """

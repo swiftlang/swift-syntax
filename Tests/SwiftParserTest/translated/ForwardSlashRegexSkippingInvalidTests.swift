@@ -59,12 +59,20 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
     assertParse(
       """
       func e() {
-        _ = /1️⃣         }2️⃣
+        _ = ℹ️/1️⃣         }2️⃣
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "bare slash regex literal may not start with space"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '/' to end regex literal", fixIts: ["insert '/'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "bare slash regex literal may not start with space"
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected '/' to end regex literal",
+          notes: [NoteSpec(message: "to match this opening '/'")],
+          fixIts: ["insert '/'"]
+        ),
       ],
       fixedSource: """
         func e() {
@@ -78,12 +86,20 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
     assertParse(
       """
       func f() {
-        _ = /1️⃣         {2️⃣
+        _ = ℹ️/1️⃣         {2️⃣
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "bare slash regex literal may not start with space"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '/' to end regex literal", fixIts: ["insert '/'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "bare slash regex literal may not start with space"
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected '/' to end regex literal",
+          notes: [NoteSpec(message: "to match this opening '/'")],
+          fixIts: ["insert '/'"]
+        ),
       ],
       fixedSource: """
         func f() {
@@ -121,12 +137,21 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
     assertParse(
       #"""
       func i() {
-        _ = /x1️⃣ "[abc]     {2️⃣
+        _ = /x1️⃣ ℹ️"[abc]     {2️⃣
       }
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "consecutive statements on a line must be separated by ';'",
+          fixIts: ["insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: #"expected '"' to end string literal"#,
+          notes: [NoteSpec(message: #"to match this opening '"'"#)],
+          fixIts: [#"insert '"'"#]
+        ),
       ],
       fixedSource: #"""
         func i() {
@@ -140,11 +165,15 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
     assertParse(
       """
       func j() {
-        _ = /^ [abc]     {1️⃣
+        _ = ℹ️/^ [abc]     {1️⃣
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '/' to end regex literal", fixIts: ["insert '/'"])
+        DiagnosticSpec(
+          message: "expected '/' to end regex literal",
+          notes: [NoteSpec(message: "to match this opening '/'")],
+          fixIts: ["insert '/'"]
+        )
       ],
       fixedSource: """
         func j() {
@@ -158,11 +187,15 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
     assertParse(
       #"""
       func k() {
-        _ = /^ "[abc]     {1️⃣
+        _ = ℹ️/^ "[abc]     {1️⃣
       }
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "expected '/' to end regex literal", fixIts: ["insert '/'"])
+        DiagnosticSpec(
+          message: "expected '/' to end regex literal",
+          notes: [NoteSpec(message: "to match this opening '/'")],
+          fixIts: ["insert '/'"]
+        )
       ],
       fixedSource: #"""
         func k() {
@@ -176,11 +209,15 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
     assertParse(
       """
       func l() {
-        _ = /^    } abc     {1️⃣
+        _ = ℹ️/^    } abc     {1️⃣
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '/' to end regex literal", fixIts: ["insert '/'"])
+        DiagnosticSpec(
+          message: "expected '/' to end regex literal",
+          notes: [NoteSpec(message: "to match this opening '/'")],
+          fixIts: ["insert '/'"]
+        )
       ],
       fixedSource: """
         func l() {
@@ -194,14 +231,25 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
     assertParse(
       #"""
       func m() {
-        _ = /1️⃣ "2️⃣
+        _ = ℹ️/1️⃣ "2️⃣
       }
       3️⃣}
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "bare slash regex literal may not start with space"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '/' to end regex literal", fixIts: ["insert '/'"]),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous brace at top level"),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "bare slash regex literal may not start with space"
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected '/' to end regex literal",
+          notes: [NoteSpec(message: "to match this opening '/'")],
+          fixIts: ["insert '/'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "extraneous brace at top level"
+        ),
       ],
       fixedSource: #"""
         func m() {

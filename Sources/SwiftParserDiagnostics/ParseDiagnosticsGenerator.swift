@@ -662,25 +662,14 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     // Detect C-style for loops based on two semicolons which could not be parsed between the 'for' keyword and the '{'
     // This is mostly a proof-of-concept implementation to produce more complex diagnostics.
     if let unexpectedCondition = node.body.unexpectedBeforeLeftBrace,
-      unexpectedCondition.tokens(withKind: .semicolon).count == 2
+      unexpectedCondition.tokens(withKind: .semicolon).count == 2,
+      let firstToken = node.pattern.firstToken(viewMode: .sourceAccurate),
+      let lastToken = unexpectedCondition.lastToken(viewMode: .sourceAccurate)
     {
-      // FIXME: This is aweful. We should have a way to either get all children between two cursors in a syntax node or highlight a range from one node to another.
       addDiagnostic(
         node,
         .cStyleForLoop,
-        highlights: ([
-          Syntax(node.pattern),
-          Syntax(node.unexpectedBetweenPatternAndTypeAnnotation),
-          Syntax(node.typeAnnotation),
-          Syntax(node.unexpectedBetweenTypeAnnotationAndInKeyword),
-          Syntax(node.inKeyword),
-          Syntax(node.unexpectedBetweenInKeywordAndSequenceExpr),
-          Syntax(node.sequenceExpr),
-          Syntax(node.unexpectedBetweenSequenceExprAndWhereClause),
-          Syntax(node.whereClause),
-          Syntax(node.unexpectedBetweenWhereClauseAndBody),
-          Syntax(unexpectedCondition),
-        ] as [Syntax?]).compactMap({ $0 }),
+        highlights: (getTokens(between: firstToken, and: lastToken).map { Optional(Syntax($0)) }).compactMap({ $0 }),
         handledNodes: [node.inKeyword.id, node.sequenceExpr.id, unexpectedCondition.id]
       )
     } else {  // If it's not a C-style for loop
@@ -688,7 +677,6 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         addDiagnostic(node.sequenceExpr, .expectedSequenceExpressionInForEachLoop, handledNodes: [node.sequenceExpr.id])
       }
     }
-
     return .visitChildren
   }
 

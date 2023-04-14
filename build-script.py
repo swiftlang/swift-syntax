@@ -16,7 +16,7 @@ PACKAGE_DIR = os.path.dirname(os.path.realpath(__file__))
 WORKSPACE_DIR = os.path.dirname(PACKAGE_DIR)
 EXAMPLES_DIR = os.path.join(PACKAGE_DIR, "Examples")
 SOURCES_DIR = os.path.join(PACKAGE_DIR, "Sources")
-IDEUTILS_DIR = os.path.join(SOURCES_DIR, "IDEUtils")
+SWIFTIDEUTILS_DIR = os.path.join(SOURCES_DIR, "SwiftIDEUtils")
 SWIFTSYNTAX_DIR = os.path.join(SOURCES_DIR, "SwiftSyntax")
 SWIFTSYNTAX_DOCUMENTATION_DIR = \
         os.path.join(SWIFTSYNTAX_DIR, "Documentation.docc")
@@ -261,7 +261,7 @@ def verify_code_generated_files(
 
     print("** Verifing code generated files **")
 
-    for module in ["SwiftBasicFormat", "IDEUtils", \
+    for module in ["SwiftBasicFormat", "SwiftIDEUtils", \
       "SwiftParser", "SwiftSyntax", "SwiftSyntaxBuilder"]:
       self_generated_dir = os.path.join(self_temp_dir, module, "generated")
       user_generated_dir = os.path.join(SOURCES_DIR, module, "generated")

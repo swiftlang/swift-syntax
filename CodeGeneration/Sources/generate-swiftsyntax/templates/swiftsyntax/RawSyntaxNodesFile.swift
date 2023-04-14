@@ -193,15 +193,15 @@ let rawSyntaxNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         let params = FunctionParameterListSyntax {
           for child in node.children {
             FunctionParameterSyntax(
-              firstName: child.isUnexpectedNodes ? .wildcardToken(trailingTrivia: .space) : nil,
-              secondName: .identifier(child.swiftName),
+              firstName: child.isUnexpectedNodes ? .wildcardToken(trailingTrivia: .space) : .identifier(child.swiftName),
+              secondName: child.isUnexpectedNodes ? .identifier(child.swiftName) : nil,
               colon: .colonToken(),
               type: child.rawParameterType,
               defaultArgument: child.isUnexpectedNodes ? child.defaultInitialization : nil
             )
           }
 
-          FunctionParameterSyntax("arena: __shared SyntaxArena", for: .functionParameters)
+          FunctionParameterSyntax("arena: __shared SyntaxArena")
         }
         try InitializerDeclSyntax("public init(\(params))") {
           if !node.children.isEmpty {

@@ -34,19 +34,8 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
   }
   enum ValidationError: CustomStringConvertible {
     case expectedNonNil(expectedKind: RawSyntaxNodeProtocol.Type, file: StaticString, line: UInt)
-    case kindMismatch(
-        expectedKind: RawSyntaxNodeProtocol.Type, 
-        actualKind: SyntaxKind, 
-        file: StaticString, 
-        line: UInt
-      )
-    case tokenMismatch(
-        expectedTokenChoices: [TokenChoice], 
-        actualKind: RawTokenKind, 
-        actualText: SyntaxText, 
-        file: StaticString, 
-        line: UInt
-      )
+    case kindMismatch(expectedKind: RawSyntaxNodeProtocol.Type, actualKind: SyntaxKind, file: StaticString, line: UInt)
+    case tokenMismatch(expectedTokenChoices: [TokenChoice], actualKind: RawTokenKind, actualText: SyntaxText, file: StaticString, line: UInt)
     
 
     var description: String {

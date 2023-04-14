@@ -333,9 +333,9 @@ final class EnumTests: XCTestCase {
   }
 
   func testEnum20() {
+    // We used to crash on this.  rdar://14678675
     assertParse(
       """
-      // We used to crash on this.  rdar://14678675
       enum rdar14678675 {
         case U1, 1️⃣
         case U2
@@ -344,7 +344,14 @@ final class EnumTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected identifier in enum case", fixIts: ["insert identifier"])
-      ]
+      ],
+      fixedSource: """
+        enum rdar14678675 {
+          case U1, <#identifier#>
+          case U2
+          case U3
+        }
+        """
     )
   }
 
@@ -358,7 +365,12 @@ final class EnumTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(message: "expected identifier in enum case", fixIts: ["insert identifier"]),
         DiagnosticSpec(message: "unexpected code ':' in enum"),
-      ]
+      ],
+      fixedSource: """
+        enum Recovery1 {
+          case <#identifier#>:
+        }
+        """
     )
   }
 
@@ -396,9 +408,18 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "keyword 'Self' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "keyword 'Self' cannot be used as an identifier here",
+          fixIts: ["if this name is unavoidable, use backticks to escape it"]
+        ),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected 'Self' keyword in enum"),
-      ]
+      ],
+      fixedSource: """
+        enum Recovery4 {
+          case `Self` Self
+        }
+        """
     )
   }
 
@@ -431,7 +452,14 @@ final class EnumTests: XCTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: "'_' cannot be used as an identifier here"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "'_' cannot be used as an identifier here"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected identifier in enum case", fixIts: ["insert identifier"]),
-      ]
+      ],
+      fixedSource: """
+        enum Recovery6 {
+          case Snout, _;
+          case _;
+          case Tusk, <#identifier#>
+        }
+        """
     )
   }
 
@@ -1207,8 +1235,14 @@ final class EnumTests: XCTestCase {
       enum 1️⃣switch {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "keyword 'switch' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"])
-      ]
+        DiagnosticSpec(
+          message: "keyword 'switch' cannot be used as an identifier here",
+          fixIts: ["if this name is unavoidable, use backticks to escape it"]
+        )
+      ],
+      fixedSource: """
+        enum `switch` {}
+        """
     )
   }
 
@@ -1240,8 +1274,18 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "keyword 'operator' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"])
-      ]
+        DiagnosticSpec(
+          message: "keyword 'operator' cannot be used as an identifier here",
+          fixIts: ["if this name is unavoidable, use backticks to escape it"]
+        )
+      ],
+      fixedSource: """
+        enum E_53662 {
+          case identifier
+          case `operator`
+          case identifier2
+        }
+        """
     )
   }
 
@@ -1255,8 +1299,18 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "keyword 'var' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"])
-      ]
+        DiagnosticSpec(
+          message: "keyword 'var' cannot be used as an identifier here",
+          fixIts: ["if this name is unavoidable, use backticks to escape it"]
+        )
+      ],
+      fixedSource: """
+        enum E_53662_var {
+          case identifier
+          case `var`
+          case identifier2
+        }
+        """
     )
   }
 
@@ -1283,8 +1337,16 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "keyword 'func' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"])
-      ]
+        DiagnosticSpec(
+          message: "keyword 'func' cannot be used as an identifier here",
+          fixIts: ["if this name is unavoidable, use backticks to escape it"]
+        )
+      ],
+      fixedSource: """
+        enum E_53662_Comma {
+          case a, b, c, `func`, d
+        }
+        """
     )
   }
 
@@ -1300,7 +1362,15 @@ final class EnumTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected identifier in enum case", fixIts: ["insert identifier"])
-      ]
+      ],
+      fixedSource: """
+        enum E_53662_Newline {
+          case identifier1
+          case identifier2
+          case <#identifier#>
+          case identifier
+        }
+        """
     )
   }
 
@@ -1314,7 +1384,13 @@ final class EnumTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected identifier in enum case", fixIts: ["insert identifier"])
-      ]
+      ],
+      fixedSource: """
+        enum E_53662_Newline2 {
+          case <#identifier#>
+          func foo() {}
+        }
+        """
     )
   }
 
@@ -1326,9 +1402,21 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "keyword 'let' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '.foo(x, y):' in enum"),
-      ]
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "keyword 'let' cannot be used as an identifier here",
+          fixIts: ["if this name is unavoidable, use backticks to escape it"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "unexpected code '.foo(x, y):' in enum"
+        ),
+      ],
+      fixedSource: """
+        enum E_53662_PatternMatching {
+          case `let` .foo(x, y):
+        }
+        """
     )
   }
 
@@ -1343,7 +1431,13 @@ final class EnumTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in enum case", fixIts: ["insert identifier"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in enum case", fixIts: ["insert identifier"]),
-      ]
+      ],
+      fixedSource: #"""
+        enum CasesWithMissingElement: Int {
+          case a = "hello", <#identifier#>
+          case b = "hello", <#identifier#>
+        }
+        """#
     )
   }
 

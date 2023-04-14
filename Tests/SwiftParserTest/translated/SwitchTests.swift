@@ -35,7 +35,13 @@ final class SwitchTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression and '{}' to end 'switch' statement", fixIts: ["insert expression and '{}'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier and function signature in function", fixIts: ["insert identifier and function signature"]),
-      ]
+      ],
+      fixedSource: """
+        func parseError1(x: Int) {
+          switch <#expression#> {
+        }func <#identifier#>() {}
+        }
+        """
     )
   }
 
@@ -48,7 +54,13 @@ final class SwitchTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{}' in 'switch' statement", fixIts: ["insert '{}'"])
-      ]
+      ],
+      fixedSource: """
+        func parseError2(x: Int) {
+          switch x {
+        }
+        }
+        """
     )
   }
 
@@ -63,7 +75,14 @@ final class SwitchTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected expression and ':' in switch case", fixIts: ["insert expression and ':'"])
-      ]
+      ],
+      fixedSource: """
+        func parseError3(x: Int) {
+          switch x {
+            case <#expression#>:
+          }
+        }
+        """
     )
   }
 
@@ -79,7 +98,14 @@ final class SwitchTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(message: "expected expression in 'where' clause", fixIts: ["insert expression"]),
         DiagnosticSpec(message: "expected ':' in switch case", fixIts: ["insert ':'"]),
-      ]
+      ],
+      fixedSource: """
+        func parseError4(x: Int) {
+          switch x {
+          case var z where <#expression#>:
+          }
+        }
+        """
     )
   }
 
@@ -94,7 +120,14 @@ final class SwitchTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected ':' in switch case", fixIts: ["insert ':'"])
-      ]
+      ],
+      fixedSource: """
+        func parseError5(x: Int) {
+          switch x {
+          case let z:
+          }
+        }
+        """
     )
   }
 
@@ -109,7 +142,14 @@ final class SwitchTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected ':' in switch case", fixIts: ["insert ':'"])
-      ]
+      ],
+      fixedSource: """
+        func parseError6(x: Int) {
+          switch x {
+          default:
+          }
+        }
+        """
     )
   }
 
@@ -251,7 +291,19 @@ final class SwitchTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "all statements inside a switch must be covered by a 'case' or 'default' label", fixIts: ["insert label"])
-      ]
+      ],
+      fixedSource: """
+        switch x {
+        case <#identifier#>:
+          x = 1
+        default:
+          x = 0
+        case 0:
+          x = 0
+        case 1:
+          x = 0
+        }
+        """
     )
   }
 
@@ -300,7 +352,13 @@ final class SwitchTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "all statements inside a switch must be covered by a 'case' or 'default' label", fixIts: ["insert label"])
-      ]
+      ],
+      fixedSource: """
+        switch x {
+        case <#identifier#>:
+          x = 1
+        }
+        """
     )
   }
 
@@ -314,7 +372,14 @@ final class SwitchTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "all statements inside a switch must be covered by a 'case' or 'default' label", fixIts: ["insert label"])
-      ]
+      ],
+      fixedSource: """
+        switch x {
+        case <#identifier#>:
+          x = 1
+          x = 2
+        }
+        """
     )
   }
 
@@ -1191,7 +1256,16 @@ final class SwitchTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected ':' in switch case", fixIts: ["insert ':'"])
-      ]
+      ],
+      fixedSource: """
+        func testReturnBeforeIncompleteUnknownDefault() {
+          switch x {
+          case 1:
+            return
+          @unknown default:
+          }
+        }
+        """
     )
   }
 
@@ -1208,7 +1282,16 @@ final class SwitchTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected label in switch case", fixIts: ["insert label"])
-      ]
+      ],
+      fixedSource: """
+        func testReturnBeforeIncompleteUnknownDefault2() {
+          switch x {
+          case 1:
+            return
+          @unknown case <#identifier#>:
+          }
+        }
+        """
     )
   }
 
@@ -1232,7 +1315,17 @@ final class SwitchTests: XCTestCase {
           ],
           fixIts: ["insert ']'"]
         )
-      ]
+      ],
+      fixedSource: """
+        func testIncompleteArrayLiteral() {
+          switch x {
+          case 1:
+            _ = [1]
+          @unknown default:
+            ()
+          }
+        }
+        """
     )
   }
 }

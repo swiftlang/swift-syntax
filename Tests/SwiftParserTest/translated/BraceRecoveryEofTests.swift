@@ -30,7 +30,13 @@ final class BraceRecoveryEofTests: XCTestCase {
           ],
           fixIts: ["insert '}'"]
         )
-      ]
+      ],
+      fixedSource: """
+        // Make sure source ranges satisfy the verifier.
+        for foo in [1, 2] {
+          _ = foo
+        }
+        """
     )
   }
 }

@@ -63,7 +63,10 @@ final class AttributeTests: XCTestCase {
         DiagnosticSpec(message: "expected ':' in attribute argument", fixIts: ["insert ':'"]),
         DiagnosticSpec(message: "expected ')' to end attribute", fixIts: ["insert ')'"]),
         DiagnosticSpec(message: "expected declaration after attribute", fixIts: ["insert declaration"]),
-      ]
+      ],
+      fixedSource: """
+        @_specialize(e:) <#declaration#>
+        """
     )
   }
 
@@ -76,7 +79,10 @@ final class AttributeTests: XCTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' in attribute argument", fixIts: ["insert ':'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected ': false' in attribute argument", fixIts: ["insert ': false'"]),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected declaration after attribute", fixIts: ["insert declaration"]),
-      ]
+      ],
+      fixedSource: """
+        @_specialize(e:, exported: false)  <#declaration#>
+        """
     )
   }
 
@@ -502,7 +508,11 @@ final class AttributeTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(message: "expected ':' and string literal in @_unavailableFromAsync argument", fixIts: ["insert ':' and string literal"]),
         DiagnosticSpec(message: #"unexpected code '= "abc"' in attribute"#),
-      ]
+      ],
+      fixedSource: """
+        @_unavailableFromAsync(message: ""= "abc")
+        func foo() {}
+        """
     )
 
     assertParse(

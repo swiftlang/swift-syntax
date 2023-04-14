@@ -212,7 +212,14 @@ final class TrailingClosuresTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "'default' label can only appear inside a 'switch' statement"),
-      ]
+      ],
+      fixedSource: """
+        func produce(fn: () -> Int?, default d: () -> Int) -> Int {
+          return fn() ?? d()
+        }
+        _ = produce { 0 }; default: { 1 }
+        _ = produce { 2 } `default`: { 3 }
+        """
     )
   }
 

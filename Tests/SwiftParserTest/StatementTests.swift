@@ -80,7 +80,12 @@ final class StatementTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(message: "expected expression, '=', and expression in pattern matching", fixIts: ["insert expression, '=', and expression"]),
         DiagnosticSpec(message: "unexpected code '* ! = x' in 'if' statement"),
-      ]
+      ],
+      fixedSource: """
+        if case <#expression#> = <#expression#> * ! = x {
+          bar()
+        }
+        """
     )
 
     assertParse(
@@ -286,7 +291,18 @@ final class StatementTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code 'foo()' before conditional compilation clause"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "all statements inside a switch must be covered by a 'case' or 'default' label", fixIts: ["insert label"]),
-      ]
+      ],
+      fixedSource: """
+        switch x {
+          foo()
+        #if true
+        case <#identifier#>:
+          bar()
+        #endif
+          case .A, .B:
+            break
+        }
+        """
     )
 
     assertParse(
@@ -615,7 +631,10 @@ final class StatementTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression in 'forget' statement", fixIts: ["insert expression"]),
         DiagnosticSpec(locationMarker: "1️⃣", message: "'case' can only appear inside a 'switch' statement or 'enum' declaration"),
-      ]
+      ],
+      fixedSource: """
+        _forget <#expression#>case
+        """
     )
 
     // It's important that we don't parse this one as a forget statement!
@@ -682,7 +701,11 @@ final class StatementTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected '}' to end 'if' statement", fixIts: ["insert '}'"])
-      ]
+      ],
+      fixedSource: """
+        if p{""
+        }
+        """
     )
   }
 
@@ -696,7 +719,11 @@ final class StatementTests: XCTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '->' and return type in subscript", fixIts: ["insert '->' and return type"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end subscript", fixIts: ["insert '}'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code '@self _modify' at top level"),
-      ]
+      ],
+      fixedSource: """
+        subscript() -> <#type#> {
+        }@self _modify
+        """
     )
   }
 }

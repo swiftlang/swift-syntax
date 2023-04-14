@@ -331,7 +331,12 @@ final class IfconfigExprTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected value in function call", fixIts: ["insert value"])
-      ]
+      ],
+      fixedSource: """
+        #if canImport(A, <#expression#>)
+          let a = 1
+        #endif
+        """
     )
   }
 
@@ -370,7 +375,12 @@ final class IfconfigExprTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected value in function call", fixIts: ["insert value"])
-      ]
+      ],
+      fixedSource: """
+        #if canImport(A, _version: <#expression#>)
+          let a = 1
+        #endif
+        """
     )
   }
 

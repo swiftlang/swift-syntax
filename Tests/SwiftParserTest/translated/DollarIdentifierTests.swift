@@ -36,7 +36,14 @@ final class DollarIdentifierTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "'$' is not a valid identifier", fixIts: ["if this name is unavoidable, use backticks to escape it"])
-      ]
+      ],
+      fixedSource: """
+        func dollarVar() {
+          var `$` : Int = 42
+          $ += 1
+          print($)
+        }
+        """
     )
   }
 
@@ -50,7 +57,13 @@ final class DollarIdentifierTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "'$' is not a valid identifier", fixIts: ["if this name is unavoidable, use backticks to escape it"])
-      ]
+      ],
+      fixedSource: """
+        func dollarLet() {
+          let `$` = 42
+          print($)
+        }
+        """
     )
   }
 
@@ -81,7 +94,12 @@ final class DollarIdentifierTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "'$' is not a valid identifier", fixIts: ["if this name is unavoidable, use backticks to escape it"])
-      ]
+      ],
+      fixedSource: """
+        func dollarEnum() {
+          enum `$` {}
+        }
+        """
     )
   }
 
@@ -94,7 +112,12 @@ final class DollarIdentifierTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "'$' is not a valid identifier", fixIts: ["if this name is unavoidable, use backticks to escape it"])
-      ]
+      ],
+      fixedSource: """
+        func dollarStruct() {
+          struct `$` {}
+        }
+        """
     )
   }
 
@@ -118,7 +141,10 @@ final class DollarIdentifierTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "'$' is not a valid identifier", fixIts: ["if this name is unavoidable, use backticks to escape it"])
-      ]
+      ],
+      fixedSource: """
+        $(`$`: 24)
+        """
     )
   }
 

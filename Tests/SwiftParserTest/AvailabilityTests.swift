@@ -151,7 +151,11 @@ final class AvailabilityTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(message: "expected version tuple in version restriction", fixIts: ["insert version tuple"]),
         DiagnosticSpec(message: "unexpected code '10e10' in attribute"),
-      ]
+      ],
+      fixedSource: """
+        @available(OSX <#integer literal#>10e10)
+        func test() {}
+        """
     )
 
     assertParse(
@@ -162,7 +166,11 @@ final class AvailabilityTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(message: "expected integer literal in version tuple", fixIts: ["insert integer literal"]),
         DiagnosticSpec(message: "unexpected code '0e10' in attribute"),
-      ]
+      ],
+      fixedSource: """
+        @available(OSX 10.<#integer literal#>0e10)
+        func test() {}
+        """
     )
 
     assertParse(
@@ -173,7 +181,11 @@ final class AvailabilityTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(message: "expected version tuple in version restriction", fixIts: ["insert version tuple"]),
         DiagnosticSpec(message: "unexpected code '0xff' in attribute"),
-      ]
+      ],
+      fixedSource: """
+        @available(OSX <#integer literal#>0xff)
+        func test() {}
+        """
     )
 
     assertParse(
@@ -184,8 +196,11 @@ final class AvailabilityTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(message: "expected integer literal in version tuple", fixIts: ["insert integer literal"]),
         DiagnosticSpec(message: "unexpected code '0xff' in attribute"),
-      ]
+      ],
+      fixedSource: """
+        @available(OSX 1.0.<#integer literal#>0xff)
+        func test() {}
+        """
     )
-
   }
 }

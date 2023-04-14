@@ -103,7 +103,10 @@ final class TypealiasTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected '=' and type in typealias declaration", fixIts: ["insert '=' and type"])
-      ]
+      ],
+      fixedSource: """
+        typealias Recovery1 = <#type#>
+        """
     )
   }
 
@@ -115,7 +118,10 @@ final class TypealiasTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '=' in typealias declaration", fixIts: ["replace ':' with '='"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected type in typealias declaration", fixIts: ["insert type"]),
-      ]
+      ],
+      fixedSource: """
+        typealias Recovery2 =<#type#>
+        """
     )
   }
 
@@ -126,7 +132,10 @@ final class TypealiasTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected type in typealias declaration", fixIts: ["insert type"])
-      ]
+      ],
+      fixedSource: """
+        typealias Recovery3 = <#type#>
+        """
     )
   }
 
@@ -137,7 +146,10 @@ final class TypealiasTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected '=' in typealias declaration", fixIts: ["replace ':' with '='"])
-      ]
+      ],
+      fixedSource: """
+        typealias Recovery4 = Int
+        """
     )
   }
 
@@ -149,7 +161,10 @@ final class TypealiasTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '=' in typealias declaration", fixIts: ["replace ':' with '='"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code ', Float' at top level"),
-      ]
+      ],
+      fixedSource: """
+        typealias Recovery5 = Int, Float
+        """
     )
   }
 
@@ -161,7 +176,10 @@ final class TypealiasTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(message: "expected type in typealias declaration", fixIts: ["insert type"]),
         DiagnosticSpec(message: "extraneous code '=' at top level"),
-      ]
+      ],
+      fixedSource: """
+        typealias Recovery6 = <#type#>=
+        """
     )
   }
 

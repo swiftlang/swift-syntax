@@ -39,7 +39,10 @@ final class PoundAssertTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: #"extraneous code ', "error message")' at top level"#),
-      ]
+      ],
+      fixedSource: #"""
+        #assert; true, "error message")
+        """#
     )
   }
 
@@ -50,7 +53,10 @@ final class PoundAssertTests: XCTestCase {
       """#,
       diagnostics: [
         DiagnosticSpec(message: "expected value in macro expansion", fixIts: ["insert value"])
-      ]
+      ],
+      fixedSource: #"""
+        #assert(<#expression#>, "error message")
+        """#
     )
   }
 
@@ -69,7 +75,12 @@ final class PoundAssertTests: XCTestCase {
           ],
           fixIts: ["insert ')'"]
         )
-      ]
+      ],
+      fixedSource: """
+        func unbalanced1() {
+          #assert(true)
+        }
+        """
     )
   }
 
@@ -88,7 +99,12 @@ final class PoundAssertTests: XCTestCase {
           ],
           fixIts: ["insert ')'"]
         )
-      ]
+      ],
+      fixedSource: #"""
+        func unbalanced2() {
+          #assert(true, "hello world")
+        }
+        """#
     )
   }
 }

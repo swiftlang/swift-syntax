@@ -82,7 +82,11 @@ final class AvailabilityQueryTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "availability condition cannot be used in an expression; did you mean '#unavailable'?", fixIts: ["replace '!#available' with '#unavailable'"])
-      ]
+      ],
+      fixedSource: """
+        if let _ = Optional(5), #unavailable(OSX 10.52, *) {
+        }
+        """
     )
   }
 
@@ -114,7 +118,11 @@ final class AvailabilityQueryTests: XCTestCase {
           message: "expected '(', '@availability' arguments, and ')' in availability condition",
           fixIts: ["insert '(', '@availability' arguments, and ')'"]
         )
-      ]
+      ],
+      fixedSource: """
+        if #available (<#identifier#>) {
+        }
+        """
     )
   }
 
@@ -126,7 +134,11 @@ final class AvailabilityQueryTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected platform and ')' to end availability condition", fixIts: ["insert platform and ')'"])
-      ]
+      ],
+      fixedSource: """
+        if #available(<#identifier#>) {
+        }
+        """
     )
   }
 
@@ -138,7 +150,11 @@ final class AvailabilityQueryTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected version restriction in availability argument", fixIts: ["insert version restriction"])
-      ]
+      ],
+      fixedSource: """
+        if #available(<#identifier#>) {
+        }
+        """
     )
   }
 
@@ -156,7 +172,11 @@ final class AvailabilityQueryTests: XCTestCase {
           ],
           fixIts: ["insert ')'"]
         )
-      ]
+      ],
+      fixedSource: """
+        if #available(OSX) {
+        }
+        """
     )
   }
 
@@ -183,7 +203,11 @@ final class AvailabilityQueryTests: XCTestCase {
           ],
           fixIts: ["insert ')'"]
         )
-      ]
+      ],
+      fixedSource: """
+        if #available(OSX 10.51) {
+        }
+        """
     )
   }
 
@@ -308,7 +332,11 @@ final class AvailabilityQueryTests: XCTestCase {
           ],
           fixIts: ["insert ')'"]
         )
-      ]
+      ],
+      fixedSource: """
+        if #available(*) {
+        }
+        """
     )
   }
 
@@ -331,7 +359,11 @@ final class AvailabilityQueryTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(message: "expected version restriction in availability argument", fixIts: ["insert version restriction"]),
         DiagnosticSpec(message: "expected ')' to end availability condition", fixIts: ["insert ')'"]),
-      ]
+      ],
+      fixedSource: """
+        if #available(OSX 10.51, <#identifier#>) {
+        }
+        """
     )
   }
 
@@ -343,7 +375,11 @@ final class AvailabilityQueryTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected version restriction in availability argument", fixIts: ["insert version restriction"])
-      ]
+      ],
+      fixedSource: """
+        if #available(OSX 10.51, <#identifier#>) {
+        }
+        """
     )
   }
 
@@ -361,7 +397,11 @@ final class AvailabilityQueryTests: XCTestCase {
           ],
           fixIts: ["insert ')'"]
         )
-      ]
+      ],
+      fixedSource: """
+        if #available(OSX 10.51, iOS) {
+        }
+        """
     )
   }
 

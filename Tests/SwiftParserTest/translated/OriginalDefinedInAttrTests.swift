@@ -60,10 +60,15 @@ final class OriginalDefinedInAttrTests: XCTestCase {
       """#,
       diagnostics: [
         DiagnosticSpec(
+          locationMarker: "1️⃣",
           message: "expected ',' and version list in @_originallyDefinedIn arguments",
           fixIts: ["insert ',' and version list"]
         )
-      ]
+      ],
+      fixedSource: #"""
+        @_originallyDefinedIn(module: "foo", <#identifier#>)
+        public class ToplevelClass1 {}
+        """#
     )
   }
 
@@ -116,7 +121,11 @@ final class OriginalDefinedInAttrTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(message: "expected version restriction in version", fixIts: ["insert version restriction"]),
         DiagnosticSpec(message: "expected ')' to end attribute", fixIts: ["insert ')'"]),
-      ]
+      ],
+      fixedSource: #"""
+        @_originallyDefinedIn(module: "foo", <#identifier#>)
+        public class ToplevelClass3 {}
+        """#
     )
   }
 

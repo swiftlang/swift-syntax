@@ -166,7 +166,10 @@ final class DeprecatedWhereTests: XCTestCase {
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature", fixIts: ["insert parameter clause"]),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected identifier in protocol", fixIts: ["insert identifier"]),
         DiagnosticSpec(locationMarker: "4️⃣", message: "unexpected code '>(x: T)' in protocol"),
-      ]
+      ],
+      fixedSource: """
+        func testCombinedConstraintsOld<T: <#type#>>()protocol <#identifier#><ProtoA, ProtoB> where T: ProtoC>(x: T) {}
+        """
     )
   }
 
@@ -181,8 +184,10 @@ final class DeprecatedWhereTests: XCTestCase {
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature", fixIts: ["insert parameter clause"]),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected identifier in protocol", fixIts: ["insert identifier"]),
         DiagnosticSpec(locationMarker: "4️⃣", message: "unexpected code '>(x: T) where T: ProtoD' in protocol"),
-      ]
+      ],
+      fixedSource: """
+        func testCombinedConstraintsOld<T: <#type#>>()protocol <#identifier#><ProtoA, ProtoB> where T: ProtoC>(x: T) where T: ProtoD {}
+        """
     )
   }
-
 }

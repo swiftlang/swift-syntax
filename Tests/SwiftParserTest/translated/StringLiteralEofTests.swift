@@ -24,7 +24,11 @@ final class StringLiteralEofTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(message: "expected value and ')' in string literal", fixIts: ["insert value and ')'"]),
         DiagnosticSpec(message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
-      ]
+      ],
+      fixedSource: ##"""
+        // NOTE: DO NOT add a newline at EOF.
+        _ = "foo\(<#expression#>)"
+        """##
     )
   }
 
@@ -65,7 +69,10 @@ final class StringLiteralEofTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "invalid escape sequence in literal"),
         DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
-      ]
+      ],
+      fixedSource: ##"""
+        _ = "foo \"
+        """##
     )
   }
 
@@ -78,7 +85,11 @@ final class StringLiteralEofTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "invalid escape sequence in literal"),
         DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
-      ]
+      ],
+      fixedSource: ##"""
+        // NOTE: DO NOT add a newline at EOF.
+        _ = "foo \"
+        """##
     )
   }
 
@@ -91,7 +102,12 @@ final class StringLiteralEofTests: XCTestCase {
       """#,
       diagnostics: [
         DiagnosticSpec(message: #"expected '"""' to end string literal"#, fixIts: [#"insert '"""'"#])
-      ]
+      ],
+      fixedSource: #"""
+        // NOTE: DO NOT add a newline at EOF.
+        _ = """
+            foo"""
+        """#
     )
   }
 
@@ -128,7 +144,12 @@ final class StringLiteralEofTests: XCTestCase {
         DiagnosticSpec(message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
         DiagnosticSpec(message: "expected ')' in string literal", fixIts: ["insert ')'"]),
         DiagnosticSpec(message: #"expected '"""' to end string literal"#, fixIts: [#"insert '"""'"#]),
-      ]
+      ],
+      fixedSource: ##"""
+        _ = """
+            foo
+            \("bar")"""
+        """##
     )
   }
 
@@ -144,8 +165,12 @@ final class StringLiteralEofTests: XCTestCase {
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code 'baz' in string literal"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected ')' in string literal", fixIts: ["insert ')'"]),
         DiagnosticSpec(locationMarker: "3️⃣", message: #"expected '"""' to end string literal"#, fixIts: [#"insert '"""'"#]),
-      ]
+      ],
+      fixedSource: ##"""
+        _ = """
+            \("bar"
+            baz)"""
+        """##
     )
   }
-
 }

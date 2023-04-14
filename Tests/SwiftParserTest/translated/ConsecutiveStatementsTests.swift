@@ -64,7 +64,20 @@ final class ConsecutiveStatementsTests: XCTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
         DiagnosticSpec(locationMarker: "3️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
-      ]
+      ],
+      fixedSource: """
+        // Within a function
+        func test(i: inout Int, j: inout Int) {
+          // Okay
+          let q : Int; i = j; j = i; _ = q
+          if i != j { i = j }
+          // Errors
+          i = j; j = i
+          let r : Int; i = j
+          let s : Int; let t : Int
+          _ = r; _ = s; _ = t
+        }
+        """
     )
   }
 
@@ -94,7 +107,25 @@ final class ConsecutiveStatementsTests: XCTestCase {
         DiagnosticSpec(locationMarker: "3️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
         DiagnosticSpec(locationMarker: "4️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
         DiagnosticSpec(locationMarker: "5️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
-      ]
+      ],
+      fixedSource: """
+        struct X {
+          // In a sequence of declarations.
+          var a, b : Int; func d() -> Int {}
+          var prop : Int { return 4
+          }; var other : Float
+          // Within property accessors
+          subscript(i: Int) -> Float {
+            get {
+              var x = i; x = i + x; return Float(x)
+            }
+            set {
+              var x = i; x = i + 1
+              _ = x
+            }
+          }
+        }
+        """
     )
   }
 
@@ -174,7 +205,11 @@ final class ConsecutiveStatementsTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
-      ]
+      ],
+      fixedSource: """
+        // At the top level
+        var i, j : Int; i = j; j = i
+        """
     )
   }
 }

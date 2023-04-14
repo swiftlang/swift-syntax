@@ -206,7 +206,10 @@ final class ForwardSlashRegexTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected '/' to end regex literal", fixIts: ["insert '/'"])
-      ]
+      ],
+      fixedSource: """
+        _ = /^)/
+        """
     )
   }
 
@@ -289,7 +292,12 @@ final class ForwardSlashRegexTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected expression after operator", fixIts: ["insert expression"])
-      ]
+      ],
+      fixedSource: """
+        do {
+          _ = 0; /x / <#expression#>
+        }
+        """
     )
   }
 
@@ -304,7 +312,13 @@ final class ForwardSlashRegexTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(message: "expected expression after operator", fixIts: ["insert expression"]),
         DiagnosticSpec(message: "unexpected code '? 0 : 1' in 'do' statement"),
-      ]
+      ],
+      fixedSource: """
+        _ = /x/ ? 0 : 1
+        do {
+          _ = /x / <#expression#>? 0 : 1
+        }
+        """
     )
   }
 
@@ -327,7 +341,13 @@ final class ForwardSlashRegexTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(message: "expected expression after operator", fixIts: ["insert expression"]),
         DiagnosticSpec(message: "unexpected code '?? /x /' in 'do' statement"),
-      ]
+      ],
+      fixedSource: """
+        _ = /x/ ?? /x/
+        do {
+          _ = /x / <#expression#>?? /x /
+        }
+        """
     )
   }
 
@@ -393,7 +413,12 @@ final class ForwardSlashRegexTests: XCTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression in operator", fixIts: ["insert expression"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '...' in 'do' statement"),
-      ]
+      ],
+      fixedSource: """
+        do {
+          _ = /x; /<#expression#>...
+        }
+        """
     )
   }
 
@@ -406,7 +431,12 @@ final class ForwardSlashRegexTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected expression after operator", fixIts: ["insert expression"])
-      ]
+      ],
+      fixedSource: """
+        do {
+          _ = true / false / <#expression#>;
+        }
+        """
     )
   }
 
@@ -441,7 +471,10 @@ final class ForwardSlashRegexTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected expression after operator", fixIts: ["insert expression"])
-      ]
+      ],
+      fixedSource: """
+        foo(/abc/, y: /abc / <#expression#>)
+        """
     )
   }
 
@@ -471,7 +504,14 @@ final class ForwardSlashRegexTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected expression after operator", fixIts: ["insert expression"])
-      ]
+      ],
+      fixedSource: """
+        func testSubscript(_ x: S) {
+          x[/x/]
+          x[/x / <#expression#>]
+          _ = x[/] / 2
+        }
+        """
     )
   }
 
@@ -487,7 +527,15 @@ final class ForwardSlashRegexTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected expression after operator", fixIts: ["insert expression"])
-      ]
+      ],
+      fixedSource: """
+        func testReturn() -> Regex<Substring> {
+          if .random() {
+            return /x/
+          }
+          return /x / <#expression#>
+        }
+        """
     )
   }
 
@@ -510,7 +558,12 @@ final class ForwardSlashRegexTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected expression after operator", fixIts: ["insert expression"])
-      ]
+      ],
+      fixedSource: """
+        do {
+          _ = [/abc/, /abc / <#expression#>]
+        }
+        """
     )
   }
 
@@ -524,7 +577,12 @@ final class ForwardSlashRegexTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression after operator", fixIts: ["insert expression"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression after operator", fixIts: ["insert expression"]),
-      ]
+      ],
+      fixedSource: """
+        do {
+          _ = [/abc / <#expression#>: /abc / <#expression#>]
+        }
+        """
     )
   }
 
@@ -597,7 +655,12 @@ final class ForwardSlashRegexTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected expression after operator", fixIts: ["insert expression"])
-      ]
+      ],
+      fixedSource: """
+        do {
+          _ = ((/abc / <#expression#>))
+        }
+        """
     )
   }
 
@@ -750,7 +813,10 @@ final class ForwardSlashRegexTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected name in member access", fixIts: ["insert name"])
-      ]
+      ],
+      fixedSource: """
+        _ = 0.<#identifier#> / 1 / 2
+        """
     )
   }
 
@@ -761,7 +827,10 @@ final class ForwardSlashRegexTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected name in member access", fixIts: ["insert name"])
-      ]
+      ],
+      fixedSource: """
+        _ = 0 .<#identifier#> / 1 / 2
+        """
     )
   }
 
@@ -864,7 +933,12 @@ final class ForwardSlashRegexTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected pattern in variable", fixIts: ["insert pattern"])
-      ]
+      ],
+      fixedSource: """
+        do {
+          let <#pattern#>/x/
+        }
+        """
     )
   }
 
@@ -877,7 +951,12 @@ final class ForwardSlashRegexTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected expression after operator", fixIts: ["insert expression"])
-      ]
+      ],
+      fixedSource: """
+        do {
+          _ = try /x/; _ = try /x / <#expression#>
+        }
+        """
     )
   }
 
@@ -890,7 +969,12 @@ final class ForwardSlashRegexTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected expression after operator", fixIts: ["insert expression"])
-      ]
+      ],
+      fixedSource: """
+        do {
+          _ = try? /x/; _ = try? /x / <#expression#>
+        }
+        """
     )
   }
 
@@ -903,7 +987,12 @@ final class ForwardSlashRegexTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected expression after operator", fixIts: ["insert expression"])
-      ]
+      ],
+      fixedSource: """
+        do {
+          _ = try! /x/; _ = try! /x / <#expression#>
+        }
+        """
     )
   }
 
@@ -1067,7 +1156,14 @@ final class ForwardSlashRegexTests: XCTestCase {
       """#,
       diagnostics: [
         DiagnosticSpec(message: "expected ')' to end function call", fixIts: ["insert ')'"])
-      ]
+      ],
+      fixedSource: #"""
+        _ = qux(/, 1) / 2
+        do {
+          _ = qux(/, "(") / 2
+          _ = qux(/, "(")/)2
+        }
+        """#
     )
   }
 
@@ -1224,7 +1320,10 @@ final class ForwardSlashRegexTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected '/' to end regex literal", fixIts: ["insert '/'"])
-      ]
+      ],
+      fixedSource: """
+        _ = //
+        """
     )
   }
 
@@ -1235,7 +1334,10 @@ final class ForwardSlashRegexTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected '/' to end regex literal", fixIts: ["insert '/'"])
-      ]
+      ],
+      fixedSource: """
+        _ = /)/
+        """
     )
   }
 
@@ -1273,7 +1375,12 @@ final class ForwardSlashRegexTests: XCTestCase {
           ],
           fixIts: ["insert ')'"]
         )
-      ]
+      ],
+      fixedSource: #"""
+        do {
+          let _: Regex = (/whatever\)/)
+        }
+        """#
     )
   }
 
@@ -1313,7 +1420,12 @@ final class ForwardSlashRegexTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected root in key path", fixIts: ["insert root"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '])/' in 'do' statement"),
-      ]
+      ],
+      fixedSource: #"""
+        do {
+          _ = /[\<#type#>]])/
+        }
+        """#
     )
   }
 
@@ -1349,7 +1461,10 @@ final class ForwardSlashRegexTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
-      ]
+      ],
+      fixedSource: #"""
+        _ = ^/"/; ""
+        """#
     )
   }
 
@@ -1361,7 +1476,10 @@ final class ForwardSlashRegexTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
-      ]
+      ],
+      fixedSource: #"""
+        _ = ^/"[/; ""
+        """#
     )
   }
 
@@ -1453,7 +1571,10 @@ final class ForwardSlashRegexTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "bare slash regex literal may not start with space"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected '/' to end regex literal", fixIts: ["insert '/'"]),
-      ]
+      ],
+      fixedSource: """
+        _ = /               /
+        """
     )
   }
 
@@ -1465,7 +1586,10 @@ final class ForwardSlashRegexTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected '/' to end regex literal", fixIts: ["insert '/'"])
-      ]
+      ],
+      fixedSource: """
+        _ = /^                  /
+        """
     )
   }
 

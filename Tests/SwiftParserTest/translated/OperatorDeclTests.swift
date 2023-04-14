@@ -34,7 +34,10 @@ final class OperatorDeclTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "operator should not be declared with body", fixIts: ["remove operator body"])
-      ]
+      ],
+      fixedSource: """
+        postfix operator +++
+        """
     )
   }
 
@@ -45,7 +48,10 @@ final class OperatorDeclTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "operator should not be declared with body", fixIts: ["remove operator body"])
-      ]
+      ],
+      fixedSource: """
+        infix operator +++
+        """
     )
   }
 
@@ -72,7 +78,10 @@ final class OperatorDeclTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "operator should not be declared with body", fixIts: ["remove operator body"])
-      ]
+      ],
+      fixedSource: """
+        infix operator +++*+ : A
+        """
     )
   }
 
@@ -83,7 +92,10 @@ final class OperatorDeclTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "operator should not be declared with body", fixIts: ["remove operator body"])
-      ]
+      ],
+      fixedSource: """
+        prefix operator +++** : A
+        """
     )
   }
 
@@ -102,7 +114,10 @@ final class OperatorDeclTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "operator should not be declared with body", fixIts: ["remove operator body"])
-      ]
+      ],
+      fixedSource: """
+        postfix operator ++*+* : A
+        """
     )
   }
 
@@ -133,7 +148,10 @@ final class OperatorDeclTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 1: operator must be declared as 'prefix', 'postfix', or 'infix'
         DiagnosticSpec(message: "operator should not be declared with body", fixIts: ["remove operator body"])
-      ]
+      ],
+      fixedSource: """
+        operator +*+++
+        """
     )
   }
 
@@ -145,7 +163,10 @@ final class OperatorDeclTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 1: operator must be declared as 'prefix', 'postfix', or 'infix'
         DiagnosticSpec(message: "operator should not be declared with body", fixIts: ["remove operator body"])
-      ]
+      ],
+      fixedSource: """
+        operator +*++* : A
+        """
     )
   }
 
@@ -156,7 +177,10 @@ final class OperatorDeclTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected binary operator in operator declaration", fixIts: ["insert binary operator"])
-      ]
+      ],
+      fixedSource: """
+        prefix operator <#binary operator#>
+        """
     )
   }
 
@@ -259,7 +283,10 @@ final class OperatorDeclTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "'@aa' is not allowed in operator names", fixIts: ["remove '@aa'"])
-      ]
+      ],
+      fixedSource: """
+        infix operator !!
+        """
     )
   }
 
@@ -282,7 +309,10 @@ final class OperatorDeclTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "'#' is not allowed in operator names", fixIts: ["remove '#'"])
-      ]
+      ],
+      fixedSource: """
+        infix operator ++=
+        """
     )
   }
 
@@ -293,20 +323,26 @@ final class OperatorDeclTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "'#' is not allowed in operator names", fixIts: ["remove '#'"])
-      ]
+      ],
+      fixedSource: """
+        infix operator ->
+        """
     )
   }
 
   func testOperatorDecl13() {
+    // FIXME: Ideally, we shouldn't emit the «consistent whitespace» diagnostic
+    // where = cannot possibly mean an assignment.
     assertParse(
       """
-      // FIXME: Ideally, we shouldn't emit the «consistent whitespace» diagnostic
-      // where = cannot possibly mean an assignment.
       infix operator =1️⃣#=
       """,
       diagnostics: [
         DiagnosticSpec(message: "'#=' is not allowed in operator names", fixIts: ["remove '#='"])
-      ]
+      ],
+      fixedSource: """
+        infix operator =
+        """
     )
   }
 
@@ -319,7 +355,12 @@ final class OperatorDeclTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected precedence group in operator declaration", fixIts: ["insert precedence group"])
-      ]
+      ],
+      fixedSource: """
+        infix operator +++=
+        infix operator *** : A
+        infix operator --- : <#identifier#>;
+        """
     )
   }
 
@@ -332,7 +373,12 @@ final class OperatorDeclTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected identifier in precedencegroup", fixIts: ["insert identifier"])
-      ]
+      ],
+      fixedSource: """
+        precedencegroup <#identifier#> {
+          associativity: right
+        }
+        """
     )
   }
 
@@ -345,7 +391,12 @@ final class OperatorDeclTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected ':' in 'associativity' property of precedencegroup", fixIts: ["insert ':'"])
-      ]
+      ],
+      fixedSource: """
+        precedencegroup A {
+          associativity: right
+        }
+        """
     )
   }
 
@@ -397,7 +448,12 @@ final class OperatorDeclTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected name in 'relation' property of precedencegroup", fixIts: ["insert name"])
-      ]
+      ],
+      fixedSource: """
+        precedencegroup E {
+          higherThan: <#identifier#>
+        }
+        """
     )
   }
 
@@ -476,7 +532,10 @@ final class OperatorDeclTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected precedence group in operator declaration", fixIts: ["insert precedence group"])
-      ]
+      ],
+      fixedSource: """
+        postfix operator ++: <#identifier#>
+        """
     )
   }
 

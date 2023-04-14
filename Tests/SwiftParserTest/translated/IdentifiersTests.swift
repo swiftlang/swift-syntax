@@ -114,7 +114,10 @@ final class IdentifiersTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "keyword 'Self' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"])
-      ]
+      ],
+      fixedSource: """
+        struct `Self` {}
+        """
     )
   }
 
@@ -133,7 +136,10 @@ final class IdentifiersTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "keyword 'Any' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"])
-      ]
+      ],
+      fixedSource: """
+        struct `Any` {}
+        """
     )
   }
 
@@ -144,7 +150,10 @@ final class IdentifiersTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "keyword 'enum' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"])
-      ]
+      ],
+      fixedSource: """
+        protocol `enum` {}
+        """
     )
   }
 
@@ -159,7 +168,13 @@ final class IdentifiersTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "keyword 'public' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "'_' cannot be used as an identifier here"),
-      ]
+      ],
+      fixedSource: """
+        protocol test {
+          associatedtype `public`
+        }
+        func _(_ x: Int) {}
+        """
     )
   }
 

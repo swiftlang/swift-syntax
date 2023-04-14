@@ -338,7 +338,10 @@ final class OperatorsTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"])
-      ]
+      ],
+      fixedSource: """
+        foo!!; foo
+        """
     )
   }
 
@@ -349,8 +352,10 @@ final class OperatorsTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"])
-      ]
+      ],
+      fixedSource: """
+        foo??; bar
+        """
     )
   }
-
 }

@@ -66,18 +66,20 @@ func syntaxNode(emitKind: String) -> SourceFileSyntax {
         )
 
         try! InitializerDeclSyntax("\(node.generateInitializerDeclHeader(optionalBaseAsMissing: false))") {
-          let parameters = FunctionParameterListSyntax {
+          let parameters = ClosureParameterListSyntax {
             for child in node.children {
-              FunctionParameterSyntax(firstName: "\(raw: child.swiftName)")
+              ClosureParameterSyntax(firstName: .identifier(child.swiftName))
             }
           }
 
           let closureSignature = ClosureSignatureSyntax(
             input: .input(
-              ParameterClauseSyntax {
-                FunctionParameterSyntax(firstName: .identifier("arena"))
-                FunctionParameterSyntax(firstName: .wildcardToken())
-              }
+              ClosureParameterClauseSyntax(
+                parameterList: ClosureParameterListSyntax {
+                  ClosureParameterSyntax(firstName: .identifier("arena"))
+                  ClosureParameterSyntax(firstName: .wildcardToken())
+                }
+              )
             )
           )
           let layoutList = ArrayExprSyntax {
@@ -384,13 +386,13 @@ fileprivate extension Node {
     }
 
     let params = FunctionParameterListSyntax {
-      FunctionParameterSyntax("leadingTrivia: Trivia? = nil", for: .functionParameters)
+      FunctionParameterSyntax("leadingTrivia: Trivia? = nil")
 
       for child in children {
         createFunctionParameterSyntax(for: child)
       }
 
-      FunctionParameterSyntax("trailingTrivia: Trivia? = nil", for: .functionParameters)
+      FunctionParameterSyntax("trailingTrivia: Trivia? = nil")
         .with(\.leadingTrivia, .newline)
     }
 

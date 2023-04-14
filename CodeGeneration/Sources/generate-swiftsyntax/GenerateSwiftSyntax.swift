@@ -20,7 +20,7 @@ import Utils
 private let generatedDirName = "generated"
 
 private let swiftBasicFormatGeneratedDir = ["SwiftBasicFormat", generatedDirName]
-private let ideUtilsGeneratedDir = ["IDEUtils", generatedDirName]
+private let swiftIdeUtilsGeneratedDir = ["SwiftIDEUtils", generatedDirName]
 private let swiftParserGeneratedDir = ["SwiftParser", generatedDirName]
 private let swiftParserDiagnosticsGeneratedDir = ["SwiftParserDiagnostics", generatedDirName]
 private let swiftSyntaxGeneratedDir = ["SwiftSyntax", generatedDirName]
@@ -83,7 +83,7 @@ struct GenerateSwiftSyntax: ParsableCommand {
         GeneratedFileSpec(swiftBasicFormatGeneratedDir + ["BasicFormat.swift"], basicFormatFile),
 
         // IDEUtils
-        GeneratedFileSpec(ideUtilsGeneratedDir + ["SyntaxClassification.swift"], syntaxClassificationFile),
+        GeneratedFileSpec(swiftIdeUtilsGeneratedDir + ["SyntaxClassification.swift"], syntaxClassificationFile),
 
         // SwiftParser
         GeneratedFileSpec(swiftParserGeneratedDir + ["DeclarationModifier.swift"], declarationModifierFile),

@@ -66,7 +66,7 @@ public class CodeGenerationFormat: BasicFormat {
 
   public override func visit(_ node: MemberDeclListItemSyntax) -> MemberDeclListItemSyntax {
     let formatted = super.visit(node)
-    if node.indexInParent != 0 && !node.decl.is(EnumCaseDeclSyntax.self) {
+    if node != node.parent?.children(viewMode: .sourceAccurate).first?.as(MemberDeclListItemSyntax.self) && !node.decl.is(EnumCaseDeclSyntax.self) {
       return ensuringTwoLeadingNewlines(node: formatted)
     } else {
       return formatted
@@ -92,10 +92,10 @@ public class CodeGenerationFormat: BasicFormat {
   }
 
   private func ensuringTwoLeadingNewlines<NodeType: SyntaxProtocol>(node: NodeType) -> NodeType {
-    if node.leadingTrivia?.first?.isNewline ?? false {
-      return node.with(\.leadingTrivia, indentedNewline + (node.leadingTrivia ?? []))
+    if node.leadingTrivia.first?.isNewline ?? false {
+      return node.with(\.leadingTrivia, indentedNewline + node.leadingTrivia)
     } else {
-      return node.with(\.leadingTrivia, indentedNewline + indentedNewline + (node.leadingTrivia ?? []))
+      return node.with(\.leadingTrivia, indentedNewline + indentedNewline + node.leadingTrivia)
     }
   }
 
@@ -105,10 +105,10 @@ public class CodeGenerationFormat: BasicFormat {
       self.visit($0).as(SyntaxType.self)!
     }
     formattedChildren = formattedChildren.map {
-      if $0.leadingTrivia?.first?.isNewline == true {
+      if $0.leadingTrivia.first?.isNewline == true {
         return $0
       } else {
-        return $0.with(\.leadingTrivia, indentedNewline + ($0.leadingTrivia ?? []))
+        return $0.with(\.leadingTrivia, indentedNewline + $0.leadingTrivia)
       }
     }
     indentationLevel -= 1

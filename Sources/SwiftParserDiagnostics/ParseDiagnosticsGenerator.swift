@@ -30,6 +30,31 @@ fileprivate func getTokens(between first: TokenSyntax, and second: TokenSyntax) 
   return tokens
 }
 
+fileprivate func getChildren(between first: Syntax, and second: Syntax) -> [Syntax] {
+  let parent = first.parent
+  let children = parent?.children(viewMode: .sourceAccurate)
+  let map = children?.compactMap({ $0.as(Syntax.self) })
+  var res: [Syntax] = []
+  
+  var inTheLoop = false
+  
+  for m in map! {
+    if inTheLoop {
+      if m == second {
+        res.append(m)
+        break
+      } else {
+        res.append(m)
+      }
+    } else if m == first {
+      res.append(m)
+      inTheLoop = true
+    }
+  }
+  
+  return res
+}
+
 fileprivate extension TokenSyntax {
   /// Assuming this token is a `poundAvailableKeyword` or `poundUnavailableKeyword`
   /// returns the opposite keyword.
@@ -662,14 +687,16 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     // Detect C-style for loops based on two semicolons which could not be parsed between the 'for' keyword and the '{'
     // This is mostly a proof-of-concept implementation to produce more complex diagnostics.
     if let unexpectedCondition = node.body.unexpectedBeforeLeftBrace,
-      unexpectedCondition.tokens(withKind: .semicolon).count == 2,
-      let firstToken = node.pattern.firstToken(viewMode: .sourceAccurate),
-      let lastToken = unexpectedCondition.lastToken(viewMode: .sourceAccurate)
+      unexpectedCondition.tokens(withKind: .semicolon).count == 2
     {
+      var highlights = getChildren(between: Syntax(node.pattern), and: Syntax(node.sequenceExpr))
+      highlights.append(Syntax(unexpectedCondition))
       addDiagnostic(
         node,
         .cStyleForLoop,
-        highlights: (getTokens(between: firstToken, and: lastToken).map { Optional(Syntax($0)) }).compactMap({ $0 }),
+        highlights: (
+          highlights
+         as [Syntax?]).compactMap({ $0 }),
         handledNodes: [node.inKeyword.id, node.sequenceExpr.id, unexpectedCondition.id]
       )
     } else {  // If it's not a C-style for loop

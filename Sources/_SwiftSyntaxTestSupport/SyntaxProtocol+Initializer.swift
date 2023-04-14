@@ -110,21 +110,36 @@ extension SyntaxProtocol {
   /// (or at least an expression that's very close to constructing this node, the addition of a few manual upcast by hand is still needed).
   /// The intended use case for this is to print a syntax tree and create a substructure assertion from the generated expression.
   /// When `includeTrivia` is set to `false`, the token's leading and trailing trivia will not be included in the generated expression.
+  ///
+  /// - Warning: This is only designed for use in the debugger. Do not call it outside of the debugger.
+  @available(*, deprecated, message: "For use in debugger only")
   public func debugInitCall(includeTrivia: Bool = true) -> String {
     return self.debugInitCallExpr(includeTrivia: includeTrivia).formatted(using: InitializerExprFormat()).description
   }
 
   private func debugInitCallExpr(includeTrivia: Bool) -> ExprSyntax {
-    let mirror = Mirror(reflecting: self)
-    if self.kind.isSyntaxCollection {
+    if type(of: self) != self.syntaxNodeType {
+      let nestedInitCall = Syntax(self).asProtocol(SyntaxProtocol.self).debugInitCallExpr(includeTrivia: includeTrivia)
+      var typeName = "\(type(of: self))"
+      // If the type is `SyntaxChildChoices`, it is a nested type that needs to be qualified.
+      if self is SyntaxChildChoices, let parent = parent {
+        typeName = "\(parent.syntaxNodeType).\(typeName)"
+      }
+      return ExprSyntax(
+        FunctionCallExprSyntax(callee: ExprSyntax("\(raw: typeName)")) {
+          TupleExprElementSyntax(expression: nestedInitCall)
+        }
+      )
+    }
+
+    if case .collection(let collectionElementType) = self.syntaxNodeType.structure {
       let typeName = String(describing: type(of: self))
       return ExprSyntax(
         FunctionCallExprSyntax(callee: IdentifierExprSyntax(identifier: .identifier(typeName))) {
           TupleExprElementSyntax(
             expression: ArrayExprSyntax {
-              for child in mirror.children {
-                let value = child.value as! SyntaxProtocol?
-                ArrayElementSyntax(expression: value?.debugInitCallExpr(includeTrivia: includeTrivia) ?? ExprSyntax(NilLiteralExprSyntax()))
+              for child in self.children(viewMode: .all) {
+                ArrayElementSyntax(expression: child.as(collectionElementType)!.debugInitCallExpr(includeTrivia: includeTrivia))
               }
             }
           )
@@ -134,12 +149,12 @@ extension SyntaxProtocol {
       let tokenKind = token.tokenKind
       let tokenInitializerName: String
       let tokenKindArgument: ExprSyntax?
-      if tokenKind.isLexerClassifiedKeyword || tokenKind == .eof {
-        tokenInitializerName = String(describing: tokenKind)
-        tokenKindArgument = nil
-      } else if case .keyword(let keyword) = tokenKind {
+      if case .keyword(let keyword) = tokenKind {
         tokenInitializerName = "keyword"
         tokenKindArgument = ExprSyntax(".\(raw: keyword)")
+      } else if tokenKind.isLexerClassifiedKeyword || tokenKind == .eof {
+        tokenInitializerName = String(describing: tokenKind)
+        tokenKindArgument = nil
       } else if tokenKind.decomposeToRaw().rawKind.defaultText != nil {
         tokenInitializerName = "\(String(describing: tokenKind))Token"
         tokenKindArgument = nil
@@ -176,15 +191,15 @@ extension SyntaxProtocol {
           }
         }
       )
-    } else {
+    } else if case .layout(let layout) = self.syntaxNodeType.structure {
       let typeName = String(describing: type(of: self))
       return ExprSyntax(
         FunctionCallExprSyntax(callee: IdentifierExprSyntax(identifier: .identifier(typeName))) {
-          for child in mirror.children {
-            let label = child.label!
-            let value = child.value as! SyntaxProtocol?
+          for keyPath in layout {
+            let label = childName(keyPath) ?? ""
+            let value = self[keyPath: keyPath as! PartialKeyPath<Self>] as! SyntaxProtocol?
             let isUnexpected = label.hasPrefix("unexpected")
-            if !isUnexpected || value != nil {
+            if value != nil {
               TupleExprElementSyntax(
                 label: isUnexpected ? nil : .identifier(label),
                 colon: isUnexpected ? nil : .colonToken(),
@@ -194,6 +209,8 @@ extension SyntaxProtocol {
           }
         }
       )
+    } else {
+      fatalError()
     }
   }
 }

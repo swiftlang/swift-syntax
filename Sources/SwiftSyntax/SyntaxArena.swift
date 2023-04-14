@@ -19,7 +19,7 @@ public class SyntaxArena {
   /// are retained in `addChild()` and are released in `deinit`.
   private var childRefs: Set<SyntaxArenaRef>
 
-  #if DEBUG
+  #if DEBUG || SWIFTSYNTAX_ENABLE_ASSERTIONS
   /// Whether or not this arena has been added to other arenas as a child.
   /// Used to make sure we don’t introduce retain cycles between arenas.
   private var hasParent: Bool
@@ -32,7 +32,7 @@ public class SyntaxArena {
   fileprivate init(slabSize: Int) {
     self.allocator = BumpPtrAllocator(slabSize: slabSize)
     self.childRefs = []
-    #if DEBUG
+    #if DEBUG || SWIFTSYNTAX_ENABLE_ASSERTIONS
     self.hasParent = false
     #endif
   }
@@ -107,7 +107,7 @@ public class SyntaxArena {
   func addChild(_ otherRef: SyntaxArenaRef) {
     if SyntaxArenaRef(self) == otherRef { return }
 
-    #if DEBUG
+    #if DEBUG || SWIFTSYNTAX_ENABLE_ASSERTIONS
     precondition(
       !self.hasParent,
       "an arena can't have a new child once it's owned by other arenas"
@@ -116,7 +116,7 @@ public class SyntaxArena {
 
     if childRefs.insert(otherRef).inserted {
       otherRef.retain()
-      #if DEBUG
+      #if DEBUG || SWIFTSYNTAX_ENABLE_ASSERTIONS
       // FIXME: This may trigger a data race warning in Thread Sanitizer.
       // Can we use atomic bool here?
       otherRef.value.hasParent = true

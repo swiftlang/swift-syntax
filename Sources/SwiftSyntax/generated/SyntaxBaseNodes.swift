@@ -82,14 +82,12 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    #if DEBUG
     switch data.raw.kind {
     case .accessorDecl, .actorDecl, .associatedtypeDecl, .classDecl, .deinitializerDecl, .editorPlaceholderDecl, .enumCaseDecl, .enumDecl, .extensionDecl, .functionDecl, .ifConfigDecl, .importDecl, .initializerDecl, .macroDecl, .macroExpansionDecl, .missingDecl, .operatorDecl, .poundSourceLocation, .precedenceGroupDecl, .protocolDecl, .structDecl, .subscriptDecl, .typealiasDecl, .variableDecl:
       break
     default:
-      fatalError("Unable to create DeclSyntax from \(data.raw.kind)")
+      preconditionFailure("Unable to create DeclSyntax from \(data.raw.kind)")
     }
-    #endif 
     self._syntaxNode = Syntax(data)
   }
   
@@ -219,14 +217,12 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    #if DEBUG
     switch data.raw.kind {
     case .arrayExpr, .arrowExpr, .asExpr, .assignmentExpr, .awaitExpr, .binaryOperatorExpr, .booleanLiteralExpr, .borrowExpr, .closureExpr, .dictionaryExpr, .discardAssignmentExpr, .editorPlaceholderExpr, .floatLiteralExpr, .forcedValueExpr, .functionCallExpr, .identifierExpr, .ifExpr, .inOutExpr, .infixOperatorExpr, .integerLiteralExpr, .isExpr, .keyPathExpr, .macroExpansionExpr, .memberAccessExpr, .missingExpr, .moveExpr, .nilLiteralExpr, .optionalChainingExpr, .packElementExpr, .packExpansionExpr, .postfixIfConfigExpr, .postfixUnaryExpr, .prefixOperatorExpr, .regexLiteralExpr, .sequenceExpr, .specializeExpr, .stringLiteralExpr, .subscriptExpr, .superRefExpr, .switchExpr, .ternaryExpr, .tryExpr, .tupleExpr, .typeExpr, .unresolvedAsExpr, .unresolvedIsExpr, .unresolvedPatternExpr, .unresolvedTernaryExpr:
       break
     default:
-      fatalError("Unable to create ExprSyntax from \(data.raw.kind)")
+      preconditionFailure("Unable to create ExprSyntax from \(data.raw.kind)")
     }
-    #endif 
     self._syntaxNode = Syntax(data)
   }
   
@@ -380,14 +376,12 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    #if DEBUG
     switch data.raw.kind {
     case .expressionPattern, .identifierPattern, .isTypePattern, .missingPattern, .tuplePattern, .valueBindingPattern, .wildcardPattern:
       break
     default:
-      fatalError("Unable to create PatternSyntax from \(data.raw.kind)")
+      preconditionFailure("Unable to create PatternSyntax from \(data.raw.kind)")
     }
-    #endif 
     self._syntaxNode = Syntax(data)
   }
   
@@ -500,14 +494,12 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    #if DEBUG
     switch data.raw.kind {
     case .breakStmt, .continueStmt, .deferStmt, .doStmt, .expressionStmt, .fallthroughStmt, .forInStmt, .forgetStmt, .guardStmt, .labeledStmt, .missingStmt, .repeatWhileStmt, .returnStmt, .throwStmt, .whileStmt, .yieldStmt:
       break
     default:
-      fatalError("Unable to create StmtSyntax from \(data.raw.kind)")
+      preconditionFailure("Unable to create StmtSyntax from \(data.raw.kind)")
     }
-    #endif 
     self._syntaxNode = Syntax(data)
   }
   
@@ -629,14 +621,12 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    #if DEBUG
     switch data.raw.kind {
     case .arrayType, .attributedType, .classRestrictionType, .compositionType, .constrainedSugarType, .dictionaryType, .functionType, .implicitlyUnwrappedOptionalType, .memberTypeIdentifier, .metatypeType, .missingType, .namedOpaqueReturnType, .optionalType, .packExpansionType, .packReferenceType, .simpleTypeIdentifier, .tupleType:
       break
     default:
-      fatalError("Unable to create TypeSyntax from \(data.raw.kind)")
+      preconditionFailure("Unable to create TypeSyntax from \(data.raw.kind)")
     }
-    #endif 
     self._syntaxNode = Syntax(data)
   }
   

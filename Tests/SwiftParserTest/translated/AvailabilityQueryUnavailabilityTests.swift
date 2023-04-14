@@ -436,29 +436,33 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   func testAvailabilityQueryUnavailability34a() {
     assertParse(
       """
-      // Diagnose wrong spellings of unavailability
       if #available(*) 1️⃣== false {
       }
       """,
       diagnostics: [
         DiagnosticSpec(message: "#available cannot be used as an expression, did you mean to use '#unavailable'?", fixIts: ["replace '#available(*) == false' with '#unavailable(*)'"])
-      ]
+      ],
+      fixedSource: """
+        if #unavailable(*) {
+        }
+        """
     )
   }
 
   func testAvailabilityQueryUnavailability34b() {
     assertParse(
       """
-      // Diagnose wrong spellings of unavailability
-      if #available(*) 1️⃣== false && 2️⃣true {
+      if #available(*) 1️⃣== false 2️⃣&& true {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '== false &&' in 'if' statement"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ',' in 'if' statement", fixIts: ["insert ','"]),
-        // TODO: Old parser expected error on line 2: #available cannot be used as an expression, did you mean to use '#unavailable'?, Fix-It replacements: 4 - 14 = '#unavailable', 18 - 27 = ''
-        // TODO: Old parser expected error on line 2: expected ',' joining parts of a multi-clause condition, Fix-It replacements: 27 - 28 = ','
-      ]
+        DiagnosticSpec(locationMarker: "1️⃣", message: "#available cannot be used as an expression, did you mean to use '#unavailable'?", fixIts: ["replace '#available(*) == false' with '#unavailable(*)'"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ',' joining parts of a multi-clause condition", fixIts: ["replace '&&' with ','"]),
+      ],
+      fixedSource: """
+        if #unavailable(*) , true {
+        }
+        """
     )
   }
 
@@ -470,6 +474,22 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "availability condition cannot be used in an expression; did you mean '#unavailable'?", fixIts: ["replace '!#available' with '#unavailable'"])
+      ],
+      fixedSource: """
+        if #unavailable(*) {
+        }
+        """
+    )
+  }
+
+  func testAvailabilityQueryUnavailability34d() {
+    assertParse(
+      """
+      if #available(*) 1️⃣== {
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '==' in 'if' statement")
       ]
     )
   }

@@ -188,9 +188,6 @@ extension Parser {
     repeat {
       let condition = self.parseConditionElement(lastBindingKind: elements.last?.condition.as(RawOptionalBindingConditionSyntax.self)?.bindingKeyword)
       var unexpectedBeforeKeepGoing: RawUnexpectedNodesSyntax? = nil
-      if let equalOperator = self.consumeIfContextualPunctuator("=="), let falseKeyword = self.consume(if: .keyword(.false)) {
-        unexpectedBeforeKeepGoing = RawUnexpectedNodesSyntax([equalOperator, falseKeyword], arena: self.arena)
-      }
       keepGoing = self.consume(if: .comma)
       if keepGoing == nil, let andOperator = self.consumeIfContextualPunctuator("&&") {
         unexpectedBeforeKeepGoing = RawUnexpectedNodesSyntax(combining: unexpectedBeforeKeepGoing, andOperator, arena: self.arena)
@@ -342,6 +339,12 @@ extension Parser {
     let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
     let spec = self.parseAvailabilitySpecList()
     let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
+    let unexpectedAfterRParen: RawUnexpectedNodesSyntax?
+    if let (equalOperator, falseKeyword) = self.consume(if: { $0.isContextualPunctuator("==") }, followedBy: { TokenSpec.keyword(.false) ~= $0 }) {
+      unexpectedAfterRParen = RawUnexpectedNodesSyntax([equalOperator, falseKeyword], arena: self.arena)
+    } else {
+      unexpectedAfterRParen = nil
+    }
     return .availability(
       RawAvailabilityConditionSyntax(
         availabilityKeyword: keyword,
@@ -350,6 +353,7 @@ extension Parser {
         availabilitySpec: spec,
         unexpectedBeforeRParen,
         rightParen: rparen,
+        unexpectedAfterRParen,
         arena: self.arena
       )
     )

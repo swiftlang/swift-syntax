@@ -12,7 +12,7 @@
 
 import XCTest
 import SwiftSyntax
-import SwiftSyntaxParser
+import SwiftParser
 
 public class IncrementalParsingTests: XCTestCase {
 
@@ -21,10 +21,10 @@ public class IncrementalParsingTests: XCTestCase {
     let step: (String, (Int, Int, String)) =
       ("struct AA { func f() {", (8, 0, "A"))
 
-    var tree = try! SyntaxParser.parse(source: original)
+    var tree = Parser.parse(source: original)
     let sourceEdit = SourceEdit(range: ByteSourceRange(offset: step.1.0, length: step.1.1), replacementLength: step.1.2.utf8.count)
     let lookup = IncrementalParseTransition(previousTree: tree, edits: ConcurrentEdits(sourceEdit))
-    tree = try! SyntaxParser.parse(source: step.0, parseTransition: lookup)
+    tree = Parser.parse(source: step.0, parseTransition: lookup)
     XCTAssertEqual("\(tree)", step.0)
   }
 
@@ -35,11 +35,11 @@ public class IncrementalParsingTests: XCTestCase {
     let step: (String, (Int, Int, String)) =
       ("struct AA {}\nstruct B {}\n", (8, 0, "A"))
 
-    let origTree = try! SyntaxParser.parse(source: original)
+    let origTree = Parser.parse(source: original)
     let sourceEdit = SourceEdit(range: ByteSourceRange(offset: step.1.0, length: step.1.1), replacementLength: step.1.2.utf8.count)
     let reusedNodeCollector = IncrementalParseReusedNodeCollector()
     let transition = IncrementalParseTransition(previousTree: origTree, edits: ConcurrentEdits(sourceEdit), reusedNodeDelegate: reusedNodeCollector)
-    let newTree = try! SyntaxParser.parse(source: step.0, parseTransition: transition)
+    let newTree = Parser.parse(source: step.0, parseTransition: transition)
     XCTAssertEqual("\(newTree)", step.0)
 
     let origStructB = origTree.statements[1]

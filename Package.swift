@@ -49,7 +49,6 @@ let package = Package(
     .library(name: "SwiftSyntax", type: .static, targets: ["SwiftSyntax"]),
     .library(name: "SwiftSyntaxBuilder", type: .static, targets: ["SwiftSyntaxBuilder"]),
     .library(name: "SwiftSyntaxMacros", type: .static, targets: ["SwiftSyntaxMacros"]),
-    .library(name: "SwiftSyntaxParser", type: .static, targets: ["SwiftSyntaxParser"]),
   ],
   targets: [
     // MARK: - Internal helper targets
@@ -61,6 +60,11 @@ let package = Package(
     .target(
       name: "_SwiftSyntaxTestSupport",
       dependencies: ["SwiftBasicFormat", "SwiftSyntax", "SwiftSyntaxBuilder"]
+    ),
+
+    .testTarget(
+      name: "SwiftSyntaxTestSupportTest",
+      dependencies: ["_SwiftSyntaxTestSupport", "SwiftParser"]
     ),
 
     // MARK: - Library targets
@@ -236,7 +240,7 @@ let package = Package(
 
     .executableTarget(
       name: "lit-test-helper",
-      dependencies: ["IDEUtils", "SwiftSyntax", "SwiftSyntaxParser"]
+      dependencies: ["IDEUtils", "SwiftSyntax", "SwiftParser"]
     ),
 
     // MARK: PerformanceTest
@@ -244,21 +248,7 @@ let package = Package(
 
     .testTarget(
       name: "PerformanceTest",
-      dependencies: ["IDEUtils", "SwiftParser", "SwiftSyntax", "SwiftSyntaxParser"],
-      exclude: ["Inputs"]
-    ),
-
-    // MARK: SwiftSyntaxParser
-    // TODO: All clients should use SwiftParser instead
-
-    .target(
-      name: "SwiftSyntaxParser",
-      dependencies: ["SwiftSyntax", "SwiftParser"]
-    ),
-
-    .testTarget(
-      name: "SwiftSyntaxParserTest",
-      dependencies: ["_SwiftSyntaxTestSupport", "SwiftSyntaxParser"],
+      dependencies: ["IDEUtils", "SwiftParser", "SwiftSyntax"],
       exclude: ["Inputs"]
     ),
   ]

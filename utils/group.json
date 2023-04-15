@@ -8,6 +8,7 @@
     "RawSyntaxValidation.swift",
   ],
   "Syntax": [
+    "ChildNameForKeyPath.swift",
     "Keyword.swift",
     "SyntaxChildren.swift",
     "SyntaxData.swift",

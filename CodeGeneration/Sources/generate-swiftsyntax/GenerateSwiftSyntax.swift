@@ -98,6 +98,7 @@ struct GenerateSwiftSyntax: ParsableCommand {
         GeneratedFileSpec(swiftParserDiagnosticsGeneratedDir + ["TokenNameForDiagnostics.swift"], tokenNameForDiagnosticFile),
 
         // SwiftSyntax
+        GeneratedFileSpec(swiftSyntaxGeneratedDir + ["ChildNameForKeyPath.swift"], childNameForKeyPathFile),
         GeneratedFileSpec(swiftSyntaxGeneratedDir + ["Keyword.swift"], keywordFile),
         GeneratedFileSpec(swiftSyntaxGeneratedDir + ["raw", "RawSyntaxNodes.swift"], rawSyntaxNodesFile),
         GeneratedFileSpec(swiftSyntaxGeneratedDir + ["raw", "RawSyntaxValidation.swift"], rawSyntaxValidationFile),

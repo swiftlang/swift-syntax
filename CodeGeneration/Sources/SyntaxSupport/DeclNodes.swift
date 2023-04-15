@@ -332,7 +332,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "Detail",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .keyword(text: "set")])
+        kind: .token(choices: [.token(tokenKind: "IdentifierToken")])
       ),
       Child(
         name: "RightParen",
@@ -348,7 +348,44 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "Name",
-        kind: .token(choices: [.keyword(text: "class"), .keyword(text: "convenience"), .keyword(text: "dynamic"), .keyword(text: "final"), .keyword(text: "infix"), .keyword(text: "lazy"), .keyword(text: "optional"), .keyword(text: "override"), .keyword(text: "postfix"), .keyword(text: "prefix"), .keyword(text: "required"), .keyword(text: "static"), .keyword(text: "unowned"), .keyword(text: "weak"), .keyword(text: "private"), .keyword(text: "fileprivate"), .keyword(text: "internal"), .keyword(text: "public"), .keyword(text: "open"), .keyword(text: "mutating"), .keyword(text: "nonmutating"), .keyword(text: "indirect"), .keyword(text: "__consuming"), .keyword(text: "borrowing"), .keyword(text: "consuming"), .keyword(text: "actor"), .keyword(text: "async"), .keyword(text: "distributed"), .keyword(text: "isolated"), .keyword(text: "nonisolated"), .keyword(text: "_const"), .keyword(text: "_local"), .keyword(text: "package")]),
+        kind: .token(choices: [
+          .keyword(text: "__consuming"),
+          .keyword(text: "__setter_access"),
+          .keyword(text: "_const"),
+          .keyword(text: "_local"),
+          .keyword(text: "actor"),
+          .keyword(text: "async"),
+          .keyword(text: "borrowing"),
+          .keyword(text: "class"),
+          .keyword(text: "consuming"),
+          .keyword(text: "convenience"),
+          .keyword(text: "distributed"),
+          .keyword(text: "dynamic"),
+          .keyword(text: "fileprivate"),
+          .keyword(text: "final"),
+          .keyword(text: "indirect"),
+          .keyword(text: "infix"),
+          .keyword(text: "internal"),
+          .keyword(text: "isolated"),
+          .keyword(text: "lazy"),
+          .keyword(text: "mutating"),
+          .keyword(text: "nonisolated"),
+          .keyword(text: "nonmutating"),
+          .keyword(text: "open"),
+          .keyword(text: "optional"),
+          .keyword(text: "override"),
+          .keyword(text: "package"),
+          .keyword(text: "postfix"),
+          .keyword(text: "prefix"),
+          .keyword(text: "private"),
+          .keyword(text: "public"),
+          .keyword(text: "reasync"),
+          .keyword(text: "required"),
+          .keyword(text: "setter_access"),
+          .keyword(text: "static"),
+          .keyword(text: "unowned"),
+          .keyword(text: "weak"),
+        ]),
         classification: "Attribute"
       ),
       Child(

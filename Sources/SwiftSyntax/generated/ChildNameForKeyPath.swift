@@ -118,12 +118,12 @@ internal func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenInheritanceClauseAndGenericWhereClause"
   case \ActorDeclSyntax.genericWhereClause:
     return "genericWhereClause"
-  case \ActorDeclSyntax.unexpectedBetweenGenericWhereClauseAndMembers:
-    return "unexpectedBetweenGenericWhereClauseAndMembers"
-  case \ActorDeclSyntax.members:
-    return "members"
-  case \ActorDeclSyntax.unexpectedAfterMembers:
-    return "unexpectedAfterMembers"
+  case \ActorDeclSyntax.unexpectedBetweenGenericWhereClauseAndMemberBlock:
+    return "unexpectedBetweenGenericWhereClauseAndMemberBlock"
+  case \ActorDeclSyntax.memberBlock:
+    return "memberBlock"
+  case \ActorDeclSyntax.unexpectedAfterMemberBlock:
+    return "unexpectedAfterMemberBlock"
   case \ArrayElementSyntax.unexpectedBeforeExpression:
     return "unexpectedBeforeExpression"
   case \ArrayElementSyntax.expression:
@@ -468,12 +468,12 @@ internal func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenInheritanceClauseAndGenericWhereClause"
   case \ClassDeclSyntax.genericWhereClause:
     return "genericWhereClause"
-  case \ClassDeclSyntax.unexpectedBetweenGenericWhereClauseAndMembers:
-    return "unexpectedBetweenGenericWhereClauseAndMembers"
-  case \ClassDeclSyntax.members:
-    return "members"
-  case \ClassDeclSyntax.unexpectedAfterMembers:
-    return "unexpectedAfterMembers"
+  case \ClassDeclSyntax.unexpectedBetweenGenericWhereClauseAndMemberBlock:
+    return "unexpectedBetweenGenericWhereClauseAndMemberBlock"
+  case \ClassDeclSyntax.memberBlock:
+    return "memberBlock"
+  case \ClassDeclSyntax.unexpectedAfterMemberBlock:
+    return "unexpectedAfterMemberBlock"
   case \ClassRestrictionTypeSyntax.unexpectedBeforeClassKeyword:
     return "unexpectedBeforeClassKeyword"
   case \ClassRestrictionTypeSyntax.classKeyword:
@@ -1168,12 +1168,12 @@ internal func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenInheritanceClauseAndGenericWhereClause"
   case \EnumDeclSyntax.genericWhereClause:
     return "genericWhereClause"
-  case \EnumDeclSyntax.unexpectedBetweenGenericWhereClauseAndMembers:
-    return "unexpectedBetweenGenericWhereClauseAndMembers"
-  case \EnumDeclSyntax.members:
-    return "members"
-  case \EnumDeclSyntax.unexpectedAfterMembers:
-    return "unexpectedAfterMembers"
+  case \EnumDeclSyntax.unexpectedBetweenGenericWhereClauseAndMemberBlock:
+    return "unexpectedBetweenGenericWhereClauseAndMemberBlock"
+  case \EnumDeclSyntax.memberBlock:
+    return "memberBlock"
+  case \EnumDeclSyntax.unexpectedAfterMemberBlock:
+    return "unexpectedAfterMemberBlock"
   case \ExposeAttributeArgumentsSyntax.unexpectedBeforeLanguage:
     return "unexpectedBeforeLanguage"
   case \ExposeAttributeArgumentsSyntax.language:
@@ -1246,12 +1246,12 @@ internal func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenInheritanceClauseAndGenericWhereClause"
   case \ExtensionDeclSyntax.genericWhereClause:
     return "genericWhereClause"
-  case \ExtensionDeclSyntax.unexpectedBetweenGenericWhereClauseAndMembers:
-    return "unexpectedBetweenGenericWhereClauseAndMembers"
-  case \ExtensionDeclSyntax.members:
-    return "members"
-  case \ExtensionDeclSyntax.unexpectedAfterMembers:
-    return "unexpectedAfterMembers"
+  case \ExtensionDeclSyntax.unexpectedBetweenGenericWhereClauseAndMemberBlock:
+    return "unexpectedBetweenGenericWhereClauseAndMemberBlock"
+  case \ExtensionDeclSyntax.memberBlock:
+    return "memberBlock"
+  case \ExtensionDeclSyntax.unexpectedAfterMemberBlock:
+    return "unexpectedAfterMemberBlock"
   case \FallthroughStmtSyntax.unexpectedBeforeFallthroughKeyword:
     return "unexpectedBeforeFallthroughKeyword"
   case \FallthroughStmtSyntax.fallthroughKeyword:
@@ -2586,12 +2586,12 @@ internal func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenInheritanceClauseAndGenericWhereClause"
   case \ProtocolDeclSyntax.genericWhereClause:
     return "genericWhereClause"
-  case \ProtocolDeclSyntax.unexpectedBetweenGenericWhereClauseAndMembers:
-    return "unexpectedBetweenGenericWhereClauseAndMembers"
-  case \ProtocolDeclSyntax.members:
-    return "members"
-  case \ProtocolDeclSyntax.unexpectedAfterMembers:
-    return "unexpectedAfterMembers"
+  case \ProtocolDeclSyntax.unexpectedBetweenGenericWhereClauseAndMemberBlock:
+    return "unexpectedBetweenGenericWhereClauseAndMemberBlock"
+  case \ProtocolDeclSyntax.memberBlock:
+    return "memberBlock"
+  case \ProtocolDeclSyntax.unexpectedAfterMemberBlock:
+    return "unexpectedAfterMemberBlock"
   case \QualifiedDeclNameSyntax.unexpectedBeforeBaseType:
     return "unexpectedBeforeBaseType"
   case \QualifiedDeclNameSyntax.baseType:
@@ -2776,12 +2776,12 @@ internal func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenInheritanceClauseAndGenericWhereClause"
   case \StructDeclSyntax.genericWhereClause:
     return "genericWhereClause"
-  case \StructDeclSyntax.unexpectedBetweenGenericWhereClauseAndMembers:
-    return "unexpectedBetweenGenericWhereClauseAndMembers"
-  case \StructDeclSyntax.members:
-    return "members"
-  case \StructDeclSyntax.unexpectedAfterMembers:
-    return "unexpectedAfterMembers"
+  case \StructDeclSyntax.unexpectedBetweenGenericWhereClauseAndMemberBlock:
+    return "unexpectedBetweenGenericWhereClauseAndMemberBlock"
+  case \StructDeclSyntax.memberBlock:
+    return "memberBlock"
+  case \StructDeclSyntax.unexpectedAfterMemberBlock:
+    return "unexpectedAfterMemberBlock"
   case \SubscriptDeclSyntax.unexpectedBeforeAttributes:
     return "unexpectedBeforeAttributes"
   case \SubscriptDeclSyntax.attributes:

@@ -199,11 +199,11 @@ extension Parser {
 
     let unexpectedBeforeDetail: RawUnexpectedNodesSyntax?
     let detail: RawTokenSyntax
-    if let setHandle = canRecoverTo(TokenSpec(.set, recoveryPrecedence: .weakBracketClose)) {
+    if let setHandle = canRecoverTo(TokenSpec(.set, remapping: .identifier, recoveryPrecedence: .weakBracketClose)) {
       (unexpectedBeforeDetail, detail) = eat(setHandle)
     } else {
       unexpectedBeforeDetail = nil
-      detail = missingToken(.set)
+      detail = missingToken(.identifier, text: "set")
     }
     let (unexpectedBeforeRightParen, rightParen) = expect(.rightParen)
 

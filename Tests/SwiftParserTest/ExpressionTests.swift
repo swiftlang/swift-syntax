@@ -611,6 +611,13 @@ final class ExpressionTests: XCTestCase {
         DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
       ]
     )
+
+    assertParse(
+      ###""1️⃣\1 \1""###,
+      diagnostics: [
+        DiagnosticSpec(message: "invalid escape sequence in literal")
+      ]
+    )
   }
 
   func testAdjacentRawStringLiterals() {

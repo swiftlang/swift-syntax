@@ -73,9 +73,9 @@ extension ActorDeclSyntax {
       inheritanceClause: TypeInheritanceClauseSyntax? = nil, 
       unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil, 
       genericWhereClause: GenericWhereClauseSyntax? = nil, 
-      unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil, 
-      unexpectedAfterMembers: UnexpectedNodesSyntax? = nil, 
-      @MemberDeclListBuilder membersBuilder: () throws -> MemberDeclListSyntax, 
+      unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil, 
+      unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil, 
+      @MemberDeclListBuilder memberBlockBuilder: () throws -> MemberDeclListSyntax, 
       trailingTrivia: Trivia? = nil
     ) rethrows {
     try self.init(
@@ -94,9 +94,9 @@ extension ActorDeclSyntax {
         inheritanceClause: inheritanceClause, 
         unexpectedBetweenInheritanceClauseAndGenericWhereClause, 
         genericWhereClause: genericWhereClause, 
-        unexpectedBetweenGenericWhereClauseAndMembers, 
-        members: MemberDeclBlockSyntax(members: membersBuilder()), 
-        unexpectedAfterMembers, 
+        unexpectedBetweenGenericWhereClauseAndMemberBlock, 
+        memberBlock: MemberDeclBlockSyntax(members: memberBlockBuilder()), 
+        unexpectedAfterMemberBlock, 
         trailingTrivia: trailingTrivia
       )
   }
@@ -174,9 +174,9 @@ extension ClassDeclSyntax {
       inheritanceClause: TypeInheritanceClauseSyntax? = nil, 
       unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil, 
       genericWhereClause: GenericWhereClauseSyntax? = nil, 
-      unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil, 
-      unexpectedAfterMembers: UnexpectedNodesSyntax? = nil, 
-      @MemberDeclListBuilder membersBuilder: () throws -> MemberDeclListSyntax, 
+      unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil, 
+      unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil, 
+      @MemberDeclListBuilder memberBlockBuilder: () throws -> MemberDeclListSyntax, 
       trailingTrivia: Trivia? = nil
     ) rethrows {
     try self.init(
@@ -195,9 +195,9 @@ extension ClassDeclSyntax {
         inheritanceClause: inheritanceClause, 
         unexpectedBetweenInheritanceClauseAndGenericWhereClause, 
         genericWhereClause: genericWhereClause, 
-        unexpectedBetweenGenericWhereClauseAndMembers, 
-        members: MemberDeclBlockSyntax(members: membersBuilder()), 
-        unexpectedAfterMembers, 
+        unexpectedBetweenGenericWhereClauseAndMemberBlock, 
+        memberBlock: MemberDeclBlockSyntax(members: memberBlockBuilder()), 
+        unexpectedAfterMemberBlock, 
         trailingTrivia: trailingTrivia
       )
   }
@@ -422,9 +422,9 @@ extension EnumDeclSyntax {
       inheritanceClause: TypeInheritanceClauseSyntax? = nil, 
       unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil, 
       genericWhereClause: GenericWhereClauseSyntax? = nil, 
-      unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil, 
-      unexpectedAfterMembers: UnexpectedNodesSyntax? = nil, 
-      @MemberDeclListBuilder membersBuilder: () throws -> MemberDeclListSyntax, 
+      unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil, 
+      unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil, 
+      @MemberDeclListBuilder memberBlockBuilder: () throws -> MemberDeclListSyntax, 
       trailingTrivia: Trivia? = nil
     ) rethrows {
     try self.init(
@@ -443,9 +443,9 @@ extension EnumDeclSyntax {
         inheritanceClause: inheritanceClause, 
         unexpectedBetweenInheritanceClauseAndGenericWhereClause, 
         genericWhereClause: genericWhereClause, 
-        unexpectedBetweenGenericWhereClauseAndMembers, 
-        members: MemberDeclBlockSyntax(members: membersBuilder()), 
-        unexpectedAfterMembers, 
+        unexpectedBetweenGenericWhereClauseAndMemberBlock, 
+        memberBlock: MemberDeclBlockSyntax(members: memberBlockBuilder()), 
+        unexpectedAfterMemberBlock, 
         trailingTrivia: trailingTrivia
       )
   }
@@ -502,9 +502,9 @@ extension ExtensionDeclSyntax {
       inheritanceClause: TypeInheritanceClauseSyntax? = nil, 
       unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil, 
       genericWhereClause: GenericWhereClauseSyntax? = nil, 
-      unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil, 
-      unexpectedAfterMembers: UnexpectedNodesSyntax? = nil, 
-      @MemberDeclListBuilder membersBuilder: () throws -> MemberDeclListSyntax, 
+      unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil, 
+      unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil, 
+      @MemberDeclListBuilder memberBlockBuilder: () throws -> MemberDeclListSyntax, 
       trailingTrivia: Trivia? = nil
     ) rethrows {
     try self.init(
@@ -521,9 +521,9 @@ extension ExtensionDeclSyntax {
         inheritanceClause: inheritanceClause, 
         unexpectedBetweenInheritanceClauseAndGenericWhereClause, 
         genericWhereClause: genericWhereClause, 
-        unexpectedBetweenGenericWhereClauseAndMembers, 
-        members: MemberDeclBlockSyntax(members: membersBuilder()), 
-        unexpectedAfterMembers, 
+        unexpectedBetweenGenericWhereClauseAndMemberBlock, 
+        memberBlock: MemberDeclBlockSyntax(members: memberBlockBuilder()), 
+        unexpectedAfterMemberBlock, 
         trailingTrivia: trailingTrivia
       )
   }
@@ -1069,9 +1069,9 @@ extension ProtocolDeclSyntax {
       inheritanceClause: TypeInheritanceClauseSyntax? = nil, 
       unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil, 
       genericWhereClause: GenericWhereClauseSyntax? = nil, 
-      unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil, 
-      unexpectedAfterMembers: UnexpectedNodesSyntax? = nil, 
-      @MemberDeclListBuilder membersBuilder: () throws -> MemberDeclListSyntax, 
+      unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil, 
+      unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil, 
+      @MemberDeclListBuilder memberBlockBuilder: () throws -> MemberDeclListSyntax, 
       trailingTrivia: Trivia? = nil
     ) rethrows {
     try self.init(
@@ -1090,9 +1090,9 @@ extension ProtocolDeclSyntax {
         inheritanceClause: inheritanceClause, 
         unexpectedBetweenInheritanceClauseAndGenericWhereClause, 
         genericWhereClause: genericWhereClause, 
-        unexpectedBetweenGenericWhereClauseAndMembers, 
-        members: MemberDeclBlockSyntax(members: membersBuilder()), 
-        unexpectedAfterMembers, 
+        unexpectedBetweenGenericWhereClauseAndMemberBlock, 
+        memberBlock: MemberDeclBlockSyntax(members: memberBlockBuilder()), 
+        unexpectedAfterMemberBlock, 
         trailingTrivia: trailingTrivia
       )
   }
@@ -1189,9 +1189,9 @@ extension StructDeclSyntax {
       inheritanceClause: TypeInheritanceClauseSyntax? = nil, 
       unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil, 
       genericWhereClause: GenericWhereClauseSyntax? = nil, 
-      unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil, 
-      unexpectedAfterMembers: UnexpectedNodesSyntax? = nil, 
-      @MemberDeclListBuilder membersBuilder: () throws -> MemberDeclListSyntax, 
+      unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil, 
+      unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil, 
+      @MemberDeclListBuilder memberBlockBuilder: () throws -> MemberDeclListSyntax, 
       trailingTrivia: Trivia? = nil
     ) rethrows {
     try self.init(
@@ -1210,9 +1210,9 @@ extension StructDeclSyntax {
         inheritanceClause: inheritanceClause, 
         unexpectedBetweenInheritanceClauseAndGenericWhereClause, 
         genericWhereClause: genericWhereClause, 
-        unexpectedBetweenGenericWhereClauseAndMembers, 
-        members: MemberDeclBlockSyntax(members: membersBuilder()), 
-        unexpectedAfterMembers, 
+        unexpectedBetweenGenericWhereClauseAndMemberBlock, 
+        memberBlock: MemberDeclBlockSyntax(members: memberBlockBuilder()), 
+        unexpectedAfterMemberBlock, 
         trailingTrivia: trailingTrivia
       )
   }

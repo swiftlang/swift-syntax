@@ -287,9 +287,9 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       inheritanceClause: TypeInheritanceClauseSyntax? = nil, 
       _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil, 
       genericWhereClause: GenericWhereClauseSyntax? = nil, 
-      _ unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil, 
-      members: MemberDeclBlockSyntax, 
-      _ unexpectedAfterMembers: UnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil, 
+      memberBlock: MemberDeclBlockSyntax, 
+      _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil, 
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -310,9 +310,9 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             inheritanceClause, 
             unexpectedBetweenInheritanceClauseAndGenericWhereClause, 
             genericWhereClause, 
-            unexpectedBetweenGenericWhereClauseAndMembers, 
-            members, 
-            unexpectedAfterMembers
+            unexpectedBetweenGenericWhereClauseAndMemberBlock, 
+            memberBlock, 
+            unexpectedAfterMemberBlock
           ))) {(arena, _) in 
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
@@ -329,9 +329,9 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           inheritanceClause?.raw, 
           unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw, 
           genericWhereClause?.raw, 
-          unexpectedBetweenGenericWhereClauseAndMembers?.raw, 
-          members.raw, 
-          unexpectedAfterMembers?.raw
+          unexpectedBetweenGenericWhereClauseAndMemberBlock?.raw, 
+          memberBlock.raw, 
+          unexpectedAfterMemberBlock?.raw
         ]
       let raw = RawSyntax.makeLayout(
           kind: SyntaxKind.actorDecl, 
@@ -509,7 +509,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 14, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -518,7 +518,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var members: MemberDeclBlockSyntax {
+  public var memberBlock: MemberDeclBlockSyntax {
     get {
       return MemberDeclBlockSyntax(data.child(at: 15, parent: Syntax(self))!)
     }
@@ -527,7 +527,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedAfterMembers: UnexpectedNodesSyntax? {
+  public var unexpectedAfterMemberBlock: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 16, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -552,9 +552,9 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.inheritanceClause, 
           \Self.unexpectedBetweenInheritanceClauseAndGenericWhereClause, 
           \Self.genericWhereClause, 
-          \Self.unexpectedBetweenGenericWhereClauseAndMembers, 
-          \Self.members, 
-          \Self.unexpectedAfterMembers
+          \Self.unexpectedBetweenGenericWhereClauseAndMemberBlock, 
+          \Self.memberBlock, 
+          \Self.unexpectedAfterMemberBlock
         ])
   }
 }
@@ -879,9 +879,9 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       inheritanceClause: TypeInheritanceClauseSyntax? = nil, 
       _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil, 
       genericWhereClause: GenericWhereClauseSyntax? = nil, 
-      _ unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil, 
-      members: MemberDeclBlockSyntax, 
-      _ unexpectedAfterMembers: UnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil, 
+      memberBlock: MemberDeclBlockSyntax, 
+      _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil, 
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -902,9 +902,9 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             inheritanceClause, 
             unexpectedBetweenInheritanceClauseAndGenericWhereClause, 
             genericWhereClause, 
-            unexpectedBetweenGenericWhereClauseAndMembers, 
-            members, 
-            unexpectedAfterMembers
+            unexpectedBetweenGenericWhereClauseAndMemberBlock, 
+            memberBlock, 
+            unexpectedAfterMemberBlock
           ))) {(arena, _) in 
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
@@ -921,9 +921,9 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           inheritanceClause?.raw, 
           unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw, 
           genericWhereClause?.raw, 
-          unexpectedBetweenGenericWhereClauseAndMembers?.raw, 
-          members.raw, 
-          unexpectedAfterMembers?.raw
+          unexpectedBetweenGenericWhereClauseAndMemberBlock?.raw, 
+          memberBlock.raw, 
+          unexpectedAfterMemberBlock?.raw
         ]
       let raw = RawSyntax.makeLayout(
           kind: SyntaxKind.classDecl, 
@@ -1101,7 +1101,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 14, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -1110,7 +1110,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var members: MemberDeclBlockSyntax {
+  public var memberBlock: MemberDeclBlockSyntax {
     get {
       return MemberDeclBlockSyntax(data.child(at: 15, parent: Syntax(self))!)
     }
@@ -1119,7 +1119,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedAfterMembers: UnexpectedNodesSyntax? {
+  public var unexpectedAfterMemberBlock: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 16, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -1144,9 +1144,9 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.inheritanceClause, 
           \Self.unexpectedBetweenInheritanceClauseAndGenericWhereClause, 
           \Self.genericWhereClause, 
-          \Self.unexpectedBetweenGenericWhereClauseAndMembers, 
-          \Self.members, 
-          \Self.unexpectedAfterMembers
+          \Self.unexpectedBetweenGenericWhereClauseAndMemberBlock, 
+          \Self.memberBlock, 
+          \Self.unexpectedAfterMemberBlock
         ])
   }
 }
@@ -1698,9 +1698,9 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       inheritanceClause: TypeInheritanceClauseSyntax? = nil, 
       _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil, 
       genericWhereClause: GenericWhereClauseSyntax? = nil, 
-      _ unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil, 
-      members: MemberDeclBlockSyntax, 
-      _ unexpectedAfterMembers: UnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil, 
+      memberBlock: MemberDeclBlockSyntax, 
+      _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil, 
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -1721,9 +1721,9 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             inheritanceClause, 
             unexpectedBetweenInheritanceClauseAndGenericWhereClause, 
             genericWhereClause, 
-            unexpectedBetweenGenericWhereClauseAndMembers, 
-            members, 
-            unexpectedAfterMembers
+            unexpectedBetweenGenericWhereClauseAndMemberBlock, 
+            memberBlock, 
+            unexpectedAfterMemberBlock
           ))) {(arena, _) in 
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
@@ -1740,9 +1740,9 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           inheritanceClause?.raw, 
           unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw, 
           genericWhereClause?.raw, 
-          unexpectedBetweenGenericWhereClauseAndMembers?.raw, 
-          members.raw, 
-          unexpectedAfterMembers?.raw
+          unexpectedBetweenGenericWhereClauseAndMemberBlock?.raw, 
+          memberBlock.raw, 
+          unexpectedAfterMemberBlock?.raw
         ]
       let raw = RawSyntax.makeLayout(
           kind: SyntaxKind.enumDecl, 
@@ -1927,7 +1927,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 14, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -1937,7 +1937,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
   
   /// The cases and other members of this enum.
-  public var members: MemberDeclBlockSyntax {
+  public var memberBlock: MemberDeclBlockSyntax {
     get {
       return MemberDeclBlockSyntax(data.child(at: 15, parent: Syntax(self))!)
     }
@@ -1946,7 +1946,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedAfterMembers: UnexpectedNodesSyntax? {
+  public var unexpectedAfterMemberBlock: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 16, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -1971,9 +1971,9 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.inheritanceClause, 
           \Self.unexpectedBetweenInheritanceClauseAndGenericWhereClause, 
           \Self.genericWhereClause, 
-          \Self.unexpectedBetweenGenericWhereClauseAndMembers, 
-          \Self.members, 
-          \Self.unexpectedAfterMembers
+          \Self.unexpectedBetweenGenericWhereClauseAndMemberBlock, 
+          \Self.memberBlock, 
+          \Self.unexpectedAfterMemberBlock
         ])
   }
 }
@@ -2013,9 +2013,9 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       inheritanceClause: TypeInheritanceClauseSyntax? = nil, 
       _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil, 
       genericWhereClause: GenericWhereClauseSyntax? = nil, 
-      _ unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil, 
-      members: MemberDeclBlockSyntax, 
-      _ unexpectedAfterMembers: UnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil, 
+      memberBlock: MemberDeclBlockSyntax, 
+      _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil, 
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -2034,9 +2034,9 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             inheritanceClause, 
             unexpectedBetweenInheritanceClauseAndGenericWhereClause, 
             genericWhereClause, 
-            unexpectedBetweenGenericWhereClauseAndMembers, 
-            members, 
-            unexpectedAfterMembers
+            unexpectedBetweenGenericWhereClauseAndMemberBlock, 
+            memberBlock, 
+            unexpectedAfterMemberBlock
           ))) {(arena, _) in 
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
@@ -2051,9 +2051,9 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           inheritanceClause?.raw, 
           unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw, 
           genericWhereClause?.raw, 
-          unexpectedBetweenGenericWhereClauseAndMembers?.raw, 
-          members.raw, 
-          unexpectedAfterMembers?.raw
+          unexpectedBetweenGenericWhereClauseAndMemberBlock?.raw, 
+          memberBlock.raw, 
+          unexpectedAfterMemberBlock?.raw
         ]
       let raw = RawSyntax.makeLayout(
           kind: SyntaxKind.extensionDecl, 
@@ -2213,7 +2213,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 12, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -2222,7 +2222,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var members: MemberDeclBlockSyntax {
+  public var memberBlock: MemberDeclBlockSyntax {
     get {
       return MemberDeclBlockSyntax(data.child(at: 13, parent: Syntax(self))!)
     }
@@ -2231,7 +2231,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedAfterMembers: UnexpectedNodesSyntax? {
+  public var unexpectedAfterMemberBlock: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 14, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -2254,9 +2254,9 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.inheritanceClause, 
           \Self.unexpectedBetweenInheritanceClauseAndGenericWhereClause, 
           \Self.genericWhereClause, 
-          \Self.unexpectedBetweenGenericWhereClauseAndMembers, 
-          \Self.members, 
-          \Self.unexpectedAfterMembers
+          \Self.unexpectedBetweenGenericWhereClauseAndMemberBlock, 
+          \Self.memberBlock, 
+          \Self.unexpectedAfterMemberBlock
         ])
   }
 }
@@ -4794,9 +4794,9 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       inheritanceClause: TypeInheritanceClauseSyntax? = nil, 
       _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil, 
       genericWhereClause: GenericWhereClauseSyntax? = nil, 
-      _ unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil, 
-      members: MemberDeclBlockSyntax, 
-      _ unexpectedAfterMembers: UnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil, 
+      memberBlock: MemberDeclBlockSyntax, 
+      _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil, 
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -4817,9 +4817,9 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             inheritanceClause, 
             unexpectedBetweenInheritanceClauseAndGenericWhereClause, 
             genericWhereClause, 
-            unexpectedBetweenGenericWhereClauseAndMembers, 
-            members, 
-            unexpectedAfterMembers
+            unexpectedBetweenGenericWhereClauseAndMemberBlock, 
+            memberBlock, 
+            unexpectedAfterMemberBlock
           ))) {(arena, _) in 
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
@@ -4836,9 +4836,9 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           inheritanceClause?.raw, 
           unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw, 
           genericWhereClause?.raw, 
-          unexpectedBetweenGenericWhereClauseAndMembers?.raw, 
-          members.raw, 
-          unexpectedAfterMembers?.raw
+          unexpectedBetweenGenericWhereClauseAndMemberBlock?.raw, 
+          memberBlock.raw, 
+          unexpectedAfterMemberBlock?.raw
         ]
       let raw = RawSyntax.makeLayout(
           kind: SyntaxKind.protocolDecl, 
@@ -5016,7 +5016,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 14, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -5025,7 +5025,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var members: MemberDeclBlockSyntax {
+  public var memberBlock: MemberDeclBlockSyntax {
     get {
       return MemberDeclBlockSyntax(data.child(at: 15, parent: Syntax(self))!)
     }
@@ -5034,7 +5034,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedAfterMembers: UnexpectedNodesSyntax? {
+  public var unexpectedAfterMemberBlock: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 16, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -5059,9 +5059,9 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.inheritanceClause, 
           \Self.unexpectedBetweenInheritanceClauseAndGenericWhereClause, 
           \Self.genericWhereClause, 
-          \Self.unexpectedBetweenGenericWhereClauseAndMembers, 
-          \Self.members, 
-          \Self.unexpectedAfterMembers
+          \Self.unexpectedBetweenGenericWhereClauseAndMemberBlock, 
+          \Self.memberBlock, 
+          \Self.unexpectedAfterMemberBlock
         ])
   }
 }
@@ -5103,9 +5103,9 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       inheritanceClause: TypeInheritanceClauseSyntax? = nil, 
       _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil, 
       genericWhereClause: GenericWhereClauseSyntax? = nil, 
-      _ unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil, 
-      members: MemberDeclBlockSyntax, 
-      _ unexpectedAfterMembers: UnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil, 
+      memberBlock: MemberDeclBlockSyntax, 
+      _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil, 
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -5126,9 +5126,9 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             inheritanceClause, 
             unexpectedBetweenInheritanceClauseAndGenericWhereClause, 
             genericWhereClause, 
-            unexpectedBetweenGenericWhereClauseAndMembers, 
-            members, 
-            unexpectedAfterMembers
+            unexpectedBetweenGenericWhereClauseAndMemberBlock, 
+            memberBlock, 
+            unexpectedAfterMemberBlock
           ))) {(arena, _) in 
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
@@ -5145,9 +5145,9 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           inheritanceClause?.raw, 
           unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw, 
           genericWhereClause?.raw, 
-          unexpectedBetweenGenericWhereClauseAndMembers?.raw, 
-          members.raw, 
-          unexpectedAfterMembers?.raw
+          unexpectedBetweenGenericWhereClauseAndMemberBlock?.raw, 
+          memberBlock.raw, 
+          unexpectedAfterMemberBlock?.raw
         ]
       let raw = RawSyntax.makeLayout(
           kind: SyntaxKind.structDecl, 
@@ -5325,7 +5325,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 14, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -5334,7 +5334,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var members: MemberDeclBlockSyntax {
+  public var memberBlock: MemberDeclBlockSyntax {
     get {
       return MemberDeclBlockSyntax(data.child(at: 15, parent: Syntax(self))!)
     }
@@ -5343,7 +5343,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedAfterMembers: UnexpectedNodesSyntax? {
+  public var unexpectedAfterMemberBlock: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 16, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -5368,9 +5368,9 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.inheritanceClause, 
           \Self.unexpectedBetweenInheritanceClauseAndGenericWhereClause, 
           \Self.genericWhereClause, 
-          \Self.unexpectedBetweenGenericWhereClauseAndMembers, 
-          \Self.members, 
-          \Self.unexpectedAfterMembers
+          \Self.unexpectedBetweenGenericWhereClauseAndMemberBlock, 
+          \Self.memberBlock, 
+          \Self.unexpectedAfterMemberBlock
         ])
   }
 }

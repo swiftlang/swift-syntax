@@ -37,7 +37,7 @@ final class ExtensionDeclTests: XCTestCase {
     let members = MemberDeclListSyntax(keywords.map { MemberDeclListItemSyntax(decl: $0) })
     let buildable = ExtensionDeclSyntax(
       extendedType: TypeSyntax("TokenSyntax"),
-      members: MemberDeclBlockSyntax(members: members)
+      memberBlock: MemberDeclBlockSyntax(members: members)
     )
 
     assertBuildResult(

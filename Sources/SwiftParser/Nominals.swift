@@ -25,7 +25,7 @@ protocol NominalTypeDeclarationTrait {
     primaryOrGenerics: PrimaryOrGenerics?,
     inheritanceClause: RawTypeInheritanceClauseSyntax?,
     genericWhereClause: RawGenericWhereClauseSyntax?,
-    members: RawMemberDeclBlockSyntax,
+    memberBlock: RawMemberDeclBlockSyntax,
     arena: __shared SyntaxArena
   )
 
@@ -43,10 +43,22 @@ extension RawProtocolDeclSyntax: NominalTypeDeclarationTrait {
     primaryOrGenerics: RawPrimaryAssociatedTypeClauseSyntax?,
     inheritanceClause: RawTypeInheritanceClauseSyntax?,
     genericWhereClause: RawGenericWhereClauseSyntax?,
-    members: RawMemberDeclBlockSyntax,
+    memberBlock: RawMemberDeclBlockSyntax,
     arena: __shared SyntaxArena
   ) {
-    self.init(attributes: attributes, modifiers: modifiers, unexpectedBeforeIntroducerKeyword, protocolKeyword: introducerKeyword, unexpectedBeforeIdentifier, identifier: identifier, primaryAssociatedTypeClause: primaryOrGenerics, inheritanceClause: inheritanceClause, genericWhereClause: genericWhereClause, members: members, arena: arena)
+    self.init(
+      attributes: attributes,
+      modifiers: modifiers,
+      unexpectedBeforeIntroducerKeyword,
+      protocolKeyword: introducerKeyword,
+      unexpectedBeforeIdentifier,
+      identifier: identifier,
+      primaryAssociatedTypeClause: primaryOrGenerics,
+      inheritanceClause: inheritanceClause,
+      genericWhereClause: genericWhereClause,
+      memberBlock: memberBlock,
+      arena: arena
+    )
   }
 
   static func parsePrimaryOrGenerics(_ parser: inout Parser) -> RawPrimaryAssociatedTypeClauseSyntax? {
@@ -65,10 +77,22 @@ extension RawClassDeclSyntax: NominalTypeDeclarationTrait {
     primaryOrGenerics: RawGenericParameterClauseSyntax?,
     inheritanceClause: RawTypeInheritanceClauseSyntax?,
     genericWhereClause: RawGenericWhereClauseSyntax?,
-    members: RawMemberDeclBlockSyntax,
+    memberBlock: RawMemberDeclBlockSyntax,
     arena: __shared SyntaxArena
   ) {
-    self.init(attributes: attributes, modifiers: modifiers, unexpectedBeforeIntroducerKeyword, classKeyword: introducerKeyword, unexpectedBeforeIdentifier, identifier: identifier, genericParameterClause: primaryOrGenerics, inheritanceClause: inheritanceClause, genericWhereClause: genericWhereClause, members: members, arena: arena)
+    self.init(
+      attributes: attributes,
+      modifiers: modifiers,
+      unexpectedBeforeIntroducerKeyword,
+      classKeyword: introducerKeyword,
+      unexpectedBeforeIdentifier,
+      identifier: identifier,
+      genericParameterClause: primaryOrGenerics,
+      inheritanceClause: inheritanceClause,
+      genericWhereClause: genericWhereClause,
+      memberBlock: memberBlock,
+      arena: arena
+    )
   }
 
   static func parsePrimaryOrGenerics(_ parser: inout Parser) -> RawGenericParameterClauseSyntax? {
@@ -87,10 +111,22 @@ extension RawActorDeclSyntax: NominalTypeDeclarationTrait {
     primaryOrGenerics: RawGenericParameterClauseSyntax?,
     inheritanceClause: RawTypeInheritanceClauseSyntax?,
     genericWhereClause: RawGenericWhereClauseSyntax?,
-    members: RawMemberDeclBlockSyntax,
+    memberBlock: RawMemberDeclBlockSyntax,
     arena: __shared SyntaxArena
   ) {
-    self.init(attributes: attributes, modifiers: modifiers, unexpectedBeforeIntroducerKeyword, actorKeyword: introducerKeyword, unexpectedBeforeIdentifier, identifier: identifier, genericParameterClause: primaryOrGenerics, inheritanceClause: inheritanceClause, genericWhereClause: genericWhereClause, members: members, arena: arena)
+    self.init(
+      attributes: attributes,
+      modifiers: modifiers,
+      unexpectedBeforeIntroducerKeyword,
+      actorKeyword: introducerKeyword,
+      unexpectedBeforeIdentifier,
+      identifier: identifier,
+      genericParameterClause: primaryOrGenerics,
+      inheritanceClause: inheritanceClause,
+      genericWhereClause: genericWhereClause,
+      memberBlock: memberBlock,
+      arena: arena
+    )
   }
 
   static func parsePrimaryOrGenerics(_ parser: inout Parser) -> RawGenericParameterClauseSyntax? {
@@ -109,10 +145,22 @@ extension RawStructDeclSyntax: NominalTypeDeclarationTrait {
     primaryOrGenerics: RawGenericParameterClauseSyntax?,
     inheritanceClause: RawTypeInheritanceClauseSyntax?,
     genericWhereClause: RawGenericWhereClauseSyntax?,
-    members: RawMemberDeclBlockSyntax,
+    memberBlock: RawMemberDeclBlockSyntax,
     arena: __shared SyntaxArena
   ) {
-    self.init(attributes: attributes, modifiers: modifiers, unexpectedBeforeIntroducerKeyword, structKeyword: introducerKeyword, unexpectedBeforeIdentifier, identifier: identifier, genericParameterClause: primaryOrGenerics, inheritanceClause: inheritanceClause, genericWhereClause: genericWhereClause, members: members, arena: arena)
+    self.init(
+      attributes: attributes,
+      modifiers: modifiers,
+      unexpectedBeforeIntroducerKeyword,
+      structKeyword: introducerKeyword,
+      unexpectedBeforeIdentifier,
+      identifier: identifier,
+      genericParameterClause: primaryOrGenerics,
+      inheritanceClause: inheritanceClause,
+      genericWhereClause: genericWhereClause,
+      memberBlock: memberBlock,
+      arena: arena
+    )
   }
 
   static func parsePrimaryOrGenerics(_ parser: inout Parser) -> RawGenericParameterClauseSyntax? {
@@ -131,10 +179,22 @@ extension RawEnumDeclSyntax: NominalTypeDeclarationTrait {
     primaryOrGenerics: RawGenericParameterClauseSyntax?,
     inheritanceClause: RawTypeInheritanceClauseSyntax?,
     genericWhereClause: RawGenericWhereClauseSyntax?,
-    members: RawMemberDeclBlockSyntax,
+    memberBlock: RawMemberDeclBlockSyntax,
     arena: __shared SyntaxArena
   ) {
-    self.init(attributes: attributes, modifiers: modifiers, unexpectedBeforeIntroducerKeyword, enumKeyword: introducerKeyword, unexpectedBeforeIdentifier, identifier: identifier, genericParameters: primaryOrGenerics, inheritanceClause: inheritanceClause, genericWhereClause: genericWhereClause, members: members, arena: arena)
+    self.init(
+      attributes: attributes,
+      modifiers: modifiers,
+      unexpectedBeforeIntroducerKeyword,
+      enumKeyword: introducerKeyword,
+      unexpectedBeforeIdentifier,
+      identifier: identifier,
+      genericParameters: primaryOrGenerics,
+      inheritanceClause: inheritanceClause,
+      genericWhereClause: genericWhereClause,
+      memberBlock: memberBlock,
+      arena: arena
+    )
   }
 
   static func parsePrimaryOrGenerics(_ parser: inout Parser) -> RawGenericParameterClauseSyntax? {
@@ -162,7 +222,7 @@ extension Parser {
         primaryOrGenerics: nil,
         inheritanceClause: nil,
         genericWhereClause: nil,
-        members: RawMemberDeclBlockSyntax(
+        memberBlock: RawMemberDeclBlockSyntax(
           leftBrace: RawTokenSyntax(missing: .leftBrace, arena: self.arena),
           members: RawMemberDeclListSyntax(elements: [], arena: self.arena),
           rightBrace: RawTokenSyntax(missing: .rightBrace, arena: self.arena),
@@ -194,7 +254,7 @@ extension Parser {
       whereClause = nil
     }
 
-    let members = self.parseMemberDeclList(introducer: introducerKeyword)
+    let memberBlock = self.parseMemberDeclList(introducer: introducerKeyword)
     return T.init(
       attributes: attrs.attributes,
       modifiers: attrs.modifiers,
@@ -205,7 +265,7 @@ extension Parser {
       primaryOrGenerics: primaryOrGenerics,
       inheritanceClause: inheritance,
       genericWhereClause: whereClause,
-      members: members,
+      memberBlock: memberBlock,
       arena: self.arena
     )
   }

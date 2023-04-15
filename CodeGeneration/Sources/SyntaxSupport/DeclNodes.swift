@@ -196,7 +196,7 @@ public let DECL_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "Members",
+        name: "MemberBlock",
         kind: .node(kind: "MemberDeclBlock")
       ),
     ]
@@ -312,7 +312,7 @@ public let DECL_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "Members",
+        name: "MemberBlock",
         kind: .node(kind: "MemberDeclBlock")
       ),
     ]
@@ -654,7 +654,7 @@ public let DECL_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "Members",
+        name: "MemberBlock",
         kind: .node(kind: "MemberDeclBlock"),
         description: "The cases and other members of this enum."
       ),
@@ -709,7 +709,7 @@ public let DECL_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "Members",
+        name: "MemberBlock",
         kind: .node(kind: "MemberDeclBlock")
       ),
     ]
@@ -1714,7 +1714,7 @@ public let DECL_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "Members",
+        name: "MemberBlock",
         kind: .node(kind: "MemberDeclBlock")
       ),
     ]
@@ -1816,7 +1816,7 @@ public let DECL_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "Members",
+        name: "MemberBlock",
         kind: .node(kind: "MemberDeclBlock")
       ),
     ]

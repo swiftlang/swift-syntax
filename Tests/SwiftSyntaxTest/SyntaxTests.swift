@@ -42,10 +42,10 @@ public class SyntaxTests: XCTestCase {
     let s = StructDeclSyntax(
       structKeyword: .keyword(.struct),
       identifier: .identifier("someStruct"),
-      members: MemberDeclBlockSyntax(leftBrace: .leftBraceToken(), members: [], rightBrace: .rightBraceToken())
+      memberBlock: MemberDeclBlockSyntax(leftBrace: .leftBraceToken(), members: [], rightBrace: .rightBraceToken())
     )
 
-    XCTAssertEqual(Syntax(s), s.members.parent)
-    XCTAssertNil(s.members.detach().parent)
+    XCTAssertEqual(Syntax(s), s.memberBlock.parent)
+    XCTAssertNil(s.memberBlock.detach().parent)
   }
 }

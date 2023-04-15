@@ -54,7 +54,7 @@ public class ParseFileTests: XCTestCase {
       var cases: [EnumCaseDeclSyntax] = []
       override func visit(_ node: EnumDeclSyntax) -> SyntaxVisitorContinueKind {
         cases.append(
-          contentsOf: node.members.members.compactMap {
+          contentsOf: node.memberBlock.members.compactMap {
             $0.decl.as(EnumCaseDeclSyntax.self)
           }
         )

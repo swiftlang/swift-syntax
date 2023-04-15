@@ -102,7 +102,7 @@ public protocol DeclGroupSyntax: SyntaxProtocol {
     set 
   }
   
-  var members: MemberDeclBlockSyntax { 
+  var memberBlock: MemberDeclBlockSyntax { 
     get 
     set 
   }

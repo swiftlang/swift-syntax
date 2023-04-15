@@ -419,7 +419,7 @@ extension Parser {
     } else {
       whereClause = nil
     }
-    let members = self.parseMemberDeclList(introducer: extensionKeyword)
+    let memberBlock = self.parseMemberDeclList(introducer: extensionKeyword)
     return RawExtensionDeclSyntax(
       attributes: attrs.attributes,
       modifiers: attrs.modifiers,
@@ -428,7 +428,7 @@ extension Parser {
       extendedType: type,
       inheritanceClause: inheritance,
       genericWhereClause: whereClause,
-      members: members,
+      memberBlock: memberBlock,
       arena: self.arena
     )
   }

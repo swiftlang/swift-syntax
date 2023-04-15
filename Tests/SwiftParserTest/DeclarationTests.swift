@@ -1293,7 +1293,7 @@ final class DeclarationTests: XCTestCase {
               ClassDeclSyntax(
                 classKeyword: .keyword(.class),
                 identifier: .identifier("A"),
-                members: MemberDeclBlockSyntax(
+                memberBlock: MemberDeclBlockSyntax(
                   leftBrace: .leftBraceToken(),
                   members: MemberDeclListSyntax([
                     MemberDeclListItemSyntax(
@@ -1322,7 +1322,7 @@ final class DeclarationTests: XCTestCase {
               ClassDeclSyntax(
                 classKeyword: .keyword(.class),
                 identifier: .identifier("B"),
-                members: MemberDeclBlockSyntax(
+                memberBlock: MemberDeclBlockSyntax(
                   leftBrace: .leftBraceToken(),
                   members: MemberDeclListSyntax([]),
                   rightBrace: .rightBraceToken()

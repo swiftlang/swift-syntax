@@ -46,7 +46,7 @@ final class InvalidIfExprTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected ':' and expression after '? ...' in ternary expression", fixIts: ["insert ':' and expression"]),
-        DiagnosticSpec(message: "expected ')' to end tuple"),
+        DiagnosticSpec(message: "expected ')' to end tuple", fixIts: ["insert ')'"]),
       ],
       fixedSource: "(a ? b ? c : d: <#expression#>)"
     )

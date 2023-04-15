@@ -31,7 +31,7 @@ final class OriginalDefinedInAttrTests: XCTestCase {
       public func foo1() {}
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "expected 'module' in @_originallyDefinedIn arguments"),
+        DiagnosticSpec(message: "expected 'module' in @_originallyDefinedIn arguments", fixIts: ["insert 'module'"]),
         DiagnosticSpec(message: "unexpected code 'modulename' before @_originallyDefinedIn arguments"),
       ]
     )
@@ -53,7 +53,7 @@ final class OriginalDefinedInAttrTests: XCTestCase {
       public class ToplevelClass1 {}
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ',' and version list in @_originallyDefinedIn arguments")
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ',' and version list in @_originallyDefinedIn arguments", fixIts: ["insert ',' and version list"])
       ]
     )
   }
@@ -65,7 +65,7 @@ final class OriginalDefinedInAttrTests: XCTestCase {
       public class ToplevelClass2 {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected 'module:', string literal, and ',' in @_originallyDefinedIn arguments")
+        DiagnosticSpec(message: "expected 'module:', string literal, and ',' in @_originallyDefinedIn arguments", fixIts: ["insert 'module:', string literal, and ','"])
       ]
     )
   }
@@ -77,8 +77,8 @@ final class OriginalDefinedInAttrTests: XCTestCase {
       public class ToplevelClass3 {}
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "expected version restriction in version"),
-        DiagnosticSpec(message: "expected ')' to end attribute"),
+        DiagnosticSpec(message: "expected version restriction in version", fixIts: ["insert version restriction"]),
+        DiagnosticSpec(message: "expected ')' to end attribute", fixIts: ["insert ')'"]),
       ]
     )
   }

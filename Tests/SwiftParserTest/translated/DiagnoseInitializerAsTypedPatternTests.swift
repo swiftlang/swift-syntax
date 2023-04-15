@@ -70,7 +70,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
       let e1️⃣: X(), ee: Int
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?")
+        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' with '='"])
       ],
       fixedSource: "let e= X(), ee: Int"
     )

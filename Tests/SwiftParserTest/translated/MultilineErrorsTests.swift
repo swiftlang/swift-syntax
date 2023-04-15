@@ -93,7 +93,7 @@ final class MultilineErrorsTests: XCTestCase {
           """
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "insufficient indentation of line in multi-line string literal")
+        DiagnosticSpec(message: "insufficient indentation of line in multi-line string literal", fixIts: ["change indentation of this line to match closing delimiter"])
       ],
       fixedSource: #"""
         _ = """
@@ -114,7 +114,7 @@ final class MultilineErrorsTests: XCTestCase {
       	"""
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "insufficient indentation of line in multi-line string literal")
+        DiagnosticSpec(message: "insufficient indentation of line in multi-line string literal", fixIts: ["change indentation of this line to match closing delimiter"])
       ],
       fixedSource: #"""
         _ = """
@@ -134,7 +134,7 @@ final class MultilineErrorsTests: XCTestCase {
           """
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "insufficient indentation of line in multi-line string literal")
+        DiagnosticSpec(message: "insufficient indentation of line in multi-line string literal", fixIts: ["change indentation of this line to match closing delimiter"])
       ],
       fixedSource: #"""
         _ = """
@@ -154,7 +154,7 @@ final class MultilineErrorsTests: XCTestCase {
           """
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "insufficient indentation of line in multi-line string literal")
+        DiagnosticSpec(message: "insufficient indentation of line in multi-line string literal", fixIts: ["change indentation of this line to match closing delimiter"])
       ],
       fixedSource: #"""
         _ = """
@@ -175,7 +175,7 @@ final class MultilineErrorsTests: XCTestCase {
           """
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "insufficient indentation of line in multi-line string literal")
+        DiagnosticSpec(message: "insufficient indentation of line in multi-line string literal", fixIts: ["change indentation of this line to match closing delimiter"])
       ],
       fixedSource: #"""
         _ = """
@@ -197,7 +197,7 @@ final class MultilineErrorsTests: XCTestCase {
         """
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected tab in indentation of line in multi-line string literal")
+        DiagnosticSpec(message: "unexpected tab in indentation of line in multi-line string literal", fixIts: ["change indentation of this line to match closing delimiter"])
       ],
       fixedSource: #"""
         _ = """
@@ -218,7 +218,7 @@ final class MultilineErrorsTests: XCTestCase {
           """
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected tab in indentation of line in multi-line string literal")
+        DiagnosticSpec(message: "unexpected tab in indentation of line in multi-line string literal", fixIts: ["change indentation of this line to match closing delimiter"])
       ],
       fixedSource: #"""
         _ = """
@@ -239,7 +239,7 @@ final class MultilineErrorsTests: XCTestCase {
       	"""
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected space in indentation of line in multi-line string literal")
+        DiagnosticSpec(message: "unexpected space in indentation of line in multi-line string literal", fixIts: ["change indentation of this line to match closing delimiter"])
       ],
       fixedSource: #"""
         _ = """
@@ -260,7 +260,7 @@ final class MultilineErrorsTests: XCTestCase {
       		"""
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected space in indentation of line in multi-line string literal")
+        DiagnosticSpec(message: "unexpected space in indentation of line in multi-line string literal", fixIts: ["change indentation of this line to match closing delimiter"])
       ]
     )
   }
@@ -292,7 +292,7 @@ final class MultilineErrorsTests: XCTestCase {
           Pi1️⃣"""
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "multi-line string literal closing delimiter must begin on a new line")
+        DiagnosticSpec(message: "multi-line string literal closing delimiter must begin on a new line", fixIts: ["insert newline"])
       ],
       fixedSource: #"""
         _ = """
@@ -343,7 +343,7 @@ final class MultilineErrorsTests: XCTestCase {
       	"""
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected space in indentation of the next 2 lines in multi-line string literal")
+        DiagnosticSpec(message: "unexpected space in indentation of the next 2 lines in multi-line string literal", fixIts: ["change indentation of this line to match closing delimiter"])
       ],
       fixedSource: #"""
         _ = """
@@ -373,9 +373,9 @@ final class MultilineErrorsTests: XCTestCase {
       		"""
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "insufficient indentation of the next 4 lines in multi-line string literal"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected space in indentation of the next 2 lines in multi-line string literal"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "insufficient indentation of the next 2 lines in multi-line string literal"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "insufficient indentation of the next 4 lines in multi-line string literal", fixIts: ["change indentation of this line to match closing delimiter"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected space in indentation of the next 2 lines in multi-line string literal", fixIts: ["change indentation of this line to match closing delimiter"]),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "insufficient indentation of the next 2 lines in multi-line string literal", fixIts: ["change indentation of this line to match closing delimiter"]),
       ],
       fixedSource: #"""
         _ = """
@@ -406,7 +406,7 @@ final class MultilineErrorsTests: XCTestCase {
           """
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "insufficient indentation of the next 2 lines in multi-line string literal")
+        DiagnosticSpec(message: "insufficient indentation of the next 2 lines in multi-line string literal", fixIts: ["change indentation of this line to match closing delimiter"])
       ],
       fixedSource: #"""
         _ = """
@@ -428,8 +428,8 @@ final class MultilineErrorsTests: XCTestCase {
           """
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "insufficient indentation of line in multi-line string literal"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "insufficient indentation of line in multi-line string literal"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "insufficient indentation of line in multi-line string literal", fixIts: ["change indentation of this line to match closing delimiter"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "insufficient indentation of line in multi-line string literal", fixIts: ["change indentation of this line to match closing delimiter"]),
       ],
       fixedSource: #"""
         _ = """
@@ -450,8 +450,8 @@ final class MultilineErrorsTests: XCTestCase {
                   2️⃣)!"
       """##,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ')' in string literal"),
-        DiagnosticSpec(locationMarker: "1️⃣", message: #"expected '"' to end string literal"#),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ')' in string literal", fixIts: [#"insert ')'"#]),
+        DiagnosticSpec(locationMarker: "1️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
         DiagnosticSpec(locationMarker: "2️⃣", message: #"extraneous code ')!"' at top level"#),
       ]
     )
@@ -466,8 +466,8 @@ final class MultilineErrorsTests: XCTestCase {
                   """2️⃣)!"
       """##,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected value and ')' in string literal"),
-        DiagnosticSpec(locationMarker: "1️⃣", message: #"expected '"' to end string literal"#),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected value and ')' in string literal", fixIts: ["insert value and ')'"]),
+        DiagnosticSpec(locationMarker: "1️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
         DiagnosticSpec(locationMarker: "2️⃣", message: #"extraneous code ')!"' at top level"#),
       ]
     )
@@ -515,7 +515,7 @@ final class MultilineErrorsTests: XCTestCase {
         """
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "escaped newline at the last line of a multi-line string literal is not allowed")
+        DiagnosticSpec(message: "escaped newline at the last line of a multi-line string literal is not allowed", fixIts: ["remove ''"])
       ],
       fixedSource: #"""
         _ = """
@@ -533,7 +533,7 @@ final class MultilineErrorsTests: XCTestCase {
         """
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "escaped newline at the last line of a multi-line string literal is not allowed")
+        DiagnosticSpec(message: "escaped newline at the last line of a multi-line string literal is not allowed", fixIts: ["remove ''"])
       ],
       fixedSource: #"""
         _ = """
@@ -551,7 +551,7 @@ final class MultilineErrorsTests: XCTestCase {
         """
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "escaped newline at the last line of a multi-line string literal is not allowed")
+        DiagnosticSpec(message: "escaped newline at the last line of a multi-line string literal is not allowed", fixIts: ["remove ''"])
       ],
       fixedSource: #"""
         _ = """
@@ -569,7 +569,7 @@ final class MultilineErrorsTests: XCTestCase {
         """
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "escaped newline at the last line of a multi-line string literal is not allowed")
+        DiagnosticSpec(message: "escaped newline at the last line of a multi-line string literal is not allowed", fixIts: ["remove ''"])
       ],
       fixedSource: #"""
         _ = """
@@ -587,7 +587,7 @@ final class MultilineErrorsTests: XCTestCase {
       """##,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "invalid escape sequence in literal"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"""' to end string literal"#),
+        DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"""' to end string literal"#, fixIts: [#"insert '"""'"#]),
       ]
     )
   }
@@ -600,7 +600,7 @@ final class MultilineErrorsTests: XCTestCase {
         """
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "escaped newline at the last line of a multi-line string literal is not allowed")
+        DiagnosticSpec(message: "escaped newline at the last line of a multi-line string literal is not allowed", fixIts: ["remove ''"])
       ],
       fixedSource: #"""
         _ = """
@@ -617,8 +617,8 @@ final class MultilineErrorsTests: XCTestCase {
         """
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "multi-line string literal content must begin on a new line"),
-        DiagnosticSpec(message: "escaped newline at the last line of a multi-line string literal is not allowed"),
+        DiagnosticSpec(message: "multi-line string literal content must begin on a new line", fixIts: ["insert newline"]),
+        DiagnosticSpec(message: "escaped newline at the last line of a multi-line string literal is not allowed", fixIts: ["remove ''"]),
       ],
       fixedSource: #"""
         _ = """
@@ -638,9 +638,9 @@ final class MultilineErrorsTests: XCTestCase {
         """
       """##,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: #"expected '"' to end string literal"#),
+        DiagnosticSpec(locationMarker: "1️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
         DiagnosticSpec(locationMarker: "2️⃣", message: #"unexpected code 'baz' in string literal"#),
-        DiagnosticSpec(locationMarker: "3️⃣", message: #"expected ')' in string literal"#, notes: [NoteSpec(message: "to match this opening '('")]),
+        DiagnosticSpec(locationMarker: "3️⃣", message: #"expected ')' in string literal"#, notes: [NoteSpec(message: "to match this opening '('")], fixIts: ["insert ')'"]),
       ],
       fixedSource: ##"""
         let _ = """
@@ -664,9 +664,9 @@ final class MultilineErrorsTests: XCTestCase {
       """##,
       substructure: Syntax(IdentifierExprSyntax(identifier: .identifier("abc"))),
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: #"expected '"' to end string literal"#),
+        DiagnosticSpec(locationMarker: "1️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
         DiagnosticSpec(locationMarker: "2️⃣", message: #"unexpected code 'baz' in string literal"#),
-        DiagnosticSpec(locationMarker: "3️⃣", message: #"expected ')' in string literal"#, notes: [NoteSpec(message: "to match this opening '('")]),
+        DiagnosticSpec(locationMarker: "3️⃣", message: #"expected ')' in string literal"#, notes: [NoteSpec(message: "to match this opening '('")], fixIts: ["insert ')'"]),
       ]
     )
   }
@@ -678,7 +678,7 @@ final class MultilineErrorsTests: XCTestCase {
       \(1)1️⃣"""
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "multi-line string literal closing delimiter must begin on a new line")
+        DiagnosticSpec(message: "multi-line string literal closing delimiter must begin on a new line", fixIts: ["insert newline"])
       ],
       fixedSource: #"""
         _ = """
@@ -698,7 +698,7 @@ final class MultilineErrorsTests: XCTestCase {
         """
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "insufficient indentation of line in multi-line string literal")
+        DiagnosticSpec(message: "insufficient indentation of line in multi-line string literal", fixIts: ["change indentation of this line to match closing delimiter"])
       ],
       fixedSource: #"""
           """
@@ -720,8 +720,8 @@ final class MultilineErrorsTests: XCTestCase {
         """
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "insufficient indentation of line in multi-line string literal"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "insufficient indentation of line in multi-line string literal"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "insufficient indentation of line in multi-line string literal", fixIts: ["change indentation of this line to match closing delimiter"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "insufficient indentation of line in multi-line string literal", fixIts: ["change indentation of this line to match closing delimiter"]),
       ],
       fixedSource: #"""
           """
@@ -745,7 +745,7 @@ final class MultilineErrorsTests: XCTestCase {
         """
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "insufficient indentation of the next 3 lines in multi-line string literal")
+        DiagnosticSpec(message: "insufficient indentation of the next 3 lines in multi-line string literal", fixIts: ["change indentation of this line to match closing delimiter"])
       ],
       fixedSource: #"""
           """
@@ -766,7 +766,7 @@ final class MultilineErrorsTests: XCTestCase {
       """
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "multi-line string literal content must begin on a new line")
+        DiagnosticSpec(message: "multi-line string literal content must begin on a new line", fixIts: ["insert newline"])
       ]
     )
   }

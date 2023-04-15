@@ -55,7 +55,7 @@ final class DeclarationTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "keyword 'where' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected '(' to start parameter clause", fixIts: ["insert '('"]),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected ':' and type in parameter"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected ':' and type in parameter", fixIts: ["insert ':' and type"]),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected ')' to end parameter clause", fixIts: ["insert ')'"]),
       ],
       fixedSource: """
@@ -124,15 +124,15 @@ final class DeclarationTests: XCTestCase {
       "class T where t1️⃣",
       diagnostics: [
         DiagnosticSpec(message: "expected ':' or '==' to indicate a conformance or same-type requirement"),
-        DiagnosticSpec(message: "expected member block in class"),
+        DiagnosticSpec(message: "expected member block in class", fixIts: ["insert member block"]),
       ]
     )
     assertParse(
       "class B<where g1️⃣",
       diagnostics: [
         DiagnosticSpec(message: "expected ':' or '==' to indicate a conformance or same-type requirement"),
-        DiagnosticSpec(message: "expected '>' to end generic parameter clause"),
-        DiagnosticSpec(message: "expected member block in class"),
+        DiagnosticSpec(message: "expected '>' to end generic parameter clause", fixIts: ["insert '>'"]),
+        DiagnosticSpec(message: "expected member block in class", fixIts: ["insert member block"]),
       ]
     )
   }
@@ -188,8 +188,8 @@ final class DeclarationTests: XCTestCase {
       "protocol P{1️⃣{}case2️⃣",
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '{}' before enum case"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in enum case"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end protocol"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in enum case", fixIts: ["insert identifier"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end protocol", fixIts: ["insert '}'"]),
       ]
     )
   }
@@ -220,7 +220,7 @@ final class DeclarationTests: XCTestCase {
     assertParse(
       "_ = foo/* */?.description1️⃣",
       diagnostics: [
-        DiagnosticSpec(message: "expected ':' and expression after '? ...' in ternary expression")
+        DiagnosticSpec(message: "expected ':' and expression after '? ...' in ternary expression", fixIts: ["insert ':' and expression"])
       ]
     )
 
@@ -288,8 +288,8 @@ final class DeclarationTests: XCTestCase {
       internal(set) var defaultProp = 0
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
       ]
     )
 
@@ -298,7 +298,7 @@ final class DeclarationTests: XCTestCase {
       private(1️⃣get) var a = 0
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected 'set' in modifier"),
+        DiagnosticSpec(message: "expected 'set' in modifier", fixIts: ["insert 'set'"]),
         DiagnosticSpec(message: "unexpected code 'get' in modifier"),
       ]
     )
@@ -310,7 +310,7 @@ final class DeclarationTests: XCTestCase {
       ) var a = 0
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected 'set)' to end modifier"),
+        DiagnosticSpec(message: "expected 'set)' to end modifier", fixIts: ["insert 'set)'"]),
         // FIXME: It should print `+` as detail of text.
         DiagnosticSpec(message: "unexpected code in variable"),
       ]
@@ -348,7 +348,7 @@ final class DeclarationTests: XCTestCase {
       private(1️⃣var a = 0
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected 'set)' to end modifier")
+        DiagnosticSpec(message: "expected 'set)' to end modifier", fixIts: ["insert 'set)'"])
       ]
     )
 
@@ -367,7 +367,7 @@ final class DeclarationTests: XCTestCase {
       private(1️⃣get, didSet var a = 0
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected 'set)' to end modifier"),
+        DiagnosticSpec(message: "expected 'set)' to end modifier", fixIts: ["insert 'set)'"]),
         DiagnosticSpec(message: "unexpected code 'get, didSet' in variable"),
       ]
     )
@@ -601,7 +601,7 @@ final class DeclarationTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected declaration after 'public' modifier")
+        DiagnosticSpec(message: "expected declaration after 'public' modifier", fixIts: ["insert declaration"])
       ]
     )
   }
@@ -610,7 +610,7 @@ final class DeclarationTests: XCTestCase {
     assertParse(
       "func test(first second 1️⃣Int)",
       diagnostics: [
-        DiagnosticSpec(message: "expected ':' in parameter")
+        DiagnosticSpec(message: "expected ':' in parameter", fixIts: ["insert ':'"])
       ]
     )
   }
@@ -628,7 +628,7 @@ final class DeclarationTests: XCTestCase {
     assertParse(
       "func test(first second: Int1️⃣",
       diagnostics: [
-        DiagnosticSpec(message: "expected ')' to end parameter clause")
+        DiagnosticSpec(message: "expected ')' to end parameter clause", fixIts: ["insert ')'"])
       ]
     )
   }
@@ -637,7 +637,7 @@ final class DeclarationTests: XCTestCase {
     assertParse(
       "func test 1️⃣first second: Int)",
       diagnostics: [
-        DiagnosticSpec(message: "expected '(' to start parameter clause")
+        DiagnosticSpec(message: "expected '(' to start parameter clause", fixIts: ["insert '('"])
       ]
     )
   }
@@ -665,7 +665,7 @@ final class DeclarationTests: XCTestCase {
         )
       ),
       diagnostics: [
-        DiagnosticSpec(message: "expected parameter clause in function signature")
+        DiagnosticSpec(message: "expected parameter clause in function signature", fixIts: ["insert parameter clause"])
       ]
     )
   }
@@ -702,7 +702,7 @@ final class DeclarationTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '->' and return type in subscript")
+        DiagnosticSpec(message: "expected '->' and return type in subscript", fixIts: ["insert '->' and return type"])
       ]
     )
   }
@@ -737,7 +737,7 @@ final class DeclarationTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected async specifier; did you mean 'async'?")
+        DiagnosticSpec(message: "expected async specifier; did you mean 'async'?", fixIts: ["replace 'reasync' with 'async'"])
       ]
     )
   }
@@ -750,9 +750,9 @@ final class DeclarationTests: XCTestCase {
       4️⃣}
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '}' to end struct"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '}' to end struct", fixIts: ["insert '}'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "bare slash regex literal may not start with space"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected '/' to end regex literal"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected '/' to end regex literal", fixIts: ["insert '/\'"]),
         DiagnosticSpec(locationMarker: "4️⃣", message: "extraneous brace at top level"),
       ]
     )
@@ -790,10 +790,10 @@ final class DeclarationTests: XCTestCase {
       Lorem1️⃣ ipsum2️⃣ dolor3️⃣ sit4️⃣ amet5️⃣, consectetur adipiscing elit
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
         DiagnosticSpec(locationMarker: "5️⃣", message: "extraneous code ', consectetur adipiscing elit' at top level"),
       ]
     )
@@ -847,9 +847,9 @@ final class DeclarationTests: XCTestCase {
         )
       ),
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' in parameter"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end parameter clause"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected identifier in struct"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' in parameter", fixIts: ["insert ':'"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end parameter clause", fixIts: ["insert ')'"]),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected identifier in struct", fixIts: ["insert identifier"]),
         DiagnosticSpec(locationMarker: "4️⃣", message: "unexpected code ')' in struct"),
       ]
     )
@@ -894,8 +894,8 @@ final class DeclarationTests: XCTestCase {
         )
       ),
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' in parameter"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ']' to end array type"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' in parameter", fixIts: ["insert ':'"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ']' to end array type", fixIts: ["insert ']'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code 'fourth: Int' in parameter clause"),
       ]
     )
@@ -916,8 +916,8 @@ final class DeclarationTests: XCTestCase {
         )
       ),
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' in parameter"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end parameter clause"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' in parameter", fixIts: ["insert ':'"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end parameter clause", fixIts: ["insert ')'"]),
         DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous code ': Int) {}' at top level"),
       ]
     )
@@ -931,12 +931,12 @@ final class DeclarationTests: XCTestCase {
       @3️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' in struct"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected condition in conditional compilation clause"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected name in attribute"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected declaration after attribute"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected '#endif' in conditional compilation block"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected '}' to end struct"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' in struct", fixIts: ["insert '{'"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected condition in conditional compilation clause", fixIts: ["insert condition"]),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected name in attribute", fixIts: ["insert name"]),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected declaration after attribute", fixIts: ["insert declaration"]),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected '#endif' in conditional compilation block", fixIts: ["insert '#endif'"]),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected '}' to end struct", fixIts: ["insert '}'"]),
       ]
     )
   }
@@ -1002,7 +1002,7 @@ final class DeclarationTests: XCTestCase {
       "1️⃣}class C2️⃣",
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before class"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in class"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in class", fixIts: ["insert member block"]),
       ],
       fixedSource: """
         }class C {}
@@ -1012,50 +1012,50 @@ final class DeclarationTests: XCTestCase {
       "1️⃣}enum C2️⃣",
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before enum"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in enum"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in enum", fixIts: ["insert member block"]),
       ]
     )
     assertParse(
       "1️⃣}protocol C2️⃣",
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before protocol"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in protocol"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in protocol", fixIts: ["insert member block"]),
       ]
     )
     assertParse(
       "1️⃣}actor C2️⃣",
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before actor"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in actor"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in actor", fixIts: ["insert member block"]),
       ]
     )
     assertParse(
       "1️⃣}struct C2️⃣",
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before struct"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in struct"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in struct", fixIts: ["insert member block"]),
       ]
     )
     assertParse(
       "1️⃣}func C2️⃣",
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before function"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature", fixIts: ["insert parameter clause"]),
       ]
     )
     assertParse(
       "1️⃣}init2️⃣",
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before initializer"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature", fixIts: ["insert parameter clause"]),
       ]
     )
     assertParse(
       "1️⃣}subscript2️⃣",
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before subscript"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in subscript"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '->' and return type in subscript"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in subscript", fixIts: ["insert parameter clause"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '->' and return type in subscript", fixIts: ["insert '->' and return type"]),
       ]
     )
   }
@@ -1143,10 +1143,10 @@ final class DeclarationTests: XCTestCase {
       struct U<@1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected name in attribute"),
-        DiagnosticSpec(message: "expected name in generic parameter"),
-        DiagnosticSpec(message: "expected '>' to end generic parameter clause"),
-        DiagnosticSpec(message: "expected member block in struct"),
+        DiagnosticSpec(message: "expected name in attribute", fixIts: ["insert name"]),
+        DiagnosticSpec(message: "expected name in generic parameter", fixIts: ["insert name"]),
+        DiagnosticSpec(message: "expected '>' to end generic parameter clause", fixIts: ["insert '>'"]),
+        DiagnosticSpec(message: "expected member block in struct", fixIts: ["insert member block"]),
       ]
     )
   }
@@ -1159,7 +1159,7 @@ final class DeclarationTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected member block in struct")
+        DiagnosticSpec(message: "expected member block in struct", fixIts: ["insert member block"])
       ]
     )
   }
@@ -1168,7 +1168,7 @@ final class DeclarationTests: XCTestCase {
     assertParse(
       "func 1️⃣{}",
       diagnostics: [
-        DiagnosticSpec(message: "expected identifier and function signature in function")
+        DiagnosticSpec(message: "expected identifier and function signature in function", fixIts: ["insert identifier and function signature"])
       ]
     )
   }
@@ -1210,7 +1210,7 @@ final class DeclarationTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '{' in variable")
+        DiagnosticSpec(message: "expected '{' in variable", fixIts: ["insert '{'"])
       ]
     )
   }
@@ -1230,7 +1230,7 @@ final class DeclarationTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '{' in variable")
+        DiagnosticSpec(message: "expected '{' in variable", fixIts: ["insert '{'"])
       ]
     )
   }
@@ -1247,10 +1247,30 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testNominalDeclarationRecovery() {
-    assertParse("protocol 1️⃣{}", diagnostics: [DiagnosticSpec(message: "expected identifier in protocol")])
-    assertParse("class 1️⃣{}", diagnostics: [DiagnosticSpec(message: "expected identifier in class")])
-    assertParse("struct 1️⃣{}", diagnostics: [DiagnosticSpec(message: "expected identifier in struct")])
-    assertParse("enum 1️⃣{}", diagnostics: [DiagnosticSpec(message: "expected identifier in enum")])
+    assertParse(
+      "protocol 1️⃣{}",
+      diagnostics: [
+        DiagnosticSpec(message: "expected identifier in protocol", fixIts: ["insert identifier"])
+      ]
+    )
+    assertParse(
+      "class 1️⃣{}",
+      diagnostics: [
+        DiagnosticSpec(message: "expected identifier in class", fixIts: ["insert identifier"])
+      ]
+    )
+    assertParse(
+      "struct 1️⃣{}",
+      diagnostics: [
+        DiagnosticSpec(message: "expected identifier in struct", fixIts: ["insert identifier"])
+      ]
+    )
+    assertParse(
+      "enum 1️⃣{}",
+      diagnostics: [
+        DiagnosticSpec(message: "expected identifier in enum", fixIts: ["insert identifier"])
+      ]
+    )
     // `actor` cannot recover from a missing identifier since it's contextual
     // based on the presence of the identifier.
   }
@@ -1313,8 +1333,8 @@ final class DeclarationTests: XCTestCase {
         ])
       ),
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'func' in function"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'func' in function", fixIts: ["insert 'func'"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature", fixIts: ["insert parameter clause"]),
       ]
     )
   }
@@ -1342,9 +1362,9 @@ final class DeclarationTests: XCTestCase {
       macro m5<T: P>(_: T)
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected parameter clause in function signature"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected parameter clause in function signature", fixIts: ["insert parameter clause"]),
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code ': Int = A.M1' before macro"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature", fixIts: ["insert parameter clause"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code ': T = A.M4 where T.Assoc: P' before macro"),
       ]
     )
@@ -1354,7 +1374,7 @@ final class DeclarationTests: XCTestCase {
       macro m1 1️⃣= A
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected parameter clause in function signature")
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected parameter clause in function signature", fixIts: ["insert parameter clause"])
       ]
     )
   }
@@ -1363,11 +1383,11 @@ final class DeclarationTests: XCTestCase {
     assertParse(
       "protocol1️⃣<2️⃣:3️⃣",
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in protocol"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected name in primary associated type clause"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '>' to end primary associated type clause"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected type in inherited type"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected member block in protocol"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in protocol", fixIts: ["insert identifier"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected name in primary associated type clause", fixIts: ["insert name"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '>' to end primary associated type clause", fixIts: ["insert '>'"]),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected type in inherited type", fixIts: ["insert type"]),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected member block in protocol", fixIts: ["insert member block"]),
       ]
     )
   }
@@ -1415,7 +1435,7 @@ final class DeclarationTests: XCTestCase {
       let a =1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected expression in variable")
+        DiagnosticSpec(message: "expected expression in variable", fixIts: ["insert expression"])
       ],
       fixedSource: """
         let a = <#expression#>

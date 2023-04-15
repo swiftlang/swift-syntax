@@ -37,7 +37,7 @@ final class PoundAssertTests: XCTestCase {
       #assert1️⃣ true2️⃣, "error message")
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: #"extraneous code ', "error message")' at top level"#),
       ]
     )
@@ -49,7 +49,7 @@ final class PoundAssertTests: XCTestCase {
       #assert(1️⃣, "error message")
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "expected value in macro expansion")
+        DiagnosticSpec(message: "expected value in macro expansion", fixIts: ["insert value"])
       ]
     )
   }
@@ -66,7 +66,8 @@ final class PoundAssertTests: XCTestCase {
           message: "expected ')' to end macro expansion",
           notes: [
             NoteSpec(message: "to match this opening '('")
-          ]
+          ],
+          fixIts: ["insert ')'"]
         )
       ]
     )
@@ -84,10 +85,10 @@ final class PoundAssertTests: XCTestCase {
           message: "expected ')' to end macro expansion",
           notes: [
             NoteSpec(message: "to match this opening '('")
-          ]
+          ],
+          fixIts: ["insert ')'"]
         )
       ]
     )
   }
-
 }

@@ -287,8 +287,8 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in enum case"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ':' and type in parameter"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in enum case", fixIts: ["insert identifier"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ':' and type in parameter", fixIts: ["insert ':' and type"]),
         DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code '0' in parameter clause"),
         DiagnosticSpec(locationMarker: "4️⃣", message: "unexpected code ':' in enum"),
       ],
@@ -343,7 +343,7 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected identifier in enum case")
+        DiagnosticSpec(message: "expected identifier in enum case", fixIts: ["insert identifier"])
       ]
     )
   }
@@ -356,7 +356,7 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected identifier in enum case"),
+        DiagnosticSpec(message: "expected identifier in enum case", fixIts: ["insert identifier"]),
         DiagnosticSpec(message: "unexpected code ':' in enum"),
       ]
     )
@@ -396,7 +396,7 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "keyword 'Self' cannot be used as an identifier here"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "keyword 'Self' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected 'Self' keyword in enum"),
       ]
     )
@@ -430,7 +430,7 @@ final class EnumTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "'_' cannot be used as an identifier here"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "'_' cannot be used as an identifier here"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected identifier in enum case"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected identifier in enum case", fixIts: ["insert identifier"]),
       ]
     )
   }
@@ -1207,7 +1207,7 @@ final class EnumTests: XCTestCase {
       enum 1️⃣switch {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "keyword 'switch' cannot be used as an identifier here")
+        DiagnosticSpec(message: "keyword 'switch' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"])
       ]
     )
   }
@@ -1240,7 +1240,7 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "keyword 'operator' cannot be used as an identifier here")
+        DiagnosticSpec(message: "keyword 'operator' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"])
       ]
     )
   }
@@ -1255,7 +1255,7 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "keyword 'var' cannot be used as an identifier here")
+        DiagnosticSpec(message: "keyword 'var' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"])
       ]
     )
   }
@@ -1283,7 +1283,7 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "keyword 'func' cannot be used as an identifier here")
+        DiagnosticSpec(message: "keyword 'func' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"])
       ]
     )
   }
@@ -1299,7 +1299,7 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected identifier in enum case")
+        DiagnosticSpec(message: "expected identifier in enum case", fixIts: ["insert identifier"])
       ]
     )
   }
@@ -1313,7 +1313,7 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected identifier in enum case")
+        DiagnosticSpec(message: "expected identifier in enum case", fixIts: ["insert identifier"])
       ]
     )
   }
@@ -1326,7 +1326,7 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "keyword 'let' cannot be used as an identifier here"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "keyword 'let' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '.foo(x, y):' in enum"),
       ]
     )
@@ -1341,8 +1341,8 @@ final class EnumTests: XCTestCase {
       }
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in enum case"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in enum case"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in enum case", fixIts: ["insert identifier"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in enum case", fixIts: ["insert identifier"]),
       ]
     )
   }

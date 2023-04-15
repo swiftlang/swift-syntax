@@ -22,7 +22,7 @@ final class ForwardSlashRegexSkippingAllowedTests: XCTestCase {
       var 1️⃣: Int
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected pattern in variable")
+        DiagnosticSpec(message: "expected pattern in variable", fixIts: ["insert pattern"])
       ]
     )
   }

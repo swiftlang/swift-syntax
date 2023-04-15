@@ -27,10 +27,10 @@ final class BraceRecoveryEofTests: XCTestCase {
           message: "expected '}' to end 'for' statement",
           notes: [
             NoteSpec(message: "to match this opening '{'")
-          ]
+          ],
+          fixIts: ["insert '}'"]
         )
       ]
     )
   }
-
 }

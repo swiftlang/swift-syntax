@@ -330,7 +330,7 @@ final class IfconfigExprTests: XCTestCase {
       #endif
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected value in function call")
+        DiagnosticSpec(message: "expected value in function call", fixIts: ["insert value"])
       ]
     )
   }
@@ -369,7 +369,7 @@ final class IfconfigExprTests: XCTestCase {
       #endif
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected value in function call")
+        DiagnosticSpec(message: "expected value in function call", fixIts: ["insert value"])
       ]
     )
   }

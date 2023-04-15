@@ -42,7 +42,7 @@ final class TypeMemberTests: XCTestCase {
           name: .identifier("", presence: .missing)
         )
       ),
-      diagnostics: [DiagnosticSpec(message: "expected name in member type")]
+      diagnostics: [DiagnosticSpec(message: "expected name in member type", fixIts: ["insert name"])]
     )
   }
 
@@ -86,7 +86,7 @@ final class TypeMemberTests: XCTestCase {
       assertParse(
         source,
         TypeSyntax.parse,
-        diagnostics: [DiagnosticSpec(message: "extraneous whitespace after '.' is not permitted")],
+        diagnostics: [DiagnosticSpec(message: "extraneous whitespace after '.' is not permitted", fixIts: ["remove whitespace"])],
         fixedSource: expected,
         line: line
       )

@@ -161,10 +161,10 @@ final class DeprecatedWhereTests: XCTestCase {
       func testCombinedConstraintsOld<T: 2️⃣protocol3️⃣<ProtoA, ProtoB> where T: ProtoC4️⃣>(x: T) {}
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected inherited type in generic parameter"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '>' to end generic parameter clause"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected identifier in protocol"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected inherited type in generic parameter", fixIts: ["insert inherited type"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '>' to end generic parameter clause", fixIts: ["insert '>'"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature", fixIts: ["insert parameter clause"]),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected identifier in protocol", fixIts: ["insert identifier"]),
         DiagnosticSpec(locationMarker: "4️⃣", message: "unexpected code '>(x: T)' in protocol"),
       ]
     )
@@ -176,10 +176,10 @@ final class DeprecatedWhereTests: XCTestCase {
       func testCombinedConstraintsOld<T: 2️⃣protocol3️⃣<ProtoA, ProtoB> where T: ProtoC4️⃣>(x: T) where T: ProtoD {}
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected inherited type in generic parameter"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '>' to end generic parameter clause"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected identifier in protocol"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected inherited type in generic parameter", fixIts: ["insert inherited type"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '>' to end generic parameter clause", fixIts: ["insert '>'"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature", fixIts: ["insert parameter clause"]),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected identifier in protocol", fixIts: ["insert identifier"]),
         DiagnosticSpec(locationMarker: "4️⃣", message: "unexpected code '>(x: T) where T: ProtoD' in protocol"),
       ]
     )

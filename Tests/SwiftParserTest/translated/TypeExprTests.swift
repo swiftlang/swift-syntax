@@ -558,7 +558,7 @@ final class TypeExprTests: XCTestCase {
       let _ = [(Int) -> 1️⃣throws Int]()
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'throws' must preceed '->'")
+        DiagnosticSpec(message: "'throws' must preceed '->'", fixIts: ["move 'throws' in front of '->'"])
       ],
       fixedSource: """
         let _ = [(Int) throws -> Int]()
@@ -572,7 +572,7 @@ final class TypeExprTests: XCTestCase {
       let _ = [Int throws 1️⃣Int]();
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '->' in array element")
+        DiagnosticSpec(message: "expected '->' in array element", fixIts: ["insert '->'"])
       ]
     )
   }
@@ -702,8 +702,8 @@ final class TypeExprTests: XCTestCase {
       func takesVoid(f: 1️⃣Void 2️⃣-> ()) {}
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(' to start function type"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' in function type"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(' to start function type", fixIts: ["insert '('"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' in function type", fixIts: ["insert ')'"]),
       ]
     )
   }

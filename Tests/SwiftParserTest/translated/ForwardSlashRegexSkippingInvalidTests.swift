@@ -64,7 +64,7 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "bare slash regex literal may not start with space"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '/' to end regex literal"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '/' to end regex literal", fixIts: ["insert '/'"]),
       ]
     )
   }
@@ -78,7 +78,7 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "bare slash regex literal may not start with space"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '/' to end regex literal"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '/' to end regex literal", fixIts: ["insert '/'"]),
       ]
     )
   }
@@ -115,8 +115,8 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
       }
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
       ]
     )
   }
@@ -129,7 +129,7 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '/' to end regex literal")
+        DiagnosticSpec(message: "expected '/' to end regex literal", fixIts: ["insert '/'"])
       ]
     )
   }
@@ -142,7 +142,7 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
       }
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "expected '/' to end regex literal")
+        DiagnosticSpec(message: "expected '/' to end regex literal", fixIts: ["insert '/'"])
       ]
     )
   }
@@ -155,7 +155,7 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '/' to end regex literal")
+        DiagnosticSpec(message: "expected '/' to end regex literal", fixIts: ["insert '/'"])
       ]
     )
   }
@@ -170,7 +170,7 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
       """#,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "bare slash regex literal may not start with space"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '/' to end regex literal"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '/' to end regex literal", fixIts: ["insert '/'"]),
         DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous brace at top level"),
 
       ]

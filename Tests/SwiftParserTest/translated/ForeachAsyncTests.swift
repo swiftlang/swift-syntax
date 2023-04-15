@@ -79,9 +79,9 @@ final class ForeachAsyncTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'in' in 'for' statement"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '{' in 'for' statement"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected '}' to end 'for' statement"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'in' in 'for' statement", fixIts: ["insert 'in'"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '{' in 'for' statement", fixIts: ["insert '{'"]),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected '}' to end 'for' statement", fixIts: ["insert '}'"]),
       ]
     )
   }

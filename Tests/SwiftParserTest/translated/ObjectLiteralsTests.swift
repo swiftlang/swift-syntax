@@ -21,7 +21,7 @@ final class ObjectLiteralsTests: XCTestCase {
       let _ = [#Color(colorLiteralRed: red, green: green, blue: blue, alpha: alpha)#1️⃣]
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in macro expansion")
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in macro expansion", fixIts: ["insert identifier"])
       ]
     )
   }
@@ -32,7 +32,7 @@ final class ObjectLiteralsTests: XCTestCase {
       let _ = [#Image(imageLiteral: localResourceNameAsString)#1️⃣]
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in macro expansion")
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in macro expansion", fixIts: ["insert identifier"])
       ]
     )
   }
@@ -43,7 +43,7 @@ final class ObjectLiteralsTests: XCTestCase {
       let _ = [#FileReference(fileReferenceLiteral: localResourceNameAsString)#1️⃣]
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in macro expansion")
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in macro expansion", fixIts: ["insert identifier"])
       ]
     )
   }
@@ -102,8 +102,8 @@ final class ObjectLiteralsTests: XCTestCase {
       let _ = [#1️⃣#2️⃣]
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in macro expansion"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in macro expansion"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in macro expansion", fixIts: ["insert identifier"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in macro expansion", fixIts: ["insert identifier"]),
       ]
     )
   }
@@ -114,7 +114,7 @@ final class ObjectLiteralsTests: XCTestCase {
       let _ = [#Color(_: 1, green: 1, 2)2️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ']' to end array")
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ']' to end array", fixIts: ["insert ']'"])
       ]
     )
   }
@@ -125,8 +125,8 @@ final class ObjectLiteralsTests: XCTestCase {
       let _ = [1️⃣#Color(red: 1, green: 1, blue: 1)#2️⃣3️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in macro expansion"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected ']' to end array"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in macro expansion", fixIts: ["insert identifier"]),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected ']' to end array", fixIts: ["insert ']'"]),
       ]
     )
   }
@@ -137,7 +137,7 @@ final class ObjectLiteralsTests: XCTestCase {
       let _ = [#Color(withRed: 1, green: 1, whatever: 2)#1️⃣]
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in macro expansion")
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in macro expansion", fixIts: ["insert identifier"])
       ]
     )
   }

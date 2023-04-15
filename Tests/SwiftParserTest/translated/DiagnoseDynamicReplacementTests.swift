@@ -32,7 +32,7 @@ final class DiagnoseDynamicReplacementTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '(', @_dynamicReplacement argument, and ')' in attribute")
+        DiagnosticSpec(message: "expected '(', @_dynamicReplacement argument, and ')' in attribute", fixIts: ["insert '(', @_dynamicReplacement argument, and ')'"])
       ]
     )
   }
@@ -45,8 +45,8 @@ final class DiagnoseDynamicReplacementTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected argument for '@_dynamicReplacement' attribute"),
-        DiagnosticSpec(message: "expected ')' to end attribute"),
+        DiagnosticSpec(message: "expected argument for '@_dynamicReplacement' attribute", fixIts: ["insert attribute argument"]),
+        DiagnosticSpec(message: "expected ')' to end attribute", fixIts: ["insert ')'"]),
       ]
     )
   }
@@ -63,10 +63,15 @@ final class DiagnoseDynamicReplacementTests: XCTestCase {
           message: "expected ')' to end attribute",
           notes: [
             NoteSpec(message: "to match this opening '('")
-          ]
+          ],
+          fixIts: ["insert ')'"]
         )
-      ]
+      ],
+      fixedSource: """
+        @_dynamicReplacement(for: dynamically_replaceable() )
+        func test_dynamic_replacement_for3() {
+        }
+        """
     )
   }
-
 }

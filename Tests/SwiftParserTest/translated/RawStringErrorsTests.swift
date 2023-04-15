@@ -21,7 +21,7 @@ final class RawStringErrorsTests: XCTestCase {
       let _ = "foo\(#"bar"#1️⃣#)baz"
       """###,
       diagnostics: [
-        DiagnosticSpec(message: "too many '#' characters in closing delimiter")
+        DiagnosticSpec(message: "too many '#' characters in closing delimiter", fixIts: ["remove extraneous delimiters"])
       ]
     )
   }
@@ -32,7 +32,7 @@ final class RawStringErrorsTests: XCTestCase {
       let _ = #"\#1️⃣#("invalid")"#
       """###,
       diagnostics: [
-        DiagnosticSpec(message: "too many '#' characters to start string interpolation")
+        DiagnosticSpec(message: "too many '#' characters to start string interpolation", fixIts: ["remove extraneous delimiters"])
       ],
       fixedSource: ###"""
         let _ = #"\#("invalid")"#
@@ -60,7 +60,7 @@ final class RawStringErrorsTests: XCTestCase {
       let _ = ####"invalid"###1️⃣
       """#####,
       diagnostics: [
-        DiagnosticSpec(message: #####"expected '"####' to end string literal"#####)
+        DiagnosticSpec(message: #####"expected '"####' to end string literal"#####, fixIts: [#####"insert '"####'"#####])
       ]
     )
   }
@@ -71,7 +71,7 @@ final class RawStringErrorsTests: XCTestCase {
       let _ = ###"invalid"###1️⃣###
       """#####,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "too many '#' characters in closing delimiter")
+        DiagnosticSpec(locationMarker: "1️⃣", message: "too many '#' characters in closing delimiter", fixIts: ["remove extraneous delimiters"])
       ]
     )
   }
@@ -84,8 +84,8 @@ final class RawStringErrorsTests: XCTestCase {
         aa2️⃣"""##
       """###,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "multi-line string literal content must begin on a new line"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "multi-line string literal closing delimiter must begin on a new line"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "multi-line string literal content must begin on a new line", fixIts: ["insert newline"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "multi-line string literal closing delimiter must begin on a new line", fixIts: ["insert newline"]),
       ],
       fixedSource: ###"""
         let _ = ##"""
@@ -104,7 +104,7 @@ final class RawStringErrorsTests: XCTestCase {
         """#
       """##,
       diagnostics: [
-        DiagnosticSpec(message: "multi-line string literal content must begin on a new line")
+        DiagnosticSpec(message: "multi-line string literal content must begin on a new line", fixIts: ["insert newline"])
       ],
       fixedSource: ##"""
         let _ = #"""
@@ -121,7 +121,7 @@ final class RawStringErrorsTests: XCTestCase {
         """###
       """####,
       diagnostics: [
-        DiagnosticSpec(message: "multi-line string literal content must begin on a new line")
+        DiagnosticSpec(message: "multi-line string literal content must begin on a new line", fixIts: ["insert newline"])
       ],
       fixedSource: ####"""
         let _ = ###"""

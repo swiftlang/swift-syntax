@@ -207,6 +207,34 @@ public struct Parser {
       break
     }
   }
+
+  #if SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION
+  var shouldRecordAlternativeTokenChoices: Bool = false
+
+  public mutating func enableAlternativeTokenChoices() {
+    shouldRecordAlternativeTokenChoices = true
+  }
+
+  /// When compiled with `SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION`, and
+  /// `shouldRecordAlternativeTokenChoices` is `true` the parser records which
+  /// `TokenSpec`s it checked for a token at a specific offset in the source
+  /// file. The offsets are the location of the token text's start (excluding
+  /// leading trivia).
+  ///
+  /// This information allows testing techniques to replace tokens by these
+  /// alternate token choices to generate new, interesting test cases
+  @_spi(RawSyntax)
+  public var alternativeTokenChoices: [Int: [TokenSpec]] = [:]
+
+  mutating func recordAlternativeTokenChoice(for lexeme: Lexer.Lexeme, choices: [TokenSpec]) {
+    guard let lexemeBaseAddress = lexeme.tokenText.baseAddress,
+      let offset = lexemes.offset(of: lexemeBaseAddress)
+    else {
+      return
+    }
+    alternativeTokenChoices[offset, default: []].append(contentsOf: choices)
+  }
+  #endif
 }
 
 // MARK: Inspecting Tokens

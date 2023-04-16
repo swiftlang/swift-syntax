@@ -16,18 +16,20 @@ import XCTest
 
 public class EntryTests: XCTestCase {
   func testTopLevelStringParse() throws {
-    assertParse("func test() {}", { Parser.parse(source: $0) })
+    let source = "func test() {}"
+    let tree = Parser.parse(source: source)
+    XCTAssert(tree.is(SourceFileSyntax.self))
+    XCTAssert(!tree.hasError)
+    XCTAssertEqual(tree.description, source)
   }
 
   func testTopLevelBufferParse() throws {
-    assertParse(
-      "func test() {}",
-      { (source: String) -> SourceFileSyntax in
-        var source = source
-        source.makeContiguousUTF8()
-        return source.withUTF8 { Parser.parse(source: $0) }
-      }
-    )
+    var source = "func test() {}"
+    source.makeContiguousUTF8()
+    let tree = source.withUTF8 { Parser.parse(source: $0) }
+    XCTAssert(tree.is(SourceFileSyntax.self))
+    XCTAssert(!tree.hasError)
+    XCTAssertEqual(tree.description, source)
   }
 
   func testSyntaxParse() throws {

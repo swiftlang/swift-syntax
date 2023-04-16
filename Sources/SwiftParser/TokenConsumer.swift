@@ -13,8 +13,7 @@
 @_spi(RawSyntax) import SwiftSyntax
 
 /// A type that consumes  instances of `TokenSyntax`.
-@_spi(RawSyntax)
-public protocol TokenConsumer {
+protocol TokenConsumer {
   associatedtype Token
   /// The current token syntax being examined by the consumer
   var currentToken: Lexer.Lexeme { get }
@@ -32,6 +31,21 @@ public protocol TokenConsumer {
   func peek() -> Lexer.Lexeme
 
   func lookahead() -> Parser.Lookahead
+
+  #if SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION
+  var shouldRecordAlternativeTokenChoices: Bool { get }
+
+  /// When compiled with `SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION`,
+  /// record alternative tokens that the parser was looking for at the offset of
+  /// `lexeme`.
+  ///
+  /// E.g. if at offset 33, we issue an `at(.leftParen)` call, this will record
+  /// that `.leftParen` is an interesting token at offset 33. This allows the
+  /// test case mutators to prefer replacing the current token at offset 33 by a
+  /// left paren, because apparently this would be a code path that the parser
+  /// is interested in.
+  mutating func recordAlternativeTokenChoice(for lexeme: Lexer.Lexeme, choices: [TokenSpec])
+  #endif
 }
 
 // MARK: Checking if we are at one specific token (`at`)
@@ -51,6 +65,11 @@ extension TokenConsumer {
   /// Returns whether the the current token matches `spec`
   @inline(__always)
   mutating func at(_ spec: TokenSpec) -> Bool {
+    #if SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION
+    if shouldRecordAlternativeTokenChoices {
+      recordAlternativeTokenChoice(for: self.currentToken, choices: [spec])
+    }
+    #endif
     return spec ~= self.currentToken
   }
 
@@ -60,6 +79,11 @@ extension TokenConsumer {
     _ spec1: TokenSpec,
     _ spec2: TokenSpec
   ) -> Bool {
+    #if SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION
+    if shouldRecordAlternativeTokenChoices {
+      recordAlternativeTokenChoice(for: self.currentToken, choices: [spec1, spec2])
+    }
+    #endif
     switch self.currentToken {
     case spec1: return true
     case spec2: return true
@@ -74,6 +98,11 @@ extension TokenConsumer {
     _ spec2: TokenSpec,
     _ spec3: TokenSpec
   ) -> Bool {
+    #if SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION
+    if shouldRecordAlternativeTokenChoices {
+      recordAlternativeTokenChoice(for: self.currentToken, choices: [spec1, spec2, spec3])
+    }
+    #endif
     switch self.currentToken {
     case spec1: return true
     case spec2: return true
@@ -93,6 +122,11 @@ extension TokenConsumer {
   /// as well as a handle to consume that token.
   @inline(__always)
   mutating func at<SpecSet: TokenSpecSet>(anyIn specSet: SpecSet.Type) -> (SpecSet, TokenConsumptionHandle)? {
+    #if SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION
+    if shouldRecordAlternativeTokenChoices {
+      recordAlternativeTokenChoice(for: self.currentToken, choices: specSet.allCases.map(\.spec))
+    }
+    #endif
     if let matchedKind = SpecSet(lexeme: self.currentToken) {
       precondition(matchedKind.spec ~= self.currentToken)
       return (

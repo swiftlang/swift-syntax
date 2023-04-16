@@ -454,6 +454,39 @@ func assertDiagnostic<T: SyntaxProtocol>(
   }
 }
 
+class MutatedTreePrinter: SyntaxVisitor {
+  private var mutations: [Int: TokenSpec] = [:]
+  private var printedSource: [UInt8] = []
+
+  /// Prints `tree` by replacing the tokens whose offset is in `mutations` by
+  /// a token that matches the corresponding `TokenSpec`.
+  static func print(tree: Syntax, mutations: [Int: TokenSpec]) -> [UInt8] {
+    let printer = MutatedTreePrinter(mutations: mutations)
+    printer.walk(tree)
+    return printer.printedSource
+  }
+
+  private init(mutations: [Int: TokenSpec]) {
+    self.mutations = mutations
+    super.init(viewMode: .sourceAccurate)
+  }
+
+  override func visit(_ node: TokenSyntax) -> SyntaxVisitorContinueKind {
+    if let mutation = mutations[node.positionAfterSkippingLeadingTrivia.utf8Offset] {
+      let token = TokenSyntax(
+        mutation.synthesizedTokenKind,
+        leadingTrivia: node.leadingTrivia,
+        trailingTrivia: node.trailingTrivia,
+        presence: .present
+      )
+      printedSource.append(contentsOf: token.syntaxTextBytes)
+      return .skipChildren
+    }
+    printedSource.append(contentsOf: node.syntaxTextBytes)
+    return .skipChildren
+  }
+}
+
 public struct AssertParseOptions: OptionSet {
   public var rawValue: UInt8
 
@@ -497,38 +530,6 @@ func assertParse(
   )
 }
 
-/// Same as `assertParse` overload with a `(String) -> S` `parse`,
-/// constructing a `Parser` from the given `String` and passing that to
-/// `parse` instead.
-func assertParse<S: SyntaxProtocol>(
-  _ markedSource: String,
-  _ parse: (inout Parser) -> S,
-  substructure expectedSubstructure: Syntax? = nil,
-  substructureAfterMarker: String = "START",
-  diagnostics expectedDiagnostics: [DiagnosticSpec] = [],
-  applyFixIts: [String]? = nil,
-  fixedSource expectedFixedSource: String? = nil,
-  options: AssertParseOptions = [],
-  file: StaticString = #file,
-  line: UInt = #line
-) {
-  assertParse(
-    markedSource,
-    { (source: String) -> S in
-      var parser = Parser(source)
-      return parse(&parser)
-    },
-    substructure: expectedSubstructure,
-    substructureAfterMarker: substructureAfterMarker,
-    diagnostics: expectedDiagnostics,
-    applyFixIts: applyFixIts,
-    fixedSource: expectedFixedSource,
-    options: options,
-    file: file,
-    line: line
-  )
-}
-
 /// Removes any test markers from `markedSource` (1) and parses the result
 /// using `parse`. By default it only checks if the parsed syntax tree is
 /// printable back to the origin source, ie. it round trips.
@@ -549,7 +550,7 @@ func assertParse<S: SyntaxProtocol>(
 ///     this string.
 func assertParse<S: SyntaxProtocol>(
   _ markedSource: String,
-  _ parse: (String) -> S,
+  _ parse: (inout Parser) -> S,
   substructure expectedSubstructure: Syntax? = nil,
   substructureAfterMarker: String = "START",
   diagnostics expectedDiagnostics: [DiagnosticSpec] = [],
@@ -563,7 +564,15 @@ func assertParse<S: SyntaxProtocol>(
   var (markerLocations, source) = extractMarkers(markedSource)
   markerLocations["START"] = 0
 
-  let tree: S = parse(source)
+  var parser = Parser(source)
+  #if SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION
+  let enableTestCaseMutation = ProcessInfo.processInfo.environment["SKIP_LONG_TESTS"] != "1"
+
+  if enableTestCaseMutation {
+    parser.enableAlternativeTokenChoices()
+  }
+  #endif
+  let tree: S = parse(&parser)
 
   // Round-trip
   assertStringsEqualWithDiff(
@@ -623,4 +632,38 @@ func assertParse<S: SyntaxProtocol>(
       line: line
     )
   }
+
+  #if SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION
+  if enableTestCaseMutation {
+    let mutations: [(offset: Int, replacement: TokenSpec)] = parser.alternativeTokenChoices.flatMap { offset, replacements in
+      return replacements.map { (offset, $0) }
+    }
+    DispatchQueue.concurrentPerform(iterations: mutations.count) { index in
+      let mutation = mutations[index]
+      let alternateSource = MutatedTreePrinter.print(tree: Syntax(tree), mutations: [mutation.offset: mutation.replacement])
+      alternateSource.withUnsafeBufferPointer { buf in
+        let mutatedSource = String(decoding: buf, as: UTF8.self)
+        // Check that we don't hit any assertions in the parser while parsing
+        // the mutated source and that it round-trips
+        var mutatedParser = Parser(buf)
+        let mutatedTree = parse(&mutatedParser)
+        assertStringsEqualWithDiff(
+          "\(mutatedTree)",
+          mutatedSource,
+          additionalInfo: """
+            Mutated source failed to round-trip.
+
+            Mutated source:
+            \(mutatedSource)
+
+            Actual syntax tree:
+            \(mutatedTree.debugDescription)
+            """,
+          file: file,
+          line: line
+        )
+      }
+    }
+  }
+  #endif
 }

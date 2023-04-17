@@ -13,7 +13,7 @@
 import XCTest
 import IDEUtils
 import SwiftSyntax
-import SwiftSyntaxParser
+import SwiftParser
 
 public class SyntaxClassifierPerformanceTests: XCTestCase {
 
@@ -28,7 +28,8 @@ public class SyntaxClassifierPerformanceTests: XCTestCase {
     try XCTSkipIf(ProcessInfo.processInfo.environment["SKIP_LONG_TESTS"] == "1")
     XCTAssertNoThrow(
       try {
-        let parsed = try SyntaxParser.parse(inputFile)
+        let source = try String(contentsOf: inputFile)
+        let parsed = Parser.parse(source: source)
 
         measure {
           for _ in 0..<10 {

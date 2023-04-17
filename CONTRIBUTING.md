@@ -43,11 +43,7 @@ If you can’t find it in your Schemes, you need to manually add it using Produc
 
 ### XCTests
 
-The `SwiftSyntaxParser` module (the legacy parser) of this repository depends on the C++ parser library (`_InternalSwiftSyntaxParser.dylib`) to parse source code.
-The syntax node definitions of that parser library need to match those used by your SwiftSyntax checkout.
-Most of the time, the parser library included in the latest Swift Development Snapshot will fulfill this requirement. 
-
-To run the tests in Xcode, select the latest Swift Development Snapshot in Xcode -> Toolchains, select the SwiftSyntax-Package scheme and hit Product -> Test.
+To run the tests in Xcode, select the SwiftSyntax-Package scheme and hit Product -> Test.
 
 You can also run the tests from the command line using
 ```bash
@@ -68,7 +64,7 @@ Tip: Running SwiftSyntax’s self-parse tests takes the majority of testing time
 
 ### `lit`-based tests
 
-A few tests of the `SwiftSyntaxParser` module (the legacy parser), which test the interaction between SwiftSyntax and the C++ parser library (`_InternalSwiftSyntaxParser.dylib`) are based LLVM’s `lit` and `FileCheck` tools.
+A few tests are based LLVM’s `lit` and `FileCheck` tools.
 To run these, build `FileCheck`, e.g. by building the Swift compiler and run the tests using the following command:
 ```bash
 ./build-script.py test --toolchain /Library/Developer/Toolchains/swift-DEVELOPMENT-SNAPSHOT-<recent date>.xctoolchain/usr --skip-lit-tests --filecheck-exec /path/to/build/Release+Asserts/llvm-macosx-x86_64/bin/FileCheck

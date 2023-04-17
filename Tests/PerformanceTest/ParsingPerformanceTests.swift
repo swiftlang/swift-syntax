@@ -12,7 +12,6 @@
 
 import XCTest
 import SwiftSyntax
-import SwiftSyntaxParser
 import SwiftParser
 
 public class ParsingPerformanceTests: XCTestCase {
@@ -24,23 +23,12 @@ public class ParsingPerformanceTests: XCTestCase {
       .appendingPathComponent("MinimalCollections.swift.input")
   }
 
-  func testParsingPerformance() throws {
-    try XCTSkipIf(ProcessInfo.processInfo.environment["SKIP_LONG_TESTS"] == "1")
-    measure {
-      do {
-        _ = try SyntaxParser.parse(inputFile)
-      } catch {
-        XCTFail(error.localizedDescription)
-      }
-    }
-  }
-
   func testNativeParsingPerformance() throws {
     try XCTSkipIf(ProcessInfo.processInfo.environment["SKIP_LONG_TESTS"] == "1")
     measure {
       do {
         let source = try String(contentsOf: inputFile)
-        _ = SwiftParser.Parser.parse(source: source)
+        _ = Parser.parse(source: source)
       } catch {
         XCTFail(error.localizedDescription)
       }

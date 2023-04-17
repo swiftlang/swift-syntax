@@ -11,8 +11,15 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftSyntax
-import SwiftSyntaxParser
+import SwiftParser
 import Foundation
+
+extension Parser {
+  public static func parse(_ url: URL) throws -> SourceFileSyntax {
+    let source = try String(contentsOf: url)
+    return Self.parse(source: source)
+  }
+}
 
 /// Print the given message to stderr
 func printerr(_ message: String, terminator: String = "\n") {
@@ -230,13 +237,6 @@ struct IncrementalEdit {
   let replacement: String
 }
 
-func getSwiftLanguageVersionInfo(args: CommandLineArguments) -> (languageVersion: String?, enableBareSlashRegexLiteral: Bool?) {
-  return (
-    args["-swift-version"],
-    args["-enable-bare-slash-regex"].map({ $0 == "1" })
-  )
-}
-
 /// Rewrites a parsed tree with all constructed nodes.
 class TreeReconstructor: SyntaxRewriter {
   override func visit(_ token: TokenSyntax) -> TokenSyntax {
@@ -252,9 +252,8 @@ class TreeReconstructor: SyntaxRewriter {
 
 func performClassifySyntax(args: CommandLineArguments) throws {
   let treeURL = URL(fileURLWithPath: try args.getRequired("-source-file"))
-  let versionInfo = getSwiftLanguageVersionInfo(args: args)
 
-  let tree = try SyntaxParser.parse(treeURL, languageVersion: versionInfo.languageVersion, enableBareSlashRegexLiteral: versionInfo.enableBareSlashRegexLiteral)
+  let tree = try Parser.parse(treeURL)
   let result = ClassifiedSyntaxTreePrinter.print(Syntax(tree))
   do {
     // Sanity check that we get the same result if the tree has constructed nodes.
@@ -337,9 +336,8 @@ func performParseIncremental(args: CommandLineArguments) throws {
     URL(fileURLWithPath: try args.getRequired("-old-source-file"))
   let postEditURL = URL(fileURLWithPath: try args.getRequired("-source-file"))
   let expectedReparseRegions = try args.getReparseRegions()
-  let versionInfo = getSwiftLanguageVersionInfo(args: args)
 
-  let preEditTree = try SyntaxParser.parse(preEditURL, languageVersion: versionInfo.languageVersion, enableBareSlashRegexLiteral: versionInfo.enableBareSlashRegexLiteral)
+  let preEditTree = try Parser.parse(preEditURL)
   let edits = try parseIncrementalEditArguments(args: args)
   let regionCollector = IncrementalParseReusedNodeCollector()
   let editTransition = IncrementalParseTransition(
@@ -349,8 +347,7 @@ func performParseIncremental(args: CommandLineArguments) throws {
   )
 
   let postEditText = try String(contentsOf: postEditURL)
-  let postEditTree =
-    try SyntaxParser.parse(source: postEditText, parseTransition: editTransition)
+  let postEditTree = Parser.parse(source: postEditText, parseTransition: editTransition)
 
   let postTreeDump = postEditTree.description
 
@@ -455,8 +452,7 @@ func verifyReusedRegions(
 
 func performRoundtrip(args: CommandLineArguments) throws {
   let sourceURL = URL(fileURLWithPath: try args.getRequired("-source-file"))
-  let versionInfo = getSwiftLanguageVersionInfo(args: args)
-  let tree = try SyntaxParser.parse(sourceURL, languageVersion: versionInfo.languageVersion, enableBareSlashRegexLiteral: versionInfo.enableBareSlashRegexLiteral)
+  let tree = try Parser.parse(sourceURL)
   let treeText = tree.description
 
   if let outURL = args["-out"].map(URL.init(fileURLWithPath:)) {
@@ -471,9 +467,8 @@ func performVerifyRoundtrip(args: CommandLineArguments) throws {
   guard let source = try String(data: Data(contentsOf: sourceURL), encoding: .utf8) else {
     throw TestingError.readingSourceFileFailed(sourceURL)
   }
-  let versionInfo = getSwiftLanguageVersionInfo(args: args)
 
-  let tree = try SyntaxParser.parse(source: source, languageVersion: versionInfo.languageVersion, enableBareSlashRegexLiteral: versionInfo.enableBareSlashRegexLiteral)
+  let tree = Parser.parse(source: source)
   if tree.description != source {
     throw TestingError.roundTripFailed
   }
@@ -500,71 +495,14 @@ class NodePrinter: SyntaxAnyVisitor {
 
 func printSyntaxTree(args: CommandLineArguments) throws {
   let treeURL = URL(fileURLWithPath: try args.getRequired("-source-file"))
-  let versionInfo = getSwiftLanguageVersionInfo(args: args)
-  let tree = try SyntaxParser.parse(treeURL, languageVersion: versionInfo.languageVersion, enableBareSlashRegexLiteral: versionInfo.enableBareSlashRegexLiteral)
+  let tree = try Parser.parse(treeURL)
   let printer = NodePrinter()
   printer.walk(tree)
-}
-
-func printParserDiags(args: CommandLineArguments) throws {
-  let treeURL = URL(fileURLWithPath: try args.getRequired("-source-file"))
-  let versionInfo = getSwiftLanguageVersionInfo(args: args)
-
-  var diagCounter: (error: Int, warning: Int, note: Int) = (0, 0, 0)
-
-  func handleDiagnostic(diagnostic: Diagnostic) {
-    switch diagnostic.message.severity {
-    case .error:
-      diagCounter.error += 1
-      diagCounter.note += diagnostic.notes.count
-    case .warning:
-      diagCounter.warning += 1
-      diagCounter.note += diagnostic.notes.count
-    case .note:
-      diagCounter.note += 1
-    }
-    print(diagnostic.debugDescription)
-  }
-
-  _ = try SyntaxParser.parse(treeURL, languageVersion: versionInfo.languageVersion, enableBareSlashRegexLiteral: versionInfo.enableBareSlashRegexLiteral, diagnosticHandler: handleDiagnostic)
-
-  print("\(diagCounter.error) error(s) \(diagCounter.warning) warnings(s) \(diagCounter.note) note(s)")
 }
 
 /// Write the given string to stderr **without** appending a newline character.
 func writeToStderr(_ msg: String) {
   FileHandle.standardError.write(msg.data(using: .utf8)!)
-}
-
-func diagnose(args: CommandLineArguments) throws {
-  func printDiagnostic(diagnostic: Diagnostic) {
-    if let loc = diagnostic.location {
-      writeToStderr("\(loc.file!):\(loc.line!):\(loc.column!): ")
-    } else {
-      writeToStderr("<unknown>:0:0: ")
-    }
-    switch diagnostic.message.severity {
-    case .note: writeToStderr("note: ")
-    case .warning: writeToStderr("warning: ")
-    case .error: writeToStderr("error: ")
-    }
-    writeToStderr(diagnostic.message.text)
-    writeToStderr("\n")
-
-    for note in diagnostic.notes {
-      printDiagnostic(diagnostic: note.asDiagnostic())
-    }
-  }
-
-  let treeURL = URL(fileURLWithPath: try args.getRequired("-source-file"))
-  let versionInfo = getSwiftLanguageVersionInfo(args: args)
-
-  _ = try SyntaxParser.parse(
-    treeURL,
-    languageVersion: versionInfo.languageVersion,
-    enableBareSlashRegexLiteral: versionInfo.enableBareSlashRegexLiteral,
-    diagnosticHandler: printDiagnostic
-  )
 }
 
 do {
@@ -580,10 +518,6 @@ do {
     try performVerifyRoundtrip(args: args)
   } else if args.has("-print-tree") {
     try printSyntaxTree(args: args)
-  } else if args.has("-dump-diags") {
-    try printParserDiags(args: args)
-  } else if args.has("-diagnose") {
-    try diagnose(args: args)
   } else if args.has("-help") {
     printHelp()
   } else {

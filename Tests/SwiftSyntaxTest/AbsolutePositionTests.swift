@@ -10,10 +10,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-import XCTest
-import SwiftSyntax
-import SwiftSyntaxParser
 import _SwiftSyntaxTestSupport
+import SwiftSyntax
+import XCTest
 
 fileprivate class FuncRenamer: SyntaxRewriter {
   override func visit(_ node: FunctionDeclSyntax) -> DeclSyntax {
@@ -24,72 +23,6 @@ fileprivate class FuncRenamer: SyntaxRewriter {
 }
 
 public class AbsolutePositionTests: XCTestCase {
-
-  public func testVisitor() {
-    XCTAssertNoThrow(
-      try {
-        let source = try String(contentsOf: getTestInput("visitor.swift"))
-        let parsed = try SyntaxParser.parse(getTestInput("visitor.swift"))
-        XCTAssertEqual(0, parsed.position.utf8Offset)
-        XCTAssertEqual(
-          source.count,
-          parsed.eofToken.positionAfterSkippingLeadingTrivia.utf8Offset
-        )
-        XCTAssertEqual(0, parsed.position.utf8Offset)
-        XCTAssertEqual(source.count, parsed.byteSize)
-      }()
-    )
-  }
-
-  public func testClosure() {
-    XCTAssertNoThrow(
-      try {
-        let source = try String(contentsOf: getTestInput("closure.swift"))
-        let parsed = try SyntaxParser.parse(getTestInput("closure.swift"))
-        XCTAssertEqual(
-          source.count,
-          parsed.eofToken.positionAfterSkippingLeadingTrivia.utf8Offset
-        )
-        XCTAssertEqual(0, parsed.position.utf8Offset)
-        XCTAssertEqual(source.count, parsed.byteSize)
-      }()
-    )
-  }
-
-  public func testRename() {
-    XCTAssertNoThrow(
-      try {
-        let parsed = try SyntaxParser.parse(getTestInput("visitor.swift"))
-        let renamed = FuncRenamer().visit(parsed)
-        let renamedSource = renamed.description
-        XCTAssertEqual(
-          renamedSource.count,
-          renamed.eofToken.positionAfterSkippingLeadingTrivia.utf8Offset
-        )
-        XCTAssertEqual(renamedSource.count, renamed.byteSize)
-      }()
-    )
-  }
-
-  public func testCurrentFile() {
-    XCTAssertNoThrow(
-      try {
-        let parsed = try SyntaxParser.parse(URL(fileURLWithPath: #file))
-        class Visitor: SyntaxVisitor {
-          override func visit(_ node: TokenSyntax) -> SyntaxVisitorContinueKind {
-            XCTAssertEqual(
-              node.positionAfterSkippingLeadingTrivia.utf8Offset,
-              node.position.utf8Offset + node.leadingTrivia.byteSize
-            )
-            return .skipChildren
-          }
-        }
-        let visitor = Visitor(viewMode: .sourceAccurate)
-        visitor.walk(parsed)
-      }()
-    )
-  }
-
   public func testRecursion() {
     var l = [CodeBlockItemSyntax]()
     let idx = 2000

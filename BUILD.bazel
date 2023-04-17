@@ -96,14 +96,6 @@ swift_syntax_library(
 )
 
 swift_syntax_library(
-    name = "SwiftSyntaxParser",
-    deps = [
-        ":SwiftParser",
-        ":SwiftSyntax",
-    ],
-)
-
-swift_syntax_library(
     name = "SwiftRefactor",
     deps = [
         ":SwiftParser",

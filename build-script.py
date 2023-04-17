@@ -502,7 +502,6 @@ def build_command(args: argparse.Namespace) -> None:
         # Until rdar://53881101 is implemented, we cannot request a build of multiple
         # targets simultaneously. For now, just build one product after the other.
         builder.buildProduct("SwiftSyntax")
-        builder.buildProduct("SwiftSyntaxParser")
         builder.buildProduct("SwiftSyntaxBuilder")
 
         # Build examples

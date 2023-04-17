@@ -1,7 +1,6 @@
 ## Overview
 
-The `SwiftParser` framework implements a parser that accepts Swift source text
-as input and produces a SwiftSyntax syntax tree. This module is under active development and is not yet ready to completely replace `SwiftSyntaxParser`. For more information about the design of this module, please see [the module documentation](SwiftParser.docc/SwiftParser.md).
+The `SwiftParser` framework implements a parser that accepts Swift source text as input and produces a SwiftSyntax syntax tree. 
 
 ## Quickstart
 

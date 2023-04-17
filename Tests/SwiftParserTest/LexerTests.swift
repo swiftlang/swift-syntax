@@ -1240,6 +1240,22 @@ public class LexerTests: XCTestCase {
     )
   }
 
+  func testNullCharacterInSourceFile() {
+    assertLexemes(
+      "var x = 11️⃣\0\nvar y = 2",
+      lexemes: [
+        LexemeSpec(.keyword, text: "var", trailing: " "),
+        LexemeSpec(.identifier, text: "x", trailing: " "),
+        LexemeSpec(.equal, text: "=", trailing: " "),
+        LexemeSpec(.integerLiteral, text: "1", trailing: "\0", diagnostic: "nul character embedded in middle of file"),
+        LexemeSpec(.keyword, leading: "\n", text: "var", trailing: " ", flags: .isAtStartOfLine),
+        LexemeSpec(.identifier, text: "y", trailing: " "),
+        LexemeSpec(.equal, text: "=", trailing: " "),
+        LexemeSpec(.integerLiteral, text: "2", trailing: ""),
+      ]
+    )
+  }
+
   func testNullCharacterInStringLiteral() {
     assertLexemes(
       """

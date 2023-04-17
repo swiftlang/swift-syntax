@@ -48,4 +48,81 @@ public class SyntaxTests: XCTestCase {
     XCTAssertEqual(Syntax(s), s.memberBlock.parent)
     XCTAssertNil(s.memberBlock.detach().parent)
   }
+
+  public func testCasting() {
+    let integerExpr = IntegerLiteralExprSyntax(
+      digits: .integerLiteral("1", trailingTrivia: .space)
+    )
+
+    let expr = ExprSyntax(integerExpr)
+    let node = Syntax(expr)
+    XCTAssertTrue(expr.is(IntegerLiteralExprSyntax.self))
+    XCTAssertTrue(node.is(IntegerLiteralExprSyntax.self))
+    XCTAssertTrue(node.as(ExprSyntax.self)!.is(IntegerLiteralExprSyntax.self))
+
+    XCTAssertTrue(node.isProtocol(ExprSyntaxProtocol.self))
+    XCTAssertTrue(node.asProtocol(ExprSyntaxProtocol.self) is IntegerLiteralExprSyntax)
+    XCTAssertTrue(expr.asProtocol(ExprSyntaxProtocol.self) is IntegerLiteralExprSyntax)
+    XCTAssertTrue(expr.asProtocol(ExprSyntaxProtocol.self) as? IntegerLiteralExprSyntax == integerExpr)
+
+    XCTAssertFalse(node.isProtocol(BracedSyntax.self))
+    XCTAssertNil(node.asProtocol(BracedSyntax.self))
+    XCTAssertFalse(expr.isProtocol(BracedSyntax.self))
+    XCTAssertNil(expr.asProtocol(BracedSyntax.self))
+
+    let classDecl = CodeBlockSyntax(
+      leftBrace: TokenSyntax.leftBraceToken(),
+      statements: CodeBlockItemListSyntax([]),
+      rightBrace: TokenSyntax.rightBraceToken()
+    )
+
+    XCTAssertTrue(classDecl.isProtocol(BracedSyntax.self))
+    XCTAssertNotNil(classDecl.asProtocol(BracedSyntax.self))
+
+    let optNode: Syntax? = node
+    switch optNode?.as(SyntaxEnum.self) {
+    case .integerLiteralExpr: break
+    default: XCTFail("failed to convert to SyntaxEnum")
+    }
+
+    XCTAssertNil(ExprSyntax(nil as IntegerLiteralExprSyntax?))
+    XCTAssertEqual(ExprSyntax(integerExpr).as(IntegerLiteralExprSyntax.self)!, integerExpr)
+  }
+
+  public func testNodeType() {
+    let integerExpr = IntegerLiteralExprSyntax(
+      digits: TokenSyntax.integerLiteral("1", trailingTrivia: .space)
+    )
+    let expr = ExprSyntax(integerExpr)
+    let node = Syntax(expr)
+
+    XCTAssertTrue(integerExpr.syntaxNodeType == expr.syntaxNodeType)
+    XCTAssertTrue(integerExpr.syntaxNodeType == node.syntaxNodeType)
+    XCTAssertEqual("\(integerExpr.syntaxNodeType)", "IntegerLiteralExprSyntax")
+  }
+
+  public func testConstructFromSyntaxProtocol() {
+    let integerExpr = IntegerLiteralExprSyntax(
+      digits: .integerLiteral("1", trailingTrivia: .space)
+    )
+
+    XCTAssertEqual(Syntax(integerExpr), Syntax(fromProtocol: integerExpr as SyntaxProtocol))
+    XCTAssertEqual(Syntax(integerExpr), Syntax(fromProtocol: integerExpr as ExprSyntaxProtocol))
+  }
+
+  public func testPositions() {
+    let leading = Trivia(pieces: [.spaces(2)])
+    let trailing = Trivia(pieces: [.spaces(1)])
+    let funcKW = TokenSyntax.keyword(
+      .func,
+      leadingTrivia: leading,
+      trailingTrivia: trailing
+    )
+    XCTAssertEqual("\(funcKW)", "  func ")
+    XCTAssertEqual(funcKW.position, AbsolutePosition(utf8Offset: 0))
+    XCTAssertEqual(funcKW.positionAfterSkippingLeadingTrivia, AbsolutePosition(utf8Offset: 2))
+    XCTAssertEqual(funcKW.endPositionBeforeTrailingTrivia, AbsolutePosition(utf8Offset: 6))
+    XCTAssertEqual(funcKW.endPosition, AbsolutePosition(utf8Offset: 7))
+    XCTAssertEqual(funcKW.contentLength, SourceLength(utf8Length: 4))
+  }
 }

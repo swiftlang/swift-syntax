@@ -11,6 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftSyntax
+import SwiftSyntaxBuilder
 
 /// Abstractly represents a source location in the macro.
 public struct AbstractSourceLocation {
@@ -22,4 +23,18 @@ public struct AbstractSourceLocation {
 
   /// A primary expression that represents the column and is `ExpressibleByIntegerLiteral`.
   public let column: ExprSyntax
+
+  public init(file: ExprSyntax, line: ExprSyntax, column: ExprSyntax) {
+    self.file = file
+    self.line = line
+    self.column = column
+  }
+
+  public init(_ sourceLocation: SourceLocation) {
+    self = AbstractSourceLocation(
+      file: "\(literal: sourceLocation.file)",
+      line: "\(literal: sourceLocation.line)",
+      column: "\(literal: sourceLocation.column)"
+    )
+  }
 }

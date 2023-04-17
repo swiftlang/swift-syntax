@@ -21,6 +21,3 @@ public protocol DeclarationMacro: FreestandingMacro {
     in context: Context
   ) throws -> [DeclSyntax]
 }
-
-@available(*, deprecated, renamed: "DeclarationMacro")
-public typealias FreestandingDeclarationMacro = DeclarationMacro

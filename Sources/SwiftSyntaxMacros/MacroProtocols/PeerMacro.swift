@@ -25,6 +25,3 @@ public protocol PeerMacro: AttachedMacro {
     in context: Context
   ) throws -> [DeclSyntax]
 }
-
-@available(*, deprecated, renamed: "PeerMacro")
-public typealias PeerDeclarationMacro = PeerMacro

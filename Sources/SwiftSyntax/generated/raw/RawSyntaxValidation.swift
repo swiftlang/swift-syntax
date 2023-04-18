@@ -17,7 +17,7 @@
 /// Note that this only validates the immediate children.
 /// Results in an assertion failure if the layout is invalid.
 func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
-  #if DEBUG
+  #if SWIFTSYNTAX_ENABLE_RAWSYNTAX_VALIDATION
   enum TokenChoice: CustomStringConvertible {
     case keyword(StaticString)
     case tokenKind(RawTokenKind)
@@ -140,7 +140,6 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     // the list of expected token choices in the syntax tree doesn't match those
     // the parser generates. Disable the verification for now until all issues
     // regarding it are fixed.
-    #if VALIDATE_TOKEN_CHOICES
     if raw != nil {
       return verify(
           raw, 
@@ -151,9 +150,6 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
         )
     }
     return nil
-    #else 
-    return verify(raw, as: RawTokenSyntax?.self)
-    #endif 
   }
   func verify(
       _ raw: RawSyntax?, 
@@ -166,7 +162,6 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     // the list of expected token choices in the syntax tree doesn't match those
     // the parser generates. Disable the verification for now until all issues
     // regarding it are fixed.
-    #if VALIDATE_TOKEN_CHOICES
     guard let raw = raw else {
       return .expectedNonNil(expectedKind: RawTokenSyntax.self, file: file, line: line)
     }
@@ -193,9 +188,6 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
         file: file, 
         line: line
       )
-    #else 
-    return verify(raw, as: RawTokenSyntax.self)
-    #endif 
   }
   func assertNoError(_ nodeKind: SyntaxKind, _ index: Int, _ error: ValidationError?) {
     if let error = error {

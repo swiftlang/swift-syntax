@@ -99,11 +99,12 @@ extension Parser {
 extension Parser {
   mutating func parseModifierDetail() -> RawDeclModifierDetailSyntax {
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-    let detailToken = self.consumeAnyToken()
+    let (unexpectedBeforeDetailToken, detailToken) = self.expect(.identifier, TokenSpec(.set, remapping: .identifier), default: .identifier)
     let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
     return RawDeclModifierDetailSyntax(
       unexpectedBeforeLeftParen,
       leftParen: leftParen,
+      unexpectedBeforeDetailToken,
       detail: detailToken,
       unexpectedBeforeRightParen,
       rightParen: rightParen,

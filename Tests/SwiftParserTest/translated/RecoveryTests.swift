@@ -1273,7 +1273,6 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: array types are now written with the brackets around the element type, Fix-It replacements: 17 - 17 = '[', 20 - 21 = ''
         DiagnosticSpec(message: "unexpected code '[0]' in function")
       ]
     )
@@ -1289,7 +1288,6 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: array types are now written with the brackets around the element type, Fix-It replacements: 17 - 17 = '[', 20 - 21 = ''
         DiagnosticSpec(message: "unexpected code '[0_1]' in function")
       ]
     )
@@ -1305,7 +1303,6 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: array types are now written with the brackets around the element type, Fix-It replacements: 17 - 17 = '[', 20 - 21 = ''
         DiagnosticSpec(message: "unexpected code '[0b1]' in function")
       ]
     )

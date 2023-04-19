@@ -71,10 +71,7 @@ private func createConvenienceInitializer(node: Node) throws -> InitializerDeclS
         produceExpr = ExprSyntax("\(raw: child.swiftName)Builder()")
       }
       builderParameters.append(
-        FunctionParameterSyntax(
-          "@\(raw: builderInitializableType.resultBuilderBaseName) \(raw: child.swiftName)Builder: () throws-> \(raw: builderInitializableType.syntax)",
-          for: .functionParameters
-        )
+        FunctionParameterSyntax("@\(raw: builderInitializableType.resultBuilderBaseName) \(raw: child.swiftName)Builder: () throws-> \(raw: builderInitializableType.syntax)")
       )
     } else {
       produceExpr = convertFromSyntaxProtocolToSyntaxType(child: child)
@@ -95,11 +92,11 @@ private func createConvenienceInitializer(node: Node) throws -> InitializerDeclS
   }
 
   let params = ParameterClauseSyntax {
-    FunctionParameterSyntax("leadingTrivia: Trivia? = nil", for: .functionParameters)
+    FunctionParameterSyntax("leadingTrivia: Trivia? = nil")
     for param in normalParameters + builderParameters {
       param
     }
-    FunctionParameterSyntax("trailingTrivia: Trivia? = nil", for: .functionParameters)
+    FunctionParameterSyntax("trailingTrivia: Trivia? = nil")
   }
 
   return try InitializerDeclSyntax(

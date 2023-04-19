@@ -11708,9 +11708,9 @@ public struct RawInheritedTypeSyntax: RawSyntaxNodeProtocol {
   }
   
   public init(
-      _ unexpectedBeforeHasWithout: RawUnexpectedNodesSyntax? = nil, 
-      hasWithout: RawTokenSyntax?, 
-      _ unexpectedBetweenHasWithoutAndTypeName: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBeforeWithoutTilde: RawUnexpectedNodesSyntax? = nil, 
+      withoutTilde: RawTokenSyntax?, 
+      _ unexpectedBetweenWithoutTildeAndTypeName: RawUnexpectedNodesSyntax? = nil, 
       typeName: RawTypeSyntax, 
       _ unexpectedBetweenTypeNameAndTrailingComma: RawUnexpectedNodesSyntax? = nil, 
       trailingComma: RawTokenSyntax?, 
@@ -11720,9 +11720,9 @@ public struct RawInheritedTypeSyntax: RawSyntaxNodeProtocol {
     let raw = RawSyntax.makeLayout(
       kind: .inheritedType, uninitializedCount: 7, arena: arena) { layout in 
       layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeHasWithout?.raw
-      layout[1] = hasWithout?.raw
-      layout[2] = unexpectedBetweenHasWithoutAndTypeName?.raw
+      layout[0] = unexpectedBeforeWithoutTilde?.raw
+      layout[1] = withoutTilde?.raw
+      layout[2] = unexpectedBetweenWithoutTildeAndTypeName?.raw
       layout[3] = typeName.raw
       layout[4] = unexpectedBetweenTypeNameAndTrailingComma?.raw
       layout[5] = trailingComma?.raw
@@ -11731,15 +11731,15 @@ public struct RawInheritedTypeSyntax: RawSyntaxNodeProtocol {
     self.init(unchecked: raw)
   }
   
-  public var unexpectedBeforeHasWithout: RawUnexpectedNodesSyntax? {
+  public var unexpectedBeforeWithoutTilde: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var hasWithout: RawTokenSyntax? {
+  public var withoutTilde: RawTokenSyntax? {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))
   }
   
-  public var unexpectedBetweenHasWithoutAndTypeName: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenWithoutTildeAndTypeName: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   

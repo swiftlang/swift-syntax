@@ -10504,9 +10504,9 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
   
   public init<T: TypeSyntaxProtocol>(
       leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeHasWithout: UnexpectedNodesSyntax? = nil, 
-      hasWithout: TokenSyntax? = nil, 
-      _ unexpectedBetweenHasWithoutAndTypeName: UnexpectedNodesSyntax? = nil, 
+      _ unexpectedBeforeWithoutTilde: UnexpectedNodesSyntax? = nil, 
+      withoutTilde: TokenSyntax? = nil, 
+      _ unexpectedBetweenWithoutTildeAndTypeName: UnexpectedNodesSyntax? = nil, 
       typeName: T, 
       _ unexpectedBetweenTypeNameAndTrailingComma: UnexpectedNodesSyntax? = nil, 
       trailingComma: TokenSyntax? = nil, 
@@ -10517,18 +10517,18 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeHasWithout, 
-            hasWithout, 
-            unexpectedBetweenHasWithoutAndTypeName, 
+            unexpectedBeforeWithoutTilde, 
+            withoutTilde, 
+            unexpectedBetweenWithoutTildeAndTypeName, 
             typeName, 
             unexpectedBetweenTypeNameAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
           ))) {(arena, _) in 
       let layout: [RawSyntax?] = [
-          unexpectedBeforeHasWithout?.raw, 
-          hasWithout?.raw, 
-          unexpectedBetweenHasWithoutAndTypeName?.raw, 
+          unexpectedBeforeWithoutTilde?.raw, 
+          withoutTilde?.raw, 
+          unexpectedBetweenWithoutTildeAndTypeName?.raw, 
           typeName.raw, 
           unexpectedBetweenTypeNameAndTrailingComma?.raw, 
           trailingComma?.raw, 
@@ -10546,7 +10546,7 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
   
-  public var unexpectedBeforeHasWithout: UnexpectedNodesSyntax? {
+  public var unexpectedBeforeWithoutTilde: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -10555,7 +10555,7 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var hasWithout: TokenSyntax? {
+  public var withoutTilde: TokenSyntax? {
     get {
       return data.child(at: 1, parent: Syntax(self)).map(TokenSyntax.init)
     }
@@ -10564,7 +10564,7 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenHasWithoutAndTypeName: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenWithoutTildeAndTypeName: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -10611,9 +10611,9 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([
-          \Self.unexpectedBeforeHasWithout, 
-          \Self.hasWithout, 
-          \Self.unexpectedBetweenHasWithoutAndTypeName, 
+          \Self.unexpectedBeforeWithoutTilde, 
+          \Self.withoutTilde, 
+          \Self.unexpectedBetweenWithoutTildeAndTypeName, 
           \Self.typeName, 
           \Self.unexpectedBetweenTypeNameAndTrailingComma, 
           \Self.trailingComma, 

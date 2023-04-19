@@ -289,16 +289,14 @@ extension Parser {
             )
           )
         } else {
-          if self.currentToken.starts(with: "~") {
-            withoutToken = self.consumePrefix("~", as: .prefixOperator)
-          }
+          withoutToken = self.consumeIfContextualPunctuator("~", remapping: .prefixOperator)
           type = self.parseType()
         }
 
         keepGoing = self.consume(if: .comma)
         elements.append(
           RawInheritedTypeSyntax(
-            hasWithout: withoutToken,
+            withoutTilde: withoutToken,
             typeName: type,
             trailingComma: keepGoing,
             arena: self.arena

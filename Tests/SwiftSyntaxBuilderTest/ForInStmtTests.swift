@@ -38,7 +38,7 @@ final class ForInStmtTests: XCTestCase {
         ).cast(ForInStmtSyntax.self),
         """
         for foo in bar {
-            _ = foo
+          _ = foo
         }
         """
       ),

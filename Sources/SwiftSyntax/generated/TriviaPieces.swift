@@ -463,3 +463,73 @@ extension RawTriviaPiece {
     }
   }
 }
+
+extension TriviaPiece {
+  /// Returns `true` if this piece is a newline, space or tab.
+  public var isWhitespace: Bool {
+    return isSpaceOrTab || isNewline
+  }
+  
+  public var isNewline: Bool {
+    switch self {
+    case .carriageReturns:
+      return true
+    case .carriageReturnLineFeeds:
+      return true
+    case .formfeeds:
+      return true
+    case .newlines:
+      return true
+    case .verticalTabs:
+      return true
+    default:
+      return false
+    }
+  }
+  
+  public var isSpaceOrTab: Bool {
+    switch self {
+    case .spaces:
+      return true
+    case .tabs:
+      return true
+    default:
+      return false
+    }
+  }
+}
+
+extension RawTriviaPiece {
+  /// Returns `true` if this piece is a newline, space or tab.
+  public var isWhitespace: Bool {
+    return isSpaceOrTab || isNewline
+  }
+  
+  public var isNewline: Bool {
+    switch self {
+    case .carriageReturns:
+      return true
+    case .carriageReturnLineFeeds:
+      return true
+    case .formfeeds:
+      return true
+    case .newlines:
+      return true
+    case .verticalTabs:
+      return true
+    default:
+      return false
+    }
+  }
+  
+  public var isSpaceOrTab: Bool {
+    switch self {
+    case .spaces:
+      return true
+    case .tabs:
+      return true
+    default:
+      return false
+    }
+  }
+}

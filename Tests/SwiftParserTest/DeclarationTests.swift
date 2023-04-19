@@ -1566,9 +1566,37 @@ final class DeclarationTests: XCTestCase {
     assertParse(
       """
       struct Hello: ~Copyable {}
+      """,
+      substructure: Syntax(
+        InheritedTypeSyntax(
+          withoutTilde: .prefixOperator("~"),
+          typeName: TypeSyntax(stringLiteral: "Copyable")
+        )
+      )
+    )
 
-      enum Whatever: Int, ~ Hashable, Equatable {}
+    assertParse(
       """
+      enum Whatever: Int, ~ Hashable, Equatable {}
+      """,
+      substructure:
+        Syntax(
+          TypeInheritanceClauseSyntax(
+            colon: .colonToken(),
+            inheritedTypeCollection: InheritedTypeListSyntax([
+              InheritedTypeSyntax(
+                typeName: TypeSyntax(stringLiteral: "Int"),
+                trailingComma: .commaToken()
+              ),
+              InheritedTypeSyntax(
+                withoutTilde: .prefixOperator("~"),
+                typeName: TypeSyntax(stringLiteral: "Hashable"),
+                trailingComma: .commaToken()
+              ),
+              InheritedTypeSyntax(typeName: TypeSyntax(stringLiteral: "Equatable")),
+            ])
+          )
+        )
     )
   }
 }

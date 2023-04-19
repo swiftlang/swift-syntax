@@ -1033,7 +1033,7 @@ public let DECL_NODES: [Node] = [
       /// indicate the suppression of implicit conformance to this type.
       /// This child stores the token representing the 'without' operator.
       Child(
-        name: "HasWithout",
+        name: "WithoutTilde",
         kind: .token(choices: [.token(tokenKind: "PrefixOperatorToken")]),
         isOptional: true
       ),

@@ -1712,12 +1712,12 @@ internal func childName(_ keyPath: AnyKeyPath) -> String? {
     return "rightOperand"
   case \InfixOperatorExprSyntax.unexpectedAfterRightOperand:
     return "unexpectedAfterRightOperand"
-  case \InheritedTypeSyntax.unexpectedBeforeHasWithout:
-    return "unexpectedBeforeHasWithout"
-  case \InheritedTypeSyntax.hasWithout:
-    return "hasWithout"
-  case \InheritedTypeSyntax.unexpectedBetweenHasWithoutAndTypeName:
-    return "unexpectedBetweenHasWithoutAndTypeName"
+  case \InheritedTypeSyntax.unexpectedBeforeWithoutTilde:
+    return "unexpectedBeforeWithoutTilde"
+  case \InheritedTypeSyntax.withoutTilde:
+    return "withoutTilde"
+  case \InheritedTypeSyntax.unexpectedBetweenWithoutTildeAndTypeName:
+    return "unexpectedBetweenWithoutTildeAndTypeName"
   case \InheritedTypeSyntax.typeName:
     return "typeName"
   case \InheritedTypeSyntax.unexpectedBetweenTypeNameAndTrailingComma:

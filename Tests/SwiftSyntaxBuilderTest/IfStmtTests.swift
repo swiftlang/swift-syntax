@@ -41,7 +41,7 @@ final class IfStmtTests: XCTestCase {
         ).cast(IfExprSyntax.self),
         """
         if foo == x {
-            return foo
+          return foo
         }
         """
       ),
@@ -58,10 +58,10 @@ final class IfStmtTests: XCTestCase {
         ).cast(IfExprSyntax.self),
         """
         if foo == x {
-            return foo
+          return foo
         }
         else {
-            return bar
+          return bar
         }
         """
       ),

@@ -15,7 +15,6 @@ public class Trivia {
   public let comment: String
   public let characters: [Character]
   public let swiftCharacters: [Character]
-  public let isNewLine: Bool
   public let isComment: Bool
 
   public var lowerName: String { lowercaseFirstWord(name: name) }
@@ -36,17 +35,23 @@ public class Trivia {
 
   public var isCollection: Bool { charactersLen > 0 }
 
+  public var isBlank: Bool {
+    characters.contains { $0.isWhitespace }
+  }
+
+  public var isNewLine: Bool {
+    characters.contains { $0.isNewline }
+  }
+
   init(
     name: String,
     comment: String,
     characters: [Character] = [],
     swiftCharacters: [Character] = [],
-    isNewLine: Bool = false,
     isComment: Bool = false
   ) {
     self.name = name
     self.comment = comment
-    self.isNewLine = isNewLine
     self.isComment = isComment
     self.characters = characters
 
@@ -86,8 +91,7 @@ public let TRIVIAS: [Trivia] = [
     ],
     swiftCharacters: [
       Character("\r")
-    ],
-    isNewLine: true
+    ]
   ),
 
   Trivia(
@@ -100,8 +104,7 @@ public let TRIVIAS: [Trivia] = [
     swiftCharacters: [
       Character("\r"),
       Character("\n"),
-    ],
-    isNewLine: true
+    ]
   ),
 
   Trivia(
@@ -142,8 +145,7 @@ public let TRIVIAS: [Trivia] = [
     ],
     swiftCharacters: [
       Character("\n")
-    ],
-    isNewLine: true
+    ]
   ),
 
   Trivia(

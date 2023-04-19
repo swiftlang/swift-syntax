@@ -7,9 +7,10 @@
 # See http://swift.org/CONTRIBUTORS.txt for Swift project authors
 
 add_swift_host_library(SwiftBasicFormat
-  generated/BasicFormat.swift
+  BasicFormat.swift
+  generated/BasicFormat+Extensions.swift
   SyntaxProtocol+Formatted.swift
-  Trivia+Indented.swift
+  Trivia+FormatExtensions.swift
 )
 
 target_link_libraries(SwiftBasicFormat PUBLIC

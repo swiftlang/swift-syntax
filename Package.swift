@@ -103,6 +103,11 @@ let package = Package(
       exclude: ["CMakeLists.txt"]
     ),
 
+    .testTarget(
+      name: "SwiftBasicFormatTest",
+      dependencies: ["_SwiftSyntaxTestSupport", "SwiftBasicFormat", "SwiftSyntaxBuilder"]
+    ),
+
     // MARK: SwiftCompilerPlugin
 
     .target(

@@ -19,8 +19,8 @@ import SwiftBasicFormat
 import XCTest
 
 class TwoSpacesFormat: BasicFormat {
-  override var indentation: TriviaPiece {
-    .spaces(indentationLevel * 2)
+  public init() {
+    super.init(indentationIncrement: .spaces(2))
   }
 }
 

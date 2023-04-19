@@ -63,7 +63,7 @@ final class FunctionTests: XCTestCase {
         ),
         """
         public static func == (lhs: String, rhs: String) -> Bool {
-            return lhs < rhs
+          return lhs < rhs
         }
         """
       ),
@@ -77,7 +77,7 @@ final class FunctionTests: XCTestCase {
         ),
         """
         public static func == (lhs: String, rhs: String) -> Bool {
-            return lhs > rhs
+          return lhs > rhs
         }
         """
       ),
@@ -91,7 +91,7 @@ final class FunctionTests: XCTestCase {
         ),
         """
         public static func == (lhs1: String, lhs2: String, rhs1: String, rhs2: String) -> Bool {
-            return (lhs1, lhs2) > (rhs1, rhs2)
+          return (lhs1, lhs2) > (rhs1, rhs2)
         }
         """
       ),
@@ -105,7 +105,7 @@ final class FunctionTests: XCTestCase {
         ),
         """
         public func foo<Generic>(input: Bas) -> Foo<Generic> {
-            return input as Foo<Generic>!
+          return input as Foo<Generic>!
         }
         """
       ),
@@ -119,7 +119,7 @@ final class FunctionTests: XCTestCase {
         ),
         """
         public func foo<Generic>(input: Bas) -> Foo<Generic?> {
-            return input as Foo<Generic?>!
+          return input as Foo<Generic?>!
         }
         """
       ),
@@ -133,7 +133,7 @@ final class FunctionTests: XCTestCase {
         ),
         """
         public func foo<Generic>(input: [Bar]) -> Foo<[Bar]> {
-            return input
+          return input
         }
         """
       ),
@@ -147,7 +147,7 @@ final class FunctionTests: XCTestCase {
         ),
         """
         public func foo(myOptionalClosure: MyClosure?)  {
-            myOptionalClosure!()
+          myOptionalClosure!()
         }
         """
       ),
@@ -290,13 +290,13 @@ final class FunctionTests: XCTestCase {
       builder,
       """
       func test(
-          _ p1: Int,
-          p2: Int,
-          _ p3: Int,
-          p4: Int,
-          _ p5: Int
+        _ p1: Int,
+        p2: Int,
+        _ p3: Int,
+        p4: Int,
+        _ p5: Int
       ) -> Int {
-          return p1 + p2 + p3 + p4 + p5
+        return p1 + p2 + p3 + p4 + p5
       }
       """
     )

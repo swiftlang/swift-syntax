@@ -39,10 +39,10 @@ final class ArrayExprTests: XCTestCase {
       builder,
       """
       [
-          1,
-          #"2"3"#,
-          4,
-          "五",
+        1,
+        #"2"3"#,
+        4,
+        "五",
       ]
       """
     )

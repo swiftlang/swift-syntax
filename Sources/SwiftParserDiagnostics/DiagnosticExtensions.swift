@@ -127,7 +127,7 @@ extension FixIt.MultiNodeChange {
       let previousToken = node.previousToken(viewMode: .fixedUp),
       previousToken.presence == .present,
       previousToken.trailingTrivia.isEmpty,
-      BasicFormat().requiresTrailingSpace(previousToken),
+      BasicFormat().requiresTrailingWhitespace(previousToken),
       leadingTrivia == nil
     {
       /// If neither this nor the previous token are punctionation make sure they

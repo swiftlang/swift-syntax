@@ -56,11 +56,11 @@ final class IfConfigDeclSyntaxTests: XCTestCase {
       """
       #if DEBUG
       public func debug(_ data: Foo) -> String {
-          return data.debugDescription
+        return data.debugDescription
       }
       #else
       public func debug(_ data: Foo) -> String {
-          return data.description
+        return data.description
       }
       #endif
       """

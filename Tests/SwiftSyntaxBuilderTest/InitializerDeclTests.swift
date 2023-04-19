@@ -28,7 +28,7 @@ final class InitializerDeclTests: XCTestCase {
       builder,
       """
       public init(errorCode: Int) {
-          self.code = errorCode
+        self.code = errorCode
       }
       """
     )
@@ -48,10 +48,10 @@ final class InitializerDeclTests: XCTestCase {
       builder,
       """
       public init?(errorCode: Int) {
-          guard errorCode > 0 else {
-              return nil
-          }
-          self.code = errorCode
+        guard errorCode > 0 else {
+            return nil
+        }
+        self.code = errorCode
       }
       """
     )
@@ -76,13 +76,13 @@ final class InitializerDeclTests: XCTestCase {
       builder,
       """
       init(
-          _ p1: Int,
-          p2: Int,
-          _ p3: Int,
-          p4: Int,
-          _ p5: Int
+        _ p1: Int,
+        p2: Int,
+        _ p3: Int,
+        p4: Int,
+        _ p5: Int
       ) {
-          self.init(p1 + p2 + p3 + p4 + p5)
+        self.init(p1 + p2 + p3 + p4 + p5)
       }
       """
     )

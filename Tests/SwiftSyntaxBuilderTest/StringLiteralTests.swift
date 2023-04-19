@@ -268,11 +268,11 @@ final class StringLiteralTests: XCTestCase {
       buildable,
       #"""
       assertionFailure("""
-          Error validating child at index \(index) of \(nodeKind):
-          Node did not satisfy any node choice requirement.
-          Validation failures:
-          \(nonNilErrors.map({ "- \($0.description)" }).joined(separator: "\n"))
-          """, file: file, line: line)
+        Error validating child at index \(index) of \(nodeKind):
+        Node did not satisfy any node choice requirement.
+        Validation failures:
+        \(nonNilErrors.map({ "- \($0.description)" }).joined(separator: "\n"))
+        """, file: file, line: line)
       """#
     )
   }
@@ -294,11 +294,11 @@ final class StringLiteralTests: XCTestCase {
       buildable,
       #"""
       if true {
-          assertionFailure("""
-              Error validating child at index
-              Node did not satisfy any node choice requirement.
-              Validation failures:
-              """)
+        assertionFailure("""
+          Error validating child at index
+          Node did not satisfy any node choice requirement.
+          Validation failures:
+          """)
       }
       """#
     )
@@ -323,13 +323,13 @@ final class StringLiteralTests: XCTestCase {
       buildable,
       #"""
       if true {
-          assertionFailure(
-              """
-              Error validating child at index
-              Node did not satisfy any node choice requirement.
-              Validation failures:
-              """
-          )
+        assertionFailure(
+          """
+          Error validating child at index
+          Node did not satisfy any node choice requirement.
+          Validation failures:
+          """
+        )
       }
       """#
     )

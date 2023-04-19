@@ -45,11 +45,11 @@ final class DictionaryExprTests: XCTestCase {
       builder,
       """
       [
-          1: 1,
-          2: "二",
-          "three": 3,
-          4:
-              #"f"o"u"r"#,
+        1: 1,
+        2: "二",
+        "three": 3,
+        4:
+          #"f"o"u"r"#,
       ]
       """
     )

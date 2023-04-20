@@ -32,8 +32,13 @@ open class BasicFormat: SyntaxRewriter {
   /// This is used as a reference-point to indent user-indented code.
   private var anchorPoints: [TokenSyntax: Trivia] = [:]
 
-  public init(indentationIncrement: Trivia = .spaces(4), initialIndentation: Trivia = []) {
-    self.indentationWidth = indentationIncrement
+  /// The previously visited token. This is faster than accessing
+  /// `token.previousToken` inside `visit(_:TokenSyntax)`. `nil` if no token has
+  /// been visited yet.
+  private var previousToken: TokenSyntax? = nil
+
+  public init(indentationWidth: Trivia = .spaces(4), initialIndentation: Trivia = []) {
+    self.indentationWidth = indentationWidth
     self.indentationStack = [initialIndentation]
   }
 
@@ -132,7 +137,7 @@ open class BasicFormat: SyntaxRewriter {
     var ancestor: Syntax = Syntax(token)
     while let parent = ancestor.parent {
       ancestor = parent
-      if ancestor.firstToken(viewMode: .sourceAccurate) != token {
+      if ancestor.position != token.position {
         break
       }
       if let ancestorsParent = ancestor.parent, childrenSeparatedByNewline(ancestorsParent) {
@@ -143,22 +148,10 @@ open class BasicFormat: SyntaxRewriter {
     return false
   }
 
-  /// Whether a leading space on `token` should be added.
-  open func requiresLeadingWhitespace(_ token: TokenSyntax) -> Bool {
-    switch (token.previousToken(viewMode: .sourceAccurate)?.tokenKind, token.tokenKind) {
-    case (.leftParen, .leftBrace):  // Ensures there is not a space in `.map({ $0.foo })`
-      return false
-    default:
-      break
-    }
-
-    return token.requiresLeadingSpace
-  }
-
-  /// Whether a trailing space on `token` should be added.
-  open func requiresTrailingWhitespace(_ token: TokenSyntax) -> Bool {
-    switch (token.tokenKind, token.nextToken(viewMode: .sourceAccurate)?.tokenKind) {
-    case (.exclamationMark, .leftParen),  // Ensures there is not a space in `myOptionalClosure!()`
+  open func requiresWhitespace(between first: TokenSyntax?, and second: TokenSyntax?) -> Bool {
+    switch (first?.tokenKind, second?.tokenKind) {
+    case (.leftParen, .leftBrace),  // Ensures there is not a space in `.map({ $0.foo })`
+      (.exclamationMark, .leftParen),  // Ensures there is not a space in `myOptionalClosure!()`
       (.exclamationMark, .period),  // Ensures there is not a space in `myOptionalBar!.foo()`
       (.keyword(.as), .exclamationMark),  // Ensures there is not a space in `as!`
       (.keyword(.as), .postfixQuestionMark),  // Ensures there is not a space in `as?`
@@ -172,22 +165,34 @@ open class BasicFormat: SyntaxRewriter {
       break
     }
 
-    return token.requiresTrailingSpace
+    if first?.requiresTrailingSpace ?? false {
+      return true
+    }
+    if second?.requiresLeadingSpace ?? false {
+      return true
+    }
+    return false
   }
 
   // MARK: - Formatting a token
 
   open override func visit(_ token: TokenSyntax) -> TokenSyntax {
+    defer {
+      self.previousToken = token
+    }
+    let previousToken = self.previousToken ?? token.previousToken(viewMode: .sourceAccurate)
+    let nextToken = token.nextToken(viewMode: .sourceAccurate)
+
     lazy var previousTokenWillEndWithWhitespace: Bool = {
-      guard let previousToken = token.previousToken(viewMode: .sourceAccurate) else {
+      guard let previousToken = previousToken else {
         return false
       }
       return previousToken.trailingTrivia.pieces.last?.isWhitespace ?? false
-        || requiresTrailingWhitespace(previousToken)
+        || requiresWhitespace(between: previousToken, and: token)
     }()
 
     lazy var previousTokenWillEndWithNewline: Bool = {
-      guard let previousToken = token.previousToken(viewMode: .sourceAccurate) else {
+      guard let previousToken = previousToken else {
         // Assume that the start of the tree is equivalent to a newline so we
         // don't add a leading newline to the file.
         return true
@@ -196,7 +201,7 @@ open class BasicFormat: SyntaxRewriter {
     }()
 
     lazy var nextTokenWillStartWithNewline: Bool = {
-      guard let nextToken = token.nextToken(viewMode: .sourceAccurate) else {
+      guard let nextToken = nextToken else {
         return false
       }
       return nextToken.leadingTrivia.startsWithNewline
@@ -206,7 +211,6 @@ open class BasicFormat: SyntaxRewriter {
     /// This token's trailing trivia + any spaces or tabs at the start of the
     /// next token's leading trivia.
     lazy var combinedTrailingTrivia: Trivia = {
-      let nextToken = token.nextToken(viewMode: .sourceAccurate)
       let nextTokenLeadingWhitespace = nextToken?.leadingTrivia.prefix(while: { $0.isSpaceOrTab }) ?? []
       return trailingTrivia + Trivia(pieces: nextTokenLeadingWhitespace)
     }()
@@ -224,7 +228,7 @@ open class BasicFormat: SyntaxRewriter {
         //  - the previous token didn't end with a newline
         leadingTrivia = .newline + leadingTrivia
       }
-    } else if requiresLeadingWhitespace(token) {
+    } else if requiresWhitespace(between: previousToken, and: token) {
       // Add a leading space if the token requires it unless
       //  - it already starts with a whitespace or
       //  - the previous token ends with a whitespace after the rewrite
@@ -243,7 +247,7 @@ open class BasicFormat: SyntaxRewriter {
     //  - it already ends with a whitespace or
     //  - the next token will start starts with a newline after the rewrite
     //    because newlines should be preferred to spaces as a whitespace
-    if requiresTrailingWhitespace(token)
+    if requiresWhitespace(between: token, and: nextToken)
       && !trailingTrivia.endsWithWhitespace
       && !nextTokenWillStartWithNewline
     {
@@ -272,6 +276,10 @@ open class BasicFormat: SyntaxRewriter {
     leadingTrivia = leadingTrivia.trimmingTrailingWhitespaceBeforeNewline(isBeforeNewline: false)
     trailingTrivia = trailingTrivia.trimmingTrailingWhitespaceBeforeNewline(isBeforeNewline: nextTokenWillStartWithNewline)
 
-    return token.with(\.leadingTrivia, leadingTrivia).with(\.trailingTrivia, trailingTrivia)
+    if leadingTrivia == token.leadingTrivia && trailingTrivia == token.trailingTrivia {
+      return token
+    }
+
+    return token.detach().with(\.leadingTrivia, leadingTrivia).with(\.trailingTrivia, trailingTrivia)
   }
 }

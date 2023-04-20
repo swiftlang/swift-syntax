@@ -191,13 +191,12 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         /// - Parameter layout: The new list of raw syntax nodes underlying this
         ///                     collection.
         /// - Returns: A new `\(raw: node.name)` with the new layout underlying it.
-        internal func replacingLayout(
-          _ layout: [RawSyntax?]) -> \(raw: node.name) {
-            let arena = SyntaxArena()
-            let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
-            let newData = data.replacingSelf(newRaw, arena: arena)
-            return \(raw: node.name)(newData)
-          }
+        internal func replacingLayout(_ layout: [RawSyntax?]) -> \(raw: node.name) {
+          let arena = SyntaxArena()
+          let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+          let newData = data.replacingSelf(newRaw, arena: arena)
+          return \(raw: node.name)(newData)
+        }
         """
       )
 

@@ -16,7 +16,7 @@ import SwiftSyntaxBuilder
 
 private class InitializerExprFormat: BasicFormat {
   public init() {
-    super.init(indentationIncrement: .spaces(2))
+    super.init(indentationWidth: .spaces(2))
   }
 
   private func formatChildrenSeparatedByNewline<SyntaxType: SyntaxProtocol>(children: SyntaxChildren, elementType: SyntaxType.Type) -> [SyntaxType] {

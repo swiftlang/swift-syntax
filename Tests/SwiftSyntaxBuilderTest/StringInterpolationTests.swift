@@ -20,7 +20,7 @@ import XCTest
 
 class TwoSpacesFormat: BasicFormat {
   public init() {
-    super.init(indentationIncrement: .spaces(2))
+    super.init(indentationWidth: .spaces(2))
   }
 }
 

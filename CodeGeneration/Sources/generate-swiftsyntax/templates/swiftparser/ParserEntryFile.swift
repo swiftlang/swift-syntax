@@ -88,10 +88,10 @@ let parserEntryFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
         let existingUnexpected: [RawSyntax]
         if let unexpectedNode = layout.children[layout.children.count - 1] {
-           precondition(unexpectedNode.is(RawUnexpectedNodesSyntax.self))
-           existingUnexpected = unexpectedNode.as(RawUnexpectedNodesSyntax.self).elements
+          precondition(unexpectedNode.is(RawUnexpectedNodesSyntax.self))
+          existingUnexpected = unexpectedNode.as(RawUnexpectedNodesSyntax.self).elements
         } else {
-           existingUnexpected = []
+          existingUnexpected = []
         }
         let unexpected = RawUnexpectedNodesSyntax(elements: existingUnexpected + remainingTokens, arena: self.arena)
 

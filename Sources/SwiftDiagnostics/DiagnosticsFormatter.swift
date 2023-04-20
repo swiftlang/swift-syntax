@@ -112,32 +112,28 @@ public struct DiagnosticsFormatter {
         return nil
       }
 
-      let startLoc = highlight.startLocation(converter: slc, afterLeadingTrivia: true);
-      guard let startLine = startLoc.line else {
-        return nil
-      }
+      let startLoc = highlight.startLocation(converter: slc, afterLeadingTrivia: true)
+      let startLine = startLoc.line
 
       // Find the starting column.
       let startColumn: Int
       if startLine < lineNumber {
         startColumn = 1
-      } else if startLine == lineNumber, let column = startLoc.column {
-        startColumn = column
+      } else if startLine == lineNumber {
+        startColumn = startLoc.column
       } else {
         return nil
       }
 
       // Find the ending column.
       let endLoc = highlight.endLocation(converter: slc, afterTrailingTrivia: false)
-      guard let endLine = endLoc.line else {
-        return nil
-      }
+      let endLine = endLoc.line
 
       let endColumn: Int
       if endLine > lineNumber {
         endColumn = annotatedLine.sourceString.count
-      } else if endLine == lineNumber, let column = endLoc.column {
-        endColumn = column
+      } else if endLine == lineNumber {
+        endColumn = endLoc.column
       } else {
         return nil
       }
@@ -283,9 +279,9 @@ public struct DiagnosticsFormatter {
         annotatedSource.append("\n")
       }
 
-      let columnsWithDiagnostics = Set(annotatedLine.diagnostics.map { $0.location(converter: slc).column ?? 0 })
+      let columnsWithDiagnostics = Set(annotatedLine.diagnostics.map { $0.location(converter: slc).column })
       let diagsPerColumn = Dictionary(grouping: annotatedLine.diagnostics) { diag in
-        diag.location(converter: slc).column ?? 0
+        diag.location(converter: slc).column
       }.sorted { lhs, rhs in
         lhs.key > rhs.key
       }

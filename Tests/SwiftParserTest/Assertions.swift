@@ -336,16 +336,8 @@ func assertLocation<T: SyntaxProtocol>(
     let locationConverter = SourceLocationConverter(file: "", source: tree.description)
     let actualLocation = location
     let expectedLocation = locationConverter.location(for: AbsolutePosition(utf8Offset: markerLoc))
-    if let actualLine = actualLocation.line,
-      let actualColumn = actualLocation.column,
-      let expectedLine = expectedLocation.line,
-      let expectedColumn = expectedLocation.column
-    {
-      if actualLine != expectedLine || actualColumn != expectedColumn {
-        XCTFail("Expected location \(expectedLine):\(expectedColumn) but got \(actualLine):\(actualColumn)", file: file, line: line)
-      }
-    } else {
-      XCTFail("Failed to resolve diagnostic location to line/column", file: file, line: line)
+    if actualLocation.line != expectedLocation.line || actualLocation.column != expectedLocation.column {
+      XCTFail("Expected location \(expectedLocation.line):\(expectedLocation.column) but got \(actualLocation.line):\(actualLocation.column)", file: file, line: line)
     }
   } else {
     XCTFail("Did not find marker \(locationMarker) in the source code", file: file, line: line)

@@ -18,12 +18,15 @@ open class BasicFormat: SyntaxRewriter {
 
   /// As we reach a new indendation level, its indentation will be added to the
   /// stack. As we exit that indentation level, the indendation will be popped.
-  public var indentationStack: [Trivia]
+  /// `isUserDefined` is `true` if the indentation was inferred from something
+  /// the user provided manually instead of being inferred from the nesting
+  /// level.
+  public var indentationStack: [(indentation: Trivia, isUserDefined: Bool)]
 
   /// The trivia by which tokens should currently be indented.
   public var currentIndentationLevel: Trivia {
-    // `popIndentationLevel` guarantees that there is always one item on the stack.
-    return indentationStack.last!
+    // `decreaseIndentationLevel` guarantees that there is always one item on the stack.
+    return indentationStack.last!.indentation
   }
 
   /// For every token that is being put on a new line but did not have
@@ -39,17 +42,24 @@ open class BasicFormat: SyntaxRewriter {
 
   public init(indentationWidth: Trivia = .spaces(4), initialIndentation: Trivia = []) {
     self.indentationWidth = indentationWidth
-    self.indentationStack = [initialIndentation]
+    self.indentationStack = [(indentation: initialIndentation, isUserDefined: false)]
   }
 
   // MARK: - Updating indentation level
 
-  public func pushIndentationLevel(increasingIndentationBy: Trivia) {
-    indentationStack.append(currentIndentationLevel + increasingIndentationBy)
+  public func increaseIndentationLevel(to userDefinedIndentation: Trivia? = nil) {
+    if let userDefinedIndentation = userDefinedIndentation {
+      indentationStack.append((indentation: userDefinedIndentation, isUserDefined: false))
+    } else {
+      indentationStack.append((indentation: currentIndentationLevel + indentationWidth, isUserDefined: false))
+    }
   }
 
-  public func popIndentationLevel() {
-    precondition(indentationStack.count > 1, "Popping more indentation levels than have been pushed")
+  public func decreaseIndentationLevel() {
+    if indentationStack.count == 1 {
+      assertionFailure("Popping more indentation levels than have been pushed")
+      return
+    }
     indentationStack.removeLast()
   }
 
@@ -57,19 +67,20 @@ open class BasicFormat: SyntaxRewriter {
     if requiresIndent(node) {
       if let firstToken = node.firstToken(viewMode: .sourceAccurate),
         let tokenIndentation = firstToken.leadingTrivia.indentation(isOnNewline: false),
-        !tokenIndentation.isEmpty
+        !tokenIndentation.isEmpty,
+        let lastNonUserDefinedIndentation = indentationStack.last(where: { !$0.isUserDefined })?.indentation
       {
         // If the first token in this block is indented, infer the indentation level from it.
-        pushIndentationLevel(increasingIndentationBy: tokenIndentation)
+        increaseIndentationLevel(to: lastNonUserDefinedIndentation + tokenIndentation)
       } else {
-        pushIndentationLevel(increasingIndentationBy: indentationWidth)
+        increaseIndentationLevel()
       }
     }
   }
 
   open override func visitPost(_ node: Syntax) {
     if requiresIndent(node) {
-      popIndentationLevel()
+      decreaseIndentationLevel()
     }
   }
 
@@ -187,7 +198,7 @@ open class BasicFormat: SyntaxRewriter {
       guard let previousToken = previousToken else {
         return false
       }
-      return previousToken.trailingTrivia.pieces.last?.isWhitespace ?? false
+      return previousToken.trailingTrivia.endsWithWhitespace
         || requiresWhitespace(between: previousToken, and: token)
     }()
 
@@ -197,7 +208,25 @@ open class BasicFormat: SyntaxRewriter {
         // don't add a leading newline to the file.
         return true
       }
-      return previousToken.trailingTrivia.endsWithNewline
+      if previousToken.trailingTrivia.endsWithNewline {
+        return true
+      }
+      if case .stringSegment(let segment) = previousToken.tokenKind, segment.last?.isNewline ?? false {
+        return true
+      }
+      return false
+    }()
+
+    lazy var previousTokenIsStringLiteralEndingInNewline: Bool = {
+      guard let previousToken = previousToken else {
+        // Assume that the start of the tree is equivalent to a newline so we
+        // don't add a leading newline to the file.
+        return true
+      }
+      if case .stringSegment(let segment) = previousToken.tokenKind, segment.last?.isNewline ?? false {
+        return true
+      }
+      return false
     }()
 
     lazy var nextTokenWillStartWithNewline: Bool = {
@@ -270,7 +299,7 @@ open class BasicFormat: SyntaxRewriter {
       trailingTriviaIndentation = anchorPointIndentation
     }
 
-    leadingTrivia = leadingTrivia.indented(indentation: leadingTriviaIndentation, isOnNewline: false)
+    leadingTrivia = leadingTrivia.indented(indentation: leadingTriviaIndentation, isOnNewline: previousTokenIsStringLiteralEndingInNewline)
     trailingTrivia = trailingTrivia.indented(indentation: trailingTriviaIndentation, isOnNewline: false)
 
     leadingTrivia = leadingTrivia.trimmingTrailingWhitespaceBeforeNewline(isBeforeNewline: false)

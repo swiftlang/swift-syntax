@@ -20,7 +20,7 @@ private class InitializerExprFormat: BasicFormat {
   }
 
   private func formatChildrenSeparatedByNewline<SyntaxType: SyntaxProtocol>(children: SyntaxChildren, elementType: SyntaxType.Type) -> [SyntaxType] {
-    pushIndentationLevel(increasingIndentationBy: indentationWidth)
+    increaseIndentationLevel()
     var formattedChildren = children.map {
       self.visit($0).as(SyntaxType.self)!
     }
@@ -31,7 +31,7 @@ private class InitializerExprFormat: BasicFormat {
         return $0.with(\.leadingTrivia, .newline + currentIndentationLevel + $0.leadingTrivia)
       }
     }
-    popIndentationLevel()
+    decreaseIndentationLevel()
     if !formattedChildren.isEmpty {
       formattedChildren[formattedChildren.count - 1] = formattedChildren[formattedChildren.count - 1].with(\.trailingTrivia, .newline + currentIndentationLevel)
     }

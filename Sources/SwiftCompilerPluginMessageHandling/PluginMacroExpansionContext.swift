@@ -160,8 +160,8 @@ class SourceManager {
     return SourceLocation(
       // NOTE: IUO because 'localLocation' is created by a location converter
       // which guarantees non-nil line/column.
-      line: localLocation.line! + lineOffset,
-      column: localLocation.column! + columnOffset,
+      line: localLocation.line + lineOffset,
+      column: localLocation.column + columnOffset,
       offset: localLocation.offset + positionOffset,
       file: file
     )

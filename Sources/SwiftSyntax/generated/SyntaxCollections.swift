@@ -75,8 +75,7 @@ public struct AccessPathSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `AccessPathSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> AccessPathSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> AccessPathSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -285,8 +284,7 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `AccessorListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> AccessorListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> AccessorListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -495,8 +493,7 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `ArrayElementListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> ArrayElementListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> ArrayElementListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -748,8 +745,7 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `AttributeListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> AttributeListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> AttributeListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -958,8 +954,7 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `AvailabilitySpecListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> AvailabilitySpecListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> AvailabilitySpecListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -1168,8 +1163,7 @@ public struct AvailabilityVersionRestrictionListSyntax: SyntaxCollection, Syntax
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `AvailabilityVersionRestrictionListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> AvailabilityVersionRestrictionListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> AvailabilityVersionRestrictionListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -1378,8 +1372,7 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `CaseItemListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> CaseItemListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> CaseItemListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -1588,8 +1581,7 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `CatchClauseListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> CatchClauseListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> CatchClauseListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -1798,8 +1790,7 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `CatchItemListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> CatchItemListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> CatchItemListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -2008,8 +1999,7 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `ClosureCaptureItemListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> ClosureCaptureItemListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> ClosureCaptureItemListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -2218,8 +2208,7 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `ClosureParamListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> ClosureParamListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> ClosureParamListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -2428,8 +2417,7 @@ public struct ClosureParameterListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `ClosureParameterListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> ClosureParameterListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> ClosureParameterListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -2638,8 +2626,7 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `CodeBlockItemListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> CodeBlockItemListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> CodeBlockItemListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -2848,8 +2835,7 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `CompositionTypeElementListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> CompositionTypeElementListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> CompositionTypeElementListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -3058,8 +3044,7 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `ConditionElementListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> ConditionElementListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> ConditionElementListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -3268,8 +3253,7 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `DeclNameArgumentListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> DeclNameArgumentListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> DeclNameArgumentListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -3478,8 +3462,7 @@ public struct DesignatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `DesignatedTypeListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> DesignatedTypeListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> DesignatedTypeListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -3688,8 +3671,7 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `DictionaryElementListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> DictionaryElementListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> DictionaryElementListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -3898,8 +3880,7 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `DifferentiabilityParamListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> DifferentiabilityParamListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> DifferentiabilityParamListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -4105,8 +4086,7 @@ public struct DocumentationAttributeArgumentsSyntax: SyntaxCollection, SyntaxHas
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `DocumentationAttributeArgumentsSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> DocumentationAttributeArgumentsSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> DocumentationAttributeArgumentsSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -4312,8 +4292,7 @@ public struct EffectsArgumentsSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `EffectsArgumentsSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> EffectsArgumentsSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> EffectsArgumentsSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -4519,8 +4498,7 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `EnumCaseElementListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> EnumCaseElementListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> EnumCaseElementListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -4729,8 +4707,7 @@ public struct EnumCaseParameterListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `EnumCaseParameterListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> EnumCaseParameterListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> EnumCaseParameterListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -4936,8 +4913,7 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `ExprListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> ExprListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> ExprListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -5146,8 +5122,7 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `FunctionParameterListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> FunctionParameterListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> FunctionParameterListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -5356,8 +5331,7 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `GenericArgumentListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> GenericArgumentListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> GenericArgumentListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -5566,8 +5540,7 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `GenericParameterListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> GenericParameterListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> GenericParameterListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -5776,8 +5749,7 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `GenericRequirementListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> GenericRequirementListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> GenericRequirementListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -5986,8 +5958,7 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `IfConfigClauseListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> IfConfigClauseListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> IfConfigClauseListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -6196,8 +6167,7 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `InheritedTypeListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> InheritedTypeListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> InheritedTypeListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -6406,8 +6376,7 @@ public struct KeyPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `KeyPathComponentListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> KeyPathComponentListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> KeyPathComponentListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -6616,8 +6585,7 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `MemberDeclListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> MemberDeclListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> MemberDeclListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -6826,8 +6794,7 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `ModifierListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> ModifierListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> ModifierListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -7036,8 +7003,7 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `MultipleTrailingClosureElementListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> MultipleTrailingClosureElementListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> MultipleTrailingClosureElementListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -7246,8 +7212,7 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `ObjCSelectorSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> ObjCSelectorSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> ObjCSelectorSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -7456,8 +7421,7 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `PatternBindingListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> PatternBindingListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> PatternBindingListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -7721,8 +7685,7 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `PrecedenceGroupAttributeListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> PrecedenceGroupAttributeListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> PrecedenceGroupAttributeListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -7931,8 +7894,7 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `PrecedenceGroupNameListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> PrecedenceGroupNameListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> PrecedenceGroupNameListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -8141,8 +8103,7 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `PrimaryAssociatedTypeListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> PrimaryAssociatedTypeListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> PrimaryAssociatedTypeListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -8416,8 +8377,7 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `SpecializeAttributeSpecListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> SpecializeAttributeSpecListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> SpecializeAttributeSpecListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -8669,8 +8629,7 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `StringLiteralSegmentsSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> StringLiteralSegmentsSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> StringLiteralSegmentsSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -8922,8 +8881,7 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `SwitchCaseListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> SwitchCaseListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> SwitchCaseListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -9132,8 +9090,7 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `TupleExprElementListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> TupleExprElementListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> TupleExprElementListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -9342,8 +9299,7 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `TuplePatternElementListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> TuplePatternElementListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> TuplePatternElementListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -9552,8 +9508,7 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `TupleTypeElementListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> TupleTypeElementListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> TupleTypeElementListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -9759,8 +9714,7 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `UnexpectedNodesSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> UnexpectedNodesSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> UnexpectedNodesSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -9969,8 +9923,7 @@ public struct YieldExprListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `YieldExprListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> YieldExprListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> YieldExprListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)

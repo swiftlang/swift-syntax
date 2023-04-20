@@ -35,18 +35,18 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: copyrightHead
               DeclSyntax(
                 #"""
                 enum TokenChoice: CustomStringConvertible {
-                   case keyword(StaticString)
-                   case tokenKind(RawTokenKind)
+                  case keyword(StaticString)
+                  case tokenKind(RawTokenKind)
 
-                   var description: String {
-                     switch self {
-                     case .keyword(let keyword):
-                       return "keyword('\(keyword)')"
-                     case .tokenKind(let kind):
-                       return "\(kind)"
-                     }
-                   }
-                 }
+                  var description: String {
+                    switch self {
+                    case .keyword(let keyword):
+                      return "keyword('\(keyword)')"
+                    case .tokenKind(let kind):
+                      return "\(kind)"
+                    }
+                  }
+                }
                 """#
               )
 
@@ -76,7 +76,7 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: copyrightHead
                       return (file, line)
                     case .tokenMismatch(expectedTokenChoices: _, actualKind: _, actualText: _, file: let file, line: let line):
                       return (file, line)
-                  }
+                    }
                   }
                 }
                 """#
@@ -156,13 +156,13 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: copyrightHead
 
               DeclSyntax(
                 #"""
-                 func assertNoError(_ nodeKind: SyntaxKind, _ index: Int, _ error: ValidationError?) {
-                   if let error = error {
-                     let (file, line) = error.fileAndLine
-                     assertionFailure("""
-                       Error validating child at index \(index) of \(nodeKind):
-                       \(error.description)
-                       """, file: file, line: line)
+                func assertNoError(_ nodeKind: SyntaxKind, _ index: Int, _ error: ValidationError?) {
+                  if let error = error {
+                    let (file, line) = error.fileAndLine
+                    assertionFailure("""
+                      Error validating child at index \(index) of \(nodeKind):
+                      \(error.description)
+                      """, file: file, line: line)
                   }
                 }
                 """#

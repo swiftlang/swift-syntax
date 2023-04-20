@@ -65,7 +65,8 @@ public struct AccessPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -186,7 +187,8 @@ public struct AccessorBlockSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -340,7 +342,8 @@ public struct AccessorEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -461,7 +464,8 @@ public struct AccessorParameterSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -596,7 +600,8 @@ public struct ArrayElementSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -990,7 +995,8 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -1223,7 +1229,8 @@ public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -1352,7 +1359,8 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -1538,7 +1546,8 @@ public struct AvailabilityEntrySyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -1762,7 +1771,8 @@ public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable 
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -1900,7 +1910,8 @@ public struct AvailabilityVersionRestrictionListEntrySyntax: SyntaxProtocol, Syn
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -2016,7 +2027,8 @@ public struct AvailabilityVersionRestrictionSyntax: SyntaxProtocol, SyntaxHashab
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -2138,7 +2150,8 @@ public struct BackDeployedAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashabl
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -2301,7 +2314,8 @@ public struct CaseItemSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -2442,7 +2456,8 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -2602,7 +2617,8 @@ public struct CatchItemSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -2784,7 +2800,8 @@ public struct ClosureCaptureItemSpecifierSyntax: SyntaxProtocol, SyntaxHashable 
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -2957,7 +2974,8 @@ public struct ClosureCaptureItemSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -3138,7 +3156,8 @@ public struct ClosureCaptureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -3292,7 +3311,8 @@ public struct ClosureParamSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -3413,7 +3433,8 @@ public struct ClosureParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -3606,7 +3627,8 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -4006,7 +4028,8 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -4273,7 +4296,8 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -4396,7 +4420,8 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -4550,7 +4575,8 @@ public struct CompositionTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -4734,7 +4760,8 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -4855,7 +4882,8 @@ public struct ConformanceRequirementSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -5008,7 +5036,8 @@ public struct ConventionAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -5190,7 +5219,8 @@ public struct ConventionWitnessMethodAttributeArgumentsSyntax: SyntaxProtocol, S
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -5331,7 +5361,8 @@ public struct DeclModifierDetailSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -5466,7 +5497,8 @@ public struct DeclModifierSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -5581,7 +5613,8 @@ public struct DeclNameArgumentSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -5702,7 +5735,8 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -5856,7 +5890,8 @@ public struct DeclNameSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -6003,7 +6038,8 @@ public struct DerivativeRegistrationAttributeArgumentsSyntax: SyntaxProtocol, Sy
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -6223,7 +6259,8 @@ public struct DesignatedTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -6350,7 +6387,8 @@ public struct DictionaryElementSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -6505,7 +6543,8 @@ public struct DifferentiabilityParamSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -6668,7 +6707,8 @@ public struct DifferentiabilityParamsClauseSyntax: SyntaxProtocol, SyntaxHashabl
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -6811,7 +6851,8 @@ public struct DifferentiabilityParamsSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -6984,7 +7025,8 @@ public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHash
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -7215,7 +7257,8 @@ public struct DocumentationAttributeArgumentSyntax: SyntaxProtocol, SyntaxHashab
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -7377,7 +7420,8 @@ public struct DynamicReplacementArgumentsSyntax: SyntaxProtocol, SyntaxHashable 
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -7524,7 +7568,8 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -7689,7 +7734,8 @@ public struct EnumCaseParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -7876,7 +7922,8 @@ public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -8120,7 +8167,8 @@ public struct ExposeAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -8273,7 +8321,8 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -8467,7 +8516,8 @@ public struct FunctionEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -8624,7 +8674,8 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -8923,7 +8974,8 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -9064,7 +9116,8 @@ public struct GenericArgumentClauseSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -9218,7 +9271,8 @@ public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -9345,7 +9399,8 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -9543,7 +9598,8 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -9857,7 +9913,8 @@ public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -9972,7 +10029,8 @@ public struct GenericWhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -10193,7 +10251,8 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -10375,7 +10434,8 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -10534,7 +10594,8 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -10649,7 +10710,8 @@ public struct InitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -10817,7 +10879,8 @@ public struct KeyPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -10918,7 +10981,8 @@ public struct KeyPathOptionalComponentSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -11015,7 +11079,8 @@ public struct KeyPathPropertyComponentSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -11156,7 +11221,8 @@ public struct KeyPathSubscriptComponentSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -11322,7 +11388,8 @@ public struct LabeledSpecializeEntrySyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -11517,7 +11584,8 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -11764,7 +11832,8 @@ public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -11925,7 +11994,8 @@ public struct MemberDeclBlockSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -12079,7 +12149,8 @@ public struct MemberDeclListItemSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -12179,7 +12250,8 @@ public struct MissingSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -12258,7 +12330,8 @@ public struct MultipleTrailingClosureElementSyntax: SyntaxProtocol, SyntaxHashab
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -12393,7 +12466,8 @@ public struct ObjCSelectorPieceSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -12514,7 +12588,8 @@ public struct OpaqueReturnTypeOfAttributeArgumentsSyntax: SyntaxProtocol, Syntax
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -12657,7 +12732,8 @@ public struct OperatorPrecedenceAndTypesSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -12825,7 +12901,8 @@ public struct OptionalBindingConditionSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -12998,7 +13075,8 @@ public struct OriginallyDefinedInArgumentsSyntax: SyntaxProtocol, SyntaxHashable
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -13198,7 +13276,8 @@ public struct ParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -13412,7 +13491,8 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -13617,7 +13697,8 @@ public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -13838,7 +13919,8 @@ public struct PrecedenceGroupAssignmentSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -13980,7 +14062,8 @@ public struct PrecedenceGroupAssociativitySyntax: SyntaxProtocol, SyntaxHashable
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -14116,7 +14199,8 @@ public struct PrecedenceGroupNameElementSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -14237,7 +14321,8 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -14399,7 +14484,8 @@ public struct PrimaryAssociatedTypeClauseSyntax: SyntaxProtocol, SyntaxHashable 
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -14553,7 +14639,8 @@ public struct PrimaryAssociatedTypeSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -14680,7 +14767,8 @@ public struct QualifiedDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -14877,7 +14965,8 @@ public struct ReturnClauseSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -14998,7 +15087,8 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -15133,7 +15223,8 @@ public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -15253,7 +15344,8 @@ public struct StringSegmentSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -15350,7 +15442,8 @@ public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -15552,7 +15645,8 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -15706,7 +15800,8 @@ public struct SwitchDefaultLabelSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -15833,7 +15928,8 @@ public struct TargetFunctionEntrySyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -16004,7 +16100,8 @@ public struct TupleExprElementSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -16171,7 +16268,8 @@ public struct TuplePatternElementSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -16362,7 +16460,8 @@ public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -16597,7 +16696,8 @@ public struct TypeAnnotationSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -16712,7 +16812,8 @@ public struct TypeEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -16827,7 +16928,8 @@ public struct TypeInheritanceClauseSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -16961,7 +17063,8 @@ public struct TypeInitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -17082,7 +17185,8 @@ public struct UnavailableFromAsyncArgumentsSyntax: SyntaxProtocol, SyntaxHashabl
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -17223,7 +17327,8 @@ public struct UnderscorePrivateAttributeArgumentsSyntax: SyntaxProtocol, SyntaxH
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -17376,7 +17481,8 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -17556,7 +17662,8 @@ public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -17671,7 +17778,8 @@ public struct YieldExprListElementSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -17792,7 +17900,8 @@ public struct YieldListSyntax: SyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)

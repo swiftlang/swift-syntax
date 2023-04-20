@@ -51,7 +51,8 @@ public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -128,7 +129,8 @@ public struct IdentifierPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -219,7 +221,8 @@ public struct IsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -317,7 +320,8 @@ public struct MissingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -396,7 +400,8 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -550,7 +555,8 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -665,7 +671,8 @@ public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)

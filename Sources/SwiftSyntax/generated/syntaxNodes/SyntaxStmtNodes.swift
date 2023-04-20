@@ -65,7 +65,8 @@ public struct BreakStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -180,7 +181,8 @@ public struct ContinueStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -295,7 +297,8 @@ public struct DeferStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -416,7 +419,8 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -556,7 +560,8 @@ public struct ExpressionStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -633,7 +638,8 @@ public struct FallthroughStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -772,7 +778,8 @@ public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -1047,7 +1054,8 @@ public struct ForgetStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -1174,7 +1182,8 @@ public struct GuardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -1354,7 +1363,8 @@ public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -1472,7 +1482,8 @@ public struct MissingStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -1557,7 +1568,8 @@ public struct RepeatWhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -1712,7 +1724,8 @@ public struct ReturnStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -1858,7 +1871,8 @@ public struct ThrowStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -1979,7 +1993,8 @@ public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -2175,7 +2190,8 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           arena: arena, 
           leadingTrivia: leadingTrivia, 
           trailingTrivia: trailingTrivia
-        )
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)

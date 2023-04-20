@@ -109,8 +109,12 @@ func syntaxNode(emitKind: String) -> SourceFileSyntax {
                 DeclSyntax(
                   """
                   let raw = RawSyntax.makeLayout(
-                    kind: SyntaxKind.\(raw: node.swiftSyntaxKind), from: layout, arena: arena,
-                    leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
+                    kind: SyntaxKind.\(raw: node.swiftSyntaxKind),
+                    from: layout,
+                    arena: arena,
+                    leadingTrivia: leadingTrivia,
+                    trailingTrivia: trailingTrivia
+                  )
                   """
                 )
               }

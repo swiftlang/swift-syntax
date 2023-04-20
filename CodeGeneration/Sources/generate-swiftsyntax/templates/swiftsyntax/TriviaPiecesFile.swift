@@ -181,7 +181,7 @@ let triviaPiecesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   ) {
     for trivia in TRIVIAS {
       if trivia.isCollection {
-        DeclSyntax(" case \(raw: trivia.enumCaseName)(Int)")
+        DeclSyntax("case \(raw: trivia.enumCaseName)(Int)")
 
       } else {
         DeclSyntax("case \(raw: trivia.enumCaseName)(SyntaxText)")

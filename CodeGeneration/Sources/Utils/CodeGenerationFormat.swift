@@ -106,7 +106,7 @@ public class CodeGenerationFormat: BasicFormat {
   }
 
   private func formatChildrenSeparatedByNewline<SyntaxType: SyntaxProtocol>(children: SyntaxChildren, elementType: SyntaxType.Type) -> [SyntaxType] {
-    pushIndentationLevel(increasingIndentationBy: indentationWidth)
+    increaseIndentationLevel()
     var formattedChildren = children.map {
       self.visit($0).as(SyntaxType.self)!
     }
@@ -117,7 +117,7 @@ public class CodeGenerationFormat: BasicFormat {
         return $0.with(\.leadingTrivia, indentedNewline + $0.leadingTrivia)
       }
     }
-    popIndentationLevel()
+    decreaseIndentationLevel()
     if !formattedChildren.isEmpty {
       formattedChildren[formattedChildren.count - 1] = formattedChildren[formattedChildren.count - 1].with(\.trailingTrivia, indentedNewline)
     }

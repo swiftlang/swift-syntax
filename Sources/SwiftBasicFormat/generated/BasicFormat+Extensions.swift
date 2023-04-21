@@ -245,6 +245,18 @@ fileprivate extension AnyKeyPath {
       return false
     case \FunctionParameterSyntax.secondName:
       return true
+    case \MissingDeclSyntax.placeholder:
+      return false
+    case \MissingExprSyntax.placeholder:
+      return false
+    case \MissingPatternSyntax.placeholder:
+      return false
+    case \MissingStmtSyntax.placeholder:
+      return false
+    case \MissingSyntax.placeholder:
+      return false
+    case \MissingTypeSyntax.placeholder:
+      return false
     default:
       return nil
     }
@@ -261,6 +273,18 @@ fileprivate extension AnyKeyPath {
     case \DictionaryExprSyntax.content:
       return false
     case \DynamicReplacementArgumentsSyntax.forLabel:
+      return false
+    case \MissingDeclSyntax.placeholder:
+      return false
+    case \MissingExprSyntax.placeholder:
+      return false
+    case \MissingPatternSyntax.placeholder:
+      return false
+    case \MissingStmtSyntax.placeholder:
+      return false
+    case \MissingSyntax.placeholder:
+      return false
+    case \MissingTypeSyntax.placeholder:
       return false
     case \SwitchCaseLabelSyntax.colon:
       return false

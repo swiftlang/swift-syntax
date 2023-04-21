@@ -2126,18 +2126,42 @@ internal func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenAttributesAndModifiers"
   case \MissingDeclSyntax.modifiers:
     return "modifiers"
-  case \MissingDeclSyntax.unexpectedAfterModifiers:
-    return "unexpectedAfterModifiers"
-  case \MissingExprSyntax.unexpected:
-    return "unexpected"
-  case \MissingPatternSyntax.unexpected:
-    return "unexpected"
-  case \MissingStmtSyntax.unexpected:
-    return "unexpected"
-  case \MissingSyntax.unexpected:
-    return "unexpected"
-  case \MissingTypeSyntax.unexpected:
-    return "unexpected"
+  case \MissingDeclSyntax.unexpectedBetweenModifiersAndPlaceholder:
+    return "unexpectedBetweenModifiersAndPlaceholder"
+  case \MissingDeclSyntax.placeholder:
+    return "placeholder"
+  case \MissingDeclSyntax.unexpectedAfterPlaceholder:
+    return "unexpectedAfterPlaceholder"
+  case \MissingExprSyntax.unexpectedBeforePlaceholder:
+    return "unexpectedBeforePlaceholder"
+  case \MissingExprSyntax.placeholder:
+    return "placeholder"
+  case \MissingExprSyntax.unexpectedAfterPlaceholder:
+    return "unexpectedAfterPlaceholder"
+  case \MissingPatternSyntax.unexpectedBeforePlaceholder:
+    return "unexpectedBeforePlaceholder"
+  case \MissingPatternSyntax.placeholder:
+    return "placeholder"
+  case \MissingPatternSyntax.unexpectedAfterPlaceholder:
+    return "unexpectedAfterPlaceholder"
+  case \MissingStmtSyntax.unexpectedBeforePlaceholder:
+    return "unexpectedBeforePlaceholder"
+  case \MissingStmtSyntax.placeholder:
+    return "placeholder"
+  case \MissingStmtSyntax.unexpectedAfterPlaceholder:
+    return "unexpectedAfterPlaceholder"
+  case \MissingSyntax.unexpectedBeforePlaceholder:
+    return "unexpectedBeforePlaceholder"
+  case \MissingSyntax.placeholder:
+    return "placeholder"
+  case \MissingSyntax.unexpectedAfterPlaceholder:
+    return "unexpectedAfterPlaceholder"
+  case \MissingTypeSyntax.unexpectedBeforePlaceholder:
+    return "unexpectedBeforePlaceholder"
+  case \MissingTypeSyntax.placeholder:
+    return "placeholder"
+  case \MissingTypeSyntax.unexpectedAfterPlaceholder:
+    return "unexpectedAfterPlaceholder"
   case \MoveExprSyntax.unexpectedBeforeMoveKeyword:
     return "unexpectedBeforeMoveKeyword"
   case \MoveExprSyntax.moveKeyword:

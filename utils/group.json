@@ -36,6 +36,7 @@
   ],
   "Utils": [
     "CommonAncestor.swift",
+    "MissingNodeInitializers.swift",
     "SyntaxAnyVisitor.swift",
     "SyntaxBuilders.swift",
     "SyntaxClassifier.swift",

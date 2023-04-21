@@ -14,6 +14,7 @@ Alternatively you can also build it from the command line using `build-script.py
      - (enclosing directory)
        - swift-argument-parser
        - swift-syntax
+     ```
 2. Execute the following command
     ```bash
     swift-syntax/build-script.py build --toolchain /Library/Developer/Toolchains/swift-DEVELOPMENT-SNAPSHOT-<recent date>.xctoolchain/usr
@@ -62,7 +63,7 @@ Tip: Running SwiftSyntax’s self-parse tests takes the majority of testing time
 2. Select the Arguments tab in the Run section
 3. Add a `SKIP_LONG_TESTS` environment variable with value `1`
 
-### `lit`-based tests
+### `lit`-based Tests
 
 A few tests are based LLVM’s `lit` and `FileCheck` tools.
 To run these, build `FileCheck`, e.g. by building the Swift compiler and run the tests using the following command:
@@ -70,7 +71,7 @@ To run these, build `FileCheck`, e.g. by building the Swift compiler and run the
 ./build-script.py test --toolchain /Library/Developer/Toolchains/swift-DEVELOPMENT-SNAPSHOT-<recent date>.xctoolchain/usr --skip-lit-tests --filecheck-exec /path/to/build/Release+Asserts/llvm-macosx-x86_64/bin/FileCheck
 ```
 
-## Generating source code
+## Generating Source Code
 
 If you want to modify the code-generated files, perform the following steps:
 
@@ -86,3 +87,7 @@ If you want to modify the code-generated files, perform the following steps:
     swift-syntax/build-script.py generate-source-code --toolchain /Library/Developer/Toolchains/swift-DEVELOPMENT-SNAPSHOT-<recent date>.xctoolchain/usr
     ```
 3. The new source-generated file will be written into your `Sources` directory.
+
+## Swift Version
+
+We require that SwiftSyntax builds with the latest released compiler and the previous major version (e.g. with Swift 5.8 and Swift 5.7).

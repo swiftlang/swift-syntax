@@ -59,8 +59,8 @@ extension TriviaPiece: TextOutputStreamable {
   /// - Parameter stream: The stream to which to print the trivia.
   public func write<Target>(to target: inout Target) where Target: TextOutputStream {
     func printRepeated(_ character: String, count: Int) {
-      for _ in 0 ..< count { 
-        target.write(character) 
+      for _ in 0 ..< count {
+        target.write(character)
       }
     }
     switch self {

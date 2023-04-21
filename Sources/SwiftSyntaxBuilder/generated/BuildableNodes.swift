@@ -46,8 +46,8 @@ extension AccessorDeclSyntax {
         unexpectedBetweenParameterAndEffectSpecifiers, 
         effectSpecifiers: effectSpecifiers, 
         unexpectedBetweenEffectSpecifiersAndBody, 
-        body: bodyBuilder().map { 
-          CodeBlockSyntax(statements: $0) 
+        body: bodyBuilder().map {
+          CodeBlockSyntax(statements: $0)
         }, 
         unexpectedAfterBody, 
         trailingTrivia: trailingTrivia
@@ -335,8 +335,8 @@ extension DeinitializerDeclSyntax {
         unexpectedBetweenModifiersAndDeinitKeyword, 
         deinitKeyword: deinitKeyword, 
         unexpectedBetweenDeinitKeywordAndBody, 
-        body: bodyBuilder().map { 
-          CodeBlockSyntax(statements: $0) 
+        body: bodyBuilder().map {
+          CodeBlockSyntax(statements: $0)
         }, 
         unexpectedAfterBody, 
         trailingTrivia: trailingTrivia
@@ -663,8 +663,8 @@ extension FunctionDeclSyntax {
         unexpectedBetweenSignatureAndGenericWhereClause, 
         genericWhereClause: genericWhereClause, 
         unexpectedBetweenGenericWhereClauseAndBody, 
-        body: bodyBuilder().map { 
-          CodeBlockSyntax(statements: $0) 
+        body: bodyBuilder().map {
+          CodeBlockSyntax(statements: $0)
         }, 
         unexpectedAfterBody, 
         trailingTrivia: trailingTrivia
@@ -867,8 +867,8 @@ extension InitializerDeclSyntax {
         unexpectedBetweenSignatureAndGenericWhereClause, 
         genericWhereClause: genericWhereClause, 
         unexpectedBetweenGenericWhereClauseAndBody, 
-        body: bodyBuilder().map { 
-          CodeBlockSyntax(statements: $0) 
+        body: bodyBuilder().map {
+          CodeBlockSyntax(statements: $0)
         }, 
         unexpectedAfterBody, 
         trailingTrivia: trailingTrivia

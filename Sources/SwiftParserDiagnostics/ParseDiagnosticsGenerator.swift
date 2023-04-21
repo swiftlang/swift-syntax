@@ -993,6 +993,35 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return handleMissingSyntax(node, additionalHandledNodes: [node.placeholder.id])
   }
 
+  override open func visit(_ node: OriginallyDefinedInArgumentsSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    if let token = node.unexpectedBetweenModuleLabelAndColon?.onlyToken(where: { $0.tokenKind.isIdentifier }),
+      node.moduleLabel.presence == .missing
+    {
+      addDiagnostic(
+        node,
+        MissingNodesError(missingNodes: [Syntax(node.moduleLabel)]),
+        fixIts: [
+          FixIt(
+            message: ReplaceTokensFixIt(
+              replaceTokens: [token],
+              replacements: [node.moduleLabel]
+            ),
+            changes: [
+              FixIt.MultiNodeChange.makeMissing(token),
+              FixIt.MultiNodeChange.makePresent(node.moduleLabel),
+            ]
+          )
+        ],
+        handledNodes: [node.moduleLabel.id, token.id]
+      )
+    }
+
+    return .visitChildren
+  }
+
   public override func visit(_ node: OperatorDeclSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren

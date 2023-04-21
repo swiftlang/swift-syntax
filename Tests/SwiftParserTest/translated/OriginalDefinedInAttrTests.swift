@@ -31,9 +31,15 @@ final class OriginalDefinedInAttrTests: XCTestCase {
       public func foo1() {}
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "expected 'module' in @_originallyDefinedIn arguments", fixIts: ["insert 'module'"]),
-        DiagnosticSpec(message: "unexpected code 'modulename' before @_originallyDefinedIn arguments"),
-      ]
+        DiagnosticSpec(
+          message: "expected 'module' in @_originallyDefinedIn arguments",
+          fixIts: ["replace 'modulename' with 'module'"]
+        )
+      ],
+      fixedSource: #"""
+        @_originallyDefinedIn(module: "foo", OSX 13.13)
+        public func foo1() {}
+        """#
     )
   }
 
@@ -53,7 +59,10 @@ final class OriginalDefinedInAttrTests: XCTestCase {
       public class ToplevelClass1 {}
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ',' and version list in @_originallyDefinedIn arguments", fixIts: ["insert ',' and version list"])
+        DiagnosticSpec(
+          message: "expected ',' and version list in @_originallyDefinedIn arguments",
+          fixIts: ["insert ',' and version list"]
+        )
       ]
     )
   }
@@ -200,5 +209,4 @@ final class OriginalDefinedInAttrTests: XCTestCase {
       """
     )
   }
-
 }

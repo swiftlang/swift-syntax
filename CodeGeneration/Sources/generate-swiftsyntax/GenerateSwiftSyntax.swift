@@ -80,7 +80,7 @@ struct GenerateSwiftSyntax: ParsableCommand {
     let fileSpecs: [GeneratedFileSpec] =
       [
         // SwiftBasicFormat
-        GeneratedFileSpec(swiftBasicFormatGeneratedDir + ["BasicFormat.swift"], basicFormatFile),
+        GeneratedFileSpec(swiftBasicFormatGeneratedDir + ["BasicFormat+Extensions.swift"], basicFormatExtensionsFile),
 
         // IDEUtils
         GeneratedFileSpec(ideUtilsGeneratedDir + ["SyntaxClassification.swift"], syntaxClassificationFile),

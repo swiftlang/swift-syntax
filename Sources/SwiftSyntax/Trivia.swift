@@ -172,34 +172,6 @@ extension Trivia {
   }
 }
 
-extension TriviaPiece {
-  /// Returns true if the trivia is `.newlines`, `.carriageReturns` or `.carriageReturnLineFeeds`
-  public var isNewline: Bool {
-    switch self {
-    case .newlines,
-      .carriageReturns,
-      .carriageReturnLineFeeds:
-      return true
-    default:
-      return false
-    }
-  }
-}
-
-extension RawTriviaPiece {
-  /// Returns true if the trivia is `.newlines`, `.carriageReturns` or `.carriageReturnLineFeeds`
-  public var isNewline: Bool {
-    switch self {
-    case .newlines,
-      .carriageReturns,
-      .carriageReturnLineFeeds:
-      return true
-    default:
-      return false
-    }
-  }
-}
-
 extension RawTriviaPiece: TextOutputStreamable {
   public func write<Target: TextOutputStream>(to target: inout Target) {
     TriviaPiece(raw: self).write(to: &target)

@@ -52,4 +52,27 @@ final class ClassDeclSyntaxTests: XCTestCase {
       """
     )
   }
+
+  func testNodeWithoutAnchorPointInResultBuilder() throws {
+    let buildable = ClassDeclSyntax(identifier: .identifier("Foo")) {
+      DeclSyntax(
+        """
+          func foo() -> String {
+            return "hello world"
+          }
+        """
+      )
+    }
+
+    assertBuildResult(
+      buildable,
+      """
+      class Foo {
+        func foo() -> String {
+          return "hello world"
+        }
+      }
+      """
+    )
+  }
 }

@@ -190,4 +190,71 @@ final class BasicFormatTest: XCTestCase {
         """
     )
   }
+
+  func testStringInterpolationAtStartOfMultiLineStringLiteral() {
+    assertFormatted(
+      source: #"""
+        class Foo {
+        func test() {
+            assertionFailure("""
+              ABC
+              \(myVar)
+              """)
+        }
+        }
+        """#,
+      expected: #"""
+        class Foo {
+            func test() {
+                assertionFailure("""
+                  ABC
+                  \(myVar)
+                  """)
+            }
+        }
+        """#
+    )
+  }
+
+  func testMultilineStringLiteral() {
+    assertFormatted(
+      source: #"""
+        assertionFailure("""
+          First line
+          Second line
+          """)
+        """#,
+      expected: #"""
+        assertionFailure("""
+          First line
+          Second line
+          """)
+        """#
+    )
+  }
+
+  func testNestedUserDefinedIndentation() {
+    assertFormatted(
+      source: """
+        class X {
+        func test() {
+            withTrailingClosure() {
+                if true { return }
+            }
+        }
+        }
+        """,
+      expected: """
+        class X {
+            func test() {
+                withTrailingClosure() {
+                    if true {
+                        return
+                    }
+                }
+            }
+        }
+        """
+    )
+  }
 }

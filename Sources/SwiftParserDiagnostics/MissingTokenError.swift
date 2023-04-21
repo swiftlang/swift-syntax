@@ -109,11 +109,16 @@ extension ParseDiagnosticsGenerator {
       // The extraneous whitespace caused a missing identifier, output a
       // diagnostic inserting it instead of a diagnostic to fix the trivia
       // around the period.
-      _ = handleMissingSyntax(
+      let fixIt = FixIt(
+        message: InsertTokenFixIt(missingNodes: [Syntax(identifier)]),
+        changes: changes + [.makePresent(identifier, trailingTrivia: invalidToken.trailingTrivia)]
+      )
+      addDiagnostic(
         identifier,
-        overridePosition: invalidToken.endPositionBeforeTrailingTrivia,
-        additionalChanges: changes,
-        additionalHandledNodes: [invalidTokenContainer.id]
+        position: invalidToken.endPositionBeforeTrailingTrivia,
+        MissingNodesError(missingNodes: [Syntax(identifier)]),
+        fixIts: [fixIt],
+        handledNodes: [invalidTokenContainer.id, identifier.id]
       )
     } else {
       let fixIt = FixIt(message: .removeExtraneousWhitespace, changes: changes)
@@ -143,7 +148,7 @@ extension ParseDiagnosticsGenerator {
       message: isTooMany ? .removeExtraneousDelimiters : .insertExtraClosingPounds,
       changes: [
         .makeMissing(invalidToken),
-        .makePresentBeforeTrivia(missingToken),
+        .makePresent(missingToken),
       ]
     )
     addDiagnostic(

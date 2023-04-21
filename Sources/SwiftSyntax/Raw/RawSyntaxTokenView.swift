@@ -174,6 +174,7 @@ public struct RawSyntaxTokenView {
   /// kind changed to `newValue`.
   @_spi(RawSyntax)
   public func withKind(_ newValue: TokenKind, arena: SyntaxArena) -> RawSyntax {
+    arena.addChild(self.raw.arenaReference)
     switch raw.rawData.payload {
     case .parsedToken(_):
       // The wholeText can't be continuous anymore. Make a materialized token.
@@ -200,6 +201,7 @@ public struct RawSyntaxTokenView {
   /// Returns a `RawSyntax` node with the presence changed to `newValue`.
   @_spi(RawSyntax)
   public func withPresence(_ newValue: SourcePresence, arena: SyntaxArena) -> RawSyntax {
+    arena.addChild(self.raw.arenaReference)
     switch raw.rawData.payload {
     case .parsedToken(var payload):
       payload.presence = newValue
@@ -269,6 +271,7 @@ public struct RawSyntaxTokenView {
 
   @_spi(RawSyntax)
   public func withTokenDiagnostic(tokenDiagnostic: TokenDiagnostic?, arena: SyntaxArena) -> RawSyntax {
+    arena.addChild(self.raw.arenaReference)
     switch raw.rawData.payload {
     case .parsedToken(var dat):
       dat.tokenDiagnostic = tokenDiagnostic

@@ -2257,7 +2257,7 @@ final class RecoveryTests: XCTestCase {
         )
       ],
       fixedSource: """
-        func f<<#identifier#> >() {}
+        func f<<#identifier#>>() {}
         """
     )
 

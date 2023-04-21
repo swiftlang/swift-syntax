@@ -76,62 +76,6 @@ let basicFormatExtensionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader)
       }
       """
     )
-
-    try VariableDeclSyntax("var requiresLeadingSpace: Bool") {
-      StmtSyntax(
-        """
-        if let keyPath = keyPathInParent, let requiresLeadingSpace = keyPath.requiresLeadingSpace {
-          return requiresLeadingSpace
-        }
-        """
-      )
-
-      try SwitchExprSyntax("switch tokenKind") {
-        for token in SYNTAX_TOKENS {
-          if token.requiresLeadingSpace {
-            SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
-              StmtSyntax("return true")
-            }
-          }
-        }
-        for keyword in KEYWORDS where keyword.requiresLeadingSpace {
-          SwitchCaseSyntax("case .keyword(.\(raw: keyword.escapedName)):") {
-            StmtSyntax("return true")
-          }
-        }
-        SwitchCaseSyntax("default:") {
-          StmtSyntax("return false")
-        }
-      }
-    }
-
-    try VariableDeclSyntax("var requiresTrailingSpace: Bool") {
-      StmtSyntax(
-        """
-        if let keyPath = keyPathInParent, let requiresTrailingSpace = keyPath.requiresTrailingSpace {
-          return requiresTrailingSpace
-        }
-        """
-      )
-
-      try SwitchExprSyntax("switch tokenKind") {
-        for token in SYNTAX_TOKENS {
-          if token.requiresTrailingSpace {
-            SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
-              StmtSyntax("return true")
-            }
-          }
-        }
-        for keyword in KEYWORDS where keyword.requiresTrailingSpace {
-          SwitchCaseSyntax("case .keyword(.\(raw: keyword.escapedName)):") {
-            StmtSyntax("return true")
-          }
-        }
-        SwitchCaseSyntax("default:") {
-          StmtSyntax("return false")
-        }
-      }
-    }
   }
 
   try! ExtensionDeclSyntax("fileprivate extension AnyKeyPath") {

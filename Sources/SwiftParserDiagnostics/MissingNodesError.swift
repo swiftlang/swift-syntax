@@ -21,6 +21,12 @@ fileprivate func findCommonAncestor(_ nodes: [Syntax]) -> Syntax? {
   return findCommonAncestorOrSelf(nodes.compactMap({ $0.parent }))
 }
 
+class NoNewlinesFormat: BasicFormat {
+  override func requiresLeadingNewline(_ token: TokenSyntax) -> Bool {
+    return false
+  }
+}
+
 fileprivate enum NodesDescriptionPart {
   case tokensWithDefaultText([TokenSyntax])
   case tokenWithoutDefaultText(TokenSyntax)
@@ -30,7 +36,7 @@ fileprivate enum NodesDescriptionPart {
     switch self {
     case .tokensWithDefaultText(var tokens):
       if format {
-        tokens = tokens.map({ BasicFormat().visit($0) })
+        tokens = tokens.map({ NoNewlinesFormat(viewMode: .all).visit($0) })
       }
       if !tokens.isEmpty {
         tokens[0] = tokens[0].with(\.leadingTrivia, [])
@@ -70,11 +76,11 @@ fileprivate enum NodesDescriptionPart {
         } else {
           let (rawKind, text) = token.tokenKind.decomposeToRaw()
           if let text = text, !text.isEmpty {
-            let presentToken = TokenSyntax(token.tokenKind, presence: .present)
+            let presentToken = token.with(\.presence, .present)
             newPart = .tokensWithDefaultText([presentToken])
           } else if let defaultText = rawKind.defaultText {
             let newKind = TokenKind.fromRaw(kind: rawKind, text: String(syntaxText: defaultText))
-            let presentToken = TokenSyntax(newKind, presence: .present)
+            let presentToken = token.with(\.tokenKind, newKind).with(\.presence, .present)
             newPart = .tokensWithDefaultText([presentToken])
           } else {
             newPart = .tokenWithoutDefaultText(token)
@@ -357,21 +363,7 @@ extension ParseDiagnosticsGenerator {
       }
     }
 
-    let changes = missingNodes.enumerated().map { (index, missingNode) -> FixIt.MultiNodeChange in
-      if index == 0,
-        let token = missingNode.as(TokenSyntax.self),
-        let previousTokenKind = missingNode.previousToken(viewMode: .sourceAccurate)?.tokenKind
-      {
-        if token.tokenKind.isPunctuation && !previousTokenKind.isPunctuation {
-          // Don't want whitespace before punctuation
-          return .makePresentBeforeTrivia(token)
-        } else if (token.tokenKind.isIdentifier || token.tokenKind.isDollarIdentifier) && previousTokenKind.isPunctuation {
-          // Don't want whitespace after punctuation where the following token is an identifier
-          return .makePresentBeforeTrivia(token)
-        }
-      }
-      return .makePresent(missingNode)
-    }
+    let changes = missingNodes.map { FixIt.MultiNodeChange.makePresent($0) }
     let fixIt = FixIt(
       message: InsertTokenFixIt(missingNodes: missingNodes),
       changes: additionalChanges + changes

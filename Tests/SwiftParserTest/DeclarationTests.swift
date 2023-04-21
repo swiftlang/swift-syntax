@@ -1005,7 +1005,8 @@ final class DeclarationTests: XCTestCase {
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in class"),
       ],
       fixedSource: """
-        }class C {}
+        }class C {
+        }
         """
     )
     assertParse(

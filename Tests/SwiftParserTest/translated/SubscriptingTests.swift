@@ -210,7 +210,7 @@ final class SubscriptingTests: XCTestCase {
         struct A0 {
           subscript(
             i : (Int)
-             -> Int)  -> <#type#>{
+             -> Int) -> <#type#> {
             get {
               return stored
             }
@@ -460,7 +460,7 @@ final class SubscriptingTests: XCTestCase {
       ],
       fixedSource: """
         struct A11 {
-          subscript( x y : (Int) -> Int)  -> <#type#>{
+          subscript(x y : (Int) -> Int) -> <#type#> {
             return 0
           }
         }

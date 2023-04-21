@@ -228,7 +228,7 @@ public enum Keyword: UInt8, Hashable {
         self = .`is`
       case "of":
         self = .of
-      default: 
+      default:
         return nil
       }
     case 3:
@@ -255,7 +255,7 @@ public enum Keyword: UInt8, Hashable {
         self = .`var`
       case "wrt":
         self = .wrt
-      default: 
+      default:
         return nil
       }
     case 4:
@@ -304,7 +304,7 @@ public enum Keyword: UInt8, Hashable {
         self = .`Type`
       case "weak":
         self = .weak
-      default: 
+      default:
         return nil
       }
     case 5:
@@ -357,7 +357,7 @@ public enum Keyword: UInt8, Hashable {
         self = .`while`
       case "yield":
         self = .yield
-      default: 
+      default:
         return nil
       }
     case 6:
@@ -404,7 +404,7 @@ public enum Keyword: UInt8, Hashable {
         self = .`throws`
       case "unsafe":
         self = .unsafe
-      default: 
+      default:
         return nil
       }
     case 7:
@@ -449,7 +449,7 @@ public enum Keyword: UInt8, Hashable {
         self = .unowned
       case "willSet":
         self = .willSet
-      default: 
+      default:
         return nil
       }
     case 8:
@@ -498,7 +498,7 @@ public enum Keyword: UInt8, Hashable {
         self = .`rethrows`
       case "Sendable":
         self = .Sendable
-      default: 
+      default:
         return nil
       }
     case 9:
@@ -527,7 +527,7 @@ public enum Keyword: UInt8, Hashable {
         self = .`typealias`
       case "unchecked":
         self = .unchecked
-      default: 
+      default:
         return nil
       }
     case 10:
@@ -552,7 +552,7 @@ public enum Keyword: UInt8, Hashable {
         self = .sourceFile
       case "visibility":
         self = .visibility
-      default: 
+      default:
         return nil
       }
     case 11:
@@ -587,7 +587,7 @@ public enum Keyword: UInt8, Hashable {
         self = .nonmutating
       case "unavailable":
         self = .unavailable
-      default: 
+      default:
         return nil
       }
     case 12:
@@ -604,7 +604,7 @@ public enum Keyword: UInt8, Hashable {
         self = .backDeployed
       case "noDerivative":
         self = .noDerivative
-      default: 
+      default:
         return nil
       }
     case 13:
@@ -613,7 +613,7 @@ public enum Keyword: UInt8, Hashable {
         self = .associativity
       case "unsafeAddress":
         self = .unsafeAddress
-      default: 
+      default:
         return nil
       }
     case 14:
@@ -632,7 +632,7 @@ public enum Keyword: UInt8, Hashable {
         self = .differentiable
       case "witness_method":
         self = .witness_method
-      default: 
+      default:
         return nil
       }
     case 15:
@@ -641,7 +641,7 @@ public enum Keyword: UInt8, Hashable {
         self = .__setter_access
       case "precedencegroup":
         self = .`precedencegroup`
-      default: 
+      default:
         return nil
       }
     case 16:
@@ -650,14 +650,14 @@ public enum Keyword: UInt8, Hashable {
         self = ._objcRuntimeName
       case "addressWithOwner":
         self = .addressWithOwner
-      default: 
+      default:
         return nil
       }
     case 17:
       switch text {
       case "_RefCountedObject":
         self = ._RefCountedObject
-      default: 
+      default:
         return nil
       }
     case 19:
@@ -670,7 +670,7 @@ public enum Keyword: UInt8, Hashable {
         self = ._opaqueReturnTypeOf
       case "_PackageDescription":
         self = ._PackageDescription
-      default: 
+      default:
         return nil
       }
     case 20:
@@ -681,21 +681,21 @@ public enum Keyword: UInt8, Hashable {
         self = ._originallyDefinedIn
       case "unsafeMutableAddress":
         self = .unsafeMutableAddress
-      default: 
+      default:
         return nil
       }
     case 21:
       switch text {
       case "_unavailableFromAsync":
         self = ._unavailableFromAsync
-      default: 
+      default:
         return nil
       }
     case 22:
       switch text {
       case "addressWithNativeOwner":
         self = .addressWithNativeOwner
-      default: 
+      default:
         return nil
       }
     case 23:
@@ -706,24 +706,24 @@ public enum Keyword: UInt8, Hashable {
         self = ._projectedValueProperty
       case "mutableAddressWithOwner":
         self = .mutableAddressWithOwner
-      default: 
+      default:
         return nil
       }
     case 29:
       switch text {
       case "mutableAddressWithNativeOwner":
         self = .mutableAddressWithNativeOwner
-      default: 
+      default:
         return nil
       }
     case 31:
       switch text {
       case "_swift_native_objc_runtime_base":
         self = ._swift_native_objc_runtime_base
-      default: 
+      default:
         return nil
       }
-    default: 
+    default:
       return nil
     }
   }

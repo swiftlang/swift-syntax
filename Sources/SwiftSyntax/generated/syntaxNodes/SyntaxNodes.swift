@@ -19,8 +19,8 @@ public struct AccessPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .accessPathComponent else { 
-      return nil 
+    guard node.raw.kind == .accessPathComponent else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -34,12 +34,12 @@ public struct AccessPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeName: UnexpectedNodesSyntax? = nil, 
-      name: TokenSyntax, 
-      _ unexpectedBetweenNameAndTrailingDot: UnexpectedNodesSyntax? = nil, 
-      trailingDot: TokenSyntax? = nil, 
-      _ unexpectedAfterTrailingDot: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeName: UnexpectedNodesSyntax? = nil,
+      name: TokenSyntax,
+      _ unexpectedBetweenNameAndTrailingDot: UnexpectedNodesSyntax? = nil,
+      trailingDot: TokenSyntax? = nil,
+      _ unexpectedAfterTrailingDot: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -51,7 +51,7 @@ public struct AccessPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenNameAndTrailingDot, 
             trailingDot, 
             unexpectedAfterTrailingDot
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeName?.raw, 
           name.raw, 
@@ -60,11 +60,11 @@ public struct AccessPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterTrailingDot?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.accessPathComponent, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.accessPathComponent,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -135,8 +135,8 @@ public struct AccessorBlockSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .accessorBlock else { 
-      return nil 
+    guard node.raw.kind == .accessorBlock else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -150,14 +150,14 @@ public struct AccessorBlockSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeLeftBrace: UnexpectedNodesSyntax? = nil, 
-      leftBrace: TokenSyntax = .leftBraceToken(), 
-      _ unexpectedBetweenLeftBraceAndAccessors: UnexpectedNodesSyntax? = nil, 
-      accessors: AccessorListSyntax, 
-      _ unexpectedBetweenAccessorsAndRightBrace: UnexpectedNodesSyntax? = nil, 
-      rightBrace: TokenSyntax = .rightBraceToken(), 
-      _ unexpectedAfterRightBrace: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeLeftBrace: UnexpectedNodesSyntax? = nil,
+      leftBrace: TokenSyntax = .leftBraceToken(),
+      _ unexpectedBetweenLeftBraceAndAccessors: UnexpectedNodesSyntax? = nil,
+      accessors: AccessorListSyntax,
+      _ unexpectedBetweenAccessorsAndRightBrace: UnexpectedNodesSyntax? = nil,
+      rightBrace: TokenSyntax = .rightBraceToken(),
+      _ unexpectedAfterRightBrace: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -171,7 +171,7 @@ public struct AccessorBlockSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenAccessorsAndRightBrace, 
             rightBrace, 
             unexpectedAfterRightBrace
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftBrace?.raw, 
           leftBrace.raw, 
@@ -182,11 +182,11 @@ public struct AccessorBlockSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterRightBrace?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.accessorBlock, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.accessorBlock,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -242,8 +242,8 @@ public struct AccessorBlockSyntax: SyntaxProtocol, SyntaxHashable {
     if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.accessorList, 
-                                      from: [element.raw], arena: arena)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.accessorList,
+                                        from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(at: 3, with: collection, arena: arena)
     return AccessorBlockSyntax(newData)
@@ -296,8 +296,8 @@ public struct AccessorEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .accessorEffectSpecifiers else { 
-      return nil 
+    guard node.raw.kind == .accessorEffectSpecifiers else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -311,12 +311,12 @@ public struct AccessorEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeAsyncSpecifier: UnexpectedNodesSyntax? = nil, 
-      asyncSpecifier: TokenSyntax? = nil, 
-      _ unexpectedBetweenAsyncSpecifierAndThrowsSpecifier: UnexpectedNodesSyntax? = nil, 
-      throwsSpecifier: TokenSyntax? = nil, 
-      _ unexpectedAfterThrowsSpecifier: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeAsyncSpecifier: UnexpectedNodesSyntax? = nil,
+      asyncSpecifier: TokenSyntax? = nil,
+      _ unexpectedBetweenAsyncSpecifierAndThrowsSpecifier: UnexpectedNodesSyntax? = nil,
+      throwsSpecifier: TokenSyntax? = nil,
+      _ unexpectedAfterThrowsSpecifier: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -328,7 +328,7 @@ public struct AccessorEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenAsyncSpecifierAndThrowsSpecifier, 
             throwsSpecifier, 
             unexpectedAfterThrowsSpecifier
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAsyncSpecifier?.raw, 
           asyncSpecifier?.raw, 
@@ -337,11 +337,11 @@ public struct AccessorEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterThrowsSpecifier?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.accessorEffectSpecifiers, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.accessorEffectSpecifiers,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -412,8 +412,8 @@ public struct AccessorParameterSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .accessorParameter else { 
-      return nil 
+    guard node.raw.kind == .accessorParameter else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -427,14 +427,14 @@ public struct AccessorParameterSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil, 
-      leftParen: TokenSyntax = .leftParenToken(), 
-      _ unexpectedBetweenLeftParenAndName: UnexpectedNodesSyntax? = nil, 
-      name: TokenSyntax, 
-      _ unexpectedBetweenNameAndRightParen: UnexpectedNodesSyntax? = nil, 
-      rightParen: TokenSyntax = .rightParenToken(), 
-      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
+      leftParen: TokenSyntax = .leftParenToken(),
+      _ unexpectedBetweenLeftParenAndName: UnexpectedNodesSyntax? = nil,
+      name: TokenSyntax,
+      _ unexpectedBetweenNameAndRightParen: UnexpectedNodesSyntax? = nil,
+      rightParen: TokenSyntax = .rightParenToken(),
+      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -448,7 +448,7 @@ public struct AccessorParameterSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenNameAndRightParen, 
             rightParen, 
             unexpectedAfterRightParen
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftParen?.raw, 
           leftParen.raw, 
@@ -459,11 +459,11 @@ public struct AccessorParameterSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterRightParen?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.accessorParameter, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.accessorParameter,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -554,8 +554,8 @@ public struct ArrayElementSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .arrayElement else { 
-      return nil 
+    guard node.raw.kind == .arrayElement else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -569,12 +569,12 @@ public struct ArrayElementSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init<E: ExprSyntaxProtocol>(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeExpression: UnexpectedNodesSyntax? = nil, 
-      expression: E, 
-      _ unexpectedBetweenExpressionAndTrailingComma: UnexpectedNodesSyntax? = nil, 
-      trailingComma: TokenSyntax? = nil, 
-      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeExpression: UnexpectedNodesSyntax? = nil,
+      expression: E,
+      _ unexpectedBetweenExpressionAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingComma: TokenSyntax? = nil,
+      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -586,7 +586,7 @@ public struct ArrayElementSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenExpressionAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeExpression?.raw, 
           expression.raw, 
@@ -595,11 +595,11 @@ public struct ArrayElementSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterTrailingComma?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.arrayElement, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.arrayElement,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -734,8 +734,8 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
       }
     }
     
-    init(_ data: SyntaxData) { 
-      self.init(Syntax(data))! 
+    init(_ data: SyntaxData) {
+      self.init(Syntax(data))!
     }
     
     public init(_ node: TupleExprElementListSyntax) {
@@ -821,83 +821,83 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
     public init?<S: SyntaxProtocol>(_ node: S) {
       if let node = node.as(TupleExprElementListSyntax.self) {
         self = .argumentList(node)
-        return 
+        return
       }
       if let node = node.as(TokenSyntax.self) {
         self = .token(node)
-        return 
+        return
       }
       if let node = node.as(StringLiteralExprSyntax.self) {
         self = .string(node)
-        return 
+        return
       }
       if let node = node.as(AvailabilitySpecListSyntax.self) {
         self = .availability(node)
-        return 
+        return
       }
       if let node = node.as(SpecializeAttributeSpecListSyntax.self) {
         self = .specializeArguments(node)
-        return 
+        return
       }
       if let node = node.as(ObjCSelectorSyntax.self) {
         self = .objCName(node)
-        return 
+        return
       }
       if let node = node.as(ImplementsAttributeArgumentsSyntax.self) {
         self = .implementsArguments(node)
-        return 
+        return
       }
       if let node = node.as(DifferentiableAttributeArgumentsSyntax.self) {
         self = .differentiableArguments(node)
-        return 
+        return
       }
       if let node = node.as(DerivativeRegistrationAttributeArgumentsSyntax.self) {
         self = .derivativeRegistrationArguments(node)
-        return 
+        return
       }
       if let node = node.as(BackDeployedAttributeSpecListSyntax.self) {
         self = .backDeployedArguments(node)
-        return 
+        return
       }
       if let node = node.as(ConventionAttributeArgumentsSyntax.self) {
         self = .conventionArguments(node)
-        return 
+        return
       }
       if let node = node.as(ConventionWitnessMethodAttributeArgumentsSyntax.self) {
         self = .conventionWitnessMethodArguments(node)
-        return 
+        return
       }
       if let node = node.as(OpaqueReturnTypeOfAttributeArgumentsSyntax.self) {
         self = .opaqueReturnTypeOfAttributeArguments(node)
-        return 
+        return
       }
       if let node = node.as(ExposeAttributeArgumentsSyntax.self) {
         self = .exposeAttributeArguments(node)
-        return 
+        return
       }
       if let node = node.as(OriginallyDefinedInArgumentsSyntax.self) {
         self = .originallyDefinedInArguments(node)
-        return 
+        return
       }
       if let node = node.as(UnderscorePrivateAttributeArgumentsSyntax.self) {
         self = .underscorePrivateAttributeArguments(node)
-        return 
+        return
       }
       if let node = node.as(DynamicReplacementArgumentsSyntax.self) {
         self = .dynamicReplacementArguments(node)
-        return 
+        return
       }
       if let node = node.as(UnavailableFromAsyncArgumentsSyntax.self) {
         self = .unavailableFromAsyncArguments(node)
-        return 
+        return
       }
       if let node = node.as(EffectsArgumentsSyntax.self) {
         self = .effectsArguments(node)
-        return 
+        return
       }
       if let node = node.as(DocumentationAttributeArgumentsSyntax.self) {
         self = .documentationArguments(node)
-        return 
+        return
       }
       return nil
     }
@@ -931,8 +931,8 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .attribute else { 
-      return nil 
+    guard node.raw.kind == .attribute else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -946,18 +946,18 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init<A: TypeSyntaxProtocol>(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeAtSignToken: UnexpectedNodesSyntax? = nil, 
-      atSignToken: TokenSyntax = .atSignToken(), 
-      _ unexpectedBetweenAtSignTokenAndAttributeName: UnexpectedNodesSyntax? = nil, 
-      attributeName: A, 
-      _ unexpectedBetweenAttributeNameAndLeftParen: UnexpectedNodesSyntax? = nil, 
-      leftParen: TokenSyntax? = nil, 
-      _ unexpectedBetweenLeftParenAndArgument: UnexpectedNodesSyntax? = nil, 
-      argument: Argument? = nil, 
-      _ unexpectedBetweenArgumentAndRightParen: UnexpectedNodesSyntax? = nil, 
-      rightParen: TokenSyntax? = nil, 
-      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeAtSignToken: UnexpectedNodesSyntax? = nil,
+      atSignToken: TokenSyntax = .atSignToken(),
+      _ unexpectedBetweenAtSignTokenAndAttributeName: UnexpectedNodesSyntax? = nil,
+      attributeName: A,
+      _ unexpectedBetweenAttributeNameAndLeftParen: UnexpectedNodesSyntax? = nil,
+      leftParen: TokenSyntax? = nil,
+      _ unexpectedBetweenLeftParenAndArgument: UnexpectedNodesSyntax? = nil,
+      argument: Argument? = nil,
+      _ unexpectedBetweenArgumentAndRightParen: UnexpectedNodesSyntax? = nil,
+      rightParen: TokenSyntax? = nil,
+      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -975,7 +975,7 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenArgumentAndRightParen, 
             rightParen, 
             unexpectedAfterRightParen
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAtSignToken?.raw, 
           atSignToken.raw, 
@@ -990,11 +990,11 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterRightParen?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.attribute, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.attribute,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -1143,8 +1143,8 @@ public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
       }
     }
     
-    init(_ data: SyntaxData) { 
-      self.init(Syntax(data))! 
+    init(_ data: SyntaxData) {
+      self.init(Syntax(data))!
     }
     
     public init(_ node: TokenSyntax) {
@@ -1162,15 +1162,15 @@ public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
     public init?<S: SyntaxProtocol>(_ node: S) {
       if let node = node.as(TokenSyntax.self) {
         self = .token(node)
-        return 
+        return
       }
       if let node = node.as(AvailabilityVersionRestrictionSyntax.self) {
         self = .availabilityVersionRestriction(node)
-        return 
+        return
       }
       if let node = node.as(AvailabilityLabeledArgumentSyntax.self) {
         self = .availabilityLabeledArgument(node)
-        return 
+        return
       }
       return nil
     }
@@ -1183,8 +1183,8 @@ public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .availabilityArgument else { 
-      return nil 
+    guard node.raw.kind == .availabilityArgument else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -1198,12 +1198,12 @@ public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeEntry: UnexpectedNodesSyntax? = nil, 
-      entry: Entry, 
-      _ unexpectedBetweenEntryAndTrailingComma: UnexpectedNodesSyntax? = nil, 
-      trailingComma: TokenSyntax? = nil, 
-      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeEntry: UnexpectedNodesSyntax? = nil,
+      entry: Entry,
+      _ unexpectedBetweenEntryAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingComma: TokenSyntax? = nil,
+      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -1215,7 +1215,7 @@ public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenEntryAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeEntry?.raw, 
           entry.raw, 
@@ -1224,11 +1224,11 @@ public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterTrailingComma?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.availabilityArgument, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.availabilityArgument,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -1301,8 +1301,8 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .availabilityCondition else { 
-      return nil 
+    guard node.raw.kind == .availabilityCondition else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -1316,16 +1316,16 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeAvailabilityKeyword: UnexpectedNodesSyntax? = nil, 
-      availabilityKeyword: TokenSyntax, 
-      _ unexpectedBetweenAvailabilityKeywordAndLeftParen: UnexpectedNodesSyntax? = nil, 
-      leftParen: TokenSyntax = .leftParenToken(), 
-      _ unexpectedBetweenLeftParenAndAvailabilitySpec: UnexpectedNodesSyntax? = nil, 
-      availabilitySpec: AvailabilitySpecListSyntax, 
-      _ unexpectedBetweenAvailabilitySpecAndRightParen: UnexpectedNodesSyntax? = nil, 
-      rightParen: TokenSyntax = .rightParenToken(), 
-      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeAvailabilityKeyword: UnexpectedNodesSyntax? = nil,
+      availabilityKeyword: TokenSyntax,
+      _ unexpectedBetweenAvailabilityKeywordAndLeftParen: UnexpectedNodesSyntax? = nil,
+      leftParen: TokenSyntax = .leftParenToken(),
+      _ unexpectedBetweenLeftParenAndAvailabilitySpec: UnexpectedNodesSyntax? = nil,
+      availabilitySpec: AvailabilitySpecListSyntax,
+      _ unexpectedBetweenAvailabilitySpecAndRightParen: UnexpectedNodesSyntax? = nil,
+      rightParen: TokenSyntax = .rightParenToken(),
+      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -1341,7 +1341,7 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenAvailabilitySpecAndRightParen, 
             rightParen, 
             unexpectedAfterRightParen
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAvailabilityKeyword?.raw, 
           availabilityKeyword.raw, 
@@ -1354,11 +1354,11 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterRightParen?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.availabilityCondition, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.availabilityCondition,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -1432,8 +1432,8 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
     if let col = raw.layoutView!.children[5] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.availabilitySpecList, 
-                                      from: [element.raw], arena: arena)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.availabilitySpecList,
+                                        from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(at: 5, with: collection, arena: arena)
     return AvailabilityConditionSyntax(newData)
@@ -1488,8 +1488,8 @@ public struct AvailabilityEntrySyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .availabilityEntry else { 
-      return nil 
+    guard node.raw.kind == .availabilityEntry else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -1503,16 +1503,16 @@ public struct AvailabilityEntrySyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeLabel: UnexpectedNodesSyntax? = nil, 
-      label: TokenSyntax = .keyword(.availability), 
-      _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil, 
-      colon: TokenSyntax = .colonToken(), 
-      _ unexpectedBetweenColonAndAvailabilityList: UnexpectedNodesSyntax? = nil, 
-      availabilityList: AvailabilitySpecListSyntax, 
-      _ unexpectedBetweenAvailabilityListAndSemicolon: UnexpectedNodesSyntax? = nil, 
-      semicolon: TokenSyntax = .semicolonToken(), 
-      _ unexpectedAfterSemicolon: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeLabel: UnexpectedNodesSyntax? = nil,
+      label: TokenSyntax = .keyword(.availability),
+      _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax = .colonToken(),
+      _ unexpectedBetweenColonAndAvailabilityList: UnexpectedNodesSyntax? = nil,
+      availabilityList: AvailabilitySpecListSyntax,
+      _ unexpectedBetweenAvailabilityListAndSemicolon: UnexpectedNodesSyntax? = nil,
+      semicolon: TokenSyntax = .semicolonToken(),
+      _ unexpectedAfterSemicolon: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -1528,7 +1528,7 @@ public struct AvailabilityEntrySyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenAvailabilityListAndSemicolon, 
             semicolon, 
             unexpectedAfterSemicolon
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLabel?.raw, 
           label.raw, 
@@ -1541,11 +1541,11 @@ public struct AvailabilityEntrySyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterSemicolon?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.availabilityEntry, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.availabilityEntry,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -1621,8 +1621,8 @@ public struct AvailabilityEntrySyntax: SyntaxProtocol, SyntaxHashable {
     if let col = raw.layoutView!.children[5] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.availabilitySpecList, 
-                                      from: [element.raw], arena: arena)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.availabilitySpecList,
+                                        from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(at: 5, with: collection, arena: arena)
     return AvailabilityEntrySyntax(newData)
@@ -1687,8 +1687,8 @@ public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable 
       }
     }
     
-    init(_ data: SyntaxData) { 
-      self.init(Syntax(data))! 
+    init(_ data: SyntaxData) {
+      self.init(Syntax(data))!
     }
     
     public init(_ node: StringLiteralExprSyntax) {
@@ -1702,11 +1702,11 @@ public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable 
     public init?<S: SyntaxProtocol>(_ node: S) {
       if let node = node.as(StringLiteralExprSyntax.self) {
         self = .string(node)
-        return 
+        return
       }
       if let node = node.as(VersionTupleSyntax.self) {
         self = .version(node)
-        return 
+        return
       }
       return nil
     }
@@ -1719,8 +1719,8 @@ public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable 
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .availabilityLabeledArgument else { 
-      return nil 
+    guard node.raw.kind == .availabilityLabeledArgument else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -1734,14 +1734,14 @@ public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable 
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeLabel: UnexpectedNodesSyntax? = nil, 
-      label: TokenSyntax, 
-      _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil, 
-      colon: TokenSyntax = .colonToken(), 
-      _ unexpectedBetweenColonAndValue: UnexpectedNodesSyntax? = nil, 
-      value: Value, 
-      _ unexpectedAfterValue: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeLabel: UnexpectedNodesSyntax? = nil,
+      label: TokenSyntax,
+      _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax = .colonToken(),
+      _ unexpectedBetweenColonAndValue: UnexpectedNodesSyntax? = nil,
+      value: Value,
+      _ unexpectedAfterValue: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -1755,7 +1755,7 @@ public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable 
             unexpectedBetweenColonAndValue, 
             value, 
             unexpectedAfterValue
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLabel?.raw, 
           label.raw, 
@@ -1766,11 +1766,11 @@ public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable 
           unexpectedAfterValue?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.availabilityLabeledArgument, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.availabilityLabeledArgument,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -1864,8 +1864,8 @@ public struct AvailabilityVersionRestrictionListEntrySyntax: SyntaxProtocol, Syn
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .availabilityVersionRestrictionListEntry else { 
-      return nil 
+    guard node.raw.kind == .availabilityVersionRestrictionListEntry else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -1879,12 +1879,12 @@ public struct AvailabilityVersionRestrictionListEntrySyntax: SyntaxProtocol, Syn
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeAvailabilityVersionRestriction: UnexpectedNodesSyntax? = nil, 
-      availabilityVersionRestriction: AvailabilityVersionRestrictionSyntax, 
-      _ unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma: UnexpectedNodesSyntax? = nil, 
-      trailingComma: TokenSyntax? = nil, 
-      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeAvailabilityVersionRestriction: UnexpectedNodesSyntax? = nil,
+      availabilityVersionRestriction: AvailabilityVersionRestrictionSyntax,
+      _ unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingComma: TokenSyntax? = nil,
+      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -1896,7 +1896,7 @@ public struct AvailabilityVersionRestrictionListEntrySyntax: SyntaxProtocol, Syn
             unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAvailabilityVersionRestriction?.raw, 
           availabilityVersionRestriction.raw, 
@@ -1905,11 +1905,11 @@ public struct AvailabilityVersionRestrictionListEntrySyntax: SyntaxProtocol, Syn
           unexpectedAfterTrailingComma?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.availabilityVersionRestrictionListEntry, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.availabilityVersionRestrictionListEntry,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -1981,8 +1981,8 @@ public struct AvailabilityVersionRestrictionSyntax: SyntaxProtocol, SyntaxHashab
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .availabilityVersionRestriction else { 
-      return nil 
+    guard node.raw.kind == .availabilityVersionRestriction else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -1996,12 +1996,12 @@ public struct AvailabilityVersionRestrictionSyntax: SyntaxProtocol, SyntaxHashab
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforePlatform: UnexpectedNodesSyntax? = nil, 
-      platform: TokenSyntax, 
-      _ unexpectedBetweenPlatformAndVersion: UnexpectedNodesSyntax? = nil, 
-      version: VersionTupleSyntax? = nil, 
-      _ unexpectedAfterVersion: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforePlatform: UnexpectedNodesSyntax? = nil,
+      platform: TokenSyntax,
+      _ unexpectedBetweenPlatformAndVersion: UnexpectedNodesSyntax? = nil,
+      version: VersionTupleSyntax? = nil,
+      _ unexpectedAfterVersion: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -2013,7 +2013,7 @@ public struct AvailabilityVersionRestrictionSyntax: SyntaxProtocol, SyntaxHashab
             unexpectedBetweenPlatformAndVersion, 
             version, 
             unexpectedAfterVersion
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforePlatform?.raw, 
           platform.raw, 
@@ -2022,11 +2022,11 @@ public struct AvailabilityVersionRestrictionSyntax: SyntaxProtocol, SyntaxHashab
           unexpectedAfterVersion?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.availabilityVersionRestriction, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.availabilityVersionRestriction,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -2098,8 +2098,8 @@ public struct BackDeployedAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashabl
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .backDeployedAttributeSpecList else { 
-      return nil 
+    guard node.raw.kind == .backDeployedAttributeSpecList else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -2113,14 +2113,14 @@ public struct BackDeployedAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashabl
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeBeforeLabel: UnexpectedNodesSyntax? = nil, 
-      beforeLabel: TokenSyntax = .keyword(.before), 
-      _ unexpectedBetweenBeforeLabelAndColon: UnexpectedNodesSyntax? = nil, 
-      colon: TokenSyntax = .colonToken(), 
-      _ unexpectedBetweenColonAndVersionList: UnexpectedNodesSyntax? = nil, 
-      versionList: AvailabilityVersionRestrictionListSyntax, 
-      _ unexpectedAfterVersionList: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeBeforeLabel: UnexpectedNodesSyntax? = nil,
+      beforeLabel: TokenSyntax = .keyword(.before),
+      _ unexpectedBetweenBeforeLabelAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax = .colonToken(),
+      _ unexpectedBetweenColonAndVersionList: UnexpectedNodesSyntax? = nil,
+      versionList: AvailabilityVersionRestrictionListSyntax,
+      _ unexpectedAfterVersionList: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -2134,7 +2134,7 @@ public struct BackDeployedAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashabl
             unexpectedBetweenColonAndVersionList, 
             versionList, 
             unexpectedAfterVersionList
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeBeforeLabel?.raw, 
           beforeLabel.raw, 
@@ -2145,11 +2145,11 @@ public struct BackDeployedAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashabl
           unexpectedAfterVersionList?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.backDeployedAttributeSpecList, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.backDeployedAttributeSpecList,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -2226,8 +2226,8 @@ public struct BackDeployedAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashabl
     if let col = raw.layoutView!.children[5] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.availabilityVersionRestrictionList, 
-                                      from: [element.raw], arena: arena)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.availabilityVersionRestrictionList,
+                                        from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(at: 5, with: collection, arena: arena)
     return BackDeployedAttributeSpecListSyntax(newData)
@@ -2262,8 +2262,8 @@ public struct CaseItemSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .caseItem else { 
-      return nil 
+    guard node.raw.kind == .caseItem else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -2277,14 +2277,14 @@ public struct CaseItemSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init<P: PatternSyntaxProtocol>(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforePattern: UnexpectedNodesSyntax? = nil, 
-      pattern: P, 
-      _ unexpectedBetweenPatternAndWhereClause: UnexpectedNodesSyntax? = nil, 
-      whereClause: WhereClauseSyntax? = nil, 
-      _ unexpectedBetweenWhereClauseAndTrailingComma: UnexpectedNodesSyntax? = nil, 
-      trailingComma: TokenSyntax? = nil, 
-      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforePattern: UnexpectedNodesSyntax? = nil,
+      pattern: P,
+      _ unexpectedBetweenPatternAndWhereClause: UnexpectedNodesSyntax? = nil,
+      whereClause: WhereClauseSyntax? = nil,
+      _ unexpectedBetweenWhereClauseAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingComma: TokenSyntax? = nil,
+      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -2298,7 +2298,7 @@ public struct CaseItemSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenWhereClauseAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforePattern?.raw, 
           pattern.raw, 
@@ -2309,11 +2309,11 @@ public struct CaseItemSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterTrailingComma?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.caseItem, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.caseItem,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -2404,8 +2404,8 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .catchClause else { 
-      return nil 
+    guard node.raw.kind == .catchClause else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -2419,14 +2419,14 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeCatchKeyword: UnexpectedNodesSyntax? = nil, 
-      catchKeyword: TokenSyntax = .keyword(.catch), 
-      _ unexpectedBetweenCatchKeywordAndCatchItems: UnexpectedNodesSyntax? = nil, 
-      catchItems: CatchItemListSyntax? = nil, 
-      _ unexpectedBetweenCatchItemsAndBody: UnexpectedNodesSyntax? = nil, 
-      body: CodeBlockSyntax, 
-      _ unexpectedAfterBody: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeCatchKeyword: UnexpectedNodesSyntax? = nil,
+      catchKeyword: TokenSyntax = .keyword(.catch),
+      _ unexpectedBetweenCatchKeywordAndCatchItems: UnexpectedNodesSyntax? = nil,
+      catchItems: CatchItemListSyntax? = nil,
+      _ unexpectedBetweenCatchItemsAndBody: UnexpectedNodesSyntax? = nil,
+      body: CodeBlockSyntax,
+      _ unexpectedAfterBody: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -2440,7 +2440,7 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenCatchItemsAndBody, 
             body, 
             unexpectedAfterBody
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeCatchKeyword?.raw, 
           catchKeyword.raw, 
@@ -2451,11 +2451,11 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterBody?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.catchClause, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.catchClause,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -2511,8 +2511,8 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable {
     if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.catchItemList, 
-                                      from: [element.raw], arena: arena)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.catchItemList,
+                                        from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(at: 3, with: collection, arena: arena)
     return CatchClauseSyntax(newData)
@@ -2565,8 +2565,8 @@ public struct CatchItemSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .catchItem else { 
-      return nil 
+    guard node.raw.kind == .catchItem else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -2580,14 +2580,14 @@ public struct CatchItemSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init<P: PatternSyntaxProtocol>(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforePattern: UnexpectedNodesSyntax? = nil, 
-      pattern: P? = nil, 
-      _ unexpectedBetweenPatternAndWhereClause: UnexpectedNodesSyntax? = nil, 
-      whereClause: WhereClauseSyntax? = nil, 
-      _ unexpectedBetweenWhereClauseAndTrailingComma: UnexpectedNodesSyntax? = nil, 
-      trailingComma: TokenSyntax? = nil, 
-      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforePattern: UnexpectedNodesSyntax? = nil,
+      pattern: P? = nil,
+      _ unexpectedBetweenPatternAndWhereClause: UnexpectedNodesSyntax? = nil,
+      whereClause: WhereClauseSyntax? = nil,
+      _ unexpectedBetweenWhereClauseAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingComma: TokenSyntax? = nil,
+      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -2601,7 +2601,7 @@ public struct CatchItemSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenWhereClauseAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforePattern?.raw, 
           pattern?.raw, 
@@ -2612,11 +2612,11 @@ public struct CatchItemSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterTrailingComma?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.catchItem, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.catchItem,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -2635,25 +2635,25 @@ public struct CatchItemSyntax: SyntaxProtocol, SyntaxHashable {
   /// the base type would allow implicit conversion from a string literal,
   /// which the above initializer doesn't support.
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforePattern: UnexpectedNodesSyntax? = nil, 
-      pattern: MissingPatternSyntax? = nil, 
-      _ unexpectedBetweenPatternAndWhereClause: UnexpectedNodesSyntax? = nil, 
-      whereClause: WhereClauseSyntax? = nil, 
-      _ unexpectedBetweenWhereClauseAndTrailingComma: UnexpectedNodesSyntax? = nil, 
-      trailingComma: TokenSyntax? = nil, 
-      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforePattern: UnexpectedNodesSyntax? = nil,
+      pattern: MissingPatternSyntax? = nil,
+      _ unexpectedBetweenPatternAndWhereClause: UnexpectedNodesSyntax? = nil,
+      whereClause: WhereClauseSyntax? = nil,
+      _ unexpectedBetweenWhereClauseAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingComma: TokenSyntax? = nil,
+      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
     self.init(
-        leadingTrivia: leadingTrivia, 
-        unexpectedBeforePattern, 
-        pattern: Optional<PatternSyntax>.none, 
-        unexpectedBetweenPatternAndWhereClause, 
-        whereClause: whereClause, 
-        unexpectedBetweenWhereClauseAndTrailingComma, 
-        trailingComma: trailingComma, 
+        leadingTrivia: leadingTrivia,
+        unexpectedBeforePattern,
+        pattern: Optional<PatternSyntax>.none,
+        unexpectedBetweenPatternAndWhereClause,
+        whereClause: whereClause,
+        unexpectedBetweenWhereClauseAndTrailingComma,
+        trailingComma: trailingComma,
         unexpectedAfterTrailingComma, 
         trailingTrivia: trailingTrivia
       )
@@ -2742,8 +2742,8 @@ public struct ClosureCaptureItemSpecifierSyntax: SyntaxProtocol, SyntaxHashable 
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .closureCaptureItemSpecifier else { 
-      return nil 
+    guard node.raw.kind == .closureCaptureItemSpecifier else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -2757,16 +2757,16 @@ public struct ClosureCaptureItemSpecifierSyntax: SyntaxProtocol, SyntaxHashable 
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeSpecifier: UnexpectedNodesSyntax? = nil, 
-      specifier: TokenSyntax, 
-      _ unexpectedBetweenSpecifierAndLeftParen: UnexpectedNodesSyntax? = nil, 
-      leftParen: TokenSyntax? = nil, 
-      _ unexpectedBetweenLeftParenAndDetail: UnexpectedNodesSyntax? = nil, 
-      detail: TokenSyntax? = nil, 
-      _ unexpectedBetweenDetailAndRightParen: UnexpectedNodesSyntax? = nil, 
-      rightParen: TokenSyntax? = nil, 
-      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeSpecifier: UnexpectedNodesSyntax? = nil,
+      specifier: TokenSyntax,
+      _ unexpectedBetweenSpecifierAndLeftParen: UnexpectedNodesSyntax? = nil,
+      leftParen: TokenSyntax? = nil,
+      _ unexpectedBetweenLeftParenAndDetail: UnexpectedNodesSyntax? = nil,
+      detail: TokenSyntax? = nil,
+      _ unexpectedBetweenDetailAndRightParen: UnexpectedNodesSyntax? = nil,
+      rightParen: TokenSyntax? = nil,
+      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -2782,7 +2782,7 @@ public struct ClosureCaptureItemSpecifierSyntax: SyntaxProtocol, SyntaxHashable 
             unexpectedBetweenDetailAndRightParen, 
             rightParen, 
             unexpectedAfterRightParen
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeSpecifier?.raw, 
           specifier.raw, 
@@ -2795,11 +2795,11 @@ public struct ClosureCaptureItemSpecifierSyntax: SyntaxProtocol, SyntaxHashable 
           unexpectedAfterRightParen?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.closureCaptureItemSpecifier, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.closureCaptureItemSpecifier,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -2910,8 +2910,8 @@ public struct ClosureCaptureItemSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .closureCaptureItem else { 
-      return nil 
+    guard node.raw.kind == .closureCaptureItem else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -2925,18 +2925,18 @@ public struct ClosureCaptureItemSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init<E: ExprSyntaxProtocol>(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeSpecifier: UnexpectedNodesSyntax? = nil, 
-      specifier: ClosureCaptureItemSpecifierSyntax? = nil, 
-      _ unexpectedBetweenSpecifierAndName: UnexpectedNodesSyntax? = nil, 
-      name: TokenSyntax? = nil, 
-      _ unexpectedBetweenNameAndAssignToken: UnexpectedNodesSyntax? = nil, 
-      assignToken: TokenSyntax? = nil, 
-      _ unexpectedBetweenAssignTokenAndExpression: UnexpectedNodesSyntax? = nil, 
-      expression: E, 
-      _ unexpectedBetweenExpressionAndTrailingComma: UnexpectedNodesSyntax? = nil, 
-      trailingComma: TokenSyntax? = nil, 
-      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeSpecifier: UnexpectedNodesSyntax? = nil,
+      specifier: ClosureCaptureItemSpecifierSyntax? = nil,
+      _ unexpectedBetweenSpecifierAndName: UnexpectedNodesSyntax? = nil,
+      name: TokenSyntax? = nil,
+      _ unexpectedBetweenNameAndAssignToken: UnexpectedNodesSyntax? = nil,
+      assignToken: TokenSyntax? = nil,
+      _ unexpectedBetweenAssignTokenAndExpression: UnexpectedNodesSyntax? = nil,
+      expression: E,
+      _ unexpectedBetweenExpressionAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingComma: TokenSyntax? = nil,
+      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -2954,7 +2954,7 @@ public struct ClosureCaptureItemSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenExpressionAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeSpecifier?.raw, 
           specifier?.raw, 
@@ -2969,11 +2969,11 @@ public struct ClosureCaptureItemSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterTrailingComma?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.closureCaptureItem, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.closureCaptureItem,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -3104,8 +3104,8 @@ public struct ClosureCaptureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .closureCaptureSignature else { 
-      return nil 
+    guard node.raw.kind == .closureCaptureSignature else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -3119,14 +3119,14 @@ public struct ClosureCaptureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeLeftSquare: UnexpectedNodesSyntax? = nil, 
-      leftSquare: TokenSyntax = .leftSquareBracketToken(), 
-      _ unexpectedBetweenLeftSquareAndItems: UnexpectedNodesSyntax? = nil, 
-      items: ClosureCaptureItemListSyntax? = nil, 
-      _ unexpectedBetweenItemsAndRightSquare: UnexpectedNodesSyntax? = nil, 
-      rightSquare: TokenSyntax = .rightSquareBracketToken(), 
-      _ unexpectedAfterRightSquare: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeLeftSquare: UnexpectedNodesSyntax? = nil,
+      leftSquare: TokenSyntax = .leftSquareBracketToken(),
+      _ unexpectedBetweenLeftSquareAndItems: UnexpectedNodesSyntax? = nil,
+      items: ClosureCaptureItemListSyntax? = nil,
+      _ unexpectedBetweenItemsAndRightSquare: UnexpectedNodesSyntax? = nil,
+      rightSquare: TokenSyntax = .rightSquareBracketToken(),
+      _ unexpectedAfterRightSquare: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -3140,7 +3140,7 @@ public struct ClosureCaptureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenItemsAndRightSquare, 
             rightSquare, 
             unexpectedAfterRightSquare
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftSquare?.raw, 
           leftSquare.raw, 
@@ -3151,11 +3151,11 @@ public struct ClosureCaptureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterRightSquare?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.closureCaptureSignature, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.closureCaptureSignature,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -3211,8 +3211,8 @@ public struct ClosureCaptureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
     if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.closureCaptureItemList, 
-                                      from: [element.raw], arena: arena)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.closureCaptureItemList,
+                                        from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(at: 3, with: collection, arena: arena)
     return ClosureCaptureSignatureSyntax(newData)
@@ -3265,8 +3265,8 @@ public struct ClosureParamSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .closureParam else { 
-      return nil 
+    guard node.raw.kind == .closureParam else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -3280,12 +3280,12 @@ public struct ClosureParamSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeName: UnexpectedNodesSyntax? = nil, 
-      name: TokenSyntax, 
-      _ unexpectedBetweenNameAndTrailingComma: UnexpectedNodesSyntax? = nil, 
-      trailingComma: TokenSyntax? = nil, 
-      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeName: UnexpectedNodesSyntax? = nil,
+      name: TokenSyntax,
+      _ unexpectedBetweenNameAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingComma: TokenSyntax? = nil,
+      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -3297,7 +3297,7 @@ public struct ClosureParamSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenNameAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeName?.raw, 
           name.raw, 
@@ -3306,11 +3306,11 @@ public struct ClosureParamSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterTrailingComma?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.closureParam, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.closureParam,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -3381,8 +3381,8 @@ public struct ClosureParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .closureParameterClause else { 
-      return nil 
+    guard node.raw.kind == .closureParameterClause else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -3396,14 +3396,14 @@ public struct ClosureParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil, 
-      leftParen: TokenSyntax = .leftParenToken(), 
-      _ unexpectedBetweenLeftParenAndParameterList: UnexpectedNodesSyntax? = nil, 
-      parameterList: ClosureParameterListSyntax, 
-      _ unexpectedBetweenParameterListAndRightParen: UnexpectedNodesSyntax? = nil, 
-      rightParen: TokenSyntax = .rightParenToken(), 
-      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
+      leftParen: TokenSyntax = .leftParenToken(),
+      _ unexpectedBetweenLeftParenAndParameterList: UnexpectedNodesSyntax? = nil,
+      parameterList: ClosureParameterListSyntax,
+      _ unexpectedBetweenParameterListAndRightParen: UnexpectedNodesSyntax? = nil,
+      rightParen: TokenSyntax = .rightParenToken(),
+      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -3417,7 +3417,7 @@ public struct ClosureParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenParameterListAndRightParen, 
             rightParen, 
             unexpectedAfterRightParen
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftParen?.raw, 
           leftParen.raw, 
@@ -3428,11 +3428,11 @@ public struct ClosureParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterRightParen?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.closureParameterClause, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.closureParameterClause,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -3490,8 +3490,8 @@ public struct ClosureParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
     if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.closureParameterList, 
-                                      from: [element.raw], arena: arena)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.closureParameterList,
+                                        from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(at: 3, with: collection, arena: arena)
     return ClosureParameterClauseSyntax(newData)
@@ -3545,8 +3545,8 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .closureParameter else { 
-      return nil 
+    guard node.raw.kind == .closureParameter else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -3560,24 +3560,24 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init<T: TypeSyntaxProtocol>(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, 
-      attributes: AttributeListSyntax? = nil, 
-      _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, 
-      modifiers: ModifierListSyntax? = nil, 
-      _ unexpectedBetweenModifiersAndFirstName: UnexpectedNodesSyntax? = nil, 
-      firstName: TokenSyntax, 
-      _ unexpectedBetweenFirstNameAndSecondName: UnexpectedNodesSyntax? = nil, 
-      secondName: TokenSyntax? = nil, 
-      _ unexpectedBetweenSecondNameAndColon: UnexpectedNodesSyntax? = nil, 
-      colon: TokenSyntax? = nil, 
-      _ unexpectedBetweenColonAndType: UnexpectedNodesSyntax? = nil, 
-      type: T? = nil, 
-      _ unexpectedBetweenTypeAndEllipsis: UnexpectedNodesSyntax? = nil, 
-      ellipsis: TokenSyntax? = nil, 
-      _ unexpectedBetweenEllipsisAndTrailingComma: UnexpectedNodesSyntax? = nil, 
-      trailingComma: TokenSyntax? = nil, 
-      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
+      attributes: AttributeListSyntax? = nil,
+      _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
+      modifiers: ModifierListSyntax? = nil,
+      _ unexpectedBetweenModifiersAndFirstName: UnexpectedNodesSyntax? = nil,
+      firstName: TokenSyntax,
+      _ unexpectedBetweenFirstNameAndSecondName: UnexpectedNodesSyntax? = nil,
+      secondName: TokenSyntax? = nil,
+      _ unexpectedBetweenSecondNameAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax? = nil,
+      _ unexpectedBetweenColonAndType: UnexpectedNodesSyntax? = nil,
+      type: T? = nil,
+      _ unexpectedBetweenTypeAndEllipsis: UnexpectedNodesSyntax? = nil,
+      ellipsis: TokenSyntax? = nil,
+      _ unexpectedBetweenEllipsisAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingComma: TokenSyntax? = nil,
+      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -3601,7 +3601,7 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenEllipsisAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
           attributes?.raw, 
@@ -3622,11 +3622,11 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterTrailingComma?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.closureParameter, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.closureParameter,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -3645,45 +3645,45 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable {
   /// the base type would allow implicit conversion from a string literal,
   /// which the above initializer doesn't support.
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, 
-      attributes: AttributeListSyntax? = nil, 
-      _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, 
-      modifiers: ModifierListSyntax? = nil, 
-      _ unexpectedBetweenModifiersAndFirstName: UnexpectedNodesSyntax? = nil, 
-      firstName: TokenSyntax, 
-      _ unexpectedBetweenFirstNameAndSecondName: UnexpectedNodesSyntax? = nil, 
-      secondName: TokenSyntax? = nil, 
-      _ unexpectedBetweenSecondNameAndColon: UnexpectedNodesSyntax? = nil, 
-      colon: TokenSyntax? = nil, 
-      _ unexpectedBetweenColonAndType: UnexpectedNodesSyntax? = nil, 
-      type: MissingTypeSyntax? = nil, 
-      _ unexpectedBetweenTypeAndEllipsis: UnexpectedNodesSyntax? = nil, 
-      ellipsis: TokenSyntax? = nil, 
-      _ unexpectedBetweenEllipsisAndTrailingComma: UnexpectedNodesSyntax? = nil, 
-      trailingComma: TokenSyntax? = nil, 
-      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
+      attributes: AttributeListSyntax? = nil,
+      _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
+      modifiers: ModifierListSyntax? = nil,
+      _ unexpectedBetweenModifiersAndFirstName: UnexpectedNodesSyntax? = nil,
+      firstName: TokenSyntax,
+      _ unexpectedBetweenFirstNameAndSecondName: UnexpectedNodesSyntax? = nil,
+      secondName: TokenSyntax? = nil,
+      _ unexpectedBetweenSecondNameAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax? = nil,
+      _ unexpectedBetweenColonAndType: UnexpectedNodesSyntax? = nil,
+      type: MissingTypeSyntax? = nil,
+      _ unexpectedBetweenTypeAndEllipsis: UnexpectedNodesSyntax? = nil,
+      ellipsis: TokenSyntax? = nil,
+      _ unexpectedBetweenEllipsisAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingComma: TokenSyntax? = nil,
+      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
     self.init(
-        leadingTrivia: leadingTrivia, 
-        unexpectedBeforeAttributes, 
-        attributes: attributes, 
-        unexpectedBetweenAttributesAndModifiers, 
-        modifiers: modifiers, 
-        unexpectedBetweenModifiersAndFirstName, 
-        firstName: firstName, 
-        unexpectedBetweenFirstNameAndSecondName, 
-        secondName: secondName, 
-        unexpectedBetweenSecondNameAndColon, 
-        colon: colon, 
-        unexpectedBetweenColonAndType, 
-        type: Optional<TypeSyntax>.none, 
-        unexpectedBetweenTypeAndEllipsis, 
-        ellipsis: ellipsis, 
-        unexpectedBetweenEllipsisAndTrailingComma, 
-        trailingComma: trailingComma, 
+        leadingTrivia: leadingTrivia,
+        unexpectedBeforeAttributes,
+        attributes: attributes,
+        unexpectedBetweenAttributesAndModifiers,
+        modifiers: modifiers,
+        unexpectedBetweenModifiersAndFirstName,
+        firstName: firstName,
+        unexpectedBetweenFirstNameAndSecondName,
+        secondName: secondName,
+        unexpectedBetweenSecondNameAndColon,
+        colon: colon,
+        unexpectedBetweenColonAndType,
+        type: Optional<TypeSyntax>.none,
+        unexpectedBetweenTypeAndEllipsis,
+        ellipsis: ellipsis,
+        unexpectedBetweenEllipsisAndTrailingComma,
+        trailingComma: trailingComma,
         unexpectedAfterTrailingComma, 
         trailingTrivia: trailingTrivia
       )
@@ -3719,8 +3719,8 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable {
     if let col = raw.layoutView!.children[1] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList, 
-                                      from: [element.raw], arena: arena)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
+                                        from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(at: 1, with: collection, arena: arena)
     return ClosureParameterSyntax(newData)
@@ -3756,8 +3756,8 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable {
     if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList, 
-                                      from: [element.raw], arena: arena)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
+                                        from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(at: 3, with: collection, arena: arena)
     return ClosureParameterSyntax(newData)
@@ -3926,8 +3926,8 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
       }
     }
     
-    init(_ data: SyntaxData) { 
-      self.init(Syntax(data))! 
+    init(_ data: SyntaxData) {
+      self.init(Syntax(data))!
     }
     
     public init(_ node: ClosureParamListSyntax) {
@@ -3941,11 +3941,11 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
     public init?<S: SyntaxProtocol>(_ node: S) {
       if let node = node.as(ClosureParamListSyntax.self) {
         self = .simpleInput(node)
-        return 
+        return
       }
       if let node = node.as(ClosureParameterClauseSyntax.self) {
         self = .input(node)
-        return 
+        return
       }
       return nil
     }
@@ -3958,8 +3958,8 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .closureSignature else { 
-      return nil 
+    guard node.raw.kind == .closureSignature else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -3973,20 +3973,20 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, 
-      attributes: AttributeListSyntax? = nil, 
-      _ unexpectedBetweenAttributesAndCapture: UnexpectedNodesSyntax? = nil, 
-      capture: ClosureCaptureSignatureSyntax? = nil, 
-      _ unexpectedBetweenCaptureAndInput: UnexpectedNodesSyntax? = nil, 
-      input: Input? = nil, 
-      _ unexpectedBetweenInputAndEffectSpecifiers: UnexpectedNodesSyntax? = nil, 
-      effectSpecifiers: TypeEffectSpecifiersSyntax? = nil, 
-      _ unexpectedBetweenEffectSpecifiersAndOutput: UnexpectedNodesSyntax? = nil, 
-      output: ReturnClauseSyntax? = nil, 
-      _ unexpectedBetweenOutputAndInTok: UnexpectedNodesSyntax? = nil, 
-      inTok: TokenSyntax = .keyword(.in), 
-      _ unexpectedAfterInTok: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
+      attributes: AttributeListSyntax? = nil,
+      _ unexpectedBetweenAttributesAndCapture: UnexpectedNodesSyntax? = nil,
+      capture: ClosureCaptureSignatureSyntax? = nil,
+      _ unexpectedBetweenCaptureAndInput: UnexpectedNodesSyntax? = nil,
+      input: Input? = nil,
+      _ unexpectedBetweenInputAndEffectSpecifiers: UnexpectedNodesSyntax? = nil,
+      effectSpecifiers: TypeEffectSpecifiersSyntax? = nil,
+      _ unexpectedBetweenEffectSpecifiersAndOutput: UnexpectedNodesSyntax? = nil,
+      output: ReturnClauseSyntax? = nil,
+      _ unexpectedBetweenOutputAndInTok: UnexpectedNodesSyntax? = nil,
+      inTok: TokenSyntax = .keyword(.in),
+      _ unexpectedAfterInTok: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -4006,7 +4006,7 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenOutputAndInTok, 
             inTok, 
             unexpectedAfterInTok
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
           attributes?.raw, 
@@ -4023,11 +4023,11 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterInTok?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.closureSignature, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.closureSignature,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -4065,8 +4065,8 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
     if let col = raw.layoutView!.children[1] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList, 
-                                      from: [element.raw], arena: arena)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
+                                        from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(at: 1, with: collection, arena: arena)
     return ClosureSignatureSyntax(newData)
@@ -4210,8 +4210,8 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
       }
     }
     
-    init(_ data: SyntaxData) { 
-      self.init(Syntax(data))! 
+    init(_ data: SyntaxData) {
+      self.init(Syntax(data))!
     }
     
     public init<Node: DeclSyntaxProtocol>(_ node: Node) {
@@ -4229,15 +4229,15 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
     public init?<S: SyntaxProtocol>(_ node: S) {
       if let node = node.as(DeclSyntax.self) {
         self = .decl(node)
-        return 
+        return
       }
       if let node = node.as(StmtSyntax.self) {
         self = .stmt(node)
-        return 
+        return
       }
       if let node = node.as(ExprSyntax.self) {
         self = .expr(node)
-        return 
+        return
       }
       return nil
     }
@@ -4250,8 +4250,8 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .codeBlockItem else { 
-      return nil 
+    guard node.raw.kind == .codeBlockItem else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -4265,12 +4265,12 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeItem: UnexpectedNodesSyntax? = nil, 
-      item: Item, 
-      _ unexpectedBetweenItemAndSemicolon: UnexpectedNodesSyntax? = nil, 
-      semicolon: TokenSyntax? = nil, 
-      _ unexpectedAfterSemicolon: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeItem: UnexpectedNodesSyntax? = nil,
+      item: Item,
+      _ unexpectedBetweenItemAndSemicolon: UnexpectedNodesSyntax? = nil,
+      semicolon: TokenSyntax? = nil,
+      _ unexpectedAfterSemicolon: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -4282,7 +4282,7 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenItemAndSemicolon, 
             semicolon, 
             unexpectedAfterSemicolon
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeItem?.raw, 
           item.raw, 
@@ -4291,11 +4291,11 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterSemicolon?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.codeBlockItem, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.codeBlockItem,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -4368,8 +4368,8 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .codeBlock else { 
-      return nil 
+    guard node.raw.kind == .codeBlock else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -4383,14 +4383,14 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeLeftBrace: UnexpectedNodesSyntax? = nil, 
-      leftBrace: TokenSyntax = .leftBraceToken(), 
-      _ unexpectedBetweenLeftBraceAndStatements: UnexpectedNodesSyntax? = nil, 
-      statements: CodeBlockItemListSyntax, 
-      _ unexpectedBetweenStatementsAndRightBrace: UnexpectedNodesSyntax? = nil, 
-      rightBrace: TokenSyntax = .rightBraceToken(), 
-      _ unexpectedAfterRightBrace: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeLeftBrace: UnexpectedNodesSyntax? = nil,
+      leftBrace: TokenSyntax = .leftBraceToken(),
+      _ unexpectedBetweenLeftBraceAndStatements: UnexpectedNodesSyntax? = nil,
+      statements: CodeBlockItemListSyntax,
+      _ unexpectedBetweenStatementsAndRightBrace: UnexpectedNodesSyntax? = nil,
+      rightBrace: TokenSyntax = .rightBraceToken(),
+      _ unexpectedAfterRightBrace: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -4404,7 +4404,7 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenStatementsAndRightBrace, 
             rightBrace, 
             unexpectedAfterRightBrace
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftBrace?.raw, 
           leftBrace.raw, 
@@ -4415,11 +4415,11 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterRightBrace?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.codeBlock, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.codeBlock,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -4475,8 +4475,8 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable {
     if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.codeBlockItemList, 
-                                      from: [element.raw], arena: arena)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.codeBlockItemList,
+                                        from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(at: 3, with: collection, arena: arena)
     return CodeBlockSyntax(newData)
@@ -4529,8 +4529,8 @@ public struct CompositionTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .compositionTypeElement else { 
-      return nil 
+    guard node.raw.kind == .compositionTypeElement else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -4544,12 +4544,12 @@ public struct CompositionTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init<T: TypeSyntaxProtocol>(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeType: UnexpectedNodesSyntax? = nil, 
-      type: T, 
-      _ unexpectedBetweenTypeAndAmpersand: UnexpectedNodesSyntax? = nil, 
-      ampersand: TokenSyntax? = nil, 
-      _ unexpectedAfterAmpersand: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeType: UnexpectedNodesSyntax? = nil,
+      type: T,
+      _ unexpectedBetweenTypeAndAmpersand: UnexpectedNodesSyntax? = nil,
+      ampersand: TokenSyntax? = nil,
+      _ unexpectedAfterAmpersand: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -4561,7 +4561,7 @@ public struct CompositionTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenTypeAndAmpersand, 
             ampersand, 
             unexpectedAfterAmpersand
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeType?.raw, 
           type.raw, 
@@ -4570,11 +4570,11 @@ public struct CompositionTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterAmpersand?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.compositionTypeElement, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.compositionTypeElement,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -4661,8 +4661,8 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable {
       }
     }
     
-    init(_ data: SyntaxData) { 
-      self.init(Syntax(data))! 
+    init(_ data: SyntaxData) {
+      self.init(Syntax(data))!
     }
     
     public init<Node: ExprSyntaxProtocol>(_ node: Node) {
@@ -4684,19 +4684,19 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable {
     public init?<S: SyntaxProtocol>(_ node: S) {
       if let node = node.as(ExprSyntax.self) {
         self = .expression(node)
-        return 
+        return
       }
       if let node = node.as(AvailabilityConditionSyntax.self) {
         self = .availability(node)
-        return 
+        return
       }
       if let node = node.as(MatchingPatternConditionSyntax.self) {
         self = .matchingPattern(node)
-        return 
+        return
       }
       if let node = node.as(OptionalBindingConditionSyntax.self) {
         self = .optionalBinding(node)
-        return 
+        return
       }
       return nil
     }
@@ -4714,8 +4714,8 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .conditionElement else { 
-      return nil 
+    guard node.raw.kind == .conditionElement else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -4729,12 +4729,12 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeCondition: UnexpectedNodesSyntax? = nil, 
-      condition: Condition, 
-      _ unexpectedBetweenConditionAndTrailingComma: UnexpectedNodesSyntax? = nil, 
-      trailingComma: TokenSyntax? = nil, 
-      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeCondition: UnexpectedNodesSyntax? = nil,
+      condition: Condition,
+      _ unexpectedBetweenConditionAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingComma: TokenSyntax? = nil,
+      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -4746,7 +4746,7 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenConditionAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeCondition?.raw, 
           condition.raw, 
@@ -4755,11 +4755,11 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterTrailingComma?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.conditionElement, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.conditionElement,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -4830,8 +4830,8 @@ public struct ConformanceRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .conformanceRequirement else { 
-      return nil 
+    guard node.raw.kind == .conformanceRequirement else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -4845,14 +4845,14 @@ public struct ConformanceRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init<L: TypeSyntaxProtocol, R: TypeSyntaxProtocol>(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeLeftTypeIdentifier: UnexpectedNodesSyntax? = nil, 
-      leftTypeIdentifier: L, 
-      _ unexpectedBetweenLeftTypeIdentifierAndColon: UnexpectedNodesSyntax? = nil, 
-      colon: TokenSyntax = .colonToken(), 
-      _ unexpectedBetweenColonAndRightTypeIdentifier: UnexpectedNodesSyntax? = nil, 
-      rightTypeIdentifier: R, 
-      _ unexpectedAfterRightTypeIdentifier: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeLeftTypeIdentifier: UnexpectedNodesSyntax? = nil,
+      leftTypeIdentifier: L,
+      _ unexpectedBetweenLeftTypeIdentifierAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax = .colonToken(),
+      _ unexpectedBetweenColonAndRightTypeIdentifier: UnexpectedNodesSyntax? = nil,
+      rightTypeIdentifier: R,
+      _ unexpectedAfterRightTypeIdentifier: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -4866,7 +4866,7 @@ public struct ConformanceRequirementSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenColonAndRightTypeIdentifier, 
             rightTypeIdentifier, 
             unexpectedAfterRightTypeIdentifier
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftTypeIdentifier?.raw, 
           leftTypeIdentifier.raw, 
@@ -4877,11 +4877,11 @@ public struct ConformanceRequirementSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterRightTypeIdentifier?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.conformanceRequirement, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.conformanceRequirement,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -4972,8 +4972,8 @@ public struct ConventionAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .conventionAttributeArguments else { 
-      return nil 
+    guard node.raw.kind == .conventionAttributeArguments else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -4987,18 +4987,18 @@ public struct ConventionAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeConventionLabel: UnexpectedNodesSyntax? = nil, 
-      conventionLabel: TokenSyntax, 
-      _ unexpectedBetweenConventionLabelAndComma: UnexpectedNodesSyntax? = nil, 
-      comma: TokenSyntax? = nil, 
-      _ unexpectedBetweenCommaAndCTypeLabel: UnexpectedNodesSyntax? = nil, 
-      cTypeLabel: TokenSyntax? = nil, 
-      _ unexpectedBetweenCTypeLabelAndColon: UnexpectedNodesSyntax? = nil, 
-      colon: TokenSyntax? = nil, 
-      _ unexpectedBetweenColonAndCTypeString: UnexpectedNodesSyntax? = nil, 
-      cTypeString: StringLiteralExprSyntax? = nil, 
-      _ unexpectedAfterCTypeString: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeConventionLabel: UnexpectedNodesSyntax? = nil,
+      conventionLabel: TokenSyntax,
+      _ unexpectedBetweenConventionLabelAndComma: UnexpectedNodesSyntax? = nil,
+      comma: TokenSyntax? = nil,
+      _ unexpectedBetweenCommaAndCTypeLabel: UnexpectedNodesSyntax? = nil,
+      cTypeLabel: TokenSyntax? = nil,
+      _ unexpectedBetweenCTypeLabelAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax? = nil,
+      _ unexpectedBetweenColonAndCTypeString: UnexpectedNodesSyntax? = nil,
+      cTypeString: StringLiteralExprSyntax? = nil,
+      _ unexpectedAfterCTypeString: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -5016,7 +5016,7 @@ public struct ConventionAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
             unexpectedBetweenColonAndCTypeString, 
             cTypeString, 
             unexpectedAfterCTypeString
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeConventionLabel?.raw, 
           conventionLabel.raw, 
@@ -5031,11 +5031,11 @@ public struct ConventionAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
           unexpectedAfterCTypeString?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.conventionAttributeArguments, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.conventionAttributeArguments,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -5167,8 +5167,8 @@ public struct ConventionWitnessMethodAttributeArgumentsSyntax: SyntaxProtocol, S
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .conventionWitnessMethodAttributeArguments else { 
-      return nil 
+    guard node.raw.kind == .conventionWitnessMethodAttributeArguments else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -5182,14 +5182,14 @@ public struct ConventionWitnessMethodAttributeArgumentsSyntax: SyntaxProtocol, S
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeWitnessMethodLabel: UnexpectedNodesSyntax? = nil, 
-      witnessMethodLabel: TokenSyntax = .keyword(.witness_method), 
-      _ unexpectedBetweenWitnessMethodLabelAndColon: UnexpectedNodesSyntax? = nil, 
-      colon: TokenSyntax = .colonToken(), 
-      _ unexpectedBetweenColonAndProtocolName: UnexpectedNodesSyntax? = nil, 
-      protocolName: TokenSyntax, 
-      _ unexpectedAfterProtocolName: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeWitnessMethodLabel: UnexpectedNodesSyntax? = nil,
+      witnessMethodLabel: TokenSyntax = .keyword(.witness_method),
+      _ unexpectedBetweenWitnessMethodLabelAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax = .colonToken(),
+      _ unexpectedBetweenColonAndProtocolName: UnexpectedNodesSyntax? = nil,
+      protocolName: TokenSyntax,
+      _ unexpectedAfterProtocolName: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -5203,7 +5203,7 @@ public struct ConventionWitnessMethodAttributeArgumentsSyntax: SyntaxProtocol, S
             unexpectedBetweenColonAndProtocolName, 
             protocolName, 
             unexpectedAfterProtocolName
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeWitnessMethodLabel?.raw, 
           witnessMethodLabel.raw, 
@@ -5214,11 +5214,11 @@ public struct ConventionWitnessMethodAttributeArgumentsSyntax: SyntaxProtocol, S
           unexpectedAfterProtocolName?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.conventionWitnessMethodAttributeArguments, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.conventionWitnessMethodAttributeArguments,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -5309,8 +5309,8 @@ public struct DeclModifierDetailSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .declModifierDetail else { 
-      return nil 
+    guard node.raw.kind == .declModifierDetail else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -5324,14 +5324,14 @@ public struct DeclModifierDetailSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil, 
-      leftParen: TokenSyntax = .leftParenToken(), 
-      _ unexpectedBetweenLeftParenAndDetail: UnexpectedNodesSyntax? = nil, 
-      detail: TokenSyntax, 
-      _ unexpectedBetweenDetailAndRightParen: UnexpectedNodesSyntax? = nil, 
-      rightParen: TokenSyntax = .rightParenToken(), 
-      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
+      leftParen: TokenSyntax = .leftParenToken(),
+      _ unexpectedBetweenLeftParenAndDetail: UnexpectedNodesSyntax? = nil,
+      detail: TokenSyntax,
+      _ unexpectedBetweenDetailAndRightParen: UnexpectedNodesSyntax? = nil,
+      rightParen: TokenSyntax = .rightParenToken(),
+      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -5345,7 +5345,7 @@ public struct DeclModifierDetailSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenDetailAndRightParen, 
             rightParen, 
             unexpectedAfterRightParen
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftParen?.raw, 
           leftParen.raw, 
@@ -5356,11 +5356,11 @@ public struct DeclModifierDetailSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterRightParen?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.declModifierDetail, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.declModifierDetail,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -5451,8 +5451,8 @@ public struct DeclModifierSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .declModifier else { 
-      return nil 
+    guard node.raw.kind == .declModifier else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -5466,12 +5466,12 @@ public struct DeclModifierSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeName: UnexpectedNodesSyntax? = nil, 
-      name: TokenSyntax, 
-      _ unexpectedBetweenNameAndDetail: UnexpectedNodesSyntax? = nil, 
-      detail: DeclModifierDetailSyntax? = nil, 
-      _ unexpectedAfterDetail: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeName: UnexpectedNodesSyntax? = nil,
+      name: TokenSyntax,
+      _ unexpectedBetweenNameAndDetail: UnexpectedNodesSyntax? = nil,
+      detail: DeclModifierDetailSyntax? = nil,
+      _ unexpectedAfterDetail: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -5483,7 +5483,7 @@ public struct DeclModifierSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenNameAndDetail, 
             detail, 
             unexpectedAfterDetail
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeName?.raw, 
           name.raw, 
@@ -5492,11 +5492,11 @@ public struct DeclModifierSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterDetail?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.declModifier, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.declModifier,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -5567,8 +5567,8 @@ public struct DeclNameArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .declNameArgument else { 
-      return nil 
+    guard node.raw.kind == .declNameArgument else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -5582,12 +5582,12 @@ public struct DeclNameArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeName: UnexpectedNodesSyntax? = nil, 
-      name: TokenSyntax, 
-      _ unexpectedBetweenNameAndColon: UnexpectedNodesSyntax? = nil, 
-      colon: TokenSyntax = .colonToken(), 
-      _ unexpectedAfterColon: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeName: UnexpectedNodesSyntax? = nil,
+      name: TokenSyntax,
+      _ unexpectedBetweenNameAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax = .colonToken(),
+      _ unexpectedAfterColon: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -5599,7 +5599,7 @@ public struct DeclNameArgumentSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenNameAndColon, 
             colon, 
             unexpectedAfterColon
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeName?.raw, 
           name.raw, 
@@ -5608,11 +5608,11 @@ public struct DeclNameArgumentSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterColon?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.declNameArgument, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.declNameArgument,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -5683,8 +5683,8 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .declNameArguments else { 
-      return nil 
+    guard node.raw.kind == .declNameArguments else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -5698,14 +5698,14 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil, 
-      leftParen: TokenSyntax = .leftParenToken(), 
-      _ unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? = nil, 
-      arguments: DeclNameArgumentListSyntax, 
-      _ unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? = nil, 
-      rightParen: TokenSyntax = .rightParenToken(), 
-      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
+      leftParen: TokenSyntax = .leftParenToken(),
+      _ unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? = nil,
+      arguments: DeclNameArgumentListSyntax,
+      _ unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? = nil,
+      rightParen: TokenSyntax = .rightParenToken(),
+      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -5719,7 +5719,7 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenArgumentsAndRightParen, 
             rightParen, 
             unexpectedAfterRightParen
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftParen?.raw, 
           leftParen.raw, 
@@ -5730,11 +5730,11 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterRightParen?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.declNameArguments, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.declNameArguments,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -5790,8 +5790,8 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
     if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.declNameArgumentList, 
-                                      from: [element.raw], arena: arena)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.declNameArgumentList,
+                                        from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(at: 3, with: collection, arena: arena)
     return DeclNameArgumentsSyntax(newData)
@@ -5844,8 +5844,8 @@ public struct DeclNameSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .declName else { 
-      return nil 
+    guard node.raw.kind == .declName else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -5859,12 +5859,12 @@ public struct DeclNameSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeDeclBaseName: UnexpectedNodesSyntax? = nil, 
-      declBaseName: TokenSyntax, 
-      _ unexpectedBetweenDeclBaseNameAndDeclNameArguments: UnexpectedNodesSyntax? = nil, 
-      declNameArguments: DeclNameArgumentsSyntax? = nil, 
-      _ unexpectedAfterDeclNameArguments: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeDeclBaseName: UnexpectedNodesSyntax? = nil,
+      declBaseName: TokenSyntax,
+      _ unexpectedBetweenDeclBaseNameAndDeclNameArguments: UnexpectedNodesSyntax? = nil,
+      declNameArguments: DeclNameArgumentsSyntax? = nil,
+      _ unexpectedAfterDeclNameArguments: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -5876,7 +5876,7 @@ public struct DeclNameSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenDeclBaseNameAndDeclNameArguments, 
             declNameArguments, 
             unexpectedAfterDeclNameArguments
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeDeclBaseName?.raw, 
           declBaseName.raw, 
@@ -5885,11 +5885,11 @@ public struct DeclNameSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterDeclNameArguments?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.declName, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.declName,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -5962,8 +5962,8 @@ public struct DerivativeRegistrationAttributeArgumentsSyntax: SyntaxProtocol, Sy
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .derivativeRegistrationAttributeArguments else { 
-      return nil 
+    guard node.raw.kind == .derivativeRegistrationAttributeArguments else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -5977,22 +5977,22 @@ public struct DerivativeRegistrationAttributeArgumentsSyntax: SyntaxProtocol, Sy
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeOfLabel: UnexpectedNodesSyntax? = nil, 
-      ofLabel: TokenSyntax = .keyword(.of), 
-      _ unexpectedBetweenOfLabelAndColon: UnexpectedNodesSyntax? = nil, 
-      colon: TokenSyntax = .colonToken(), 
-      _ unexpectedBetweenColonAndOriginalDeclName: UnexpectedNodesSyntax? = nil, 
-      originalDeclName: QualifiedDeclNameSyntax, 
-      _ unexpectedBetweenOriginalDeclNameAndPeriod: UnexpectedNodesSyntax? = nil, 
-      period: TokenSyntax? = nil, 
-      _ unexpectedBetweenPeriodAndAccessorKind: UnexpectedNodesSyntax? = nil, 
-      accessorKind: TokenSyntax? = nil, 
-      _ unexpectedBetweenAccessorKindAndComma: UnexpectedNodesSyntax? = nil, 
-      comma: TokenSyntax? = nil, 
-      _ unexpectedBetweenCommaAndDiffParams: UnexpectedNodesSyntax? = nil, 
-      diffParams: DifferentiabilityParamsClauseSyntax? = nil, 
-      _ unexpectedAfterDiffParams: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeOfLabel: UnexpectedNodesSyntax? = nil,
+      ofLabel: TokenSyntax = .keyword(.of),
+      _ unexpectedBetweenOfLabelAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax = .colonToken(),
+      _ unexpectedBetweenColonAndOriginalDeclName: UnexpectedNodesSyntax? = nil,
+      originalDeclName: QualifiedDeclNameSyntax,
+      _ unexpectedBetweenOriginalDeclNameAndPeriod: UnexpectedNodesSyntax? = nil,
+      period: TokenSyntax? = nil,
+      _ unexpectedBetweenPeriodAndAccessorKind: UnexpectedNodesSyntax? = nil,
+      accessorKind: TokenSyntax? = nil,
+      _ unexpectedBetweenAccessorKindAndComma: UnexpectedNodesSyntax? = nil,
+      comma: TokenSyntax? = nil,
+      _ unexpectedBetweenCommaAndDiffParams: UnexpectedNodesSyntax? = nil,
+      diffParams: DifferentiabilityParamsClauseSyntax? = nil,
+      _ unexpectedAfterDiffParams: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -6014,7 +6014,7 @@ public struct DerivativeRegistrationAttributeArgumentsSyntax: SyntaxProtocol, Sy
             unexpectedBetweenCommaAndDiffParams, 
             diffParams, 
             unexpectedAfterDiffParams
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeOfLabel?.raw, 
           ofLabel.raw, 
@@ -6033,11 +6033,11 @@ public struct DerivativeRegistrationAttributeArgumentsSyntax: SyntaxProtocol, Sy
           unexpectedAfterDiffParams?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.derivativeRegistrationAttributeArguments, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.derivativeRegistrationAttributeArguments,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -6213,8 +6213,8 @@ public struct DesignatedTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .designatedTypeElement else { 
-      return nil 
+    guard node.raw.kind == .designatedTypeElement else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -6228,12 +6228,12 @@ public struct DesignatedTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeLeadingComma: UnexpectedNodesSyntax? = nil, 
-      leadingComma: TokenSyntax = .commaToken(), 
-      _ unexpectedBetweenLeadingCommaAndName: UnexpectedNodesSyntax? = nil, 
-      name: TokenSyntax, 
-      _ unexpectedAfterName: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeLeadingComma: UnexpectedNodesSyntax? = nil,
+      leadingComma: TokenSyntax = .commaToken(),
+      _ unexpectedBetweenLeadingCommaAndName: UnexpectedNodesSyntax? = nil,
+      name: TokenSyntax,
+      _ unexpectedAfterName: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -6245,7 +6245,7 @@ public struct DesignatedTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenLeadingCommaAndName, 
             name, 
             unexpectedAfterName
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeadingComma?.raw, 
           leadingComma.raw, 
@@ -6254,11 +6254,11 @@ public struct DesignatedTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterName?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.designatedTypeElement, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.designatedTypeElement,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -6329,8 +6329,8 @@ public struct DictionaryElementSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .dictionaryElement else { 
-      return nil 
+    guard node.raw.kind == .dictionaryElement else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -6344,16 +6344,16 @@ public struct DictionaryElementSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init<K: ExprSyntaxProtocol, V: ExprSyntaxProtocol>(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeKeyExpression: UnexpectedNodesSyntax? = nil, 
-      keyExpression: K, 
-      _ unexpectedBetweenKeyExpressionAndColon: UnexpectedNodesSyntax? = nil, 
-      colon: TokenSyntax = .colonToken(), 
-      _ unexpectedBetweenColonAndValueExpression: UnexpectedNodesSyntax? = nil, 
-      valueExpression: V, 
-      _ unexpectedBetweenValueExpressionAndTrailingComma: UnexpectedNodesSyntax? = nil, 
-      trailingComma: TokenSyntax? = nil, 
-      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeKeyExpression: UnexpectedNodesSyntax? = nil,
+      keyExpression: K,
+      _ unexpectedBetweenKeyExpressionAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax = .colonToken(),
+      _ unexpectedBetweenColonAndValueExpression: UnexpectedNodesSyntax? = nil,
+      valueExpression: V,
+      _ unexpectedBetweenValueExpressionAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingComma: TokenSyntax? = nil,
+      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -6369,7 +6369,7 @@ public struct DictionaryElementSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenValueExpressionAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeKeyExpression?.raw, 
           keyExpression.raw, 
@@ -6382,11 +6382,11 @@ public struct DictionaryElementSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterTrailingComma?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.dictionaryElement, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.dictionaryElement,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -6497,8 +6497,8 @@ public struct DifferentiabilityParamSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .differentiabilityParam else { 
-      return nil 
+    guard node.raw.kind == .differentiabilityParam else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -6512,12 +6512,12 @@ public struct DifferentiabilityParamSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeParameter: UnexpectedNodesSyntax? = nil, 
-      parameter: TokenSyntax, 
-      _ unexpectedBetweenParameterAndTrailingComma: UnexpectedNodesSyntax? = nil, 
-      trailingComma: TokenSyntax? = nil, 
-      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeParameter: UnexpectedNodesSyntax? = nil,
+      parameter: TokenSyntax,
+      _ unexpectedBetweenParameterAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingComma: TokenSyntax? = nil,
+      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -6529,7 +6529,7 @@ public struct DifferentiabilityParamSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenParameterAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeParameter?.raw, 
           parameter.raw, 
@@ -6538,11 +6538,11 @@ public struct DifferentiabilityParamSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterTrailingComma?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.differentiabilityParam, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.differentiabilityParam,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -6623,8 +6623,8 @@ public struct DifferentiabilityParamsClauseSyntax: SyntaxProtocol, SyntaxHashabl
       }
     }
     
-    init(_ data: SyntaxData) { 
-      self.init(Syntax(data))! 
+    init(_ data: SyntaxData) {
+      self.init(Syntax(data))!
     }
     
     public init(_ node: DifferentiabilityParamSyntax) {
@@ -6638,11 +6638,11 @@ public struct DifferentiabilityParamsClauseSyntax: SyntaxProtocol, SyntaxHashabl
     public init?<S: SyntaxProtocol>(_ node: S) {
       if let node = node.as(DifferentiabilityParamSyntax.self) {
         self = .parameter(node)
-        return 
+        return
       }
       if let node = node.as(DifferentiabilityParamsSyntax.self) {
         self = .parameterList(node)
-        return 
+        return
       }
       return nil
     }
@@ -6655,8 +6655,8 @@ public struct DifferentiabilityParamsClauseSyntax: SyntaxProtocol, SyntaxHashabl
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .differentiabilityParamsClause else { 
-      return nil 
+    guard node.raw.kind == .differentiabilityParamsClause else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -6670,14 +6670,14 @@ public struct DifferentiabilityParamsClauseSyntax: SyntaxProtocol, SyntaxHashabl
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeWrtLabel: UnexpectedNodesSyntax? = nil, 
-      wrtLabel: TokenSyntax = .keyword(.wrt), 
-      _ unexpectedBetweenWrtLabelAndColon: UnexpectedNodesSyntax? = nil, 
-      colon: TokenSyntax = .colonToken(), 
-      _ unexpectedBetweenColonAndParameters: UnexpectedNodesSyntax? = nil, 
-      parameters: Parameters, 
-      _ unexpectedAfterParameters: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeWrtLabel: UnexpectedNodesSyntax? = nil,
+      wrtLabel: TokenSyntax = .keyword(.wrt),
+      _ unexpectedBetweenWrtLabelAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax = .colonToken(),
+      _ unexpectedBetweenColonAndParameters: UnexpectedNodesSyntax? = nil,
+      parameters: Parameters,
+      _ unexpectedAfterParameters: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -6691,7 +6691,7 @@ public struct DifferentiabilityParamsClauseSyntax: SyntaxProtocol, SyntaxHashabl
             unexpectedBetweenColonAndParameters, 
             parameters, 
             unexpectedAfterParameters
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeWrtLabel?.raw, 
           wrtLabel.raw, 
@@ -6702,11 +6702,11 @@ public struct DifferentiabilityParamsClauseSyntax: SyntaxProtocol, SyntaxHashabl
           unexpectedAfterParameters?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.differentiabilityParamsClause, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.differentiabilityParamsClause,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -6799,8 +6799,8 @@ public struct DifferentiabilityParamsSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .differentiabilityParams else { 
-      return nil 
+    guard node.raw.kind == .differentiabilityParams else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -6814,14 +6814,14 @@ public struct DifferentiabilityParamsSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil, 
-      leftParen: TokenSyntax = .leftParenToken(), 
-      _ unexpectedBetweenLeftParenAndDiffParams: UnexpectedNodesSyntax? = nil, 
-      diffParams: DifferentiabilityParamListSyntax, 
-      _ unexpectedBetweenDiffParamsAndRightParen: UnexpectedNodesSyntax? = nil, 
-      rightParen: TokenSyntax = .rightParenToken(), 
-      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
+      leftParen: TokenSyntax = .leftParenToken(),
+      _ unexpectedBetweenLeftParenAndDiffParams: UnexpectedNodesSyntax? = nil,
+      diffParams: DifferentiabilityParamListSyntax,
+      _ unexpectedBetweenDiffParamsAndRightParen: UnexpectedNodesSyntax? = nil,
+      rightParen: TokenSyntax = .rightParenToken(),
+      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -6835,7 +6835,7 @@ public struct DifferentiabilityParamsSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenDiffParamsAndRightParen, 
             rightParen, 
             unexpectedAfterRightParen
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftParen?.raw, 
           leftParen.raw, 
@@ -6846,11 +6846,11 @@ public struct DifferentiabilityParamsSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterRightParen?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.differentiabilityParams, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.differentiabilityParams,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -6907,8 +6907,8 @@ public struct DifferentiabilityParamsSyntax: SyntaxProtocol, SyntaxHashable {
     if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.differentiabilityParamList, 
-                                      from: [element.raw], arena: arena)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.differentiabilityParamList,
+                                        from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(at: 3, with: collection, arena: arena)
     return DifferentiabilityParamsSyntax(newData)
@@ -6961,8 +6961,8 @@ public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHash
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .differentiableAttributeArguments else { 
-      return nil 
+    guard node.raw.kind == .differentiableAttributeArguments else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -6976,18 +6976,18 @@ public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHash
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeDiffKind: UnexpectedNodesSyntax? = nil, 
-      diffKind: TokenSyntax? = nil, 
-      _ unexpectedBetweenDiffKindAndDiffKindComma: UnexpectedNodesSyntax? = nil, 
-      diffKindComma: TokenSyntax? = nil, 
-      _ unexpectedBetweenDiffKindCommaAndDiffParams: UnexpectedNodesSyntax? = nil, 
-      diffParams: DifferentiabilityParamsClauseSyntax? = nil, 
-      _ unexpectedBetweenDiffParamsAndDiffParamsComma: UnexpectedNodesSyntax? = nil, 
-      diffParamsComma: TokenSyntax? = nil, 
-      _ unexpectedBetweenDiffParamsCommaAndWhereClause: UnexpectedNodesSyntax? = nil, 
-      whereClause: GenericWhereClauseSyntax? = nil, 
-      _ unexpectedAfterWhereClause: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeDiffKind: UnexpectedNodesSyntax? = nil,
+      diffKind: TokenSyntax? = nil,
+      _ unexpectedBetweenDiffKindAndDiffKindComma: UnexpectedNodesSyntax? = nil,
+      diffKindComma: TokenSyntax? = nil,
+      _ unexpectedBetweenDiffKindCommaAndDiffParams: UnexpectedNodesSyntax? = nil,
+      diffParams: DifferentiabilityParamsClauseSyntax? = nil,
+      _ unexpectedBetweenDiffParamsAndDiffParamsComma: UnexpectedNodesSyntax? = nil,
+      diffParamsComma: TokenSyntax? = nil,
+      _ unexpectedBetweenDiffParamsCommaAndWhereClause: UnexpectedNodesSyntax? = nil,
+      whereClause: GenericWhereClauseSyntax? = nil,
+      _ unexpectedAfterWhereClause: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -7005,7 +7005,7 @@ public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHash
             unexpectedBetweenDiffParamsCommaAndWhereClause, 
             whereClause, 
             unexpectedAfterWhereClause
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeDiffKind?.raw, 
           diffKind?.raw, 
@@ -7020,11 +7020,11 @@ public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHash
           unexpectedAfterWhereClause?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.differentiableAttributeArguments, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.differentiableAttributeArguments,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -7167,8 +7167,8 @@ public struct DocumentationAttributeArgumentSyntax: SyntaxProtocol, SyntaxHashab
       }
     }
     
-    init(_ data: SyntaxData) { 
-      self.init(Syntax(data))! 
+    init(_ data: SyntaxData) {
+      self.init(Syntax(data))!
     }
     
     public init(_ node: TokenSyntax) {
@@ -7182,11 +7182,11 @@ public struct DocumentationAttributeArgumentSyntax: SyntaxProtocol, SyntaxHashab
     public init?<S: SyntaxProtocol>(_ node: S) {
       if let node = node.as(TokenSyntax.self) {
         self = .token(node)
-        return 
+        return
       }
       if let node = node.as(StringLiteralExprSyntax.self) {
         self = .string(node)
-        return 
+        return
       }
       return nil
     }
@@ -7199,8 +7199,8 @@ public struct DocumentationAttributeArgumentSyntax: SyntaxProtocol, SyntaxHashab
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .documentationAttributeArgument else { 
-      return nil 
+    guard node.raw.kind == .documentationAttributeArgument else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -7214,16 +7214,16 @@ public struct DocumentationAttributeArgumentSyntax: SyntaxProtocol, SyntaxHashab
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeLabel: UnexpectedNodesSyntax? = nil, 
-      label: TokenSyntax, 
-      _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil, 
-      colon: TokenSyntax = .colonToken(), 
-      _ unexpectedBetweenColonAndValue: UnexpectedNodesSyntax? = nil, 
-      value: Value, 
-      _ unexpectedBetweenValueAndTrailingComma: UnexpectedNodesSyntax? = nil, 
-      trailingComma: TokenSyntax? = nil, 
-      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeLabel: UnexpectedNodesSyntax? = nil,
+      label: TokenSyntax,
+      _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax = .colonToken(),
+      _ unexpectedBetweenColonAndValue: UnexpectedNodesSyntax? = nil,
+      value: Value,
+      _ unexpectedBetweenValueAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingComma: TokenSyntax? = nil,
+      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -7239,7 +7239,7 @@ public struct DocumentationAttributeArgumentSyntax: SyntaxProtocol, SyntaxHashab
             unexpectedBetweenValueAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLabel?.raw, 
           label.raw, 
@@ -7252,11 +7252,11 @@ public struct DocumentationAttributeArgumentSyntax: SyntaxProtocol, SyntaxHashab
           unexpectedAfterTrailingComma?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.documentationAttributeArgument, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.documentationAttributeArgument,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -7368,8 +7368,8 @@ public struct DynamicReplacementArgumentsSyntax: SyntaxProtocol, SyntaxHashable 
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .dynamicReplacementArguments else { 
-      return nil 
+    guard node.raw.kind == .dynamicReplacementArguments else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -7383,14 +7383,14 @@ public struct DynamicReplacementArgumentsSyntax: SyntaxProtocol, SyntaxHashable 
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeForLabel: UnexpectedNodesSyntax? = nil, 
-      forLabel: TokenSyntax = .keyword(.for), 
-      _ unexpectedBetweenForLabelAndColon: UnexpectedNodesSyntax? = nil, 
-      colon: TokenSyntax = .colonToken(), 
-      _ unexpectedBetweenColonAndDeclname: UnexpectedNodesSyntax? = nil, 
-      declname: DeclNameSyntax, 
-      _ unexpectedAfterDeclname: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeForLabel: UnexpectedNodesSyntax? = nil,
+      forLabel: TokenSyntax = .keyword(.for),
+      _ unexpectedBetweenForLabelAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax = .colonToken(),
+      _ unexpectedBetweenColonAndDeclname: UnexpectedNodesSyntax? = nil,
+      declname: DeclNameSyntax,
+      _ unexpectedAfterDeclname: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -7404,7 +7404,7 @@ public struct DynamicReplacementArgumentsSyntax: SyntaxProtocol, SyntaxHashable 
             unexpectedBetweenColonAndDeclname, 
             declname, 
             unexpectedAfterDeclname
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeForLabel?.raw, 
           forLabel.raw, 
@@ -7415,11 +7415,11 @@ public struct DynamicReplacementArgumentsSyntax: SyntaxProtocol, SyntaxHashable 
           unexpectedAfterDeclname?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.dynamicReplacementArguments, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.dynamicReplacementArguments,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -7510,8 +7510,8 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .enumCaseElement else { 
-      return nil 
+    guard node.raw.kind == .enumCaseElement else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -7525,16 +7525,16 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeIdentifier: UnexpectedNodesSyntax? = nil, 
-      identifier: TokenSyntax, 
-      _ unexpectedBetweenIdentifierAndAssociatedValue: UnexpectedNodesSyntax? = nil, 
-      associatedValue: EnumCaseParameterClauseSyntax? = nil, 
-      _ unexpectedBetweenAssociatedValueAndRawValue: UnexpectedNodesSyntax? = nil, 
-      rawValue: InitializerClauseSyntax? = nil, 
-      _ unexpectedBetweenRawValueAndTrailingComma: UnexpectedNodesSyntax? = nil, 
-      trailingComma: TokenSyntax? = nil, 
-      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeIdentifier: UnexpectedNodesSyntax? = nil,
+      identifier: TokenSyntax,
+      _ unexpectedBetweenIdentifierAndAssociatedValue: UnexpectedNodesSyntax? = nil,
+      associatedValue: EnumCaseParameterClauseSyntax? = nil,
+      _ unexpectedBetweenAssociatedValueAndRawValue: UnexpectedNodesSyntax? = nil,
+      rawValue: InitializerClauseSyntax? = nil,
+      _ unexpectedBetweenRawValueAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingComma: TokenSyntax? = nil,
+      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -7550,7 +7550,7 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenRawValueAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeIdentifier?.raw, 
           identifier.raw, 
@@ -7563,11 +7563,11 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterTrailingComma?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.enumCaseElement, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.enumCaseElement,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -7682,8 +7682,8 @@ public struct EnumCaseParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .enumCaseParameterClause else { 
-      return nil 
+    guard node.raw.kind == .enumCaseParameterClause else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -7697,14 +7697,14 @@ public struct EnumCaseParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil, 
-      leftParen: TokenSyntax = .leftParenToken(), 
-      _ unexpectedBetweenLeftParenAndParameterList: UnexpectedNodesSyntax? = nil, 
-      parameterList: EnumCaseParameterListSyntax, 
-      _ unexpectedBetweenParameterListAndRightParen: UnexpectedNodesSyntax? = nil, 
-      rightParen: TokenSyntax = .rightParenToken(), 
-      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
+      leftParen: TokenSyntax = .leftParenToken(),
+      _ unexpectedBetweenLeftParenAndParameterList: UnexpectedNodesSyntax? = nil,
+      parameterList: EnumCaseParameterListSyntax,
+      _ unexpectedBetweenParameterListAndRightParen: UnexpectedNodesSyntax? = nil,
+      rightParen: TokenSyntax = .rightParenToken(),
+      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -7718,7 +7718,7 @@ public struct EnumCaseParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenParameterListAndRightParen, 
             rightParen, 
             unexpectedAfterRightParen
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftParen?.raw, 
           leftParen.raw, 
@@ -7729,11 +7729,11 @@ public struct EnumCaseParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterRightParen?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.enumCaseParameterClause, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.enumCaseParameterClause,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -7791,8 +7791,8 @@ public struct EnumCaseParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
     if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.enumCaseParameterList, 
-                                      from: [element.raw], arena: arena)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.enumCaseParameterList,
+                                        from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(at: 3, with: collection, arena: arena)
     return EnumCaseParameterClauseSyntax(newData)
@@ -7846,8 +7846,8 @@ public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .enumCaseParameter else { 
-      return nil 
+    guard node.raw.kind == .enumCaseParameter else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -7861,22 +7861,22 @@ public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init<T: TypeSyntaxProtocol>(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeModifiers: UnexpectedNodesSyntax? = nil, 
-      modifiers: ModifierListSyntax? = nil, 
-      _ unexpectedBetweenModifiersAndFirstName: UnexpectedNodesSyntax? = nil, 
-      firstName: TokenSyntax? = nil, 
-      _ unexpectedBetweenFirstNameAndSecondName: UnexpectedNodesSyntax? = nil, 
-      secondName: TokenSyntax? = nil, 
-      _ unexpectedBetweenSecondNameAndColon: UnexpectedNodesSyntax? = nil, 
-      colon: TokenSyntax? = nil, 
-      _ unexpectedBetweenColonAndType: UnexpectedNodesSyntax? = nil, 
-      type: T, 
-      _ unexpectedBetweenTypeAndDefaultArgument: UnexpectedNodesSyntax? = nil, 
-      defaultArgument: InitializerClauseSyntax? = nil, 
-      _ unexpectedBetweenDefaultArgumentAndTrailingComma: UnexpectedNodesSyntax? = nil, 
-      trailingComma: TokenSyntax? = nil, 
-      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeModifiers: UnexpectedNodesSyntax? = nil,
+      modifiers: ModifierListSyntax? = nil,
+      _ unexpectedBetweenModifiersAndFirstName: UnexpectedNodesSyntax? = nil,
+      firstName: TokenSyntax? = nil,
+      _ unexpectedBetweenFirstNameAndSecondName: UnexpectedNodesSyntax? = nil,
+      secondName: TokenSyntax? = nil,
+      _ unexpectedBetweenSecondNameAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax? = nil,
+      _ unexpectedBetweenColonAndType: UnexpectedNodesSyntax? = nil,
+      type: T,
+      _ unexpectedBetweenTypeAndDefaultArgument: UnexpectedNodesSyntax? = nil,
+      defaultArgument: InitializerClauseSyntax? = nil,
+      _ unexpectedBetweenDefaultArgumentAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingComma: TokenSyntax? = nil,
+      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -7898,7 +7898,7 @@ public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenDefaultArgumentAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeModifiers?.raw, 
           modifiers?.raw, 
@@ -7917,11 +7917,11 @@ public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterTrailingComma?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.enumCaseParameter, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.enumCaseParameter,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -7959,8 +7959,8 @@ public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable {
     if let col = raw.layoutView!.children[1] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList, 
-                                      from: [element.raw], arena: arena)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
+                                        from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(at: 1, with: collection, arena: arena)
     return EnumCaseParameterSyntax(newData)
@@ -8115,8 +8115,8 @@ public struct ExposeAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .exposeAttributeArguments else { 
-      return nil 
+    guard node.raw.kind == .exposeAttributeArguments else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -8130,14 +8130,14 @@ public struct ExposeAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeLanguage: UnexpectedNodesSyntax? = nil, 
-      language: TokenSyntax, 
-      _ unexpectedBetweenLanguageAndComma: UnexpectedNodesSyntax? = nil, 
-      comma: TokenSyntax? = nil, 
-      _ unexpectedBetweenCommaAndCxxName: UnexpectedNodesSyntax? = nil, 
-      cxxName: StringLiteralExprSyntax? = nil, 
-      _ unexpectedAfterCxxName: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeLanguage: UnexpectedNodesSyntax? = nil,
+      language: TokenSyntax,
+      _ unexpectedBetweenLanguageAndComma: UnexpectedNodesSyntax? = nil,
+      comma: TokenSyntax? = nil,
+      _ unexpectedBetweenCommaAndCxxName: UnexpectedNodesSyntax? = nil,
+      cxxName: StringLiteralExprSyntax? = nil,
+      _ unexpectedAfterCxxName: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -8151,7 +8151,7 @@ public struct ExposeAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenCommaAndCxxName, 
             cxxName, 
             unexpectedAfterCxxName
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLanguage?.raw, 
           language.raw, 
@@ -8162,11 +8162,11 @@ public struct ExposeAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterCxxName?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.exposeAttributeArguments, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.exposeAttributeArguments,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -8257,8 +8257,8 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .expressionSegment else { 
-      return nil 
+    guard node.raw.kind == .expressionSegment else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -8272,18 +8272,18 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeBackslash: UnexpectedNodesSyntax? = nil, 
-      backslash: TokenSyntax = .backslashToken(), 
-      _ unexpectedBetweenBackslashAndDelimiter: UnexpectedNodesSyntax? = nil, 
-      delimiter: TokenSyntax? = nil, 
-      _ unexpectedBetweenDelimiterAndLeftParen: UnexpectedNodesSyntax? = nil, 
-      leftParen: TokenSyntax = .leftParenToken(), 
-      _ unexpectedBetweenLeftParenAndExpressions: UnexpectedNodesSyntax? = nil, 
-      expressions: TupleExprElementListSyntax, 
-      _ unexpectedBetweenExpressionsAndRightParen: UnexpectedNodesSyntax? = nil, 
-      rightParen: TokenSyntax = .rightParenToken(), 
-      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeBackslash: UnexpectedNodesSyntax? = nil,
+      backslash: TokenSyntax = .backslashToken(),
+      _ unexpectedBetweenBackslashAndDelimiter: UnexpectedNodesSyntax? = nil,
+      delimiter: TokenSyntax? = nil,
+      _ unexpectedBetweenDelimiterAndLeftParen: UnexpectedNodesSyntax? = nil,
+      leftParen: TokenSyntax = .leftParenToken(),
+      _ unexpectedBetweenLeftParenAndExpressions: UnexpectedNodesSyntax? = nil,
+      expressions: TupleExprElementListSyntax,
+      _ unexpectedBetweenExpressionsAndRightParen: UnexpectedNodesSyntax? = nil,
+      rightParen: TokenSyntax = .rightParenToken(),
+      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -8301,7 +8301,7 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenExpressionsAndRightParen, 
             rightParen, 
             unexpectedAfterRightParen
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeBackslash?.raw, 
           backslash.raw, 
@@ -8316,11 +8316,11 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterRightParen?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.expressionSegment, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.expressionSegment,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -8412,8 +8412,8 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
     if let col = raw.layoutView!.children[7] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElementList, 
-                                      from: [element.raw], arena: arena)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElementList,
+                                        from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(at: 7, with: collection, arena: arena)
     return ExpressionSegmentSyntax(newData)
@@ -8470,8 +8470,8 @@ public struct FunctionEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .functionEffectSpecifiers else { 
-      return nil 
+    guard node.raw.kind == .functionEffectSpecifiers else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -8485,12 +8485,12 @@ public struct FunctionEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeAsyncSpecifier: UnexpectedNodesSyntax? = nil, 
-      asyncSpecifier: TokenSyntax? = nil, 
-      _ unexpectedBetweenAsyncSpecifierAndThrowsSpecifier: UnexpectedNodesSyntax? = nil, 
-      throwsSpecifier: TokenSyntax? = nil, 
-      _ unexpectedAfterThrowsSpecifier: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeAsyncSpecifier: UnexpectedNodesSyntax? = nil,
+      asyncSpecifier: TokenSyntax? = nil,
+      _ unexpectedBetweenAsyncSpecifierAndThrowsSpecifier: UnexpectedNodesSyntax? = nil,
+      throwsSpecifier: TokenSyntax? = nil,
+      _ unexpectedAfterThrowsSpecifier: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -8502,7 +8502,7 @@ public struct FunctionEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenAsyncSpecifierAndThrowsSpecifier, 
             throwsSpecifier, 
             unexpectedAfterThrowsSpecifier
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAsyncSpecifier?.raw, 
           asyncSpecifier?.raw, 
@@ -8511,11 +8511,11 @@ public struct FunctionEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterThrowsSpecifier?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.functionEffectSpecifiers, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.functionEffectSpecifiers,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -8586,8 +8586,8 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .functionParameter else { 
-      return nil 
+    guard node.raw.kind == .functionParameter else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -8601,26 +8601,26 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init<T: TypeSyntaxProtocol>(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, 
-      attributes: AttributeListSyntax? = nil, 
-      _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, 
-      modifiers: ModifierListSyntax? = nil, 
-      _ unexpectedBetweenModifiersAndFirstName: UnexpectedNodesSyntax? = nil, 
-      firstName: TokenSyntax, 
-      _ unexpectedBetweenFirstNameAndSecondName: UnexpectedNodesSyntax? = nil, 
-      secondName: TokenSyntax? = nil, 
-      _ unexpectedBetweenSecondNameAndColon: UnexpectedNodesSyntax? = nil, 
-      colon: TokenSyntax = .colonToken(), 
-      _ unexpectedBetweenColonAndType: UnexpectedNodesSyntax? = nil, 
-      type: T, 
-      _ unexpectedBetweenTypeAndEllipsis: UnexpectedNodesSyntax? = nil, 
-      ellipsis: TokenSyntax? = nil, 
-      _ unexpectedBetweenEllipsisAndDefaultArgument: UnexpectedNodesSyntax? = nil, 
-      defaultArgument: InitializerClauseSyntax? = nil, 
-      _ unexpectedBetweenDefaultArgumentAndTrailingComma: UnexpectedNodesSyntax? = nil, 
-      trailingComma: TokenSyntax? = nil, 
-      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
+      attributes: AttributeListSyntax? = nil,
+      _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
+      modifiers: ModifierListSyntax? = nil,
+      _ unexpectedBetweenModifiersAndFirstName: UnexpectedNodesSyntax? = nil,
+      firstName: TokenSyntax,
+      _ unexpectedBetweenFirstNameAndSecondName: UnexpectedNodesSyntax? = nil,
+      secondName: TokenSyntax? = nil,
+      _ unexpectedBetweenSecondNameAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax = .colonToken(),
+      _ unexpectedBetweenColonAndType: UnexpectedNodesSyntax? = nil,
+      type: T,
+      _ unexpectedBetweenTypeAndEllipsis: UnexpectedNodesSyntax? = nil,
+      ellipsis: TokenSyntax? = nil,
+      _ unexpectedBetweenEllipsisAndDefaultArgument: UnexpectedNodesSyntax? = nil,
+      defaultArgument: InitializerClauseSyntax? = nil,
+      _ unexpectedBetweenDefaultArgumentAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingComma: TokenSyntax? = nil,
+      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -8646,7 +8646,7 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenDefaultArgumentAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
           attributes?.raw, 
@@ -8669,11 +8669,11 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterTrailingComma?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.functionParameter, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.functionParameter,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -8711,8 +8711,8 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
     if let col = raw.layoutView!.children[1] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList, 
-                                      from: [element.raw], arena: arena)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
+                                        from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(at: 1, with: collection, arena: arena)
     return FunctionParameterSyntax(newData)
@@ -8748,8 +8748,8 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
     if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList, 
-                                      from: [element.raw], arena: arena)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
+                                        from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(at: 3, with: collection, arena: arena)
     return FunctionParameterSyntax(newData)
@@ -8922,8 +8922,8 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .functionSignature else { 
-      return nil 
+    guard node.raw.kind == .functionSignature else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -8937,14 +8937,14 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeInput: UnexpectedNodesSyntax? = nil, 
-      input: ParameterClauseSyntax, 
-      _ unexpectedBetweenInputAndEffectSpecifiers: UnexpectedNodesSyntax? = nil, 
-      effectSpecifiers: FunctionEffectSpecifiersSyntax? = nil, 
-      _ unexpectedBetweenEffectSpecifiersAndOutput: UnexpectedNodesSyntax? = nil, 
-      output: ReturnClauseSyntax? = nil, 
-      _ unexpectedAfterOutput: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeInput: UnexpectedNodesSyntax? = nil,
+      input: ParameterClauseSyntax,
+      _ unexpectedBetweenInputAndEffectSpecifiers: UnexpectedNodesSyntax? = nil,
+      effectSpecifiers: FunctionEffectSpecifiersSyntax? = nil,
+      _ unexpectedBetweenEffectSpecifiersAndOutput: UnexpectedNodesSyntax? = nil,
+      output: ReturnClauseSyntax? = nil,
+      _ unexpectedAfterOutput: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -8958,7 +8958,7 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenEffectSpecifiersAndOutput, 
             output, 
             unexpectedAfterOutput
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeInput?.raw, 
           input.raw, 
@@ -8969,11 +8969,11 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterOutput?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.functionSignature, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.functionSignature,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -9064,8 +9064,8 @@ public struct GenericArgumentClauseSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .genericArgumentClause else { 
-      return nil 
+    guard node.raw.kind == .genericArgumentClause else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -9079,14 +9079,14 @@ public struct GenericArgumentClauseSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeLeftAngleBracket: UnexpectedNodesSyntax? = nil, 
-      leftAngleBracket: TokenSyntax = .leftAngleToken(), 
-      _ unexpectedBetweenLeftAngleBracketAndArguments: UnexpectedNodesSyntax? = nil, 
-      arguments: GenericArgumentListSyntax, 
-      _ unexpectedBetweenArgumentsAndRightAngleBracket: UnexpectedNodesSyntax? = nil, 
-      rightAngleBracket: TokenSyntax = .rightAngleToken(), 
-      _ unexpectedAfterRightAngleBracket: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeLeftAngleBracket: UnexpectedNodesSyntax? = nil,
+      leftAngleBracket: TokenSyntax = .leftAngleToken(),
+      _ unexpectedBetweenLeftAngleBracketAndArguments: UnexpectedNodesSyntax? = nil,
+      arguments: GenericArgumentListSyntax,
+      _ unexpectedBetweenArgumentsAndRightAngleBracket: UnexpectedNodesSyntax? = nil,
+      rightAngleBracket: TokenSyntax = .rightAngleToken(),
+      _ unexpectedAfterRightAngleBracket: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -9100,7 +9100,7 @@ public struct GenericArgumentClauseSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenArgumentsAndRightAngleBracket, 
             rightAngleBracket, 
             unexpectedAfterRightAngleBracket
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftAngleBracket?.raw, 
           leftAngleBracket.raw, 
@@ -9111,11 +9111,11 @@ public struct GenericArgumentClauseSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterRightAngleBracket?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.genericArgumentClause, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.genericArgumentClause,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -9171,8 +9171,8 @@ public struct GenericArgumentClauseSyntax: SyntaxProtocol, SyntaxHashable {
     if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.genericArgumentList, 
-                                      from: [element.raw], arena: arena)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.genericArgumentList,
+                                        from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(at: 3, with: collection, arena: arena)
     return GenericArgumentClauseSyntax(newData)
@@ -9225,8 +9225,8 @@ public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .genericArgument else { 
-      return nil 
+    guard node.raw.kind == .genericArgument else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -9240,12 +9240,12 @@ public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init<A: TypeSyntaxProtocol>(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeArgumentType: UnexpectedNodesSyntax? = nil, 
-      argumentType: A, 
-      _ unexpectedBetweenArgumentTypeAndTrailingComma: UnexpectedNodesSyntax? = nil, 
-      trailingComma: TokenSyntax? = nil, 
-      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeArgumentType: UnexpectedNodesSyntax? = nil,
+      argumentType: A,
+      _ unexpectedBetweenArgumentTypeAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingComma: TokenSyntax? = nil,
+      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -9257,7 +9257,7 @@ public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenArgumentTypeAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeArgumentType?.raw, 
           argumentType.raw, 
@@ -9266,11 +9266,11 @@ public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterTrailingComma?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.genericArgument, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.genericArgument,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -9341,8 +9341,8 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .genericParameterClause else { 
-      return nil 
+    guard node.raw.kind == .genericParameterClause else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -9356,16 +9356,16 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeLeftAngleBracket: UnexpectedNodesSyntax? = nil, 
-      leftAngleBracket: TokenSyntax = .leftAngleToken(), 
-      _ unexpectedBetweenLeftAngleBracketAndGenericParameterList: UnexpectedNodesSyntax? = nil, 
-      genericParameterList: GenericParameterListSyntax, 
-      _ unexpectedBetweenGenericParameterListAndGenericWhereClause: UnexpectedNodesSyntax? = nil, 
-      genericWhereClause: GenericWhereClauseSyntax? = nil, 
-      _ unexpectedBetweenGenericWhereClauseAndRightAngleBracket: UnexpectedNodesSyntax? = nil, 
-      rightAngleBracket: TokenSyntax = .rightAngleToken(), 
-      _ unexpectedAfterRightAngleBracket: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeLeftAngleBracket: UnexpectedNodesSyntax? = nil,
+      leftAngleBracket: TokenSyntax = .leftAngleToken(),
+      _ unexpectedBetweenLeftAngleBracketAndGenericParameterList: UnexpectedNodesSyntax? = nil,
+      genericParameterList: GenericParameterListSyntax,
+      _ unexpectedBetweenGenericParameterListAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
+      genericWhereClause: GenericWhereClauseSyntax? = nil,
+      _ unexpectedBetweenGenericWhereClauseAndRightAngleBracket: UnexpectedNodesSyntax? = nil,
+      rightAngleBracket: TokenSyntax = .rightAngleToken(),
+      _ unexpectedAfterRightAngleBracket: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -9381,7 +9381,7 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenGenericWhereClauseAndRightAngleBracket, 
             rightAngleBracket, 
             unexpectedAfterRightAngleBracket
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftAngleBracket?.raw, 
           leftAngleBracket.raw, 
@@ -9394,11 +9394,11 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterRightAngleBracket?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.genericParameterClause, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.genericParameterClause,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -9454,8 +9454,8 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
     if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.genericParameterList, 
-                                      from: [element.raw], arena: arena)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.genericParameterList,
+                                        from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(at: 3, with: collection, arena: arena)
     return GenericParameterClauseSyntax(newData)
@@ -9528,8 +9528,8 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .genericParameter else { 
-      return nil 
+    guard node.raw.kind == .genericParameter else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -9543,20 +9543,20 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init<I: TypeSyntaxProtocol>(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, 
-      attributes: AttributeListSyntax? = nil, 
-      _ unexpectedBetweenAttributesAndEach: UnexpectedNodesSyntax? = nil, 
-      each: TokenSyntax? = nil, 
-      _ unexpectedBetweenEachAndName: UnexpectedNodesSyntax? = nil, 
-      name: TokenSyntax, 
-      _ unexpectedBetweenNameAndColon: UnexpectedNodesSyntax? = nil, 
-      colon: TokenSyntax? = nil, 
-      _ unexpectedBetweenColonAndInheritedType: UnexpectedNodesSyntax? = nil, 
-      inheritedType: I? = nil, 
-      _ unexpectedBetweenInheritedTypeAndTrailingComma: UnexpectedNodesSyntax? = nil, 
-      trailingComma: TokenSyntax? = nil, 
-      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
+      attributes: AttributeListSyntax? = nil,
+      _ unexpectedBetweenAttributesAndEach: UnexpectedNodesSyntax? = nil,
+      each: TokenSyntax? = nil,
+      _ unexpectedBetweenEachAndName: UnexpectedNodesSyntax? = nil,
+      name: TokenSyntax,
+      _ unexpectedBetweenNameAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax? = nil,
+      _ unexpectedBetweenColonAndInheritedType: UnexpectedNodesSyntax? = nil,
+      inheritedType: I? = nil,
+      _ unexpectedBetweenInheritedTypeAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingComma: TokenSyntax? = nil,
+      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -9576,7 +9576,7 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenInheritedTypeAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
           attributes?.raw, 
@@ -9593,11 +9593,11 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterTrailingComma?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.genericParameter, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.genericParameter,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -9616,37 +9616,37 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
   /// the base type would allow implicit conversion from a string literal,
   /// which the above initializer doesn't support.
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, 
-      attributes: AttributeListSyntax? = nil, 
-      _ unexpectedBetweenAttributesAndEach: UnexpectedNodesSyntax? = nil, 
-      each: TokenSyntax? = nil, 
-      _ unexpectedBetweenEachAndName: UnexpectedNodesSyntax? = nil, 
-      name: TokenSyntax, 
-      _ unexpectedBetweenNameAndColon: UnexpectedNodesSyntax? = nil, 
-      colon: TokenSyntax? = nil, 
-      _ unexpectedBetweenColonAndInheritedType: UnexpectedNodesSyntax? = nil, 
-      inheritedType: MissingTypeSyntax? = nil, 
-      _ unexpectedBetweenInheritedTypeAndTrailingComma: UnexpectedNodesSyntax? = nil, 
-      trailingComma: TokenSyntax? = nil, 
-      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
+      attributes: AttributeListSyntax? = nil,
+      _ unexpectedBetweenAttributesAndEach: UnexpectedNodesSyntax? = nil,
+      each: TokenSyntax? = nil,
+      _ unexpectedBetweenEachAndName: UnexpectedNodesSyntax? = nil,
+      name: TokenSyntax,
+      _ unexpectedBetweenNameAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax? = nil,
+      _ unexpectedBetweenColonAndInheritedType: UnexpectedNodesSyntax? = nil,
+      inheritedType: MissingTypeSyntax? = nil,
+      _ unexpectedBetweenInheritedTypeAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingComma: TokenSyntax? = nil,
+      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
     self.init(
-        leadingTrivia: leadingTrivia, 
-        unexpectedBeforeAttributes, 
-        attributes: attributes, 
-        unexpectedBetweenAttributesAndEach, 
-        each: each, 
-        unexpectedBetweenEachAndName, 
-        name: name, 
-        unexpectedBetweenNameAndColon, 
-        colon: colon, 
-        unexpectedBetweenColonAndInheritedType, 
-        inheritedType: Optional<TypeSyntax>.none, 
-        unexpectedBetweenInheritedTypeAndTrailingComma, 
-        trailingComma: trailingComma, 
+        leadingTrivia: leadingTrivia,
+        unexpectedBeforeAttributes,
+        attributes: attributes,
+        unexpectedBetweenAttributesAndEach,
+        each: each,
+        unexpectedBetweenEachAndName,
+        name: name,
+        unexpectedBetweenNameAndColon,
+        colon: colon,
+        unexpectedBetweenColonAndInheritedType,
+        inheritedType: Optional<TypeSyntax>.none,
+        unexpectedBetweenInheritedTypeAndTrailingComma,
+        trailingComma: trailingComma,
         unexpectedAfterTrailingComma, 
         trailingTrivia: trailingTrivia
       )
@@ -9682,8 +9682,8 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
     if let col = raw.layoutView!.children[1] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList, 
-                                      from: [element.raw], arena: arena)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
+                                        from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(at: 1, with: collection, arena: arena)
     return GenericParameterSyntax(newData)
@@ -9827,8 +9827,8 @@ public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable {
       }
     }
     
-    init(_ data: SyntaxData) { 
-      self.init(Syntax(data))! 
+    init(_ data: SyntaxData) {
+      self.init(Syntax(data))!
     }
     
     public init(_ node: SameTypeRequirementSyntax) {
@@ -9846,15 +9846,15 @@ public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable {
     public init?<S: SyntaxProtocol>(_ node: S) {
       if let node = node.as(SameTypeRequirementSyntax.self) {
         self = .sameTypeRequirement(node)
-        return 
+        return
       }
       if let node = node.as(ConformanceRequirementSyntax.self) {
         self = .conformanceRequirement(node)
-        return 
+        return
       }
       if let node = node.as(LayoutRequirementSyntax.self) {
         self = .layoutRequirement(node)
-        return 
+        return
       }
       return nil
     }
@@ -9867,8 +9867,8 @@ public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .genericRequirement else { 
-      return nil 
+    guard node.raw.kind == .genericRequirement else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -9882,12 +9882,12 @@ public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeBody: UnexpectedNodesSyntax? = nil, 
-      body: Body, 
-      _ unexpectedBetweenBodyAndTrailingComma: UnexpectedNodesSyntax? = nil, 
-      trailingComma: TokenSyntax? = nil, 
-      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeBody: UnexpectedNodesSyntax? = nil,
+      body: Body,
+      _ unexpectedBetweenBodyAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingComma: TokenSyntax? = nil,
+      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -9899,7 +9899,7 @@ public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenBodyAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeBody?.raw, 
           body.raw, 
@@ -9908,11 +9908,11 @@ public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterTrailingComma?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.genericRequirement, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.genericRequirement,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -9983,8 +9983,8 @@ public struct GenericWhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .genericWhereClause else { 
-      return nil 
+    guard node.raw.kind == .genericWhereClause else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -9998,12 +9998,12 @@ public struct GenericWhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeWhereKeyword: UnexpectedNodesSyntax? = nil, 
-      whereKeyword: TokenSyntax = .keyword(.where), 
-      _ unexpectedBetweenWhereKeywordAndRequirementList: UnexpectedNodesSyntax? = nil, 
-      requirementList: GenericRequirementListSyntax, 
-      _ unexpectedAfterRequirementList: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeWhereKeyword: UnexpectedNodesSyntax? = nil,
+      whereKeyword: TokenSyntax = .keyword(.where),
+      _ unexpectedBetweenWhereKeywordAndRequirementList: UnexpectedNodesSyntax? = nil,
+      requirementList: GenericRequirementListSyntax,
+      _ unexpectedAfterRequirementList: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -10015,7 +10015,7 @@ public struct GenericWhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenWhereKeywordAndRequirementList, 
             requirementList, 
             unexpectedAfterRequirementList
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeWhereKeyword?.raw, 
           whereKeyword.raw, 
@@ -10024,11 +10024,11 @@ public struct GenericWhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterRequirementList?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.genericWhereClause, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.genericWhereClause,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -10084,8 +10084,8 @@ public struct GenericWhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
     if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.genericRequirementList, 
-                                      from: [element.raw], arena: arena)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.genericRequirementList,
+                                        from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(at: 3, with: collection, arena: arena)
     return GenericWhereClauseSyntax(newData)
@@ -10137,8 +10137,8 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
       }
     }
     
-    init(_ data: SyntaxData) { 
-      self.init(Syntax(data))! 
+    init(_ data: SyntaxData) {
+      self.init(Syntax(data))!
     }
     
     public init(_ node: CodeBlockItemListSyntax) {
@@ -10164,23 +10164,23 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
     public init?<S: SyntaxProtocol>(_ node: S) {
       if let node = node.as(CodeBlockItemListSyntax.self) {
         self = .statements(node)
-        return 
+        return
       }
       if let node = node.as(SwitchCaseListSyntax.self) {
         self = .switchCases(node)
-        return 
+        return
       }
       if let node = node.as(MemberDeclListSyntax.self) {
         self = .decls(node)
-        return 
+        return
       }
       if let node = node.as(ExprSyntax.self) {
         self = .postfixExpression(node)
-        return 
+        return
       }
       if let node = node.as(AttributeListSyntax.self) {
         self = .attributes(node)
-        return 
+        return
       }
       return nil
     }
@@ -10199,8 +10199,8 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .ifConfigClause else { 
-      return nil 
+    guard node.raw.kind == .ifConfigClause else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -10214,14 +10214,14 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init<C: ExprSyntaxProtocol>(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforePoundKeyword: UnexpectedNodesSyntax? = nil, 
-      poundKeyword: TokenSyntax, 
-      _ unexpectedBetweenPoundKeywordAndCondition: UnexpectedNodesSyntax? = nil, 
-      condition: C? = nil, 
-      _ unexpectedBetweenConditionAndElements: UnexpectedNodesSyntax? = nil, 
-      elements: Elements? = nil, 
-      _ unexpectedAfterElements: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforePoundKeyword: UnexpectedNodesSyntax? = nil,
+      poundKeyword: TokenSyntax,
+      _ unexpectedBetweenPoundKeywordAndCondition: UnexpectedNodesSyntax? = nil,
+      condition: C? = nil,
+      _ unexpectedBetweenConditionAndElements: UnexpectedNodesSyntax? = nil,
+      elements: Elements? = nil,
+      _ unexpectedAfterElements: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -10235,7 +10235,7 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenConditionAndElements, 
             elements, 
             unexpectedAfterElements
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforePoundKeyword?.raw, 
           poundKeyword.raw, 
@@ -10246,11 +10246,11 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterElements?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.ifConfigClause, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.ifConfigClause,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -10269,25 +10269,25 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
   /// the base type would allow implicit conversion from a string literal,
   /// which the above initializer doesn't support.
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforePoundKeyword: UnexpectedNodesSyntax? = nil, 
-      poundKeyword: TokenSyntax, 
-      _ unexpectedBetweenPoundKeywordAndCondition: UnexpectedNodesSyntax? = nil, 
-      condition: MissingExprSyntax? = nil, 
-      _ unexpectedBetweenConditionAndElements: UnexpectedNodesSyntax? = nil, 
-      elements: Elements? = nil, 
-      _ unexpectedAfterElements: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforePoundKeyword: UnexpectedNodesSyntax? = nil,
+      poundKeyword: TokenSyntax,
+      _ unexpectedBetweenPoundKeywordAndCondition: UnexpectedNodesSyntax? = nil,
+      condition: MissingExprSyntax? = nil,
+      _ unexpectedBetweenConditionAndElements: UnexpectedNodesSyntax? = nil,
+      elements: Elements? = nil,
+      _ unexpectedAfterElements: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
     self.init(
-        leadingTrivia: leadingTrivia, 
-        unexpectedBeforePoundKeyword, 
-        poundKeyword: poundKeyword, 
-        unexpectedBetweenPoundKeywordAndCondition, 
-        condition: Optional<ExprSyntax>.none, 
-        unexpectedBetweenConditionAndElements, 
-        elements: elements, 
+        leadingTrivia: leadingTrivia,
+        unexpectedBeforePoundKeyword,
+        poundKeyword: poundKeyword,
+        unexpectedBetweenPoundKeywordAndCondition,
+        condition: Optional<ExprSyntax>.none,
+        unexpectedBetweenConditionAndElements,
+        elements: elements,
         unexpectedAfterElements, 
         trailingTrivia: trailingTrivia
       )
@@ -10376,8 +10376,8 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .implementsAttributeArguments else { 
-      return nil 
+    guard node.raw.kind == .implementsAttributeArguments else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -10391,16 +10391,16 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
   }
   
   public init<T: TypeSyntaxProtocol>(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeType: UnexpectedNodesSyntax? = nil, 
-      type: T, 
-      _ unexpectedBetweenTypeAndComma: UnexpectedNodesSyntax? = nil, 
-      comma: TokenSyntax = .commaToken(), 
-      _ unexpectedBetweenCommaAndDeclBaseName: UnexpectedNodesSyntax? = nil, 
-      declBaseName: TokenSyntax, 
-      _ unexpectedBetweenDeclBaseNameAndDeclNameArguments: UnexpectedNodesSyntax? = nil, 
-      declNameArguments: DeclNameArgumentsSyntax? = nil, 
-      _ unexpectedAfterDeclNameArguments: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeType: UnexpectedNodesSyntax? = nil,
+      type: T,
+      _ unexpectedBetweenTypeAndComma: UnexpectedNodesSyntax? = nil,
+      comma: TokenSyntax = .commaToken(),
+      _ unexpectedBetweenCommaAndDeclBaseName: UnexpectedNodesSyntax? = nil,
+      declBaseName: TokenSyntax,
+      _ unexpectedBetweenDeclBaseNameAndDeclNameArguments: UnexpectedNodesSyntax? = nil,
+      declNameArguments: DeclNameArgumentsSyntax? = nil,
+      _ unexpectedAfterDeclNameArguments: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -10416,7 +10416,7 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
             unexpectedBetweenDeclBaseNameAndDeclNameArguments, 
             declNameArguments, 
             unexpectedAfterDeclNameArguments
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeType?.raw, 
           type.raw, 
@@ -10429,11 +10429,11 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
           unexpectedAfterDeclNameArguments?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.implementsAttributeArguments, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.implementsAttributeArguments,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -10548,8 +10548,8 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .inheritedType else { 
-      return nil 
+    guard node.raw.kind == .inheritedType else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -10563,14 +10563,14 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init<T: TypeSyntaxProtocol>(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeWithoutTilde: UnexpectedNodesSyntax? = nil, 
-      withoutTilde: TokenSyntax? = nil, 
-      _ unexpectedBetweenWithoutTildeAndTypeName: UnexpectedNodesSyntax? = nil, 
-      typeName: T, 
-      _ unexpectedBetweenTypeNameAndTrailingComma: UnexpectedNodesSyntax? = nil, 
-      trailingComma: TokenSyntax? = nil, 
-      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeWithoutTilde: UnexpectedNodesSyntax? = nil,
+      withoutTilde: TokenSyntax? = nil,
+      _ unexpectedBetweenWithoutTildeAndTypeName: UnexpectedNodesSyntax? = nil,
+      typeName: T,
+      _ unexpectedBetweenTypeNameAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingComma: TokenSyntax? = nil,
+      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -10584,7 +10584,7 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenTypeNameAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeWithoutTilde?.raw, 
           withoutTilde?.raw, 
@@ -10595,11 +10595,11 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterTrailingComma?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.inheritedType, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.inheritedType,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -10690,8 +10690,8 @@ public struct InitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .initializerClause else { 
-      return nil 
+    guard node.raw.kind == .initializerClause else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -10705,12 +10705,12 @@ public struct InitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init<V: ExprSyntaxProtocol>(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeEqual: UnexpectedNodesSyntax? = nil, 
-      equal: TokenSyntax = .equalToken(), 
-      _ unexpectedBetweenEqualAndValue: UnexpectedNodesSyntax? = nil, 
-      value: V, 
-      _ unexpectedAfterValue: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeEqual: UnexpectedNodesSyntax? = nil,
+      equal: TokenSyntax = .equalToken(),
+      _ unexpectedBetweenEqualAndValue: UnexpectedNodesSyntax? = nil,
+      value: V,
+      _ unexpectedAfterValue: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -10722,7 +10722,7 @@ public struct InitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenEqualAndValue, 
             value, 
             unexpectedAfterValue
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeEqual?.raw, 
           equal.raw, 
@@ -10731,11 +10731,11 @@ public struct InitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterValue?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.initializerClause, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.initializerClause,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -10819,8 +10819,8 @@ public struct KeyPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
       }
     }
     
-    init(_ data: SyntaxData) { 
-      self.init(Syntax(data))! 
+    init(_ data: SyntaxData) {
+      self.init(Syntax(data))!
     }
     
     public init(_ node: KeyPathPropertyComponentSyntax) {
@@ -10838,15 +10838,15 @@ public struct KeyPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
     public init?<S: SyntaxProtocol>(_ node: S) {
       if let node = node.as(KeyPathPropertyComponentSyntax.self) {
         self = .property(node)
-        return 
+        return
       }
       if let node = node.as(KeyPathSubscriptComponentSyntax.self) {
         self = .subscript(node)
-        return 
+        return
       }
       if let node = node.as(KeyPathOptionalComponentSyntax.self) {
         self = .optional(node)
-        return 
+        return
       }
       return nil
     }
@@ -10859,8 +10859,8 @@ public struct KeyPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .keyPathComponent else { 
-      return nil 
+    guard node.raw.kind == .keyPathComponent else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -10874,12 +10874,12 @@ public struct KeyPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforePeriod: UnexpectedNodesSyntax? = nil, 
-      period: TokenSyntax? = nil, 
-      _ unexpectedBetweenPeriodAndComponent: UnexpectedNodesSyntax? = nil, 
-      component: Component, 
-      _ unexpectedAfterComponent: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforePeriod: UnexpectedNodesSyntax? = nil,
+      period: TokenSyntax? = nil,
+      _ unexpectedBetweenPeriodAndComponent: UnexpectedNodesSyntax? = nil,
+      component: Component,
+      _ unexpectedAfterComponent: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -10891,7 +10891,7 @@ public struct KeyPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenPeriodAndComponent, 
             component, 
             unexpectedAfterComponent
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforePeriod?.raw, 
           period?.raw, 
@@ -10900,11 +10900,11 @@ public struct KeyPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterComponent?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.keyPathComponent, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.keyPathComponent,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -10975,8 +10975,8 @@ public struct KeyPathOptionalComponentSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .keyPathOptionalComponent else { 
-      return nil 
+    guard node.raw.kind == .keyPathOptionalComponent else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -10990,23 +10990,23 @@ public struct KeyPathOptionalComponentSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeQuestionOrExclamationMark: UnexpectedNodesSyntax? = nil, 
-      questionOrExclamationMark: TokenSyntax, 
-      _ unexpectedAfterQuestionOrExclamationMark: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeQuestionOrExclamationMark: UnexpectedNodesSyntax? = nil,
+      questionOrExclamationMark: TokenSyntax,
+      _ unexpectedAfterQuestionOrExclamationMark: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeQuestionOrExclamationMark, questionOrExclamationMark, unexpectedAfterQuestionOrExclamationMark))) {(arena, _) in 
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeQuestionOrExclamationMark, questionOrExclamationMark, unexpectedAfterQuestionOrExclamationMark))) {(arena, _) in
       let layout: [RawSyntax?] = [unexpectedBeforeQuestionOrExclamationMark?.raw, questionOrExclamationMark.raw, unexpectedAfterQuestionOrExclamationMark?.raw]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.keyPathOptionalComponent, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.keyPathOptionalComponent,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -11053,8 +11053,8 @@ public struct KeyPathPropertyComponentSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .keyPathPropertyComponent else { 
-      return nil 
+    guard node.raw.kind == .keyPathPropertyComponent else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -11068,14 +11068,14 @@ public struct KeyPathPropertyComponentSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeIdentifier: UnexpectedNodesSyntax? = nil, 
-      identifier: TokenSyntax, 
-      _ unexpectedBetweenIdentifierAndDeclNameArguments: UnexpectedNodesSyntax? = nil, 
-      declNameArguments: DeclNameArgumentsSyntax? = nil, 
-      _ unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause: UnexpectedNodesSyntax? = nil, 
-      genericArgumentClause: GenericArgumentClauseSyntax? = nil, 
-      _ unexpectedAfterGenericArgumentClause: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeIdentifier: UnexpectedNodesSyntax? = nil,
+      identifier: TokenSyntax,
+      _ unexpectedBetweenIdentifierAndDeclNameArguments: UnexpectedNodesSyntax? = nil,
+      declNameArguments: DeclNameArgumentsSyntax? = nil,
+      _ unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause: UnexpectedNodesSyntax? = nil,
+      genericArgumentClause: GenericArgumentClauseSyntax? = nil,
+      _ unexpectedAfterGenericArgumentClause: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -11089,7 +11089,7 @@ public struct KeyPathPropertyComponentSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause, 
             genericArgumentClause, 
             unexpectedAfterGenericArgumentClause
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeIdentifier?.raw, 
           identifier.raw, 
@@ -11100,11 +11100,11 @@ public struct KeyPathPropertyComponentSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterGenericArgumentClause?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.keyPathPropertyComponent, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.keyPathPropertyComponent,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -11195,8 +11195,8 @@ public struct KeyPathSubscriptComponentSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .keyPathSubscriptComponent else { 
-      return nil 
+    guard node.raw.kind == .keyPathSubscriptComponent else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -11210,14 +11210,14 @@ public struct KeyPathSubscriptComponentSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeLeftBracket: UnexpectedNodesSyntax? = nil, 
-      leftBracket: TokenSyntax = .leftSquareBracketToken(), 
-      _ unexpectedBetweenLeftBracketAndArgumentList: UnexpectedNodesSyntax? = nil, 
-      argumentList: TupleExprElementListSyntax, 
-      _ unexpectedBetweenArgumentListAndRightBracket: UnexpectedNodesSyntax? = nil, 
-      rightBracket: TokenSyntax = .rightSquareBracketToken(), 
-      _ unexpectedAfterRightBracket: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeLeftBracket: UnexpectedNodesSyntax? = nil,
+      leftBracket: TokenSyntax = .leftSquareBracketToken(),
+      _ unexpectedBetweenLeftBracketAndArgumentList: UnexpectedNodesSyntax? = nil,
+      argumentList: TupleExprElementListSyntax,
+      _ unexpectedBetweenArgumentListAndRightBracket: UnexpectedNodesSyntax? = nil,
+      rightBracket: TokenSyntax = .rightSquareBracketToken(),
+      _ unexpectedAfterRightBracket: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -11231,7 +11231,7 @@ public struct KeyPathSubscriptComponentSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenArgumentListAndRightBracket, 
             rightBracket, 
             unexpectedAfterRightBracket
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftBracket?.raw, 
           leftBracket.raw, 
@@ -11242,11 +11242,11 @@ public struct KeyPathSubscriptComponentSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterRightBracket?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.keyPathSubscriptComponent, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.keyPathSubscriptComponent,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -11302,8 +11302,8 @@ public struct KeyPathSubscriptComponentSyntax: SyntaxProtocol, SyntaxHashable {
     if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElementList, 
-                                      from: [element.raw], arena: arena)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElementList,
+                                        from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(at: 3, with: collection, arena: arena)
     return KeyPathSubscriptComponentSyntax(newData)
@@ -11356,8 +11356,8 @@ public struct LabeledSpecializeEntrySyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .labeledSpecializeEntry else { 
-      return nil 
+    guard node.raw.kind == .labeledSpecializeEntry else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -11371,16 +11371,16 @@ public struct LabeledSpecializeEntrySyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeLabel: UnexpectedNodesSyntax? = nil, 
-      label: TokenSyntax, 
-      _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil, 
-      colon: TokenSyntax = .colonToken(), 
-      _ unexpectedBetweenColonAndValue: UnexpectedNodesSyntax? = nil, 
-      value: TokenSyntax, 
-      _ unexpectedBetweenValueAndTrailingComma: UnexpectedNodesSyntax? = nil, 
-      trailingComma: TokenSyntax? = nil, 
-      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeLabel: UnexpectedNodesSyntax? = nil,
+      label: TokenSyntax,
+      _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax = .colonToken(),
+      _ unexpectedBetweenColonAndValue: UnexpectedNodesSyntax? = nil,
+      value: TokenSyntax,
+      _ unexpectedBetweenValueAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingComma: TokenSyntax? = nil,
+      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -11396,7 +11396,7 @@ public struct LabeledSpecializeEntrySyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenValueAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLabel?.raw, 
           label.raw, 
@@ -11409,11 +11409,11 @@ public struct LabeledSpecializeEntrySyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterTrailingComma?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.labeledSpecializeEntry, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.labeledSpecializeEntry,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -11528,8 +11528,8 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .layoutRequirement else { 
-      return nil 
+    guard node.raw.kind == .layoutRequirement else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -11543,24 +11543,24 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init<T: TypeSyntaxProtocol>(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeTypeIdentifier: UnexpectedNodesSyntax? = nil, 
-      typeIdentifier: T, 
-      _ unexpectedBetweenTypeIdentifierAndColon: UnexpectedNodesSyntax? = nil, 
-      colon: TokenSyntax = .colonToken(), 
-      _ unexpectedBetweenColonAndLayoutConstraint: UnexpectedNodesSyntax? = nil, 
-      layoutConstraint: TokenSyntax, 
-      _ unexpectedBetweenLayoutConstraintAndLeftParen: UnexpectedNodesSyntax? = nil, 
-      leftParen: TokenSyntax? = nil, 
-      _ unexpectedBetweenLeftParenAndSize: UnexpectedNodesSyntax? = nil, 
-      size: TokenSyntax? = nil, 
-      _ unexpectedBetweenSizeAndComma: UnexpectedNodesSyntax? = nil, 
-      comma: TokenSyntax? = nil, 
-      _ unexpectedBetweenCommaAndAlignment: UnexpectedNodesSyntax? = nil, 
-      alignment: TokenSyntax? = nil, 
-      _ unexpectedBetweenAlignmentAndRightParen: UnexpectedNodesSyntax? = nil, 
-      rightParen: TokenSyntax? = nil, 
-      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeTypeIdentifier: UnexpectedNodesSyntax? = nil,
+      typeIdentifier: T,
+      _ unexpectedBetweenTypeIdentifierAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax = .colonToken(),
+      _ unexpectedBetweenColonAndLayoutConstraint: UnexpectedNodesSyntax? = nil,
+      layoutConstraint: TokenSyntax,
+      _ unexpectedBetweenLayoutConstraintAndLeftParen: UnexpectedNodesSyntax? = nil,
+      leftParen: TokenSyntax? = nil,
+      _ unexpectedBetweenLeftParenAndSize: UnexpectedNodesSyntax? = nil,
+      size: TokenSyntax? = nil,
+      _ unexpectedBetweenSizeAndComma: UnexpectedNodesSyntax? = nil,
+      comma: TokenSyntax? = nil,
+      _ unexpectedBetweenCommaAndAlignment: UnexpectedNodesSyntax? = nil,
+      alignment: TokenSyntax? = nil,
+      _ unexpectedBetweenAlignmentAndRightParen: UnexpectedNodesSyntax? = nil,
+      rightParen: TokenSyntax? = nil,
+      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -11584,7 +11584,7 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenAlignmentAndRightParen, 
             rightParen, 
             unexpectedAfterRightParen
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeTypeIdentifier?.raw, 
           typeIdentifier.raw, 
@@ -11605,11 +11605,11 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterRightParen?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.layoutRequirement, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.layoutRequirement,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -11800,8 +11800,8 @@ public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .matchingPatternCondition else { 
-      return nil 
+    guard node.raw.kind == .matchingPatternCondition else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -11815,16 +11815,16 @@ public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init<P: PatternSyntaxProtocol>(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeCaseKeyword: UnexpectedNodesSyntax? = nil, 
-      caseKeyword: TokenSyntax = .keyword(.case), 
-      _ unexpectedBetweenCaseKeywordAndPattern: UnexpectedNodesSyntax? = nil, 
-      pattern: P, 
-      _ unexpectedBetweenPatternAndTypeAnnotation: UnexpectedNodesSyntax? = nil, 
-      typeAnnotation: TypeAnnotationSyntax? = nil, 
-      _ unexpectedBetweenTypeAnnotationAndInitializer: UnexpectedNodesSyntax? = nil, 
-      initializer: InitializerClauseSyntax, 
-      _ unexpectedAfterInitializer: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeCaseKeyword: UnexpectedNodesSyntax? = nil,
+      caseKeyword: TokenSyntax = .keyword(.case),
+      _ unexpectedBetweenCaseKeywordAndPattern: UnexpectedNodesSyntax? = nil,
+      pattern: P,
+      _ unexpectedBetweenPatternAndTypeAnnotation: UnexpectedNodesSyntax? = nil,
+      typeAnnotation: TypeAnnotationSyntax? = nil,
+      _ unexpectedBetweenTypeAnnotationAndInitializer: UnexpectedNodesSyntax? = nil,
+      initializer: InitializerClauseSyntax,
+      _ unexpectedAfterInitializer: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -11840,7 +11840,7 @@ public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenTypeAnnotationAndInitializer, 
             initializer, 
             unexpectedAfterInitializer
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeCaseKeyword?.raw, 
           caseKeyword.raw, 
@@ -11853,11 +11853,11 @@ public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterInitializer?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.matchingPatternCondition, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.matchingPatternCondition,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -11968,8 +11968,8 @@ public struct MemberDeclBlockSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .memberDeclBlock else { 
-      return nil 
+    guard node.raw.kind == .memberDeclBlock else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -11983,14 +11983,14 @@ public struct MemberDeclBlockSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeLeftBrace: UnexpectedNodesSyntax? = nil, 
-      leftBrace: TokenSyntax = .leftBraceToken(), 
-      _ unexpectedBetweenLeftBraceAndMembers: UnexpectedNodesSyntax? = nil, 
-      members: MemberDeclListSyntax, 
-      _ unexpectedBetweenMembersAndRightBrace: UnexpectedNodesSyntax? = nil, 
-      rightBrace: TokenSyntax = .rightBraceToken(), 
-      _ unexpectedAfterRightBrace: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeLeftBrace: UnexpectedNodesSyntax? = nil,
+      leftBrace: TokenSyntax = .leftBraceToken(),
+      _ unexpectedBetweenLeftBraceAndMembers: UnexpectedNodesSyntax? = nil,
+      members: MemberDeclListSyntax,
+      _ unexpectedBetweenMembersAndRightBrace: UnexpectedNodesSyntax? = nil,
+      rightBrace: TokenSyntax = .rightBraceToken(),
+      _ unexpectedAfterRightBrace: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -12004,7 +12004,7 @@ public struct MemberDeclBlockSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenMembersAndRightBrace, 
             rightBrace, 
             unexpectedAfterRightBrace
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftBrace?.raw, 
           leftBrace.raw, 
@@ -12015,11 +12015,11 @@ public struct MemberDeclBlockSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterRightBrace?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.memberDeclBlock, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.memberDeclBlock,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -12075,8 +12075,8 @@ public struct MemberDeclBlockSyntax: SyntaxProtocol, SyntaxHashable {
     if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.memberDeclList, 
-                                      from: [element.raw], arena: arena)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.memberDeclList,
+                                        from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(at: 3, with: collection, arena: arena)
     return MemberDeclBlockSyntax(newData)
@@ -12129,8 +12129,8 @@ public struct MemberDeclListItemSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .memberDeclListItem else { 
-      return nil 
+    guard node.raw.kind == .memberDeclListItem else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -12144,12 +12144,12 @@ public struct MemberDeclListItemSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init<D: DeclSyntaxProtocol>(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeDecl: UnexpectedNodesSyntax? = nil, 
-      decl: D, 
-      _ unexpectedBetweenDeclAndSemicolon: UnexpectedNodesSyntax? = nil, 
-      semicolon: TokenSyntax? = nil, 
-      _ unexpectedAfterSemicolon: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeDecl: UnexpectedNodesSyntax? = nil,
+      decl: D,
+      _ unexpectedBetweenDeclAndSemicolon: UnexpectedNodesSyntax? = nil,
+      semicolon: TokenSyntax? = nil,
+      _ unexpectedAfterSemicolon: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -12161,7 +12161,7 @@ public struct MemberDeclListItemSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenDeclAndSemicolon, 
             semicolon, 
             unexpectedAfterSemicolon
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeDecl?.raw, 
           decl.raw, 
@@ -12170,11 +12170,11 @@ public struct MemberDeclListItemSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterSemicolon?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.memberDeclListItem, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.memberDeclListItem,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -12247,8 +12247,8 @@ public struct MissingSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .missing else { 
-      return nil 
+    guard node.raw.kind == .missing else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -12262,20 +12262,20 @@ public struct MissingSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-    leadingTrivia: Trivia? = nil, 
-    _ unexpected: UnexpectedNodesSyntax? = nil, 
+    leadingTrivia: Trivia? = nil,
+    _ unexpected: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpected))) {(arena, _) in 
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpected))) {(arena, _) in
       let layout: [RawSyntax?] = [unexpected?.raw]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.missing, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.missing,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -12304,8 +12304,8 @@ public struct MultipleTrailingClosureElementSyntax: SyntaxProtocol, SyntaxHashab
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .multipleTrailingClosureElement else { 
-      return nil 
+    guard node.raw.kind == .multipleTrailingClosureElement else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -12319,14 +12319,14 @@ public struct MultipleTrailingClosureElementSyntax: SyntaxProtocol, SyntaxHashab
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeLabel: UnexpectedNodesSyntax? = nil, 
-      label: TokenSyntax, 
-      _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil, 
-      colon: TokenSyntax = .colonToken(), 
-      _ unexpectedBetweenColonAndClosure: UnexpectedNodesSyntax? = nil, 
-      closure: ClosureExprSyntax, 
-      _ unexpectedAfterClosure: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeLabel: UnexpectedNodesSyntax? = nil,
+      label: TokenSyntax,
+      _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax = .colonToken(),
+      _ unexpectedBetweenColonAndClosure: UnexpectedNodesSyntax? = nil,
+      closure: ClosureExprSyntax,
+      _ unexpectedAfterClosure: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -12340,7 +12340,7 @@ public struct MultipleTrailingClosureElementSyntax: SyntaxProtocol, SyntaxHashab
             unexpectedBetweenColonAndClosure, 
             closure, 
             unexpectedAfterClosure
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLabel?.raw, 
           label.raw, 
@@ -12351,11 +12351,11 @@ public struct MultipleTrailingClosureElementSyntax: SyntaxProtocol, SyntaxHashab
           unexpectedAfterClosure?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.multipleTrailingClosureElement, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.multipleTrailingClosureElement,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -12446,8 +12446,8 @@ public struct ObjCSelectorPieceSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .objCSelectorPiece else { 
-      return nil 
+    guard node.raw.kind == .objCSelectorPiece else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -12461,12 +12461,12 @@ public struct ObjCSelectorPieceSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeName: UnexpectedNodesSyntax? = nil, 
-      name: TokenSyntax? = nil, 
-      _ unexpectedBetweenNameAndColon: UnexpectedNodesSyntax? = nil, 
-      colon: TokenSyntax? = nil, 
-      _ unexpectedAfterColon: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeName: UnexpectedNodesSyntax? = nil,
+      name: TokenSyntax? = nil,
+      _ unexpectedBetweenNameAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax? = nil,
+      _ unexpectedAfterColon: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -12478,7 +12478,7 @@ public struct ObjCSelectorPieceSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenNameAndColon, 
             colon, 
             unexpectedAfterColon
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeName?.raw, 
           name?.raw, 
@@ -12487,11 +12487,11 @@ public struct ObjCSelectorPieceSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterColon?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.objCSelectorPiece, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.objCSelectorPiece,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -12562,8 +12562,8 @@ public struct OpaqueReturnTypeOfAttributeArgumentsSyntax: SyntaxProtocol, Syntax
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .opaqueReturnTypeOfAttributeArguments else { 
-      return nil 
+    guard node.raw.kind == .opaqueReturnTypeOfAttributeArguments else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -12577,14 +12577,14 @@ public struct OpaqueReturnTypeOfAttributeArgumentsSyntax: SyntaxProtocol, Syntax
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeMangledName: UnexpectedNodesSyntax? = nil, 
-      mangledName: StringLiteralExprSyntax, 
-      _ unexpectedBetweenMangledNameAndComma: UnexpectedNodesSyntax? = nil, 
-      comma: TokenSyntax = .commaToken(), 
-      _ unexpectedBetweenCommaAndOrdinal: UnexpectedNodesSyntax? = nil, 
-      ordinal: TokenSyntax, 
-      _ unexpectedAfterOrdinal: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeMangledName: UnexpectedNodesSyntax? = nil,
+      mangledName: StringLiteralExprSyntax,
+      _ unexpectedBetweenMangledNameAndComma: UnexpectedNodesSyntax? = nil,
+      comma: TokenSyntax = .commaToken(),
+      _ unexpectedBetweenCommaAndOrdinal: UnexpectedNodesSyntax? = nil,
+      ordinal: TokenSyntax,
+      _ unexpectedAfterOrdinal: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -12598,7 +12598,7 @@ public struct OpaqueReturnTypeOfAttributeArgumentsSyntax: SyntaxProtocol, Syntax
             unexpectedBetweenCommaAndOrdinal, 
             ordinal, 
             unexpectedAfterOrdinal
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeMangledName?.raw, 
           mangledName.raw, 
@@ -12609,11 +12609,11 @@ public struct OpaqueReturnTypeOfAttributeArgumentsSyntax: SyntaxProtocol, Syntax
           unexpectedAfterOrdinal?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.opaqueReturnTypeOfAttributeArguments, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.opaqueReturnTypeOfAttributeArguments,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -12706,8 +12706,8 @@ public struct OperatorPrecedenceAndTypesSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .operatorPrecedenceAndTypes else { 
-      return nil 
+    guard node.raw.kind == .operatorPrecedenceAndTypes else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -12721,14 +12721,14 @@ public struct OperatorPrecedenceAndTypesSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeColon: UnexpectedNodesSyntax? = nil, 
-      colon: TokenSyntax = .colonToken(), 
-      _ unexpectedBetweenColonAndPrecedenceGroup: UnexpectedNodesSyntax? = nil, 
-      precedenceGroup: TokenSyntax, 
-      _ unexpectedBetweenPrecedenceGroupAndDesignatedTypes: UnexpectedNodesSyntax? = nil, 
-      designatedTypes: DesignatedTypeListSyntax, 
-      _ unexpectedAfterDesignatedTypes: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax = .colonToken(),
+      _ unexpectedBetweenColonAndPrecedenceGroup: UnexpectedNodesSyntax? = nil,
+      precedenceGroup: TokenSyntax,
+      _ unexpectedBetweenPrecedenceGroupAndDesignatedTypes: UnexpectedNodesSyntax? = nil,
+      designatedTypes: DesignatedTypeListSyntax,
+      _ unexpectedAfterDesignatedTypes: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -12742,7 +12742,7 @@ public struct OperatorPrecedenceAndTypesSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenPrecedenceGroupAndDesignatedTypes, 
             designatedTypes, 
             unexpectedAfterDesignatedTypes
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeColon?.raw, 
           colon.raw, 
@@ -12753,11 +12753,11 @@ public struct OperatorPrecedenceAndTypesSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterDesignatedTypes?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.operatorPrecedenceAndTypes, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.operatorPrecedenceAndTypes,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -12833,8 +12833,8 @@ public struct OperatorPrecedenceAndTypesSyntax: SyntaxProtocol, SyntaxHashable {
     if let col = raw.layoutView!.children[5] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.designatedTypeList, 
-                                      from: [element.raw], arena: arena)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.designatedTypeList,
+                                        from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(at: 5, with: collection, arena: arena)
     return OperatorPrecedenceAndTypesSyntax(newData)
@@ -12869,8 +12869,8 @@ public struct OptionalBindingConditionSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .optionalBindingCondition else { 
-      return nil 
+    guard node.raw.kind == .optionalBindingCondition else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -12884,16 +12884,16 @@ public struct OptionalBindingConditionSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init<P: PatternSyntaxProtocol>(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeBindingKeyword: UnexpectedNodesSyntax? = nil, 
-      bindingKeyword: TokenSyntax, 
-      _ unexpectedBetweenBindingKeywordAndPattern: UnexpectedNodesSyntax? = nil, 
-      pattern: P, 
-      _ unexpectedBetweenPatternAndTypeAnnotation: UnexpectedNodesSyntax? = nil, 
-      typeAnnotation: TypeAnnotationSyntax? = nil, 
-      _ unexpectedBetweenTypeAnnotationAndInitializer: UnexpectedNodesSyntax? = nil, 
-      initializer: InitializerClauseSyntax? = nil, 
-      _ unexpectedAfterInitializer: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeBindingKeyword: UnexpectedNodesSyntax? = nil,
+      bindingKeyword: TokenSyntax,
+      _ unexpectedBetweenBindingKeywordAndPattern: UnexpectedNodesSyntax? = nil,
+      pattern: P,
+      _ unexpectedBetweenPatternAndTypeAnnotation: UnexpectedNodesSyntax? = nil,
+      typeAnnotation: TypeAnnotationSyntax? = nil,
+      _ unexpectedBetweenTypeAnnotationAndInitializer: UnexpectedNodesSyntax? = nil,
+      initializer: InitializerClauseSyntax? = nil,
+      _ unexpectedAfterInitializer: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -12909,7 +12909,7 @@ public struct OptionalBindingConditionSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenTypeAnnotationAndInitializer, 
             initializer, 
             unexpectedAfterInitializer
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeBindingKeyword?.raw, 
           bindingKeyword.raw, 
@@ -12922,11 +12922,11 @@ public struct OptionalBindingConditionSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterInitializer?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.optionalBindingCondition, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.optionalBindingCondition,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -13037,8 +13037,8 @@ public struct OriginallyDefinedInArgumentsSyntax: SyntaxProtocol, SyntaxHashable
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .originallyDefinedInArguments else { 
-      return nil 
+    guard node.raw.kind == .originallyDefinedInArguments else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -13052,18 +13052,18 @@ public struct OriginallyDefinedInArgumentsSyntax: SyntaxProtocol, SyntaxHashable
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeModuleLabel: UnexpectedNodesSyntax? = nil, 
-      moduleLabel: TokenSyntax = .keyword(.module), 
-      _ unexpectedBetweenModuleLabelAndColon: UnexpectedNodesSyntax? = nil, 
-      colon: TokenSyntax = .colonToken(), 
-      _ unexpectedBetweenColonAndModuleName: UnexpectedNodesSyntax? = nil, 
-      moduleName: StringLiteralExprSyntax, 
-      _ unexpectedBetweenModuleNameAndComma: UnexpectedNodesSyntax? = nil, 
-      comma: TokenSyntax = .commaToken(), 
-      _ unexpectedBetweenCommaAndPlatforms: UnexpectedNodesSyntax? = nil, 
-      platforms: AvailabilityVersionRestrictionListSyntax, 
-      _ unexpectedAfterPlatforms: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeModuleLabel: UnexpectedNodesSyntax? = nil,
+      moduleLabel: TokenSyntax = .keyword(.module),
+      _ unexpectedBetweenModuleLabelAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax = .colonToken(),
+      _ unexpectedBetweenColonAndModuleName: UnexpectedNodesSyntax? = nil,
+      moduleName: StringLiteralExprSyntax,
+      _ unexpectedBetweenModuleNameAndComma: UnexpectedNodesSyntax? = nil,
+      comma: TokenSyntax = .commaToken(),
+      _ unexpectedBetweenCommaAndPlatforms: UnexpectedNodesSyntax? = nil,
+      platforms: AvailabilityVersionRestrictionListSyntax,
+      _ unexpectedAfterPlatforms: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -13081,7 +13081,7 @@ public struct OriginallyDefinedInArgumentsSyntax: SyntaxProtocol, SyntaxHashable
             unexpectedBetweenCommaAndPlatforms, 
             platforms, 
             unexpectedAfterPlatforms
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeModuleLabel?.raw, 
           moduleLabel.raw, 
@@ -13096,11 +13096,11 @@ public struct OriginallyDefinedInArgumentsSyntax: SyntaxProtocol, SyntaxHashable
           unexpectedAfterPlatforms?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.originallyDefinedInArguments, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.originallyDefinedInArguments,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -13210,8 +13210,8 @@ public struct OriginallyDefinedInArgumentsSyntax: SyntaxProtocol, SyntaxHashable
     if let col = raw.layoutView!.children[9] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.availabilityVersionRestrictionList, 
-                                      from: [element.raw], arena: arena)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.availabilityVersionRestrictionList,
+                                        from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(at: 9, with: collection, arena: arena)
     return OriginallyDefinedInArgumentsSyntax(newData)
@@ -13250,8 +13250,8 @@ public struct ParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .parameterClause else { 
-      return nil 
+    guard node.raw.kind == .parameterClause else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -13265,14 +13265,14 @@ public struct ParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil, 
-      leftParen: TokenSyntax = .leftParenToken(), 
-      _ unexpectedBetweenLeftParenAndParameterList: UnexpectedNodesSyntax? = nil, 
-      parameterList: FunctionParameterListSyntax, 
-      _ unexpectedBetweenParameterListAndRightParen: UnexpectedNodesSyntax? = nil, 
-      rightParen: TokenSyntax = .rightParenToken(), 
-      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
+      leftParen: TokenSyntax = .leftParenToken(),
+      _ unexpectedBetweenLeftParenAndParameterList: UnexpectedNodesSyntax? = nil,
+      parameterList: FunctionParameterListSyntax,
+      _ unexpectedBetweenParameterListAndRightParen: UnexpectedNodesSyntax? = nil,
+      rightParen: TokenSyntax = .rightParenToken(),
+      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -13286,7 +13286,7 @@ public struct ParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenParameterListAndRightParen, 
             rightParen, 
             unexpectedAfterRightParen
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftParen?.raw, 
           leftParen.raw, 
@@ -13297,11 +13297,11 @@ public struct ParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterRightParen?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.parameterClause, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.parameterClause,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -13357,8 +13357,8 @@ public struct ParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
     if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.functionParameterList, 
-                                      from: [element.raw], arena: arena)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.functionParameterList,
+                                        from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(at: 3, with: collection, arena: arena)
     return ParameterClauseSyntax(newData)
@@ -13421,8 +13421,8 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
       }
     }
     
-    init(_ data: SyntaxData) { 
-      self.init(Syntax(data))! 
+    init(_ data: SyntaxData) {
+      self.init(Syntax(data))!
     }
     
     public init(_ node: AccessorBlockSyntax) {
@@ -13436,11 +13436,11 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
     public init?<S: SyntaxProtocol>(_ node: S) {
       if let node = node.as(AccessorBlockSyntax.self) {
         self = .accessors(node)
-        return 
+        return
       }
       if let node = node.as(CodeBlockSyntax.self) {
         self = .getter(node)
-        return 
+        return
       }
       return nil
     }
@@ -13453,8 +13453,8 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .patternBinding else { 
-      return nil 
+    guard node.raw.kind == .patternBinding else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -13468,18 +13468,18 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init<P: PatternSyntaxProtocol>(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforePattern: UnexpectedNodesSyntax? = nil, 
-      pattern: P, 
-      _ unexpectedBetweenPatternAndTypeAnnotation: UnexpectedNodesSyntax? = nil, 
-      typeAnnotation: TypeAnnotationSyntax? = nil, 
-      _ unexpectedBetweenTypeAnnotationAndInitializer: UnexpectedNodesSyntax? = nil, 
-      initializer: InitializerClauseSyntax? = nil, 
-      _ unexpectedBetweenInitializerAndAccessor: UnexpectedNodesSyntax? = nil, 
-      accessor: Accessor? = nil, 
-      _ unexpectedBetweenAccessorAndTrailingComma: UnexpectedNodesSyntax? = nil, 
-      trailingComma: TokenSyntax? = nil, 
-      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforePattern: UnexpectedNodesSyntax? = nil,
+      pattern: P,
+      _ unexpectedBetweenPatternAndTypeAnnotation: UnexpectedNodesSyntax? = nil,
+      typeAnnotation: TypeAnnotationSyntax? = nil,
+      _ unexpectedBetweenTypeAnnotationAndInitializer: UnexpectedNodesSyntax? = nil,
+      initializer: InitializerClauseSyntax? = nil,
+      _ unexpectedBetweenInitializerAndAccessor: UnexpectedNodesSyntax? = nil,
+      accessor: Accessor? = nil,
+      _ unexpectedBetweenAccessorAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingComma: TokenSyntax? = nil,
+      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -13497,7 +13497,7 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenAccessorAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforePattern?.raw, 
           pattern.raw, 
@@ -13512,11 +13512,11 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterTrailingComma?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.patternBinding, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.patternBinding,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -13647,8 +13647,8 @@ public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .poundSourceLocationArgs else { 
-      return nil 
+    guard node.raw.kind == .poundSourceLocationArgs else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -13662,22 +13662,22 @@ public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeFileArgLabel: UnexpectedNodesSyntax? = nil, 
-      fileArgLabel: TokenSyntax = .keyword(.file), 
-      _ unexpectedBetweenFileArgLabelAndFileArgColon: UnexpectedNodesSyntax? = nil, 
-      fileArgColon: TokenSyntax = .colonToken(), 
-      _ unexpectedBetweenFileArgColonAndFileName: UnexpectedNodesSyntax? = nil, 
-      fileName: StringLiteralExprSyntax, 
-      _ unexpectedBetweenFileNameAndComma: UnexpectedNodesSyntax? = nil, 
-      comma: TokenSyntax = .commaToken(), 
-      _ unexpectedBetweenCommaAndLineArgLabel: UnexpectedNodesSyntax? = nil, 
-      lineArgLabel: TokenSyntax = .keyword(.line), 
-      _ unexpectedBetweenLineArgLabelAndLineArgColon: UnexpectedNodesSyntax? = nil, 
-      lineArgColon: TokenSyntax = .colonToken(), 
-      _ unexpectedBetweenLineArgColonAndLineNumber: UnexpectedNodesSyntax? = nil, 
-      lineNumber: TokenSyntax, 
-      _ unexpectedAfterLineNumber: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeFileArgLabel: UnexpectedNodesSyntax? = nil,
+      fileArgLabel: TokenSyntax = .keyword(.file),
+      _ unexpectedBetweenFileArgLabelAndFileArgColon: UnexpectedNodesSyntax? = nil,
+      fileArgColon: TokenSyntax = .colonToken(),
+      _ unexpectedBetweenFileArgColonAndFileName: UnexpectedNodesSyntax? = nil,
+      fileName: StringLiteralExprSyntax,
+      _ unexpectedBetweenFileNameAndComma: UnexpectedNodesSyntax? = nil,
+      comma: TokenSyntax = .commaToken(),
+      _ unexpectedBetweenCommaAndLineArgLabel: UnexpectedNodesSyntax? = nil,
+      lineArgLabel: TokenSyntax = .keyword(.line),
+      _ unexpectedBetweenLineArgLabelAndLineArgColon: UnexpectedNodesSyntax? = nil,
+      lineArgColon: TokenSyntax = .colonToken(),
+      _ unexpectedBetweenLineArgColonAndLineNumber: UnexpectedNodesSyntax? = nil,
+      lineNumber: TokenSyntax,
+      _ unexpectedAfterLineNumber: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -13699,7 +13699,7 @@ public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenLineArgColonAndLineNumber, 
             lineNumber, 
             unexpectedAfterLineNumber
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeFileArgLabel?.raw, 
           fileArgLabel.raw, 
@@ -13718,11 +13718,11 @@ public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterLineNumber?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.poundSourceLocationArgs, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.poundSourceLocationArgs,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -13893,8 +13893,8 @@ public struct PrecedenceGroupAssignmentSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .precedenceGroupAssignment else { 
-      return nil 
+    guard node.raw.kind == .precedenceGroupAssignment else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -13908,14 +13908,14 @@ public struct PrecedenceGroupAssignmentSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeAssignmentKeyword: UnexpectedNodesSyntax? = nil, 
-      assignmentKeyword: TokenSyntax = .keyword(.assignment), 
-      _ unexpectedBetweenAssignmentKeywordAndColon: UnexpectedNodesSyntax? = nil, 
-      colon: TokenSyntax = .colonToken(), 
-      _ unexpectedBetweenColonAndFlag: UnexpectedNodesSyntax? = nil, 
-      flag: TokenSyntax, 
-      _ unexpectedAfterFlag: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeAssignmentKeyword: UnexpectedNodesSyntax? = nil,
+      assignmentKeyword: TokenSyntax = .keyword(.assignment),
+      _ unexpectedBetweenAssignmentKeywordAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax = .colonToken(),
+      _ unexpectedBetweenColonAndFlag: UnexpectedNodesSyntax? = nil,
+      flag: TokenSyntax,
+      _ unexpectedAfterFlag: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -13929,7 +13929,7 @@ public struct PrecedenceGroupAssignmentSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenColonAndFlag, 
             flag, 
             unexpectedAfterFlag
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAssignmentKeyword?.raw, 
           assignmentKeyword.raw, 
@@ -13940,11 +13940,11 @@ public struct PrecedenceGroupAssignmentSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterFlag?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.precedenceGroupAssignment, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.precedenceGroupAssignment,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -14036,8 +14036,8 @@ public struct PrecedenceGroupAssociativitySyntax: SyntaxProtocol, SyntaxHashable
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .precedenceGroupAssociativity else { 
-      return nil 
+    guard node.raw.kind == .precedenceGroupAssociativity else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -14051,14 +14051,14 @@ public struct PrecedenceGroupAssociativitySyntax: SyntaxProtocol, SyntaxHashable
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeAssociativityKeyword: UnexpectedNodesSyntax? = nil, 
-      associativityKeyword: TokenSyntax = .keyword(.associativity), 
-      _ unexpectedBetweenAssociativityKeywordAndColon: UnexpectedNodesSyntax? = nil, 
-      colon: TokenSyntax = .colonToken(), 
-      _ unexpectedBetweenColonAndValue: UnexpectedNodesSyntax? = nil, 
-      value: TokenSyntax, 
-      _ unexpectedAfterValue: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeAssociativityKeyword: UnexpectedNodesSyntax? = nil,
+      associativityKeyword: TokenSyntax = .keyword(.associativity),
+      _ unexpectedBetweenAssociativityKeywordAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax = .colonToken(),
+      _ unexpectedBetweenColonAndValue: UnexpectedNodesSyntax? = nil,
+      value: TokenSyntax,
+      _ unexpectedAfterValue: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -14072,7 +14072,7 @@ public struct PrecedenceGroupAssociativitySyntax: SyntaxProtocol, SyntaxHashable
             unexpectedBetweenColonAndValue, 
             value, 
             unexpectedAfterValue
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAssociativityKeyword?.raw, 
           associativityKeyword.raw, 
@@ -14083,11 +14083,11 @@ public struct PrecedenceGroupAssociativitySyntax: SyntaxProtocol, SyntaxHashable
           unexpectedAfterValue?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.precedenceGroupAssociativity, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.precedenceGroupAssociativity,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -14179,8 +14179,8 @@ public struct PrecedenceGroupNameElementSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .precedenceGroupNameElement else { 
-      return nil 
+    guard node.raw.kind == .precedenceGroupNameElement else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -14194,12 +14194,12 @@ public struct PrecedenceGroupNameElementSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeName: UnexpectedNodesSyntax? = nil, 
-      name: TokenSyntax, 
-      _ unexpectedBetweenNameAndTrailingComma: UnexpectedNodesSyntax? = nil, 
-      trailingComma: TokenSyntax? = nil, 
-      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeName: UnexpectedNodesSyntax? = nil,
+      name: TokenSyntax,
+      _ unexpectedBetweenNameAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingComma: TokenSyntax? = nil,
+      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -14211,7 +14211,7 @@ public struct PrecedenceGroupNameElementSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenNameAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeName?.raw, 
           name.raw, 
@@ -14220,11 +14220,11 @@ public struct PrecedenceGroupNameElementSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterTrailingComma?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.precedenceGroupNameElement, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.precedenceGroupNameElement,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -14295,8 +14295,8 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .precedenceGroupRelation else { 
-      return nil 
+    guard node.raw.kind == .precedenceGroupRelation else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -14310,14 +14310,14 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeHigherThanOrLowerThan: UnexpectedNodesSyntax? = nil, 
-      higherThanOrLowerThan: TokenSyntax, 
-      _ unexpectedBetweenHigherThanOrLowerThanAndColon: UnexpectedNodesSyntax? = nil, 
-      colon: TokenSyntax = .colonToken(), 
-      _ unexpectedBetweenColonAndOtherNames: UnexpectedNodesSyntax? = nil, 
-      otherNames: PrecedenceGroupNameListSyntax, 
-      _ unexpectedAfterOtherNames: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeHigherThanOrLowerThan: UnexpectedNodesSyntax? = nil,
+      higherThanOrLowerThan: TokenSyntax,
+      _ unexpectedBetweenHigherThanOrLowerThanAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax = .colonToken(),
+      _ unexpectedBetweenColonAndOtherNames: UnexpectedNodesSyntax? = nil,
+      otherNames: PrecedenceGroupNameListSyntax,
+      _ unexpectedAfterOtherNames: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -14331,7 +14331,7 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenColonAndOtherNames, 
             otherNames, 
             unexpectedAfterOtherNames
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeHigherThanOrLowerThan?.raw, 
           higherThanOrLowerThan.raw, 
@@ -14342,11 +14342,11 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterOtherNames?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.precedenceGroupRelation, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.precedenceGroupRelation,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -14422,8 +14422,8 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
     if let col = raw.layoutView!.children[5] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.precedenceGroupNameList, 
-                                      from: [element.raw], arena: arena)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.precedenceGroupNameList,
+                                        from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(at: 5, with: collection, arena: arena)
     return PrecedenceGroupRelationSyntax(newData)
@@ -14458,8 +14458,8 @@ public struct PrimaryAssociatedTypeClauseSyntax: SyntaxProtocol, SyntaxHashable 
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .primaryAssociatedTypeClause else { 
-      return nil 
+    guard node.raw.kind == .primaryAssociatedTypeClause else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -14473,14 +14473,14 @@ public struct PrimaryAssociatedTypeClauseSyntax: SyntaxProtocol, SyntaxHashable 
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeLeftAngleBracket: UnexpectedNodesSyntax? = nil, 
-      leftAngleBracket: TokenSyntax = .leftAngleToken(), 
-      _ unexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList: UnexpectedNodesSyntax? = nil, 
-      primaryAssociatedTypeList: PrimaryAssociatedTypeListSyntax, 
-      _ unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket: UnexpectedNodesSyntax? = nil, 
-      rightAngleBracket: TokenSyntax = .rightAngleToken(), 
-      _ unexpectedAfterRightAngleBracket: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeLeftAngleBracket: UnexpectedNodesSyntax? = nil,
+      leftAngleBracket: TokenSyntax = .leftAngleToken(),
+      _ unexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList: UnexpectedNodesSyntax? = nil,
+      primaryAssociatedTypeList: PrimaryAssociatedTypeListSyntax,
+      _ unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket: UnexpectedNodesSyntax? = nil,
+      rightAngleBracket: TokenSyntax = .rightAngleToken(),
+      _ unexpectedAfterRightAngleBracket: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -14494,7 +14494,7 @@ public struct PrimaryAssociatedTypeClauseSyntax: SyntaxProtocol, SyntaxHashable 
             unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket, 
             rightAngleBracket, 
             unexpectedAfterRightAngleBracket
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftAngleBracket?.raw, 
           leftAngleBracket.raw, 
@@ -14505,11 +14505,11 @@ public struct PrimaryAssociatedTypeClauseSyntax: SyntaxProtocol, SyntaxHashable 
           unexpectedAfterRightAngleBracket?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.primaryAssociatedTypeClause, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.primaryAssociatedTypeClause,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -14565,8 +14565,8 @@ public struct PrimaryAssociatedTypeClauseSyntax: SyntaxProtocol, SyntaxHashable 
     if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.primaryAssociatedTypeList, 
-                                      from: [element.raw], arena: arena)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.primaryAssociatedTypeList,
+                                        from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(at: 3, with: collection, arena: arena)
     return PrimaryAssociatedTypeClauseSyntax(newData)
@@ -14619,8 +14619,8 @@ public struct PrimaryAssociatedTypeSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .primaryAssociatedType else { 
-      return nil 
+    guard node.raw.kind == .primaryAssociatedType else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -14634,12 +14634,12 @@ public struct PrimaryAssociatedTypeSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeName: UnexpectedNodesSyntax? = nil, 
-      name: TokenSyntax, 
-      _ unexpectedBetweenNameAndTrailingComma: UnexpectedNodesSyntax? = nil, 
-      trailingComma: TokenSyntax? = nil, 
-      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeName: UnexpectedNodesSyntax? = nil,
+      name: TokenSyntax,
+      _ unexpectedBetweenNameAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingComma: TokenSyntax? = nil,
+      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -14651,7 +14651,7 @@ public struct PrimaryAssociatedTypeSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenNameAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeName?.raw, 
           name.raw, 
@@ -14660,11 +14660,11 @@ public struct PrimaryAssociatedTypeSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterTrailingComma?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.primaryAssociatedType, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.primaryAssociatedType,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -14735,8 +14735,8 @@ public struct QualifiedDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .qualifiedDeclName else { 
-      return nil 
+    guard node.raw.kind == .qualifiedDeclName else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -14750,16 +14750,16 @@ public struct QualifiedDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init<B: TypeSyntaxProtocol>(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeBaseType: UnexpectedNodesSyntax? = nil, 
-      baseType: B? = nil, 
-      _ unexpectedBetweenBaseTypeAndDot: UnexpectedNodesSyntax? = nil, 
-      dot: TokenSyntax? = nil, 
-      _ unexpectedBetweenDotAndName: UnexpectedNodesSyntax? = nil, 
-      name: TokenSyntax, 
-      _ unexpectedBetweenNameAndArguments: UnexpectedNodesSyntax? = nil, 
-      arguments: DeclNameArgumentsSyntax? = nil, 
-      _ unexpectedAfterArguments: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeBaseType: UnexpectedNodesSyntax? = nil,
+      baseType: B? = nil,
+      _ unexpectedBetweenBaseTypeAndDot: UnexpectedNodesSyntax? = nil,
+      dot: TokenSyntax? = nil,
+      _ unexpectedBetweenDotAndName: UnexpectedNodesSyntax? = nil,
+      name: TokenSyntax,
+      _ unexpectedBetweenNameAndArguments: UnexpectedNodesSyntax? = nil,
+      arguments: DeclNameArgumentsSyntax? = nil,
+      _ unexpectedAfterArguments: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -14775,7 +14775,7 @@ public struct QualifiedDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenNameAndArguments, 
             arguments, 
             unexpectedAfterArguments
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeBaseType?.raw, 
           baseType?.raw, 
@@ -14788,11 +14788,11 @@ public struct QualifiedDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterArguments?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.qualifiedDeclName, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.qualifiedDeclName,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -14811,29 +14811,29 @@ public struct QualifiedDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
   /// the base type would allow implicit conversion from a string literal,
   /// which the above initializer doesn't support.
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeBaseType: UnexpectedNodesSyntax? = nil, 
-      baseType: MissingTypeSyntax? = nil, 
-      _ unexpectedBetweenBaseTypeAndDot: UnexpectedNodesSyntax? = nil, 
-      dot: TokenSyntax? = nil, 
-      _ unexpectedBetweenDotAndName: UnexpectedNodesSyntax? = nil, 
-      name: TokenSyntax, 
-      _ unexpectedBetweenNameAndArguments: UnexpectedNodesSyntax? = nil, 
-      arguments: DeclNameArgumentsSyntax? = nil, 
-      _ unexpectedAfterArguments: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeBaseType: UnexpectedNodesSyntax? = nil,
+      baseType: MissingTypeSyntax? = nil,
+      _ unexpectedBetweenBaseTypeAndDot: UnexpectedNodesSyntax? = nil,
+      dot: TokenSyntax? = nil,
+      _ unexpectedBetweenDotAndName: UnexpectedNodesSyntax? = nil,
+      name: TokenSyntax,
+      _ unexpectedBetweenNameAndArguments: UnexpectedNodesSyntax? = nil,
+      arguments: DeclNameArgumentsSyntax? = nil,
+      _ unexpectedAfterArguments: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
     self.init(
-        leadingTrivia: leadingTrivia, 
-        unexpectedBeforeBaseType, 
-        baseType: Optional<TypeSyntax>.none, 
-        unexpectedBetweenBaseTypeAndDot, 
-        dot: dot, 
-        unexpectedBetweenDotAndName, 
-        name: name, 
-        unexpectedBetweenNameAndArguments, 
-        arguments: arguments, 
+        leadingTrivia: leadingTrivia,
+        unexpectedBeforeBaseType,
+        baseType: Optional<TypeSyntax>.none,
+        unexpectedBetweenBaseTypeAndDot,
+        dot: dot,
+        unexpectedBetweenDotAndName,
+        name: name,
+        unexpectedBetweenNameAndArguments,
+        arguments: arguments,
         unexpectedAfterArguments, 
         trailingTrivia: trailingTrivia
       )
@@ -14945,8 +14945,8 @@ public struct ReturnClauseSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .returnClause else { 
-      return nil 
+    guard node.raw.kind == .returnClause else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -14960,12 +14960,12 @@ public struct ReturnClauseSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init<R: TypeSyntaxProtocol>(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeArrow: UnexpectedNodesSyntax? = nil, 
-      arrow: TokenSyntax = .arrowToken(), 
-      _ unexpectedBetweenArrowAndReturnType: UnexpectedNodesSyntax? = nil, 
-      returnType: R, 
-      _ unexpectedAfterReturnType: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeArrow: UnexpectedNodesSyntax? = nil,
+      arrow: TokenSyntax = .arrowToken(),
+      _ unexpectedBetweenArrowAndReturnType: UnexpectedNodesSyntax? = nil,
+      returnType: R,
+      _ unexpectedAfterReturnType: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -14977,7 +14977,7 @@ public struct ReturnClauseSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenArrowAndReturnType, 
             returnType, 
             unexpectedAfterReturnType
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeArrow?.raw, 
           arrow.raw, 
@@ -14986,11 +14986,11 @@ public struct ReturnClauseSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterReturnType?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.returnClause, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.returnClause,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -15061,8 +15061,8 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .sameTypeRequirement else { 
-      return nil 
+    guard node.raw.kind == .sameTypeRequirement else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -15076,14 +15076,14 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init<L: TypeSyntaxProtocol, R: TypeSyntaxProtocol>(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeLeftTypeIdentifier: UnexpectedNodesSyntax? = nil, 
-      leftTypeIdentifier: L, 
-      _ unexpectedBetweenLeftTypeIdentifierAndEqualityToken: UnexpectedNodesSyntax? = nil, 
-      equalityToken: TokenSyntax, 
-      _ unexpectedBetweenEqualityTokenAndRightTypeIdentifier: UnexpectedNodesSyntax? = nil, 
-      rightTypeIdentifier: R, 
-      _ unexpectedAfterRightTypeIdentifier: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeLeftTypeIdentifier: UnexpectedNodesSyntax? = nil,
+      leftTypeIdentifier: L,
+      _ unexpectedBetweenLeftTypeIdentifierAndEqualityToken: UnexpectedNodesSyntax? = nil,
+      equalityToken: TokenSyntax,
+      _ unexpectedBetweenEqualityTokenAndRightTypeIdentifier: UnexpectedNodesSyntax? = nil,
+      rightTypeIdentifier: R,
+      _ unexpectedAfterRightTypeIdentifier: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -15097,7 +15097,7 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenEqualityTokenAndRightTypeIdentifier, 
             rightTypeIdentifier, 
             unexpectedAfterRightTypeIdentifier
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftTypeIdentifier?.raw, 
           leftTypeIdentifier.raw, 
@@ -15108,11 +15108,11 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterRightTypeIdentifier?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.sameTypeRequirement, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.sameTypeRequirement,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -15203,8 +15203,8 @@ public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .sourceFile else { 
-      return nil 
+    guard node.raw.kind == .sourceFile else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -15218,12 +15218,12 @@ public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeStatements: UnexpectedNodesSyntax? = nil, 
-      statements: CodeBlockItemListSyntax, 
-      _ unexpectedBetweenStatementsAndEOFToken: UnexpectedNodesSyntax? = nil, 
-      eofToken: TokenSyntax = .eof(), 
-      _ unexpectedAfterEOFToken: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeStatements: UnexpectedNodesSyntax? = nil,
+      statements: CodeBlockItemListSyntax,
+      _ unexpectedBetweenStatementsAndEOFToken: UnexpectedNodesSyntax? = nil,
+      eofToken: TokenSyntax = .eof(),
+      _ unexpectedAfterEOFToken: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -15235,7 +15235,7 @@ public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenStatementsAndEOFToken, 
             eofToken, 
             unexpectedAfterEOFToken
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeStatements?.raw, 
           statements.raw, 
@@ -15244,11 +15244,11 @@ public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterEOFToken?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.sourceFile, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.sourceFile,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -15286,8 +15286,8 @@ public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable {
     if let col = raw.layoutView!.children[1] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.codeBlockItemList, 
-                                      from: [element.raw], arena: arena)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.codeBlockItemList,
+                                        from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(at: 1, with: collection, arena: arena)
     return SourceFileSyntax(newData)
@@ -15338,8 +15338,8 @@ public struct StringSegmentSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .stringSegment else { 
-      return nil 
+    guard node.raw.kind == .stringSegment else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -15353,23 +15353,23 @@ public struct StringSegmentSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeContent: UnexpectedNodesSyntax? = nil, 
-      content: TokenSyntax, 
-      _ unexpectedAfterContent: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeContent: UnexpectedNodesSyntax? = nil,
+      content: TokenSyntax,
+      _ unexpectedAfterContent: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeContent, content, unexpectedAfterContent))) {(arena, _) in 
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeContent, content, unexpectedAfterContent))) {(arena, _) in
       let layout: [RawSyntax?] = [unexpectedBeforeContent?.raw, content.raw, unexpectedAfterContent?.raw]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.stringSegment, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.stringSegment,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -15416,8 +15416,8 @@ public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .switchCaseLabel else { 
-      return nil 
+    guard node.raw.kind == .switchCaseLabel else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -15431,14 +15431,14 @@ public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeCaseKeyword: UnexpectedNodesSyntax? = nil, 
-      caseKeyword: TokenSyntax = .keyword(.case), 
-      _ unexpectedBetweenCaseKeywordAndCaseItems: UnexpectedNodesSyntax? = nil, 
-      caseItems: CaseItemListSyntax, 
-      _ unexpectedBetweenCaseItemsAndColon: UnexpectedNodesSyntax? = nil, 
-      colon: TokenSyntax = .colonToken(), 
-      _ unexpectedAfterColon: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeCaseKeyword: UnexpectedNodesSyntax? = nil,
+      caseKeyword: TokenSyntax = .keyword(.case),
+      _ unexpectedBetweenCaseKeywordAndCaseItems: UnexpectedNodesSyntax? = nil,
+      caseItems: CaseItemListSyntax,
+      _ unexpectedBetweenCaseItemsAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax = .colonToken(),
+      _ unexpectedAfterColon: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -15452,7 +15452,7 @@ public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenCaseItemsAndColon, 
             colon, 
             unexpectedAfterColon
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeCaseKeyword?.raw, 
           caseKeyword.raw, 
@@ -15463,11 +15463,11 @@ public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterColon?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.switchCaseLabel, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.switchCaseLabel,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -15523,8 +15523,8 @@ public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable {
     if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.caseItemList, 
-                                      from: [element.raw], arena: arena)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.caseItemList,
+                                        from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(at: 3, with: collection, arena: arena)
     return SwitchCaseLabelSyntax(newData)
@@ -15587,8 +15587,8 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
       }
     }
     
-    init(_ data: SyntaxData) { 
-      self.init(Syntax(data))! 
+    init(_ data: SyntaxData) {
+      self.init(Syntax(data))!
     }
     
     public init(_ node: SwitchDefaultLabelSyntax) {
@@ -15602,11 +15602,11 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
     public init?<S: SyntaxProtocol>(_ node: S) {
       if let node = node.as(SwitchDefaultLabelSyntax.self) {
         self = .default(node)
-        return 
+        return
       }
       if let node = node.as(SwitchCaseLabelSyntax.self) {
         self = .case(node)
-        return 
+        return
       }
       return nil
     }
@@ -15619,8 +15619,8 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .switchCase else { 
-      return nil 
+    guard node.raw.kind == .switchCase else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -15634,14 +15634,14 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeUnknownAttr: UnexpectedNodesSyntax? = nil, 
-      unknownAttr: AttributeSyntax? = nil, 
-      _ unexpectedBetweenUnknownAttrAndLabel: UnexpectedNodesSyntax? = nil, 
-      label: Label, 
-      _ unexpectedBetweenLabelAndStatements: UnexpectedNodesSyntax? = nil, 
-      statements: CodeBlockItemListSyntax, 
-      _ unexpectedAfterStatements: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeUnknownAttr: UnexpectedNodesSyntax? = nil,
+      unknownAttr: AttributeSyntax? = nil,
+      _ unexpectedBetweenUnknownAttrAndLabel: UnexpectedNodesSyntax? = nil,
+      label: Label,
+      _ unexpectedBetweenLabelAndStatements: UnexpectedNodesSyntax? = nil,
+      statements: CodeBlockItemListSyntax,
+      _ unexpectedAfterStatements: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -15655,7 +15655,7 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenLabelAndStatements, 
             statements, 
             unexpectedAfterStatements
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeUnknownAttr?.raw, 
           unknownAttr?.raw, 
@@ -15666,11 +15666,11 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterStatements?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.switchCase, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.switchCase,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -15744,8 +15744,8 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
     if let col = raw.layoutView!.children[5] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.codeBlockItemList, 
-                                      from: [element.raw], arena: arena)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.codeBlockItemList,
+                                        from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(at: 5, with: collection, arena: arena)
     return SwitchCaseSyntax(newData)
@@ -15780,8 +15780,8 @@ public struct SwitchDefaultLabelSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .switchDefaultLabel else { 
-      return nil 
+    guard node.raw.kind == .switchDefaultLabel else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -15795,12 +15795,12 @@ public struct SwitchDefaultLabelSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeDefaultKeyword: UnexpectedNodesSyntax? = nil, 
-      defaultKeyword: TokenSyntax = .keyword(.default), 
-      _ unexpectedBetweenDefaultKeywordAndColon: UnexpectedNodesSyntax? = nil, 
-      colon: TokenSyntax = .colonToken(), 
-      _ unexpectedAfterColon: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeDefaultKeyword: UnexpectedNodesSyntax? = nil,
+      defaultKeyword: TokenSyntax = .keyword(.default),
+      _ unexpectedBetweenDefaultKeywordAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax = .colonToken(),
+      _ unexpectedAfterColon: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -15812,7 +15812,7 @@ public struct SwitchDefaultLabelSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenDefaultKeywordAndColon, 
             colon, 
             unexpectedAfterColon
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeDefaultKeyword?.raw, 
           defaultKeyword.raw, 
@@ -15821,11 +15821,11 @@ public struct SwitchDefaultLabelSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterColon?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.switchDefaultLabel, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.switchDefaultLabel,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -15896,8 +15896,8 @@ public struct TargetFunctionEntrySyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .targetFunctionEntry else { 
-      return nil 
+    guard node.raw.kind == .targetFunctionEntry else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -15911,16 +15911,16 @@ public struct TargetFunctionEntrySyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeLabel: UnexpectedNodesSyntax? = nil, 
-      label: TokenSyntax = .keyword(.target), 
-      _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil, 
-      colon: TokenSyntax = .colonToken(), 
-      _ unexpectedBetweenColonAndDeclname: UnexpectedNodesSyntax? = nil, 
-      declname: DeclNameSyntax, 
-      _ unexpectedBetweenDeclnameAndTrailingComma: UnexpectedNodesSyntax? = nil, 
-      trailingComma: TokenSyntax? = nil, 
-      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeLabel: UnexpectedNodesSyntax? = nil,
+      label: TokenSyntax = .keyword(.target),
+      _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax = .colonToken(),
+      _ unexpectedBetweenColonAndDeclname: UnexpectedNodesSyntax? = nil,
+      declname: DeclNameSyntax,
+      _ unexpectedBetweenDeclnameAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingComma: TokenSyntax? = nil,
+      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -15936,7 +15936,7 @@ public struct TargetFunctionEntrySyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenDeclnameAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLabel?.raw, 
           label.raw, 
@@ -15949,11 +15949,11 @@ public struct TargetFunctionEntrySyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterTrailingComma?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.targetFunctionEntry, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.targetFunctionEntry,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -16068,8 +16068,8 @@ public struct TupleExprElementSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .tupleExprElement else { 
-      return nil 
+    guard node.raw.kind == .tupleExprElement else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -16083,16 +16083,16 @@ public struct TupleExprElementSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init<E: ExprSyntaxProtocol>(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeLabel: UnexpectedNodesSyntax? = nil, 
-      label: TokenSyntax? = nil, 
-      _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil, 
-      colon: TokenSyntax? = nil, 
-      _ unexpectedBetweenColonAndExpression: UnexpectedNodesSyntax? = nil, 
-      expression: E, 
-      _ unexpectedBetweenExpressionAndTrailingComma: UnexpectedNodesSyntax? = nil, 
-      trailingComma: TokenSyntax? = nil, 
-      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeLabel: UnexpectedNodesSyntax? = nil,
+      label: TokenSyntax? = nil,
+      _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax? = nil,
+      _ unexpectedBetweenColonAndExpression: UnexpectedNodesSyntax? = nil,
+      expression: E,
+      _ unexpectedBetweenExpressionAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingComma: TokenSyntax? = nil,
+      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -16108,7 +16108,7 @@ public struct TupleExprElementSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenExpressionAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLabel?.raw, 
           label?.raw, 
@@ -16121,11 +16121,11 @@ public struct TupleExprElementSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterTrailingComma?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.tupleExprElement, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.tupleExprElement,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -16236,8 +16236,8 @@ public struct TuplePatternElementSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .tuplePatternElement else { 
-      return nil 
+    guard node.raw.kind == .tuplePatternElement else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -16251,16 +16251,16 @@ public struct TuplePatternElementSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init<P: PatternSyntaxProtocol>(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeLabelName: UnexpectedNodesSyntax? = nil, 
-      labelName: TokenSyntax? = nil, 
-      _ unexpectedBetweenLabelNameAndLabelColon: UnexpectedNodesSyntax? = nil, 
-      labelColon: TokenSyntax? = nil, 
-      _ unexpectedBetweenLabelColonAndPattern: UnexpectedNodesSyntax? = nil, 
-      pattern: P, 
-      _ unexpectedBetweenPatternAndTrailingComma: UnexpectedNodesSyntax? = nil, 
-      trailingComma: TokenSyntax? = nil, 
-      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeLabelName: UnexpectedNodesSyntax? = nil,
+      labelName: TokenSyntax? = nil,
+      _ unexpectedBetweenLabelNameAndLabelColon: UnexpectedNodesSyntax? = nil,
+      labelColon: TokenSyntax? = nil,
+      _ unexpectedBetweenLabelColonAndPattern: UnexpectedNodesSyntax? = nil,
+      pattern: P,
+      _ unexpectedBetweenPatternAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingComma: TokenSyntax? = nil,
+      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -16276,7 +16276,7 @@ public struct TuplePatternElementSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenPatternAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLabelName?.raw, 
           labelName?.raw, 
@@ -16289,11 +16289,11 @@ public struct TuplePatternElementSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterTrailingComma?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.tuplePatternElement, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.tuplePatternElement,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -16404,8 +16404,8 @@ public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .tupleTypeElement else { 
-      return nil 
+    guard node.raw.kind == .tupleTypeElement else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -16419,24 +16419,24 @@ public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init<T: TypeSyntaxProtocol>(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeInOut: UnexpectedNodesSyntax? = nil, 
-      inOut: TokenSyntax? = nil, 
-      _ unexpectedBetweenInOutAndName: UnexpectedNodesSyntax? = nil, 
-      name: TokenSyntax? = nil, 
-      _ unexpectedBetweenNameAndSecondName: UnexpectedNodesSyntax? = nil, 
-      secondName: TokenSyntax? = nil, 
-      _ unexpectedBetweenSecondNameAndColon: UnexpectedNodesSyntax? = nil, 
-      colon: TokenSyntax? = nil, 
-      _ unexpectedBetweenColonAndType: UnexpectedNodesSyntax? = nil, 
-      type: T, 
-      _ unexpectedBetweenTypeAndEllipsis: UnexpectedNodesSyntax? = nil, 
-      ellipsis: TokenSyntax? = nil, 
-      _ unexpectedBetweenEllipsisAndInitializer: UnexpectedNodesSyntax? = nil, 
-      initializer: InitializerClauseSyntax? = nil, 
-      _ unexpectedBetweenInitializerAndTrailingComma: UnexpectedNodesSyntax? = nil, 
-      trailingComma: TokenSyntax? = nil, 
-      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeInOut: UnexpectedNodesSyntax? = nil,
+      inOut: TokenSyntax? = nil,
+      _ unexpectedBetweenInOutAndName: UnexpectedNodesSyntax? = nil,
+      name: TokenSyntax? = nil,
+      _ unexpectedBetweenNameAndSecondName: UnexpectedNodesSyntax? = nil,
+      secondName: TokenSyntax? = nil,
+      _ unexpectedBetweenSecondNameAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax? = nil,
+      _ unexpectedBetweenColonAndType: UnexpectedNodesSyntax? = nil,
+      type: T,
+      _ unexpectedBetweenTypeAndEllipsis: UnexpectedNodesSyntax? = nil,
+      ellipsis: TokenSyntax? = nil,
+      _ unexpectedBetweenEllipsisAndInitializer: UnexpectedNodesSyntax? = nil,
+      initializer: InitializerClauseSyntax? = nil,
+      _ unexpectedBetweenInitializerAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingComma: TokenSyntax? = nil,
+      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -16460,7 +16460,7 @@ public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenInitializerAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeInOut?.raw, 
           inOut?.raw, 
@@ -16481,11 +16481,11 @@ public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterTrailingComma?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.tupleTypeElement, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.tupleTypeElement,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -16676,8 +16676,8 @@ public struct TypeAnnotationSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .typeAnnotation else { 
-      return nil 
+    guard node.raw.kind == .typeAnnotation else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -16691,12 +16691,12 @@ public struct TypeAnnotationSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init<T: TypeSyntaxProtocol>(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeColon: UnexpectedNodesSyntax? = nil, 
-      colon: TokenSyntax = .colonToken(), 
-      _ unexpectedBetweenColonAndType: UnexpectedNodesSyntax? = nil, 
-      type: T, 
-      _ unexpectedAfterType: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax = .colonToken(),
+      _ unexpectedBetweenColonAndType: UnexpectedNodesSyntax? = nil,
+      type: T,
+      _ unexpectedAfterType: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -16708,7 +16708,7 @@ public struct TypeAnnotationSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenColonAndType, 
             type, 
             unexpectedAfterType
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeColon?.raw, 
           colon.raw, 
@@ -16717,11 +16717,11 @@ public struct TypeAnnotationSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterType?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.typeAnnotation, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.typeAnnotation,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -16792,8 +16792,8 @@ public struct TypeEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .typeEffectSpecifiers else { 
-      return nil 
+    guard node.raw.kind == .typeEffectSpecifiers else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -16807,12 +16807,12 @@ public struct TypeEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeAsyncSpecifier: UnexpectedNodesSyntax? = nil, 
-      asyncSpecifier: TokenSyntax? = nil, 
-      _ unexpectedBetweenAsyncSpecifierAndThrowsSpecifier: UnexpectedNodesSyntax? = nil, 
-      throwsSpecifier: TokenSyntax? = nil, 
-      _ unexpectedAfterThrowsSpecifier: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeAsyncSpecifier: UnexpectedNodesSyntax? = nil,
+      asyncSpecifier: TokenSyntax? = nil,
+      _ unexpectedBetweenAsyncSpecifierAndThrowsSpecifier: UnexpectedNodesSyntax? = nil,
+      throwsSpecifier: TokenSyntax? = nil,
+      _ unexpectedAfterThrowsSpecifier: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -16824,7 +16824,7 @@ public struct TypeEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenAsyncSpecifierAndThrowsSpecifier, 
             throwsSpecifier, 
             unexpectedAfterThrowsSpecifier
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAsyncSpecifier?.raw, 
           asyncSpecifier?.raw, 
@@ -16833,11 +16833,11 @@ public struct TypeEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterThrowsSpecifier?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.typeEffectSpecifiers, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.typeEffectSpecifiers,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -16908,8 +16908,8 @@ public struct TypeInheritanceClauseSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .typeInheritanceClause else { 
-      return nil 
+    guard node.raw.kind == .typeInheritanceClause else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -16923,12 +16923,12 @@ public struct TypeInheritanceClauseSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeColon: UnexpectedNodesSyntax? = nil, 
-      colon: TokenSyntax = .colonToken(), 
-      _ unexpectedBetweenColonAndInheritedTypeCollection: UnexpectedNodesSyntax? = nil, 
-      inheritedTypeCollection: InheritedTypeListSyntax, 
-      _ unexpectedAfterInheritedTypeCollection: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax = .colonToken(),
+      _ unexpectedBetweenColonAndInheritedTypeCollection: UnexpectedNodesSyntax? = nil,
+      inheritedTypeCollection: InheritedTypeListSyntax,
+      _ unexpectedAfterInheritedTypeCollection: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -16940,7 +16940,7 @@ public struct TypeInheritanceClauseSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenColonAndInheritedTypeCollection, 
             inheritedTypeCollection, 
             unexpectedAfterInheritedTypeCollection
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeColon?.raw, 
           colon.raw, 
@@ -16949,11 +16949,11 @@ public struct TypeInheritanceClauseSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterInheritedTypeCollection?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.typeInheritanceClause, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.typeInheritanceClause,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -17009,8 +17009,8 @@ public struct TypeInheritanceClauseSyntax: SyntaxProtocol, SyntaxHashable {
     if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.inheritedTypeList, 
-                                      from: [element.raw], arena: arena)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.inheritedTypeList,
+                                        from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(at: 3, with: collection, arena: arena)
     return TypeInheritanceClauseSyntax(newData)
@@ -17043,8 +17043,8 @@ public struct TypeInitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .typeInitializerClause else { 
-      return nil 
+    guard node.raw.kind == .typeInitializerClause else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -17058,12 +17058,12 @@ public struct TypeInitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init<V: TypeSyntaxProtocol>(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeEqual: UnexpectedNodesSyntax? = nil, 
-      equal: TokenSyntax = .equalToken(), 
-      _ unexpectedBetweenEqualAndValue: UnexpectedNodesSyntax? = nil, 
-      value: V, 
-      _ unexpectedAfterValue: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeEqual: UnexpectedNodesSyntax? = nil,
+      equal: TokenSyntax = .equalToken(),
+      _ unexpectedBetweenEqualAndValue: UnexpectedNodesSyntax? = nil,
+      value: V,
+      _ unexpectedAfterValue: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -17075,7 +17075,7 @@ public struct TypeInitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenEqualAndValue, 
             value, 
             unexpectedAfterValue
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeEqual?.raw, 
           equal.raw, 
@@ -17084,11 +17084,11 @@ public struct TypeInitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterValue?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.typeInitializerClause, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.typeInitializerClause,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -17159,8 +17159,8 @@ public struct UnavailableFromAsyncArgumentsSyntax: SyntaxProtocol, SyntaxHashabl
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .unavailableFromAsyncArguments else { 
-      return nil 
+    guard node.raw.kind == .unavailableFromAsyncArguments else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -17174,14 +17174,14 @@ public struct UnavailableFromAsyncArgumentsSyntax: SyntaxProtocol, SyntaxHashabl
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeMessageLabel: UnexpectedNodesSyntax? = nil, 
-      messageLabel: TokenSyntax = .keyword(.message), 
-      _ unexpectedBetweenMessageLabelAndColon: UnexpectedNodesSyntax? = nil, 
-      colon: TokenSyntax = .colonToken(), 
-      _ unexpectedBetweenColonAndMessage: UnexpectedNodesSyntax? = nil, 
-      message: StringLiteralExprSyntax, 
-      _ unexpectedAfterMessage: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeMessageLabel: UnexpectedNodesSyntax? = nil,
+      messageLabel: TokenSyntax = .keyword(.message),
+      _ unexpectedBetweenMessageLabelAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax = .colonToken(),
+      _ unexpectedBetweenColonAndMessage: UnexpectedNodesSyntax? = nil,
+      message: StringLiteralExprSyntax,
+      _ unexpectedAfterMessage: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -17195,7 +17195,7 @@ public struct UnavailableFromAsyncArgumentsSyntax: SyntaxProtocol, SyntaxHashabl
             unexpectedBetweenColonAndMessage, 
             message, 
             unexpectedAfterMessage
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeMessageLabel?.raw, 
           messageLabel.raw, 
@@ -17206,11 +17206,11 @@ public struct UnavailableFromAsyncArgumentsSyntax: SyntaxProtocol, SyntaxHashabl
           unexpectedAfterMessage?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.unavailableFromAsyncArguments, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.unavailableFromAsyncArguments,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -17301,8 +17301,8 @@ public struct UnderscorePrivateAttributeArgumentsSyntax: SyntaxProtocol, SyntaxH
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .underscorePrivateAttributeArguments else { 
-      return nil 
+    guard node.raw.kind == .underscorePrivateAttributeArguments else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -17316,14 +17316,14 @@ public struct UnderscorePrivateAttributeArgumentsSyntax: SyntaxProtocol, SyntaxH
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeSourceFileLabel: UnexpectedNodesSyntax? = nil, 
-      sourceFileLabel: TokenSyntax = .keyword(.sourceFile), 
-      _ unexpectedBetweenSourceFileLabelAndColon: UnexpectedNodesSyntax? = nil, 
-      colon: TokenSyntax = .colonToken(), 
-      _ unexpectedBetweenColonAndFilename: UnexpectedNodesSyntax? = nil, 
-      filename: StringLiteralExprSyntax, 
-      _ unexpectedAfterFilename: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeSourceFileLabel: UnexpectedNodesSyntax? = nil,
+      sourceFileLabel: TokenSyntax = .keyword(.sourceFile),
+      _ unexpectedBetweenSourceFileLabelAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax = .colonToken(),
+      _ unexpectedBetweenColonAndFilename: UnexpectedNodesSyntax? = nil,
+      filename: StringLiteralExprSyntax,
+      _ unexpectedAfterFilename: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -17337,7 +17337,7 @@ public struct UnderscorePrivateAttributeArgumentsSyntax: SyntaxProtocol, SyntaxH
             unexpectedBetweenColonAndFilename, 
             filename, 
             unexpectedAfterFilename
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeSourceFileLabel?.raw, 
           sourceFileLabel.raw, 
@@ -17348,11 +17348,11 @@ public struct UnderscorePrivateAttributeArgumentsSyntax: SyntaxProtocol, SyntaxH
           unexpectedAfterFilename?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.underscorePrivateAttributeArguments, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.underscorePrivateAttributeArguments,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -17443,8 +17443,8 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .versionTuple else { 
-      return nil 
+    guard node.raw.kind == .versionTuple else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -17458,18 +17458,18 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeMajor: UnexpectedNodesSyntax? = nil, 
-      major: TokenSyntax, 
-      _ unexpectedBetweenMajorAndMinorPeriod: UnexpectedNodesSyntax? = nil, 
-      minorPeriod: TokenSyntax? = nil, 
-      _ unexpectedBetweenMinorPeriodAndMinor: UnexpectedNodesSyntax? = nil, 
-      minor: TokenSyntax? = nil, 
-      _ unexpectedBetweenMinorAndPatchPeriod: UnexpectedNodesSyntax? = nil, 
-      patchPeriod: TokenSyntax? = nil, 
-      _ unexpectedBetweenPatchPeriodAndPatch: UnexpectedNodesSyntax? = nil, 
-      patch: TokenSyntax? = nil, 
-      _ unexpectedAfterPatch: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeMajor: UnexpectedNodesSyntax? = nil,
+      major: TokenSyntax,
+      _ unexpectedBetweenMajorAndMinorPeriod: UnexpectedNodesSyntax? = nil,
+      minorPeriod: TokenSyntax? = nil,
+      _ unexpectedBetweenMinorPeriodAndMinor: UnexpectedNodesSyntax? = nil,
+      minor: TokenSyntax? = nil,
+      _ unexpectedBetweenMinorAndPatchPeriod: UnexpectedNodesSyntax? = nil,
+      patchPeriod: TokenSyntax? = nil,
+      _ unexpectedBetweenPatchPeriodAndPatch: UnexpectedNodesSyntax? = nil,
+      patch: TokenSyntax? = nil,
+      _ unexpectedAfterPatch: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -17487,7 +17487,7 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenPatchPeriodAndPatch, 
             patch, 
             unexpectedAfterPatch
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeMajor?.raw, 
           major.raw, 
@@ -17502,11 +17502,11 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterPatch?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.versionTuple, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.versionTuple,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -17642,8 +17642,8 @@ public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .whereClause else { 
-      return nil 
+    guard node.raw.kind == .whereClause else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -17657,12 +17657,12 @@ public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init<G: ExprSyntaxProtocol>(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeWhereKeyword: UnexpectedNodesSyntax? = nil, 
-      whereKeyword: TokenSyntax = .keyword(.where), 
-      _ unexpectedBetweenWhereKeywordAndGuardResult: UnexpectedNodesSyntax? = nil, 
-      guardResult: G, 
-      _ unexpectedAfterGuardResult: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeWhereKeyword: UnexpectedNodesSyntax? = nil,
+      whereKeyword: TokenSyntax = .keyword(.where),
+      _ unexpectedBetweenWhereKeywordAndGuardResult: UnexpectedNodesSyntax? = nil,
+      guardResult: G,
+      _ unexpectedAfterGuardResult: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -17674,7 +17674,7 @@ public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenWhereKeywordAndGuardResult, 
             guardResult, 
             unexpectedAfterGuardResult
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeWhereKeyword?.raw, 
           whereKeyword.raw, 
@@ -17683,11 +17683,11 @@ public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterGuardResult?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.whereClause, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.whereClause,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -17758,8 +17758,8 @@ public struct YieldExprListElementSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .yieldExprListElement else { 
-      return nil 
+    guard node.raw.kind == .yieldExprListElement else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -17773,12 +17773,12 @@ public struct YieldExprListElementSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init<E: ExprSyntaxProtocol>(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeExpression: UnexpectedNodesSyntax? = nil, 
-      expression: E, 
-      _ unexpectedBetweenExpressionAndComma: UnexpectedNodesSyntax? = nil, 
-      comma: TokenSyntax? = nil, 
-      _ unexpectedAfterComma: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeExpression: UnexpectedNodesSyntax? = nil,
+      expression: E,
+      _ unexpectedBetweenExpressionAndComma: UnexpectedNodesSyntax? = nil,
+      comma: TokenSyntax? = nil,
+      _ unexpectedAfterComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -17790,7 +17790,7 @@ public struct YieldExprListElementSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenExpressionAndComma, 
             comma, 
             unexpectedAfterComma
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeExpression?.raw, 
           expression.raw, 
@@ -17799,11 +17799,11 @@ public struct YieldExprListElementSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterComma?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.yieldExprListElement, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.yieldExprListElement,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -17874,8 +17874,8 @@ public struct YieldListSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .yieldList else { 
-      return nil 
+    guard node.raw.kind == .yieldList else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -17889,14 +17889,14 @@ public struct YieldListSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil, 
-      leftParen: TokenSyntax = .leftParenToken(), 
-      _ unexpectedBetweenLeftParenAndElementList: UnexpectedNodesSyntax? = nil, 
-      elementList: YieldExprListSyntax, 
-      _ unexpectedBetweenElementListAndRightParen: UnexpectedNodesSyntax? = nil, 
-      rightParen: TokenSyntax = .rightParenToken(), 
-      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
+      leftParen: TokenSyntax = .leftParenToken(),
+      _ unexpectedBetweenLeftParenAndElementList: UnexpectedNodesSyntax? = nil,
+      elementList: YieldExprListSyntax,
+      _ unexpectedBetweenElementListAndRightParen: UnexpectedNodesSyntax? = nil,
+      rightParen: TokenSyntax = .rightParenToken(),
+      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -17910,7 +17910,7 @@ public struct YieldListSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenElementListAndRightParen, 
             rightParen, 
             unexpectedAfterRightParen
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftParen?.raw, 
           leftParen.raw, 
@@ -17921,11 +17921,11 @@ public struct YieldListSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterRightParen?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.yieldList, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
+        kind: SyntaxKind.yieldList,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
         
       )
       return SyntaxData.forRoot(raw)
@@ -17981,8 +17981,8 @@ public struct YieldListSyntax: SyntaxProtocol, SyntaxHashable {
     if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.yieldExprList, 
-                                      from: [element.raw], arena: arena)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.yieldExprList,
+                                        from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(at: 3, with: collection, arena: arena)
     return YieldListSyntax(newData)

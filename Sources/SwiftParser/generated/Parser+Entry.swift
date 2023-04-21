@@ -18,7 +18,7 @@ extension Parser {
   /// Parse the source code in the given string as Swift source file. See
   /// `Parser.init` for more details.
   public static func parse(
-    source: String, 
+    source: String,
     parseTransition: IncrementalParseTransition? = nil
   ) -> SourceFileSyntax {
     var parser = Parser(source)
@@ -28,8 +28,8 @@ extension Parser {
   /// Parse the source code in the given string as Swift source file. See
   /// `Parser.init` for more details.
   public static func parse(
-    source: UnsafeBufferPointer<UInt8>, 
-    maximumNestingLevel: Int? = nil, 
+    source: UnsafeBufferPointer<UInt8>,
+    maximumNestingLevel: Int? = nil,
     parseTransition: IncrementalParseTransition? = nil
   ) -> SourceFileSyntax {
     var parser = Parser(source, maximumNestingLevel: maximumNestingLevel)

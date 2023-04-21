@@ -486,9 +486,12 @@ final class AttributeTests: XCTestCase {
       func foo() {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected 'message' in @_unavailableFromAsync argument", fixIts: ["insert 'message'"]),
-        DiagnosticSpec(message: "unexpected code 'nope' before @_unavailableFromAsync argument"),
-      ]
+        DiagnosticSpec(message: "expected 'message' in @_unavailableFromAsync argument", fixIts: ["replace 'nope' with 'message'"])
+      ],
+      fixedSource: """
+        @_unavailableFromAsync(message: "abc")
+        func foo() {}
+        """
     )
 
     assertParse(

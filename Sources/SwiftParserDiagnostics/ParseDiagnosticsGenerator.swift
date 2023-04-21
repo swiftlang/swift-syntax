@@ -1376,6 +1376,36 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: UnavailableFromAsyncArgumentsSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+
+    if let token = node.unexpectedBetweenMessageLabelAndColon?.onlyToken(where: { $0.tokenKind.isIdentifier }),
+      node.messageLabel.presence == .missing
+    {
+      addDiagnostic(
+        node,
+        MissingNodesError(missingNodes: [Syntax(node.messageLabel)]),
+        fixIts: [
+          FixIt(
+            message: ReplaceTokensFixIt(
+              replaceTokens: [token],
+              replacements: [node.messageLabel]
+            ),
+            changes: [
+              FixIt.MultiNodeChange.makeMissing(token),
+              FixIt.MultiNodeChange.makePresent(node.messageLabel),
+            ]
+          )
+        ],
+        handledNodes: [node.messageLabel.id, token.id]
+      )
+    }
+
+    return .visitChildren
+  }
+
   public override func visit(_ node: UnresolvedTernaryExprSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren

@@ -101,7 +101,7 @@ final class OriginalDefinedInAttrTests: XCTestCase {
         ),
       ],
       fixedSource: """
-        @_originallyDefinedIn(module: "OSX" , <#identifier#>13.13.3)
+        @_originallyDefinedIn(module: "OSX", <#identifier#> 13.13.3)
         public class ToplevelClass2 {}
         """
     )

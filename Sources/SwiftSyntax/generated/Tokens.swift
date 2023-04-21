@@ -14,713 +14,713 @@
 
 extension TokenSyntax {
   public static func arrowToken(
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
-        .arrow, 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .arrow,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func atSignToken(
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
-        .atSign, 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .atSign,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func backslashToken(
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
-        .backslash, 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .backslash,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func backtickToken(
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
-        .backtick, 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .backtick,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func binaryOperator(
-      _ text: String, 
-      leadingTrivia: Trivia = [], 
-      trailingTrivia: Trivia = [], 
-      presence: SourcePresence = .present
+    _ text: String,
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
+    presence: SourcePresence = .present
     
   ) -> TokenSyntax {
     return TokenSyntax(
-        .binaryOperator(text), 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .binaryOperator(text),
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func colonToken(
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
-        .colon, 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .colon,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func commaToken(
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
-        .comma, 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .comma,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func dollarIdentifier(
-      _ text: String, 
-      leadingTrivia: Trivia = [], 
-      trailingTrivia: Trivia = [], 
-      presence: SourcePresence = .present
+    _ text: String,
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
+    presence: SourcePresence = .present
     
   ) -> TokenSyntax {
     return TokenSyntax(
-        .dollarIdentifier(text), 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .dollarIdentifier(text),
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func ellipsisToken(
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
-        .ellipsis, 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .ellipsis,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func equalToken(
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
-        .equal, 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .equal,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func exclamationMarkToken(
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
-        .exclamationMark, 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .exclamationMark,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func extendedRegexDelimiter(
-      _ text: String, 
-      leadingTrivia: Trivia = [], 
-      trailingTrivia: Trivia = [], 
-      presence: SourcePresence = .present
+    _ text: String,
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
+    presence: SourcePresence = .present
     
   ) -> TokenSyntax {
     return TokenSyntax(
-        .extendedRegexDelimiter(text), 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .extendedRegexDelimiter(text),
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func floatingLiteral(
-      _ text: String, 
-      leadingTrivia: Trivia = [], 
-      trailingTrivia: Trivia = [], 
-      presence: SourcePresence = .present
+    _ text: String,
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
+    presence: SourcePresence = .present
     
   ) -> TokenSyntax {
     return TokenSyntax(
-        .floatingLiteral(text), 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .floatingLiteral(text),
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func identifier(
-      _ text: String, 
-      leadingTrivia: Trivia = [], 
-      trailingTrivia: Trivia = [], 
-      presence: SourcePresence = .present
+    _ text: String,
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
+    presence: SourcePresence = .present
     
   ) -> TokenSyntax {
     return TokenSyntax(
-        .identifier(text), 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .identifier(text),
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func infixQuestionMarkToken(
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
-        .infixQuestionMark, 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .infixQuestionMark,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func integerLiteral(
-      _ text: String, 
-      leadingTrivia: Trivia = [], 
-      trailingTrivia: Trivia = [], 
-      presence: SourcePresence = .present
+    _ text: String,
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
+    presence: SourcePresence = .present
     
   ) -> TokenSyntax {
     return TokenSyntax(
-        .integerLiteral(text), 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .integerLiteral(text),
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func keyword(
-      _ value: Keyword, 
-      leadingTrivia: Trivia = [], 
-      trailingTrivia: Trivia = [], 
-      presence: SourcePresence = .present
+    _ value: Keyword,
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
+    presence: SourcePresence = .present
     
   ) -> TokenSyntax {
     return TokenSyntax(
-        .keyword(value), 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .keyword(value),
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func leftAngleToken(
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
-        .leftAngle, 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .leftAngle,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func leftBraceToken(
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
-        .leftBrace, 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .leftBrace,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func leftParenToken(
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
-        .leftParen, 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .leftParen,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func leftSquareBracketToken(
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
-        .leftSquareBracket, 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .leftSquareBracket,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func multilineStringQuoteToken(
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
-        .multilineStringQuote, 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .multilineStringQuote,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func periodToken(
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
-        .period, 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .period,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func postfixOperator(
-      _ text: String, 
-      leadingTrivia: Trivia = [], 
-      trailingTrivia: Trivia = [], 
-      presence: SourcePresence = .present
+    _ text: String,
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
+    presence: SourcePresence = .present
     
   ) -> TokenSyntax {
     return TokenSyntax(
-        .postfixOperator(text), 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .postfixOperator(text),
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func postfixQuestionMarkToken(
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
-        .postfixQuestionMark, 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .postfixQuestionMark,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func poundToken(
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
-        .pound, 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .pound,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func poundAvailableKeyword(
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
-        .poundAvailableKeyword, 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .poundAvailableKeyword,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func poundElseKeyword(
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
-        .poundElseKeyword, 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .poundElseKeyword,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func poundElseifKeyword(
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
-        .poundElseifKeyword, 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .poundElseifKeyword,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func poundEndifKeyword(
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
-        .poundEndifKeyword, 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .poundEndifKeyword,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func poundIfKeyword(
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
-        .poundIfKeyword, 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .poundIfKeyword,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func poundSourceLocationKeyword(
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
-        .poundSourceLocationKeyword, 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .poundSourceLocationKeyword,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func poundUnavailableKeyword(
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
-        .poundUnavailableKeyword, 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .poundUnavailableKeyword,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func prefixAmpersandToken(
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
-        .prefixAmpersand, 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .prefixAmpersand,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func prefixOperator(
-      _ text: String, 
-      leadingTrivia: Trivia = [], 
-      trailingTrivia: Trivia = [], 
-      presence: SourcePresence = .present
+    _ text: String,
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
+    presence: SourcePresence = .present
     
   ) -> TokenSyntax {
     return TokenSyntax(
-        .prefixOperator(text), 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .prefixOperator(text),
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func rawStringDelimiter(
-      _ text: String, 
-      leadingTrivia: Trivia = [], 
-      trailingTrivia: Trivia = [], 
-      presence: SourcePresence = .present
+    _ text: String,
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
+    presence: SourcePresence = .present
     
   ) -> TokenSyntax {
     return TokenSyntax(
-        .rawStringDelimiter(text), 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .rawStringDelimiter(text),
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func regexLiteralPattern(
-      _ text: String, 
-      leadingTrivia: Trivia = [], 
-      trailingTrivia: Trivia = [], 
-      presence: SourcePresence = .present
+    _ text: String,
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
+    presence: SourcePresence = .present
     
   ) -> TokenSyntax {
     return TokenSyntax(
-        .regexLiteralPattern(text), 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .regexLiteralPattern(text),
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func regexSlashToken(
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
-        .regexSlash, 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .regexSlash,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func rightAngleToken(
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
-        .rightAngle, 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .rightAngle,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func rightBraceToken(
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
-        .rightBrace, 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .rightBrace,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func rightParenToken(
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
-        .rightParen, 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .rightParen,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func rightSquareBracketToken(
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
-        .rightSquareBracket, 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .rightSquareBracket,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func semicolonToken(
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
-        .semicolon, 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .semicolon,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func singleQuoteToken(
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
-        .singleQuote, 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .singleQuote,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func stringQuoteToken(
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
-        .stringQuote, 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .stringQuote,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func stringSegment(
-      _ text: String, 
-      leadingTrivia: Trivia = [], 
-      trailingTrivia: Trivia = [], 
-      presence: SourcePresence = .present
+    _ text: String,
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
+    presence: SourcePresence = .present
     
   ) -> TokenSyntax {
     return TokenSyntax(
-        .stringSegment(text), 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .stringSegment(text),
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func unknown(
-      _ text: String, 
-      leadingTrivia: Trivia = [], 
-      trailingTrivia: Trivia = [], 
-      presence: SourcePresence = .present
+    _ text: String,
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
+    presence: SourcePresence = .present
     
   ) -> TokenSyntax {
     return TokenSyntax(
-        .unknown(text), 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .unknown(text),
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func wildcardToken(
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
-        .wildcard, 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: trailingTrivia, 
-        presence: presence
-      
+      .wildcard,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+        
     )
   }
   
   public static func eof(
-    leadingTrivia: Trivia = [], 
+    leadingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
-        .eof, 
-        leadingTrivia: leadingTrivia, 
-        trailingTrivia: [], 
-        presence: presence
-      
+      .eof,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: [],
+      presence: presence
+        
     )
   }
 }

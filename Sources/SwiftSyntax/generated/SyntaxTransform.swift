@@ -3802,7 +3802,7 @@ extension SyntaxTransformVisitor {
   
   public func visitChildren<SyntaxType: SyntaxProtocol>(_ node: SyntaxType) -> [ResultType] {
     let syntaxNode = Syntax(node)
-    return NonNilRawSyntaxChildren(syntaxNode, viewMode: .sourceAccurate).map { rawChild in 
+    return NonNilRawSyntaxChildren(syntaxNode, viewMode: .sourceAccurate).map { rawChild in
       let child = Syntax(SyntaxData(rawChild, parent: syntaxNode))
       return visit(child)
     }

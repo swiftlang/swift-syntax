@@ -31,8 +31,8 @@ public struct AccessPathBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -44,8 +44,8 @@ public struct AccessPathBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -69,8 +69,8 @@ public struct AccessPathBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -111,8 +111,8 @@ public struct AccessorListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -124,8 +124,8 @@ public struct AccessorListBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -149,8 +149,8 @@ public struct AccessorListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -191,8 +191,8 @@ public struct ArrayElementListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -204,8 +204,8 @@ public struct ArrayElementListBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -229,8 +229,8 @@ public struct ArrayElementListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -245,8 +245,8 @@ public struct ArrayElementListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in 
-        return index < lastIndex ? source.ensuringTrailingComma() : source
+    return .init(component.enumerated().map { index, source in
+      return index < lastIndex ? source.ensuringTrailingComma() : source
       })
   }
 }
@@ -274,8 +274,8 @@ public struct AttributeListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -299,8 +299,8 @@ public struct AttributeListBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -324,8 +324,8 @@ public struct AttributeListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -366,8 +366,8 @@ public struct AvailabilitySpecListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -379,8 +379,8 @@ public struct AvailabilitySpecListBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -404,8 +404,8 @@ public struct AvailabilitySpecListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -446,8 +446,8 @@ public struct AvailabilityVersionRestrictionListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -459,8 +459,8 @@ public struct AvailabilityVersionRestrictionListBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -484,8 +484,8 @@ public struct AvailabilityVersionRestrictionListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -526,8 +526,8 @@ public struct CaseItemListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -539,8 +539,8 @@ public struct CaseItemListBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -564,8 +564,8 @@ public struct CaseItemListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -580,8 +580,8 @@ public struct CaseItemListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in 
-        return index < lastIndex ? source.ensuringTrailingComma() : source
+    return .init(component.enumerated().map { index, source in
+      return index < lastIndex ? source.ensuringTrailingComma() : source
       })
   }
 }
@@ -609,8 +609,8 @@ public struct CatchClauseListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -622,8 +622,8 @@ public struct CatchClauseListBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -647,8 +647,8 @@ public struct CatchClauseListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -689,8 +689,8 @@ public struct CatchItemListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -702,8 +702,8 @@ public struct CatchItemListBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -727,8 +727,8 @@ public struct CatchItemListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -743,8 +743,8 @@ public struct CatchItemListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in 
-        return index < lastIndex ? source.ensuringTrailingComma() : source
+    return .init(component.enumerated().map { index, source in
+      return index < lastIndex ? source.ensuringTrailingComma() : source
       })
   }
 }
@@ -772,8 +772,8 @@ public struct ClosureCaptureItemListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -785,8 +785,8 @@ public struct ClosureCaptureItemListBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -810,8 +810,8 @@ public struct ClosureCaptureItemListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -826,8 +826,8 @@ public struct ClosureCaptureItemListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in 
-        return index < lastIndex ? source.ensuringTrailingComma() : source
+    return .init(component.enumerated().map { index, source in
+      return index < lastIndex ? source.ensuringTrailingComma() : source
       })
   }
 }
@@ -855,8 +855,8 @@ public struct ClosureParamListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -868,8 +868,8 @@ public struct ClosureParamListBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -893,8 +893,8 @@ public struct ClosureParamListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -909,8 +909,8 @@ public struct ClosureParamListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in 
-        return index < lastIndex ? source.ensuringTrailingComma() : source
+    return .init(component.enumerated().map { index, source in
+      return index < lastIndex ? source.ensuringTrailingComma() : source
       })
   }
 }
@@ -938,8 +938,8 @@ public struct ClosureParameterListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -951,8 +951,8 @@ public struct ClosureParameterListBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -976,8 +976,8 @@ public struct ClosureParameterListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -992,8 +992,8 @@ public struct ClosureParameterListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in 
-        return index < lastIndex ? source.ensuringTrailingComma() : source
+    return .init(component.enumerated().map { index, source in
+      return index < lastIndex ? source.ensuringTrailingComma() : source
       })
   }
 }
@@ -1021,8 +1021,8 @@ public struct CodeBlockItemListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -1034,8 +1034,8 @@ public struct CodeBlockItemListBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -1059,8 +1059,8 @@ public struct CodeBlockItemListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -1101,8 +1101,8 @@ public struct CompositionTypeElementListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -1114,8 +1114,8 @@ public struct CompositionTypeElementListBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -1139,8 +1139,8 @@ public struct CompositionTypeElementListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -1181,8 +1181,8 @@ public struct ConditionElementListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -1194,8 +1194,8 @@ public struct ConditionElementListBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -1219,8 +1219,8 @@ public struct ConditionElementListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -1235,8 +1235,8 @@ public struct ConditionElementListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in 
-        return index < lastIndex ? source.ensuringTrailingComma() : source
+    return .init(component.enumerated().map { index, source in
+      return index < lastIndex ? source.ensuringTrailingComma() : source
       })
   }
 }
@@ -1264,8 +1264,8 @@ public struct DeclNameArgumentListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -1277,8 +1277,8 @@ public struct DeclNameArgumentListBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -1302,8 +1302,8 @@ public struct DeclNameArgumentListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -1344,8 +1344,8 @@ public struct DesignatedTypeListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -1357,8 +1357,8 @@ public struct DesignatedTypeListBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -1382,8 +1382,8 @@ public struct DesignatedTypeListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -1424,8 +1424,8 @@ public struct DictionaryElementListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -1437,8 +1437,8 @@ public struct DictionaryElementListBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -1462,8 +1462,8 @@ public struct DictionaryElementListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -1478,8 +1478,8 @@ public struct DictionaryElementListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in 
-        return index < lastIndex ? source.ensuringTrailingComma() : source
+    return .init(component.enumerated().map { index, source in
+      return index < lastIndex ? source.ensuringTrailingComma() : source
       })
   }
 }
@@ -1507,8 +1507,8 @@ public struct DifferentiabilityParamListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -1520,8 +1520,8 @@ public struct DifferentiabilityParamListBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -1545,8 +1545,8 @@ public struct DifferentiabilityParamListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -1561,8 +1561,8 @@ public struct DifferentiabilityParamListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in 
-        return index < lastIndex ? source.ensuringTrailingComma() : source
+    return .init(component.enumerated().map { index, source in
+      return index < lastIndex ? source.ensuringTrailingComma() : source
       })
   }
 }
@@ -1590,8 +1590,8 @@ public struct DocumentationAttributeArgumentsBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -1603,8 +1603,8 @@ public struct DocumentationAttributeArgumentsBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -1628,8 +1628,8 @@ public struct DocumentationAttributeArgumentsBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -1644,8 +1644,8 @@ public struct DocumentationAttributeArgumentsBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in 
-        return index < lastIndex ? source.ensuringTrailingComma() : source
+    return .init(component.enumerated().map { index, source in
+      return index < lastIndex ? source.ensuringTrailingComma() : source
       })
   }
 }
@@ -1673,8 +1673,8 @@ public struct EffectsArgumentsBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -1686,8 +1686,8 @@ public struct EffectsArgumentsBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -1711,8 +1711,8 @@ public struct EffectsArgumentsBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -1753,8 +1753,8 @@ public struct EnumCaseElementListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -1766,8 +1766,8 @@ public struct EnumCaseElementListBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -1791,8 +1791,8 @@ public struct EnumCaseElementListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -1807,8 +1807,8 @@ public struct EnumCaseElementListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in 
-        return index < lastIndex ? source.ensuringTrailingComma() : source
+    return .init(component.enumerated().map { index, source in
+      return index < lastIndex ? source.ensuringTrailingComma() : source
       })
   }
 }
@@ -1836,8 +1836,8 @@ public struct EnumCaseParameterListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -1849,8 +1849,8 @@ public struct EnumCaseParameterListBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -1874,8 +1874,8 @@ public struct EnumCaseParameterListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -1890,8 +1890,8 @@ public struct EnumCaseParameterListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in 
-        return index < lastIndex ? source.ensuringTrailingComma() : source
+    return .init(component.enumerated().map { index, source in
+      return index < lastIndex ? source.ensuringTrailingComma() : source
       })
   }
 }
@@ -1919,8 +1919,8 @@ public struct ExprListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -1932,8 +1932,8 @@ public struct ExprListBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -1957,8 +1957,8 @@ public struct ExprListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -1999,8 +1999,8 @@ public struct FunctionParameterListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -2012,8 +2012,8 @@ public struct FunctionParameterListBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -2037,8 +2037,8 @@ public struct FunctionParameterListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -2053,8 +2053,8 @@ public struct FunctionParameterListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in 
-        return index < lastIndex ? source.ensuringTrailingComma() : source
+    return .init(component.enumerated().map { index, source in
+      return index < lastIndex ? source.ensuringTrailingComma() : source
       })
   }
 }
@@ -2082,8 +2082,8 @@ public struct GenericArgumentListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -2095,8 +2095,8 @@ public struct GenericArgumentListBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -2120,8 +2120,8 @@ public struct GenericArgumentListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -2136,8 +2136,8 @@ public struct GenericArgumentListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in 
-        return index < lastIndex ? source.ensuringTrailingComma() : source
+    return .init(component.enumerated().map { index, source in
+      return index < lastIndex ? source.ensuringTrailingComma() : source
       })
   }
 }
@@ -2165,8 +2165,8 @@ public struct GenericParameterListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -2178,8 +2178,8 @@ public struct GenericParameterListBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -2203,8 +2203,8 @@ public struct GenericParameterListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -2219,8 +2219,8 @@ public struct GenericParameterListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in 
-        return index < lastIndex ? source.ensuringTrailingComma() : source
+    return .init(component.enumerated().map { index, source in
+      return index < lastIndex ? source.ensuringTrailingComma() : source
       })
   }
 }
@@ -2248,8 +2248,8 @@ public struct GenericRequirementListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -2261,8 +2261,8 @@ public struct GenericRequirementListBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -2286,8 +2286,8 @@ public struct GenericRequirementListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -2302,8 +2302,8 @@ public struct GenericRequirementListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in 
-        return index < lastIndex ? source.ensuringTrailingComma() : source
+    return .init(component.enumerated().map { index, source in
+      return index < lastIndex ? source.ensuringTrailingComma() : source
       })
   }
 }
@@ -2331,8 +2331,8 @@ public struct IfConfigClauseListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -2344,8 +2344,8 @@ public struct IfConfigClauseListBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -2369,8 +2369,8 @@ public struct IfConfigClauseListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -2411,8 +2411,8 @@ public struct InheritedTypeListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -2424,8 +2424,8 @@ public struct InheritedTypeListBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -2449,8 +2449,8 @@ public struct InheritedTypeListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -2465,8 +2465,8 @@ public struct InheritedTypeListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in 
-        return index < lastIndex ? source.ensuringTrailingComma() : source
+    return .init(component.enumerated().map { index, source in
+      return index < lastIndex ? source.ensuringTrailingComma() : source
       })
   }
 }
@@ -2494,8 +2494,8 @@ public struct KeyPathComponentListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -2507,8 +2507,8 @@ public struct KeyPathComponentListBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -2532,8 +2532,8 @@ public struct KeyPathComponentListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -2574,8 +2574,8 @@ public struct MemberDeclListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -2587,8 +2587,8 @@ public struct MemberDeclListBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -2612,8 +2612,8 @@ public struct MemberDeclListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -2654,8 +2654,8 @@ public struct ModifierListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -2667,8 +2667,8 @@ public struct ModifierListBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -2692,8 +2692,8 @@ public struct ModifierListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -2734,8 +2734,8 @@ public struct MultipleTrailingClosureElementListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -2747,8 +2747,8 @@ public struct MultipleTrailingClosureElementListBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -2772,8 +2772,8 @@ public struct MultipleTrailingClosureElementListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -2814,8 +2814,8 @@ public struct ObjCSelectorBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -2827,8 +2827,8 @@ public struct ObjCSelectorBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -2852,8 +2852,8 @@ public struct ObjCSelectorBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -2894,8 +2894,8 @@ public struct PatternBindingListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -2907,8 +2907,8 @@ public struct PatternBindingListBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -2932,8 +2932,8 @@ public struct PatternBindingListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -2948,8 +2948,8 @@ public struct PatternBindingListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in 
-        return index < lastIndex ? source.ensuringTrailingComma() : source
+    return .init(component.enumerated().map { index, source in
+      return index < lastIndex ? source.ensuringTrailingComma() : source
       })
   }
 }
@@ -2977,8 +2977,8 @@ public struct PrecedenceGroupAttributeListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -3008,8 +3008,8 @@ public struct PrecedenceGroupAttributeListBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -3033,8 +3033,8 @@ public struct PrecedenceGroupAttributeListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -3075,8 +3075,8 @@ public struct PrecedenceGroupNameListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -3088,8 +3088,8 @@ public struct PrecedenceGroupNameListBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -3113,8 +3113,8 @@ public struct PrecedenceGroupNameListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -3155,8 +3155,8 @@ public struct PrimaryAssociatedTypeListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -3168,8 +3168,8 @@ public struct PrimaryAssociatedTypeListBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -3193,8 +3193,8 @@ public struct PrimaryAssociatedTypeListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -3209,8 +3209,8 @@ public struct PrimaryAssociatedTypeListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in 
-        return index < lastIndex ? source.ensuringTrailingComma() : source
+    return .init(component.enumerated().map { index, source in
+      return index < lastIndex ? source.ensuringTrailingComma() : source
       })
   }
 }
@@ -3238,8 +3238,8 @@ public struct SpecializeAttributeSpecListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -3275,8 +3275,8 @@ public struct SpecializeAttributeSpecListBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -3300,8 +3300,8 @@ public struct SpecializeAttributeSpecListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -3342,8 +3342,8 @@ public struct StringLiteralSegmentsBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -3367,8 +3367,8 @@ public struct StringLiteralSegmentsBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -3392,8 +3392,8 @@ public struct StringLiteralSegmentsBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -3434,8 +3434,8 @@ public struct SwitchCaseListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -3459,8 +3459,8 @@ public struct SwitchCaseListBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -3484,8 +3484,8 @@ public struct SwitchCaseListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -3526,8 +3526,8 @@ public struct TupleExprElementListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -3539,8 +3539,8 @@ public struct TupleExprElementListBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -3564,8 +3564,8 @@ public struct TupleExprElementListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -3580,8 +3580,8 @@ public struct TupleExprElementListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in 
-        return index < lastIndex ? source.ensuringTrailingComma() : source
+    return .init(component.enumerated().map { index, source in
+      return index < lastIndex ? source.ensuringTrailingComma() : source
       })
   }
 }
@@ -3609,8 +3609,8 @@ public struct TuplePatternElementListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -3622,8 +3622,8 @@ public struct TuplePatternElementListBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -3647,8 +3647,8 @@ public struct TuplePatternElementListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -3663,8 +3663,8 @@ public struct TuplePatternElementListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in 
-        return index < lastIndex ? source.ensuringTrailingComma() : source
+    return .init(component.enumerated().map { index, source in
+      return index < lastIndex ? source.ensuringTrailingComma() : source
       })
   }
 }
@@ -3692,8 +3692,8 @@ public struct TupleTypeElementListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -3705,8 +3705,8 @@ public struct TupleTypeElementListBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -3730,8 +3730,8 @@ public struct TupleTypeElementListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -3746,8 +3746,8 @@ public struct TupleTypeElementListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in 
-        return index < lastIndex ? source.ensuringTrailingComma() : source
+    return .init(component.enumerated().map { index, source in
+      return index < lastIndex ? source.ensuringTrailingComma() : source
       })
   }
 }
@@ -3775,8 +3775,8 @@ public struct UnexpectedNodesBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -3788,8 +3788,8 @@ public struct UnexpectedNodesBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -3813,8 +3813,8 @@ public struct UnexpectedNodesBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -3855,8 +3855,8 @@ public struct YieldExprListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   
@@ -3868,8 +3868,8 @@ public struct YieldExprListBuilder {
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map { 
-      $0 
+    return expression.map {
+      $0
     }
   }
   
@@ -3893,8 +3893,8 @@ public struct YieldExprListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap { 
-      $0 
+    return components.flatMap {
+      $0
     }
   }
   

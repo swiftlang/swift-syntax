@@ -19,113 +19,113 @@ extension Keyword {
   /// This is true for keywords that used to be considered non-contextual.
   var isLexerClassified: Bool {
     switch self {
-    case .`Any`: 
+    case .`Any`:
       return true
-    case .`as`: 
+    case .`as`:
       return true
-    case .`associatedtype`: 
+    case .`associatedtype`:
       return true
-    case .`break`: 
+    case .`break`:
       return true
-    case .`case`: 
+    case .`case`:
       return true
-    case .`catch`: 
+    case .`catch`:
       return true
-    case .`class`: 
+    case .`class`:
       return true
-    case .`continue`: 
+    case .`continue`:
       return true
-    case .`default`: 
+    case .`default`:
       return true
-    case .`defer`: 
+    case .`defer`:
       return true
-    case .`deinit`: 
+    case .`deinit`:
       return true
-    case .`do`: 
+    case .`do`:
       return true
-    case .`else`: 
+    case .`else`:
       return true
-    case .`enum`: 
+    case .`enum`:
       return true
-    case .`extension`: 
+    case .`extension`:
       return true
-    case .`fallthrough`: 
+    case .`fallthrough`:
       return true
-    case .`false`: 
+    case .`false`:
       return true
-    case .`fileprivate`: 
+    case .`fileprivate`:
       return true
-    case .`for`: 
+    case .`for`:
       return true
-    case .`func`: 
+    case .`func`:
       return true
-    case .`guard`: 
+    case .`guard`:
       return true
-    case .`if`: 
+    case .`if`:
       return true
-    case .`import`: 
+    case .`import`:
       return true
-    case .`in`: 
+    case .`in`:
       return true
-    case .`init`: 
+    case .`init`:
       return true
-    case .`inout`: 
+    case .`inout`:
       return true
-    case .`internal`: 
+    case .`internal`:
       return true
-    case .`is`: 
+    case .`is`:
       return true
-    case .`let`: 
+    case .`let`:
       return true
-    case .`nil`: 
+    case .`nil`:
       return true
-    case .`operator`: 
+    case .`operator`:
       return true
-    case .`precedencegroup`: 
+    case .`precedencegroup`:
       return true
-    case .`private`: 
+    case .`private`:
       return true
-    case .`protocol`: 
+    case .`protocol`:
       return true
-    case .`public`: 
+    case .`public`:
       return true
-    case .`repeat`: 
+    case .`repeat`:
       return true
-    case .`rethrows`: 
+    case .`rethrows`:
       return true
-    case .`return`: 
+    case .`return`:
       return true
-    case .`self`: 
+    case .`self`:
       return true
-    case .`Self`: 
+    case .`Self`:
       return true
-    case .`static`: 
+    case .`static`:
       return true
-    case .`struct`: 
+    case .`struct`:
       return true
-    case .`subscript`: 
+    case .`subscript`:
       return true
-    case .`super`: 
+    case .`super`:
       return true
-    case .`switch`: 
+    case .`switch`:
       return true
-    case .`throw`: 
+    case .`throw`:
       return true
-    case .`throws`: 
+    case .`throws`:
       return true
-    case .`true`: 
+    case .`true`:
       return true
-    case .`try`: 
+    case .`try`:
       return true
-    case .`typealias`: 
+    case .`typealias`:
       return true
-    case .`var`: 
+    case .`var`:
       return true
-    case .`where`: 
+    case .`where`:
       return true
-    case .`while`: 
+    case .`while`:
       return true
-    default: 
+    default:
       return false
     }
   }
@@ -157,7 +157,7 @@ extension TokenKind {
       return true
     case .keyword(let keyword):
       return keyword.isLexerClassified
-    default: 
+    default:
       return false
     }
   }

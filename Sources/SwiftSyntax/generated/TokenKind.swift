@@ -766,7 +766,7 @@ extension TokenKind {
       return .integerLiteral(text)
     case .keyword:
       var text = text
-      return text.withSyntaxText { text in 
+      return text.withSyntaxText { text in
         return .keyword(Keyword(text)!)
       }
     case .leftAngle:

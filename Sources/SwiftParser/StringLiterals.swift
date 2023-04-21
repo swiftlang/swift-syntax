@@ -487,7 +487,7 @@ extension Parser {
       // string literal.
       guard currentToken.leadingTriviaText.isEmpty else { break }
 
-      if let stringSegment = self.consume(if: .stringSegment) {
+      if let stringSegment = self.consume(if: .stringSegment, TokenSpec(.identifier, remapping: .stringSegment)) {
         segments.append(.stringSegment(RawStringSegmentSyntax(content: stringSegment, arena: self.arena)))
       } else if let backslash = self.consume(if: .backslash) {
         let (unexpectedBeforeDelimiter, delimiter) = self.parsePoundDelimiter(.rawStringDelimiter, matching: openDelimiter)

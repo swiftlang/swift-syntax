@@ -61,12 +61,40 @@ final class OriginalDefinedInAttrTests: XCTestCase {
   func testOriginalDefinedInAttr5() {
     assertParse(
       """
-      @_originallyDefinedIn(1️⃣OSX 13.13.3)
+      @_originallyDefinedIn(1️⃣OSX 2️⃣13.13.3)
       public class ToplevelClass2 {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected 'module:', string literal, and ',' in @_originallyDefinedIn arguments", fixIts: ["insert 'module:', string literal, and ','"])
-      ]
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected 'module:' in @_originallyDefinedIn arguments",
+          fixIts: ["insert 'module:'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: #"expected '"' in string literal"#,
+          fixIts: [#"insert '"'"#]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: #"expected '"' to end string literal"#,
+          fixIts: [#"insert '"'"#]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected ',' in @_originallyDefinedIn arguments",
+          fixIts: ["insert ','"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected platform in version restriction",
+          fixIts: ["insert platform"]
+        ),
+      ],
+      fixedSource: """
+        @_originallyDefinedIn(module: "OSX" , <#identifier#>13.13.3)
+        public class ToplevelClass2 {}
+        """
     )
   }
 

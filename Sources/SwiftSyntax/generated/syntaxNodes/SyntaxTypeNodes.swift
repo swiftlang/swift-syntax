@@ -1441,7 +1441,7 @@ public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 
 // MARK: - MissingTypeSyntax
 
-
+/// In case the source code is missing a type, this node stands in place of the missing type.
 public struct MissingTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -1461,14 +1461,17 @@ public struct MissingTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-    leadingTrivia: Trivia? = nil,
-    _ unexpected: UnexpectedNodesSyntax? = nil,
-    trailingTrivia: Trivia? = nil
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforePlaceholder: UnexpectedNodesSyntax? = nil,
+      placeholder: TokenSyntax,
+      _ unexpectedAfterPlaceholder: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpected))) {(arena, _) in
-      let layout: [RawSyntax?] = [unexpected?.raw]
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforePlaceholder, placeholder, unexpectedAfterPlaceholder))) {(arena, _) in
+      let layout: [RawSyntax?] = [unexpectedBeforePlaceholder?.raw, placeholder.raw, unexpectedAfterPlaceholder?.raw]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.missingType,
         from: layout,
@@ -1482,7 +1485,7 @@ public struct MissingTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
   
-  public var unexpected: UnexpectedNodesSyntax? {
+  public var unexpectedBeforePlaceholder: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -1491,8 +1494,27 @@ public struct MissingTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// A placeholder, i.e. `<#type#>` that can be inserted into the source code to represent the missing type. This token should always have `presence = .missing`.
+  public var placeholder: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = MissingTypeSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedAfterPlaceholder: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = MissingTypeSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
   public static var structure: SyntaxNodeStructure {
-    return .layout([\Self.unexpected])
+    return .layout([\Self.unexpectedBeforePlaceholder, \Self.placeholder, \Self.unexpectedAfterPlaceholder])
   }
 }
 

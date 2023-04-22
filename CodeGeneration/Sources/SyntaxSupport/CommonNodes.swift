@@ -144,6 +144,7 @@ public let COMMON_NODES: [Node] = [
   Node(
     name: "MissingDecl",
     nameForDiagnostics: "declaration",
+    description: "In case the source code is missing a declaration, this node stands in place of the missing declaration.",
     kind: "Decl",
     traits: [
       "Attributed"
@@ -152,12 +153,22 @@ public let COMMON_NODES: [Node] = [
       Child(
         name: "Attributes",
         kind: .collection(kind: "AttributeList", collectionElementName: "Attribute"),
+        description: "If there were standalone attributes without a declaration to attach them to, the `MissingDeclSyntax` will contain these.",
         isOptional: true
       ),
       Child(
         name: "Modifiers",
         kind: .collection(kind: "ModifierList", collectionElementName: "Modifier"),
+        description: "If there were standalone modifiers without a declaration to attach them to, the `MissingDeclSyntax` will contain these.",
         isOptional: true
+      ),
+      Child(
+        name: "Placeholder",
+        kind: .token(choices: [.token(tokenKind: "IdentifierToken")], requiresLeadingSpace: false, requiresTrailingSpace: false),
+        description: """
+          A placeholder, i.e. `<#decl#>` that can be inserted into the source code to represent the missing declaration.
+          This token should always have `presence = .missing`.
+          """
       ),
     ]
   ),
@@ -165,31 +176,85 @@ public let COMMON_NODES: [Node] = [
   Node(
     name: "MissingExpr",
     nameForDiagnostics: "expression",
-    kind: "Expr"
+    description: "In case the source code is missing a expression, this node stands in place of the missing expression.",
+    kind: "Expr",
+    children: [
+      Child(
+        name: "Placeholder",
+        kind: .token(choices: [.token(tokenKind: "IdentifierToken")], requiresLeadingSpace: false, requiresTrailingSpace: false),
+        description: """
+          A placeholder, i.e. `<#expression#>` that can be inserted into the source code to represent the missing expression.
+          This token should always have `presence = .missing`.
+          """
+      )
+    ]
   ),
 
   Node(
     name: "MissingPattern",
     nameForDiagnostics: "pattern",
-    kind: "Pattern"
+    description: "In case the source code is missing a pattern, this node stands in place of the missing pattern.",
+    kind: "Pattern",
+    children: [
+      Child(
+        name: "Placeholder",
+        kind: .token(choices: [.token(tokenKind: "IdentifierToken")], requiresLeadingSpace: false, requiresTrailingSpace: false),
+        description: """
+          A placeholder, i.e. `<#pattern#>` that can be inserted into the source code to represent the missing pattern.
+          This token should always have `presence = .missing`.
+          """
+      )
+    ]
   ),
 
   Node(
     name: "MissingStmt",
     nameForDiagnostics: "statement",
-    kind: "Stmt"
+    description: "In case the source code is missing a statement, this node stands in place of the missing statement.",
+    kind: "Stmt",
+    children: [
+      Child(
+        name: "Placeholder",
+        kind: .token(choices: [.token(tokenKind: "IdentifierToken")], requiresLeadingSpace: false, requiresTrailingSpace: false),
+        description: """
+          A placeholder, i.e. `<#statement#>` that can be inserted into the source code to represent the missing pattern.
+          This token should always have `presence = .missing`.
+          """
+      )
+    ]
   ),
 
   Node(
     name: "Missing",
     nameForDiagnostics: nil,
-    kind: "Syntax"
+    description: "In case the source code is missing a syntax node, this node stands in place of the missing node.",
+    kind: "Syntax",
+    children: [
+      Child(
+        name: "Placeholder",
+        kind: .token(choices: [.token(tokenKind: "IdentifierToken")], requiresLeadingSpace: false, requiresTrailingSpace: false),
+        description: """
+          A placeholder, i.e. `<#syntax#>` that can be inserted into the source code to represent the missing pattern.
+          This token should always have `presence = .missing`
+          """
+      )
+    ]
   ),
 
   Node(
     name: "MissingType",
     nameForDiagnostics: "type",
-    kind: "Type"
+    description: "In case the source code is missing a type, this node stands in place of the missing type.",
+    kind: "Type",
+    children: [
+      Child(
+        name: "Placeholder",
+        kind: .token(choices: [.token(tokenKind: "IdentifierToken")], requiresLeadingSpace: false, requiresTrailingSpace: false),
+        description: """
+          A placeholder, i.e. `<#type#>` that can be inserted into the source code to represent the missing type. This token should always have `presence = .missing`.
+          """
+      )
+    ]
   ),
 
   Node(

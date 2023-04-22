@@ -15,6 +15,18 @@ import SwiftSyntaxBuilder
 import SyntaxSupport
 import Utils
 
+extension Child {
+  public var docComment: SwiftSyntax.Trivia {
+    guard let description = description else {
+      return []
+    }
+    let dedented = dedented(string: description)
+    let lines = dedented.split(separator: "\n", omittingEmptySubsequences: false)
+    let pieces = lines.map { SwiftSyntax.TriviaPiece.docLineComment("/// \($0)") }
+    return Trivia(pieces: pieces)
+  }
+}
+
 /// This file generates the syntax nodes for SwiftSyntax. To keep the generated
 /// files at a managable file size, it is to be invoked multiple times with the
 /// variable `emitKind` set to a base kind listed in
@@ -33,7 +45,7 @@ func syntaxNode(emitKind: String) -> SourceFileSyntax {
         """
       ) {
         for child in node.children {
-          if let childChoiceDecl = try generateSyntaxChildChoices(for: child) {
+          if let childChoiceDecl = try! generateSyntaxChildChoices(for: child) {
             childChoiceDecl
           }
         }
@@ -140,7 +152,7 @@ func syntaxNode(emitKind: String) -> SourceFileSyntax {
         if node.hasOptionalBaseTypeChild {
           // TODO: Remove when we no longer support compiling in Swift 5.6. Change the
           // above constructor to use `Optional<BaseType>.none` instead.
-          try InitializerDeclSyntax(
+          try! InitializerDeclSyntax(
             """
             /// This initializer exists solely because Swift 5.6 does not support
             /// `Optional<ConcreteType>.none` as a default value of a generic parameter.
@@ -191,11 +203,10 @@ func syntaxNode(emitKind: String) -> SourceFileSyntax {
 
           let childType: String = child.kind.isNodeChoicesEmpty ? child.typeName : child.name
           let type = child.isOptional ? TypeSyntax("\(raw: childType)?") : TypeSyntax("\(raw: childType)")
-          let childDoc = child.description.map { dedented(string: $0) }.map { Trivia.docLineComment("/// \($0)") }
 
-          try VariableDeclSyntax(
+          try! VariableDeclSyntax(
             """
-            \(raw: childDoc ?? [])
+            \(raw: child.docComment)
             public var \(raw: child.swiftName): \(type)
             """
           ) {
@@ -274,7 +285,7 @@ private func generateSyntaxChildChoices(for child: Child) throws -> EnumDeclSynt
     return nil
   }
 
-  return try EnumDeclSyntax("public enum \(raw: child.name): SyntaxChildChoices") {
+  return try! EnumDeclSyntax("public enum \(raw: child.name): SyntaxChildChoices") {
     for choice in choices {
       DeclSyntax("case `\(raw: choice.swiftName)`(\(raw: choice.typeName))")
     }

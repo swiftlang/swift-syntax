@@ -12,6 +12,8 @@ add_swift_host_library(SwiftSyntax
   BumpPtrAllocator.swift
   CommonAncestor.swift
   IncrementalParseTransition.swift
+  MemoryLayout.swift
+  MissingNodeInitializers.swift
   Trivia.swift
   SourceLength.swift
   SourceLocation.swift

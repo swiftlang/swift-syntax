@@ -1448,7 +1448,7 @@ public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 
 // MARK: - MissingStmtSyntax
 
-
+/// In case the source code is missing a statement, this node stands in place of the missing statement.
 public struct MissingStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -1468,14 +1468,17 @@ public struct MissingStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-    leadingTrivia: Trivia? = nil,
-    _ unexpected: UnexpectedNodesSyntax? = nil,
-    trailingTrivia: Trivia? = nil
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforePlaceholder: UnexpectedNodesSyntax? = nil,
+      placeholder: TokenSyntax,
+      _ unexpectedAfterPlaceholder: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpected))) {(arena, _) in
-      let layout: [RawSyntax?] = [unexpected?.raw]
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforePlaceholder, placeholder, unexpectedAfterPlaceholder))) {(arena, _) in
+      let layout: [RawSyntax?] = [unexpectedBeforePlaceholder?.raw, placeholder.raw, unexpectedAfterPlaceholder?.raw]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.missingStmt,
         from: layout,
@@ -1489,7 +1492,7 @@ public struct MissingStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
   
-  public var unexpected: UnexpectedNodesSyntax? {
+  public var unexpectedBeforePlaceholder: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -1498,8 +1501,27 @@ public struct MissingStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// A placeholder, i.e. `<#statement#>` that can be inserted into the source code to represent the missing pattern./// This token should always have `presence = .missing`.
+  public var placeholder: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = MissingStmtSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedAfterPlaceholder: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = MissingStmtSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
   public static var structure: SyntaxNodeStructure {
-    return .layout([\Self.unexpected])
+    return .layout([\Self.unexpectedBeforePlaceholder, \Self.placeholder, \Self.unexpectedAfterPlaceholder])
   }
 }
 

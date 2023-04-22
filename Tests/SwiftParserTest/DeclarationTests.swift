@@ -1384,8 +1384,7 @@ final class DeclarationTests: XCTestCase {
       "protocol1️⃣<2️⃣:3️⃣",
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in protocol", fixIts: ["insert identifier"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected name in primary associated type clause", fixIts: ["insert name"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '>' to end primary associated type clause", fixIts: ["insert '>'"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected name and '>' to end primary associated type clause", fixIts: ["insert name and '>'"]),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected type in inherited type", fixIts: ["insert type"]),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected member block in protocol", fixIts: ["insert member block"]),
       ]

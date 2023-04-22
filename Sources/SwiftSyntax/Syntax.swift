@@ -660,21 +660,22 @@ public protocol SyntaxChildChoices: SyntaxProtocol {}
 public struct TokenSequence: Sequence {
   public struct Iterator: IteratorProtocol {
     var nextToken: TokenSyntax?
-    let endPosition: AbsolutePosition
+    /// The last token to iterate (inclusive).
+    let endToken: TokenSyntax?
     let viewMode: SyntaxTreeViewMode
 
-    init(_ token: TokenSyntax?, endPosition: AbsolutePosition, viewMode: SyntaxTreeViewMode) {
+    init(_ token: TokenSyntax?, endToken: TokenSyntax?, viewMode: SyntaxTreeViewMode) {
       self.nextToken = token
-      self.endPosition = endPosition
+      self.endToken = endToken
       self.viewMode = viewMode
     }
 
     public mutating func next() -> TokenSyntax? {
       guard let token = self.nextToken else { return nil }
-      self.nextToken = token.nextToken(viewMode: viewMode)
-      // Make sure we stop once we reach the end of the containing node.
-      if let nextTok = self.nextToken, nextTok.position >= self.endPosition {
+      if nextToken == endToken {
         self.nextToken = nil
+      } else {
+        self.nextToken = token.nextToken(viewMode: viewMode)
       }
       return token
     }
@@ -689,7 +690,7 @@ public struct TokenSequence: Sequence {
   }
 
   public func makeIterator() -> Iterator {
-    return Iterator(node.firstToken(viewMode: viewMode), endPosition: node.endPosition, viewMode: viewMode)
+    return Iterator(node.firstToken(viewMode: viewMode), endToken: node.lastToken(viewMode: viewMode), viewMode: viewMode)
   }
 
   public func reversed() -> ReversedTokenSequence {

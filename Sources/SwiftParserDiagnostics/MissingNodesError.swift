@@ -335,17 +335,18 @@ extension ParseDiagnosticsGenerator {
 
     /// Ancestors that don't contain any tokens are not very interesting to merge diagnostics (because there can't be any missing tokens we can merge them with).
     /// Find the first ancestor that contains any tokens.
-    var ancestorWithTokens = node.parent
+    var ancestorWithMoreTokens = node.parent
     var index = node.index
-    while let unwrappedParent = ancestorWithTokens, !unwrappedParent.hasTokens {
-      ancestorWithTokens = unwrappedParent.parent
+    let nodeTokens = Array(node.tokens(viewMode: .all))
+    while let unwrappedParent = ancestorWithMoreTokens, Array(unwrappedParent.tokens(viewMode: .all)) == nodeTokens {
+      ancestorWithMoreTokens = unwrappedParent.parent
       index = unwrappedParent.index
     }
 
     // Walk all upcoming sibling to see if they are also missing to handle them in this diagnostic.
     // If this is the case, handle all of them in this diagnostic.
     var missingNodes = [Syntax(node)]
-    if let parentWithTokens = ancestorWithTokens {
+    if let parentWithTokens = ancestorWithMoreTokens {
       let siblings = parentWithTokens.children(viewMode: .all)
       let siblingsAfter = siblings[siblings.index(after: index)...]
       for sibling in siblingsAfter {

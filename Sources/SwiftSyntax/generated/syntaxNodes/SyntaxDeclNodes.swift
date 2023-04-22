@@ -3914,7 +3914,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
 // MARK: - MissingDeclSyntax
 
-
+/// In case the source code is missing a declaration, this node stands in place of the missing declaration.
 public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -3939,7 +3939,9 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       attributes: AttributeListSyntax? = nil,
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
       modifiers: ModifierListSyntax? = nil,
-      _ unexpectedAfterModifiers: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenModifiersAndPlaceholder: UnexpectedNodesSyntax? = nil,
+      placeholder: TokenSyntax,
+      _ unexpectedAfterPlaceholder: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -3950,14 +3952,18 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             attributes, 
             unexpectedBetweenAttributesAndModifiers, 
             modifiers, 
-            unexpectedAfterModifiers
+            unexpectedBetweenModifiersAndPlaceholder, 
+            placeholder, 
+            unexpectedAfterPlaceholder
           ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
           attributes?.raw, 
           unexpectedBetweenAttributesAndModifiers?.raw, 
           modifiers?.raw, 
-          unexpectedAfterModifiers?.raw
+          unexpectedBetweenModifiersAndPlaceholder?.raw, 
+          placeholder.raw, 
+          unexpectedAfterPlaceholder?.raw
         ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.missingDecl,
@@ -3981,6 +3987,7 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// If there were standalone attributes without a declaration to attach them to, the `MissingDeclSyntax` will contain these.
   public var attributes: AttributeListSyntax? {
     get {
       return data.child(at: 1, parent: Syntax(self)).map(AttributeListSyntax.init)
@@ -4018,6 +4025,7 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// If there were standalone modifiers without a declaration to attach them to, the `MissingDeclSyntax` will contain these.
   public var modifiers: ModifierListSyntax? {
     get {
       return data.child(at: 3, parent: Syntax(self)).map(ModifierListSyntax.init)
@@ -4046,12 +4054,31 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return MissingDeclSyntax(newData)
   }
   
-  public var unexpectedAfterModifiers: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenModifiersAndPlaceholder: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MissingDeclSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  /// A placeholder, i.e. `<#decl#>` that can be inserted into the source code to represent the missing declaration./// This token should always have `presence = .missing`.
+  public var placeholder: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = MissingDeclSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedAfterPlaceholder: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = MissingDeclSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
     }
   }
   
@@ -4061,7 +4088,9 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.attributes, 
           \Self.unexpectedBetweenAttributesAndModifiers, 
           \Self.modifiers, 
-          \Self.unexpectedAfterModifiers
+          \Self.unexpectedBetweenModifiersAndPlaceholder, 
+          \Self.placeholder, 
+          \Self.unexpectedAfterPlaceholder
         ])
   }
 }

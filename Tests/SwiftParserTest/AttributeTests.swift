@@ -311,8 +311,7 @@ final class AttributeTests: XCTestCase {
       "@resultBuilder1️⃣",
       diagnostics: [DiagnosticSpec(message: "expected declaration after attribute", fixIts: ["insert declaration"])],
       fixedSource: """
-        @resultBuilder
-        <#declaration#>
+        @resultBuilder<#declaration#>
         """
     )
   }

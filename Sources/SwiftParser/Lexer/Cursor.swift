@@ -1913,7 +1913,10 @@ extension Lexer.Cursor {
           return Lexer.Result(.stringSegment, error: error)
         }
       case .error(let errorKind):
-        error = LexingDiagnostic(errorKind, position: self)
+        // Only overwrite error if we had not found an earlier error yet
+        if error == nil {
+          error = LexingDiagnostic(errorKind, position: self)
+        }
         self = clone
       case .endOfString:
         return Lexer.Result(

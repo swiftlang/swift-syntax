@@ -29,7 +29,7 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: copyrightHead
       clauses: try IfConfigClauseListSyntax {
         IfConfigClauseSyntax(
           poundKeyword: .poundIfKeyword(),
-          condition: ExprSyntax("DEBUG"),
+          condition: ExprSyntax("SWIFTSYNTAX_ENABLE_RAWSYNTAX_VALIDATION"),
           elements: .statements(
             try CodeBlockItemListSyntax {
               DeclSyntax(
@@ -114,14 +114,10 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: copyrightHead
                   // the list of expected token choices in the syntax tree doesn't match those
                   // the parser generates. Disable the verification for now until all issues
                   // regarding it are fixed.
-                  #if VALIDATE_TOKEN_CHOICES
                   if raw != nil {
                     return verify(raw, as: RawTokenSyntax.self, tokenChoices: tokenChoices, file: file, line: line)
                   }
                   return nil
-                  #else
-                  return verify(raw, as: RawTokenSyntax?.self)
-                  #endif
                 }
                 """
               )
@@ -133,7 +129,6 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: copyrightHead
                   // the list of expected token choices in the syntax tree doesn't match those
                   // the parser generates. Disable the verification for now until all issues
                   // regarding it are fixed.
-                  #if VALIDATE_TOKEN_CHOICES
                   guard let raw = raw else {
                     return .expectedNonNil(expectedKind: RawTokenSyntax.self, file: file, line: line)
                   }
@@ -154,9 +149,6 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: copyrightHead
                     }
                   }
                   return ValidationError.tokenMismatch(expectedTokenChoices: tokenChoices, actualKind: tokenView.rawKind, actualText: tokenView.rawText, file: file, line: line)
-                  #else
-                  return verify(raw, as: RawTokenSyntax.self)
-                  #endif
                 }
 
                 """

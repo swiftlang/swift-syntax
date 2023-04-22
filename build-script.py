@@ -6,7 +6,6 @@ import platform
 import subprocess
 import sys
 import tempfile
-from concurrent.futures import ThreadPoolExecutor
 from typing import Dict, List, Optional
 
 
@@ -141,6 +140,7 @@ def run_code_generation(
 
     env = dict(os.environ)
     env["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] = "1"
+    env["SWIFTSYNTAX_ENABLE_RAWSYNTAX_VALIDATION"] = "1"
     check_call(swiftpm_call, env=env, verbose=verbose)
 
 
@@ -174,6 +174,8 @@ class Builder(object):
     build_dir: Optional[str]
     multiroot_data_file: Optional[str]
     release: bool
+    enable_rawsyntax_validation: bool
+    enable_test_fuzzing: bool
     disable_sandbox: bool
 
     def __init__(
@@ -182,12 +184,16 @@ class Builder(object):
         build_dir: Optional[str],
         multiroot_data_file: Optional[str],
         release: bool,
+        enable_rawsyntax_validation: bool,
+        enable_test_fuzzing: bool,
         verbose: bool,
         disable_sandbox: bool = False,
     ) -> None:
         self.build_dir = build_dir
         self.multiroot_data_file = multiroot_data_file
         self.release = release
+        self.enable_rawsyntax_validation = enable_rawsyntax_validation
+        self.enable_test_fuzzing = enable_test_fuzzing
         self.disable_sandbox = disable_sandbox
         self.verbose = verbose
         self.toolchain = toolchain
@@ -221,6 +227,10 @@ class Builder(object):
 
         env = dict(os.environ)
         env["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] = "1"
+        if self.enable_rawsyntax_validation:
+            env["SWIFTSYNTAX_ENABLE_RAWSYNTAX_VALIDATION"] = "1"
+        if self.enable_test_fuzzing:
+            env["SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION"] = "1"
         # Tell other projects in the unified build to use local dependencies
         env["SWIFTCI_USE_LOCAL_DEPS"] = "1"
         env["SWIFT_SYNTAX_PARSER_LIB_SEARCH_PATH"] = \
@@ -273,8 +283,15 @@ def check_generated_files_match(self_generated_dir: str,
 
 
 def run_tests(
-    toolchain: str, build_dir: Optional[str], multiroot_data_file: Optional[str],
-    release: bool, filecheck_exec: Optional[str], skip_lit_tests: bool, verbose: bool
+    toolchain: str,
+    build_dir: Optional[str],
+    multiroot_data_file: Optional[str],
+    release: bool,
+    enable_rawsyntax_validation: bool,
+    enable_test_fuzzing: bool,
+    filecheck_exec: Optional[str], 
+    skip_lit_tests: bool, 
+    verbose: bool
 ) -> None:
     print("** Running SwiftSyntax Tests **")
 
@@ -292,6 +309,8 @@ def run_tests(
         build_dir=build_dir,
         multiroot_data_file=multiroot_data_file,
         release=release,
+        enable_rawsyntax_validation=enable_rawsyntax_validation,
+        enable_test_fuzzing=enable_test_fuzzing,
         verbose=verbose,
     )
 
@@ -394,9 +413,15 @@ def run_lit_tests(toolchain: str, build_dir: Optional[str], release: bool,
 # XCTest Tests
 
 
-def run_xctests(toolchain: str, build_dir: Optional[str],
-                multiroot_data_file: Optional[str], release: bool,
-                verbose: bool) -> None:
+def run_xctests(
+    toolchain: str, 
+    build_dir: Optional[str],
+    multiroot_data_file: Optional[str], 
+    release: bool,
+    enable_rawsyntax_validation: bool,
+    enable_test_fuzzing: bool,
+    verbose: bool
+) -> None:
     print("** Running XCTests **")
     swiftpm_call = get_swiftpm_invocation(
         toolchain=toolchain,
@@ -414,6 +439,10 @@ def run_xctests(toolchain: str, build_dir: Optional[str],
 
     env = dict(os.environ)
     env["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] = "1"
+    if enable_rawsyntax_validation:
+        env["SWIFTSYNTAX_ENABLE_RAWSYNTAX_VALIDATION"] = "1"
+    if enable_test_fuzzing:
+        env["SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION"] = "1"
     # Tell other projects in the unified build to use local dependencies
     env["SWIFTCI_USE_LOCAL_DEPS"] = "1"
     env["SWIFT_SYNTAX_PARSER_LIB_SEARCH_PATH"] = \
@@ -461,17 +490,18 @@ def verify_source_code_command(args: argparse.Namespace) -> None:
 def build_command(args: argparse.Namespace) -> None:
     try:
         builder = Builder(
-            toolchain=realpath(args.toolchain),
+            toolchain=realpath(args.toolchain), # pyright: ignore
             build_dir=realpath(args.build_dir),
             multiroot_data_file=args.multiroot_data_file,
             release=args.release,
+            enable_rawsyntax_validation=args.enable_rawsyntax_validation,
+            enable_test_fuzzing=args.enable_test_fuzzing,
             verbose=args.verbose,
             disable_sandbox=args.disable_sandbox,
         )
         # Until rdar://53881101 is implemented, we cannot request a build of multiple
         # targets simultaneously. For now, just build one product after the other.
         builder.buildProduct("SwiftSyntax")
-        builder.buildProduct("SwiftSyntaxParser")
         builder.buildProduct("SwiftSyntaxBuilder")
 
         # Build examples
@@ -484,10 +514,12 @@ def build_command(args: argparse.Namespace) -> None:
 def test_command(args: argparse.Namespace) -> None:
     try:
         builder = Builder(
-            toolchain=realpath(args.toolchain),
+            toolchain=realpath(args.toolchain), # pyright: ignore
             build_dir=realpath(args.build_dir),
             multiroot_data_file=args.multiroot_data_file,
             release=args.release,
+            enable_rawsyntax_validation=args.enable_rawsyntax_validation,
+            enable_test_fuzzing=args.enable_test_fuzzing,
             verbose=args.verbose,
             disable_sandbox=args.disable_sandbox,
         )
@@ -496,10 +528,12 @@ def test_command(args: argparse.Namespace) -> None:
         builder.buildExample("ExamplePlugin")
 
         run_tests(
-            toolchain=realpath(args.toolchain),
+            toolchain=realpath(args.toolchain), # pyright: ignore
             build_dir=realpath(args.build_dir),
             multiroot_data_file=args.multiroot_data_file,
             release=args.release,
+            enable_rawsyntax_validation=args.enable_rawsyntax_validation,
+            enable_test_fuzzing=args.enable_test_fuzzing,
             filecheck_exec=realpath(args.filecheck_exec),
             skip_lit_tests=args.skip_lit_tests,
             verbose=args.verbose,
@@ -550,6 +584,26 @@ def parse_args() -> argparse.Namespace:
             Path to an Xcode workspace to create a unified build of SwiftSyntax with
             other projects.
             """,
+        )
+
+        parser.add_argument(
+            "--enable-rawsyntax-validation",
+            action="store_true",
+            help="""
+            When constructing RawSyntax nodes validate that their layout matches that
+            defined in `CodeGeneration` and that TokenSyntax nodes have a `tokenKind`
+            matching the ones specified in `CodeGeneration`.
+            """
+        )
+
+        parser.add_argument(
+            "--enable-test-fuzzing",
+            action="store_true",
+            help="""
+            For each `assertParse` test, perform mutations of the test case based on
+            alternate token choices that the parser checks, validating that there are
+            no round-trip or assertion failures.
+            """
         )
 
         parser.add_argument(

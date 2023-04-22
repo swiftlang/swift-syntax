@@ -83,9 +83,31 @@ public let COMMON_NODES: [Node] = [
     ]
   ),
 
-  // decl-effect-specifiers -> (async | reasync)? (throws | rethrows)?
+  // accessor-effect-specifiers -> (async)? (throws)?
   Node(
-    name: "DeclEffectSpecifiers",
+    name: "AccessorEffectSpecifiers",
+    nameForDiagnostics: "accessor specifiers",
+    kind: "Syntax",
+    traits: [
+      "EffectSpecifiers"
+    ],
+    children: [
+      Child(
+        name: "AsyncSpecifier",
+        kind: .token(choices: [.keyword(text: "async")]),
+        isOptional: true
+      ),
+      Child(
+        name: "ThrowsSpecifier",
+        kind: .token(choices: [.keyword(text: "throws")]),
+        isOptional: true
+      ),
+    ]
+  ),
+
+  // funtion-effect-specifiers -> (async | reasync)? (throws | rethrows)?
+  Node(
+    name: "FunctionEffectSpecifiers",
     nameForDiagnostics: "effect specifiers",
     kind: "Syntax",
     traits: [

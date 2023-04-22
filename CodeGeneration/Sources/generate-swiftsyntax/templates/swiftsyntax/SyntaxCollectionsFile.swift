@@ -136,8 +136,7 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
       DeclSyntax(
         """
-        @_spi(RawSyntax)
-        public var layoutView: RawSyntaxLayoutView {
+        private var layoutView: RawSyntaxLayoutView {
           data.raw.layoutView!
         }
         """
@@ -180,7 +179,7 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       DeclSyntax(
         """
         /// The number of elements, `present` or `missing`, in this collection.
-        public var count: Int { return raw.layoutView!.children.count }
+        public var count: Int { return layoutView.children.count }
         """
       )
 
@@ -314,14 +313,6 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         }
         """
       )
-
-      DeclSyntax(
-        """
-        public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-          return nil
-        }
-        """
-      )
     }
 
     try! ExtensionDeclSyntax(
@@ -426,17 +417,5 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         """
       )
     }
-  }
-
-  for node in SYNTAX_NODES where node.isSyntaxCollection {
-    DeclSyntax(
-      """
-      extension \(raw: node.name): CustomReflectable {
-        public var customMirror: Mirror {
-          return Mirror(self, unlabeledChildren: self.map{ $0 })
-        }
-      }
-      """
-    )
   }
 }

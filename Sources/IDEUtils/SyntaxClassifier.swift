@@ -17,12 +17,8 @@ fileprivate extension SyntaxProtocol {
     var contextualClassif: (SyntaxClassification, Bool)? = nil
     var curData = Syntax(self)
     repeat {
-      guard let parent = curData.parent else { break }
-      contextualClassif = SyntaxClassification.classify(
-        parentKind: parent.raw.kind,
-        indexInParent: curData.indexInParent,
-        childKind: raw.kind
-      )
+      guard let parent = curData.parent, let keyPath = curData.keyPathInParent else { break }
+      contextualClassif = SyntaxClassification.classify(keyPath)
       curData = parent
     } while contextualClassif == nil
     return contextualClassif
@@ -35,7 +31,7 @@ extension TokenSyntax {
     let contextualClassification = self.contextualClassification
     let relativeOffset = leadingTriviaLength.utf8Length
     let absoluteOffset = position.utf8Offset + relativeOffset
-    return TokenKindAndText(kind: rawTokenKind, text: tokenView.rawText).classify(
+    return TokenKindAndText(kind: tokenView.rawKind, text: tokenView.rawText).classify(
       offset: absoluteOffset,
       contextualClassification: contextualClassification
     )
@@ -200,16 +196,17 @@ private struct ClassificationVisitor {
 
     for case (let index, let child?) in children.enumerated() {
 
-      let classficiation = SyntaxClassification.classify(
-        parentKind: descriptor.node.kind,
-        indexInParent: index,
-        childKind: child.kind
-      )
+      let classification: (SyntaxClassification, Bool)?
+      if case .layout(let layout) = descriptor.node.kind.syntaxNodeType.structure {
+        classification = SyntaxClassification.classify(layout[index])
+      } else {
+        classification = nil
+      }
       let result = visit(
         .init(
           node: child,
           byteOffset: byteOffset,
-          contextualClassification: classficiation ?? descriptor.contextualClassification
+          contextualClassification: classification ?? descriptor.contextualClassification
         )
       )
       if result == .break {

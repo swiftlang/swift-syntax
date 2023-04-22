@@ -12,7 +12,7 @@
 
 import XCTest
 import SwiftSyntax
-import SwiftSyntaxParser
+import SwiftParser
 
 public class VisitorPerformanceTests: XCTestCase {
 
@@ -29,7 +29,7 @@ public class VisitorPerformanceTests: XCTestCase {
 
     XCTAssertNoThrow(
       try {
-        let parsed = try SyntaxParser.parse(inputFile)
+        let parsed = Parser.parse(source: try String(contentsOf: inputFile))
 
         let emptyVisitor = EmptyVisitor(viewMode: .sourceAccurate)
 
@@ -46,7 +46,7 @@ public class VisitorPerformanceTests: XCTestCase {
 
     XCTAssertNoThrow(
       try {
-        let parsed = try SyntaxParser.parse(inputFile)
+        let parsed = Parser.parse(source: try String(contentsOf: inputFile))
 
         let emptyRewriter = EmptyRewriter()
 
@@ -63,7 +63,7 @@ public class VisitorPerformanceTests: XCTestCase {
 
     XCTAssertNoThrow(
       try {
-        let parsed = try SyntaxParser.parse(inputFile)
+        let parsed = Parser.parse(source: try String(contentsOf: inputFile))
 
         let emptyVisitor = EmptyAnyVisitor(viewMode: .sourceAccurate)
 

@@ -23,7 +23,7 @@ func syntaxNode(emitKind: String) -> SourceFileSyntax {
   SourceFileSyntax(leadingTrivia: copyrightHeader) {
     for node in SYNTAX_NODES where !node.isBase && node.collectionElement.isEmpty && node.baseKind == emitKind {
       // We are actually handling this node now
-      let nodeDoc = node.description.map { "/// \($0)" }
+      let nodeDoc = node.description?.split(separator: "\n", omittingEmptySubsequences: false).map { "/// \($0)" }.joined(separator: "\n")
       try! StructDeclSyntax(
         """
         // MARK: - \(raw: node.name)
@@ -258,48 +258,6 @@ func syntaxNode(emitKind: String) -> SourceFileSyntax {
 
           StmtSyntax("return .layout(\(layout))")
         }
-
-        try! FunctionDeclSyntax("public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String?") {
-          try! SwitchExprSyntax("switch index.data?.indexInParent") {
-            for (index, child) in node.children.enumerated() {
-              SwitchCaseSyntax("case \(raw: index):") {
-                if let nameForDiagnostics = child.nameForDiagnostics {
-                  StmtSyntax(#"return "\#(raw: nameForDiagnostics)""#)
-                } else {
-                  StmtSyntax("return nil")
-                }
-              }
-            }
-
-            SwitchCaseSyntax(
-              """
-              default:
-                fatalError("Invalid index")
-              """
-            )
-          }
-        }
-      }
-
-      try! ExtensionDeclSyntax("extension \(raw: node.name): CustomReflectable") {
-        let children = DictionaryExprSyntax {
-          for child in node.children {
-            DictionaryElementSyntax(
-              leadingTrivia: .newline,
-              keyExpression: ExprSyntax(#""\#(raw: child.swiftName)""#),
-              valueExpression: child.isOptional
-                ? ExprSyntax("\(raw: child.swiftName).map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any")
-                : ExprSyntax("Syntax(\(raw: child.swiftName)).asProtocol(SyntaxProtocol.self)")
-            )
-          }
-        }
-        DeclSyntax(
-          """
-          public var customMirror: Mirror {
-            return Mirror(self, children: \(children))
-          }
-          """
-        )
       }
     }
   }
@@ -456,60 +414,6 @@ fileprivate extension Node {
         \(params)
         )
         """
-    }
-  }
-}
-
-fileprivate extension Child {
-  /// If the type has a default value, return an expression of the form
-  /// ` = default_value` that can be used as the default value to for a
-  /// function parameter. Otherwise, return an empty string.
-  var defaultInitialization: InitializerClauseSyntax? {
-    // Note that this should be Optional<BaseType>.none for defaulted generic,
-    // but that doesn't work in Swift 5.6. To keep source compatibility with
-    // previous SwiftSyntax, we instead create a second initializer that uses
-    // `Missing<Node>` and defaults that to `nil` instead (and `Missing` is
-    // used so that they can't be implicitly converted from a literal).
-
-    if isOptional || isUnexpectedNodes {
-      return InitializerClauseSyntax(value: NilLiteralExprSyntax())
-    }
-
-    guard let token = token, isToken else {
-      return nil
-    }
-
-    if token.isKeyword {
-      return InitializerClauseSyntax(value: ExprSyntax(".\(raw: token.swiftKind)()"))
-    }
-
-    if token.text != nil {
-      return InitializerClauseSyntax(value: ExprSyntax(".\(raw: token.swiftKind)Token()"))
-    }
-
-    guard case .token(let choices, _, _) = kind else {
-      return nil
-    }
-
-    guard choices.count == 1 else {
-      return nil
-    }
-
-    var textChoice: String
-
-    switch choices[0] {
-    case .keyword(let text),
-      .token(let text):
-      textChoice = text
-    }
-
-    if token.associatedValueClass != nil {
-      if textChoice == "init" {
-        textChoice = "`init`"
-      }
-      return InitializerClauseSyntax(value: ExprSyntax(".\(raw: token.swiftKind)(.\(raw: textChoice))"))
-    } else {
-      return InitializerClauseSyntax(value: ExprSyntax(#".\#(raw: token.swiftKind)("\#(raw: textChoice)")"#))
     }
   }
 }

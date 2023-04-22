@@ -249,7 +249,7 @@ extension StringLiteralExprSyntax {
         continue
 
       // Special mode: counting a sequence of pounds until we reach its end.
-      case (true, "#"):
+      case (true, _) where c.unicodeScalars.contains("#"):
         consecutivePounds += 1
         maxPounds = max(maxPounds, consecutivePounds)
       case (true, _):
@@ -283,7 +283,7 @@ extension StringLiteralExprSyntax {
       }
     }
 
-    let escapedContent = content.escapingForStringLiteral(usingDelimiter: closeDelimiter?.text ?? "", isMultiline: openQuote.rawTokenKind == .multilineStringQuote)
+    let escapedContent = content.escapingForStringLiteral(usingDelimiter: closeDelimiter?.text ?? "", isMultiline: openQuote.tokenView.rawKind == .multilineStringQuote)
     let contentToken = TokenSyntax.stringSegment(escapedContent)
     let segment = StringSegmentSyntax(content: contentToken)
     let segments = StringLiteralSegmentsSyntax([.stringSegment(segment)])

@@ -71,6 +71,15 @@ final class StringLiteralTests: XCTestCase {
     )
   }
 
+  func testEscapePoundEmojis() {
+    assertBuildResult(
+      StringLiteralExprSyntax(content: ##"foo"#️⃣"bar"##),
+      """
+      ##"foo"#️⃣"bar"##
+      """
+    )
+  }
+
   func testEscapeInteropolation() {
     assertBuildResult(
       StringLiteralExprSyntax(content: ###"\##(foobar)\#(foobar)"###),

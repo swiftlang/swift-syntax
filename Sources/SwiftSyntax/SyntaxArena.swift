@@ -19,7 +19,7 @@ public class SyntaxArena {
   /// are retained in `addChild()` and are released in `deinit`.
   private var childRefs: Set<SyntaxArenaRef>
 
-  #if DEBUG
+  #if DEBUG || SWIFTSYNTAX_ENABLE_ASSERTIONS
   /// Whether or not this arena has been added to other arenas as a child.
   /// Used to make sure we don’t introduce retain cycles between arenas.
   private var hasParent: Bool
@@ -32,7 +32,7 @@ public class SyntaxArena {
   fileprivate init(slabSize: Int) {
     self.allocator = BumpPtrAllocator(slabSize: slabSize)
     self.childRefs = []
-    #if DEBUG
+    #if DEBUG || SWIFTSYNTAX_ENABLE_ASSERTIONS
     self.hasParent = false
     #endif
   }
@@ -107,7 +107,7 @@ public class SyntaxArena {
   func addChild(_ otherRef: SyntaxArenaRef) {
     if SyntaxArenaRef(self) == otherRef { return }
 
-    #if DEBUG
+    #if DEBUG || SWIFTSYNTAX_ENABLE_ASSERTIONS
     precondition(
       !self.hasParent,
       "an arena can't have a new child once it's owned by other arenas"
@@ -116,7 +116,7 @@ public class SyntaxArena {
 
     if childRefs.insert(otherRef).inserted {
       otherRef.retain()
-      #if DEBUG
+      #if DEBUG || SWIFTSYNTAX_ENABLE_ASSERTIONS
       // FIXME: This may trigger a data race warning in Thread Sanitizer.
       // Can we use atomic bool here?
       otherRef.value.hasParent = true
@@ -135,8 +135,7 @@ public class SyntaxArena {
   ///
   /// "managed" means it's empty, a part of "source buffer", or in the memory
   /// allocated by the underlying arena.
-  @_spi(RawSyntax)
-  public func contains(text: SyntaxText) -> Bool {
+  func contains(text: SyntaxText) -> Bool {
     return (text.isEmpty || allocator.contains(address: text.baseAddress!))
   }
 }
@@ -165,6 +164,7 @@ public class ParsingSyntaxArena: SyntaxArena {
   /// The interned buffer is guaranteed to be null-terminated.
   /// `contains(address _:)` is faster if the address is inside the memory
   /// range this function returned.
+  @_spi(RawSyntax)
   public func internSourceBuffer(_ buffer: UnsafeBufferPointer<UInt8>) -> UnsafeBufferPointer<UInt8> {
     let allocated = allocator.allocate(
       UInt8.self,

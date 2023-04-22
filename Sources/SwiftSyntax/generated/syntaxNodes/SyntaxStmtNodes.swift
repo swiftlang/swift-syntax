@@ -125,35 +125,6 @@ public struct BreakStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterLabel
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return "label"
-    case 4:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension BreakStmtSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeBreakKeyword": unexpectedBeforeBreakKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "breakKeyword": Syntax(breakKeyword).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenBreakKeywordAndLabel": unexpectedBetweenBreakKeywordAndLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "label": label.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedAfterLabel": unexpectedAfterLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
-        ])
-  }
 }
 
 // MARK: - ContinueStmtSyntax
@@ -269,35 +240,6 @@ public struct ContinueStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterLabel
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return "label"
-    case 4:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension ContinueStmtSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeContinueKeyword": unexpectedBeforeContinueKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "continueKeyword": Syntax(continueKeyword).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenContinueKeywordAndLabel": unexpectedBetweenContinueKeywordAndLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "label": label.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedAfterLabel": unexpectedAfterLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
-        ])
-  }
 }
 
 // MARK: - DeferStmtSyntax
@@ -411,35 +353,6 @@ public struct DeferStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedBetweenDeferKeywordAndBody, 
           \Self.body, 
           \Self.unexpectedAfterBody
-        ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension DeferStmtSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeDeferKeyword": unexpectedBeforeDeferKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "deferKeyword": Syntax(deferKeyword).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenDeferKeywordAndBody": unexpectedBetweenDeferKeywordAndBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "body": Syntax(body).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterBody": unexpectedAfterBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
         ])
   }
 }
@@ -602,41 +515,6 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterCatchClauses
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return "body"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension DoStmtSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeDoKeyword": unexpectedBeforeDoKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "doKeyword": Syntax(doKeyword).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenDoKeywordAndBody": unexpectedBetweenDoKeywordAndBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "body": Syntax(body).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenBodyAndCatchClauses": unexpectedBetweenBodyAndCatchClauses.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "catchClauses": catchClauses.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedAfterCatchClauses": unexpectedAfterCatchClauses.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
-        ])
-  }
 }
 
 // MARK: - ExpressionStmtSyntax
@@ -714,28 +592,6 @@ public struct ExpressionStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public static var structure: SyntaxNodeStructure {
     return .layout([\Self.unexpectedBeforeExpression, \Self.expression, \Self.unexpectedAfterExpression])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension ExpressionStmtSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-        "unexpectedBeforeExpression": unexpectedBeforeExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-        "expression": Syntax(expression).asProtocol(SyntaxProtocol.self), 
-        "unexpectedAfterExpression": unexpectedAfterExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any ])
-  }
 }
 
 // MARK: - FallthroughStmtSyntax
@@ -812,28 +668,6 @@ public struct FallthroughStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([\Self.unexpectedBeforeFallthroughKeyword, \Self.fallthroughKeyword, \Self.unexpectedAfterFallthroughKeyword])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension FallthroughStmtSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-        "unexpectedBeforeFallthroughKeyword": unexpectedBeforeFallthroughKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-        "fallthroughKeyword": Syntax(fallthroughKeyword).asProtocol(SyntaxProtocol.self), 
-        "unexpectedAfterFallthroughKeyword": unexpectedAfterFallthroughKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any ])
   }
 }
 
@@ -1158,83 +992,6 @@ public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterBody
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    case 9:
-      return nil
-    case 10:
-      return nil
-    case 11:
-      return nil
-    case 12:
-      return nil
-    case 13:
-      return nil
-    case 14:
-      return nil
-    case 15:
-      return nil
-    case 16:
-      return nil
-    case 17:
-      return nil
-    case 18:
-      return nil
-    case 19:
-      return "body"
-    case 20:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension ForInStmtSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeForKeyword": unexpectedBeforeForKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "forKeyword": Syntax(forKeyword).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenForKeywordAndTryKeyword": unexpectedBetweenForKeywordAndTryKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "tryKeyword": tryKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenTryKeywordAndAwaitKeyword": unexpectedBetweenTryKeywordAndAwaitKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "awaitKeyword": awaitKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenAwaitKeywordAndCaseKeyword": unexpectedBetweenAwaitKeywordAndCaseKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "caseKeyword": caseKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenCaseKeywordAndPattern": unexpectedBetweenCaseKeywordAndPattern.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "pattern": Syntax(pattern).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenPatternAndTypeAnnotation": unexpectedBetweenPatternAndTypeAnnotation.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "typeAnnotation": typeAnnotation.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenTypeAnnotationAndInKeyword": unexpectedBetweenTypeAnnotationAndInKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "inKeyword": Syntax(inKeyword).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenInKeywordAndSequenceExpr": unexpectedBetweenInKeywordAndSequenceExpr.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "sequenceExpr": Syntax(sequenceExpr).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenSequenceExprAndWhereClause": unexpectedBetweenSequenceExprAndWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "whereClause": whereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenWhereClauseAndBody": unexpectedBetweenWhereClauseAndBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "body": Syntax(body).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterBody": unexpectedAfterBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
-        ])
-  }
 }
 
 // MARK: - ForgetStmtSyntax
@@ -1348,35 +1105,6 @@ public struct ForgetStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedBetweenForgetKeywordAndExpression, 
           \Self.expression, 
           \Self.unexpectedAfterExpression
-        ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension ForgetStmtSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeForgetKeyword": unexpectedBeforeForgetKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "forgetKeyword": Syntax(forgetKeyword).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenForgetKeywordAndExpression": unexpectedBetweenForgetKeywordAndExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "expression": Syntax(expression).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterExpression": unexpectedAfterExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
         ])
   }
 }
@@ -1565,47 +1293,6 @@ public struct GuardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterBody
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return "condition"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return "body"
-    case 8:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension GuardStmtSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeGuardKeyword": unexpectedBeforeGuardKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "guardKeyword": Syntax(guardKeyword).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenGuardKeywordAndConditions": unexpectedBetweenGuardKeywordAndConditions.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "conditions": Syntax(conditions).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenConditionsAndElseKeyword": unexpectedBetweenConditionsAndElseKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "elseKeyword": Syntax(elseKeyword).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenElseKeywordAndBody": unexpectedBetweenElseKeywordAndBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "body": Syntax(body).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterBody": unexpectedAfterBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
-        ])
-  }
 }
 
 // MARK: - LabeledStmtSyntax
@@ -1632,7 +1319,7 @@ public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public init<S: StmtSyntaxProtocol>(
       leadingTrivia: Trivia? = nil, 
       _ unexpectedBeforeLabelName: UnexpectedNodesSyntax? = nil, 
-      labelName: TokenSyntax = .identifier("IdentifierToken"), 
+      labelName: TokenSyntax, 
       _ unexpectedBetweenLabelNameAndLabelColon: UnexpectedNodesSyntax? = nil, 
       labelColon: TokenSyntax = .colonToken(), 
       _ unexpectedBetweenLabelColonAndStatement: UnexpectedNodesSyntax? = nil, 
@@ -1747,41 +1434,6 @@ public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterStatement
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "label name"
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension LabeledStmtSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeLabelName": unexpectedBeforeLabelName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "labelName": Syntax(labelName).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenLabelNameAndLabelColon": unexpectedBetweenLabelNameAndLabelColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "labelColon": Syntax(labelColon).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenLabelColonAndStatement": unexpectedBetweenLabelColonAndStatement.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "statement": Syntax(statement).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterStatement": unexpectedAfterStatement.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
-        ])
-  }
 }
 
 // MARK: - MissingStmtSyntax
@@ -1837,22 +1489,6 @@ public struct MissingStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([\Self.unexpected])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension MissingStmtSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-        "unexpected": unexpected.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any ])
   }
 }
 
@@ -2021,47 +1657,6 @@ public struct RepeatWhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterCondition
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return "body"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return "condition"
-    case 8:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension RepeatWhileStmtSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeRepeatKeyword": unexpectedBeforeRepeatKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "repeatKeyword": Syntax(repeatKeyword).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenRepeatKeywordAndBody": unexpectedBetweenRepeatKeywordAndBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "body": Syntax(body).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenBodyAndWhileKeyword": unexpectedBetweenBodyAndWhileKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "whileKeyword": Syntax(whileKeyword).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenWhileKeywordAndCondition": unexpectedBetweenWhileKeywordAndCondition.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "condition": Syntax(condition).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterCondition": unexpectedAfterCondition.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
-        ])
-  }
 }
 
 // MARK: - ReturnStmtSyntax
@@ -2208,35 +1803,6 @@ public struct ReturnStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterExpression
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension ReturnStmtSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeReturnKeyword": unexpectedBeforeReturnKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "returnKeyword": Syntax(returnKeyword).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenReturnKeywordAndExpression": unexpectedBetweenReturnKeywordAndExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "expression": expression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedAfterExpression": unexpectedAfterExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
-        ])
-  }
 }
 
 // MARK: - ThrowStmtSyntax
@@ -2350,35 +1916,6 @@ public struct ThrowStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedBetweenThrowKeywordAndExpression, 
           \Self.expression, 
           \Self.unexpectedAfterExpression
-        ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension ThrowStmtSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeThrowKeyword": unexpectedBeforeThrowKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "throwKeyword": Syntax(throwKeyword).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenThrowKeywordAndExpression": unexpectedBetweenThrowKeywordAndExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "expression": Syntax(expression).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterExpression": unexpectedAfterExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
         ])
   }
 }
@@ -2541,41 +2078,6 @@ public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterBody
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension WhileStmtSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeWhileKeyword": unexpectedBeforeWhileKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "whileKeyword": Syntax(whileKeyword).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenWhileKeywordAndConditions": unexpectedBetweenWhileKeywordAndConditions.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "conditions": Syntax(conditions).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenConditionsAndBody": unexpectedBetweenConditionsAndBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "body": Syntax(body).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterBody": unexpectedAfterBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
-        ])
-  }
 }
 
 // MARK: - YieldStmtSyntax
@@ -2731,35 +2233,6 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedBetweenYieldKeywordAndYields, 
           \Self.yields, 
           \Self.unexpectedAfterYields
-        ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension YieldStmtSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeYieldKeyword": unexpectedBeforeYieldKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "yieldKeyword": Syntax(yieldKeyword).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenYieldKeywordAndYields": unexpectedBetweenYieldKeywordAndYields.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "yields": Syntax(yields).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterYields": unexpectedAfterYields.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
         ])
   }
 }

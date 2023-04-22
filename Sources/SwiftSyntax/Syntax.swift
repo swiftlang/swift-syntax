@@ -95,24 +95,12 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
     return self.raw.kind.syntaxNodeType.init(self)!
   }
 
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return self.raw.kind.syntaxNodeType.init(self)!.childNameForDiagnostics(index)
-  }
-
   public func hash(into hasher: inout Hasher) {
     return data.nodeId.hash(into: &hasher)
   }
 
   public static func == (lhs: Syntax, rhs: Syntax) -> Bool {
     return lhs.data.nodeId == rhs.data.nodeId
-  }
-}
-
-extension Syntax: CustomReflectable {
-  /// Reconstructs the real syntax type for this type from the node's kind and
-  /// provides a mirror that reflects this type.
-  public var customMirror: Mirror {
-    return Mirror(reflecting: self.asProtocol(SyntaxProtocol.self))
   }
 }
 
@@ -161,7 +149,7 @@ public extension SyntaxHashable {
 /// protocol to provide common functionality for all syntax nodes.
 /// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
 public protocol SyntaxProtocol: CustomStringConvertible,
-  CustomDebugStringConvertible, TextOutputStreamable
+  CustomDebugStringConvertible, TextOutputStreamable, CustomReflectable
 {
 
   /// Retrieve the generic syntax node that is represented by this node.
@@ -174,12 +162,6 @@ public protocol SyntaxProtocol: CustomStringConvertible,
 
   /// The statically allowed structure of the syntax node.
   static var structure: SyntaxNodeStructure { get }
-
-  /// Return a name with which the child at the given `index` can be referred to
-  /// in diagnostics.
-  /// Typically, you want to use `childNameInParent` on the child instead of
-  /// calling this method on the parent.
-  func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String?
 }
 
 // Casting functions to specialized syntax nodes.
@@ -213,18 +195,6 @@ public extension SyntaxProtocol {
     var copy = self
     copy[keyPath: keyPath] = value
     return copy
-  }
-}
-
-public extension SyntaxProtocol {
-  /// If the parent has a dedicated "name for diagnostics" for this node, return it.
-  /// Otherwise, return `nil`.
-  var childNameInParent: String? {
-    if let parent = self.parent, let childName = parent.childNameForDiagnostics(self.index) {
-      return childName
-    } else {
-      return nil
-    }
   }
 }
 
@@ -265,19 +235,6 @@ public extension SyntaxProtocol {
     return SyntaxChildrenIndex(self.data.absoluteInfo)
   }
 
-  /// Whether or not this node is a token one.
-  var isToken: Bool {
-    return raw.isToken
-  }
-
-  /// Whether or not this node represents an SyntaxCollection.
-  var isCollection: Bool {
-    // We need to provide a custom implementation for is(SyntaxCollection.self)
-    // since SyntaxCollection has generic or self requirements and can thus
-    // not be used as a method argument.
-    return raw.kind.isSyntaxCollection
-  }
-
   /// Whether the tree contained by this layout has any
   ///  - missing nodes or
   ///  - unexpected nodes or
@@ -306,18 +263,22 @@ public extension SyntaxProtocol {
     return data.parent.map(Syntax.init(_:))
   }
 
-  /// The index of this node in the parent's children.
-  var indexInParent: Int {
-    return data.indexInParent
-  }
-
   /// Whether or not this node has a parent.
   var hasParent: Bool {
     return parent != nil
   }
 
-  /// Recursively walks through the tree to find the token semantically before
-  /// this node.
+  var keyPathInParent: AnyKeyPath? {
+    guard let parent = self.parent else {
+      return nil
+    }
+    guard case .layout(let childrenKeyPaths) = parent.kind.syntaxNodeType.structure else {
+      return nil
+    }
+    return childrenKeyPaths[data.indexInParent]
+  }
+
+  @available(*, deprecated, message: "Use previousToken(viewMode:) instead")
   var previousToken: TokenSyntax? {
     return self.previousToken(viewMode: .sourceAccurate)
   }
@@ -342,8 +303,7 @@ public extension SyntaxProtocol {
     return parent.previousToken(viewMode: viewMode)
   }
 
-  /// Recursively walks through the tree to find the next token semantically
-  /// after this node.
+  @available(*, deprecated, message: "Use nextToken(viewMode:) instead")
   var nextToken: TokenSyntax? {
     return self.nextToken(viewMode: .sourceAccurate)
   }
@@ -365,8 +325,7 @@ public extension SyntaxProtocol {
     return parent.nextToken(viewMode: viewMode)
   }
 
-  /// Returns the first token in this syntax node in the source accurate view of
-  /// the syntax tree.
+  @available(*, deprecated, message: "Use firstToken(viewMode: .sourceAccurate) instead")
   var firstToken: TokenSyntax? {
     return self.firstToken(viewMode: .sourceAccurate)
   }
@@ -386,7 +345,7 @@ public extension SyntaxProtocol {
     return nil
   }
 
-  /// Returns the last token node that is part of this syntax node.
+  @available(*, deprecated, message: "Use lastToken(viewMode: .sourceAccurate) instead")
   var lastToken: TokenSyntax? {
     return self.lastToken(viewMode: .sourceAccurate)
   }
@@ -471,6 +430,12 @@ public extension SyntaxProtocol {
   /// The leading trivia of this syntax node. Leading trivia is attached to
   /// the first token syntax contained by this node. Without such token, this
   /// property will return nil.
+  ///
+  /// Note: `Trivia` is not able to represent invalid UTF-8 sequences. To get
+  /// the leading trivia text including all invalid UTF-8 sequences, use
+  /// ```
+  /// node.syntaxTextBytes.prefix(self.leadingTriviaLength.utf8Length)
+  /// ```
   var leadingTrivia: Trivia {
     get {
       return raw.formLeadingTrivia()
@@ -483,6 +448,12 @@ public extension SyntaxProtocol {
   /// The trailing trivia of this syntax node. Trailing trivia is attached to
   /// the last token syntax contained by this node. Without such token, this
   /// property will return nil.
+  ///
+  /// Note: `Trivia` is not able to represent invalid UTF-8 sequences. To get
+  /// the leading trivia text including all invalid UTF-8 sequences, use
+  /// ```
+  /// node.syntaxTextBytes[(node.byteSize - node.trailingTriviaLength.utf8Length)...]
+  /// ```
   var trailingTrivia: Trivia {
     get {
       return raw.formTrailingTrivia()
@@ -586,14 +557,14 @@ public extension SyntaxProtocol {
     debugDescription()
   }
 
-  /// Same as `debugDescription` but includes all children.
-  var recursiveDescription: String {
-    debugDescription(includeChildren: true)
+  var customMirror: Mirror {
+    // Suppress printing of children when doing `po node` in the debugger.
+    // `debugDescription` already prints them in a nicer way.
+    return Mirror(self, children: [:])
   }
 
   /// Returns a summarized dump of this node.
   /// - Parameters:
-  ///   - includeChildren: Whether to also dump children, false by default.
   ///   - includeTrivia: Add trivia to each dumped node, which the default
   ///   dump skips.
   ///   - converter: The location converter for the root of the tree. Adds
@@ -603,31 +574,28 @@ public extension SyntaxProtocol {
   ///   - indentLevel: The starting indent level, 0 by default. Each level is 2
   ///   spaces.
   func debugDescription(
-    includeChildren: Bool = false,
     includeTrivia: Bool = false,
     converter: SourceLocationConverter? = nil,
     mark: SyntaxProtocol? = nil,
-    indentLevel: Int = 0
+    indentString: String = ""
   ) -> String {
     var str = ""
     debugWrite(
       to: &str,
-      includeChildren: includeChildren,
       includeTrivia: includeTrivia,
       converter: converter,
       mark: mark,
-      indentLevel: indentLevel
+      indentString: indentString
     )
     return str
   }
 
   private func debugWrite<Target: TextOutputStream>(
     to target: inout Target,
-    includeChildren: Bool,
     includeTrivia: Bool,
     converter: SourceLocationConverter? = nil,
     mark: SyntaxProtocol? = nil,
-    indentLevel: Int
+    indentString: String
   ) {
     if let mark = mark, self.id == mark.id {
       target.write("*** ")
@@ -648,11 +616,6 @@ public extension SyntaxProtocol {
     }
 
     let allChildren = children(viewMode: .all)
-    if includeChildren {
-      if !allChildren.isEmpty {
-        target.write(" children=\(allChildren.count)")
-      }
-    }
 
     if let converter = converter {
       let range = sourceRange(converter: converter)
@@ -667,21 +630,24 @@ public extension SyntaxProtocol {
       target.write(" ***")
     }
 
-    if includeChildren {
-      let childIndentLevel = indentLevel + 1
-      for (num, child) in allChildren.enumerated() {
-        target.write("\n")
-        target.write(String(repeating: " ", count: childIndentLevel * 2))
-        target.write("\(num): ")
-        child.debugWrite(
-          to: &target,
-          includeChildren: includeChildren,
-          includeTrivia: includeTrivia,
-          converter: converter,
-          mark: mark,
-          indentLevel: childIndentLevel
-        )
+    for (num, child) in allChildren.enumerated() {
+      let isLastChild = num == allChildren.count - 1
+      target.write("\n")
+      target.write(indentString)
+      target.write(isLastChild ? "╰─" : "├─")
+      if let keyPath = child.keyPathInParent, let name = childName(keyPath) {
+        target.write("\(name): ")
+      } else if self.kind.isSyntaxCollection {
+        target.write("[\(num)]: ")
       }
+      let childIndentString = indentString + (isLastChild ? "  " : "│ ")
+      child.debugWrite(
+        to: &target,
+        includeTrivia: includeTrivia,
+        converter: converter,
+        mark: mark,
+        indentString: childIndentString
+      )
     }
   }
 }
@@ -689,12 +655,6 @@ public extension SyntaxProtocol {
 /// Protocol for the enums nested inside `Syntax` nodes that enumerate all the
 /// possible types a child node might have.
 public protocol SyntaxChildChoices: SyntaxProtocol {}
-
-public extension SyntaxChildChoices {
-  func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return Syntax(self).childNameForDiagnostics(index)
-  }
-}
 
 /// Sequence of tokens that are part of the provided Syntax node.
 public struct TokenSequence: Sequence {
@@ -787,15 +747,6 @@ public struct ReversedTokenSequence: Sequence {
 extension ReversedTokenSequence: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, unlabeledChildren: self.map { $0 })
-  }
-}
-
-/// Expose `recursiveDescription` on raw nodes for debugging purposes.
-extension RawSyntaxNodeProtocol {
-  /// Print this raw syntax node including all of its children.
-  /// Intended for debugging purposes only.
-  var recursiveDescription: String {
-    return Syntax(raw: raw).recursiveDescription
   }
 }
 

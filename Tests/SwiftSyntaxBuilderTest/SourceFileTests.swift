@@ -22,7 +22,7 @@ final class SourceFileTests: XCTestCase {
       ClassDeclSyntax(
         classKeyword: .keyword(.class),
         identifier: "SomeViewController",
-        membersBuilder: {
+        memberBlockBuilder: {
           DeclSyntax("let tableView: UITableView")
         }
       )

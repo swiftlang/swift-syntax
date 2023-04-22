@@ -137,39 +137,29 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         internal init(_ data: SyntaxData)
         """
       ) {
-        IfConfigDeclSyntax(
-          clauses: IfConfigClauseListSyntax {
-            IfConfigClauseSyntax(
-              poundKeyword: .poundIfKeyword(),
-              condition: ExprSyntax("DEBUG"),
-              elements: .statements(
-                CodeBlockItemListSyntax {
-                  try! SwitchExprSyntax("switch data.raw.kind") {
-                    SwitchCaseSyntax(
-                      label: .case(
-                        SwitchCaseLabelSyntax {
-                          for childNode in SYNTAX_NODES where childNode.baseKind == node.syntaxKind {
-                            CaseItemSyntax(
-                              pattern: ExpressionPatternSyntax(
-                                expression: ExprSyntax(".\(raw: childNode.swiftSyntaxKind)")
-                              )
-                            )
-                          }
-                        }
+        CodeBlockItemListSyntax {
+          try! SwitchExprSyntax("switch data.raw.kind") {
+            SwitchCaseSyntax(
+              label: .case(
+                SwitchCaseLabelSyntax {
+                  for childNode in SYNTAX_NODES where childNode.baseKind == node.syntaxKind {
+                    CaseItemSyntax(
+                      pattern: ExpressionPatternSyntax(
+                        expression: ExprSyntax(".\(raw: childNode.swiftSyntaxKind)")
                       )
-                    ) {
-                      BreakStmtSyntax()
-                    }
-
-                    SwitchCaseSyntax("default:") {
-                      ExprSyntax("fatalError(\"Unable to create \(raw: node.name) from \\(data.raw.kind)\")")
-                    }
+                    )
                   }
                 }
               )
-            )
+            ) {
+              BreakStmtSyntax()
+            }
+
+            SwitchCaseSyntax("default:") {
+              ExprSyntax("preconditionFailure(\"Unable to create \(raw: node.name) from \\(data.raw.kind)\")")
+            }
           }
-        )
+        }
 
         ExprSyntax("self._syntaxNode = Syntax(data)")
       }
@@ -232,26 +222,27 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
         StmtSyntax("return .choices(\(choices))")
       }
-
-      DeclSyntax(
-        """
-        public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-          return Syntax(self).childNameForDiagnostics(index)
-        }
-        """
-      )
     }
+  }
 
-    DeclSyntax(
-      """
-      extension \(raw: node.name): CustomReflectable {
-        /// Reconstructs the real syntax type for this type from the node's kind and
-        /// provides a mirror that reflects this type.
-        public var customMirror: Mirror {
-          return Mirror(reflecting: Syntax(self).asProtocol(SyntaxProtocol.self))
+  try! ExtensionDeclSyntax("extension Syntax") {
+    try VariableDeclSyntax("public static var structure: SyntaxNodeStructure") {
+      let choices = ArrayExprSyntax {
+        ArrayElementSyntax(
+          leadingTrivia: .newline,
+          expression: ExprSyntax(".node(TokenSyntax.self)")
+        )
+
+        for node in NON_BASE_SYNTAX_NODES {
+          ArrayElementSyntax(
+            leadingTrivia: .newline,
+            expression: ExprSyntax(".node(\(raw: node.name).self)")
+          )
         }
       }
-      """
-    )
+
+      StmtSyntax("return .choices(\(choices))")
+    }
   }
+
 }

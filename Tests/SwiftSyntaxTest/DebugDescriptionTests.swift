@@ -12,6 +12,7 @@
 
 import XCTest
 import SwiftSyntax
+import _SwiftSyntaxTestSupport
 
 private extension String {
   // This implementation is really slow; to use it outside a test it should be optimized.
@@ -20,8 +21,7 @@ private extension String {
   }
 }
 
-public class CustomReflectableTests: XCTestCase {
-
+public class DebugDescriptionTests: XCTestCase {
   public func testDump() {
     struct TestCase {
       let syntax: Any
@@ -118,47 +118,13 @@ public class CustomReflectableTests: XCTestCase {
         return .init(
           syntax: tuples,
           expectedDumped: """
-            ▿ TupleExprElementListSyntax
-              ▿ TupleExprElementSyntax
-                - unexpectedBeforeLabel: nil
-                - label: nil
-                - unexpectedBetweenLabelAndColon: nil
-                - colon: nil
-                - unexpectedBetweenColonAndExpression: nil
-                ▿ expression: IntegerLiteralExprSyntax
-                  - unexpectedBeforeDigits: nil
-                  ▿ digits: integerLiteral("1")
-                    - text: "1"
-                    ▿ leadingTrivia: []
-                      - pieces: 0 elements
-                    ▿ trailingTrivia: []
-                      - pieces: 0 elements
-                    ▿ tokenKind: SwiftSyntax.TokenKind.integerLiteral
-                      - integerLiteral: "1"
-                  - unexpectedAfterDigits: nil
-                - unexpectedBetweenExpressionAndTrailingComma: nil
-                - trailingComma: nil
-                - unexpectedAfterTrailingComma: nil
-              ▿ TupleExprElementSyntax
-                - unexpectedBeforeLabel: nil
-                - label: nil
-                - unexpectedBetweenLabelAndColon: nil
-                - colon: nil
-                - unexpectedBetweenColonAndExpression: nil
-                ▿ expression: IntegerLiteralExprSyntax
-                  - unexpectedBeforeDigits: nil
-                  ▿ digits: integerLiteral("2")
-                    - text: "2"
-                    ▿ leadingTrivia: []
-                      - pieces: 0 elements
-                    ▿ trailingTrivia: []
-                      - pieces: 0 elements
-                    ▿ tokenKind: SwiftSyntax.TokenKind.integerLiteral
-                      - integerLiteral: "2"
-                  - unexpectedAfterDigits: nil
-                - unexpectedBetweenExpressionAndTrailingComma: nil
-                - trailingComma: nil
-                - unexpectedAfterTrailingComma: nil
+            - TupleExprElementListSyntax
+            ├─[0]: TupleExprElementSyntax
+            │ ╰─expression: IntegerLiteralExprSyntax
+            │   ╰─digits: integerLiteral("1")
+            ╰─[1]: TupleExprElementSyntax
+              ╰─expression: IntegerLiteralExprSyntax
+                ╰─digits: integerLiteral("2")
 
             """
         )
@@ -177,47 +143,13 @@ public class CustomReflectableTests: XCTestCase {
           syntax: tuples.reversed(),
           expectedDumped: """
             ▿ Swift.ReversedCollection<SwiftSyntax.TupleExprElementListSyntax>
-              ▿ _base: TupleExprElementListSyntax
-                ▿ TupleExprElementSyntax
-                  - unexpectedBeforeLabel: nil
-                  - label: nil
-                  - unexpectedBetweenLabelAndColon: nil
-                  - colon: nil
-                  - unexpectedBetweenColonAndExpression: nil
-                  ▿ expression: IntegerLiteralExprSyntax
-                    - unexpectedBeforeDigits: nil
-                    ▿ digits: integerLiteral("1")
-                      - text: "1"
-                      ▿ leadingTrivia: []
-                        - pieces: 0 elements
-                      ▿ trailingTrivia: []
-                        - pieces: 0 elements
-                      ▿ tokenKind: SwiftSyntax.TokenKind.integerLiteral
-                        - integerLiteral: "1"
-                    - unexpectedAfterDigits: nil
-                  - unexpectedBetweenExpressionAndTrailingComma: nil
-                  - trailingComma: nil
-                  - unexpectedAfterTrailingComma: nil
-                ▿ TupleExprElementSyntax
-                  - unexpectedBeforeLabel: nil
-                  - label: nil
-                  - unexpectedBetweenLabelAndColon: nil
-                  - colon: nil
-                  - unexpectedBetweenColonAndExpression: nil
-                  ▿ expression: IntegerLiteralExprSyntax
-                    - unexpectedBeforeDigits: nil
-                    ▿ digits: integerLiteral("2")
-                      - text: "2"
-                      ▿ leadingTrivia: []
-                        - pieces: 0 elements
-                      ▿ trailingTrivia: []
-                        - pieces: 0 elements
-                      ▿ tokenKind: SwiftSyntax.TokenKind.integerLiteral
-                        - integerLiteral: "2"
-                    - unexpectedAfterDigits: nil
-                  - unexpectedBetweenExpressionAndTrailingComma: nil
-                  - trailingComma: nil
-                  - unexpectedAfterTrailingComma: nil
+              - _base: TupleExprElementListSyntax
+            ├─[0]: TupleExprElementSyntax
+            │ ╰─expression: IntegerLiteralExprSyntax
+            │   ╰─digits: integerLiteral("1")
+            ╰─[1]: TupleExprElementSyntax
+              ╰─expression: IntegerLiteralExprSyntax
+                ╰─digits: integerLiteral("2")
 
             """
         )
@@ -227,7 +159,11 @@ public class CustomReflectableTests: XCTestCase {
     testCases.forEach { keyAndValue in
       let (key:line, value:testCase) = keyAndValue
       let actualDumped = dumped(testCase.syntax)
-      XCTAssertEqual(testCase.expectedDumped.trimmingTrailingWhitespace(), actualDumped.trimmingTrailingWhitespace(), line: line)
+      assertStringsEqualWithDiff(
+        actualDumped.trimmingTrailingWhitespace(),
+        testCase.expectedDumped.trimmingTrailingWhitespace(),
+        line: line
+      )
     }
   }
 

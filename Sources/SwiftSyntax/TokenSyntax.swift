@@ -68,22 +68,6 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
     return tokenKind.text
   }
 
-  public var rawTokenKind: RawTokenKind {
-    return tokenView.rawKind
-  }
-
-  /// Returns a new TokenSyntax with its kind replaced
-  /// by the provided token kind.
-  public func withKind(_ tokenKind: TokenKind) -> TokenSyntax {
-    guard raw.kind == .token else {
-      fatalError("TokenSyntax must have token as its raw")
-    }
-    let arena = SyntaxArena()
-    let newRaw = tokenView.withKind(tokenKind, arena: arena)
-    let newData = data.replacingSelf(newRaw, arena: arena)
-    return TokenSyntax(newData)
-  }
-
   /// The leading trivia (spaces, newlines, etc.) associated with this token.
   public var leadingTrivia: Trivia {
     get {
@@ -110,7 +94,13 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
       return tokenView.formKind()
     }
     set {
-      self = withKind(newValue)
+      guard raw.kind == .token else {
+        fatalError("TokenSyntax must have token as its raw")
+      }
+      let arena = SyntaxArena()
+      let newRaw = tokenView.withKind(newValue, arena: arena)
+      let newData = data.replacingSelf(newRaw, arena: arena)
+      self = TokenSyntax(newData)
     }
   }
 
@@ -137,10 +127,6 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
 
   public static var structure: SyntaxNodeStructure {
     return .layout([])
-  }
-
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
   }
 
   /// If the token has a lexical error, the type of the error.

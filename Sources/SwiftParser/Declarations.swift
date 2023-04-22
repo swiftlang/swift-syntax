@@ -419,7 +419,7 @@ extension Parser {
     } else {
       whereClause = nil
     }
-    let members = self.parseMemberDeclList(introducer: extensionKeyword)
+    let memberBlock = self.parseMemberDeclList(introducer: extensionKeyword)
     return RawExtensionDeclSyntax(
       attributes: attrs.attributes,
       modifiers: attrs.modifiers,
@@ -428,7 +428,7 @@ extension Parser {
       extendedType: type,
       inheritanceClause: inheritance,
       genericWhereClause: whereClause,
-      members: members,
+      memberBlock: memberBlock,
       arena: self.arena
     )
   }
@@ -1198,7 +1198,7 @@ extension Parser {
       parser.parseFunctionParameter()
     }
 
-    var effectSpecifiers = self.parseDeclEffectSpecifiers()
+    var effectSpecifiers = self.parseFunctionEffectSpecifiers()
 
     var output: RawReturnClauseSyntax?
 
@@ -1264,7 +1264,7 @@ extension Parser {
       parser.parseFunctionParameter()
     }
 
-    var misplacedEffectSpecifiers: RawDeclEffectSpecifiersSyntax?
+    var misplacedEffectSpecifiers: RawFunctionEffectSpecifiersSyntax?
     let result = self.parseFunctionReturnClause(effectSpecifiers: &misplacedEffectSpecifiers, allowNamedOpaqueResultType: true)
 
     // Parse a 'where' clause if present.
@@ -1519,7 +1519,7 @@ extension Parser {
       parameter = nil
     }
 
-    let effectSpecifiers = self.parseDeclEffectSpecifiers()
+    let effectSpecifiers = self.parseAccessorEffectSpecifiers()
 
     let body = self.parseOptionalCodeBlock()
     return RawAccessorDeclSyntax(

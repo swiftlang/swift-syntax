@@ -20,9 +20,9 @@ fileprivate extension TokenSyntax {
   var negatedAvailabilityKeyword: TokenSyntax {
     switch self.tokenKind {
     case .poundAvailableKeyword:
-      return self.withKind(.poundUnavailableKeyword)
+      return self.with(\.tokenKind, .poundUnavailableKeyword)
     case .poundUnavailableKeyword:
-      return self.withKind(.poundAvailableKeyword)
+      return self.with(\.tokenKind, .poundAvailableKeyword)
     default:
       preconditionFailure("The availability token of an AvailabilityConditionSyntax should always be #available or #unavailable")
     }
@@ -385,6 +385,10 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: AccessorEffectSpecifiersSyntax) -> SyntaxVisitorContinueKind {
+    return handleEffectSpecifiers(node)
+  }
+
   public override func visit(_ node: AssociatedtypeDeclSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren
@@ -538,7 +542,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
-  public override func visit(_ node: DeclEffectSpecifiersSyntax) -> SyntaxVisitorContinueKind {
+  public override func visit(_ node: FunctionEffectSpecifiersSyntax) -> SyntaxVisitorContinueKind {
     return handleEffectSpecifiers(node)
   }
 

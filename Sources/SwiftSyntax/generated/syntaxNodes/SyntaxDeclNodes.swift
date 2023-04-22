@@ -44,7 +44,7 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       _ unexpectedBetweenAccessorKindAndParameter: UnexpectedNodesSyntax? = nil, 
       parameter: AccessorParameterSyntax? = nil, 
       _ unexpectedBetweenParameterAndEffectSpecifiers: UnexpectedNodesSyntax? = nil, 
-      effectSpecifiers: DeclEffectSpecifiersSyntax? = nil, 
+      effectSpecifiers: AccessorEffectSpecifiersSyntax? = nil, 
       _ unexpectedBetweenEffectSpecifiersAndBody: UnexpectedNodesSyntax? = nil, 
       body: CodeBlockSyntax? = nil, 
       _ unexpectedAfterBody: UnexpectedNodesSyntax? = nil, 
@@ -195,9 +195,9 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var effectSpecifiers: DeclEffectSpecifiersSyntax? {
+  public var effectSpecifiers: AccessorEffectSpecifiersSyntax? {
     get {
-      return data.child(at: 9, parent: Syntax(self)).map(DeclEffectSpecifiersSyntax.init)
+      return data.child(at: 9, parent: Syntax(self)).map(AccessorEffectSpecifiersSyntax.init)
     }
     set(value) {
       self = AccessorDeclSyntax(data.replacingChild(at: 9, with: value?.raw, arena: SyntaxArena()))
@@ -248,59 +248,6 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterBody
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "attributes"
-    case 2:
-      return nil
-    case 3:
-      return "modifiers"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return "parameter"
-    case 8:
-      return nil
-    case 9:
-      return nil
-    case 10:
-      return nil
-    case 11:
-      return nil
-    case 12:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension AccessorDeclSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeAttributes": unexpectedBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenAttributesAndModifier": unexpectedBetweenAttributesAndModifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "modifier": modifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenModifierAndAccessorKind": unexpectedBetweenModifierAndAccessorKind.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "accessorKind": Syntax(accessorKind).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenAccessorKindAndParameter": unexpectedBetweenAccessorKindAndParameter.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "parameter": parameter.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenParameterAndEffectSpecifiers": unexpectedBetweenParameterAndEffectSpecifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "effectSpecifiers": effectSpecifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenEffectSpecifiersAndBody": unexpectedBetweenEffectSpecifiersAndBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "body": body.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedAfterBody": unexpectedAfterBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
-        ])
-  }
 }
 
 // MARK: - ActorDeclSyntax
@@ -333,16 +280,16 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       _ unexpectedBetweenModifiersAndActorKeyword: UnexpectedNodesSyntax? = nil, 
       actorKeyword: TokenSyntax = .keyword(.actor), 
       _ unexpectedBetweenActorKeywordAndIdentifier: UnexpectedNodesSyntax? = nil, 
-      identifier: TokenSyntax = .identifier("IdentifierToken"), 
+      identifier: TokenSyntax, 
       _ unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? = nil, 
       genericParameterClause: GenericParameterClauseSyntax? = nil, 
       _ unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil, 
       inheritanceClause: TypeInheritanceClauseSyntax? = nil, 
       _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil, 
       genericWhereClause: GenericWhereClauseSyntax? = nil, 
-      _ unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil, 
-      members: MemberDeclBlockSyntax, 
-      _ unexpectedAfterMembers: UnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil, 
+      memberBlock: MemberDeclBlockSyntax, 
+      _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil, 
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -363,9 +310,9 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             inheritanceClause, 
             unexpectedBetweenInheritanceClauseAndGenericWhereClause, 
             genericWhereClause, 
-            unexpectedBetweenGenericWhereClauseAndMembers, 
-            members, 
-            unexpectedAfterMembers
+            unexpectedBetweenGenericWhereClauseAndMemberBlock, 
+            memberBlock, 
+            unexpectedAfterMemberBlock
           ))) {(arena, _) in 
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
@@ -382,9 +329,9 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           inheritanceClause?.raw, 
           unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw, 
           genericWhereClause?.raw, 
-          unexpectedBetweenGenericWhereClauseAndMembers?.raw, 
-          members.raw, 
-          unexpectedAfterMembers?.raw
+          unexpectedBetweenGenericWhereClauseAndMemberBlock?.raw, 
+          memberBlock.raw, 
+          unexpectedAfterMemberBlock?.raw
         ]
       let raw = RawSyntax.makeLayout(
           kind: SyntaxKind.actorDecl, 
@@ -562,7 +509,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 14, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -571,7 +518,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var members: MemberDeclBlockSyntax {
+  public var memberBlock: MemberDeclBlockSyntax {
     get {
       return MemberDeclBlockSyntax(data.child(at: 15, parent: Syntax(self))!)
     }
@@ -580,7 +527,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedAfterMembers: UnexpectedNodesSyntax? {
+  public var unexpectedAfterMemberBlock: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 16, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -605,74 +552,9 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.inheritanceClause, 
           \Self.unexpectedBetweenInheritanceClauseAndGenericWhereClause, 
           \Self.genericWhereClause, 
-          \Self.unexpectedBetweenGenericWhereClauseAndMembers, 
-          \Self.members, 
-          \Self.unexpectedAfterMembers
-        ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "attributes"
-    case 2:
-      return nil
-    case 3:
-      return "modifiers"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    case 9:
-      return "generic parameter clause"
-    case 10:
-      return nil
-    case 11:
-      return "type inheritance clause"
-    case 12:
-      return nil
-    case 13:
-      return "generic where clause"
-    case 14:
-      return nil
-    case 15:
-      return nil
-    case 16:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension ActorDeclSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeAttributes": unexpectedBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenAttributesAndModifiers": unexpectedBetweenAttributesAndModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenModifiersAndActorKeyword": unexpectedBetweenModifiersAndActorKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "actorKeyword": Syntax(actorKeyword).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenActorKeywordAndIdentifier": unexpectedBetweenActorKeywordAndIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "identifier": Syntax(identifier).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenIdentifierAndGenericParameterClause": unexpectedBetweenIdentifierAndGenericParameterClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "genericParameterClause": genericParameterClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenGenericParameterClauseAndInheritanceClause": unexpectedBetweenGenericParameterClauseAndInheritanceClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "inheritanceClause": inheritanceClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenInheritanceClauseAndGenericWhereClause": unexpectedBetweenInheritanceClauseAndGenericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenGenericWhereClauseAndMembers": unexpectedBetweenGenericWhereClauseAndMembers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "members": Syntax(members).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterMembers": unexpectedAfterMembers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
+          \Self.unexpectedBetweenGenericWhereClauseAndMemberBlock, 
+          \Self.memberBlock, 
+          \Self.unexpectedAfterMemberBlock
         ])
   }
 }
@@ -707,7 +589,7 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       _ unexpectedBetweenModifiersAndAssociatedtypeKeyword: UnexpectedNodesSyntax? = nil, 
       associatedtypeKeyword: TokenSyntax = .keyword(.associatedtype), 
       _ unexpectedBetweenAssociatedtypeKeywordAndIdentifier: UnexpectedNodesSyntax? = nil, 
-      identifier: TokenSyntax = .identifier("IdentifierToken"), 
+      identifier: TokenSyntax, 
       _ unexpectedBetweenIdentifierAndInheritanceClause: UnexpectedNodesSyntax? = nil, 
       inheritanceClause: TypeInheritanceClauseSyntax? = nil, 
       _ unexpectedBetweenInheritanceClauseAndInitializer: UnexpectedNodesSyntax? = nil, 
@@ -958,65 +840,6 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterGenericWhereClause
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "attributes"
-    case 2:
-      return nil
-    case 3:
-      return "modifiers"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    case 9:
-      return "inheritance clause"
-    case 10:
-      return nil
-    case 11:
-      return nil
-    case 12:
-      return nil
-    case 13:
-      return "generic where clause"
-    case 14:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension AssociatedtypeDeclSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeAttributes": unexpectedBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenAttributesAndModifiers": unexpectedBetweenAttributesAndModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenModifiersAndAssociatedtypeKeyword": unexpectedBetweenModifiersAndAssociatedtypeKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "associatedtypeKeyword": Syntax(associatedtypeKeyword).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenAssociatedtypeKeywordAndIdentifier": unexpectedBetweenAssociatedtypeKeywordAndIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "identifier": Syntax(identifier).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenIdentifierAndInheritanceClause": unexpectedBetweenIdentifierAndInheritanceClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "inheritanceClause": inheritanceClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenInheritanceClauseAndInitializer": unexpectedBetweenInheritanceClauseAndInitializer.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "initializer": initializer.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenInitializerAndGenericWhereClause": unexpectedBetweenInitializerAndGenericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedAfterGenericWhereClause": unexpectedAfterGenericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
-        ])
-  }
 }
 
 // MARK: - ClassDeclSyntax
@@ -1049,16 +872,16 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       _ unexpectedBetweenModifiersAndClassKeyword: UnexpectedNodesSyntax? = nil, 
       classKeyword: TokenSyntax = .keyword(.class), 
       _ unexpectedBetweenClassKeywordAndIdentifier: UnexpectedNodesSyntax? = nil, 
-      identifier: TokenSyntax = .identifier("IdentifierToken"), 
+      identifier: TokenSyntax, 
       _ unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? = nil, 
       genericParameterClause: GenericParameterClauseSyntax? = nil, 
       _ unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil, 
       inheritanceClause: TypeInheritanceClauseSyntax? = nil, 
       _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil, 
       genericWhereClause: GenericWhereClauseSyntax? = nil, 
-      _ unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil, 
-      members: MemberDeclBlockSyntax, 
-      _ unexpectedAfterMembers: UnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil, 
+      memberBlock: MemberDeclBlockSyntax, 
+      _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil, 
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -1079,9 +902,9 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             inheritanceClause, 
             unexpectedBetweenInheritanceClauseAndGenericWhereClause, 
             genericWhereClause, 
-            unexpectedBetweenGenericWhereClauseAndMembers, 
-            members, 
-            unexpectedAfterMembers
+            unexpectedBetweenGenericWhereClauseAndMemberBlock, 
+            memberBlock, 
+            unexpectedAfterMemberBlock
           ))) {(arena, _) in 
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
@@ -1098,9 +921,9 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           inheritanceClause?.raw, 
           unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw, 
           genericWhereClause?.raw, 
-          unexpectedBetweenGenericWhereClauseAndMembers?.raw, 
-          members.raw, 
-          unexpectedAfterMembers?.raw
+          unexpectedBetweenGenericWhereClauseAndMemberBlock?.raw, 
+          memberBlock.raw, 
+          unexpectedAfterMemberBlock?.raw
         ]
       let raw = RawSyntax.makeLayout(
           kind: SyntaxKind.classDecl, 
@@ -1278,7 +1101,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 14, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -1287,7 +1110,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var members: MemberDeclBlockSyntax {
+  public var memberBlock: MemberDeclBlockSyntax {
     get {
       return MemberDeclBlockSyntax(data.child(at: 15, parent: Syntax(self))!)
     }
@@ -1296,7 +1119,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedAfterMembers: UnexpectedNodesSyntax? {
+  public var unexpectedAfterMemberBlock: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 16, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -1321,74 +1144,9 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.inheritanceClause, 
           \Self.unexpectedBetweenInheritanceClauseAndGenericWhereClause, 
           \Self.genericWhereClause, 
-          \Self.unexpectedBetweenGenericWhereClauseAndMembers, 
-          \Self.members, 
-          \Self.unexpectedAfterMembers
-        ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "attributes"
-    case 2:
-      return nil
-    case 3:
-      return "modifiers"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    case 9:
-      return "generic parameter clause"
-    case 10:
-      return nil
-    case 11:
-      return "inheritance clause"
-    case 12:
-      return nil
-    case 13:
-      return "generic where clause"
-    case 14:
-      return nil
-    case 15:
-      return nil
-    case 16:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension ClassDeclSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeAttributes": unexpectedBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenAttributesAndModifiers": unexpectedBetweenAttributesAndModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenModifiersAndClassKeyword": unexpectedBetweenModifiersAndClassKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "classKeyword": Syntax(classKeyword).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenClassKeywordAndIdentifier": unexpectedBetweenClassKeywordAndIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "identifier": Syntax(identifier).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenIdentifierAndGenericParameterClause": unexpectedBetweenIdentifierAndGenericParameterClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "genericParameterClause": genericParameterClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenGenericParameterClauseAndInheritanceClause": unexpectedBetweenGenericParameterClauseAndInheritanceClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "inheritanceClause": inheritanceClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenInheritanceClauseAndGenericWhereClause": unexpectedBetweenInheritanceClauseAndGenericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenGenericWhereClauseAndMembers": unexpectedBetweenGenericWhereClauseAndMembers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "members": Syntax(members).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterMembers": unexpectedAfterMembers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
+          \Self.unexpectedBetweenGenericWhereClauseAndMemberBlock, 
+          \Self.memberBlock, 
+          \Self.unexpectedAfterMemberBlock
         ])
   }
 }
@@ -1596,47 +1354,6 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterBody
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "attributes"
-    case 2:
-      return nil
-    case 3:
-      return "modifiers"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension DeinitializerDeclSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeAttributes": unexpectedBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenAttributesAndModifiers": unexpectedBetweenAttributesAndModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenModifiersAndDeinitKeyword": unexpectedBetweenModifiersAndDeinitKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "deinitKeyword": Syntax(deinitKeyword).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenDeinitKeywordAndBody": unexpectedBetweenDeinitKeywordAndBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "body": body.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedAfterBody": unexpectedAfterBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
-        ])
-  }
 }
 
 // MARK: - EditorPlaceholderDeclSyntax
@@ -1663,7 +1380,7 @@ public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil, 
       _ unexpectedBeforeIdentifier: UnexpectedNodesSyntax? = nil, 
-      identifier: TokenSyntax = .identifier("IdentifierToken"), 
+      identifier: TokenSyntax, 
       _ unexpectedAfterIdentifier: UnexpectedNodesSyntax? = nil, 
       trailingTrivia: Trivia? = nil
     
@@ -1713,28 +1430,6 @@ public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([\Self.unexpectedBeforeIdentifier, \Self.identifier, \Self.unexpectedAfterIdentifier])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension EditorPlaceholderDeclSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-        "unexpectedBeforeIdentifier": unexpectedBeforeIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-        "identifier": Syntax(identifier).asProtocol(SyntaxProtocol.self), 
-        "unexpectedAfterIdentifier": unexpectedAfterIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any ])
   }
 }
 
@@ -1964,47 +1659,6 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterElements
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "attributes"
-    case 2:
-      return nil
-    case 3:
-      return "modifiers"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return "elements"
-    case 8:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension EnumCaseDeclSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeAttributes": unexpectedBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenAttributesAndModifiers": unexpectedBetweenAttributesAndModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenModifiersAndCaseKeyword": unexpectedBetweenModifiersAndCaseKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "caseKeyword": Syntax(caseKeyword).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenCaseKeywordAndElements": unexpectedBetweenCaseKeywordAndElements.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "elements": Syntax(elements).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterElements": unexpectedAfterElements.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
-        ])
-  }
 }
 
 // MARK: - EnumDeclSyntax
@@ -2037,16 +1691,16 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       _ unexpectedBetweenModifiersAndEnumKeyword: UnexpectedNodesSyntax? = nil, 
       enumKeyword: TokenSyntax = .keyword(.enum), 
       _ unexpectedBetweenEnumKeywordAndIdentifier: UnexpectedNodesSyntax? = nil, 
-      identifier: TokenSyntax = .identifier("IdentifierToken"), 
+      identifier: TokenSyntax, 
       _ unexpectedBetweenIdentifierAndGenericParameters: UnexpectedNodesSyntax? = nil, 
       genericParameters: GenericParameterClauseSyntax? = nil, 
       _ unexpectedBetweenGenericParametersAndInheritanceClause: UnexpectedNodesSyntax? = nil, 
       inheritanceClause: TypeInheritanceClauseSyntax? = nil, 
       _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil, 
       genericWhereClause: GenericWhereClauseSyntax? = nil, 
-      _ unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil, 
-      members: MemberDeclBlockSyntax, 
-      _ unexpectedAfterMembers: UnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil, 
+      memberBlock: MemberDeclBlockSyntax, 
+      _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil, 
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -2067,9 +1721,9 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             inheritanceClause, 
             unexpectedBetweenInheritanceClauseAndGenericWhereClause, 
             genericWhereClause, 
-            unexpectedBetweenGenericWhereClauseAndMembers, 
-            members, 
-            unexpectedAfterMembers
+            unexpectedBetweenGenericWhereClauseAndMemberBlock, 
+            memberBlock, 
+            unexpectedAfterMemberBlock
           ))) {(arena, _) in 
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
@@ -2086,9 +1740,9 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           inheritanceClause?.raw, 
           unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw, 
           genericWhereClause?.raw, 
-          unexpectedBetweenGenericWhereClauseAndMembers?.raw, 
-          members.raw, 
-          unexpectedAfterMembers?.raw
+          unexpectedBetweenGenericWhereClauseAndMemberBlock?.raw, 
+          memberBlock.raw, 
+          unexpectedAfterMemberBlock?.raw
         ]
       let raw = RawSyntax.makeLayout(
           kind: SyntaxKind.enumDecl, 
@@ -2273,7 +1927,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 14, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -2283,7 +1937,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
   
   /// The cases and other members of this enum.
-  public var members: MemberDeclBlockSyntax {
+  public var memberBlock: MemberDeclBlockSyntax {
     get {
       return MemberDeclBlockSyntax(data.child(at: 15, parent: Syntax(self))!)
     }
@@ -2292,7 +1946,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedAfterMembers: UnexpectedNodesSyntax? {
+  public var unexpectedAfterMemberBlock: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 16, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -2317,74 +1971,9 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.inheritanceClause, 
           \Self.unexpectedBetweenInheritanceClauseAndGenericWhereClause, 
           \Self.genericWhereClause, 
-          \Self.unexpectedBetweenGenericWhereClauseAndMembers, 
-          \Self.members, 
-          \Self.unexpectedAfterMembers
-        ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "attributes"
-    case 2:
-      return nil
-    case 3:
-      return "modifiers"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    case 9:
-      return "generic parameter clause"
-    case 10:
-      return nil
-    case 11:
-      return "inheritance clause"
-    case 12:
-      return nil
-    case 13:
-      return "generic where clause"
-    case 14:
-      return nil
-    case 15:
-      return nil
-    case 16:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension EnumDeclSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeAttributes": unexpectedBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenAttributesAndModifiers": unexpectedBetweenAttributesAndModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenModifiersAndEnumKeyword": unexpectedBetweenModifiersAndEnumKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "enumKeyword": Syntax(enumKeyword).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenEnumKeywordAndIdentifier": unexpectedBetweenEnumKeywordAndIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "identifier": Syntax(identifier).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenIdentifierAndGenericParameters": unexpectedBetweenIdentifierAndGenericParameters.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "genericParameters": genericParameters.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenGenericParametersAndInheritanceClause": unexpectedBetweenGenericParametersAndInheritanceClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "inheritanceClause": inheritanceClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenInheritanceClauseAndGenericWhereClause": unexpectedBetweenInheritanceClauseAndGenericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenGenericWhereClauseAndMembers": unexpectedBetweenGenericWhereClauseAndMembers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "members": Syntax(members).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterMembers": unexpectedAfterMembers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
+          \Self.unexpectedBetweenGenericWhereClauseAndMemberBlock, 
+          \Self.memberBlock, 
+          \Self.unexpectedAfterMemberBlock
         ])
   }
 }
@@ -2424,9 +2013,9 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       inheritanceClause: TypeInheritanceClauseSyntax? = nil, 
       _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil, 
       genericWhereClause: GenericWhereClauseSyntax? = nil, 
-      _ unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil, 
-      members: MemberDeclBlockSyntax, 
-      _ unexpectedAfterMembers: UnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil, 
+      memberBlock: MemberDeclBlockSyntax, 
+      _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil, 
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -2445,9 +2034,9 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             inheritanceClause, 
             unexpectedBetweenInheritanceClauseAndGenericWhereClause, 
             genericWhereClause, 
-            unexpectedBetweenGenericWhereClauseAndMembers, 
-            members, 
-            unexpectedAfterMembers
+            unexpectedBetweenGenericWhereClauseAndMemberBlock, 
+            memberBlock, 
+            unexpectedAfterMemberBlock
           ))) {(arena, _) in 
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
@@ -2462,9 +2051,9 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           inheritanceClause?.raw, 
           unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw, 
           genericWhereClause?.raw, 
-          unexpectedBetweenGenericWhereClauseAndMembers?.raw, 
-          members.raw, 
-          unexpectedAfterMembers?.raw
+          unexpectedBetweenGenericWhereClauseAndMemberBlock?.raw, 
+          memberBlock.raw, 
+          unexpectedAfterMemberBlock?.raw
         ]
       let raw = RawSyntax.makeLayout(
           kind: SyntaxKind.extensionDecl, 
@@ -2624,7 +2213,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 12, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -2633,7 +2222,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var members: MemberDeclBlockSyntax {
+  public var memberBlock: MemberDeclBlockSyntax {
     get {
       return MemberDeclBlockSyntax(data.child(at: 13, parent: Syntax(self))!)
     }
@@ -2642,7 +2231,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedAfterMembers: UnexpectedNodesSyntax? {
+  public var unexpectedAfterMemberBlock: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 14, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -2665,68 +2254,9 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.inheritanceClause, 
           \Self.unexpectedBetweenInheritanceClauseAndGenericWhereClause, 
           \Self.genericWhereClause, 
-          \Self.unexpectedBetweenGenericWhereClauseAndMembers, 
-          \Self.members, 
-          \Self.unexpectedAfterMembers
-        ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "attributes"
-    case 2:
-      return nil
-    case 3:
-      return "modifiers"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    case 9:
-      return "inheritance clause"
-    case 10:
-      return nil
-    case 11:
-      return "generic where clause"
-    case 12:
-      return nil
-    case 13:
-      return nil
-    case 14:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension ExtensionDeclSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeAttributes": unexpectedBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenAttributesAndModifiers": unexpectedBetweenAttributesAndModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenModifiersAndExtensionKeyword": unexpectedBetweenModifiersAndExtensionKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "extensionKeyword": Syntax(extensionKeyword).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenExtensionKeywordAndExtendedType": unexpectedBetweenExtensionKeywordAndExtendedType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "extendedType": Syntax(extendedType).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenExtendedTypeAndInheritanceClause": unexpectedBetweenExtendedTypeAndInheritanceClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "inheritanceClause": inheritanceClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenInheritanceClauseAndGenericWhereClause": unexpectedBetweenInheritanceClauseAndGenericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenGenericWhereClauseAndMembers": unexpectedBetweenGenericWhereClauseAndMembers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "members": Syntax(members).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterMembers": unexpectedAfterMembers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
+          \Self.unexpectedBetweenGenericWhereClauseAndMemberBlock, 
+          \Self.memberBlock, 
+          \Self.unexpectedAfterMemberBlock
         ])
   }
 }
@@ -3038,71 +2568,6 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterBody
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "attributes"
-    case 2:
-      return nil
-    case 3:
-      return "modifiers"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    case 9:
-      return "generic parameter clause"
-    case 10:
-      return nil
-    case 11:
-      return "function signature"
-    case 12:
-      return nil
-    case 13:
-      return "generic where clause"
-    case 14:
-      return nil
-    case 15:
-      return nil
-    case 16:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension FunctionDeclSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeAttributes": unexpectedBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenAttributesAndModifiers": unexpectedBetweenAttributesAndModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenModifiersAndFuncKeyword": unexpectedBetweenModifiersAndFuncKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "funcKeyword": Syntax(funcKeyword).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenFuncKeywordAndIdentifier": unexpectedBetweenFuncKeywordAndIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "identifier": Syntax(identifier).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenIdentifierAndGenericParameterClause": unexpectedBetweenIdentifierAndGenericParameterClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "genericParameterClause": genericParameterClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenGenericParameterClauseAndSignature": unexpectedBetweenGenericParameterClauseAndSignature.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "signature": Syntax(signature).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenSignatureAndGenericWhereClause": unexpectedBetweenSignatureAndGenericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenGenericWhereClauseAndBody": unexpectedBetweenGenericWhereClauseAndBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "body": body.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedAfterBody": unexpectedAfterBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
-        ])
-  }
 }
 
 // MARK: - IfConfigDeclSyntax
@@ -3235,35 +2700,6 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedBetweenClausesAndPoundEndif, 
           \Self.poundEndif, 
           \Self.unexpectedAfterPoundEndif
-        ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension IfConfigDeclSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeClauses": unexpectedBeforeClauses.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "clauses": Syntax(clauses).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenClausesAndPoundEndif": unexpectedBetweenClausesAndPoundEndif.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "poundEndif": Syntax(poundEndif).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterPoundEndif": unexpectedAfterPoundEndif.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
         ])
   }
 }
@@ -3516,58 +2952,18 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterPath
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "attributes"
-    case 2:
-      return nil
-    case 3:
-      return "modifiers"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    case 9:
-      return nil
-    case 10:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension ImportDeclSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeAttributes": unexpectedBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenAttributesAndModifiers": unexpectedBetweenAttributesAndModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenModifiersAndImportTok": unexpectedBetweenModifiersAndImportTok.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "importTok": Syntax(importTok).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenImportTokAndImportKind": unexpectedBetweenImportTokAndImportKind.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "importKind": importKind.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenImportKindAndPath": unexpectedBetweenImportKindAndPath.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "path": Syntax(path).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterPath": unexpectedAfterPath.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
-        ])
-  }
 }
 
 // MARK: - InitializerDeclSyntax
 
-
+/// An initializer declaration like the following.
+/// 
+/// ```swift
+/// init(someParameter: Int) {
+/// }
+/// ```
+/// 
+/// The body is optional because this node also represents initializer requirements inside protocols.
 public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -3669,6 +3065,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// Attributes that are attached to the initializer.
   public var attributes: AttributeListSyntax? {
     get {
       return data.child(at: 1, parent: Syntax(self)).map(AttributeListSyntax.init)
@@ -3706,6 +3103,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// Modifiers attached to the initializer
   public var modifiers: ModifierListSyntax? {
     get {
       return data.child(at: 3, parent: Syntax(self)).map(ModifierListSyntax.init)
@@ -3743,6 +3141,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The init keyword
   public var initKeyword: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
@@ -3761,6 +3160,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// If the initializer is failable, a question mark to indicate that.
   public var optionalMark: TokenSyntax? {
     get {
       return data.child(at: 7, parent: Syntax(self)).map(TokenSyntax.init)
@@ -3779,6 +3179,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// Generic parameters of the initializer.
   public var genericParameterClause: GenericParameterClauseSyntax? {
     get {
       return data.child(at: 9, parent: Syntax(self)).map(GenericParameterClauseSyntax.init)
@@ -3797,6 +3198,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The arguments of the initializer. While the function signature allows specifying an return clause, doing so is not semantically valid.
   public var signature: FunctionSignatureSyntax {
     get {
       return FunctionSignatureSyntax(data.child(at: 11, parent: Syntax(self))!)
@@ -3815,6 +3217,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// If the initializer had generic parameters, a where clause that can restrict those
   public var genericWhereClause: GenericWhereClauseSyntax? {
     get {
       return data.child(at: 13, parent: Syntax(self)).map(GenericWhereClauseSyntax.init)
@@ -3833,6 +3236,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The initializer’s body. Missing if the initialier is a requirement of a protocol declaration.
   public var body: CodeBlockSyntax? {
     get {
       return data.child(at: 15, parent: Syntax(self)).map(CodeBlockSyntax.init)
@@ -3872,71 +3276,6 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterBody
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "attributes"
-    case 2:
-      return nil
-    case 3:
-      return "modifiers"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    case 9:
-      return "generic parameter clause"
-    case 10:
-      return nil
-    case 11:
-      return "function signature"
-    case 12:
-      return nil
-    case 13:
-      return "generic where clause"
-    case 14:
-      return nil
-    case 15:
-      return nil
-    case 16:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension InitializerDeclSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeAttributes": unexpectedBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenAttributesAndModifiers": unexpectedBetweenAttributesAndModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenModifiersAndInitKeyword": unexpectedBetweenModifiersAndInitKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "initKeyword": Syntax(initKeyword).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenInitKeywordAndOptionalMark": unexpectedBetweenInitKeywordAndOptionalMark.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "optionalMark": optionalMark.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenOptionalMarkAndGenericParameterClause": unexpectedBetweenOptionalMarkAndGenericParameterClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "genericParameterClause": genericParameterClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenGenericParameterClauseAndSignature": unexpectedBetweenGenericParameterClauseAndSignature.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "signature": Syntax(signature).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenSignatureAndGenericWhereClause": unexpectedBetweenSignatureAndGenericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenGenericWhereClauseAndBody": unexpectedBetweenGenericWhereClauseAndBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "body": body.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedAfterBody": unexpectedAfterBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
-        ])
-  }
 }
 
 // MARK: - MacroDeclSyntax
@@ -3969,7 +3308,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       _ unexpectedBetweenModifiersAndMacroKeyword: UnexpectedNodesSyntax? = nil, 
       macroKeyword: TokenSyntax = .keyword(.macro), 
       _ unexpectedBetweenMacroKeywordAndIdentifier: UnexpectedNodesSyntax? = nil, 
-      identifier: TokenSyntax = .identifier("IdentifierToken"), 
+      identifier: TokenSyntax, 
       _ unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? = nil, 
       genericParameterClause: GenericParameterClauseSyntax? = nil, 
       _ unexpectedBetweenGenericParameterClauseAndSignature: UnexpectedNodesSyntax? = nil, 
@@ -4246,71 +3585,6 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterGenericWhereClause
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "attributes"
-    case 2:
-      return nil
-    case 3:
-      return "modifiers"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    case 9:
-      return "generic parameter clause"
-    case 10:
-      return nil
-    case 11:
-      return "macro signature"
-    case 12:
-      return nil
-    case 13:
-      return "macro definition"
-    case 14:
-      return nil
-    case 15:
-      return "generic where clause"
-    case 16:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension MacroDeclSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeAttributes": unexpectedBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenAttributesAndModifiers": unexpectedBetweenAttributesAndModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenModifiersAndMacroKeyword": unexpectedBetweenModifiersAndMacroKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "macroKeyword": Syntax(macroKeyword).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenMacroKeywordAndIdentifier": unexpectedBetweenMacroKeywordAndIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "identifier": Syntax(identifier).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenIdentifierAndGenericParameterClause": unexpectedBetweenIdentifierAndGenericParameterClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "genericParameterClause": genericParameterClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenGenericParameterClauseAndSignature": unexpectedBetweenGenericParameterClauseAndSignature.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "signature": Syntax(signature).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenSignatureAndDefinition": unexpectedBetweenSignatureAndDefinition.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "definition": definition.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenDefinitionAndGenericWhereClause": unexpectedBetweenDefinitionAndGenericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedAfterGenericWhereClause": unexpectedAfterGenericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
-        ])
-  }
 }
 
 // MARK: - MacroExpansionDeclSyntax
@@ -4339,7 +3613,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       _ unexpectedBeforePoundToken: UnexpectedNodesSyntax? = nil, 
       poundToken: TokenSyntax = .poundToken(), 
       _ unexpectedBetweenPoundTokenAndMacro: UnexpectedNodesSyntax? = nil, 
-      macro: TokenSyntax = .identifier("IdentifierToken"), 
+      macro: TokenSyntax, 
       _ unexpectedBetweenMacroAndGenericArguments: UnexpectedNodesSyntax? = nil, 
       genericArguments: GenericArgumentClauseSyntax? = nil, 
       _ unexpectedBetweenGenericArgumentsAndLeftParen: UnexpectedNodesSyntax? = nil, 
@@ -4621,71 +3895,6 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterAdditionalTrailingClosures
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    case 9:
-      return nil
-    case 10:
-      return nil
-    case 11:
-      return nil
-    case 12:
-      return nil
-    case 13:
-      return nil
-    case 14:
-      return nil
-    case 15:
-      return nil
-    case 16:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension MacroExpansionDeclSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforePoundToken": unexpectedBeforePoundToken.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "poundToken": Syntax(poundToken).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenPoundTokenAndMacro": unexpectedBetweenPoundTokenAndMacro.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "macro": Syntax(macro).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenMacroAndGenericArguments": unexpectedBetweenMacroAndGenericArguments.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "genericArguments": genericArguments.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenGenericArgumentsAndLeftParen": unexpectedBetweenGenericArgumentsAndLeftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "leftParen": leftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenLeftParenAndArgumentList": unexpectedBetweenLeftParenAndArgumentList.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "argumentList": Syntax(argumentList).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenArgumentListAndRightParen": unexpectedBetweenArgumentListAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "rightParen": rightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenRightParenAndTrailingClosure": unexpectedBetweenRightParenAndTrailingClosure.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "trailingClosure": trailingClosure.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures": unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "additionalTrailingClosures": additionalTrailingClosures.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedAfterAdditionalTrailingClosures": unexpectedAfterAdditionalTrailingClosures.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
-        ])
-  }
 }
 
 // MARK: - MissingDeclSyntax
@@ -4837,35 +4046,6 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedBetweenAttributesAndModifiers, 
           \Self.modifiers, 
           \Self.unexpectedAfterModifiers
-        ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension MissingDeclSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeAttributes": unexpectedBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenAttributesAndModifiers": unexpectedBetweenAttributesAndModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedAfterModifiers": unexpectedAfterModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
         ])
   }
 }
@@ -5102,53 +4282,6 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterOperatorPrecedenceAndTypes
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "attributes"
-    case 2:
-      return nil
-    case 3:
-      return "modifiers"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    case 9:
-      return nil
-    case 10:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension OperatorDeclSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeAttributes": unexpectedBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenAttributesAndModifiers": unexpectedBetweenAttributesAndModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenModifiersAndOperatorKeyword": unexpectedBetweenModifiersAndOperatorKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "operatorKeyword": Syntax(operatorKeyword).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenOperatorKeywordAndIdentifier": unexpectedBetweenOperatorKeywordAndIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "identifier": Syntax(identifier).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes": unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "operatorPrecedenceAndTypes": operatorPrecedenceAndTypes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedAfterOperatorPrecedenceAndTypes": unexpectedAfterOperatorPrecedenceAndTypes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
-        ])
-  }
 }
 
 // MARK: - PoundSourceLocationSyntax
@@ -5316,47 +4449,6 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterRightParen
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    case 5:
-      return "arguments"
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension PoundSourceLocationSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforePoundSourceLocation": unexpectedBeforePoundSourceLocation.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "poundSourceLocation": Syntax(poundSourceLocation).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenPoundSourceLocationAndLeftParen": unexpectedBetweenPoundSourceLocationAndLeftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "leftParen": Syntax(leftParen).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenLeftParenAndArgs": unexpectedBetweenLeftParenAndArgs.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "args": args.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenArgsAndRightParen": unexpectedBetweenArgsAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "rightParen": Syntax(rightParen).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterRightParen": unexpectedAfterRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
-        ])
-  }
 }
 
 // MARK: - PrecedenceGroupDeclSyntax
@@ -5389,7 +4481,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       _ unexpectedBetweenModifiersAndPrecedencegroupKeyword: UnexpectedNodesSyntax? = nil, 
       precedencegroupKeyword: TokenSyntax = .keyword(.precedencegroup), 
       _ unexpectedBetweenPrecedencegroupKeywordAndIdentifier: UnexpectedNodesSyntax? = nil, 
-      identifier: TokenSyntax = .identifier("IdentifierToken"), 
+      identifier: TokenSyntax, 
       _ unexpectedBetweenIdentifierAndLeftBrace: UnexpectedNodesSyntax? = nil, 
       leftBrace: TokenSyntax = .leftBraceToken(), 
       _ unexpectedBetweenLeftBraceAndGroupAttributes: UnexpectedNodesSyntax? = nil, 
@@ -5663,65 +4755,6 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterRightBrace
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "attributes"
-    case 2:
-      return nil
-    case 3:
-      return "modifiers"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    case 9:
-      return nil
-    case 10:
-      return nil
-    case 11:
-      return nil
-    case 12:
-      return nil
-    case 13:
-      return nil
-    case 14:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension PrecedenceGroupDeclSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeAttributes": unexpectedBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenAttributesAndModifiers": unexpectedBetweenAttributesAndModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenModifiersAndPrecedencegroupKeyword": unexpectedBetweenModifiersAndPrecedencegroupKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "precedencegroupKeyword": Syntax(precedencegroupKeyword).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenPrecedencegroupKeywordAndIdentifier": unexpectedBetweenPrecedencegroupKeywordAndIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "identifier": Syntax(identifier).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenIdentifierAndLeftBrace": unexpectedBetweenIdentifierAndLeftBrace.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "leftBrace": Syntax(leftBrace).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenLeftBraceAndGroupAttributes": unexpectedBetweenLeftBraceAndGroupAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "groupAttributes": Syntax(groupAttributes).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenGroupAttributesAndRightBrace": unexpectedBetweenGroupAttributesAndRightBrace.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "rightBrace": Syntax(rightBrace).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterRightBrace": unexpectedAfterRightBrace.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
-        ])
-  }
 }
 
 // MARK: - ProtocolDeclSyntax
@@ -5754,16 +4787,16 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       _ unexpectedBetweenModifiersAndProtocolKeyword: UnexpectedNodesSyntax? = nil, 
       protocolKeyword: TokenSyntax = .keyword(.protocol), 
       _ unexpectedBetweenProtocolKeywordAndIdentifier: UnexpectedNodesSyntax? = nil, 
-      identifier: TokenSyntax = .identifier("IdentifierToken"), 
+      identifier: TokenSyntax, 
       _ unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause: UnexpectedNodesSyntax? = nil, 
       primaryAssociatedTypeClause: PrimaryAssociatedTypeClauseSyntax? = nil, 
       _ unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil, 
       inheritanceClause: TypeInheritanceClauseSyntax? = nil, 
       _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil, 
       genericWhereClause: GenericWhereClauseSyntax? = nil, 
-      _ unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil, 
-      members: MemberDeclBlockSyntax, 
-      _ unexpectedAfterMembers: UnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil, 
+      memberBlock: MemberDeclBlockSyntax, 
+      _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil, 
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -5784,9 +4817,9 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             inheritanceClause, 
             unexpectedBetweenInheritanceClauseAndGenericWhereClause, 
             genericWhereClause, 
-            unexpectedBetweenGenericWhereClauseAndMembers, 
-            members, 
-            unexpectedAfterMembers
+            unexpectedBetweenGenericWhereClauseAndMemberBlock, 
+            memberBlock, 
+            unexpectedAfterMemberBlock
           ))) {(arena, _) in 
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
@@ -5803,9 +4836,9 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           inheritanceClause?.raw, 
           unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw, 
           genericWhereClause?.raw, 
-          unexpectedBetweenGenericWhereClauseAndMembers?.raw, 
-          members.raw, 
-          unexpectedAfterMembers?.raw
+          unexpectedBetweenGenericWhereClauseAndMemberBlock?.raw, 
+          memberBlock.raw, 
+          unexpectedAfterMemberBlock?.raw
         ]
       let raw = RawSyntax.makeLayout(
           kind: SyntaxKind.protocolDecl, 
@@ -5983,7 +5016,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 14, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -5992,7 +5025,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var members: MemberDeclBlockSyntax {
+  public var memberBlock: MemberDeclBlockSyntax {
     get {
       return MemberDeclBlockSyntax(data.child(at: 15, parent: Syntax(self))!)
     }
@@ -6001,7 +5034,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedAfterMembers: UnexpectedNodesSyntax? {
+  public var unexpectedAfterMemberBlock: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 16, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -6026,74 +5059,9 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.inheritanceClause, 
           \Self.unexpectedBetweenInheritanceClauseAndGenericWhereClause, 
           \Self.genericWhereClause, 
-          \Self.unexpectedBetweenGenericWhereClauseAndMembers, 
-          \Self.members, 
-          \Self.unexpectedAfterMembers
-        ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "attributes"
-    case 2:
-      return nil
-    case 3:
-      return "modifiers"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    case 9:
-      return "primary associated type clause"
-    case 10:
-      return nil
-    case 11:
-      return "inheritance clause"
-    case 12:
-      return nil
-    case 13:
-      return "generic where clause"
-    case 14:
-      return nil
-    case 15:
-      return nil
-    case 16:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension ProtocolDeclSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeAttributes": unexpectedBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenAttributesAndModifiers": unexpectedBetweenAttributesAndModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenModifiersAndProtocolKeyword": unexpectedBetweenModifiersAndProtocolKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "protocolKeyword": Syntax(protocolKeyword).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenProtocolKeywordAndIdentifier": unexpectedBetweenProtocolKeywordAndIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "identifier": Syntax(identifier).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause": unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "primaryAssociatedTypeClause": primaryAssociatedTypeClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause": unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "inheritanceClause": inheritanceClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenInheritanceClauseAndGenericWhereClause": unexpectedBetweenInheritanceClauseAndGenericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenGenericWhereClauseAndMembers": unexpectedBetweenGenericWhereClauseAndMembers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "members": Syntax(members).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterMembers": unexpectedAfterMembers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
+          \Self.unexpectedBetweenGenericWhereClauseAndMemberBlock, 
+          \Self.memberBlock, 
+          \Self.unexpectedAfterMemberBlock
         ])
   }
 }
@@ -6128,16 +5096,16 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       _ unexpectedBetweenModifiersAndStructKeyword: UnexpectedNodesSyntax? = nil, 
       structKeyword: TokenSyntax = .keyword(.struct), 
       _ unexpectedBetweenStructKeywordAndIdentifier: UnexpectedNodesSyntax? = nil, 
-      identifier: TokenSyntax = .identifier("IdentifierToken"), 
+      identifier: TokenSyntax, 
       _ unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? = nil, 
       genericParameterClause: GenericParameterClauseSyntax? = nil, 
       _ unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil, 
       inheritanceClause: TypeInheritanceClauseSyntax? = nil, 
       _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil, 
       genericWhereClause: GenericWhereClauseSyntax? = nil, 
-      _ unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil, 
-      members: MemberDeclBlockSyntax, 
-      _ unexpectedAfterMembers: UnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil, 
+      memberBlock: MemberDeclBlockSyntax, 
+      _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil, 
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -6158,9 +5126,9 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             inheritanceClause, 
             unexpectedBetweenInheritanceClauseAndGenericWhereClause, 
             genericWhereClause, 
-            unexpectedBetweenGenericWhereClauseAndMembers, 
-            members, 
-            unexpectedAfterMembers
+            unexpectedBetweenGenericWhereClauseAndMemberBlock, 
+            memberBlock, 
+            unexpectedAfterMemberBlock
           ))) {(arena, _) in 
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
@@ -6177,9 +5145,9 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           inheritanceClause?.raw, 
           unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw, 
           genericWhereClause?.raw, 
-          unexpectedBetweenGenericWhereClauseAndMembers?.raw, 
-          members.raw, 
-          unexpectedAfterMembers?.raw
+          unexpectedBetweenGenericWhereClauseAndMemberBlock?.raw, 
+          memberBlock.raw, 
+          unexpectedAfterMemberBlock?.raw
         ]
       let raw = RawSyntax.makeLayout(
           kind: SyntaxKind.structDecl, 
@@ -6357,7 +5325,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 14, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -6366,7 +5334,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var members: MemberDeclBlockSyntax {
+  public var memberBlock: MemberDeclBlockSyntax {
     get {
       return MemberDeclBlockSyntax(data.child(at: 15, parent: Syntax(self))!)
     }
@@ -6375,7 +5343,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedAfterMembers: UnexpectedNodesSyntax? {
+  public var unexpectedAfterMemberBlock: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 16, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -6400,74 +5368,9 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.inheritanceClause, 
           \Self.unexpectedBetweenInheritanceClauseAndGenericWhereClause, 
           \Self.genericWhereClause, 
-          \Self.unexpectedBetweenGenericWhereClauseAndMembers, 
-          \Self.members, 
-          \Self.unexpectedAfterMembers
-        ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "attributes"
-    case 2:
-      return nil
-    case 3:
-      return "modifiers"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    case 9:
-      return "generic parameter clause"
-    case 10:
-      return nil
-    case 11:
-      return "type inheritance clause"
-    case 12:
-      return nil
-    case 13:
-      return "generic where clause"
-    case 14:
-      return nil
-    case 15:
-      return nil
-    case 16:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension StructDeclSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeAttributes": unexpectedBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenAttributesAndModifiers": unexpectedBetweenAttributesAndModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenModifiersAndStructKeyword": unexpectedBetweenModifiersAndStructKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "structKeyword": Syntax(structKeyword).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenStructKeywordAndIdentifier": unexpectedBetweenStructKeywordAndIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "identifier": Syntax(identifier).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenIdentifierAndGenericParameterClause": unexpectedBetweenIdentifierAndGenericParameterClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "genericParameterClause": genericParameterClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenGenericParameterClauseAndInheritanceClause": unexpectedBetweenGenericParameterClauseAndInheritanceClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "inheritanceClause": inheritanceClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenInheritanceClauseAndGenericWhereClause": unexpectedBetweenInheritanceClauseAndGenericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenGenericWhereClauseAndMembers": unexpectedBetweenGenericWhereClauseAndMembers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "members": Syntax(members).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterMembers": unexpectedAfterMembers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
+          \Self.unexpectedBetweenGenericWhereClauseAndMemberBlock, 
+          \Self.memberBlock, 
+          \Self.unexpectedAfterMemberBlock
         ])
   }
 }
@@ -6821,71 +5724,6 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterAccessor
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "attributes"
-    case 2:
-      return nil
-    case 3:
-      return "modifiers"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return "generic parameter clause"
-    case 8:
-      return nil
-    case 9:
-      return nil
-    case 10:
-      return nil
-    case 11:
-      return nil
-    case 12:
-      return nil
-    case 13:
-      return "generic where clause"
-    case 14:
-      return nil
-    case 15:
-      return nil
-    case 16:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension SubscriptDeclSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeAttributes": unexpectedBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenAttributesAndModifiers": unexpectedBetweenAttributesAndModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenModifiersAndSubscriptKeyword": unexpectedBetweenModifiersAndSubscriptKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "subscriptKeyword": Syntax(subscriptKeyword).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenSubscriptKeywordAndGenericParameterClause": unexpectedBetweenSubscriptKeywordAndGenericParameterClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "genericParameterClause": genericParameterClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenGenericParameterClauseAndIndices": unexpectedBetweenGenericParameterClauseAndIndices.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "indices": Syntax(indices).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenIndicesAndResult": unexpectedBetweenIndicesAndResult.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "result": Syntax(result).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenResultAndGenericWhereClause": unexpectedBetweenResultAndGenericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenGenericWhereClauseAndAccessor": unexpectedBetweenGenericWhereClauseAndAccessor.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "accessor": accessor.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedAfterAccessor": unexpectedAfterAccessor.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
-        ])
-  }
 }
 
 // MARK: - TypealiasDeclSyntax
@@ -6918,7 +5756,7 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       _ unexpectedBetweenModifiersAndTypealiasKeyword: UnexpectedNodesSyntax? = nil, 
       typealiasKeyword: TokenSyntax = .keyword(.typealias), 
       _ unexpectedBetweenTypealiasKeywordAndIdentifier: UnexpectedNodesSyntax? = nil, 
-      identifier: TokenSyntax = .identifier("IdentifierToken"), 
+      identifier: TokenSyntax, 
       _ unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? = nil, 
       genericParameterClause: GenericParameterClauseSyntax? = nil, 
       _ unexpectedBetweenGenericParameterClauseAndInitializer: UnexpectedNodesSyntax? = nil, 
@@ -7169,65 +6007,6 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedAfterGenericWhereClause
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "attributes"
-    case 2:
-      return nil
-    case 3:
-      return "modifiers"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    case 9:
-      return "generic parameter clause"
-    case 10:
-      return nil
-    case 11:
-      return nil
-    case 12:
-      return nil
-    case 13:
-      return "generic where clause"
-    case 14:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension TypealiasDeclSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeAttributes": unexpectedBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenAttributesAndModifiers": unexpectedBetweenAttributesAndModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenModifiersAndTypealiasKeyword": unexpectedBetweenModifiersAndTypealiasKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "typealiasKeyword": Syntax(typealiasKeyword).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenTypealiasKeywordAndIdentifier": unexpectedBetweenTypealiasKeywordAndIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "identifier": Syntax(identifier).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenIdentifierAndGenericParameterClause": unexpectedBetweenIdentifierAndGenericParameterClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "genericParameterClause": genericParameterClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenGenericParameterClauseAndInitializer": unexpectedBetweenGenericParameterClauseAndInitializer.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "initializer": Syntax(initializer).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenInitializerAndGenericWhereClause": unexpectedBetweenInitializerAndGenericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedAfterGenericWhereClause": unexpectedAfterGenericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
-        ])
-  }
 }
 
 // MARK: - VariableDeclSyntax
@@ -7450,47 +6229,6 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedBetweenBindingKeywordAndBindings, 
           \Self.bindings, 
           \Self.unexpectedAfterBindings
-        ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "attributes"
-    case 2:
-      return nil
-    case 3:
-      return "modifiers"
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension VariableDeclSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-          "unexpectedBeforeAttributes": unexpectedBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenAttributesAndModifiers": unexpectedBetweenAttributesAndModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "unexpectedBetweenModifiersAndBindingKeyword": unexpectedBetweenModifiersAndBindingKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "bindingKeyword": Syntax(bindingKeyword).asProtocol(SyntaxProtocol.self), 
-          "unexpectedBetweenBindingKeywordAndBindings": unexpectedBetweenBindingKeywordAndBindings.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any , 
-          "bindings": Syntax(bindings).asProtocol(SyntaxProtocol.self), 
-          "unexpectedAfterBindings": unexpectedAfterBindings.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any
         ])
   }
 }

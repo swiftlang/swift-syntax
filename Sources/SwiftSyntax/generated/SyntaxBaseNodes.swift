@@ -82,14 +82,12 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    #if DEBUG
     switch data.raw.kind {
     case .accessorDecl, .actorDecl, .associatedtypeDecl, .classDecl, .deinitializerDecl, .editorPlaceholderDecl, .enumCaseDecl, .enumDecl, .extensionDecl, .functionDecl, .ifConfigDecl, .importDecl, .initializerDecl, .macroDecl, .macroExpansionDecl, .missingDecl, .operatorDecl, .poundSourceLocation, .precedenceGroupDecl, .protocolDecl, .structDecl, .subscriptDecl, .typealiasDecl, .variableDecl:
       break
     default:
-      fatalError("Unable to create DeclSyntax from \(data.raw.kind)")
+      preconditionFailure("Unable to create DeclSyntax from \(data.raw.kind)")
     }
-    #endif 
     self._syntaxNode = Syntax(data)
   }
   
@@ -146,18 +144,6 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           .node(TypealiasDeclSyntax.self), 
           .node(VariableDeclSyntax.self)
         ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return Syntax(self).childNameForDiagnostics(index)
-  }
-}
-
-extension DeclSyntax: CustomReflectable {
-  /// Reconstructs the real syntax type for this type from the node's kind and
-  /// provides a mirror that reflects this type.
-  public var customMirror: Mirror {
-    return Mirror(reflecting: Syntax(self).asProtocol(SyntaxProtocol.self))
   }
 }
 
@@ -231,14 +217,12 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    #if DEBUG
     switch data.raw.kind {
     case .arrayExpr, .arrowExpr, .asExpr, .assignmentExpr, .awaitExpr, .binaryOperatorExpr, .booleanLiteralExpr, .borrowExpr, .closureExpr, .dictionaryExpr, .discardAssignmentExpr, .editorPlaceholderExpr, .floatLiteralExpr, .forcedValueExpr, .functionCallExpr, .identifierExpr, .ifExpr, .inOutExpr, .infixOperatorExpr, .integerLiteralExpr, .isExpr, .keyPathExpr, .macroExpansionExpr, .memberAccessExpr, .missingExpr, .moveExpr, .nilLiteralExpr, .optionalChainingExpr, .packElementExpr, .packExpansionExpr, .postfixIfConfigExpr, .postfixUnaryExpr, .prefixOperatorExpr, .regexLiteralExpr, .sequenceExpr, .specializeExpr, .stringLiteralExpr, .subscriptExpr, .superRefExpr, .switchExpr, .ternaryExpr, .tryExpr, .tupleExpr, .typeExpr, .unresolvedAsExpr, .unresolvedIsExpr, .unresolvedPatternExpr, .unresolvedTernaryExpr:
       break
     default:
-      fatalError("Unable to create ExprSyntax from \(data.raw.kind)")
+      preconditionFailure("Unable to create ExprSyntax from \(data.raw.kind)")
     }
-    #endif 
     self._syntaxNode = Syntax(data)
   }
   
@@ -320,18 +304,6 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           .node(UnresolvedTernaryExprSyntax.self)
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return Syntax(self).childNameForDiagnostics(index)
-  }
-}
-
-extension ExprSyntax: CustomReflectable {
-  /// Reconstructs the real syntax type for this type from the node's kind and
-  /// provides a mirror that reflects this type.
-  public var customMirror: Mirror {
-    return Mirror(reflecting: Syntax(self).asProtocol(SyntaxProtocol.self))
-  }
 }
 
 // MARK: - PatternSyntax
@@ -404,14 +376,12 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    #if DEBUG
     switch data.raw.kind {
     case .expressionPattern, .identifierPattern, .isTypePattern, .missingPattern, .tuplePattern, .valueBindingPattern, .wildcardPattern:
       break
     default:
-      fatalError("Unable to create PatternSyntax from \(data.raw.kind)")
+      preconditionFailure("Unable to create PatternSyntax from \(data.raw.kind)")
     }
-    #endif 
     self._syntaxNode = Syntax(data)
   }
   
@@ -451,18 +421,6 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
           .node(ValueBindingPatternSyntax.self), 
           .node(WildcardPatternSyntax.self)
         ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return Syntax(self).childNameForDiagnostics(index)
-  }
-}
-
-extension PatternSyntax: CustomReflectable {
-  /// Reconstructs the real syntax type for this type from the node's kind and
-  /// provides a mirror that reflects this type.
-  public var customMirror: Mirror {
-    return Mirror(reflecting: Syntax(self).asProtocol(SyntaxProtocol.self))
   }
 }
 
@@ -536,14 +494,12 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    #if DEBUG
     switch data.raw.kind {
     case .breakStmt, .continueStmt, .deferStmt, .doStmt, .expressionStmt, .fallthroughStmt, .forInStmt, .forgetStmt, .guardStmt, .labeledStmt, .missingStmt, .repeatWhileStmt, .returnStmt, .throwStmt, .whileStmt, .yieldStmt:
       break
     default:
-      fatalError("Unable to create StmtSyntax from \(data.raw.kind)")
+      preconditionFailure("Unable to create StmtSyntax from \(data.raw.kind)")
     }
-    #endif 
     self._syntaxNode = Syntax(data)
   }
   
@@ -592,18 +548,6 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           .node(WhileStmtSyntax.self), 
           .node(YieldStmtSyntax.self)
         ])
-  }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return Syntax(self).childNameForDiagnostics(index)
-  }
-}
-
-extension StmtSyntax: CustomReflectable {
-  /// Reconstructs the real syntax type for this type from the node's kind and
-  /// provides a mirror that reflects this type.
-  public var customMirror: Mirror {
-    return Mirror(reflecting: Syntax(self).asProtocol(SyntaxProtocol.self))
   }
 }
 
@@ -677,14 +621,12 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    #if DEBUG
     switch data.raw.kind {
     case .arrayType, .attributedType, .classRestrictionType, .compositionType, .constrainedSugarType, .dictionaryType, .functionType, .implicitlyUnwrappedOptionalType, .memberTypeIdentifier, .metatypeType, .missingType, .namedOpaqueReturnType, .optionalType, .packExpansionType, .packReferenceType, .simpleTypeIdentifier, .tupleType:
       break
     default:
-      fatalError("Unable to create TypeSyntax from \(data.raw.kind)")
+      preconditionFailure("Unable to create TypeSyntax from \(data.raw.kind)")
     }
-    #endif 
     self._syntaxNode = Syntax(data)
   }
   
@@ -735,16 +677,280 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
           .node(TupleTypeSyntax.self)
         ])
   }
-  
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return Syntax(self).childNameForDiagnostics(index)
-  }
 }
 
-extension TypeSyntax: CustomReflectable {
-  /// Reconstructs the real syntax type for this type from the node's kind and
-  /// provides a mirror that reflects this type.
-  public var customMirror: Mirror {
-    return Mirror(reflecting: Syntax(self).asProtocol(SyntaxProtocol.self))
+extension Syntax {
+  public static var structure: SyntaxNodeStructure {
+    return .choices([
+          .node(TokenSyntax.self), 
+          .node(AccessPathComponentSyntax.self), 
+          .node(AccessPathSyntax.self), 
+          .node(AccessorBlockSyntax.self), 
+          .node(AccessorDeclSyntax.self), 
+          .node(AccessorEffectSpecifiersSyntax.self), 
+          .node(AccessorListSyntax.self), 
+          .node(AccessorParameterSyntax.self), 
+          .node(ActorDeclSyntax.self), 
+          .node(ArrayElementListSyntax.self), 
+          .node(ArrayElementSyntax.self), 
+          .node(ArrayExprSyntax.self), 
+          .node(ArrayTypeSyntax.self), 
+          .node(ArrowExprSyntax.self), 
+          .node(AsExprSyntax.self), 
+          .node(AssignmentExprSyntax.self), 
+          .node(AssociatedtypeDeclSyntax.self), 
+          .node(AttributeListSyntax.self), 
+          .node(AttributeSyntax.self), 
+          .node(AttributedTypeSyntax.self), 
+          .node(AvailabilityArgumentSyntax.self), 
+          .node(AvailabilityConditionSyntax.self), 
+          .node(AvailabilityEntrySyntax.self), 
+          .node(AvailabilityLabeledArgumentSyntax.self), 
+          .node(AvailabilitySpecListSyntax.self), 
+          .node(AvailabilityVersionRestrictionListEntrySyntax.self), 
+          .node(AvailabilityVersionRestrictionListSyntax.self), 
+          .node(AvailabilityVersionRestrictionSyntax.self), 
+          .node(AwaitExprSyntax.self), 
+          .node(BackDeployedAttributeSpecListSyntax.self), 
+          .node(BinaryOperatorExprSyntax.self), 
+          .node(BooleanLiteralExprSyntax.self), 
+          .node(BorrowExprSyntax.self), 
+          .node(BreakStmtSyntax.self), 
+          .node(CaseItemListSyntax.self), 
+          .node(CaseItemSyntax.self), 
+          .node(CatchClauseListSyntax.self), 
+          .node(CatchClauseSyntax.self), 
+          .node(CatchItemListSyntax.self), 
+          .node(CatchItemSyntax.self), 
+          .node(ClassDeclSyntax.self), 
+          .node(ClassRestrictionTypeSyntax.self), 
+          .node(ClosureCaptureItemListSyntax.self), 
+          .node(ClosureCaptureItemSpecifierSyntax.self), 
+          .node(ClosureCaptureItemSyntax.self), 
+          .node(ClosureCaptureSignatureSyntax.self), 
+          .node(ClosureExprSyntax.self), 
+          .node(ClosureParamListSyntax.self), 
+          .node(ClosureParamSyntax.self), 
+          .node(ClosureParameterClauseSyntax.self), 
+          .node(ClosureParameterListSyntax.self), 
+          .node(ClosureParameterSyntax.self), 
+          .node(ClosureSignatureSyntax.self), 
+          .node(CodeBlockItemListSyntax.self), 
+          .node(CodeBlockItemSyntax.self), 
+          .node(CodeBlockSyntax.self), 
+          .node(CompositionTypeElementListSyntax.self), 
+          .node(CompositionTypeElementSyntax.self), 
+          .node(CompositionTypeSyntax.self), 
+          .node(ConditionElementListSyntax.self), 
+          .node(ConditionElementSyntax.self), 
+          .node(ConformanceRequirementSyntax.self), 
+          .node(ConstrainedSugarTypeSyntax.self), 
+          .node(ContinueStmtSyntax.self), 
+          .node(ConventionAttributeArgumentsSyntax.self), 
+          .node(ConventionWitnessMethodAttributeArgumentsSyntax.self), 
+          .node(DeclModifierDetailSyntax.self), 
+          .node(DeclModifierSyntax.self), 
+          .node(DeclNameArgumentListSyntax.self), 
+          .node(DeclNameArgumentSyntax.self), 
+          .node(DeclNameArgumentsSyntax.self), 
+          .node(DeclNameSyntax.self), 
+          .node(DeferStmtSyntax.self), 
+          .node(DeinitializerDeclSyntax.self), 
+          .node(DerivativeRegistrationAttributeArgumentsSyntax.self), 
+          .node(DesignatedTypeElementSyntax.self), 
+          .node(DesignatedTypeListSyntax.self), 
+          .node(DictionaryElementListSyntax.self), 
+          .node(DictionaryElementSyntax.self), 
+          .node(DictionaryExprSyntax.self), 
+          .node(DictionaryTypeSyntax.self), 
+          .node(DifferentiabilityParamListSyntax.self), 
+          .node(DifferentiabilityParamSyntax.self), 
+          .node(DifferentiabilityParamsClauseSyntax.self), 
+          .node(DifferentiabilityParamsSyntax.self), 
+          .node(DifferentiableAttributeArgumentsSyntax.self), 
+          .node(DiscardAssignmentExprSyntax.self), 
+          .node(DoStmtSyntax.self), 
+          .node(DocumentationAttributeArgumentSyntax.self), 
+          .node(DocumentationAttributeArgumentsSyntax.self), 
+          .node(DynamicReplacementArgumentsSyntax.self), 
+          .node(EditorPlaceholderDeclSyntax.self), 
+          .node(EditorPlaceholderExprSyntax.self), 
+          .node(EffectsArgumentsSyntax.self), 
+          .node(EnumCaseDeclSyntax.self), 
+          .node(EnumCaseElementListSyntax.self), 
+          .node(EnumCaseElementSyntax.self), 
+          .node(EnumCaseParameterClauseSyntax.self), 
+          .node(EnumCaseParameterListSyntax.self), 
+          .node(EnumCaseParameterSyntax.self), 
+          .node(EnumDeclSyntax.self), 
+          .node(ExposeAttributeArgumentsSyntax.self), 
+          .node(ExprListSyntax.self), 
+          .node(ExpressionPatternSyntax.self), 
+          .node(ExpressionSegmentSyntax.self), 
+          .node(ExpressionStmtSyntax.self), 
+          .node(ExtensionDeclSyntax.self), 
+          .node(FallthroughStmtSyntax.self), 
+          .node(FloatLiteralExprSyntax.self), 
+          .node(ForInStmtSyntax.self), 
+          .node(ForcedValueExprSyntax.self), 
+          .node(ForgetStmtSyntax.self), 
+          .node(FunctionCallExprSyntax.self), 
+          .node(FunctionDeclSyntax.self), 
+          .node(FunctionEffectSpecifiersSyntax.self), 
+          .node(FunctionParameterListSyntax.self), 
+          .node(FunctionParameterSyntax.self), 
+          .node(FunctionSignatureSyntax.self), 
+          .node(FunctionTypeSyntax.self), 
+          .node(GenericArgumentClauseSyntax.self), 
+          .node(GenericArgumentListSyntax.self), 
+          .node(GenericArgumentSyntax.self), 
+          .node(GenericParameterClauseSyntax.self), 
+          .node(GenericParameterListSyntax.self), 
+          .node(GenericParameterSyntax.self), 
+          .node(GenericRequirementListSyntax.self), 
+          .node(GenericRequirementSyntax.self), 
+          .node(GenericWhereClauseSyntax.self), 
+          .node(GuardStmtSyntax.self), 
+          .node(IdentifierExprSyntax.self), 
+          .node(IdentifierPatternSyntax.self), 
+          .node(IfConfigClauseListSyntax.self), 
+          .node(IfConfigClauseSyntax.self), 
+          .node(IfConfigDeclSyntax.self), 
+          .node(IfExprSyntax.self), 
+          .node(ImplementsAttributeArgumentsSyntax.self), 
+          .node(ImplicitlyUnwrappedOptionalTypeSyntax.self), 
+          .node(ImportDeclSyntax.self), 
+          .node(InOutExprSyntax.self), 
+          .node(InfixOperatorExprSyntax.self), 
+          .node(InheritedTypeListSyntax.self), 
+          .node(InheritedTypeSyntax.self), 
+          .node(InitializerClauseSyntax.self), 
+          .node(InitializerDeclSyntax.self), 
+          .node(IntegerLiteralExprSyntax.self), 
+          .node(IsExprSyntax.self), 
+          .node(IsTypePatternSyntax.self), 
+          .node(KeyPathComponentListSyntax.self), 
+          .node(KeyPathComponentSyntax.self), 
+          .node(KeyPathExprSyntax.self), 
+          .node(KeyPathOptionalComponentSyntax.self), 
+          .node(KeyPathPropertyComponentSyntax.self), 
+          .node(KeyPathSubscriptComponentSyntax.self), 
+          .node(LabeledSpecializeEntrySyntax.self), 
+          .node(LabeledStmtSyntax.self), 
+          .node(LayoutRequirementSyntax.self), 
+          .node(MacroDeclSyntax.self), 
+          .node(MacroExpansionDeclSyntax.self), 
+          .node(MacroExpansionExprSyntax.self), 
+          .node(MatchingPatternConditionSyntax.self), 
+          .node(MemberAccessExprSyntax.self), 
+          .node(MemberDeclBlockSyntax.self), 
+          .node(MemberDeclListItemSyntax.self), 
+          .node(MemberDeclListSyntax.self), 
+          .node(MemberTypeIdentifierSyntax.self), 
+          .node(MetatypeTypeSyntax.self), 
+          .node(MissingDeclSyntax.self), 
+          .node(MissingExprSyntax.self), 
+          .node(MissingPatternSyntax.self), 
+          .node(MissingStmtSyntax.self), 
+          .node(MissingSyntax.self), 
+          .node(MissingTypeSyntax.self), 
+          .node(ModifierListSyntax.self), 
+          .node(MoveExprSyntax.self), 
+          .node(MultipleTrailingClosureElementListSyntax.self), 
+          .node(MultipleTrailingClosureElementSyntax.self), 
+          .node(NamedOpaqueReturnTypeSyntax.self), 
+          .node(NilLiteralExprSyntax.self), 
+          .node(ObjCSelectorPieceSyntax.self), 
+          .node(ObjCSelectorSyntax.self), 
+          .node(OpaqueReturnTypeOfAttributeArgumentsSyntax.self), 
+          .node(OperatorDeclSyntax.self), 
+          .node(OperatorPrecedenceAndTypesSyntax.self), 
+          .node(OptionalBindingConditionSyntax.self), 
+          .node(OptionalChainingExprSyntax.self), 
+          .node(OptionalTypeSyntax.self), 
+          .node(OriginallyDefinedInArgumentsSyntax.self), 
+          .node(PackElementExprSyntax.self), 
+          .node(PackExpansionExprSyntax.self), 
+          .node(PackExpansionTypeSyntax.self), 
+          .node(PackReferenceTypeSyntax.self), 
+          .node(ParameterClauseSyntax.self), 
+          .node(PatternBindingListSyntax.self), 
+          .node(PatternBindingSyntax.self), 
+          .node(PostfixIfConfigExprSyntax.self), 
+          .node(PostfixUnaryExprSyntax.self), 
+          .node(PoundSourceLocationArgsSyntax.self), 
+          .node(PoundSourceLocationSyntax.self), 
+          .node(PrecedenceGroupAssignmentSyntax.self), 
+          .node(PrecedenceGroupAssociativitySyntax.self), 
+          .node(PrecedenceGroupAttributeListSyntax.self), 
+          .node(PrecedenceGroupDeclSyntax.self), 
+          .node(PrecedenceGroupNameElementSyntax.self), 
+          .node(PrecedenceGroupNameListSyntax.self), 
+          .node(PrecedenceGroupRelationSyntax.self), 
+          .node(PrefixOperatorExprSyntax.self), 
+          .node(PrimaryAssociatedTypeClauseSyntax.self), 
+          .node(PrimaryAssociatedTypeListSyntax.self), 
+          .node(PrimaryAssociatedTypeSyntax.self), 
+          .node(ProtocolDeclSyntax.self), 
+          .node(QualifiedDeclNameSyntax.self), 
+          .node(RegexLiteralExprSyntax.self), 
+          .node(RepeatWhileStmtSyntax.self), 
+          .node(ReturnClauseSyntax.self), 
+          .node(ReturnStmtSyntax.self), 
+          .node(SameTypeRequirementSyntax.self), 
+          .node(SequenceExprSyntax.self), 
+          .node(SimpleTypeIdentifierSyntax.self), 
+          .node(SourceFileSyntax.self), 
+          .node(SpecializeAttributeSpecListSyntax.self), 
+          .node(SpecializeExprSyntax.self), 
+          .node(StringLiteralExprSyntax.self), 
+          .node(StringLiteralSegmentsSyntax.self), 
+          .node(StringSegmentSyntax.self), 
+          .node(StructDeclSyntax.self), 
+          .node(SubscriptDeclSyntax.self), 
+          .node(SubscriptExprSyntax.self), 
+          .node(SuperRefExprSyntax.self), 
+          .node(SwitchCaseLabelSyntax.self), 
+          .node(SwitchCaseListSyntax.self), 
+          .node(SwitchCaseSyntax.self), 
+          .node(SwitchDefaultLabelSyntax.self), 
+          .node(SwitchExprSyntax.self), 
+          .node(TargetFunctionEntrySyntax.self), 
+          .node(TernaryExprSyntax.self), 
+          .node(ThrowStmtSyntax.self), 
+          .node(TryExprSyntax.self), 
+          .node(TupleExprElementListSyntax.self), 
+          .node(TupleExprElementSyntax.self), 
+          .node(TupleExprSyntax.self), 
+          .node(TuplePatternElementListSyntax.self), 
+          .node(TuplePatternElementSyntax.self), 
+          .node(TuplePatternSyntax.self), 
+          .node(TupleTypeElementListSyntax.self), 
+          .node(TupleTypeElementSyntax.self), 
+          .node(TupleTypeSyntax.self), 
+          .node(TypeAnnotationSyntax.self), 
+          .node(TypeEffectSpecifiersSyntax.self), 
+          .node(TypeExprSyntax.self), 
+          .node(TypeInheritanceClauseSyntax.self), 
+          .node(TypeInitializerClauseSyntax.self), 
+          .node(TypealiasDeclSyntax.self), 
+          .node(UnavailableFromAsyncArgumentsSyntax.self), 
+          .node(UnderscorePrivateAttributeArgumentsSyntax.self), 
+          .node(UnexpectedNodesSyntax.self), 
+          .node(UnresolvedAsExprSyntax.self), 
+          .node(UnresolvedIsExprSyntax.self), 
+          .node(UnresolvedPatternExprSyntax.self), 
+          .node(UnresolvedTernaryExprSyntax.self), 
+          .node(ValueBindingPatternSyntax.self), 
+          .node(VariableDeclSyntax.self), 
+          .node(VersionTupleSyntax.self), 
+          .node(WhereClauseSyntax.self), 
+          .node(WhileStmtSyntax.self), 
+          .node(WildcardPatternSyntax.self), 
+          .node(YieldExprListElementSyntax.self), 
+          .node(YieldExprListSyntax.self), 
+          .node(YieldListSyntax.self), 
+          .node(YieldStmtSyntax.self)
+        ])
   }
 }

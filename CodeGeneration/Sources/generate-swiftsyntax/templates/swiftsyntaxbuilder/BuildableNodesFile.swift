@@ -22,9 +22,9 @@ let buildableNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     let type = node.type
 
     if let convenienceInit = try! createConvenienceInitializer(node: node) {
-      let docComment: SwiftSyntax.Trivia = node.documentation.isEmpty ? [] : .docLineComment("/// \(node.documentation)") + .newline
+      let docComment = node.description?.split(separator: "\n", omittingEmptySubsequences: false).map { "/// \($0)" }.joined(separator: "\n") ?? ""
       ExtensionDeclSyntax(
-        leadingTrivia: docComment,
+        leadingTrivia: "\(docComment)\n",
         extendedType: SimpleTypeIdentifierSyntax(name: .identifier(type.syntaxBaseName))
       ) {
         convenienceInit
@@ -83,7 +83,7 @@ private func createConvenienceInitializer(node: Node) throws -> InitializerDeclS
           firstName: .identifier(child.swiftName),
           colon: .colonToken(),
           type: child.parameterType,
-          defaultArgument: child.defaultInitialization.map { InitializerClauseSyntax(value: $0) }
+          defaultArgument: child.defaultInitialization
         )
       )
     }

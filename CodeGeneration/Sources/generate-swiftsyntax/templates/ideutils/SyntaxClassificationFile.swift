@@ -53,35 +53,17 @@ let syntaxClassificationFile = SourceFileSyntax(leadingTrivia: copyrightHeader) 
       ///   - childKind: The node syntax kind.
       /// - Returns: A pair of classification and whether it is "forced", or nil if
       ///   no classification is attached.
-      internal static func classify(
-          parentKind: SyntaxKind, indexInParent: Int, childKind: SyntaxKind
-        ) -> (SyntaxClassification, Bool)?
+      internal static func classify(_ keyPath: AnyKeyPath) -> (SyntaxClassification, Bool)?
       """
     ) {
-      try IfExprSyntax(
-        """
-        // Separate checks for token nodes (most common checks) versus checks for layout nodes.
-        if childKind == .token
-        """
-      ) {
-        try SwitchExprSyntax("switch (parentKind, indexInParent)") {
-          for childClassification in node_child_classifications where childClassification.isToken {
-            SwitchCaseSyntax("case (.\(raw: childClassification.parent.swiftSyntaxKind), \(raw: childClassification.childIndex)):") {
-              StmtSyntax("return (.\(raw: childClassification.classification!.swiftName), \(raw: childClassification.force))")
-            }
+      try SwitchExprSyntax("switch keyPath") {
+        for childClassification in node_child_classifications {
+          SwitchCaseSyntax("case \\\(raw: childClassification.parent.type.syntaxBaseName).\(raw: childClassification.child.swiftName):") {
+            StmtSyntax("return (.\(raw: childClassification.classification!.swiftName), \(raw: childClassification.force))")
           }
-
-          SwitchCaseSyntax("default: return nil")
         }
-      } else: {
-        try SwitchExprSyntax("switch (parentKind, indexInParent)") {
-          for childClassification in node_child_classifications where !childClassification.isToken {
-            SwitchCaseSyntax("case (.\(raw: childClassification.parent.swiftSyntaxKind), \(raw: childClassification.childIndex)):") {
-              StmtSyntax("return (.\(raw: childClassification.classification!.swiftName), \(raw: childClassification.force))")
-            }
-          }
-
-          SwitchCaseSyntax("default: return nil")
+        SwitchCaseSyntax("default:") {
+          StmtSyntax("return nil")
         }
       }
     }

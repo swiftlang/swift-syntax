@@ -14,7 +14,7 @@
 
 /// The data for an index in a syntax children collection that is not the end
 /// index. See `SyntaxChildrenIndex` for the representation of the end index.
-public struct SyntaxChildrenIndexData: Comparable {
+struct SyntaxChildrenIndexData: Comparable {
   /// The UTF-8 offset of the item at this index in the source file
   /// See `AbsoluteSyntaxPosition.offset`
   let offset: UInt32
@@ -25,7 +25,7 @@ public struct SyntaxChildrenIndexData: Comparable {
   /// See `SyntaxIdentifier.indexIntree`
   let indexInTree: SyntaxIndexInTree
 
-  public static func < (
+  static func < (
     lhs: SyntaxChildrenIndexData,
     rhs: SyntaxChildrenIndexData
   ) -> Bool {
@@ -370,13 +370,9 @@ struct NonNilRawSyntaxChildren: BidirectionalCollection {
       {
         return reversedIndex
       }
-      #if DEBUG
       // Reversing any further would result in undefined behaviour of
       // index(before:)
-      if reversedIndex == children.startIndex {
-        fatalError("presentIndex(before:) must not be called if there is no " + "present index before the given one")
-      }
-      #endif
+      precondition(reversedIndex != children.startIndex, "presentIndex(before:) must not be called if there is no " + "present index before the given one")
       reversedIndex = children.index(before: reversedIndex)
     }
   }

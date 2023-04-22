@@ -41,7 +41,7 @@ public let TRAITS: [Trait] = [
     children: [
       Child(name: "Attributes", kind: .node(kind: "AttributeList"), isOptional: true),
       Child(name: "Modifiers", kind: .node(kind: "ModifierList"), isOptional: true),
-      Child(name: "Members", kind: .node(kind: "MemberDeclBlock")),
+      Child(name: "MemberBlock", kind: .node(kind: "MemberDeclBlock")),
     ]
   ),
   Trait(

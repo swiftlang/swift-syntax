@@ -8,6 +8,7 @@
     "RawSyntaxValidation.swift",
   ],
   "Syntax": [
+    "ChildNameForKeyPath.swift",
     "Keyword.swift",
     "SyntaxChildren.swift",
     "SyntaxData.swift",
@@ -43,7 +44,6 @@
     "SyntaxTransform.swift",
     "SyntaxText.swift",
     "SyntaxVisitor.swift",
-    "Misc.swift",
   ],
   "Position": [
     "AbsolutePosition.swift",

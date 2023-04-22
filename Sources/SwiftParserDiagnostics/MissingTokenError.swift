@@ -27,7 +27,7 @@ extension ParseDiagnosticsGenerator {
     // this token.
 
     let handled: Bool
-    switch (missingToken.rawTokenKind, invalidToken.rawTokenKind) {
+    switch (missingToken.tokenView.rawKind, invalidToken.tokenView.rawKind) {
     case (.identifier, _):
       handled = handleInvalidIdentifier(invalidToken: invalidToken, missingToken: missingToken, invalidTokenContainer: invalidTokenContainer)
     case (.multilineStringQuote, .multilineStringQuote):
@@ -103,7 +103,7 @@ extension ParseDiagnosticsGenerator {
     ]
 
     if let identifier = missingToken.nextToken(viewMode: .all),
-      identifier.rawTokenKind == .identifier,
+      identifier.tokenView.rawKind == .identifier,
       identifier.presence == .missing
     {
       // The extraneous whitespace caused a missing identifier, output a

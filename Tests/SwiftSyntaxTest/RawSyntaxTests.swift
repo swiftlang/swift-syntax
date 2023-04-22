@@ -46,7 +46,7 @@ fileprivate func cannedStructDecl(arena: SyntaxArena) -> RawStructDeclSyntax {
     presence: .present,
     arena: arena
   )
-  let members = RawMemberDeclBlockSyntax(
+  let memberBlock = RawMemberDeclBlockSyntax(
     leftBrace: lBrace,
     members: RawMemberDeclListSyntax(elements: [], arena: arena),
     rightBrace: rBrace,
@@ -60,7 +60,7 @@ fileprivate func cannedStructDecl(arena: SyntaxArena) -> RawStructDeclSyntax {
     genericParameterClause: nil,
     inheritanceClause: nil,
     genericWhereClause: nil,
-    members: members,
+    memberBlock: memberBlock,
     arena: arena
   )
 }
@@ -85,8 +85,8 @@ final class RawSyntaxTests: XCTestCase {
       let structDecl = cannedStructDecl(arena: arena)
       XCTAssertEqual(structDecl.identifier.tokenKind, .identifier)
       XCTAssertEqual(structDecl.structKeyword.tokenText, "struct")
-      XCTAssertEqual(structDecl.members.leftBrace.tokenText, "{")
-      XCTAssertEqual(structDecl.members.members.elements.count, 0)
+      XCTAssertEqual(structDecl.memberBlock.leftBrace.tokenText, "{")
+      XCTAssertEqual(structDecl.memberBlock.members.elements.count, 0)
 
       XCTAssert(structDecl.is(RawDeclSyntax.self))
       XCTAssertNotNil(structDecl.as(RawDeclSyntax.self))
@@ -142,7 +142,7 @@ final class RawSyntaxTests: XCTestCase {
       XCTAssertEqual(ident.description, "\nfoo ")
 
       let identSyntax = Syntax(raw: ident.raw).as(TokenSyntax.self)!
-      let barIdentSyntax = identSyntax.withKind(.keyword(.open))
+      let barIdentSyntax = identSyntax.with(\.tokenKind, .keyword(.open))
       let barIdent = barIdentSyntax.raw.as(RawTokenSyntax.self)!
 
       XCTAssertEqual(barIdent.tokenKind, .keyword)

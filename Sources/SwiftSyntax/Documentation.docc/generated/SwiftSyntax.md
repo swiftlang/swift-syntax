@@ -284,6 +284,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 ### Miscellaneous Syntax
 
 - <doc:SwiftSyntax/AccessorBlockSyntax>
+- <doc:SwiftSyntax/AccessorEffectSpecifiersSyntax>
 - <doc:SwiftSyntax/AccessorParameterSyntax>
 - <doc:SwiftSyntax/AttributeSyntax>
 - <doc:SwiftSyntax/AvailabilityConditionSyntax>
@@ -299,7 +300,6 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/ConformanceRequirementSyntax>
 - <doc:SwiftSyntax/ConventionAttributeArgumentsSyntax>
 - <doc:SwiftSyntax/ConventionWitnessMethodAttributeArgumentsSyntax>
-- <doc:SwiftSyntax/DeclEffectSpecifiersSyntax>
 - <doc:SwiftSyntax/DeclModifierDetailSyntax>
 - <doc:SwiftSyntax/DeclNameArgumentsSyntax>
 - <doc:SwiftSyntax/DeclNameSyntax>
@@ -311,6 +311,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/EnumCaseParameterClauseSyntax>
 - <doc:SwiftSyntax/ExposeAttributeArgumentsSyntax>
 - <doc:SwiftSyntax/ExpressionSegmentSyntax>
+- <doc:SwiftSyntax/FunctionEffectSpecifiersSyntax>
 - <doc:SwiftSyntax/FunctionSignatureSyntax>
 - <doc:SwiftSyntax/GenericArgumentClauseSyntax>
 - <doc:SwiftSyntax/GenericParameterClauseSyntax>

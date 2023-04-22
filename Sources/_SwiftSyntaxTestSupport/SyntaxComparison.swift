@@ -79,10 +79,10 @@ extension TreeDifference: CustomDebugStringConvertible {
       \(message)
 
       Full Expected Tree:
-      \(baseline.root.debugDescription(includeChildren: true, includeTrivia: includeTrivia, converter: expectedConverter, mark: baseline))
+      \(baseline.root.debugDescription(includeTrivia: includeTrivia, converter: expectedConverter, mark: baseline))
 
       Full Actual Tree:
-      \(node.root.debugDescription(includeChildren: true, includeTrivia: includeTrivia, converter: actualConverter, mark: node))
+      \(node.root.debugDescription(includeTrivia: includeTrivia, converter: actualConverter, mark: node))
       """
   }
 }
@@ -118,7 +118,7 @@ public extension SyntaxProtocol {
       return .nodeType
     }
 
-    if isToken {
+    if self.is(TokenSyntax.self) {
       if let token = Syntax(self).as(TokenSyntax.self), let baselineToken = Syntax(baseline).as(TokenSyntax.self) {
         if token.presence != baselineToken.presence {
           return .presence

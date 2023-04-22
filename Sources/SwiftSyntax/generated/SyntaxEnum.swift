@@ -20,6 +20,7 @@ public enum SyntaxEnum {
   case accessPath(AccessPathSyntax)
   case accessorBlock(AccessorBlockSyntax)
   case accessorDecl(AccessorDeclSyntax)
+  case accessorEffectSpecifiers(AccessorEffectSpecifiersSyntax)
   case accessorList(AccessorListSyntax)
   case accessorParameter(AccessorParameterSyntax)
   case actorDecl(ActorDeclSyntax)
@@ -80,7 +81,6 @@ public enum SyntaxEnum {
   case continueStmt(ContinueStmtSyntax)
   case conventionAttributeArguments(ConventionAttributeArgumentsSyntax)
   case conventionWitnessMethodAttributeArguments(ConventionWitnessMethodAttributeArgumentsSyntax)
-  case declEffectSpecifiers(DeclEffectSpecifiersSyntax)
   case declModifierDetail(DeclModifierDetailSyntax)
   case declModifier(DeclModifierSyntax)
   case declNameArgumentList(DeclNameArgumentListSyntax)
@@ -129,6 +129,7 @@ public enum SyntaxEnum {
   case forgetStmt(ForgetStmtSyntax)
   case functionCallExpr(FunctionCallExprSyntax)
   case functionDecl(FunctionDeclSyntax)
+  case functionEffectSpecifiers(FunctionEffectSpecifiersSyntax)
   case functionParameterList(FunctionParameterListSyntax)
   case functionParameter(FunctionParameterSyntax)
   case functionSignature(FunctionSignatureSyntax)
@@ -299,6 +300,8 @@ public extension Syntax {
       return .accessorBlock(AccessorBlockSyntax(self)!)
     case .accessorDecl:
       return .accessorDecl(AccessorDeclSyntax(self)!)
+    case .accessorEffectSpecifiers:
+      return .accessorEffectSpecifiers(AccessorEffectSpecifiersSyntax(self)!)
     case .accessorList:
       return .accessorList(AccessorListSyntax(self)!)
     case .accessorParameter:
@@ -419,8 +422,6 @@ public extension Syntax {
       return .conventionAttributeArguments(ConventionAttributeArgumentsSyntax(self)!)
     case .conventionWitnessMethodAttributeArguments:
       return .conventionWitnessMethodAttributeArguments(ConventionWitnessMethodAttributeArgumentsSyntax(self)!)
-    case .declEffectSpecifiers:
-      return .declEffectSpecifiers(DeclEffectSpecifiersSyntax(self)!)
     case .declModifierDetail:
       return .declModifierDetail(DeclModifierDetailSyntax(self)!)
     case .declModifier:
@@ -517,6 +518,8 @@ public extension Syntax {
       return .functionCallExpr(FunctionCallExprSyntax(self)!)
     case .functionDecl:
       return .functionDecl(FunctionDeclSyntax(self)!)
+    case .functionEffectSpecifiers:
+      return .functionEffectSpecifiers(FunctionEffectSpecifiersSyntax(self)!)
     case .functionParameterList:
       return .functionParameterList(FunctionParameterListSyntax(self)!)
     case .functionParameter:

@@ -173,7 +173,7 @@ extension RawEffectSpecifiersTrait {
   }
 }
 
-extension RawDeclEffectSpecifiersSyntax: RawEffectSpecifiersTrait {
+extension RawFunctionEffectSpecifiersSyntax: RawEffectSpecifiersTrait {
   enum MisspelledAsyncSpecifiers: TokenSpecSet {
     case await
 
@@ -331,12 +331,92 @@ extension RawTypeEffectSpecifiersSyntax: RawEffectSpecifiersTrait {
   }
 }
 
+extension RawAccessorEffectSpecifiersSyntax: RawEffectSpecifiersTrait {
+  enum MisspelledAsyncSpecifiers: TokenSpecSet {
+    case await
+    case reasync
+
+    init?(lexeme: Lexer.Lexeme) {
+      switch PrepareForKeywordMatch(lexeme) {
+      case TokenSpec(.await, allowAtStartOfLine: false): self = .await
+      case TokenSpec(.reasync): self = .reasync
+      default: return nil
+      }
+    }
+
+    var spec: TokenSpec {
+      switch self {
+      case .await: return TokenSpec(.await, allowAtStartOfLine: false)
+      case .reasync: return .keyword(.reasync)
+      }
+    }
+  }
+
+  enum CorrectAsyncTokenKinds: TokenSpecSet {
+    case async
+
+    init?(lexeme: Lexer.Lexeme) {
+      switch PrepareForKeywordMatch(lexeme) {
+      case TokenSpec(.async): self = .async
+      default: return nil
+      }
+    }
+
+    var spec: TokenSpec {
+      switch self {
+      case .async: return .keyword(.async)
+      }
+    }
+  }
+
+  enum MisspelledThrowsTokenKinds: TokenSpecSet {
+    case `rethrows`
+    case `try`
+    case `throw`
+
+    init?(lexeme: Lexer.Lexeme) {
+      switch PrepareForKeywordMatch(lexeme) {
+      case TokenSpec(.rethrows): self = .rethrows
+      case TokenSpec(.try, allowAtStartOfLine: false): self = .try
+      case TokenSpec(.throw, allowAtStartOfLine: false): self = .throw
+      default: return nil
+      }
+    }
+
+    var spec: TokenSpec {
+      switch self {
+      case .rethrows: return .keyword(.rethrows)
+      case .try: return TokenSpec(.try, allowAtStartOfLine: false)
+      case .throw: return TokenSpec(.throw, allowAtStartOfLine: false)
+      }
+    }
+  }
+
+  enum CorrectThrowsTokenKinds: TokenSpecSet {
+    case `throws`
+
+    init?(lexeme: Lexer.Lexeme) {
+      switch PrepareForKeywordMatch(lexeme) {
+      case TokenSpec(.throws): self = .throws
+      default: return nil
+      }
+    }
+
+    var spec: TokenSpec {
+      switch self {
+      case .throws: return .keyword(.throws)
+      }
+    }
+  }
+
+}
+
 extension TokenConsumer {
-  mutating func at<SpecSet1: TokenSpecSet, SpecSet2: TokenSpecSet>(anyIn specSet1: SpecSet1.Type, or specSet2: SpecSet2.Type) -> (TokenSpec, TokenConsumptionHandle)? {
+  mutating func at<SpecSet1: TokenSpecSet, SpecSet2: TokenSpecSet>(anyIn specSet1: SpecSet1.Type, or specSet2: SpecSet2.Type) -> (spec: TokenSpec, handle: TokenConsumptionHandle, matchedSubset: Any.Type)? {
     if let (spec, handle) = self.at(anyIn: specSet1) {
-      return (spec.spec, handle)
+      return (spec.spec, handle, SpecSet1.self)
     } else if let (spec, handle) = self.at(anyIn: specSet2) {
-      return (spec.spec, handle)
+      return (spec.spec, handle, SpecSet2.self)
     } else {
       return nil
     }
@@ -390,14 +470,14 @@ extension Parser {
 
     var unexpectedAfterThrowsLoopProgress = LoopProgressCondition()
     while unexpectedAfterThrowsLoopProgress.evaluate(self.currentToken) {
-      if let (_, handle) = self.at(anyIn: S.MisspelledAsyncSpecifiers.self, or: S.CorrectAsyncTokenKinds.self) {
+      if let (_, handle, _) = self.at(anyIn: S.MisspelledAsyncSpecifiers.self, or: S.CorrectAsyncTokenKinds.self) {
         let misspelledAsync = self.eat(handle)
         unexpectedAfterThrows.append(RawSyntax(misspelledAsync))
         if asyncKeyword == nil {
           // Handle `async` after `throws`
           asyncKeyword = missingToken(.keyword(.async))
         }
-      } else if let (_, handle) = self.at(anyIn: S.MisspelledThrowsTokenKinds.self, or: S.CorrectThrowsTokenKinds.self) {
+      } else if let (_, handle, _) = self.at(anyIn: S.MisspelledThrowsTokenKinds.self, or: S.CorrectThrowsTokenKinds.self) {
         let misspelledThrows = self.eat(handle)
         unexpectedAfterThrows.append(RawSyntax(misspelledThrows))
       } else {
@@ -423,8 +503,12 @@ extension Parser {
     return parseEffectSpecifiers(RawTypeEffectSpecifiersSyntax.self)
   }
 
-  mutating func parseDeclEffectSpecifiers() -> RawDeclEffectSpecifiersSyntax? {
-    return parseEffectSpecifiers(RawDeclEffectSpecifiersSyntax.self)
+  mutating func parseFunctionEffectSpecifiers() -> RawFunctionEffectSpecifiersSyntax? {
+    return parseEffectSpecifiers(RawFunctionEffectSpecifiersSyntax.self)
+  }
+
+  mutating func parseAccessorEffectSpecifiers() -> RawAccessorEffectSpecifiersSyntax? {
+    return parseEffectSpecifiers(RawAccessorEffectSpecifiersSyntax.self)
   }
 
   /// Consume any misplaced effect specifiers and return them in as unexpected tokens.
@@ -437,17 +521,25 @@ extension Parser {
     var unexpected: [RawTokenSyntax] = []
     var loopProgress = LoopProgressCondition()
     while loopProgress.evaluate(self.currentToken) {
-      if let (spec, handle) = self.at(anyIn: S.MisspelledAsyncSpecifiers.self, or: S.CorrectAsyncTokenKinds.self) {
+      if let (spec, handle, matchedSubset) = self.at(anyIn: S.MisspelledAsyncSpecifiers.self, or: S.CorrectAsyncTokenKinds.self) {
         let misspelledAsync = self.eat(handle)
         unexpected.append(misspelledAsync)
         if effectSpecifiers?.asyncSpecifier == nil {
-          synthesizedAsync = missingToken(spec)
+          if matchedSubset == S.CorrectAsyncTokenKinds.self {
+            synthesizedAsync = missingToken(spec)
+          } else {
+            synthesizedAsync = missingToken(.async)
+          }
         }
-      } else if let (spec, handle) = self.at(anyIn: S.MisspelledThrowsTokenKinds.self, or: S.CorrectThrowsTokenKinds.self) {
+      } else if let (spec, handle, matchedSubset) = self.at(anyIn: S.MisspelledThrowsTokenKinds.self, or: S.CorrectThrowsTokenKinds.self) {
         let misspelledThrows = self.eat(handle)
         unexpected.append(misspelledThrows)
         if effectSpecifiers?.throwsSpecifier == nil {
-          synthesizedThrows = missingToken(spec)
+          if matchedSubset == S.CorrectThrowsTokenKinds.self {
+            synthesizedThrows = missingToken(spec)
+          } else {
+            synthesizedThrows = missingToken(.throws)
+          }
         }
       } else {
         break

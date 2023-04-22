@@ -53,6 +53,13 @@ open class SyntaxRewriter {
     return DeclSyntax(visitChildren(node))
   }
   
+  /// Visit a `AccessorEffectSpecifiersSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: AccessorEffectSpecifiersSyntax) -> AccessorEffectSpecifiersSyntax {
+    return Syntax(visitChildren(node)).cast(AccessorEffectSpecifiersSyntax.self)
+  }
+  
   /// Visit a `AccessorListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -473,13 +480,6 @@ open class SyntaxRewriter {
     return Syntax(visitChildren(node)).cast(ConventionWitnessMethodAttributeArgumentsSyntax.self)
   }
   
-  /// Visit a `DeclEffectSpecifiersSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: DeclEffectSpecifiersSyntax) -> DeclEffectSpecifiersSyntax {
-    return Syntax(visitChildren(node)).cast(DeclEffectSpecifiersSyntax.self)
-  }
-  
   /// Visit a `DeclModifierDetailSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -814,6 +814,13 @@ open class SyntaxRewriter {
   ///   - Returns: the rewritten node
   open func visit(_ node: FunctionDeclSyntax) -> DeclSyntax {
     return DeclSyntax(visitChildren(node))
+  }
+  
+  /// Visit a `FunctionEffectSpecifiersSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: FunctionEffectSpecifiersSyntax) -> FunctionEffectSpecifiersSyntax {
+    return Syntax(visitChildren(node)).cast(FunctionEffectSpecifiersSyntax.self)
   }
   
   /// Visit a `FunctionParameterListSyntax`.
@@ -2025,6 +2032,20 @@ open class SyntaxRewriter {
   }
   
   /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplAccessorEffectSpecifiersSyntax(_ data: SyntaxData) -> Syntax {
+    let node = AccessorEffectSpecifiersSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { 
+      visitPost(node._syntaxNode) 
+    }
+    if let newNode = visitAny(node._syntaxNode) { 
+      return newNode 
+    }
+    return Syntax(visit(node))
+  }
+  
+  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplAccessorListSyntax(_ data: SyntaxData) -> Syntax {
     let node = AccessorListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -2865,20 +2886,6 @@ open class SyntaxRewriter {
   }
   
   /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplDeclEffectSpecifiersSyntax(_ data: SyntaxData) -> Syntax {
-    let node = DeclEffectSpecifiersSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
-    }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplDeclModifierDetailSyntax(_ data: SyntaxData) -> Syntax {
     let node = DeclModifierDetailSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -3539,6 +3546,20 @@ open class SyntaxRewriter {
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplFunctionDeclSyntax(_ data: SyntaxData) -> Syntax {
     let node = FunctionDeclSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { 
+      visitPost(node._syntaxNode) 
+    }
+    if let newNode = visitAny(node._syntaxNode) { 
+      return newNode 
+    }
+    return Syntax(visit(node))
+  }
+  
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplFunctionEffectSpecifiersSyntax(_ data: SyntaxData) -> Syntax {
+    let node = FunctionEffectSpecifiersSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer { 
@@ -5756,6 +5777,8 @@ open class SyntaxRewriter {
       return visitImplAccessorBlockSyntax
     case .accessorDecl:
       return visitImplAccessorDeclSyntax
+    case .accessorEffectSpecifiers:
+      return visitImplAccessorEffectSpecifiersSyntax
     case .accessorList:
       return visitImplAccessorListSyntax
     case .accessorParameter:
@@ -5876,8 +5899,6 @@ open class SyntaxRewriter {
       return visitImplConventionAttributeArgumentsSyntax
     case .conventionWitnessMethodAttributeArguments:
       return visitImplConventionWitnessMethodAttributeArgumentsSyntax
-    case .declEffectSpecifiers:
-      return visitImplDeclEffectSpecifiersSyntax
     case .declModifierDetail:
       return visitImplDeclModifierDetailSyntax
     case .declModifier:
@@ -5974,6 +5995,8 @@ open class SyntaxRewriter {
       return visitImplFunctionCallExprSyntax
     case .functionDecl:
       return visitImplFunctionDeclSyntax
+    case .functionEffectSpecifiers:
+      return visitImplFunctionEffectSpecifiersSyntax
     case .functionParameterList:
       return visitImplFunctionParameterListSyntax
     case .functionParameter:
@@ -6300,6 +6323,8 @@ open class SyntaxRewriter {
       return visitImplAccessorBlockSyntax(data)
     case .accessorDecl:
       return visitImplAccessorDeclSyntax(data)
+    case .accessorEffectSpecifiers:
+      return visitImplAccessorEffectSpecifiersSyntax(data)
     case .accessorList:
       return visitImplAccessorListSyntax(data)
     case .accessorParameter:
@@ -6420,8 +6445,6 @@ open class SyntaxRewriter {
       return visitImplConventionAttributeArgumentsSyntax(data)
     case .conventionWitnessMethodAttributeArguments:
       return visitImplConventionWitnessMethodAttributeArgumentsSyntax(data)
-    case .declEffectSpecifiers:
-      return visitImplDeclEffectSpecifiersSyntax(data)
     case .declModifierDetail:
       return visitImplDeclModifierDetailSyntax(data)
     case .declModifier:
@@ -6518,6 +6541,8 @@ open class SyntaxRewriter {
       return visitImplFunctionCallExprSyntax(data)
     case .functionDecl:
       return visitImplFunctionDeclSyntax(data)
+    case .functionEffectSpecifiers:
+      return visitImplFunctionEffectSpecifiersSyntax(data)
     case .functionParameterList:
       return visitImplFunctionParameterListSyntax(data)
     case .functionParameter:

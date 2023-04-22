@@ -62,11 +62,11 @@ let basicFormatFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     DeclSyntax(
       """
       open override func visitPre(_ node: Syntax) {
-        if let keyPath = getKeyPath(node), shouldIndent(keyPath) {
+        if let keyPath = node.keyPathInParent, shouldIndent(keyPath) {
           indentationLevel += 1
         }
         if let parent = node.parent, childrenSeparatedByNewline(parent) {
-          putNextTokenOnNewLine = true && node.previousToken != nil
+          putNextTokenOnNewLine = true && node.previousToken(viewMode: .sourceAccurate) != nil
         }
       }
       """
@@ -74,7 +74,7 @@ let basicFormatFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     DeclSyntax(
       """
       open override func visitPost(_ node: Syntax) {
-        if let keyPath = getKeyPath(node), shouldIndent(keyPath) {
+        if let keyPath = node.keyPathInParent, shouldIndent(keyPath) {
           indentationLevel -= 1
         }
       }
@@ -92,7 +92,7 @@ let basicFormatFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         if requiresTrailingSpace(node) && trailingTrivia.isEmpty {
           trailingTrivia += .space
         }
-        if let keyPath = getKeyPath(Syntax(node)), requiresLeadingNewline(keyPath), !(leadingTrivia.first?.isNewline ?? false), !shouldOmitNewline(node) {
+        if let keyPath = node.keyPathInParent, requiresLeadingNewline(keyPath), !(leadingTrivia.first?.isNewline ?? false), !shouldOmitNewline(node) {
           leadingTrivia = .newline + leadingTrivia
         }
         var isOnNewline: Bool = (lastRewrittenToken?.trailingTrivia.pieces.last?.isNewline == true)
@@ -206,7 +206,7 @@ let basicFormatFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     try FunctionDeclSyntax("open func requiresLeadingSpace(_ token: TokenSyntax) -> Bool") {
       StmtSyntax(
         """
-        if let keyPath = getKeyPath(token), let requiresLeadingSpace = requiresLeadingSpace(keyPath) {
+        if let keyPath = token.keyPathInParent, let requiresLeadingSpace = requiresLeadingSpace(keyPath) {
           return requiresLeadingSpace
         }
         """
@@ -268,7 +268,7 @@ let basicFormatFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     try FunctionDeclSyntax("open func requiresTrailingSpace(_ token: TokenSyntax) -> Bool") {
       StmtSyntax(
         """
-        if let keyPath = getKeyPath(token), let requiresTrailingSpace = requiresTrailingSpace(keyPath) {
+        if let keyPath = token.keyPathInParent, let requiresTrailingSpace = requiresTrailingSpace(keyPath) {
           return requiresTrailingSpace
         }
         """
@@ -311,19 +311,5 @@ let basicFormatFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         }
       }
     }
-
-    DeclSyntax(
-      """
-      private func getKeyPath<T: SyntaxProtocol>(_ node: T) -> AnyKeyPath? {
-        guard let parent = node.parent else {
-          return nil
-        }
-        guard case .layout(let childrenKeyPaths) = parent.kind.syntaxNodeType.structure else {
-          return nil
-        }
-        return childrenKeyPaths[node.indexInParent]
-      }
-      """
-    )
   }
 }

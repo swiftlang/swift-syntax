@@ -426,6 +426,23 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: ArrayTypeSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+
+    if node.leftSquareBracket.presence == .missing && node.rightSquareBracket.presence == .present {
+      addDiagnostic(
+        node.rightSquareBracket,
+        .extraRightBracket,
+        fixIts: [.init(message: InsertFixIt(tokenToBeInserted: node.leftSquareBracket), changes: .makePresent(node.leftSquareBracket))],
+        handledNodes: [node.leftSquareBracket.id]
+      )
+    }
+
+    return .visitChildren
+  }
+
   public override func visit(_ node: AttributeSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren

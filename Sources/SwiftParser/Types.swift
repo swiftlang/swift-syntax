@@ -1052,7 +1052,37 @@ extension Parser {
         )
       )
     } else {
-      return self.parseType()
+      var result = self.parseType()
+
+      guard !result.hasError else {
+        return result
+      }
+
+      if self.at(.rightSquareBracket) {
+        let (unexpectedBeforeRSquareBracket, rightSquareBracket) = self.expect(.rightSquareBracket)
+        result = RawTypeSyntax(
+          RawArrayTypeSyntax(
+            leftSquareBracket: missingToken(.leftSquareBracket),
+            elementType: result,
+            unexpectedBeforeRSquareBracket,
+            rightSquareBracket: rightSquareBracket,
+            arena: self.arena
+          )
+        )
+      }
+
+      var loopProgress = LoopProgressCondition()
+      while loopProgress.evaluate(currentToken) {
+        if self.at(TokenSpec(.postfixQuestionMark, allowAtStartOfLine: false)) {
+          result = RawTypeSyntax(self.parseOptionalType(result))
+        } else if self.at(TokenSpec(.exclamationMark, allowAtStartOfLine: false)) {
+          result = RawTypeSyntax(self.parseImplicitlyUnwrappedOptionalType(result))
+        } else {
+          break
+        }
+      }
+
+      return result
     }
   }
 }

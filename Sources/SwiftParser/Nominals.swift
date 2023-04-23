@@ -240,7 +240,7 @@ extension Parser {
     }
 
     let inheritance: RawTypeInheritanceClauseSyntax?
-    if self.at(.colon) {
+    if self.at(.colon) || self.isAtPythonStyleInheritanceClause() {
       inheritance = self.parseInheritance()
     } else {
       inheritance = nil
@@ -273,7 +273,20 @@ extension Parser {
   /// Parse an inheritance clause.
   @_spi(RawSyntax)
   public mutating func parseInheritance() -> RawTypeInheritanceClauseSyntax {
-    let (unexpectedBeforeColon, colon) = self.expect(.colon)
+    let unexpectedBeforeColon: RawUnexpectedNodesSyntax?
+    let colon: RawTokenSyntax
+
+    let isPythonStyleInheritanceClause: Bool
+    // Parse python style inheritance clause and replace parentheses with a colon
+    if let leftParen = self.consume(if: .leftParen) {
+      unexpectedBeforeColon = RawUnexpectedNodesSyntax([leftParen], arena: self.arena)
+      colon = missingToken(.colon)
+      isPythonStyleInheritanceClause = true
+    } else {
+      (unexpectedBeforeColon, colon) = self.expect(.colon)
+      isPythonStyleInheritanceClause = false
+    }
+
     var elements = [RawInheritedTypeSyntax]()
     do {
       var keepGoing: RawTokenSyntax? = nil
@@ -304,10 +317,21 @@ extension Parser {
         )
       } while keepGoing != nil && loopProgress.evaluate(currentToken)
     }
+
+    let unexpectedAfterInheritedTypeCollection: RawUnexpectedNodesSyntax?
+
+    // If it is a Python style inheritance clause, then consume a right paren if there is one.
+    if isPythonStyleInheritanceClause, let rightParen = self.consume(if: .rightParen) {
+      unexpectedAfterInheritedTypeCollection = RawUnexpectedNodesSyntax(elements: [RawSyntax(rightParen)], arena: self.arena)
+    } else {
+      unexpectedAfterInheritedTypeCollection = nil
+    }
+
     return RawTypeInheritanceClauseSyntax(
       unexpectedBeforeColon,
       colon: colon,
       inheritedTypeCollection: RawInheritedTypeListSyntax(elements: elements, arena: self.arena),
+      unexpectedAfterInheritedTypeCollection,
       arena: self.arena
     )
   }
@@ -348,5 +372,16 @@ extension Parser {
       rightAngleBracket: rangle,
       arena: self.arena
     )
+  }
+}
+
+extension Parser {
+  private mutating func isAtPythonStyleInheritanceClause() -> Bool {
+    guard self.at(.leftParen) else { return false }
+    return self.withLookahead {
+      $0.consume(if: .leftParen)
+      guard $0.canParseType() else { return false }
+      return $0.at(.rightParen, .keyword(.where), .leftBrace) || $0.at(.eof)
+    }
   }
 }

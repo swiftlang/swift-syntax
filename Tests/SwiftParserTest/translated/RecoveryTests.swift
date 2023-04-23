@@ -1521,9 +1521,14 @@ final class RecoveryTests: XCTestCase {
       class WrongInheritanceClause11️⃣(Int) {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected ':' to begin inheritance clause, Fix-It replacements: 30 - 31 = ': ', 34 - 35 = ''
-        DiagnosticSpec(message: "unexpected code '(Int)' in class")
-      ]
+        DiagnosticSpec(
+          message: "expected ':' to begin inheritance clause",
+          fixIts: ["replace '()' with ':'"]
+        )
+      ],
+      fixedSource: """
+        class WrongInheritanceClause1: Int {}
+        """
     )
   }
 
@@ -1533,9 +1538,14 @@ final class RecoveryTests: XCTestCase {
       class WrongInheritanceClause21️⃣(Base2<Int>) {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected ':' to begin inheritance clause, Fix-It replacements: 30 - 31 = ': ', 41 - 42 = ''
-        DiagnosticSpec(message: "unexpected code '(Base2<Int>)' in class")
-      ]
+        DiagnosticSpec(
+          message: "expected ':' to begin inheritance clause",
+          fixIts: ["replace '()' with ':'"]
+        )
+      ],
+      fixedSource: """
+        class WrongInheritanceClause2: Base2<Int>{}
+        """
     )
   }
 
@@ -1545,9 +1555,14 @@ final class RecoveryTests: XCTestCase {
       class WrongInheritanceClause3<T>1️⃣(SubModule.Base1) where T:AnyObject {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected ':' to begin inheritance clause, Fix-It replacements: 33 - 34 = ': ', 49 - 50 = ''
-        DiagnosticSpec(message: "unexpected code '(SubModule.Base1) where T:AnyObject' in class")
-      ]
+        DiagnosticSpec(
+          message: "expected ':' to begin inheritance clause",
+          fixIts: ["replace '()' with ':'"]
+        )
+      ],
+      fixedSource: """
+        class WrongInheritanceClause3<T>: SubModule.Base1 where T:AnyObject {}
+        """
     )
   }
 
@@ -1557,9 +1572,14 @@ final class RecoveryTests: XCTestCase {
       class WrongInheritanceClause41️⃣(SubModule.Base2<Int>) {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected ':' to begin inheritance clause, Fix-It replacements: 30 - 31 = ': ', 51 - 52 = ''
-        DiagnosticSpec(message: "unexpected code '(SubModule.Base2<Int>)' in class")
-      ]
+        DiagnosticSpec(
+          message: "expected ':' to begin inheritance clause",
+          fixIts: ["replace '()' with ':'"]
+        )
+      ],
+      fixedSource: """
+        class WrongInheritanceClause4: SubModule.Base2<Int>{}
+        """
     )
   }
 
@@ -1569,47 +1589,55 @@ final class RecoveryTests: XCTestCase {
       class WrongInheritanceClause5<T>1️⃣(SubModule.Base2<Int>) where T:AnyObject {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected ':' to begin inheritance clause, Fix-It replacements: 33 - 34 = ': ', 54 - 55 = ''
-        DiagnosticSpec(message: "unexpected code '(SubModule.Base2<Int>) where T:AnyObject' in class")
-      ]
+        DiagnosticSpec(
+          message: "expected ':' to begin inheritance clause",
+          fixIts: ["replace '()' with ':'"]
+        )
+      ],
+      fixedSource: """
+        class WrongInheritanceClause5<T>: SubModule.Base2<Int>where T:AnyObject {}
+        """
     )
   }
 
   func testRecovery130() {
     assertParse(
       """
-      class WrongInheritanceClause61️⃣(Int 2️⃣{}3️⃣
+      class WrongInheritanceClause61️⃣(Int {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected ':' to begin inheritance clause, Fix-It replacements: 30 - 31 = ': '
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' in class", fixIts: ["insert '{'"]),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'var' in variable", fixIts: ["insert 'var'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end tuple pattern", fixIts: ["insert ')'"]),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected '}' to end class", fixIts: ["insert '}'"]),
-      ]
+        DiagnosticSpec(
+          message: "expected ':' to begin inheritance clause",
+          fixIts: ["replace '(' with ':'"]
+        )
+      ],
+      fixedSource: """
+        class WrongInheritanceClause6: Int {}
+        """
     )
   }
 
   func testRecovery131() {
     assertParse(
       """
-      class WrongInheritanceClause7<T>1️⃣(Int 2️⃣where T:AnyObject {}
+      class WrongInheritanceClause7<T>1️⃣(Int where T:AnyObject {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected ':' to begin inheritance clause, Fix-It replacements: 33 - 34 = ': '
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' in class", fixIts: ["insert '{'"]),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'var' in variable", fixIts: ["insert 'var'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end tuple pattern", fixIts: ["insert ')'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end class", fixIts: ["insert '}'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code 'where T:AnyObject {}' at top level"),
-      ]
+        DiagnosticSpec(
+          message: "expected ':' to begin inheritance clause",
+          fixIts: ["replace '(' with ':'"]
+        )
+      ],
+      fixedSource: """
+        class WrongInheritanceClause7<T>: Int where T:AnyObject {}
+        """
     )
   }
 
   func testRecovery132() {
+    // <rdar://problem/18502220> [swift-crashes 078] parser crash on invalid cast in sequence expr
     assertParse(
       """
-      // <rdar://problem/18502220> [swift-crashes 078] parser crash on invalid cast in sequence expr
       Base=1 as Base=1
       """
     )

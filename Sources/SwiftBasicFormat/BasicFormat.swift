@@ -35,21 +35,28 @@ open class BasicFormat: SyntaxRewriter {
   /// This is used as a reference-point to indent user-indented code.
   private var anchorPoints: [TokenSyntax: Trivia] = [:]
 
+  public let viewMode: SyntaxTreeViewMode
+
   /// The previously visited token. This is faster than accessing
   /// `token.previousToken` inside `visit(_:TokenSyntax)`. `nil` if no token has
   /// been visited yet.
   private var previousToken: TokenSyntax? = nil
 
-  public init(indentationWidth: Trivia = .spaces(4), initialIndentation: Trivia = []) {
+  public init(
+    indentationWidth: Trivia = .spaces(4),
+    initialIndentation: Trivia = [],
+    viewMode: SyntaxTreeViewMode = .sourceAccurate
+  ) {
     self.indentationWidth = indentationWidth
     self.indentationStack = [(indentation: initialIndentation, isUserDefined: false)]
+    self.viewMode = viewMode
   }
 
   // MARK: - Updating indentation level
 
   public func increaseIndentationLevel(to userDefinedIndentation: Trivia? = nil) {
     if let userDefinedIndentation = userDefinedIndentation {
-      indentationStack.append((indentation: userDefinedIndentation, isUserDefined: false))
+      indentationStack.append((indentation: userDefinedIndentation, isUserDefined: true))
     } else {
       indentationStack.append((indentation: currentIndentationLevel + indentationWidth, isUserDefined: false))
     }
@@ -65,7 +72,7 @@ open class BasicFormat: SyntaxRewriter {
 
   open override func visitPre(_ node: Syntax) {
     if requiresIndent(node) {
-      if let firstToken = node.firstToken(viewMode: .sourceAccurate),
+      if let firstToken = node.firstToken(viewMode: viewMode),
         let tokenIndentation = firstToken.leadingTrivia.indentation(isOnNewline: false),
         !tokenIndentation.isEmpty,
         let lastNonUserDefinedIndentation = indentationStack.last(where: { !$0.isUserDefined })?.indentation
@@ -103,6 +110,8 @@ open class BasicFormat: SyntaxRewriter {
       return true
     case .codeBlockItemList:
       return true
+    case .ifConfigClauseList:
+      return true
     case .memberDeclList:
       return true
     case .switchCaseList:
@@ -118,7 +127,7 @@ open class BasicFormat: SyntaxRewriter {
     var ancestor: Syntax = Syntax(token)
     while let parent = ancestor.parent {
       ancestor = parent
-      if let firstToken = parent.firstToken(viewMode: .sourceAccurate),
+      if let firstToken = parent.firstToken(viewMode: viewMode),
         let anchorPointIndentation = anchorPoints[firstToken]
       {
         return anchorPointIndentation
@@ -148,11 +157,17 @@ open class BasicFormat: SyntaxRewriter {
     var ancestor: Syntax = Syntax(token)
     while let parent = ancestor.parent {
       ancestor = parent
-      if ancestor.position != token.position {
+      if ancestor.position != token.position || ancestor.firstToken(viewMode: viewMode) != token {
         break
       }
       if let ancestorsParent = ancestor.parent, childrenSeparatedByNewline(ancestorsParent) {
         return true
+      }
+      switch ancestor.keyPathInParent {
+      case \IfConfigClauseSyntax.elements:
+        return true
+      default:
+        break
       }
     }
 
@@ -161,28 +176,94 @@ open class BasicFormat: SyntaxRewriter {
 
   open func requiresWhitespace(between first: TokenSyntax?, and second: TokenSyntax?) -> Bool {
     switch (first?.tokenKind, second?.tokenKind) {
-    case (.leftParen, .leftBrace),  // Ensures there is not a space in `.map({ $0.foo })`
-      (.exclamationMark, .leftParen),  // Ensures there is not a space in `myOptionalClosure!()`
-      (.exclamationMark, .period),  // Ensures there is not a space in `myOptionalBar!.foo()`
-      (.keyword(.as), .exclamationMark),  // Ensures there is not a space in `as!`
-      (.keyword(.as), .postfixQuestionMark),  // Ensures there is not a space in `as?`
-      (.keyword(.try), .exclamationMark),  // Ensures there is not a space in `try!`
-      (.keyword(.try), .postfixQuestionMark),  // Ensures there is not a space in `try?`:
-      (.postfixQuestionMark, .leftParen),  // Ensures there is not a space in `init?()` or `myOptionalClosure?()`s
-      (.postfixQuestionMark, .rightAngle),  // Ensures there is not a space in `ContiguousArray<RawSyntax?>`
-      (.postfixQuestionMark, .rightParen):  // Ensures there is not a space in `myOptionalClosure?()`
+    case (.atSign, _),
+      (.backslash, _),
+      (.backtick, _),
+      (.dollarIdentifier, .period),  // a.b
+      (.eof, _),
+      (.exclamationMark, .leftParen),  // myOptionalClosure!()
+      (.exclamationMark, .period),  // myOptionalBar!.foo()
+      (.extendedRegexDelimiter, .leftParen),  // opening extended regex delimiter should never be separate by a space
+      (.extendedRegexDelimiter, .regexSlash),  // opening extended regex delimiter should never be separate by a space
+      (.identifier, .leftAngle),  // MyType<Int>
+      (.identifier, .leftParen),  // foo()
+      (.identifier, .leftSquareBracket),  // myArray[1]
+      (.identifier, .period),  // a.b
+      (.integerLiteral, .period),  // macOS 11.2.1
+      (.keyword(.`init`), .leftAngle),  // init<T>()
+      (.keyword(.`init`), .leftParen),  // init()
+      (.keyword(.self), .period),  // self.someProperty
+      (.keyword(.Self), .period),  // self.someProperty
+      (.keyword(.set), .leftParen),  // var mYar: Int { set(value) {} }
+      (.keyword(.subscript), .leftParen),  // subscript(x: Int)
+      (.keyword(.super), .period),  // super.someProperty
+      (.leftBrace, _),
+      (.leftParen, _),
+      (.leftSquareBracket, _),
+      (.multilineStringQuote, .rawStringDelimiter),  // closing raw string delimiter should never be separate by a space
+      (.period, _),
+      (.postfixQuestionMark, .leftAngle),  // init?<T>()
+      (.postfixQuestionMark, .leftParen),  // init?() or myOptionalClosure?()
+      (.postfixQuestionMark, .period),  // someOptional?.someProperty
+      (.pound, _),
+      (.poundUnavailableKeyword, .leftParen),  // #unavailable(...)
+      (.prefixAmpersand, _),
+      (.prefixOperator, _),
+      (.rawStringDelimiter, .leftParen),  // opening raw string delimiter should never be separate by a space
+      (.rawStringDelimiter, .multilineStringQuote),  // opening raw string delimiter should never be separate by a space
+      (.rawStringDelimiter, .singleQuote),  // opening raw string delimiter should never be separate by a space
+      (.rawStringDelimiter, .stringQuote),  // opening raw string delimiter should never be separate by a space
+      (.regexLiteralPattern, _),
+      (.regexSlash, .extendedRegexDelimiter),  // closing extended regex delimiter should never be separate by a space
+      (.rightAngle, .leftParen),  // func foo<T>(x: T)
+      (.rightParen, .leftParen),  // returnsClosure()()
+      (.rightParen, .period),  // foo().bar
+      (.rightSquareBracket, .period),  // myArray[1].someProperty
+      (.singleQuote, .rawStringDelimiter),  // closing raw string delimiter should never be separate by a space
+      (.stringQuote, .rawStringDelimiter),  // closing raw string delimiter should never be separate by a space
+      (.stringSegment, _),
+      (_, .colon),
+      (_, .comma),
+      (_, .ellipsis),
+      (_, .eof),
+      (_, .exclamationMark),
+      (_, .postfixOperator),
+      (_, .postfixQuestionMark),
+      (_, .rightBrace),
+      (_, .rightParen),
+      (_, .rightSquareBracket),
+      (_, .semicolon),
+      (_, nil),
+      (nil, _):
+      return false
+    case (.leftAngle, _) where second?.tokenKind != .rightAngle:  // `<` and `>` need to be separated by a space because otherwise they become an operator
+      return false
+    case (_, .rightAngle) where first?.tokenKind != .leftAngle:  // `<` and `>` need to be separated by a space because otherwise they become an operator
       return false
     default:
       break
     }
 
-    if first?.requiresTrailingSpace ?? false {
-      return true
+    switch first?.keyPathInParent {
+    case \ExpressionSegmentSyntax.backslash,
+      \ExpressionSegmentSyntax.rightParen,
+      \DeclNameArgumentSyntax.colon,
+      \StringLiteralExprSyntax.openQuote,
+      \RegexLiteralExprSyntax.openSlash:
+      return false
+    default:
+      break
     }
-    if second?.requiresLeadingSpace ?? false {
-      return true
-    }
-    return false
+
+    return true
+  }
+
+  /// Whether the formatter should consider this token as being mutable.
+  /// This allows the diagnostic generator to only assume that missing nodes
+  /// will be mutated. Thus, if two tokens need to be separated by a space, it
+  /// will not be assumed that the space is added to an immutable previous node.
+  open func isMutable(_ token: TokenSyntax) -> Bool {
+    return true
   }
 
   // MARK: - Formatting a token
@@ -191,15 +272,15 @@ open class BasicFormat: SyntaxRewriter {
     defer {
       self.previousToken = token
     }
-    let previousToken = self.previousToken ?? token.previousToken(viewMode: .sourceAccurate)
-    let nextToken = token.nextToken(viewMode: .sourceAccurate)
+    let previousToken = self.previousToken ?? token.previousToken(viewMode: viewMode)
+    let nextToken = token.nextToken(viewMode: viewMode)
 
     lazy var previousTokenWillEndWithWhitespace: Bool = {
       guard let previousToken = previousToken else {
         return false
       }
       return previousToken.trailingTrivia.endsWithWhitespace
-        || requiresWhitespace(between: previousToken, and: token)
+        || (requiresWhitespace(between: previousToken, and: token) && isMutable(previousToken))
     }()
 
     lazy var previousTokenWillEndWithNewline: Bool = {
@@ -234,7 +315,7 @@ open class BasicFormat: SyntaxRewriter {
         return false
       }
       return nextToken.leadingTrivia.startsWithNewline
-        || requiresLeadingNewline(nextToken)
+        || (requiresLeadingNewline(nextToken) && isMutable(nextToken))
     }()
 
     /// This token's trailing trivia + any spaces or tabs at the start of the

@@ -50,12 +50,12 @@ class PresentMaker: SyntaxRewriter {
       let presentToken: TokenSyntax
       let (rawKind, text) = token.tokenKind.decomposeToRaw()
       if let text = text, (!text.isEmpty || rawKind == .stringSegment) {  // string segments can have empty text
-        presentToken = TokenSyntax(token.tokenKind, presence: .present)
+        presentToken = token.with(\.presence, .present)
       } else {
         let newKind = TokenKind.fromRaw(kind: rawKind, text: rawKind.defaultText.map(String.init) ?? "<#\(token.tokenKind.nameForDiagnostics)#>")
-        presentToken = TokenSyntax(newKind, leadingTrivia: token.leadingTrivia, trailingTrivia: token.trailingTrivia, presence: .present)
+        presentToken = token.with(\.tokenKind, newKind).with(\.presence, .present)
       }
-      return BasicFormat().visit(presentToken)
+      return presentToken
     } else {
       return token
     }

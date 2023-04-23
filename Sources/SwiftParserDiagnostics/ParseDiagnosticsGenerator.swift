@@ -581,7 +581,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
           position: position,
           .consecutiveStatementsOnSameLine,
           fixIts: [
-            FixIt(message: .insertSemicolon, changes: .makePresentBeforeTrivia(semicolon))
+            FixIt(message: .insertSemicolon, changes: .makePresent(semicolon))
           ],
           handledNodes: [semicolon.id]
         )
@@ -958,7 +958,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
           position: position,
           .consecutiveDeclarationsOnSameLine,
           fixIts: [
-            FixIt(message: .insertSemicolon, changes: .makePresentBeforeTrivia(semicolon))
+            FixIt(message: .insertSemicolon, changes: .makePresent(semicolon))
           ],
           handledNodes: [semicolon.id]
         )

@@ -68,7 +68,7 @@ final class DiagnoseDynamicReplacementTests: XCTestCase {
         )
       ],
       fixedSource: """
-        @_dynamicReplacement(for: dynamically_replaceable() )
+        @_dynamicReplacement(for: dynamically_replaceable())
         func test_dynamic_replacement_for3() {
         }
         """

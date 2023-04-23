@@ -625,6 +625,10 @@ func assertParse<S: SyntaxProtocol>(
     )
   }
 
+  if expectedDiagnostics.isEmpty {
+    assertBasicFormat(source: source, parse: parse, file: file, line: line)
+  }
+
   #if SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION
   if enableTestCaseMutation {
     let mutations: [(offset: Int, replacement: TokenSpec)] = parser.alternativeTokenChoices.flatMap { offset, replacements in
@@ -658,4 +662,55 @@ func assertParse<S: SyntaxProtocol>(
     }
   }
   #endif
+}
+
+class TriviaRemover: SyntaxRewriter {
+  override func visit(_ token: TokenSyntax) -> TokenSyntax {
+    var ancestor = Syntax(token)
+    while let parent = ancestor.parent {
+      ancestor = parent
+      if ancestor.is(StringLiteralExprSyntax.self) || ancestor.is(RegexLiteralExprSyntax.self) {
+        // Don't mess with indentation inside string or regex literals.
+        // BasicFormat doesn't know where to re-apply newlines and how much to indent the string literal contents.
+        return token
+      }
+    }
+    if token.parent?.is(StringSegmentSyntax.self) ?? false {
+      return token
+    }
+    return token.with(\.leadingTrivia, []).with(\.trailingTrivia, [])
+  }
+}
+
+func assertBasicFormat<S: SyntaxProtocol>(
+  source: String,
+  parse: (inout Parser) -> S,
+  file: StaticString = #file,
+  line: UInt = #line
+) {
+  var parser = Parser(source)
+  let sourceTree = Syntax(parse(&parser))
+  let withoutTrivia = TriviaRemover().visit(sourceTree)
+  let formatted = withoutTrivia.formatted()
+
+  var formattedParser = Parser(formatted.description)
+  let formattedReparsed = Syntax(parse(&formattedParser))
+
+  do {
+    let subtreeMatcher = SubtreeMatcher(Syntax(formattedReparsed), markers: [:])
+    try subtreeMatcher.assertSameStructure(
+      Syntax(sourceTree),
+      includeTrivia: false,
+      additionalInfo: """
+        Removing trivia, formatting using BasicFormat and re-parsing did not produce the same syntax tree.
+
+        Formatted source:
+        \(formatted)
+        """,
+      file: file,
+      line: line
+    )
+  } catch {
+    XCTFail("Matching for a subtree failed with error: \(error)", file: file, line: line)
+  }
 }

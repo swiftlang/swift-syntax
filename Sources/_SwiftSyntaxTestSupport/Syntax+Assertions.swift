@@ -115,11 +115,23 @@ public struct SubtreeMatcher {
     afterMarker: String? = nil,
     _ expected: Syntax,
     includeTrivia: Bool = false,
+    additionalInfo: String? = nil,
     file: StaticString = #filePath,
     line: UInt = #line
   ) throws {
     if let diff = try findFirstDifference(afterMarker: afterMarker, baseline: expected, includeTrivia: includeTrivia) {
-      XCTFail(diff.debugDescription, file: file, line: line)
+      let message: String
+      if let additionalInfo = additionalInfo {
+        message = """
+          \(additionalInfo)
+
+          \(diff.debugDescription)
+          """
+      } else {
+        message = diff.debugDescription
+      }
+
+      XCTFail(message, file: file, line: line)
     }
   }
 }

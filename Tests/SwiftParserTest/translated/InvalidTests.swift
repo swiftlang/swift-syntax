@@ -482,7 +482,7 @@ final class InvalidTests: XCTestCase {
       ],
       fixedSource: """
         func were(
-        wolf: () ){}
+        wolf: ()) {}
         """
     )
   }

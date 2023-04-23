@@ -59,6 +59,8 @@ extension FixIt {
   }
 }
 
+// MARK: - Make missing
+
 extension FixIt.MultiNodeChange {
   /// Replaced a present token with a missing node.
   /// If `transferTrivia` is `true`, the leading and trailing trivia of the
@@ -98,77 +100,11 @@ extension FixIt.MultiNodeChange {
     return FixIt.MultiNodeChange(primitiveChanges: changes)
   }
 
-  /// Make a node present. If `leadingTrivia` or `trailingTrivia` is specified,
-  /// override the default leading/trailing trivia inferred from `BasicFormat`.
-  static func makePresent<T: SyntaxProtocol>(
-    _ node: T,
-    leadingTrivia: Trivia? = nil,
-    trailingTrivia: Trivia? = nil
-  ) -> Self {
-    var presentNode = PresentMaker().visit(Syntax(node))
-    if let leadingTrivia = leadingTrivia {
-      presentNode = presentNode.with(\.leadingTrivia, leadingTrivia)
-    }
-    if let trailingTrivia = trailingTrivia {
-      presentNode = presentNode.with(\.trailingTrivia, trailingTrivia)
-    }
-    if node.shouldBeInsertedAfterNextTokenTrivia,
-      let nextToken = node.nextToken(viewMode: .sourceAccurate),
-      leadingTrivia == nil
-    {
-      return FixIt.MultiNodeChange(
-        .replace(
-          oldNode: Syntax(node),
-          newNode: Syntax(presentNode).with(\.leadingTrivia, nextToken.leadingTrivia)
-        ),
-        .replaceLeadingTrivia(token: nextToken, newTrivia: [])
-      )
-    } else if node.leadingTrivia.isEmpty,
-      let previousToken = node.previousToken(viewMode: .fixedUp),
-      previousToken.presence == .present,
-      previousToken.trailingTrivia.isEmpty,
-      BasicFormat().requiresWhitespace(between: previousToken, and: node.firstToken(viewMode: .fixedUp)),
-      leadingTrivia == nil
-    {
-      /// If neither this nor the previous token are punctionation make sure they
-      /// are separated by a space.
-      return FixIt.MultiNodeChange(
-        .replace(
-          oldNode: Syntax(node),
-          newNode: Syntax(presentNode).with(\.leadingTrivia, .space)
-        )
-      )
-    } else {
-      return FixIt.MultiNodeChange(
-        .replace(
-          oldNode: Syntax(node),
-          newNode: Syntax(presentNode)
-        )
-      )
-    }
-  }
-
-  /// Makes the `token` present, moving it in front of the previous token's trivia.
-  static func makePresentBeforeTrivia(_ token: TokenSyntax) -> Self {
-    if let previousToken = token.previousToken(viewMode: .sourceAccurate) {
-      var presentToken = PresentMaker().visit(token)
-      if !previousToken.trailingTrivia.isEmpty {
-        presentToken = presentToken.with(\.trailingTrivia, previousToken.trailingTrivia)
-      }
-      return FixIt.MultiNodeChange(
-        .replaceTrailingTrivia(token: previousToken, newTrivia: []),
-        .replace(oldNode: Syntax(token), newNode: Syntax(presentToken))
-      )
-    } else {
-      return .makePresent(token)
-    }
-  }
-
   /// Transfers the leading and trailing trivia of `nodes` to the previous token
   /// While doing this, it tries to be smart, merging trivia where it makes sense
   /// and refusing to add e.g. a space after punctuation, where it usually
   /// doesn't make sense.
-  static func transferTriviaAtSides<SyntaxType: SyntaxProtocol>(from nodes: [SyntaxType]) -> Self {
+  private static func transferTriviaAtSides<SyntaxType: SyntaxProtocol>(from nodes: [SyntaxType]) -> Self {
     let removedTriviaAtSides = (nodes.first?.leadingTrivia ?? []).merging(nodes.last?.trailingTrivia ?? [])
     if !removedTriviaAtSides.isEmpty, let previousToken = nodes.first?.previousToken(viewMode: .sourceAccurate) {
       let mergedTrivia = previousToken.trailingTrivia.merging(removedTriviaAtSides)
@@ -185,13 +121,70 @@ extension FixIt.MultiNodeChange {
   }
 }
 
-extension TriviaPiece {
-  var isSpaceOrTab: Bool {
-    switch self {
-    case .spaces, .tabs:
-      return true
-    default:
-      return false
+// MARK: - Make present
+
+class MissingNodesBasicFormatter: BasicFormat {
+  override func isMutable(_ token: TokenSyntax) -> Bool {
+    // Assume that all missing nodes will be made present by the Fix-It.
+    return token.presence == .missing
+  }
+}
+
+extension FixIt.MultiNodeChange {
+  /// Make a node present. If `leadingTrivia` or `trailingTrivia` is specified,
+  /// override the default leading/trailing trivia inferred from `BasicFormat`.
+  static func makePresent<T: SyntaxProtocol>(
+    _ node: T,
+    leadingTrivia: Trivia? = nil,
+    trailingTrivia: Trivia? = nil
+  ) -> Self {
+    var presentNode = MissingNodesBasicFormatter(viewMode: .fixedUp).visit(Syntax(node))
+    presentNode = PresentMaker().rewrite(presentNode)
+
+    if let leadingTrivia = leadingTrivia {
+      presentNode = presentNode.with(\.leadingTrivia, leadingTrivia)
     }
+    if let trailingTrivia = trailingTrivia {
+      presentNode = presentNode.with(\.trailingTrivia, trailingTrivia)
+    }
+
+    var changes: [FixIt.Change] = []
+
+    if node.shouldBeInsertedAfterNextTokenTrivia,
+      let nextToken = node.nextToken(viewMode: .sourceAccurate),
+      leadingTrivia == nil
+    {
+      // Move the next token's leading trivia to this node's leading trivia.
+      changes.append(.replaceLeadingTrivia(token: nextToken, newTrivia: []))
+      presentNode = presentNode.with(\.leadingTrivia, nextToken.leadingTrivia)
+
+      // If this node and the next token need to be separated, insert a space.
+      if let lastToken = node.lastToken(viewMode: .all),
+        lastToken.trailingTrivia.isEmpty,
+        BasicFormat().requiresWhitespace(between: lastToken, and: nextToken)
+      {
+        presentNode = presentNode.with(\.trailingTrivia, .space)
+      }
+    }
+
+    if let previousToken = node.previousToken(viewMode: .all),
+      previousToken.presence == .present,
+      let firstToken = node.firstToken(viewMode: .all),
+      previousToken.trailingTrivia.allSatisfy({ $0.isWhitespace }),
+      !BasicFormat().requiresWhitespace(between: previousToken, and: firstToken)
+    {
+      // If the previous token and this node don't need to be separated, remove
+      // the separation.
+      changes.append(.replaceTrailingTrivia(token: previousToken, newTrivia: []))
+    }
+
+    changes.append(
+      .replace(
+        oldNode: Syntax(node),
+        newNode: Syntax(presentNode)
+      )
+    )
+
+    return FixIt.MultiNodeChange(primitiveChanges: changes)
   }
 }

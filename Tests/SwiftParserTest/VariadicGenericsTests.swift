@@ -616,7 +616,7 @@ final class TypeParameterPackTests: XCTestCase {
         DiagnosticSpec(message: "expected ',' in tuple type", fixIts: ["insert ','"])
       ],
       fixedSource: """
-        var foo: (Array<Foo> , Array<Bar>)
+        var foo: (Array<Foo>, Array<Bar>)
         """
     )
 
@@ -640,7 +640,7 @@ final class TypeParameterPackTests: XCTestCase {
         DiagnosticSpec(message: "expected ',' in tuple type", fixIts: ["insert ','"])
       ],
       fixedSource: """
-        var foo: (Array<Foo> , a)
+        var foo: (Array<Foo>, a)
         """
     )
   }

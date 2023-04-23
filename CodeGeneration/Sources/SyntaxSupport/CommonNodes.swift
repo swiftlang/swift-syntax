@@ -16,8 +16,7 @@ public let COMMON_NODES: [Node] = [
     name: "CodeBlockItemList",
     nameForDiagnostics: nil,
     kind: "SyntaxCollection",
-    element: "CodeBlockItem",
-    elementsSeparatedByNewline: true
+    element: "CodeBlockItem"
   ),
 
   // code-block-item = (decl | stmt | expr) ';'?

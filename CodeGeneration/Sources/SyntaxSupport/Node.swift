@@ -30,7 +30,6 @@ public class Node {
   public let collectionElementName: String?
   public let collectionElementChoices: [String]?
   public let omitWhenEmpty: Bool
-  public let elementsSeparatedByNewline: Bool
   public let collectionElement: String
 
   /// Returns `true` if this node declares one of the base syntax kinds.
@@ -98,8 +97,7 @@ public class Node {
     element: String = "",
     elementName: String? = nil,
     elementChoices: [String]? = nil,
-    omitWhenEmpty: Bool = false,
-    elementsSeparatedByNewline: Bool = false
+    omitWhenEmpty: Bool = false
   ) {
     self.syntaxKind = name
     self.swiftSyntaxKind = lowercaseFirstWord(name: name)
@@ -159,7 +157,6 @@ public class Node {
     // from its supertype, use that.
     self.collectionElementName = elementName ?? self.collectionElement
     self.collectionElementChoices = elementChoices ?? []
-    self.elementsSeparatedByNewline = elementsSeparatedByNewline
 
     // For SyntaxCollections make sure that the elementName is set.
     precondition(!isSyntaxCollection || elementName != nil || element != "")

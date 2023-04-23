@@ -211,7 +211,7 @@ class PluginMacroExpansionContext {
 
 extension PluginMacroExpansionContext: MacroExpansionContext {
   /// Generate a unique name for use in the macro.
-  public func createUniqueName(_ providedName: String) -> TokenSyntax {
+  public func makeUniqueName(_ providedName: String) -> TokenSyntax {
     // If provided with an empty name, substitute in something.
     let name = providedName.isEmpty ? "__local" : providedName
 
@@ -246,11 +246,10 @@ extension PluginMacroExpansionContext: MacroExpansionContext {
     of node: Node,
     at positionMode: PositionInSyntaxNode,
     filePathMode: SourceLocationFilePathMode
-  ) -> SourceLocation? {
-    return sourceManger.location(
-      of: Syntax(node),
-      at: positionMode,
-      filePathMode: filePathMode
-    )
+  ) -> AbstractSourceLocation? {
+    guard let location = sourceManger.location(of: Syntax(node), at: positionMode, filePathMode: filePathMode) else {
+      return nil
+    }
+    return AbstractSourceLocation(location)
   }
 }

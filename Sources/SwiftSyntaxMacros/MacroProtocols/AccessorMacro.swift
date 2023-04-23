@@ -23,6 +23,3 @@ public protocol AccessorMacro: AttachedMacro {
     in context: Context
   ) throws -> [AccessorDeclSyntax]
 }
-
-@available(*, deprecated, renamed: "AccessorMacro")
-public typealias AccessorDeclarationMacro = AccessorMacro

@@ -46,6 +46,14 @@ public extension RawSyntaxNodeProtocol {
   var isEmpty: Bool {
     return raw.byteLength == 0
   }
+
+  /// Whether the tree contained by this layout has any
+  ///  - missing nodes or
+  ///  - unexpected nodes or
+  ///  - tokens with a `TokenDiagnostic` of severity `error`
+  var hasError: Bool {
+    return raw.recursiveFlags.contains(.hasError)
+  }
 }
 
 /// `RawSyntax` itself conforms to `RawSyntaxNodeProtocol`.

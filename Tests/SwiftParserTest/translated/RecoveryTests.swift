@@ -1119,15 +1119,27 @@ final class RecoveryTests: XCTestCase {
     )
   }
 
-  func testRecovery98a() {
-    assertParse(
-      """
-      let a1: Swift.Int1️⃣]
-      """,
-      diagnostics: [
-        DiagnosticSpec(message: "extraneous code ']' at top level")
-      ]
-    )
+  func testRecovery98() {
+    let testCases: [UInt: (testCase: String, fixedSource: String)] = [
+      #line: ("let a1: Swift.Int1️⃣]", "let a1: [Swift.Int]"),
+      #line: ("let a3: Set<Int>1️⃣]", "let a3: [Set<Int>]"),
+      #line: ("let a4: Int1️⃣]?", "let a4: [Int]?"),
+      #line: ("let a5: Int?1️⃣]", "let a5: [Int?]"),
+      #line: ("let a6: [Int]1️⃣]", "let a6: [[Int]]"),
+      #line: ("let a7: [String: Int]1️⃣]", "let a7: [[String: Int]]"),
+      #line: ("func foo() -> Int1️⃣]??", "func foo() -> [Int]??"),
+    ]
+
+    for (line, testCase) in testCases {
+      assertParse(
+        testCase.testCase,
+        diagnostics: [
+          DiagnosticSpec(message: "unexpected ']' in type; did you mean to write an array type?", fixIts: ["insert '['"], line: line)
+        ],
+        fixedSource: testCase.fixedSource,
+        line: line
+      )
+    }
   }
 
   func testRecovery98b() {
@@ -1138,66 +1150,6 @@ final class RecoveryTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(message: "expected '>' to end generic argument clause"),
         DiagnosticSpec(message: "extraneous code ']>' at top level"),
-      ]
-    )
-  }
-
-  func testRecovery98c() {
-    assertParse(
-      """
-      let a3: Set<Int>1️⃣]
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 4: unexpected ']' in type; did you mean to write an array type?, Fix-It replacements: 11 - 11 = '['
-        DiagnosticSpec(message: "extraneous code ']' at top level")
-      ]
-    )
-  }
-
-  func testRecovery98d() {
-    assertParse(
-      """
-      let a4: Int1️⃣]?
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 5: unexpected ']' in type; did you mean to write an array type?, Fix-It replacements: 11 - 11 = '['
-        DiagnosticSpec(message: "extraneous code ']?' at top level")
-      ]
-    )
-  }
-
-  func testRecovery98e() {
-    assertParse(
-      """
-      let a5: Int?1️⃣]
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 6: unexpected ']' in type; did you mean to write an array type?, Fix-It replacements: 11 - 11 = '['
-        DiagnosticSpec(message: "extraneous code ']' at top level")
-      ]
-    )
-  }
-
-  func testRecovery98f() {
-    assertParse(
-      """
-      let a6: [Int]1️⃣]
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 7: unexpected ']' in type; did you mean to write an array type?, Fix-It replacements: 11 - 11 = '['
-        DiagnosticSpec(message: "extraneous code ']' at top level")
-      ]
-    )
-  }
-
-  func testRecovery98g() {
-    assertParse(
-      """
-      let a7: [String: Int]1️⃣]
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 8: unexpected ']' in type; did you mean to write an array type?, Fix-It replacements: 11 - 11 = '['
-        DiagnosticSpec(message: "extraneous code ']' at top level")
       ]
     )
   }
@@ -1239,10 +1191,9 @@ final class RecoveryTests: XCTestCase {
       4️⃣}
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '}' to end struct"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ']' to end array"),
-        // TODO: Old parser expected error on line 5: unexpected ']' in type; did you mean to write an array type?, Fix-It replacements: 17 - 17 = '['
-        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code ']' in function"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '}' to end struct", fixIts: ["insert '}'"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ']' to end array", fixIts: ["insert ']'"]),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected ']' in type; did you mean to write an array type?", fixIts: ["insert '['"]),
         DiagnosticSpec(locationMarker: "4️⃣", message: "extraneous brace at top level"),
       ]
     )

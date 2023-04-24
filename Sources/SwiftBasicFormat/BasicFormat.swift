@@ -216,6 +216,7 @@ open class BasicFormat: SyntaxRewriter {
       (.regexLiteralPattern, _),
       (.regexSlash, .extendedRegexDelimiter),  // closing extended regex delimiter should never be separate by a space
       (.rightAngle, .leftParen),  // func foo<T>(x: T)
+      (.rightBrace, .leftParen),  // { return 1 }()
       (.rightParen, .leftParen),  // returnsClosure()()
       (.rightParen, .period),  // foo().bar
       (.rightSquareBracket, .period),  // myArray[1].someProperty
@@ -310,6 +311,14 @@ open class BasicFormat: SyntaxRewriter {
       return false
     }()
 
+    lazy var nextTokenWillStartWithWhitespace: Bool = {
+      guard let nextToken = nextToken else {
+        return false
+      }
+      return nextToken.leadingTrivia.startsWithWhitespace
+        || (requiresLeadingNewline(nextToken) && isMutable(nextToken))
+    }()
+
     lazy var nextTokenWillStartWithNewline: Bool = {
       guard let nextToken = nextToken else {
         return false
@@ -359,7 +368,7 @@ open class BasicFormat: SyntaxRewriter {
     //    because newlines should be preferred to spaces as a whitespace
     if requiresWhitespace(between: token, and: nextToken)
       && !trailingTrivia.endsWithWhitespace
-      && !nextTokenWillStartWithNewline
+      && !nextTokenWillStartWithWhitespace
     {
       trailingTrivia += .space
     }

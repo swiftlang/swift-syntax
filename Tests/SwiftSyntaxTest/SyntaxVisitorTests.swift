@@ -29,6 +29,27 @@ public class SyntaxVisitorTests: XCTestCase {
   ///
   /// The source file is hard-coded so this test case doesn't need to depend on the parser.
   static var nestedFunctionsFile: SourceFileSyntax {
+    let innerBody = CodeBlockSyntax(
+      leftBrace: .leftBraceToken(),
+      statements: CodeBlockItemListSyntax([
+        CodeBlockItemSyntax(
+          item: CodeBlockItemSyntax.Item(
+            IntegerLiteralExprSyntax(
+              digits: .integerLiteral(
+                "0xG",
+                leadingTrivia: [
+                  .newlines(1),
+                  .spaces(6),
+                  .blockComment("/*Unknown token */"),
+                ]
+              )
+            )
+          )
+        )
+      ]),
+      rightBrace: .rightBraceToken(leadingTrivia: [.newlines(1), .spaces(4)])
+    )
+
     let source = SourceFileSyntax(
       statements: CodeBlockItemListSyntax([
         CodeBlockItemSyntax(
@@ -76,26 +97,7 @@ public class SyntaxVisitorTests: XCTestCase {
                                       rightParen: .rightParenToken(trailingTrivia: .space)
                                     )
                                   ),
-                                  body: CodeBlockSyntax(
-                                    leftBrace: .leftBraceToken(),
-                                    statements: CodeBlockItemListSyntax([
-                                      CodeBlockItemSyntax(
-                                        item: CodeBlockItemSyntax.Item(
-                                          IntegerLiteralExprSyntax(
-                                            digits: .integerLiteral(
-                                              "0xG",
-                                              leadingTrivia: [
-                                                .newlines(1),
-                                                .spaces(6),
-                                                .blockComment("/*Unknown token */"),
-                                              ]
-                                            )
-                                          )
-                                        )
-                                      )
-                                    ]),
-                                    rightBrace: .rightBraceToken(leadingTrivia: [.newlines(1), .spaces(4)])
-                                  )
+                                  body: innerBody
                                 )
                               )
                             )

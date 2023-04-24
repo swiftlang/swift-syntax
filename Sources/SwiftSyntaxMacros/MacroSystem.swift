@@ -200,7 +200,7 @@ class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
             }
           )
         } catch {
-          context.addDiagnostics(from: error, node: node)
+          context.addDiagnostics(from: error, node: declExpansion)
         }
 
         continue

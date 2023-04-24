@@ -18,13 +18,30 @@ import SwiftSyntax
 import XCTest
 import _SwiftSyntaxTestSupport
 
-fileprivate func assertFormatted(
-  source: String,
+fileprivate func assertFormatted<T: SyntaxProtocol>(
+  tree: T,
   expected: String,
+  using format: BasicFormat = BasicFormat(indentationWidth: .spaces(4)),
   file: StaticString = #file,
   line: UInt = #line
 ) {
-  assertStringsEqualWithDiff(Parser.parse(source: source).formatted().description, expected, file: file, line: line)
+  assertStringsEqualWithDiff(tree.formatted(using: format).description, expected, file: file, line: line)
+}
+
+fileprivate func assertFormatted(
+  source: String,
+  expected: String,
+  using format: BasicFormat = BasicFormat(indentationWidth: .spaces(4)),
+  file: StaticString = #file,
+  line: UInt = #line
+) {
+  assertFormatted(
+    tree: Parser.parse(source: source),
+    expected: expected,
+    using: format,
+    file: file,
+    line: line
+  )
 }
 
 final class BasicFormatTest: XCTestCase {
@@ -255,6 +272,59 @@ final class BasicFormatTest: XCTestCase {
             }
         }
         """
+    )
+  }
+
+  func testDontInsertTrailingWhitespaceIfNextTokenStartsWithLeadingWhitespace() {
+    let tree = VariableDeclSyntax(
+      bindingKeyword: .keyword(.var),
+      bindings: PatternBindingListSyntax([
+        PatternBindingSyntax(
+          pattern: PatternSyntax(IdentifierPatternSyntax(identifier: .identifier("x"))),
+          typeAnnotation: TypeAnnotationSyntax(
+            colon: .colonToken(trailingTrivia: .space),
+            type: TypeSyntax(SimpleTypeIdentifierSyntax(name: .identifier("Int")))
+          ),
+          accessor: PatternBindingSyntax.Accessor(
+            AccessorBlockSyntax(
+              leftBrace: .leftBraceToken(leadingTrivia: .space),
+              accessors: AccessorListSyntax([]),
+              rightBrace: .rightBraceToken(leadingTrivia: .newline)
+            )
+          )
+        )
+      ])
+    )
+    assertFormatted(
+      tree: tree,
+      expected: """
+        var x: Int {
+        }
+        """
+    )
+  }
+
+  func testAccessor() {
+    let source = """
+      struct Point {
+        var computed: Int {
+          get { 0 }
+        }
+      }
+      """
+
+    assertFormatted(
+      source: source,
+      expected: """
+        struct Point {
+          var computed: Int {
+            get {
+              0
+            }
+          }
+        }
+        """,
+      using: BasicFormat(indentationWidth: .spaces(2))
     )
   }
 }

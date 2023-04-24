@@ -18,13 +18,6 @@ import SwiftSyntax
 import SwiftSyntaxMacros
 import XCTest
 
-private extension String {
-  // This implementation is really slow; to use it outside a test it should be optimized.
-  func trimmingTrailingWhitespace() -> String {
-    return self.replacingOccurrences(of: "[ ]+\\n", with: "\n", options: .regularExpression)
-  }
-}
-
 // MARK: - Note
 
 /// Describes a diagnostic note that tests expect to be created by a macro expansion.
@@ -210,8 +203,8 @@ func assertDiagnostic<T: SyntaxProtocol>(
     }
 
     assertStringsEqualWithDiff(
-      highlightedCode.trimmingTrailingWhitespace(),
-      highlight.trimmingTrailingWhitespace(),
+      highlightedCode,
+      highlight,
       "highlight does not match",
       file: spec.originatorFile,
       line: spec.originatorLine
@@ -255,7 +248,7 @@ func assertDiagnostic<T: SyntaxProtocol>(
 ///     macros in various places (e.g., `#stringify(x + y)`).
 ///   - expandedSource: The source code that we expect to see after performing
 ///     macro expansion on the original source.
-///   - diagnostics:
+///   - diagnostics: The diagnostics when expanding any macro
 ///   - macros: The macros that should be expanded, provided as a dictionary
 ///     mapping macro names (e.g., `"stringify"`) to implementation types
 ///     (e.g., `StringifyMacro.self`).
@@ -282,8 +275,8 @@ public func assertMacroExpansion(
   let expandedSourceFile = origSourceFile.expand(macros: macros, in: context).formatted(using: BasicFormat(indentationWidth: indentationWidth))
 
   assertStringsEqualWithDiff(
-    expandedSourceFile.description.trimmingTrailingWhitespace(),
-    expandedSource.trimmingTrailingWhitespace(),
+    expandedSourceFile.description,
+    expandedSource,
     file: file,
     line: line
   )

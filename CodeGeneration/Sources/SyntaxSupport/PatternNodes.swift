@@ -31,7 +31,7 @@ public let PATTERN_NODES: [Node] = [
     children: [
       Child(
         name: "Identifier",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "KeywordToken")])
+        kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .keyword(text: "self"), .keyword(text: "init")])
       )
     ]
   ),

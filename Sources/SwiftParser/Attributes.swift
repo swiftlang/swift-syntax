@@ -340,7 +340,7 @@ extension Parser {
 extension Parser {
   mutating func parseDifferentiableAttribute() -> RawAttributeSyntax {
     let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-    let (unexpectedBeforeDifferentiable, differentiable) = self.expect(.keyword(.differentiable))
+    let (unexpectedBeforeDifferentiable, differentiable) = self.expect(TokenSpec(.differentiable, remapping: .identifier))
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
 
     let argument = self.parseDifferentiableAttributeArguments()
@@ -528,7 +528,7 @@ extension Parser {
 extension Parser {
   mutating func parseDerivativeAttribute() -> RawAttributeSyntax {
     let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-    let (unexpectedBeforeDerivative, derivative) = self.expect(.keyword(.derivative))
+    let (unexpectedBeforeDerivative, derivative) = self.expect(TokenSpec(.derivative, remapping: .identifier))
 
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
     let argument = self.parseDerivativeAttributeArguments()

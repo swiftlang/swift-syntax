@@ -952,7 +952,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
   case .differentiabilityParam:
     assert(layout.count == 5)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.identifier), .tokenKind(.integerLiteral), .tokenKind(.keyword)]))
+    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.identifier), .tokenKind(.integerLiteral), .keyword("self")]))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 3, verify(layout[3], as: RawTokenSyntax?.self, tokenChoices: [.tokenKind(.comma)]))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
@@ -1394,7 +1394,9 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [
             .tokenKind(.identifier), 
-            .tokenKind(.keyword), 
+            .keyword("self"), 
+            .keyword("Self"), 
+            .keyword("init"), 
             .tokenKind(.dollarIdentifier), 
             .tokenKind(.binaryOperator)
           ]))
@@ -1404,7 +1406,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
   case .identifierPattern:
     assert(layout.count == 3)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.identifier), .tokenKind(.keyword)]))
+    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.identifier), .keyword("self"), .keyword("init")]))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
   case .ifConfigClauseList:
     for (index, element) in layout.enumerated() {
@@ -1589,7 +1591,9 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [
             .tokenKind(.identifier), 
-            .tokenKind(.keyword), 
+            .keyword("self"), 
+            .keyword("Self"), 
+            .keyword("init"), 
             .tokenKind(.dollarIdentifier), 
             .tokenKind(.binaryOperator), 
             .tokenKind(.integerLiteral)
@@ -1761,7 +1765,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 3, verify(layout[3], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.period)]))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.identifier), .tokenKind(.keyword)]))
+    assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.identifier), .keyword("self"), .keyword("Self")]))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 7, verify(layout[7], as: RawGenericArgumentClauseSyntax?.self))
     assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
@@ -2201,7 +2205,14 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
   case .simpleTypeIdentifier:
     assert(layout.count == 5)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.identifier), .tokenKind(.keyword), .tokenKind(.wildcard)]))
+    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [
+            .tokenKind(.identifier), 
+            .keyword("self"), 
+            .keyword("Self"), 
+            .keyword("Any"), 
+            .tokenKind(.keyword), 
+            .tokenKind(.wildcard)
+          ]))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 3, verify(layout[3], as: RawGenericArgumentClauseSyntax?.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))

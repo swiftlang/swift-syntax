@@ -281,7 +281,7 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "Name",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "KeywordToken")]),
+        kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .keyword(text: "self"), .keyword(text: "Self")]),
         nameForDiagnostics: "name",
         classification: "TypeIdentifier"
       ),
@@ -391,7 +391,7 @@ public let TYPE_NODES: [Node] = [
     children: [
       Child(
         name: "Name",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "KeywordToken"), .token(tokenKind: "WildcardToken")]),
+        kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .keyword(text: "self"), .keyword(text: "Self"), .keyword(text: "Any"), .token(tokenKind: "KeywordToken"), .token(tokenKind: "WildcardToken")]),
         classification: "TypeIdentifier"
       ),
       Child(

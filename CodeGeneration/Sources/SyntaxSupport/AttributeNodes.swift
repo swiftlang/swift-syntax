@@ -388,7 +388,7 @@ public let ATTRIBUTE_NODES: [Node] = [
     children: [
       Child(
         name: "Parameter",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "IntegerLiteralToken"), .token(tokenKind: "KeywordToken")])
+        kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "IntegerLiteralToken"), .keyword(text: "self")])
       ),
       Child(
         name: "TrailingComma",
@@ -518,7 +518,7 @@ public let ATTRIBUTE_NODES: [Node] = [
         kind: .nodeChoices(choices: [
           Child(
             name: "Token",
-            kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "KeywordToken")])
+            kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .keyword(text: "private"), .keyword(text: "fileprivate"), .keyword(text: "internal"), .keyword(text: "public"), .keyword(text: "open")])
           ),  // Keywords can be: public, internal, private, fileprivate, open
           Child(
             name: "String",

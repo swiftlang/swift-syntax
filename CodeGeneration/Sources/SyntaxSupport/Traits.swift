@@ -48,9 +48,9 @@ public let TRAITS: [Trait] = [
     traitName: "EffectSpecifiers",
     children: [
       Child(name: "UnexpectedBeforeAsyncSpecifier", kind: .node(kind: "UnexpectedNodes"), isOptional: true),
-      Child(name: "AsyncSpecifier", kind: .token(choices: [.token(tokenKind: "KeywordToken")]), isOptional: true),
+      Child(name: "AsyncSpecifier", kind: .token(choices: [.keyword(text: "async"), .keyword(text: "reasync")]), isOptional: true),
       Child(name: "UnexpectedBetweenAsyncSpecifierAndThrowsSpecifier", kind: .node(kind: "UnexpectedNodes"), isOptional: true),
-      Child(name: "ThrowsSpecifier", kind: .token(choices: [.token(tokenKind: "KeywordToken")]), isOptional: true),
+      Child(name: "ThrowsSpecifier", kind: .token(choices: [.keyword(text: "throws"), .keyword(text: "rethrows")]), isOptional: true),
       Child(name: "UnexpectedAfterThrowsSpecifier", kind: .node(kind: "UnexpectedNodes"), isOptional: true),
     ]
   ),

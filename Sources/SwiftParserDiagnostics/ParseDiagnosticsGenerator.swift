@@ -1286,6 +1286,51 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return handleEffectSpecifiers(node)
   }
 
+  public override func visit(_ node: TypeInheritanceClauseSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+
+    if let unexpected = node.unexpectedBeforeColon,
+      let leftParen = unexpected.onlyToken(where: { $0.tokenKind == .leftParen })
+    {
+
+      var handledNodes: [SyntaxIdentifier] = [
+        leftParen.id,
+        node.colon.id,
+      ]
+
+      var changes: [FixIt.MultiNodeChange] = [
+        .makePresent(node.colon),
+        .makeMissing(unexpected),
+      ]
+
+      var replaceTokens = [leftParen]
+
+      if let rightParen = node.unexpectedAfterInheritedTypeCollection?.onlyToken(where: { $0.tokenKind == .rightParen }) {
+        handledNodes += [rightParen.id]
+        changes += [
+          .makeMissing(rightParen)
+        ]
+
+        replaceTokens += [rightParen]
+      }
+
+      addDiagnostic(
+        unexpected,
+        .expectedColonClass,
+        fixIts: [
+          FixIt(
+            message: ReplaceTokensFixIt(replaceTokens: replaceTokens, replacements: [.colonToken()]),
+            changes: changes
+          )
+        ],
+        handledNodes: handledNodes
+      )
+    }
+    return .visitChildren
+  }
+
   public override func visit(_ node: TypeInitializerClauseSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren

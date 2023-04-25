@@ -84,7 +84,7 @@ When updating nodes, certain clients of SwiftSyntax that are relying upon those
 nodes will need to be changed in tandem. For example, the 
 [swift-stress-tester][swift-stress-tester] uses SwiftSyntax, and the CI/CD
 system will not allow changes to SwiftSyntax that break `swift-stress-tester`
-wihtout a paired change to that repository.
+without a paired change to that repository.
 
 When adding nodes or removing existing nodes, it is often the case that you 
 will need a paired PR to the [Swift Compiler repository][Swiftc] as well. This

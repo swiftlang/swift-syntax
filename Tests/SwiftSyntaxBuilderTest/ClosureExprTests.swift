@@ -57,4 +57,23 @@ final class ClosureExprTests: XCTestCase {
       """
     )
   }
+
+  func testMultiTrailingClosure() {
+    let buildable = ExprSyntax(
+      """
+      foo { _ in
+      }anotherClosure: { _ in
+      }
+      """
+    )
+
+    assertBuildResult(
+      buildable,
+      """
+      foo { _ in
+      } anotherClosure: { _ in
+      }
+      """
+    )
+  }
 }

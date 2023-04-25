@@ -497,7 +497,7 @@ extension Parser {
         let unexpectedBeforeInherited: RawUnexpectedNodesSyntax?
         let inherited: RawTypeSyntax?
         if colon != nil {
-          if self.at(.identifier, .keyword(.protocol), .keyword(.Any)) {
+          if self.at(.identifier, .keyword(.protocol), .keyword(.Any)) || self.atContextualPunctuator("~") {
             unexpectedBeforeInherited = nil
             inherited = self.parseType()
           } else if let classKeyword = self.consume(if: .keyword(.class)) {

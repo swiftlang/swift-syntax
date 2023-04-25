@@ -1154,6 +1154,11 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: SuperRefExprSyntax) -> ResultType
   
+  /// Visiting `SuppressedTypeSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: SuppressedTypeSyntax) -> ResultType
+  
   /// Visiting `SwitchCaseLabelSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -2954,6 +2959,13 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
+  /// Visiting `SuppressedTypeSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: SuppressedTypeSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
   /// Visiting `SwitchCaseLabelSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -3698,6 +3710,8 @@ extension SyntaxTransformVisitor {
     case .subscriptExpr(let derived):
       return visit(derived)
     case .superRefExpr(let derived):
+      return visit(derived)
+    case .suppressedType(let derived):
       return visit(derived)
     case .switchCaseLabel(let derived):
       return visit(derived)

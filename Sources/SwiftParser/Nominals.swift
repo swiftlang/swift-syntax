@@ -292,7 +292,6 @@ extension Parser {
       var keepGoing: RawTokenSyntax? = nil
       var loopProgress = LoopProgressCondition()
       repeat {
-        var withoutToken: RawTokenSyntax? = nil
         let type: RawTypeSyntax
         if let classKeyword = self.consume(if: .keyword(.class)) {
           type = RawTypeSyntax(
@@ -302,14 +301,12 @@ extension Parser {
             )
           )
         } else {
-          withoutToken = self.consumeIfContextualPunctuator("~", remapping: .prefixOperator)
           type = self.parseType()
         }
 
         keepGoing = self.consume(if: .comma)
         elements.append(
           RawInheritedTypeSyntax(
-            withoutTilde: withoutToken,
             typeName: type,
             trailingComma: keepGoing,
             arena: self.arena

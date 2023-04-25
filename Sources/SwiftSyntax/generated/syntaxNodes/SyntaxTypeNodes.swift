@@ -2098,6 +2098,122 @@ public struct SimpleTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
   }
 }
 
+// MARK: - SuppressedTypeSyntax
+
+
+public struct SuppressedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+  
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .suppressedType else {
+      return nil
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+  
+  /// Creates a `SuppressedTypeSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    precondition(data.raw.kind == .suppressedType)
+    self._syntaxNode = Syntax(data)
+  }
+  
+  public init<P: TypeSyntaxProtocol>(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeWithoutTilde: UnexpectedNodesSyntax? = nil,
+      withoutTilde: TokenSyntax,
+      _ unexpectedBetweenWithoutTildeAndPatternType: UnexpectedNodesSyntax? = nil,
+      patternType: P,
+      _ unexpectedAfterPatternType: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
+            unexpectedBeforeWithoutTilde, 
+            withoutTilde, 
+            unexpectedBetweenWithoutTildeAndPatternType, 
+            patternType, 
+            unexpectedAfterPatternType
+          ))) {(arena, _) in
+      let layout: [RawSyntax?] = [
+          unexpectedBeforeWithoutTilde?.raw, 
+          withoutTilde.raw, 
+          unexpectedBetweenWithoutTildeAndPatternType?.raw, 
+          patternType.raw, 
+          unexpectedAfterPatternType?.raw
+        ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.suppressedType,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+        
+      )
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+  
+  public var unexpectedBeforeWithoutTilde: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = SuppressedTypeSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var withoutTilde: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = SuppressedTypeSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenWithoutTildeAndPatternType: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = SuppressedTypeSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var patternType: TypeSyntax {
+    get {
+      return TypeSyntax(data.child(at: 3, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = SuppressedTypeSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedAfterPatternType: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = SuppressedTypeSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+          \Self.unexpectedBeforeWithoutTilde, 
+          \Self.withoutTilde, 
+          \Self.unexpectedBetweenWithoutTildeAndPatternType, 
+          \Self.patternType, 
+          \Self.unexpectedAfterPatternType
+        ])
+  }
+}
+
 // MARK: - TupleTypeSyntax
 
 

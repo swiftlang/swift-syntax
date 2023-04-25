@@ -1580,8 +1580,10 @@ final class DeclarationTests: XCTestCase {
       """,
       substructure: Syntax(
         InheritedTypeSyntax(
-          withoutTilde: .prefixOperator("~"),
-          typeName: TypeSyntax(stringLiteral: "Copyable")
+          typeName: SuppressedTypeSyntax(
+            withoutTilde: .prefixOperator("~"),
+            patternType: TypeSyntax(stringLiteral: "Copyable")
+          )
         )
       )
     )
@@ -1600,12 +1602,48 @@ final class DeclarationTests: XCTestCase {
                 trailingComma: .commaToken()
               ),
               InheritedTypeSyntax(
-                withoutTilde: .prefixOperator("~"),
-                typeName: TypeSyntax(stringLiteral: "Hashable"),
+                typeName: SuppressedTypeSyntax(
+                  withoutTilde: .prefixOperator("~"),
+                  patternType: TypeSyntax(stringLiteral: "Hashable")
+                ),
                 trailingComma: .commaToken()
               ),
               InheritedTypeSyntax(typeName: TypeSyntax(stringLiteral: "Equatable")),
             ])
+          )
+        )
+    )
+
+    assertParse(
+      """
+      typealias T = ~1️⃣Int 2️⃣-> Bool
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '(' to start function type",
+          fixIts: ["insert '('"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected ')' in function type",
+          fixIts: ["insert ')'"]
+        ),
+      ],
+      fixedSource: """
+        typealias T = ~(Int) -> Bool
+        """
+    )
+
+    assertParse(
+      """
+      typealias T = ~(Int) -> Bool
+      """,
+      substructure:
+        Syntax(
+          SuppressedTypeSyntax(
+            withoutTilde: .prefixOperator("~"),
+            patternType: FunctionTypeSyntax(arguments: [TupleTypeElementSyntax(type: TypeSyntax("Int"))], output: ReturnClauseSyntax(returnType: TypeSyntax("Bool")))
           )
         )
     )

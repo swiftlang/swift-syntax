@@ -1713,12 +1713,8 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "rightOperand"
   case \InfixOperatorExprSyntax.unexpectedAfterRightOperand:
     return "unexpectedAfterRightOperand"
-  case \InheritedTypeSyntax.unexpectedBeforeWithoutTilde:
-    return "unexpectedBeforeWithoutTilde"
-  case \InheritedTypeSyntax.withoutTilde:
-    return "withoutTilde"
-  case \InheritedTypeSyntax.unexpectedBetweenWithoutTildeAndTypeName:
-    return "unexpectedBetweenWithoutTildeAndTypeName"
+  case \InheritedTypeSyntax.unexpectedBeforeTypeName:
+    return "unexpectedBeforeTypeName"
   case \InheritedTypeSyntax.typeName:
     return "typeName"
   case \InheritedTypeSyntax.unexpectedBetweenTypeNameAndTrailingComma:
@@ -2873,6 +2869,16 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "superKeyword"
   case \SuperRefExprSyntax.unexpectedAfterSuperKeyword:
     return "unexpectedAfterSuperKeyword"
+  case \SuppressedTypeSyntax.unexpectedBeforeWithoutTilde:
+    return "unexpectedBeforeWithoutTilde"
+  case \SuppressedTypeSyntax.withoutTilde:
+    return "withoutTilde"
+  case \SuppressedTypeSyntax.unexpectedBetweenWithoutTildeAndPatternType:
+    return "unexpectedBetweenWithoutTildeAndPatternType"
+  case \SuppressedTypeSyntax.patternType:
+    return "patternType"
+  case \SuppressedTypeSyntax.unexpectedAfterPatternType:
+    return "unexpectedAfterPatternType"
   case \SwitchCaseLabelSyntax.unexpectedBeforeCaseKeyword:
     return "unexpectedBeforeCaseKeyword"
   case \SwitchCaseLabelSyntax.caseKeyword:

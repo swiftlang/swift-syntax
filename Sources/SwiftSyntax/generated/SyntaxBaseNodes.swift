@@ -610,7 +610,7 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   
   public init?<S: SyntaxProtocol>(_ node: S) {
     switch node.raw.kind {
-    case .arrayType, .attributedType, .classRestrictionType, .compositionType, .constrainedSugarType, .dictionaryType, .functionType, .implicitlyUnwrappedOptionalType, .memberTypeIdentifier, .metatypeType, .missingType, .namedOpaqueReturnType, .optionalType, .packExpansionType, .packReferenceType, .simpleTypeIdentifier, .tupleType:
+    case .arrayType, .attributedType, .classRestrictionType, .compositionType, .constrainedSugarType, .dictionaryType, .functionType, .implicitlyUnwrappedOptionalType, .memberTypeIdentifier, .metatypeType, .missingType, .namedOpaqueReturnType, .optionalType, .packExpansionType, .packReferenceType, .simpleTypeIdentifier, .suppressedType, .tupleType:
       self._syntaxNode = node._syntaxNode
     default:
       return nil
@@ -622,7 +622,7 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   /// is undefined.
   internal init(_ data: SyntaxData) {
     switch data.raw.kind {
-    case .arrayType, .attributedType, .classRestrictionType, .compositionType, .constrainedSugarType, .dictionaryType, .functionType, .implicitlyUnwrappedOptionalType, .memberTypeIdentifier, .metatypeType, .missingType, .namedOpaqueReturnType, .optionalType, .packExpansionType, .packReferenceType, .simpleTypeIdentifier, .tupleType:
+    case .arrayType, .attributedType, .classRestrictionType, .compositionType, .constrainedSugarType, .dictionaryType, .functionType, .implicitlyUnwrappedOptionalType, .memberTypeIdentifier, .metatypeType, .missingType, .namedOpaqueReturnType, .optionalType, .packExpansionType, .packReferenceType, .simpleTypeIdentifier, .suppressedType, .tupleType:
       break
     default:
       preconditionFailure("Unable to create TypeSyntax from \(data.raw.kind)")
@@ -674,6 +674,7 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
           .node(PackExpansionTypeSyntax.self),
           .node(PackReferenceTypeSyntax.self),
           .node(SimpleTypeIdentifierSyntax.self),
+          .node(SuppressedTypeSyntax.self),
           .node(TupleTypeSyntax.self)
         ])
   }
@@ -910,6 +911,7 @@ extension Syntax {
           .node(SubscriptDeclSyntax.self),
           .node(SubscriptExprSyntax.self),
           .node(SuperRefExprSyntax.self),
+          .node(SuppressedTypeSyntax.self),
           .node(SwitchCaseLabelSyntax.self),
           .node(SwitchCaseListSyntax.self),
           .node(SwitchCaseSyntax.self),

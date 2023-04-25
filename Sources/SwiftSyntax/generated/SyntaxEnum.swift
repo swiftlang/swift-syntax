@@ -243,6 +243,7 @@ public enum SyntaxEnum {
   case subscriptDecl(SubscriptDeclSyntax)
   case subscriptExpr(SubscriptExprSyntax)
   case superRefExpr(SuperRefExprSyntax)
+  case suppressedType(SuppressedTypeSyntax)
   case switchCaseLabel(SwitchCaseLabelSyntax)
   case switchCaseList(SwitchCaseListSyntax)
   case switchCase(SwitchCaseSyntax)
@@ -746,6 +747,8 @@ public extension Syntax {
       return .subscriptExpr(SubscriptExprSyntax(self)!)
     case .superRefExpr:
       return .superRefExpr(SuperRefExprSyntax(self)!)
+    case .suppressedType:
+      return .suppressedType(SuppressedTypeSyntax(self)!)
     case .switchCaseLabel:
       return .switchCaseLabel(SwitchCaseLabelSyntax(self)!)
     case .switchCaseList:

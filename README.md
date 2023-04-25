@@ -6,6 +6,8 @@ SwiftSyntax is a set of Swift libraries for parsing, inspecting, generating, and
 
 You can read SwiftSyntax’s documentation on [swiftpackageindex.com](https://swiftpackageindex.com/apple/swift-syntax/documentation).
 
+A great way to interactively explore the SwiftSyntax tree of a source file is https://swift-ast-explorer.com, developed by [@kishikawakatsumi](https://github.com/kishikawakatsumi).
+
 ## Adding SwiftSyntax as a Dependency
 
 ### Trunk Development (main)

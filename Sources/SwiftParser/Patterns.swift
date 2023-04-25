@@ -175,10 +175,12 @@ extension Parser {
       && !self.currentToken.isAtStartOfLine
       && lookahead.canParseType()
     {
-      // Recovery if the user forgot to add ':'
-      let result = self.parseResultType()
+      let (unexpectedBeforeColon, colon) = self.expect(.colon)
+      let result = self.parseType()
+
       type = RawTypeAnnotationSyntax(
-        colon: self.missingToken(.colon),
+        unexpectedBeforeColon,
+        colon: colon,
         type: result,
         arena: self.arena
       )

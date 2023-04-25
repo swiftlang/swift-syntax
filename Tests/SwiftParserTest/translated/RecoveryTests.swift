@@ -813,9 +813,9 @@ final class RecoveryTests: XCTestCase {
     assertParse(
       #"""
       struct SS 1️⃣SS : Multi {
-        private var a 2️⃣b 3️⃣: Int = ""
+        private var a 2️⃣b : Int = ""
         func f() {
-          var c 4️⃣d = 5
+          var c 3️⃣d = 5
           let _ = 0
         }
       }
@@ -828,16 +828,24 @@ final class RecoveryTests: XCTestCase {
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
-          message: "expected ':' in type annotation",
-          fixIts: ["insert ':'"]
+          message: "found an unexpected second identifier in pattern; is there an accidental break?",
+          fixIts: ["join the identifiers together", "join the identifiers together with camel-case"]
         ),
-        DiagnosticSpec(locationMarker: "3️⃣", message: #"unexpected code ': Int = ""' before function"#),
         DiagnosticSpec(
-          locationMarker: "4️⃣",
+          locationMarker: "3️⃣",
           message: "expected ':' in type annotation",
           fixIts: ["insert ':'"]
         ),
-      ]
+      ],
+      fixedSource: #"""
+        struct SSSS : Multi {
+          private var ab : Int = ""
+          func f() {
+            var c: d = 5
+            let _ = 0
+          }
+        }
+        """#
     )
   }
 
@@ -865,6 +873,24 @@ final class RecoveryTests: XCTestCase {
       ],
       fixedSource: """
         let (efg: Hij, foobar) = (5, 6)
+        """
+    )
+  }
+
+  func testRecovery64c() {
+    assertParse(
+      """
+      private var a 1️⃣b : Int = ""
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "found an unexpected second identifier in pattern; is there an accidental break?",
+          fixIts: ["join the identifiers together", "join the identifiers together with camel-case"]
+        )
+      ],
+      fixedSource: """
+        private var ab : Int = ""
         """
     )
   }

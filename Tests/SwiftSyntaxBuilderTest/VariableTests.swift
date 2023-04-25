@@ -293,6 +293,28 @@ final class VariableTests: XCTestCase {
     )
   }
 
+  func testAccessorWithEffectSpecifier() throws {
+    let buildable = try VariableDeclSyntax("var test: Int") {
+      AccessorDeclSyntax(
+        accessorKind: .keyword(.get),
+        effectSpecifiers: AccessorEffectSpecifiersSyntax(
+          asyncSpecifier: .keyword(.async),
+          throwsSpecifier: .keyword(.throws)
+        )
+      ) {}
+    }
+
+    assertBuildResult(
+      buildable,
+      """
+      var test: Int {
+          get async throws {
+          }
+      }
+      """
+    )
+  }
+
   func testAttributedVariables() throws {
     let testCases: [UInt: (VariableDeclSyntax, String)] = try [
       #line: (

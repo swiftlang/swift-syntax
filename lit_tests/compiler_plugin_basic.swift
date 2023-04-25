@@ -23,7 +23,9 @@ class MyClass {
 }
 
 // For '@Metadata'
-// CHECK: static var __metadata__: [String: String] { ["name": "MyClass"] }
+// CHECK: {{^}}static var __metadata__: [String: String] {
+// CHECK-NEXT: {{^}}    ["name": "MyClass"]
+// CHECK-NEXT: {{^}}}
 
 // For '#echo(12)'
 // CHECK: /* echo */12

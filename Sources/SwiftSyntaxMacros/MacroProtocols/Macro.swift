@@ -11,4 +11,8 @@
 //===----------------------------------------------------------------------===//
 
 /// Describes a macro.
-public protocol Macro {}
+public protocol Macro {
+  /// How the resulting expansion should be formatted, `.auto` by default.
+  /// Use `.disabled` for the expansion to be used as is.
+  static var formatMode: FormatMode { get }
+}

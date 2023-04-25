@@ -16,6 +16,7 @@ add_swift_host_library(SwiftCompilerPluginMessageHandling
 
 target_link_libraries(SwiftCompilerPluginMessageHandling PUBLIC
   SwiftSyntax
+  SwiftBasicFormat
   SwiftDiagnostics
   SwiftParser
   SwiftSyntaxMacros

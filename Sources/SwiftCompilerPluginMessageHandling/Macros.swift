@@ -10,6 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
+import SwiftBasicFormat
 import SwiftDiagnostics
 import SwiftSyntax
 import SwiftSyntaxMacros
@@ -49,21 +50,21 @@ extension CompilerPluginMessageHandler {
           try exprMacroDef.expansion(of: node, in: context)
         }
         let rewritten = try _openExistential(macroSyntax, do: _expand)
-        expandedSource = rewritten.description
+        expandedSource = rewritten.formattedExpansion(macroDefinition.formatMode)
 
       case let declMacroDef as DeclarationMacro.Type:
         func _expand<Node: FreestandingMacroExpansionSyntax>(node: Node) throws -> [DeclSyntax] {
           try declMacroDef.expansion(of: node, in: context)
         }
         let rewritten = try _openExistential(macroSyntax, do: _expand)
-        expandedSource = CodeBlockItemListSyntax(rewritten.map { CodeBlockItemSyntax(item: .decl($0)) }).description
+        expandedSource = CodeBlockItemListSyntax(rewritten.map { CodeBlockItemSyntax(item: .decl($0)) }).formattedExpansion(macroDefinition.formatMode)
 
       case let codeItemMacroDef as CodeItemMacro.Type:
         func _expand<Node: FreestandingMacroExpansionSyntax>(node: Node) throws -> [CodeBlockItemSyntax] {
           try codeItemMacroDef.expansion(of: node, in: context)
         }
         let rewritten = try _openExistential(macroSyntax, do: _expand)
-        expandedSource = CodeBlockItemListSyntax(rewritten).description
+        expandedSource = CodeBlockItemListSyntax(rewritten).formattedExpansion(macroDefinition.formatMode)
 
       default:
         throw MacroExpansionError.unmathedMacroRole
@@ -113,7 +114,7 @@ extension CompilerPluginMessageHandler {
           in: context
         )
         expandedSources = accessors.map {
-          $0.trimmedDescription
+          $0.formattedExpansion(macroDefinition.formatMode)
         }
 
       case (let attachedMacro as MemberAttributeMacro.Type, .memberAttribute):
@@ -145,7 +146,7 @@ extension CompilerPluginMessageHandler {
 
         // Form a buffer containing an attribute list to return to the caller.
         expandedSources = attributes.map {
-          $0.trimmedDescription
+          $0.formattedExpansion(macroDefinition.formatMode)
         }
 
       case (let attachedMacro as MemberMacro.Type, .member):
@@ -170,7 +171,7 @@ extension CompilerPluginMessageHandler {
         let members = try _openExistential(declGroup, do: expandMemberMacro)
 
         // Form a buffer of member declarations to return to the caller.
-        expandedSources = members.map { $0.trimmedDescription }
+        expandedSources = members.map { $0.formattedExpansion(macroDefinition.formatMode) }
 
       case (let attachedMacro as PeerMacro.Type, .peer):
         let peers = try attachedMacro.expansion(
@@ -181,7 +182,7 @@ extension CompilerPluginMessageHandler {
 
         // Form a buffer of peer declarations to return to the caller.
         expandedSources = peers.map {
-          $0.trimmedDescription
+          $0.formattedExpansion(macroDefinition.formatMode)
         }
 
       case (let attachedMacro as ConformanceMacro.Type, .conformance):
@@ -232,5 +233,20 @@ extension CompilerPluginMessageHandler {
     try self.sendMessage(
       .expandAttachedMacroResult(expandedSources: expandedSources, diagnostics: diagnostics)
     )
+  }
+}
+
+fileprivate extension SyntaxProtocol {
+  /// Perform a format if required and then trim any leading/trailing
+  /// whitespace.
+  func formattedExpansion(_ mode: FormatMode) -> String {
+    let formatted: Syntax
+    switch mode {
+    case .auto:
+      formatted = self.formatted()
+    case .disabled:
+      formatted = Syntax(self)
+    }
+    return formatted.trimmedDescription(matching: { $0.isWhitespace })
   }
 }

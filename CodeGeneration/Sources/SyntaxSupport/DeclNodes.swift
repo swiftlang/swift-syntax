@@ -111,8 +111,7 @@ public let DECL_NODES: [Node] = [
     name: "AccessorList",
     nameForDiagnostics: nil,
     kind: "SyntaxCollection",
-    element: "AccessorDecl",
-    elementsSeparatedByNewline: true
+    element: "AccessorDecl"
   ),
 
   // (value)
@@ -1296,8 +1295,7 @@ public let DECL_NODES: [Node] = [
     name: "MemberDeclList",
     nameForDiagnostics: nil,
     kind: "SyntaxCollection",
-    element: "MemberDeclListItem",
-    elementsSeparatedByNewline: true
+    element: "MemberDeclListItem"
   ),
 
   // declaration-modifier -> access-level-modifier

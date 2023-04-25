@@ -34,4 +34,46 @@ final class ClosureExprTests: XCTestCase {
       """
     )
   }
+  func testClosureExprWithAsync() {
+    let buildable = ClosureExprSyntax(
+      signature: ClosureSignatureSyntax(
+        input: .simpleInput(
+          ClosureParamListSyntax {
+            ClosureParamSyntax(name: .identifier("area"))
+          }
+        ),
+        effectSpecifiers: TypeEffectSpecifiersSyntax(
+          asyncSpecifier: .keyword(.async),
+          throwsSpecifier: .keyword(.throws)
+        )
+      )
+    ) {}
+
+    assertBuildResult(
+      buildable,
+      """
+      {area async throws in
+      }
+      """
+    )
+  }
+
+  func testMultiTrailingClosure() {
+    let buildable = ExprSyntax(
+      """
+      foo { _ in
+      }anotherClosure: { _ in
+      }
+      """
+    )
+
+    assertBuildResult(
+      buildable,
+      """
+      foo { _ in
+      } anotherClosure: { _ in
+      }
+      """
+    )
+  }
 }

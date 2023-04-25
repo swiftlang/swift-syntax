@@ -165,6 +165,47 @@ final class FunctionTests: XCTestCase {
       ),
       #line: (
         DeclSyntax(
+          """
+          @discardableResult
+          public func foo() -> String {
+            return "foo"
+          }
+          """
+        ),
+        """
+        @discardableResult
+        public func foo() -> String {
+          return "foo"
+        }
+        """
+      ),
+      #line: (
+        DeclSyntax(
+          FunctionDeclSyntax(
+            attributes: [.attribute(AttributeSyntax("@inline(__always)")), .attribute(AttributeSyntax("@discardableResult"))],
+            modifiers: [DeclModifierSyntax(name: .keyword(.public))],
+            identifier: TokenSyntax.identifier("foo"),
+            signature: FunctionSignatureSyntax(
+              input: ParameterClauseSyntax(
+                parameterList: FunctionParameterListSyntax {}
+              ),
+              output: ReturnClauseSyntax(
+                returnType: SimpleTypeIdentifierSyntax(name: .identifier("String"))
+              )
+            ),
+            bodyBuilder: {
+              StmtSyntax(#"return "foo""#)
+            }
+          )
+        ),
+        """
+        @inline(__always) @discardableResult public func foo() -> String {
+            return "foo"
+        }
+        """
+      ),
+      #line: (
+        DeclSyntax(
           FunctionDeclSyntax(
             modifiers: [DeclModifierSyntax(name: .keyword(.public)), DeclModifierSyntax(name: .keyword(.static))],
             identifier: TokenSyntax.identifier("=="),

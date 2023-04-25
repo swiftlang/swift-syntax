@@ -1481,8 +1481,7 @@ public let EXPR_NODES: [Node] = [
     kind: "SyntaxCollection",
     element: "Syntax",
     elementName: "SwitchCase",
-    elementChoices: ["SwitchCase", "IfConfigDecl"],
-    elementsSeparatedByNewline: true
+    elementChoices: ["SwitchCase", "IfConfigDecl"]
   ),
 
   // switch-case -> unknown-attr? switch-case-label stmt-list

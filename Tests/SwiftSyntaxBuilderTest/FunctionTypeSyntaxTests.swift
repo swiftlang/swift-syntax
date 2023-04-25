@@ -14,16 +14,16 @@ import XCTest
 import SwiftSyntax
 import SwiftSyntaxBuilder
 
-final class ImportTests: XCTestCase {
-  func testImport() {
-    let leadingTrivia = Trivia.unexpectedText("␣")
-    let identifier = TokenSyntax.identifier("SwiftSyntax")
+final class FunctionTypeSyntaxTests: XCTestCase {
+  func testFunctionEffectSpecifiersSyntax() throws {
+    let typeEffects = TypeEffectSpecifiersSyntax(asyncSpecifier: .keyword(.async), throwsSpecifier: .keyword(.throws))
+    let buildable = FunctionTypeSyntax(arguments: [], effectSpecifiers: typeEffects, output: .init(returnType: TypeSyntax("String")))
 
-    let importDecl = ImportDeclSyntax(
-      leadingTrivia: leadingTrivia,
-      path: AccessPathSyntax([AccessPathComponentSyntax(name: identifier)])
+    assertBuildResult(
+      buildable,
+      """
+      () async throws -> String
+      """
     )
-
-    assertBuildResult(importDecl, "␣import SwiftSyntax")
   }
 }

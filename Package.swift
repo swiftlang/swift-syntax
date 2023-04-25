@@ -45,10 +45,10 @@ let package = Package(
     .macCatalyst(.v13),
   ],
   products: [
-    .library(name: "IDEUtils", type: .static, targets: ["IDEUtils"]),
     .library(name: "SwiftCompilerPlugin", type: .static, targets: ["SwiftCompilerPlugin"]),
     .library(name: "SwiftCompilerPluginMessageHandling", type: .static, targets: ["SwiftCompilerPluginMessageHandling"]),
     .library(name: "SwiftDiagnostics", type: .static, targets: ["SwiftDiagnostics"]),
+    .library(name: "SwiftIDEUtils", type: .static, targets: ["SwiftIDEUtils"]),
     .library(name: "SwiftOperators", type: .static, targets: ["SwiftOperators"]),
     .library(name: "SwiftParser", type: .static, targets: ["SwiftParser"]),
     .library(name: "SwiftParserDiagnostics", type: .static, targets: ["SwiftParserDiagnostics"]),
@@ -81,19 +81,6 @@ let package = Package(
     //  - Each target argument takes exactly one line, unless there are external dependencies.
     //    In that case package and internal dependencies are on different lines.
     //  - All array elements are sorted alphabetically
-
-    // MARK: IDEUtils
-
-    .target(
-      name: "IDEUtils",
-      dependencies: ["SwiftSyntax"],
-      exclude: ["CMakeLists.txt"]
-    ),
-
-    .testTarget(
-      name: "IDEUtilsTest",
-      dependencies: ["_SwiftSyntaxTestSupport", "IDEUtils", "SwiftParser", "SwiftSyntax"]
-    ),
 
     // MARK: SwiftBasicFormat
 
@@ -134,6 +121,19 @@ let package = Package(
     .testTarget(
       name: "SwiftDiagnosticsTest",
       dependencies: ["_SwiftSyntaxTestSupport", "SwiftDiagnostics", "SwiftParser", "SwiftParserDiagnostics"]
+    ),
+
+    // MARK: SwiftIDEUtils
+
+    .target(
+      name: "SwiftIDEUtils",
+      dependencies: ["SwiftSyntax"],
+      exclude: ["CMakeLists.txt"]
+    ),
+
+    .testTarget(
+      name: "SwiftIDEUtilsTest",
+      dependencies: ["_SwiftSyntaxTestSupport", "SwiftIDEUtils", "SwiftParser", "SwiftSyntax"]
     ),
 
     // MARK: SwiftSyntax
@@ -250,7 +250,7 @@ let package = Package(
 
     .executableTarget(
       name: "lit-test-helper",
-      dependencies: ["IDEUtils", "SwiftSyntax", "SwiftParser"]
+      dependencies: ["SwiftIDEUtils", "SwiftSyntax", "SwiftParser"]
     ),
 
     // MARK: PerformanceTest
@@ -258,7 +258,7 @@ let package = Package(
 
     .testTarget(
       name: "PerformanceTest",
-      dependencies: ["IDEUtils", "SwiftParser", "SwiftSyntax"],
+      dependencies: ["SwiftIDEUtils", "SwiftParser", "SwiftSyntax"],
       exclude: ["Inputs"]
     ),
   ]

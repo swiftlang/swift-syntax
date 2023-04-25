@@ -125,6 +125,9 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var escapedNewlineAtLatlineOfMultiLineStringLiteralNotAllowed: Self {
     .init("escaped newline at the last line of a multi-line string literal is not allowed")
   }
+  public static var expectedColonClass: Self {
+    .init("expected ':' to begin inheritance clause")
+  }
   public static var expectedExpressionAfterTry: Self {
     .init("expected expression after 'try'")
   }

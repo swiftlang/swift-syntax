@@ -633,6 +633,6 @@ final class TypeParameterPackTests: XCTestCase {
       fixedSource: """
         var foo: (Array<Foo>, a)
         """
-     )
+    )
   }
 }

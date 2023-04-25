@@ -71,7 +71,7 @@ final class DiagnoseDynamicReplacementTests: XCTestCase {
         func test_dynamic_replacement_for3() {
         }
         """
-     )
+    )
   }
 
 }

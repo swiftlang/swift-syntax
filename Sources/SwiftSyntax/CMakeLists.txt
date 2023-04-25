@@ -18,6 +18,7 @@ add_swift_host_library(SwiftSyntax
   SourceLength.swift
   SourceLocation.swift
   SourcePresence.swift
+  SwiftSyntaxCompatibility.swift
   Syntax.swift
   SyntaxArena.swift
   SyntaxChildren.swift

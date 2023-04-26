@@ -358,19 +358,17 @@ func assertNote<T: SyntaxProtocol>(
   _ note: Note,
   in tree: T,
   markerLocations: [String: Int],
-  expected spec: NoteSpec,
-  file: StaticString = #filePath,
-  line: UInt = #line
+  expected spec: NoteSpec
 ) {
-  XCTAssertEqual(note.message, spec.message, file: file, line: line)
+  XCTAssertEqual(note.message, spec.message, file: spec.file, line: spec.line)
   let locationConverter = SourceLocationConverter(file: "", source: tree.description)
   assertLocation(
     note.location(converter: locationConverter),
     in: tree,
     markerLocations: markerLocations,
     expectedLocationMarker: spec.locationMarker,
-    file: file,
-    line: line
+    file: spec.file,
+    line: spec.line
   )
 }
 
@@ -380,9 +378,7 @@ func assertDiagnostic<T: SyntaxProtocol>(
   _ diag: Diagnostic,
   in tree: T,
   markerLocations: [String: Int],
-  expected spec: DiagnosticSpec,
-  file: StaticString = #filePath,
-  line: UInt = #line
+  expected spec: DiagnosticSpec
 ) {
   let locationConverter = SourceLocationConverter(file: "", source: tree.description)
   assertLocation(
@@ -390,32 +386,32 @@ func assertDiagnostic<T: SyntaxProtocol>(
     in: tree,
     markerLocations: markerLocations,
     expectedLocationMarker: spec.locationMarker,
-    file: file,
-    line: line
+    file: spec.file,
+    line: spec.line
   )
   if let id = spec.id {
-    XCTAssertEqual(diag.diagnosticID, id, file: file, line: line)
+    XCTAssertEqual(diag.diagnosticID, id, file: spec.file, line: spec.line)
   }
   if let message = spec.message {
-    assertStringsEqualWithDiff(diag.message, message, file: file, line: line)
+    assertStringsEqualWithDiff(diag.message, message, file: spec.file, line: spec.line)
   }
-  XCTAssertEqual(spec.severity, diag.diagMessage.severity, file: file, line: line)
+  XCTAssertEqual(spec.severity, diag.diagMessage.severity, file: spec.file, line: spec.line)
   if diag.message.contains("\n") {
     XCTFail(
       """
       Diagnostic message should only span a single line. Message was:
       \(diag.message)
       """,
-      file: file,
-      line: line
+      file: spec.file,
+      line: spec.line
     )
   }
   if let highlight = spec.highlight {
     assertStringsEqualWithDiff(
       diag.highlights.map(\.description).joined().trimmingTrailingWhitespace(),
       highlight.trimmingTrailingWhitespace(),
-      file: file,
-      line: line
+      file: spec.file,
+      line: spec.line
     )
   }
   if let notes = spec.notes {
@@ -425,22 +421,23 @@ func assertDiagnostic<T: SyntaxProtocol>(
         Expected \(notes.count) notes but received \(diag.notes.count):
         \(diag.notes.map(\.debugDescription).joined(separator: "\n"))
         """,
-        file: file,
-        line: line
+        file: spec.file,
+        line: spec.line
       )
     } else {
       for (note, expectedNote) in zip(diag.notes, notes) {
-        assertNote(note, in: tree, markerLocations: markerLocations, expected: expectedNote, file: expectedNote.file, line: expectedNote.line)
+        assertNote(note, in: tree, markerLocations: markerLocations, expected: expectedNote)
       }
     }
   }
+
   if let fixIts = spec.fixIts {
     if fixIts != diag.fixIts.map(\.message.message) {
       failStringsEqualWithDiff(
         diag.fixIts.map(\.message.message).joined(separator: "\n"),
         fixIts.joined(separator: "\n"),
-        file: file,
-        line: line
+        file: spec.file,
+        line: spec.line
       )
     }
   }
@@ -603,7 +600,7 @@ func assertParse<S: SyntaxProtocol>(
     )
   } else {
     for (diag, expectedDiag) in zip(diags, expectedDiagnostics) {
-      assertDiagnostic(diag, in: tree, markerLocations: markerLocations, expected: expectedDiag, file: expectedDiag.file, line: expectedDiag.line)
+      assertDiagnostic(diag, in: tree, markerLocations: markerLocations, expected: expectedDiag)
     }
   }
 

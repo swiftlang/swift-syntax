@@ -10,12 +10,13 @@
 //
 //===----------------------------------------------------------------------===//
 
+import _SwiftSyntaxTestSupport
 import SwiftDiagnostics
 import SwiftParser
 import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
-import _SwiftSyntaxTestSupport
+import SwiftSyntaxMacrosTestSupport
 import XCTest
 
 enum CustomError: Error, CustomStringConvertible {
@@ -650,55 +651,6 @@ public struct UnwrapMacro: CodeItemMacro {
   }
 }
 
-// MARK: Assertion helper functions
-
-/// Assert that expanding the given macros in the original source produces
-/// the given expanded source code.
-///
-/// - Parameters:
-///   - macros: The macros that should be expanded, provided as a dictionary
-///     mapping macro names (e.g., `"stringify"`) to implementation types
-///     (e.g., `StringifyMacro.self`).
-///   - testModuleName: The name of the test module to use.
-///   - testFileName: The name of the test file name to use.
-///   - originalSource: The original source code, which is expected to contain
-///     macros in various places (e.g., `#stringify(x + y)`).
-///   - expandedSource: The source code that we expect to see after performing
-///     macro expansion on the original source.
-public func assertMacroExpansion(
-  macros: [String: Macro.Type],
-  testModuleName: String = "TestModule",
-  testFileName: String = "test.swift",
-  _ originalSource: String,
-  _ expandedSource: String,
-  diagnosticStrings: [String] = [],
-  file: StaticString = #file,
-  line: UInt = #line
-) {
-  // Parse the original source file.
-  let origSourceFile = Parser.parse(source: originalSource)
-
-  // Expand all macros in the source.
-  let context = BasicMacroExpansionContext(
-    sourceFiles: [origSourceFile: .init(moduleName: testModuleName, fullFilePath: testFileName)]
-  )
-  let expandedSourceFile = origSourceFile.expand(macros: macros, in: context)
-
-  assertStringsEqualWithDiff(
-    expandedSourceFile.description,
-    expandedSource,
-    file: file,
-    line: line
-  )
-
-  let diags = context.diagnostics
-  XCTAssertEqual(diags.count, diagnosticStrings.count)
-  for (actualDiag, expectedDiag) in zip(diags, diagnosticStrings) {
-    let actualMessage = actualDiag.message
-    XCTAssertEqual(actualMessage, expectedDiag)
-  }
-}
-
 // MARK: Tests
 
 /// The set of test macros we use here.
@@ -721,51 +673,56 @@ public let testMacros: [String: Macro.Type] = [
 ]
 
 final class MacroSystemTests: XCTestCase {
+  private let indentationWidth: Trivia = .spaces(2)
+
   func testExpressionExpansion() {
     assertMacroExpansion(
-      macros: testMacros,
       """
       let b = #stringify(x + y)
       #colorLiteral(red: 0.5, green: 0.5, blue: 0.25, alpha: 1.0)
       """,
-      """
-      let b = (x + y, "x + y")
-      .init(_colorLiteralRed: 0.5, green: 0.5, blue: 0.25, alpha: 1.0)
-      """
+      expandedSource: """
+        let b = (x + y, "x + y")
+        .init(_colorLiteralRed: 0.5, green: 0.5, blue: 0.25, alpha: 1.0)
+        """,
+      macros: testMacros,
+      indentationWidth: indentationWidth
     )
   }
 
   func testStringifyExpression() {
     assertMacroExpansion(
-      macros: ["stringify": StringifyMacro.self],
       """
       _ = #stringify({ () -> Bool in
         print("hello")
         return true
       })
       """,
-      """
-      _ = ({ () -> Bool in
-        print("hello")
-        return true
-      }, #"{ () -> Bool in\\#n  print("hello")\\#n  return true\\#n}"#)
-      """
+      expandedSource: """
+        _ = ({ () -> Bool in
+          print("hello")
+          return true
+          }, #"{ () -> Bool in\\#n  print("hello")\\#n  return true\\#n}"#)
+        """,
+      macros: ["stringify": StringifyMacro.self],
+      indentationWidth: indentationWidth
     )
   }
 
   func testLocationExpansions() {
     assertMacroExpansion(
-      macros: testMacros,
-      testModuleName: "MyModule",
-      testFileName: "taylor.swift",
       """
       let b = #fileID
       let c = #column
       """,
-      """
-      let b = "MyModule/taylor.swift"
-      let c = 9
-      """
+      expandedSource: """
+        let b = "MyModule/taylor.swift"
+        let c = 9
+        """,
+      macros: testMacros,
+      testModuleName: "MyModule",
+      testFileName: "taylor.swift",
+      indentationWidth: indentationWidth
     )
   }
 
@@ -781,19 +738,19 @@ final class MacroSystemTests: XCTestCase {
 
   func testContextIndependence() {
     assertMacroExpansion(
-      macros: ["checkContext": CheckContextIndependenceMacro.self],
       """
       let b = #checkContext
       """,
-      """
-      let b = ()
-      """
+      expandedSource: """
+        let b = ()
+        """,
+      macros: ["checkContext": CheckContextIndependenceMacro.self],
+      indentationWidth: indentationWidth
     )
   }
 
   func testErrorExpansion() {
     assertMacroExpansion(
-      macros: testMacros,
       """
       #myError("please don't do that")
       struct X {
@@ -804,102 +761,113 @@ final class MacroSystemTests: XCTestCase {
         }
       }
       """,
-      """
+      expandedSource: """
 
-      struct X {
-        func f() { }
-        func g() {
+        struct X {
+          func f() {
+          }
+          func g() {
+          }
         }
-      }
-      """,
-      diagnosticStrings: [
-        "please don't do that",
-        "#error macro requires a string literal",
-        "worse",
-      ]
+        """,
+      diagnostics: [
+        DiagnosticSpec(message: "please don't do that", line: 1, column: 1, highlight: #"#myError("please don't do that")"#),
+        DiagnosticSpec(message: "#error macro requires a string literal", line: 4, column: 3, highlight: #"#myError(bad)"#),
+        DiagnosticSpec(message: "worse", line: 6, column: 5, highlight: #"#myError("worse")"#),
+      ],
+      macros: testMacros,
+      indentationWidth: indentationWidth
     )
   }
 
   func testBitwidthNumberedStructsExpansion() {
     assertMacroExpansion(
-      macros: testMacros,
       """
       #bitwidthNumberedStructs("MyInt")
       """,
-      """
+      expandedSource: """
 
-      struct MyInt8 { }
-      struct MyInt16 { }
-      struct MyInt32 { }
-      struct MyInt64 { }
-      """
+        struct MyInt8 {
+        }
+        struct MyInt16 {
+        }
+        struct MyInt32 {
+        }
+        struct MyInt64 {
+        }
+        """,
+      macros: testMacros,
+      indentationWidth: indentationWidth
     )
   }
 
   func testPropertyWrapper() {
     assertMacroExpansion(
-      macros: testMacros,
       """
       @wrapProperty("MyWrapperType")
       var x: Int
       """,
-      """
+      expandedSource: """
 
-      var x: Int {
-        get {
-          _x.wrappedValue
+        var x: Int {
+          get {
+            _x.wrappedValue
+          }
+          set {
+            _x.wrappedValue = newValue
+          }
         }
-        set {
-          _x.wrappedValue = newValue
-        }
-      }
-      private var _x: MyWrapperType<Int>
-      """
+        private var _x: MyWrapperType<Int>
+        """,
+      macros: testMacros,
+      indentationWidth: indentationWidth
     )
   }
 
   func testAddCompletionHandler() {
     assertMacroExpansion(
-      macros: testMacros,
       """
       @addCompletionHandler
       func f(a: Int, for b: String, _ value: Double) async -> String { }
       """,
-      """
+      expandedSource: """
 
-      func f(a: Int, for b: String, _ value: Double) async -> String { }
-
-      func f(a: Int, for b: String, _ value: Double, completionHandler: (String) -> Void) {
-        Task {
-          completionHandler(await f(a: a, for: b, value))
+        func f(a: Int, for b: String, _ value: Double) async -> String {
         }
-      }
-      """
+
+        func f(a: Int, for b: String, _ value: Double, completionHandler: (String) -> Void) {
+          Task {
+            completionHandler(await f(a: a, for: b, value))
+          }
+        }
+        """,
+      macros: testMacros,
+      indentationWidth: indentationWidth
     )
   }
 
   func testAddBackingStorage() {
     assertMacroExpansion(
-      macros: testMacros,
       """
       @addBackingStorage
       struct S {
         var value: Int
       }
       """,
-      """
+      expandedSource: """
 
-      struct S {
-        var value: Int
-        var _storage: Storage<Self>
-      }
-      """
+        struct S {
+          var value: Int
+          var _storage: Storage<Self>
+        }
+        """,
+      macros: testMacros,
+      indentationWidth: indentationWidth
     )
   }
 
   func testWrapAllProperties() {
     assertMacroExpansion(
-      macros: testMacros,
       """
       @wrapAllProperties
       struct Point {
@@ -914,28 +882,35 @@ final class MacroSystemTests: XCTestCase {
         func test() {}
       }
       """,
-      """
+      expandedSource: """
 
-      struct Point {
-        @Wrapper
-        var x: Int
-        @Wrapper
-        var y: Int
-        @Wrapper
-        var description: String { "" }
-        @Wrapper
-        var computed: Int {
-          get { 0 }
-          set {}
+        struct Point {
+          @Wrapper
+          var x: Int
+          @Wrapper
+          var y: Int
+          @Wrapper
+          var description: String {
+            ""
+          }
+          @Wrapper
+          var computed: Int {
+            get {
+              0
+            }
+            set {
+            }
+          }
+
+          func test() {
+          }
         }
-
-        func test() {}
-      }
-      """
+        """,
+      macros: testMacros,
+      indentationWidth: indentationWidth
     )
 
     assertMacroExpansion(
-      macros: testMacros,
       """
       @wrapStoredProperties
       struct Point {
@@ -952,30 +927,37 @@ final class MacroSystemTests: XCTestCase {
         func test() {}
       }
       """,
-      """
+      expandedSource: """
 
-      struct Point {
-        @Wrapper
-        var x: Int
-        @Wrapper
-        var y: Int
+        struct Point {
+          @Wrapper
+          var x: Int
+          @Wrapper
+          var y: Int
 
-        var description: String { "" }
+          var description: String {
+            ""
+          }
 
-        var computed: Int {
-          get { 0 }
-          set {}
+          var computed: Int {
+            get {
+              0
+            }
+            set {
+            }
+          }
+
+          func test() {
+          }
         }
-
-        func test() {}
-      }
-      """
+        """,
+      macros: testMacros,
+      indentationWidth: indentationWidth
     )
   }
 
   func testTypeWrapperTransform() {
     assertMacroExpansion(
-      macros: testMacros,
       """
       @customTypeWrapper
       struct Point {
@@ -983,36 +965,36 @@ final class MacroSystemTests: XCTestCase {
         var y: Int
       }
       """,
-      // FIXME: Accessor brace indentation is off
-      """
+      expandedSource: """
 
-      struct Point {
-        var x: Int {
-          get {
-            _storage[wrappedKeyPath: \\.x]
+        struct Point {
+          var x: Int {
+            get {
+              _storage[wrappedKeyPath: \\.x]
+            }
+            set {
+              _storage[wrappedKeyPath: \\.x] = newValue
+            }
           }
-          set {
-            _storage[wrappedKeyPath: \\.x] = newValue
+          var y: Int {
+            get {
+              _storage[wrappedKeyPath: \\.y]
+            }
+            set {
+              _storage[wrappedKeyPath: \\.y] = newValue
+            }
           }
-      }
-        var y: Int {
-          get {
-            _storage[wrappedKeyPath: \\.y]
-          }
-          set {
-            _storage[wrappedKeyPath: \\.y] = newValue
-          }
-      }
-        var _storage: Wrapper<Self>
-      }
-      """
+          var _storage: Wrapper<Self>
+        }
+        """,
+      macros: testMacros,
+      indentationWidth: indentationWidth
     )
 
   }
 
   func testUnwrap() {
     assertMacroExpansion(
-      macros: testMacros,
       #"""
       let x: Int? = 1
       let y: Int? = nil
@@ -1022,23 +1004,37 @@ final class MacroSystemTests: XCTestCase {
         fatalError("nil is \\($0)")
       }
       """#,
-      #"""
-      let x: Int? = 1
-      let y: Int? = nil
-      let z: Int? = 3
-      guard let x else { fatalError("'x' is nil") }
-      guard let y else { fatalError("'y' is nil") }
-      guard let z else { fatalError("'z' is nil") }
-      guard let x else { {
-        fatalError("nil is \\($0)")
-      }("x") }
-      guard let y else { {
-        fatalError("nil is \\($0)")
-      }("y") }
-      guard let z else { {
-        fatalError("nil is \\($0)")
-      }("z") }
-      """#
+      expandedSource: #"""
+        let x: Int? = 1
+        let y: Int? = nil
+        let z: Int? = 3
+        guard let x else {
+          fatalError("'x' is nil")
+        }
+        guard let y else {
+          fatalError("'y' is nil")
+        }
+        guard let z else {
+          fatalError("'z' is nil")
+        }
+        guard let x else {
+          {
+            fatalError("nil is \\($0)")
+          }("x")
+        }
+        guard let y else {
+          {
+            fatalError("nil is \\($0)")
+          }("y")
+        }
+        guard let z else {
+          {
+            fatalError("nil is \\($0)")
+          }("z")
+        }
+        """#,
+      macros: testMacros,
+      indentationWidth: indentationWidth
     )
   }
 }

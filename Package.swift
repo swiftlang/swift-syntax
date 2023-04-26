@@ -56,6 +56,7 @@ let package = Package(
     .library(name: "SwiftSyntax", type: .static, targets: ["SwiftSyntax"]),
     .library(name: "SwiftSyntaxBuilder", type: .static, targets: ["SwiftSyntaxBuilder"]),
     .library(name: "SwiftSyntaxMacros", type: .static, targets: ["SwiftSyntaxMacros"]),
+    .library(name: "SwiftSyntaxMacrosTestSupport", type: .static, targets: ["SwiftSyntaxMacrosTestSupport"]),
   ],
   targets: [
     // MARK: - Internal helper targets
@@ -178,7 +179,14 @@ let package = Package(
 
     .testTarget(
       name: "SwiftSyntaxMacrosTest",
-      dependencies: ["_SwiftSyntaxTestSupport", "SwiftDiagnostics", "SwiftOperators", "SwiftParser", "SwiftSyntaxBuilder", "SwiftSyntaxMacros"]
+      dependencies: ["_SwiftSyntaxTestSupport", "SwiftDiagnostics", "SwiftOperators", "SwiftParser", "SwiftSyntaxBuilder", "SwiftSyntaxMacros", "SwiftSyntaxMacrosTestSupport"]
+    ),
+
+    // MARK: SwiftSyntaxMacrosTestSupport
+
+    .target(
+      name: "SwiftSyntaxMacrosTestSupport",
+      dependencies: ["_SwiftSyntaxTestSupport", "SwiftDiagnostics", "SwiftParser", "SwiftSyntaxMacros"]
     ),
 
     // MARK: SwiftParser

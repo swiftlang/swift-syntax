@@ -79,7 +79,8 @@ public class SyntaxArena {
 
   /// Copies a UTF8 sequence of `String` to the memory this arena manages, and
   /// returns the copied string as a `SyntaxText`
-  func intern(_ value: String) -> SyntaxText {
+  @_spi(RawSyntax)
+  public func intern(_ value: String) -> SyntaxText {
     if value.isEmpty { return SyntaxText() }
     var value = value
     return value.withUTF8 { utf8 in

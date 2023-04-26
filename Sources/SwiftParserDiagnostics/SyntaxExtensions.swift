@@ -149,6 +149,15 @@ extension TokenKind {
       return false
     }
   }
+
+  var isIntegerLiteral: Bool {
+    switch self {
+    case .integerLiteral:
+      return true
+    default:
+      return false
+    }
+  }
 }
 
 public extension TriviaPiece {

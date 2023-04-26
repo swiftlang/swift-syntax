@@ -1263,6 +1263,31 @@ extension Parser {
       return RawExprSyntax(self.parseClosureExpression())
     case (.period, let handle)?:  // .foo
       let dot = self.eat(handle)
+
+      // Special case ".<integer_literal>" like ".4".  This isn't valid, but the
+      // developer almost certainly meant to use "0.4".  Diagnose this, and
+      // recover as if they wrote that.
+      if let integerLiteral = self.consume(if: .integerLiteral) {
+        let text = arena.intern("0" + String(syntaxText: dot.tokenText) + String(syntaxText: integerLiteral.tokenText))
+        return RawExprSyntax(
+          RawFloatLiteralExprSyntax(
+            floatingDigits: RawTokenSyntax(
+              missing: .floatingLiteral,
+              text: text,
+              arena: self.arena
+            ),
+            RawUnexpectedNodesSyntax(
+              elements: [
+                RawSyntax(dot),
+                RawSyntax(integerLiteral),
+              ],
+              arena: self.arena
+            ),
+            arena: self.arena
+          )
+        )
+      }
+
       let (name, args) = self.parseDeclNameRef([.keywords, .compoundNames])
       return RawExprSyntax(
         RawMemberAccessExprSyntax(

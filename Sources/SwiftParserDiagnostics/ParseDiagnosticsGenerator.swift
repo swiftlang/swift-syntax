@@ -678,6 +678,32 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: FloatLiteralExprSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    if node.floatingDigits.presence == .missing,
+      let (period, integerLiteral) = node.unexpectedAfterFloatingDigits?.twoTokens(firstSatisfying: { $0.tokenKind == .period }, secondSatisfying: { $0.tokenKind.isIntegerLiteral })
+    {
+      addDiagnostic(
+        node,
+        InvalidFloatLiteralMissingLeadingZero(decimalDigits: integerLiteral),
+        fixIts: [
+          FixIt(
+            message: InsertFixIt(tokenToBeInserted: .integerLiteral("0")),
+            changes: [
+              .makePresent(node.floatingDigits),
+              .makeMissing(period),
+              .makeMissing(integerLiteral),
+            ]
+          )
+        ],
+        handledNodes: [node.floatingDigits.id, period.id, integerLiteral.id]
+      )
+    }
+    return .visitChildren
+  }
+
   public override func visit(_ node: ForInStmtSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren

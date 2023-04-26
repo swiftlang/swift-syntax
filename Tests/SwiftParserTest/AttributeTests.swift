@@ -422,12 +422,23 @@ final class AttributeTests: XCTestCase {
 
     assertParse(
       """
-      @_expose(Cxx, 1️⃣baz) func foo() {}
+      @_expose(Cxx, 1️⃣baz2️⃣) func foo() {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected string literal to end @_expose arguments", fixIts: ["insert string literal"]),
-        DiagnosticSpec(message: "unexpected code 'baz' in attribute"),
-      ]
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: #"expected '"' in string literal"#,
+          fixIts: [#"insert '"'"#]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: #"expected '"' to end string literal"#,
+          fixIts: [#"insert '"'"#]
+        ),
+      ],
+      fixedSource: """
+        @_expose(Cxx, "baz") func foo() {}
+        """
     )
   }
 
@@ -475,9 +486,12 @@ final class AttributeTests: XCTestCase {
       func foo() {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected 'message' in @_unavailableFromAsync argument", fixIts: ["insert 'message'"]),
-        DiagnosticSpec(message: "unexpected code 'nope' before @_unavailableFromAsync argument"),
-      ]
+        DiagnosticSpec(message: "expected 'message' in @_unavailableFromAsync argument", fixIts: ["replace 'nope' with 'message'"])
+      ],
+      fixedSource: """
+        @_unavailableFromAsync(message: "abc")
+        func foo() {}
+        """
     )
 
     assertParse(
@@ -493,13 +507,25 @@ final class AttributeTests: XCTestCase {
 
     assertParse(
       """
-      @_unavailableFromAsync(message: 1️⃣abc)
+      @_unavailableFromAsync(message: 1️⃣abc2️⃣)
       func foo() {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected string literal to end @_unavailableFromAsync argument", fixIts: ["insert string literal"]),
-        DiagnosticSpec(message: "unexpected code 'abc' in attribute"),
-      ]
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: #"expected '"' in string literal"#,
+          fixIts: [#"insert '"'"#]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: #"expected '"' to end string literal"#,
+          fixIts: [#"insert '"'"#]
+        ),
+      ],
+      fixedSource: """
+        @_unavailableFromAsync(message: "abc")
+        func foo() {}
+        """
     )
   }
 

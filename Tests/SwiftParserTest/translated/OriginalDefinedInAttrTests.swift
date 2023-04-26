@@ -31,9 +31,15 @@ final class OriginalDefinedInAttrTests: XCTestCase {
       public func foo1() {}
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "expected 'module' in @_originallyDefinedIn arguments", fixIts: ["insert 'module'"]),
-        DiagnosticSpec(message: "unexpected code 'modulename' before @_originallyDefinedIn arguments"),
-      ]
+        DiagnosticSpec(
+          message: "expected 'module' in @_originallyDefinedIn arguments",
+          fixIts: ["replace 'modulename' with 'module'"]
+        )
+      ],
+      fixedSource: #"""
+        @_originallyDefinedIn(module: "foo", OSX 13.13)
+        public func foo1() {}
+        """#
     )
   }
 
@@ -53,7 +59,10 @@ final class OriginalDefinedInAttrTests: XCTestCase {
       public class ToplevelClass1 {}
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ',' and version list in @_originallyDefinedIn arguments", fixIts: ["insert ',' and version list"])
+        DiagnosticSpec(
+          message: "expected ',' and version list in @_originallyDefinedIn arguments",
+          fixIts: ["insert ',' and version list"]
+        )
       ]
     )
   }
@@ -61,12 +70,40 @@ final class OriginalDefinedInAttrTests: XCTestCase {
   func testOriginalDefinedInAttr5() {
     assertParse(
       """
-      @_originallyDefinedIn(1️⃣OSX 13.13.3)
+      @_originallyDefinedIn(1️⃣OSX 2️⃣13.13.3)
       public class ToplevelClass2 {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected 'module:', string literal, and ',' in @_originallyDefinedIn arguments", fixIts: ["insert 'module:', string literal, and ','"])
-      ]
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected 'module:' in @_originallyDefinedIn arguments",
+          fixIts: ["insert 'module:'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: #"expected '"' in string literal"#,
+          fixIts: [#"insert '"'"#]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: #"expected '"' to end string literal"#,
+          fixIts: [#"insert '"'"#]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected ',' in @_originallyDefinedIn arguments",
+          fixIts: ["insert ','"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected platform in version restriction",
+          fixIts: ["insert platform"]
+        ),
+      ],
+      fixedSource: """
+        @_originallyDefinedIn(module: "OSX", <#identifier#> 13.13.3)
+        public class ToplevelClass2 {}
+        """
     )
   }
 
@@ -172,5 +209,4 @@ final class OriginalDefinedInAttrTests: XCTestCase {
       """
     )
   }
-
 }

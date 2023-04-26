@@ -121,8 +121,7 @@ final class AvailabilityQueryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected version restriction in availability argument"),
-        DiagnosticSpec(message: "expected ')' to end availability condition"),
+        DiagnosticSpec(message: "expected platform and ')' to end availability condition", fixIts: ["insert platform and ')'"])
       ]
     )
   }

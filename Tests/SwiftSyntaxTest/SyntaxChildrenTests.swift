@@ -71,4 +71,14 @@ public class SyntaxChildrenTests: XCTestCase {
     try XCTAssertNext(&fixedUpIt) { $0.is(TokenSyntax.self) }
     try XCTAssertNext(&fixedUpIt) { $0.is(MissingExprSyntax.self) }
   }
+
+  public func testTokenSequencesWithMissingChild() {
+    let codeBlock = CodeBlockSyntax(
+      leftBrace: .leftBraceToken(presence: .missing),
+      statements: [],
+      rightBrace: .rightBraceToken(presence: .missing)
+    )
+
+    XCTAssertEqual(Array(codeBlock.tokens(viewMode: .all)).count, 2)
+  }
 }

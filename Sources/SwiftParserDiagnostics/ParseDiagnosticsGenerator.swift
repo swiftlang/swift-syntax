@@ -513,7 +513,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
           position: position,
           .consecutiveStatementsOnSameLine,
           fixIts: [
-            FixIt(message: .insertSemicolon, changes: .makePresentBeforeTrivia(semicolon))
+            FixIt(message: .insertSemicolon, changes: .makePresent(semicolon))
           ],
           handledNodes: [semicolon.id]
         )
@@ -858,7 +858,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
           position: position,
           .consecutiveDeclarationsOnSameLine,
           fixIts: [
-            FixIt(message: .insertSemicolon, changes: .makePresentBeforeTrivia(semicolon))
+            FixIt(message: .insertSemicolon, changes: .makePresent(semicolon))
           ],
           handledNodes: [semicolon.id]
         )
@@ -870,27 +870,27 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
   }
 
   public override func visit(_ node: MissingDeclSyntax) -> SyntaxVisitorContinueKind {
-    return handleMissingSyntax(node)
+    return handleMissingSyntax(node, additionalHandledNodes: [node.placeholder.id])
   }
 
   public override func visit(_ node: MissingExprSyntax) -> SyntaxVisitorContinueKind {
-    return handleMissingSyntax(node)
+    return handleMissingSyntax(node, additionalHandledNodes: [node.placeholder.id])
   }
 
   public override func visit(_ node: MissingPatternSyntax) -> SyntaxVisitorContinueKind {
-    return handleMissingSyntax(node)
+    return handleMissingSyntax(node, additionalHandledNodes: [node.placeholder.id])
   }
 
   public override func visit(_ node: MissingStmtSyntax) -> SyntaxVisitorContinueKind {
-    return handleMissingSyntax(node)
+    return handleMissingSyntax(node, additionalHandledNodes: [node.placeholder.id])
   }
 
   public override func visit(_ node: MissingSyntax) -> SyntaxVisitorContinueKind {
-    return handleMissingSyntax(node)
+    return handleMissingSyntax(node, additionalHandledNodes: [node.placeholder.id])
   }
 
   public override func visit(_ node: MissingTypeSyntax) -> SyntaxVisitorContinueKind {
-    return handleMissingSyntax(node)
+    return handleMissingSyntax(node, additionalHandledNodes: [node.placeholder.id])
   }
 
   public override func visit(_ node: OperatorDeclSyntax) -> SyntaxVisitorContinueKind {

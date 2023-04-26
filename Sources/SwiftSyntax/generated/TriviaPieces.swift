@@ -59,8 +59,8 @@ extension TriviaPiece: TextOutputStreamable {
   /// - Parameter stream: The stream to which to print the trivia.
   public func write<Target>(to target: inout Target) where Target: TextOutputStream {
     func printRepeated(_ character: String, count: Int) {
-      for _ in 0 ..< count { 
-        target.write(character) 
+      for _ in 0 ..< count {
+        target.write(character)
       }
     }
     switch self {
@@ -460,6 +460,76 @@ extension RawTriviaPiece {
       return text
     case .verticalTabs(_):
       return nil
+    }
+  }
+}
+
+extension TriviaPiece {
+  /// Returns `true` if this piece is a newline, space or tab.
+  public var isWhitespace: Bool {
+    return isSpaceOrTab || isNewline
+  }
+  
+  public var isNewline: Bool {
+    switch self {
+    case .carriageReturns:
+      return true
+    case .carriageReturnLineFeeds:
+      return true
+    case .formfeeds:
+      return true
+    case .newlines:
+      return true
+    case .verticalTabs:
+      return true
+    default:
+      return false
+    }
+  }
+  
+  public var isSpaceOrTab: Bool {
+    switch self {
+    case .spaces:
+      return true
+    case .tabs:
+      return true
+    default:
+      return false
+    }
+  }
+}
+
+extension RawTriviaPiece {
+  /// Returns `true` if this piece is a newline, space or tab.
+  public var isWhitespace: Bool {
+    return isSpaceOrTab || isNewline
+  }
+  
+  public var isNewline: Bool {
+    switch self {
+    case .carriageReturns:
+      return true
+    case .carriageReturnLineFeeds:
+      return true
+    case .formfeeds:
+      return true
+    case .newlines:
+      return true
+    case .verticalTabs:
+      return true
+    default:
+      return false
+    }
+  }
+  
+  public var isSpaceOrTab: Bool {
+    switch self {
+    case .spaces:
+      return true
+    case .tabs:
+      return true
+    default:
+      return false
     }
   }
 }

@@ -15,10 +15,12 @@ import SwiftBasicFormat
 import SwiftSyntaxBuilder
 
 private class InitializerExprFormat: BasicFormat {
-  override var indentation: TriviaPiece { return .spaces(indentationLevel * 2) }
+  public init() {
+    super.init(indentationWidth: .spaces(2))
+  }
 
   private func formatChildrenSeparatedByNewline<SyntaxType: SyntaxProtocol>(children: SyntaxChildren, elementType: SyntaxType.Type) -> [SyntaxType] {
-    indentationLevel += 1
+    increaseIndentationLevel()
     var formattedChildren = children.map {
       self.visit($0).as(SyntaxType.self)!
     }
@@ -26,12 +28,12 @@ private class InitializerExprFormat: BasicFormat {
       if $0.leadingTrivia.first?.isNewline == true {
         return $0
       } else {
-        return $0.with(\.leadingTrivia, indentedNewline + $0.leadingTrivia)
+        return $0.with(\.leadingTrivia, .newline + currentIndentationLevel + $0.leadingTrivia)
       }
     }
-    indentationLevel -= 1
+    decreaseIndentationLevel()
     if !formattedChildren.isEmpty {
-      formattedChildren[formattedChildren.count - 1] = formattedChildren[formattedChildren.count - 1].with(\.trailingTrivia, indentedNewline)
+      formattedChildren[formattedChildren.count - 1] = formattedChildren[formattedChildren.count - 1].with(\.trailingTrivia, .newline + currentIndentationLevel)
     }
     return formattedChildren
   }

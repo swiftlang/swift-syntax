@@ -50,8 +50,8 @@ public struct RawAccessPathComponentSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -65,7 +65,7 @@ public struct RawAccessPathComponentSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .accessPathComponent, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .accessPathComponent, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeName?.raw
       layout[1] = name.raw
@@ -120,18 +120,18 @@ public struct RawAccessPathSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [RawAccessPathComponentSyntax], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .accessPath, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .accessPath, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -141,8 +141,8 @@ public struct RawAccessPathSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawAccessPathComponentSyntax] {
-    layoutView.children.map { 
-      RawAccessPathComponentSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawAccessPathComponentSyntax(raw: $0!)
     }
   }
 }
@@ -170,8 +170,8 @@ public struct RawAccessorBlockSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -187,7 +187,7 @@ public struct RawAccessorBlockSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .accessorBlock, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .accessorBlock, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLeftBrace?.raw
       layout[1] = leftBrace.raw
@@ -252,8 +252,8 @@ public struct RawAccessorDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -275,7 +275,7 @@ public struct RawAccessorDeclSyntax: RawDeclSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .accessorDecl, uninitializedCount: 13, arena: arena) { layout in 
+      kind: .accessorDecl, uninitializedCount: 13, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
@@ -370,8 +370,8 @@ public struct RawAccessorEffectSpecifiersSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -385,7 +385,7 @@ public struct RawAccessorEffectSpecifiersSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .accessorEffectSpecifiers, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .accessorEffectSpecifiers, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAsyncSpecifier?.raw
       layout[1] = asyncSpecifier?.raw
@@ -440,18 +440,18 @@ public struct RawAccessorListSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [RawAccessorDeclSyntax], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .accessorList, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .accessorList, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -461,8 +461,8 @@ public struct RawAccessorListSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawAccessorDeclSyntax] {
-    layoutView.children.map { 
-      RawAccessorDeclSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawAccessorDeclSyntax(raw: $0!)
     }
   }
 }
@@ -490,8 +490,8 @@ public struct RawAccessorParameterSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -507,7 +507,7 @@ public struct RawAccessorParameterSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .accessorParameter, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .accessorParameter, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLeftParen?.raw
       layout[1] = leftParen.raw
@@ -572,8 +572,8 @@ public struct RawActorDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -599,7 +599,7 @@ public struct RawActorDeclSyntax: RawDeclSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .actorDecl, uninitializedCount: 17, arena: arena) { layout in 
+      kind: .actorDecl, uninitializedCount: 17, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
@@ -714,18 +714,18 @@ public struct RawArrayElementListSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [RawArrayElementSyntax], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .arrayElementList, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .arrayElementList, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -735,8 +735,8 @@ public struct RawArrayElementListSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawArrayElementSyntax] {
-    layoutView.children.map { 
-      RawArrayElementSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawArrayElementSyntax(raw: $0!)
     }
   }
 }
@@ -764,8 +764,8 @@ public struct RawArrayElementSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -779,7 +779,7 @@ public struct RawArrayElementSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .arrayElement, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .arrayElement, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeExpression?.raw
       layout[1] = expression.raw
@@ -834,8 +834,8 @@ public struct RawArrayExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -851,7 +851,7 @@ public struct RawArrayExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .arrayExpr, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .arrayExpr, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLeftSquare?.raw
       layout[1] = leftSquare.raw
@@ -916,8 +916,8 @@ public struct RawArrayTypeSyntax: RawTypeSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -933,7 +933,7 @@ public struct RawArrayTypeSyntax: RawTypeSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .arrayType, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .arrayType, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLeftSquareBracket?.raw
       layout[1] = leftSquareBracket.raw
@@ -998,8 +998,8 @@ public struct RawArrowExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -1013,7 +1013,7 @@ public struct RawArrowExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .arrowExpr, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .arrowExpr, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeEffectSpecifiers?.raw
       layout[1] = effectSpecifiers?.raw
@@ -1068,8 +1068,8 @@ public struct RawAsExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -1087,7 +1087,7 @@ public struct RawAsExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .asExpr, uninitializedCount: 9, arena: arena) { layout in 
+      kind: .asExpr, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeExpression?.raw
       layout[1] = expression.raw
@@ -1162,8 +1162,8 @@ public struct RawAssignmentExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -1175,7 +1175,7 @@ public struct RawAssignmentExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .assignmentExpr, uninitializedCount: 3, arena: arena) { layout in 
+      kind: .assignmentExpr, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAssignToken?.raw
       layout[1] = assignToken.raw
@@ -1220,8 +1220,8 @@ public struct RawAssociatedtypeDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -1245,7 +1245,7 @@ public struct RawAssociatedtypeDeclSyntax: RawDeclSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .associatedtypeDecl, uninitializedCount: 15, arena: arena) { layout in 
+      kind: .associatedtypeDecl, uninitializedCount: 15, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
@@ -1340,9 +1340,9 @@ public struct RawAttributeListSyntax: RawSyntaxNodeProtocol {
     
     public var raw: RawSyntax {
       switch self {
-      case .attribute(let node): 
+      case .attribute(let node):
         return node.raw
-      case .ifConfigDecl(let node): 
+      case .ifConfigDecl(let node):
         return node.raw
       }
     }
@@ -1350,11 +1350,11 @@ public struct RawAttributeListSyntax: RawSyntaxNodeProtocol {
     public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
       if let node = RawAttributeSyntax(other) {
         self = .attribute(node)
-        return 
+        return
       }
       if let node = RawIfConfigDeclSyntax(other) {
         self = .ifConfigDecl(node)
-        return 
+        return
       }
       return nil
     }
@@ -1381,18 +1381,18 @@ public struct RawAttributeListSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [Element], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .attributeList, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .attributeList, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -1402,8 +1402,8 @@ public struct RawAttributeListSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawSyntax] {
-    layoutView.children.map { 
-      RawSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawSyntax(raw: $0!)
     }
   }
 }
@@ -1439,45 +1439,45 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol {
     
     public var raw: RawSyntax {
       switch self {
-      case .argumentList(let node): 
+      case .argumentList(let node):
         return node.raw
-      case .token(let node): 
+      case .token(let node):
         return node.raw
-      case .string(let node): 
+      case .string(let node):
         return node.raw
-      case .availability(let node): 
+      case .availability(let node):
         return node.raw
-      case .specializeArguments(let node): 
+      case .specializeArguments(let node):
         return node.raw
-      case .objCName(let node): 
+      case .objCName(let node):
         return node.raw
-      case .implementsArguments(let node): 
+      case .implementsArguments(let node):
         return node.raw
-      case .differentiableArguments(let node): 
+      case .differentiableArguments(let node):
         return node.raw
-      case .derivativeRegistrationArguments(let node): 
+      case .derivativeRegistrationArguments(let node):
         return node.raw
-      case .backDeployedArguments(let node): 
+      case .backDeployedArguments(let node):
         return node.raw
-      case .conventionArguments(let node): 
+      case .conventionArguments(let node):
         return node.raw
-      case .conventionWitnessMethodArguments(let node): 
+      case .conventionWitnessMethodArguments(let node):
         return node.raw
-      case .opaqueReturnTypeOfAttributeArguments(let node): 
+      case .opaqueReturnTypeOfAttributeArguments(let node):
         return node.raw
-      case .exposeAttributeArguments(let node): 
+      case .exposeAttributeArguments(let node):
         return node.raw
-      case .originallyDefinedInArguments(let node): 
+      case .originallyDefinedInArguments(let node):
         return node.raw
-      case .underscorePrivateAttributeArguments(let node): 
+      case .underscorePrivateAttributeArguments(let node):
         return node.raw
-      case .dynamicReplacementArguments(let node): 
+      case .dynamicReplacementArguments(let node):
         return node.raw
-      case .unavailableFromAsyncArguments(let node): 
+      case .unavailableFromAsyncArguments(let node):
         return node.raw
-      case .effectsArguments(let node): 
+      case .effectsArguments(let node):
         return node.raw
-      case .documentationArguments(let node): 
+      case .documentationArguments(let node):
         return node.raw
       }
     }
@@ -1485,83 +1485,83 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol {
     public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
       if let node = RawTupleExprElementListSyntax(other) {
         self = .argumentList(node)
-        return 
+        return
       }
       if let node = RawTokenSyntax(other) {
         self = .token(node)
-        return 
+        return
       }
       if let node = RawStringLiteralExprSyntax(other) {
         self = .string(node)
-        return 
+        return
       }
       if let node = RawAvailabilitySpecListSyntax(other) {
         self = .availability(node)
-        return 
+        return
       }
       if let node = RawSpecializeAttributeSpecListSyntax(other) {
         self = .specializeArguments(node)
-        return 
+        return
       }
       if let node = RawObjCSelectorSyntax(other) {
         self = .objCName(node)
-        return 
+        return
       }
       if let node = RawImplementsAttributeArgumentsSyntax(other) {
         self = .implementsArguments(node)
-        return 
+        return
       }
       if let node = RawDifferentiableAttributeArgumentsSyntax(other) {
         self = .differentiableArguments(node)
-        return 
+        return
       }
       if let node = RawDerivativeRegistrationAttributeArgumentsSyntax(other) {
         self = .derivativeRegistrationArguments(node)
-        return 
+        return
       }
       if let node = RawBackDeployedAttributeSpecListSyntax(other) {
         self = .backDeployedArguments(node)
-        return 
+        return
       }
       if let node = RawConventionAttributeArgumentsSyntax(other) {
         self = .conventionArguments(node)
-        return 
+        return
       }
       if let node = RawConventionWitnessMethodAttributeArgumentsSyntax(other) {
         self = .conventionWitnessMethodArguments(node)
-        return 
+        return
       }
       if let node = RawOpaqueReturnTypeOfAttributeArgumentsSyntax(other) {
         self = .opaqueReturnTypeOfAttributeArguments(node)
-        return 
+        return
       }
       if let node = RawExposeAttributeArgumentsSyntax(other) {
         self = .exposeAttributeArguments(node)
-        return 
+        return
       }
       if let node = RawOriginallyDefinedInArgumentsSyntax(other) {
         self = .originallyDefinedInArguments(node)
-        return 
+        return
       }
       if let node = RawUnderscorePrivateAttributeArgumentsSyntax(other) {
         self = .underscorePrivateAttributeArguments(node)
-        return 
+        return
       }
       if let node = RawDynamicReplacementArgumentsSyntax(other) {
         self = .dynamicReplacementArguments(node)
-        return 
+        return
       }
       if let node = RawUnavailableFromAsyncArgumentsSyntax(other) {
         self = .unavailableFromAsyncArguments(node)
-        return 
+        return
       }
       if let node = RawEffectsArgumentsSyntax(other) {
         self = .effectsArguments(node)
-        return 
+        return
       }
       if let node = RawDocumentationAttributeArgumentsSyntax(other) {
         self = .documentationArguments(node)
-        return 
+        return
       }
       return nil
     }
@@ -1588,8 +1588,8 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -1609,7 +1609,7 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .attribute, uninitializedCount: 11, arena: arena) { layout in 
+      kind: .attribute, uninitializedCount: 11, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAtSignToken?.raw
       layout[1] = atSignToken.raw
@@ -1694,8 +1694,8 @@ public struct RawAttributedTypeSyntax: RawTypeSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -1711,7 +1711,7 @@ public struct RawAttributedTypeSyntax: RawTypeSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .attributedType, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .attributedType, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeSpecifier?.raw
       layout[1] = specifier?.raw
@@ -1767,11 +1767,11 @@ public struct RawAvailabilityArgumentSyntax: RawSyntaxNodeProtocol {
     
     public var raw: RawSyntax {
       switch self {
-      case .token(let node): 
+      case .token(let node):
         return node.raw
-      case .availabilityVersionRestriction(let node): 
+      case .availabilityVersionRestriction(let node):
         return node.raw
-      case .availabilityLabeledArgument(let node): 
+      case .availabilityLabeledArgument(let node):
         return node.raw
       }
     }
@@ -1779,15 +1779,15 @@ public struct RawAvailabilityArgumentSyntax: RawSyntaxNodeProtocol {
     public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
       if let node = RawTokenSyntax(other) {
         self = .token(node)
-        return 
+        return
       }
       if let node = RawAvailabilityVersionRestrictionSyntax(other) {
         self = .availabilityVersionRestriction(node)
-        return 
+        return
       }
       if let node = RawAvailabilityLabeledArgumentSyntax(other) {
         self = .availabilityLabeledArgument(node)
-        return 
+        return
       }
       return nil
     }
@@ -1814,8 +1814,8 @@ public struct RawAvailabilityArgumentSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -1829,7 +1829,7 @@ public struct RawAvailabilityArgumentSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .availabilityArgument, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .availabilityArgument, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeEntry?.raw
       layout[1] = entry.raw
@@ -1884,8 +1884,8 @@ public struct RawAvailabilityConditionSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -1903,7 +1903,7 @@ public struct RawAvailabilityConditionSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .availabilityCondition, uninitializedCount: 9, arena: arena) { layout in 
+      kind: .availabilityCondition, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAvailabilityKeyword?.raw
       layout[1] = availabilityKeyword.raw
@@ -1978,8 +1978,8 @@ public struct RawAvailabilityEntrySyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -1997,7 +1997,7 @@ public struct RawAvailabilityEntrySyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .availabilityEntry, uninitializedCount: 9, arena: arena) { layout in 
+      kind: .availabilityEntry, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLabel?.raw
       layout[1] = label.raw
@@ -2062,9 +2062,9 @@ public struct RawAvailabilityLabeledArgumentSyntax: RawSyntaxNodeProtocol {
     
     public var raw: RawSyntax {
       switch self {
-      case .string(let node): 
+      case .string(let node):
         return node.raw
-      case .version(let node): 
+      case .version(let node):
         return node.raw
       }
     }
@@ -2072,11 +2072,11 @@ public struct RawAvailabilityLabeledArgumentSyntax: RawSyntaxNodeProtocol {
     public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
       if let node = RawStringLiteralExprSyntax(other) {
         self = .string(node)
-        return 
+        return
       }
       if let node = RawVersionTupleSyntax(other) {
         self = .version(node)
-        return 
+        return
       }
       return nil
     }
@@ -2103,8 +2103,8 @@ public struct RawAvailabilityLabeledArgumentSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -2120,7 +2120,7 @@ public struct RawAvailabilityLabeledArgumentSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .availabilityLabeledArgument, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .availabilityLabeledArgument, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLabel?.raw
       layout[1] = label.raw
@@ -2185,18 +2185,18 @@ public struct RawAvailabilitySpecListSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [RawAvailabilityArgumentSyntax], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .availabilitySpecList, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .availabilitySpecList, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -2206,8 +2206,8 @@ public struct RawAvailabilitySpecListSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawAvailabilityArgumentSyntax] {
-    layoutView.children.map { 
-      RawAvailabilityArgumentSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawAvailabilityArgumentSyntax(raw: $0!)
     }
   }
 }
@@ -2235,8 +2235,8 @@ public struct RawAvailabilityVersionRestrictionListEntrySyntax: RawSyntaxNodePro
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -2250,7 +2250,7 @@ public struct RawAvailabilityVersionRestrictionListEntrySyntax: RawSyntaxNodePro
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .availabilityVersionRestrictionListEntry, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .availabilityVersionRestrictionListEntry, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAvailabilityVersionRestriction?.raw
       layout[1] = availabilityVersionRestriction.raw
@@ -2305,18 +2305,18 @@ public struct RawAvailabilityVersionRestrictionListSyntax: RawSyntaxNodeProtocol
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [RawAvailabilityVersionRestrictionListEntrySyntax], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .availabilityVersionRestrictionList, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .availabilityVersionRestrictionList, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -2326,8 +2326,8 @@ public struct RawAvailabilityVersionRestrictionListSyntax: RawSyntaxNodeProtocol
   }
   
   public var elements: [RawAvailabilityVersionRestrictionListEntrySyntax] {
-    layoutView.children.map { 
-      RawAvailabilityVersionRestrictionListEntrySyntax(raw: $0!) 
+    layoutView.children.map {
+      RawAvailabilityVersionRestrictionListEntrySyntax(raw: $0!)
     }
   }
 }
@@ -2355,8 +2355,8 @@ public struct RawAvailabilityVersionRestrictionSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -2370,7 +2370,7 @@ public struct RawAvailabilityVersionRestrictionSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .availabilityVersionRestriction, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .availabilityVersionRestriction, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforePlatform?.raw
       layout[1] = platform.raw
@@ -2425,8 +2425,8 @@ public struct RawAwaitExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -2440,7 +2440,7 @@ public struct RawAwaitExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .awaitExpr, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .awaitExpr, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAwaitKeyword?.raw
       layout[1] = awaitKeyword.raw
@@ -2495,8 +2495,8 @@ public struct RawBackDeployedAttributeSpecListSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -2512,7 +2512,7 @@ public struct RawBackDeployedAttributeSpecListSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .backDeployedAttributeSpecList, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .backDeployedAttributeSpecList, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeBeforeLabel?.raw
       layout[1] = beforeLabel.raw
@@ -2577,8 +2577,8 @@ public struct RawBinaryOperatorExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -2590,7 +2590,7 @@ public struct RawBinaryOperatorExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .binaryOperatorExpr, uninitializedCount: 3, arena: arena) { layout in 
+      kind: .binaryOperatorExpr, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeOperatorToken?.raw
       layout[1] = operatorToken.raw
@@ -2635,8 +2635,8 @@ public struct RawBooleanLiteralExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -2648,7 +2648,7 @@ public struct RawBooleanLiteralExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .booleanLiteralExpr, uninitializedCount: 3, arena: arena) { layout in 
+      kind: .booleanLiteralExpr, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeBooleanLiteral?.raw
       layout[1] = booleanLiteral.raw
@@ -2693,8 +2693,8 @@ public struct RawBorrowExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -2708,7 +2708,7 @@ public struct RawBorrowExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .borrowExpr, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .borrowExpr, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeBorrowKeyword?.raw
       layout[1] = borrowKeyword.raw
@@ -2763,8 +2763,8 @@ public struct RawBreakStmtSyntax: RawStmtSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -2778,7 +2778,7 @@ public struct RawBreakStmtSyntax: RawStmtSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .breakStmt, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .breakStmt, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeBreakKeyword?.raw
       layout[1] = breakKeyword.raw
@@ -2833,18 +2833,18 @@ public struct RawCaseItemListSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [RawCaseItemSyntax], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .caseItemList, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .caseItemList, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -2854,8 +2854,8 @@ public struct RawCaseItemListSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawCaseItemSyntax] {
-    layoutView.children.map { 
-      RawCaseItemSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawCaseItemSyntax(raw: $0!)
     }
   }
 }
@@ -2883,8 +2883,8 @@ public struct RawCaseItemSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -2900,7 +2900,7 @@ public struct RawCaseItemSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .caseItem, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .caseItem, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforePattern?.raw
       layout[1] = pattern.raw
@@ -2965,18 +2965,18 @@ public struct RawCatchClauseListSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [RawCatchClauseSyntax], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .catchClauseList, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .catchClauseList, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -2986,8 +2986,8 @@ public struct RawCatchClauseListSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawCatchClauseSyntax] {
-    layoutView.children.map { 
-      RawCatchClauseSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawCatchClauseSyntax(raw: $0!)
     }
   }
 }
@@ -3015,8 +3015,8 @@ public struct RawCatchClauseSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -3032,7 +3032,7 @@ public struct RawCatchClauseSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .catchClause, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .catchClause, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeCatchKeyword?.raw
       layout[1] = catchKeyword.raw
@@ -3097,18 +3097,18 @@ public struct RawCatchItemListSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [RawCatchItemSyntax], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .catchItemList, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .catchItemList, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -3118,8 +3118,8 @@ public struct RawCatchItemListSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawCatchItemSyntax] {
-    layoutView.children.map { 
-      RawCatchItemSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawCatchItemSyntax(raw: $0!)
     }
   }
 }
@@ -3147,8 +3147,8 @@ public struct RawCatchItemSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -3164,7 +3164,7 @@ public struct RawCatchItemSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .catchItem, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .catchItem, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforePattern?.raw
       layout[1] = pattern?.raw
@@ -3229,8 +3229,8 @@ public struct RawClassDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -3256,7 +3256,7 @@ public struct RawClassDeclSyntax: RawDeclSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .classDecl, uninitializedCount: 17, arena: arena) { layout in 
+      kind: .classDecl, uninitializedCount: 17, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
@@ -3371,8 +3371,8 @@ public struct RawClassRestrictionTypeSyntax: RawTypeSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -3384,7 +3384,7 @@ public struct RawClassRestrictionTypeSyntax: RawTypeSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .classRestrictionType, uninitializedCount: 3, arena: arena) { layout in 
+      kind: .classRestrictionType, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeClassKeyword?.raw
       layout[1] = classKeyword.raw
@@ -3429,18 +3429,18 @@ public struct RawClosureCaptureItemListSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [RawClosureCaptureItemSyntax], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .closureCaptureItemList, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .closureCaptureItemList, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -3450,8 +3450,8 @@ public struct RawClosureCaptureItemListSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawClosureCaptureItemSyntax] {
-    layoutView.children.map { 
-      RawClosureCaptureItemSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawClosureCaptureItemSyntax(raw: $0!)
     }
   }
 }
@@ -3479,8 +3479,8 @@ public struct RawClosureCaptureItemSpecifierSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -3498,7 +3498,7 @@ public struct RawClosureCaptureItemSpecifierSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .closureCaptureItemSpecifier, uninitializedCount: 9, arena: arena) { layout in 
+      kind: .closureCaptureItemSpecifier, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeSpecifier?.raw
       layout[1] = specifier.raw
@@ -3573,8 +3573,8 @@ public struct RawClosureCaptureItemSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -3594,7 +3594,7 @@ public struct RawClosureCaptureItemSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .closureCaptureItem, uninitializedCount: 11, arena: arena) { layout in 
+      kind: .closureCaptureItem, uninitializedCount: 11, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeSpecifier?.raw
       layout[1] = specifier?.raw
@@ -3679,8 +3679,8 @@ public struct RawClosureCaptureSignatureSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -3696,7 +3696,7 @@ public struct RawClosureCaptureSignatureSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .closureCaptureSignature, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .closureCaptureSignature, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLeftSquare?.raw
       layout[1] = leftSquare.raw
@@ -3761,8 +3761,8 @@ public struct RawClosureExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -3780,7 +3780,7 @@ public struct RawClosureExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .closureExpr, uninitializedCount: 9, arena: arena) { layout in 
+      kind: .closureExpr, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLeftBrace?.raw
       layout[1] = leftBrace.raw
@@ -3855,18 +3855,18 @@ public struct RawClosureParamListSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [RawClosureParamSyntax], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .closureParamList, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .closureParamList, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -3876,8 +3876,8 @@ public struct RawClosureParamListSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawClosureParamSyntax] {
-    layoutView.children.map { 
-      RawClosureParamSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawClosureParamSyntax(raw: $0!)
     }
   }
 }
@@ -3905,8 +3905,8 @@ public struct RawClosureParamSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -3920,7 +3920,7 @@ public struct RawClosureParamSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .closureParam, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .closureParam, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeName?.raw
       layout[1] = name.raw
@@ -3975,8 +3975,8 @@ public struct RawClosureParameterClauseSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -3992,7 +3992,7 @@ public struct RawClosureParameterClauseSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .closureParameterClause, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .closureParameterClause, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLeftParen?.raw
       layout[1] = leftParen.raw
@@ -4057,18 +4057,18 @@ public struct RawClosureParameterListSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [RawClosureParameterSyntax], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .closureParameterList, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .closureParameterList, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -4078,8 +4078,8 @@ public struct RawClosureParameterListSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawClosureParameterSyntax] {
-    layoutView.children.map { 
-      RawClosureParameterSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawClosureParameterSyntax(raw: $0!)
     }
   }
 }
@@ -4107,8 +4107,8 @@ public struct RawClosureParameterSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -4134,7 +4134,7 @@ public struct RawClosureParameterSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .closureParameter, uninitializedCount: 17, arena: arena) { layout in 
+      kind: .closureParameter, uninitializedCount: 17, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
@@ -4239,9 +4239,9 @@ public struct RawClosureSignatureSyntax: RawSyntaxNodeProtocol {
     
     public var raw: RawSyntax {
       switch self {
-      case .simpleInput(let node): 
+      case .simpleInput(let node):
         return node.raw
-      case .input(let node): 
+      case .input(let node):
         return node.raw
       }
     }
@@ -4249,11 +4249,11 @@ public struct RawClosureSignatureSyntax: RawSyntaxNodeProtocol {
     public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
       if let node = RawClosureParamListSyntax(other) {
         self = .simpleInput(node)
-        return 
+        return
       }
       if let node = RawClosureParameterClauseSyntax(other) {
         self = .input(node)
-        return 
+        return
       }
       return nil
     }
@@ -4280,8 +4280,8 @@ public struct RawClosureSignatureSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -4303,7 +4303,7 @@ public struct RawClosureSignatureSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .closureSignature, uninitializedCount: 13, arena: arena) { layout in 
+      kind: .closureSignature, uninitializedCount: 13, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
@@ -4398,18 +4398,18 @@ public struct RawCodeBlockItemListSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [RawCodeBlockItemSyntax], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .codeBlockItemList, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .codeBlockItemList, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -4419,8 +4419,8 @@ public struct RawCodeBlockItemListSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawCodeBlockItemSyntax] {
-    layoutView.children.map { 
-      RawCodeBlockItemSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawCodeBlockItemSyntax(raw: $0!)
     }
   }
 }
@@ -4439,11 +4439,11 @@ public struct RawCodeBlockItemSyntax: RawSyntaxNodeProtocol {
     
     public var raw: RawSyntax {
       switch self {
-      case .decl(let node): 
+      case .decl(let node):
         return node.raw
-      case .stmt(let node): 
+      case .stmt(let node):
         return node.raw
-      case .expr(let node): 
+      case .expr(let node):
         return node.raw
       }
     }
@@ -4451,15 +4451,15 @@ public struct RawCodeBlockItemSyntax: RawSyntaxNodeProtocol {
     public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
       if let node = RawDeclSyntax(other) {
         self = .decl(node)
-        return 
+        return
       }
       if let node = RawStmtSyntax(other) {
         self = .stmt(node)
-        return 
+        return
       }
       if let node = RawExprSyntax(other) {
         self = .expr(node)
-        return 
+        return
       }
       return nil
     }
@@ -4486,8 +4486,8 @@ public struct RawCodeBlockItemSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -4501,7 +4501,7 @@ public struct RawCodeBlockItemSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .codeBlockItem, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .codeBlockItem, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeItem?.raw
       layout[1] = item.raw
@@ -4556,8 +4556,8 @@ public struct RawCodeBlockSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -4573,7 +4573,7 @@ public struct RawCodeBlockSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .codeBlock, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .codeBlock, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLeftBrace?.raw
       layout[1] = leftBrace.raw
@@ -4638,18 +4638,18 @@ public struct RawCompositionTypeElementListSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [RawCompositionTypeElementSyntax], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .compositionTypeElementList, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .compositionTypeElementList, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -4659,8 +4659,8 @@ public struct RawCompositionTypeElementListSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawCompositionTypeElementSyntax] {
-    layoutView.children.map { 
-      RawCompositionTypeElementSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawCompositionTypeElementSyntax(raw: $0!)
     }
   }
 }
@@ -4688,8 +4688,8 @@ public struct RawCompositionTypeElementSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -4703,7 +4703,7 @@ public struct RawCompositionTypeElementSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .compositionTypeElement, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .compositionTypeElement, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeType?.raw
       layout[1] = type.raw
@@ -4758,8 +4758,8 @@ public struct RawCompositionTypeSyntax: RawTypeSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -4771,7 +4771,7 @@ public struct RawCompositionTypeSyntax: RawTypeSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .compositionType, uninitializedCount: 3, arena: arena) { layout in 
+      kind: .compositionType, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeElements?.raw
       layout[1] = elements.raw
@@ -4816,18 +4816,18 @@ public struct RawConditionElementListSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [RawConditionElementSyntax], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .conditionElementList, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .conditionElementList, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -4837,8 +4837,8 @@ public struct RawConditionElementListSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawConditionElementSyntax] {
-    layoutView.children.map { 
-      RawConditionElementSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawConditionElementSyntax(raw: $0!)
     }
   }
 }
@@ -4858,13 +4858,13 @@ public struct RawConditionElementSyntax: RawSyntaxNodeProtocol {
     
     public var raw: RawSyntax {
       switch self {
-      case .expression(let node): 
+      case .expression(let node):
         return node.raw
-      case .availability(let node): 
+      case .availability(let node):
         return node.raw
-      case .matchingPattern(let node): 
+      case .matchingPattern(let node):
         return node.raw
-      case .optionalBinding(let node): 
+      case .optionalBinding(let node):
         return node.raw
       }
     }
@@ -4872,19 +4872,19 @@ public struct RawConditionElementSyntax: RawSyntaxNodeProtocol {
     public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
       if let node = RawExprSyntax(other) {
         self = .expression(node)
-        return 
+        return
       }
       if let node = RawAvailabilityConditionSyntax(other) {
         self = .availability(node)
-        return 
+        return
       }
       if let node = RawMatchingPatternConditionSyntax(other) {
         self = .matchingPattern(node)
-        return 
+        return
       }
       if let node = RawOptionalBindingConditionSyntax(other) {
         self = .optionalBinding(node)
-        return 
+        return
       }
       return nil
     }
@@ -4911,8 +4911,8 @@ public struct RawConditionElementSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -4926,7 +4926,7 @@ public struct RawConditionElementSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .conditionElement, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .conditionElement, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeCondition?.raw
       layout[1] = condition.raw
@@ -4981,8 +4981,8 @@ public struct RawConformanceRequirementSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -4998,7 +4998,7 @@ public struct RawConformanceRequirementSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .conformanceRequirement, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .conformanceRequirement, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLeftTypeIdentifier?.raw
       layout[1] = leftTypeIdentifier.raw
@@ -5063,8 +5063,8 @@ public struct RawConstrainedSugarTypeSyntax: RawTypeSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -5078,7 +5078,7 @@ public struct RawConstrainedSugarTypeSyntax: RawTypeSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .constrainedSugarType, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .constrainedSugarType, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeSomeOrAnySpecifier?.raw
       layout[1] = someOrAnySpecifier.raw
@@ -5133,8 +5133,8 @@ public struct RawContinueStmtSyntax: RawStmtSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -5148,7 +5148,7 @@ public struct RawContinueStmtSyntax: RawStmtSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .continueStmt, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .continueStmt, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeContinueKeyword?.raw
       layout[1] = continueKeyword.raw
@@ -5203,8 +5203,8 @@ public struct RawConventionAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -5224,7 +5224,7 @@ public struct RawConventionAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .conventionAttributeArguments, uninitializedCount: 11, arena: arena) { layout in 
+      kind: .conventionAttributeArguments, uninitializedCount: 11, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeConventionLabel?.raw
       layout[1] = conventionLabel.raw
@@ -5309,8 +5309,8 @@ public struct RawConventionWitnessMethodAttributeArgumentsSyntax: RawSyntaxNodeP
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -5326,7 +5326,7 @@ public struct RawConventionWitnessMethodAttributeArgumentsSyntax: RawSyntaxNodeP
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .conventionWitnessMethodAttributeArguments, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .conventionWitnessMethodAttributeArguments, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeWitnessMethodLabel?.raw
       layout[1] = witnessMethodLabel.raw
@@ -5391,8 +5391,8 @@ public struct RawDeclModifierDetailSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -5408,7 +5408,7 @@ public struct RawDeclModifierDetailSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .declModifierDetail, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .declModifierDetail, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLeftParen?.raw
       layout[1] = leftParen.raw
@@ -5473,8 +5473,8 @@ public struct RawDeclModifierSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -5488,7 +5488,7 @@ public struct RawDeclModifierSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .declModifier, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .declModifier, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeName?.raw
       layout[1] = name.raw
@@ -5543,18 +5543,18 @@ public struct RawDeclNameArgumentListSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [RawDeclNameArgumentSyntax], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .declNameArgumentList, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .declNameArgumentList, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -5564,8 +5564,8 @@ public struct RawDeclNameArgumentListSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawDeclNameArgumentSyntax] {
-    layoutView.children.map { 
-      RawDeclNameArgumentSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawDeclNameArgumentSyntax(raw: $0!)
     }
   }
 }
@@ -5593,8 +5593,8 @@ public struct RawDeclNameArgumentSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -5608,7 +5608,7 @@ public struct RawDeclNameArgumentSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .declNameArgument, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .declNameArgument, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeName?.raw
       layout[1] = name.raw
@@ -5663,8 +5663,8 @@ public struct RawDeclNameArgumentsSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -5680,7 +5680,7 @@ public struct RawDeclNameArgumentsSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .declNameArguments, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .declNameArguments, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLeftParen?.raw
       layout[1] = leftParen.raw
@@ -5745,8 +5745,8 @@ public struct RawDeclNameSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -5760,7 +5760,7 @@ public struct RawDeclNameSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .declName, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .declName, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeDeclBaseName?.raw
       layout[1] = declBaseName.raw
@@ -5801,9 +5801,9 @@ public struct RawDeclSyntax: RawDeclSyntaxNodeProtocol {
   
   public static func isKindOf(_ raw: RawSyntax) -> Bool {
     switch raw.kind {
-    case .accessorDecl, .actorDecl, .associatedtypeDecl, .classDecl, .deinitializerDecl, .editorPlaceholderDecl, .enumCaseDecl, .enumDecl, .extensionDecl, .functionDecl, .ifConfigDecl, .importDecl, .initializerDecl, .macroDecl, .macroExpansionDecl, .missingDecl, .operatorDecl, .poundSourceLocation, .precedenceGroupDecl, .protocolDecl, .structDecl, .subscriptDecl, .typealiasDecl, .variableDecl: 
+    case .accessorDecl, .actorDecl, .associatedtypeDecl, .classDecl, .deinitializerDecl, .editorPlaceholderDecl, .enumCaseDecl, .enumDecl, .extensionDecl, .functionDecl, .ifConfigDecl, .importDecl, .initializerDecl, .macroDecl, .macroExpansionDecl, .missingDecl, .operatorDecl, .poundSourceLocation, .precedenceGroupDecl, .protocolDecl, .structDecl, .subscriptDecl, .typealiasDecl, .variableDecl:
       return true
-    default: 
+    default:
       return false
     }
   }
@@ -5820,8 +5820,8 @@ public struct RawDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -5854,8 +5854,8 @@ public struct RawDeferStmtSyntax: RawStmtSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -5869,7 +5869,7 @@ public struct RawDeferStmtSyntax: RawStmtSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .deferStmt, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .deferStmt, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeDeferKeyword?.raw
       layout[1] = deferKeyword.raw
@@ -5924,8 +5924,8 @@ public struct RawDeinitializerDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -5943,7 +5943,7 @@ public struct RawDeinitializerDeclSyntax: RawDeclSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .deinitializerDecl, uninitializedCount: 9, arena: arena) { layout in 
+      kind: .deinitializerDecl, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
@@ -6018,8 +6018,8 @@ public struct RawDerivativeRegistrationAttributeArgumentsSyntax: RawSyntaxNodePr
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -6043,7 +6043,7 @@ public struct RawDerivativeRegistrationAttributeArgumentsSyntax: RawSyntaxNodePr
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .derivativeRegistrationAttributeArguments, uninitializedCount: 15, arena: arena) { layout in 
+      kind: .derivativeRegistrationAttributeArguments, uninitializedCount: 15, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeOfLabel?.raw
       layout[1] = ofLabel.raw
@@ -6148,8 +6148,8 @@ public struct RawDesignatedTypeElementSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -6163,7 +6163,7 @@ public struct RawDesignatedTypeElementSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .designatedTypeElement, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .designatedTypeElement, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLeadingComma?.raw
       layout[1] = leadingComma.raw
@@ -6218,18 +6218,18 @@ public struct RawDesignatedTypeListSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [RawDesignatedTypeElementSyntax], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .designatedTypeList, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .designatedTypeList, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -6239,8 +6239,8 @@ public struct RawDesignatedTypeListSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawDesignatedTypeElementSyntax] {
-    layoutView.children.map { 
-      RawDesignatedTypeElementSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawDesignatedTypeElementSyntax(raw: $0!)
     }
   }
 }
@@ -6268,18 +6268,18 @@ public struct RawDictionaryElementListSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [RawDictionaryElementSyntax], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .dictionaryElementList, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .dictionaryElementList, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -6289,8 +6289,8 @@ public struct RawDictionaryElementListSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawDictionaryElementSyntax] {
-    layoutView.children.map { 
-      RawDictionaryElementSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawDictionaryElementSyntax(raw: $0!)
     }
   }
 }
@@ -6318,8 +6318,8 @@ public struct RawDictionaryElementSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -6337,7 +6337,7 @@ public struct RawDictionaryElementSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .dictionaryElement, uninitializedCount: 9, arena: arena) { layout in 
+      kind: .dictionaryElement, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeKeyExpression?.raw
       layout[1] = keyExpression.raw
@@ -6402,9 +6402,9 @@ public struct RawDictionaryExprSyntax: RawExprSyntaxNodeProtocol {
     
     public var raw: RawSyntax {
       switch self {
-      case .colon(let node): 
+      case .colon(let node):
         return node.raw
-      case .elements(let node): 
+      case .elements(let node):
         return node.raw
       }
     }
@@ -6412,11 +6412,11 @@ public struct RawDictionaryExprSyntax: RawExprSyntaxNodeProtocol {
     public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
       if let node = RawTokenSyntax(other) {
         self = .colon(node)
-        return 
+        return
       }
       if let node = RawDictionaryElementListSyntax(other) {
         self = .elements(node)
-        return 
+        return
       }
       return nil
     }
@@ -6443,8 +6443,8 @@ public struct RawDictionaryExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -6460,7 +6460,7 @@ public struct RawDictionaryExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .dictionaryExpr, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .dictionaryExpr, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLeftSquare?.raw
       layout[1] = leftSquare.raw
@@ -6525,8 +6525,8 @@ public struct RawDictionaryTypeSyntax: RawTypeSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -6546,7 +6546,7 @@ public struct RawDictionaryTypeSyntax: RawTypeSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .dictionaryType, uninitializedCount: 11, arena: arena) { layout in 
+      kind: .dictionaryType, uninitializedCount: 11, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLeftSquareBracket?.raw
       layout[1] = leftSquareBracket.raw
@@ -6631,18 +6631,18 @@ public struct RawDifferentiabilityParamListSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [RawDifferentiabilityParamSyntax], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .differentiabilityParamList, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .differentiabilityParamList, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -6652,8 +6652,8 @@ public struct RawDifferentiabilityParamListSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawDifferentiabilityParamSyntax] {
-    layoutView.children.map { 
-      RawDifferentiabilityParamSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawDifferentiabilityParamSyntax(raw: $0!)
     }
   }
 }
@@ -6681,8 +6681,8 @@ public struct RawDifferentiabilityParamSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -6696,7 +6696,7 @@ public struct RawDifferentiabilityParamSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .differentiabilityParam, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .differentiabilityParam, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeParameter?.raw
       layout[1] = parameter.raw
@@ -6741,9 +6741,9 @@ public struct RawDifferentiabilityParamsClauseSyntax: RawSyntaxNodeProtocol {
     
     public var raw: RawSyntax {
       switch self {
-      case .parameter(let node): 
+      case .parameter(let node):
         return node.raw
-      case .parameterList(let node): 
+      case .parameterList(let node):
         return node.raw
       }
     }
@@ -6751,11 +6751,11 @@ public struct RawDifferentiabilityParamsClauseSyntax: RawSyntaxNodeProtocol {
     public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
       if let node = RawDifferentiabilityParamSyntax(other) {
         self = .parameter(node)
-        return 
+        return
       }
       if let node = RawDifferentiabilityParamsSyntax(other) {
         self = .parameterList(node)
-        return 
+        return
       }
       return nil
     }
@@ -6782,8 +6782,8 @@ public struct RawDifferentiabilityParamsClauseSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -6799,7 +6799,7 @@ public struct RawDifferentiabilityParamsClauseSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .differentiabilityParamsClause, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .differentiabilityParamsClause, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeWrtLabel?.raw
       layout[1] = wrtLabel.raw
@@ -6864,8 +6864,8 @@ public struct RawDifferentiabilityParamsSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -6881,7 +6881,7 @@ public struct RawDifferentiabilityParamsSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .differentiabilityParams, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .differentiabilityParams, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLeftParen?.raw
       layout[1] = leftParen.raw
@@ -6946,8 +6946,8 @@ public struct RawDifferentiableAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -6967,7 +6967,7 @@ public struct RawDifferentiableAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .differentiableAttributeArguments, uninitializedCount: 11, arena: arena) { layout in 
+      kind: .differentiableAttributeArguments, uninitializedCount: 11, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeDiffKind?.raw
       layout[1] = diffKind?.raw
@@ -7052,8 +7052,8 @@ public struct RawDiscardAssignmentExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -7065,7 +7065,7 @@ public struct RawDiscardAssignmentExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .discardAssignmentExpr, uninitializedCount: 3, arena: arena) { layout in 
+      kind: .discardAssignmentExpr, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeWildcard?.raw
       layout[1] = wildcard.raw
@@ -7110,8 +7110,8 @@ public struct RawDoStmtSyntax: RawStmtSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -7127,7 +7127,7 @@ public struct RawDoStmtSyntax: RawStmtSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .doStmt, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .doStmt, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeDoKeyword?.raw
       layout[1] = doKeyword.raw
@@ -7182,9 +7182,9 @@ public struct RawDocumentationAttributeArgumentSyntax: RawSyntaxNodeProtocol {
     
     public var raw: RawSyntax {
       switch self {
-      case .token(let node): 
+      case .token(let node):
         return node.raw
-      case .string(let node): 
+      case .string(let node):
         return node.raw
       }
     }
@@ -7192,11 +7192,11 @@ public struct RawDocumentationAttributeArgumentSyntax: RawSyntaxNodeProtocol {
     public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
       if let node = RawTokenSyntax(other) {
         self = .token(node)
-        return 
+        return
       }
       if let node = RawStringLiteralExprSyntax(other) {
         self = .string(node)
-        return 
+        return
       }
       return nil
     }
@@ -7223,8 +7223,8 @@ public struct RawDocumentationAttributeArgumentSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -7242,7 +7242,7 @@ public struct RawDocumentationAttributeArgumentSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .documentationAttributeArgument, uninitializedCount: 9, arena: arena) { layout in 
+      kind: .documentationAttributeArgument, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLabel?.raw
       layout[1] = label.raw
@@ -7317,18 +7317,18 @@ public struct RawDocumentationAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [RawDocumentationAttributeArgumentSyntax], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .documentationAttributeArguments, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .documentationAttributeArguments, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -7338,8 +7338,8 @@ public struct RawDocumentationAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawDocumentationAttributeArgumentSyntax] {
-    layoutView.children.map { 
-      RawDocumentationAttributeArgumentSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawDocumentationAttributeArgumentSyntax(raw: $0!)
     }
   }
 }
@@ -7367,8 +7367,8 @@ public struct RawDynamicReplacementArgumentsSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -7384,7 +7384,7 @@ public struct RawDynamicReplacementArgumentsSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .dynamicReplacementArguments, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .dynamicReplacementArguments, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeForLabel?.raw
       layout[1] = forLabel.raw
@@ -7449,8 +7449,8 @@ public struct RawEditorPlaceholderDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -7462,7 +7462,7 @@ public struct RawEditorPlaceholderDeclSyntax: RawDeclSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .editorPlaceholderDecl, uninitializedCount: 3, arena: arena) { layout in 
+      kind: .editorPlaceholderDecl, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeIdentifier?.raw
       layout[1] = identifier.raw
@@ -7507,8 +7507,8 @@ public struct RawEditorPlaceholderExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -7520,7 +7520,7 @@ public struct RawEditorPlaceholderExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .editorPlaceholderExpr, uninitializedCount: 3, arena: arena) { layout in 
+      kind: .editorPlaceholderExpr, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeIdentifier?.raw
       layout[1] = identifier.raw
@@ -7565,18 +7565,18 @@ public struct RawEffectsArgumentsSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [RawTokenSyntax], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .effectsArguments, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .effectsArguments, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -7586,8 +7586,8 @@ public struct RawEffectsArgumentsSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawTokenSyntax] {
-    layoutView.children.map { 
-      RawTokenSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawTokenSyntax(raw: $0!)
     }
   }
 }
@@ -7615,8 +7615,8 @@ public struct RawEnumCaseDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -7634,7 +7634,7 @@ public struct RawEnumCaseDeclSyntax: RawDeclSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .enumCaseDecl, uninitializedCount: 9, arena: arena) { layout in 
+      kind: .enumCaseDecl, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
@@ -7709,18 +7709,18 @@ public struct RawEnumCaseElementListSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [RawEnumCaseElementSyntax], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .enumCaseElementList, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .enumCaseElementList, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -7730,8 +7730,8 @@ public struct RawEnumCaseElementListSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawEnumCaseElementSyntax] {
-    layoutView.children.map { 
-      RawEnumCaseElementSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawEnumCaseElementSyntax(raw: $0!)
     }
   }
 }
@@ -7759,8 +7759,8 @@ public struct RawEnumCaseElementSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -7778,7 +7778,7 @@ public struct RawEnumCaseElementSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .enumCaseElement, uninitializedCount: 9, arena: arena) { layout in 
+      kind: .enumCaseElement, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeIdentifier?.raw
       layout[1] = identifier.raw
@@ -7853,8 +7853,8 @@ public struct RawEnumCaseParameterClauseSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -7870,7 +7870,7 @@ public struct RawEnumCaseParameterClauseSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .enumCaseParameterClause, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .enumCaseParameterClause, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLeftParen?.raw
       layout[1] = leftParen.raw
@@ -7935,18 +7935,18 @@ public struct RawEnumCaseParameterListSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [RawEnumCaseParameterSyntax], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .enumCaseParameterList, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .enumCaseParameterList, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -7956,8 +7956,8 @@ public struct RawEnumCaseParameterListSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawEnumCaseParameterSyntax] {
-    layoutView.children.map { 
-      RawEnumCaseParameterSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawEnumCaseParameterSyntax(raw: $0!)
     }
   }
 }
@@ -7985,8 +7985,8 @@ public struct RawEnumCaseParameterSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -8010,7 +8010,7 @@ public struct RawEnumCaseParameterSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .enumCaseParameter, uninitializedCount: 15, arena: arena) { layout in 
+      kind: .enumCaseParameter, uninitializedCount: 15, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeModifiers?.raw
       layout[1] = modifiers?.raw
@@ -8115,8 +8115,8 @@ public struct RawEnumDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -8142,7 +8142,7 @@ public struct RawEnumDeclSyntax: RawDeclSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .enumDecl, uninitializedCount: 17, arena: arena) { layout in 
+      kind: .enumDecl, uninitializedCount: 17, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
@@ -8257,8 +8257,8 @@ public struct RawExposeAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -8274,7 +8274,7 @@ public struct RawExposeAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .exposeAttributeArguments, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .exposeAttributeArguments, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLanguage?.raw
       layout[1] = language.raw
@@ -8339,18 +8339,18 @@ public struct RawExprListSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [RawExprSyntax], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .exprList, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .exprList, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -8360,8 +8360,8 @@ public struct RawExprListSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawExprSyntax] {
-    layoutView.children.map { 
-      RawExprSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawExprSyntax(raw: $0!)
     }
   }
 }
@@ -8375,9 +8375,9 @@ public struct RawExprSyntax: RawExprSyntaxNodeProtocol {
   
   public static func isKindOf(_ raw: RawSyntax) -> Bool {
     switch raw.kind {
-    case .arrayExpr, .arrowExpr, .asExpr, .assignmentExpr, .awaitExpr, .binaryOperatorExpr, .booleanLiteralExpr, .borrowExpr, .closureExpr, .dictionaryExpr, .discardAssignmentExpr, .editorPlaceholderExpr, .floatLiteralExpr, .forcedValueExpr, .functionCallExpr, .identifierExpr, .ifExpr, .inOutExpr, .infixOperatorExpr, .integerLiteralExpr, .isExpr, .keyPathExpr, .macroExpansionExpr, .memberAccessExpr, .missingExpr, .moveExpr, .nilLiteralExpr, .optionalChainingExpr, .packElementExpr, .packExpansionExpr, .postfixIfConfigExpr, .postfixUnaryExpr, .prefixOperatorExpr, .regexLiteralExpr, .sequenceExpr, .specializeExpr, .stringLiteralExpr, .subscriptExpr, .superRefExpr, .switchExpr, .ternaryExpr, .tryExpr, .tupleExpr, .typeExpr, .unresolvedAsExpr, .unresolvedIsExpr, .unresolvedPatternExpr, .unresolvedTernaryExpr: 
+    case .arrayExpr, .arrowExpr, .asExpr, .assignmentExpr, .awaitExpr, .binaryOperatorExpr, .booleanLiteralExpr, .borrowExpr, .closureExpr, .dictionaryExpr, .discardAssignmentExpr, .editorPlaceholderExpr, .floatLiteralExpr, .forcedValueExpr, .functionCallExpr, .identifierExpr, .ifExpr, .inOutExpr, .infixOperatorExpr, .integerLiteralExpr, .isExpr, .keyPathExpr, .macroExpansionExpr, .memberAccessExpr, .missingExpr, .moveExpr, .nilLiteralExpr, .optionalChainingExpr, .packElementExpr, .packExpansionExpr, .postfixIfConfigExpr, .postfixUnaryExpr, .prefixOperatorExpr, .regexLiteralExpr, .sequenceExpr, .specializeExpr, .stringLiteralExpr, .subscriptExpr, .superRefExpr, .switchExpr, .ternaryExpr, .tryExpr, .tupleExpr, .typeExpr, .unresolvedAsExpr, .unresolvedIsExpr, .unresolvedPatternExpr, .unresolvedTernaryExpr:
       return true
-    default: 
+    default:
       return false
     }
   }
@@ -8394,8 +8394,8 @@ public struct RawExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -8428,8 +8428,8 @@ public struct RawExpressionPatternSyntax: RawPatternSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -8441,7 +8441,7 @@ public struct RawExpressionPatternSyntax: RawPatternSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .expressionPattern, uninitializedCount: 3, arena: arena) { layout in 
+      kind: .expressionPattern, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeExpression?.raw
       layout[1] = expression.raw
@@ -8486,8 +8486,8 @@ public struct RawExpressionSegmentSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -8507,7 +8507,7 @@ public struct RawExpressionSegmentSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .expressionSegment, uninitializedCount: 11, arena: arena) { layout in 
+      kind: .expressionSegment, uninitializedCount: 11, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeBackslash?.raw
       layout[1] = backslash.raw
@@ -8592,8 +8592,8 @@ public struct RawExpressionStmtSyntax: RawStmtSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -8605,7 +8605,7 @@ public struct RawExpressionStmtSyntax: RawStmtSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .expressionStmt, uninitializedCount: 3, arena: arena) { layout in 
+      kind: .expressionStmt, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeExpression?.raw
       layout[1] = expression.raw
@@ -8650,8 +8650,8 @@ public struct RawExtensionDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -8675,7 +8675,7 @@ public struct RawExtensionDeclSyntax: RawDeclSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .extensionDecl, uninitializedCount: 15, arena: arena) { layout in 
+      kind: .extensionDecl, uninitializedCount: 15, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
@@ -8780,8 +8780,8 @@ public struct RawFallthroughStmtSyntax: RawStmtSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -8793,7 +8793,7 @@ public struct RawFallthroughStmtSyntax: RawStmtSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .fallthroughStmt, uninitializedCount: 3, arena: arena) { layout in 
+      kind: .fallthroughStmt, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeFallthroughKeyword?.raw
       layout[1] = fallthroughKeyword.raw
@@ -8838,8 +8838,8 @@ public struct RawFloatLiteralExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -8851,7 +8851,7 @@ public struct RawFloatLiteralExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .floatLiteralExpr, uninitializedCount: 3, arena: arena) { layout in 
+      kind: .floatLiteralExpr, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeFloatingDigits?.raw
       layout[1] = floatingDigits.raw
@@ -8896,8 +8896,8 @@ public struct RawForInStmtSyntax: RawStmtSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -8927,7 +8927,7 @@ public struct RawForInStmtSyntax: RawStmtSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .forInStmt, uninitializedCount: 21, arena: arena) { layout in 
+      kind: .forInStmt, uninitializedCount: 21, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeForKeyword?.raw
       layout[1] = forKeyword.raw
@@ -9062,8 +9062,8 @@ public struct RawForcedValueExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -9077,7 +9077,7 @@ public struct RawForcedValueExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .forcedValueExpr, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .forcedValueExpr, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeExpression?.raw
       layout[1] = expression.raw
@@ -9132,8 +9132,8 @@ public struct RawForgetStmtSyntax: RawStmtSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -9147,7 +9147,7 @@ public struct RawForgetStmtSyntax: RawStmtSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .forgetStmt, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .forgetStmt, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeForgetKeyword?.raw
       layout[1] = forgetKeyword.raw
@@ -9202,8 +9202,8 @@ public struct RawFunctionCallExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -9225,7 +9225,7 @@ public struct RawFunctionCallExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .functionCallExpr, uninitializedCount: 13, arena: arena) { layout in 
+      kind: .functionCallExpr, uninitializedCount: 13, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeCalledExpression?.raw
       layout[1] = calledExpression.raw
@@ -9320,8 +9320,8 @@ public struct RawFunctionDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -9347,7 +9347,7 @@ public struct RawFunctionDeclSyntax: RawDeclSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .functionDecl, uninitializedCount: 17, arena: arena) { layout in 
+      kind: .functionDecl, uninitializedCount: 17, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
@@ -9462,8 +9462,8 @@ public struct RawFunctionEffectSpecifiersSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -9477,7 +9477,7 @@ public struct RawFunctionEffectSpecifiersSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .functionEffectSpecifiers, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .functionEffectSpecifiers, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAsyncSpecifier?.raw
       layout[1] = asyncSpecifier?.raw
@@ -9532,18 +9532,18 @@ public struct RawFunctionParameterListSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [RawFunctionParameterSyntax], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .functionParameterList, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .functionParameterList, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -9553,8 +9553,8 @@ public struct RawFunctionParameterListSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawFunctionParameterSyntax] {
-    layoutView.children.map { 
-      RawFunctionParameterSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawFunctionParameterSyntax(raw: $0!)
     }
   }
 }
@@ -9582,8 +9582,8 @@ public struct RawFunctionParameterSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -9611,7 +9611,7 @@ public struct RawFunctionParameterSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .functionParameter, uninitializedCount: 19, arena: arena) { layout in 
+      kind: .functionParameter, uninitializedCount: 19, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
@@ -9736,8 +9736,8 @@ public struct RawFunctionSignatureSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -9753,7 +9753,7 @@ public struct RawFunctionSignatureSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .functionSignature, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .functionSignature, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeInput?.raw
       layout[1] = input.raw
@@ -9818,8 +9818,8 @@ public struct RawFunctionTypeSyntax: RawTypeSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -9839,7 +9839,7 @@ public struct RawFunctionTypeSyntax: RawTypeSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .functionType, uninitializedCount: 11, arena: arena) { layout in 
+      kind: .functionType, uninitializedCount: 11, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLeftParen?.raw
       layout[1] = leftParen.raw
@@ -9924,8 +9924,8 @@ public struct RawGenericArgumentClauseSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -9941,7 +9941,7 @@ public struct RawGenericArgumentClauseSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .genericArgumentClause, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .genericArgumentClause, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLeftAngleBracket?.raw
       layout[1] = leftAngleBracket.raw
@@ -10006,18 +10006,18 @@ public struct RawGenericArgumentListSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [RawGenericArgumentSyntax], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .genericArgumentList, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .genericArgumentList, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -10027,8 +10027,8 @@ public struct RawGenericArgumentListSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawGenericArgumentSyntax] {
-    layoutView.children.map { 
-      RawGenericArgumentSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawGenericArgumentSyntax(raw: $0!)
     }
   }
 }
@@ -10056,8 +10056,8 @@ public struct RawGenericArgumentSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -10071,7 +10071,7 @@ public struct RawGenericArgumentSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .genericArgument, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .genericArgument, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeArgumentType?.raw
       layout[1] = argumentType.raw
@@ -10126,8 +10126,8 @@ public struct RawGenericParameterClauseSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -10145,7 +10145,7 @@ public struct RawGenericParameterClauseSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .genericParameterClause, uninitializedCount: 9, arena: arena) { layout in 
+      kind: .genericParameterClause, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLeftAngleBracket?.raw
       layout[1] = leftAngleBracket.raw
@@ -10220,18 +10220,18 @@ public struct RawGenericParameterListSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [RawGenericParameterSyntax], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .genericParameterList, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .genericParameterList, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -10241,8 +10241,8 @@ public struct RawGenericParameterListSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawGenericParameterSyntax] {
-    layoutView.children.map { 
-      RawGenericParameterSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawGenericParameterSyntax(raw: $0!)
     }
   }
 }
@@ -10270,8 +10270,8 @@ public struct RawGenericParameterSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -10293,7 +10293,7 @@ public struct RawGenericParameterSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .genericParameter, uninitializedCount: 13, arena: arena) { layout in 
+      kind: .genericParameter, uninitializedCount: 13, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
@@ -10388,18 +10388,18 @@ public struct RawGenericRequirementListSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [RawGenericRequirementSyntax], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .genericRequirementList, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .genericRequirementList, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -10409,8 +10409,8 @@ public struct RawGenericRequirementListSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawGenericRequirementSyntax] {
-    layoutView.children.map { 
-      RawGenericRequirementSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawGenericRequirementSyntax(raw: $0!)
     }
   }
 }
@@ -10429,11 +10429,11 @@ public struct RawGenericRequirementSyntax: RawSyntaxNodeProtocol {
     
     public var raw: RawSyntax {
       switch self {
-      case .sameTypeRequirement(let node): 
+      case .sameTypeRequirement(let node):
         return node.raw
-      case .conformanceRequirement(let node): 
+      case .conformanceRequirement(let node):
         return node.raw
-      case .layoutRequirement(let node): 
+      case .layoutRequirement(let node):
         return node.raw
       }
     }
@@ -10441,15 +10441,15 @@ public struct RawGenericRequirementSyntax: RawSyntaxNodeProtocol {
     public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
       if let node = RawSameTypeRequirementSyntax(other) {
         self = .sameTypeRequirement(node)
-        return 
+        return
       }
       if let node = RawConformanceRequirementSyntax(other) {
         self = .conformanceRequirement(node)
-        return 
+        return
       }
       if let node = RawLayoutRequirementSyntax(other) {
         self = .layoutRequirement(node)
-        return 
+        return
       }
       return nil
     }
@@ -10476,8 +10476,8 @@ public struct RawGenericRequirementSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -10491,7 +10491,7 @@ public struct RawGenericRequirementSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .genericRequirement, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .genericRequirement, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeBody?.raw
       layout[1] = body.raw
@@ -10546,8 +10546,8 @@ public struct RawGenericWhereClauseSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -10561,7 +10561,7 @@ public struct RawGenericWhereClauseSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .genericWhereClause, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .genericWhereClause, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeWhereKeyword?.raw
       layout[1] = whereKeyword.raw
@@ -10616,8 +10616,8 @@ public struct RawGuardStmtSyntax: RawStmtSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -10635,7 +10635,7 @@ public struct RawGuardStmtSyntax: RawStmtSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .guardStmt, uninitializedCount: 9, arena: arena) { layout in 
+      kind: .guardStmt, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeGuardKeyword?.raw
       layout[1] = guardKeyword.raw
@@ -10710,8 +10710,8 @@ public struct RawIdentifierExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -10725,7 +10725,7 @@ public struct RawIdentifierExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .identifierExpr, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .identifierExpr, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeIdentifier?.raw
       layout[1] = identifier.raw
@@ -10780,8 +10780,8 @@ public struct RawIdentifierPatternSyntax: RawPatternSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -10793,7 +10793,7 @@ public struct RawIdentifierPatternSyntax: RawPatternSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .identifierPattern, uninitializedCount: 3, arena: arena) { layout in 
+      kind: .identifierPattern, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeIdentifier?.raw
       layout[1] = identifier.raw
@@ -10838,18 +10838,18 @@ public struct RawIfConfigClauseListSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [RawIfConfigClauseSyntax], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .ifConfigClauseList, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .ifConfigClauseList, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -10859,8 +10859,8 @@ public struct RawIfConfigClauseListSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawIfConfigClauseSyntax] {
-    layoutView.children.map { 
-      RawIfConfigClauseSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawIfConfigClauseSyntax(raw: $0!)
     }
   }
 }
@@ -10881,15 +10881,15 @@ public struct RawIfConfigClauseSyntax: RawSyntaxNodeProtocol {
     
     public var raw: RawSyntax {
       switch self {
-      case .statements(let node): 
+      case .statements(let node):
         return node.raw
-      case .switchCases(let node): 
+      case .switchCases(let node):
         return node.raw
-      case .decls(let node): 
+      case .decls(let node):
         return node.raw
-      case .postfixExpression(let node): 
+      case .postfixExpression(let node):
         return node.raw
-      case .attributes(let node): 
+      case .attributes(let node):
         return node.raw
       }
     }
@@ -10897,23 +10897,23 @@ public struct RawIfConfigClauseSyntax: RawSyntaxNodeProtocol {
     public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
       if let node = RawCodeBlockItemListSyntax(other) {
         self = .statements(node)
-        return 
+        return
       }
       if let node = RawSwitchCaseListSyntax(other) {
         self = .switchCases(node)
-        return 
+        return
       }
       if let node = RawMemberDeclListSyntax(other) {
         self = .decls(node)
-        return 
+        return
       }
       if let node = RawExprSyntax(other) {
         self = .postfixExpression(node)
-        return 
+        return
       }
       if let node = RawAttributeListSyntax(other) {
         self = .attributes(node)
-        return 
+        return
       }
       return nil
     }
@@ -10940,8 +10940,8 @@ public struct RawIfConfigClauseSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -10957,7 +10957,7 @@ public struct RawIfConfigClauseSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .ifConfigClause, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .ifConfigClause, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforePoundKeyword?.raw
       layout[1] = poundKeyword.raw
@@ -11022,8 +11022,8 @@ public struct RawIfConfigDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -11037,7 +11037,7 @@ public struct RawIfConfigDeclSyntax: RawDeclSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .ifConfigDecl, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .ifConfigDecl, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeClauses?.raw
       layout[1] = clauses.raw
@@ -11082,9 +11082,9 @@ public struct RawIfExprSyntax: RawExprSyntaxNodeProtocol {
     
     public var raw: RawSyntax {
       switch self {
-      case .ifExpr(let node): 
+      case .ifExpr(let node):
         return node.raw
-      case .codeBlock(let node): 
+      case .codeBlock(let node):
         return node.raw
       }
     }
@@ -11092,11 +11092,11 @@ public struct RawIfExprSyntax: RawExprSyntaxNodeProtocol {
     public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
       if let node = RawIfExprSyntax(other) {
         self = .ifExpr(node)
-        return 
+        return
       }
       if let node = RawCodeBlockSyntax(other) {
         self = .codeBlock(node)
-        return 
+        return
       }
       return nil
     }
@@ -11123,8 +11123,8 @@ public struct RawIfExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -11144,7 +11144,7 @@ public struct RawIfExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .ifExpr, uninitializedCount: 11, arena: arena) { layout in 
+      kind: .ifExpr, uninitializedCount: 11, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeIfKeyword?.raw
       layout[1] = ifKeyword.raw
@@ -11229,8 +11229,8 @@ public struct RawImplementsAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -11248,7 +11248,7 @@ public struct RawImplementsAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .implementsAttributeArguments, uninitializedCount: 9, arena: arena) { layout in 
+      kind: .implementsAttributeArguments, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeType?.raw
       layout[1] = type.raw
@@ -11323,8 +11323,8 @@ public struct RawImplicitlyUnwrappedOptionalTypeSyntax: RawTypeSyntaxNodeProtoco
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -11338,7 +11338,7 @@ public struct RawImplicitlyUnwrappedOptionalTypeSyntax: RawTypeSyntaxNodeProtoco
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .implicitlyUnwrappedOptionalType, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .implicitlyUnwrappedOptionalType, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeWrappedType?.raw
       layout[1] = wrappedType.raw
@@ -11393,8 +11393,8 @@ public struct RawImportDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -11414,7 +11414,7 @@ public struct RawImportDeclSyntax: RawDeclSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .importDecl, uninitializedCount: 11, arena: arena) { layout in 
+      kind: .importDecl, uninitializedCount: 11, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
@@ -11499,8 +11499,8 @@ public struct RawInOutExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -11514,7 +11514,7 @@ public struct RawInOutExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .inOutExpr, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .inOutExpr, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAmpersand?.raw
       layout[1] = ampersand.raw
@@ -11569,8 +11569,8 @@ public struct RawInfixOperatorExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -11586,7 +11586,7 @@ public struct RawInfixOperatorExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .infixOperatorExpr, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .infixOperatorExpr, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLeftOperand?.raw
       layout[1] = leftOperand.raw
@@ -11651,18 +11651,18 @@ public struct RawInheritedTypeListSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [RawInheritedTypeSyntax], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .inheritedTypeList, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .inheritedTypeList, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -11672,8 +11672,8 @@ public struct RawInheritedTypeListSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawInheritedTypeSyntax] {
-    layoutView.children.map { 
-      RawInheritedTypeSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawInheritedTypeSyntax(raw: $0!)
     }
   }
 }
@@ -11701,8 +11701,8 @@ public struct RawInheritedTypeSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -11716,7 +11716,7 @@ public struct RawInheritedTypeSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .inheritedType, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .inheritedType, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeTypeName?.raw
       layout[1] = typeName.raw
@@ -11771,8 +11771,8 @@ public struct RawInitializerClauseSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -11786,7 +11786,7 @@ public struct RawInitializerClauseSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .initializerClause, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .initializerClause, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeEqual?.raw
       layout[1] = equal.raw
@@ -11841,8 +11841,8 @@ public struct RawInitializerDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -11868,7 +11868,7 @@ public struct RawInitializerDeclSyntax: RawDeclSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .initializerDecl, uninitializedCount: 17, arena: arena) { layout in 
+      kind: .initializerDecl, uninitializedCount: 17, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
@@ -11983,8 +11983,8 @@ public struct RawIntegerLiteralExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -11996,7 +11996,7 @@ public struct RawIntegerLiteralExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .integerLiteralExpr, uninitializedCount: 3, arena: arena) { layout in 
+      kind: .integerLiteralExpr, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeDigits?.raw
       layout[1] = digits.raw
@@ -12041,8 +12041,8 @@ public struct RawIsExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -12058,7 +12058,7 @@ public struct RawIsExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .isExpr, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .isExpr, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeExpression?.raw
       layout[1] = expression.raw
@@ -12123,8 +12123,8 @@ public struct RawIsTypePatternSyntax: RawPatternSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -12138,7 +12138,7 @@ public struct RawIsTypePatternSyntax: RawPatternSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .isTypePattern, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .isTypePattern, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeIsKeyword?.raw
       layout[1] = isKeyword.raw
@@ -12193,18 +12193,18 @@ public struct RawKeyPathComponentListSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [RawKeyPathComponentSyntax], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .keyPathComponentList, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .keyPathComponentList, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -12214,8 +12214,8 @@ public struct RawKeyPathComponentListSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawKeyPathComponentSyntax] {
-    layoutView.children.map { 
-      RawKeyPathComponentSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawKeyPathComponentSyntax(raw: $0!)
     }
   }
 }
@@ -12234,11 +12234,11 @@ public struct RawKeyPathComponentSyntax: RawSyntaxNodeProtocol {
     
     public var raw: RawSyntax {
       switch self {
-      case .property(let node): 
+      case .property(let node):
         return node.raw
-      case .subscript(let node): 
+      case .subscript(let node):
         return node.raw
-      case .optional(let node): 
+      case .optional(let node):
         return node.raw
       }
     }
@@ -12246,15 +12246,15 @@ public struct RawKeyPathComponentSyntax: RawSyntaxNodeProtocol {
     public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
       if let node = RawKeyPathPropertyComponentSyntax(other) {
         self = .property(node)
-        return 
+        return
       }
       if let node = RawKeyPathSubscriptComponentSyntax(other) {
         self = .subscript(node)
-        return 
+        return
       }
       if let node = RawKeyPathOptionalComponentSyntax(other) {
         self = .optional(node)
-        return 
+        return
       }
       return nil
     }
@@ -12281,8 +12281,8 @@ public struct RawKeyPathComponentSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -12296,7 +12296,7 @@ public struct RawKeyPathComponentSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .keyPathComponent, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .keyPathComponent, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforePeriod?.raw
       layout[1] = period?.raw
@@ -12351,8 +12351,8 @@ public struct RawKeyPathExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -12368,7 +12368,7 @@ public struct RawKeyPathExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .keyPathExpr, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .keyPathExpr, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeBackslash?.raw
       layout[1] = backslash.raw
@@ -12433,8 +12433,8 @@ public struct RawKeyPathOptionalComponentSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -12446,7 +12446,7 @@ public struct RawKeyPathOptionalComponentSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .keyPathOptionalComponent, uninitializedCount: 3, arena: arena) { layout in 
+      kind: .keyPathOptionalComponent, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeQuestionOrExclamationMark?.raw
       layout[1] = questionOrExclamationMark.raw
@@ -12491,8 +12491,8 @@ public struct RawKeyPathPropertyComponentSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -12508,7 +12508,7 @@ public struct RawKeyPathPropertyComponentSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .keyPathPropertyComponent, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .keyPathPropertyComponent, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeIdentifier?.raw
       layout[1] = identifier.raw
@@ -12573,8 +12573,8 @@ public struct RawKeyPathSubscriptComponentSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -12590,7 +12590,7 @@ public struct RawKeyPathSubscriptComponentSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .keyPathSubscriptComponent, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .keyPathSubscriptComponent, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLeftBracket?.raw
       layout[1] = leftBracket.raw
@@ -12655,8 +12655,8 @@ public struct RawLabeledSpecializeEntrySyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -12674,7 +12674,7 @@ public struct RawLabeledSpecializeEntrySyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .labeledSpecializeEntry, uninitializedCount: 9, arena: arena) { layout in 
+      kind: .labeledSpecializeEntry, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLabel?.raw
       layout[1] = label.raw
@@ -12749,8 +12749,8 @@ public struct RawLabeledStmtSyntax: RawStmtSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -12766,7 +12766,7 @@ public struct RawLabeledStmtSyntax: RawStmtSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .labeledStmt, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .labeledStmt, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLabelName?.raw
       layout[1] = labelName.raw
@@ -12831,8 +12831,8 @@ public struct RawLayoutRequirementSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -12858,7 +12858,7 @@ public struct RawLayoutRequirementSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .layoutRequirement, uninitializedCount: 17, arena: arena) { layout in 
+      kind: .layoutRequirement, uninitializedCount: 17, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeTypeIdentifier?.raw
       layout[1] = typeIdentifier.raw
@@ -12973,8 +12973,8 @@ public struct RawMacroDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -13000,7 +13000,7 @@ public struct RawMacroDeclSyntax: RawDeclSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .macroDecl, uninitializedCount: 17, arena: arena) { layout in 
+      kind: .macroDecl, uninitializedCount: 17, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
@@ -13115,8 +13115,8 @@ public struct RawMacroExpansionDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -13142,7 +13142,7 @@ public struct RawMacroExpansionDeclSyntax: RawDeclSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .macroExpansionDecl, uninitializedCount: 17, arena: arena) { layout in 
+      kind: .macroExpansionDecl, uninitializedCount: 17, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforePoundToken?.raw
       layout[1] = poundToken.raw
@@ -13257,8 +13257,8 @@ public struct RawMacroExpansionExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -13284,7 +13284,7 @@ public struct RawMacroExpansionExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .macroExpansionExpr, uninitializedCount: 17, arena: arena) { layout in 
+      kind: .macroExpansionExpr, uninitializedCount: 17, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforePoundToken?.raw
       layout[1] = poundToken.raw
@@ -13399,8 +13399,8 @@ public struct RawMatchingPatternConditionSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -13418,7 +13418,7 @@ public struct RawMatchingPatternConditionSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .matchingPatternCondition, uninitializedCount: 9, arena: arena) { layout in 
+      kind: .matchingPatternCondition, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeCaseKeyword?.raw
       layout[1] = caseKeyword.raw
@@ -13493,8 +13493,8 @@ public struct RawMemberAccessExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -13512,7 +13512,7 @@ public struct RawMemberAccessExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .memberAccessExpr, uninitializedCount: 9, arena: arena) { layout in 
+      kind: .memberAccessExpr, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeBase?.raw
       layout[1] = base?.raw
@@ -13587,8 +13587,8 @@ public struct RawMemberDeclBlockSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -13604,7 +13604,7 @@ public struct RawMemberDeclBlockSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .memberDeclBlock, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .memberDeclBlock, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLeftBrace?.raw
       layout[1] = leftBrace.raw
@@ -13669,8 +13669,8 @@ public struct RawMemberDeclListItemSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -13684,7 +13684,7 @@ public struct RawMemberDeclListItemSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .memberDeclListItem, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .memberDeclListItem, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeDecl?.raw
       layout[1] = decl.raw
@@ -13739,18 +13739,18 @@ public struct RawMemberDeclListSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [RawMemberDeclListItemSyntax], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .memberDeclList, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .memberDeclList, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -13760,8 +13760,8 @@ public struct RawMemberDeclListSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawMemberDeclListItemSyntax] {
-    layoutView.children.map { 
-      RawMemberDeclListItemSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawMemberDeclListItemSyntax(raw: $0!)
     }
   }
 }
@@ -13789,8 +13789,8 @@ public struct RawMemberTypeIdentifierSyntax: RawTypeSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -13808,7 +13808,7 @@ public struct RawMemberTypeIdentifierSyntax: RawTypeSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .memberTypeIdentifier, uninitializedCount: 9, arena: arena) { layout in 
+      kind: .memberTypeIdentifier, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeBaseType?.raw
       layout[1] = baseType.raw
@@ -13883,8 +13883,8 @@ public struct RawMetatypeTypeSyntax: RawTypeSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -13900,7 +13900,7 @@ public struct RawMetatypeTypeSyntax: RawTypeSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .metatypeType, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .metatypeType, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeBaseType?.raw
       layout[1] = baseType.raw
@@ -13965,8 +13965,8 @@ public struct RawMissingDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -13976,17 +13976,21 @@ public struct RawMissingDeclSyntax: RawDeclSyntaxNodeProtocol {
       attributes: RawAttributeListSyntax?, 
       _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil, 
       modifiers: RawModifierListSyntax?, 
-      _ unexpectedAfterModifiers: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenModifiersAndPlaceholder: RawUnexpectedNodesSyntax? = nil, 
+      placeholder: RawTokenSyntax, 
+      _ unexpectedAfterPlaceholder: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .missingDecl, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .missingDecl, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
       layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
       layout[3] = modifiers?.raw
-      layout[4] = unexpectedAfterModifiers?.raw
+      layout[4] = unexpectedBetweenModifiersAndPlaceholder?.raw
+      layout[5] = placeholder.raw
+      layout[6] = unexpectedAfterPlaceholder?.raw
     }
     self.init(unchecked: raw)
   }
@@ -14007,8 +14011,16 @@ public struct RawMissingDeclSyntax: RawDeclSyntaxNodeProtocol {
     layoutView.children[3].map(RawModifierListSyntax.init(raw:))
   }
   
-  public var unexpectedAfterModifiers: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenModifiersAndPlaceholder: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  
+  public var placeholder: RawTokenSyntax {
+    layoutView.children[5].map(RawTokenSyntax.init(raw:))!
+  }
+  
+  public var unexpectedAfterPlaceholder: RawUnexpectedNodesSyntax? {
+    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 
@@ -14035,23 +14047,38 @@ public struct RawMissingExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
-  public init(_ unexpected: RawUnexpectedNodesSyntax? = nil, arena: __shared SyntaxArena) {
+  public init(
+      _ unexpectedBeforePlaceholder: RawUnexpectedNodesSyntax? = nil, 
+      placeholder: RawTokenSyntax, 
+      _ unexpectedAfterPlaceholder: RawUnexpectedNodesSyntax? = nil, 
+      arena: __shared SyntaxArena
+    ) {
     let raw = RawSyntax.makeLayout(
-      kind: .missingExpr, uninitializedCount: 1, arena: arena) { layout in 
+      kind: .missingExpr, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = unexpected?.raw
+      layout[0] = unexpectedBeforePlaceholder?.raw
+      layout[1] = placeholder.raw
+      layout[2] = unexpectedAfterPlaceholder?.raw
     }
     self.init(unchecked: raw)
   }
   
-  public var unexpected: RawUnexpectedNodesSyntax? {
+  public var unexpectedBeforePlaceholder: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  
+  public var placeholder: RawTokenSyntax {
+    layoutView.children[1].map(RawTokenSyntax.init(raw:))!
+  }
+  
+  public var unexpectedAfterPlaceholder: RawUnexpectedNodesSyntax? {
+    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 
@@ -14078,23 +14105,38 @@ public struct RawMissingPatternSyntax: RawPatternSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
-  public init(_ unexpected: RawUnexpectedNodesSyntax? = nil, arena: __shared SyntaxArena) {
+  public init(
+      _ unexpectedBeforePlaceholder: RawUnexpectedNodesSyntax? = nil, 
+      placeholder: RawTokenSyntax, 
+      _ unexpectedAfterPlaceholder: RawUnexpectedNodesSyntax? = nil, 
+      arena: __shared SyntaxArena
+    ) {
     let raw = RawSyntax.makeLayout(
-      kind: .missingPattern, uninitializedCount: 1, arena: arena) { layout in 
+      kind: .missingPattern, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = unexpected?.raw
+      layout[0] = unexpectedBeforePlaceholder?.raw
+      layout[1] = placeholder.raw
+      layout[2] = unexpectedAfterPlaceholder?.raw
     }
     self.init(unchecked: raw)
   }
   
-  public var unexpected: RawUnexpectedNodesSyntax? {
+  public var unexpectedBeforePlaceholder: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  
+  public var placeholder: RawTokenSyntax {
+    layoutView.children[1].map(RawTokenSyntax.init(raw:))!
+  }
+  
+  public var unexpectedAfterPlaceholder: RawUnexpectedNodesSyntax? {
+    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 
@@ -14121,23 +14163,38 @@ public struct RawMissingStmtSyntax: RawStmtSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
-  public init(_ unexpected: RawUnexpectedNodesSyntax? = nil, arena: __shared SyntaxArena) {
+  public init(
+      _ unexpectedBeforePlaceholder: RawUnexpectedNodesSyntax? = nil, 
+      placeholder: RawTokenSyntax, 
+      _ unexpectedAfterPlaceholder: RawUnexpectedNodesSyntax? = nil, 
+      arena: __shared SyntaxArena
+    ) {
     let raw = RawSyntax.makeLayout(
-      kind: .missingStmt, uninitializedCount: 1, arena: arena) { layout in 
+      kind: .missingStmt, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = unexpected?.raw
+      layout[0] = unexpectedBeforePlaceholder?.raw
+      layout[1] = placeholder.raw
+      layout[2] = unexpectedAfterPlaceholder?.raw
     }
     self.init(unchecked: raw)
   }
   
-  public var unexpected: RawUnexpectedNodesSyntax? {
+  public var unexpectedBeforePlaceholder: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  
+  public var placeholder: RawTokenSyntax {
+    layoutView.children[1].map(RawTokenSyntax.init(raw:))!
+  }
+  
+  public var unexpectedAfterPlaceholder: RawUnexpectedNodesSyntax? {
+    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 
@@ -14164,23 +14221,38 @@ public struct RawMissingSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
-  public init(_ unexpected: RawUnexpectedNodesSyntax? = nil, arena: __shared SyntaxArena) {
+  public init(
+      _ unexpectedBeforePlaceholder: RawUnexpectedNodesSyntax? = nil, 
+      placeholder: RawTokenSyntax, 
+      _ unexpectedAfterPlaceholder: RawUnexpectedNodesSyntax? = nil, 
+      arena: __shared SyntaxArena
+    ) {
     let raw = RawSyntax.makeLayout(
-      kind: .missing, uninitializedCount: 1, arena: arena) { layout in 
+      kind: .missing, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = unexpected?.raw
+      layout[0] = unexpectedBeforePlaceholder?.raw
+      layout[1] = placeholder.raw
+      layout[2] = unexpectedAfterPlaceholder?.raw
     }
     self.init(unchecked: raw)
   }
   
-  public var unexpected: RawUnexpectedNodesSyntax? {
+  public var unexpectedBeforePlaceholder: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  
+  public var placeholder: RawTokenSyntax {
+    layoutView.children[1].map(RawTokenSyntax.init(raw:))!
+  }
+  
+  public var unexpectedAfterPlaceholder: RawUnexpectedNodesSyntax? {
+    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 
@@ -14207,23 +14279,38 @@ public struct RawMissingTypeSyntax: RawTypeSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
-  public init(_ unexpected: RawUnexpectedNodesSyntax? = nil, arena: __shared SyntaxArena) {
+  public init(
+      _ unexpectedBeforePlaceholder: RawUnexpectedNodesSyntax? = nil, 
+      placeholder: RawTokenSyntax, 
+      _ unexpectedAfterPlaceholder: RawUnexpectedNodesSyntax? = nil, 
+      arena: __shared SyntaxArena
+    ) {
     let raw = RawSyntax.makeLayout(
-      kind: .missingType, uninitializedCount: 1, arena: arena) { layout in 
+      kind: .missingType, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = unexpected?.raw
+      layout[0] = unexpectedBeforePlaceholder?.raw
+      layout[1] = placeholder.raw
+      layout[2] = unexpectedAfterPlaceholder?.raw
     }
     self.init(unchecked: raw)
   }
   
-  public var unexpected: RawUnexpectedNodesSyntax? {
+  public var unexpectedBeforePlaceholder: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  
+  public var placeholder: RawTokenSyntax {
+    layoutView.children[1].map(RawTokenSyntax.init(raw:))!
+  }
+  
+  public var unexpectedAfterPlaceholder: RawUnexpectedNodesSyntax? {
+    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 
@@ -14250,18 +14337,18 @@ public struct RawModifierListSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [RawDeclModifierSyntax], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .modifierList, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .modifierList, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -14271,8 +14358,8 @@ public struct RawModifierListSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawDeclModifierSyntax] {
-    layoutView.children.map { 
-      RawDeclModifierSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawDeclModifierSyntax(raw: $0!)
     }
   }
 }
@@ -14300,8 +14387,8 @@ public struct RawMoveExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -14315,7 +14402,7 @@ public struct RawMoveExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .moveExpr, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .moveExpr, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeMoveKeyword?.raw
       layout[1] = moveKeyword.raw
@@ -14370,18 +14457,18 @@ public struct RawMultipleTrailingClosureElementListSyntax: RawSyntaxNodeProtocol
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [RawMultipleTrailingClosureElementSyntax], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .multipleTrailingClosureElementList, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .multipleTrailingClosureElementList, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -14391,8 +14478,8 @@ public struct RawMultipleTrailingClosureElementListSyntax: RawSyntaxNodeProtocol
   }
   
   public var elements: [RawMultipleTrailingClosureElementSyntax] {
-    layoutView.children.map { 
-      RawMultipleTrailingClosureElementSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawMultipleTrailingClosureElementSyntax(raw: $0!)
     }
   }
 }
@@ -14420,8 +14507,8 @@ public struct RawMultipleTrailingClosureElementSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -14437,7 +14524,7 @@ public struct RawMultipleTrailingClosureElementSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .multipleTrailingClosureElement, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .multipleTrailingClosureElement, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLabel?.raw
       layout[1] = label.raw
@@ -14502,8 +14589,8 @@ public struct RawNamedOpaqueReturnTypeSyntax: RawTypeSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -14517,7 +14604,7 @@ public struct RawNamedOpaqueReturnTypeSyntax: RawTypeSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .namedOpaqueReturnType, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .namedOpaqueReturnType, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeGenericParameters?.raw
       layout[1] = genericParameters.raw
@@ -14572,8 +14659,8 @@ public struct RawNilLiteralExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -14585,7 +14672,7 @@ public struct RawNilLiteralExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .nilLiteralExpr, uninitializedCount: 3, arena: arena) { layout in 
+      kind: .nilLiteralExpr, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeNilKeyword?.raw
       layout[1] = nilKeyword.raw
@@ -14630,8 +14717,8 @@ public struct RawObjCSelectorPieceSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -14645,7 +14732,7 @@ public struct RawObjCSelectorPieceSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .objCSelectorPiece, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .objCSelectorPiece, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeName?.raw
       layout[1] = name?.raw
@@ -14700,18 +14787,18 @@ public struct RawObjCSelectorSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [RawObjCSelectorPieceSyntax], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .objCSelector, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .objCSelector, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -14721,8 +14808,8 @@ public struct RawObjCSelectorSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawObjCSelectorPieceSyntax] {
-    layoutView.children.map { 
-      RawObjCSelectorPieceSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawObjCSelectorPieceSyntax(raw: $0!)
     }
   }
 }
@@ -14750,8 +14837,8 @@ public struct RawOpaqueReturnTypeOfAttributeArgumentsSyntax: RawSyntaxNodeProtoc
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -14767,7 +14854,7 @@ public struct RawOpaqueReturnTypeOfAttributeArgumentsSyntax: RawSyntaxNodeProtoc
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .opaqueReturnTypeOfAttributeArguments, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .opaqueReturnTypeOfAttributeArguments, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeMangledName?.raw
       layout[1] = mangledName.raw
@@ -14832,8 +14919,8 @@ public struct RawOperatorDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -14853,7 +14940,7 @@ public struct RawOperatorDeclSyntax: RawDeclSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .operatorDecl, uninitializedCount: 11, arena: arena) { layout in 
+      kind: .operatorDecl, uninitializedCount: 11, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
@@ -14938,8 +15025,8 @@ public struct RawOperatorPrecedenceAndTypesSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -14955,7 +15042,7 @@ public struct RawOperatorPrecedenceAndTypesSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .operatorPrecedenceAndTypes, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .operatorPrecedenceAndTypes, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeColon?.raw
       layout[1] = colon.raw
@@ -15020,8 +15107,8 @@ public struct RawOptionalBindingConditionSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -15039,7 +15126,7 @@ public struct RawOptionalBindingConditionSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .optionalBindingCondition, uninitializedCount: 9, arena: arena) { layout in 
+      kind: .optionalBindingCondition, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeBindingKeyword?.raw
       layout[1] = bindingKeyword.raw
@@ -15114,8 +15201,8 @@ public struct RawOptionalChainingExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -15129,7 +15216,7 @@ public struct RawOptionalChainingExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .optionalChainingExpr, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .optionalChainingExpr, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeExpression?.raw
       layout[1] = expression.raw
@@ -15184,8 +15271,8 @@ public struct RawOptionalTypeSyntax: RawTypeSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -15199,7 +15286,7 @@ public struct RawOptionalTypeSyntax: RawTypeSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .optionalType, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .optionalType, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeWrappedType?.raw
       layout[1] = wrappedType.raw
@@ -15254,8 +15341,8 @@ public struct RawOriginallyDefinedInArgumentsSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -15275,7 +15362,7 @@ public struct RawOriginallyDefinedInArgumentsSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .originallyDefinedInArguments, uninitializedCount: 11, arena: arena) { layout in 
+      kind: .originallyDefinedInArguments, uninitializedCount: 11, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeModuleLabel?.raw
       layout[1] = moduleLabel.raw
@@ -15360,8 +15447,8 @@ public struct RawPackElementExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -15375,7 +15462,7 @@ public struct RawPackElementExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .packElementExpr, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .packElementExpr, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeEachKeyword?.raw
       layout[1] = eachKeyword.raw
@@ -15430,8 +15517,8 @@ public struct RawPackExpansionExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -15445,7 +15532,7 @@ public struct RawPackExpansionExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .packExpansionExpr, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .packExpansionExpr, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeRepeatKeyword?.raw
       layout[1] = repeatKeyword.raw
@@ -15500,8 +15587,8 @@ public struct RawPackExpansionTypeSyntax: RawTypeSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -15515,7 +15602,7 @@ public struct RawPackExpansionTypeSyntax: RawTypeSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .packExpansionType, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .packExpansionType, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeRepeatKeyword?.raw
       layout[1] = repeatKeyword.raw
@@ -15570,8 +15657,8 @@ public struct RawPackReferenceTypeSyntax: RawTypeSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -15585,7 +15672,7 @@ public struct RawPackReferenceTypeSyntax: RawTypeSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .packReferenceType, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .packReferenceType, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeEachKeyword?.raw
       layout[1] = eachKeyword.raw
@@ -15640,8 +15727,8 @@ public struct RawParameterClauseSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -15657,7 +15744,7 @@ public struct RawParameterClauseSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .parameterClause, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .parameterClause, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLeftParen?.raw
       layout[1] = leftParen.raw
@@ -15722,18 +15809,18 @@ public struct RawPatternBindingListSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [RawPatternBindingSyntax], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .patternBindingList, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .patternBindingList, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -15743,8 +15830,8 @@ public struct RawPatternBindingListSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawPatternBindingSyntax] {
-    layoutView.children.map { 
-      RawPatternBindingSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawPatternBindingSyntax(raw: $0!)
     }
   }
 }
@@ -15762,9 +15849,9 @@ public struct RawPatternBindingSyntax: RawSyntaxNodeProtocol {
     
     public var raw: RawSyntax {
       switch self {
-      case .accessors(let node): 
+      case .accessors(let node):
         return node.raw
-      case .getter(let node): 
+      case .getter(let node):
         return node.raw
       }
     }
@@ -15772,11 +15859,11 @@ public struct RawPatternBindingSyntax: RawSyntaxNodeProtocol {
     public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
       if let node = RawAccessorBlockSyntax(other) {
         self = .accessors(node)
-        return 
+        return
       }
       if let node = RawCodeBlockSyntax(other) {
         self = .getter(node)
-        return 
+        return
       }
       return nil
     }
@@ -15803,8 +15890,8 @@ public struct RawPatternBindingSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -15824,7 +15911,7 @@ public struct RawPatternBindingSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .patternBinding, uninitializedCount: 11, arena: arena) { layout in 
+      kind: .patternBinding, uninitializedCount: 11, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforePattern?.raw
       layout[1] = pattern.raw
@@ -15895,9 +15982,9 @@ public struct RawPatternSyntax: RawPatternSyntaxNodeProtocol {
   
   public static func isKindOf(_ raw: RawSyntax) -> Bool {
     switch raw.kind {
-    case .expressionPattern, .identifierPattern, .isTypePattern, .missingPattern, .tuplePattern, .valueBindingPattern, .wildcardPattern: 
+    case .expressionPattern, .identifierPattern, .isTypePattern, .missingPattern, .tuplePattern, .valueBindingPattern, .wildcardPattern:
       return true
-    default: 
+    default:
       return false
     }
   }
@@ -15914,8 +16001,8 @@ public struct RawPatternSyntax: RawPatternSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -15948,8 +16035,8 @@ public struct RawPostfixIfConfigExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -15963,7 +16050,7 @@ public struct RawPostfixIfConfigExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .postfixIfConfigExpr, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .postfixIfConfigExpr, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeBase?.raw
       layout[1] = base?.raw
@@ -16018,8 +16105,8 @@ public struct RawPostfixUnaryExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -16033,7 +16120,7 @@ public struct RawPostfixUnaryExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .postfixUnaryExpr, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .postfixUnaryExpr, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeExpression?.raw
       layout[1] = expression.raw
@@ -16088,8 +16175,8 @@ public struct RawPoundSourceLocationArgsSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -16113,7 +16200,7 @@ public struct RawPoundSourceLocationArgsSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .poundSourceLocationArgs, uninitializedCount: 15, arena: arena) { layout in 
+      kind: .poundSourceLocationArgs, uninitializedCount: 15, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeFileArgLabel?.raw
       layout[1] = fileArgLabel.raw
@@ -16218,8 +16305,8 @@ public struct RawPoundSourceLocationSyntax: RawDeclSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -16237,7 +16324,7 @@ public struct RawPoundSourceLocationSyntax: RawDeclSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .poundSourceLocation, uninitializedCount: 9, arena: arena) { layout in 
+      kind: .poundSourceLocation, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforePoundSourceLocation?.raw
       layout[1] = poundSourceLocation.raw
@@ -16312,8 +16399,8 @@ public struct RawPrecedenceGroupAssignmentSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -16329,7 +16416,7 @@ public struct RawPrecedenceGroupAssignmentSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .precedenceGroupAssignment, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .precedenceGroupAssignment, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAssignmentKeyword?.raw
       layout[1] = assignmentKeyword.raw
@@ -16394,8 +16481,8 @@ public struct RawPrecedenceGroupAssociativitySyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -16411,7 +16498,7 @@ public struct RawPrecedenceGroupAssociativitySyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .precedenceGroupAssociativity, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .precedenceGroupAssociativity, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAssociativityKeyword?.raw
       layout[1] = associativityKeyword.raw
@@ -16467,11 +16554,11 @@ public struct RawPrecedenceGroupAttributeListSyntax: RawSyntaxNodeProtocol {
     
     public var raw: RawSyntax {
       switch self {
-      case .precedenceGroupRelation(let node): 
+      case .precedenceGroupRelation(let node):
         return node.raw
-      case .precedenceGroupAssignment(let node): 
+      case .precedenceGroupAssignment(let node):
         return node.raw
-      case .precedenceGroupAssociativity(let node): 
+      case .precedenceGroupAssociativity(let node):
         return node.raw
       }
     }
@@ -16479,15 +16566,15 @@ public struct RawPrecedenceGroupAttributeListSyntax: RawSyntaxNodeProtocol {
     public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
       if let node = RawPrecedenceGroupRelationSyntax(other) {
         self = .precedenceGroupRelation(node)
-        return 
+        return
       }
       if let node = RawPrecedenceGroupAssignmentSyntax(other) {
         self = .precedenceGroupAssignment(node)
-        return 
+        return
       }
       if let node = RawPrecedenceGroupAssociativitySyntax(other) {
         self = .precedenceGroupAssociativity(node)
-        return 
+        return
       }
       return nil
     }
@@ -16514,18 +16601,18 @@ public struct RawPrecedenceGroupAttributeListSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [Element], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .precedenceGroupAttributeList, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .precedenceGroupAttributeList, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -16535,8 +16622,8 @@ public struct RawPrecedenceGroupAttributeListSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawSyntax] {
-    layoutView.children.map { 
-      RawSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawSyntax(raw: $0!)
     }
   }
 }
@@ -16564,8 +16651,8 @@ public struct RawPrecedenceGroupDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -16589,7 +16676,7 @@ public struct RawPrecedenceGroupDeclSyntax: RawDeclSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .precedenceGroupDecl, uninitializedCount: 15, arena: arena) { layout in 
+      kind: .precedenceGroupDecl, uninitializedCount: 15, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
@@ -16694,8 +16781,8 @@ public struct RawPrecedenceGroupNameElementSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -16709,7 +16796,7 @@ public struct RawPrecedenceGroupNameElementSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .precedenceGroupNameElement, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .precedenceGroupNameElement, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeName?.raw
       layout[1] = name.raw
@@ -16764,18 +16851,18 @@ public struct RawPrecedenceGroupNameListSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [RawPrecedenceGroupNameElementSyntax], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .precedenceGroupNameList, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .precedenceGroupNameList, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -16785,8 +16872,8 @@ public struct RawPrecedenceGroupNameListSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawPrecedenceGroupNameElementSyntax] {
-    layoutView.children.map { 
-      RawPrecedenceGroupNameElementSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawPrecedenceGroupNameElementSyntax(raw: $0!)
     }
   }
 }
@@ -16814,8 +16901,8 @@ public struct RawPrecedenceGroupRelationSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -16831,7 +16918,7 @@ public struct RawPrecedenceGroupRelationSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .precedenceGroupRelation, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .precedenceGroupRelation, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeHigherThanOrLowerThan?.raw
       layout[1] = higherThanOrLowerThan.raw
@@ -16896,8 +16983,8 @@ public struct RawPrefixOperatorExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -16911,7 +16998,7 @@ public struct RawPrefixOperatorExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .prefixOperatorExpr, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .prefixOperatorExpr, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeOperatorToken?.raw
       layout[1] = operatorToken?.raw
@@ -16966,8 +17053,8 @@ public struct RawPrimaryAssociatedTypeClauseSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -16983,7 +17070,7 @@ public struct RawPrimaryAssociatedTypeClauseSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .primaryAssociatedTypeClause, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .primaryAssociatedTypeClause, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLeftAngleBracket?.raw
       layout[1] = leftAngleBracket.raw
@@ -17048,18 +17135,18 @@ public struct RawPrimaryAssociatedTypeListSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [RawPrimaryAssociatedTypeSyntax], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .primaryAssociatedTypeList, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .primaryAssociatedTypeList, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -17069,8 +17156,8 @@ public struct RawPrimaryAssociatedTypeListSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawPrimaryAssociatedTypeSyntax] {
-    layoutView.children.map { 
-      RawPrimaryAssociatedTypeSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawPrimaryAssociatedTypeSyntax(raw: $0!)
     }
   }
 }
@@ -17098,8 +17185,8 @@ public struct RawPrimaryAssociatedTypeSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -17113,7 +17200,7 @@ public struct RawPrimaryAssociatedTypeSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .primaryAssociatedType, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .primaryAssociatedType, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeName?.raw
       layout[1] = name.raw
@@ -17168,8 +17255,8 @@ public struct RawProtocolDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -17195,7 +17282,7 @@ public struct RawProtocolDeclSyntax: RawDeclSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .protocolDecl, uninitializedCount: 17, arena: arena) { layout in 
+      kind: .protocolDecl, uninitializedCount: 17, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
@@ -17310,8 +17397,8 @@ public struct RawQualifiedDeclNameSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -17329,7 +17416,7 @@ public struct RawQualifiedDeclNameSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .qualifiedDeclName, uninitializedCount: 9, arena: arena) { layout in 
+      kind: .qualifiedDeclName, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeBaseType?.raw
       layout[1] = baseType?.raw
@@ -17404,8 +17491,8 @@ public struct RawRegexLiteralExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -17425,7 +17512,7 @@ public struct RawRegexLiteralExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .regexLiteralExpr, uninitializedCount: 11, arena: arena) { layout in 
+      kind: .regexLiteralExpr, uninitializedCount: 11, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeOpeningPounds?.raw
       layout[1] = openingPounds?.raw
@@ -17510,8 +17597,8 @@ public struct RawRepeatWhileStmtSyntax: RawStmtSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -17529,7 +17616,7 @@ public struct RawRepeatWhileStmtSyntax: RawStmtSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .repeatWhileStmt, uninitializedCount: 9, arena: arena) { layout in 
+      kind: .repeatWhileStmt, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeRepeatKeyword?.raw
       layout[1] = repeatKeyword.raw
@@ -17604,8 +17691,8 @@ public struct RawReturnClauseSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -17619,7 +17706,7 @@ public struct RawReturnClauseSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .returnClause, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .returnClause, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeArrow?.raw
       layout[1] = arrow.raw
@@ -17674,8 +17761,8 @@ public struct RawReturnStmtSyntax: RawStmtSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -17689,7 +17776,7 @@ public struct RawReturnStmtSyntax: RawStmtSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .returnStmt, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .returnStmt, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeReturnKeyword?.raw
       layout[1] = returnKeyword.raw
@@ -17744,8 +17831,8 @@ public struct RawSameTypeRequirementSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -17761,7 +17848,7 @@ public struct RawSameTypeRequirementSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .sameTypeRequirement, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .sameTypeRequirement, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLeftTypeIdentifier?.raw
       layout[1] = leftTypeIdentifier.raw
@@ -17826,8 +17913,8 @@ public struct RawSequenceExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -17839,7 +17926,7 @@ public struct RawSequenceExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .sequenceExpr, uninitializedCount: 3, arena: arena) { layout in 
+      kind: .sequenceExpr, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeElements?.raw
       layout[1] = elements.raw
@@ -17884,8 +17971,8 @@ public struct RawSimpleTypeIdentifierSyntax: RawTypeSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -17899,7 +17986,7 @@ public struct RawSimpleTypeIdentifierSyntax: RawTypeSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .simpleTypeIdentifier, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .simpleTypeIdentifier, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeName?.raw
       layout[1] = name.raw
@@ -17954,8 +18041,8 @@ public struct RawSourceFileSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -17969,7 +18056,7 @@ public struct RawSourceFileSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .sourceFile, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .sourceFile, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeStatements?.raw
       layout[1] = statements.raw
@@ -18016,13 +18103,13 @@ public struct RawSpecializeAttributeSpecListSyntax: RawSyntaxNodeProtocol {
     
     public var raw: RawSyntax {
       switch self {
-      case .labeledSpecializeEntry(let node): 
+      case .labeledSpecializeEntry(let node):
         return node.raw
-      case .availabilityEntry(let node): 
+      case .availabilityEntry(let node):
         return node.raw
-      case .targetFunctionEntry(let node): 
+      case .targetFunctionEntry(let node):
         return node.raw
-      case .genericWhereClause(let node): 
+      case .genericWhereClause(let node):
         return node.raw
       }
     }
@@ -18030,19 +18117,19 @@ public struct RawSpecializeAttributeSpecListSyntax: RawSyntaxNodeProtocol {
     public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
       if let node = RawLabeledSpecializeEntrySyntax(other) {
         self = .labeledSpecializeEntry(node)
-        return 
+        return
       }
       if let node = RawAvailabilityEntrySyntax(other) {
         self = .availabilityEntry(node)
-        return 
+        return
       }
       if let node = RawTargetFunctionEntrySyntax(other) {
         self = .targetFunctionEntry(node)
-        return 
+        return
       }
       if let node = RawGenericWhereClauseSyntax(other) {
         self = .genericWhereClause(node)
-        return 
+        return
       }
       return nil
     }
@@ -18069,18 +18156,18 @@ public struct RawSpecializeAttributeSpecListSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [Element], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .specializeAttributeSpecList, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .specializeAttributeSpecList, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -18090,8 +18177,8 @@ public struct RawSpecializeAttributeSpecListSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawSyntax] {
-    layoutView.children.map { 
-      RawSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawSyntax(raw: $0!)
     }
   }
 }
@@ -18119,8 +18206,8 @@ public struct RawSpecializeExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -18134,7 +18221,7 @@ public struct RawSpecializeExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .specializeExpr, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .specializeExpr, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeExpression?.raw
       layout[1] = expression.raw
@@ -18175,9 +18262,9 @@ public struct RawStmtSyntax: RawStmtSyntaxNodeProtocol {
   
   public static func isKindOf(_ raw: RawSyntax) -> Bool {
     switch raw.kind {
-    case .breakStmt, .continueStmt, .deferStmt, .doStmt, .expressionStmt, .fallthroughStmt, .forInStmt, .forgetStmt, .guardStmt, .labeledStmt, .missingStmt, .repeatWhileStmt, .returnStmt, .throwStmt, .whileStmt, .yieldStmt: 
+    case .breakStmt, .continueStmt, .deferStmt, .doStmt, .expressionStmt, .fallthroughStmt, .forInStmt, .forgetStmt, .guardStmt, .labeledStmt, .missingStmt, .repeatWhileStmt, .returnStmt, .throwStmt, .whileStmt, .yieldStmt:
       return true
-    default: 
+    default:
       return false
     }
   }
@@ -18194,8 +18281,8 @@ public struct RawStmtSyntax: RawStmtSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -18228,8 +18315,8 @@ public struct RawStringLiteralExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -18249,7 +18336,7 @@ public struct RawStringLiteralExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .stringLiteralExpr, uninitializedCount: 11, arena: arena) { layout in 
+      kind: .stringLiteralExpr, uninitializedCount: 11, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeOpenDelimiter?.raw
       layout[1] = openDelimiter?.raw
@@ -18324,9 +18411,9 @@ public struct RawStringLiteralSegmentsSyntax: RawSyntaxNodeProtocol {
     
     public var raw: RawSyntax {
       switch self {
-      case .stringSegment(let node): 
+      case .stringSegment(let node):
         return node.raw
-      case .expressionSegment(let node): 
+      case .expressionSegment(let node):
         return node.raw
       }
     }
@@ -18334,11 +18421,11 @@ public struct RawStringLiteralSegmentsSyntax: RawSyntaxNodeProtocol {
     public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
       if let node = RawStringSegmentSyntax(other) {
         self = .stringSegment(node)
-        return 
+        return
       }
       if let node = RawExpressionSegmentSyntax(other) {
         self = .expressionSegment(node)
-        return 
+        return
       }
       return nil
     }
@@ -18365,18 +18452,18 @@ public struct RawStringLiteralSegmentsSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [Element], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .stringLiteralSegments, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .stringLiteralSegments, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -18386,8 +18473,8 @@ public struct RawStringLiteralSegmentsSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawSyntax] {
-    layoutView.children.map { 
-      RawSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawSyntax(raw: $0!)
     }
   }
 }
@@ -18415,8 +18502,8 @@ public struct RawStringSegmentSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -18428,7 +18515,7 @@ public struct RawStringSegmentSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .stringSegment, uninitializedCount: 3, arena: arena) { layout in 
+      kind: .stringSegment, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeContent?.raw
       layout[1] = content.raw
@@ -18473,8 +18560,8 @@ public struct RawStructDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -18500,7 +18587,7 @@ public struct RawStructDeclSyntax: RawDeclSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .structDecl, uninitializedCount: 17, arena: arena) { layout in 
+      kind: .structDecl, uninitializedCount: 17, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
@@ -18605,9 +18692,9 @@ public struct RawSubscriptDeclSyntax: RawDeclSyntaxNodeProtocol {
     
     public var raw: RawSyntax {
       switch self {
-      case .accessors(let node): 
+      case .accessors(let node):
         return node.raw
-      case .getter(let node): 
+      case .getter(let node):
         return node.raw
       }
     }
@@ -18615,11 +18702,11 @@ public struct RawSubscriptDeclSyntax: RawDeclSyntaxNodeProtocol {
     public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
       if let node = RawAccessorBlockSyntax(other) {
         self = .accessors(node)
-        return 
+        return
       }
       if let node = RawCodeBlockSyntax(other) {
         self = .getter(node)
-        return 
+        return
       }
       return nil
     }
@@ -18646,8 +18733,8 @@ public struct RawSubscriptDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -18673,7 +18760,7 @@ public struct RawSubscriptDeclSyntax: RawDeclSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .subscriptDecl, uninitializedCount: 17, arena: arena) { layout in 
+      kind: .subscriptDecl, uninitializedCount: 17, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
@@ -18788,8 +18875,8 @@ public struct RawSubscriptExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -18811,7 +18898,7 @@ public struct RawSubscriptExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .subscriptExpr, uninitializedCount: 13, arena: arena) { layout in 
+      kind: .subscriptExpr, uninitializedCount: 13, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeCalledExpression?.raw
       layout[1] = calledExpression.raw
@@ -18906,8 +18993,8 @@ public struct RawSuperRefExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -18919,7 +19006,7 @@ public struct RawSuperRefExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .superRefExpr, uninitializedCount: 3, arena: arena) { layout in 
+      kind: .superRefExpr, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeSuperKeyword?.raw
       layout[1] = superKeyword.raw
@@ -18964,8 +19051,8 @@ public struct RawSwitchCaseLabelSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -18981,7 +19068,7 @@ public struct RawSwitchCaseLabelSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .switchCaseLabel, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .switchCaseLabel, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeCaseKeyword?.raw
       layout[1] = caseKeyword.raw
@@ -19036,9 +19123,9 @@ public struct RawSwitchCaseListSyntax: RawSyntaxNodeProtocol {
     
     public var raw: RawSyntax {
       switch self {
-      case .switchCase(let node): 
+      case .switchCase(let node):
         return node.raw
-      case .ifConfigDecl(let node): 
+      case .ifConfigDecl(let node):
         return node.raw
       }
     }
@@ -19046,11 +19133,11 @@ public struct RawSwitchCaseListSyntax: RawSyntaxNodeProtocol {
     public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
       if let node = RawSwitchCaseSyntax(other) {
         self = .switchCase(node)
-        return 
+        return
       }
       if let node = RawIfConfigDeclSyntax(other) {
         self = .ifConfigDecl(node)
-        return 
+        return
       }
       return nil
     }
@@ -19077,18 +19164,18 @@ public struct RawSwitchCaseListSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [Element], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .switchCaseList, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .switchCaseList, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -19098,8 +19185,8 @@ public struct RawSwitchCaseListSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawSyntax] {
-    layoutView.children.map { 
-      RawSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawSyntax(raw: $0!)
     }
   }
 }
@@ -19117,9 +19204,9 @@ public struct RawSwitchCaseSyntax: RawSyntaxNodeProtocol {
     
     public var raw: RawSyntax {
       switch self {
-      case .default(let node): 
+      case .default(let node):
         return node.raw
-      case .case(let node): 
+      case .case(let node):
         return node.raw
       }
     }
@@ -19127,11 +19214,11 @@ public struct RawSwitchCaseSyntax: RawSyntaxNodeProtocol {
     public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
       if let node = RawSwitchDefaultLabelSyntax(other) {
         self = .default(node)
-        return 
+        return
       }
       if let node = RawSwitchCaseLabelSyntax(other) {
         self = .case(node)
-        return 
+        return
       }
       return nil
     }
@@ -19158,8 +19245,8 @@ public struct RawSwitchCaseSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -19175,7 +19262,7 @@ public struct RawSwitchCaseSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .switchCase, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .switchCase, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeUnknownAttr?.raw
       layout[1] = unknownAttr?.raw
@@ -19240,8 +19327,8 @@ public struct RawSwitchDefaultLabelSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -19255,7 +19342,7 @@ public struct RawSwitchDefaultLabelSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .switchDefaultLabel, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .switchDefaultLabel, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeDefaultKeyword?.raw
       layout[1] = defaultKeyword.raw
@@ -19310,8 +19397,8 @@ public struct RawSwitchExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -19331,7 +19418,7 @@ public struct RawSwitchExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .switchExpr, uninitializedCount: 11, arena: arena) { layout in 
+      kind: .switchExpr, uninitializedCount: 11, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeSwitchKeyword?.raw
       layout[1] = switchKeyword.raw
@@ -19416,8 +19503,8 @@ public struct RawTargetFunctionEntrySyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -19435,7 +19522,7 @@ public struct RawTargetFunctionEntrySyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .targetFunctionEntry, uninitializedCount: 9, arena: arena) { layout in 
+      kind: .targetFunctionEntry, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLabel?.raw
       layout[1] = label.raw
@@ -19510,8 +19597,8 @@ public struct RawTernaryExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -19531,7 +19618,7 @@ public struct RawTernaryExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .ternaryExpr, uninitializedCount: 11, arena: arena) { layout in 
+      kind: .ternaryExpr, uninitializedCount: 11, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeConditionExpression?.raw
       layout[1] = conditionExpression.raw
@@ -19616,8 +19703,8 @@ public struct RawThrowStmtSyntax: RawStmtSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -19631,7 +19718,7 @@ public struct RawThrowStmtSyntax: RawStmtSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .throwStmt, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .throwStmt, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeThrowKeyword?.raw
       layout[1] = throwKeyword.raw
@@ -19686,8 +19773,8 @@ public struct RawTryExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -19703,7 +19790,7 @@ public struct RawTryExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .tryExpr, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .tryExpr, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeTryKeyword?.raw
       layout[1] = tryKeyword.raw
@@ -19768,18 +19855,18 @@ public struct RawTupleExprElementListSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [RawTupleExprElementSyntax], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .tupleExprElementList, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .tupleExprElementList, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -19789,8 +19876,8 @@ public struct RawTupleExprElementListSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawTupleExprElementSyntax] {
-    layoutView.children.map { 
-      RawTupleExprElementSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawTupleExprElementSyntax(raw: $0!)
     }
   }
 }
@@ -19818,8 +19905,8 @@ public struct RawTupleExprElementSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -19837,7 +19924,7 @@ public struct RawTupleExprElementSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .tupleExprElement, uninitializedCount: 9, arena: arena) { layout in 
+      kind: .tupleExprElement, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLabel?.raw
       layout[1] = label?.raw
@@ -19912,8 +19999,8 @@ public struct RawTupleExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -19929,7 +20016,7 @@ public struct RawTupleExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .tupleExpr, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .tupleExpr, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLeftParen?.raw
       layout[1] = leftParen.raw
@@ -19994,18 +20081,18 @@ public struct RawTuplePatternElementListSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [RawTuplePatternElementSyntax], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .tuplePatternElementList, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .tuplePatternElementList, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -20015,8 +20102,8 @@ public struct RawTuplePatternElementListSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawTuplePatternElementSyntax] {
-    layoutView.children.map { 
-      RawTuplePatternElementSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawTuplePatternElementSyntax(raw: $0!)
     }
   }
 }
@@ -20044,8 +20131,8 @@ public struct RawTuplePatternElementSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -20063,7 +20150,7 @@ public struct RawTuplePatternElementSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .tuplePatternElement, uninitializedCount: 9, arena: arena) { layout in 
+      kind: .tuplePatternElement, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLabelName?.raw
       layout[1] = labelName?.raw
@@ -20138,8 +20225,8 @@ public struct RawTuplePatternSyntax: RawPatternSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -20155,7 +20242,7 @@ public struct RawTuplePatternSyntax: RawPatternSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .tuplePattern, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .tuplePattern, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLeftParen?.raw
       layout[1] = leftParen.raw
@@ -20220,18 +20307,18 @@ public struct RawTupleTypeElementListSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [RawTupleTypeElementSyntax], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .tupleTypeElementList, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .tupleTypeElementList, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -20241,8 +20328,8 @@ public struct RawTupleTypeElementListSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawTupleTypeElementSyntax] {
-    layoutView.children.map { 
-      RawTupleTypeElementSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawTupleTypeElementSyntax(raw: $0!)
     }
   }
 }
@@ -20270,8 +20357,8 @@ public struct RawTupleTypeElementSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -20297,7 +20384,7 @@ public struct RawTupleTypeElementSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .tupleTypeElement, uninitializedCount: 17, arena: arena) { layout in 
+      kind: .tupleTypeElement, uninitializedCount: 17, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeInOut?.raw
       layout[1] = inOut?.raw
@@ -20412,8 +20499,8 @@ public struct RawTupleTypeSyntax: RawTypeSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -20429,7 +20516,7 @@ public struct RawTupleTypeSyntax: RawTypeSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .tupleType, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .tupleType, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLeftParen?.raw
       layout[1] = leftParen.raw
@@ -20494,8 +20581,8 @@ public struct RawTypeAnnotationSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -20509,7 +20596,7 @@ public struct RawTypeAnnotationSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .typeAnnotation, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .typeAnnotation, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeColon?.raw
       layout[1] = colon.raw
@@ -20564,8 +20651,8 @@ public struct RawTypeEffectSpecifiersSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -20579,7 +20666,7 @@ public struct RawTypeEffectSpecifiersSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .typeEffectSpecifiers, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .typeEffectSpecifiers, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAsyncSpecifier?.raw
       layout[1] = asyncSpecifier?.raw
@@ -20634,8 +20721,8 @@ public struct RawTypeExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -20647,7 +20734,7 @@ public struct RawTypeExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .typeExpr, uninitializedCount: 3, arena: arena) { layout in 
+      kind: .typeExpr, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeType?.raw
       layout[1] = type.raw
@@ -20692,8 +20779,8 @@ public struct RawTypeInheritanceClauseSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -20707,7 +20794,7 @@ public struct RawTypeInheritanceClauseSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .typeInheritanceClause, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .typeInheritanceClause, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeColon?.raw
       layout[1] = colon.raw
@@ -20762,8 +20849,8 @@ public struct RawTypeInitializerClauseSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -20777,7 +20864,7 @@ public struct RawTypeInitializerClauseSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .typeInitializerClause, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .typeInitializerClause, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeEqual?.raw
       layout[1] = equal.raw
@@ -20818,9 +20905,9 @@ public struct RawTypeSyntax: RawTypeSyntaxNodeProtocol {
   
   public static func isKindOf(_ raw: RawSyntax) -> Bool {
     switch raw.kind {
-    case .arrayType, .attributedType, .classRestrictionType, .compositionType, .constrainedSugarType, .dictionaryType, .functionType, .implicitlyUnwrappedOptionalType, .memberTypeIdentifier, .metatypeType, .missingType, .namedOpaqueReturnType, .optionalType, .packExpansionType, .packReferenceType, .simpleTypeIdentifier, .tupleType: 
+    case .arrayType, .attributedType, .classRestrictionType, .compositionType, .constrainedSugarType, .dictionaryType, .functionType, .implicitlyUnwrappedOptionalType, .memberTypeIdentifier, .metatypeType, .missingType, .namedOpaqueReturnType, .optionalType, .packExpansionType, .packReferenceType, .simpleTypeIdentifier, .tupleType:
       return true
-    default: 
+    default:
       return false
     }
   }
@@ -20837,8 +20924,8 @@ public struct RawTypeSyntax: RawTypeSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -20871,8 +20958,8 @@ public struct RawTypealiasDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -20896,7 +20983,7 @@ public struct RawTypealiasDeclSyntax: RawDeclSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .typealiasDecl, uninitializedCount: 15, arena: arena) { layout in 
+      kind: .typealiasDecl, uninitializedCount: 15, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
@@ -21001,8 +21088,8 @@ public struct RawUnavailableFromAsyncArgumentsSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -21018,7 +21105,7 @@ public struct RawUnavailableFromAsyncArgumentsSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .unavailableFromAsyncArguments, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .unavailableFromAsyncArguments, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeMessageLabel?.raw
       layout[1] = messageLabel.raw
@@ -21083,8 +21170,8 @@ public struct RawUnderscorePrivateAttributeArgumentsSyntax: RawSyntaxNodeProtoco
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -21100,7 +21187,7 @@ public struct RawUnderscorePrivateAttributeArgumentsSyntax: RawSyntaxNodeProtoco
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .underscorePrivateAttributeArguments, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .underscorePrivateAttributeArguments, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeSourceFileLabel?.raw
       layout[1] = sourceFileLabel.raw
@@ -21165,18 +21252,18 @@ public struct RawUnexpectedNodesSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [RawSyntax], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .unexpectedNodes, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .unexpectedNodes, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -21186,8 +21273,8 @@ public struct RawUnexpectedNodesSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawSyntax] {
-    layoutView.children.map { 
-      RawSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawSyntax(raw: $0!)
     }
   }
 }
@@ -21215,8 +21302,8 @@ public struct RawUnresolvedAsExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -21230,7 +21317,7 @@ public struct RawUnresolvedAsExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .unresolvedAsExpr, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .unresolvedAsExpr, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAsTok?.raw
       layout[1] = asTok.raw
@@ -21285,8 +21372,8 @@ public struct RawUnresolvedIsExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -21298,7 +21385,7 @@ public struct RawUnresolvedIsExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .unresolvedIsExpr, uninitializedCount: 3, arena: arena) { layout in 
+      kind: .unresolvedIsExpr, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeIsTok?.raw
       layout[1] = isTok.raw
@@ -21343,8 +21430,8 @@ public struct RawUnresolvedPatternExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -21356,7 +21443,7 @@ public struct RawUnresolvedPatternExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .unresolvedPatternExpr, uninitializedCount: 3, arena: arena) { layout in 
+      kind: .unresolvedPatternExpr, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforePattern?.raw
       layout[1] = pattern.raw
@@ -21401,8 +21488,8 @@ public struct RawUnresolvedTernaryExprSyntax: RawExprSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -21418,7 +21505,7 @@ public struct RawUnresolvedTernaryExprSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .unresolvedTernaryExpr, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .unresolvedTernaryExpr, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeQuestionMark?.raw
       layout[1] = questionMark.raw
@@ -21483,8 +21570,8 @@ public struct RawValueBindingPatternSyntax: RawPatternSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -21498,7 +21585,7 @@ public struct RawValueBindingPatternSyntax: RawPatternSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .valueBindingPattern, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .valueBindingPattern, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeBindingKeyword?.raw
       layout[1] = bindingKeyword.raw
@@ -21553,8 +21640,8 @@ public struct RawVariableDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -21572,7 +21659,7 @@ public struct RawVariableDeclSyntax: RawDeclSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .variableDecl, uninitializedCount: 9, arena: arena) { layout in 
+      kind: .variableDecl, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
@@ -21647,8 +21734,8 @@ public struct RawVersionTupleSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -21668,7 +21755,7 @@ public struct RawVersionTupleSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .versionTuple, uninitializedCount: 11, arena: arena) { layout in 
+      kind: .versionTuple, uninitializedCount: 11, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeMajor?.raw
       layout[1] = major.raw
@@ -21753,8 +21840,8 @@ public struct RawWhereClauseSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -21768,7 +21855,7 @@ public struct RawWhereClauseSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .whereClause, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .whereClause, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeWhereKeyword?.raw
       layout[1] = whereKeyword.raw
@@ -21823,8 +21910,8 @@ public struct RawWhileStmtSyntax: RawStmtSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -21840,7 +21927,7 @@ public struct RawWhileStmtSyntax: RawStmtSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .whileStmt, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .whileStmt, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeWhileKeyword?.raw
       layout[1] = whileKeyword.raw
@@ -21905,8 +21992,8 @@ public struct RawWildcardPatternSyntax: RawPatternSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -21920,7 +22007,7 @@ public struct RawWildcardPatternSyntax: RawPatternSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .wildcardPattern, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .wildcardPattern, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeWildcard?.raw
       layout[1] = wildcard.raw
@@ -21975,8 +22062,8 @@ public struct RawYieldExprListElementSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -21990,7 +22077,7 @@ public struct RawYieldExprListElementSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .yieldExprListElement, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .yieldExprListElement, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeExpression?.raw
       layout[1] = expression.raw
@@ -22045,18 +22132,18 @@ public struct RawYieldExprListSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
   
   public init(elements: [RawYieldExprListElementSyntax], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .yieldExprList, uninitializedCount: elements.count, arena: arena) { layout in 
-        guard var ptr = layout.baseAddress else { 
-        return 
-      }
+      kind: .yieldExprList, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+            return
+          }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1
@@ -22066,8 +22153,8 @@ public struct RawYieldExprListSyntax: RawSyntaxNodeProtocol {
   }
   
   public var elements: [RawYieldExprListElementSyntax] {
-    layoutView.children.map { 
-      RawYieldExprListElementSyntax(raw: $0!) 
+    layoutView.children.map {
+      RawYieldExprListElementSyntax(raw: $0!)
     }
   }
 }
@@ -22095,8 +22182,8 @@ public struct RawYieldListSyntax: RawSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -22112,7 +22199,7 @@ public struct RawYieldListSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .yieldList, uninitializedCount: 7, arena: arena) { layout in 
+      kind: .yieldList, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLeftParen?.raw
       layout[1] = leftParen.raw
@@ -22167,9 +22254,9 @@ public struct RawYieldStmtSyntax: RawStmtSyntaxNodeProtocol {
     
     public var raw: RawSyntax {
       switch self {
-      case .yieldList(let node): 
+      case .yieldList(let node):
         return node.raw
-      case .simpleYield(let node): 
+      case .simpleYield(let node):
         return node.raw
       }
     }
@@ -22177,11 +22264,11 @@ public struct RawYieldStmtSyntax: RawStmtSyntaxNodeProtocol {
     public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
       if let node = RawYieldListSyntax(other) {
         self = .yieldList(node)
-        return 
+        return
       }
       if let node = RawExprSyntax(other) {
         self = .simpleYield(node)
-        return 
+        return
       }
       return nil
     }
@@ -22208,8 +22295,8 @@ public struct RawYieldStmtSyntax: RawStmtSyntaxNodeProtocol {
   }
   
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else { 
-      return nil 
+    guard Self.isKindOf(other.raw) else {
+      return nil
     }
     self.init(unchecked: other.raw)
   }
@@ -22223,7 +22310,7 @@ public struct RawYieldStmtSyntax: RawStmtSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .yieldStmt, uninitializedCount: 5, arena: arena) { layout in 
+      kind: .yieldStmt, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeYieldKeyword?.raw
       layout[1] = yieldKeyword.raw

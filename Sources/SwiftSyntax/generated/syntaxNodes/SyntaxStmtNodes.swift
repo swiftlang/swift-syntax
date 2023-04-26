@@ -19,8 +19,8 @@ public struct BreakStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .breakStmt else { 
-      return nil 
+    guard node.raw.kind == .breakStmt else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -34,12 +34,12 @@ public struct BreakStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeBreakKeyword: UnexpectedNodesSyntax? = nil, 
-      breakKeyword: TokenSyntax = .keyword(.break), 
-      _ unexpectedBetweenBreakKeywordAndLabel: UnexpectedNodesSyntax? = nil, 
-      label: TokenSyntax? = nil, 
-      _ unexpectedAfterLabel: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeBreakKeyword: UnexpectedNodesSyntax? = nil,
+      breakKeyword: TokenSyntax = .keyword(.break),
+      _ unexpectedBetweenBreakKeywordAndLabel: UnexpectedNodesSyntax? = nil,
+      label: TokenSyntax? = nil,
+      _ unexpectedAfterLabel: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -51,7 +51,7 @@ public struct BreakStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenBreakKeywordAndLabel, 
             label, 
             unexpectedAfterLabel
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeBreakKeyword?.raw, 
           breakKeyword.raw, 
@@ -60,12 +60,13 @@ public struct BreakStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           unexpectedAfterLabel?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.breakStmt, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
-        )
+        kind: SyntaxKind.breakStmt,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -134,8 +135,8 @@ public struct ContinueStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .continueStmt else { 
-      return nil 
+    guard node.raw.kind == .continueStmt else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -149,12 +150,12 @@ public struct ContinueStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeContinueKeyword: UnexpectedNodesSyntax? = nil, 
-      continueKeyword: TokenSyntax = .keyword(.continue), 
-      _ unexpectedBetweenContinueKeywordAndLabel: UnexpectedNodesSyntax? = nil, 
-      label: TokenSyntax? = nil, 
-      _ unexpectedAfterLabel: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeContinueKeyword: UnexpectedNodesSyntax? = nil,
+      continueKeyword: TokenSyntax = .keyword(.continue),
+      _ unexpectedBetweenContinueKeywordAndLabel: UnexpectedNodesSyntax? = nil,
+      label: TokenSyntax? = nil,
+      _ unexpectedAfterLabel: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -166,7 +167,7 @@ public struct ContinueStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenContinueKeywordAndLabel, 
             label, 
             unexpectedAfterLabel
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeContinueKeyword?.raw, 
           continueKeyword.raw, 
@@ -175,12 +176,13 @@ public struct ContinueStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           unexpectedAfterLabel?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.continueStmt, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
-        )
+        kind: SyntaxKind.continueStmt,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -249,8 +251,8 @@ public struct DeferStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .deferStmt else { 
-      return nil 
+    guard node.raw.kind == .deferStmt else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -264,12 +266,12 @@ public struct DeferStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeDeferKeyword: UnexpectedNodesSyntax? = nil, 
-      deferKeyword: TokenSyntax = .keyword(.defer), 
-      _ unexpectedBetweenDeferKeywordAndBody: UnexpectedNodesSyntax? = nil, 
-      body: CodeBlockSyntax, 
-      _ unexpectedAfterBody: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeDeferKeyword: UnexpectedNodesSyntax? = nil,
+      deferKeyword: TokenSyntax = .keyword(.defer),
+      _ unexpectedBetweenDeferKeywordAndBody: UnexpectedNodesSyntax? = nil,
+      body: CodeBlockSyntax,
+      _ unexpectedAfterBody: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -281,7 +283,7 @@ public struct DeferStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenDeferKeywordAndBody, 
             body, 
             unexpectedAfterBody
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeDeferKeyword?.raw, 
           deferKeyword.raw, 
@@ -290,12 +292,13 @@ public struct DeferStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           unexpectedAfterBody?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.deferStmt, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
-        )
+        kind: SyntaxKind.deferStmt,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -364,8 +367,8 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .doStmt else { 
-      return nil 
+    guard node.raw.kind == .doStmt else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -379,14 +382,14 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeDoKeyword: UnexpectedNodesSyntax? = nil, 
-      doKeyword: TokenSyntax = .keyword(.do), 
-      _ unexpectedBetweenDoKeywordAndBody: UnexpectedNodesSyntax? = nil, 
-      body: CodeBlockSyntax, 
-      _ unexpectedBetweenBodyAndCatchClauses: UnexpectedNodesSyntax? = nil, 
-      catchClauses: CatchClauseListSyntax? = nil, 
-      _ unexpectedAfterCatchClauses: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeDoKeyword: UnexpectedNodesSyntax? = nil,
+      doKeyword: TokenSyntax = .keyword(.do),
+      _ unexpectedBetweenDoKeywordAndBody: UnexpectedNodesSyntax? = nil,
+      body: CodeBlockSyntax,
+      _ unexpectedBetweenBodyAndCatchClauses: UnexpectedNodesSyntax? = nil,
+      catchClauses: CatchClauseListSyntax? = nil,
+      _ unexpectedAfterCatchClauses: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -400,7 +403,7 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenBodyAndCatchClauses, 
             catchClauses, 
             unexpectedAfterCatchClauses
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeDoKeyword?.raw, 
           doKeyword.raw, 
@@ -411,12 +414,13 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           unexpectedAfterCatchClauses?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.doStmt, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
-        )
+        kind: SyntaxKind.doStmt,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -488,8 +492,8 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     if let col = raw.layoutView!.children[5] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.catchClauseList, 
-                                      from: [element.raw], arena: arena)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.catchClauseList,
+                                        from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(at: 5, with: collection, arena: arena)
     return DoStmtSyntax(newData)
@@ -524,8 +528,8 @@ public struct ExpressionStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .expressionStmt else { 
-      return nil 
+    guard node.raw.kind == .expressionStmt else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -539,24 +543,25 @@ public struct ExpressionStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   }
   
   public init<E: ExprSyntaxProtocol>(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeExpression: UnexpectedNodesSyntax? = nil, 
-      expression: E, 
-      _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeExpression: UnexpectedNodesSyntax? = nil,
+      expression: E,
+      _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeExpression, expression, unexpectedAfterExpression))) {(arena, _) in 
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeExpression, expression, unexpectedAfterExpression))) {(arena, _) in
       let layout: [RawSyntax?] = [unexpectedBeforeExpression?.raw, expression.raw, unexpectedAfterExpression?.raw]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.expressionStmt, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
-        )
+        kind: SyntaxKind.expressionStmt,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -601,8 +606,8 @@ public struct FallthroughStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .fallthroughStmt else { 
-      return nil 
+    guard node.raw.kind == .fallthroughStmt else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -616,24 +621,25 @@ public struct FallthroughStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeFallthroughKeyword: UnexpectedNodesSyntax? = nil, 
-      fallthroughKeyword: TokenSyntax = .keyword(.fallthrough), 
-      _ unexpectedAfterFallthroughKeyword: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeFallthroughKeyword: UnexpectedNodesSyntax? = nil,
+      fallthroughKeyword: TokenSyntax = .keyword(.fallthrough),
+      _ unexpectedAfterFallthroughKeyword: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeFallthroughKeyword, fallthroughKeyword, unexpectedAfterFallthroughKeyword))) {(arena, _) in 
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeFallthroughKeyword, fallthroughKeyword, unexpectedAfterFallthroughKeyword))) {(arena, _) in
       let layout: [RawSyntax?] = [unexpectedBeforeFallthroughKeyword?.raw, fallthroughKeyword.raw, unexpectedAfterFallthroughKeyword?.raw]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.fallthroughStmt, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
-        )
+        kind: SyntaxKind.fallthroughStmt,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -678,8 +684,8 @@ public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .forInStmt else { 
-      return nil 
+    guard node.raw.kind == .forInStmt else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -693,28 +699,28 @@ public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   }
   
   public init<P: PatternSyntaxProtocol, S: ExprSyntaxProtocol>(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeForKeyword: UnexpectedNodesSyntax? = nil, 
-      forKeyword: TokenSyntax = .keyword(.for), 
-      _ unexpectedBetweenForKeywordAndTryKeyword: UnexpectedNodesSyntax? = nil, 
-      tryKeyword: TokenSyntax? = nil, 
-      _ unexpectedBetweenTryKeywordAndAwaitKeyword: UnexpectedNodesSyntax? = nil, 
-      awaitKeyword: TokenSyntax? = nil, 
-      _ unexpectedBetweenAwaitKeywordAndCaseKeyword: UnexpectedNodesSyntax? = nil, 
-      caseKeyword: TokenSyntax? = nil, 
-      _ unexpectedBetweenCaseKeywordAndPattern: UnexpectedNodesSyntax? = nil, 
-      pattern: P, 
-      _ unexpectedBetweenPatternAndTypeAnnotation: UnexpectedNodesSyntax? = nil, 
-      typeAnnotation: TypeAnnotationSyntax? = nil, 
-      _ unexpectedBetweenTypeAnnotationAndInKeyword: UnexpectedNodesSyntax? = nil, 
-      inKeyword: TokenSyntax = .keyword(.in), 
-      _ unexpectedBetweenInKeywordAndSequenceExpr: UnexpectedNodesSyntax? = nil, 
-      sequenceExpr: S, 
-      _ unexpectedBetweenSequenceExprAndWhereClause: UnexpectedNodesSyntax? = nil, 
-      whereClause: WhereClauseSyntax? = nil, 
-      _ unexpectedBetweenWhereClauseAndBody: UnexpectedNodesSyntax? = nil, 
-      body: CodeBlockSyntax, 
-      _ unexpectedAfterBody: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeForKeyword: UnexpectedNodesSyntax? = nil,
+      forKeyword: TokenSyntax = .keyword(.for),
+      _ unexpectedBetweenForKeywordAndTryKeyword: UnexpectedNodesSyntax? = nil,
+      tryKeyword: TokenSyntax? = nil,
+      _ unexpectedBetweenTryKeywordAndAwaitKeyword: UnexpectedNodesSyntax? = nil,
+      awaitKeyword: TokenSyntax? = nil,
+      _ unexpectedBetweenAwaitKeywordAndCaseKeyword: UnexpectedNodesSyntax? = nil,
+      caseKeyword: TokenSyntax? = nil,
+      _ unexpectedBetweenCaseKeywordAndPattern: UnexpectedNodesSyntax? = nil,
+      pattern: P,
+      _ unexpectedBetweenPatternAndTypeAnnotation: UnexpectedNodesSyntax? = nil,
+      typeAnnotation: TypeAnnotationSyntax? = nil,
+      _ unexpectedBetweenTypeAnnotationAndInKeyword: UnexpectedNodesSyntax? = nil,
+      inKeyword: TokenSyntax = .keyword(.in),
+      _ unexpectedBetweenInKeywordAndSequenceExpr: UnexpectedNodesSyntax? = nil,
+      sequenceExpr: S,
+      _ unexpectedBetweenSequenceExprAndWhereClause: UnexpectedNodesSyntax? = nil,
+      whereClause: WhereClauseSyntax? = nil,
+      _ unexpectedBetweenWhereClauseAndBody: UnexpectedNodesSyntax? = nil,
+      body: CodeBlockSyntax,
+      _ unexpectedAfterBody: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -742,7 +748,7 @@ public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenWhereClauseAndBody, 
             body, 
             unexpectedAfterBody
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeForKeyword?.raw, 
           forKeyword.raw, 
@@ -767,12 +773,13 @@ public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           unexpectedAfterBody?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.forInStmt, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
-        )
+        kind: SyntaxKind.forInStmt,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -1001,8 +1008,8 @@ public struct ForgetStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .forgetStmt else { 
-      return nil 
+    guard node.raw.kind == .forgetStmt else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -1016,12 +1023,12 @@ public struct ForgetStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   }
   
   public init<E: ExprSyntaxProtocol>(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeForgetKeyword: UnexpectedNodesSyntax? = nil, 
-      forgetKeyword: TokenSyntax = .keyword(._forget), 
-      _ unexpectedBetweenForgetKeywordAndExpression: UnexpectedNodesSyntax? = nil, 
-      expression: E, 
-      _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeForgetKeyword: UnexpectedNodesSyntax? = nil,
+      forgetKeyword: TokenSyntax = .keyword(._forget),
+      _ unexpectedBetweenForgetKeywordAndExpression: UnexpectedNodesSyntax? = nil,
+      expression: E,
+      _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -1033,7 +1040,7 @@ public struct ForgetStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenForgetKeywordAndExpression, 
             expression, 
             unexpectedAfterExpression
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeForgetKeyword?.raw, 
           forgetKeyword.raw, 
@@ -1042,12 +1049,13 @@ public struct ForgetStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           unexpectedAfterExpression?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.forgetStmt, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
-        )
+        kind: SyntaxKind.forgetStmt,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -1116,8 +1124,8 @@ public struct GuardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .guardStmt else { 
-      return nil 
+    guard node.raw.kind == .guardStmt else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -1131,16 +1139,16 @@ public struct GuardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeGuardKeyword: UnexpectedNodesSyntax? = nil, 
-      guardKeyword: TokenSyntax = .keyword(.guard), 
-      _ unexpectedBetweenGuardKeywordAndConditions: UnexpectedNodesSyntax? = nil, 
-      conditions: ConditionElementListSyntax, 
-      _ unexpectedBetweenConditionsAndElseKeyword: UnexpectedNodesSyntax? = nil, 
-      elseKeyword: TokenSyntax = .keyword(.else), 
-      _ unexpectedBetweenElseKeywordAndBody: UnexpectedNodesSyntax? = nil, 
-      body: CodeBlockSyntax, 
-      _ unexpectedAfterBody: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeGuardKeyword: UnexpectedNodesSyntax? = nil,
+      guardKeyword: TokenSyntax = .keyword(.guard),
+      _ unexpectedBetweenGuardKeywordAndConditions: UnexpectedNodesSyntax? = nil,
+      conditions: ConditionElementListSyntax,
+      _ unexpectedBetweenConditionsAndElseKeyword: UnexpectedNodesSyntax? = nil,
+      elseKeyword: TokenSyntax = .keyword(.else),
+      _ unexpectedBetweenElseKeywordAndBody: UnexpectedNodesSyntax? = nil,
+      body: CodeBlockSyntax,
+      _ unexpectedAfterBody: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -1156,7 +1164,7 @@ public struct GuardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenElseKeywordAndBody, 
             body, 
             unexpectedAfterBody
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeGuardKeyword?.raw, 
           guardKeyword.raw, 
@@ -1169,12 +1177,13 @@ public struct GuardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           unexpectedAfterBody?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.guardStmt, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
-        )
+        kind: SyntaxKind.guardStmt,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -1228,8 +1237,8 @@ public struct GuardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.conditionElementList, 
-                                      from: [element.raw], arena: arena)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.conditionElementList,
+                                        from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(at: 3, with: collection, arena: arena)
     return GuardStmtSyntax(newData)
@@ -1302,8 +1311,8 @@ public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .labeledStmt else { 
-      return nil 
+    guard node.raw.kind == .labeledStmt else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -1317,14 +1326,14 @@ public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   }
   
   public init<S: StmtSyntaxProtocol>(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeLabelName: UnexpectedNodesSyntax? = nil, 
-      labelName: TokenSyntax, 
-      _ unexpectedBetweenLabelNameAndLabelColon: UnexpectedNodesSyntax? = nil, 
-      labelColon: TokenSyntax = .colonToken(), 
-      _ unexpectedBetweenLabelColonAndStatement: UnexpectedNodesSyntax? = nil, 
-      statement: S, 
-      _ unexpectedAfterStatement: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeLabelName: UnexpectedNodesSyntax? = nil,
+      labelName: TokenSyntax,
+      _ unexpectedBetweenLabelNameAndLabelColon: UnexpectedNodesSyntax? = nil,
+      labelColon: TokenSyntax = .colonToken(),
+      _ unexpectedBetweenLabelColonAndStatement: UnexpectedNodesSyntax? = nil,
+      statement: S,
+      _ unexpectedAfterStatement: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -1338,7 +1347,7 @@ public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenLabelColonAndStatement, 
             statement, 
             unexpectedAfterStatement
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLabelName?.raw, 
           labelName.raw, 
@@ -1349,12 +1358,13 @@ public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           unexpectedAfterStatement?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.labeledStmt, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
-        )
+        kind: SyntaxKind.labeledStmt,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -1438,13 +1448,13 @@ public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 
 // MARK: - MissingStmtSyntax
 
-
+/// In case the source code is missing a statement, this node stands in place of the missing statement.
 public struct MissingStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .missingStmt else { 
-      return nil 
+    guard node.raw.kind == .missingStmt else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -1458,27 +1468,31 @@ public struct MissingStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-    leadingTrivia: Trivia? = nil, 
-    _ unexpected: UnexpectedNodesSyntax? = nil, 
-    trailingTrivia: Trivia? = nil
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforePlaceholder: UnexpectedNodesSyntax? = nil,
+      placeholder: TokenSyntax,
+      _ unexpectedAfterPlaceholder: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpected))) {(arena, _) in 
-      let layout: [RawSyntax?] = [unexpected?.raw]
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforePlaceholder, placeholder, unexpectedAfterPlaceholder))) {(arena, _) in
+      let layout: [RawSyntax?] = [unexpectedBeforePlaceholder?.raw, placeholder.raw, unexpectedAfterPlaceholder?.raw]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.missingStmt, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
-        )
+        kind: SyntaxKind.missingStmt,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
-  public var unexpected: UnexpectedNodesSyntax? {
+  public var unexpectedBeforePlaceholder: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -1487,8 +1501,27 @@ public struct MissingStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// A placeholder, i.e. `<#statement#>` that can be inserted into the source code to represent the missing pattern./// This token should always have `presence = .missing`.
+  public var placeholder: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = MissingStmtSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedAfterPlaceholder: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = MissingStmtSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
   public static var structure: SyntaxNodeStructure {
-    return .layout([\Self.unexpected])
+    return .layout([\Self.unexpectedBeforePlaceholder, \Self.placeholder, \Self.unexpectedAfterPlaceholder])
   }
 }
 
@@ -1499,8 +1532,8 @@ public struct RepeatWhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .repeatWhileStmt else { 
-      return nil 
+    guard node.raw.kind == .repeatWhileStmt else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -1514,16 +1547,16 @@ public struct RepeatWhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   }
   
   public init<C: ExprSyntaxProtocol>(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeRepeatKeyword: UnexpectedNodesSyntax? = nil, 
-      repeatKeyword: TokenSyntax = .keyword(.repeat), 
-      _ unexpectedBetweenRepeatKeywordAndBody: UnexpectedNodesSyntax? = nil, 
-      body: CodeBlockSyntax, 
-      _ unexpectedBetweenBodyAndWhileKeyword: UnexpectedNodesSyntax? = nil, 
-      whileKeyword: TokenSyntax = .keyword(.while), 
-      _ unexpectedBetweenWhileKeywordAndCondition: UnexpectedNodesSyntax? = nil, 
-      condition: C, 
-      _ unexpectedAfterCondition: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeRepeatKeyword: UnexpectedNodesSyntax? = nil,
+      repeatKeyword: TokenSyntax = .keyword(.repeat),
+      _ unexpectedBetweenRepeatKeywordAndBody: UnexpectedNodesSyntax? = nil,
+      body: CodeBlockSyntax,
+      _ unexpectedBetweenBodyAndWhileKeyword: UnexpectedNodesSyntax? = nil,
+      whileKeyword: TokenSyntax = .keyword(.while),
+      _ unexpectedBetweenWhileKeywordAndCondition: UnexpectedNodesSyntax? = nil,
+      condition: C,
+      _ unexpectedAfterCondition: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -1539,7 +1572,7 @@ public struct RepeatWhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenWhileKeywordAndCondition, 
             condition, 
             unexpectedAfterCondition
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeRepeatKeyword?.raw, 
           repeatKeyword.raw, 
@@ -1552,12 +1585,13 @@ public struct RepeatWhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           unexpectedAfterCondition?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.repeatWhileStmt, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
-        )
+        kind: SyntaxKind.repeatWhileStmt,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -1666,8 +1700,8 @@ public struct ReturnStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .returnStmt else { 
-      return nil 
+    guard node.raw.kind == .returnStmt else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -1681,12 +1715,12 @@ public struct ReturnStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   }
   
   public init<E: ExprSyntaxProtocol>(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeReturnKeyword: UnexpectedNodesSyntax? = nil, 
-      returnKeyword: TokenSyntax = .keyword(.return), 
-      _ unexpectedBetweenReturnKeywordAndExpression: UnexpectedNodesSyntax? = nil, 
-      expression: E? = nil, 
-      _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeReturnKeyword: UnexpectedNodesSyntax? = nil,
+      returnKeyword: TokenSyntax = .keyword(.return),
+      _ unexpectedBetweenReturnKeywordAndExpression: UnexpectedNodesSyntax? = nil,
+      expression: E? = nil,
+      _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -1698,7 +1732,7 @@ public struct ReturnStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenReturnKeywordAndExpression, 
             expression, 
             unexpectedAfterExpression
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeReturnKeyword?.raw, 
           returnKeyword.raw, 
@@ -1707,12 +1741,13 @@ public struct ReturnStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           unexpectedAfterExpression?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.returnStmt, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
-        )
+        kind: SyntaxKind.returnStmt,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -1729,21 +1764,21 @@ public struct ReturnStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   /// the base type would allow implicit conversion from a string literal,
   /// which the above initializer doesn't support.
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeReturnKeyword: UnexpectedNodesSyntax? = nil, 
-      returnKeyword: TokenSyntax = .keyword(.return), 
-      _ unexpectedBetweenReturnKeywordAndExpression: UnexpectedNodesSyntax? = nil, 
-      expression: MissingExprSyntax? = nil, 
-      _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeReturnKeyword: UnexpectedNodesSyntax? = nil,
+      returnKeyword: TokenSyntax = .keyword(.return),
+      _ unexpectedBetweenReturnKeywordAndExpression: UnexpectedNodesSyntax? = nil,
+      expression: MissingExprSyntax? = nil,
+      _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
     self.init(
-        leadingTrivia: leadingTrivia, 
-        unexpectedBeforeReturnKeyword, 
-        returnKeyword: returnKeyword, 
-        unexpectedBetweenReturnKeywordAndExpression, 
-        expression: Optional<ExprSyntax>.none, 
+        leadingTrivia: leadingTrivia,
+        unexpectedBeforeReturnKeyword,
+        returnKeyword: returnKeyword,
+        unexpectedBetweenReturnKeywordAndExpression,
+        expression: Optional<ExprSyntax>.none,
         unexpectedAfterExpression, 
         trailingTrivia: trailingTrivia
       )
@@ -1812,8 +1847,8 @@ public struct ThrowStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .throwStmt else { 
-      return nil 
+    guard node.raw.kind == .throwStmt else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -1827,12 +1862,12 @@ public struct ThrowStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   }
   
   public init<E: ExprSyntaxProtocol>(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeThrowKeyword: UnexpectedNodesSyntax? = nil, 
-      throwKeyword: TokenSyntax = .keyword(.throw), 
-      _ unexpectedBetweenThrowKeywordAndExpression: UnexpectedNodesSyntax? = nil, 
-      expression: E, 
-      _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeThrowKeyword: UnexpectedNodesSyntax? = nil,
+      throwKeyword: TokenSyntax = .keyword(.throw),
+      _ unexpectedBetweenThrowKeywordAndExpression: UnexpectedNodesSyntax? = nil,
+      expression: E,
+      _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -1844,7 +1879,7 @@ public struct ThrowStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenThrowKeywordAndExpression, 
             expression, 
             unexpectedAfterExpression
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeThrowKeyword?.raw, 
           throwKeyword.raw, 
@@ -1853,12 +1888,13 @@ public struct ThrowStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           unexpectedAfterExpression?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.throwStmt, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
-        )
+        kind: SyntaxKind.throwStmt,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -1927,8 +1963,8 @@ public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .whileStmt else { 
-      return nil 
+    guard node.raw.kind == .whileStmt else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -1942,14 +1978,14 @@ public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeWhileKeyword: UnexpectedNodesSyntax? = nil, 
-      whileKeyword: TokenSyntax = .keyword(.while), 
-      _ unexpectedBetweenWhileKeywordAndConditions: UnexpectedNodesSyntax? = nil, 
-      conditions: ConditionElementListSyntax, 
-      _ unexpectedBetweenConditionsAndBody: UnexpectedNodesSyntax? = nil, 
-      body: CodeBlockSyntax, 
-      _ unexpectedAfterBody: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeWhileKeyword: UnexpectedNodesSyntax? = nil,
+      whileKeyword: TokenSyntax = .keyword(.while),
+      _ unexpectedBetweenWhileKeywordAndConditions: UnexpectedNodesSyntax? = nil,
+      conditions: ConditionElementListSyntax,
+      _ unexpectedBetweenConditionsAndBody: UnexpectedNodesSyntax? = nil,
+      body: CodeBlockSyntax,
+      _ unexpectedAfterBody: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -1963,7 +1999,7 @@ public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenConditionsAndBody, 
             body, 
             unexpectedAfterBody
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeWhileKeyword?.raw, 
           whileKeyword.raw, 
@@ -1974,12 +2010,13 @@ public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           unexpectedAfterBody?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.whileStmt, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
-        )
+        kind: SyntaxKind.whileStmt,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -2033,8 +2070,8 @@ public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.conditionElementList, 
-                                      from: [element.raw], arena: arena)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.conditionElementList,
+                                        from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(at: 3, with: collection, arena: arena)
     return WhileStmtSyntax(newData)
@@ -2097,8 +2134,8 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       }
     }
     
-    init(_ data: SyntaxData) { 
-      self.init(Syntax(data))! 
+    init(_ data: SyntaxData) {
+      self.init(Syntax(data))!
     }
     
     public init(_ node: YieldListSyntax) {
@@ -2112,11 +2149,11 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     public init?<S: SyntaxProtocol>(_ node: S) {
       if let node = node.as(YieldListSyntax.self) {
         self = .yieldList(node)
-        return 
+        return
       }
       if let node = node.as(ExprSyntax.self) {
         self = .simpleYield(node)
-        return 
+        return
       }
       return nil
     }
@@ -2129,8 +2166,8 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .yieldStmt else { 
-      return nil 
+    guard node.raw.kind == .yieldStmt else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -2144,12 +2181,12 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   }
   
   public init(
-      leadingTrivia: Trivia? = nil, 
-      _ unexpectedBeforeYieldKeyword: UnexpectedNodesSyntax? = nil, 
-      yieldKeyword: TokenSyntax = .keyword(.yield), 
-      _ unexpectedBetweenYieldKeywordAndYields: UnexpectedNodesSyntax? = nil, 
-      yields: Yields, 
-      _ unexpectedAfterYields: UnexpectedNodesSyntax? = nil, 
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeYieldKeyword: UnexpectedNodesSyntax? = nil,
+      yieldKeyword: TokenSyntax = .keyword(.yield),
+      _ unexpectedBetweenYieldKeywordAndYields: UnexpectedNodesSyntax? = nil,
+      yields: Yields,
+      _ unexpectedAfterYields: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -2161,7 +2198,7 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenYieldKeywordAndYields, 
             yields, 
             unexpectedAfterYields
-          ))) {(arena, _) in 
+          ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeYieldKeyword?.raw, 
           yieldKeyword.raw, 
@@ -2170,12 +2207,13 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           unexpectedAfterYields?.raw
         ]
       let raw = RawSyntax.makeLayout(
-          kind: SyntaxKind.yieldStmt, 
-          from: layout, 
-          arena: arena, 
-          leadingTrivia: leadingTrivia, 
-          trailingTrivia: trailingTrivia
-        )
+        kind: SyntaxKind.yieldStmt,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+        
+      )
       return SyntaxData.forRoot(raw)
     }
     self.init(data)

@@ -1980,11 +1980,11 @@ open class SyntaxRewriter {
     let node = AccessPathComponentSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -1994,11 +1994,11 @@ open class SyntaxRewriter {
     let node = AccessPathSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2008,11 +2008,11 @@ open class SyntaxRewriter {
     let node = AccessorBlockSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2022,11 +2022,11 @@ open class SyntaxRewriter {
     let node = AccessorDeclSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2036,11 +2036,11 @@ open class SyntaxRewriter {
     let node = AccessorEffectSpecifiersSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2050,11 +2050,11 @@ open class SyntaxRewriter {
     let node = AccessorListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2064,11 +2064,11 @@ open class SyntaxRewriter {
     let node = AccessorParameterSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2078,11 +2078,11 @@ open class SyntaxRewriter {
     let node = ActorDeclSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2092,11 +2092,11 @@ open class SyntaxRewriter {
     let node = ArrayElementListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2106,11 +2106,11 @@ open class SyntaxRewriter {
     let node = ArrayElementSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2120,11 +2120,11 @@ open class SyntaxRewriter {
     let node = ArrayExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2134,11 +2134,11 @@ open class SyntaxRewriter {
     let node = ArrayTypeSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2148,11 +2148,11 @@ open class SyntaxRewriter {
     let node = ArrowExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2162,11 +2162,11 @@ open class SyntaxRewriter {
     let node = AsExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2176,11 +2176,11 @@ open class SyntaxRewriter {
     let node = AssignmentExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2190,11 +2190,11 @@ open class SyntaxRewriter {
     let node = AssociatedtypeDeclSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2204,11 +2204,11 @@ open class SyntaxRewriter {
     let node = AttributeListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2218,11 +2218,11 @@ open class SyntaxRewriter {
     let node = AttributeSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2232,11 +2232,11 @@ open class SyntaxRewriter {
     let node = AttributedTypeSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2246,11 +2246,11 @@ open class SyntaxRewriter {
     let node = AvailabilityArgumentSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2260,11 +2260,11 @@ open class SyntaxRewriter {
     let node = AvailabilityConditionSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2274,11 +2274,11 @@ open class SyntaxRewriter {
     let node = AvailabilityEntrySyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2288,11 +2288,11 @@ open class SyntaxRewriter {
     let node = AvailabilityLabeledArgumentSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2302,11 +2302,11 @@ open class SyntaxRewriter {
     let node = AvailabilitySpecListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2316,11 +2316,11 @@ open class SyntaxRewriter {
     let node = AvailabilityVersionRestrictionListEntrySyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2330,11 +2330,11 @@ open class SyntaxRewriter {
     let node = AvailabilityVersionRestrictionListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2344,11 +2344,11 @@ open class SyntaxRewriter {
     let node = AvailabilityVersionRestrictionSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2358,11 +2358,11 @@ open class SyntaxRewriter {
     let node = AwaitExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2372,11 +2372,11 @@ open class SyntaxRewriter {
     let node = BackDeployedAttributeSpecListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2386,11 +2386,11 @@ open class SyntaxRewriter {
     let node = BinaryOperatorExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2400,11 +2400,11 @@ open class SyntaxRewriter {
     let node = BooleanLiteralExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2414,11 +2414,11 @@ open class SyntaxRewriter {
     let node = BorrowExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2428,11 +2428,11 @@ open class SyntaxRewriter {
     let node = BreakStmtSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2442,11 +2442,11 @@ open class SyntaxRewriter {
     let node = CaseItemListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2456,11 +2456,11 @@ open class SyntaxRewriter {
     let node = CaseItemSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2470,11 +2470,11 @@ open class SyntaxRewriter {
     let node = CatchClauseListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2484,11 +2484,11 @@ open class SyntaxRewriter {
     let node = CatchClauseSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2498,11 +2498,11 @@ open class SyntaxRewriter {
     let node = CatchItemListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2512,11 +2512,11 @@ open class SyntaxRewriter {
     let node = CatchItemSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2526,11 +2526,11 @@ open class SyntaxRewriter {
     let node = ClassDeclSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2540,11 +2540,11 @@ open class SyntaxRewriter {
     let node = ClassRestrictionTypeSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2554,11 +2554,11 @@ open class SyntaxRewriter {
     let node = ClosureCaptureItemListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2568,11 +2568,11 @@ open class SyntaxRewriter {
     let node = ClosureCaptureItemSpecifierSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2582,11 +2582,11 @@ open class SyntaxRewriter {
     let node = ClosureCaptureItemSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2596,11 +2596,11 @@ open class SyntaxRewriter {
     let node = ClosureCaptureSignatureSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2610,11 +2610,11 @@ open class SyntaxRewriter {
     let node = ClosureExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2624,11 +2624,11 @@ open class SyntaxRewriter {
     let node = ClosureParamListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2638,11 +2638,11 @@ open class SyntaxRewriter {
     let node = ClosureParamSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2652,11 +2652,11 @@ open class SyntaxRewriter {
     let node = ClosureParameterClauseSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2666,11 +2666,11 @@ open class SyntaxRewriter {
     let node = ClosureParameterListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2680,11 +2680,11 @@ open class SyntaxRewriter {
     let node = ClosureParameterSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2694,11 +2694,11 @@ open class SyntaxRewriter {
     let node = ClosureSignatureSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2708,11 +2708,11 @@ open class SyntaxRewriter {
     let node = CodeBlockItemListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2722,11 +2722,11 @@ open class SyntaxRewriter {
     let node = CodeBlockItemSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2736,11 +2736,11 @@ open class SyntaxRewriter {
     let node = CodeBlockSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2750,11 +2750,11 @@ open class SyntaxRewriter {
     let node = CompositionTypeElementListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2764,11 +2764,11 @@ open class SyntaxRewriter {
     let node = CompositionTypeElementSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2778,11 +2778,11 @@ open class SyntaxRewriter {
     let node = CompositionTypeSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2792,11 +2792,11 @@ open class SyntaxRewriter {
     let node = ConditionElementListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2806,11 +2806,11 @@ open class SyntaxRewriter {
     let node = ConditionElementSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2820,11 +2820,11 @@ open class SyntaxRewriter {
     let node = ConformanceRequirementSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2834,11 +2834,11 @@ open class SyntaxRewriter {
     let node = ConstrainedSugarTypeSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2848,11 +2848,11 @@ open class SyntaxRewriter {
     let node = ContinueStmtSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2862,11 +2862,11 @@ open class SyntaxRewriter {
     let node = ConventionAttributeArgumentsSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2876,11 +2876,11 @@ open class SyntaxRewriter {
     let node = ConventionWitnessMethodAttributeArgumentsSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2890,11 +2890,11 @@ open class SyntaxRewriter {
     let node = DeclModifierDetailSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2904,11 +2904,11 @@ open class SyntaxRewriter {
     let node = DeclModifierSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2918,11 +2918,11 @@ open class SyntaxRewriter {
     let node = DeclNameArgumentListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2932,11 +2932,11 @@ open class SyntaxRewriter {
     let node = DeclNameArgumentSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2946,11 +2946,11 @@ open class SyntaxRewriter {
     let node = DeclNameArgumentsSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2960,11 +2960,11 @@ open class SyntaxRewriter {
     let node = DeclNameSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2974,11 +2974,11 @@ open class SyntaxRewriter {
     let node = DeferStmtSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -2988,11 +2988,11 @@ open class SyntaxRewriter {
     let node = DeinitializerDeclSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3002,11 +3002,11 @@ open class SyntaxRewriter {
     let node = DerivativeRegistrationAttributeArgumentsSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3016,11 +3016,11 @@ open class SyntaxRewriter {
     let node = DesignatedTypeElementSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3030,11 +3030,11 @@ open class SyntaxRewriter {
     let node = DesignatedTypeListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3044,11 +3044,11 @@ open class SyntaxRewriter {
     let node = DictionaryElementListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3058,11 +3058,11 @@ open class SyntaxRewriter {
     let node = DictionaryElementSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3072,11 +3072,11 @@ open class SyntaxRewriter {
     let node = DictionaryExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3086,11 +3086,11 @@ open class SyntaxRewriter {
     let node = DictionaryTypeSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3100,11 +3100,11 @@ open class SyntaxRewriter {
     let node = DifferentiabilityParamListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3114,11 +3114,11 @@ open class SyntaxRewriter {
     let node = DifferentiabilityParamSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3128,11 +3128,11 @@ open class SyntaxRewriter {
     let node = DifferentiabilityParamsClauseSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3142,11 +3142,11 @@ open class SyntaxRewriter {
     let node = DifferentiabilityParamsSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3156,11 +3156,11 @@ open class SyntaxRewriter {
     let node = DifferentiableAttributeArgumentsSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3170,11 +3170,11 @@ open class SyntaxRewriter {
     let node = DiscardAssignmentExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3184,11 +3184,11 @@ open class SyntaxRewriter {
     let node = DoStmtSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3198,11 +3198,11 @@ open class SyntaxRewriter {
     let node = DocumentationAttributeArgumentSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3212,11 +3212,11 @@ open class SyntaxRewriter {
     let node = DocumentationAttributeArgumentsSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3226,11 +3226,11 @@ open class SyntaxRewriter {
     let node = DynamicReplacementArgumentsSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3240,11 +3240,11 @@ open class SyntaxRewriter {
     let node = EditorPlaceholderDeclSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3254,11 +3254,11 @@ open class SyntaxRewriter {
     let node = EditorPlaceholderExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3268,11 +3268,11 @@ open class SyntaxRewriter {
     let node = EffectsArgumentsSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3282,11 +3282,11 @@ open class SyntaxRewriter {
     let node = EnumCaseDeclSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3296,11 +3296,11 @@ open class SyntaxRewriter {
     let node = EnumCaseElementListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3310,11 +3310,11 @@ open class SyntaxRewriter {
     let node = EnumCaseElementSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3324,11 +3324,11 @@ open class SyntaxRewriter {
     let node = EnumCaseParameterClauseSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3338,11 +3338,11 @@ open class SyntaxRewriter {
     let node = EnumCaseParameterListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3352,11 +3352,11 @@ open class SyntaxRewriter {
     let node = EnumCaseParameterSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3366,11 +3366,11 @@ open class SyntaxRewriter {
     let node = EnumDeclSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3380,11 +3380,11 @@ open class SyntaxRewriter {
     let node = ExposeAttributeArgumentsSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3394,11 +3394,11 @@ open class SyntaxRewriter {
     let node = ExprListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3408,11 +3408,11 @@ open class SyntaxRewriter {
     let node = ExpressionPatternSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3422,11 +3422,11 @@ open class SyntaxRewriter {
     let node = ExpressionSegmentSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3436,11 +3436,11 @@ open class SyntaxRewriter {
     let node = ExpressionStmtSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3450,11 +3450,11 @@ open class SyntaxRewriter {
     let node = ExtensionDeclSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3464,11 +3464,11 @@ open class SyntaxRewriter {
     let node = FallthroughStmtSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3478,11 +3478,11 @@ open class SyntaxRewriter {
     let node = FloatLiteralExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3492,11 +3492,11 @@ open class SyntaxRewriter {
     let node = ForInStmtSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3506,11 +3506,11 @@ open class SyntaxRewriter {
     let node = ForcedValueExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3520,11 +3520,11 @@ open class SyntaxRewriter {
     let node = ForgetStmtSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3534,11 +3534,11 @@ open class SyntaxRewriter {
     let node = FunctionCallExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3548,11 +3548,11 @@ open class SyntaxRewriter {
     let node = FunctionDeclSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3562,11 +3562,11 @@ open class SyntaxRewriter {
     let node = FunctionEffectSpecifiersSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3576,11 +3576,11 @@ open class SyntaxRewriter {
     let node = FunctionParameterListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3590,11 +3590,11 @@ open class SyntaxRewriter {
     let node = FunctionParameterSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3604,11 +3604,11 @@ open class SyntaxRewriter {
     let node = FunctionSignatureSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3618,11 +3618,11 @@ open class SyntaxRewriter {
     let node = FunctionTypeSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3632,11 +3632,11 @@ open class SyntaxRewriter {
     let node = GenericArgumentClauseSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3646,11 +3646,11 @@ open class SyntaxRewriter {
     let node = GenericArgumentListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3660,11 +3660,11 @@ open class SyntaxRewriter {
     let node = GenericArgumentSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3674,11 +3674,11 @@ open class SyntaxRewriter {
     let node = GenericParameterClauseSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3688,11 +3688,11 @@ open class SyntaxRewriter {
     let node = GenericParameterListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3702,11 +3702,11 @@ open class SyntaxRewriter {
     let node = GenericParameterSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3716,11 +3716,11 @@ open class SyntaxRewriter {
     let node = GenericRequirementListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3730,11 +3730,11 @@ open class SyntaxRewriter {
     let node = GenericRequirementSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3744,11 +3744,11 @@ open class SyntaxRewriter {
     let node = GenericWhereClauseSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3758,11 +3758,11 @@ open class SyntaxRewriter {
     let node = GuardStmtSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3772,11 +3772,11 @@ open class SyntaxRewriter {
     let node = IdentifierExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3786,11 +3786,11 @@ open class SyntaxRewriter {
     let node = IdentifierPatternSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3800,11 +3800,11 @@ open class SyntaxRewriter {
     let node = IfConfigClauseListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3814,11 +3814,11 @@ open class SyntaxRewriter {
     let node = IfConfigClauseSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3828,11 +3828,11 @@ open class SyntaxRewriter {
     let node = IfConfigDeclSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3842,11 +3842,11 @@ open class SyntaxRewriter {
     let node = IfExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3856,11 +3856,11 @@ open class SyntaxRewriter {
     let node = ImplementsAttributeArgumentsSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3870,11 +3870,11 @@ open class SyntaxRewriter {
     let node = ImplicitlyUnwrappedOptionalTypeSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3884,11 +3884,11 @@ open class SyntaxRewriter {
     let node = ImportDeclSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3898,11 +3898,11 @@ open class SyntaxRewriter {
     let node = InOutExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3912,11 +3912,11 @@ open class SyntaxRewriter {
     let node = InfixOperatorExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3926,11 +3926,11 @@ open class SyntaxRewriter {
     let node = InheritedTypeListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3940,11 +3940,11 @@ open class SyntaxRewriter {
     let node = InheritedTypeSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3954,11 +3954,11 @@ open class SyntaxRewriter {
     let node = InitializerClauseSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3968,11 +3968,11 @@ open class SyntaxRewriter {
     let node = InitializerDeclSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3982,11 +3982,11 @@ open class SyntaxRewriter {
     let node = IntegerLiteralExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -3996,11 +3996,11 @@ open class SyntaxRewriter {
     let node = IsExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4010,11 +4010,11 @@ open class SyntaxRewriter {
     let node = IsTypePatternSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4024,11 +4024,11 @@ open class SyntaxRewriter {
     let node = KeyPathComponentListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4038,11 +4038,11 @@ open class SyntaxRewriter {
     let node = KeyPathComponentSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4052,11 +4052,11 @@ open class SyntaxRewriter {
     let node = KeyPathExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4066,11 +4066,11 @@ open class SyntaxRewriter {
     let node = KeyPathOptionalComponentSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4080,11 +4080,11 @@ open class SyntaxRewriter {
     let node = KeyPathPropertyComponentSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4094,11 +4094,11 @@ open class SyntaxRewriter {
     let node = KeyPathSubscriptComponentSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4108,11 +4108,11 @@ open class SyntaxRewriter {
     let node = LabeledSpecializeEntrySyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4122,11 +4122,11 @@ open class SyntaxRewriter {
     let node = LabeledStmtSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4136,11 +4136,11 @@ open class SyntaxRewriter {
     let node = LayoutRequirementSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4150,11 +4150,11 @@ open class SyntaxRewriter {
     let node = MacroDeclSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4164,11 +4164,11 @@ open class SyntaxRewriter {
     let node = MacroExpansionDeclSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4178,11 +4178,11 @@ open class SyntaxRewriter {
     let node = MacroExpansionExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4192,11 +4192,11 @@ open class SyntaxRewriter {
     let node = MatchingPatternConditionSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4206,11 +4206,11 @@ open class SyntaxRewriter {
     let node = MemberAccessExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4220,11 +4220,11 @@ open class SyntaxRewriter {
     let node = MemberDeclBlockSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4234,11 +4234,11 @@ open class SyntaxRewriter {
     let node = MemberDeclListItemSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4248,11 +4248,11 @@ open class SyntaxRewriter {
     let node = MemberDeclListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4262,11 +4262,11 @@ open class SyntaxRewriter {
     let node = MemberTypeIdentifierSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4276,11 +4276,11 @@ open class SyntaxRewriter {
     let node = MetatypeTypeSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4290,11 +4290,11 @@ open class SyntaxRewriter {
     let node = MissingDeclSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4304,11 +4304,11 @@ open class SyntaxRewriter {
     let node = MissingExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4318,11 +4318,11 @@ open class SyntaxRewriter {
     let node = MissingPatternSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4332,11 +4332,11 @@ open class SyntaxRewriter {
     let node = MissingStmtSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4346,11 +4346,11 @@ open class SyntaxRewriter {
     let node = MissingSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4360,11 +4360,11 @@ open class SyntaxRewriter {
     let node = MissingTypeSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4374,11 +4374,11 @@ open class SyntaxRewriter {
     let node = ModifierListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4388,11 +4388,11 @@ open class SyntaxRewriter {
     let node = MoveExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4402,11 +4402,11 @@ open class SyntaxRewriter {
     let node = MultipleTrailingClosureElementListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4416,11 +4416,11 @@ open class SyntaxRewriter {
     let node = MultipleTrailingClosureElementSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4430,11 +4430,11 @@ open class SyntaxRewriter {
     let node = NamedOpaqueReturnTypeSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4444,11 +4444,11 @@ open class SyntaxRewriter {
     let node = NilLiteralExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4458,11 +4458,11 @@ open class SyntaxRewriter {
     let node = ObjCSelectorPieceSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4472,11 +4472,11 @@ open class SyntaxRewriter {
     let node = ObjCSelectorSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4486,11 +4486,11 @@ open class SyntaxRewriter {
     let node = OpaqueReturnTypeOfAttributeArgumentsSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4500,11 +4500,11 @@ open class SyntaxRewriter {
     let node = OperatorDeclSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4514,11 +4514,11 @@ open class SyntaxRewriter {
     let node = OperatorPrecedenceAndTypesSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4528,11 +4528,11 @@ open class SyntaxRewriter {
     let node = OptionalBindingConditionSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4542,11 +4542,11 @@ open class SyntaxRewriter {
     let node = OptionalChainingExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4556,11 +4556,11 @@ open class SyntaxRewriter {
     let node = OptionalTypeSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4570,11 +4570,11 @@ open class SyntaxRewriter {
     let node = OriginallyDefinedInArgumentsSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4584,11 +4584,11 @@ open class SyntaxRewriter {
     let node = PackElementExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4598,11 +4598,11 @@ open class SyntaxRewriter {
     let node = PackExpansionExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4612,11 +4612,11 @@ open class SyntaxRewriter {
     let node = PackExpansionTypeSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4626,11 +4626,11 @@ open class SyntaxRewriter {
     let node = PackReferenceTypeSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4640,11 +4640,11 @@ open class SyntaxRewriter {
     let node = ParameterClauseSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4654,11 +4654,11 @@ open class SyntaxRewriter {
     let node = PatternBindingListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4668,11 +4668,11 @@ open class SyntaxRewriter {
     let node = PatternBindingSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4682,11 +4682,11 @@ open class SyntaxRewriter {
     let node = PostfixIfConfigExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4696,11 +4696,11 @@ open class SyntaxRewriter {
     let node = PostfixUnaryExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4710,11 +4710,11 @@ open class SyntaxRewriter {
     let node = PoundSourceLocationArgsSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4724,11 +4724,11 @@ open class SyntaxRewriter {
     let node = PoundSourceLocationSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4738,11 +4738,11 @@ open class SyntaxRewriter {
     let node = PrecedenceGroupAssignmentSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4752,11 +4752,11 @@ open class SyntaxRewriter {
     let node = PrecedenceGroupAssociativitySyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4766,11 +4766,11 @@ open class SyntaxRewriter {
     let node = PrecedenceGroupAttributeListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4780,11 +4780,11 @@ open class SyntaxRewriter {
     let node = PrecedenceGroupDeclSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4794,11 +4794,11 @@ open class SyntaxRewriter {
     let node = PrecedenceGroupNameElementSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4808,11 +4808,11 @@ open class SyntaxRewriter {
     let node = PrecedenceGroupNameListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4822,11 +4822,11 @@ open class SyntaxRewriter {
     let node = PrecedenceGroupRelationSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4836,11 +4836,11 @@ open class SyntaxRewriter {
     let node = PrefixOperatorExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4850,11 +4850,11 @@ open class SyntaxRewriter {
     let node = PrimaryAssociatedTypeClauseSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4864,11 +4864,11 @@ open class SyntaxRewriter {
     let node = PrimaryAssociatedTypeListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4878,11 +4878,11 @@ open class SyntaxRewriter {
     let node = PrimaryAssociatedTypeSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4892,11 +4892,11 @@ open class SyntaxRewriter {
     let node = ProtocolDeclSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4906,11 +4906,11 @@ open class SyntaxRewriter {
     let node = QualifiedDeclNameSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4920,11 +4920,11 @@ open class SyntaxRewriter {
     let node = RegexLiteralExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4934,11 +4934,11 @@ open class SyntaxRewriter {
     let node = RepeatWhileStmtSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4948,11 +4948,11 @@ open class SyntaxRewriter {
     let node = ReturnClauseSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4962,11 +4962,11 @@ open class SyntaxRewriter {
     let node = ReturnStmtSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4976,11 +4976,11 @@ open class SyntaxRewriter {
     let node = SameTypeRequirementSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -4990,11 +4990,11 @@ open class SyntaxRewriter {
     let node = SequenceExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5004,11 +5004,11 @@ open class SyntaxRewriter {
     let node = SimpleTypeIdentifierSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5018,11 +5018,11 @@ open class SyntaxRewriter {
     let node = SourceFileSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5032,11 +5032,11 @@ open class SyntaxRewriter {
     let node = SpecializeAttributeSpecListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5046,11 +5046,11 @@ open class SyntaxRewriter {
     let node = SpecializeExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5060,11 +5060,11 @@ open class SyntaxRewriter {
     let node = StringLiteralExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5074,11 +5074,11 @@ open class SyntaxRewriter {
     let node = StringLiteralSegmentsSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5088,11 +5088,11 @@ open class SyntaxRewriter {
     let node = StringSegmentSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5102,11 +5102,11 @@ open class SyntaxRewriter {
     let node = StructDeclSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5116,11 +5116,11 @@ open class SyntaxRewriter {
     let node = SubscriptDeclSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5130,11 +5130,11 @@ open class SyntaxRewriter {
     let node = SubscriptExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5144,11 +5144,11 @@ open class SyntaxRewriter {
     let node = SuperRefExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5158,11 +5158,11 @@ open class SyntaxRewriter {
     let node = SwitchCaseLabelSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5172,11 +5172,11 @@ open class SyntaxRewriter {
     let node = SwitchCaseListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5186,11 +5186,11 @@ open class SyntaxRewriter {
     let node = SwitchCaseSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5200,11 +5200,11 @@ open class SyntaxRewriter {
     let node = SwitchDefaultLabelSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5214,11 +5214,11 @@ open class SyntaxRewriter {
     let node = SwitchExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5228,11 +5228,11 @@ open class SyntaxRewriter {
     let node = TargetFunctionEntrySyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5242,11 +5242,11 @@ open class SyntaxRewriter {
     let node = TernaryExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5256,11 +5256,11 @@ open class SyntaxRewriter {
     let node = ThrowStmtSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5270,11 +5270,11 @@ open class SyntaxRewriter {
     let node = TryExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5284,11 +5284,11 @@ open class SyntaxRewriter {
     let node = TupleExprElementListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5298,11 +5298,11 @@ open class SyntaxRewriter {
     let node = TupleExprElementSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5312,11 +5312,11 @@ open class SyntaxRewriter {
     let node = TupleExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5326,11 +5326,11 @@ open class SyntaxRewriter {
     let node = TuplePatternElementListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5340,11 +5340,11 @@ open class SyntaxRewriter {
     let node = TuplePatternElementSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5354,11 +5354,11 @@ open class SyntaxRewriter {
     let node = TuplePatternSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5368,11 +5368,11 @@ open class SyntaxRewriter {
     let node = TupleTypeElementListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5382,11 +5382,11 @@ open class SyntaxRewriter {
     let node = TupleTypeElementSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5396,11 +5396,11 @@ open class SyntaxRewriter {
     let node = TupleTypeSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5410,11 +5410,11 @@ open class SyntaxRewriter {
     let node = TypeAnnotationSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5424,11 +5424,11 @@ open class SyntaxRewriter {
     let node = TypeEffectSpecifiersSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5438,11 +5438,11 @@ open class SyntaxRewriter {
     let node = TypeExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5452,11 +5452,11 @@ open class SyntaxRewriter {
     let node = TypeInheritanceClauseSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5466,11 +5466,11 @@ open class SyntaxRewriter {
     let node = TypeInitializerClauseSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5480,11 +5480,11 @@ open class SyntaxRewriter {
     let node = TypealiasDeclSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5494,11 +5494,11 @@ open class SyntaxRewriter {
     let node = UnavailableFromAsyncArgumentsSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5508,11 +5508,11 @@ open class SyntaxRewriter {
     let node = UnderscorePrivateAttributeArgumentsSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5522,11 +5522,11 @@ open class SyntaxRewriter {
     let node = UnexpectedNodesSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5536,11 +5536,11 @@ open class SyntaxRewriter {
     let node = UnresolvedAsExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5550,11 +5550,11 @@ open class SyntaxRewriter {
     let node = UnresolvedIsExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5564,11 +5564,11 @@ open class SyntaxRewriter {
     let node = UnresolvedPatternExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5578,11 +5578,11 @@ open class SyntaxRewriter {
     let node = UnresolvedTernaryExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5592,11 +5592,11 @@ open class SyntaxRewriter {
     let node = ValueBindingPatternSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5606,11 +5606,11 @@ open class SyntaxRewriter {
     let node = VariableDeclSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5620,11 +5620,11 @@ open class SyntaxRewriter {
     let node = VersionTupleSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5634,11 +5634,11 @@ open class SyntaxRewriter {
     let node = WhereClauseSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5648,11 +5648,11 @@ open class SyntaxRewriter {
     let node = WhileStmtSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5662,11 +5662,11 @@ open class SyntaxRewriter {
     let node = WildcardPatternSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5676,11 +5676,11 @@ open class SyntaxRewriter {
     let node = YieldExprListElementSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5690,11 +5690,11 @@ open class SyntaxRewriter {
     let node = YieldExprListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5704,11 +5704,11 @@ open class SyntaxRewriter {
     let node = YieldListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5718,11 +5718,11 @@ open class SyntaxRewriter {
     let node = YieldStmtSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -5732,11 +5732,11 @@ open class SyntaxRewriter {
     let node = TokenSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
-    defer { 
-      visitPost(node._syntaxNode) 
+    defer {
+      visitPost(node._syntaxNode)
     }
-    if let newNode = visitAny(node._syntaxNode) { 
-      return newNode 
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
     }
     return Syntax(visit(node))
   }
@@ -6310,7 +6310,7 @@ open class SyntaxRewriter {
   private func visit(_ data: SyntaxData) -> Syntax {
     return visitationFunc(for: data)(data)
   }
-  #else 
+  #else
   private func visit(_ data: SyntaxData) -> Syntax {
     switch data.raw.kind {
     case .token:
@@ -6853,7 +6853,7 @@ open class SyntaxRewriter {
       return visitImplYieldStmtSyntax(data)
     }
   }
-  #endif 
+  #endif
   
   private func visitChildren<SyntaxType: SyntaxProtocol>(
     _ node: SyntaxType
@@ -6864,36 +6864,36 @@ open class SyntaxRewriter {
     // initialize the new layout. Once we know that we have to rewrite the
     // layout, we need to collect all futher children, regardless of whether
     // they are rewritten or not.
-    
+
     // newLayout is nil until the first child node is rewritten and rewritten
     // nodes are being collected.
     var newLayout: ContiguousArray<RawSyntax?>?
-    
+
     // Rewritten children just to keep their 'SyntaxArena' alive until they are
     // wrapped with 'Syntax'
     var rewrittens: ContiguousArray<Syntax> = []
-    
+
     let syntaxNode = node._syntaxNode
-    
+
     // Incrementing i manually is faster than using .enumerated()
     var childIndex = 0
     for (raw, info) in RawSyntaxChildren(syntaxNode) {
-      defer { 
-        childIndex += 1 
-      }
+      defer {
+          childIndex += 1
+        }
       guard let child = raw else {
         // Node does not exist. If we are collecting rewritten nodes, we need to
         // collect this one as well, otherwise we can ignore it.
         if newLayout != nil {
           newLayout!.append(nil)
         }
-        continue 
+        continue
       }
-      
+
       // Build the Syntax node to rewrite
       let absoluteRaw = AbsoluteRawSyntax(raw: child, info: info)
       let data = SyntaxData(absoluteRaw, parent: syntaxNode)
-      
+
       let rewritten = visit(data)
       if rewritten.data.nodeId != info.nodeId {
         // The node was rewritten, let's handle it
@@ -6901,7 +6901,7 @@ open class SyntaxRewriter {
           // We have not yet collected any previous rewritten nodes. Initialize
           // the new layout with the previous nodes of the parent. This is
           // possible, since we know they were not rewritten.
-          
+
           // The below implementation is based on Collection.map but directly
           // reserves enough capacity for the entire layout.
           newLayout = ContiguousArray<RawSyntax?>()
@@ -6910,7 +6910,7 @@ open class SyntaxRewriter {
             newLayout!.append(node.raw.layoutView!.children[j])
           }
         }
-        
+
         // Now that we know we have a new layout in which we collect rewritten
         // nodes, add it.
         rewrittens.append(rewritten)
@@ -6923,13 +6923,13 @@ open class SyntaxRewriter {
         }
       }
     }
-    
+
     if let newLayout = newLayout {
       // A child node was rewritten. Build the updated node.
-      
+
       // Sanity check, ensure the new children are the same length.
       precondition(newLayout.count == node.raw.layoutView!.children.count)
-      
+
       let arena = SyntaxArena()
       let newRaw = node.raw.layoutView!.replacingLayout(with: Array(newLayout), arena: arena)
       // 'withExtendedLifetime' to keep 'SyntaxArena's of them alive until here.
@@ -6940,5 +6940,13 @@ open class SyntaxRewriter {
       // No child node was rewritten. So no need to change this node as well.
       return node
     }
+  }
+  
+  /// Rewrite `node` and anchor, making sure that the rewritten node also has
+  /// a parent if `node` had one.
+  public func rewrite(_ node: Syntax) -> Syntax {
+    let rewritten = self.visit(node)
+    let arena = SyntaxArena()
+    return Syntax(node.data.replacingSelf(rewritten.raw, arena: arena))
   }
 }

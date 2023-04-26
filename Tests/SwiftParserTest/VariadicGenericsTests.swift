@@ -607,8 +607,11 @@ final class TypeParameterPackTests: XCTestCase {
       var foo: (Array<Foo> 1️⃣Array<Bar>)
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ',' in tuple type")
-      ]
+        DiagnosticSpec(message: "expected ',' in tuple type", fixIts: ["insert ','"])
+      ],
+      fixedSource: """
+        var foo: (Array<Foo>, Array<Bar>)
+        """
     )
 
     assertParse(
@@ -625,8 +628,11 @@ final class TypeParameterPackTests: XCTestCase {
       var foo: (Array<Foo> 1️⃣a)
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ',' in tuple type")
-      ]
+        DiagnosticSpec(message: "expected ',' in tuple type", fixIts: ["insert ','"])
+      ],
+      fixedSource: """
+        var foo: (Array<Foo>, a)
+        """
     )
   }
 }

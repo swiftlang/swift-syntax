@@ -14,8 +14,8 @@
 
 public protocol SyntaxCollection: SyntaxProtocol, Sequence where Element: SyntaxProtocol {
   /// The number of elements, `present` or `missing`, in this collection.
-  var count: Int { 
-    get 
+  var count: Int {
+    get
   }
 }
 
@@ -39,8 +39,8 @@ public struct AccessPathSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .accessPath else { 
-      return nil 
+    guard node.raw.kind == .accessPath else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -54,19 +54,19 @@ public struct AccessPathSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.accessPath, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.accessPath,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `AccessPathSyntax` by replacing the underlying layout with
@@ -75,8 +75,7 @@ public struct AccessPathSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `AccessPathSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> AccessPathSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> AccessPathSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -115,8 +114,8 @@ public struct AccessPathSyntax: SyntaxCollection, SyntaxHashable {
   public func inserting(_ syntax: Element, at index: Int) -> AccessPathSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -132,8 +131,8 @@ public struct AccessPathSyntax: SyntaxCollection, SyntaxHashable {
   public func replacing(childAt index: Int, with syntax: Element) -> AccessPathSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -249,8 +248,8 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .accessorList else { 
-      return nil 
+    guard node.raw.kind == .accessorList else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -264,19 +263,19 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.accessorList, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.accessorList,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `AccessorListSyntax` by replacing the underlying layout with
@@ -285,8 +284,7 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `AccessorListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> AccessorListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> AccessorListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -325,8 +323,8 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
   public func inserting(_ syntax: Element, at index: Int) -> AccessorListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -342,8 +340,8 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
   public func replacing(childAt index: Int, with syntax: Element) -> AccessorListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -459,8 +457,8 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .arrayElementList else { 
-      return nil 
+    guard node.raw.kind == .arrayElementList else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -474,19 +472,19 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.arrayElementList, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.arrayElementList,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `ArrayElementListSyntax` by replacing the underlying layout with
@@ -495,8 +493,7 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `ArrayElementListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> ArrayElementListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> ArrayElementListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -535,8 +532,8 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
   public func inserting(_ syntax: Element, at index: Int) -> ArrayElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -552,8 +549,8 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
   public func replacing(childAt index: Int, with syntax: Element) -> ArrayElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -674,8 +671,8 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
       }
     }
     
-    init(_ data: SyntaxData) { 
-      self.init(Syntax(data))! 
+    init(_ data: SyntaxData) {
+      self.init(Syntax(data))!
     }
     
     public init(_ node: AttributeSyntax) {
@@ -689,18 +686,18 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
     public init?<S: SyntaxProtocol>(_ node: S) {
       if let node = node.as(AttributeSyntax.self) {
         self = .attribute(node)
-        return 
+        return
       }
       if let node = node.as(IfConfigDeclSyntax.self) {
         self = .ifConfigDecl(node)
-        return 
+        return
       }
       return nil
     }
     
     public static var structure: SyntaxNodeStructure {
       return .choices([
-          .node(AttributeSyntax.self), 
+          .node(AttributeSyntax.self),
           .node(IfConfigDeclSyntax.self)])
     }
   }
@@ -712,8 +709,8 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .attributeList else { 
-      return nil 
+    guard node.raw.kind == .attributeList else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -727,19 +724,19 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.attributeList, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `AttributeListSyntax` by replacing the underlying layout with
@@ -748,8 +745,7 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `AttributeListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> AttributeListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> AttributeListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -788,8 +784,8 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
   public func inserting(_ syntax: Element, at index: Int) -> AttributeListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -805,8 +801,8 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
   public func replacing(childAt index: Int, with syntax: Element) -> AttributeListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -922,8 +918,8 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .availabilitySpecList else { 
-      return nil 
+    guard node.raw.kind == .availabilitySpecList else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -937,19 +933,19 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.availabilitySpecList, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.availabilitySpecList,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `AvailabilitySpecListSyntax` by replacing the underlying layout with
@@ -958,8 +954,7 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `AvailabilitySpecListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> AvailabilitySpecListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> AvailabilitySpecListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -998,8 +993,8 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
   public func inserting(_ syntax: Element, at index: Int) -> AvailabilitySpecListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -1015,8 +1010,8 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
   public func replacing(childAt index: Int, with syntax: Element) -> AvailabilitySpecListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -1132,8 +1127,8 @@ public struct AvailabilityVersionRestrictionListSyntax: SyntaxCollection, Syntax
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .availabilityVersionRestrictionList else { 
-      return nil 
+    guard node.raw.kind == .availabilityVersionRestrictionList else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -1147,19 +1142,19 @@ public struct AvailabilityVersionRestrictionListSyntax: SyntaxCollection, Syntax
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.availabilityVersionRestrictionList, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.availabilityVersionRestrictionList,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `AvailabilityVersionRestrictionListSyntax` by replacing the underlying layout with
@@ -1168,8 +1163,7 @@ public struct AvailabilityVersionRestrictionListSyntax: SyntaxCollection, Syntax
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `AvailabilityVersionRestrictionListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> AvailabilityVersionRestrictionListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> AvailabilityVersionRestrictionListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -1208,8 +1202,8 @@ public struct AvailabilityVersionRestrictionListSyntax: SyntaxCollection, Syntax
   public func inserting(_ syntax: Element, at index: Int) -> AvailabilityVersionRestrictionListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -1225,8 +1219,8 @@ public struct AvailabilityVersionRestrictionListSyntax: SyntaxCollection, Syntax
   public func replacing(childAt index: Int, with syntax: Element) -> AvailabilityVersionRestrictionListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -1342,8 +1336,8 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .caseItemList else { 
-      return nil 
+    guard node.raw.kind == .caseItemList else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -1357,19 +1351,19 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.caseItemList, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.caseItemList,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `CaseItemListSyntax` by replacing the underlying layout with
@@ -1378,8 +1372,7 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `CaseItemListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> CaseItemListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> CaseItemListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -1418,8 +1411,8 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
   public func inserting(_ syntax: Element, at index: Int) -> CaseItemListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -1435,8 +1428,8 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
   public func replacing(childAt index: Int, with syntax: Element) -> CaseItemListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -1552,8 +1545,8 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .catchClauseList else { 
-      return nil 
+    guard node.raw.kind == .catchClauseList else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -1567,19 +1560,19 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.catchClauseList, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.catchClauseList,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `CatchClauseListSyntax` by replacing the underlying layout with
@@ -1588,8 +1581,7 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `CatchClauseListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> CatchClauseListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> CatchClauseListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -1628,8 +1620,8 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
   public func inserting(_ syntax: Element, at index: Int) -> CatchClauseListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -1645,8 +1637,8 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
   public func replacing(childAt index: Int, with syntax: Element) -> CatchClauseListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -1762,8 +1754,8 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .catchItemList else { 
-      return nil 
+    guard node.raw.kind == .catchItemList else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -1777,19 +1769,19 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.catchItemList, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.catchItemList,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `CatchItemListSyntax` by replacing the underlying layout with
@@ -1798,8 +1790,7 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `CatchItemListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> CatchItemListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> CatchItemListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -1838,8 +1829,8 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
   public func inserting(_ syntax: Element, at index: Int) -> CatchItemListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -1855,8 +1846,8 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
   public func replacing(childAt index: Int, with syntax: Element) -> CatchItemListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -1972,8 +1963,8 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .closureCaptureItemList else { 
-      return nil 
+    guard node.raw.kind == .closureCaptureItemList else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -1987,19 +1978,19 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.closureCaptureItemList, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.closureCaptureItemList,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `ClosureCaptureItemListSyntax` by replacing the underlying layout with
@@ -2008,8 +1999,7 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `ClosureCaptureItemListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> ClosureCaptureItemListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> ClosureCaptureItemListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -2048,8 +2038,8 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
   public func inserting(_ syntax: Element, at index: Int) -> ClosureCaptureItemListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -2065,8 +2055,8 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
   public func replacing(childAt index: Int, with syntax: Element) -> ClosureCaptureItemListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -2182,8 +2172,8 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .closureParamList else { 
-      return nil 
+    guard node.raw.kind == .closureParamList else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -2197,19 +2187,19 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.closureParamList, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.closureParamList,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `ClosureParamListSyntax` by replacing the underlying layout with
@@ -2218,8 +2208,7 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `ClosureParamListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> ClosureParamListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> ClosureParamListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -2258,8 +2247,8 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
   public func inserting(_ syntax: Element, at index: Int) -> ClosureParamListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -2275,8 +2264,8 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
   public func replacing(childAt index: Int, with syntax: Element) -> ClosureParamListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -2392,8 +2381,8 @@ public struct ClosureParameterListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .closureParameterList else { 
-      return nil 
+    guard node.raw.kind == .closureParameterList else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -2407,19 +2396,19 @@ public struct ClosureParameterListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.closureParameterList, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.closureParameterList,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `ClosureParameterListSyntax` by replacing the underlying layout with
@@ -2428,8 +2417,7 @@ public struct ClosureParameterListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `ClosureParameterListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> ClosureParameterListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> ClosureParameterListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -2468,8 +2456,8 @@ public struct ClosureParameterListSyntax: SyntaxCollection, SyntaxHashable {
   public func inserting(_ syntax: Element, at index: Int) -> ClosureParameterListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -2485,8 +2473,8 @@ public struct ClosureParameterListSyntax: SyntaxCollection, SyntaxHashable {
   public func replacing(childAt index: Int, with syntax: Element) -> ClosureParameterListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -2602,8 +2590,8 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .codeBlockItemList else { 
-      return nil 
+    guard node.raw.kind == .codeBlockItemList else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -2617,19 +2605,19 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.codeBlockItemList, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.codeBlockItemList,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `CodeBlockItemListSyntax` by replacing the underlying layout with
@@ -2638,8 +2626,7 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `CodeBlockItemListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> CodeBlockItemListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> CodeBlockItemListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -2678,8 +2665,8 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
   public func inserting(_ syntax: Element, at index: Int) -> CodeBlockItemListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -2695,8 +2682,8 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
   public func replacing(childAt index: Int, with syntax: Element) -> CodeBlockItemListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -2812,8 +2799,8 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .compositionTypeElementList else { 
-      return nil 
+    guard node.raw.kind == .compositionTypeElementList else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -2827,19 +2814,19 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.compositionTypeElementList, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.compositionTypeElementList,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `CompositionTypeElementListSyntax` by replacing the underlying layout with
@@ -2848,8 +2835,7 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `CompositionTypeElementListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> CompositionTypeElementListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> CompositionTypeElementListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -2888,8 +2874,8 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
   public func inserting(_ syntax: Element, at index: Int) -> CompositionTypeElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -2905,8 +2891,8 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
   public func replacing(childAt index: Int, with syntax: Element) -> CompositionTypeElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -3022,8 +3008,8 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .conditionElementList else { 
-      return nil 
+    guard node.raw.kind == .conditionElementList else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -3037,19 +3023,19 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.conditionElementList, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.conditionElementList,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `ConditionElementListSyntax` by replacing the underlying layout with
@@ -3058,8 +3044,7 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `ConditionElementListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> ConditionElementListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> ConditionElementListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -3098,8 +3083,8 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
   public func inserting(_ syntax: Element, at index: Int) -> ConditionElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -3115,8 +3100,8 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
   public func replacing(childAt index: Int, with syntax: Element) -> ConditionElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -3232,8 +3217,8 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .declNameArgumentList else { 
-      return nil 
+    guard node.raw.kind == .declNameArgumentList else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -3247,19 +3232,19 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.declNameArgumentList, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.declNameArgumentList,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `DeclNameArgumentListSyntax` by replacing the underlying layout with
@@ -3268,8 +3253,7 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `DeclNameArgumentListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> DeclNameArgumentListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> DeclNameArgumentListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -3308,8 +3292,8 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   public func inserting(_ syntax: Element, at index: Int) -> DeclNameArgumentListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -3325,8 +3309,8 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   public func replacing(childAt index: Int, with syntax: Element) -> DeclNameArgumentListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -3442,8 +3426,8 @@ public struct DesignatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .designatedTypeList else { 
-      return nil 
+    guard node.raw.kind == .designatedTypeList else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -3457,19 +3441,19 @@ public struct DesignatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.designatedTypeList, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.designatedTypeList,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `DesignatedTypeListSyntax` by replacing the underlying layout with
@@ -3478,8 +3462,7 @@ public struct DesignatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `DesignatedTypeListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> DesignatedTypeListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> DesignatedTypeListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -3518,8 +3501,8 @@ public struct DesignatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   public func inserting(_ syntax: Element, at index: Int) -> DesignatedTypeListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -3535,8 +3518,8 @@ public struct DesignatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   public func replacing(childAt index: Int, with syntax: Element) -> DesignatedTypeListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -3652,8 +3635,8 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .dictionaryElementList else { 
-      return nil 
+    guard node.raw.kind == .dictionaryElementList else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -3667,19 +3650,19 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.dictionaryElementList, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.dictionaryElementList,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `DictionaryElementListSyntax` by replacing the underlying layout with
@@ -3688,8 +3671,7 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `DictionaryElementListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> DictionaryElementListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> DictionaryElementListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -3728,8 +3710,8 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
   public func inserting(_ syntax: Element, at index: Int) -> DictionaryElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -3745,8 +3727,8 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
   public func replacing(childAt index: Int, with syntax: Element) -> DictionaryElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -3862,8 +3844,8 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .differentiabilityParamList else { 
-      return nil 
+    guard node.raw.kind == .differentiabilityParamList else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -3877,19 +3859,19 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.differentiabilityParamList, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.differentiabilityParamList,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `DifferentiabilityParamListSyntax` by replacing the underlying layout with
@@ -3898,8 +3880,7 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `DifferentiabilityParamListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> DifferentiabilityParamListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> DifferentiabilityParamListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -3938,8 +3919,8 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
   public func inserting(_ syntax: Element, at index: Int) -> DifferentiabilityParamListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -3955,8 +3936,8 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
   public func replacing(childAt index: Int, with syntax: Element) -> DifferentiabilityParamListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -4069,8 +4050,8 @@ public struct DocumentationAttributeArgumentsSyntax: SyntaxCollection, SyntaxHas
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .documentationAttributeArguments else { 
-      return nil 
+    guard node.raw.kind == .documentationAttributeArguments else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -4084,19 +4065,19 @@ public struct DocumentationAttributeArgumentsSyntax: SyntaxCollection, SyntaxHas
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.documentationAttributeArguments, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.documentationAttributeArguments,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `DocumentationAttributeArgumentsSyntax` by replacing the underlying layout with
@@ -4105,8 +4086,7 @@ public struct DocumentationAttributeArgumentsSyntax: SyntaxCollection, SyntaxHas
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `DocumentationAttributeArgumentsSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> DocumentationAttributeArgumentsSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> DocumentationAttributeArgumentsSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -4145,8 +4125,8 @@ public struct DocumentationAttributeArgumentsSyntax: SyntaxCollection, SyntaxHas
   public func inserting(_ syntax: Element, at index: Int) -> DocumentationAttributeArgumentsSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -4162,8 +4142,8 @@ public struct DocumentationAttributeArgumentsSyntax: SyntaxCollection, SyntaxHas
   public func replacing(childAt index: Int, with syntax: Element) -> DocumentationAttributeArgumentsSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -4276,8 +4256,8 @@ public struct EffectsArgumentsSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .effectsArguments else { 
-      return nil 
+    guard node.raw.kind == .effectsArguments else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -4291,19 +4271,19 @@ public struct EffectsArgumentsSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.effectsArguments, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.effectsArguments,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `EffectsArgumentsSyntax` by replacing the underlying layout with
@@ -4312,8 +4292,7 @@ public struct EffectsArgumentsSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `EffectsArgumentsSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> EffectsArgumentsSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> EffectsArgumentsSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -4352,8 +4331,8 @@ public struct EffectsArgumentsSyntax: SyntaxCollection, SyntaxHashable {
   public func inserting(_ syntax: Element, at index: Int) -> EffectsArgumentsSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -4369,8 +4348,8 @@ public struct EffectsArgumentsSyntax: SyntaxCollection, SyntaxHashable {
   public func replacing(childAt index: Int, with syntax: Element) -> EffectsArgumentsSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -4483,8 +4462,8 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .enumCaseElementList else { 
-      return nil 
+    guard node.raw.kind == .enumCaseElementList else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -4498,19 +4477,19 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.enumCaseElementList, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.enumCaseElementList,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `EnumCaseElementListSyntax` by replacing the underlying layout with
@@ -4519,8 +4498,7 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `EnumCaseElementListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> EnumCaseElementListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> EnumCaseElementListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -4559,8 +4537,8 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
   public func inserting(_ syntax: Element, at index: Int) -> EnumCaseElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -4576,8 +4554,8 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
   public func replacing(childAt index: Int, with syntax: Element) -> EnumCaseElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -4693,8 +4671,8 @@ public struct EnumCaseParameterListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .enumCaseParameterList else { 
-      return nil 
+    guard node.raw.kind == .enumCaseParameterList else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -4708,19 +4686,19 @@ public struct EnumCaseParameterListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.enumCaseParameterList, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.enumCaseParameterList,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `EnumCaseParameterListSyntax` by replacing the underlying layout with
@@ -4729,8 +4707,7 @@ public struct EnumCaseParameterListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `EnumCaseParameterListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> EnumCaseParameterListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> EnumCaseParameterListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -4769,8 +4746,8 @@ public struct EnumCaseParameterListSyntax: SyntaxCollection, SyntaxHashable {
   public func inserting(_ syntax: Element, at index: Int) -> EnumCaseParameterListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -4786,8 +4763,8 @@ public struct EnumCaseParameterListSyntax: SyntaxCollection, SyntaxHashable {
   public func replacing(childAt index: Int, with syntax: Element) -> EnumCaseParameterListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -4900,8 +4877,8 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .exprList else { 
-      return nil 
+    guard node.raw.kind == .exprList else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -4915,19 +4892,19 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.exprList, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.exprList,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `ExprListSyntax` by replacing the underlying layout with
@@ -4936,8 +4913,7 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `ExprListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> ExprListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> ExprListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -4976,8 +4952,8 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
   public func inserting(_ syntax: Element, at index: Int) -> ExprListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -4993,8 +4969,8 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
   public func replacing(childAt index: Int, with syntax: Element) -> ExprListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -5110,8 +5086,8 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .functionParameterList else { 
-      return nil 
+    guard node.raw.kind == .functionParameterList else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -5125,19 +5101,19 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.functionParameterList, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.functionParameterList,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `FunctionParameterListSyntax` by replacing the underlying layout with
@@ -5146,8 +5122,7 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `FunctionParameterListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> FunctionParameterListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> FunctionParameterListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -5186,8 +5161,8 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
   public func inserting(_ syntax: Element, at index: Int) -> FunctionParameterListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -5203,8 +5178,8 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
   public func replacing(childAt index: Int, with syntax: Element) -> FunctionParameterListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -5320,8 +5295,8 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .genericArgumentList else { 
-      return nil 
+    guard node.raw.kind == .genericArgumentList else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -5335,19 +5310,19 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.genericArgumentList, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.genericArgumentList,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `GenericArgumentListSyntax` by replacing the underlying layout with
@@ -5356,8 +5331,7 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `GenericArgumentListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> GenericArgumentListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> GenericArgumentListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -5396,8 +5370,8 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   public func inserting(_ syntax: Element, at index: Int) -> GenericArgumentListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -5413,8 +5387,8 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   public func replacing(childAt index: Int, with syntax: Element) -> GenericArgumentListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -5530,8 +5504,8 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .genericParameterList else { 
-      return nil 
+    guard node.raw.kind == .genericParameterList else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -5545,19 +5519,19 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.genericParameterList, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.genericParameterList,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `GenericParameterListSyntax` by replacing the underlying layout with
@@ -5566,8 +5540,7 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `GenericParameterListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> GenericParameterListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> GenericParameterListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -5606,8 +5579,8 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
   public func inserting(_ syntax: Element, at index: Int) -> GenericParameterListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -5623,8 +5596,8 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
   public func replacing(childAt index: Int, with syntax: Element) -> GenericParameterListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -5740,8 +5713,8 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .genericRequirementList else { 
-      return nil 
+    guard node.raw.kind == .genericRequirementList else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -5755,19 +5728,19 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.genericRequirementList, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.genericRequirementList,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `GenericRequirementListSyntax` by replacing the underlying layout with
@@ -5776,8 +5749,7 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `GenericRequirementListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> GenericRequirementListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> GenericRequirementListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -5816,8 +5788,8 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
   public func inserting(_ syntax: Element, at index: Int) -> GenericRequirementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -5833,8 +5805,8 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
   public func replacing(childAt index: Int, with syntax: Element) -> GenericRequirementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -5950,8 +5922,8 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .ifConfigClauseList else { 
-      return nil 
+    guard node.raw.kind == .ifConfigClauseList else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -5965,19 +5937,19 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.ifConfigClauseList, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.ifConfigClauseList,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `IfConfigClauseListSyntax` by replacing the underlying layout with
@@ -5986,8 +5958,7 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `IfConfigClauseListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> IfConfigClauseListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> IfConfigClauseListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -6026,8 +5997,8 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
   public func inserting(_ syntax: Element, at index: Int) -> IfConfigClauseListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -6043,8 +6014,8 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
   public func replacing(childAt index: Int, with syntax: Element) -> IfConfigClauseListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -6160,8 +6131,8 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .inheritedTypeList else { 
-      return nil 
+    guard node.raw.kind == .inheritedTypeList else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -6175,19 +6146,19 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.inheritedTypeList, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.inheritedTypeList,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `InheritedTypeListSyntax` by replacing the underlying layout with
@@ -6196,8 +6167,7 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `InheritedTypeListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> InheritedTypeListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> InheritedTypeListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -6236,8 +6206,8 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   public func inserting(_ syntax: Element, at index: Int) -> InheritedTypeListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -6253,8 +6223,8 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   public func replacing(childAt index: Int, with syntax: Element) -> InheritedTypeListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -6370,8 +6340,8 @@ public struct KeyPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .keyPathComponentList else { 
-      return nil 
+    guard node.raw.kind == .keyPathComponentList else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -6385,19 +6355,19 @@ public struct KeyPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.keyPathComponentList, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.keyPathComponentList,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `KeyPathComponentListSyntax` by replacing the underlying layout with
@@ -6406,8 +6376,7 @@ public struct KeyPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `KeyPathComponentListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> KeyPathComponentListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> KeyPathComponentListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -6446,8 +6415,8 @@ public struct KeyPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
   public func inserting(_ syntax: Element, at index: Int) -> KeyPathComponentListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -6463,8 +6432,8 @@ public struct KeyPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
   public func replacing(childAt index: Int, with syntax: Element) -> KeyPathComponentListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -6580,8 +6549,8 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .memberDeclList else { 
-      return nil 
+    guard node.raw.kind == .memberDeclList else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -6595,19 +6564,19 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.memberDeclList, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.memberDeclList,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `MemberDeclListSyntax` by replacing the underlying layout with
@@ -6616,8 +6585,7 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `MemberDeclListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> MemberDeclListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> MemberDeclListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -6656,8 +6624,8 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
   public func inserting(_ syntax: Element, at index: Int) -> MemberDeclListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -6673,8 +6641,8 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
   public func replacing(childAt index: Int, with syntax: Element) -> MemberDeclListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -6790,8 +6758,8 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .modifierList else { 
-      return nil 
+    guard node.raw.kind == .modifierList else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -6805,19 +6773,19 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.modifierList, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `ModifierListSyntax` by replacing the underlying layout with
@@ -6826,8 +6794,7 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `ModifierListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> ModifierListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> ModifierListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -6866,8 +6833,8 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
   public func inserting(_ syntax: Element, at index: Int) -> ModifierListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -6883,8 +6850,8 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
   public func replacing(childAt index: Int, with syntax: Element) -> ModifierListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -7000,8 +6967,8 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .multipleTrailingClosureElementList else { 
-      return nil 
+    guard node.raw.kind == .multipleTrailingClosureElementList else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -7015,19 +6982,19 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.multipleTrailingClosureElementList, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.multipleTrailingClosureElementList,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `MultipleTrailingClosureElementListSyntax` by replacing the underlying layout with
@@ -7036,8 +7003,7 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `MultipleTrailingClosureElementListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> MultipleTrailingClosureElementListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> MultipleTrailingClosureElementListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -7076,8 +7042,8 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
   public func inserting(_ syntax: Element, at index: Int) -> MultipleTrailingClosureElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -7093,8 +7059,8 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
   public func replacing(childAt index: Int, with syntax: Element) -> MultipleTrailingClosureElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -7210,8 +7176,8 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .objCSelector else { 
-      return nil 
+    guard node.raw.kind == .objCSelector else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -7225,19 +7191,19 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.objCSelector, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.objCSelector,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `ObjCSelectorSyntax` by replacing the underlying layout with
@@ -7246,8 +7212,7 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `ObjCSelectorSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> ObjCSelectorSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> ObjCSelectorSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -7286,8 +7251,8 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
   public func inserting(_ syntax: Element, at index: Int) -> ObjCSelectorSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -7303,8 +7268,8 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
   public func replacing(childAt index: Int, with syntax: Element) -> ObjCSelectorSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -7420,8 +7385,8 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .patternBindingList else { 
-      return nil 
+    guard node.raw.kind == .patternBindingList else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -7435,19 +7400,19 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.patternBindingList, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.patternBindingList,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `PatternBindingListSyntax` by replacing the underlying layout with
@@ -7456,8 +7421,7 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `PatternBindingListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> PatternBindingListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> PatternBindingListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -7496,8 +7460,8 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
   public func inserting(_ syntax: Element, at index: Int) -> PatternBindingListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -7513,8 +7477,8 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
   public func replacing(childAt index: Int, with syntax: Element) -> PatternBindingListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -7638,8 +7602,8 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
       }
     }
     
-    init(_ data: SyntaxData) { 
-      self.init(Syntax(data))! 
+    init(_ data: SyntaxData) {
+      self.init(Syntax(data))!
     }
     
     public init(_ node: PrecedenceGroupRelationSyntax) {
@@ -7657,23 +7621,23 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
     public init?<S: SyntaxProtocol>(_ node: S) {
       if let node = node.as(PrecedenceGroupRelationSyntax.self) {
         self = .precedenceGroupRelation(node)
-        return 
+        return
       }
       if let node = node.as(PrecedenceGroupAssignmentSyntax.self) {
         self = .precedenceGroupAssignment(node)
-        return 
+        return
       }
       if let node = node.as(PrecedenceGroupAssociativitySyntax.self) {
         self = .precedenceGroupAssociativity(node)
-        return 
+        return
       }
       return nil
     }
     
     public static var structure: SyntaxNodeStructure {
       return .choices([
-          .node(PrecedenceGroupRelationSyntax.self), 
-          .node(PrecedenceGroupAssignmentSyntax.self), 
+          .node(PrecedenceGroupRelationSyntax.self),
+          .node(PrecedenceGroupAssignmentSyntax.self),
           .node(PrecedenceGroupAssociativitySyntax.self)])
     }
   }
@@ -7685,8 +7649,8 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .precedenceGroupAttributeList else { 
-      return nil 
+    guard node.raw.kind == .precedenceGroupAttributeList else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -7700,19 +7664,19 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.precedenceGroupAttributeList, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.precedenceGroupAttributeList,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `PrecedenceGroupAttributeListSyntax` by replacing the underlying layout with
@@ -7721,8 +7685,7 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `PrecedenceGroupAttributeListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> PrecedenceGroupAttributeListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> PrecedenceGroupAttributeListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -7761,8 +7724,8 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
   public func inserting(_ syntax: Element, at index: Int) -> PrecedenceGroupAttributeListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -7778,8 +7741,8 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
   public func replacing(childAt index: Int, with syntax: Element) -> PrecedenceGroupAttributeListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -7895,8 +7858,8 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .precedenceGroupNameList else { 
-      return nil 
+    guard node.raw.kind == .precedenceGroupNameList else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -7910,19 +7873,19 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.precedenceGroupNameList, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.precedenceGroupNameList,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `PrecedenceGroupNameListSyntax` by replacing the underlying layout with
@@ -7931,8 +7894,7 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `PrecedenceGroupNameListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> PrecedenceGroupNameListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> PrecedenceGroupNameListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -7971,8 +7933,8 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
   public func inserting(_ syntax: Element, at index: Int) -> PrecedenceGroupNameListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -7988,8 +7950,8 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
   public func replacing(childAt index: Int, with syntax: Element) -> PrecedenceGroupNameListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -8105,8 +8067,8 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .primaryAssociatedTypeList else { 
-      return nil 
+    guard node.raw.kind == .primaryAssociatedTypeList else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -8120,19 +8082,19 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.primaryAssociatedTypeList, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.primaryAssociatedTypeList,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `PrimaryAssociatedTypeListSyntax` by replacing the underlying layout with
@@ -8141,8 +8103,7 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `PrimaryAssociatedTypeListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> PrimaryAssociatedTypeListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> PrimaryAssociatedTypeListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -8181,8 +8142,8 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
   public func inserting(_ syntax: Element, at index: Int) -> PrimaryAssociatedTypeListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -8198,8 +8159,8 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
   public func replacing(childAt index: Int, with syntax: Element) -> PrimaryAssociatedTypeListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -8323,8 +8284,8 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
       }
     }
     
-    init(_ data: SyntaxData) { 
-      self.init(Syntax(data))! 
+    init(_ data: SyntaxData) {
+      self.init(Syntax(data))!
     }
     
     public init(_ node: LabeledSpecializeEntrySyntax) {
@@ -8346,28 +8307,28 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
     public init?<S: SyntaxProtocol>(_ node: S) {
       if let node = node.as(LabeledSpecializeEntrySyntax.self) {
         self = .labeledSpecializeEntry(node)
-        return 
+        return
       }
       if let node = node.as(AvailabilityEntrySyntax.self) {
         self = .availabilityEntry(node)
-        return 
+        return
       }
       if let node = node.as(TargetFunctionEntrySyntax.self) {
         self = .targetFunctionEntry(node)
-        return 
+        return
       }
       if let node = node.as(GenericWhereClauseSyntax.self) {
         self = .genericWhereClause(node)
-        return 
+        return
       }
       return nil
     }
     
     public static var structure: SyntaxNodeStructure {
       return .choices([
-            .node(LabeledSpecializeEntrySyntax.self), 
-            .node(AvailabilityEntrySyntax.self), 
-            .node(TargetFunctionEntrySyntax.self), 
+            .node(LabeledSpecializeEntrySyntax.self),
+            .node(AvailabilityEntrySyntax.self),
+            .node(TargetFunctionEntrySyntax.self),
             .node(GenericWhereClauseSyntax.self)
           ])
     }
@@ -8380,8 +8341,8 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .specializeAttributeSpecList else { 
-      return nil 
+    guard node.raw.kind == .specializeAttributeSpecList else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -8395,19 +8356,19 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.specializeAttributeSpecList, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.specializeAttributeSpecList,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `SpecializeAttributeSpecListSyntax` by replacing the underlying layout with
@@ -8416,8 +8377,7 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `SpecializeAttributeSpecListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> SpecializeAttributeSpecListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> SpecializeAttributeSpecListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -8456,8 +8416,8 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
   public func inserting(_ syntax: Element, at index: Int) -> SpecializeAttributeSpecListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -8473,8 +8433,8 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
   public func replacing(childAt index: Int, with syntax: Element) -> SpecializeAttributeSpecListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -8595,8 +8555,8 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
       }
     }
     
-    init(_ data: SyntaxData) { 
-      self.init(Syntax(data))! 
+    init(_ data: SyntaxData) {
+      self.init(Syntax(data))!
     }
     
     public init(_ node: StringSegmentSyntax) {
@@ -8610,18 +8570,18 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
     public init?<S: SyntaxProtocol>(_ node: S) {
       if let node = node.as(StringSegmentSyntax.self) {
         self = .stringSegment(node)
-        return 
+        return
       }
       if let node = node.as(ExpressionSegmentSyntax.self) {
         self = .expressionSegment(node)
-        return 
+        return
       }
       return nil
     }
     
     public static var structure: SyntaxNodeStructure {
       return .choices([
-          .node(StringSegmentSyntax.self), 
+          .node(StringSegmentSyntax.self),
           .node(ExpressionSegmentSyntax.self)])
     }
   }
@@ -8633,8 +8593,8 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .stringLiteralSegments else { 
-      return nil 
+    guard node.raw.kind == .stringLiteralSegments else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -8648,19 +8608,19 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.stringLiteralSegments, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.stringLiteralSegments,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `StringLiteralSegmentsSyntax` by replacing the underlying layout with
@@ -8669,8 +8629,7 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `StringLiteralSegmentsSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> StringLiteralSegmentsSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> StringLiteralSegmentsSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -8709,8 +8668,8 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
   public func inserting(_ syntax: Element, at index: Int) -> StringLiteralSegmentsSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -8726,8 +8685,8 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
   public func replacing(childAt index: Int, with syntax: Element) -> StringLiteralSegmentsSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -8848,8 +8807,8 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
       }
     }
     
-    init(_ data: SyntaxData) { 
-      self.init(Syntax(data))! 
+    init(_ data: SyntaxData) {
+      self.init(Syntax(data))!
     }
     
     public init(_ node: SwitchCaseSyntax) {
@@ -8863,18 +8822,18 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
     public init?<S: SyntaxProtocol>(_ node: S) {
       if let node = node.as(SwitchCaseSyntax.self) {
         self = .switchCase(node)
-        return 
+        return
       }
       if let node = node.as(IfConfigDeclSyntax.self) {
         self = .ifConfigDecl(node)
-        return 
+        return
       }
       return nil
     }
     
     public static var structure: SyntaxNodeStructure {
       return .choices([
-          .node(SwitchCaseSyntax.self), 
+          .node(SwitchCaseSyntax.self),
           .node(IfConfigDeclSyntax.self)])
     }
   }
@@ -8886,8 +8845,8 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .switchCaseList else { 
-      return nil 
+    guard node.raw.kind == .switchCaseList else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -8901,19 +8860,19 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.switchCaseList, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.switchCaseList,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `SwitchCaseListSyntax` by replacing the underlying layout with
@@ -8922,8 +8881,7 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `SwitchCaseListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> SwitchCaseListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> SwitchCaseListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -8962,8 +8920,8 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
   public func inserting(_ syntax: Element, at index: Int) -> SwitchCaseListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -8979,8 +8937,8 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
   public func replacing(childAt index: Int, with syntax: Element) -> SwitchCaseListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -9096,8 +9054,8 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .tupleExprElementList else { 
-      return nil 
+    guard node.raw.kind == .tupleExprElementList else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -9111,19 +9069,19 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElementList, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElementList,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `TupleExprElementListSyntax` by replacing the underlying layout with
@@ -9132,8 +9090,7 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `TupleExprElementListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> TupleExprElementListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> TupleExprElementListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -9172,8 +9129,8 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
   public func inserting(_ syntax: Element, at index: Int) -> TupleExprElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -9189,8 +9146,8 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
   public func replacing(childAt index: Int, with syntax: Element) -> TupleExprElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -9306,8 +9263,8 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .tuplePatternElementList else { 
-      return nil 
+    guard node.raw.kind == .tuplePatternElementList else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -9321,19 +9278,19 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.tuplePatternElementList, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.tuplePatternElementList,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `TuplePatternElementListSyntax` by replacing the underlying layout with
@@ -9342,8 +9299,7 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `TuplePatternElementListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> TuplePatternElementListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> TuplePatternElementListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -9382,8 +9338,8 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
   public func inserting(_ syntax: Element, at index: Int) -> TuplePatternElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -9399,8 +9355,8 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
   public func replacing(childAt index: Int, with syntax: Element) -> TuplePatternElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -9516,8 +9472,8 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .tupleTypeElementList else { 
-      return nil 
+    guard node.raw.kind == .tupleTypeElementList else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -9531,19 +9487,19 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.tupleTypeElementList, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.tupleTypeElementList,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `TupleTypeElementListSyntax` by replacing the underlying layout with
@@ -9552,8 +9508,7 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `TupleTypeElementListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> TupleTypeElementListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> TupleTypeElementListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -9592,8 +9547,8 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
   public func inserting(_ syntax: Element, at index: Int) -> TupleTypeElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -9609,8 +9564,8 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
   public func replacing(childAt index: Int, with syntax: Element) -> TupleTypeElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -9723,8 +9678,8 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .unexpectedNodes else { 
-      return nil 
+    guard node.raw.kind == .unexpectedNodes else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -9738,19 +9693,19 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.unexpectedNodes, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.unexpectedNodes,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `UnexpectedNodesSyntax` by replacing the underlying layout with
@@ -9759,8 +9714,7 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `UnexpectedNodesSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> UnexpectedNodesSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> UnexpectedNodesSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -9799,8 +9753,8 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
   public func inserting(_ syntax: Element, at index: Int) -> UnexpectedNodesSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -9816,8 +9770,8 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
   public func replacing(childAt index: Int, with syntax: Element) -> UnexpectedNodesSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }
@@ -9933,8 +9887,8 @@ public struct YieldExprListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .yieldExprList else { 
-      return nil 
+    guard node.raw.kind == .yieldExprList else {
+      return nil
     }
     self._syntaxNode = node._syntaxNode
   }
@@ -9948,19 +9902,19 @@ public struct YieldExprListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in 
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.yieldExprList, 
-                                   from: children.map { 
-          $0.raw 
-        }, arena: arena)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.yieldExprList,
+                                     from: children.map {
+            $0.raw
+          }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { 
-    return layoutView.children.count 
+  public var count: Int {
+    return layoutView.children.count
   }
   
   /// Creates a new `YieldExprListSyntax` by replacing the underlying layout with
@@ -9969,8 +9923,7 @@ public struct YieldExprListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
   /// - Returns: A new `YieldExprListSyntax` with the new layout underlying it.
-  internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> YieldExprListSyntax {
+  internal func replacingLayout(_ layout: [RawSyntax?]) -> YieldExprListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -10009,8 +9962,8 @@ public struct YieldExprListSyntax: SyntaxCollection, SyntaxHashable {
   public func inserting(_ syntax: Element, at index: Int) -> YieldExprListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
-    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index), 
-               "inserting node at invalid index \(index)")
+    precondition((newLayout.startIndex ... newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
     newLayout.insert(syntax.raw, at: index)
     return replacingLayout(newLayout)
   }
@@ -10026,8 +9979,8 @@ public struct YieldExprListSyntax: SyntaxCollection, SyntaxHashable {
   public func replacing(childAt index: Int, with syntax: Element) -> YieldExprListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
-    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index), 
-               "replacing node at invalid index \(index)")
+    precondition((newLayout.startIndex ..< newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
     newLayout[index] = syntax.raw
     return replacingLayout(newLayout)
   }

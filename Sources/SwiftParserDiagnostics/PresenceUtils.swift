@@ -50,71 +50,15 @@ class PresentMaker: SyntaxRewriter {
       let presentToken: TokenSyntax
       let (rawKind, text) = token.tokenKind.decomposeToRaw()
       if let text = text, (!text.isEmpty || rawKind == .stringSegment) {  // string segments can have empty text
-        presentToken = TokenSyntax(token.tokenKind, presence: .present)
+        presentToken = token.with(\.presence, .present)
       } else {
         let newKind = TokenKind.fromRaw(kind: rawKind, text: rawKind.defaultText.map(String.init) ?? "<#\(token.tokenKind.nameForDiagnostics)#>")
-        presentToken = TokenSyntax(newKind, leadingTrivia: token.leadingTrivia, trailingTrivia: token.trailingTrivia, presence: .present)
+        presentToken = token.with(\.tokenKind, newKind).with(\.presence, .present)
       }
-      return BasicFormat().visit(presentToken)
+      return presentToken
     } else {
       return token
     }
-  }
-
-  override func visit(_ node: MissingDeclSyntax) -> DeclSyntax {
-    let leadingTriviaBeforePlaceholder: Trivia
-    if node.isMissingAllTokens {
-      leadingTriviaBeforePlaceholder = []
-    } else if node.modifiers != nil {
-      leadingTriviaBeforePlaceholder = .space
-    } else {
-      leadingTriviaBeforePlaceholder = .newline
-    }
-    return DeclSyntax(
-      StructDeclSyntax(
-        node.unexpectedBeforeAttributes,
-        attributes: node.attributes,
-        node.unexpectedBetweenAttributesAndModifiers,
-        modifiers: node.modifiers,
-        structKeyword: .keyword(.struct, presence: .missing),
-        identifier: .identifier("<#declaration#>", leadingTrivia: leadingTriviaBeforePlaceholder),
-        memberBlock: MemberDeclBlockSyntax(
-          leftBrace: .leftBraceToken(presence: .missing),
-          members: MemberDeclListSyntax([]),
-          rightBrace: .rightBraceToken(presence: .missing)
-        )
-      )
-    )
-  }
-
-  override func visit(_ node: MissingExprSyntax) -> ExprSyntax {
-    return ExprSyntax(IdentifierExprSyntax(identifier: .identifier("<#expression#>")))
-  }
-
-  override func visit(_ node: MissingPatternSyntax) -> PatternSyntax {
-    return PatternSyntax(IdentifierPatternSyntax(identifier: .identifier("<#pattern#>")))
-  }
-
-  override func visit(_ node: MissingStmtSyntax) -> StmtSyntax {
-    return StmtSyntax(
-      DoStmtSyntax(
-        doKeyword: .keyword(.do, presence: .missing),
-        UnexpectedNodesSyntax([Syntax(TokenSyntax.identifier("<#statement#>"))]),
-        body: CodeBlockSyntax(
-          leftBrace: .leftBraceToken(presence: .missing),
-          statements: CodeBlockItemListSyntax([]),
-          rightBrace: .rightBraceToken(presence: .missing)
-        )
-      )
-    )
-  }
-
-  override func visit(_ node: MissingTypeSyntax) -> TypeSyntax {
-    return TypeSyntax(SimpleTypeIdentifierSyntax(name: .identifier("<#type#>")))
-  }
-
-  override func visit(_ node: MissingSyntax) -> Syntax {
-    return Syntax(IdentifierExprSyntax(identifier: .identifier("<#syntax#>")))
   }
 }
 

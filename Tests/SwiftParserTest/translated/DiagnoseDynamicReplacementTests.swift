@@ -65,7 +65,12 @@ final class DiagnoseDynamicReplacementTests: XCTestCase {
             NoteSpec(message: "to match this opening '('")
           ]
         )
-      ]
+      ],
+      fixedSource: """
+        @_dynamicReplacement(for: dynamically_replaceable())
+        func test_dynamic_replacement_for3() {
+        }
+        """
     )
   }
 

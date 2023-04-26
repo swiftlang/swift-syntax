@@ -181,7 +181,7 @@ let triviaPiecesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   ) {
     for trivia in TRIVIAS {
       if trivia.isCollection {
-        DeclSyntax(" case \(raw: trivia.enumCaseName)(Int)")
+        DeclSyntax("case \(raw: trivia.enumCaseName)(Int)")
 
       } else {
         DeclSyntax("case \(raw: trivia.enumCaseName)(SyntaxText)")
@@ -263,5 +263,52 @@ let triviaPiecesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         }
       }
     }
+  }
+
+  try! generateIsHelpers(for: "TriviaPiece")
+
+  try! generateIsHelpers(for: "RawTriviaPiece")
+}
+
+fileprivate func generateIsHelpers(for pieceName: String) throws -> ExtensionDeclSyntax {
+  return try ExtensionDeclSyntax("extension \(raw: pieceName)") {
+    DeclSyntax(
+      """
+      /// Returns `true` if this piece is a newline, space or tab.
+      public var isWhitespace: Bool {
+        return isSpaceOrTab || isNewline
+      }
+      """
+    )
+
+    try VariableDeclSyntax("public var isNewline: Bool") {
+      try SwitchExprSyntax("switch self") {
+        for trivia in TRIVIAS {
+          if trivia.isNewLine {
+            SwitchCaseSyntax("case .\(raw: trivia.enumCaseName):") {
+              StmtSyntax("return true")
+            }
+          }
+        }
+        SwitchCaseSyntax("default:") {
+          StmtSyntax("return false")
+        }
+      }
+    }
+
+    DeclSyntax(
+      """
+      public var isSpaceOrTab: Bool {
+        switch self {
+        case .spaces:
+          return true
+        case .tabs:
+          return true
+        default:
+          return false
+        }
+      }
+      """
+    )
   }
 }

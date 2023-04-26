@@ -169,11 +169,11 @@ let rawSyntaxNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           public init(elements: [\(raw: element)], arena: __shared SyntaxArena) {
             let raw = RawSyntax.makeLayout(
               kind: .\(raw: node.swiftSyntaxKind), uninitializedCount: elements.count, arena: arena) { layout in
-                  guard var ptr = layout.baseAddress else { return }
-                  for elem in elements {
-                    ptr.initialize(to: elem.raw)
-                    ptr += 1
-                  }
+                guard var ptr = layout.baseAddress else { return }
+                for elem in elements {
+                  ptr.initialize(to: elem.raw)
+                  ptr += 1
+                }
             }
             self.init(unchecked: raw)
           }
@@ -183,7 +183,7 @@ let rawSyntaxNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         DeclSyntax(
           """
           public var elements: [Raw\(raw: node.collectionElementType.syntaxBaseName)] {
-              layoutView.children.map { Raw\(raw: node.collectionElementType.syntaxBaseName)(raw: $0!) }
+            layoutView.children.map { Raw\(raw: node.collectionElementType.syntaxBaseName)(raw: $0!) }
           }
           """
         )
@@ -193,15 +193,15 @@ let rawSyntaxNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         let params = FunctionParameterListSyntax {
           for child in node.children {
             FunctionParameterSyntax(
-              firstName: child.isUnexpectedNodes ? .wildcardToken(trailingTrivia: .space) : nil,
-              secondName: .identifier(child.swiftName),
+              firstName: child.isUnexpectedNodes ? .wildcardToken(trailingTrivia: .space) : .identifier(child.swiftName),
+              secondName: child.isUnexpectedNodes ? .identifier(child.swiftName) : nil,
               colon: .colonToken(),
               type: child.rawParameterType,
               defaultArgument: child.isUnexpectedNodes ? child.defaultInitialization : nil
             )
           }
 
-          FunctionParameterSyntax("arena: __shared SyntaxArena", for: .functionParameters)
+          FunctionParameterSyntax("arena: __shared SyntaxArena")
         }
         try InitializerDeclSyntax("public init(\(params))") {
           if !node.children.isEmpty {

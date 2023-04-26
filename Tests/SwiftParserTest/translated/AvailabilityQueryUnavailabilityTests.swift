@@ -90,8 +90,12 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '(', '@availability' arguments, and ')' in availability condition")
-      ]
+        DiagnosticSpec(message: "expected '(', '@availability' arguments, and ')' in availability condition", fixIts: ["insert '(', '@availability' arguments, and ')'"])
+      ],
+      fixedSource: """
+        if #unavailable(<#identifier#>) {
+        }
+        """
     )
   }
 
@@ -102,9 +106,12 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected version restriction in availability argument"),
-        DiagnosticSpec(message: "expected ')' to end availability condition"),
-      ]
+        DiagnosticSpec(message: "expected platform and ')' to end availability condition", fixIts: ["insert platform and ')'"])
+      ],
+      fixedSource: """
+        if #unavailable(<#identifier#>) {
+        }
+        """
     )
   }
 
@@ -292,9 +299,13 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected version restriction in availability argument"),
-        DiagnosticSpec(message: "expected ')' to end availability condition"),
-      ]
+        DiagnosticSpec(message: "expected version restriction in availability argument", fixIts: ["insert version restriction"]),
+        DiagnosticSpec(message: "expected ')' to end availability condition", fixIts: ["insert ')'"]),
+      ],
+      fixedSource: """
+        if #unavailable(OSX 10.51, <#identifier#>) {
+        }
+        """
     )
   }
 
@@ -305,8 +316,12 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected version restriction in availability argument")
-      ]
+        DiagnosticSpec(message: "expected version restriction in availability argument", fixIts: ["insert version restriction"])
+      ],
+      fixedSource: """
+        if #unavailable(OSX 10.51, <#identifier#>) {
+        }
+        """
     )
   }
 

@@ -15,9 +15,9 @@
 // MARK: - AttributedSyntax
 
 public protocol AttributedSyntax: SyntaxProtocol {
-  var attributes: AttributeListSyntax? { 
-    get 
-    set 
+  var attributes: AttributeListSyntax? {
+    get
+    set
   }
 }
 
@@ -51,14 +51,14 @@ public extension SyntaxProtocol {
 // MARK: - BracedSyntax
 
 public protocol BracedSyntax: SyntaxProtocol {
-  var leftBrace: TokenSyntax { 
-    get 
-    set 
+  var leftBrace: TokenSyntax {
+    get
+    set
   }
   
-  var rightBrace: TokenSyntax { 
-    get 
-    set 
+  var rightBrace: TokenSyntax {
+    get
+    set
   }
 }
 
@@ -92,19 +92,19 @@ public extension SyntaxProtocol {
 // MARK: - DeclGroupSyntax
 
 public protocol DeclGroupSyntax: SyntaxProtocol {
-  var attributes: AttributeListSyntax? { 
-    get 
-    set 
+  var attributes: AttributeListSyntax? {
+    get
+    set
   }
   
-  var modifiers: ModifierListSyntax? { 
-    get 
-    set 
+  var modifiers: ModifierListSyntax? {
+    get
+    set
   }
   
-  var memberBlock: MemberDeclBlockSyntax { 
-    get 
-    set 
+  var memberBlock: MemberDeclBlockSyntax {
+    get
+    set
   }
 }
 
@@ -138,29 +138,29 @@ public extension SyntaxProtocol {
 // MARK: - EffectSpecifiersSyntax
 
 public protocol EffectSpecifiersSyntax: SyntaxProtocol {
-  var unexpectedBeforeAsyncSpecifier: UnexpectedNodesSyntax? { 
-    get 
-    set 
+  var unexpectedBeforeAsyncSpecifier: UnexpectedNodesSyntax? {
+    get
+    set
   }
   
-  var asyncSpecifier: TokenSyntax? { 
-    get 
-    set 
+  var asyncSpecifier: TokenSyntax? {
+    get
+    set
   }
   
-  var unexpectedBetweenAsyncSpecifierAndThrowsSpecifier: UnexpectedNodesSyntax? { 
-    get 
-    set 
+  var unexpectedBetweenAsyncSpecifierAndThrowsSpecifier: UnexpectedNodesSyntax? {
+    get
+    set
   }
   
-  var throwsSpecifier: TokenSyntax? { 
-    get 
-    set 
+  var throwsSpecifier: TokenSyntax? {
+    get
+    set
   }
   
-  var unexpectedAfterThrowsSpecifier: UnexpectedNodesSyntax? { 
-    get 
-    set 
+  var unexpectedAfterThrowsSpecifier: UnexpectedNodesSyntax? {
+    get
+    set
   }
 }
 
@@ -194,44 +194,44 @@ public extension SyntaxProtocol {
 // MARK: - FreestandingMacroExpansionSyntax
 
 public protocol FreestandingMacroExpansionSyntax: SyntaxProtocol {
-  var poundToken: TokenSyntax { 
-    get 
-    set 
+  var poundToken: TokenSyntax {
+    get
+    set
   }
   
-  var macro: TokenSyntax { 
-    get 
-    set 
+  var macro: TokenSyntax {
+    get
+    set
   }
   
-  var genericArguments: GenericArgumentClauseSyntax? { 
-    get 
-    set 
+  var genericArguments: GenericArgumentClauseSyntax? {
+    get
+    set
   }
   
-  var leftParen: TokenSyntax? { 
-    get 
-    set 
+  var leftParen: TokenSyntax? {
+    get
+    set
   }
   
-  var argumentList: TupleExprElementListSyntax { 
-    get 
-    set 
+  var argumentList: TupleExprElementListSyntax {
+    get
+    set
   }
   
-  var rightParen: TokenSyntax? { 
-    get 
-    set 
+  var rightParen: TokenSyntax? {
+    get
+    set
   }
   
-  var trailingClosure: ClosureExprSyntax? { 
-    get 
-    set 
+  var trailingClosure: ClosureExprSyntax? {
+    get
+    set
   }
   
-  var additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? { 
-    get 
-    set 
+  var additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? {
+    get
+    set
   }
 }
 
@@ -265,9 +265,9 @@ public extension SyntaxProtocol {
 // MARK: - IdentifiedDeclSyntax
 
 public protocol IdentifiedDeclSyntax: SyntaxProtocol {
-  var identifier: TokenSyntax { 
-    get 
-    set 
+  var identifier: TokenSyntax {
+    get
+    set
   }
 }
 
@@ -301,14 +301,14 @@ public extension SyntaxProtocol {
 // MARK: - ParenthesizedSyntax
 
 public protocol ParenthesizedSyntax: SyntaxProtocol {
-  var leftParen: TokenSyntax { 
-    get 
-    set 
+  var leftParen: TokenSyntax {
+    get
+    set
   }
   
-  var rightParen: TokenSyntax { 
-    get 
-    set 
+  var rightParen: TokenSyntax {
+    get
+    set
   }
 }
 
@@ -342,9 +342,9 @@ public extension SyntaxProtocol {
 // MARK: - WithCodeBlockSyntax
 
 public protocol WithCodeBlockSyntax: SyntaxProtocol {
-  var body: CodeBlockSyntax { 
-    get 
-    set 
+  var body: CodeBlockSyntax {
+    get
+    set
   }
 }
 
@@ -378,9 +378,9 @@ public extension SyntaxProtocol {
 // MARK: - WithStatementsSyntax
 
 public protocol WithStatementsSyntax: SyntaxProtocol {
-  var statements: CodeBlockItemListSyntax { 
-    get 
-    set 
+  var statements: CodeBlockItemListSyntax {
+    get
+    set
   }
 }
 
@@ -414,9 +414,9 @@ public extension SyntaxProtocol {
 // MARK: - WithTrailingCommaSyntax
 
 public protocol WithTrailingCommaSyntax: SyntaxProtocol {
-  var trailingComma: TokenSyntax? { 
-    get 
-    set 
+  var trailingComma: TokenSyntax? {
+    get
+    set
   }
 }
 

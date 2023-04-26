@@ -20,9 +20,9 @@ extension SyntaxParseable {
   public typealias StringInterpolation = SyntaxStringInterpolation
   
   public init(stringInterpolation: SyntaxStringInterpolation) {
-    self = performParse(source: stringInterpolation.sourceText, parse: { parser in 
-        return Self.parse(from: &parser)
-      })
+    self = performParse(source: stringInterpolation.sourceText, parse: { parser in
+      return Self.parse(from: &parser)
+    })
   }
 }
 
@@ -60,7 +60,7 @@ extension TypeSyntax: SyntaxExpressibleByStringInterpolation {}
 // but is currently used in `ConvenienceInitializers.swift`.
 // See the corresponding TODO there.
 func performParse<SyntaxType: SyntaxProtocol>(source: [UInt8], parse: (inout Parser) -> SyntaxType) -> SyntaxType {
-  return source.withUnsafeBufferPointer { buffer in 
+  return source.withUnsafeBufferPointer { buffer in
     var parser = Parser(buffer)
     // FIXME: When the parser supports incremental parsing, put the
     // interpolatedSyntaxNodes in so we don't have to parse them again.

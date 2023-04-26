@@ -16,8 +16,6 @@ import SwiftSyntaxBuilder
 
 final class CollectionNodeFlatteningTests: XCTestCase {
   func test_FlattenCodeBlockItemListWithBuilder() {
-    let leadingTrivia = Trivia.unexpectedText("␣")
-
     @CodeBlockItemListBuilder
     func buildInnerCodeBlockItemList() -> CodeBlockItemListSyntax {
       FunctionCallExprSyntax(callee: ExprSyntax("innerBuilder"))
@@ -30,7 +28,7 @@ final class CollectionNodeFlatteningTests: XCTestCase {
       buildInnerCodeBlockItemList()
     }
 
-    let codeBlock = CodeBlockSyntax(leadingTrivia: leadingTrivia) {
+    let codeBlock = CodeBlockSyntax {
       FunctionCallExprSyntax(callee: ExprSyntax("outsideBuilder"))
       buildOuterCodeBlockItemList()
     }
@@ -38,7 +36,7 @@ final class CollectionNodeFlatteningTests: XCTestCase {
     assertBuildResult(
       codeBlock,
       """
-      ␣{
+      {
           outsideBuilder()
           outerBuilder()
           innerBuilder()

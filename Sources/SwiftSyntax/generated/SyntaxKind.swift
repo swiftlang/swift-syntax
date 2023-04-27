@@ -243,6 +243,7 @@ public enum SyntaxKind {
   case subscriptDecl
   case subscriptExpr
   case superRefExpr
+  case suppressedType
   case switchCaseLabel
   case switchCaseList
   case switchCase
@@ -861,6 +862,8 @@ public enum SyntaxKind {
       return SubscriptExprSyntax.self
     case .superRefExpr:
       return SuperRefExprSyntax.self
+    case .suppressedType:
+      return SuppressedTypeSyntax.self
     case .switchCaseLabel:
       return SwitchCaseLabelSyntax.self
     case .switchCaseList:

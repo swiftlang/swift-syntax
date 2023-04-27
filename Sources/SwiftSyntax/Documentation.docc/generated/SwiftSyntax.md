@@ -186,6 +186,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/PackExpansionTypeSyntax>
 - <doc:SwiftSyntax/PackReferenceTypeSyntax>
 - <doc:SwiftSyntax/SimpleTypeIdentifierSyntax>
+- <doc:SwiftSyntax/SuppressedTypeSyntax>
 - <doc:SwiftSyntax/TupleTypeSyntax>
 
 ### Collections

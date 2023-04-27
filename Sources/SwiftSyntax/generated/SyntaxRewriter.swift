@@ -6904,8 +6904,8 @@ open class SyntaxRewriter {
     var childIndex = 0
     for (raw, info) in RawSyntaxChildren(syntaxNode) {
       defer {
-          childIndex += 1
-        }
+        childIndex += 1
+      }
       guard let child = raw else {
         // Node does not exist. If we are collecting rewritten nodes, we need to
         // collect this one as well, otherwise we can ignore it.

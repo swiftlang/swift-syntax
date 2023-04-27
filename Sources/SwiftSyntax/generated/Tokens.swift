@@ -23,7 +23,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -37,7 +37,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -51,7 +51,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -65,7 +65,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -81,7 +81,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -95,7 +95,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -109,7 +109,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -125,7 +125,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -139,7 +139,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -153,7 +153,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -167,7 +167,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -183,7 +183,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -199,7 +199,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -215,7 +215,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -229,7 +229,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -245,7 +245,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -261,7 +261,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -275,7 +275,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -289,7 +289,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -303,7 +303,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -317,7 +317,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -331,7 +331,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -345,7 +345,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -361,7 +361,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -375,7 +375,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -389,7 +389,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -403,7 +403,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -417,7 +417,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -431,7 +431,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -445,7 +445,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -459,7 +459,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -473,7 +473,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -487,7 +487,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -501,7 +501,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -517,7 +517,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -533,7 +533,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -549,7 +549,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -563,7 +563,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -577,7 +577,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -591,7 +591,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -605,7 +605,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -619,7 +619,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -633,7 +633,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -647,7 +647,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -661,7 +661,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -677,7 +677,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -693,7 +693,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -707,7 +707,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-        
+      
     )
   }
   
@@ -720,7 +720,7 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: [],
       presence: presence
-        
+      
     )
   }
 }

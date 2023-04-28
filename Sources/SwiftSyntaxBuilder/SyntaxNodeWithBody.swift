@@ -40,6 +40,25 @@ extension SyntaxStringInterpolation {
 public protocol HasTrailingCodeBlock {
   var body: CodeBlockSyntax { get set }
 
+  /// Constructs a syntax node where `header` builds the text of the node before the body in braces and `bodyBuilder` is used to build the node’s body.
+  ///
+  /// For example, you can construct
+  ///
+  /// ```swift
+  /// while x < 5 {
+  ///   x += 1
+  /// }
+  /// ```
+  ///
+  /// using this call
+  ///
+  /// ```swift
+  /// try WhileStmtSyntax("while x < 5") {
+  ///   ExprSyntax("x += 1")
+  /// }
+  /// ```
+  ///
+  /// Throws an error if `header` defines a different node type than the type the initializer is called on. E.g. if calling `try IfStmtSyntax("while x < 5") {}`
   init(_ header: PartialSyntaxNodeString, @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax) rethrows
 }
 
@@ -71,6 +90,25 @@ extension WhileStmtSyntax: HasTrailingCodeBlock {}
 public protocol HasTrailingOptionalCodeBlock {
   var body: CodeBlockSyntax? { get set }
 
+  /// Constructs a syntax node where `header` builds the text of the node before the body in braces and `bodyBuilder` is used to build the node’s body.
+  ///
+  /// For example, you can construct
+  ///
+  /// ```swift
+  /// func addOne(_ base: Int) -> Int {
+  ///   return base + 1
+  /// }
+  /// ```
+  ///
+  /// using this call
+  ///
+  /// ```swift
+  /// try FunctionDeclSyntax("func addOne(_ base: Int) -> Int") {
+  ///   ExprSyntax("return base + 1")
+  /// }
+  /// ```
+  ///
+  /// Throws an error if `header` defines a different node type than the type the initializer is called on. E.g. if calling `try FunctionDeclSyntax("init") {}`
   init(_ header: PartialSyntaxNodeString, @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax) throws
 }
 
@@ -95,6 +133,27 @@ extension InitializerDeclSyntax: HasTrailingOptionalCodeBlock {}
 public protocol HasTrailingMemberDeclBlock {
   var memberBlock: MemberDeclBlockSyntax { get set }
 
+  /// Constructs a syntax node where `header` builds the text of the node before the members in braces and `membersBuilder` is used to list the node’s members.
+  ///
+  /// For example, you can construct
+  ///
+  /// ```swift
+  /// struct Point {
+  ///   var x: Int
+  ///   var y: Int
+  /// }
+  /// ```
+  ///
+  /// using this call
+  ///
+  /// ```swift
+  /// try StructDeclSyntax("struct Point") {
+  ///   DeclSyntax("var x: Int")
+  ///   DeclSyntax("var y: Int")
+  /// }
+  /// ```
+  ///
+  /// Throws an error if `header` defines a different node type than the type the initializer is called on. E.g. if calling `try StructDeclSyntax("class MyClass") {}`
   init(_ header: PartialSyntaxNodeString, @MemberDeclListBuilder membersBuilder: () throws -> MemberDeclListSyntax) throws
 }
 
@@ -121,6 +180,23 @@ extension StructDeclSyntax: HasTrailingMemberDeclBlock {}
 // So we cannot conform to `HasTrailingCodeBlock`
 
 public extension IfExprSyntax {
+  /// Constructs an `if` expression with an optional `else` block.
+  ///
+  /// `header` specifies the part of the `if` expression before the body’s first brace.
+  ///
+  /// For example, the following `if` expression has the header `if sunny`
+  ///
+  /// ```swift
+  /// if sunny {
+  ///   sunbath()
+  /// }
+  /// ```
+  ///
+  /// If `elseBuilder` is not `nil`, an `else` keyword will automatically be inserted.
+  ///
+  /// This function takes care of inserting the braces as well.
+  ///
+  /// Throws an error if `header` does not start an `if` expression. E.g. if calling `try IfExprSyntax("while true") {}`
   init(_ header: PartialSyntaxNodeString, @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax, @CodeBlockItemListBuilder `else` elseBuilder: () throws -> CodeBlockItemListSyntax? = { nil }) throws {
     let expr = ExprSyntax("\(header) {}")
     guard let ifExpr = expr.as(Self.self) else {
@@ -132,6 +208,40 @@ public extension IfExprSyntax {
     self.elseKeyword = elseBody != nil ? .keyword(.else) : nil
   }
 
+  /// Constructs an `if` expression with a following `else if` clause.
+  /// This can be used to create longer chains of `if`, `else if` expressions.
+  ///
+  /// For example, you can construct
+  ///
+  /// ```swift
+  /// if x == 1 {
+  ///     return "one
+  /// } else if x == 2 {
+  ///     return "two
+  /// } else {
+  ///     return "many
+  /// }
+  /// ```
+  ///
+  /// using this call
+  ///
+  /// ```swift
+  /// try IfExprSyntax(
+  ///   "if x == 1",
+  ///   bodyBuilder: {
+  ///     StmtSyntax(#"return "one""#)
+  ///   }, elseIf: IfExprSyntax(
+  ///     "if x == 2",
+  ///     bodyBuilder: {
+  ///       StmtSyntax(#"return "two""#)
+  ///     }, else: {
+  ///       StmtSyntax(#"return "many""#)
+  ///     }
+  ///   )
+  /// )
+  /// ```
+  ///
+  /// Throws an error if `header` does not start an `if` expression. E.g. if calling `try IfExprSyntax("while true", bodyBuilder: {}, elseIf: {})`
   init(_ header: PartialSyntaxNodeString, @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax, elseIf: IfExprSyntax) throws {
     let expr = ExprSyntax("\(header) {}")
     guard let ifExpr = expr.as(Self.self) else {
@@ -147,6 +257,24 @@ public extension IfExprSyntax {
 // MARK: - SwitchCase
 
 extension SwitchCaseSyntax {
+  /// Constructs a case item where `header` includes the text between the `case` keyword and the `:` (both inclusive) and `statementsBuilder` can be used to build the statements inside the case item.
+  ///
+  /// For example, you can construct
+  ///
+  /// ```swift
+  /// default:
+  ///   return nil
+  /// ```
+  ///
+  /// using this call
+  ///
+  /// ```swift
+  /// try SwitchCaseSyntax("default:") {
+  ///   StmtSyntax("return")
+  /// }
+  /// ```
+  ///
+  /// Throws an error if `header` does not start a switch case item. E.g. if calling `try SwitchCaseSyntax("func foo") {}`
   public init(_ header: PartialSyntaxNodeString, @CodeBlockItemListBuilder statementsBuilder: () throws -> CodeBlockItemListSyntax) rethrows {
     self = SwitchCaseSyntax("\(header)")
     self.statements = try statementsBuilder()
@@ -158,6 +286,29 @@ extension SwitchCaseSyntax {
 // So we cannot conform to `HasTrailingCodeBlock` or `HasTrailingMemberDeclBlock`
 
 public extension SwitchExprSyntax {
+  /// Constructs a `switch` expression where `header` builds the text before the opening `{` and `casesBuilder` can be used to build the case items.
+  ///
+  /// For example, to construct
+  ///
+  /// ```swift
+  /// switch direction {
+  /// case .up:
+  ///   goUp()
+  /// case .down:
+  ///   goDown()
+  /// }
+  /// ```
+  ///
+  /// using this call
+  ///
+  /// ```swift
+  /// try SwitchExprSyntax("switch direction") {
+  ///   SwitchCaseSyntax("case .up: goUp()")
+  ///   SwitchCaseSyntax("case .down: goDown()")
+  /// }
+  /// ```
+  ///
+  /// Throws an error if `header` does not start a switch expression. E.g. if calling `try SwitchExprSyntax("if x < 42") {}`
   init(_ header: PartialSyntaxNodeString, @SwitchCaseListBuilder casesBuilder: () throws -> SwitchCaseListSyntax = { SwitchCaseListSyntax([]) }) throws {
     let expr = ExprSyntax("\(header) {}")
     guard let switchExpr = expr.as(Self.self) else {
@@ -173,6 +324,25 @@ public extension SwitchExprSyntax {
 // So we cannot conform to `HasTrailingCodeBlock` or `HasTrailingMemberDeclBlock`
 
 public extension VariableDeclSyntax {
+  /// Construct a variable with a single `get` accessor where `header` builds the text beofre the opening `{` and `accessor` builds the accessor body.
+  ///
+  /// For example, to construt
+  ///
+  /// ```swift
+  /// var x: Int {
+  ///   return origin.x
+  /// }
+  /// ```
+  ///
+  /// using this call
+  ///
+  /// ```swift
+  /// try VariableDeclSyntax("var x: Int") {
+  ///   StmtSyntax("return origin.x")
+  /// }
+  /// ```
+  ///
+  /// Throws an error if `header` does not start a variable declaration. E.g. if calling `try VariableDeclSyntax("func foo") {}`
   init(_ header: PartialSyntaxNodeString, @CodeBlockItemListBuilder accessor: () throws -> CodeBlockItemListSyntax) throws {
     let decl = DeclSyntax("\(header) {}")
     guard let castedDecl = decl.as(Self.self) else {

@@ -97,6 +97,32 @@ final class IfStmtTests: XCTestCase {
         }
         """
       ),
+      #line: (
+        try IfExprSyntax(
+          "if x == 1",
+          bodyBuilder: {
+            StmtSyntax(#"return "one""#)
+          },
+          elseIf: IfExprSyntax(
+            "if x == 2",
+            bodyBuilder: {
+              StmtSyntax(#"return "two""#)
+            },
+            else: {
+              StmtSyntax(#"return "many""#)
+            }
+          )
+        ),
+        """
+        if x == 1 {
+            return "one"
+        } else if x == 2 {
+            return "two"
+        } else {
+            return "many"
+        }
+        """
+      ),
     ]
 
     for (line, testCase) in testCases {

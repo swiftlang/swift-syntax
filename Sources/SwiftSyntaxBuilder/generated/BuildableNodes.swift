@@ -1171,6 +1171,61 @@ extension SourceFileSyntax {
   }
 }
 
+///     A struct declaration like the following.
+/// 
+///     ```swift
+///     struct SomeStruct {
+///       let someMember: String
+///       var anotherMember: Int
+/// 
+///       func foo() {
+///         print(someMember)
+///       }
+/// 
+///       mutating func bar() {
+///         anotherMember = 42
+///       }
+///     }
+///     ```
+/// 
+///     A struct declaration may be declared without any members.
+/// 
+///     ```swift
+///     struct EmptyStruct {
+/// 
+///     }
+///     ```
+/// 
+///     A struct declaration may include a type inheritance clause listing
+///     one or more protocols the struct conforms to.
+/// 
+///     The example below uses Hashable and Equatable protocols whose members
+///     are automatically synthesized by the compiler if the struct contains
+///     stored members that are themselves `Hashable` and `Equatable`.
+/// 
+///     ```swift
+///     struct AdvancedStruct: Hashable, Equatable {
+///       let someMember: String
+///       var anotherMember: Int
+///     }
+///     ```
+/// 
+///     A struct declaration may include a generic parameter clause as well
+///     as a generic where clause.
+/// 
+///     ```swift
+///     struct Stack<Element> {
+///       var items: [Element] = []
+/// 
+///       mutating func push(_ item: Element) {
+///         items.append(item)
+///       }
+/// 
+///       mutating func pop() -> Element {
+///         return items.removeLast()
+///       }
+///    }
+///    ```
 extension StructDeclSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(

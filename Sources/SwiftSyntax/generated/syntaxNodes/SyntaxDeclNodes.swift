@@ -5117,7 +5117,61 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
 // MARK: - StructDeclSyntax
 
-
+///     A struct declaration like the following.
+/// 
+///     ```swift
+///     struct SomeStruct {
+///       let someMember: String
+///       var anotherMember: Int
+/// 
+///       func foo() {
+///         print(someMember)
+///       }
+/// 
+///       mutating func bar() {
+///         anotherMember = 42
+///       }
+///     }
+///     ```
+/// 
+///     A struct declaration may be declared without any members.
+/// 
+///     ```swift
+///     struct EmptyStruct {
+/// 
+///     }
+///     ```
+/// 
+///     A struct declaration may include a type inheritance clause listing
+///     one or more protocols the struct conforms to.
+/// 
+///     The example below uses Hashable and Equatable protocols whose members
+///     are automatically synthesized by the compiler if the struct contains
+///     stored members that are themselves `Hashable` and `Equatable`.
+/// 
+///     ```swift
+///     struct AdvancedStruct: Hashable, Equatable {
+///       let someMember: String
+///       var anotherMember: Int
+///     }
+///     ```
+/// 
+///     A struct declaration may include a generic parameter clause as well
+///     as a generic where clause.
+/// 
+///     ```swift
+///     struct Stack<Element> {
+///       var items: [Element] = []
+/// 
+///       mutating func push(_ item: Element) {
+///         items.append(item)
+///       }
+/// 
+///       mutating func pop() -> Element {
+///         return items.removeLast()
+///       }
+///    }
+///    ```
 public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -5220,6 +5274,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// Attributes that are attached to the struct declaration.
   public var attributes: AttributeListSyntax? {
     get {
       return data.child(at: 1, parent: Syntax(self)).map(AttributeListSyntax.init)
@@ -5257,6 +5312,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// Modifiers that are attached to the struct declaration.
   public var modifiers: ModifierListSyntax? {
     get {
       return data.child(at: 3, parent: Syntax(self)).map(ModifierListSyntax.init)
@@ -5294,6 +5350,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The `struct` keyword for this declaration.
   public var structKeyword: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
@@ -5312,6 +5369,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// Declares the name of this struct. If the name matches a reserved keyword use backticks to escape it.
   public var identifier: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 7, parent: Syntax(self))!)
@@ -5330,6 +5388,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The generic parameters, if any, of the struct declaration.
   public var genericParameterClause: GenericParameterClauseSyntax? {
     get {
       return data.child(at: 9, parent: Syntax(self)).map(GenericParameterClauseSyntax.init)
@@ -5348,6 +5407,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The struct declaration inheritance clause describing one or more conformances for this struct declaration.
   public var inheritanceClause: TypeInheritanceClauseSyntax? {
     get {
       return data.child(at: 11, parent: Syntax(self)).map(TypeInheritanceClauseSyntax.init)
@@ -5366,6 +5426,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The `where` clause that applies to the generic parameters of this struct declaration.
   public var genericWhereClause: GenericWhereClauseSyntax? {
     get {
       return data.child(at: 13, parent: Syntax(self)).map(GenericWhereClauseSyntax.init)
@@ -5384,6 +5445,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The members of the struct declaration. Because struct extension declarations may declare additional members the contents of this member block isn't guaranteed to be a complete list of members for this type.
   public var memberBlock: MemberDeclBlockSyntax {
     get {
       return MemberDeclBlockSyntax(data.child(at: 15, parent: Syntax(self))!)

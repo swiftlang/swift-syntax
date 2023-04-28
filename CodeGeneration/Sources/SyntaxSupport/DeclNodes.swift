@@ -1805,6 +1805,63 @@ public let DECL_NODES: [Node] = [
   Node(
     name: "StructDecl",
     nameForDiagnostics: "struct",
+    description: """
+          A struct declaration like the following.
+
+          ```swift
+          struct SomeStruct {
+            let someMember: String
+            var anotherMember: Int
+
+            func foo() {
+              print(someMember)
+            }
+
+            mutating func bar() {
+              anotherMember = 42
+            }
+          }
+          ```
+
+          A struct declaration may be declared without any members.
+
+          ```swift
+          struct EmptyStruct {
+
+          }
+          ```
+
+          A struct declaration may include a type inheritance clause listing
+          one or more protocols the struct conforms to.
+
+          The example below uses Hashable and Equatable protocols whose members
+          are automatically synthesized by the compiler if the struct contains
+          stored members that are themselves `Hashable` and `Equatable`.
+
+          ```swift
+          struct AdvancedStruct: Hashable, Equatable {
+            let someMember: String
+            var anotherMember: Int
+          }
+          ```
+
+          A struct declaration may include a generic parameter clause as well
+          as a generic where clause.
+
+          ```swift
+          struct Stack<Element> {
+            var items: [Element] = []
+
+            mutating func push(_ item: Element) {
+              items.append(item)
+            }
+
+            mutating func pop() -> Element {
+              return items.removeLast()
+            }
+         }
+         ```
+      """,
     kind: "Decl",
     traits: [
       "DeclGroup",
@@ -1816,43 +1873,51 @@ public let DECL_NODES: [Node] = [
         name: "Attributes",
         kind: .collection(kind: "AttributeList", collectionElementName: "Attribute"),
         nameForDiagnostics: "attributes",
+        description: "Attributes that are attached to the struct declaration.",
         isOptional: true
       ),
       Child(
         name: "Modifiers",
         kind: .collection(kind: "ModifierList", collectionElementName: "Modifier"),
         nameForDiagnostics: "modifiers",
+        description: "Modifiers that are attached to the struct declaration.",
         isOptional: true
       ),
       Child(
         name: "StructKeyword",
-        kind: .token(choices: [.keyword(text: "struct")])
+        kind: .token(choices: [.keyword(text: "struct")]),
+        description: "The `struct` keyword for this declaration."
       ),
       Child(
         name: "Identifier",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken")])
+        kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+        description: "Declares the name of this struct. If the name matches a reserved keyword use backticks to escape it."
       ),
       Child(
         name: "GenericParameterClause",
         kind: .node(kind: "GenericParameterClause"),
         nameForDiagnostics: "generic parameter clause",
+        description: "The generic parameters, if any, of the struct declaration.",
         isOptional: true
       ),
       Child(
         name: "InheritanceClause",
         kind: .node(kind: "TypeInheritanceClause"),
         nameForDiagnostics: "type inheritance clause",
+        description: "The struct declaration inheritance clause describing one or more conformances for this struct declaration.",
         isOptional: true
       ),
       Child(
         name: "GenericWhereClause",
         kind: .node(kind: "GenericWhereClause"),
         nameForDiagnostics: "generic where clause",
+        description: "The `where` clause that applies to the generic parameters of this struct declaration.",
         isOptional: true
       ),
       Child(
         name: "MemberBlock",
-        kind: .node(kind: "MemberDeclBlock")
+        kind: .node(kind: "MemberDeclBlock"),
+        description: "The members of the struct declaration. Because struct extension declarations may declare additional members the contents of this member block isn't guaranteed to be a complete list of members for this type."
       ),
     ]
   ),

@@ -1081,6 +1081,30 @@ extension Parser {
             arena: self.arena
           )
         )
+      } else if self.at(.colon) {
+        var lookahead = self.lookahead()
+
+        // We only want to continue with a dictionary if we can parse a colon and a simpletype.
+        // Otherwise we can get a wrong diagnostic if we get a Python-style function declaration.
+        guard lookahead.consume(if: .colon) != nil && lookahead.canParseSimpleType() else {
+          return result
+        }
+
+        let (unexpectedBeforeColon, colon) = self.expect(.colon)
+        let secondType = self.parseSimpleType()
+        let rightSquareBracket = self.consume(if: .rightSquareBracket) ?? self.missingToken(.rightSquareBracket)
+
+        result = RawTypeSyntax(
+          RawDictionaryTypeSyntax(
+            leftSquareBracket: self.missingToken(.leftSquareBracket),
+            keyType: result,
+            unexpectedBeforeColon,
+            colon: colon,
+            valueType: secondType,
+            rightSquareBracket: rightSquareBracket,
+            arena: self.arena
+          )
+        )
       }
 
       var loopProgress = LoopProgressCondition()

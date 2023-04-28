@@ -2844,7 +2844,7 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         unexpectedBeforeBackslash,
         backslash: backslash,
         unexpectedBetweenBackslashAndRoot,
-        root: Optional<TypeSyntax>.none,
+        root: Optional<TypeSyntax> .none,
         unexpectedBetweenRootAndComponents,
         components: components,
         unexpectedAfterComponents, 
@@ -3357,7 +3357,7 @@ public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self.init(
         leadingTrivia: leadingTrivia,
         unexpectedBeforeBase,
-        base: Optional<ExprSyntax>.none,
+        base: Optional<ExprSyntax> .none,
         unexpectedBetweenBaseAndDot,
         dot: dot,
         unexpectedBetweenDotAndName,
@@ -4169,7 +4169,7 @@ public struct PostfixIfConfigExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self.init(
         leadingTrivia: leadingTrivia,
         unexpectedBeforeBase,
-        base: Optional<ExprSyntax>.none,
+        base: Optional<ExprSyntax> .none,
         unexpectedBetweenBaseAndConfig,
         config: config,
         unexpectedAfterConfig, 

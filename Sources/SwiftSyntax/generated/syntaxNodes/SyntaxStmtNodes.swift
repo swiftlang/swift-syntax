@@ -1778,7 +1778,7 @@ public struct ReturnStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
         unexpectedBeforeReturnKeyword,
         returnKeyword: returnKeyword,
         unexpectedBetweenReturnKeywordAndExpression,
-        expression: Optional<ExprSyntax>.none,
+        expression: Optional<ExprSyntax> .none,
         unexpectedAfterExpression, 
         trailingTrivia: trailingTrivia
       )

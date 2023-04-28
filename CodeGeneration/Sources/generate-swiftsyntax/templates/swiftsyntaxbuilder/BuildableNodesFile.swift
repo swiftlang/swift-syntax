@@ -22,13 +22,13 @@ let buildableNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     let type = node.type
 
     if let convenienceInit = try! createConvenienceInitializer(node: node) {
-      let docComment = node.description?.split(separator: "\n", omittingEmptySubsequences: false).map { "/// \($0)" }.joined(separator: "\n") ?? ""
-      ExtensionDeclSyntax(
-        leadingTrivia: "\(docComment)\n",
-        extendedType: SimpleTypeIdentifierSyntax(name: .identifier(type.syntaxBaseName))
-      ) {
-        convenienceInit
-      }
+      DeclSyntax(
+        """
+        extension \(raw: type.syntaxBaseName) {
+        \(convenienceInit)
+        }
+        """
+      )
     }
   }
 }

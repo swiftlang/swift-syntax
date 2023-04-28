@@ -544,7 +544,7 @@ extension Parser {
 
     let rangle: RawTokenSyntax
     if self.currentToken.starts(with: ">") {
-      rangle = self.consumeAnyToken(remapping: .rightAngle)
+      rangle = self.consumePrefix(">", as: .rightAngle)
     } else {
       rangle = RawTokenSyntax(missing: .rightAngle, arena: self.arena)
     }

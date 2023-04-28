@@ -1610,6 +1610,15 @@ final class DeclarationTests: XCTestCase {
         )
     )
   }
+
+  func testDoubleRightAngle() {
+    assertParse(
+      "func foo<A>1️⃣> test()",
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected code '> test' before parameter clause")
+      ]
+    )
+  }
 }
 
 extension Parser.DeclAttributes {

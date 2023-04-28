@@ -541,12 +541,34 @@ public extension SyntaxProtocol {
     return self.with(\.leadingTrivia, []).with(\.trailingTrivia, [])
   }
 
-  /// The description of this node without the leading trivia of the first token
-  /// in the node and the trailing trivia of the last token in the node.
+  /// A copy of this node with pieces that match `matching` trimmed from the
+  /// leading trivia of the first token and trailing trivia of the last token.
+  func trimmed(matching filter: (TriviaPiece) -> Bool) -> Self {
+    // TODO: Should only need one new node here
+    return self.with(
+      \.leadingTrivia,
+      Trivia(pieces: leadingTrivia.pieces.drop(while: filter))
+    ).with(
+      \.trailingTrivia,
+      Trivia(pieces: trailingTrivia.pieces.reversed().drop(while: filter).reversed())
+    )
+  }
+
+  /// The description of this node with leading whitespace of the first token
+  /// and trailing whitespace of the last token removed.
   var trimmedDescription: String {
-    // TODO: We shouldn't need to create to copies just to get the description
-    // without trivia.
+    // TODO: We shouldn't need to create to copies just to get the trimmed
+    // description.
     return self.trimmed.description
+  }
+
+  /// The description of this node with pieces that match `matching` removed
+  /// from the leading trivia of the first token and trailing trivia of the
+  /// last token.
+  func trimmedDescription(matching filter: (TriviaPiece) -> Bool) -> String {
+    // TODO: We shouldn't need to create to copies just to get the trimmed
+    // description.
+    return self.trimmed(matching: filter).description
   }
 }
 

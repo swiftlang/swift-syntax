@@ -562,9 +562,9 @@ public class LexerTests: XCTestCase {
       ]
     )
     assertLexemes(
-      "^/*/",
+      "^1️⃣/*/",
       lexemes: [
-        LexemeSpec(.binaryOperator, text: "^", trailing: "/*/")
+        LexemeSpec(.binaryOperator, text: "^", trailing: "/*/", diagnostic: "unterminated '/*' comment")
       ]
     )
   }
@@ -1458,6 +1458,24 @@ public class LexerTests: XCTestCase {
       "\u{a0}0x1️⃣r",
       lexemes: [
         LexemeSpec(.integerLiteral, leading: "\u{a0}", text: "0xr", diagnostic: "'r' is not a valid hexadecimal digit (0-9, A-F) in integer literal")
+      ]
+    )
+  }
+
+  func testUnterminatedBlockComment() {
+    assertLexemes(
+      "1️⃣/*",
+      lexemes: [
+        LexemeSpec(.eof, leading: "/*", text: "", diagnostic: "unterminated '/*' comment")
+      ]
+    )
+  }
+
+  func testSlashStartSlash() {
+    assertLexemes(
+      "1️⃣/*/",
+      lexemes: [
+        LexemeSpec(.eof, leading: "/*/", text: "", diagnostic: "unterminated '/*' comment")
       ]
     )
   }

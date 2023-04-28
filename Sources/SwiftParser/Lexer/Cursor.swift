@@ -684,7 +684,7 @@ extension Lexer.Cursor {
 
   /// Returns `true` if the comment spaned multiple lines and `false` otherwise.
   /// Assumes that the curser is currently pointing at the `*` of the opening `/*`.
-  mutating func advanceToEndOfSlashStarComment() -> Bool {
+  mutating func advanceToEndOfSlashStarComment(slashPosition: Lexer.Cursor) -> TriviaResult {
     precondition(self.previous == UInt8(ascii: "/"))
     // Make sure to advance over the * so that we don't incorrectly handle /*/ as
     // the beginning and end of the comment.
@@ -692,16 +692,17 @@ extension Lexer.Cursor {
     precondition(consumedStar)
 
     var depth = 1
-    var isMultiline = false
+    var newlinePresence = NewlinePresence.absent
+    var error: LexingDiagnostic? = nil
 
-    while true {
+    LOOP: while true {
       switch self.advance() {
       case UInt8(ascii: "*"):
         // Check for a '*/'
         if self.advance(matching: "/") {
           depth -= 1
           if depth == 0 {
-            return isMultiline
+            break LOOP
           }
         }
       case UInt8(ascii: "/"):
@@ -711,14 +712,17 @@ extension Lexer.Cursor {
         }
 
       case UInt8(ascii: "\n"), UInt8(ascii: "\r"):
-        isMultiline = true
+        newlinePresence = .present
         continue
       case nil:
-        return isMultiline
+        error = LexingDiagnostic(.unterminatedBlockComment, position: slashPosition)
+        break LOOP
       case .some:
         continue
       }
     }
+
+    return TriviaResult(newlinePresence: newlinePresence, error: error)
   }
 
   /// If this is the opening delimiter of a raw string literal, return the number
@@ -1063,7 +1067,7 @@ extension Lexer.Cursor {
 // MARK: - Trivia
 
 extension Lexer.Cursor {
-  fileprivate enum NewlinePresence {
+  enum NewlinePresence {
     case absent
     case present
   }
@@ -1080,7 +1084,7 @@ extension Lexer.Cursor {
     case escapedNewlineInMultiLineStringLiteral
   }
 
-  fileprivate struct TriviaResult {
+  struct TriviaResult {
     let newlinePresence: NewlinePresence
     let error: LexingDiagnostic?
   }
@@ -1137,7 +1141,11 @@ extension Lexer.Cursor {
           self.advanceToEndOfLine()
           continue
         case UInt8(ascii: "*"):
-          _ = self.advanceToEndOfSlashStarComment()
+          let starSlashResult = self.advanceToEndOfSlashStarComment(slashPosition: start)
+          if starSlashResult.newlinePresence == .present {
+            newlinePresence = .present
+          }
+          error = error ?? starSlashResult.error
           continue
         default:
           break

@@ -41,17 +41,18 @@ public struct TokenDiagnostic: Hashable {
     case invalidNumberOfHexDigitsInUnicodeEscape
     case invalidOctalDigitInIntegerLiteral
     case invalidUtf8
-    /// The lexer dicovered an error but was not able to represent the offset of the error because it would overflow `LexerErrorOffset`.
-    case tokenDiagnosticOffsetOverflow
+    case multilineRegexClosingNotOnNewline
     case nonBreakingSpace
     case nulCharacter
     case sourceConflictMarker
+    case spaceAtEndOfRegexLiteral
+    case spaceAtStartOfRegexLiteral
+    /// The lexer dicovered an error but was not able to represent the offset of the error because it would overflow `LexerErrorOffset`.
+    case tokenDiagnosticOffsetOverflow
     case unexpectedBlockCommentEnd
     case unicodeCurlyQuote
     case unprintableAsciiCharacter
-    case spaceAtStartOfRegexLiteral
-    case spaceAtEndOfRegexLiteral
-    case multilineRegexClosingNotOnNewline
+    case unterminatedBlockComment
   }
 
   public let kind: Kind
@@ -118,16 +119,17 @@ public struct TokenDiagnostic: Hashable {
     case .invalidNumberOfHexDigitsInUnicodeEscape: return .error
     case .invalidOctalDigitInIntegerLiteral: return .error
     case .invalidUtf8: return .error
-    case .tokenDiagnosticOffsetOverflow: return .error
+    case .multilineRegexClosingNotOnNewline: return .error
     case .nonBreakingSpace: return .warning
     case .nulCharacter: return .warning
     case .sourceConflictMarker: return .error
+    case .spaceAtEndOfRegexLiteral: return .error
+    case .spaceAtStartOfRegexLiteral: return .error
+    case .tokenDiagnosticOffsetOverflow: return .error
     case .unexpectedBlockCommentEnd: return .error
     case .unicodeCurlyQuote: return .error
     case .unprintableAsciiCharacter: return .error
-    case .spaceAtStartOfRegexLiteral: return .error
-    case .spaceAtEndOfRegexLiteral: return .error
-    case .multilineRegexClosingNotOnNewline: return .error
+    case .unterminatedBlockComment: return .error
     }
   }
 }

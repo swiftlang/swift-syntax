@@ -666,33 +666,33 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "Identifier",
         kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
-        description: "The name of this enum."
+        description: "Declares the name of this enum. If the name matches a reserved keyword use backticks to escape it."
       ),
       Child(
         name: "GenericParameters",
         kind: .node(kind: "GenericParameterClause"),
         nameForDiagnostics: "generic parameter clause",
-        description: "The generic parameters, if any, for this enum.",
+        description: "The generic parameters, if any, for this enum declaration.",
         isOptional: true
       ),
       Child(
         name: "InheritanceClause",
         kind: .node(kind: "TypeInheritanceClause"),
         nameForDiagnostics: "inheritance clause",
-        description: "The inheritance clause describing conformances or raw values for this enum.",
+        description: "The inheritance clause describing conformances or raw values for this enum declaration.",
         isOptional: true
       ),
       Child(
         name: "GenericWhereClause",
         kind: .node(kind: "GenericWhereClause"),
         nameForDiagnostics: "generic where clause",
-        description: "The `where` clause that applies to the generic parameters of this enum.",
+        description: "The `where` clause that applies to the generic parameters of this enum declaration.",
         isOptional: true
       ),
       Child(
         name: "MemberBlock",
         kind: .node(kind: "MemberDeclBlock"),
-        description: "The cases and other members of this enum."
+        description: "The cases and other members associated with this enum declaration. Because enum extension declarations may declare additional members the contents of this member block isn't guaranteed to be a complete list of members for this type."
       ),
     ]
   ),

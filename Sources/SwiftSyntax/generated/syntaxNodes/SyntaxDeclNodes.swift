@@ -1868,7 +1868,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// The name of this enum.
+  /// Declares the name of this enum. If the name matches a reserved keyword use backticks to escape it.
   public var identifier: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 7, parent: Syntax(self))!)
@@ -1887,7 +1887,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// The generic parameters, if any, for this enum.
+  /// The generic parameters, if any, for this enum declaration.
   public var genericParameters: GenericParameterClauseSyntax? {
     get {
       return data.child(at: 9, parent: Syntax(self)).map(GenericParameterClauseSyntax.init)
@@ -1906,7 +1906,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// The inheritance clause describing conformances or raw values for this enum.
+  /// The inheritance clause describing conformances or raw values for this enum declaration.
   public var inheritanceClause: TypeInheritanceClauseSyntax? {
     get {
       return data.child(at: 11, parent: Syntax(self)).map(TypeInheritanceClauseSyntax.init)
@@ -1925,7 +1925,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// The `where` clause that applies to the generic parameters of this enum.
+  /// The `where` clause that applies to the generic parameters of this enum declaration.
   public var genericWhereClause: GenericWhereClauseSyntax? {
     get {
       return data.child(at: 13, parent: Syntax(self)).map(GenericWhereClauseSyntax.init)
@@ -1944,7 +1944,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// The cases and other members of this enum.
+  /// The cases and other members associated with this enum declaration. Because enum extension declarations may declare additional members the contents of this member block isn't guaranteed to be a complete list of members for this type.
   public var memberBlock: MemberDeclBlockSyntax {
     get {
       return MemberDeclBlockSyntax(data.child(at: 15, parent: Syntax(self))!)

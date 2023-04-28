@@ -1209,22 +1209,63 @@ final class RecoveryTests: XCTestCase {
       """
       struct ErrorTypeInVarDeclDictionaryType {
         let a1: String1️⃣:
-        let a2: String2️⃣: Int]
-        let a3: String3️⃣: [Int]
-        let a4: String4️⃣: Int
+        let a2: 2️⃣String: Int]
+        let a3: 3️⃣String: [Int]4️⃣
+        let a4: 5️⃣String: Int6️⃣
+        let a4: 7️⃣String: Int]??
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: unexpected ':' in type; did you mean to write a dictionary type?, Fix-It replacements: 11 - 11 = '['
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive declarations on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code ':' before variable"),
-        // TODO: Old parser expected error on line 3: unexpected ':' in type; did you mean to write a dictionary type?, Fix-It replacements: 11 - 11 = '['
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code ': Int]' before variable"),
-        // TODO: Old parser expected error on line 4: unexpected ':' in type; did you mean to write a dictionary type?, Fix-It replacements: 11 - 11 = '[', 24 - 24 = ']'
-        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code ': [Int]' before variable"),
-        // TODO: Old parser expected error on line 5: unexpected ':' in type; did you mean to write a dictionary type?, Fix-It replacements: 11 - 11 = '[', 22 - 22 = ']'
-        DiagnosticSpec(locationMarker: "4️⃣", message: "unexpected code ': Int' in struct"),
-      ]
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "consecutive declarations on a line must be separated by ';'",
+          fixIts: ["insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "unexpected code ':' before variable"
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected '[' to start dictionary type",
+          fixIts: ["insert '['"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "expected '[' to start dictionary type",
+          fixIts: ["insert '['"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "expected ']' to end dictionary type",
+          fixIts: ["insert ']'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "5️⃣",
+          message: "expected '[' to start dictionary type",
+          fixIts: ["insert '['"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "6️⃣",
+          message: "expected ']' to end dictionary type",
+          fixIts: ["insert ']'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "7️⃣",
+          message: "expected '[' to start dictionary type",
+          fixIts: ["insert '['"]
+        ),
+
+      ],
+      fixedSource: """
+        struct ErrorTypeInVarDeclDictionaryType {
+          let a1: String;:
+          let a2: [String: Int]
+          let a3: [String: [Int]]
+          let a4: [String: Int]
+          let a4: [String: Int]??
+        }
+        """
     )
   }
 
@@ -2310,6 +2351,16 @@ final class RecoveryTests: XCTestCase {
       fixedSource: """
         func f<<#identifier#>>() {}
         """
+    )
+  }
+
+  // https://github.com/apple/swift-syntax/pull/1484/files#r1176740738
+  func testRecovery184() {
+    assertParse(
+      "func foo() -> Int1️⃣:",
+      diagnostics: [
+        DiagnosticSpec(message: "extraneous code ':' at top level")
+      ]
     )
   }
 }

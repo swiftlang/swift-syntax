@@ -582,7 +582,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if let trailingComma = node.trailingComma {
       exchangeTokens(
         unexpected: node.unexpectedBetweenConditionAndTrailingComma,
-        unexpectedTokenCondition: { $0.text == "&&" },
+        unexpectedTokenCondition: { $0.text == "&&" || $0.tokenKind == .keyword(.where) },
         correctTokens: [node.trailingComma],
         message: { _ in .joinConditionsUsingComma },
         moveFixIt: { ReplaceTokensFixIt(replaceTokens: $0, replacements: [trailingComma]) }

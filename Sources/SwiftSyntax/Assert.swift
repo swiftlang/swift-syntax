@@ -29,7 +29,12 @@
 /// Use this instead of `precondition` in places where the assertion has a
 /// non-trivial cost but provides little value in release builds.
 @_transparent
-public func assert(_ condition: @autoclosure () -> Bool, _ message: @autoclosure () -> String = String(), file: StaticString = #file, line: UInt = #line) {
+public func assert(
+  _ condition: @autoclosure () -> Bool,
+  _ message: @autoclosure () -> String = String(),
+  file: StaticString = #file,
+  line: UInt = #line
+) {
   #if SWIFTSYNTAX_ENABLE_ASSERTIONS
   if !_fastPath(condition()) {
     fatalError(message(), file: file, line: line)
@@ -44,10 +49,34 @@ public func assert(_ condition: @autoclosure () -> Bool, _ message: @autoclosure
 /// requested by setting the `SWIFTSYNTAX_ENABLE_ASSERTIONS` conditional
 /// compilation flag.
 @_transparent
-public func assertionFailure(_ message: @autoclosure () -> String = String(), file: StaticString = #file, line: UInt = #line) {
+public func assertionFailure(
+  _ message: @autoclosure () -> String = String(),
+  file: StaticString = #file,
+  line: UInt = #line
+) {
   #if SWIFTSYNTAX_ENABLE_ASSERTIONS
   fatalError(message(), file: file, line: line)
   #else
   Swift.assertionFailure(message(), file: file, line: line)
+  #endif
+}
+
+// MARK: - Precondition
+
+/// Override Swift’s `precondition` with slightly changed semantics.
+/// In release builds, it also emits the error message upon failure, like `fatalError`.
+/// It can also be disabled by setting the `SWIFTSYNTAX_DISABLE_PRECONDITION` conditional compilation flag.
+/// Note that `SWIFTSYNTAX_DISABLE_PRECONDITION` does not disable `preconditionFailure`.
+@_transparent
+public func precondition(
+  _ condition: @autoclosure () -> Bool,
+  _ message: @autoclosure () -> String = String(),
+  file: StaticString = #file,
+  line: UInt = #line
+) {
+  #if !SWIFTSYNTAX_DISABLE_PRECONDITIONS
+  if !_fastPath(condition()) {
+    fatalError(message(), file: file, line: line)
+  }
   #endif
 }

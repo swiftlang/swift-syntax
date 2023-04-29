@@ -116,7 +116,14 @@ final class SuperTests: XCTestCase {
       """#,
       diagnostics: [
         DiagnosticSpec(message: "expected name in member access", fixIts: ["insert name"])
-      ]
+      ],
+      fixedSource: #"""
+        class D : B {
+          func bad_super_1() {
+            super.<#identifier#>$0
+          }
+        }
+        """#
     )
   }
 

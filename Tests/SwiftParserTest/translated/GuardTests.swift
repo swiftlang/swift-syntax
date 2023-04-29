@@ -24,7 +24,13 @@ final class GuardTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected 'else' and body in 'guard' statement", fixIts: ["insert 'else' and body"])
-      ]
+      ],
+      fixedSource: """
+        func noConditionNoElse() {
+          guard {} else {
+        }
+        }
+        """
     )
   }
 
@@ -37,7 +43,12 @@ final class GuardTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected condition in 'guard' statement", fixIts: ["insert condition"])
-      ]
+      ],
+      fixedSource: """
+        func noCondition() {
+          guard <#expression#> else {}
+        }
+        """
     )
   }
 }

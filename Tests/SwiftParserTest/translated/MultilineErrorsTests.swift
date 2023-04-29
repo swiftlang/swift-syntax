@@ -50,13 +50,7 @@ final class MultilineErrorsTests: XCTestCase {
     )
   }
 
-  func testMultilineErrors2() {
-    assertParseWithAllNewlineEndings(
-      """
-      // ===---------- Multiline --------===
-      """
-    )
-  }
+  // MARK: - Multiline
 
   func testMultilineErrors3() {
     // expecting at least 4 columns of leading indentation
@@ -261,7 +255,13 @@ final class MultilineErrorsTests: XCTestCase {
       """#,
       diagnostics: [
         DiagnosticSpec(message: "unexpected space in indentation of line in multi-line string literal", fixIts: ["change indentation of this line to match closing delimiter"])
-      ]
+      ],
+      fixedSource: #"""
+        _ = """
+        		Fourteen 2
+        		Pi 2
+        		"""
+        """#
     )
   }
 
@@ -453,7 +453,13 @@ final class MultilineErrorsTests: XCTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected ')' in string literal", fixIts: [#"insert ')'"#]),
         DiagnosticSpec(locationMarker: "1️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
         DiagnosticSpec(locationMarker: "2️⃣", message: #"extraneous code ')!"' at top level"#),
-      ]
+      ],
+      fixedSource: ##"""
+        _ = "hello\("""
+                    world
+                    """)"
+                    )!"
+        """##
     )
   }
 
@@ -469,7 +475,13 @@ final class MultilineErrorsTests: XCTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected value and ')' in string literal", fixIts: ["insert value and ')'"]),
         DiagnosticSpec(locationMarker: "1️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
         DiagnosticSpec(locationMarker: "2️⃣", message: #"extraneous code ')!"' at top level"#),
-      ]
+      ],
+      fixedSource: ##"""
+        _ = "h\(<#expression#>)"
+                    """
+                    world
+                    """)!"
+        """##
     )
   }
 
@@ -588,7 +600,11 @@ final class MultilineErrorsTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "invalid escape sequence in literal"),
         DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"""' to end string literal"#, fixIts: [#"insert '"""'"#]),
-      ]
+      ],
+      fixedSource: ##"""
+        _ = """
+          foo\"""
+        """##
     )
   }
 
@@ -667,7 +683,15 @@ final class MultilineErrorsTests: XCTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
         DiagnosticSpec(locationMarker: "2️⃣", message: #"unexpected code 'baz' in string literal"#),
         DiagnosticSpec(locationMarker: "3️⃣", message: #"expected ')' in string literal"#, notes: [NoteSpec(message: "to match this opening '('")], fixIts: ["insert ')'"]),
-      ]
+      ],
+      fixedSource: ##"""
+        let _ = """
+          foo
+          \("bar"
+          baz)
+          """
+          abc
+        """##
     )
   }
 
@@ -767,7 +791,12 @@ final class MultilineErrorsTests: XCTestCase {
       """#,
       diagnostics: [
         DiagnosticSpec(message: "multi-line string literal content must begin on a new line", fixIts: ["insert newline"])
-      ]
+      ],
+      fixedSource: #"""
+        """
+        \#(" ")
+        """
+        """#
     )
   }
 }

@@ -43,7 +43,16 @@ final class TrailingSemiTests: XCTestCase {
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected ';' separator", fixIts: ["remove ';'"]),
         DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected ';' separator", fixIts: ["remove ';'"]),
         DiagnosticSpec(locationMarker: "4️⃣", message: "unexpected ';' separator", fixIts: ["remove ';;'"]),
-      ]
+      ],
+      fixedSource: """
+        struct SpuriousSemi {
+
+          var a : Int ;
+          func b () {};
+          static func c () {};
+
+        }
+        """
     )
   }
 
@@ -68,7 +77,21 @@ final class TrailingSemiTests: XCTestCase {
         DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive declarations on a line must be separated by ';'", fixIts: ["insert ';'"]),
         DiagnosticSpec(locationMarker: "3️⃣", message: "consecutive declarations on a line must be separated by ';'", fixIts: ["insert ';'"]),
         DiagnosticSpec(locationMarker: "4️⃣", message: "consecutive declarations on a line must be separated by ';'", fixIts: ["insert ';'"]),
-      ]
+      ],
+      fixedSource: """
+        class C {
+          var a : Int = 10; func aa() {};
+        #if FLAG1
+          var aaa: Int = 42; func aaaa() {};
+        #elseif FLAG2
+          var aaa: Int = 42; func aaaa() {}
+        #else
+          var aaa: Int = 42; func aaaa() {}
+        #endif
+          func b () {};
+          class func c () {};
+        }
+        """
     )
   }
 
@@ -84,7 +107,15 @@ final class TrailingSemiTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "consecutive declarations on a line must be separated by ';'", fixIts: ["insert ';'"])
-      ]
+      ],
+      fixedSource: """
+        extension S {
+          //var a : Int ;
+          func bb () {};
+          static func cc () {};
+          func dd() {}; subscript(i: Int) -> Int { return 1 }
+        }
+        """
     )
   }
 

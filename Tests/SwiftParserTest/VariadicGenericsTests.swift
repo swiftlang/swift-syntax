@@ -61,7 +61,10 @@ final class VariadicGenericsTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected ',' in tuple type", fixIts: ["insert ','"])
-      ]
+      ],
+      fixedSource: """
+        func invalid<each T>() -> (each any, T) {}
+        """
     )
 
     assertParse(
@@ -101,7 +104,10 @@ final class VariadicGenericsTests: XCTestCase {
           message: "ellipsis operator cannot be used with a type parameter pack",
           fixIts: ["remove '...'"]
         )
-      ]
+      ],
+      fixedSource: """
+        func invalid<each T>(_ t: repeat each T) {}
+        """
     )
   }
 
@@ -335,7 +341,12 @@ final class TypeParameterPackTests: XCTestCase {
           message: "associated types cannot be variadic",
           fixIts: ["remove 'each'"]
         )
-      ]
+      ],
+      fixedSource: """
+        protocol P {
+          associatedtype T
+        }
+        """
     )
   }
   func testParameterPacks4EarlySyntax() {
@@ -350,7 +361,12 @@ final class TypeParameterPackTests: XCTestCase {
           message: "associated types cannot be variadic",
           fixIts: ["remove '...'"]
         )
-      ]
+      ],
+      fixedSource: """
+        protocol P {
+          associatedtype T
+        }
+        """
     )
   }
   func testParameterPacks5() {
@@ -574,7 +590,10 @@ final class TypeParameterPackTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected ',' in tuple type", fixIts: ["insert ','"])
-      ]
+      ],
+      fixedSource: """
+        var foo: (bar: Int, Int)
+        """
     )
 
     assertParse(
@@ -595,7 +614,10 @@ final class TypeParameterPackTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected ',' in tuple type", fixIts: ["insert ','"])
-      ]
+      ],
+      fixedSource: """
+        var foo: (A, Int)
+        """
     )
 
     assertParse(
@@ -605,7 +627,10 @@ final class TypeParameterPackTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' in tuple type", fixIts: ["insert ':'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected ',' in tuple type", fixIts: ["insert ','"]),
-      ]
+      ],
+      fixedSource: """
+        var foo: (_: a, Int)
+        """
     )
 
     assertParse(

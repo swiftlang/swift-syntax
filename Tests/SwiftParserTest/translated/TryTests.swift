@@ -249,7 +249,11 @@ final class TryTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected expression after 'try'", fixIts: ["insert expression"])
-      ]
+      ],
+      fixedSource: """
+        try <#expression#>
+        func method() {}
+        """
     )
   }
 

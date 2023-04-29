@@ -118,7 +118,11 @@ final class DirectiveTests: XCTestCase {
       "#if test1️⃣",
       diagnostics: [
         DiagnosticSpec(message: "expected '#endif' in conditional compilation block", fixIts: ["insert '#endif'"])
-      ]
+      ],
+      fixedSource: """
+        #if test
+        #endif
+        """
     )
   }
 

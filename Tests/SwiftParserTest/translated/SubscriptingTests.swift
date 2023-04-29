@@ -235,7 +235,15 @@ final class SubscriptingTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected parameter clause in subscript", fixIts: ["insert parameter clause"])
-      ]
+      ],
+      fixedSource: """
+        // Parsing errors
+        struct A0 {
+          subscript() -> Int {
+            return 1
+          }
+        }
+        """
     )
   }
 
@@ -255,8 +263,21 @@ final class SubscriptingTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '->' in subscript", fixIts: ["insert '->'"])
-      ]
+        DiagnosticSpec(message: "expected '->' in subscript", fixIts: ["insert '->'"])
+      ],
+      fixedSource: """
+        struct A1 {
+          subscript (i : Int) ->
+             Int {
+            get {
+              return stored
+            }
+            set {
+              stored = newValue
+            }
+          }
+        }
+        """
     )
   }
 
@@ -277,7 +298,20 @@ final class SubscriptingTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected return type in subscript", fixIts: ["insert return type"])
-      ]
+      ],
+      fixedSource: """
+        struct A2 {
+          subscript (i : Int) -> <#type#>
+             {
+            get {
+              return stored
+            }
+            set {
+              stored = newValue
+            }
+          }
+        }
+        """
     )
   }
 
@@ -295,7 +329,17 @@ final class SubscriptingTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected '->' and return type in subscript", fixIts: ["insert '->' and return type"])
-      ]
+      ],
+      fixedSource: """
+        struct A3 {
+          subscript(i : Int) -> <#type#>
+          {
+            get {
+              return i
+            }
+          }
+        }
+        """
     )
   }
 
@@ -312,7 +356,16 @@ final class SubscriptingTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected '->' and return type in subscript", fixIts: ["insert '->' and return type"])
-      ]
+      ],
+      fixedSource: """
+        struct A4 {
+          subscript(i : Int) -> <#type#> {
+            get {
+              return i
+            }
+          }
+        }
+        """
     )
   }
 
@@ -387,7 +440,19 @@ final class SubscriptingTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' in subscript", fixIts: ["insert '{'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end struct", fixIts: ["insert '}'"]),
-      ]
+      ],
+      fixedSource: """
+        struct A8 {
+          subscript(i : Int) -> Int {
+            get {
+              return stored
+            }
+            set {
+              stored = value
+            }
+          }
+        }
+        """
     )
   }
 

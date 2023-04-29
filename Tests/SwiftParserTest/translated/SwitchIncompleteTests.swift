@@ -31,7 +31,12 @@ final class SwitchIncompleteTests: XCTestCase {
           ],
           fixIts: ["insert '}'"]
         )
-      ]
+      ],
+      fixedSource: """
+        switch 1 {
+        case 1:
+        }
+        """
     )
   }
 }

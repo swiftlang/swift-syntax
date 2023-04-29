@@ -604,7 +604,9 @@ func assertParse<S: SyntaxProtocol>(
   }
 
   // Applying Fix-Its
-  if let expectedFixedSource = expectedFixedSource {
+  if expectedDiagnostics.contains(where: { !$0.fixIts.isEmpty }) && expectedFixedSource == nil {
+    XCTFail("Expected a fixed source if the test case produces diagnostics with Fix-Its", file: file, line: line)
+  } else if let expectedFixedSource = expectedFixedSource {
     let fixedTree = FixItApplier.applyFixes(in: diags, withMessages: applyFixIts, to: tree)
     var fixedTreeDescription = fixedTree.description
     if options.contains(.normalizeNewlinesInFixedSource) {
@@ -619,6 +621,10 @@ func assertParse<S: SyntaxProtocol>(
       file: file,
       line: line
     )
+  }
+
+  if expectedDiagnostics.allSatisfy({ $0.fixIts.isEmpty }) && expectedFixedSource != nil {
+    XCTFail("A fixed source was provided but the test case produces no diagnostics with Fix-Its", file: file, line: line)
   }
 
   if expectedDiagnostics.isEmpty {

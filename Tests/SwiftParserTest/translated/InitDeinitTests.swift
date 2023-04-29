@@ -26,7 +26,12 @@ final class InitDeinitTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected parameter clause in function signature", fixIts: ["insert parameter clause"])
-      ]
+      ],
+      fixedSource: """
+        struct FooStructConstructorA {
+          init()
+        }
+        """
     )
   }
 
@@ -49,7 +54,12 @@ final class InitDeinitTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected parameter clause in function signature", fixIts: ["insert parameter clause"])
-      ]
+      ],
+      fixedSource: """
+        struct FooStructConstructorC {
+          init() {}
+        }
+        """
     )
   }
 
@@ -62,7 +72,12 @@ final class InitDeinitTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected parameter clause in function signature", fixIts: ["insert parameter clause"])
-      ]
+      ],
+      fixedSource: """
+        struct FooStructConstructorC {
+          init<T>() {}
+        }
+        """
     )
   }
 
@@ -75,7 +90,12 @@ final class InitDeinitTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected parameter clause in function signature", fixIts: ["insert parameter clause"])
-      ]
+      ],
+      fixedSource: """
+        struct FooStructConstructorC {
+          init?() { self.init() }
+        }
+        """
     )
   }
 
@@ -215,7 +235,12 @@ final class InitDeinitTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected parameter clause in function signature", fixIts: ["insert parameter clause"])
-      ]
+      ],
+      fixedSource: """
+        init() {}
+        init()
+        init() {}
+        """
     )
   }
 

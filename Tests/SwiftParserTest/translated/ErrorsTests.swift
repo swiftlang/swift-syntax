@@ -41,53 +41,12 @@ final class ErrorsTests: XCTestCase {
   func testErrors3() {
     assertParse(
       """
-      func one() {
-        do {
-          true ? () : 1️⃣throw opaque_error()
-        } catch _ {
-        }
-        do {
-        } catch {
-          let error2 = error
-        }
-        do {
-        } catch 2️⃣where true {
-          let error2 = error
-        } catch {
-        }
-        // <rdar://problem/20985280> QoI: improve diagnostic on improper pattern match on type
-        do {
-          throw opaque_error()
-        } catch MSV {
-        } catch {
-        }
-        do {
-          throw opaque_error()
-        } catch is Error {
-        }
-        func foo() throws {}
-        do {
-      #if false
-          try foo()
-      #endif
-        } catch {    // don't warn, #if code should be scanned.
-        }
-        do {
-      #if false
-          throw opaque_error()
-      #endif
-        } catch {    // don't warn, #if code should be scanned.
-        }
-        do {
-          throw opaque_error()
-        } catch MSV.Foo, MSV.CarriesInt(let num) {
-        } catch {
-        }
+      do {
+        throw opaque_error()
+      } catch MSV.Foo, MSV.CarriesInt(let num) {
+      } catch {
       }
-      """,
-      diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression after ternary operator", fixIts: ["insert expression"])
-      ]
+      """
     )
   }
 
@@ -173,7 +132,12 @@ final class ErrorsTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "'throws' must preceed '->'", fixIts: ["move 'throws' in front of '->'"])
-      ]
+      ],
+      fixedSource: """
+        func postThrows2() throws -> Int {
+          return try postThrows()
+        }
+        """
     )
   }
 
@@ -204,7 +168,12 @@ final class ErrorsTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "'rethrows' must preceed '->'", fixIts: ["move 'rethrows' in front of '->'"])
-      ]
+      ],
+      fixedSource: """
+        func postRethrows2(_ f: () throws -> Int) rethrows -> Int {
+          return try f()
+        }
+        """
     )
   }
 
@@ -217,7 +186,12 @@ final class ErrorsTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "'throws' must preceed '->'", fixIts: ["move 'throws' in front of '->'"])
-      ]
+      ],
+      fixedSource: """
+        func postThrows3() {
+          _ = { () throws -> Int in }
+        }
+        """
     )
   }
 
@@ -394,7 +368,10 @@ final class ErrorsTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected throwing specifier; did you mean 'throws'?", fixIts: ["replace 'try' with 'throws'"])
-      ]
+      ],
+      fixedSource: """
+        func fixitTry0<T>(a: T) throws where T:ExpressibleByStringLiteral {}
+        """
     )
   }
 
@@ -419,7 +396,10 @@ final class ErrorsTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected throwing specifier; did you mean 'throws'?", fixIts: ["replace 'try' with 'throws'"])
-      ]
+      ],
+      fixedSource: """
+        func fixitTry2() throws {}
+        """
     )
   }
 
@@ -430,7 +410,10 @@ final class ErrorsTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected throwing specifier; did you mean 'throws'?", fixIts: ["replace 'try' with 'throws'"])
-      ]
+      ],
+      fixedSource: """
+        let fixitTry3 : () throws -> Int
+        """
     )
   }
 
@@ -473,6 +456,93 @@ final class ErrorsTests: XCTestCase {
       fixedSource: """
         func fixitAwait2() async throws -> Int { }
         """
+    )
+  }
+
+  func testErrors27() {
+    assertParse(
+      """
+      do {
+        true ? () : 1️⃣throw opaque_error()
+      } catch _ {
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected expression after ternary operator", fixIts: ["insert expression"])
+      ],
+      fixedSource: """
+        do {
+          true ? () : <#expression#>throw opaque_error()
+        } catch _ {
+        }
+        """
+    )
+  }
+
+  func testErrors28() {
+    assertParse(
+      """
+      do {
+      } catch {
+        let error2 = error
+      }
+      """
+    )
+  }
+
+  func testErrors29() {
+    assertParse(
+      """
+      do {
+      } catch where true {
+        let error2 = error
+      } catch {
+      }
+      """
+    )
+  }
+
+  // <rdar://problem/20985280> QoI: improve diagnostic on improper pattern match on type
+  func testErrors30() {
+    assertParse(
+      """
+      do {
+        throw opaque_error()
+      } catch MSV {
+      } catch {
+      }
+      """
+    )
+  }
+
+  func testErrors31() {
+    assertParse(
+      """
+      do {
+        throw opaque_error()
+      } catch is Error {
+      }
+      """
+    )
+  }
+
+  func testErrors32() {
+    assertParse(
+      """
+      func foo() throws {}
+        do {
+      #if false
+          try foo()
+      #endif
+        } catch {    // don't warn, #if code should be scanned.
+        }
+        do {
+      #if false
+          throw opaque_error()
+      #endif
+        } catch {    // don't warn, #if code should be scanned.
+        }
+      """
     )
   }
 

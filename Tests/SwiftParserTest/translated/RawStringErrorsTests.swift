@@ -22,7 +22,10 @@ final class RawStringErrorsTests: XCTestCase {
       """###,
       diagnostics: [
         DiagnosticSpec(message: "too many '#' characters in closing delimiter", fixIts: ["remove extraneous delimiters"])
-      ]
+      ],
+      fixedSource: ###"""
+        let _ = "foo\(#"bar"#)baz"
+        """###
     )
   }
 
@@ -61,7 +64,10 @@ final class RawStringErrorsTests: XCTestCase {
       """#####,
       diagnostics: [
         DiagnosticSpec(message: #####"expected '"####' to end string literal"#####, fixIts: [#####"insert '"####'"#####])
-      ]
+      ],
+      fixedSource: #####"""
+        let _ = ####"invalid"###"####
+        """#####
     )
   }
 
@@ -72,7 +78,10 @@ final class RawStringErrorsTests: XCTestCase {
       """#####,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "too many '#' characters in closing delimiter", fixIts: ["remove extraneous delimiters"])
-      ]
+      ],
+      fixedSource: #####"""
+        let _ = ###"invalid"###
+        """#####
     )
   }
 

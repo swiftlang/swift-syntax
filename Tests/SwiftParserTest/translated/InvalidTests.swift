@@ -35,7 +35,10 @@ final class InvalidTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "'inout' before a parameter name is not allowed", fixIts: ["move 'inout' in front of type"])
-      ]
+      ],
+      fixedSource: """
+        func test2(let x : inout Int) {}
+        """
     )
   }
 
@@ -58,7 +61,10 @@ final class InvalidTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "'__shared' before a parameter name is not allowed", fixIts: ["move '__shared' in front of type"])
-      ]
+      ],
+      fixedSource: """
+        func test1s(var x : __shared Int) {}
+        """
     )
   }
 
@@ -69,7 +75,10 @@ final class InvalidTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "'__shared' before a parameter name is not allowed", fixIts: ["move '__shared' in front of type"])
-      ]
+      ],
+      fixedSource: """
+        func test2s(let x : __shared Int) {}
+        """
     )
   }
 
@@ -80,7 +89,10 @@ final class InvalidTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "'__owned' before a parameter name is not allowed", fixIts: ["move '__owned' in front of type"])
-      ]
+      ],
+      fixedSource: """
+        func test1o(var x : __owned Int) {}
+        """
     )
   }
 
@@ -91,7 +103,10 @@ final class InvalidTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "'__owned' before a parameter name is not allowed", fixIts: ["move '__owned' in front of type"])
-      ]
+      ],
+      fixedSource: """
+        func test2o(let x : __owned Int) {}
+        """
     )
   }
 
@@ -104,7 +119,12 @@ final class InvalidTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected value and ')' to end function call", fixIts: ["insert value and ')'"])
-      ]
+      ],
+      fixedSource: """
+        func test3() {
+          undeclared_func(<#expression#>)
+        }
+        """
     )
   }
 
@@ -117,9 +137,9 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid6() {
+    // rdar://16601779
     assertParse(
       """
-      // rdar://16601779
       func foo() {
         runAction(SKAction.sequence()1️⃣
           skview!
@@ -127,7 +147,13 @@ final class InvalidTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected ')' to end function call", fixIts: ["insert ')'"])
-      ]
+      ],
+      fixedSource: """
+        func foo() {
+          runAction(SKAction.sequence())
+            skview!
+        }
+        """
     )
   }
 
@@ -150,7 +176,15 @@ final class InvalidTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "all statements inside a switch must be covered by a 'case' or 'default' label", fixIts: ["insert label"])
-      ]
+      ],
+      fixedSource: """
+        switch state {
+        case <#identifier#>:
+          let duration : Int = 0
+          case 1:
+            break
+        }
+        """
     )
   }
 
@@ -176,14 +210,32 @@ final class InvalidTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "all statements inside a switch must be covered by a 'case' or 'default' label", fixIts: ["insert label"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
-      ]
+      ],
+      fixedSource: #"""
+        func testNotCoveredCase(x: Int) {
+          switch x {
+        case <#identifier#>:
+            let y = "foo"
+            switch y {
+              case "bar":
+                blah; blah // ignored
+            }
+          case "baz":
+            break
+          case 1:
+            break
+          default:
+            break
+          }
+        }
+        """#
     )
   }
 
   func testInvalid10() {
+    // rdar://18926814
     assertParse(
       ##"""
-      // rdar://18926814
       func test4() {
         let abc = 123
         _ = " >> \( abc 1️⃣} ) << "2️⃣
@@ -191,7 +243,13 @@ final class InvalidTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace in string literal"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end function", fixIts: ["insert '}'"]),
-      ]
+      ],
+      fixedSource: ##"""
+        func test4() {
+          let abc = 123
+          _ = " >> \( abc } ) << "
+        }
+        """##
     )
   }
 
@@ -207,14 +265,17 @@ final class InvalidTests: XCTestCase {
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected return type in function type", fixIts: ["insert return type"]),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected ')' to end parameter clause", fixIts: ["insert ')'"]),
         DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code '<T>() -> T)' in function"),
-      ]
+      ],
+      fixedSource: """
+        func d(_ b: (String) -> <#type#>) <T>() -> T) {}
+        """
     )
   }
 
   func testInvalid12() {
+    // <rdar://problem/22143680> QoI: terrible diagnostic when trying to form a generic protocol
     assertParse(
       """
-      // <rdar://problem/22143680> QoI: terrible diagnostic when trying to form a generic protocol
       protocol Animal<Food> {
         func feed(_ food: Food)
       }
@@ -223,10 +284,10 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid13() {
+    // https://github.com/apple/swift/issues/43190
+    // Crash with invalid parameter declaration
     assertParse(
       """
-      // https://github.com/apple/swift/issues/43190
-      // Crash with invalid parameter declaration
       do {
         class Starfish {}
         struct Salmon {}
@@ -237,14 +298,23 @@ final class InvalidTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected ':' and type in parameter", fixIts: ["insert ':' and type"])
-      ]
+      ],
+      fixedSource: """
+        do {
+          class Starfish {}
+          struct Salmon {}
+          func f(s Starfish: <#type#>,
+                    _ ss: Salmon) -> [Int] {}
+          func g() { f(Starfish(), Salmon()) }
+        }
+        """
     )
   }
 
   func testInvalid14() {
+    // https://github.com/apple/swift/issues/43313
     assertParse(
       """
-      // https://github.com/apple/swift/issues/43313
       do {
         func f(_ a: Int, b: Int) {}
         f(1, b: 2,1️⃣)
@@ -252,20 +322,19 @@ final class InvalidTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected value in function call", fixIts: ["insert value"])
-      ]
-    )
-  }
-
-  func testInvalid15() {
-    assertParse(
-      """
-      // https://github.com/apple/swift/issues/43591
-      // Two inout crash compiler
-      """
+      ],
+      fixedSource: """
+        do {
+          func f(_ a: Int, b: Int) {}
+          f(1, b: 2, <#expression#>)
+        }
+        """
     )
   }
 
   func testInvalid16a() {
+    // https://github.com/apple/swift/issues/43591
+    // Two inout crash compiler
     assertParse(
       """
       func f1_43591(a : inout 1️⃣inout Int) {}
@@ -306,7 +375,10 @@ final class InvalidTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "'inout' before a parameter name is not allowed", fixIts: ["remove redundant 'inout'"])
-      ]
+      ],
+      fixedSource: """
+        func f4_43591(x: inout String) {}
+        """
     )
   }
 
@@ -317,7 +389,10 @@ final class InvalidTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "'inout' before a parameter name is not allowed", fixIts: ["remove redundant 'inout'"])
-      ]
+      ],
+      fixedSource: """
+        func f5_43591(i: inout Int) {}
+        """
     )
   }
 
@@ -328,7 +403,10 @@ final class InvalidTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "keyword 'repeat' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"])
-      ]
+      ],
+      fixedSource: """
+        func `repeat`() {}
+        """
     )
   }
 
@@ -339,7 +417,10 @@ final class InvalidTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "keyword 'for' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"])
-      ]
+      ],
+      fixedSource: """
+        let `for` = 2
+        """
     )
   }
 
@@ -350,7 +431,10 @@ final class InvalidTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "'inout' before a parameter name is not allowed", fixIts: ["remove redundant 'inout'"])
-      ]
+      ],
+      fixedSource: """
+        func f4_43591(x: inout String) {}
+        """
     )
   }
 
@@ -373,7 +457,10 @@ final class InvalidTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "keyword 'repeat' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"])
-      ]
+      ],
+      fixedSource: """
+        func `repeat`() {}
+        """
     )
   }
 
@@ -384,7 +471,10 @@ final class InvalidTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "keyword 'for' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"])
-      ]
+      ],
+      fixedSource: """
+        let `for` = 2
+        """
     )
   }
 
@@ -498,7 +588,11 @@ final class InvalidTests: XCTestCase {
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected ':' and type in parameter", fixIts: ["insert ':' and type"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end parameter clause", fixIts: ["insert ')'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '<T>(x: T)' in function"),
-      ]
+      ],
+      fixedSource: """
+        func hammer(
+        leavings: <#type#>) <T>(x: T) {}
+        """
     )
   }
 

@@ -41,7 +41,7 @@ final class RegexLiteralTests: XCTestCase {
       #//#1️⃣#
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "too many '#' characters in closing delimiter", fixIts: ["remove extraneous delimiters"])
+        DiagnosticSpec(message: "too many '#' characters in closing delimiter", fixIts: ["remove extraneous delimiters"])
       ],
       fixedSource: "#//#"
     )
@@ -52,7 +52,7 @@ final class RegexLiteralTests: XCTestCase {
       #/abc/#1️⃣#
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "too many '#' characters in closing delimiter", fixIts: ["remove extraneous delimiters"])
+        DiagnosticSpec(message: "too many '#' characters in closing delimiter", fixIts: ["remove extraneous delimiters"])
       ],
       fixedSource: "#/abc/#"
     )
@@ -65,7 +65,10 @@ final class RegexLiteralTests: XCTestCase {
       """#,
       diagnostics: [
         DiagnosticSpec(message: "expected identifier in macro expansion", fixIts: ["insert identifier"])
-      ]
+      ],
+      fixedSource: #"""
+        #<#identifier#>
+        """#
     )
   }
 
@@ -76,7 +79,10 @@ final class RegexLiteralTests: XCTestCase {
       """#,
       diagnostics: [
         DiagnosticSpec(message: "expected '/' to end regex literal", fixIts: ["insert '/'"])
-      ]
+      ],
+      fixedSource: #"""
+        //
+        """#
     )
   }
 
@@ -87,7 +93,10 @@ final class RegexLiteralTests: XCTestCase {
       """#,
       diagnostics: [
         DiagnosticSpec(message: "expected identifier in macro expansion", fixIts: ["insert identifier"])
-      ]
+      ],
+      fixedSource: #"""
+        /#<#identifier#>
+        """#
     )
   }
 
@@ -98,7 +107,10 @@ final class RegexLiteralTests: XCTestCase {
       """#,
       diagnostics: [
         DiagnosticSpec(message: "expected '/#' to end regex literal", fixIts: ["insert '/#'"])
-      ]
+      ],
+      fixedSource: #"""
+        #//#
+        """#
     )
   }
 
@@ -109,7 +121,10 @@ final class RegexLiteralTests: XCTestCase {
       """#,
       diagnostics: [
         DiagnosticSpec(message: "expected '#' to end regex literal", fixIts: ["insert '#'"])
-      ]
+      ],
+      fixedSource: #"""
+        #//#
+        """#
     )
   }
 
@@ -120,7 +135,10 @@ final class RegexLiteralTests: XCTestCase {
       """#,
       diagnostics: [
         DiagnosticSpec(message: "expected '#' to end regex literal", fixIts: ["insert '#'"])
-      ]
+      ],
+      fixedSource: #"""
+        #///#
+        """#
     )
   }
 
@@ -131,7 +149,10 @@ final class RegexLiteralTests: XCTestCase {
       """#,
       diagnostics: [
         DiagnosticSpec(message: "expected '/#' to end regex literal", fixIts: ["insert '/#'"])
-      ]
+      ],
+      fixedSource: #"""
+        #/#/#
+        """#
     )
   }
 
@@ -142,7 +163,10 @@ final class RegexLiteralTests: XCTestCase {
       """#,
       diagnostics: [
         DiagnosticSpec(message: "expected '/#' to end regex literal", fixIts: ["insert '/#'"])
-      ]
+      ],
+      fixedSource: #"""
+        #/##/#
+        """#
     )
   }
 
@@ -153,7 +177,10 @@ final class RegexLiteralTests: XCTestCase {
       """#,
       diagnostics: [
         DiagnosticSpec(message: "expected '#' to end regex literal", fixIts: ["insert '#'"])
-      ]
+      ],
+      fixedSource: #"""
+        #/##/#
+        """#
     )
   }
 
@@ -316,7 +343,11 @@ final class RegexLiteralTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '/#' to end regex literal", fixIts: ["insert '/#'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in macro expansion", fixIts: ["insert identifier"]),
-      ]
+      ],
+      fixedSource: """
+        #/abc/#
+        /#<#identifier#>
+        """
     )
   }
 
@@ -329,7 +360,11 @@ final class RegexLiteralTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '/#' to end regex literal", fixIts: ["insert '/#'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in macro expansion", fixIts: ["insert identifier"]),
-      ]
+      ],
+      fixedSource: """
+        #/abc/#
+            \t \t /#<#identifier#>
+        """
     )
   }
 
@@ -392,7 +427,10 @@ final class RegexLiteralTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected expression after operator", fixIts: ["insert expression"])
-      ]
+      ],
+      fixedSource: """
+        /a / <#expression#>
+        """
     )
   }
 
@@ -403,7 +441,10 @@ final class RegexLiteralTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected expression after operator", fixIts: ["insert expression"])
-      ]
+      ],
+      fixedSource: """
+        let x = /a / <#expression#>
+        """
     )
   }
 
@@ -686,7 +727,10 @@ final class RegexLiteralTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected name in member access", fixIts: ["insert name"])
-      ]
+      ],
+      fixedSource: """
+        x.<#identifier#> /^ x/
+        """
     )
   }
 
@@ -698,7 +742,10 @@ final class RegexLiteralTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected identifier in macro expansion", fixIts: ["insert identifier"])
-      ]
+      ],
+      fixedSource: """
+        #<#identifier#> /^ x/
+        """
     )
   }
 
@@ -718,7 +765,10 @@ final class RegexLiteralTests: XCTestCase {
       """#,
       diagnostics: [
         DiagnosticSpec(message: "expected root in key path", fixIts: ["insert root"])
-      ]
+      ],
+      fixedSource: #"""
+        \<#type#> /^ x/
+        """#
     )
   }
 
@@ -826,7 +876,10 @@ final class RegexLiteralTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected expression in 'await' expression", fixIts: ["insert expression"])
-      ]
+      ],
+      fixedSource: """
+        await <#expression#> /^ x/
+        """
     )
   }
 
@@ -1133,7 +1186,10 @@ final class RegexLiteralTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "'=' must have consistent whitespace on both sides", fixIts: ["insert whitespace"])
-      ]
+      ],
+      fixedSource: """
+        let x = /abc/
+        """
     )
   }
 
@@ -1145,7 +1201,10 @@ final class RegexLiteralTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected name in member access", fixIts: ["insert name"]),
-      ]
+      ],
+      fixedSource: """
+        let x; .<#identifier#>/abc/
+        """
     )
   }
 

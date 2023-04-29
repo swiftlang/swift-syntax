@@ -46,7 +46,10 @@ final class UnclosedStringInterpolationTests: XCTestCase {
         DiagnosticSpec(message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
         DiagnosticSpec(message: "expected ')' in string literal", fixIts: ["insert ')'"]),
         DiagnosticSpec(message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
-      ]
+      ],
+      fixedSource: ##"""
+        let theGoat = "kanye \("")"
+        """##
     )
   }
 
@@ -57,7 +60,10 @@ final class UnclosedStringInterpolationTests: XCTestCase {
       """##,
       diagnostics: [
         DiagnosticSpec(message: "expected ')' in string literal", fixIts: ["insert ')'"])
-      ]
+      ],
+      fixedSource: ##"""
+        let equation1 = "2 + 2 = \(2 + 2)"
+        """##
     )
   }
 
@@ -68,7 +74,10 @@ final class UnclosedStringInterpolationTests: XCTestCase {
       """##,
       diagnostics: [
         DiagnosticSpec(message: "expected ')' in string literal", fixIts: ["insert ')'"])
-      ]
+      ],
+      fixedSource: ##"""
+        let s = "\(x)"; print(x)
+        """##
     )
   }
 
@@ -80,7 +89,10 @@ final class UnclosedStringInterpolationTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '; print(x' in string literal"),
         DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
-      ]
+      ],
+      fixedSource: ##"""
+        let zzz = "\(x; print(x)"
+        """##
     )
   }
 
@@ -92,7 +104,10 @@ final class UnclosedStringInterpolationTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(message: "expected ')' in string literal", fixIts: ["insert ')'"]),
         DiagnosticSpec(message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
-      ]
+      ],
+      fixedSource: ##"""
+        let goatedAlbum = "The Life Of \("Pablo")"
+        """##
     )
   }
 
@@ -107,7 +122,12 @@ final class UnclosedStringInterpolationTests: XCTestCase {
         DiagnosticSpec(message: #"expected '"""' to end string literal"#, fixIts: [#"insert '"""'"#]),
         DiagnosticSpec(message: "expected ')' in string literal", fixIts: ["insert ')'"]),
         DiagnosticSpec(message: #"expected '"""' to end string literal"#, fixIts: [#"insert '"""'"#]),
-      ]
+      ],
+      fixedSource: ##"""
+        _ = """
+        \(
+        """""")"""
+        """##
     )
   }
 
@@ -119,7 +139,10 @@ final class UnclosedStringInterpolationTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code 'H(' in string literal"),
         DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
-      ]
+      ],
+      fixedSource: #"""
+        "\(e H()r"
+        """#
     )
   }
 
@@ -132,7 +155,10 @@ final class UnclosedStringInterpolationTests: XCTestCase {
         DiagnosticSpec(message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
         DiagnosticSpec(message: "expected ')' in string literal", fixIts: ["insert ')'"]),
         DiagnosticSpec(message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
-      ]
+      ],
+      fixedSource: #"""
+        "\("")"
+        """#
     )
   }
 }

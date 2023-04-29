@@ -148,7 +148,12 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected 'var' in variable", fixIts: ["insert 'var'"])
-      ]
+      ],
+      fixedSource: """
+        struct Bar {
+          var fisr = 0x5F3759DF
+        }
+        """
     )
   }
 
@@ -163,7 +168,14 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected 'func' in function", fixIts: ["insert 'func'"])
-      ]
+      ],
+      fixedSource: """
+        struct Bar {
+          func %%<T: Brew> (lhs: T, rhs: T) -> T {
+            lhs + lhs + rhs + rhs
+          }
+        }
+        """
     )
   }
 
@@ -176,7 +188,12 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected 'var' in variable", fixIts: ["insert 'var'"])
-      ]
+      ],
+      fixedSource: """
+        struct Bar {
+          var _: Int = 42
+        }
+        """
     )
   }
 
@@ -189,7 +206,12 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected 'var' in variable", fixIts: ["insert 'var'"])
-      ]
+      ],
+      fixedSource: """
+        struct Bar {
+          var (light, dark) = (100, 200)
+        }
+        """
     )
   }
 
@@ -220,7 +242,12 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected 'func' in function", fixIts: ["insert 'func'"])
-      ]
+      ],
+      fixedSource: """
+        class Baz {
+          func instanceMethod() {}
+        }
+        """
     )
   }
 
@@ -233,7 +260,12 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected 'func' in function", fixIts: ["insert 'func'"])
-      ]
+      ],
+      fixedSource: """
+        class Baz {
+          static func staticMethod() {}
+        }
+        """
     )
   }
 
@@ -246,7 +278,12 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected 'var' in variable", fixIts: ["insert 'var'"])
-      ]
+      ],
+      fixedSource: """
+        class Baz {
+          var instanceProperty: Int { 0 }
+        }
+        """
     )
   }
 
@@ -259,7 +296,12 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected 'var' in variable", fixIts: ["insert 'var'"])
-      ]
+      ],
+      fixedSource: """
+        class Baz {
+          static var staticProperty: Int { 0 }
+        }
+        """
     )
   }
 

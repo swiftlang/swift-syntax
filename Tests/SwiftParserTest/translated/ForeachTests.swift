@@ -29,38 +29,83 @@ final class ForeachTests: XCTestCase {
   }
 
   func testForeach2() {
+    // Simple foreach loop, using the variable in the body
     assertParse(
       """
       func for_each(r: Range<Int>, iir: IntRange<Int>) {
         var sum = 0
-        // Simple foreach loop, using the variable in the body
         for i in r {
           sum = sum + i
         }
-        // Check scoping of variable introduced with foreach loop
-        i = 0
-        // For-each loops with two variables and varying degrees of typedness
+      }
+      """
+    )
+
+    // Check scoping of variable introduced with foreach loop
+    // For-each loops with two variables and varying degrees of typedness
+    assertParse(
+      """
+      func for_each(r: Range<Int>, iir: IntRange<Int>) {
+        var sum = 0
         for (i, j) in iir {
           sum = sum + i + j
         }
-        for (i, j) in iir {
-          sum = sum + i + j
-        }
+      }
+      """
+    )
+
+    assertParse(
+      """
+      func for_each(r: Range<Int>, iir: IntRange<Int>) {
+        var sum = 0
         for (i, j) : (Int, Int) in iir {
           sum = sum + i + j
         }
-        // Parse errors
-        for i 1️⃣r {
-        }
-        for i in r 2️⃣sum = sum + i;3️⃣
       }
-      """,
-      diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'in' in 'for' statement", fixIts: ["insert 'in'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '{' in 'for' statement", fixIts: ["insert '{'"]),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected '}' to end 'for' statement", fixIts: ["insert '}'"]),
-      ]
+      """
     )
   }
 
+  // Parse errors
+  func testForeach3() {
+    assertParse(
+      """
+      func for_each(r: Range<Int>, iir: IntRange<Int>) {
+        var sum = 0
+        for i 1️⃣r {
+        }
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected 'in' in 'for' statement", fixIts: ["insert 'in'"])
+      ],
+      fixedSource: """
+        func for_each(r: Range<Int>, iir: IntRange<Int>) {
+          var sum = 0
+          for i in r {
+          }
+        }
+        """
+    )
+
+    assertParse(
+      """
+      func for_each(r: Range<Int>, iir: IntRange<Int>) {
+        var sum = 0
+        for i in r 1️⃣sum = sum + i;2️⃣
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' in 'for' statement", fixIts: ["insert '{'"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end 'for' statement", fixIts: ["insert '}'"]),
+      ],
+      fixedSource: """
+        func for_each(r: Range<Int>, iir: IntRange<Int>) {
+          var sum = 0
+          for i in r {sum = sum + i;
+        }
+        }
+        """
+    )
+  }
 }

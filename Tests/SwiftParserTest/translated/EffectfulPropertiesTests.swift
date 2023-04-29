@@ -188,7 +188,13 @@ final class EffectfulPropertiesTests: XCTestCase {
           message: "expected throwing specifier; did you mean 'throws'?",
           fixIts: ["replace 'rethrows' with 'throws'"]
         ),
-      ]
+      ],
+      fixedSource: """
+        var bad1 : Int {
+          get throws { 0 }
+          set throws { }
+        }
+        """
     )
   }
 
@@ -211,7 +217,13 @@ final class EffectfulPropertiesTests: XCTestCase {
           message: "expected async specifier; did you mean 'async'?",
           fixIts: ["replace 'reasync' with 'async'"]
         ),
-      ]
+      ],
+      fixedSource: """
+        var bad2 : Int {
+          get async { 0 }
+          set async { }
+        }
+        """
     )
   }
 
@@ -245,7 +257,12 @@ final class EffectfulPropertiesTests: XCTestCase {
           notes: [NoteSpec(locationMarker: "3️⃣", message: "'throws' declared here")],
           fixIts: ["remove redundant 'rethrows'"]
         ),
-      ]
+      ],
+      fixedSource: """
+        var bad4 : Int = 0 {
+          willSet(theValue) async async throws {}
+        }
+        """
     )
   }
 
@@ -289,7 +306,12 @@ final class EffectfulPropertiesTests: XCTestCase {
           fixIts: ["replace 'rethrows' with 'throws'"]
         ),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '-> Int' in accessor"),
-      ]
+      ],
+      fixedSource: """
+        var bad6 : Int {
+          get throws -> Int { 0 }
+        }
+        """
     )
   }
 
@@ -302,7 +324,12 @@ final class EffectfulPropertiesTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "'async' must precede 'throws'", fixIts: ["move 'async' in front of 'throws'"])
-      ]
+      ],
+      fixedSource: """
+        var bad7 : Double {
+          get async throws { 3.14 }
+        }
+        """
     )
   }
 
@@ -316,7 +343,13 @@ final class EffectfulPropertiesTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "'async' must precede 'throws'", fixIts: ["move 'async' in front of 'throws'"])
-      ]
+      ],
+      fixedSource: """
+        var bad8 : Double {
+          get {}
+          _modify async throws { yield &bad8 }
+        }
+        """
     )
   }
 
@@ -349,7 +382,15 @@ final class EffectfulPropertiesTests: XCTestCase {
           message: "'async' must precede 'throws'",
           fixIts: ["move 'async' in front of 'throws'"]
         ),
-      ]
+      ],
+      fixedSource: """
+        protocol BadP {
+          var prop2 : Int { get bogus rethrows set }
+          var prop3 : Int { get throws bogus set }
+          var prop4 : Int { get async bogus set }
+          var prop5 : Int { get async throws }
+        }
+        """
     )
   }
 }

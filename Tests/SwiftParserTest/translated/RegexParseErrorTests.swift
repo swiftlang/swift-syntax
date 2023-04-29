@@ -54,7 +54,10 @@ final class RegexParseErrorTests: XCTestCase {
       """#,
       diagnostics: [
         DiagnosticSpec(message: "expected '#' to end regex literal", fixIts: ["insert '#'"])
-      ]
+      ],
+      fixedSource: #"""
+        _ = #/\\/''/#
+        """#
     )
   }
 
@@ -65,7 +68,10 @@ final class RegexParseErrorTests: XCTestCase {
       """#,
       diagnostics: [
         DiagnosticSpec(message: "expected '/#' to end regex literal", fixIts: ["insert '/#'"])
-      ]
+      ],
+      fixedSource: #"""
+        _ = #/\|/#
+        """#
     )
   }
 
@@ -76,7 +82,10 @@ final class RegexParseErrorTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected '#' to end regex literal", fixIts: ["insert '#'"])
-      ]
+      ],
+      fixedSource: """
+        _ = #//#
+        """
     )
   }
 
@@ -87,7 +96,10 @@ final class RegexParseErrorTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected '/#' to end regex literal", fixIts: ["insert '/#'"])
-      ]
+      ],
+      fixedSource: """
+        _ = #/xy/#
+        """
     )
   }
 
@@ -132,7 +144,12 @@ final class RegexParseErrorTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected '/#' to end regex literal", fixIts: ["insert '/#'"])
-      ]
+      ],
+      fixedSource: """
+        do {
+          _ = #/(?'a/#
+        }
+        """
     )
   }
 
@@ -155,7 +172,13 @@ final class RegexParseErrorTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected root in key path", fixIts: ["insert root"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression after operator", fixIts: ["insert expression"]),
-      ]
+      ],
+      fixedSource: #"""
+        do {
+          _ = /\<#type#>
+          / <#expression#>
+        }
+        """#
     )
   }
 
@@ -170,7 +193,13 @@ final class RegexParseErrorTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '/#' to end regex literal", fixIts: ["insert '/#'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in macro expansion", fixIts: ["insert identifier"]),
-      ]
+      ],
+      fixedSource: #"""
+        do {
+          _ = #/\/#
+        /#<#identifier#>
+        }
+        """#
     )
   }
 

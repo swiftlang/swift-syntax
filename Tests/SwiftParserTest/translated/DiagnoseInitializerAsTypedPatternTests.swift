@@ -127,7 +127,10 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' with '='"])
-      ]
+      ],
+      fixedSource: """
+        let g= X(x)
+        """
     )
   }
 
@@ -138,7 +141,10 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' with '='"])
-      ]
+      ],
+      fixedSource: """
+        let h= X(x, y)
+        """
     )
   }
 
@@ -149,7 +155,10 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' with '='"])
-      ]
+      ],
+      fixedSource: """
+        let i= X() { foo() }
+        """
     )
   }
 
@@ -160,7 +169,10 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' with '='"])
-      ]
+      ],
+      fixedSource: """
+        let j= X(x) { foo() }
+        """
     )
   }
 
@@ -171,7 +183,10 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' with '='"])
-      ]
+      ],
+      fixedSource: """
+        let k= X(x, y) { foo() }
+        """
     )
   }
 
@@ -184,7 +199,12 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' with '='"])
-      ]
+      ],
+      fixedSource: """
+        func nonTopLevel() {
+          let a=[X]()
+        }
+        """
     )
   }
 
@@ -197,7 +217,12 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' with '='"])
-      ]
+      ],
+      fixedSource: """
+        func nonTopLevel() {
+          let i= X() { foo() }
+        }
+        """
     )
   }
 
@@ -210,7 +235,12 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' with '='"])
-      ]
+      ],
+      fixedSource: """
+        func nonTopLevel() {
+          let j= X(x) { foo() }
+        }
+        """
     )
   }
 
@@ -223,7 +253,12 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' with '='"])
-      ]
+      ],
+      fixedSource: """
+        func nonTopLevel() {
+          let k= X(x, y) { foo() }
+        }
+        """
     )
   }
 

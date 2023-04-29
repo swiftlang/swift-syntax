@@ -22,7 +22,11 @@ final class ActorTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected member block in actor", fixIts: ["insert member block"])
-      ]
+      ],
+      fixedSource: """
+        actor MyActor1 {
+        }
+        """
     )
   }
 
@@ -42,7 +46,14 @@ final class ActorTests: XCTestCase {
           ],
           fixIts: ["insert '}'"]
         )
-      ]
+      ],
+      fixedSource: """
+        actor MyActor2 {
+            init() {
+            }
+        func hello() { }
+        }
+        """
     )
   }
 }

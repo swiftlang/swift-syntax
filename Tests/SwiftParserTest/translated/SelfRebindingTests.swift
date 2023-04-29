@@ -64,7 +64,15 @@ final class SelfRebindingTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "keyword 'self' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"])
-      ]
+      ],
+      fixedSource: """
+        struct T {
+            var mutable: Int = 0
+            func f() {
+                let `self` = self
+            }
+        }
+        """
     )
   }
 

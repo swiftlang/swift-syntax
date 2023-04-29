@@ -20,7 +20,10 @@ final class ExpressionTests: XCTestCase {
       "let a =1️⃣",
       diagnostics: [
         DiagnosticSpec(message: "expected expression in variable", fixIts: ["insert expression"])
-      ]
+      ],
+      fixedSource: """
+        let a = <#expression#>
+        """
     )
 
     assertParse("a ? b : c ? d : e")
@@ -28,7 +31,10 @@ final class ExpressionTests: XCTestCase {
       "a ? b :1️⃣",
       diagnostics: [
         DiagnosticSpec(message: "expected expression after ternary operator", fixIts: ["insert expression"])
-      ]
+      ],
+      fixedSource: """
+        a ? b : <#expression#>
+        """
     )
   }
 
@@ -151,7 +157,11 @@ final class ExpressionTests: XCTestCase {
       """#,
       diagnostics: [
         DiagnosticSpec(message: "expected value and ']' to end subscript", fixIts: ["insert value and ']'"])
-      ]
+      ],
+      fixedSource: #"""
+        \a
+        c[<#expression#>]
+        """#
     )
 
     assertParse(
@@ -334,7 +344,11 @@ final class ExpressionTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected value in array element", fixIts: ["insert value"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected ']' to end array", fixIts: ["insert ']'"]),
-      ]
+      ],
+      fixedSource: """
+        [<#expression#>
+          ,]
+        """
     )
 
     assertParse(
@@ -344,7 +358,10 @@ final class ExpressionTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(message: "expected value in dictionary element", fixIts: ["insert value"]),
         DiagnosticSpec(message: "expected ']' to end dictionary", fixIts: ["insert ']'"]),
-      ]
+      ],
+      fixedSource: """
+        ([1: <#expression#>])
+        """
     )
 
     assertParse(
@@ -422,7 +439,10 @@ final class ExpressionTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(message: "expected ')' in string literal", fixIts: ["insert ')'"]),
         DiagnosticSpec(message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
-      ]
+      ],
+      fixedSource: #"""
+        "\(())"
+        """#
     )
   }
 
@@ -479,7 +499,10 @@ final class ExpressionTests: XCTestCase {
           ],
           fixIts: [#"insert '"'"#]
         )
-      ]
+      ],
+      fixedSource: #"""
+        "\","
+        """#
     )
 
     assertParse(
@@ -552,7 +575,10 @@ final class ExpressionTests: XCTestCase {
           ],
           fixIts: [#"insert '"""'"#]
         )
-      ]
+      ],
+      fixedSource: ##"""
+        """""""
+        """##
     )
 
     assertParse(
@@ -561,7 +587,10 @@ final class ExpressionTests: XCTestCase {
       """##,
       diagnostics: [
         DiagnosticSpec(message: #"expected '"""' to end string literal"#, fixIts: [#"insert '"""'"#])
-      ]
+      ],
+      fixedSource: ##"""
+        """"""""
+        """##
     )
 
     assertParse(
@@ -583,7 +612,10 @@ final class ExpressionTests: XCTestCase {
       """##,
       diagnostics: [
         DiagnosticSpec(message: ##"expected '"#' to end string literal"##, fixIts: [##"insert '"#'"##])
-      ]
+      ],
+      fixedSource: ##"""
+        #""#
+        """##
     )
 
     assertParse(
@@ -592,7 +624,10 @@ final class ExpressionTests: XCTestCase {
       """##,
       diagnostics: [
         DiagnosticSpec(message: ##"expected '"""#' to end string literal"##, fixIts: [##"insert '"""#'"##])
-      ]
+      ],
+      fixedSource: ##"""
+        #""""""#
+        """##
     )
 
     assertParse(
@@ -601,7 +636,10 @@ final class ExpressionTests: XCTestCase {
       """##,
       diagnostics: [
         DiagnosticSpec(message: ##"expected '"""#' to end string literal"##, fixIts: [##"insert '"""#'"##])
-      ]
+      ],
+      fixedSource: ##"""
+        #"""a"""#
+        """##
     )
 
     assertParse(
@@ -609,7 +647,10 @@ final class ExpressionTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "invalid escape sequence in literal"),
         DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
-      ]
+      ],
+      fixedSource: ###"""
+        "\"
+        """###
     )
 
     assertParse(
@@ -670,7 +711,10 @@ final class ExpressionTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected root in key path", fixIts: ["insert root"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end tuple type", fixIts: ["insert ')'"]),
-      ]
+      ],
+      fixedSource: ##"""
+        \<#type#>\()
+        """##
     )
 
     assertParse(
@@ -685,7 +729,10 @@ final class ExpressionTests: XCTestCase {
       """#,
       diagnostics: [
         DiagnosticSpec(message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#])
-      ]
+      ],
+      fixedSource: #"""
+        ""
+        """#
     )
 
     assertParse(
@@ -694,7 +741,10 @@ final class ExpressionTests: XCTestCase {
       """#,
       diagnostics: [
         DiagnosticSpec(message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#])
-      ]
+      ],
+      fixedSource: #"""
+        "'"
+        """#
     )
   }
 
@@ -729,7 +779,10 @@ final class ExpressionTests: XCTestCase {
       "foo ? 11️⃣",
       diagnostics: [
         DiagnosticSpec(message: "expected ':' and expression after '? ...' in ternary expression", fixIts: ["insert ':' and expression"])
-      ]
+      ],
+      fixedSource: """
+        foo ? 1: <#expression#>
+        """
     )
   }
 
@@ -747,7 +800,16 @@ final class ExpressionTests: XCTestCase {
         DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end 'if' statement", fixIts: ["insert '}'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end function", fixIts: ["insert '}'"]),
-      ]
+      ],
+      fixedSource: #"""
+        func nestThoseIfs() {
+          \n
+          if false != true {
+            \n
+            print; "\(i)\"\n"
+        }
+        }
+        """#
     )
 
     assertParse(
@@ -755,7 +817,10 @@ final class ExpressionTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected value in tuple", fixIts: ["insert value"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end macro expansion", fixIts: ["insert ')'"]),
-      ]
+      ],
+      fixedSource: """
+        #keyPath((b: <#expression#>))
+        """
     )
   }
 
@@ -780,7 +845,10 @@ final class ExpressionTests: XCTestCase {
       "let _ = [Int throws 1️⃣Int]()",
       diagnostics: [
         DiagnosticSpec(message: "expected '->' in array element", fixIts: ["insert '->'"])
-      ]
+      ],
+      fixedSource: """
+        let _ = [Int throws -> Int]()
+        """
     )
   }
 
@@ -794,7 +862,13 @@ final class ExpressionTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected expression after ternary operator", fixIts: ["insert expression"])
-      ]
+      ],
+      fixedSource: """
+        do {
+          true ? () : <#expression#>throw opaque_error()
+        } catch _ {
+        }
+        """
     )
   }
 
@@ -808,7 +882,10 @@ final class ExpressionTests: XCTestCase {
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected type in function type", fixIts: ["insert type"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '..' in function type"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected return type in function type", fixIts: ["insert return type"]),
-      ]
+      ],
+      fixedSource: """
+        let <#pattern#>:(<#type#>..)-> <#type#>
+        """
     )
   }
 
@@ -820,7 +897,10 @@ final class ExpressionTests: XCTestCase {
       substructureAfterMarker: "1️⃣",
       diagnostics: [
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression", fixIts: ["insert expression"])
-      ]
+      ],
+      fixedSource: """
+        Foo async -> <#expression#>
+        """
     )
   }
 
@@ -948,7 +1028,11 @@ final class ExpressionTests: XCTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected ')' in string literal", fixIts: ["insert ')'"]),
         DiagnosticSpec(locationMarker: "1️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
         DiagnosticSpec(locationMarker: "2️⃣", message: #"extraneous code ')"' at top level"#),
-      ]
+      ],
+      fixedSource: #"""
+        "test \(label: <#expression#>)"
+        foo)"
+        """#
     )
   }
 
@@ -969,7 +1053,11 @@ final class ExpressionTests: XCTestCase {
       ),
       diagnostics: [
         DiagnosticSpec(message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#])
-      ]
+      ],
+      fixedSource: """
+        "This is unterminated"
+        x
+        """
     )
   }
 
@@ -1039,6 +1127,12 @@ final class ExpressionTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(message: "escaped newline at the last line of a multi-line string literal is not allowed", fixIts: ["remove ''"])
       ],
+      fixedSource: #"""
+          """
+          line 1
+          line 2
+          """
+        """#,
       options: [.substructureCheckTrivia]
     )
   }
@@ -1682,7 +1776,12 @@ final class StatementExpressionTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "multi-line string literal content must begin on a new line", fixIts: ["insert newline"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected value and ')' to end tuple", fixIts: ["insert value and ')'"]),
-      ]
+      ],
+      fixedSource: #"""
+        """
+        \({(<#expression#>)})
+        """
+        """#
     )
   }
 
@@ -1695,7 +1794,11 @@ final class StatementExpressionTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
         DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
-      ]
+      ],
+      fixedSource: #"""
+        "abc"
+        ""
+        """#
     )
   }
 
@@ -1708,7 +1811,11 @@ final class StatementExpressionTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
         DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
-      ]
+      ],
+      fixedSource: #"""
+        ""
+        ""
+        """#
     )
   }
 
@@ -1722,7 +1829,11 @@ final class StatementExpressionTests: XCTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
         DiagnosticSpec(locationMarker: "3️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
-      ]
+      ],
+      fixedSource: #"""
+        "abc"
+        \(def); ""
+        """#
     )
   }
 
@@ -1736,7 +1847,11 @@ final class StatementExpressionTests: XCTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected ')' in string literal", fixIts: ["insert ')'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
         DiagnosticSpec(locationMarker: "3️⃣", message: #"extraneous code ')"' at top level"#),
-      ]
+      ],
+      fixedSource: #"""
+        "abc\(def)"
+        )"
+        """#
     )
   }
 
@@ -1750,7 +1865,11 @@ final class StatementExpressionTests: XCTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected value and ')' in string literal", fixIts: ["insert value and ')'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
         DiagnosticSpec(locationMarker: "3️⃣", message: #"extraneous code ')"' at top level"#),
-      ]
+      ],
+      fixedSource: #"""
+        "abc\(<#expression#>)"
+        def)"
+        """#
     )
   }
 
@@ -1765,7 +1884,11 @@ final class StatementExpressionTests: XCTestCase {
         DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
         DiagnosticSpec(locationMarker: "3️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
         DiagnosticSpec(locationMarker: "4️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
-      ]
+      ],
+      fixedSource: #"""
+        "abc\"
+        (def); ""
+        """#
     )
   }
 
@@ -1779,7 +1902,11 @@ final class StatementExpressionTests: XCTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in macro expansion", fixIts: ["insert identifier"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected identifier in macro expansion", fixIts: ["insert identifier"]),
-      ]
+      ],
+      fixedSource: #"""
+        #<#identifier#>
+        "abc"; #<#identifier#>
+        """#
     )
   }
 
@@ -1793,7 +1920,11 @@ final class StatementExpressionTests: XCTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: ##"expected '"#' to end string literal"##, fixIts: [##"insert '"#'"##]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
         DiagnosticSpec(locationMarker: "3️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
-      ]
+      ],
+      fixedSource: #"""
+        #""#
+        abc; "#"
+        """#
     )
   }
 
@@ -1806,7 +1937,11 @@ final class StatementExpressionTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: ##"expected '"#' to end string literal"##, fixIts: [##"insert '"#'"##]),
         DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
-      ]
+      ],
+      fixedSource: #"""
+        #"abc"#
+        "#"
+        """#
     )
   }
 
@@ -1819,7 +1954,11 @@ final class StatementExpressionTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: ##"expected '"#' to end string literal"##, fixIts: [##"insert '"#'"##]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in macro expansion", fixIts: ["insert identifier"]),
-      ]
+      ],
+      fixedSource: #"""
+        #"abc""#
+        #<#identifier#>
+        """#
     )
   }
 
@@ -1837,7 +1976,10 @@ final class StatementExpressionTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
-      ]
+      ],
+      fixedSource: """
+        {a; b; c}
+        """
     )
   }
 
@@ -1847,7 +1989,10 @@ final class StatementExpressionTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
-      ]
+      ],
+      fixedSource: """
+        switch x {case y: a; b; c}
+        """
     )
   }
 
@@ -1859,7 +2004,10 @@ final class StatementExpressionTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
-      ]
+      ],
+      fixedSource: """
+        var i: Int { a; b; c }
+        """
     )
   }
 
@@ -1871,7 +2019,10 @@ final class StatementExpressionTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
-      ]
+      ],
+      fixedSource: """
+        var i: Int { get {a; b} set {c; d} }
+        """
     )
   }
 
@@ -1919,7 +2070,10 @@ final class StatementExpressionTests: XCTestCase {
       """#,
       diagnostics: [
         DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"])
-      ]
+      ],
+      fixedSource: #"""
+        \String.?; ""
+        """#
     )
   }
 

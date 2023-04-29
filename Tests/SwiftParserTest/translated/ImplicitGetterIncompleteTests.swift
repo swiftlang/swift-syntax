@@ -43,8 +43,16 @@ final class ImplicitGetterIncompleteTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(message: "expected '}' to end variable", fixIts: ["insert '}'"]),
         DiagnosticSpec(message: "expected '}' to end function", fixIts: ["insert '}'"]),
-      ]
+      ],
+      fixedSource: #"""
+        // Would trigger assertion when AST verifier checks source ranges ("child source range not contained within its parent")
+        func test2() {
+          var a : Int {
+            switch i {
+        }
+        }
+        }
+        """#
     )
   }
-
 }

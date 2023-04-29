@@ -42,7 +42,12 @@ final class TypeMemberTests: XCTestCase {
           name: .identifier("", presence: .missing)
         )
       ),
-      diagnostics: [DiagnosticSpec(message: "expected name in member type", fixIts: ["insert name"])]
+      diagnostics: [
+        DiagnosticSpec(message: "expected name in member type", fixIts: ["insert name"])
+      ],
+      fixedSource: """
+        MyType.<#identifier#>
+        """
     )
   }
 

@@ -573,7 +573,10 @@ final class TypeExprTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected '->' in array element", fixIts: ["insert '->'"])
-      ]
+      ],
+      fixedSource: """
+        let _ = [Int throws -> Int]();
+        """
     )
   }
 
@@ -704,7 +707,10 @@ final class TypeExprTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(' to start function type", fixIts: ["insert '('"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' in function type", fixIts: ["insert ')'"]),
-      ]
+      ],
+      fixedSource: """
+        func takesVoid(f: (Void) -> ()) {}
+        """
     )
   }
 

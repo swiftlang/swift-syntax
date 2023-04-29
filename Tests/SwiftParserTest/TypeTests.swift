@@ -62,7 +62,10 @@ final class TypeTests: XCTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected type in function type", fixIts: ["insert type"]),
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '..' in function type"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected return type in function type", fixIts: ["insert return type"]),
-      ]
+      ],
+      fixedSource: """
+        t as(<#type#>..)-> <#type#>
+        """
     )
   }
 
@@ -97,7 +100,11 @@ final class TypeTests: XCTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in closure capture item", fixIts: ["insert identifier"]),
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected 'class' keyword in closure capture signature"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end closure", fixIts: ["insert '}'"]),
-      ]
+      ],
+      fixedSource: """
+        {[<#identifier#>class]in
+        }
+        """
     )
 
     assertParse(
@@ -114,7 +121,10 @@ final class TypeTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(message: "expected identifier in closure capture item", fixIts: ["insert identifier"]),
         DiagnosticSpec(message: "unexpected code '^' in closure capture signature"),
-      ]
+      ],
+      fixedSource: """
+        {[weak <#identifier#>^]in}
+        """
     )
   }
 

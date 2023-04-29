@@ -20,7 +20,10 @@ final class RegexParseEndOfBufferTests: XCTestCase {
       "var unterminated = #/(xy1️⃣",
       diagnostics: [
         DiagnosticSpec(message: "expected '/#' to end regex literal", fixIts: ["insert '/#'"])
-      ]
+      ],
+      fixedSource: """
+        var unterminated = #/(xy/#
+        """
     )
   }
 }

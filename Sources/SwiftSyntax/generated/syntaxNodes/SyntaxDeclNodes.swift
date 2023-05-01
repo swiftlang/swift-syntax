@@ -1157,7 +1157,12 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
 // MARK: - DeinitializerDeclSyntax
 
-
+/// A deinitializer declaration like the following.
+/// 
+/// ```swift
+/// deinit {
+/// }
+/// ```
 public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -1236,6 +1241,7 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// Attributes that are attached to the deinitializer.
   public var attributes: AttributeListSyntax? {
     get {
       return data.child(at: 1, parent: Syntax(self)).map(AttributeListSyntax.init)
@@ -1273,6 +1279,7 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// Modifiers that are attached to the deinitializer.
   public var modifiers: ModifierListSyntax? {
     get {
       return data.child(at: 3, parent: Syntax(self)).map(ModifierListSyntax.init)
@@ -1310,6 +1317,7 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The deinit keyword.
   public var deinitKeyword: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
@@ -1328,6 +1336,7 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The deinitializer's body.
   public var body: CodeBlockSyntax? {
     get {
       return data.child(at: 7, parent: Syntax(self)).map(CodeBlockSyntax.init)

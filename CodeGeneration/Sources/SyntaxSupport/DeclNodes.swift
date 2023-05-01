@@ -398,6 +398,14 @@ public let DECL_NODES: [Node] = [
   Node(
     name: "DeinitializerDecl",
     nameForDiagnostics: "deinitializer",
+    description: """
+      A deinitializer declaration like the following.
+
+      ```swift
+      deinit {
+      }
+      ```
+      """,
     kind: "Decl",
     traits: [
       "Attributed"
@@ -407,21 +415,25 @@ public let DECL_NODES: [Node] = [
         name: "Attributes",
         kind: .collection(kind: "AttributeList", collectionElementName: "Attribute"),
         nameForDiagnostics: "attributes",
+        description: "Attributes that are attached to the deinitializer.",
         isOptional: true
       ),
       Child(
         name: "Modifiers",
         kind: .collection(kind: "ModifierList", collectionElementName: "Modifier"),
         nameForDiagnostics: "modifiers",
+        description: "Modifiers that are attached to the deinitializer.",
         isOptional: true
       ),
       Child(
         name: "DeinitKeyword",
-        kind: .token(choices: [.keyword(text: "deinit")])
+        kind: .token(choices: [.keyword(text: "deinit")]),
+        description: "The deinit keyword."
       ),
       Child(
         name: "Body",
         kind: .node(kind: "CodeBlock"),
+        description: "The deinitializer's body.",
         isOptional: true
       ),
     ]

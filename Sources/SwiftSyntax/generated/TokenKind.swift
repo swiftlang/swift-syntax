@@ -66,7 +66,6 @@ public enum TokenKind: Hashable {
   case wildcard
   
   /// The textual representation of this token kind.
-  @_spi(Testing)
   public var text: String {
     switch self {
     case .arrow:

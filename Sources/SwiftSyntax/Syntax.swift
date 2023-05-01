@@ -145,10 +145,25 @@ public extension SyntaxHashable {
   }
 }
 
+public enum SyntaxOrOptionalProtocolType {
+  case optional(SyntaxProtocol.Type)
+  case nonOptional(SyntaxProtocol.Type)
+}
+
+public protocol SyntaxOrOptionalProtocol {
+  static var syntaxOrOptionalProtocolType: SyntaxOrOptionalProtocolType { get }
+}
+
+extension Optional: SyntaxOrOptionalProtocol where Wrapped: SyntaxProtocol {
+  public static var syntaxOrOptionalProtocolType: SyntaxOrOptionalProtocolType {
+    return .optional(Wrapped.self)
+  }
+}
+
 /// Provide common functionality for specialized syntax nodes. Extend this
 /// protocol to provide common functionality for all syntax nodes.
 /// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
-public protocol SyntaxProtocol: CustomStringConvertible,
+public protocol SyntaxProtocol: SyntaxOrOptionalProtocol, CustomStringConvertible,
   CustomDebugStringConvertible, TextOutputStreamable, CustomReflectable
 {
 
@@ -195,6 +210,10 @@ public extension SyntaxProtocol {
     var copy = self
     copy[keyPath: keyPath] = value
     return copy
+  }
+
+  static var syntaxOrOptionalProtocolType: SyntaxOrOptionalProtocolType {
+    return .nonOptional(Self.self)
   }
 }
 

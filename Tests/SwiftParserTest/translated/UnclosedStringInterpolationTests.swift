@@ -187,7 +187,9 @@ final class UnclosedStringInterpolationTests: XCTestCase {
       fixedSource: ##"""
         _ = """
         \(
-        """""")"""
+        """
+        """)
+        """
         """##
     )
   }

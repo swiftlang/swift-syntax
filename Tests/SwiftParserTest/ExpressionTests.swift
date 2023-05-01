@@ -603,7 +603,8 @@ final class ExpressionTests: XCTestCase {
         )
       ],
       fixedSource: ##"""
-        """""""
+        """"
+        """
         """##
     )
 
@@ -619,7 +620,8 @@ final class ExpressionTests: XCTestCase {
         )
       ],
       fixedSource: ##"""
-        """"""""
+        """""
+        """
         """##
     )
 
@@ -656,7 +658,8 @@ final class ExpressionTests: XCTestCase {
         DiagnosticSpec(message: ##"expected '"""#' to end string literal"##, fixIts: [##"insert '"""#'"##])
       ],
       fixedSource: ##"""
-        #""""""#
+        #"""
+        """#
         """##
     )
 
@@ -668,7 +671,8 @@ final class ExpressionTests: XCTestCase {
         DiagnosticSpec(message: ##"expected '"""#' to end string literal"##, fixIts: [##"insert '"""#'"##])
       ],
       fixedSource: ##"""
-        #"""a"""#
+        #"""a
+        """#
         """##
     )
 

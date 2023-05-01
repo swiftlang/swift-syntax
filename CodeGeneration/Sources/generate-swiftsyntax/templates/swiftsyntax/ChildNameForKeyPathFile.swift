@@ -20,7 +20,8 @@ let childNameForKeyPathFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     """
     /// If the keyPath is one from a layout structure, return the property name
     /// of it.
-    internal func childName(_ keyPath: AnyKeyPath) -> String?
+    @_spi(RawSyntax)
+    public func childName(_ keyPath: AnyKeyPath) -> String?
     """
   ) {
     try! SwitchExprSyntax("switch keyPath") {

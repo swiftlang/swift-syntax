@@ -249,7 +249,7 @@ public struct MissingNodesError: ParserError {
     } else {
       missingExpr = nil
     }
-    if let missingExpr = missingExpr,
+    if let missingExpr,
       let exprList = missingExpr.parent?.as(ExprListSyntax.self),
       exprList.parent?.is(SequenceExprSyntax.self) ?? false,
       let previousSiblingIndex = exprList.index(missingExpr.index, offsetBy: -1, limitedBy: exprList.startIndex)
@@ -296,7 +296,7 @@ public struct MissingNodesError: ParserError {
   public var message: String {
     let (anchor, description) = nodesDescriptionAndCommonParent(missingNodes, format: true)
     var message = "expected \(description)"
-    if let afterClause = afterClause {
+    if let afterClause {
       message += " \(afterClause)"
     } else if let parentContextClause = parentContextClause(anchor: anchor?.parent ?? findCommonAncestor(missingNodes)) {
       message += " \(parentContextClause)"
@@ -389,7 +389,7 @@ extension ParseDiagnosticsGenerator {
     }
 
     let position: AbsolutePosition
-    if let overridePosition = overridePosition {
+    if let overridePosition {
       position = overridePosition
     } else if node.shouldBeInsertedAfterNextTokenTrivia, let nextToken = node.nextToken(viewMode: .sourceAccurate) {
       position = nextToken.positionAfterSkippingLeadingTrivia

@@ -148,7 +148,7 @@ public struct Parser {
     self.maximumNestingLevel = maximumNestingLevel ?? Self.defaultMaximumNestingLevel
 
     var sourceBuffer: UnsafeBufferPointer<UInt8>
-    if let arena = arena {
+    if let arena {
       self.arena = arena
       sourceBuffer = input
       precondition(arena.contains(text: SyntaxText(baseAddress: input.baseAddress, count: input.count)))

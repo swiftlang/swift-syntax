@@ -133,7 +133,7 @@ extension Trivia: CustomStringConvertible {
 
 extension Trivia: CustomDebugStringConvertible {
   public var debugDescription: String {
-    if count == 1, let first = first {
+    if count == 1, let first {
       return first.debugDescription
     }
     return "[" + map(\.debugDescription).joined(separator: ", ") + "]"

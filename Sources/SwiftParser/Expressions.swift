@@ -173,7 +173,7 @@ extension Parser {
       elements.append(lastElement)
       elements.append(operatorExpr)
 
-      if let rhsExpr = rhsExpr {
+      if let rhsExpr {
         // Operator parsing returned the RHS.
         lastElement = rhsExpr
       } else if forDirective && self.currentToken.isAtStartOfLine {
@@ -1472,7 +1472,7 @@ extension Parser {
     let (unexpectedBeforeSlash, openSlash) = self.expect(.regexSlash)
 
     // If we had opening pounds, there should be no trivia for the slash.
-    if let openPounds = openPounds {
+    if let openPounds {
       precondition(openPounds.trailingTriviaByteLength == 0 && openSlash.leadingTriviaByteLength == 0)
     }
 

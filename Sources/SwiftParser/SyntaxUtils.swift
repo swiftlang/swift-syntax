@@ -56,7 +56,7 @@ extension Array: UnexpectedNodesCombinable where Element: UnexpectedNodesCombina
 
 extension Optional: UnexpectedNodesCombinable where Wrapped: UnexpectedNodesCombinable {
   var elements: [RawSyntax] {
-    if let self = self {
+    if let self {
       return self.elements
     } else {
       return []

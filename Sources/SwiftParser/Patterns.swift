@@ -164,7 +164,7 @@ extension Parser {
     let colon = self.consume(if: .colon)
     var lookahead = self.lookahead()
     var type: RawTypeAnnotationSyntax?
-    if let colon = colon {
+    if let colon {
       let result = self.parseResultType()
       type = RawTypeAnnotationSyntax(
         colon: colon,

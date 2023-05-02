@@ -185,7 +185,7 @@ extension Parser {
       } else {
         generics = nil
       }
-      if let keepGoing = keepGoing {
+      if let keepGoing {
         result = RawTypeSyntax(
           RawMemberTypeIdentifierSyntax(
             baseType: result!,

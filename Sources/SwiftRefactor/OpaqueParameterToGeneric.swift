@@ -133,7 +133,7 @@ public struct OpaqueParameterToGeneric: RefactoringProvider {
     }
 
     var newGenericParams: [GenericParameterSyntax] = []
-    if let genericParams = genericParams {
+    if let genericParams {
       newGenericParams.append(contentsOf: genericParams.genericParameterList)
     }
 
@@ -152,7 +152,7 @@ public struct OpaqueParameterToGeneric: RefactoringProvider {
 
     let newGenericParamSyntax = GenericParameterListSyntax(newGenericParams)
     let newGenericParamClause: GenericParameterClauseSyntax
-    if let genericParams = genericParams {
+    if let genericParams {
       newGenericParamClause = genericParams.with(
         \.genericParameterList,
         newGenericParamSyntax

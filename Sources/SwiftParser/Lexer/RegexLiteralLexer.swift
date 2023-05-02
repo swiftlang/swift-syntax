@@ -174,7 +174,7 @@ fileprivate struct RegexLiteralLexer {
 
     // If we have a multi-line literal, make sure the closing delimiter
     // appears alone on a newline.
-    if let lastNewlineEnd = lastNewlineEnd {
+    if let lastNewlineEnd {
       var delimScan = lastNewlineEnd
       while delimScan.pointer < slashBegin.pointer {
         if !delimScan.advance(matching: " ", "\t") {
@@ -809,7 +809,7 @@ extension Lexer.Cursor {
 
     // Compute the new transition.
     let transition: Lexer.StateTransition?
-    if let existingPtr = existingPtr {
+    if let existingPtr {
       transition = lexemes.isEmpty ? .pop : .replace(newState: .inRegexLiteral(index: index, lexemes: existingPtr))
     } else {
       transition = lexemes.isEmpty ? nil : .pushRegexLexemes(index: index, lexemes: lexemes.base)

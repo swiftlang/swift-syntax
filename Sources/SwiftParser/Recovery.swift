@@ -92,7 +92,7 @@ extension Parser.Lookahead {
       default:
         matchedSpec = nil
       }
-      if let matchedSpec = matchedSpec {
+      if let matchedSpec {
         return RecoveryConsumptionHandle(
           unexpectedTokens: self.tokensConsumed - initialTokensConsumed,
           tokenConsumptionHandle: TokenConsumptionHandle(spec: matchedSpec)

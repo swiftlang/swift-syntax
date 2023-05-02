@@ -215,15 +215,19 @@ class Builder(object):
 
     def buildProduct(self, product_name: str) -> None:
         print("** Building product " + product_name + " **")
-        self.__build(PACKAGE_DIR, product_name)
+        self.__build(PACKAGE_DIR, product_name, is_product=True)
+
+    def buildTarget(self, target_name: str) -> None:
+        print("** Building target " + target_name + " **")
+        self.__build(PACKAGE_DIR, target_name, is_product=False)
 
     def buildExample(self, example_name: str) -> None:
         print("** Building example " + example_name + " **")
-        self.__build(EXAMPLES_DIR, example_name)
+        self.__build(EXAMPLES_DIR, example_name, is_product=True)
 
-    def __build(self, package_dir: str, product_name: str) -> None:
+    def __build(self, package_dir: str, name: str, is_product: bool) -> None:
         command = list(self.__get_swiftpm_invocation(package_dir))
-        command.extend(["--product", product_name])
+        command.extend(["--product" if is_product else "--target", name])
 
         env = dict(os.environ)
         env["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] = "1"
@@ -499,10 +503,7 @@ def build_command(args: argparse.Namespace) -> None:
             verbose=args.verbose,
             disable_sandbox=args.disable_sandbox,
         )
-        # Until rdar://53881101 is implemented, we cannot request a build of multiple
-        # targets simultaneously. For now, just build one product after the other.
-        builder.buildProduct("SwiftSyntax")
-        builder.buildProduct("SwiftSyntaxBuilder")
+        builder.buildTarget("SwiftSyntax-all")
 
         # Build examples
         builder.buildExample("AddOneToIntegerLiterals")

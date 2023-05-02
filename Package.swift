@@ -277,6 +277,22 @@ let package = Package(
   ]
 )
 
+// This is a fake target that depends on all targets in the package.
+// We need to define it manually because the `SwiftSyntax-Package` target doesn't exist for `swift build`.
+
+package.targets.append(
+  .target(
+    name: "SwiftSyntax-all",
+    dependencies: package.targets.compactMap {
+      if $0.type == .test {
+        return nil
+      } else {
+        return .byName(name: $0.name)
+      }
+    }
+  )
+)
+
 if ProcessInfo.processInfo.environment["SWIFTCI_USE_LOCAL_DEPS"] == nil {
   // Building standalone.
   package.dependencies += [

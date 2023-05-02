@@ -1719,7 +1719,7 @@ public struct ReturnStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       _ unexpectedBeforeReturnKeyword: UnexpectedNodesSyntax? = nil,
       returnKeyword: TokenSyntax = .keyword(.return),
       _ unexpectedBetweenReturnKeywordAndExpression: UnexpectedNodesSyntax? = nil,
-      expression: (some ExprSyntaxProtocol)? = nil,
+      expression: (some ExprSyntaxProtocol)? = ExprSyntax?.none,
       _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -1751,37 +1751,6 @@ public struct ReturnStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
-  }
-  
-  /// This initializer exists solely because Swift 5.6 does not support
-  /// `Optional<ConcreteType>.none` as a default value of a generic parameter.
-  /// The above initializer thus defaults to `nil` instead, but that means it
-  /// is not actually callable when either not passing the defaulted parameter,
-  /// or passing `nil`.
-  ///
-  /// Hack around that limitation using this initializer, which takes a
-  /// `Missing*` syntax node instead. `Missing*` is used over the base type as
-  /// the base type would allow implicit conversion from a string literal,
-  /// which the above initializer doesn't support.
-  public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeReturnKeyword: UnexpectedNodesSyntax? = nil,
-      returnKeyword: TokenSyntax = .keyword(.return),
-      _ unexpectedBetweenReturnKeywordAndExpression: UnexpectedNodesSyntax? = nil,
-      expression: MissingExprSyntax? = nil,
-      _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
-    
-  ) {
-    self.init(
-        leadingTrivia: leadingTrivia,
-        unexpectedBeforeReturnKeyword,
-        returnKeyword: returnKeyword,
-        unexpectedBetweenReturnKeywordAndExpression,
-        expression: Optional<ExprSyntax> .none,
-        unexpectedAfterExpression, 
-        trailingTrivia: trailingTrivia
-      )
   }
   
   public var unexpectedBeforeReturnKeyword: UnexpectedNodesSyntax? {

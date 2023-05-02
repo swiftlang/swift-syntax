@@ -77,7 +77,7 @@ func syntaxNode(emitKind: String) -> SourceFileSyntax {
           """
         )
 
-        try! InitializerDeclSyntax("\(node.generateInitializerDeclHeader(optionalBaseAsMissing: false))") {
+        try! InitializerDeclSyntax("\(node.generateInitializerDeclHeader())") {
           let parameters = ClosureParameterListSyntax {
             for child in node.children {
               ClosureParameterSyntax(firstName: .identifier(child.swiftName))
@@ -147,53 +147,6 @@ func syntaxNode(emitKind: String) -> SourceFileSyntax {
           )
 
           ExprSyntax("self.init(data)")
-        }
-
-        if node.hasOptionalBaseTypeChild {
-          // TODO: Remove when we no longer support compiling in Swift 5.6. Change the
-          // above constructor to use `Optional<BaseType>.none` instead.
-          try! InitializerDeclSyntax(
-            """
-            /// This initializer exists solely because Swift 5.6 does not support
-            /// `Optional<ConcreteType>.none` as a default value of a generic parameter.
-            /// The above initializer thus defaults to `nil` instead, but that means it
-            /// is not actually callable when either not passing the defaulted parameter,
-            /// or passing `nil`.
-            ///
-            /// Hack around that limitation using this initializer, which takes a
-            /// `Missing*` syntax node instead. `Missing*` is used over the base type as
-            /// the base type would allow implicit conversion from a string literal,
-            /// which the above initializer doesn't support.
-            \(node.generateInitializerDeclHeader(optionalBaseAsMissing: true))
-            """
-          ) {
-            FunctionCallExprSyntax(callee: ExprSyntax("self.init")) {
-              TupleExprElementSyntax(label: "leadingTrivia", expression: ExprSyntax("leadingTrivia"))
-              for child in node.children {
-                if child.hasOptionalBaseType {
-                  TupleExprElementSyntax(
-                    leadingTrivia: .newline,
-                    label: .identifier(child.swiftName),
-                    colon: .colonToken(),
-                    expression: ExprSyntax("Optional<\(raw: child.typeName)>.none")
-                  )
-                } else if child.isUnexpectedNodes {
-                  TupleExprElementSyntax(
-                    leadingTrivia: .newline,
-                    expression: ExprSyntax("\(raw: child.swiftName)")
-                  )
-                } else {
-                  TupleExprElementSyntax(
-                    leadingTrivia: .newline,
-                    label: .identifier(child.swiftName),
-                    colon: .colonToken(),
-                    expression: ExprSyntax("\(raw: child.swiftName)")
-                  )
-                }
-              }
-              TupleExprElementSyntax(label: "trailingTrivia", expression: ExprSyntax("trailingTrivia"))
-            }
-          }
         }
 
         for (index, child) in node.children.enumerated() {
@@ -353,7 +306,7 @@ private func generateSyntaxChildChoices(for child: Child) throws -> EnumDeclSynt
 }
 
 fileprivate extension Node {
-  func generateInitializerDeclHeader(optionalBaseAsMissing: Bool) -> PartialSyntaxNodeString {
+  func generateInitializerDeclHeader() -> PartialSyntaxNodeString {
     if children.isEmpty {
       return "public init()"
     }
@@ -363,11 +316,7 @@ fileprivate extension Node {
       if !child.kind.isNodeChoicesEmpty {
         paramType = "\(raw: child.name)"
       } else if child.hasBaseType {
-        if optionalBaseAsMissing {
-          paramType = "Missing\(raw: child.typeName)"
-        } else {
-          paramType = "some \(raw: child.typeName)Protocol"
-        }
+        paramType = "some \(raw: child.typeName)Protocol"
       } else {
         paramType = "\(raw: child.typeName)"
       }

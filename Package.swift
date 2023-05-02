@@ -45,18 +45,18 @@ let package = Package(
     .macCatalyst(.v13),
   ],
   products: [
-    .library(name: "SwiftCompilerPlugin", type: .static, targets: ["SwiftCompilerPlugin"]),
-    .library(name: "SwiftCompilerPluginMessageHandling", type: .static, targets: ["SwiftCompilerPluginMessageHandling"]),
-    .library(name: "SwiftDiagnostics", type: .static, targets: ["SwiftDiagnostics"]),
-    .library(name: "SwiftIDEUtils", type: .static, targets: ["SwiftIDEUtils"]),
-    .library(name: "SwiftOperators", type: .static, targets: ["SwiftOperators"]),
-    .library(name: "SwiftParser", type: .static, targets: ["SwiftParser"]),
-    .library(name: "SwiftParserDiagnostics", type: .static, targets: ["SwiftParserDiagnostics"]),
-    .library(name: "SwiftRefactor", type: .static, targets: ["SwiftRefactor"]),
-    .library(name: "SwiftSyntax", type: .static, targets: ["SwiftSyntax"]),
-    .library(name: "SwiftSyntaxBuilder", type: .static, targets: ["SwiftSyntaxBuilder"]),
-    .library(name: "SwiftSyntaxMacros", type: .static, targets: ["SwiftSyntaxMacros"]),
-    .library(name: "SwiftSyntaxMacrosTestSupport", type: .static, targets: ["SwiftSyntaxMacrosTestSupport"]),
+    .library(name: "SwiftCompilerPlugin", targets: ["SwiftCompilerPlugin"]),
+    .library(name: "SwiftCompilerPluginMessageHandling", targets: ["SwiftCompilerPluginMessageHandling"]),
+    .library(name: "SwiftDiagnostics", targets: ["SwiftDiagnostics"]),
+    .library(name: "SwiftIDEUtils", targets: ["SwiftIDEUtils"]),
+    .library(name: "SwiftOperators", targets: ["SwiftOperators"]),
+    .library(name: "SwiftParser", targets: ["SwiftParser"]),
+    .library(name: "SwiftParserDiagnostics", targets: ["SwiftParserDiagnostics"]),
+    .library(name: "SwiftRefactor", targets: ["SwiftRefactor"]),
+    .library(name: "SwiftSyntax", targets: ["SwiftSyntax"]),
+    .library(name: "SwiftSyntaxBuilder", targets: ["SwiftSyntaxBuilder"]),
+    .library(name: "SwiftSyntaxMacros", targets: ["SwiftSyntaxMacros"]),
+    .library(name: "SwiftSyntaxMacrosTestSupport", targets: ["SwiftSyntaxMacrosTestSupport"]),
   ],
   targets: [
     // MARK: - Internal helper targets
@@ -275,6 +275,22 @@ let package = Package(
       exclude: ["Inputs"]
     ),
   ]
+)
+
+// This is a fake target that depends on all targets in the package.
+// We need to define it manually because the `SwiftSyntax-Package` target doesn't exist for `swift build`.
+
+package.targets.append(
+  .target(
+    name: "SwiftSyntax-all",
+    dependencies: package.targets.compactMap {
+      if $0.type == .test {
+        return nil
+      } else {
+        return .byName(name: $0.name)
+      }
+    }
+  )
 )
 
 if ProcessInfo.processInfo.environment["SWIFTCI_USE_LOCAL_DEPS"] == nil {

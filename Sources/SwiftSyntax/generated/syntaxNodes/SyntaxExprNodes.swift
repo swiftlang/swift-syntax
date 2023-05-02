@@ -2611,7 +2611,13 @@ public struct IntegerLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
 // MARK: - IsExprSyntax
 
-
+/// An `is` expression like the following.
+/// 
+/// ```swift
+/// value is Double
+/// ```
+/// 
+/// This node is only generated after operators are folded using the `SwiftOperators` library. Beforehand, the parser does not know the precedences of operators and thus represents `is` by an `UnresolvedIsExpr`.
 public struct IsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -2684,6 +2690,7 @@ public struct IsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The expression which will be checked to determine whether it can be cast to a specific type.
   public var expression: ExprSyntax {
     get {
       return ExprSyntax(data.child(at: 1, parent: Syntax(self))!)
@@ -2702,6 +2709,7 @@ public struct IsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The `is` keyword for this expression.
   public var isTok: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
@@ -2720,6 +2728,7 @@ public struct IsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The type against which the expression will be checked to see if the expression can be cast to it.
   public var typeName: TypeSyntax {
     get {
       return TypeSyntax(data.child(at: 5, parent: Syntax(self))!)

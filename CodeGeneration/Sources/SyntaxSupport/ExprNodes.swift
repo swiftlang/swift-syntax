@@ -905,19 +905,31 @@ public let EXPR_NODES: [Node] = [
   Node(
     name: "IsExpr",
     nameForDiagnostics: "'is'",
+    description: """
+      An `is` expression like the following.
+
+      ```swift
+      value is Double
+      ```
+
+      This node is only generated after operators are folded using the `SwiftOperators` library. Beforehand, the parser does not know the precedences of operators and thus represents `is` by an `UnresolvedIsExpr`.
+      """,
     kind: "Expr",
     children: [
       Child(
         name: "Expression",
-        kind: .node(kind: "Expr")
+        kind: .node(kind: "Expr"),
+        description: "The expression which will be checked to determine whether it can be cast to a specific type."
       ),
       Child(
         name: "IsTok",
-        kind: .token(choices: [.keyword(text: "is")])
+        kind: .token(choices: [.keyword(text: "is")]),
+        description: "The `is` keyword for this expression."
       ),
       Child(
         name: "TypeName",
-        kind: .node(kind: "Type")
+        kind: .node(kind: "Type"),
+        description: "The type against which the expression will be checked to see if the expression can be cast to it."
       ),
     ]
   ),

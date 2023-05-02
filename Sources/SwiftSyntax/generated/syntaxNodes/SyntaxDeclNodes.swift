@@ -563,7 +563,29 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
 // MARK: - AssociatedtypeDeclSyntax
 
-
+/// An associated type declaration like the following.
+/// 
+/// ```swift
+/// associatedtype Item
+/// ```
+/// 
+/// An associated type declaration may contain a type initializer clause which represents a default type assignment for the associated type.
+/// 
+/// ```swift
+/// associatedtype Item = Int
+/// ```
+/// 
+/// An associated type declaration may be declared with an inheritance clause which specifies the required conformances.
+/// 
+/// ```swift
+/// associatedtype Iterator: IteratorProtocol
+/// ```
+/// 
+/// A generic where clause may be present, here is an example which shows an associated type containing an inheritance clauses and a generic where clause.
+/// 
+/// ```swift
+/// associatedtype Iterator: IteratorProtocol where Iterator.Element == Item
+/// ```
 public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -660,6 +682,7 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// Attributes attached to the associated type declaration.
   public var attributes: AttributeListSyntax? {
     get {
       return data.child(at: 1, parent: Syntax(self)).map(AttributeListSyntax.init)
@@ -697,6 +720,7 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// Modifiers attached to the associated type declaration.
   public var modifiers: ModifierListSyntax? {
     get {
       return data.child(at: 3, parent: Syntax(self)).map(ModifierListSyntax.init)
@@ -734,6 +758,7 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The `associatedtype` keyword for this declaration.
   public var associatedtypeKeyword: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
@@ -752,6 +777,7 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The name of this associated type.
   public var identifier: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 7, parent: Syntax(self))!)
@@ -770,6 +796,7 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The inheritance clause describing conformances for this associated type declaration.
   public var inheritanceClause: TypeInheritanceClauseSyntax? {
     get {
       return data.child(at: 9, parent: Syntax(self)).map(TypeInheritanceClauseSyntax.init)
@@ -788,6 +815,7 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The type initializer clause for this associated type declaration which represents a default type assignment for the associated type.
   public var initializer: TypeInitializerClauseSyntax? {
     get {
       return data.child(at: 11, parent: Syntax(self)).map(TypeInitializerClauseSyntax.init)
@@ -806,6 +834,7 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The `where` clause that applies to the generic parameters of this associated type declaration.
   public var genericWhereClause: GenericWhereClauseSyntax? {
     get {
       return data.child(at: 13, parent: Syntax(self)).map(GenericWhereClauseSyntax.init)
@@ -847,7 +876,27 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
 // MARK: - ClassDeclSyntax
 
-
+/// A class declaration like the following.
+/// 
+/// ```swift
+/// class SomeClass {
+///   let someMember: String
+/// 
+///   init(someMember: String) {
+///     self.someMember = someMember
+///   }
+/// 
+///   func foo() {
+///     print(someMember)
+///   }
+/// 
+///   static func bar() -> Int {
+///     return 1
+///   }
+/// }
+/// ```
+/// 
+/// A class declaration may be declared without any members.
 public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -950,6 +999,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// Attributes attached to the class declaration, such as an `@available` attribute.
   public var attributes: AttributeListSyntax? {
     get {
       return data.child(at: 1, parent: Syntax(self)).map(AttributeListSyntax.init)
@@ -987,6 +1037,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// Modifiers attached to the class declaration, such as `public`.
   public var modifiers: ModifierListSyntax? {
     get {
       return data.child(at: 3, parent: Syntax(self)).map(ModifierListSyntax.init)
@@ -1024,6 +1075,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The `class` keyword for this declaration.
   public var classKeyword: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
@@ -1042,6 +1094,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The name of the class.
   public var identifier: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 7, parent: Syntax(self))!)
@@ -1060,6 +1113,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The generic parameters, if any, of the class declaration.
   public var genericParameterClause: GenericParameterClauseSyntax? {
     get {
       return data.child(at: 9, parent: Syntax(self)).map(GenericParameterClauseSyntax.init)
@@ -1078,6 +1132,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The inheritance clause describing one or more conformances for this class declaration.
   public var inheritanceClause: TypeInheritanceClauseSyntax? {
     get {
       return data.child(at: 11, parent: Syntax(self)).map(TypeInheritanceClauseSyntax.init)
@@ -1096,6 +1151,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The `where` clause that applies to the generic parameters of this class declaration.
   public var genericWhereClause: GenericWhereClauseSyntax? {
     get {
       return data.child(at: 13, parent: Syntax(self)).map(GenericWhereClauseSyntax.init)
@@ -1114,6 +1170,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The members of the class declaration. As class extension declarations may declare additional members, the contents of this member block isn't guaranteed to be a complete list of members for this type.
   public var memberBlock: MemberDeclBlockSyntax {
     get {
       return MemberDeclBlockSyntax(data.child(at: 15, parent: Syntax(self))!)
@@ -2726,7 +2783,11 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
 // MARK: - ImportDeclSyntax
 
-
+/// An import declaration like the following.
+/// 
+/// ```swift
+/// import Foundation
+/// ```
 public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -2811,6 +2872,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// Attributes attached to the import declaration, for example `@testable`.
   public var attributes: AttributeListSyntax? {
     get {
       return data.child(at: 1, parent: Syntax(self)).map(AttributeListSyntax.init)
@@ -2848,6 +2910,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// Modifiers attached to the import declaration. Currently, no modifiers are supported by Swift.
   public var modifiers: ModifierListSyntax? {
     get {
       return data.child(at: 3, parent: Syntax(self)).map(ModifierListSyntax.init)
@@ -2885,6 +2948,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The `import` keyword for this declaration.
   public var importTok: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
@@ -2903,6 +2967,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The kind of declaration being imported. For example, a struct can be imported from a specific module.
   public var importKind: TokenSyntax? {
     get {
       return data.child(at: 7, parent: Syntax(self)).map(TokenSyntax.init)
@@ -2921,6 +2986,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The path to the module, submodule or symbol being imported.
   public var path: AccessPathSyntax {
     get {
       return AccessPathSyntax(data.child(at: 9, parent: Syntax(self))!)
@@ -4816,7 +4882,13 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
 // MARK: - ProtocolDeclSyntax
 
-
+/// A protocol declaration like the following.
+/// 
+/// ```swift
+/// protocol Example {
+///   var isValid: Bool { get }
+/// }
+/// ```
 public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -4919,6 +4991,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// Attributes attached to the protocol declaration, such as an `@available` attribute.
   public var attributes: AttributeListSyntax? {
     get {
       return data.child(at: 1, parent: Syntax(self)).map(AttributeListSyntax.init)
@@ -4956,6 +5029,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// Modifiers attached to the protocol declaration, such as `public`.
   public var modifiers: ModifierListSyntax? {
     get {
       return data.child(at: 3, parent: Syntax(self)).map(ModifierListSyntax.init)
@@ -4993,6 +5067,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The `protocol` keyword for this declaration.
   public var protocolKeyword: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
@@ -5011,6 +5086,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The name of the protocol.
   public var identifier: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 7, parent: Syntax(self))!)
@@ -5029,6 +5105,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The primary associated type for the protocol.
   public var primaryAssociatedTypeClause: PrimaryAssociatedTypeClauseSyntax? {
     get {
       return data.child(at: 9, parent: Syntax(self)).map(PrimaryAssociatedTypeClauseSyntax.init)
@@ -5047,6 +5124,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The inheritance clause describing one or more conformances for this protocol declaration.
   public var inheritanceClause: TypeInheritanceClauseSyntax? {
     get {
       return data.child(at: 11, parent: Syntax(self)).map(TypeInheritanceClauseSyntax.init)
@@ -5065,6 +5143,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The `where` clause that applies to the generic parameters of this protocol declaration.
   public var genericWhereClause: GenericWhereClauseSyntax? {
     get {
       return data.child(at: 13, parent: Syntax(self)).map(GenericWhereClauseSyntax.init)
@@ -5083,6 +5162,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The members of the protocol declaration.
   public var memberBlock: MemberDeclBlockSyntax {
     get {
       return MemberDeclBlockSyntax(data.child(at: 15, parent: Syntax(self))!)

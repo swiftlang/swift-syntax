@@ -50,7 +50,11 @@ public extension Child {
   /// function parameter. Otherwise, return `nil`.
   var defaultInitialization: InitializerClauseSyntax? {
     if isOptional || isUnexpectedNodes {
-      return InitializerClauseSyntax(value: NilLiteralExprSyntax())
+      if type.isBaseType && kind.isNodeChoicesEmpty {
+        return InitializerClauseSyntax(value: ExprSyntax("\(type.buildable).none"))
+      } else {
+        return InitializerClauseSyntax(value: NilLiteralExprSyntax())
+      }
     }
     guard let token = token, isToken else {
       return type.defaultValue.map { InitializerClauseSyntax(value: $0) }

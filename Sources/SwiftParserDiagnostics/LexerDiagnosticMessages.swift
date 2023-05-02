@@ -58,6 +58,7 @@ public enum StaticTokenError: String, DiagnosticMessage {
   case spaceAtEndOfRegexLiteral = "bare slash regex literal may not end with space"
   case multilineRegexClosingNotOnNewline = "multi-line regex closing delimiter must appear on new line"
   case unprintableAsciiCharacter = "unprintable ASCII character found in source file"
+  case unterminatedBlockComment = "unterminated '/*' comment"
 
   public var message: String { self.rawValue }
 
@@ -160,16 +161,17 @@ public extension SwiftSyntax.TokenDiagnostic {
     case .invalidNumberOfHexDigitsInUnicodeEscape: return StaticTokenError.invalidNumberOfHexDigitsInUnicodeEscape
     case .invalidOctalDigitInIntegerLiteral: return InvalidDigitInIntegerLiteral(kind: .octal(scalarAtErrorOffset))
     case .invalidUtf8: return StaticTokenError.invalidUtf8
-    case .tokenDiagnosticOffsetOverflow: return StaticTokenError.tokenDiagnosticOffsetOverflow
+    case .multilineRegexClosingNotOnNewline: return StaticTokenError.multilineRegexClosingNotOnNewline
     case .nonBreakingSpace: return StaticTokenWarning.nonBreakingSpace
     case .nulCharacter: return StaticTokenWarning.nulCharacter
     case .sourceConflictMarker: return StaticTokenError.sourceConflictMarker
+    case .spaceAtEndOfRegexLiteral: return StaticTokenError.spaceAtEndOfRegexLiteral
+    case .spaceAtStartOfRegexLiteral: return StaticTokenError.spaceAtStartOfRegexLiteral
+    case .tokenDiagnosticOffsetOverflow: return StaticTokenError.tokenDiagnosticOffsetOverflow
     case .unexpectedBlockCommentEnd: return StaticTokenError.unexpectedBlockCommentEnd
     case .unicodeCurlyQuote: return StaticTokenError.unicodeCurlyQuote
-    case .spaceAtStartOfRegexLiteral: return StaticTokenError.spaceAtStartOfRegexLiteral
-    case .spaceAtEndOfRegexLiteral: return StaticTokenError.spaceAtEndOfRegexLiteral
-    case .multilineRegexClosingNotOnNewline: return StaticTokenError.multilineRegexClosingNotOnNewline
     case .unprintableAsciiCharacter: return StaticTokenError.unprintableAsciiCharacter
+    case .unterminatedBlockComment: return StaticTokenError.unterminatedBlockComment
     }
   }
 

@@ -191,7 +191,7 @@ extension Lexer.Cursor {
     // "/**/": .blockComment.
     precondition(self.previous == UInt8(ascii: "/") && self.is(at: "*"))
     let isDocComment = self.input.count > 2 && self.is(offset: 1, at: "*") && self.is(offset: 2, notAt: "/")
-    _ = self.advanceToEndOfSlashStarComment()
+    _ = self.advanceToEndOfSlashStarComment(slashPosition: start)
     let contents = start.text(upTo: self)
     return isDocComment ? .docBlockComment(contents) : .blockComment(contents)
   }

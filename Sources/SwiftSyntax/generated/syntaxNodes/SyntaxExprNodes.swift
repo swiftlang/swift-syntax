@@ -18,7 +18,7 @@
 public struct ArrayExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .arrayExpr else {
       return nil
     }
@@ -179,7 +179,7 @@ public struct ArrayExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .arrowExpr else {
       return nil
     }
@@ -295,7 +295,7 @@ public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct AsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .asExpr else {
       return nil
     }
@@ -310,16 +310,16 @@ public struct AsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<E: ExprSyntaxProtocol, T: TypeSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeExpression: UnexpectedNodesSyntax? = nil,
-      expression: E,
+      expression: some ExprSyntaxProtocol,
       _ unexpectedBetweenExpressionAndAsTok: UnexpectedNodesSyntax? = nil,
       asTok: TokenSyntax = .keyword(.as),
       _ unexpectedBetweenAsTokAndQuestionOrExclamationMark: UnexpectedNodesSyntax? = nil,
       questionOrExclamationMark: TokenSyntax? = nil,
       _ unexpectedBetweenQuestionOrExclamationMarkAndTypeName: UnexpectedNodesSyntax? = nil,
-      typeName: T,
+      typeName: some TypeSyntaxProtocol,
       _ unexpectedAfterTypeName: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -463,7 +463,7 @@ public struct AsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct AssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .assignmentExpr else {
       return nil
     }
@@ -541,7 +541,7 @@ public struct AssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct AwaitExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .awaitExpr else {
       return nil
     }
@@ -556,12 +556,12 @@ public struct AwaitExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<E: ExprSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAwaitKeyword: UnexpectedNodesSyntax? = nil,
       awaitKeyword: TokenSyntax = .keyword(.await),
       _ unexpectedBetweenAwaitKeywordAndExpression: UnexpectedNodesSyntax? = nil,
-      expression: E,
+      expression: some ExprSyntaxProtocol,
       _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -657,7 +657,7 @@ public struct AwaitExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct BinaryOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .binaryOperatorExpr else {
       return nil
     }
@@ -735,7 +735,7 @@ public struct BinaryOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct BooleanLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .booleanLiteralExpr else {
       return nil
     }
@@ -813,7 +813,7 @@ public struct BooleanLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct BorrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .borrowExpr else {
       return nil
     }
@@ -828,12 +828,12 @@ public struct BorrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<E: ExprSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeBorrowKeyword: UnexpectedNodesSyntax? = nil,
       borrowKeyword: TokenSyntax = .keyword(._borrow),
       _ unexpectedBetweenBorrowKeywordAndExpression: UnexpectedNodesSyntax? = nil,
-      expression: E,
+      expression: some ExprSyntaxProtocol,
       _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -929,7 +929,7 @@ public struct BorrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .closureExpr else {
       return nil
     }
@@ -1139,7 +1139,7 @@ public struct DictionaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       self = .elements(node)
     }
     
-    public init?<S: SyntaxProtocol>(_ node: S) {
+    public init?(_ node: some SyntaxProtocol) {
       if let node = node.as(TokenSyntax.self) {
         self = .colon(node)
         return
@@ -1158,7 +1158,7 @@ public struct DictionaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .dictionaryExpr else {
       return nil
     }
@@ -1300,7 +1300,7 @@ public struct DictionaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct DiscardAssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .discardAssignmentExpr else {
       return nil
     }
@@ -1378,7 +1378,7 @@ public struct DiscardAssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .editorPlaceholderExpr else {
       return nil
     }
@@ -1456,7 +1456,7 @@ public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct FloatLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .floatLiteralExpr else {
       return nil
     }
@@ -1534,7 +1534,7 @@ public struct FloatLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct ForcedValueExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .forcedValueExpr else {
       return nil
     }
@@ -1549,10 +1549,10 @@ public struct ForcedValueExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<E: ExprSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeExpression: UnexpectedNodesSyntax? = nil,
-      expression: E,
+      expression: some ExprSyntaxProtocol,
       _ unexpectedBetweenExpressionAndExclamationMark: UnexpectedNodesSyntax? = nil,
       exclamationMark: TokenSyntax = .exclamationMarkToken(),
       _ unexpectedAfterExclamationMark: UnexpectedNodesSyntax? = nil,
@@ -1650,7 +1650,7 @@ public struct ForcedValueExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .functionCallExpr else {
       return nil
     }
@@ -1665,10 +1665,10 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<C: ExprSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeCalledExpression: UnexpectedNodesSyntax? = nil,
-      calledExpression: C,
+      calledExpression: some ExprSyntaxProtocol,
       _ unexpectedBetweenCalledExpressionAndLeftParen: UnexpectedNodesSyntax? = nil,
       leftParen: TokenSyntax? = nil,
       _ unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodesSyntax? = nil,
@@ -1908,7 +1908,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct IdentifierExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .identifierExpr else {
       return nil
     }
@@ -2047,7 +2047,7 @@ public struct IfExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       self = .codeBlock(node)
     }
     
-    public init?<S: SyntaxProtocol>(_ node: S) {
+    public init?(_ node: some SyntaxProtocol) {
       if let node = node.as(IfExprSyntax.self) {
         self = .ifExpr(node)
         return
@@ -2066,7 +2066,7 @@ public struct IfExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .ifExpr else {
       return nil
     }
@@ -2279,7 +2279,7 @@ public struct IfExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct InOutExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .inOutExpr else {
       return nil
     }
@@ -2294,12 +2294,12 @@ public struct InOutExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<E: ExprSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAmpersand: UnexpectedNodesSyntax? = nil,
       ampersand: TokenSyntax = .prefixAmpersandToken(),
       _ unexpectedBetweenAmpersandAndExpression: UnexpectedNodesSyntax? = nil,
-      expression: E,
+      expression: some ExprSyntaxProtocol,
       _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -2395,7 +2395,7 @@ public struct InOutExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct InfixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .infixOperatorExpr else {
       return nil
     }
@@ -2410,14 +2410,14 @@ public struct InfixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<L: ExprSyntaxProtocol, O: ExprSyntaxProtocol, R: ExprSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeLeftOperand: UnexpectedNodesSyntax? = nil,
-      leftOperand: L,
+      leftOperand: some ExprSyntaxProtocol,
       _ unexpectedBetweenLeftOperandAndOperatorOperand: UnexpectedNodesSyntax? = nil,
-      operatorOperand: O,
+      operatorOperand: some ExprSyntaxProtocol,
       _ unexpectedBetweenOperatorOperandAndRightOperand: UnexpectedNodesSyntax? = nil,
-      rightOperand: R,
+      rightOperand: some ExprSyntaxProtocol,
       _ unexpectedAfterRightOperand: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -2537,7 +2537,7 @@ public struct InfixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct IntegerLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .integerLiteralExpr else {
       return nil
     }
@@ -2615,7 +2615,7 @@ public struct IntegerLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct IsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .isExpr else {
       return nil
     }
@@ -2630,14 +2630,14 @@ public struct IsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<E: ExprSyntaxProtocol, T: TypeSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeExpression: UnexpectedNodesSyntax? = nil,
-      expression: E,
+      expression: some ExprSyntaxProtocol,
       _ unexpectedBetweenExpressionAndIsTok: UnexpectedNodesSyntax? = nil,
       isTok: TokenSyntax = .keyword(.is),
       _ unexpectedBetweenIsTokAndTypeName: UnexpectedNodesSyntax? = nil,
-      typeName: T,
+      typeName: some TypeSyntaxProtocol,
       _ unexpectedAfterTypeName: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -2757,7 +2757,7 @@ public struct IsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .keyPathExpr else {
       return nil
     }
@@ -2772,12 +2772,12 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<R: TypeSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeBackslash: UnexpectedNodesSyntax? = nil,
       backslash: TokenSyntax = .backslashToken(),
       _ unexpectedBetweenBackslashAndRoot: UnexpectedNodesSyntax? = nil,
-      root: R? = nil,
+      root: (some TypeSyntaxProtocol)? = nil,
       _ unexpectedBetweenRootAndComponents: UnexpectedNodesSyntax? = nil,
       components: KeyPathComponentListSyntax,
       _ unexpectedAfterComponents: UnexpectedNodesSyntax? = nil,
@@ -2953,7 +2953,7 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .macroExpansionExpr else {
       return nil
     }
@@ -3264,7 +3264,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .memberAccessExpr else {
       return nil
     }
@@ -3279,10 +3279,10 @@ public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<B: ExprSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeBase: UnexpectedNodesSyntax? = nil,
-      base: B? = nil,
+      base: (some ExprSyntaxProtocol)? = nil,
       _ unexpectedBetweenBaseAndDot: UnexpectedNodesSyntax? = nil,
       dot: TokenSyntax = .periodToken(),
       _ unexpectedBetweenDotAndName: UnexpectedNodesSyntax? = nil,
@@ -3471,7 +3471,7 @@ public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct MissingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .missingExpr else {
       return nil
     }
@@ -3550,7 +3550,7 @@ public struct MissingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct MoveExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .moveExpr else {
       return nil
     }
@@ -3565,12 +3565,12 @@ public struct MoveExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<E: ExprSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeMoveKeyword: UnexpectedNodesSyntax? = nil,
       moveKeyword: TokenSyntax,
       _ unexpectedBetweenMoveKeywordAndExpression: UnexpectedNodesSyntax? = nil,
-      expression: E,
+      expression: some ExprSyntaxProtocol,
       _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -3666,7 +3666,7 @@ public struct MoveExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct NilLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .nilLiteralExpr else {
       return nil
     }
@@ -3744,7 +3744,7 @@ public struct NilLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct OptionalChainingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .optionalChainingExpr else {
       return nil
     }
@@ -3759,10 +3759,10 @@ public struct OptionalChainingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<E: ExprSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeExpression: UnexpectedNodesSyntax? = nil,
-      expression: E,
+      expression: some ExprSyntaxProtocol,
       _ unexpectedBetweenExpressionAndQuestionMark: UnexpectedNodesSyntax? = nil,
       questionMark: TokenSyntax = .postfixQuestionMarkToken(),
       _ unexpectedAfterQuestionMark: UnexpectedNodesSyntax? = nil,
@@ -3860,7 +3860,7 @@ public struct OptionalChainingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct PackElementExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .packElementExpr else {
       return nil
     }
@@ -3875,12 +3875,12 @@ public struct PackElementExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<P: ExprSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeEachKeyword: UnexpectedNodesSyntax? = nil,
       eachKeyword: TokenSyntax = .keyword(.each),
       _ unexpectedBetweenEachKeywordAndPackRefExpr: UnexpectedNodesSyntax? = nil,
-      packRefExpr: P,
+      packRefExpr: some ExprSyntaxProtocol,
       _ unexpectedAfterPackRefExpr: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -3976,7 +3976,7 @@ public struct PackElementExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct PackExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .packExpansionExpr else {
       return nil
     }
@@ -3991,12 +3991,12 @@ public struct PackExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<P: ExprSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeRepeatKeyword: UnexpectedNodesSyntax? = nil,
       repeatKeyword: TokenSyntax = .keyword(.repeat),
       _ unexpectedBetweenRepeatKeywordAndPatternExpr: UnexpectedNodesSyntax? = nil,
-      patternExpr: P,
+      patternExpr: some ExprSyntaxProtocol,
       _ unexpectedAfterPatternExpr: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -4092,7 +4092,7 @@ public struct PackExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct PostfixIfConfigExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .postfixIfConfigExpr else {
       return nil
     }
@@ -4107,10 +4107,10 @@ public struct PostfixIfConfigExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<B: ExprSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeBase: UnexpectedNodesSyntax? = nil,
-      base: B? = nil,
+      base: (some ExprSyntaxProtocol)? = nil,
       _ unexpectedBetweenBaseAndConfig: UnexpectedNodesSyntax? = nil,
       config: IfConfigDeclSyntax,
       _ unexpectedAfterConfig: UnexpectedNodesSyntax? = nil,
@@ -4239,7 +4239,7 @@ public struct PostfixIfConfigExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct PostfixUnaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .postfixUnaryExpr else {
       return nil
     }
@@ -4254,10 +4254,10 @@ public struct PostfixUnaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<E: ExprSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeExpression: UnexpectedNodesSyntax? = nil,
-      expression: E,
+      expression: some ExprSyntaxProtocol,
       _ unexpectedBetweenExpressionAndOperatorToken: UnexpectedNodesSyntax? = nil,
       operatorToken: TokenSyntax,
       _ unexpectedAfterOperatorToken: UnexpectedNodesSyntax? = nil,
@@ -4355,7 +4355,7 @@ public struct PostfixUnaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct PrefixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .prefixOperatorExpr else {
       return nil
     }
@@ -4370,12 +4370,12 @@ public struct PrefixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<P: ExprSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeOperatorToken: UnexpectedNodesSyntax? = nil,
       operatorToken: TokenSyntax? = nil,
       _ unexpectedBetweenOperatorTokenAndPostfixExpression: UnexpectedNodesSyntax? = nil,
-      postfixExpression: P,
+      postfixExpression: some ExprSyntaxProtocol,
       _ unexpectedAfterPostfixExpression: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -4471,7 +4471,7 @@ public struct PrefixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct RegexLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .regexLiteralExpr else {
       return nil
     }
@@ -4665,7 +4665,7 @@ public struct RegexLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct SequenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .sequenceExpr else {
       return nil
     }
@@ -4762,7 +4762,7 @@ public struct SequenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct SpecializeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .specializeExpr else {
       return nil
     }
@@ -4777,10 +4777,10 @@ public struct SpecializeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<E: ExprSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeExpression: UnexpectedNodesSyntax? = nil,
-      expression: E,
+      expression: some ExprSyntaxProtocol,
       _ unexpectedBetweenExpressionAndGenericArgumentClause: UnexpectedNodesSyntax? = nil,
       genericArgumentClause: GenericArgumentClauseSyntax,
       _ unexpectedAfterGenericArgumentClause: UnexpectedNodesSyntax? = nil,
@@ -4878,7 +4878,7 @@ public struct SpecializeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .stringLiteralExpr else {
       return nil
     }
@@ -5091,7 +5091,7 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .subscriptExpr else {
       return nil
     }
@@ -5106,10 +5106,10 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<C: ExprSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeCalledExpression: UnexpectedNodesSyntax? = nil,
-      calledExpression: C,
+      calledExpression: some ExprSyntaxProtocol,
       _ unexpectedBetweenCalledExpressionAndLeftBracket: UnexpectedNodesSyntax? = nil,
       leftBracket: TokenSyntax = .leftSquareBracketToken(),
       _ unexpectedBetweenLeftBracketAndArgumentList: UnexpectedNodesSyntax? = nil,
@@ -5349,7 +5349,7 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct SuperRefExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .superRefExpr else {
       return nil
     }
@@ -5427,7 +5427,7 @@ public struct SuperRefExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct SwitchExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .switchExpr else {
       return nil
     }
@@ -5442,12 +5442,12 @@ public struct SwitchExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<E: ExprSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeSwitchKeyword: UnexpectedNodesSyntax? = nil,
       switchKeyword: TokenSyntax = .keyword(.switch),
       _ unexpectedBetweenSwitchKeywordAndExpression: UnexpectedNodesSyntax? = nil,
-      expression: E,
+      expression: some ExprSyntaxProtocol,
       _ unexpectedBetweenExpressionAndLeftBrace: UnexpectedNodesSyntax? = nil,
       leftBrace: TokenSyntax = .leftBraceToken(),
       _ unexpectedBetweenLeftBraceAndCases: UnexpectedNodesSyntax? = nil,
@@ -5640,7 +5640,7 @@ public struct SwitchExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .ternaryExpr else {
       return nil
     }
@@ -5655,18 +5655,18 @@ public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<C: ExprSyntaxProtocol, F: ExprSyntaxProtocol, S: ExprSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeConditionExpression: UnexpectedNodesSyntax? = nil,
-      conditionExpression: C,
+      conditionExpression: some ExprSyntaxProtocol,
       _ unexpectedBetweenConditionExpressionAndQuestionMark: UnexpectedNodesSyntax? = nil,
       questionMark: TokenSyntax = .infixQuestionMarkToken(),
       _ unexpectedBetweenQuestionMarkAndFirstChoice: UnexpectedNodesSyntax? = nil,
-      firstChoice: F,
+      firstChoice: some ExprSyntaxProtocol,
       _ unexpectedBetweenFirstChoiceAndColonMark: UnexpectedNodesSyntax? = nil,
       colonMark: TokenSyntax = .colonToken(),
       _ unexpectedBetweenColonMarkAndSecondChoice: UnexpectedNodesSyntax? = nil,
-      secondChoice: S,
+      secondChoice: some ExprSyntaxProtocol,
       _ unexpectedAfterSecondChoice: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -5834,7 +5834,7 @@ public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct TryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .tryExpr else {
       return nil
     }
@@ -5849,14 +5849,14 @@ public struct TryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<E: ExprSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeTryKeyword: UnexpectedNodesSyntax? = nil,
       tryKeyword: TokenSyntax = .keyword(.try),
       _ unexpectedBetweenTryKeywordAndQuestionOrExclamationMark: UnexpectedNodesSyntax? = nil,
       questionOrExclamationMark: TokenSyntax? = nil,
       _ unexpectedBetweenQuestionOrExclamationMarkAndExpression: UnexpectedNodesSyntax? = nil,
-      expression: E,
+      expression: some ExprSyntaxProtocol,
       _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -5976,7 +5976,7 @@ public struct TryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .tupleExpr else {
       return nil
     }
@@ -6137,7 +6137,7 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct TypeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .typeExpr else {
       return nil
     }
@@ -6152,10 +6152,10 @@ public struct TypeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<T: TypeSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeType: UnexpectedNodesSyntax? = nil,
-      type: T,
+      type: some TypeSyntaxProtocol,
       _ unexpectedAfterType: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -6215,7 +6215,7 @@ public struct TypeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct UnresolvedAsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .unresolvedAsExpr else {
       return nil
     }
@@ -6331,7 +6331,7 @@ public struct UnresolvedAsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct UnresolvedIsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .unresolvedIsExpr else {
       return nil
     }
@@ -6409,7 +6409,7 @@ public struct UnresolvedIsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct UnresolvedPatternExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .unresolvedPatternExpr else {
       return nil
     }
@@ -6424,10 +6424,10 @@ public struct UnresolvedPatternExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<P: PatternSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforePattern: UnexpectedNodesSyntax? = nil,
-      pattern: P,
+      pattern: some PatternSyntaxProtocol,
       _ unexpectedAfterPattern: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -6487,7 +6487,7 @@ public struct UnresolvedPatternExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 public struct UnresolvedTernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .unresolvedTernaryExpr else {
       return nil
     }
@@ -6502,12 +6502,12 @@ public struct UnresolvedTernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<F: ExprSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeQuestionMark: UnexpectedNodesSyntax? = nil,
       questionMark: TokenSyntax = .infixQuestionMarkToken(),
       _ unexpectedBetweenQuestionMarkAndFirstChoice: UnexpectedNodesSyntax? = nil,
-      firstChoice: F,
+      firstChoice: some ExprSyntaxProtocol,
       _ unexpectedBetweenFirstChoiceAndColonMark: UnexpectedNodesSyntax? = nil,
       colonMark: TokenSyntax = .colonToken(),
       _ unexpectedAfterColonMark: UnexpectedNodesSyntax? = nil,

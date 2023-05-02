@@ -615,11 +615,11 @@ public struct RemoveRedundantFixIt: ParserFixIt {
 public struct RemoveNodesFixIt: ParserFixIt {
   public let nodesToRemove: [Syntax]
 
-  init<SyntaxType: SyntaxProtocol>(_ nodesToRemove: [SyntaxType]) {
+  init(_ nodesToRemove: [some SyntaxProtocol]) {
     self.nodesToRemove = nodesToRemove.map(Syntax.init)
   }
 
-  init<SyntaxType: SyntaxProtocol>(_ nodeToRemove: SyntaxType) {
+  init(_ nodeToRemove: some SyntaxProtocol) {
     self.nodesToRemove = [Syntax(nodeToRemove)]
   }
 

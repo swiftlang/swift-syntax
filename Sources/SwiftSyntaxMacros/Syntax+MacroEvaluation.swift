@@ -28,9 +28,9 @@ extension SyntaxProtocol {
 extension MacroExpansionExprSyntax {
   /// Evaluate the given macro for this syntax node, producing the expanded
   /// result and (possibly) some diagnostics.
-  func evaluateMacro<Context: MacroExpansionContext>(
+  func evaluateMacro(
     _ macro: Macro.Type,
-    in context: Context
+    in context: some MacroExpansionContext
   ) -> ExprSyntax {
     guard let exprMacro = macro as? ExpressionMacro.Type else {
       return ExprSyntax(self)
@@ -49,9 +49,9 @@ extension MacroExpansionExprSyntax {
 extension MacroExpansionDeclSyntax {
   /// Evaluate the given macro for this syntax node, producing the expanded
   /// result and (possibly) some diagnostics.
-  func evaluateMacro<Context: MacroExpansionContext>(
+  func evaluateMacro(
     _ macro: Macro.Type,
-    in context: Context
+    in context: some MacroExpansionContext
   ) -> Syntax {
     // TODO: declaration/statement macros
 
@@ -82,9 +82,9 @@ extension Syntax {
   /// This operation only makes sense when `evaluatedMacroName` produces a
   /// non-nil value, indicating that this syntax node is a macro evaluation of
   /// some kind.
-  func evaluateMacro<Context: MacroExpansionContext>(
+  func evaluateMacro(
     with macroSystem: MacroSystem,
-    context: Context
+    context: some MacroExpansionContext
   ) -> Syntax {
     // If this isn't a macro evaluation node, do nothing.
     guard let macroName = evaluatedMacroName else {

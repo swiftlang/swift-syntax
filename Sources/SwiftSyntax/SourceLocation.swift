@@ -73,7 +73,7 @@ public final class SourceLocationConverter {
   /// - Parameters:
   ///   - file: The file path associated with the syntax tree.
   ///   - tree: The root of the syntax tree to convert positions to line/columns for.
-  public init<SyntaxType: SyntaxProtocol>(file: String, tree: SyntaxType) {
+  public init(file: String, tree: some SyntaxProtocol) {
     precondition(tree.parent == nil, "SourceLocationConverter must be passed the root of the syntax tree")
     self.file = file
     self.source = tree.syntaxTextBytes

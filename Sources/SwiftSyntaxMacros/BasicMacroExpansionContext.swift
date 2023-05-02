@@ -70,8 +70,8 @@ public class BasicMacroExpansionContext {
 extension BasicMacroExpansionContext {
   /// Note that the given node that was at the given position in the provided
   /// source file has been disconnected and is now a new root.
-  private func addDisconnected<Node: SyntaxProtocol>(
-    _ node: Node,
+  private func addDisconnected(
+    _ node: some SyntaxProtocol,
     at offset: AbsolutePosition,
     in sourceFile: SourceFileSyntax
   ) {
@@ -135,8 +135,8 @@ extension BasicMacroExpansionContext: MacroExpansionContext {
     diagnostics.append(diagnostic)
   }
 
-  public func location<Node: SyntaxProtocol>(
-    of node: Node,
+  public func location(
+    of node: some SyntaxProtocol,
     at position: PositionInSyntaxNode,
     filePathMode: SourceLocationFilePathMode
   ) -> AbstractSourceLocation? {

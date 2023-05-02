@@ -81,7 +81,7 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
             if choiceNode.isBase {
               DeclSyntax(
                 """
-                public init<Node: \(raw: choiceNode.name)Protocol>(_ node: Node) {
+                public init(_ node: some \(raw: choiceNode.name)Protocol) {
                   self = .\(raw: choiceNode.swiftSyntaxKind)(\(raw: choiceNode.name)(node))
                 }
                 """
@@ -98,7 +98,7 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
             }
           }
 
-          try InitializerDeclSyntax("public init?<S: SyntaxProtocol>(_ node: S)") {
+          try InitializerDeclSyntax("public init?(_ node: some SyntaxProtocol)") {
             for choiceName in node.collectionElementChoices ?? [] {
               let choiceNode = SYNTAX_NODE_MAP[choiceName]!
               StmtSyntax(
@@ -144,7 +144,7 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
       DeclSyntax(
         """
-        public init?<S: SyntaxProtocol>(_ node: S) {
+        public init?(_ node: some SyntaxProtocol) {
           guard node.raw.kind == .\(raw: node.swiftSyntaxKind) else { return nil }
           self._syntaxNode = node._syntaxNode
         }

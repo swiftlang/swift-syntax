@@ -81,8 +81,8 @@ public struct DiagnosticsFormatter {
     self.colorize = colorize
   }
 
-  public static func annotatedSource<SyntaxType: SyntaxProtocol>(
-    tree: SyntaxType,
+  public static func annotatedSource(
+    tree: some SyntaxProtocol,
     diags: [Diagnostic],
     contextSize: Int = 2,
     colorize: Bool = false
@@ -92,10 +92,10 @@ public struct DiagnosticsFormatter {
   }
 
   /// Colorize the given source line by applying highlights from diagnostics.
-  private func colorizeSourceLine<SyntaxType: SyntaxProtocol>(
+  private func colorizeSourceLine(
     _ annotatedLine: AnnotatedSourceLine,
     lineNumber: Int,
-    tree: SyntaxType,
+    tree: some SyntaxProtocol,
     sourceLocationConverter slc: SourceLocationConverter
   ) -> String {
     guard colorize, !annotatedLine.diagnostics.isEmpty else {
@@ -181,9 +181,9 @@ public struct DiagnosticsFormatter {
   /// - Parameters:
   ///   - suffixTexts: suffix text to be printed at the given absolute
   ///                  locations within the source file.
-  func annotatedSource<SyntaxType: SyntaxProtocol>(
+  func annotatedSource(
     fileName: String?,
-    tree: SyntaxType,
+    tree: some SyntaxProtocol,
     diags: [Diagnostic],
     indentString: String,
     suffixTexts: [AbsolutePosition: String],
@@ -313,8 +313,8 @@ public struct DiagnosticsFormatter {
   }
 
   /// Print given diagnostics for a given syntax tree on the command line
-  public func annotatedSource<SyntaxType: SyntaxProtocol>(
-    tree: SyntaxType,
+  public func annotatedSource(
+    tree: some SyntaxProtocol,
     diags: [Diagnostic]
   ) -> String {
     return annotatedSource(

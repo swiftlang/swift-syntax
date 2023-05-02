@@ -97,8 +97,8 @@ extension SyntaxStringInterpolation: StringInterpolationProtocol {
     self.lastIndentation = nil
   }
 
-  public mutating func appendInterpolation<Buildable: SyntaxProtocol>(
-    _ buildable: Buildable,
+  public mutating func appendInterpolation(
+    _ buildable: some SyntaxProtocol,
     format: BasicFormat = BasicFormat()
   ) {
     self.appendInterpolation(buildable.formatted(using: format))
@@ -107,8 +107,8 @@ extension SyntaxStringInterpolation: StringInterpolationProtocol {
   /// Interpolates a literal or similar expression syntax equivalent to `value`.
   ///
   /// - SeeAlso: ``Expr/init(literal:)``
-  public mutating func appendInterpolation<Literal: ExpressibleByLiteralSyntax>(
-    literal value: Literal,
+  public mutating func appendInterpolation(
+    literal value: some ExpressibleByLiteralSyntax,
     format: BasicFormat = BasicFormat()
   ) {
     self.appendInterpolation(ExprSyntax(literal: value), format: format)

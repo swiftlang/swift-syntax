@@ -797,13 +797,13 @@ extension RawSyntax {
     )
   }
 
-  static func makeLayout<C: Collection>(
+  static func makeLayout(
     kind: SyntaxKind,
-    from collection: C,
+    from collection: some Collection<RawSyntax?>,
     arena: __shared SyntaxArena,
     leadingTrivia: Trivia? = nil,
     trailingTrivia: Trivia? = nil
-  ) -> RawSyntax where C.Element == RawSyntax? {
+  ) -> RawSyntax {
     if leadingTrivia != nil || trailingTrivia != nil {
       var layout = Array(collection)
       if let leadingTrivia = leadingTrivia,
@@ -829,7 +829,7 @@ extension RawSyntax {
 
 extension RawSyntax: CustomDebugStringConvertible {
 
-  private func debugWrite<Target: TextOutputStream>(to target: inout Target, indent: Int, withChildren: Bool = false) {
+  private func debugWrite(to target: inout some TextOutputStream, indent: Int, withChildren: Bool = false) {
     let childIndent = indent + 2
     switch rawData.payload {
     case .parsedToken(let dat):

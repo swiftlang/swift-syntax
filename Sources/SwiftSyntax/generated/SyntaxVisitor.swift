@@ -30,7 +30,7 @@ open class SyntaxVisitor {
   
   /// Walk all nodes of the given syntax tree, calling the corresponding `visit`
   /// function for every node that is being visited.
-  public func walk<SyntaxType: SyntaxProtocol>(_ node: SyntaxType) {
+  public func walk(_ node: some SyntaxProtocol) {
     visit(node.data)
   }
   
@@ -6781,7 +6781,7 @@ open class SyntaxVisitor {
     }
   }
   
-  private func visitChildren<SyntaxType: SyntaxProtocol>(_ node: SyntaxType) {
+  private func visitChildren(_ node: some SyntaxProtocol) {
     let syntaxNode = Syntax(node)
     for childRaw in NonNilRawSyntaxChildren(syntaxNode, viewMode: viewMode) {
       let childData = SyntaxData(childRaw, parent: syntaxNode)

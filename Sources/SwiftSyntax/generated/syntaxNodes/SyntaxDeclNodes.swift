@@ -18,7 +18,7 @@
 public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .accessorDecl else {
       return nil
     }
@@ -257,7 +257,7 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .actorDecl else {
       return nil
     }
@@ -567,7 +567,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .associatedtypeDecl else {
       return nil
     }
@@ -851,7 +851,7 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .classDecl else {
       return nil
     }
@@ -1166,7 +1166,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .deinitializerDecl else {
       return nil
     }
@@ -1376,7 +1376,7 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .editorPlaceholderDecl else {
       return nil
     }
@@ -1454,7 +1454,7 @@ public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .enumCaseDecl else {
       return nil
     }
@@ -1683,7 +1683,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .enumDecl else {
       return nil
     }
@@ -2001,7 +2001,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .extensionDecl else {
       return nil
     }
@@ -2016,7 +2016,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<E: TypeSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
       attributes: AttributeListSyntax? = nil,
@@ -2025,7 +2025,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       _ unexpectedBetweenModifiersAndExtensionKeyword: UnexpectedNodesSyntax? = nil,
       extensionKeyword: TokenSyntax = .keyword(.extension),
       _ unexpectedBetweenExtensionKeywordAndExtendedType: UnexpectedNodesSyntax? = nil,
-      extendedType: E,
+      extendedType: some TypeSyntaxProtocol,
       _ unexpectedBetweenExtendedTypeAndInheritanceClause: UnexpectedNodesSyntax? = nil,
       inheritanceClause: TypeInheritanceClauseSyntax? = nil,
       _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
@@ -2285,7 +2285,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .functionDecl else {
       return nil
     }
@@ -2595,7 +2595,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .ifConfigDecl else {
       return nil
     }
@@ -2730,7 +2730,7 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .importDecl else {
       return nil
     }
@@ -2988,7 +2988,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .initializerDecl else {
       return nil
     }
@@ -3306,7 +3306,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .macroDecl else {
       return nil
     }
@@ -3616,7 +3616,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .macroExpansionDecl else {
       return nil
     }
@@ -3927,7 +3927,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .missingDecl else {
       return nil
     }
@@ -4110,7 +4110,7 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .operatorDecl else {
       return nil
     }
@@ -4345,7 +4345,7 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .poundSourceLocation else {
       return nil
     }
@@ -4513,7 +4513,7 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
 public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .precedenceGroupDecl else {
       return nil
     }
@@ -4820,7 +4820,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .protocolDecl else {
       return nil
     }
@@ -5184,7 +5184,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .structDecl else {
       return nil
     }
@@ -5525,7 +5525,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       self = .getter(node)
     }
     
-    public init?<S: SyntaxProtocol>(_ node: S) {
+    public init?(_ node: some SyntaxProtocol) {
       if let node = node.as(AccessorBlockSyntax.self) {
         self = .accessors(node)
         return
@@ -5544,7 +5544,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .subscriptDecl else {
       return nil
     }
@@ -5854,7 +5854,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .typealiasDecl else {
       return nil
     }
@@ -6138,7 +6138,7 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .variableDecl else {
       return nil
     }

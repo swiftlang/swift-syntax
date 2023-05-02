@@ -18,7 +18,7 @@
 public struct ArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .arrayType else {
       return nil
     }
@@ -33,12 +33,12 @@ public struct ArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<E: TypeSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeLeftSquareBracket: UnexpectedNodesSyntax? = nil,
       leftSquareBracket: TokenSyntax = .leftSquareBracketToken(),
       _ unexpectedBetweenLeftSquareBracketAndElementType: UnexpectedNodesSyntax? = nil,
-      elementType: E,
+      elementType: some TypeSyntaxProtocol,
       _ unexpectedBetweenElementTypeAndRightSquareBracket: UnexpectedNodesSyntax? = nil,
       rightSquareBracket: TokenSyntax = .rightSquareBracketToken(),
       _ unexpectedAfterRightSquareBracket: UnexpectedNodesSyntax? = nil,
@@ -160,7 +160,7 @@ public struct ArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .attributedType else {
       return nil
     }
@@ -175,14 +175,14 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<B: TypeSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeSpecifier: UnexpectedNodesSyntax? = nil,
       specifier: TokenSyntax? = nil,
       _ unexpectedBetweenSpecifierAndAttributes: UnexpectedNodesSyntax? = nil,
       attributes: AttributeListSyntax? = nil,
       _ unexpectedBetweenAttributesAndBaseType: UnexpectedNodesSyntax? = nil,
-      baseType: B,
+      baseType: some TypeSyntaxProtocol,
       _ unexpectedAfterBaseType: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -321,7 +321,7 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 public struct ClassRestrictionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .classRestrictionType else {
       return nil
     }
@@ -399,7 +399,7 @@ public struct ClassRestrictionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 public struct CompositionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .compositionType else {
       return nil
     }
@@ -496,7 +496,7 @@ public struct CompositionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 public struct ConstrainedSugarTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .constrainedSugarType else {
       return nil
     }
@@ -511,12 +511,12 @@ public struct ConstrainedSugarTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<B: TypeSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeSomeOrAnySpecifier: UnexpectedNodesSyntax? = nil,
       someOrAnySpecifier: TokenSyntax,
       _ unexpectedBetweenSomeOrAnySpecifierAndBaseType: UnexpectedNodesSyntax? = nil,
-      baseType: B,
+      baseType: some TypeSyntaxProtocol,
       _ unexpectedAfterBaseType: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -612,7 +612,7 @@ public struct ConstrainedSugarTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .dictionaryType else {
       return nil
     }
@@ -627,16 +627,16 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<K: TypeSyntaxProtocol, V: TypeSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeLeftSquareBracket: UnexpectedNodesSyntax? = nil,
       leftSquareBracket: TokenSyntax = .leftSquareBracketToken(),
       _ unexpectedBetweenLeftSquareBracketAndKeyType: UnexpectedNodesSyntax? = nil,
-      keyType: K,
+      keyType: some TypeSyntaxProtocol,
       _ unexpectedBetweenKeyTypeAndColon: UnexpectedNodesSyntax? = nil,
       colon: TokenSyntax = .colonToken(),
       _ unexpectedBetweenColonAndValueType: UnexpectedNodesSyntax? = nil,
-      valueType: V,
+      valueType: some TypeSyntaxProtocol,
       _ unexpectedBetweenValueTypeAndRightSquareBracket: UnexpectedNodesSyntax? = nil,
       rightSquareBracket: TokenSyntax = .rightSquareBracketToken(),
       _ unexpectedAfterRightSquareBracket: UnexpectedNodesSyntax? = nil,
@@ -806,7 +806,7 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .functionType else {
       return nil
     }
@@ -1019,7 +1019,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 public struct ImplicitlyUnwrappedOptionalTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .implicitlyUnwrappedOptionalType else {
       return nil
     }
@@ -1034,10 +1034,10 @@ public struct ImplicitlyUnwrappedOptionalTypeSyntax: TypeSyntaxProtocol, SyntaxH
     self._syntaxNode = Syntax(data)
   }
   
-  public init<W: TypeSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeWrappedType: UnexpectedNodesSyntax? = nil,
-      wrappedType: W,
+      wrappedType: some TypeSyntaxProtocol,
       _ unexpectedBetweenWrappedTypeAndExclamationMark: UnexpectedNodesSyntax? = nil,
       exclamationMark: TokenSyntax = .exclamationMarkToken(),
       _ unexpectedAfterExclamationMark: UnexpectedNodesSyntax? = nil,
@@ -1135,7 +1135,7 @@ public struct ImplicitlyUnwrappedOptionalTypeSyntax: TypeSyntaxProtocol, SyntaxH
 public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .memberTypeIdentifier else {
       return nil
     }
@@ -1150,10 +1150,10 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<B: TypeSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeBaseType: UnexpectedNodesSyntax? = nil,
-      baseType: B,
+      baseType: some TypeSyntaxProtocol,
       _ unexpectedBetweenBaseTypeAndPeriod: UnexpectedNodesSyntax? = nil,
       period: TokenSyntax = .periodToken(),
       _ unexpectedBetweenPeriodAndName: UnexpectedNodesSyntax? = nil,
@@ -1303,7 +1303,7 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
 public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .metatypeType else {
       return nil
     }
@@ -1318,10 +1318,10 @@ public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<B: TypeSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeBaseType: UnexpectedNodesSyntax? = nil,
-      baseType: B,
+      baseType: some TypeSyntaxProtocol,
       _ unexpectedBetweenBaseTypeAndPeriod: UnexpectedNodesSyntax? = nil,
       period: TokenSyntax = .periodToken(),
       _ unexpectedBetweenPeriodAndTypeOrProtocol: UnexpectedNodesSyntax? = nil,
@@ -1445,7 +1445,7 @@ public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 public struct MissingTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .missingType else {
       return nil
     }
@@ -1524,7 +1524,7 @@ public struct MissingTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .namedOpaqueReturnType else {
       return nil
     }
@@ -1539,12 +1539,12 @@ public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<B: TypeSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeGenericParameters: UnexpectedNodesSyntax? = nil,
       genericParameters: GenericParameterClauseSyntax,
       _ unexpectedBetweenGenericParametersAndBaseType: UnexpectedNodesSyntax? = nil,
-      baseType: B,
+      baseType: some TypeSyntaxProtocol,
       _ unexpectedAfterBaseType: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -1640,7 +1640,7 @@ public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 public struct OptionalTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .optionalType else {
       return nil
     }
@@ -1655,10 +1655,10 @@ public struct OptionalTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<W: TypeSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeWrappedType: UnexpectedNodesSyntax? = nil,
-      wrappedType: W,
+      wrappedType: some TypeSyntaxProtocol,
       _ unexpectedBetweenWrappedTypeAndQuestionMark: UnexpectedNodesSyntax? = nil,
       questionMark: TokenSyntax = .postfixQuestionMarkToken(),
       _ unexpectedAfterQuestionMark: UnexpectedNodesSyntax? = nil,
@@ -1756,7 +1756,7 @@ public struct OptionalTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 public struct PackExpansionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .packExpansionType else {
       return nil
     }
@@ -1771,12 +1771,12 @@ public struct PackExpansionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<P: TypeSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeRepeatKeyword: UnexpectedNodesSyntax? = nil,
       repeatKeyword: TokenSyntax = .keyword(.repeat),
       _ unexpectedBetweenRepeatKeywordAndPatternType: UnexpectedNodesSyntax? = nil,
-      patternType: P,
+      patternType: some TypeSyntaxProtocol,
       _ unexpectedAfterPatternType: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -1872,7 +1872,7 @@ public struct PackExpansionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 public struct PackReferenceTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .packReferenceType else {
       return nil
     }
@@ -1887,12 +1887,12 @@ public struct PackReferenceTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<P: TypeSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeEachKeyword: UnexpectedNodesSyntax? = nil,
       eachKeyword: TokenSyntax = .keyword(.each),
       _ unexpectedBetweenEachKeywordAndPackType: UnexpectedNodesSyntax? = nil,
-      packType: P,
+      packType: some TypeSyntaxProtocol,
       _ unexpectedAfterPackType: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -1988,7 +1988,7 @@ public struct PackReferenceTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 public struct SimpleTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .simpleTypeIdentifier else {
       return nil
     }
@@ -2104,7 +2104,7 @@ public struct SimpleTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
 public struct SuppressedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .suppressedType else {
       return nil
     }
@@ -2119,12 +2119,12 @@ public struct SuppressedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<P: TypeSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeWithoutTilde: UnexpectedNodesSyntax? = nil,
       withoutTilde: TokenSyntax,
       _ unexpectedBetweenWithoutTildeAndPatternType: UnexpectedNodesSyntax? = nil,
-      patternType: P,
+      patternType: some TypeSyntaxProtocol,
       _ unexpectedAfterPatternType: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -2220,7 +2220,7 @@ public struct SuppressedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .tupleType else {
       return nil
     }

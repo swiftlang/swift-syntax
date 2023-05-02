@@ -46,21 +46,21 @@ extension CompilerPluginMessageHandler {
 
       switch macroDefinition {
       case let exprMacroDef as ExpressionMacro.Type:
-        func _expand<Node: FreestandingMacroExpansionSyntax>(node: Node) throws -> ExprSyntax {
+        func _expand(node: some FreestandingMacroExpansionSyntax) throws -> ExprSyntax {
           try exprMacroDef.expansion(of: node, in: context)
         }
         let rewritten = try _openExistential(macroSyntax, do: _expand)
         expandedSource = rewritten.formattedExpansion(macroDefinition.formatMode)
 
       case let declMacroDef as DeclarationMacro.Type:
-        func _expand<Node: FreestandingMacroExpansionSyntax>(node: Node) throws -> [DeclSyntax] {
+        func _expand(node: some FreestandingMacroExpansionSyntax) throws -> [DeclSyntax] {
           try declMacroDef.expansion(of: node, in: context)
         }
         let rewritten = try _openExistential(macroSyntax, do: _expand)
         expandedSource = CodeBlockItemListSyntax(rewritten.map { CodeBlockItemSyntax(item: .decl($0)) }).formattedExpansion(macroDefinition.formatMode)
 
       case let codeItemMacroDef as CodeItemMacro.Type:
-        func _expand<Node: FreestandingMacroExpansionSyntax>(node: Node) throws -> [CodeBlockItemSyntax] {
+        func _expand(node: some FreestandingMacroExpansionSyntax) throws -> [CodeBlockItemSyntax] {
           try codeItemMacroDef.expansion(of: node, in: context)
         }
         let rewritten = try _openExistential(macroSyntax, do: _expand)
@@ -128,8 +128,8 @@ extension CompilerPluginMessageHandler {
 
         // Local function to expand a member atribute macro once we've opened up
         // the existential.
-        func expandMemberAttributeMacro<Node: DeclGroupSyntax>(
-          _ node: Node
+        func expandMemberAttributeMacro(
+          _ node: some DeclGroupSyntax
         ) throws -> [AttributeSyntax] {
           return try attachedMacro.expansion(
             of: attributeNode,
@@ -158,8 +158,8 @@ extension CompilerPluginMessageHandler {
 
         // Local function to expand a member macro once we've opened up
         // the existential.
-        func expandMemberMacro<Node: DeclGroupSyntax>(
-          _ node: Node
+        func expandMemberMacro(
+          _ node: some DeclGroupSyntax
         ) throws -> [DeclSyntax] {
           return try attachedMacro.expansion(
             of: attributeNode,
@@ -196,8 +196,8 @@ extension CompilerPluginMessageHandler {
 
         // Local function to expand a conformance macro once we've opened up
         // the existential.
-        func expandConformanceMacro<Node: DeclGroupSyntax>(
-          _ node: Node
+        func expandConformanceMacro(
+          _ node: some DeclGroupSyntax
         ) throws -> [(TypeSyntax, GenericWhereClauseSyntax?)] {
           return try attachedMacro.expansion(
             of: attributeNode,

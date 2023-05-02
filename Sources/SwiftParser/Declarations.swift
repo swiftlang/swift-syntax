@@ -1130,7 +1130,7 @@ extension Parser {
 
 extension Parser {
   /// If a `throws` keyword appears right in front of the `arrow`, it is returned as `misplacedThrowsKeyword` so it can be synthesized in front of the arrow.
-  mutating func parseFunctionReturnClause<S: RawEffectSpecifiersTrait>(effectSpecifiers: inout S?, allowNamedOpaqueResultType: Bool) -> RawReturnClauseSyntax {
+  mutating func parseFunctionReturnClause(effectSpecifiers: inout (some RawEffectSpecifiersTrait)?, allowNamedOpaqueResultType: Bool) -> RawReturnClauseSyntax {
     let (unexpectedBeforeArrow, arrow) = self.expect(.arrow)
     let unexpectedBeforeReturnType = self.parseMisplacedEffectSpecifiers(&effectSpecifiers)
     let result: RawTypeSyntax

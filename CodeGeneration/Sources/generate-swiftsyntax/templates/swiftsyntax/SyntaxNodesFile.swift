@@ -58,7 +58,7 @@ func syntaxNode(emitKind: String) -> SourceFileSyntax {
 
         DeclSyntax(
           """
-          public init?<S: SyntaxProtocol>(_ node: S) {
+          public init?(_ node: some SyntaxProtocol) {
             guard node.raw.kind == .\(raw: node.swiftSyntaxKind) else { return nil }
             self._syntaxNode = node._syntaxNode
           }
@@ -306,7 +306,7 @@ private func generateSyntaxChildChoices(for child: Child) throws -> EnumDeclSynt
       if let choiceNode = SYNTAX_NODE_MAP[choice.syntaxKind], choiceNode.isBase {
         DeclSyntax(
           """
-          public init<Node: \(raw: choiceNode.name)Protocol>(_ node: Node) {
+          public init(_ node: some \(raw: choiceNode.name)Protocol) {
             self = .\(raw: choice.swiftName)(\(raw: choiceNode.name)(node))
           }
           """
@@ -323,7 +323,7 @@ private func generateSyntaxChildChoices(for child: Child) throws -> EnumDeclSynt
       }
     }
 
-    try! InitializerDeclSyntax("public init?<S: SyntaxProtocol>(_ node: S)") {
+    try! InitializerDeclSyntax("public init?(_ node: some SyntaxProtocol)") {
       for choice in choices {
         StmtSyntax(
           """
@@ -358,36 +358,26 @@ fileprivate extension Node {
       return "public init()"
     }
 
-    var genericParamNames: [String: Int] = [:]
-    var genericParams: [String] = []
-
     func createFunctionParameterSyntax(for child: Child) -> FunctionParameterSyntax {
-      var paramType: String
+      var paramType: TypeSyntax
       if !child.kind.isNodeChoicesEmpty {
-        paramType = child.name
+        paramType = "\(raw: child.name)"
       } else if child.hasBaseType {
         if optionalBaseAsMissing {
-          paramType = "Missing\(child.typeName)"
+          paramType = "Missing\(raw: child.typeName)"
         } else {
-          // If we have a base type, make the initializer generic over its
-          // protocol instead.
-          let index = child.swiftName.index(child.swiftName.startIndex, offsetBy: 1)
-          paramType = child.swiftName[..<index].uppercased()
-
-          let paramCount = (genericParamNames[paramType] ?? 0) + 1
-          genericParamNames[paramType] = paramCount
-
-          if paramCount > 1 {
-            paramType += "\(paramCount)"
-          }
-          genericParams.append("\(paramType): \(child.typeName)Protocol")
+          paramType = "some \(raw: child.typeName)Protocol"
         }
       } else {
-        paramType = child.typeName
+        paramType = "\(raw: child.typeName)"
       }
 
       if child.isOptional {
-        paramType += "?"
+        if paramType.is(ConstrainedSugarTypeSyntax.self) {
+          paramType = "(\(paramType))?"
+        } else {
+          paramType = "\(paramType)?"
+        }
       }
 
       return FunctionParameterSyntax(
@@ -395,7 +385,7 @@ fileprivate extension Node {
         firstName: child.isUnexpectedNodes ? .wildcardToken(trailingTrivia: .space) : .identifier(child.swiftName),
         secondName: child.isUnexpectedNodes ? .identifier(child.swiftName) : nil,
         colon: .colonToken(),
-        type: TypeSyntax(stringLiteral: paramType),
+        type: paramType,
         defaultArgument: child.defaultInitialization
       )
     }
@@ -411,26 +401,10 @@ fileprivate extension Node {
         .with(\.leadingTrivia, .newline)
     }
 
-    if genericParams.isEmpty {
-      return """
-        public init(
-        \(params)
-        )
-        """
-    } else {
-      let generics = GenericParameterClauseSyntax(
-        genericParameterList: GenericParameterListSyntax {
-          for param in genericParams {
-            GenericParameterSyntax(name: .identifier(param))
-          }
-        }
+    return """
+      public init(
+      \(params)
       )
-
-      return """
-        public init\(generics)(
-        \(params)
-        )
-        """
-    }
+      """
   }
 }

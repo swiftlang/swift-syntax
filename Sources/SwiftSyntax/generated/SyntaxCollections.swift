@@ -38,7 +38,7 @@ public struct AccessPathSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .accessPath else {
       return nil
     }
@@ -247,7 +247,7 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .accessorList else {
       return nil
     }
@@ -456,7 +456,7 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .arrayElementList else {
       return nil
     }
@@ -683,7 +683,7 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
       self = .ifConfigDecl(node)
     }
     
-    public init?<S: SyntaxProtocol>(_ node: S) {
+    public init?(_ node: some SyntaxProtocol) {
       if let node = node.as(AttributeSyntax.self) {
         self = .attribute(node)
         return
@@ -708,7 +708,7 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .attributeList else {
       return nil
     }
@@ -917,7 +917,7 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .availabilitySpecList else {
       return nil
     }
@@ -1126,7 +1126,7 @@ public struct AvailabilityVersionRestrictionListSyntax: SyntaxCollection, Syntax
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .availabilityVersionRestrictionList else {
       return nil
     }
@@ -1335,7 +1335,7 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .caseItemList else {
       return nil
     }
@@ -1544,7 +1544,7 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .catchClauseList else {
       return nil
     }
@@ -1753,7 +1753,7 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .catchItemList else {
       return nil
     }
@@ -1962,7 +1962,7 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .closureCaptureItemList else {
       return nil
     }
@@ -2171,7 +2171,7 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .closureParamList else {
       return nil
     }
@@ -2380,7 +2380,7 @@ public struct ClosureParameterListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .closureParameterList else {
       return nil
     }
@@ -2589,7 +2589,7 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .codeBlockItemList else {
       return nil
     }
@@ -2798,7 +2798,7 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .compositionTypeElementList else {
       return nil
     }
@@ -3007,7 +3007,7 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .conditionElementList else {
       return nil
     }
@@ -3216,7 +3216,7 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .declNameArgumentList else {
       return nil
     }
@@ -3425,7 +3425,7 @@ public struct DesignatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .designatedTypeList else {
       return nil
     }
@@ -3634,7 +3634,7 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .dictionaryElementList else {
       return nil
     }
@@ -3843,7 +3843,7 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .differentiabilityParamList else {
       return nil
     }
@@ -4049,7 +4049,7 @@ public struct DocumentationAttributeArgumentsSyntax: SyntaxCollection, SyntaxHas
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .documentationAttributeArguments else {
       return nil
     }
@@ -4255,7 +4255,7 @@ public struct EffectsArgumentsSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .effectsArguments else {
       return nil
     }
@@ -4461,7 +4461,7 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .enumCaseElementList else {
       return nil
     }
@@ -4670,7 +4670,7 @@ public struct EnumCaseParameterListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .enumCaseParameterList else {
       return nil
     }
@@ -4876,7 +4876,7 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .exprList else {
       return nil
     }
@@ -5085,7 +5085,7 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .functionParameterList else {
       return nil
     }
@@ -5294,7 +5294,7 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .genericArgumentList else {
       return nil
     }
@@ -5503,7 +5503,7 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .genericParameterList else {
       return nil
     }
@@ -5712,7 +5712,7 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .genericRequirementList else {
       return nil
     }
@@ -5921,7 +5921,7 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .ifConfigClauseList else {
       return nil
     }
@@ -6130,7 +6130,7 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .inheritedTypeList else {
       return nil
     }
@@ -6339,7 +6339,7 @@ public struct KeyPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .keyPathComponentList else {
       return nil
     }
@@ -6548,7 +6548,7 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .memberDeclList else {
       return nil
     }
@@ -6757,7 +6757,7 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .modifierList else {
       return nil
     }
@@ -6966,7 +6966,7 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .multipleTrailingClosureElementList else {
       return nil
     }
@@ -7175,7 +7175,7 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .objCSelector else {
       return nil
     }
@@ -7384,7 +7384,7 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .patternBindingList else {
       return nil
     }
@@ -7618,7 +7618,7 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
       self = .precedenceGroupAssociativity(node)
     }
     
-    public init?<S: SyntaxProtocol>(_ node: S) {
+    public init?(_ node: some SyntaxProtocol) {
       if let node = node.as(PrecedenceGroupRelationSyntax.self) {
         self = .precedenceGroupRelation(node)
         return
@@ -7648,7 +7648,7 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .precedenceGroupAttributeList else {
       return nil
     }
@@ -7857,7 +7857,7 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .precedenceGroupNameList else {
       return nil
     }
@@ -8066,7 +8066,7 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .primaryAssociatedTypeList else {
       return nil
     }
@@ -8304,7 +8304,7 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
       self = .genericWhereClause(node)
     }
     
-    public init?<S: SyntaxProtocol>(_ node: S) {
+    public init?(_ node: some SyntaxProtocol) {
       if let node = node.as(LabeledSpecializeEntrySyntax.self) {
         self = .labeledSpecializeEntry(node)
         return
@@ -8340,7 +8340,7 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .specializeAttributeSpecList else {
       return nil
     }
@@ -8567,7 +8567,7 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
       self = .expressionSegment(node)
     }
     
-    public init?<S: SyntaxProtocol>(_ node: S) {
+    public init?(_ node: some SyntaxProtocol) {
       if let node = node.as(StringSegmentSyntax.self) {
         self = .stringSegment(node)
         return
@@ -8592,7 +8592,7 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .stringLiteralSegments else {
       return nil
     }
@@ -8819,7 +8819,7 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
       self = .ifConfigDecl(node)
     }
     
-    public init?<S: SyntaxProtocol>(_ node: S) {
+    public init?(_ node: some SyntaxProtocol) {
       if let node = node.as(SwitchCaseSyntax.self) {
         self = .switchCase(node)
         return
@@ -8844,7 +8844,7 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .switchCaseList else {
       return nil
     }
@@ -9053,7 +9053,7 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .tupleExprElementList else {
       return nil
     }
@@ -9262,7 +9262,7 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .tuplePatternElementList else {
       return nil
     }
@@ -9471,7 +9471,7 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .tupleTypeElementList else {
       return nil
     }
@@ -9677,7 +9677,7 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .unexpectedNodes else {
       return nil
     }
@@ -9886,7 +9886,7 @@ public struct YieldExprListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .yieldExprList else {
       return nil
     }

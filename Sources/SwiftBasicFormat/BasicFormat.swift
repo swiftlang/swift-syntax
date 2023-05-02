@@ -139,7 +139,7 @@ open class BasicFormat: SyntaxRewriter {
   // MARK: - Customization points
 
   /// Whether a leading newline on `token` should be added.
-  open func requiresIndent<T: SyntaxProtocol>(_ node: T) -> Bool {
+  open func requiresIndent(_ node: some SyntaxProtocol) -> Bool {
     return node.requiresIndent
   }
 

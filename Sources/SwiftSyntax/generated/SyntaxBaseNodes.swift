@@ -39,7 +39,7 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   /// Create a `DeclSyntax` node from a specialized syntax node.
-  public init<S: DeclSyntaxProtocol>(_ syntax: S) {
+  public init(_ syntax: some DeclSyntaxProtocol) {
     // We know this cast is going to succeed. Go through init(_: SyntaxData)
     // to do a sanity check and verify the kind matches in debug builds and get
     // maximum performance in release builds.
@@ -47,7 +47,7 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
   
   /// Create a `DeclSyntax` node from a specialized optional syntax node.
-  public init?<S: DeclSyntaxProtocol>(_ syntax: S?) {
+  public init?(_ syntax: (some DeclSyntaxProtocol)?) {
     guard let syntax = syntax else {
       return nil
     }
@@ -69,7 +69,7 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self.init(fromProtocol: syntax)
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     switch node.raw.kind {
     case .accessorDecl, .actorDecl, .associatedtypeDecl, .classDecl, .deinitializerDecl, .editorPlaceholderDecl, .enumCaseDecl, .enumDecl, .extensionDecl, .functionDecl, .ifConfigDecl, .importDecl, .initializerDecl, .macroDecl, .macroExpansionDecl, .missingDecl, .operatorDecl, .poundSourceLocation, .precedenceGroupDecl, .protocolDecl, .structDecl, .subscriptDecl, .typealiasDecl, .variableDecl:
       self._syntaxNode = node._syntaxNode
@@ -174,7 +174,7 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   /// Create a `ExprSyntax` node from a specialized syntax node.
-  public init<S: ExprSyntaxProtocol>(_ syntax: S) {
+  public init(_ syntax: some ExprSyntaxProtocol) {
     // We know this cast is going to succeed. Go through init(_: SyntaxData)
     // to do a sanity check and verify the kind matches in debug builds and get
     // maximum performance in release builds.
@@ -182,7 +182,7 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   }
   
   /// Create a `ExprSyntax` node from a specialized optional syntax node.
-  public init?<S: ExprSyntaxProtocol>(_ syntax: S?) {
+  public init?(_ syntax: (some ExprSyntaxProtocol)?) {
     guard let syntax = syntax else {
       return nil
     }
@@ -204,7 +204,7 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self.init(fromProtocol: syntax)
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     switch node.raw.kind {
     case .arrayExpr, .arrowExpr, .asExpr, .assignmentExpr, .awaitExpr, .binaryOperatorExpr, .booleanLiteralExpr, .borrowExpr, .closureExpr, .dictionaryExpr, .discardAssignmentExpr, .editorPlaceholderExpr, .floatLiteralExpr, .forcedValueExpr, .functionCallExpr, .identifierExpr, .ifExpr, .inOutExpr, .infixOperatorExpr, .integerLiteralExpr, .isExpr, .keyPathExpr, .macroExpansionExpr, .memberAccessExpr, .missingExpr, .moveExpr, .nilLiteralExpr, .optionalChainingExpr, .packElementExpr, .packExpansionExpr, .postfixIfConfigExpr, .postfixUnaryExpr, .prefixOperatorExpr, .regexLiteralExpr, .sequenceExpr, .specializeExpr, .stringLiteralExpr, .subscriptExpr, .superRefExpr, .switchExpr, .ternaryExpr, .tryExpr, .tupleExpr, .typeExpr, .unresolvedAsExpr, .unresolvedIsExpr, .unresolvedPatternExpr, .unresolvedTernaryExpr:
       self._syntaxNode = node._syntaxNode
@@ -333,7 +333,7 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   /// Create a `PatternSyntax` node from a specialized syntax node.
-  public init<S: PatternSyntaxProtocol>(_ syntax: S) {
+  public init(_ syntax: some PatternSyntaxProtocol) {
     // We know this cast is going to succeed. Go through init(_: SyntaxData)
     // to do a sanity check and verify the kind matches in debug builds and get
     // maximum performance in release builds.
@@ -341,7 +341,7 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   }
   
   /// Create a `PatternSyntax` node from a specialized optional syntax node.
-  public init?<S: PatternSyntaxProtocol>(_ syntax: S?) {
+  public init?(_ syntax: (some PatternSyntaxProtocol)?) {
     guard let syntax = syntax else {
       return nil
     }
@@ -363,7 +363,7 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     self.init(fromProtocol: syntax)
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     switch node.raw.kind {
     case .expressionPattern, .identifierPattern, .isTypePattern, .missingPattern, .tuplePattern, .valueBindingPattern, .wildcardPattern:
       self._syntaxNode = node._syntaxNode
@@ -451,7 +451,7 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   /// Create a `StmtSyntax` node from a specialized syntax node.
-  public init<S: StmtSyntaxProtocol>(_ syntax: S) {
+  public init(_ syntax: some StmtSyntaxProtocol) {
     // We know this cast is going to succeed. Go through init(_: SyntaxData)
     // to do a sanity check and verify the kind matches in debug builds and get
     // maximum performance in release builds.
@@ -459,7 +459,7 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   }
   
   /// Create a `StmtSyntax` node from a specialized optional syntax node.
-  public init?<S: StmtSyntaxProtocol>(_ syntax: S?) {
+  public init?(_ syntax: (some StmtSyntaxProtocol)?) {
     guard let syntax = syntax else {
       return nil
     }
@@ -481,7 +481,7 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self.init(fromProtocol: syntax)
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     switch node.raw.kind {
     case .breakStmt, .continueStmt, .deferStmt, .doStmt, .expressionStmt, .fallthroughStmt, .forInStmt, .forgetStmt, .guardStmt, .labeledStmt, .missingStmt, .repeatWhileStmt, .returnStmt, .throwStmt, .whileStmt, .yieldStmt:
       self._syntaxNode = node._syntaxNode
@@ -578,7 +578,7 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   /// Create a `TypeSyntax` node from a specialized syntax node.
-  public init<S: TypeSyntaxProtocol>(_ syntax: S) {
+  public init(_ syntax: some TypeSyntaxProtocol) {
     // We know this cast is going to succeed. Go through init(_: SyntaxData)
     // to do a sanity check and verify the kind matches in debug builds and get
     // maximum performance in release builds.
@@ -586,7 +586,7 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   }
   
   /// Create a `TypeSyntax` node from a specialized optional syntax node.
-  public init?<S: TypeSyntaxProtocol>(_ syntax: S?) {
+  public init?(_ syntax: (some TypeSyntaxProtocol)?) {
     guard let syntax = syntax else {
       return nil
     }
@@ -608,7 +608,7 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self.init(fromProtocol: syntax)
   }
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     switch node.raw.kind {
     case .arrayType, .attributedType, .classRestrictionType, .compositionType, .constrainedSugarType, .dictionaryType, .functionType, .implicitlyUnwrappedOptionalType, .memberTypeIdentifier, .metatypeType, .missingType, .namedOpaqueReturnType, .optionalType, .packExpansionType, .packReferenceType, .simpleTypeIdentifier, .suppressedType, .tupleType:
       self._syntaxNode = node._syntaxNode

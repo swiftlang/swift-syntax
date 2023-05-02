@@ -73,8 +73,8 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     super.init(viewMode: .all)
   }
 
-  public static func diagnostics<SyntaxType: SyntaxProtocol>(
-    for tree: SyntaxType
+  public static func diagnostics(
+    for tree: some SyntaxProtocol
   ) -> [Diagnostic] {
     let diagProducer = ParseDiagnosticsGenerator()
     diagProducer.walk(tree)
@@ -101,8 +101,8 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
 
   /// Produce a diagnostic.
   /// If `highlights` is `nil` the `node` will be highlighted.
-  func addDiagnostic<T: SyntaxProtocol>(
-    _ node: T,
+  func addDiagnostic(
+    _ node: some SyntaxProtocol,
     position: AbsolutePosition? = nil,
     _ message: DiagnosticMessage,
     highlights: [Syntax]? = nil,
@@ -129,7 +129,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
 
   /// Whether the node should be skipped for diagnostic emission.
   /// Every visit method must check this at the beginning.
-  func shouldSkip<T: SyntaxProtocol>(_ node: T) -> Bool {
+  func shouldSkip(_ node: some SyntaxProtocol) -> Bool {
     if !node.hasError && !node.hasWarning {
       return true
     }
@@ -140,11 +140,11 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
   ///
   /// If `incorrectContainer` contains only tokens that satisfy `unexpectedTokenCondition`, emit a diagnostic with message `message` that marks this token as misplaced.
   /// If `correctTokens` contains missing tokens, also emit a Fix-It with message `fixIt` that marks the unexpected token as missing and instead inserts `correctTokens`.
-  public func exchangeTokens<Message: DiagnosticMessage>(
+  public func exchangeTokens(
     unexpected: UnexpectedNodesSyntax?,
     unexpectedTokenCondition: (TokenSyntax) -> Bool,
     correctTokens: [TokenSyntax?],
-    message: (_ misplacedTokens: [TokenSyntax]) -> Message,
+    message: (_ misplacedTokens: [TokenSyntax]) -> some DiagnosticMessage,
     moveFixIt: (_ misplacedTokens: [TokenSyntax]) -> FixItMessage,
     removeRedundantFixIt: (_ misplacedTokens: [TokenSyntax]) -> FixItMessage? = { _ in nil }
   ) {
@@ -190,10 +190,10 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
 
   /// If `unexpected` only contains a single token that satisfies `predicate`,
   /// emits a diagnostic with `message` that removes this token.
-  public func removeToken<Message: DiagnosticMessage>(
+  public func removeToken(
     _ unexpected: UnexpectedNodesSyntax?,
     where predicate: (TokenSyntax) -> Bool,
-    message: (TokenSyntax) -> Message
+    message: (TokenSyntax) -> some DiagnosticMessage
   ) {
     guard let unexpected = unexpected,
       let misplacedToken = unexpected.onlyToken(where: predicate)
@@ -214,7 +214,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     )
   }
 
-  private func handleMisplacedEffectSpecifiersAfterArrow<S: EffectSpecifiersSyntax>(effectSpecifiers: S?, misplacedSpecifiers: UnexpectedNodesSyntax?) {
+  private func handleMisplacedEffectSpecifiersAfterArrow(effectSpecifiers: (some EffectSpecifiersSyntax)?, misplacedSpecifiers: UnexpectedNodesSyntax?) {
     exchangeTokens(
       unexpected: misplacedSpecifiers,
       unexpectedTokenCondition: { EffectSpecifier(token: $0) != nil },
@@ -225,12 +225,12 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     )
   }
 
-  private func handleMisplacedEffectSpecifiers<S: EffectSpecifiersSyntax>(effectSpecifiers: S?, output: ReturnClauseSyntax?) {
+  private func handleMisplacedEffectSpecifiers(effectSpecifiers: (some EffectSpecifiersSyntax)?, output: ReturnClauseSyntax?) {
     handleMisplacedEffectSpecifiersAfterArrow(effectSpecifiers: effectSpecifiers, misplacedSpecifiers: output?.unexpectedBetweenArrowAndReturnType)
     handleMisplacedEffectSpecifiersAfterArrow(effectSpecifiers: effectSpecifiers, misplacedSpecifiers: output?.unexpectedAfterReturnType)
   }
 
-  private func handleEffectSpecifiers<S: EffectSpecifiersSyntax>(_ node: S) -> SyntaxVisitorContinueKind {
+  private func handleEffectSpecifiers(_ node: some EffectSpecifiersSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren
     }

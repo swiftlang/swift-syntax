@@ -226,7 +226,7 @@ extension Unicode.Scalar {
   }
 
   /// Returns the first unicode scalar in `byteSequence`, which may span multiple bytes.
-  public static func lexing<S: Collection>(from byteSequence: S) -> Self? where S.Element == UInt8 {
+  public static func lexing(from byteSequence: some Collection<UInt8>) -> Self? {
     var index = byteSequence.startIndex
     let peek = { () -> UInt8? in
       if index < byteSequence.endIndex {

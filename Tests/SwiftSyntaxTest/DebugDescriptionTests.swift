@@ -13,6 +13,7 @@
 import XCTest
 import SwiftSyntax
 import _SwiftSyntaxTestSupport
+import SwiftParser
 
 private extension String {
   // This implementation is really slow; to use it outside a test it should be optimized.
@@ -158,7 +159,8 @@ public class DebugDescriptionTests: XCTestCase {
 
     testCases.forEach { keyAndValue in
       let (key:line, value:testCase) = keyAndValue
-      let actualDumped = dumped(testCase.syntax)
+      var actualDumped = ""
+      dump(testCase.syntax, to: &actualDumped)
       assertStringsEqualWithDiff(
         actualDumped.trimmingTrailingWhitespace(),
         testCase.expectedDumped.trimmingTrailingWhitespace(),
@@ -167,9 +169,59 @@ public class DebugDescriptionTests: XCTestCase {
     }
   }
 
-  public func dumped(_ syntax: Any) -> String {
-    var result = ""
-    dump(syntax, to: &result)
-    return result
+  #if DEBUG
+  // debugInitCall is only available in debug builds, so we can only test it in those.
+  @available(*, deprecated, message: "Purposefully tests debugInitCall, which is marked deprecated for debugger use only")
+  func testDebugInitCall() {
+    let sourceFile: SourceFileSyntax = """
+      test(1, 2)
+      """
+
+    assertStringsEqualWithDiff(
+      sourceFile.debugInitCall(includeTrivia: true).trimmingTrailingWhitespace(),
+      """
+      SourceFileSyntax(
+          statements: CodeBlockItemListSyntax([
+                CodeBlockItemSyntax(item: CodeBlockItemSyntax.Item(FunctionCallExprSyntax(
+                        calledExpression: ExprSyntax(IdentifierExprSyntax(identifier: .identifier("test"))),
+                        leftParen: .leftParenToken(),
+                        argumentList: TupleExprElementListSyntax([
+                              TupleExprElementSyntax(
+                                  expression: ExprSyntax(IntegerLiteralExprSyntax(digits: .integerLiteral("1"))),
+                                  trailingComma: .commaToken(trailingTrivia: .space)
+                                ),
+                              TupleExprElementSyntax(expression: ExprSyntax(IntegerLiteralExprSyntax(digits: .integerLiteral("2"))))
+                            ]),
+                        rightParen: .rightParenToken()
+                      )))
+              ]),
+          eofToken: .eof()
+        )
+      """
+    )
+
+    assertStringsEqualWithDiff(
+      sourceFile.debugInitCall(includeTrivia: false).trimmingTrailingWhitespace(),
+      """
+      SourceFileSyntax(
+          statements: CodeBlockItemListSyntax([
+                CodeBlockItemSyntax(item: CodeBlockItemSyntax.Item(FunctionCallExprSyntax(
+                        calledExpression: ExprSyntax(IdentifierExprSyntax(identifier: .identifier("test"))),
+                        leftParen: .leftParenToken(),
+                        argumentList: TupleExprElementListSyntax([
+                              TupleExprElementSyntax(
+                                  expression: ExprSyntax(IntegerLiteralExprSyntax(digits: .integerLiteral("1"))),
+                                  trailingComma: .commaToken()
+                                ),
+                              TupleExprElementSyntax(expression: ExprSyntax(IntegerLiteralExprSyntax(digits: .integerLiteral("2"))))
+                            ]),
+                        rightParen: .rightParenToken()
+                      )))
+              ]),
+          eofToken: .eof()
+        )
+      """
+    )
   }
+  #endif
 }

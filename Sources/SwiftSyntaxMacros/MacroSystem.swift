@@ -442,7 +442,7 @@ extension MacroApplication {
       do {
         let typedDecl = decl.asProtocol(DeclGroupSyntax.self)!
 
-        func expand<Decl: DeclGroupSyntax>(_ decl: Decl) throws -> [AttributeSyntax] {
+        func expand(_ decl: some DeclGroupSyntax) throws -> [AttributeSyntax] {
           return try attributeMacro.expansion(
             of: attribute,
             attachedTo: decl,
@@ -471,9 +471,9 @@ extension MacroApplication {
 extension SyntaxProtocol {
   /// Expand all uses of the given set of macros within this syntax
   /// node.
-  public func expand<Context: MacroExpansionContext>(
+  public func expand(
     macros: [String: Macro.Type],
-    in context: Context
+    in context: some MacroExpansionContext
   ) -> Syntax {
     // Build the macro system.
     var system = MacroSystem()

@@ -68,7 +68,7 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   }
 
   /// Create a `Syntax` node from a specialized syntax node.
-  public init<S: SyntaxProtocol>(_ syntax: S) {
+  public init(_ syntax: some SyntaxProtocol) {
     self = syntax._syntaxNode
   }
 
@@ -158,7 +158,7 @@ public protocol SyntaxProtocol: CustomStringConvertible,
 
   /// Converts the given specialized node to this type. Returns `nil` if the
   /// conversion is not possible.
-  init?<S: SyntaxProtocol>(_ node: S)
+  init?(_ node: some SyntaxProtocol)
 
   /// The statically allowed structure of the syntax node.
   static var structure: SyntaxNodeStructure { get }

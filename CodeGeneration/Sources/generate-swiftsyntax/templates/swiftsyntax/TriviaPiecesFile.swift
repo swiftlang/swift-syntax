@@ -55,7 +55,7 @@ let triviaPiecesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       /// Prints the provided trivia as they would be written in a source file.
       ///
       /// - Parameter stream: The stream to which to print the trivia.
-      public func write<Target>(to target: inout Target) where Target: TextOutputStream
+      public func write(to target: inout some TextOutputStream)
       """
     ) {
       DeclSyntax(

@@ -602,7 +602,7 @@ extension Parser {
   ///     unexpected period (with the extraneous whitespace) and a missing
   ///     period. If there is a newline also set `skipMember` to inform
   ///     callers to not parse any futher member names.
-  mutating func consumeMemberPeriod<R: RawSyntaxNodeProtocol>(previousNode: R?) -> (unexpected: RawUnexpectedNodesSyntax?, period: RawTokenSyntax, skipMemberName: Bool) {
+  mutating func consumeMemberPeriod(previousNode: (some RawSyntaxNodeProtocol)?) -> (unexpected: RawUnexpectedNodesSyntax?, period: RawTokenSyntax, skipMemberName: Bool) {
     precondition(self.at(.period))
 
     let beforePeriodWhitespace = previousNode?.raw.trailingTriviaByteLength ?? 0 > 0 || self.currentToken.leadingTriviaByteLength > 0

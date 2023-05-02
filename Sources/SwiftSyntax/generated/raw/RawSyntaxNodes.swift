@@ -49,7 +49,7 @@ public struct RawAccessorBlockSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -131,7 +131,7 @@ public struct RawAccessorDeclSyntax: RawDeclSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -249,7 +249,7 @@ public struct RawAccessorEffectSpecifiersSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -319,7 +319,7 @@ public struct RawAccessorListSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -369,7 +369,7 @@ public struct RawAccessorParameterSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -451,7 +451,7 @@ public struct RawActorDeclSyntax: RawDeclSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -593,7 +593,7 @@ public struct RawArrayElementListSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -643,7 +643,7 @@ public struct RawArrayElementSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -713,7 +713,7 @@ public struct RawArrayExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -795,7 +795,7 @@ public struct RawArrayTypeSyntax: RawTypeSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -877,7 +877,7 @@ public struct RawArrowExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -947,7 +947,7 @@ public struct RawAsExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -1041,7 +1041,7 @@ public struct RawAssignmentExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -1099,7 +1099,7 @@ public struct RawAssociatedtypeDeclSyntax: RawDeclSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -1227,7 +1227,7 @@ public struct RawAttributeListSyntax: RawSyntaxNodeProtocol {
       }
     }
     
-    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+    public init?(_ other: some RawSyntaxNodeProtocol) {
       if let node = RawAttributeSyntax(other) {
         self = .attribute(node)
         return
@@ -1260,7 +1260,7 @@ public struct RawAttributeListSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -1362,7 +1362,7 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol {
       }
     }
     
-    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+    public init?(_ other: some RawSyntaxNodeProtocol) {
       if let node = RawTupleExprElementListSyntax(other) {
         self = .argumentList(node)
         return
@@ -1467,7 +1467,7 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -1573,7 +1573,7 @@ public struct RawAttributedTypeSyntax: RawTypeSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -1656,7 +1656,7 @@ public struct RawAvailabilityArgumentSyntax: RawSyntaxNodeProtocol {
       }
     }
     
-    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+    public init?(_ other: some RawSyntaxNodeProtocol) {
       if let node = RawTokenSyntax(other) {
         self = .token(node)
         return
@@ -1693,7 +1693,7 @@ public struct RawAvailabilityArgumentSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -1763,7 +1763,7 @@ public struct RawAvailabilityConditionSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -1857,7 +1857,7 @@ public struct RawAvailabilityEntrySyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -1949,7 +1949,7 @@ public struct RawAvailabilityLabeledArgumentSyntax: RawSyntaxNodeProtocol {
       }
     }
     
-    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+    public init?(_ other: some RawSyntaxNodeProtocol) {
       if let node = RawStringLiteralExprSyntax(other) {
         self = .string(node)
         return
@@ -1982,7 +1982,7 @@ public struct RawAvailabilityLabeledArgumentSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -2064,7 +2064,7 @@ public struct RawAvailabilitySpecListSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -2114,7 +2114,7 @@ public struct RawAvailabilityVersionRestrictionListEntrySyntax: RawSyntaxNodePro
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -2184,7 +2184,7 @@ public struct RawAvailabilityVersionRestrictionListSyntax: RawSyntaxNodeProtocol
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -2234,7 +2234,7 @@ public struct RawAvailabilityVersionRestrictionSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -2304,7 +2304,7 @@ public struct RawAwaitExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -2374,7 +2374,7 @@ public struct RawBackDeployedAttributeSpecListSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -2456,7 +2456,7 @@ public struct RawBinaryOperatorExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -2514,7 +2514,7 @@ public struct RawBooleanLiteralExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -2572,7 +2572,7 @@ public struct RawBorrowExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -2642,7 +2642,7 @@ public struct RawBreakStmtSyntax: RawStmtSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -2712,7 +2712,7 @@ public struct RawCanImportExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -2818,7 +2818,7 @@ public struct RawCanImportVersionInfoSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -2912,7 +2912,7 @@ public struct RawCaseItemListSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -2962,7 +2962,7 @@ public struct RawCaseItemSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -3044,7 +3044,7 @@ public struct RawCatchClauseListSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -3094,7 +3094,7 @@ public struct RawCatchClauseSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -3176,7 +3176,7 @@ public struct RawCatchItemListSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -3226,7 +3226,7 @@ public struct RawCatchItemSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -3308,7 +3308,7 @@ public struct RawClassDeclSyntax: RawDeclSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -3450,7 +3450,7 @@ public struct RawClassRestrictionTypeSyntax: RawTypeSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -3508,7 +3508,7 @@ public struct RawClosureCaptureItemListSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -3558,7 +3558,7 @@ public struct RawClosureCaptureItemSpecifierSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -3652,7 +3652,7 @@ public struct RawClosureCaptureItemSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -3758,7 +3758,7 @@ public struct RawClosureCaptureSignatureSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -3840,7 +3840,7 @@ public struct RawClosureExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -3934,7 +3934,7 @@ public struct RawClosureParamListSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -3984,7 +3984,7 @@ public struct RawClosureParamSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -4054,7 +4054,7 @@ public struct RawClosureParameterClauseSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -4136,7 +4136,7 @@ public struct RawClosureParameterListSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -4186,7 +4186,7 @@ public struct RawClosureParameterSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -4326,7 +4326,7 @@ public struct RawClosureSignatureSyntax: RawSyntaxNodeProtocol {
       }
     }
     
-    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+    public init?(_ other: some RawSyntaxNodeProtocol) {
       if let node = RawClosureParamListSyntax(other) {
         self = .simpleInput(node)
         return
@@ -4359,7 +4359,7 @@ public struct RawClosureSignatureSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -4477,7 +4477,7 @@ public struct RawCodeBlockItemListSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -4528,7 +4528,7 @@ public struct RawCodeBlockItemSyntax: RawSyntaxNodeProtocol {
       }
     }
     
-    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+    public init?(_ other: some RawSyntaxNodeProtocol) {
       if let node = RawDeclSyntax(other) {
         self = .decl(node)
         return
@@ -4565,7 +4565,7 @@ public struct RawCodeBlockItemSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -4635,7 +4635,7 @@ public struct RawCodeBlockSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -4717,7 +4717,7 @@ public struct RawCompositionTypeElementListSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -4767,7 +4767,7 @@ public struct RawCompositionTypeElementSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -4837,7 +4837,7 @@ public struct RawCompositionTypeSyntax: RawTypeSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -4895,7 +4895,7 @@ public struct RawConditionElementListSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -4949,7 +4949,7 @@ public struct RawConditionElementSyntax: RawSyntaxNodeProtocol {
       }
     }
     
-    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+    public init?(_ other: some RawSyntaxNodeProtocol) {
       if let node = RawExprSyntax(other) {
         self = .expression(node)
         return
@@ -4990,7 +4990,7 @@ public struct RawConditionElementSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -5060,7 +5060,7 @@ public struct RawConformanceRequirementSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -5142,7 +5142,7 @@ public struct RawConstrainedSugarTypeSyntax: RawTypeSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -5212,7 +5212,7 @@ public struct RawContinueStmtSyntax: RawStmtSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -5282,7 +5282,7 @@ public struct RawConventionAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -5388,7 +5388,7 @@ public struct RawConventionWitnessMethodAttributeArgumentsSyntax: RawSyntaxNodeP
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -5470,7 +5470,7 @@ public struct RawDeclModifierDetailSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -5552,7 +5552,7 @@ public struct RawDeclModifierSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -5622,7 +5622,7 @@ public struct RawDeclNameArgumentListSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -5672,7 +5672,7 @@ public struct RawDeclNameArgumentSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -5742,7 +5742,7 @@ public struct RawDeclNameArgumentsSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -5824,7 +5824,7 @@ public struct RawDeclNameSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -5899,14 +5899,14 @@ public struct RawDeclSyntax: RawDeclSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
     self.init(unchecked: other.raw)
   }
   
-  public init<Node: RawDeclSyntaxNodeProtocol>(_ other: Node) {
+  public init(_ other: some RawDeclSyntaxNodeProtocol) {
     self.init(unchecked: other.raw)
   }
 }
@@ -5933,7 +5933,7 @@ public struct RawDeferStmtSyntax: RawStmtSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -6003,7 +6003,7 @@ public struct RawDeinitializerDeclSyntax: RawDeclSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -6097,7 +6097,7 @@ public struct RawDerivativeRegistrationAttributeArgumentsSyntax: RawSyntaxNodePr
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -6227,7 +6227,7 @@ public struct RawDesignatedTypeElementSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -6297,7 +6297,7 @@ public struct RawDesignatedTypeListSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -6347,7 +6347,7 @@ public struct RawDictionaryElementListSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -6397,7 +6397,7 @@ public struct RawDictionaryElementSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -6489,7 +6489,7 @@ public struct RawDictionaryExprSyntax: RawExprSyntaxNodeProtocol {
       }
     }
     
-    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+    public init?(_ other: some RawSyntaxNodeProtocol) {
       if let node = RawTokenSyntax(other) {
         self = .colon(node)
         return
@@ -6522,7 +6522,7 @@ public struct RawDictionaryExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -6604,7 +6604,7 @@ public struct RawDictionaryTypeSyntax: RawTypeSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -6710,7 +6710,7 @@ public struct RawDifferentiabilityParamListSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -6760,7 +6760,7 @@ public struct RawDifferentiabilityParamSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -6828,7 +6828,7 @@ public struct RawDifferentiabilityParamsClauseSyntax: RawSyntaxNodeProtocol {
       }
     }
     
-    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+    public init?(_ other: some RawSyntaxNodeProtocol) {
       if let node = RawDifferentiabilityParamSyntax(other) {
         self = .parameter(node)
         return
@@ -6861,7 +6861,7 @@ public struct RawDifferentiabilityParamsClauseSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -6943,7 +6943,7 @@ public struct RawDifferentiabilityParamsSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -7025,7 +7025,7 @@ public struct RawDifferentiableAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -7131,7 +7131,7 @@ public struct RawDiscardAssignmentExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -7189,7 +7189,7 @@ public struct RawDiscardStmtSyntax: RawStmtSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -7259,7 +7259,7 @@ public struct RawDoStmtSyntax: RawStmtSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -7339,7 +7339,7 @@ public struct RawDocumentationAttributeArgumentSyntax: RawSyntaxNodeProtocol {
       }
     }
     
-    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+    public init?(_ other: some RawSyntaxNodeProtocol) {
       if let node = RawTokenSyntax(other) {
         self = .token(node)
         return
@@ -7372,7 +7372,7 @@ public struct RawDocumentationAttributeArgumentSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -7466,7 +7466,7 @@ public struct RawDocumentationAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -7516,7 +7516,7 @@ public struct RawDynamicReplacementArgumentsSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -7598,7 +7598,7 @@ public struct RawEditorPlaceholderDeclSyntax: RawDeclSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -7656,7 +7656,7 @@ public struct RawEditorPlaceholderExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -7714,7 +7714,7 @@ public struct RawEffectsArgumentsSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -7764,7 +7764,7 @@ public struct RawEnumCaseDeclSyntax: RawDeclSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -7858,7 +7858,7 @@ public struct RawEnumCaseElementListSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -7908,7 +7908,7 @@ public struct RawEnumCaseElementSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -8002,7 +8002,7 @@ public struct RawEnumCaseParameterClauseSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -8084,7 +8084,7 @@ public struct RawEnumCaseParameterListSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -8134,7 +8134,7 @@ public struct RawEnumCaseParameterSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -8264,7 +8264,7 @@ public struct RawEnumDeclSyntax: RawDeclSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -8406,7 +8406,7 @@ public struct RawExposeAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -8488,7 +8488,7 @@ public struct RawExprListSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -8543,14 +8543,14 @@ public struct RawExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
     self.init(unchecked: other.raw)
   }
   
-  public init<Node: RawExprSyntaxNodeProtocol>(_ other: Node) {
+  public init(_ other: some RawExprSyntaxNodeProtocol) {
     self.init(unchecked: other.raw)
   }
 }
@@ -8577,7 +8577,7 @@ public struct RawExpressionPatternSyntax: RawPatternSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -8635,7 +8635,7 @@ public struct RawExpressionSegmentSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -8741,7 +8741,7 @@ public struct RawExpressionStmtSyntax: RawStmtSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -8799,7 +8799,7 @@ public struct RawExtensionDeclSyntax: RawDeclSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -8929,7 +8929,7 @@ public struct RawFallthroughStmtSyntax: RawStmtSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -8987,7 +8987,7 @@ public struct RawFloatLiteralExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -9045,7 +9045,7 @@ public struct RawForInStmtSyntax: RawStmtSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -9211,7 +9211,7 @@ public struct RawForcedValueExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -9281,7 +9281,7 @@ public struct RawFunctionCallExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -9399,7 +9399,7 @@ public struct RawFunctionDeclSyntax: RawDeclSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -9541,7 +9541,7 @@ public struct RawFunctionEffectSpecifiersSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -9611,7 +9611,7 @@ public struct RawFunctionParameterListSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -9661,7 +9661,7 @@ public struct RawFunctionParameterSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -9815,7 +9815,7 @@ public struct RawFunctionSignatureSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -9897,7 +9897,7 @@ public struct RawFunctionTypeSyntax: RawTypeSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -10003,7 +10003,7 @@ public struct RawGenericArgumentClauseSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -10085,7 +10085,7 @@ public struct RawGenericArgumentListSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -10135,7 +10135,7 @@ public struct RawGenericArgumentSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -10205,7 +10205,7 @@ public struct RawGenericParameterClauseSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -10299,7 +10299,7 @@ public struct RawGenericParameterListSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -10349,7 +10349,7 @@ public struct RawGenericParameterSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -10467,7 +10467,7 @@ public struct RawGenericRequirementListSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -10518,7 +10518,7 @@ public struct RawGenericRequirementSyntax: RawSyntaxNodeProtocol {
       }
     }
     
-    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+    public init?(_ other: some RawSyntaxNodeProtocol) {
       if let node = RawSameTypeRequirementSyntax(other) {
         self = .sameTypeRequirement(node)
         return
@@ -10555,7 +10555,7 @@ public struct RawGenericRequirementSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -10625,7 +10625,7 @@ public struct RawGenericWhereClauseSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -10695,7 +10695,7 @@ public struct RawGuardStmtSyntax: RawStmtSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -10789,7 +10789,7 @@ public struct RawIdentifierExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -10859,7 +10859,7 @@ public struct RawIdentifierPatternSyntax: RawPatternSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -10917,7 +10917,7 @@ public struct RawIfConfigClauseListSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -10974,7 +10974,7 @@ public struct RawIfConfigClauseSyntax: RawSyntaxNodeProtocol {
       }
     }
     
-    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+    public init?(_ other: some RawSyntaxNodeProtocol) {
       if let node = RawCodeBlockItemListSyntax(other) {
         self = .statements(node)
         return
@@ -11019,7 +11019,7 @@ public struct RawIfConfigClauseSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -11101,7 +11101,7 @@ public struct RawIfConfigDeclSyntax: RawDeclSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -11169,7 +11169,7 @@ public struct RawIfExprSyntax: RawExprSyntaxNodeProtocol {
       }
     }
     
-    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+    public init?(_ other: some RawSyntaxNodeProtocol) {
       if let node = RawIfExprSyntax(other) {
         self = .ifExpr(node)
         return
@@ -11202,7 +11202,7 @@ public struct RawIfExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -11308,7 +11308,7 @@ public struct RawImplementsAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -11402,7 +11402,7 @@ public struct RawImplicitlyUnwrappedOptionalTypeSyntax: RawTypeSyntaxNodeProtoco
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -11472,7 +11472,7 @@ public struct RawImportDeclSyntax: RawDeclSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -11578,7 +11578,7 @@ public struct RawImportPathComponentSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -11648,7 +11648,7 @@ public struct RawImportPathSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -11698,7 +11698,7 @@ public struct RawInOutExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -11768,7 +11768,7 @@ public struct RawInfixOperatorExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -11850,7 +11850,7 @@ public struct RawInheritedTypeListSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -11900,7 +11900,7 @@ public struct RawInheritedTypeSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -11970,7 +11970,7 @@ public struct RawInitializerClauseSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -12040,7 +12040,7 @@ public struct RawInitializerDeclSyntax: RawDeclSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -12182,7 +12182,7 @@ public struct RawIntegerLiteralExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -12240,7 +12240,7 @@ public struct RawIsExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -12322,7 +12322,7 @@ public struct RawIsTypePatternSyntax: RawPatternSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -12392,7 +12392,7 @@ public struct RawKeyPathComponentListSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -12443,7 +12443,7 @@ public struct RawKeyPathComponentSyntax: RawSyntaxNodeProtocol {
       }
     }
     
-    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+    public init?(_ other: some RawSyntaxNodeProtocol) {
       if let node = RawKeyPathPropertyComponentSyntax(other) {
         self = .property(node)
         return
@@ -12480,7 +12480,7 @@ public struct RawKeyPathComponentSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -12550,7 +12550,7 @@ public struct RawKeyPathExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -12632,7 +12632,7 @@ public struct RawKeyPathOptionalComponentSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -12690,7 +12690,7 @@ public struct RawKeyPathPropertyComponentSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -12772,7 +12772,7 @@ public struct RawKeyPathSubscriptComponentSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -12854,7 +12854,7 @@ public struct RawLabeledSpecializeEntrySyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -12948,7 +12948,7 @@ public struct RawLabeledStmtSyntax: RawStmtSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -13030,7 +13030,7 @@ public struct RawLayoutRequirementSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -13172,7 +13172,7 @@ public struct RawMacroDeclSyntax: RawDeclSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -13314,7 +13314,7 @@ public struct RawMacroExpansionDeclSyntax: RawDeclSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -13456,7 +13456,7 @@ public struct RawMacroExpansionExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -13598,7 +13598,7 @@ public struct RawMatchingPatternConditionSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -13692,7 +13692,7 @@ public struct RawMemberAccessExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -13786,7 +13786,7 @@ public struct RawMemberDeclBlockSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -13868,7 +13868,7 @@ public struct RawMemberDeclListItemSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -13938,7 +13938,7 @@ public struct RawMemberDeclListSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -13988,7 +13988,7 @@ public struct RawMemberTypeIdentifierSyntax: RawTypeSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -14082,7 +14082,7 @@ public struct RawMetatypeTypeSyntax: RawTypeSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -14164,7 +14164,7 @@ public struct RawMissingDeclSyntax: RawDeclSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -14246,7 +14246,7 @@ public struct RawMissingExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -14304,7 +14304,7 @@ public struct RawMissingPatternSyntax: RawPatternSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -14362,7 +14362,7 @@ public struct RawMissingStmtSyntax: RawStmtSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -14420,7 +14420,7 @@ public struct RawMissingSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -14478,7 +14478,7 @@ public struct RawMissingTypeSyntax: RawTypeSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -14536,7 +14536,7 @@ public struct RawModifierListSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -14586,7 +14586,7 @@ public struct RawMoveExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -14656,7 +14656,7 @@ public struct RawMultipleTrailingClosureElementListSyntax: RawSyntaxNodeProtocol
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -14706,7 +14706,7 @@ public struct RawMultipleTrailingClosureElementSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -14788,7 +14788,7 @@ public struct RawNamedOpaqueReturnTypeSyntax: RawTypeSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -14858,7 +14858,7 @@ public struct RawNilLiteralExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -14916,7 +14916,7 @@ public struct RawObjCSelectorPieceSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -14986,7 +14986,7 @@ public struct RawObjCSelectorSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -15036,7 +15036,7 @@ public struct RawOpaqueReturnTypeOfAttributeArgumentsSyntax: RawSyntaxNodeProtoc
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -15118,7 +15118,7 @@ public struct RawOperatorDeclSyntax: RawDeclSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -15224,7 +15224,7 @@ public struct RawOperatorPrecedenceAndTypesSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -15306,7 +15306,7 @@ public struct RawOptionalBindingConditionSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -15400,7 +15400,7 @@ public struct RawOptionalChainingExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -15470,7 +15470,7 @@ public struct RawOptionalTypeSyntax: RawTypeSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -15540,7 +15540,7 @@ public struct RawOriginallyDefinedInArgumentsSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -15646,7 +15646,7 @@ public struct RawPackElementExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -15716,7 +15716,7 @@ public struct RawPackExpansionExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -15786,7 +15786,7 @@ public struct RawPackExpansionTypeSyntax: RawTypeSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -15856,7 +15856,7 @@ public struct RawPackReferenceTypeSyntax: RawTypeSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -15926,7 +15926,7 @@ public struct RawParameterClauseSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -16008,7 +16008,7 @@ public struct RawPatternBindingListSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -16056,7 +16056,7 @@ public struct RawPatternBindingSyntax: RawSyntaxNodeProtocol {
       }
     }
     
-    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+    public init?(_ other: some RawSyntaxNodeProtocol) {
       if let node = RawAccessorBlockSyntax(other) {
         self = .accessors(node)
         return
@@ -16089,7 +16089,7 @@ public struct RawPatternBindingSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -16200,14 +16200,14 @@ public struct RawPatternSyntax: RawPatternSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
     self.init(unchecked: other.raw)
   }
   
-  public init<Node: RawPatternSyntaxNodeProtocol>(_ other: Node) {
+  public init(_ other: some RawPatternSyntaxNodeProtocol) {
     self.init(unchecked: other.raw)
   }
 }
@@ -16234,7 +16234,7 @@ public struct RawPostfixIfConfigExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -16304,7 +16304,7 @@ public struct RawPostfixUnaryExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -16374,7 +16374,7 @@ public struct RawPoundSourceLocationArgsSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -16504,7 +16504,7 @@ public struct RawPoundSourceLocationSyntax: RawDeclSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -16598,7 +16598,7 @@ public struct RawPrecedenceGroupAssignmentSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -16680,7 +16680,7 @@ public struct RawPrecedenceGroupAssociativitySyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -16763,7 +16763,7 @@ public struct RawPrecedenceGroupAttributeListSyntax: RawSyntaxNodeProtocol {
       }
     }
     
-    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+    public init?(_ other: some RawSyntaxNodeProtocol) {
       if let node = RawPrecedenceGroupRelationSyntax(other) {
         self = .precedenceGroupRelation(node)
         return
@@ -16800,7 +16800,7 @@ public struct RawPrecedenceGroupAttributeListSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -16850,7 +16850,7 @@ public struct RawPrecedenceGroupDeclSyntax: RawDeclSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -16980,7 +16980,7 @@ public struct RawPrecedenceGroupNameElementSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -17050,7 +17050,7 @@ public struct RawPrecedenceGroupNameListSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -17100,7 +17100,7 @@ public struct RawPrecedenceGroupRelationSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -17182,7 +17182,7 @@ public struct RawPrefixOperatorExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -17252,7 +17252,7 @@ public struct RawPrimaryAssociatedTypeClauseSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -17334,7 +17334,7 @@ public struct RawPrimaryAssociatedTypeListSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -17384,7 +17384,7 @@ public struct RawPrimaryAssociatedTypeSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -17454,7 +17454,7 @@ public struct RawProtocolDeclSyntax: RawDeclSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -17596,7 +17596,7 @@ public struct RawQualifiedDeclNameSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -17690,7 +17690,7 @@ public struct RawRegexLiteralExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -17796,7 +17796,7 @@ public struct RawRepeatWhileStmtSyntax: RawStmtSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -17890,7 +17890,7 @@ public struct RawReturnClauseSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -17960,7 +17960,7 @@ public struct RawReturnStmtSyntax: RawStmtSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -18030,7 +18030,7 @@ public struct RawSameTypeRequirementSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -18112,7 +18112,7 @@ public struct RawSequenceExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -18170,7 +18170,7 @@ public struct RawSimpleTypeIdentifierSyntax: RawTypeSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -18240,7 +18240,7 @@ public struct RawSourceFileSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -18314,7 +18314,7 @@ public struct RawSpecializeAttributeSpecListSyntax: RawSyntaxNodeProtocol {
       }
     }
     
-    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+    public init?(_ other: some RawSyntaxNodeProtocol) {
       if let node = RawLabeledSpecializeEntrySyntax(other) {
         self = .labeledSpecializeEntry(node)
         return
@@ -18355,7 +18355,7 @@ public struct RawSpecializeAttributeSpecListSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -18405,7 +18405,7 @@ public struct RawSpecializeExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -18480,14 +18480,14 @@ public struct RawStmtSyntax: RawStmtSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
     self.init(unchecked: other.raw)
   }
   
-  public init<Node: RawStmtSyntaxNodeProtocol>(_ other: Node) {
+  public init(_ other: some RawStmtSyntaxNodeProtocol) {
     self.init(unchecked: other.raw)
   }
 }
@@ -18514,7 +18514,7 @@ public struct RawStringLiteralExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -18618,7 +18618,7 @@ public struct RawStringLiteralSegmentsSyntax: RawSyntaxNodeProtocol {
       }
     }
     
-    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+    public init?(_ other: some RawSyntaxNodeProtocol) {
       if let node = RawStringSegmentSyntax(other) {
         self = .stringSegment(node)
         return
@@ -18651,7 +18651,7 @@ public struct RawStringLiteralSegmentsSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -18701,7 +18701,7 @@ public struct RawStringSegmentSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -18759,7 +18759,7 @@ public struct RawStructDeclSyntax: RawDeclSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -18899,7 +18899,7 @@ public struct RawSubscriptDeclSyntax: RawDeclSyntaxNodeProtocol {
       }
     }
     
-    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+    public init?(_ other: some RawSyntaxNodeProtocol) {
       if let node = RawAccessorBlockSyntax(other) {
         self = .accessors(node)
         return
@@ -18932,7 +18932,7 @@ public struct RawSubscriptDeclSyntax: RawDeclSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -19074,7 +19074,7 @@ public struct RawSubscriptExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -19192,7 +19192,7 @@ public struct RawSuperRefExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -19250,7 +19250,7 @@ public struct RawSuppressedTypeSyntax: RawTypeSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -19320,7 +19320,7 @@ public struct RawSwitchCaseLabelSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -19400,7 +19400,7 @@ public struct RawSwitchCaseListSyntax: RawSyntaxNodeProtocol {
       }
     }
     
-    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+    public init?(_ other: some RawSyntaxNodeProtocol) {
       if let node = RawSwitchCaseSyntax(other) {
         self = .switchCase(node)
         return
@@ -19433,7 +19433,7 @@ public struct RawSwitchCaseListSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -19481,7 +19481,7 @@ public struct RawSwitchCaseSyntax: RawSyntaxNodeProtocol {
       }
     }
     
-    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+    public init?(_ other: some RawSyntaxNodeProtocol) {
       if let node = RawSwitchDefaultLabelSyntax(other) {
         self = .default(node)
         return
@@ -19514,7 +19514,7 @@ public struct RawSwitchCaseSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -19596,7 +19596,7 @@ public struct RawSwitchDefaultLabelSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -19666,7 +19666,7 @@ public struct RawSwitchExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -19772,7 +19772,7 @@ public struct RawTargetFunctionEntrySyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -19866,7 +19866,7 @@ public struct RawTernaryExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -19972,7 +19972,7 @@ public struct RawThrowStmtSyntax: RawStmtSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -20042,7 +20042,7 @@ public struct RawTryExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -20124,7 +20124,7 @@ public struct RawTupleExprElementListSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -20174,7 +20174,7 @@ public struct RawTupleExprElementSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -20268,7 +20268,7 @@ public struct RawTupleExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -20350,7 +20350,7 @@ public struct RawTuplePatternElementListSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -20400,7 +20400,7 @@ public struct RawTuplePatternElementSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -20494,7 +20494,7 @@ public struct RawTuplePatternSyntax: RawPatternSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -20576,7 +20576,7 @@ public struct RawTupleTypeElementListSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -20626,7 +20626,7 @@ public struct RawTupleTypeElementSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -20768,7 +20768,7 @@ public struct RawTupleTypeSyntax: RawTypeSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -20850,7 +20850,7 @@ public struct RawTypeAnnotationSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -20920,7 +20920,7 @@ public struct RawTypeEffectSpecifiersSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -20990,7 +20990,7 @@ public struct RawTypeExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -21048,7 +21048,7 @@ public struct RawTypeInheritanceClauseSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -21118,7 +21118,7 @@ public struct RawTypeInitializerClauseSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -21193,14 +21193,14 @@ public struct RawTypeSyntax: RawTypeSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
     self.init(unchecked: other.raw)
   }
   
-  public init<Node: RawTypeSyntaxNodeProtocol>(_ other: Node) {
+  public init(_ other: some RawTypeSyntaxNodeProtocol) {
     self.init(unchecked: other.raw)
   }
 }
@@ -21227,7 +21227,7 @@ public struct RawTypealiasDeclSyntax: RawDeclSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -21357,7 +21357,7 @@ public struct RawUnavailableFromAsyncArgumentsSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -21439,7 +21439,7 @@ public struct RawUnderscorePrivateAttributeArgumentsSyntax: RawSyntaxNodeProtoco
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -21521,7 +21521,7 @@ public struct RawUnexpectedNodesSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -21571,7 +21571,7 @@ public struct RawUnresolvedAsExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -21641,7 +21641,7 @@ public struct RawUnresolvedIsExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -21699,7 +21699,7 @@ public struct RawUnresolvedPatternExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -21757,7 +21757,7 @@ public struct RawUnresolvedTernaryExprSyntax: RawExprSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -21839,7 +21839,7 @@ public struct RawValueBindingPatternSyntax: RawPatternSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -21909,7 +21909,7 @@ public struct RawVariableDeclSyntax: RawDeclSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -22003,7 +22003,7 @@ public struct RawVersionComponentListSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -22053,7 +22053,7 @@ public struct RawVersionComponentSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -22123,7 +22123,7 @@ public struct RawVersionTupleSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -22193,7 +22193,7 @@ public struct RawWhereClauseSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -22263,7 +22263,7 @@ public struct RawWhileStmtSyntax: RawStmtSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -22345,7 +22345,7 @@ public struct RawWildcardPatternSyntax: RawPatternSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -22415,7 +22415,7 @@ public struct RawYieldExprListElementSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -22485,7 +22485,7 @@ public struct RawYieldExprListSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -22535,7 +22535,7 @@ public struct RawYieldListSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }
@@ -22615,7 +22615,7 @@ public struct RawYieldStmtSyntax: RawStmtSyntaxNodeProtocol {
       }
     }
     
-    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+    public init?(_ other: some RawSyntaxNodeProtocol) {
       if let node = RawYieldListSyntax(other) {
         self = .yieldList(node)
         return
@@ -22648,7 +22648,7 @@ public struct RawYieldStmtSyntax: RawStmtSyntaxNodeProtocol {
     self.raw = raw
   }
   
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else {
       return nil
     }

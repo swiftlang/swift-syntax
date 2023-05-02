@@ -42,8 +42,8 @@ public protocol MacroExpansionContext: AnyObject {
   /// - Returns: the source location within the given node, or `nil` if the
   ///   given syntax node is not rooted in a source file that the macro
   ///   expansion context knows about.
-  func location<Node: SyntaxProtocol>(
-    of node: Node,
+  func location(
+    of node: some SyntaxProtocol,
     at position: PositionInSyntaxNode,
     filePathMode: SourceLocationFilePathMode
   ) -> AbstractSourceLocation?
@@ -59,8 +59,8 @@ extension MacroExpansionContext {
   /// - Returns: the source location within the given node, or `nil` if the
   ///   given syntax node is not rooted in a source file that the macro
   ///   expansion context knows about.
-  public func location<Node: SyntaxProtocol>(
-    of node: Node
+  public func location(
+    of node: some SyntaxProtocol
   ) -> AbstractSourceLocation? {
     return location(of: node, at: .afterLeadingTrivia, filePathMode: .fileID)
   }
@@ -79,7 +79,7 @@ private struct ThrownErrorDiagnostic: DiagnosticMessage {
 
 extension MacroExpansionContext {
   /// Add diagnostics from the error thrown during macro expansion.
-  public func addDiagnostics<S: SyntaxProtocol>(from error: Error, node: S) {
+  public func addDiagnostics(from error: Error, node: some SyntaxProtocol) {
     // Inspect the error to form an appropriate set of diagnostics.
     var diagnostics: [Diagnostic]
     if let diagnosticsError = error as? DiagnosticsError {

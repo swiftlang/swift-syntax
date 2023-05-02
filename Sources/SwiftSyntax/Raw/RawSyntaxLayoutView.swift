@@ -55,10 +55,10 @@ public struct RawSyntaxLayoutView {
 
   /// Creates a new node of the same kind but with children replaced by `elements`.
   @_spi(RawSyntax)
-  public func replacingLayout<C: Collection>(
-    with elements: C,
+  public func replacingLayout(
+    with elements: some Collection<RawSyntax?>,
     arena: SyntaxArena
-  ) -> RawSyntax where C.Element == RawSyntax? {
+  ) -> RawSyntax {
     return .makeLayout(
       kind: raw.kind,
       uninitializedCount: elements.count,
@@ -124,11 +124,11 @@ public struct RawSyntaxLayoutView {
   }
 
   @_spi(RawSyntax)
-  public func replacingChildSubrange<C: Collection>(
+  public func replacingChildSubrange(
     _ range: Range<Int>,
-    with elements: C,
+    with elements: some Collection<RawSyntax?>,
     arena: SyntaxArena
-  ) -> RawSyntax where C.Element == RawSyntax? {
+  ) -> RawSyntax {
     precondition(!raw.isToken)
     let newCount = children.count - range.count + elements.count
     return .makeLayout(

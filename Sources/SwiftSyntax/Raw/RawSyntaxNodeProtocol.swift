@@ -21,7 +21,7 @@ public protocol RawSyntaxNodeProtocol: CustomStringConvertible, TextOutputStream
   var raw: RawSyntax { get }
 
   /// Create the typed raw syntax if `other` can be cast to `Self`
-  init?<T: RawSyntaxNodeProtocol>(_ other: T)
+  init?(_ other: some RawSyntaxNodeProtocol)
 }
 
 public extension RawSyntaxNodeProtocol {
@@ -39,7 +39,7 @@ public extension RawSyntaxNodeProtocol {
     raw.description
   }
 
-  func write<Target>(to target: inout Target) where Target: TextOutputStream {
+  func write(to target: inout some TextOutputStream) {
     raw.write(to: &target)
   }
 
@@ -67,7 +67,7 @@ extension RawSyntax: RawSyntaxNodeProtocol {
     self = raw
   }
 
-  public init<T: RawSyntaxNodeProtocol>(_ other: T) {
+  public init(_ other: some RawSyntaxNodeProtocol) {
     self.init(raw: other.raw)
   }
 }
@@ -112,7 +112,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
 
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+  public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else { return nil }
     self.init(unchecked: other.raw)
   }

@@ -18,7 +18,7 @@
 public struct BreakStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .breakStmt else {
       return nil
     }
@@ -134,7 +134,7 @@ public struct BreakStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 public struct ContinueStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .continueStmt else {
       return nil
     }
@@ -250,7 +250,7 @@ public struct ContinueStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 public struct DeferStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .deferStmt else {
       return nil
     }
@@ -366,7 +366,7 @@ public struct DeferStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 public struct DiscardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .discardStmt else {
       return nil
     }
@@ -381,12 +381,12 @@ public struct DiscardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<E: ExprSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeDiscardKeyword: UnexpectedNodesSyntax? = nil,
       discardKeyword: TokenSyntax,
       _ unexpectedBetweenDiscardKeywordAndExpression: UnexpectedNodesSyntax? = nil,
-      expression: E,
+      expression: some ExprSyntaxProtocol,
       _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -482,7 +482,7 @@ public struct DiscardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .doStmt else {
       return nil
     }
@@ -643,7 +643,7 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 public struct ExpressionStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .expressionStmt else {
       return nil
     }
@@ -658,10 +658,10 @@ public struct ExpressionStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<E: ExprSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeExpression: UnexpectedNodesSyntax? = nil,
-      expression: E,
+      expression: some ExprSyntaxProtocol,
       _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -721,7 +721,7 @@ public struct ExpressionStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 public struct FallthroughStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .fallthroughStmt else {
       return nil
     }
@@ -799,7 +799,7 @@ public struct FallthroughStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .forInStmt else {
       return nil
     }
@@ -814,7 +814,7 @@ public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<P: PatternSyntaxProtocol, S: ExprSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeForKeyword: UnexpectedNodesSyntax? = nil,
       forKeyword: TokenSyntax = .keyword(.for),
@@ -825,13 +825,13 @@ public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       _ unexpectedBetweenAwaitKeywordAndCaseKeyword: UnexpectedNodesSyntax? = nil,
       caseKeyword: TokenSyntax? = nil,
       _ unexpectedBetweenCaseKeywordAndPattern: UnexpectedNodesSyntax? = nil,
-      pattern: P,
+      pattern: some PatternSyntaxProtocol,
       _ unexpectedBetweenPatternAndTypeAnnotation: UnexpectedNodesSyntax? = nil,
       typeAnnotation: TypeAnnotationSyntax? = nil,
       _ unexpectedBetweenTypeAnnotationAndInKeyword: UnexpectedNodesSyntax? = nil,
       inKeyword: TokenSyntax = .keyword(.in),
       _ unexpectedBetweenInKeywordAndSequenceExpr: UnexpectedNodesSyntax? = nil,
-      sequenceExpr: S,
+      sequenceExpr: some ExprSyntaxProtocol,
       _ unexpectedBetweenSequenceExprAndWhereClause: UnexpectedNodesSyntax? = nil,
       whereClause: WhereClauseSyntax? = nil,
       _ unexpectedBetweenWhereClauseAndBody: UnexpectedNodesSyntax? = nil,
@@ -1123,7 +1123,7 @@ public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 public struct GuardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .guardStmt else {
       return nil
     }
@@ -1310,7 +1310,7 @@ public struct GuardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .labeledStmt else {
       return nil
     }
@@ -1325,14 +1325,14 @@ public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<S: StmtSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeLabelName: UnexpectedNodesSyntax? = nil,
       labelName: TokenSyntax,
       _ unexpectedBetweenLabelNameAndLabelColon: UnexpectedNodesSyntax? = nil,
       labelColon: TokenSyntax = .colonToken(),
       _ unexpectedBetweenLabelColonAndStatement: UnexpectedNodesSyntax? = nil,
-      statement: S,
+      statement: some StmtSyntaxProtocol,
       _ unexpectedAfterStatement: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -1452,7 +1452,7 @@ public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 public struct MissingStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .missingStmt else {
       return nil
     }
@@ -1531,7 +1531,7 @@ public struct MissingStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 public struct RepeatWhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .repeatWhileStmt else {
       return nil
     }
@@ -1546,7 +1546,7 @@ public struct RepeatWhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<C: ExprSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeRepeatKeyword: UnexpectedNodesSyntax? = nil,
       repeatKeyword: TokenSyntax = .keyword(.repeat),
@@ -1555,7 +1555,7 @@ public struct RepeatWhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       _ unexpectedBetweenBodyAndWhileKeyword: UnexpectedNodesSyntax? = nil,
       whileKeyword: TokenSyntax = .keyword(.while),
       _ unexpectedBetweenWhileKeywordAndCondition: UnexpectedNodesSyntax? = nil,
-      condition: C,
+      condition: some ExprSyntaxProtocol,
       _ unexpectedAfterCondition: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -1699,7 +1699,7 @@ public struct RepeatWhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 public struct ReturnStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .returnStmt else {
       return nil
     }
@@ -1714,12 +1714,12 @@ public struct ReturnStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<E: ExprSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeReturnKeyword: UnexpectedNodesSyntax? = nil,
       returnKeyword: TokenSyntax = .keyword(.return),
       _ unexpectedBetweenReturnKeywordAndExpression: UnexpectedNodesSyntax? = nil,
-      expression: E? = nil,
+      expression: (some ExprSyntaxProtocol)? = nil,
       _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -1846,7 +1846,7 @@ public struct ReturnStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 public struct ThrowStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .throwStmt else {
       return nil
     }
@@ -1861,12 +1861,12 @@ public struct ThrowStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<E: ExprSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeThrowKeyword: UnexpectedNodesSyntax? = nil,
       throwKeyword: TokenSyntax = .keyword(.throw),
       _ unexpectedBetweenThrowKeywordAndExpression: UnexpectedNodesSyntax? = nil,
-      expression: E,
+      expression: some ExprSyntaxProtocol,
       _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -1962,7 +1962,7 @@ public struct ThrowStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .whileStmt else {
       return nil
     }
@@ -2142,11 +2142,11 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       self = .yieldList(node)
     }
     
-    public init<Node: ExprSyntaxProtocol>(_ node: Node) {
+    public init(_ node: some ExprSyntaxProtocol) {
       self = .simpleYield(ExprSyntax(node))
     }
     
-    public init?<S: SyntaxProtocol>(_ node: S) {
+    public init?(_ node: some SyntaxProtocol) {
       if let node = node.as(YieldListSyntax.self) {
         self = .yieldList(node)
         return
@@ -2165,7 +2165,7 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .yieldStmt else {
       return nil
     }

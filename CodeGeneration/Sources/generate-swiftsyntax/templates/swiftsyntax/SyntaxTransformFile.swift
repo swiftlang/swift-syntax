@@ -96,7 +96,7 @@ let syntaxTransformFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
     DeclSyntax(
       """
-      public func visit<T: SyntaxChildChoices>(_ node: T) -> ResultType {
+      public func visit(_ node: some SyntaxChildChoices) -> ResultType {
         return visit(Syntax(node))
       }
       """
@@ -104,7 +104,7 @@ let syntaxTransformFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
     DeclSyntax(
       """
-      public func visitChildren<SyntaxType: SyntaxProtocol>(_ node: SyntaxType) -> [ResultType] {
+      public func visitChildren(_ node: some SyntaxProtocol) -> [ResultType] {
         let syntaxNode = Syntax(node)
         return NonNilRawSyntaxChildren(syntaxNode, viewMode: .sourceAccurate).map { rawChild in
           let child = Syntax(SyntaxData(rawChild, parent: syntaxNode))

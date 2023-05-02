@@ -529,8 +529,8 @@ extension OperatorTable {
   /// function, a throwing error handler will end up being called twice with
   /// the first error that causes it to be thrown. The first call will stop
   /// the operation, then the second must also throw.
-  public func foldAll<Node: SyntaxProtocol>(
-    _ node: Node,
+  public func foldAll(
+    _ node: some SyntaxProtocol,
     errorHandler: OperatorErrorHandler = { throw $0 }
   ) rethrows -> Syntax {
     return try withoutActuallyEscaping(errorHandler) { errorHandler in

@@ -121,7 +121,7 @@ extension ExprSyntax {
   /// to produce a literal as the outermost syntax node, or even to have a
   /// literal anywhere in its syntax tree. Use a convenience initializer on a
   /// specific type if you need that exact type in the syntax tree.
-  public init<Literal: ExpressibleByLiteralSyntax>(literal: Literal) {
+  public init(literal: some ExpressibleByLiteralSyntax) {
     self.init(literal.makeLiteralSyntax())
   }
 }
@@ -144,8 +144,8 @@ extension FunctionCallExprSyntax {
   /// A convenience initializer that allows passing in arguments using a result builder
   /// instead of having to wrap them in a `TupleExprElementList`.
   /// The presence of the parenthesis will be inferred based on the presence of arguments and the trailing closure.
-  public init<C: ExprSyntaxProtocol>(
-    callee: C,
+  public init(
+    callee: some ExprSyntaxProtocol,
     trailingClosure: ClosureExprSyntax? = nil,
     additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? = nil,
     @TupleExprElementListBuilder argumentList: () -> TupleExprElementListSyntax = { [] }
@@ -303,7 +303,7 @@ extension StringLiteralExprSyntax {
 extension TupleExprElementSyntax {
   /// A convenience initializer that allows passing in label as an optional string.
   /// The presence of the colon will be inferred based on the presence of the label.
-  public init<E: ExprSyntaxProtocol>(label: String? = nil, expression: E) {
+  public init(label: String? = nil, expression: some ExprSyntaxProtocol) {
     self.init(
       label: label.map { .identifier($0) },
       colon: label == nil ? nil : .colonToken(),

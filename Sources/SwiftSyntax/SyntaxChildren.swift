@@ -302,7 +302,7 @@ struct NonNilRawSyntaxChildren: BidirectionalCollection {
         guard let (node, info) = self.iterator.next() else {
           return nil
         }
-        if let node = node, viewMode.shouldTraverse(node: node) {
+        if let node, viewMode.shouldTraverse(node: node) {
           return AbsoluteRawSyntax(raw: node, info: info)
         }
       }

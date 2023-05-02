@@ -76,7 +76,7 @@ internal struct RawSyntaxData {
         }
       }
       set {
-        if let newValue = newValue {
+        if let newValue {
           self.tokenDiagnosticKind = newValue.kind
           self.tokenDiagnosticByteOffset = newValue.byteOffset
         } else {
@@ -130,7 +130,7 @@ internal struct RawSyntaxData {
         }
       }
       set {
-        if let newValue = newValue {
+        if let newValue {
           self.tokenDiagnosticKind = newValue.kind
           self.tokenDiagnosticByteOffset = newValue.byteOffset
         } else {

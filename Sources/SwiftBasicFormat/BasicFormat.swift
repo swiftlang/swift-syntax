@@ -55,7 +55,7 @@ open class BasicFormat: SyntaxRewriter {
   // MARK: - Updating indentation level
 
   public func increaseIndentationLevel(to userDefinedIndentation: Trivia? = nil) {
-    if let userDefinedIndentation = userDefinedIndentation {
+    if let userDefinedIndentation {
       indentationStack.append((indentation: userDefinedIndentation, isUserDefined: true))
     } else {
       indentationStack.append((indentation: currentIndentationLevel + indentationWidth, isUserDefined: false))

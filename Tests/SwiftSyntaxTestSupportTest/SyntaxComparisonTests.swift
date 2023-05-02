@@ -187,7 +187,7 @@ public class SyntaxComparisonTests: XCTestCase {
     indent: Int = 0
   ) -> FunctionDeclSyntax {
     let funcBody: CodeBlockSyntax
-    if let body = body {
+    if let body {
       funcBody = body
     } else {
       funcBody = makeBody()

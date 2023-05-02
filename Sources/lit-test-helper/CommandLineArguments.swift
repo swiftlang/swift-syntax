@@ -61,7 +61,7 @@ struct CommandLineArguments {
         currentKey = nil
       }
     }
-    if let currentKey = currentKey {
+    if let currentKey {
       // The last key didn't have a value. Just add it with an empty string as
       // the value to the parsed args
       addArg(currentKey, "")

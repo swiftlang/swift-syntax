@@ -48,7 +48,7 @@ public class TokenSpec {
     self.name = name
     self.kind = kind
     self.nameForDiagnostics = nameForDiagnostics
-    if let unprefixedKind = unprefixedKind {
+    if let unprefixedKind {
       self.unprefixedKind = unprefixedKind
     } else {
       self.unprefixedKind = kind

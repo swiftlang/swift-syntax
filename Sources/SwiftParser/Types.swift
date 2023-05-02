@@ -156,7 +156,7 @@ extension Parser {
 
     var base = self.parseSimpleType()
     guard self.atContextualPunctuator("&") else {
-      if let someOrAny = someOrAny {
+      if let someOrAny {
         return RawTypeSyntax(
           RawConstrainedSugarTypeSyntax(
             someOrAnySpecifier: someOrAny,
@@ -201,7 +201,7 @@ extension Parser {
       )
     }
 
-    if let someOrAny = someOrAny {
+    if let someOrAny {
       return RawTypeSyntax(
         RawConstrainedSugarTypeSyntax(
           someOrAnySpecifier: someOrAny,
@@ -545,7 +545,7 @@ extension Parser {
 
         // In the case that the input is "(foo bar)" we have to decide whether we parse it as "(foo: bar)" or "(foo, bar)".
         // As most people write identifiers lowercase and types capitalized, we decide on the first character of the first token
-        if let first = first,
+        if let first,
           second == nil,
           colon?.isMissing == true,
           first.tokenText.isStartingWithUppercase

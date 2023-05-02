@@ -179,7 +179,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
       )
   }
   func assertNoError(_ nodeKind: SyntaxKind, _ index: Int, _ error: ValidationError?) {
-    if let error = error {
+    if let error {
       let (file, line) = error.fileAndLine
       assertionFailure("""
         Error validating child at index \(index) of \(nodeKind):

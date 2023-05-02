@@ -39,7 +39,7 @@ private func withTemporaryFile<T>(contents: [UInt8], body: (URL) throws -> T) th
 
 private func getContentsOfSourceFile(at path: String?) throws -> [UInt8] {
   let source: Data
-  if let path = path {
+  if let path {
     let sourceURL = URL(fileURLWithPath: path)
     source = try Data(contentsOf: sourceURL)
   } else {

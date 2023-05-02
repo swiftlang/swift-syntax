@@ -413,8 +413,8 @@ extension OperatorTable {
         //   - missing precedence groups,
         //   - have unordered precedence groups, or
         //   - have the same precedence group with no associativity.
-        if let op1Precedence = op1Precedence,
-          let op2Precedence = op2Precedence
+        if let op1Precedence,
+          let op2Precedence
         {
           try errorHandler(
             .incomparableOperators(

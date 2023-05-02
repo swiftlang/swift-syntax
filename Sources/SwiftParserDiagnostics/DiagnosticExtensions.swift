@@ -141,10 +141,10 @@ extension FixIt.MultiNodeChange {
     var presentNode = MissingNodesBasicFormatter(viewMode: .fixedUp).visit(Syntax(node))
     presentNode = PresentMaker().rewrite(presentNode)
 
-    if let leadingTrivia = leadingTrivia {
+    if let leadingTrivia {
       presentNode = presentNode.with(\.leadingTrivia, leadingTrivia)
     }
-    if let trailingTrivia = trailingTrivia {
+    if let trailingTrivia {
       presentNode = presentNode.with(\.trailingTrivia, trailingTrivia)
     }
 

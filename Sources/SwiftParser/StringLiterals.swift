@@ -72,7 +72,7 @@ fileprivate class StringLiteralExpressionIndentationChecker {
     var hasRewrittenChild = false
     var rewrittenChildren: [RawSyntax?] = []
     for child in layoutView.children {
-      if let child = child, let rewrittenChild = visit(node: child) {
+      if let child, let rewrittenChild = visit(node: child) {
         hasRewrittenChild = true
         rewrittenChildren.append(rewrittenChild)
       } else {
@@ -360,7 +360,7 @@ extension Parser {
     // -------------------------------------------------------------------------
     // Parse indentation of the closing quote
 
-    if let lastSegment = lastSegment,
+    if let lastSegment,
       let parsedTrivia = parseIndentationTrivia(text: lastSegment.content.tokenText)
     {
       indentationTrivia = parsedTrivia

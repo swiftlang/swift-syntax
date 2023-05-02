@@ -221,7 +221,7 @@ public struct DiagnosticsFormatter {
     var annotatedSource = ""
 
     // If there was a filename, add it first.
-    if let fileName = fileName {
+    if let fileName {
       let header = colorizeBufferOutline("===")
       let firstLine =
         1

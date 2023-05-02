@@ -316,7 +316,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           }
         }
         
-        if let newLayout = newLayout {
+        if let newLayout {
           // A child node was rewritten. Build the updated node.
           
           // Sanity check, ensure the new children are the same length.

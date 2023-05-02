@@ -68,7 +68,7 @@ extension SyntaxStringInterpolation: StringInterpolationProtocol {
   ) {
     let startIndex = sourceText.count
     let indentedNode: Node
-    if let lastIndentation = lastIndentation {
+    if let lastIndentation {
       indentedNode = Indenter.indent(node, indentation: lastIndentation)
     } else {
       indentedNode = node

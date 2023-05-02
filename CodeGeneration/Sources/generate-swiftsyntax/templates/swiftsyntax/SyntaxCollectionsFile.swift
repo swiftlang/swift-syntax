@@ -54,7 +54,6 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       if let collectionElementChoices = node.collectionElementChoices, !collectionElementChoices.isEmpty {
         try EnumDeclSyntax(
           """
-          @frozen // FIXME: Not actually stable, works around a miscompile
           public enum Element: SyntaxChildChoices
           """
         ) {

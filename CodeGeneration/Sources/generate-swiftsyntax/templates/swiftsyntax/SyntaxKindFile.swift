@@ -19,7 +19,6 @@ let syntaxKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   try! EnumDeclSyntax(
     """
     /// Enumerates the known kinds of Syntax represented in the Syntax tree.
-    @frozen // FIXME: Not actually stable, works around a miscompile
     public enum SyntaxKind
     """
   ) {

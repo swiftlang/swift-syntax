@@ -1658,16 +1658,18 @@ final class RecoveryTests: XCTestCase {
     assertParse(
       """
       func exprPostfix2() {
-        _ = .1️⃣42
+        _ = 1️⃣.42
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: '.42' is not a valid floating point literal; it must be written '0.42', Fix-It replacements: 7 - 7 = '0'
-        DiagnosticSpec(message: "expected name in member access", fixIts: ["insert name"])
+        DiagnosticSpec(
+          message: "'.42' is not a valid floating point literal; it must be written '0.42'",
+          fixIts: ["insert '0'"]
+        )
       ],
       fixedSource: """
         func exprPostfix2() {
-          _ = .<#identifier#>42
+          _ = 0.42
         }
         """
     )

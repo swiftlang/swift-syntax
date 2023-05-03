@@ -306,6 +306,14 @@ public struct IdentifierNotAllowedInOperatorName: ParserError {
   }
 }
 
+public struct InvalidFloatLiteralMissingLeadingZero: ParserError {
+  public let decimalDigits: TokenSyntax
+
+  public var message: String {
+    return "'.\(decimalDigits.text)' is not a valid floating point literal; it must be written '0.\(decimalDigits.text)'"
+  }
+}
+
 public struct InvalidIdentifierError: ParserError {
   public let invalidIdentifier: TokenSyntax
   public let missingIdentifier: TokenSyntax

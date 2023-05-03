@@ -349,6 +349,23 @@ public let TYPE_NODES: [Node] = [
     ]
   ),
 
+  // suppressed-type -> '~' type
+  Node(
+    name: "SuppressedType",
+    nameForDiagnostics: "suppressed type conformance",
+    kind: "Type",
+    children: [
+      Child(
+        name: "WithoutTilde",
+        kind: .token(choices: [.token(tokenKind: "PrefixOperatorToken")])
+      ),
+      Child(
+        name: "PatternType",
+        kind: .node(kind: "Type")
+      ),
+    ]
+  ),
+
   // pack-expansion-type -> type '...'
   Node(
     name: "PackExpansionType",

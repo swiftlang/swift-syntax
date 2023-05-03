@@ -2869,6 +2869,16 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "superKeyword"
   case \SuperRefExprSyntax.unexpectedAfterSuperKeyword:
     return "unexpectedAfterSuperKeyword"
+  case \SuppressedTypeSyntax.unexpectedBeforeWithoutTilde:
+    return "unexpectedBeforeWithoutTilde"
+  case \SuppressedTypeSyntax.withoutTilde:
+    return "withoutTilde"
+  case \SuppressedTypeSyntax.unexpectedBetweenWithoutTildeAndPatternType:
+    return "unexpectedBetweenWithoutTildeAndPatternType"
+  case \SuppressedTypeSyntax.patternType:
+    return "patternType"
+  case \SuppressedTypeSyntax.unexpectedAfterPatternType:
+    return "unexpectedAfterPatternType"
   case \SwitchCaseLabelSyntax.unexpectedBeforeCaseKeyword:
     return "unexpectedBeforeCaseKeyword"
   case \SwitchCaseLabelSyntax.caseKeyword:

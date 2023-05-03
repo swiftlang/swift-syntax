@@ -37,6 +37,18 @@ extension Parser {
       )
     }
 
+    // Parse without operator preceding a type '~ T'.
+    if let withoutTilde = self.consumeIfContextualPunctuator("~", remapping: .prefixOperator) {
+      let type = self.parseTypeScalar(misplacedSpecifiers: misplacedSpecifiers)
+      return RawTypeSyntax(
+        RawSuppressedTypeSyntax(
+          withoutTilde: withoutTilde,
+          patternType: type,
+          arena: self.arena
+        )
+      )
+    }
+
     return self.parseTypeScalar(misplacedSpecifiers: misplacedSpecifiers)
   }
 

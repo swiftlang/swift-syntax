@@ -341,6 +341,8 @@ extension SyntaxKind {
       return "subscript"
     case .subscriptExpr:
       return "subscript"
+    case .suppressedType:
+      return "suppressed type conformance"
     case .switchCase:
       return "switch case"
     case .switchExpr:

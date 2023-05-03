@@ -1614,6 +1614,13 @@ open class SyntaxRewriter {
     return ExprSyntax(visitChildren(node))
   }
   
+  /// Visit a `SuppressedTypeSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: SuppressedTypeSyntax) -> TypeSyntax {
+    return TypeSyntax(visitChildren(node))
+  }
+  
   /// Visit a `SwitchCaseLabelSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -5154,6 +5161,20 @@ open class SyntaxRewriter {
   }
   
   /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplSuppressedTypeSyntax(_ data: SyntaxData) -> Syntax {
+    let node = SuppressedTypeSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer {
+      visitPost(node._syntaxNode)
+    }
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
+    }
+    return Syntax(visit(node))
+  }
+  
+  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplSwitchCaseLabelSyntax(_ data: SyntaxData) -> Syntax {
     let node = SwitchCaseLabelSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -6223,6 +6244,8 @@ open class SyntaxRewriter {
       return visitImplSubscriptExprSyntax
     case .superRefExpr:
       return visitImplSuperRefExprSyntax
+    case .suppressedType:
+      return visitImplSuppressedTypeSyntax
     case .switchCaseLabel:
       return visitImplSwitchCaseLabelSyntax
     case .switchCaseList:
@@ -6769,6 +6792,8 @@ open class SyntaxRewriter {
       return visitImplSubscriptExprSyntax(data)
     case .superRefExpr:
       return visitImplSuperRefExprSyntax(data)
+    case .suppressedType:
+      return visitImplSuppressedTypeSyntax(data)
     case .switchCaseLabel:
       return visitImplSwitchCaseLabelSyntax(data)
     case .switchCaseList:

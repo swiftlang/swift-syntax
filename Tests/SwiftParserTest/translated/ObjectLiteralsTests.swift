@@ -123,10 +123,15 @@ final class ObjectLiteralsTests: XCTestCase {
   func testObjectLiterals5() {
     assertParse(
       """
-      let _ = [#Color(_: 1, green: 1, 2)2️⃣
+      let _ = ℹ️[#Color(_: 1, green: 1, 2)2️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ']' to end array", fixIts: ["insert ']'"])
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected ']' to end array",
+          notes: [NoteSpec(message: "to match this opening '['")],
+          fixIts: ["insert ']'"]
+        )
       ],
       fixedSource: """
         let _ = [#Color(_: 1, green: 1, 2)]
@@ -137,11 +142,20 @@ final class ObjectLiteralsTests: XCTestCase {
   func testObjectLiterals6() {
     assertParse(
       """
-      let _ = [1️⃣#Color(red: 1, green: 1, blue: 1)#2️⃣3️⃣
+      let _ = ℹ️[1️⃣#Color(red: 1, green: 1, blue: 1)#2️⃣3️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in macro expansion", fixIts: ["insert identifier"]),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected ']' to end array", fixIts: ["insert ']'"]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected identifier in macro expansion",
+          fixIts: ["insert identifier"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "expected ']' to end array",
+          notes: [NoteSpec(message: "to match this opening '['")],
+          fixIts: ["insert ']'"]
+        ),
       ],
       fixedSource: """
         let _ = [#Color(red: 1, green: 1, blue: 1)#<#identifier#>]

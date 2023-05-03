@@ -141,12 +141,16 @@ final class InvalidTests: XCTestCase {
     assertParse(
       """
       func foo() {
-        runAction(SKAction.sequence()1️⃣
+        runActionℹ️(SKAction.sequence()1️⃣
           skview!
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ')' to end function call", fixIts: ["insert ')'"])
+        DiagnosticSpec(
+          message: "expected ')' to end function call",
+          notes: [NoteSpec(message: "to match this opening '('")],
+          fixIts: ["insert ')'"]
+        )
       ],
       fixedSource: """
         func foo() {
@@ -236,13 +240,21 @@ final class InvalidTests: XCTestCase {
     // rdar://18926814
     assertParse(
       ##"""
-      func test4() {
+      func test4() ℹ️{
         let abc = 123
         _ = " >> \( abc 1️⃣} ) << "2️⃣
       """##,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace in string literal"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end function", fixIts: ["insert '}'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "unexpected brace in string literal"
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected '}' to end function",
+          notes: [NoteSpec(message: "to match this opening '{'")],
+          fixIts: ["insert '}'"]
+        ),
       ],
       fixedSource: ##"""
         func test4() {
@@ -257,13 +269,22 @@ final class InvalidTests: XCTestCase {
     // rdar://problem/18507467
     assertParse(
       """
-      func d(_ b: 1️⃣String 2️⃣-> 3️⃣<T>() -> T4️⃣) {}
+      func dℹ️(_ b: 1️⃣String 2️⃣-> 3️⃣<T>() -> T4️⃣) {}
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(' to start function type", fixIts: ["insert '('"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' in function type", fixIts: ["insert ')'"]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected ')' in function type",
+          fixIts: ["insert ')'"]
+        ),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected return type in function type", fixIts: ["insert return type"]),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected ')' to end parameter clause", fixIts: ["insert ')'"]),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "expected ')' to end parameter clause",
+          notes: [NoteSpec(message: "to match this opening '('")],
+          fixIts: ["insert ')'"]
+        ),
         DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code '<T>() -> T)' in function"),
       ],
       fixedSource: """

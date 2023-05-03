@@ -50,10 +50,14 @@ final class RegexParseErrorTests: XCTestCase {
   func testRegexParseError6() {
     assertParse(
       #"""
-      _ = #/\\/''/1️⃣
+      _ = ℹ️#/\\/''/1️⃣
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "expected '#' to end regex literal", fixIts: ["insert '#'"])
+        DiagnosticSpec(
+          message: "expected '#' to end regex literal",
+          notes: [NoteSpec(message: "to match this opening '#'")],
+          fixIts: ["insert '#'"]
+        )
       ],
       fixedSource: #"""
         _ = #/\\/''/#
@@ -78,10 +82,14 @@ final class RegexParseErrorTests: XCTestCase {
   func testRegexParseError8() {
     assertParse(
       """
-      _ = #//1️⃣
+      _ = ℹ️#//1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '#' to end regex literal", fixIts: ["insert '#'"])
+        DiagnosticSpec(
+          message: "expected '#' to end regex literal",
+          notes: [NoteSpec(message: "to match this opening '#'")],
+          fixIts: ["insert '#'"]
+        )
       ],
       fixedSource: """
         _ = #//#

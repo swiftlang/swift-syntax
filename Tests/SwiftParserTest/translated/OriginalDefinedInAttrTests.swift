@@ -115,12 +115,19 @@ final class OriginalDefinedInAttrTests: XCTestCase {
   func testOriginalDefinedInAttr6() {
     assertParse(
       #"""
-      @_originallyDefinedIn(module: "foo",1️⃣
+      @_originallyDefinedInℹ️(module: "foo",1️⃣
       public class ToplevelClass3 {}
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "expected version restriction in version", fixIts: ["insert version restriction"]),
-        DiagnosticSpec(message: "expected ')' to end attribute", fixIts: ["insert ')'"]),
+        DiagnosticSpec(
+          message: "expected version restriction in version",
+          fixIts: ["insert version restriction"]
+        ),
+        DiagnosticSpec(
+          message: "expected ')' to end attribute",
+          notes: [NoteSpec(message: "to match this opening '('")],
+          fixIts: ["insert ')'"]
+        ),
       ],
       fixedSource: #"""
         @_originallyDefinedIn(module: "foo", <#identifier#>)

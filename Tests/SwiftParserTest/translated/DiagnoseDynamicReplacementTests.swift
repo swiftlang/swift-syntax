@@ -45,19 +45,24 @@ final class DiagnoseDynamicReplacementTests: XCTestCase {
   func testDiagnoseDynamicReplacement3() {
     assertParse(
       """
-      @_dynamicReplacement(1️⃣
+      @_dynamicReplacementℹ️(1️⃣
       func test_dynamic_replacement_for2() {
       }
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected argument for '@_dynamicReplacement' attribute", fixIts: ["insert attribute argument"]),
-        DiagnosticSpec(message: "expected ')' to end attribute", fixIts: ["insert ')'"]),
+        DiagnosticSpec(
+          message: "expected ')' to end attribute",
+          notes: [NoteSpec(message: "to match this opening '('")],
+          fixIts: ["insert ')'"]
+        ),
       ],
       fixedSource: """
         @_dynamicReplacement(for: <#identifier#>)
         func test_dynamic_replacement_for2() {
         }
         """
+
     )
   }
 

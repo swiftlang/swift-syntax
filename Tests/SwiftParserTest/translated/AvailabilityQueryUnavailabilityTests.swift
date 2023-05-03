@@ -354,7 +354,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   func testAvailabilityQueryUnavailability22() {
     assertParse(
       """
-      if #unavailable(OSX 10.51, 1️⃣{
+      if #unavailableℹ️(OSX 10.51, 1️⃣{
       }
       """,
       diagnostics: [
@@ -364,6 +364,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
         ),
         DiagnosticSpec(
           message: "expected ')' to end availability condition",
+          notes: [NoteSpec(message: "to match this opening '('")],
           fixIts: ["insert ')'"]
         ),
       ],

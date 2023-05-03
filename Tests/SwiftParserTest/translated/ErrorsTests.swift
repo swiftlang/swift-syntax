@@ -198,12 +198,25 @@ final class ErrorsTests: XCTestCase {
   func testErrors13() {
     assertParse(
       """
-      func dupThrows1() throws 1️⃣rethrows -> 2️⃣throws Int 3️⃣throw {}
+      func dupThrows1() ℹ️throws 1️⃣rethrows -> 2️⃣throws Int 3️⃣throw {}
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "'rethrows' conflicts with 'throws'", fixIts: ["remove redundant 'rethrows'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "'throws' must preceed '->'", fixIts: ["remove redundant 'throws'"]),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "'throw' must preceed '->'", fixIts: ["remove redundant 'throw'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "'rethrows' conflicts with 'throws'",
+          notes: [NoteSpec(message: "'throws' declared here")],
+          fixIts: ["remove redundant 'rethrows'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "'throws' must preceed '->'",
+          fixIts: ["remove redundant 'throws'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "'throw' must preceed '->'",
+          fixIts: ["remove redundant 'throw'"]
+        ),
       ],
       fixedSource: """
         func dupThrows1() throws -> Int {}
@@ -217,7 +230,10 @@ final class ErrorsTests: XCTestCase {
       func dupThrows2(_ f: () throws -> 1️⃣rethrows Int) {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'rethrows' must preceed '->'", fixIts: ["remove redundant 'rethrows'"])
+        DiagnosticSpec(
+          message: "'rethrows' must preceed '->'",
+          fixIts: ["remove redundant 'rethrows'"]
+        )
       ],
       fixedSource: """
         func dupThrows2(_ f: () throws -> Int) {}
@@ -228,10 +244,14 @@ final class ErrorsTests: XCTestCase {
   func testErrors15a() {
     assertParse(
       """
-      _ = { () 1️⃣try throws in }
+      _ = { () 1️⃣try ℹ️throws in }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'try' conflicts with 'throws'", fixIts: ["remove redundant 'try'"])
+        DiagnosticSpec(
+          message: "'try' conflicts with 'throws'",
+          notes: [NoteSpec(message: "'throws' declared here")],
+          fixIts: ["remove redundant 'try'"]
+        )
       ],
       fixedSource: """
         _ = { () throws in }
@@ -245,7 +265,10 @@ final class ErrorsTests: XCTestCase {
       _ = { () throws -> Int 1️⃣throws in }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'throws' must preceed '->'", fixIts: ["remove redundant 'throws'"])
+        DiagnosticSpec(
+          message: "'throws' must preceed '->'",
+          fixIts: ["remove redundant 'throws'"]
+        )
       ],
       fixedSource: """
         _ = { () throws -> Int in }
@@ -451,7 +474,10 @@ final class ErrorsTests: XCTestCase {
       func fixitAwait2() throws 1️⃣await -> Int { }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'await' must precede 'throws'", fixIts: ["move 'await' in front of 'throws'"])
+        DiagnosticSpec(
+          message: "'await' must precede 'throws'",
+          fixIts: ["move 'await' in front of 'throws'"]
+        )
       ],
       fixedSource: """
         func fixitAwait2() async throws -> Int { }
@@ -549,10 +575,14 @@ final class ErrorsTests: XCTestCase {
   func testAwaitBetwenAsyncAndThrows() {
     assertParse(
       """
-      func fixitAwait2() async 1️⃣await throws -> Int { }
+      func fixitAwait2() ℹ️async 1️⃣await throws -> Int { }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'await' conflicts with 'async'", fixIts: ["remove redundant 'await'"])
+        DiagnosticSpec(
+          message: "'await' conflicts with 'async'",
+          notes: [NoteSpec(message: "'async' declared here")],
+          fixIts: ["remove redundant 'await'"]
+        )
       ],
       fixedSource: """
         func fixitAwait2() async throws -> Int { }
@@ -563,10 +593,14 @@ final class ErrorsTests: XCTestCase {
   func testAsyncAwait() {
     assertParse(
       """
-      func fixitAwait2() async 1️⃣await -> Int { }
+      func fixitAwait2() ℹ️async 1️⃣await -> Int { }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'await' conflicts with 'async'", fixIts: ["remove redundant 'await'"])
+        DiagnosticSpec(
+          message: "'await' conflicts with 'async'",
+          notes: [NoteSpec(message: "'async' declared here")],
+          fixIts: ["remove redundant 'await'"]
+        )
       ],
       fixedSource: """
         func fixitAwait2() async -> Int { }

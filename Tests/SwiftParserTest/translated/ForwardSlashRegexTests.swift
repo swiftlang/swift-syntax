@@ -202,10 +202,14 @@ final class ForwardSlashRegexTests: XCTestCase {
   func testForwardSlashRegex28() {
     assertParse(
       """
-      _ = /^)1️⃣
+      _ = ℹ️/^)1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '/' to end regex literal", fixIts: ["insert '/'"])
+        DiagnosticSpec(
+          message: "expected '/' to end regex literal",
+          notes: [NoteSpec(message: "to match this opening '/'")],
+          fixIts: ["insert '/'"]
+        )
       ],
       fixedSource: """
         _ = /^)/
@@ -1151,11 +1155,15 @@ final class ForwardSlashRegexTests: XCTestCase {
       _ = qux(/, 1) / 2
       do {
         _ = qux(/, "(") / 2
-        _ = qux(/, "(")/1️⃣2
+        _ = quxℹ️(/, "(")/1️⃣2
       }
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "expected ')' to end function call", fixIts: ["insert ')'"])
+        DiagnosticSpec(
+          message: "expected ')' to end function call",
+          notes: [NoteSpec(message: "to match this opening '('")],
+          fixIts: ["insert ')'"]
+        )
       ],
       fixedSource: #"""
         _ = qux(/, 1) / 2
@@ -1316,10 +1324,14 @@ final class ForwardSlashRegexTests: XCTestCase {
   func testForwardSlashRegex139() {
     assertParse(
       """
-      _ = /1️⃣
+      _ = ℹ️/1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '/' to end regex literal", fixIts: ["insert '/'"])
+        DiagnosticSpec(
+          message: "expected '/' to end regex literal",
+          notes: [NoteSpec(message: "to match this opening '/'")],
+          fixIts: ["insert '/'"]
+        )
       ],
       fixedSource: """
         _ = //
@@ -1330,10 +1342,14 @@ final class ForwardSlashRegexTests: XCTestCase {
   func testForwardSlashRegex140() {
     assertParse(
       """
-      _ = /)1️⃣
+      _ = ℹ️/)1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '/' to end regex literal", fixIts: ["insert '/'"])
+        DiagnosticSpec(
+          message: "expected '/' to end regex literal",
+          notes: [NoteSpec(message: "to match this opening '/'")],
+          fixIts: ["insert '/'"]
+        )
       ],
       fixedSource: """
         _ = /)/
@@ -1459,8 +1475,17 @@ final class ForwardSlashRegexTests: XCTestCase {
       _ = ^/"/1️⃣"2️⃣
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "consecutive statements on a line must be separated by ';'",
+          fixIts: ["insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: #"expected '"' to end string literal"#,
+          notes: [NoteSpec(locationMarker: "1️⃣", message: #"to match this opening '"'"#)],
+          fixIts: [#"insert '"'"#]
+        ),
       ],
       fixedSource: #"""
         _ = ^/"/; ""
@@ -1474,8 +1499,18 @@ final class ForwardSlashRegexTests: XCTestCase {
       _ = ^/"[/1️⃣"2️⃣
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#, fixIts: [#"insert '"'"#]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "consecutive statements on a line must be separated by ';'",
+          fixIts: ["insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: #"expected '"' to end string literal"#,
+          notes: [NoteSpec(locationMarker: "1️⃣", message: #"to match this opening '"'"#)],
+
+          fixIts: [#"insert '"'"#]
+        ),
       ],
       fixedSource: #"""
         _ = ^/"[/; ""
@@ -1566,11 +1601,16 @@ final class ForwardSlashRegexTests: XCTestCase {
     // There are intentionally trailing spaces here
     assertParse(
       """
-      _ = /1️⃣               2️⃣
+      _ = ℹ️/1️⃣               2️⃣
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "bare slash regex literal may not start with space"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '/' to end regex literal", fixIts: ["insert '/'"]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected '/' to end regex literal",
+          notes: [NoteSpec(message: "to match this opening '/'")],
+          fixIts: ["insert '/'"]
+        ),
       ],
       fixedSource: """
         _ = /               /
@@ -1582,10 +1622,14 @@ final class ForwardSlashRegexTests: XCTestCase {
     // There are intentionally trailing spaces here
     assertParse(
       """
-      _ = /^                  1️⃣
+      _ = ℹ️/^                  1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '/' to end regex literal", fixIts: ["insert '/'"])
+        DiagnosticSpec(
+          message: "expected '/' to end regex literal",
+          notes: [NoteSpec(message: "to match this opening '/'")],
+          fixIts: ["insert '/'"]
+        )
       ],
       fixedSource: """
         _ = /^                  /

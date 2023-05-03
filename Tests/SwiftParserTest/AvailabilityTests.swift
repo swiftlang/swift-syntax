@@ -163,7 +163,7 @@ final class AvailabilityTests: XCTestCase {
       func test() {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected integer literal in version tuple element", fixIts: ["insert integer literal"]),
+        DiagnosticSpec(message: "expected integer literal in version tuple", fixIts: ["insert integer literal"]),
         DiagnosticSpec(message: "unexpected code '0e10' in attribute"),
       ],
       fixedSource: """
@@ -193,7 +193,7 @@ final class AvailabilityTests: XCTestCase {
       func test() {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected integer literal in version tuple element", fixIts: ["insert integer literal"]),
+        DiagnosticSpec(message: "expected integer literal in version tuple", fixIts: ["insert integer literal"]),
         DiagnosticSpec(message: "unexpected code '0xff' in attribute"),
       ],
       fixedSource: """

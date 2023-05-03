@@ -9905,8 +9905,8 @@ public struct VersionComponentListSyntax: SyntaxCollection, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.versionComponentList,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -10074,7 +10074,7 @@ extension VersionComponentListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))

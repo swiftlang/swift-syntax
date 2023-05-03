@@ -362,8 +362,6 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "attributes"
   case \VariableDeclSyntax.modifiers:
     return "modifiers"
-  case \VersionTupleSyntax.components:
-    return "components"
   default:
     return nil
   }

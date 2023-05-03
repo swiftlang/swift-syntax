@@ -121,19 +121,19 @@ public let AVAILABILITY_NODES: [Node] = [
   // version-tuple-element -> '.' interger-literal
   Node(
     name: "VersionComponent",
-    nameForDiagnostics: "version tuple element",
-    description: "An element to represent a dot and number pair",
+    nameForDiagnostics: nil,
+    description: "An element to represent a single component in a version, like `.1`.",
     kind: "Syntax",
     children: [
       Child(
         name: "Period",
         kind: .token(choices: [.token(tokenKind: "PeriodToken")]),
-        description: "The period of this pair"
+        description: "The period of this version component"
       ),
       Child(
         name: "Number",
         kind: .token(choices: [.token(tokenKind: "IntegerLiteralToken")]),
-        description: "The number of this pair"
+        description: "The version number of this component"
       ),
     ]
   ),
@@ -141,7 +141,7 @@ public let AVAILABILITY_NODES: [Node] = [
   // version-list -> version-tuple-element version-list?
   Node(
     name: "VersionComponentList",
-    nameForDiagnostics: "version list",
+    nameForDiagnostics: nil,
     kind: "SyntaxCollection",
     element: "VersionComponent",
     omitWhenEmpty: true
@@ -162,7 +162,6 @@ public let AVAILABILITY_NODES: [Node] = [
       Child(
         name: "Components",
         kind: .collection(kind: "VersionComponentList", collectionElementName: "VersionComponent"),
-        nameForDiagnostics: "components",
         isOptional: true
       ),
     ]

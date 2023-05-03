@@ -21956,8 +21956,8 @@ public struct RawVersionComponentListSyntax: RawSyntaxNodeProtocol {
     let raw = RawSyntax.makeLayout(
       kind: .versionComponentList, uninitializedCount: elements.count, arena: arena) { layout in
         guard var ptr = layout.baseAddress else {
-            return
-          }
+          return
+        }
         for elem in elements {
           ptr.initialize(to: elem.raw)
           ptr += 1

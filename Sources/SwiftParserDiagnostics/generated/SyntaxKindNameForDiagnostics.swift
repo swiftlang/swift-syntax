@@ -385,10 +385,6 @@ extension SyntaxKind {
       return "value binding pattern"
     case .variableDecl:
       return "variable"
-    case .versionComponentList:
-      return "version list"
-    case .versionComponent:
-      return "version tuple element"
     case .versionTuple:
       return "version tuple"
     case .whereClause:

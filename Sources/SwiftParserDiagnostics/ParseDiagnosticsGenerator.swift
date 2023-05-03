@@ -545,7 +545,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         handledNodes: [label.id]
       )
 
-      [node.unexpectedBetweenLabelAndColon?.id, node.colon?.id, node.versionTuple?.id].compactMap { $0 }.forEach { handledNodes.append($0) }
+      handledNodes.append(contentsOf: [node.unexpectedBetweenLabelAndColon?.id, node.colon?.id, node.versionTuple?.id].compactMap { $0 })
     }
 
     if let versionTuple = node.versionTuple,

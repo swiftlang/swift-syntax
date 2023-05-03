@@ -17434,7 +17434,7 @@ public struct UnderscorePrivateAttributeArgumentsSyntax: SyntaxProtocol, SyntaxH
 
 // MARK: - VersionComponentSyntax
 
-/// An element to represent a dot and number pair
+/// An element to represent a single component in a version, like `.1`.
 public struct VersionComponentSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -17501,7 +17501,7 @@ public struct VersionComponentSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// The period of this pair
+  /// The period of this version component
   public var period: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
@@ -17520,7 +17520,7 @@ public struct VersionComponentSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// The number of this pair
+  /// The version number of this component
   public var number: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)

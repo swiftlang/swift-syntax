@@ -334,4 +334,44 @@ final class StringLiteralExprSyntaxTests: XCTestCase {
       """#
     )
   }
+
+  func testMultiStringOpeningQuote() {
+    assertBuildResult(
+      StringLiteralExprSyntax(openQuote: .multilineStringQuoteToken(), content: "a", closeQuote: .multilineStringQuoteToken()),
+      #"""
+      """
+      a
+      """
+      """#
+    )
+
+    assertBuildResult(
+      StringLiteralExprSyntax(
+        openQuote: .multilineStringQuoteToken(),
+        segments: StringLiteralSegmentsSyntax {
+          .expressionSegment(
+            ExpressionSegmentSyntax(
+              expressions: TupleExprElementListSyntax {
+                TupleExprElementSyntax(
+                  expression: StringLiteralExprSyntax(
+                    openQuote: .multilineStringQuoteToken(),
+                    content: "a",
+                    closeQuote: .multilineStringQuoteToken()
+                  )
+                )
+              }
+            )
+          )
+        },
+        closeQuote: .multilineStringQuoteToken()
+      ),
+      #"""
+      """
+      \("""
+      a
+      """)
+      """
+      """#
+    )
+  }
 }

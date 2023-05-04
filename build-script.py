@@ -141,6 +141,7 @@ def run_code_generation(
     env = dict(os.environ)
     env["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] = "1"
     env["SWIFTSYNTAX_ENABLE_RAWSYNTAX_VALIDATION"] = "1"
+    env["SWIFTCI_USE_LOCAL_DEPS"] = "1"
     check_call(swiftpm_call, env=env, verbose=verbose)
 
 

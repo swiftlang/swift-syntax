@@ -684,8 +684,6 @@ extension Syntax {
   public static var structure: SyntaxNodeStructure {
     return .choices([
           .node(TokenSyntax.self),
-          .node(AccessPathComponentSyntax.self),
-          .node(AccessPathSyntax.self),
           .node(AccessorBlockSyntax.self),
           .node(AccessorDeclSyntax.self),
           .node(AccessorEffectSpecifiersSyntax.self),
@@ -821,6 +819,8 @@ extension Syntax {
           .node(ImplementsAttributeArgumentsSyntax.self),
           .node(ImplicitlyUnwrappedOptionalTypeSyntax.self),
           .node(ImportDeclSyntax.self),
+          .node(ImportPathComponentSyntax.self),
+          .node(ImportPathSyntax.self),
           .node(InOutExprSyntax.self),
           .node(InfixOperatorExprSyntax.self),
           .node(InheritedTypeListSyntax.self),

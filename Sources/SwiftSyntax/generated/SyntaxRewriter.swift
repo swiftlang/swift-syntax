@@ -25,20 +25,6 @@ open class SyntaxRewriter {
   public init() {
   }
   
-  /// Visit a `AccessPathComponentSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: AccessPathComponentSyntax) -> AccessPathComponentSyntax {
-    return Syntax(visitChildren(node)).cast(AccessPathComponentSyntax.self)
-  }
-  
-  /// Visit a `AccessPathSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: AccessPathSyntax) -> AccessPathSyntax {
-    return Syntax(visitChildren(node)).cast(AccessPathSyntax.self)
-  }
-  
   /// Visit a `AccessorBlockSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -982,6 +968,20 @@ open class SyntaxRewriter {
   ///   - Returns: the rewritten node
   open func visit(_ node: ImportDeclSyntax) -> DeclSyntax {
     return DeclSyntax(visitChildren(node))
+  }
+  
+  /// Visit a `ImportPathComponentSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: ImportPathComponentSyntax) -> ImportPathComponentSyntax {
+    return Syntax(visitChildren(node)).cast(ImportPathComponentSyntax.self)
+  }
+  
+  /// Visit a `ImportPathSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: ImportPathSyntax) -> ImportPathSyntax {
+    return Syntax(visitChildren(node)).cast(ImportPathSyntax.self)
   }
   
   /// Visit a `InOutExprSyntax`.
@@ -1980,34 +1980,6 @@ open class SyntaxRewriter {
   ///   - Returns: the rewritten node
   public func visit(_ node: TypeSyntax) -> TypeSyntax {
     return visit(node.data).cast(TypeSyntax.self)
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplAccessPathComponentSyntax(_ data: SyntaxData) -> Syntax {
-    let node = AccessPathComponentSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplAccessPathSyntax(_ data: SyntaxData) -> Syntax {
-    let node = AccessPathSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
   }
   
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3889,6 +3861,34 @@ open class SyntaxRewriter {
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplImportDeclSyntax(_ data: SyntaxData) -> Syntax {
     let node = ImportDeclSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer {
+      visitPost(node._syntaxNode)
+    }
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
+    }
+    return Syntax(visit(node))
+  }
+  
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplImportPathComponentSyntax(_ data: SyntaxData) -> Syntax {
+    let node = ImportPathComponentSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer {
+      visitPost(node._syntaxNode)
+    }
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
+    }
+    return Syntax(visit(node))
+  }
+  
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplImportPathSyntax(_ data: SyntaxData) -> Syntax {
+    let node = ImportPathSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer {
@@ -5790,10 +5790,6 @@ open class SyntaxRewriter {
     switch data.raw.kind {
     case .token:
       return visitImplTokenSyntax
-    case .accessPathComponent:
-      return visitImplAccessPathComponentSyntax
-    case .accessPath:
-      return visitImplAccessPathSyntax
     case .accessorBlock:
       return visitImplAccessorBlockSyntax
     case .accessorDecl:
@@ -6064,6 +6060,10 @@ open class SyntaxRewriter {
       return visitImplImplicitlyUnwrappedOptionalTypeSyntax
     case .importDecl:
       return visitImplImportDeclSyntax
+    case .importPathComponent:
+      return visitImplImportPathComponentSyntax
+    case .importPath:
+      return visitImplImportPathSyntax
     case .inOutExpr:
       return visitImplInOutExprSyntax
     case .infixOperatorExpr:
@@ -6338,10 +6338,6 @@ open class SyntaxRewriter {
     switch data.raw.kind {
     case .token:
       return visitImplTokenSyntax(data)
-    case .accessPathComponent:
-      return visitImplAccessPathComponentSyntax(data)
-    case .accessPath:
-      return visitImplAccessPathSyntax(data)
     case .accessorBlock:
       return visitImplAccessorBlockSyntax(data)
     case .accessorDecl:
@@ -6612,6 +6608,10 @@ open class SyntaxRewriter {
       return visitImplImplicitlyUnwrappedOptionalTypeSyntax(data)
     case .importDecl:
       return visitImplImportDeclSyntax(data)
+    case .importPathComponent:
+      return visitImplImportPathComponentSyntax(data)
+    case .importPath:
+      return visitImplImportPathSyntax(data)
     case .inOutExpr:
       return visitImplInOutExprSyntax(data)
     case .infixOperatorExpr:

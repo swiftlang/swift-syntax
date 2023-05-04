@@ -310,7 +310,7 @@ extension Parser {
   ) -> RawImportDeclSyntax {
     let (unexpectedBeforeImportKeyword, importKeyword) = self.eat(handle)
     let kind = self.parseImportKind()
-    let path = self.parseImportAccessPath()
+    let path = self.parseImportPath()
     return RawImportDeclSyntax(
       attributes: attrs.attributes,
       modifiers: attrs.modifiers,
@@ -369,22 +369,22 @@ extension Parser {
   }
 
   @_spi(RawSyntax)
-  public mutating func parseImportAccessPath() -> RawAccessPathSyntax {
-    var elements = [RawAccessPathComponentSyntax]()
+  public mutating func parseImportPath() -> RawImportPathSyntax {
+    var elements = [RawImportPathComponentSyntax]()
     var keepGoing: RawTokenSyntax? = nil
     var loopProgress = LoopProgressCondition()
     repeat {
       let name = self.parseAnyIdentifier()
       keepGoing = self.consume(if: .period)
       elements.append(
-        RawAccessPathComponentSyntax(
+        RawImportPathComponentSyntax(
           name: name,
           trailingDot: keepGoing,
           arena: self.arena
         )
       )
     } while keepGoing != nil && loopProgress.evaluate(currentToken)
-    return RawAccessPathSyntax(elements: elements, arena: self.arena)
+    return RawImportPathSyntax(elements: elements, arena: self.arena)
   }
 }
 

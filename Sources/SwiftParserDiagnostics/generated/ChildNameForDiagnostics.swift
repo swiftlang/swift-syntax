@@ -16,8 +16,6 @@ import SwiftSyntax
 
 private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
   switch keyPath {
-  case \AccessPathComponentSyntax.name:
-    return "name"
   case \AccessorDeclSyntax.attributes:
     return "attributes"
   case \AccessorDeclSyntax.modifier:
@@ -198,6 +196,8 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "attributes"
   case \ImportDeclSyntax.modifiers:
     return "modifiers"
+  case \ImportPathComponentSyntax.name:
+    return "name"
   case \InitializerDeclSyntax.attributes:
     return "attributes"
   case \InitializerDeclSyntax.modifiers:

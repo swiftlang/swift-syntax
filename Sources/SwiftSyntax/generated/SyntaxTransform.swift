@@ -19,16 +19,6 @@ public protocol SyntaxTransformVisitor {
   
   func visit(_ token: TokenSyntax) -> ResultType
   
-  /// Visiting `AccessPathComponentSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: AccessPathComponentSyntax) -> ResultType
-  
-  /// Visiting `AccessPathSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: AccessPathSyntax) -> ResultType
-  
   /// Visiting `AccessorBlockSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -704,6 +694,16 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ImportDeclSyntax) -> ResultType
   
+  /// Visiting `ImportPathComponentSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: ImportPathComponentSyntax) -> ResultType
+  
+  /// Visiting `ImportPathSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: ImportPathSyntax) -> ResultType
+  
   /// Visiting `InOutExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -1368,20 +1368,6 @@ public protocol SyntaxTransformVisitor {
 extension SyntaxTransformVisitor {
   public func visit(_ token: TokenSyntax) -> ResultType {
     visitAny(Syntax(token))
-  }
-  
-  /// Visiting `AccessPathComponentSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: AccessPathComponentSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
-  /// Visiting `AccessPathSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: AccessPathSyntax) -> ResultType {
-    visitAny(Syntax(node))
   }
   
   /// Visiting `AccessorBlockSyntax` specifically.
@@ -2329,6 +2315,20 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
+  /// Visiting `ImportPathComponentSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: ImportPathComponentSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting `ImportPathSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: ImportPathSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
   /// Visiting `InOutExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -3257,10 +3257,6 @@ extension SyntaxTransformVisitor {
     switch node.as(SyntaxEnum.self) {
     case .token(let node):
       return visit(node)
-    case .accessPathComponent(let derived):
-      return visit(derived)
-    case .accessPath(let derived):
-      return visit(derived)
     case .accessorBlock(let derived):
       return visit(derived)
     case .accessorDecl(let derived):
@@ -3530,6 +3526,10 @@ extension SyntaxTransformVisitor {
     case .implicitlyUnwrappedOptionalType(let derived):
       return visit(derived)
     case .importDecl(let derived):
+      return visit(derived)
+    case .importPathComponent(let derived):
+      return visit(derived)
+    case .importPath(let derived):
       return visit(derived)
     case .inOutExpr(let derived):
       return visit(derived)

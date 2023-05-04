@@ -16,8 +16,6 @@
 @frozen // FIXME: Not actually stable, works around a miscompile
 public enum SyntaxEnum {
   case token(TokenSyntax)
-  case accessPathComponent(AccessPathComponentSyntax)
-  case accessPath(AccessPathSyntax)
   case accessorBlock(AccessorBlockSyntax)
   case accessorDecl(AccessorDeclSyntax)
   case accessorEffectSpecifiers(AccessorEffectSpecifiersSyntax)
@@ -153,6 +151,8 @@ public enum SyntaxEnum {
   case implementsAttributeArguments(ImplementsAttributeArgumentsSyntax)
   case implicitlyUnwrappedOptionalType(ImplicitlyUnwrappedOptionalTypeSyntax)
   case importDecl(ImportDeclSyntax)
+  case importPathComponent(ImportPathComponentSyntax)
+  case importPath(ImportPathSyntax)
   case inOutExpr(InOutExprSyntax)
   case infixOperatorExpr(InfixOperatorExprSyntax)
   case inheritedTypeList(InheritedTypeListSyntax)
@@ -293,10 +293,6 @@ public extension Syntax {
     switch raw.kind {
     case .token:
       return .token(TokenSyntax(self)!)
-    case .accessPathComponent:
-      return .accessPathComponent(AccessPathComponentSyntax(self)!)
-    case .accessPath:
-      return .accessPath(AccessPathSyntax(self)!)
     case .accessorBlock:
       return .accessorBlock(AccessorBlockSyntax(self)!)
     case .accessorDecl:
@@ -567,6 +563,10 @@ public extension Syntax {
       return .implicitlyUnwrappedOptionalType(ImplicitlyUnwrappedOptionalTypeSyntax(self)!)
     case .importDecl:
       return .importDecl(ImportDeclSyntax(self)!)
+    case .importPathComponent:
+      return .importPathComponent(ImportPathComponentSyntax(self)!)
+    case .importPath:
+      return .importPath(ImportPathSyntax(self)!)
     case .inOutExpr:
       return .inOutExpr(InOutExprSyntax(self)!)
     case .infixOperatorExpr:

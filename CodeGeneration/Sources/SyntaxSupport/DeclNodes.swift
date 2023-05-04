@@ -11,9 +11,8 @@
 //===----------------------------------------------------------------------===//
 
 public let DECL_NODES: [Node] = [
-  // FIXME: technically misnamed; should be "ImportPathComponent"
   Node(
-    name: "AccessPathComponent",
+    name: "ImportPathComponent",
     nameForDiagnostics: nil,
     kind: "Syntax",
     children: [
@@ -30,12 +29,11 @@ public let DECL_NODES: [Node] = [
     ]
   ),
 
-  // FIXME: technically misnamed; should be "ImportPath"
   Node(
-    name: "AccessPath",
+    name: "ImportPath",
     nameForDiagnostics: nil,
     kind: "SyntaxCollection",
-    element: "AccessPathComponent"
+    element: "ImportPathComponent"
   ),
 
   Node(
@@ -1094,7 +1092,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "Path",
-        kind: .collection(kind: "AccessPath", collectionElementName: "PathComponent"),
+        kind: .collection(kind: "ImportPath", collectionElementName: "PathComponent"),
         description: "The path to the module, submodule or symbol being imported."
       ),
     ]

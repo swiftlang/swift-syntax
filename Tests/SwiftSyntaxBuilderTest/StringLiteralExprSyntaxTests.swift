@@ -14,7 +14,7 @@ import XCTest
 import SwiftSyntax
 import SwiftSyntaxBuilder
 
-final class StringLiteralTests: XCTestCase {
+final class StringLiteralExprSyntaxTests: XCTestCase {
   func testStringLiteral() {
     let leadingTrivia = Trivia.unexpectedText("␣")
     let testCases: [UInt: (String, String)] = [

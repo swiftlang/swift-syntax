@@ -209,6 +209,31 @@ public let DECL_NODES: [Node] = [
   Node(
     name: "AssociatedtypeDecl",
     nameForDiagnostics: "associatedtype declaration",
+    description: """
+      An associated type declaration like the following.
+
+      ```swift
+      associatedtype Item
+      ```
+
+      An associated type declaration may contain a type initializer clause which represents a default type assignment for the associated type.
+
+      ```swift
+      associatedtype Item = Int
+      ```
+
+      An associated type declaration may be declared with an inheritance clause which specifies the required conformances.
+
+      ```swift
+      associatedtype Iterator: IteratorProtocol
+      ```
+
+      A generic where clause may be present, here is an example which shows an associated type containing an inheritance clauses and a generic where clause.
+
+      ```swift
+      associatedtype Iterator: IteratorProtocol where Iterator.Element == Item
+      ```
+      """,
     kind: "Decl",
     traits: [
       "IdentifiedDecl",
@@ -219,37 +244,44 @@ public let DECL_NODES: [Node] = [
         name: "Attributes",
         kind: .collection(kind: "AttributeList", collectionElementName: "Attribute"),
         nameForDiagnostics: "attributes",
+        description: "Attributes attached to the associated type declaration.",
         isOptional: true
       ),
       Child(
         name: "Modifiers",
         kind: .collection(kind: "ModifierList", collectionElementName: "Modifier"),
         nameForDiagnostics: "modifiers",
+        description: "Modifiers attached to the associated type declaration.",
         isOptional: true
       ),
       Child(
         name: "AssociatedtypeKeyword",
-        kind: .token(choices: [.keyword(text: "associatedtype")])
+        kind: .token(choices: [.keyword(text: "associatedtype")]),
+        description: "The `associatedtype` keyword for this declaration."
       ),
       Child(
         name: "Identifier",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken")])
+        kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+        description: "The name of this associated type."
       ),
       Child(
         name: "InheritanceClause",
         kind: .node(kind: "TypeInheritanceClause"),
         nameForDiagnostics: "inheritance clause",
+        description: "The inheritance clause describing conformances for this associated type declaration.",
         isOptional: true
       ),
       Child(
         name: "Initializer",
         kind: .node(kind: "TypeInitializerClause"),
+        description: "The type initializer clause for this associated type declaration which represents a default type assignment for the associated type.",
         isOptional: true
       ),
       Child(
         name: "GenericWhereClause",
         kind: .node(kind: "GenericWhereClause"),
         nameForDiagnostics: "generic where clause",
+        description: "The `where` clause that applies to the generic parameters of this associated type declaration.",
         isOptional: true
       ),
     ]
@@ -265,6 +297,29 @@ public let DECL_NODES: [Node] = [
   Node(
     name: "ClassDecl",
     nameForDiagnostics: "class",
+    description: """
+      A class declaration like the following.
+
+      ```swift
+      class SomeClass {
+        let someMember: String
+
+        init(someMember: String) {
+          self.someMember = someMember
+        }
+
+        func foo() {
+          print(someMember)
+        }
+
+        static func bar() -> Int {
+          return 1
+        }
+      }
+      ```
+
+      A class declaration may be declared without any members.
+      """,
     kind: "Decl",
     traits: [
       "DeclGroup",
@@ -276,43 +331,51 @@ public let DECL_NODES: [Node] = [
         name: "Attributes",
         kind: .collection(kind: "AttributeList", collectionElementName: "Attribute"),
         nameForDiagnostics: "attributes",
+        description: "Attributes attached to the class declaration, such as an `@available` attribute.",
         isOptional: true
       ),
       Child(
         name: "Modifiers",
         kind: .collection(kind: "ModifierList", collectionElementName: "Modifier"),
         nameForDiagnostics: "modifiers",
+        description: "Modifiers attached to the class declaration, such as `public`.",
         isOptional: true
       ),
       Child(
         name: "ClassKeyword",
-        kind: .token(choices: [.keyword(text: "class")])
+        kind: .token(choices: [.keyword(text: "class")]),
+        description: "The `class` keyword for this declaration."
       ),
       Child(
         name: "Identifier",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken")])
+        kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+        description: "The name of the class."
       ),
       Child(
         name: "GenericParameterClause",
         kind: .node(kind: "GenericParameterClause"),
         nameForDiagnostics: "generic parameter clause",
+        description: "The generic parameters, if any, of the class declaration.",
         isOptional: true
       ),
       Child(
         name: "InheritanceClause",
         kind: .node(kind: "TypeInheritanceClause"),
         nameForDiagnostics: "inheritance clause",
+        description: "The inheritance clause describing one or more conformances for this class declaration.",
         isOptional: true
       ),
       Child(
         name: "GenericWhereClause",
         kind: .node(kind: "GenericWhereClause"),
         nameForDiagnostics: "generic where clause",
+        description: "The `where` clause that applies to the generic parameters of this class declaration.",
         isOptional: true
       ),
       Child(
         name: "MemberBlock",
-        kind: .node(kind: "MemberDeclBlock")
+        kind: .node(kind: "MemberDeclBlock"),
+        description: "The members of the class declaration. As class extension declarations may declare additional members, the contents of this member block isn't guaranteed to be a complete list of members for this type."
       ),
     ]
   ),
@@ -992,6 +1055,13 @@ public let DECL_NODES: [Node] = [
   Node(
     name: "ImportDecl",
     nameForDiagnostics: "import",
+    description: """
+      An import declaration like the following.
+
+      ```swift
+      import Foundation
+      ```
+      """,
     kind: "Decl",
     traits: [
       "Attributed"
@@ -1001,26 +1071,31 @@ public let DECL_NODES: [Node] = [
         name: "Attributes",
         kind: .collection(kind: "AttributeList", collectionElementName: "Attribute"),
         nameForDiagnostics: "attributes",
+        description: "Attributes attached to the import declaration, for example `@testable`.",
         isOptional: true
       ),
       Child(
         name: "Modifiers",
         kind: .collection(kind: "ModifierList", collectionElementName: "Modifier"),
         nameForDiagnostics: "modifiers",
+        description: "Modifiers attached to the import declaration. Currently, no modifiers are supported by Swift.",
         isOptional: true
       ),
       Child(
         name: "ImportTok",
-        kind: .token(choices: [.keyword(text: "import")])
+        kind: .token(choices: [.keyword(text: "import")]),
+        description: "The `import` keyword for this declaration."
       ),
       Child(
         name: "ImportKind",
         kind: .token(choices: [.keyword(text: "typealias"), .keyword(text: "struct"), .keyword(text: "class"), .keyword(text: "enum"), .keyword(text: "protocol"), .keyword(text: "var"), .keyword(text: "let"), .keyword(text: "func"), .keyword(text: "inout")]),
+        description: "The kind of declaration being imported. For example, a struct can be imported from a specific module.",
         isOptional: true
       ),
       Child(
         name: "Path",
-        kind: .collection(kind: "AccessPath", collectionElementName: "PathComponent")
+        kind: .collection(kind: "AccessPath", collectionElementName: "PathComponent"),
+        description: "The path to the module, submodule or symbol being imported."
       ),
     ]
   ),
@@ -1715,6 +1790,15 @@ public let DECL_NODES: [Node] = [
   Node(
     name: "ProtocolDecl",
     nameForDiagnostics: "protocol",
+    description: """
+      A protocol declaration like the following.
+
+      ```swift
+      protocol Example {
+        var isValid: Bool { get }
+      }
+      ```
+      """,
     kind: "Decl",
     traits: [
       "DeclGroup",
@@ -1726,43 +1810,51 @@ public let DECL_NODES: [Node] = [
         name: "Attributes",
         kind: .collection(kind: "AttributeList", collectionElementName: "Attribute"),
         nameForDiagnostics: "attributes",
+        description: "Attributes attached to the protocol declaration, such as an `@available` attribute.",
         isOptional: true
       ),
       Child(
         name: "Modifiers",
         kind: .collection(kind: "ModifierList", collectionElementName: "Modifier"),
         nameForDiagnostics: "modifiers",
+        description: "Modifiers attached to the protocol declaration, such as `public`.",
         isOptional: true
       ),
       Child(
         name: "ProtocolKeyword",
-        kind: .token(choices: [.keyword(text: "protocol")])
+        kind: .token(choices: [.keyword(text: "protocol")]),
+        description: "The `protocol` keyword for this declaration."
       ),
       Child(
         name: "Identifier",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken")])
+        kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+        description: "The name of the protocol."
       ),
       Child(
         name: "PrimaryAssociatedTypeClause",
         kind: .node(kind: "PrimaryAssociatedTypeClause"),
         nameForDiagnostics: "primary associated type clause",
+        description: "The primary associated type for the protocol.",
         isOptional: true
       ),
       Child(
         name: "InheritanceClause",
         kind: .node(kind: "TypeInheritanceClause"),
         nameForDiagnostics: "inheritance clause",
+        description: "The inheritance clause describing one or more conformances for this protocol declaration.",
         isOptional: true
       ),
       Child(
         name: "GenericWhereClause",
         kind: .node(kind: "GenericWhereClause"),
         nameForDiagnostics: "generic where clause",
+        description: "The `where` clause that applies to the generic parameters of this protocol declaration.",
         isOptional: true
       ),
       Child(
         name: "MemberBlock",
-        kind: .node(kind: "MemberDeclBlock")
+        kind: .node(kind: "MemberDeclBlock"),
+        description: "The members of the protocol declaration."
       ),
     ]
   ),

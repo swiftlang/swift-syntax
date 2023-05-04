@@ -8,12 +8,15 @@ builder:
     - documentation_targets:
       # First item in the list is the "landing" (default) target
       - SwiftSyntax
-      - IDEUtils
       - SwiftBasicFormat
+      - SwiftCompilerPlugin
+      - SwiftCompilerPluginMessageHandling
       - SwiftDiagnostics
+      - SwiftIDEUtils
       - SwiftOperators
       - SwiftParser
       - SwiftParserDiagnostics
       - SwiftRefactor
       - SwiftSyntaxBuilder
-      - SwiftSyntaxParser
+      - SwiftSyntaxMacros
+      - SwiftSyntaxMacrosTestSupport

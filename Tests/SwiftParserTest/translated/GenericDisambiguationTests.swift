@@ -195,9 +195,6 @@ final class GenericDisambiguationTests: XCTestCase {
   func testGenericDisambiguation12() {
     assertParse(
       """
-      // FIXME: Nested generic types. Need to be able to express $T0<A, B, C> in the
-      // typechecker.
-      /*
       A<B>.C<D>.e()
       """
     )
@@ -216,11 +213,7 @@ final class GenericDisambiguationTests: XCTestCase {
       """
       meta(A<B>.C<D>.self)
       meta2(A<B>.C<D>.self, 0)
-       1️⃣*/
-      """,
-      diagnostics: [
-        DiagnosticSpec(message: "extraneous code '*/' at top level")
-      ]
+      """
     )
   }
 

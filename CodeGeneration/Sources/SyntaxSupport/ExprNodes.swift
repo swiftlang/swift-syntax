@@ -188,12 +188,12 @@ public let EXPR_NODES: [Node] = [
   // the canImport expr in if config expression
   Node(
     name: "CanImportExpr",
-    nameForDiagnostics: "'canImport' expression in if config expression",
+    nameForDiagnostics: "'canImport' expression",
     kind: "Expr",
     children: [
       Child(
         name: "CanImportKeyword",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken")])
+        kind: .token(choices: [.keyword(text: "canImport")])
       ),
       Child(
         name: "LeftParen",
@@ -215,7 +215,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "Colon",
-        kind: .token(choices: [.keyword(text: "ColonToken")]),
+        kind: .token(choices: [.token(tokenKind: "ColonToken")]),
         isOptional: true
       ),
       Child(

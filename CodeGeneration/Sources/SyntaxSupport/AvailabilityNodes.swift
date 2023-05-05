@@ -151,7 +151,7 @@ public let AVAILABILITY_NODES: [Node] = [
   Node(
     name: "VersionTuple",
     nameForDiagnostics: "version tuple",
-    description: "A version number of the form major.minor.patch in which the minor and patch part may be omitted.",
+    description: "A version number like `1.2.0`. Only the first version component is required. There might be an arbitrary number of following components.",
     kind: "Syntax",
     children: [
       Child(
@@ -162,6 +162,7 @@ public let AVAILABILITY_NODES: [Node] = [
       Child(
         name: "Components",
         kind: .collection(kind: "VersionComponentList", collectionElementName: "VersionComponent"),
+        description: "Any version components that are not the major version . For example, for `1.2.0`, this will contain `.2.0`",
         isOptional: true
       ),
     ]

@@ -370,7 +370,7 @@ final class IfconfigExprTests: XCTestCase {
       #endif
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected version tuple in 'canImport' expression in if config expression", fixIts: ["insert version tuple"])
+        DiagnosticSpec(message: "expected version tuple in 'canImport' expression", fixIts: ["insert version tuple"])
       ],
       fixedSource: """
         #if canImport(A, _version: <#integer literal#>)

@@ -70,7 +70,7 @@ extension SyntaxKind {
     case .breakStmt:
       return "'break' statement"
     case .canImportExpr:
-      return "'canImport' expression in if config expression"
+      return "'canImport' expression"
     case .catchClauseList:
       return "'catch' clause"
     case .catchClause:

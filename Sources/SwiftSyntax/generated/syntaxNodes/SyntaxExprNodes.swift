@@ -947,7 +947,7 @@ public struct CanImportExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeCanImportKeyword: UnexpectedNodesSyntax? = nil,
-      canImportKeyword: TokenSyntax,
+      canImportKeyword: TokenSyntax = .keyword(.canImport),
       _ unexpectedBetweenCanImportKeywordAndLeftParen: UnexpectedNodesSyntax? = nil,
       leftParen: TokenSyntax = .leftParenToken(),
       _ unexpectedBetweenLeftParenAndImportPath: UnexpectedNodesSyntax? = nil,

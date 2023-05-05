@@ -17552,7 +17552,7 @@ public struct VersionComponentSyntax: SyntaxProtocol, SyntaxHashable {
 
 // MARK: - VersionTupleSyntax
 
-/// A version number of the form major.minor.patch in which the minor and patch part may be omitted.
+/// A version number like `1.2.0`. Only the first version component is required. There might be an arbitrary number of following components.
 public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -17638,6 +17638,7 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// Any version components that are not the major version . For example, for `1.2.0`, this will contain `.2.0`
   public var components: VersionComponentListSyntax? {
     get {
       return data.child(at: 3, parent: Syntax(self)).map(VersionComponentListSyntax.init)

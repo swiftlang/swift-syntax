@@ -73,6 +73,14 @@ extension ClosureParameterSyntax: SyntaxParseable {
   }
 }
 
+extension CodeBlockItemSyntax: SyntaxParseable {
+  public static func parse(from parser: inout Parser) -> Self {
+    let node = parser.parseNonOptionalCodeBlockItem()
+    let raw = RawSyntax(parser.parseRemainder(into: node))
+    return Syntax(raw: raw).cast(Self.self)
+  }
+}
+
 extension DeclSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
     let node = parser.parseDeclaration()
@@ -183,5 +191,18 @@ fileprivate extension Parser {
 
     let withUnexpected = layout.replacingChild(at: layout.children.count - 1, with: unexpected.raw, arena: self.arena)
     return R.init(withUnexpected)!
+  }
+  
+  mutating func parseNonOptionalCodeBlockItem() -> RawCodeBlockItemSyntax {
+    guard let node = self.parseCodeBlockItem(isAtTopLevel: false, allowInitDecl: true) else {
+      // The missing item is not neccessary to be a declaration,
+      // which is just a placeholder here
+      return RawCodeBlockItemSyntax(
+        item: .decl(RawDeclSyntax(RawMissingDeclSyntax(attributes: nil, modifiers: nil, arena: self.arena))),
+        semicolon: nil,
+        arena: self.arena
+      )
+    }
+    return node
   }
 }

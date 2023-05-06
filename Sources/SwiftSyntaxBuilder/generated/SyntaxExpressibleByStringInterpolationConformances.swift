@@ -34,6 +34,8 @@ extension CatchClauseSyntax: SyntaxExpressibleByStringInterpolation {}
 
 extension ClosureParameterSyntax: SyntaxExpressibleByStringInterpolation {}
 
+extension CodeBlockItemSyntax: SyntaxExpressibleByStringInterpolation {}
+
 extension DeclSyntax: SyntaxExpressibleByStringInterpolation {}
 
 extension EnumCaseParameterSyntax: SyntaxExpressibleByStringInterpolation {}

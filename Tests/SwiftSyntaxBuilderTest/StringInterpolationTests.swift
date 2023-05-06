@@ -408,6 +408,26 @@ final class StringInterpolationTests: XCTestCase {
     )
   }
 
+  func testCodeBlockItemInterpolation() {
+    let codeBlockItem: CodeBlockItemSyntax =
+      """
+      func foo() {
+        return bar
+      }
+      """
+
+    XCTAssertTrue(codeBlockItem.is(CodeBlockItemSyntax.self))
+    assertStringsEqualWithDiff(
+      codeBlockItem.description,
+      """
+      func foo() {
+        return bar
+      }
+      """
+    )
+
+  }
+
   func testInvalidTrivia() {
     let invalid = Trivia("/*comment*/ invalid /*comm*/")
     XCTAssertEqual(invalid, [.blockComment("/*comment*/"), .spaces(1), .unexpectedText("invalid"), .spaces(1), .blockComment("/*comm*/")])
@@ -455,6 +475,23 @@ final class StringInterpolationTests: XCTestCase {
         1 │ struct Foo {}
           │ │            ╰─ error: expected statement
           │ ╰─ error: unexpected code 'struct Foo {}' before statement
+
+        """
+      )
+    }
+  }
+
+  func testInvalidSyntax3() {
+    let invalid: CodeBlockItemSyntax = " "
+
+    XCTAssert(invalid.hasError)
+    XCTAssertThrowsError(try CodeBlockItemSyntax(validating: " ")) { error in
+      assertStringsEqualWithDiff(
+        String(describing: error),
+        """
+
+        1 │ 
+          │ ╰─ error: expected declaration
 
         """
       )

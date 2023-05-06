@@ -25,6 +25,7 @@ public let COMMON_NODES: [Node] = [
     nameForDiagnostics: nil,
     description: "A CodeBlockItem is any Syntax node that appears on its own line inside a CodeBlock.",
     kind: "Syntax",
+    parserFunction: "parseNonOptionalCodeBlockItem",
     children: [
       Child(
         name: "Item",

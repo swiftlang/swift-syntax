@@ -118,9 +118,36 @@ public let AVAILABILITY_NODES: [Node] = [
     ]
   ),
 
-  // version-tuple -> integer-literal
-  //                | float-literal
-  //                | float-literal '.' integer-literal
+  // version-tuple-element -> '.' interger-literal
+  Node(
+    name: "VersionComponent",
+    nameForDiagnostics: "version tuple element",
+    description: "An element to represent a dot and number pair",
+    kind: "Syntax",
+    children: [
+      Child(
+        name: "Period",
+        kind: .token(choices: [.token(tokenKind: "PeriodToken")]),
+        description: "The period of this pair"
+      ),
+      Child(
+        name: "Number",
+        kind: .token(choices: [.token(tokenKind: "IntegerLiteralToken")]),
+        description: "The number of this pair"
+      ),
+    ]
+  ),
+
+  // version-list -> version-tuple-element version-list?
+  Node(
+    name: "VersionComponentList",
+    nameForDiagnostics: "version list",
+    kind: "SyntaxCollection",
+    element: "VersionComponent",
+    omitWhenEmpty: true
+  ),
+
+  // version-tuple -> integer-literal version-list?
   Node(
     name: "VersionTuple",
     nameForDiagnostics: "version tuple",
@@ -133,27 +160,9 @@ public let AVAILABILITY_NODES: [Node] = [
         description: "The major version."
       ),
       Child(
-        name: "MinorPeriod",
-        kind: .token(choices: [.token(tokenKind: "PeriodToken")]),
-        description: "If the version contains a minor number, the period separating the major from the minor number.",
-        isOptional: true
-      ),
-      Child(
-        name: "Minor",
-        kind: .token(choices: [.token(tokenKind: "IntegerLiteralToken")]),
-        description: "The minor version if specified.",
-        isOptional: true
-      ),
-      Child(
-        name: "PatchPeriod",
-        kind: .token(choices: [.token(tokenKind: "PeriodToken")]),
-        description: "If the version contains a patch number, the period separating the minor from the patch number.",
-        isOptional: true
-      ),
-      Child(
-        name: "Patch",
-        kind: .token(choices: [.token(tokenKind: "IntegerLiteralToken")]),
-        description: "The patch version if specified.",
+        name: "Components",
+        kind: .collection(kind: "VersionComponentList", collectionElementName: "VersionComponent"),
+        nameForDiagnostics: "components",
         isOptional: true
       ),
     ]

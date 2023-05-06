@@ -17432,6 +17432,124 @@ public struct UnderscorePrivateAttributeArgumentsSyntax: SyntaxProtocol, SyntaxH
   }
 }
 
+// MARK: - VersionComponentSyntax
+
+/// An element to represent a dot and number pair
+public struct VersionComponentSyntax: SyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+  
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .versionComponent else {
+      return nil
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+  
+  /// Creates a `VersionComponentSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    precondition(data.raw.kind == .versionComponent)
+    self._syntaxNode = Syntax(data)
+  }
+  
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforePeriod: UnexpectedNodesSyntax? = nil,
+      period: TokenSyntax = .periodToken(),
+      _ unexpectedBetweenPeriodAndNumber: UnexpectedNodesSyntax? = nil,
+      number: TokenSyntax,
+      _ unexpectedAfterNumber: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
+            unexpectedBeforePeriod, 
+            period, 
+            unexpectedBetweenPeriodAndNumber, 
+            number, 
+            unexpectedAfterNumber
+          ))) {(arena, _) in
+      let layout: [RawSyntax?] = [
+          unexpectedBeforePeriod?.raw, 
+          period.raw, 
+          unexpectedBetweenPeriodAndNumber?.raw, 
+          number.raw, 
+          unexpectedAfterNumber?.raw
+        ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.versionComponent,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+        
+      )
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+  
+  public var unexpectedBeforePeriod: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = VersionComponentSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  /// The period of this pair
+  public var period: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = VersionComponentSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenPeriodAndNumber: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = VersionComponentSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  /// The number of this pair
+  public var number: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = VersionComponentSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedAfterNumber: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = VersionComponentSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+          \Self.unexpectedBeforePeriod, 
+          \Self.period, 
+          \Self.unexpectedBetweenPeriodAndNumber, 
+          \Self.number, 
+          \Self.unexpectedAfterNumber
+        ])
+  }
+}
+
 // MARK: - VersionTupleSyntax
 
 /// A version number of the form major.minor.patch in which the minor and patch part may be omitted.
@@ -17457,15 +17575,9 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeMajor: UnexpectedNodesSyntax? = nil,
       major: TokenSyntax,
-      _ unexpectedBetweenMajorAndMinorPeriod: UnexpectedNodesSyntax? = nil,
-      minorPeriod: TokenSyntax? = nil,
-      _ unexpectedBetweenMinorPeriodAndMinor: UnexpectedNodesSyntax? = nil,
-      minor: TokenSyntax? = nil,
-      _ unexpectedBetweenMinorAndPatchPeriod: UnexpectedNodesSyntax? = nil,
-      patchPeriod: TokenSyntax? = nil,
-      _ unexpectedBetweenPatchPeriodAndPatch: UnexpectedNodesSyntax? = nil,
-      patch: TokenSyntax? = nil,
-      _ unexpectedAfterPatch: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenMajorAndComponents: UnexpectedNodesSyntax? = nil,
+      components: VersionComponentListSyntax? = nil,
+      _ unexpectedAfterComponents: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -17474,28 +17586,16 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
             unexpectedBeforeMajor, 
             major, 
-            unexpectedBetweenMajorAndMinorPeriod, 
-            minorPeriod, 
-            unexpectedBetweenMinorPeriodAndMinor, 
-            minor, 
-            unexpectedBetweenMinorAndPatchPeriod, 
-            patchPeriod, 
-            unexpectedBetweenPatchPeriodAndPatch, 
-            patch, 
-            unexpectedAfterPatch
+            unexpectedBetweenMajorAndComponents, 
+            components, 
+            unexpectedAfterComponents
           ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeMajor?.raw, 
           major.raw, 
-          unexpectedBetweenMajorAndMinorPeriod?.raw, 
-          minorPeriod?.raw, 
-          unexpectedBetweenMinorPeriodAndMinor?.raw, 
-          minor?.raw, 
-          unexpectedBetweenMinorAndPatchPeriod?.raw, 
-          patchPeriod?.raw, 
-          unexpectedBetweenPatchPeriodAndPatch?.raw, 
-          patch?.raw, 
-          unexpectedAfterPatch?.raw
+          unexpectedBetweenMajorAndComponents?.raw, 
+          components?.raw, 
+          unexpectedAfterComponents?.raw
         ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.versionTuple,
@@ -17529,7 +17629,7 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenMajorAndMinorPeriod: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenMajorAndComponents: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -17538,17 +17638,35 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// If the version contains a minor number, the period separating the major from the minor number.
-  public var minorPeriod: TokenSyntax? {
+  public var components: VersionComponentListSyntax? {
     get {
-      return data.child(at: 3, parent: Syntax(self)).map(TokenSyntax.init)
+      return data.child(at: 3, parent: Syntax(self)).map(VersionComponentListSyntax.init)
     }
     set(value) {
       self = VersionTupleSyntax(data.replacingChild(at: 3, with: value?.raw, arena: SyntaxArena()))
     }
   }
   
-  public var unexpectedBetweenMinorPeriodAndMinor: UnexpectedNodesSyntax? {
+  /// Adds the provided `VersionComponent` to the node's `components`
+  /// collection.
+  /// - param element: The new `VersionComponent` to add to the node's
+  ///                  `components` collection.
+  /// - returns: A copy of the receiver with the provided `VersionComponent`
+  ///            appended to its `components` collection.
+  public func addVersionComponent(_ element: VersionComponentSyntax) -> VersionTupleSyntax {
+    var collection: RawSyntax
+    let arena = SyntaxArena()
+    if let col = raw.layoutView!.children[3] {
+      collection = col.layoutView!.appending(element.raw, arena: arena)
+    } else {
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.versionComponentList,
+                                        from: [element.raw], arena: arena)
+    }
+    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
+    return VersionTupleSyntax(newData)
+  }
+  
+  public var unexpectedAfterComponents: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -17557,76 +17675,13 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// The minor version if specified.
-  public var minor: TokenSyntax? {
-    get {
-      return data.child(at: 5, parent: Syntax(self)).map(TokenSyntax.init)
-    }
-    set(value) {
-      self = VersionTupleSyntax(data.replacingChild(at: 5, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-  
-  public var unexpectedBetweenMinorAndPatchPeriod: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = VersionTupleSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-  
-  /// If the version contains a patch number, the period separating the minor from the patch number.
-  public var patchPeriod: TokenSyntax? {
-    get {
-      return data.child(at: 7, parent: Syntax(self)).map(TokenSyntax.init)
-    }
-    set(value) {
-      self = VersionTupleSyntax(data.replacingChild(at: 7, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-  
-  public var unexpectedBetweenPatchPeriodAndPatch: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = VersionTupleSyntax(data.replacingChild(at: 8, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-  
-  /// The patch version if specified.
-  public var patch: TokenSyntax? {
-    get {
-      return data.child(at: 9, parent: Syntax(self)).map(TokenSyntax.init)
-    }
-    set(value) {
-      self = VersionTupleSyntax(data.replacingChild(at: 9, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-  
-  public var unexpectedAfterPatch: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 10, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = VersionTupleSyntax(data.replacingChild(at: 10, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-  
   public static var structure: SyntaxNodeStructure {
     return .layout([
           \Self.unexpectedBeforeMajor, 
           \Self.major, 
-          \Self.unexpectedBetweenMajorAndMinorPeriod, 
-          \Self.minorPeriod, 
-          \Self.unexpectedBetweenMinorPeriodAndMinor, 
-          \Self.minor, 
-          \Self.unexpectedBetweenMinorAndPatchPeriod, 
-          \Self.patchPeriod, 
-          \Self.unexpectedBetweenPatchPeriodAndPatch, 
-          \Self.patch, 
-          \Self.unexpectedAfterPatch
+          \Self.unexpectedBetweenMajorAndComponents, 
+          \Self.components, 
+          \Self.unexpectedAfterComponents
         ])
   }
 }

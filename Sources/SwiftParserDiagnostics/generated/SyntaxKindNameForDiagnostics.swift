@@ -69,6 +69,8 @@ extension SyntaxKind {
       return "'_borrow' expression"
     case .breakStmt:
       return "'break' statement"
+    case .canImportExpr:
+      return "'canImport' expression in if config expression"
     case .catchClauseList:
       return "'catch' clause"
     case .catchClause:
@@ -383,6 +385,10 @@ extension SyntaxKind {
       return "value binding pattern"
     case .variableDecl:
       return "variable"
+    case .versionComponentList:
+      return "version list"
+    case .versionComponent:
+      return "version tuple element"
     case .versionTuple:
       return "version tuple"
     case .whereClause:

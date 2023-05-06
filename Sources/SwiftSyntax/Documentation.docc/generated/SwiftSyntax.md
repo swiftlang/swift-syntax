@@ -93,6 +93,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/BinaryOperatorExprSyntax>
 - <doc:SwiftSyntax/BooleanLiteralExprSyntax>
 - <doc:SwiftSyntax/BorrowExprSyntax>
+- <doc:SwiftSyntax/CanImportExprSyntax>
 - <doc:SwiftSyntax/ClosureExprSyntax>
 - <doc:SwiftSyntax/DictionaryExprSyntax>
 - <doc:SwiftSyntax/DiscardAssignmentExprSyntax>
@@ -279,6 +280,8 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/TupleTypeElementListSyntax>
 - <doc:SwiftSyntax/TupleTypeElementSyntax>
 - <doc:SwiftSyntax/UnexpectedNodesSyntax>
+- <doc:SwiftSyntax/VersionComponentListSyntax>
+- <doc:SwiftSyntax/VersionComponentSyntax>
 - <doc:SwiftSyntax/YieldExprListSyntax>
 - <doc:SwiftSyntax/YieldExprListElementSyntax>
 

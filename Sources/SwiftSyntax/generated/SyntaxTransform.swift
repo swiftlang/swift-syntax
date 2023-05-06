@@ -184,6 +184,11 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: BreakStmtSyntax) -> ResultType
   
+  /// Visiting `CanImportExprSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: CanImportExprSyntax) -> ResultType
+  
   /// Visiting `CaseItemListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -1324,6 +1329,16 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: VariableDeclSyntax) -> ResultType
   
+  /// Visiting `VersionComponentListSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: VersionComponentListSyntax) -> ResultType
+  
+  /// Visiting `VersionComponentSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: VersionComponentSyntax) -> ResultType
+  
   /// Visiting `VersionTupleSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -1598,6 +1613,13 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: BreakStmtSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting `CanImportExprSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: CanImportExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -3197,6 +3219,20 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
+  /// Visiting `VersionComponentListSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: VersionComponentListSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting `VersionComponentSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: VersionComponentSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
   /// Visiting `VersionTupleSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -3322,6 +3358,8 @@ extension SyntaxTransformVisitor {
     case .borrowExpr(let derived):
       return visit(derived)
     case .breakStmt(let derived):
+      return visit(derived)
+    case .canImportExpr(let derived):
       return visit(derived)
     case .caseItemList(let derived):
       return visit(derived)
@@ -3778,6 +3816,10 @@ extension SyntaxTransformVisitor {
     case .valueBindingPattern(let derived):
       return visit(derived)
     case .variableDecl(let derived):
+      return visit(derived)
+    case .versionComponentList(let derived):
+      return visit(derived)
+    case .versionComponent(let derived):
       return visit(derived)
     case .versionTuple(let derived):
       return visit(derived)

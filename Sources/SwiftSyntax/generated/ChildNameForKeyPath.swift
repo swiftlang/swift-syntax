@@ -399,6 +399,40 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "label"
   case \BreakStmtSyntax.unexpectedAfterLabel:
     return "unexpectedAfterLabel"
+  case \CanImportExprSyntax.unexpectedBeforeCanImportKeyword:
+    return "unexpectedBeforeCanImportKeyword"
+  case \CanImportExprSyntax.canImportKeyword:
+    return "canImportKeyword"
+  case \CanImportExprSyntax.unexpectedBetweenCanImportKeywordAndLeftParen:
+    return "unexpectedBetweenCanImportKeywordAndLeftParen"
+  case \CanImportExprSyntax.leftParen:
+    return "leftParen"
+  case \CanImportExprSyntax.unexpectedBetweenLeftParenAndImportPath:
+    return "unexpectedBetweenLeftParenAndImportPath"
+  case \CanImportExprSyntax.importPath:
+    return "importPath"
+  case \CanImportExprSyntax.unexpectedBetweenImportPathAndComma:
+    return "unexpectedBetweenImportPathAndComma"
+  case \CanImportExprSyntax.comma:
+    return "comma"
+  case \CanImportExprSyntax.unexpectedBetweenCommaAndLabel:
+    return "unexpectedBetweenCommaAndLabel"
+  case \CanImportExprSyntax.label:
+    return "label"
+  case \CanImportExprSyntax.unexpectedBetweenLabelAndColon:
+    return "unexpectedBetweenLabelAndColon"
+  case \CanImportExprSyntax.colon:
+    return "colon"
+  case \CanImportExprSyntax.unexpectedBetweenColonAndVersionTuple:
+    return "unexpectedBetweenColonAndVersionTuple"
+  case \CanImportExprSyntax.versionTuple:
+    return "versionTuple"
+  case \CanImportExprSyntax.unexpectedBetweenVersionTupleAndRightParen:
+    return "unexpectedBetweenVersionTupleAndRightParen"
+  case \CanImportExprSyntax.rightParen:
+    return "rightParen"
+  case \CanImportExprSyntax.unexpectedAfterRightParen:
+    return "unexpectedAfterRightParen"
   case \CaseItemSyntax.unexpectedBeforePattern:
     return "unexpectedBeforePattern"
   case \CaseItemSyntax.pattern:
@@ -3283,28 +3317,26 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "bindings"
   case \VariableDeclSyntax.unexpectedAfterBindings:
     return "unexpectedAfterBindings"
+  case \VersionComponentSyntax.unexpectedBeforePeriod:
+    return "unexpectedBeforePeriod"
+  case \VersionComponentSyntax.period:
+    return "period"
+  case \VersionComponentSyntax.unexpectedBetweenPeriodAndNumber:
+    return "unexpectedBetweenPeriodAndNumber"
+  case \VersionComponentSyntax.number:
+    return "number"
+  case \VersionComponentSyntax.unexpectedAfterNumber:
+    return "unexpectedAfterNumber"
   case \VersionTupleSyntax.unexpectedBeforeMajor:
     return "unexpectedBeforeMajor"
   case \VersionTupleSyntax.major:
     return "major"
-  case \VersionTupleSyntax.unexpectedBetweenMajorAndMinorPeriod:
-    return "unexpectedBetweenMajorAndMinorPeriod"
-  case \VersionTupleSyntax.minorPeriod:
-    return "minorPeriod"
-  case \VersionTupleSyntax.unexpectedBetweenMinorPeriodAndMinor:
-    return "unexpectedBetweenMinorPeriodAndMinor"
-  case \VersionTupleSyntax.minor:
-    return "minor"
-  case \VersionTupleSyntax.unexpectedBetweenMinorAndPatchPeriod:
-    return "unexpectedBetweenMinorAndPatchPeriod"
-  case \VersionTupleSyntax.patchPeriod:
-    return "patchPeriod"
-  case \VersionTupleSyntax.unexpectedBetweenPatchPeriodAndPatch:
-    return "unexpectedBetweenPatchPeriodAndPatch"
-  case \VersionTupleSyntax.patch:
-    return "patch"
-  case \VersionTupleSyntax.unexpectedAfterPatch:
-    return "unexpectedAfterPatch"
+  case \VersionTupleSyntax.unexpectedBetweenMajorAndComponents:
+    return "unexpectedBetweenMajorAndComponents"
+  case \VersionTupleSyntax.components:
+    return "components"
+  case \VersionTupleSyntax.unexpectedAfterComponents:
+    return "unexpectedAfterComponents"
   case \WhereClauseSyntax.unexpectedBeforeWhereKeyword:
     return "unexpectedBeforeWhereKeyword"
   case \WhereClauseSyntax.whereKeyword:

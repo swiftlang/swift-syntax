@@ -185,6 +185,51 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
+  // the canImport expr in if config expression
+  Node(
+    name: "CanImportExpr",
+    nameForDiagnostics: "'canImport' expression in if config expression",
+    kind: "Expr",
+    children: [
+      Child(
+        name: "CanImportKeyword",
+        kind: .token(choices: [.token(tokenKind: "IdentifierToken")])
+      ),
+      Child(
+        name: "LeftParen",
+        kind: .token(choices: [.token(tokenKind: "LeftParenToken")])
+      ),
+      Child(
+        name: "ImportPath",
+        kind: .token(choices: [.token(tokenKind: "IdentifierToken")])
+      ),
+      Child(
+        name: "Comma",
+        kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+        isOptional: true
+      ),
+      Child(
+        name: "Label",
+        kind: .token(choices: [.keyword(text: "_version"), .keyword(text: "_underlyingVersion")]),
+        isOptional: true
+      ),
+      Child(
+        name: "Colon",
+        kind: .token(choices: [.keyword(text: "ColonToken")]),
+        isOptional: true
+      ),
+      Child(
+        name: "VersionTuple",
+        kind: .node(kind: "VersionTuple"),
+        isOptional: true
+      ),
+      Child(
+        name: "RightParen",
+        kind: .token(choices: [.token(tokenKind: "RightParenToken")])
+      ),
+    ]
+  ),
+
   // case-item -> pattern where-clause? ','?
   Node(
     name: "CaseItem",

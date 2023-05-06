@@ -132,6 +132,30 @@ enum CanBeStatementStart: TokenSpecSet {
   }
 }
 
+enum CompilationCondition: TokenSpecSet {
+  case swiftKeyword
+  case compilerKeyword
+  case canImportKeyword
+
+  init?(lexeme: Lexer.Lexeme) {
+    switch PrepareForKeywordMatch(lexeme) {
+    case TokenSpec(.swift): self = .swiftKeyword
+    case TokenSpec(.compiler): self = .compilerKeyword
+    case TokenSpec(.canImport): self = .canImportKeyword
+    default: return nil
+    }
+  }
+
+  var spec: TokenSpec {
+    switch self {
+    case .swiftKeyword: return .keyword(.swift)
+    case .compilerKeyword: return .keyword(.compiler)
+    case .canImportKeyword: return .keyword(.canImport)
+    }
+  }
+
+}
+
 enum ContextualDeclKeyword: TokenSpecSet {
   case __consuming
   case _compilerInitialized

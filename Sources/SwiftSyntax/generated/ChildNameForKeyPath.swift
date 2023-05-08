@@ -1003,6 +1003,16 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "wildcard"
   case \DiscardAssignmentExprSyntax.unexpectedAfterWildcard:
     return "unexpectedAfterWildcard"
+  case \DiscardStmtSyntax.unexpectedBeforeDiscardKeyword:
+    return "unexpectedBeforeDiscardKeyword"
+  case \DiscardStmtSyntax.discardKeyword:
+    return "discardKeyword"
+  case \DiscardStmtSyntax.unexpectedBetweenDiscardKeywordAndExpression:
+    return "unexpectedBetweenDiscardKeywordAndExpression"
+  case \DiscardStmtSyntax.expression:
+    return "expression"
+  case \DiscardStmtSyntax.unexpectedAfterExpression:
+    return "unexpectedAfterExpression"
   case \DoStmtSyntax.unexpectedBeforeDoKeyword:
     return "unexpectedBeforeDoKeyword"
   case \DoStmtSyntax.doKeyword:
@@ -1317,16 +1327,6 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "exclamationMark"
   case \ForcedValueExprSyntax.unexpectedAfterExclamationMark:
     return "unexpectedAfterExclamationMark"
-  case \ForgetStmtSyntax.unexpectedBeforeForgetKeyword:
-    return "unexpectedBeforeForgetKeyword"
-  case \ForgetStmtSyntax.forgetKeyword:
-    return "forgetKeyword"
-  case \ForgetStmtSyntax.unexpectedBetweenForgetKeywordAndExpression:
-    return "unexpectedBetweenForgetKeywordAndExpression"
-  case \ForgetStmtSyntax.expression:
-    return "expression"
-  case \ForgetStmtSyntax.unexpectedAfterExpression:
-    return "unexpectedAfterExpression"
   case \FunctionCallExprSyntax.unexpectedBeforeCalledExpression:
     return "unexpectedBeforeCalledExpression"
   case \FunctionCallExprSyntax.calledExpression:

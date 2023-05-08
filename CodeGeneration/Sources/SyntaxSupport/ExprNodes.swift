@@ -185,6 +185,60 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
+  // the canImport expr in if config expression
+  Node(
+    name: "CanImportExpr",
+    nameForDiagnostics: "'canImport' expression",
+    kind: "Expr",
+    children: [
+      Child(
+        name: "CanImportKeyword",
+        kind: .token(choices: [.keyword(text: "canImport")])
+      ),
+      Child(
+        name: "LeftParen",
+        kind: .token(choices: [.token(tokenKind: "LeftParenToken")])
+      ),
+      Child(
+        name: "ImportPath",
+        kind: .token(choices: [.token(tokenKind: "IdentifierToken")])
+      ),
+      Child(
+        name: "VersionInfo",
+        kind: .node(kind: "CanImportVersionInfo"),
+        isOptional: true
+      ),
+      Child(
+        name: "RightParen",
+        kind: .token(choices: [.token(tokenKind: "RightParenToken")])
+      ),
+    ]
+  ),
+
+  Node(
+    name: "CanImportVersionInfo",
+    nameForDiagnostics: nil,
+    kind: "Expr",
+    children: [
+      Child(
+        name: "Comma",
+        kind: .token(choices: [.token(tokenKind: "CommaToken")])
+      ),
+      Child(
+        name: "Label",
+        kind: .token(choices: [.keyword(text: "_version"), .keyword(text: "_underlyingVersion")])
+      ),
+      Child(
+        name: "Colon",
+        kind: .token(choices: [.token(tokenKind: "ColonToken")])
+      ),
+      Child(
+        name: "VersionTuple",
+        kind: .node(kind: "VersionTuple")
+      ),
+    ]
+  ),
+
   // case-item -> pattern where-clause? ','?
   Node(
     name: "CaseItem",

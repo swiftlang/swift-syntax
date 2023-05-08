@@ -348,6 +348,13 @@ extension UnexpectedNodesSyntax: ExpressibleByArrayLiteral {
   }
 }
 
+/// `VersionComponentList` represents a collection of `VersionComponentSyntax`
+extension VersionComponentListSyntax: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: Element...) {
+    self.init(elements)
+  }
+}
+
 /// `YieldExprList` represents a collection of `YieldExprListElementSyntax`
 extension YieldExprListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {

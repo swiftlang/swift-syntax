@@ -161,6 +161,9 @@ public class Child {
     isIndented: Bool = false,
     requiresLeadingNewline: Bool = false
   ) {
+    if let firstCharInName = name.first {
+      precondition(firstCharInName.isUppercase == true, "The first letter of a child’s name should be uppercase")
+    }
     self.name = name
     self.kind = kind
     self.nameForDiagnostics = nameForDiagnostics

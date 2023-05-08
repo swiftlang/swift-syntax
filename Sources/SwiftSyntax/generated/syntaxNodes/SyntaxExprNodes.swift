@@ -923,6 +923,368 @@ public struct BorrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   }
 }
 
+// MARK: - CanImportExprSyntax
+
+
+public struct CanImportExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+  
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .canImportExpr else {
+      return nil
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+  
+  /// Creates a `CanImportExprSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    precondition(data.raw.kind == .canImportExpr)
+    self._syntaxNode = Syntax(data)
+  }
+  
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeCanImportKeyword: UnexpectedNodesSyntax? = nil,
+      canImportKeyword: TokenSyntax = .keyword(.canImport),
+      _ unexpectedBetweenCanImportKeywordAndLeftParen: UnexpectedNodesSyntax? = nil,
+      leftParen: TokenSyntax = .leftParenToken(),
+      _ unexpectedBetweenLeftParenAndImportPath: UnexpectedNodesSyntax? = nil,
+      importPath: TokenSyntax,
+      _ unexpectedBetweenImportPathAndVersionInfo: UnexpectedNodesSyntax? = nil,
+      versionInfo: CanImportVersionInfoSyntax? = nil,
+      _ unexpectedBetweenVersionInfoAndRightParen: UnexpectedNodesSyntax? = nil,
+      rightParen: TokenSyntax = .rightParenToken(),
+      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
+            unexpectedBeforeCanImportKeyword, 
+            canImportKeyword, 
+            unexpectedBetweenCanImportKeywordAndLeftParen, 
+            leftParen, 
+            unexpectedBetweenLeftParenAndImportPath, 
+            importPath, 
+            unexpectedBetweenImportPathAndVersionInfo, 
+            versionInfo, 
+            unexpectedBetweenVersionInfoAndRightParen, 
+            rightParen, 
+            unexpectedAfterRightParen
+          ))) {(arena, _) in
+      let layout: [RawSyntax?] = [
+          unexpectedBeforeCanImportKeyword?.raw, 
+          canImportKeyword.raw, 
+          unexpectedBetweenCanImportKeywordAndLeftParen?.raw, 
+          leftParen.raw, 
+          unexpectedBetweenLeftParenAndImportPath?.raw, 
+          importPath.raw, 
+          unexpectedBetweenImportPathAndVersionInfo?.raw, 
+          versionInfo?.raw, 
+          unexpectedBetweenVersionInfoAndRightParen?.raw, 
+          rightParen.raw, 
+          unexpectedAfterRightParen?.raw
+        ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.canImportExpr,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+        
+      )
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+  
+  public var unexpectedBeforeCanImportKeyword: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = CanImportExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var canImportKeyword: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = CanImportExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenCanImportKeywordAndLeftParen: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = CanImportExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var leftParen: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = CanImportExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenLeftParenAndImportPath: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = CanImportExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var importPath: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = CanImportExprSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenImportPathAndVersionInfo: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = CanImportExprSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var versionInfo: CanImportVersionInfoSyntax? {
+    get {
+      return data.child(at: 7, parent: Syntax(self)).map(CanImportVersionInfoSyntax.init)
+    }
+    set(value) {
+      self = CanImportExprSyntax(data.replacingChild(at: 7, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenVersionInfoAndRightParen: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = CanImportExprSyntax(data.replacingChild(at: 8, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var rightParen: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 9, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = CanImportExprSyntax(data.replacingChild(at: 9, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedAfterRightParen: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 10, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = CanImportExprSyntax(data.replacingChild(at: 10, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+          \Self.unexpectedBeforeCanImportKeyword, 
+          \Self.canImportKeyword, 
+          \Self.unexpectedBetweenCanImportKeywordAndLeftParen, 
+          \Self.leftParen, 
+          \Self.unexpectedBetweenLeftParenAndImportPath, 
+          \Self.importPath, 
+          \Self.unexpectedBetweenImportPathAndVersionInfo, 
+          \Self.versionInfo, 
+          \Self.unexpectedBetweenVersionInfoAndRightParen, 
+          \Self.rightParen, 
+          \Self.unexpectedAfterRightParen
+        ])
+  }
+}
+
+// MARK: - CanImportVersionInfoSyntax
+
+
+public struct CanImportVersionInfoSyntax: ExprSyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+  
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .canImportVersionInfo else {
+      return nil
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+  
+  /// Creates a `CanImportVersionInfoSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    precondition(data.raw.kind == .canImportVersionInfo)
+    self._syntaxNode = Syntax(data)
+  }
+  
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeComma: UnexpectedNodesSyntax? = nil,
+      comma: TokenSyntax = .commaToken(),
+      _ unexpectedBetweenCommaAndLabel: UnexpectedNodesSyntax? = nil,
+      label: TokenSyntax,
+      _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax = .colonToken(),
+      _ unexpectedBetweenColonAndVersionTuple: UnexpectedNodesSyntax? = nil,
+      versionTuple: VersionTupleSyntax,
+      _ unexpectedAfterVersionTuple: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
+            unexpectedBeforeComma, 
+            comma, 
+            unexpectedBetweenCommaAndLabel, 
+            label, 
+            unexpectedBetweenLabelAndColon, 
+            colon, 
+            unexpectedBetweenColonAndVersionTuple, 
+            versionTuple, 
+            unexpectedAfterVersionTuple
+          ))) {(arena, _) in
+      let layout: [RawSyntax?] = [
+          unexpectedBeforeComma?.raw, 
+          comma.raw, 
+          unexpectedBetweenCommaAndLabel?.raw, 
+          label.raw, 
+          unexpectedBetweenLabelAndColon?.raw, 
+          colon.raw, 
+          unexpectedBetweenColonAndVersionTuple?.raw, 
+          versionTuple.raw, 
+          unexpectedAfterVersionTuple?.raw
+        ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.canImportVersionInfo,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+        
+      )
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+  
+  public var unexpectedBeforeComma: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = CanImportVersionInfoSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var comma: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = CanImportVersionInfoSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenCommaAndLabel: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = CanImportVersionInfoSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var label: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = CanImportVersionInfoSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = CanImportVersionInfoSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var colon: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = CanImportVersionInfoSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenColonAndVersionTuple: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = CanImportVersionInfoSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var versionTuple: VersionTupleSyntax {
+    get {
+      return VersionTupleSyntax(data.child(at: 7, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = CanImportVersionInfoSyntax(data.replacingChild(at: 7, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedAfterVersionTuple: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = CanImportVersionInfoSyntax(data.replacingChild(at: 8, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+          \Self.unexpectedBeforeComma, 
+          \Self.comma, 
+          \Self.unexpectedBetweenCommaAndLabel, 
+          \Self.label, 
+          \Self.unexpectedBetweenLabelAndColon, 
+          \Self.colon, 
+          \Self.unexpectedBetweenColonAndVersionTuple, 
+          \Self.versionTuple, 
+          \Self.unexpectedAfterVersionTuple
+        ])
+  }
+}
+
 // MARK: - ClosureExprSyntax
 
 

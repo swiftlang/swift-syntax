@@ -47,6 +47,8 @@ public enum SyntaxKind {
   case booleanLiteralExpr
   case borrowExpr
   case breakStmt
+  case canImportExpr
+  case canImportVersionInfo
   case caseItemList
   case caseItem
   case catchClauseList
@@ -277,6 +279,8 @@ public enum SyntaxKind {
   case unresolvedTernaryExpr
   case valueBindingPattern
   case variableDecl
+  case versionComponentList
+  case versionComponent
   case versionTuple
   case whereClause
   case whileStmt
@@ -380,6 +384,8 @@ public enum SyntaxKind {
       return true
     case .unexpectedNodes:
       return true
+    case .versionComponentList:
+      return true
     case .yieldExprList:
       return true
     default:
@@ -470,6 +476,10 @@ public enum SyntaxKind {
       return BorrowExprSyntax.self
     case .breakStmt:
       return BreakStmtSyntax.self
+    case .canImportExpr:
+      return CanImportExprSyntax.self
+    case .canImportVersionInfo:
+      return CanImportVersionInfoSyntax.self
     case .caseItemList:
       return CaseItemListSyntax.self
     case .caseItem:
@@ -930,6 +940,10 @@ public enum SyntaxKind {
       return ValueBindingPatternSyntax.self
     case .variableDecl:
       return VariableDeclSyntax.self
+    case .versionComponentList:
+      return VersionComponentListSyntax.self
+    case .versionComponent:
+      return VersionComponentSyntax.self
     case .versionTuple:
       return VersionTupleSyntax.self
     case .whereClause:

@@ -531,6 +531,50 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: CanImportExprSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+
+    if let versionTuple = node.versionInfo?.versionTuple,
+      let unexpectedVersionTuple = node.unexpectedBetweenVersionInfoAndRightParen
+    {
+      if versionTuple.major.presence == .missing {
+        addDiagnostic(
+          versionTuple,
+          CannotParseVersionTuple(versionTuple: unexpectedVersionTuple),
+          handledNodes: [versionTuple.id, unexpectedVersionTuple.id]
+        )
+      } else {
+        addDiagnostic(
+          unexpectedVersionTuple,
+          .canImportWrongNumberOfParameter,
+          handledNodes: [unexpectedVersionTuple.id]
+        )
+      }
+    }
+
+    return .visitChildren
+  }
+
+  public override func visit(_ node: CanImportVersionInfoSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+
+    if node.label.presence == .missing {
+      addDiagnostic(
+        node.label,
+        .canImportWrongSecondParameterLabel,
+        handledNodes: [node.label.id]
+      )
+
+      handledNodes.append(contentsOf: [node.unexpectedBetweenLabelAndColon?.id, node.colon.id, node.versionTuple.id].compactMap { $0 })
+    }
+
+    return .visitChildren
+  }
+
   public override func visit(_ node: ConditionElementSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren
@@ -1492,6 +1536,24 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       moveFixIt: { MoveTokensAfterFixIt(movedTokens: $0, after: .equal) },
       removeRedundantFixIt: { RemoveRedundantFixIt(removeTokens: $0) }
     )
+    return .visitChildren
+  }
+
+  public override func visit(_ node: VersionTupleSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+
+    if let trailingComponents = node.unexpectedAfterComponents,
+      let components = node.components
+    {
+      addDiagnostic(
+        trailingComponents,
+        TrailingVersionAreIgnored(major: node.major, components: components),
+        handledNodes: [trailingComponents.id]
+      )
+    }
+
     return .visitChildren
   }
 

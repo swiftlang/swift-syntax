@@ -92,6 +92,12 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var associatedTypeCannotUsePack: Self {
     .init("associated types cannot be variadic")
   }
+  public static var canImportWrongSecondParameterLabel: Self {
+    .init("2nd parameter of canImport should be labeled as _version or _underlyingVersion")
+  }
+  public static var canImportWrongNumberOfParameter: Self {
+    .init("canImport can take only two parameters")
+  }
   public static var caseOutsideOfSwitchOrEnum: Self {
     .init("'case' can only appear inside a 'switch' statement or 'enum' declaration")
   }
@@ -269,6 +275,14 @@ public struct AvailabilityConditionInExpression: ParserError {
   }
 }
 
+public struct CannotParseVersionTuple: ParserError {
+  public let versionTuple: UnexpectedNodesSyntax
+
+  public var message: String {
+    return "cannot parse version \(versionTuple)"
+  }
+}
+
 public struct DuplicateEffectSpecifiers: ParserError {
   public let correctSpecifier: TokenSyntax
   public let unexpectedSpecifier: TokenSyntax
@@ -433,6 +447,17 @@ public struct TokensNotAllowedInOperatorName: ParserError {
   public var message: String {
     return "\(nodesDescription(tokens, format: false)) is not allowed in operator names"
   }
+}
+
+public struct TrailingVersionAreIgnored: ParserError {
+  public let major: TokenSyntax
+  public let components: VersionComponentListSyntax
+
+  public var message: String {
+    return "trailing components of version \(major)\(components) are ignored"
+  }
+
+  public var severity: DiagnosticSeverity = .warning
 }
 
 public struct TryCannotBeUsed: ParserError {

@@ -59,7 +59,9 @@ public enum Keyword: UInt8, Hashable {
   case _TrivialAtMost
   case _typeEraser
   case _unavailableFromAsync
+  case _underlyingVersion
   case _UnknownLayout
+  case _version
   case actor
   case addressWithNativeOwner
   case addressWithOwner
@@ -79,9 +81,11 @@ public enum Keyword: UInt8, Hashable {
   case block
   case borrowing
   case `break`
+  case canImport
   case `case`
   case `catch`
   case `class`
+  case compiler
   case consume
   case consuming
   case `continue`
@@ -464,6 +468,10 @@ public enum Keyword: UInt8, Hashable {
         self = ._private
       case "_Trivial":
         self = ._Trivial
+      case "_version":
+        self = ._version
+      case "compiler":
+        self = .compiler
       case "continue":
         self = .`continue`
       case "escaping":
@@ -509,6 +517,8 @@ public enum Keyword: UInt8, Hashable {
         self = .available
       case "borrowing":
         self = .borrowing
+      case "canImport":
+        self = .canImport
       case "consuming":
         self = .consuming
       case "extension":
@@ -660,6 +670,13 @@ public enum Keyword: UInt8, Hashable {
       default:
         return nil
       }
+    case 18:
+      switch text {
+      case "_underlyingVersion":
+        self = ._underlyingVersion
+      default:
+        return nil
+      }
     case 19:
       switch text {
       case "_dynamicReplacement":
@@ -779,7 +796,9 @@ public enum Keyword: UInt8, Hashable {
       "_TrivialAtMost", 
       "_typeEraser", 
       "_unavailableFromAsync", 
+      "_underlyingVersion", 
       "_UnknownLayout", 
+      "_version", 
       "actor", 
       "addressWithNativeOwner", 
       "addressWithOwner", 
@@ -799,9 +818,11 @@ public enum Keyword: UInt8, Hashable {
       "block", 
       "borrowing", 
       "break", 
+      "canImport", 
       "case", 
       "catch", 
       "class", 
+      "compiler", 
       "consume", 
       "consuming", 
       "continue", 

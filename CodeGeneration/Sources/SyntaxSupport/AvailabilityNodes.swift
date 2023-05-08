@@ -118,13 +118,40 @@ public let AVAILABILITY_NODES: [Node] = [
     ]
   ),
 
-  // version-tuple -> integer-literal
-  //                | float-literal
-  //                | float-literal '.' integer-literal
+  // version-tuple-element -> '.' integer-literal
+  Node(
+    name: "VersionComponent",
+    nameForDiagnostics: nil,
+    description: "An element to represent a single component in a version, like `.1`.",
+    kind: "Syntax",
+    children: [
+      Child(
+        name: "Period",
+        kind: .token(choices: [.token(tokenKind: "PeriodToken")]),
+        description: "The period of this version component"
+      ),
+      Child(
+        name: "Number",
+        kind: .token(choices: [.token(tokenKind: "IntegerLiteralToken")]),
+        description: "The version number of this component"
+      ),
+    ]
+  ),
+
+  // version-list -> version-tuple-element version-list?
+  Node(
+    name: "VersionComponentList",
+    nameForDiagnostics: nil,
+    kind: "SyntaxCollection",
+    element: "VersionComponent",
+    omitWhenEmpty: true
+  ),
+
+  // version-tuple -> integer-literal version-list?
   Node(
     name: "VersionTuple",
     nameForDiagnostics: "version tuple",
-    description: "A version number of the form major.minor.patch in which the minor and patch part may be omitted.",
+    description: "A version number like `1.2.0`. Only the first version component is required. There might be an arbitrary number of following components.",
     kind: "Syntax",
     children: [
       Child(
@@ -133,27 +160,9 @@ public let AVAILABILITY_NODES: [Node] = [
         description: "The major version."
       ),
       Child(
-        name: "MinorPeriod",
-        kind: .token(choices: [.token(tokenKind: "PeriodToken")]),
-        description: "If the version contains a minor number, the period separating the major from the minor number.",
-        isOptional: true
-      ),
-      Child(
-        name: "Minor",
-        kind: .token(choices: [.token(tokenKind: "IntegerLiteralToken")]),
-        description: "The minor version if specified.",
-        isOptional: true
-      ),
-      Child(
-        name: "PatchPeriod",
-        kind: .token(choices: [.token(tokenKind: "PeriodToken")]),
-        description: "If the version contains a patch number, the period separating the minor from the patch number.",
-        isOptional: true
-      ),
-      Child(
-        name: "Patch",
-        kind: .token(choices: [.token(tokenKind: "IntegerLiteralToken")]),
-        description: "The patch version if specified.",
+        name: "Components",
+        kind: .collection(kind: "VersionComponentList", collectionElementName: "VersionComponent"),
+        description: "Any version components that are not the major version . For example, for `1.2.0`, this will contain `.2.0`",
         isOptional: true
       ),
     ]

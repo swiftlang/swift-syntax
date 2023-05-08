@@ -121,8 +121,7 @@ final class AvailabilityTests: XCTestCase {
       substructure: Syntax(
         VersionTupleSyntax(
           major: .integerLiteral("10"),
-          minorPeriod: .periodToken(),
-          minor: .integerLiteral("0")
+          components: VersionComponentListSyntax([VersionComponentSyntax(number: .integerLiteral("0"))])
         )
       )
     )
@@ -135,10 +134,10 @@ final class AvailabilityTests: XCTestCase {
       substructure: Syntax(
         VersionTupleSyntax(
           major: .integerLiteral("10"),
-          minorPeriod: .periodToken(),
-          minor: .integerLiteral("0"),
-          patchPeriod: .periodToken(),
-          patch: .integerLiteral("1")
+          components: VersionComponentListSyntax([
+            VersionComponentSyntax(number: .integerLiteral("0")),
+            VersionComponentSyntax(number: .integerLiteral("1")),
+          ])
         )
       )
     )

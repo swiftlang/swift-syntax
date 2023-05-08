@@ -47,6 +47,8 @@ public enum SyntaxEnum {
   case booleanLiteralExpr(BooleanLiteralExprSyntax)
   case borrowExpr(BorrowExprSyntax)
   case breakStmt(BreakStmtSyntax)
+  case canImportExpr(CanImportExprSyntax)
+  case canImportVersionInfo(CanImportVersionInfoSyntax)
   case caseItemList(CaseItemListSyntax)
   case caseItem(CaseItemSyntax)
   case catchClauseList(CatchClauseListSyntax)
@@ -277,6 +279,8 @@ public enum SyntaxEnum {
   case unresolvedTernaryExpr(UnresolvedTernaryExprSyntax)
   case valueBindingPattern(ValueBindingPatternSyntax)
   case variableDecl(VariableDeclSyntax)
+  case versionComponentList(VersionComponentListSyntax)
+  case versionComponent(VersionComponentSyntax)
   case versionTuple(VersionTupleSyntax)
   case whereClause(WhereClauseSyntax)
   case whileStmt(WhileStmtSyntax)
@@ -355,6 +359,10 @@ public extension Syntax {
       return .borrowExpr(BorrowExprSyntax(self)!)
     case .breakStmt:
       return .breakStmt(BreakStmtSyntax(self)!)
+    case .canImportExpr:
+      return .canImportExpr(CanImportExprSyntax(self)!)
+    case .canImportVersionInfo:
+      return .canImportVersionInfo(CanImportVersionInfoSyntax(self)!)
     case .caseItemList:
       return .caseItemList(CaseItemListSyntax(self)!)
     case .caseItem:
@@ -815,6 +823,10 @@ public extension Syntax {
       return .valueBindingPattern(ValueBindingPatternSyntax(self)!)
     case .variableDecl:
       return .variableDecl(VariableDeclSyntax(self)!)
+    case .versionComponentList:
+      return .versionComponentList(VersionComponentListSyntax(self)!)
+    case .versionComponent:
+      return .versionComponent(VersionComponentSyntax(self)!)
     case .versionTuple:
       return .versionTuple(VersionTupleSyntax(self)!)
     case .whereClause:

@@ -69,6 +69,8 @@ extension SyntaxKind {
       return "'_borrow' expression"
     case .breakStmt:
       return "'break' statement"
+    case .canImportExpr:
+      return "'canImport' expression"
     case .catchClauseList:
       return "'catch' clause"
     case .catchClause:

@@ -1456,7 +1456,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
             FixIt(
               message: InsertTokenFixIt(missingNodes: [Syntax(node.colonMark), Syntax(nextSibling)]),
               changes: [
-                .makePresent(node.colonMark),
+                .makePresent(node.colonMark, leadingTrivia: .space),
                 .makePresent(nextSibling),
               ]
             )

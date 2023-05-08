@@ -194,8 +194,6 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/SyntaxChildren>
 - <doc:SwiftSyntax/SyntaxChildrenIndex>
 - <doc:SwiftSyntax/SyntaxChildrenIndexData>
-- <doc:SwiftSyntax/AccessPathSyntax>
-- <doc:SwiftSyntax/AccessPathComponentSyntax>
 - <doc:SwiftSyntax/AccessorListSyntax>
 - <doc:SwiftSyntax/AccessorDeclSyntax>
 - <doc:SwiftSyntax/ArrayElementListSyntax>
@@ -250,6 +248,8 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/GenericRequirementSyntax>
 - <doc:SwiftSyntax/IfConfigClauseListSyntax>
 - <doc:SwiftSyntax/IfConfigClauseSyntax>
+- <doc:SwiftSyntax/ImportPathSyntax>
+- <doc:SwiftSyntax/ImportPathComponentSyntax>
 - <doc:SwiftSyntax/InheritedTypeListSyntax>
 - <doc:SwiftSyntax/InheritedTypeSyntax>
 - <doc:SwiftSyntax/KeyPathComponentListSyntax>

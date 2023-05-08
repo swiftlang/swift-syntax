@@ -10,18 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-// This file provides compatiblity aliases to keep dependents of SwiftSyntax building.
+// This file provides compatiblity aliases to keep dependents of SwiftSyntaxBuilder building.
 // All users of the declarations in this file should transition away from them ASAP.
 
-public extension DeclGroupSyntax {
-  @available(*, deprecated, renamed: "memberBlock")
-  var members: MemberDeclBlockSyntax {
-    return self.memberBlock
-  }
-}
-
-@available(*, deprecated, renamed: "ImportPathSyntax")
-public typealias AccessPathSyntax = ImportPathSyntax
-
-@available(*, deprecated, renamed: "ImportPathComponentSyntax")
-public typealias AccessPathComponentSyntax = ImportPathComponentSyntax
+@available(*, deprecated, renamed: "ImportPathBuilder")
+public typealias AccessPathBuilder = ImportPathBuilder

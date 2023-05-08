@@ -34,30 +34,6 @@ open class SyntaxVisitor {
     visit(node.data)
   }
   
-  /// Visiting `AccessPathComponentSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: AccessPathComponentSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting `AccessPathComponentSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: AccessPathComponentSyntax) {
-  }
-  
-  /// Visiting `AccessPathSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: AccessPathSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting `AccessPathSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: AccessPathSyntax) {
-  }
-  
   /// Visiting `AccessorBlockSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -1678,6 +1654,30 @@ open class SyntaxVisitor {
   open func visitPost(_ node: ImportDeclSyntax) {
   }
   
+  /// Visiting `ImportPathComponentSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: ImportPathComponentSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting `ImportPathComponentSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: ImportPathComponentSyntax) {
+  }
+  
+  /// Visiting `ImportPathSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: ImportPathSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting `ImportPathSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: ImportPathSyntax) {
+  }
+  
   /// Visiting `InOutExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -3275,28 +3275,6 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplAccessPathComponentSyntax(_ data: SyntaxData) {
-    let node = AccessPathComponentSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplAccessPathSyntax(_ data: SyntaxData) {
-    let node = AccessPathSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplAccessorBlockSyntax(_ data: SyntaxData) {
     let node = AccessorBlockSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -4782,6 +4760,28 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplImportPathComponentSyntax(_ data: SyntaxData) {
+    let node = ImportPathComponentSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplImportPathSyntax(_ data: SyntaxData) {
+    let node = ImportPathSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplInOutExprSyntax(_ data: SyntaxData) {
     let node = InOutExprSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -6240,10 +6240,6 @@ open class SyntaxVisitor {
       _ = visit(node)
       // No children to visit.
       visitPost(node)
-    case .accessPathComponent:
-      visitImplAccessPathComponentSyntax(data)
-    case .accessPath:
-      visitImplAccessPathSyntax(data)
     case .accessorBlock:
       visitImplAccessorBlockSyntax(data)
     case .accessorDecl:
@@ -6514,6 +6510,10 @@ open class SyntaxVisitor {
       visitImplImplicitlyUnwrappedOptionalTypeSyntax(data)
     case .importDecl:
       visitImplImportDeclSyntax(data)
+    case .importPathComponent:
+      visitImplImportPathComponentSyntax(data)
+    case .importPath:
+      visitImplImportPathSyntax(data)
     case .inOutExpr:
       visitImplInOutExprSyntax(data)
     case .infixOperatorExpr:

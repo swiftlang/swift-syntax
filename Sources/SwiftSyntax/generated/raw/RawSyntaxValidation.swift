@@ -205,22 +205,6 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
   switch kind {
   case .token:
     assertionFailure("validateLayout for .token kind is not supported")
-  case .accessPathComponent:
-    assert(layout.count == 5)
-    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [
-            .tokenKind(.identifier), 
-            .tokenKind(.binaryOperator), 
-            .tokenKind(.prefixOperator), 
-            .tokenKind(.postfixOperator)
-          ]))
-    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawTokenSyntax?.self, tokenChoices: [.tokenKind(.period)]))
-    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
-  case .accessPath:
-    for (index, element) in layout.enumerated() {
-      assertNoError(kind, index, verify(element, as: RawAccessPathComponentSyntax.self))
-    }
   case .accessorBlock:
     assert(layout.count == 7)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
@@ -1482,8 +1466,24 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
             .keyword("inout")
           ]))
     assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 9, verify(layout[9], as: RawAccessPathSyntax.self))
+    assertNoError(kind, 9, verify(layout[9], as: RawImportPathSyntax.self))
     assertNoError(kind, 10, verify(layout[10], as: RawUnexpectedNodesSyntax?.self))
+  case .importPathComponent:
+    assert(layout.count == 5)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [
+            .tokenKind(.identifier), 
+            .tokenKind(.binaryOperator), 
+            .tokenKind(.prefixOperator), 
+            .tokenKind(.postfixOperator)
+          ]))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawTokenSyntax?.self, tokenChoices: [.tokenKind(.period)]))
+    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
+  case .importPath:
+    for (index, element) in layout.enumerated() {
+      assertNoError(kind, index, verify(element, as: RawImportPathComponentSyntax.self))
+    }
   case .inOutExpr:
     assert(layout.count == 5)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))

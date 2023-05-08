@@ -16,8 +16,6 @@
 @frozen // FIXME: Not actually stable, works around a miscompile
 public enum SyntaxKind {
   case token
-  case accessPathComponent
-  case accessPath
   case accessorBlock
   case accessorDecl
   case accessorEffectSpecifiers
@@ -153,6 +151,8 @@ public enum SyntaxKind {
   case implementsAttributeArguments
   case implicitlyUnwrappedOptionalType
   case importDecl
+  case importPathComponent
+  case importPath
   case inOutExpr
   case infixOperatorExpr
   case inheritedTypeList
@@ -288,8 +288,6 @@ public enum SyntaxKind {
   
   public var isSyntaxCollection: Bool {
     switch self {
-    case .accessPath:
-      return true
     case .accessorList:
       return true
     case .arrayElementList:
@@ -345,6 +343,8 @@ public enum SyntaxKind {
     case .genericRequirementList:
       return true
     case .ifConfigClauseList:
+      return true
+    case .importPath:
       return true
     case .inheritedTypeList:
       return true
@@ -408,10 +408,6 @@ public enum SyntaxKind {
     switch self {
     case .token:
       return TokenSyntax.self
-    case .accessPathComponent:
-      return AccessPathComponentSyntax.self
-    case .accessPath:
-      return AccessPathSyntax.self
     case .accessorBlock:
       return AccessorBlockSyntax.self
     case .accessorDecl:
@@ -682,6 +678,10 @@ public enum SyntaxKind {
       return ImplicitlyUnwrappedOptionalTypeSyntax.self
     case .importDecl:
       return ImportDeclSyntax.self
+    case .importPathComponent:
+      return ImportPathComponentSyntax.self
+    case .importPath:
+      return ImportPathSyntax.self
     case .inOutExpr:
       return InOutExprSyntax.self
     case .infixOperatorExpr:

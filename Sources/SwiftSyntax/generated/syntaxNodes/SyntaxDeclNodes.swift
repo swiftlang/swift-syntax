@@ -2817,7 +2817,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       _ unexpectedBetweenImportTokAndImportKind: UnexpectedNodesSyntax? = nil,
       importKind: TokenSyntax? = nil,
       _ unexpectedBetweenImportKindAndPath: UnexpectedNodesSyntax? = nil,
-      path: AccessPathSyntax,
+      path: ImportPathSyntax,
       _ unexpectedAfterPath: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -2987,9 +2987,9 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
   
   /// The path to the module, submodule or symbol being imported.
-  public var path: AccessPathSyntax {
+  public var path: ImportPathSyntax {
     get {
-      return AccessPathSyntax(data.child(at: 9, parent: Syntax(self))!)
+      return ImportPathSyntax(data.child(at: 9, parent: Syntax(self))!)
     }
     set(value) {
       self = ImportDeclSyntax(data.replacingChild(at: 9, with: value.raw, arena: SyntaxArena()))
@@ -3002,13 +3002,13 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `path` collection.
   /// - returns: A copy of the receiver with the provided `PathComponent`
   ///            appended to its `path` collection.
-  public func addPathComponent(_ element: AccessPathComponentSyntax) -> ImportDeclSyntax {
+  public func addPathComponent(_ element: ImportPathComponentSyntax) -> ImportDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
     if let col = raw.layoutView!.children[9] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.accessPath,
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.importPath,
                                         from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(at: 9, with: collection, arena: arena)

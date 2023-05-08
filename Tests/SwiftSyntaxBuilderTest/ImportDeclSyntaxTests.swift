@@ -19,7 +19,7 @@ final class ImportDeclSyntaxTests: XCTestCase {
     let identifier = TokenSyntax.identifier("SwiftSyntax")
 
     let importDecl = ImportDeclSyntax(
-      path: AccessPathSyntax([AccessPathComponentSyntax(name: identifier)])
+      path: ImportPathSyntax([ImportPathComponentSyntax(name: identifier)])
     )
 
     assertBuildResult(importDecl, "import SwiftSyntax")
@@ -28,7 +28,7 @@ final class ImportDeclSyntaxTests: XCTestCase {
   func testImportWithAttribute() {
     let buildable = ImportDeclSyntax(
       attributes: [.attribute("@_exported")],
-      path: [AccessPathComponentSyntax(name: "SwiftSyntax")]
+      path: [ImportPathComponentSyntax(name: "SwiftSyntax")]
     )
 
     assertBuildResult(

@@ -17,16 +17,6 @@
 @_spi(RawSyntax)
 public func childName(_ keyPath: AnyKeyPath) -> String? {
   switch keyPath {
-  case \AccessPathComponentSyntax.unexpectedBeforeName:
-    return "unexpectedBeforeName"
-  case \AccessPathComponentSyntax.name:
-    return "name"
-  case \AccessPathComponentSyntax.unexpectedBetweenNameAndTrailingDot:
-    return "unexpectedBetweenNameAndTrailingDot"
-  case \AccessPathComponentSyntax.trailingDot:
-    return "trailingDot"
-  case \AccessPathComponentSyntax.unexpectedAfterTrailingDot:
-    return "unexpectedAfterTrailingDot"
   case \AccessorBlockSyntax.unexpectedBeforeLeftBrace:
     return "unexpectedBeforeLeftBrace"
   case \AccessorBlockSyntax.leftBrace:
@@ -1689,6 +1679,16 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "path"
   case \ImportDeclSyntax.unexpectedAfterPath:
     return "unexpectedAfterPath"
+  case \ImportPathComponentSyntax.unexpectedBeforeName:
+    return "unexpectedBeforeName"
+  case \ImportPathComponentSyntax.name:
+    return "name"
+  case \ImportPathComponentSyntax.unexpectedBetweenNameAndTrailingDot:
+    return "unexpectedBetweenNameAndTrailingDot"
+  case \ImportPathComponentSyntax.trailingDot:
+    return "trailingDot"
+  case \ImportPathComponentSyntax.unexpectedAfterTrailingDot:
+    return "unexpectedAfterTrailingDot"
   case \InOutExprSyntax.unexpectedBeforeAmpersand:
     return "unexpectedBeforeAmpersand"
   case \InOutExprSyntax.ampersand:

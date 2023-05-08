@@ -12,122 +12,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-// MARK: - AccessPathComponentSyntax
-
-
-public struct AccessPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
-  public let _syntaxNode: Syntax
-  
-  public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .accessPathComponent else {
-      return nil
-    }
-    self._syntaxNode = node._syntaxNode
-  }
-  
-  /// Creates a `AccessPathComponentSyntax` node from the given `SyntaxData`. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
-  internal init(_ data: SyntaxData) {
-    precondition(data.raw.kind == .accessPathComponent)
-    self._syntaxNode = Syntax(data)
-  }
-  
-  public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeName: UnexpectedNodesSyntax? = nil,
-      name: TokenSyntax,
-      _ unexpectedBetweenNameAndTrailingDot: UnexpectedNodesSyntax? = nil,
-      trailingDot: TokenSyntax? = nil,
-      _ unexpectedAfterTrailingDot: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
-    
-  ) {
-    // Extend the lifetime of all parameters so their arenas don't get destroyed
-    // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeName, 
-            name, 
-            unexpectedBetweenNameAndTrailingDot, 
-            trailingDot, 
-            unexpectedAfterTrailingDot
-          ))) {(arena, _) in
-      let layout: [RawSyntax?] = [
-          unexpectedBeforeName?.raw, 
-          name.raw, 
-          unexpectedBetweenNameAndTrailingDot?.raw, 
-          trailingDot?.raw, 
-          unexpectedAfterTrailingDot?.raw
-        ]
-      let raw = RawSyntax.makeLayout(
-        kind: SyntaxKind.accessPathComponent,
-        from: layout,
-        arena: arena,
-        leadingTrivia: leadingTrivia,
-        trailingTrivia: trailingTrivia
-        
-      )
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
-  }
-  
-  public var unexpectedBeforeName: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = AccessPathComponentSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-  
-  public var name: TokenSyntax {
-    get {
-      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
-    }
-    set(value) {
-      self = AccessPathComponentSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
-    }
-  }
-  
-  public var unexpectedBetweenNameAndTrailingDot: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = AccessPathComponentSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-  
-  public var trailingDot: TokenSyntax? {
-    get {
-      return data.child(at: 3, parent: Syntax(self)).map(TokenSyntax.init)
-    }
-    set(value) {
-      self = AccessPathComponentSyntax(data.replacingChild(at: 3, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-  
-  public var unexpectedAfterTrailingDot: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = AccessPathComponentSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-  
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeName, 
-          \Self.name, 
-          \Self.unexpectedBetweenNameAndTrailingDot, 
-          \Self.trailingDot, 
-          \Self.unexpectedAfterTrailingDot
-        ])
-  }
-}
-
 // MARK: - AccessorBlockSyntax
 
 
@@ -10537,6 +10421,122 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
           \Self.unexpectedBetweenDeclBaseNameAndDeclNameArguments, 
           \Self.declNameArguments, 
           \Self.unexpectedAfterDeclNameArguments
+        ])
+  }
+}
+
+// MARK: - ImportPathComponentSyntax
+
+
+public struct ImportPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+  
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .importPathComponent else {
+      return nil
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+  
+  /// Creates a `ImportPathComponentSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    precondition(data.raw.kind == .importPathComponent)
+    self._syntaxNode = Syntax(data)
+  }
+  
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeName: UnexpectedNodesSyntax? = nil,
+      name: TokenSyntax,
+      _ unexpectedBetweenNameAndTrailingDot: UnexpectedNodesSyntax? = nil,
+      trailingDot: TokenSyntax? = nil,
+      _ unexpectedAfterTrailingDot: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
+            unexpectedBeforeName, 
+            name, 
+            unexpectedBetweenNameAndTrailingDot, 
+            trailingDot, 
+            unexpectedAfterTrailingDot
+          ))) {(arena, _) in
+      let layout: [RawSyntax?] = [
+          unexpectedBeforeName?.raw, 
+          name.raw, 
+          unexpectedBetweenNameAndTrailingDot?.raw, 
+          trailingDot?.raw, 
+          unexpectedAfterTrailingDot?.raw
+        ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.importPathComponent,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+        
+      )
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+  
+  public var unexpectedBeforeName: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = ImportPathComponentSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var name: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = ImportPathComponentSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenNameAndTrailingDot: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = ImportPathComponentSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var trailingDot: TokenSyntax? {
+    get {
+      return data.child(at: 3, parent: Syntax(self)).map(TokenSyntax.init)
+    }
+    set(value) {
+      self = ImportPathComponentSyntax(data.replacingChild(at: 3, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedAfterTrailingDot: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = ImportPathComponentSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+          \Self.unexpectedBeforeName, 
+          \Self.name, 
+          \Self.unexpectedBetweenNameAndTrailingDot, 
+          \Self.trailingDot, 
+          \Self.unexpectedAfterTrailingDot
         ])
   }
 }

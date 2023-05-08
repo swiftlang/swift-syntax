@@ -28,126 +28,6 @@ public protocol RawStmtSyntaxNodeProtocol: RawSyntaxNodeProtocol {}
 public protocol RawTypeSyntaxNodeProtocol: RawSyntaxNodeProtocol {}
 
 @_spi(RawSyntax)
-public struct RawAccessPathComponentSyntax: RawSyntaxNodeProtocol {
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
-    return raw.layoutView!
-  }
-  
-  public static func isKindOf(_ raw: RawSyntax) -> Bool {
-    return raw.kind == .accessPathComponent
-  }
-  
-  public var raw: RawSyntax
-  
-  init(raw: RawSyntax) {
-    precondition(Self.isKindOf(raw))
-    self.raw = raw
-  }
-  
-  private init(unchecked raw: RawSyntax) {
-    self.raw = raw
-  }
-  
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else {
-      return nil
-    }
-    self.init(unchecked: other.raw)
-  }
-  
-  public init(
-      _ unexpectedBeforeName: RawUnexpectedNodesSyntax? = nil, 
-      name: RawTokenSyntax, 
-      _ unexpectedBetweenNameAndTrailingDot: RawUnexpectedNodesSyntax? = nil, 
-      trailingDot: RawTokenSyntax?, 
-      _ unexpectedAfterTrailingDot: RawUnexpectedNodesSyntax? = nil, 
-      arena: __shared SyntaxArena
-    ) {
-    let raw = RawSyntax.makeLayout(
-      kind: .accessPathComponent, uninitializedCount: 5, arena: arena) { layout in
-      layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeName?.raw
-      layout[1] = name.raw
-      layout[2] = unexpectedBetweenNameAndTrailingDot?.raw
-      layout[3] = trailingDot?.raw
-      layout[4] = unexpectedAfterTrailingDot?.raw
-    }
-    self.init(unchecked: raw)
-  }
-  
-  public var unexpectedBeforeName: RawUnexpectedNodesSyntax? {
-    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  
-  public var name: RawTokenSyntax {
-    layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  
-  public var unexpectedBetweenNameAndTrailingDot: RawUnexpectedNodesSyntax? {
-    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  
-  public var trailingDot: RawTokenSyntax? {
-    layoutView.children[3].map(RawTokenSyntax.init(raw:))
-  }
-  
-  public var unexpectedAfterTrailingDot: RawUnexpectedNodesSyntax? {
-    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-}
-
-@_spi(RawSyntax)
-public struct RawAccessPathSyntax: RawSyntaxNodeProtocol {
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
-    return raw.layoutView!
-  }
-  
-  public static func isKindOf(_ raw: RawSyntax) -> Bool {
-    return raw.kind == .accessPath
-  }
-  
-  public var raw: RawSyntax
-  
-  init(raw: RawSyntax) {
-    precondition(Self.isKindOf(raw))
-    self.raw = raw
-  }
-  
-  private init(unchecked raw: RawSyntax) {
-    self.raw = raw
-  }
-  
-  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-    guard Self.isKindOf(other.raw) else {
-      return nil
-    }
-    self.init(unchecked: other.raw)
-  }
-  
-  public init(elements: [RawAccessPathComponentSyntax], arena: __shared SyntaxArena) {
-    let raw = RawSyntax.makeLayout(
-      kind: .accessPath, uninitializedCount: elements.count, arena: arena) { layout in
-        guard var ptr = layout.baseAddress else {
-          return
-        }
-        for elem in elements {
-          ptr.initialize(to: elem.raw)
-          ptr += 1
-        }
-    }
-    self.init(unchecked: raw)
-  }
-  
-  public var elements: [RawAccessPathComponentSyntax] {
-    layoutView.children.map {
-      RawAccessPathComponentSyntax(raw: $0!)
-    }
-  }
-}
-
-@_spi(RawSyntax)
 public struct RawAccessorBlockSyntax: RawSyntaxNodeProtocol {
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -11409,7 +11289,7 @@ public struct RawImportDeclSyntax: RawDeclSyntaxNodeProtocol {
       _ unexpectedBetweenImportTokAndImportKind: RawUnexpectedNodesSyntax? = nil, 
       importKind: RawTokenSyntax?, 
       _ unexpectedBetweenImportKindAndPath: RawUnexpectedNodesSyntax? = nil, 
-      path: RawAccessPathSyntax, 
+      path: RawImportPathSyntax, 
       _ unexpectedAfterPath: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
     ) {
@@ -11467,12 +11347,132 @@ public struct RawImportDeclSyntax: RawDeclSyntaxNodeProtocol {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var path: RawAccessPathSyntax {
-    layoutView.children[9].map(RawAccessPathSyntax.init(raw:))!
+  public var path: RawImportPathSyntax {
+    layoutView.children[9].map(RawImportPathSyntax.init(raw:))!
   }
   
   public var unexpectedAfterPath: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+}
+
+@_spi(RawSyntax)
+public struct RawImportPathComponentSyntax: RawSyntaxNodeProtocol {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
+    return raw.layoutView!
+  }
+  
+  public static func isKindOf(_ raw: RawSyntax) -> Bool {
+    return raw.kind == .importPathComponent
+  }
+  
+  public var raw: RawSyntax
+  
+  init(raw: RawSyntax) {
+    precondition(Self.isKindOf(raw))
+    self.raw = raw
+  }
+  
+  private init(unchecked raw: RawSyntax) {
+    self.raw = raw
+  }
+  
+  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+    guard Self.isKindOf(other.raw) else {
+      return nil
+    }
+    self.init(unchecked: other.raw)
+  }
+  
+  public init(
+      _ unexpectedBeforeName: RawUnexpectedNodesSyntax? = nil, 
+      name: RawTokenSyntax, 
+      _ unexpectedBetweenNameAndTrailingDot: RawUnexpectedNodesSyntax? = nil, 
+      trailingDot: RawTokenSyntax?, 
+      _ unexpectedAfterTrailingDot: RawUnexpectedNodesSyntax? = nil, 
+      arena: __shared SyntaxArena
+    ) {
+    let raw = RawSyntax.makeLayout(
+      kind: .importPathComponent, uninitializedCount: 5, arena: arena) { layout in
+      layout.initialize(repeating: nil)
+      layout[0] = unexpectedBeforeName?.raw
+      layout[1] = name.raw
+      layout[2] = unexpectedBetweenNameAndTrailingDot?.raw
+      layout[3] = trailingDot?.raw
+      layout[4] = unexpectedAfterTrailingDot?.raw
+    }
+    self.init(unchecked: raw)
+  }
+  
+  public var unexpectedBeforeName: RawUnexpectedNodesSyntax? {
+    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  
+  public var name: RawTokenSyntax {
+    layoutView.children[1].map(RawTokenSyntax.init(raw:))!
+  }
+  
+  public var unexpectedBetweenNameAndTrailingDot: RawUnexpectedNodesSyntax? {
+    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  
+  public var trailingDot: RawTokenSyntax? {
+    layoutView.children[3].map(RawTokenSyntax.init(raw:))
+  }
+  
+  public var unexpectedAfterTrailingDot: RawUnexpectedNodesSyntax? {
+    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+}
+
+@_spi(RawSyntax)
+public struct RawImportPathSyntax: RawSyntaxNodeProtocol {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
+    return raw.layoutView!
+  }
+  
+  public static func isKindOf(_ raw: RawSyntax) -> Bool {
+    return raw.kind == .importPath
+  }
+  
+  public var raw: RawSyntax
+  
+  init(raw: RawSyntax) {
+    precondition(Self.isKindOf(raw))
+    self.raw = raw
+  }
+  
+  private init(unchecked raw: RawSyntax) {
+    self.raw = raw
+  }
+  
+  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+    guard Self.isKindOf(other.raw) else {
+      return nil
+    }
+    self.init(unchecked: other.raw)
+  }
+  
+  public init(elements: [RawImportPathComponentSyntax], arena: __shared SyntaxArena) {
+    let raw = RawSyntax.makeLayout(
+      kind: .importPath, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+          return
+        }
+        for elem in elements {
+          ptr.initialize(to: elem.raw)
+          ptr += 1
+        }
+    }
+    self.init(unchecked: raw)
+  }
+  
+  public var elements: [RawImportPathComponentSyntax] {
+    layoutView.children.map {
+      RawImportPathComponentSyntax(raw: $0!)
+    }
   }
 }
 

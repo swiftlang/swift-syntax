@@ -118,7 +118,7 @@ public let AVAILABILITY_NODES: [Node] = [
     ]
   ),
 
-  // version-tuple-element -> '.' interger-literal
+  // version-tuple-element -> '.' integer-literal
   Node(
     name: "VersionComponent",
     nameForDiagnostics: nil,

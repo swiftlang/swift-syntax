@@ -483,7 +483,7 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   
   public init?<S: SyntaxProtocol>(_ node: S) {
     switch node.raw.kind {
-    case .breakStmt, .continueStmt, .deferStmt, .doStmt, .expressionStmt, .fallthroughStmt, .forInStmt, .forgetStmt, .guardStmt, .labeledStmt, .missingStmt, .repeatWhileStmt, .returnStmt, .throwStmt, .whileStmt, .yieldStmt:
+    case .breakStmt, .continueStmt, .deferStmt, .discardStmt, .doStmt, .expressionStmt, .fallthroughStmt, .forInStmt, .guardStmt, .labeledStmt, .missingStmt, .repeatWhileStmt, .returnStmt, .throwStmt, .whileStmt, .yieldStmt:
       self._syntaxNode = node._syntaxNode
     default:
       return nil
@@ -495,7 +495,7 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   /// is undefined.
   internal init(_ data: SyntaxData) {
     switch data.raw.kind {
-    case .breakStmt, .continueStmt, .deferStmt, .doStmt, .expressionStmt, .fallthroughStmt, .forInStmt, .forgetStmt, .guardStmt, .labeledStmt, .missingStmt, .repeatWhileStmt, .returnStmt, .throwStmt, .whileStmt, .yieldStmt:
+    case .breakStmt, .continueStmt, .deferStmt, .discardStmt, .doStmt, .expressionStmt, .fallthroughStmt, .forInStmt, .guardStmt, .labeledStmt, .missingStmt, .repeatWhileStmt, .returnStmt, .throwStmt, .whileStmt, .yieldStmt:
       break
     default:
       preconditionFailure("Unable to create StmtSyntax from \(data.raw.kind)")
@@ -534,11 +534,11 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           .node(BreakStmtSyntax.self),
           .node(ContinueStmtSyntax.self),
           .node(DeferStmtSyntax.self),
+          .node(DiscardStmtSyntax.self),
           .node(DoStmtSyntax.self),
           .node(ExpressionStmtSyntax.self),
           .node(FallthroughStmtSyntax.self),
           .node(ForInStmtSyntax.self),
-          .node(ForgetStmtSyntax.self),
           .node(GuardStmtSyntax.self),
           .node(LabeledStmtSyntax.self),
           .node(MissingStmtSyntax.self),
@@ -770,6 +770,7 @@ extension Syntax {
           .node(DifferentiabilityParamsSyntax.self),
           .node(DifferentiableAttributeArgumentsSyntax.self),
           .node(DiscardAssignmentExprSyntax.self),
+          .node(DiscardStmtSyntax.self),
           .node(DoStmtSyntax.self),
           .node(DocumentationAttributeArgumentSyntax.self),
           .node(DocumentationAttributeArgumentsSyntax.self),
@@ -794,7 +795,6 @@ extension Syntax {
           .node(FloatLiteralExprSyntax.self),
           .node(ForInStmtSyntax.self),
           .node(ForcedValueExprSyntax.self),
-          .node(ForgetStmtSyntax.self),
           .node(FunctionCallExprSyntax.self),
           .node(FunctionDeclSyntax.self),
           .node(FunctionEffectSpecifiersSyntax.self),

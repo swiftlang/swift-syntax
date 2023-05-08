@@ -55,7 +55,7 @@ extension Parser {
   ///     statement → control-transfer-statement ';'?
   ///     statement → defer-statement ';'?
   ///     statement → do-statement ';'?
-  ///     statement → forget-statement ';'?
+  ///     statement → discard-statement ';'?
   ///
   ///     loop-statement → for-in-statement
   ///     loop-statement → while-statement
@@ -124,8 +124,10 @@ extension Parser {
       return label(self.parseContinueStatement(continueHandle: handle), with: optLabel)
     case (.fallthroughKeyword, let handle)?:
       return label(self.parseFallthroughStatement(fallthroughHandle: handle), with: optLabel)
-    case (.forgetKeyword, let handle)?:
-      return label(self.parseForgetStatement(forgetHandle: handle), with: optLabel)
+    case (.forgetKeyword, let handle)?:  // NOTE: support for deprecated _forget
+      fallthrough
+    case (.discardKeyword, let handle)?:
+      return label(self.parseDiscardStatement(discardHandle: handle), with: optLabel)
     case (.returnKeyword, let handle)?:
       return label(self.parseReturnStatement(returnHandle: handle), with: optLabel)
     case (.throwKeyword, let handle)?:
@@ -393,22 +395,24 @@ extension Parser {
   }
 }
 
-// MARK: Forget Statements
+// MARK: Discard Statements
 
 extension Parser {
-  /// Parse a forget statement.
+  /// Parse a discard statement.
   ///
   /// Grammar
   /// =======
   ///
-  ///     forget-statement → 'forget' expression
+  ///     discard-statement → 'discard' expression
+  ///
+  /// where expression's first token is an identifier.
   @_spi(RawSyntax)
-  public mutating func parseForgetStatement(forgetHandle: RecoveryConsumptionHandle) -> RawForgetStmtSyntax {
-    let (unexpectedBeforeForgetKeyword, forgetKeyword) = self.eat(forgetHandle)
+  public mutating func parseDiscardStatement(discardHandle: RecoveryConsumptionHandle) -> RawDiscardStmtSyntax {
+    let (unexpectedBeforeDiscardKeyword, discardKeyword) = self.eat(discardHandle)
     let expr = self.parseExpression()
-    return RawForgetStmtSyntax(
-      unexpectedBeforeForgetKeyword,
-      forgetKeyword: forgetKeyword,
+    return RawDiscardStmtSyntax(
+      unexpectedBeforeDiscardKeyword,
+      discardKeyword: discardKeyword,
       expression: expr,
       arena: self.arena
     )
@@ -1009,22 +1013,24 @@ extension Parser.Lookahead {
         // yield statement of some singular expression.
         return !self.peek().isAtStartOfLine
       }
-    case .forgetKeyword?:
+    case .forgetKeyword?:  // NOTE: support for deprecated _forget
+      fallthrough
+    case .discardKeyword?:
       let next = peek()
-      // The thing to be forgotten must be on the same line as `forget`.
+      // The thing to be discarded must be on the same line as `discard`.
       if next.isAtStartOfLine {
         return false
       }
       switch next.rawTokenKind {
       case .identifier, .keyword:
         // Since some identifiers like "self" are classified as keywords,
-        // we want to recognize those too, to handle "forget self". We also
+        // we want to recognize those too, to handle "discard self". We also
         // accept any identifier since we want to emit a nice error message
         // later on during type checking.
         return true
       default:
-        // any other token following "forget" means it's not the statement.
-        // For example, could be the function call "forget()".
+        // any other token following "discard" means it's not the statement.
+        // For example, could be the function call "discard()".
         return false
       }
     case nil:

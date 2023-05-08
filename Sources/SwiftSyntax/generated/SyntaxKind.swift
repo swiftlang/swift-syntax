@@ -50,6 +50,7 @@ public enum SyntaxKind {
   case borrowExpr
   case breakStmt
   case canImportExpr
+  case canImportVersionInfo
   case caseItemList
   case caseItem
   case catchClauseList
@@ -481,6 +482,8 @@ public enum SyntaxKind {
       return BreakStmtSyntax.self
     case .canImportExpr:
       return CanImportExprSyntax.self
+    case .canImportVersionInfo:
+      return CanImportVersionInfoSyntax.self
     case .caseItemList:
       return CaseItemListSyntax.self
     case .caseItem:

@@ -536,20 +536,8 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
 
-    if let label = node.label,
-      label.presence == .missing
-    {
-      addDiagnostic(
-        label,
-        .canImportWrongSecondParameterLabel,
-        handledNodes: [label.id]
-      )
-
-      handledNodes.append(contentsOf: [node.unexpectedBetweenLabelAndColon?.id, node.colon?.id, node.versionTuple?.id].compactMap { $0 })
-    }
-
-    if let versionTuple = node.versionTuple,
-      let unexpectedVersionTuple = node.unexpectedBetweenVersionTupleAndRightParen
+    if let versionTuple = node.versionInfo?.versionTuple,
+      let unexpectedVersionTuple = node.unexpectedBetweenVersionInfoAndRightParen
     {
       if versionTuple.major.presence == .missing {
         addDiagnostic(
@@ -564,6 +552,24 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
           handledNodes: [unexpectedVersionTuple.id]
         )
       }
+    }
+
+    return .visitChildren
+  }
+
+  public override func visit(_ node: CanImportVersionInfoSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+
+    if node.label.presence == .missing {
+      addDiagnostic(
+        node.label,
+        .canImportWrongSecondParameterLabel,
+        handledNodes: [node.label.id]
+      )
+
+      handledNodes.append(contentsOf: [node.unexpectedBetweenLabelAndColon?.id, node.colon.id, node.versionTuple.id].compactMap { $0 })
     }
 
     return .visitChildren

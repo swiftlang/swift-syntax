@@ -2597,20 +2597,15 @@ extension Parser {
 
     let (unexpectedBeforeImportPath, importPath) = self.expect(.identifier)
 
-    let comma = self.consume(if: .comma)
+    var versionInfo: RawCanImportVersionInfoSyntax?
 
-    var unexpectedBeforeLabel: RawUnexpectedNodesSyntax?
-    var label: RawTokenSyntax?
+    if let comma = self.consume(if: .comma) {
+      let (unexpectedBeforeLabel, label) = self.expect(.keyword(._version), .keyword(._underlyingVersion), default: .keyword(._version))
+      let (unexpectedBeforeColon, colon) = self.expect(.colon)
 
-    var unexpectedBeforeColon: RawUnexpectedNodesSyntax?
-    var colon: RawTokenSyntax?
-    var version: RawVersionTupleSyntax?
+      let version = self.parseVersionTuple(maxComponentCount: 4)
 
-    if comma != nil {
-      (unexpectedBeforeLabel, label) = self.expect(.keyword(._version), .keyword(._underlyingVersion), default: .keyword(._version))
-      (unexpectedBeforeColon, colon) = self.expect(.colon)
-
-      version = self.parseVersionTuple(maxComponentCount: 4)
+      versionInfo = RawCanImportVersionInfoSyntax(comma: comma, unexpectedBeforeLabel, label: label, unexpectedBeforeColon, colon: colon, versionTuple: version, arena: self.arena)
     }
 
     let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
@@ -2622,12 +2617,7 @@ extension Parser {
         leftParen: leftParen,
         unexpectedBeforeImportPath,
         importPath: importPath,
-        comma: comma,
-        unexpectedBeforeLabel,
-        label: label,
-        unexpectedBeforeColon,
-        colon: colon,
-        versionTuple: version,
+        versionInfo: versionInfo,
         unexpectedBeforeRightParen,
         rightParen: rightParen,
         arena: self.arena

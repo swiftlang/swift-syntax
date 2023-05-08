@@ -442,6 +442,18 @@ open class SyntaxVisitor {
   open func visitPost(_ node: CanImportExprSyntax) {
   }
   
+  /// Visiting `CanImportVersionInfoSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: CanImportVersionInfoSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting `CanImportVersionInfoSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: CanImportVersionInfoSyntax) {
+  }
+  
   /// Visiting `CaseItemListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -3685,6 +3697,17 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplCanImportVersionInfoSyntax(_ data: SyntaxData) {
+    let node = CanImportVersionInfoSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplCaseItemListSyntax(_ data: SyntaxData) {
     let node = CaseItemListSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -6377,6 +6400,8 @@ open class SyntaxVisitor {
       visitImplBreakStmtSyntax(data)
     case .canImportExpr:
       visitImplCanImportExprSyntax(data)
+    case .canImportVersionInfo:
+      visitImplCanImportVersionInfoSyntax(data)
     case .caseItemList:
       visitImplCaseItemListSyntax(data)
     case .caseItem:

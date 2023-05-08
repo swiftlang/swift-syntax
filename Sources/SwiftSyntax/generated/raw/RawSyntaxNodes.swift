@@ -2846,21 +2846,15 @@ public struct RawCanImportExprSyntax: RawExprSyntaxNodeProtocol {
       leftParen: RawTokenSyntax, 
       _ unexpectedBetweenLeftParenAndImportPath: RawUnexpectedNodesSyntax? = nil, 
       importPath: RawTokenSyntax, 
-      _ unexpectedBetweenImportPathAndComma: RawUnexpectedNodesSyntax? = nil, 
-      comma: RawTokenSyntax?, 
-      _ unexpectedBetweenCommaAndLabel: RawUnexpectedNodesSyntax? = nil, 
-      label: RawTokenSyntax?, 
-      _ unexpectedBetweenLabelAndColon: RawUnexpectedNodesSyntax? = nil, 
-      colon: RawTokenSyntax?, 
-      _ unexpectedBetweenColonAndVersionTuple: RawUnexpectedNodesSyntax? = nil, 
-      versionTuple: RawVersionTupleSyntax?, 
-      _ unexpectedBetweenVersionTupleAndRightParen: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenImportPathAndVersionInfo: RawUnexpectedNodesSyntax? = nil, 
+      versionInfo: RawCanImportVersionInfoSyntax?, 
+      _ unexpectedBetweenVersionInfoAndRightParen: RawUnexpectedNodesSyntax? = nil, 
       rightParen: RawTokenSyntax, 
       _ unexpectedAfterRightParen: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .canImportExpr, uninitializedCount: 17, arena: arena) { layout in
+      kind: .canImportExpr, uninitializedCount: 11, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeCanImportKeyword?.raw
       layout[1] = canImportKeyword.raw
@@ -2868,17 +2862,11 @@ public struct RawCanImportExprSyntax: RawExprSyntaxNodeProtocol {
       layout[3] = leftParen.raw
       layout[4] = unexpectedBetweenLeftParenAndImportPath?.raw
       layout[5] = importPath.raw
-      layout[6] = unexpectedBetweenImportPathAndComma?.raw
-      layout[7] = comma?.raw
-      layout[8] = unexpectedBetweenCommaAndLabel?.raw
-      layout[9] = label?.raw
-      layout[10] = unexpectedBetweenLabelAndColon?.raw
-      layout[11] = colon?.raw
-      layout[12] = unexpectedBetweenColonAndVersionTuple?.raw
-      layout[13] = versionTuple?.raw
-      layout[14] = unexpectedBetweenVersionTupleAndRightParen?.raw
-      layout[15] = rightParen.raw
-      layout[16] = unexpectedAfterRightParen?.raw
+      layout[6] = unexpectedBetweenImportPathAndVersionInfo?.raw
+      layout[7] = versionInfo?.raw
+      layout[8] = unexpectedBetweenVersionInfoAndRightParen?.raw
+      layout[9] = rightParen.raw
+      layout[10] = unexpectedAfterRightParen?.raw
     }
     self.init(unchecked: raw)
   }
@@ -2907,48 +2895,118 @@ public struct RawCanImportExprSyntax: RawExprSyntaxNodeProtocol {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
   }
   
-  public var unexpectedBetweenImportPathAndComma: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenImportPathAndVersionInfo: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var comma: RawTokenSyntax? {
-    layoutView.children[7].map(RawTokenSyntax.init(raw:))
+  public var versionInfo: RawCanImportVersionInfoSyntax? {
+    layoutView.children[7].map(RawCanImportVersionInfoSyntax.init(raw:))
   }
   
-  public var unexpectedBetweenCommaAndLabel: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenVersionInfoAndRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var label: RawTokenSyntax? {
-    layoutView.children[9].map(RawTokenSyntax.init(raw:))
-  }
-  
-  public var unexpectedBetweenLabelAndColon: RawUnexpectedNodesSyntax? {
-    layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  
-  public var colon: RawTokenSyntax? {
-    layoutView.children[11].map(RawTokenSyntax.init(raw:))
-  }
-  
-  public var unexpectedBetweenColonAndVersionTuple: RawUnexpectedNodesSyntax? {
-    layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  
-  public var versionTuple: RawVersionTupleSyntax? {
-    layoutView.children[13].map(RawVersionTupleSyntax.init(raw:))
-  }
-  
-  public var unexpectedBetweenVersionTupleAndRightParen: RawUnexpectedNodesSyntax? {
-    layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  
   public var rightParen: RawTokenSyntax {
-    layoutView.children[15].map(RawTokenSyntax.init(raw:))!
+    layoutView.children[9].map(RawTokenSyntax.init(raw:))!
   }
   
   public var unexpectedAfterRightParen: RawUnexpectedNodesSyntax? {
-    layoutView.children[16].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+}
+
+@_spi(RawSyntax)
+public struct RawCanImportVersionInfoSyntax: RawExprSyntaxNodeProtocol {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
+    return raw.layoutView!
+  }
+  
+  public static func isKindOf(_ raw: RawSyntax) -> Bool {
+    return raw.kind == .canImportVersionInfo
+  }
+  
+  public var raw: RawSyntax
+  
+  init(raw: RawSyntax) {
+    precondition(Self.isKindOf(raw))
+    self.raw = raw
+  }
+  
+  private init(unchecked raw: RawSyntax) {
+    self.raw = raw
+  }
+  
+  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+    guard Self.isKindOf(other.raw) else {
+      return nil
+    }
+    self.init(unchecked: other.raw)
+  }
+  
+  public init(
+      _ unexpectedBeforeComma: RawUnexpectedNodesSyntax? = nil, 
+      comma: RawTokenSyntax, 
+      _ unexpectedBetweenCommaAndLabel: RawUnexpectedNodesSyntax? = nil, 
+      label: RawTokenSyntax, 
+      _ unexpectedBetweenLabelAndColon: RawUnexpectedNodesSyntax? = nil, 
+      colon: RawTokenSyntax, 
+      _ unexpectedBetweenColonAndVersionTuple: RawUnexpectedNodesSyntax? = nil, 
+      versionTuple: RawVersionTupleSyntax, 
+      _ unexpectedAfterVersionTuple: RawUnexpectedNodesSyntax? = nil, 
+      arena: __shared SyntaxArena
+    ) {
+    let raw = RawSyntax.makeLayout(
+      kind: .canImportVersionInfo, uninitializedCount: 9, arena: arena) { layout in
+      layout.initialize(repeating: nil)
+      layout[0] = unexpectedBeforeComma?.raw
+      layout[1] = comma.raw
+      layout[2] = unexpectedBetweenCommaAndLabel?.raw
+      layout[3] = label.raw
+      layout[4] = unexpectedBetweenLabelAndColon?.raw
+      layout[5] = colon.raw
+      layout[6] = unexpectedBetweenColonAndVersionTuple?.raw
+      layout[7] = versionTuple.raw
+      layout[8] = unexpectedAfterVersionTuple?.raw
+    }
+    self.init(unchecked: raw)
+  }
+  
+  public var unexpectedBeforeComma: RawUnexpectedNodesSyntax? {
+    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  
+  public var comma: RawTokenSyntax {
+    layoutView.children[1].map(RawTokenSyntax.init(raw:))!
+  }
+  
+  public var unexpectedBetweenCommaAndLabel: RawUnexpectedNodesSyntax? {
+    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  
+  public var label: RawTokenSyntax {
+    layoutView.children[3].map(RawTokenSyntax.init(raw:))!
+  }
+  
+  public var unexpectedBetweenLabelAndColon: RawUnexpectedNodesSyntax? {
+    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  
+  public var colon: RawTokenSyntax {
+    layoutView.children[5].map(RawTokenSyntax.init(raw:))!
+  }
+  
+  public var unexpectedBetweenColonAndVersionTuple: RawUnexpectedNodesSyntax? {
+    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  
+  public var versionTuple: RawVersionTupleSyntax {
+    layoutView.children[7].map(RawVersionTupleSyntax.init(raw:))!
+  }
+  
+  public var unexpectedAfterVersionTuple: RawUnexpectedNodesSyntax? {
+    layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 
@@ -8517,7 +8575,7 @@ public struct RawExprSyntax: RawExprSyntaxNodeProtocol {
   
   public static func isKindOf(_ raw: RawSyntax) -> Bool {
     switch raw.kind {
-    case .arrayExpr, .arrowExpr, .asExpr, .assignmentExpr, .awaitExpr, .binaryOperatorExpr, .booleanLiteralExpr, .borrowExpr, .canImportExpr, .closureExpr, .dictionaryExpr, .discardAssignmentExpr, .editorPlaceholderExpr, .floatLiteralExpr, .forcedValueExpr, .functionCallExpr, .identifierExpr, .ifExpr, .inOutExpr, .infixOperatorExpr, .integerLiteralExpr, .isExpr, .keyPathExpr, .macroExpansionExpr, .memberAccessExpr, .missingExpr, .moveExpr, .nilLiteralExpr, .optionalChainingExpr, .packElementExpr, .packExpansionExpr, .postfixIfConfigExpr, .postfixUnaryExpr, .prefixOperatorExpr, .regexLiteralExpr, .sequenceExpr, .specializeExpr, .stringLiteralExpr, .subscriptExpr, .superRefExpr, .switchExpr, .ternaryExpr, .tryExpr, .tupleExpr, .typeExpr, .unresolvedAsExpr, .unresolvedIsExpr, .unresolvedPatternExpr, .unresolvedTernaryExpr:
+    case .arrayExpr, .arrowExpr, .asExpr, .assignmentExpr, .awaitExpr, .binaryOperatorExpr, .booleanLiteralExpr, .borrowExpr, .canImportExpr, .canImportVersionInfo, .closureExpr, .dictionaryExpr, .discardAssignmentExpr, .editorPlaceholderExpr, .floatLiteralExpr, .forcedValueExpr, .functionCallExpr, .identifierExpr, .ifExpr, .inOutExpr, .infixOperatorExpr, .integerLiteralExpr, .isExpr, .keyPathExpr, .macroExpansionExpr, .memberAccessExpr, .missingExpr, .moveExpr, .nilLiteralExpr, .optionalChainingExpr, .packElementExpr, .packExpansionExpr, .postfixIfConfigExpr, .postfixUnaryExpr, .prefixOperatorExpr, .regexLiteralExpr, .sequenceExpr, .specializeExpr, .stringLiteralExpr, .subscriptExpr, .superRefExpr, .switchExpr, .ternaryExpr, .tryExpr, .tupleExpr, .typeExpr, .unresolvedAsExpr, .unresolvedIsExpr, .unresolvedPatternExpr, .unresolvedTernaryExpr:
       return true
     default:
       return false

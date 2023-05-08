@@ -189,6 +189,11 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: CanImportExprSyntax) -> ResultType
   
+  /// Visiting `CanImportVersionInfoSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: CanImportVersionInfoSyntax) -> ResultType
+  
   /// Visiting `CaseItemListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -1620,6 +1625,13 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: CanImportExprSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting `CanImportVersionInfoSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: CanImportVersionInfoSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -3360,6 +3372,8 @@ extension SyntaxTransformVisitor {
     case .breakStmt(let derived):
       return visit(derived)
     case .canImportExpr(let derived):
+      return visit(derived)
+    case .canImportVersionInfo(let derived):
       return visit(derived)
     case .caseItemList(let derived):
       return visit(derived)

@@ -204,28 +204,37 @@ public let EXPR_NODES: [Node] = [
         kind: .token(choices: [.token(tokenKind: "IdentifierToken")])
       ),
       Child(
-        name: "Comma",
-        kind: .token(choices: [.token(tokenKind: "CommaToken")]),
-        isOptional: true
-      ),
-      Child(
-        name: "Label",
-        kind: .token(choices: [.keyword(text: "_version"), .keyword(text: "_underlyingVersion")]),
-        isOptional: true
-      ),
-      Child(
-        name: "Colon",
-        kind: .token(choices: [.token(tokenKind: "ColonToken")]),
-        isOptional: true
-      ),
-      Child(
-        name: "VersionTuple",
-        kind: .node(kind: "VersionTuple"),
+        name: "VersionInfo",
+        kind: .node(kind: "CanImportVersionInfo"),
         isOptional: true
       ),
       Child(
         name: "RightParen",
         kind: .token(choices: [.token(tokenKind: "RightParenToken")])
+      ),
+    ]
+  ),
+
+  Node(
+    name: "CanImportVersionInfo",
+    nameForDiagnostics: nil,
+    kind: "Expr",
+    children: [
+      Child(
+        name: "Comma",
+        kind: .token(choices: [.token(tokenKind: "CommaToken")])
+      ),
+      Child(
+        name: "Label",
+        kind: .token(choices: [.keyword(text: "_version"), .keyword(text: "_underlyingVersion")])
+      ),
+      Child(
+        name: "Colon",
+        kind: .token(choices: [.token(tokenKind: "ColonToken")])
+      ),
+      Child(
+        name: "VersionTuple",
+        kind: .node(kind: "VersionTuple")
       ),
     ]
   ),

@@ -50,6 +50,7 @@ public enum SyntaxEnum {
   case borrowExpr(BorrowExprSyntax)
   case breakStmt(BreakStmtSyntax)
   case canImportExpr(CanImportExprSyntax)
+  case canImportVersionInfo(CanImportVersionInfoSyntax)
   case caseItemList(CaseItemListSyntax)
   case caseItem(CaseItemSyntax)
   case catchClauseList(CatchClauseListSyntax)
@@ -364,6 +365,8 @@ public extension Syntax {
       return .breakStmt(BreakStmtSyntax(self)!)
     case .canImportExpr:
       return .canImportExpr(CanImportExprSyntax(self)!)
+    case .canImportVersionInfo:
+      return .canImportVersionInfo(CanImportVersionInfoSyntax(self)!)
     case .caseItemList:
       return .caseItemList(CaseItemListSyntax(self)!)
     case .caseItem:

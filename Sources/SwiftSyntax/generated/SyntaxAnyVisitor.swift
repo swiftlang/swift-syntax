@@ -325,6 +325,14 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
+  override open func visit(_ node: CanImportVersionInfoSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: CanImportVersionInfoSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
   override open func visit(_ node: CaseItemListSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

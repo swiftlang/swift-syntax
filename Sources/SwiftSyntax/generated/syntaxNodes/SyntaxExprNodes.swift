@@ -952,15 +952,9 @@ public struct CanImportExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       leftParen: TokenSyntax = .leftParenToken(),
       _ unexpectedBetweenLeftParenAndImportPath: UnexpectedNodesSyntax? = nil,
       importPath: TokenSyntax,
-      _ unexpectedBetweenImportPathAndComma: UnexpectedNodesSyntax? = nil,
-      comma: TokenSyntax? = nil,
-      _ unexpectedBetweenCommaAndLabel: UnexpectedNodesSyntax? = nil,
-      label: TokenSyntax? = nil,
-      _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil,
-      colon: TokenSyntax? = nil,
-      _ unexpectedBetweenColonAndVersionTuple: UnexpectedNodesSyntax? = nil,
-      versionTuple: VersionTupleSyntax? = nil,
-      _ unexpectedBetweenVersionTupleAndRightParen: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenImportPathAndVersionInfo: UnexpectedNodesSyntax? = nil,
+      versionInfo: CanImportVersionInfoSyntax? = nil,
+      _ unexpectedBetweenVersionInfoAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax = .rightParenToken(),
       _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
@@ -975,15 +969,9 @@ public struct CanImportExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
             leftParen, 
             unexpectedBetweenLeftParenAndImportPath, 
             importPath, 
-            unexpectedBetweenImportPathAndComma, 
-            comma, 
-            unexpectedBetweenCommaAndLabel, 
-            label, 
-            unexpectedBetweenLabelAndColon, 
-            colon, 
-            unexpectedBetweenColonAndVersionTuple, 
-            versionTuple, 
-            unexpectedBetweenVersionTupleAndRightParen, 
+            unexpectedBetweenImportPathAndVersionInfo, 
+            versionInfo, 
+            unexpectedBetweenVersionInfoAndRightParen, 
             rightParen, 
             unexpectedAfterRightParen
           ))) {(arena, _) in
@@ -994,15 +982,9 @@ public struct CanImportExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           leftParen.raw, 
           unexpectedBetweenLeftParenAndImportPath?.raw, 
           importPath.raw, 
-          unexpectedBetweenImportPathAndComma?.raw, 
-          comma?.raw, 
-          unexpectedBetweenCommaAndLabel?.raw, 
-          label?.raw, 
-          unexpectedBetweenLabelAndColon?.raw, 
-          colon?.raw, 
-          unexpectedBetweenColonAndVersionTuple?.raw, 
-          versionTuple?.raw, 
-          unexpectedBetweenVersionTupleAndRightParen?.raw, 
+          unexpectedBetweenImportPathAndVersionInfo?.raw, 
+          versionInfo?.raw, 
+          unexpectedBetweenVersionInfoAndRightParen?.raw, 
           rightParen.raw, 
           unexpectedAfterRightParen?.raw
         ]
@@ -1073,7 +1055,7 @@ public struct CanImportExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenImportPathAndComma: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenImportPathAndVersionInfo: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -1082,16 +1064,16 @@ public struct CanImportExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var comma: TokenSyntax? {
+  public var versionInfo: CanImportVersionInfoSyntax? {
     get {
-      return data.child(at: 7, parent: Syntax(self)).map(TokenSyntax.init)
+      return data.child(at: 7, parent: Syntax(self)).map(CanImportVersionInfoSyntax.init)
     }
     set(value) {
       self = CanImportExprSyntax(data.replacingChild(at: 7, with: value?.raw, arena: SyntaxArena()))
     }
   }
   
-  public var unexpectedBetweenCommaAndLabel: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenVersionInfoAndRightParen: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -1100,75 +1082,21 @@ public struct CanImportExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var label: TokenSyntax? {
-    get {
-      return data.child(at: 9, parent: Syntax(self)).map(TokenSyntax.init)
-    }
-    set(value) {
-      self = CanImportExprSyntax(data.replacingChild(at: 9, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-  
-  public var unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 10, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = CanImportExprSyntax(data.replacingChild(at: 10, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-  
-  public var colon: TokenSyntax? {
-    get {
-      return data.child(at: 11, parent: Syntax(self)).map(TokenSyntax.init)
-    }
-    set(value) {
-      self = CanImportExprSyntax(data.replacingChild(at: 11, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-  
-  public var unexpectedBetweenColonAndVersionTuple: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 12, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = CanImportExprSyntax(data.replacingChild(at: 12, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-  
-  public var versionTuple: VersionTupleSyntax? {
-    get {
-      return data.child(at: 13, parent: Syntax(self)).map(VersionTupleSyntax.init)
-    }
-    set(value) {
-      self = CanImportExprSyntax(data.replacingChild(at: 13, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-  
-  public var unexpectedBetweenVersionTupleAndRightParen: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 14, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = CanImportExprSyntax(data.replacingChild(at: 14, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-  
   public var rightParen: TokenSyntax {
     get {
-      return TokenSyntax(data.child(at: 15, parent: Syntax(self))!)
+      return TokenSyntax(data.child(at: 9, parent: Syntax(self))!)
     }
     set(value) {
-      self = CanImportExprSyntax(data.replacingChild(at: 15, with: value.raw, arena: SyntaxArena()))
+      self = CanImportExprSyntax(data.replacingChild(at: 9, with: value.raw, arena: SyntaxArena()))
     }
   }
   
   public var unexpectedAfterRightParen: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 16, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 10, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = CanImportExprSyntax(data.replacingChild(at: 16, with: value?.raw, arena: SyntaxArena()))
+      self = CanImportExprSyntax(data.replacingChild(at: 10, with: value?.raw, arena: SyntaxArena()))
     }
   }
   
@@ -1180,7 +1108,171 @@ public struct CanImportExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.leftParen, 
           \Self.unexpectedBetweenLeftParenAndImportPath, 
           \Self.importPath, 
-          \Self.unexpectedBetweenImportPathAndComma, 
+          \Self.unexpectedBetweenImportPathAndVersionInfo, 
+          \Self.versionInfo, 
+          \Self.unexpectedBetweenVersionInfoAndRightParen, 
+          \Self.rightParen, 
+          \Self.unexpectedAfterRightParen
+        ])
+  }
+}
+
+// MARK: - CanImportVersionInfoSyntax
+
+
+public struct CanImportVersionInfoSyntax: ExprSyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+  
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .canImportVersionInfo else {
+      return nil
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+  
+  /// Creates a `CanImportVersionInfoSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    precondition(data.raw.kind == .canImportVersionInfo)
+    self._syntaxNode = Syntax(data)
+  }
+  
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeComma: UnexpectedNodesSyntax? = nil,
+      comma: TokenSyntax = .commaToken(),
+      _ unexpectedBetweenCommaAndLabel: UnexpectedNodesSyntax? = nil,
+      label: TokenSyntax,
+      _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax = .colonToken(),
+      _ unexpectedBetweenColonAndVersionTuple: UnexpectedNodesSyntax? = nil,
+      versionTuple: VersionTupleSyntax,
+      _ unexpectedAfterVersionTuple: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
+            unexpectedBeforeComma, 
+            comma, 
+            unexpectedBetweenCommaAndLabel, 
+            label, 
+            unexpectedBetweenLabelAndColon, 
+            colon, 
+            unexpectedBetweenColonAndVersionTuple, 
+            versionTuple, 
+            unexpectedAfterVersionTuple
+          ))) {(arena, _) in
+      let layout: [RawSyntax?] = [
+          unexpectedBeforeComma?.raw, 
+          comma.raw, 
+          unexpectedBetweenCommaAndLabel?.raw, 
+          label.raw, 
+          unexpectedBetweenLabelAndColon?.raw, 
+          colon.raw, 
+          unexpectedBetweenColonAndVersionTuple?.raw, 
+          versionTuple.raw, 
+          unexpectedAfterVersionTuple?.raw
+        ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.canImportVersionInfo,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+        
+      )
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+  
+  public var unexpectedBeforeComma: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = CanImportVersionInfoSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var comma: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = CanImportVersionInfoSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenCommaAndLabel: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = CanImportVersionInfoSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var label: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = CanImportVersionInfoSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = CanImportVersionInfoSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var colon: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = CanImportVersionInfoSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenColonAndVersionTuple: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = CanImportVersionInfoSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var versionTuple: VersionTupleSyntax {
+    get {
+      return VersionTupleSyntax(data.child(at: 7, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = CanImportVersionInfoSyntax(data.replacingChild(at: 7, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedAfterVersionTuple: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = CanImportVersionInfoSyntax(data.replacingChild(at: 8, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+          \Self.unexpectedBeforeComma, 
           \Self.comma, 
           \Self.unexpectedBetweenCommaAndLabel, 
           \Self.label, 
@@ -1188,9 +1280,7 @@ public struct CanImportExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.colon, 
           \Self.unexpectedBetweenColonAndVersionTuple, 
           \Self.versionTuple, 
-          \Self.unexpectedBetweenVersionTupleAndRightParen, 
-          \Self.rightParen, 
-          \Self.unexpectedAfterRightParen
+          \Self.unexpectedAfterVersionTuple
         ])
   }
 }

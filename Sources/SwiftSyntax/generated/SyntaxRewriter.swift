@@ -263,6 +263,13 @@ open class SyntaxRewriter {
     return ExprSyntax(visitChildren(node))
   }
   
+  /// Visit a `CanImportVersionInfoSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: CanImportVersionInfoSyntax) -> ExprSyntax {
+    return ExprSyntax(visitChildren(node))
+  }
+  
   /// Visit a `CaseItemListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -2468,6 +2475,20 @@ open class SyntaxRewriter {
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplCanImportExprSyntax(_ data: SyntaxData) -> Syntax {
     let node = CanImportExprSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer {
+      visitPost(node._syntaxNode)
+    }
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
+    }
+    return Syntax(visit(node))
+  }
+  
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplCanImportVersionInfoSyntax(_ data: SyntaxData) -> Syntax {
+    let node = CanImportVersionInfoSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer {
@@ -5921,6 +5942,8 @@ open class SyntaxRewriter {
       return visitImplBreakStmtSyntax
     case .canImportExpr:
       return visitImplCanImportExprSyntax
+    case .canImportVersionInfo:
+      return visitImplCanImportVersionInfoSyntax
     case .caseItemList:
       return visitImplCaseItemListSyntax
     case .caseItem:
@@ -6475,6 +6498,8 @@ open class SyntaxRewriter {
       return visitImplBreakStmtSyntax(data)
     case .canImportExpr:
       return visitImplCanImportExprSyntax(data)
+    case .canImportVersionInfo:
+      return visitImplCanImportVersionInfoSyntax(data)
     case .caseItemList:
       return visitImplCaseItemListSyntax(data)
     case .caseItem:

@@ -411,28 +411,34 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenLeftParenAndImportPath"
   case \CanImportExprSyntax.importPath:
     return "importPath"
-  case \CanImportExprSyntax.unexpectedBetweenImportPathAndComma:
-    return "unexpectedBetweenImportPathAndComma"
-  case \CanImportExprSyntax.comma:
-    return "comma"
-  case \CanImportExprSyntax.unexpectedBetweenCommaAndLabel:
-    return "unexpectedBetweenCommaAndLabel"
-  case \CanImportExprSyntax.label:
-    return "label"
-  case \CanImportExprSyntax.unexpectedBetweenLabelAndColon:
-    return "unexpectedBetweenLabelAndColon"
-  case \CanImportExprSyntax.colon:
-    return "colon"
-  case \CanImportExprSyntax.unexpectedBetweenColonAndVersionTuple:
-    return "unexpectedBetweenColonAndVersionTuple"
-  case \CanImportExprSyntax.versionTuple:
-    return "versionTuple"
-  case \CanImportExprSyntax.unexpectedBetweenVersionTupleAndRightParen:
-    return "unexpectedBetweenVersionTupleAndRightParen"
+  case \CanImportExprSyntax.unexpectedBetweenImportPathAndVersionInfo:
+    return "unexpectedBetweenImportPathAndVersionInfo"
+  case \CanImportExprSyntax.versionInfo:
+    return "versionInfo"
+  case \CanImportExprSyntax.unexpectedBetweenVersionInfoAndRightParen:
+    return "unexpectedBetweenVersionInfoAndRightParen"
   case \CanImportExprSyntax.rightParen:
     return "rightParen"
   case \CanImportExprSyntax.unexpectedAfterRightParen:
     return "unexpectedAfterRightParen"
+  case \CanImportVersionInfoSyntax.unexpectedBeforeComma:
+    return "unexpectedBeforeComma"
+  case \CanImportVersionInfoSyntax.comma:
+    return "comma"
+  case \CanImportVersionInfoSyntax.unexpectedBetweenCommaAndLabel:
+    return "unexpectedBetweenCommaAndLabel"
+  case \CanImportVersionInfoSyntax.label:
+    return "label"
+  case \CanImportVersionInfoSyntax.unexpectedBetweenLabelAndColon:
+    return "unexpectedBetweenLabelAndColon"
+  case \CanImportVersionInfoSyntax.colon:
+    return "colon"
+  case \CanImportVersionInfoSyntax.unexpectedBetweenColonAndVersionTuple:
+    return "unexpectedBetweenColonAndVersionTuple"
+  case \CanImportVersionInfoSyntax.versionTuple:
+    return "versionTuple"
+  case \CanImportVersionInfoSyntax.unexpectedAfterVersionTuple:
+    return "unexpectedAfterVersionTuple"
   case \CaseItemSyntax.unexpectedBeforePattern:
     return "unexpectedBeforePattern"
   case \CaseItemSyntax.pattern:

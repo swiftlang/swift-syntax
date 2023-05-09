@@ -153,11 +153,11 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/BreakStmtSyntax>
 - <doc:SwiftSyntax/ContinueStmtSyntax>
 - <doc:SwiftSyntax/DeferStmtSyntax>
+- <doc:SwiftSyntax/DiscardStmtSyntax>
 - <doc:SwiftSyntax/DoStmtSyntax>
 - <doc:SwiftSyntax/ExpressionStmtSyntax>
 - <doc:SwiftSyntax/FallthroughStmtSyntax>
 - <doc:SwiftSyntax/ForInStmtSyntax>
-- <doc:SwiftSyntax/ForgetStmtSyntax>
 - <doc:SwiftSyntax/GuardStmtSyntax>
 - <doc:SwiftSyntax/LabeledStmtSyntax>
 - <doc:SwiftSyntax/RepeatWhileStmtSyntax>

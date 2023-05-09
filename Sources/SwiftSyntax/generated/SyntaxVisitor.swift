@@ -1066,6 +1066,18 @@ open class SyntaxVisitor {
   open func visitPost(_ node: DiscardAssignmentExprSyntax) {
   }
   
+  /// Visiting `DiscardStmtSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: DiscardStmtSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting `DiscardStmtSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: DiscardStmtSyntax) {
+  }
+  
   /// Visiting `DoStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -1352,18 +1364,6 @@ open class SyntaxVisitor {
   /// The function called after visiting `ForcedValueExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ForcedValueExprSyntax) {
-  }
-  
-  /// Visiting `ForgetStmtSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: ForgetStmtSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting `ForgetStmtSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: ForgetStmtSyntax) {
   }
   
   /// Visiting `FunctionCallExprSyntax` specifically.
@@ -4221,6 +4221,17 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplDiscardStmtSyntax(_ data: SyntaxData) {
+    let node = DiscardStmtSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplDoStmtSyntax(_ data: SyntaxData) {
     let node = DoStmtSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -4476,17 +4487,6 @@ open class SyntaxVisitor {
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplForcedValueExprSyntax(_ data: SyntaxData) {
     let node = ForcedValueExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplForgetStmtSyntax(_ data: SyntaxData) {
-    let node = ForgetStmtSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -6412,6 +6412,8 @@ open class SyntaxVisitor {
       visitImplDifferentiableAttributeArgumentsSyntax(data)
     case .discardAssignmentExpr:
       visitImplDiscardAssignmentExprSyntax(data)
+    case .discardStmt:
+      visitImplDiscardStmtSyntax(data)
     case .doStmt:
       visitImplDoStmtSyntax(data)
     case .documentationAttributeArgument:
@@ -6460,8 +6462,6 @@ open class SyntaxVisitor {
       visitImplForInStmtSyntax(data)
     case .forcedValueExpr:
       visitImplForcedValueExprSyntax(data)
-    case .forgetStmt:
-      visitImplForgetStmtSyntax(data)
     case .functionCallExpr:
       visitImplFunctionCallExprSyntax(data)
     case .functionDecl:

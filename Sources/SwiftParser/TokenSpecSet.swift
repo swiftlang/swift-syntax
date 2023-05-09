@@ -80,7 +80,8 @@ enum CanBeStatementStart: TokenSpecSet {
   case doKeyword
   case fallthroughKeyword
   case forKeyword
-  case forgetKeyword
+  case forgetKeyword  // NOTE: support for deprecated _forget
+  case discardKeyword
   case guardKeyword
   case ifKeyword
   case repeatKeyword
@@ -99,6 +100,7 @@ enum CanBeStatementStart: TokenSpecSet {
     case TokenSpec(.fallthrough): self = .fallthroughKeyword
     case TokenSpec(.for): self = .forKeyword
     case TokenSpec(._forget): self = .forgetKeyword
+    case TokenSpec(.discard): self = .discardKeyword
     case TokenSpec(.guard): self = .guardKeyword
     case TokenSpec(.if): self = .ifKeyword
     case TokenSpec(.repeat): self = .repeatKeyword
@@ -120,6 +122,7 @@ enum CanBeStatementStart: TokenSpecSet {
     case .fallthroughKeyword: return .keyword(.fallthrough)
     case .forKeyword: return .keyword(.for)
     case .forgetKeyword: return TokenSpec(._forget, recoveryPrecedence: .stmtKeyword)
+    case .discardKeyword: return TokenSpec(.discard, recoveryPrecedence: .stmtKeyword)
     case .guardKeyword: return .keyword(.guard)
     case .ifKeyword: return .keyword(.if)
     case .repeatKeyword: return .keyword(.repeat)

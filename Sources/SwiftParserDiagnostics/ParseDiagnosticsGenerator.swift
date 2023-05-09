@@ -169,8 +169,9 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       changes.append(
         FixIt.MultiNodeChange.makePresent(
           correctToken,
-          leadingTrivia: misplacedToken.leadingTrivia,
-          trailingTrivia: misplacedToken.trailingTrivia
+          // Transfer any existing trivia. If there is no trivia in the misplaced token, pass `nil` so that `makePresent` can add required trivia, if necessary.
+          leadingTrivia: misplacedToken.leadingTrivia.isEmpty ? nil : misplacedToken.leadingTrivia,
+          trailingTrivia: misplacedToken.trailingTrivia.isEmpty ? nil : misplacedToken.trailingTrivia
         )
       )
     } else {
@@ -978,7 +979,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         fixIts: [
           FixIt(
             message: ReplaceTokensFixIt(replaceTokens: [.binaryOperator("==")], replacements: [node.equal]),
-            changes: [.makeMissing(unexpected), .makePresent(node.equal, leadingTrivia: [])]
+            changes: [.makeMissing(unexpected), .makePresent(node.equal)]
           )
         ],
         handledNodes: [unexpected.id, node.equal.id]
@@ -1333,7 +1334,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         node.statements,
         .allStatmentsInSwitchMustBeCoveredByCase,
         fixIts: [
-          FixIt(message: InsertTokenFixIt(missingNodes: [Syntax(node.label)]), changes: .makePresent(node.label, leadingTrivia: .newline))
+          FixIt(message: InsertTokenFixIt(missingNodes: [Syntax(node.label)]), changes: .makePresent(node.label))
         ],
         handledNodes: [node.label.id]
       )

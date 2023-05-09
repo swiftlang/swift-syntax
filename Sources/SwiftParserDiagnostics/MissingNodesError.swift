@@ -66,7 +66,7 @@ fileprivate enum NodesDescriptionPart {
     }
   }
 
-  static func descriptionParts<S: Sequence>(for nodes: S) -> [NodesDescriptionPart] where S.Element == Syntax {
+  static func descriptionParts(for nodes: some Sequence<Syntax>) -> [NodesDescriptionPart] {
     var parts: [NodesDescriptionPart] = []
     for missingNode in nodes {
       if let token = missingNode.as(TokenSyntax.self) {
@@ -110,12 +110,12 @@ fileprivate enum NodesDescriptionPart {
 /// Returns a string that describes `missingNodes`.
 /// If `commonParent` is not `nil`, `missingNodes` are expected to all be children of `commonParent`.
 /// If `format` is `true`, `BasicFormat` will be used to format the tokens prior to printing. This is useful if the nodes have been synthesized.
-func nodesDescription<SyntaxType: SyntaxProtocol>(_ nodes: [SyntaxType], format: Bool) -> String {
+func nodesDescription(_ nodes: [some SyntaxProtocol], format: Bool) -> String {
   return nodesDescriptionAndCommonParent(nodes, format: format).description
 }
 
 /// Same as `nodesDescription` but if a common ancestor was used to describe `missingNodes`, also return that `commonAncestor`
-func nodesDescriptionAndCommonParent<SyntaxType: SyntaxProtocol>(_ nodes: [SyntaxType], format: Bool) -> (commonAncestor: Syntax?, description: String) {
+func nodesDescriptionAndCommonParent(_ nodes: [some SyntaxProtocol], format: Bool) -> (commonAncestor: Syntax?, description: String) {
   let missingSyntaxNodes = nodes.map(Syntax.init)
 
   let isOnlyTokenWithNonMissingText: Bool
@@ -329,8 +329,8 @@ public struct InsertTokenFixIt: ParserFixIt {
 // MARK: - Generate Error
 
 extension ParseDiagnosticsGenerator {
-  func handleMissingSyntax<T: SyntaxProtocol>(
-    _ node: T,
+  func handleMissingSyntax(
+    _ node: some SyntaxProtocol,
     overridePosition: AbsolutePosition? = nil,
     additionalChanges: [FixIt.MultiNodeChange] = [],
     additionalHandledNodes: [SyntaxIdentifier] = []

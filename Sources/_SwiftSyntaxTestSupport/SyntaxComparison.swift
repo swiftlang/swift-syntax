@@ -32,8 +32,7 @@ public struct TreeDifference {
   public let baseline: Syntax
   public let reason: DifferenceReason
 
-  public init<Difference, Baseline>(node: Difference, baseline: Baseline, reason: DifferenceReason)
-  where Difference: SyntaxProtocol, Baseline: SyntaxProtocol {
+  public init(node: some SyntaxProtocol, baseline: some SyntaxProtocol, reason: DifferenceReason) {
     self.node = Syntax(node)
     self.baseline = Syntax(baseline)
     self.reason = reason
@@ -90,7 +89,7 @@ extension TreeDifference: CustomDebugStringConvertible {
 public extension SyntaxProtocol {
   /// Compares the current tree against a `baseline`, returning the first
   /// difference it finds.
-  func findFirstDifference<Tree: SyntaxProtocol>(baseline: Tree, includeTrivia: Bool = false) -> TreeDifference? {
+  func findFirstDifference(baseline: some SyntaxProtocol, includeTrivia: Bool = false) -> TreeDifference? {
     if let reason = isDifferent(baseline: baseline, includeTrivia: includeTrivia) {
       return TreeDifference(node: self, baseline: baseline, reason: reason)
     }
@@ -113,7 +112,7 @@ public extension SyntaxProtocol {
     return nil
   }
 
-  private func isDifferent<Tree: SyntaxProtocol>(baseline: Tree, includeTrivia: Bool = false) -> DifferenceReason? {
+  private func isDifferent(baseline: some SyntaxProtocol, includeTrivia: Bool = false) -> DifferenceReason? {
     if syntaxNodeType != baseline.syntaxNodeType {
       return .nodeType
     }

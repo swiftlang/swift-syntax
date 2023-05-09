@@ -72,7 +72,7 @@ let rawSyntaxNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
             }
           }
 
-          try InitializerDeclSyntax("public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol") {
+          try InitializerDeclSyntax("public init?(_ other: some RawSyntaxNodeProtocol)") {
             for (swiftName, typeName) in choices {
               StmtSyntax(
                 """
@@ -145,7 +145,7 @@ let rawSyntaxNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
       DeclSyntax(
         """
-        public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+        public init?(_ other: some RawSyntaxNodeProtocol) {
           guard Self.isKindOf(other.raw) else { return nil }
           self.init(unchecked: other.raw)
         }
@@ -155,7 +155,7 @@ let rawSyntaxNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       if node.isBase {
         DeclSyntax(
           """
-          public init<Node: Raw\(raw: node.name)NodeProtocol>(_ other: Node) {
+          public init(_ other: some Raw\(raw: node.name)NodeProtocol) {
             self.init(unchecked: other.raw)
           }
           """

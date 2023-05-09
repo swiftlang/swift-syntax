@@ -21,7 +21,7 @@ public struct Trivia {
   public let pieces: [TriviaPiece]
 
   /// Creates Trivia with the provided underlying pieces.
-  public init<S: Sequence>(pieces: S) where S.Element == TriviaPiece {
+  public init(pieces: some Sequence<TriviaPiece>) {
     self.pieces = Array(pieces)
   }
 
@@ -69,7 +69,7 @@ public struct Trivia {
   /// Creates a new `Trivia` by merging the leading and trailing `Trivia`
   /// of `triviaOf` into the end of `self`. Only includes one copy of any
   /// common prefixes.
-  public func merging<T: SyntaxProtocol>(triviaOf node: T) -> Trivia {
+  public func merging(triviaOf node: some SyntaxProtocol) -> Trivia {
     return merging(node.leadingTrivia).merging(node.trailingTrivia)
   }
 
@@ -115,8 +115,7 @@ extension Trivia: TextOutputStreamable {
   /// Prints the provided trivia as they would be written in a source file.
   ///
   /// - Parameter stream: The stream to which to print the trivia.
-  public func write<Target>(to target: inout Target)
-  where Target: TextOutputStream {
+  public func write(to target: inout some TextOutputStream) {
     for piece in pieces {
       piece.write(to: &target)
     }
@@ -173,7 +172,7 @@ extension Trivia {
 }
 
 extension RawTriviaPiece: TextOutputStreamable {
-  public func write<Target: TextOutputStream>(to target: inout Target) {
+  public func write(to target: inout some TextOutputStream) {
     TriviaPiece(raw: self).write(to: &target)
   }
 }

@@ -18,7 +18,7 @@
 public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .expressionPattern else {
       return nil
     }
@@ -33,10 +33,10 @@ public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<E: ExprSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeExpression: UnexpectedNodesSyntax? = nil,
-      expression: E,
+      expression: some ExprSyntaxProtocol,
       _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -96,7 +96,7 @@ public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 public struct IdentifierPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .identifierPattern else {
       return nil
     }
@@ -174,7 +174,7 @@ public struct IdentifierPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 public struct IsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .isTypePattern else {
       return nil
     }
@@ -189,12 +189,12 @@ public struct IsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<T: TypeSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeIsKeyword: UnexpectedNodesSyntax? = nil,
       isKeyword: TokenSyntax = .keyword(.is),
       _ unexpectedBetweenIsKeywordAndType: UnexpectedNodesSyntax? = nil,
-      type: T,
+      type: some TypeSyntaxProtocol,
       _ unexpectedAfterType: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -290,7 +290,7 @@ public struct IsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 public struct MissingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .missingPattern else {
       return nil
     }
@@ -369,7 +369,7 @@ public struct MissingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .tuplePattern else {
       return nil
     }
@@ -530,7 +530,7 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .valueBindingPattern else {
       return nil
     }
@@ -545,12 +545,12 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
-  public init<V: PatternSyntaxProtocol>(
+  public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeBindingKeyword: UnexpectedNodesSyntax? = nil,
       bindingKeyword: TokenSyntax,
       _ unexpectedBetweenBindingKeywordAndValuePattern: UnexpectedNodesSyntax? = nil,
-      valuePattern: V,
+      valuePattern: some PatternSyntaxProtocol,
       _ unexpectedAfterValuePattern: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -646,7 +646,7 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  public init?<S: SyntaxProtocol>(_ node: S) {
+  public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .wildcardPattern else {
       return nil
     }

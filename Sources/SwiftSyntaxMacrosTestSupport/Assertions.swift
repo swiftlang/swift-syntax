@@ -58,9 +58,9 @@ public struct NoteSpec {
   }
 }
 
-func assertNote<T: SyntaxProtocol>(
+func assertNote(
   _ note: Note,
-  in tree: T,
+  in tree: some SyntaxProtocol,
   expected spec: NoteSpec
 ) {
   assertStringsEqualWithDiff(note.message, spec.message, "message of note does not match", file: spec.originatorFile, line: spec.originatorLine)
@@ -177,9 +177,9 @@ public struct DiagnosticSpec {
   }
 }
 
-func assertDiagnostic<T: SyntaxProtocol>(
+func assertDiagnostic(
   _ diag: Diagnostic,
-  in tree: T,
+  in tree: some SyntaxProtocol,
   expected spec: DiagnosticSpec
 ) {
   if let id = spec.id {

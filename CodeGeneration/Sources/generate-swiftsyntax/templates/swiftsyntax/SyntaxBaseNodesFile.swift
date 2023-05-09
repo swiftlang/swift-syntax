@@ -63,7 +63,7 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       DeclSyntax(
         """
         /// Create a `\(raw: node.name)` node from a specialized syntax node.
-        public init<S: \(raw: node.name)Protocol>(_ syntax: S) {
+        public init(_ syntax: some \(raw: node.name)Protocol) {
           // We know this cast is going to succeed. Go through init(_: SyntaxData)
           // to do a sanity check and verify the kind matches in debug builds and get
           // maximum performance in release builds.
@@ -75,7 +75,7 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       DeclSyntax(
         """
         /// Create a `\(raw: node.name)` node from a specialized optional syntax node.
-        public init?<S: \(raw: node.name)Protocol>(_ syntax: S?) {
+        public init?(_ syntax: (some \(raw: node.name)Protocol)?) {
           guard let syntax = syntax else { return nil }
           self.init(syntax)
         }
@@ -103,7 +103,7 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         """
       )
 
-      try InitializerDeclSyntax("public init?<S: SyntaxProtocol>(_ node: S)") {
+      try InitializerDeclSyntax("public init?(_ node: some SyntaxProtocol)") {
         try SwitchExprSyntax("switch node.raw.kind") {
           SwitchCaseListSyntax {
             SwitchCaseSyntax(

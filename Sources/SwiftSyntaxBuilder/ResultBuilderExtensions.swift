@@ -13,21 +13,21 @@
 import SwiftSyntax
 
 extension CodeBlockItemListBuilder {
-  public static func buildExpression<ExprType: ExprSyntaxProtocol>(_ expression: ExprType) -> Component {
+  public static func buildExpression(_ expression: some ExprSyntaxProtocol) -> Component {
     return buildExpression(CodeBlockItemSyntax(item: .expr(ExprSyntax(expression))))
   }
 
-  public static func buildExpression<StmtType: StmtSyntaxProtocol>(_ expression: StmtType) -> Component {
+  public static func buildExpression(_ expression: some StmtSyntaxProtocol) -> Component {
     return buildExpression(CodeBlockItemSyntax(item: .stmt(StmtSyntax(expression))))
   }
 
-  public static func buildExpression<DeclType: DeclSyntaxProtocol>(_ expression: DeclType) -> Component {
+  public static func buildExpression(_ expression: some DeclSyntaxProtocol) -> Component {
     return buildExpression(CodeBlockItemSyntax(item: .decl(DeclSyntax(expression))))
   }
 }
 
 extension ConditionElementListBuilder {
-  public static func buildExpression<ExprType: ExprSyntaxProtocol>(_ expression: ExprType) -> Component {
+  public static func buildExpression(_ expression: some ExprSyntaxProtocol) -> Component {
     return buildExpression(ConditionElementSyntax(condition: .expression(ExprSyntax(expression))))
   }
 
@@ -45,7 +45,7 @@ extension ConditionElementListBuilder {
 }
 
 extension MemberDeclListBuilder {
-  public static func buildExpression<DeclType: DeclSyntaxProtocol>(_ expression: DeclType) -> Component {
+  public static func buildExpression(_ expression: some DeclSyntaxProtocol) -> Component {
     return buildExpression(MemberDeclListItemSyntax(decl: expression))
   }
 }

@@ -242,8 +242,8 @@ extension PluginMacroExpansionContext: MacroExpansionContext {
     diagnostics.append(diagnostic)
   }
 
-  public func location<Node: SyntaxProtocol>(
-    of node: Node,
+  public func location(
+    of node: some SyntaxProtocol,
     at positionMode: PositionInSyntaxNode,
     filePathMode: SourceLocationFilePathMode
   ) -> AbstractSourceLocation? {

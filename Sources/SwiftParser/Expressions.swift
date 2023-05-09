@@ -614,7 +614,7 @@ extension Parser {
   }
 
   @_spi(RawSyntax)
-  public mutating func parseDottedExpressionSuffix<R: RawSyntaxNodeProtocol>(previousNode: R?) -> (
+  public mutating func parseDottedExpressionSuffix(previousNode: (some RawSyntaxNodeProtocol)?) -> (
     unexpectedPeriod: RawUnexpectedNodesSyntax?,
     period: RawTokenSyntax,
     name: RawTokenSyntax,

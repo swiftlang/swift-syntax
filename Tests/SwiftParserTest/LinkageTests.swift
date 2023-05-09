@@ -200,9 +200,9 @@ extension LinkageTest {
       let name = try XCTUnwrap(_dyld_get_image_name(i))
       let path = String(cString: name)
       // We can wind up in SwiftParserTest.xctest when built via the IDE or
-      // in SwiftSyntaxPackageTests.xctest when built at the command line
+      // in swift-syntaxPackageTests.xctest when built at the command line
       // via the package manager.
-      guard path.hasSuffix("SwiftParserTest") || path.hasSuffix("SwiftSyntaxPackageTests") else {
+      guard path.hasSuffix("SwiftParserTest") || path.hasSuffix("swift-syntaxPackageTests") else {
         continue
       }
 

@@ -102,6 +102,7 @@ public enum SyntaxKind {
   case differentiabilityParams
   case differentiableAttributeArguments
   case discardAssignmentExpr
+  case discardStmt
   case doStmt
   case documentationAttributeArgument
   case documentationAttributeArguments
@@ -126,7 +127,6 @@ public enum SyntaxKind {
   case floatLiteralExpr
   case forInStmt
   case forcedValueExpr
-  case forgetStmt
   case functionCallExpr
   case functionDecl
   case functionEffectSpecifiers
@@ -586,6 +586,8 @@ public enum SyntaxKind {
       return DifferentiableAttributeArgumentsSyntax.self
     case .discardAssignmentExpr:
       return DiscardAssignmentExprSyntax.self
+    case .discardStmt:
+      return DiscardStmtSyntax.self
     case .doStmt:
       return DoStmtSyntax.self
     case .documentationAttributeArgument:
@@ -634,8 +636,6 @@ public enum SyntaxKind {
       return ForInStmtSyntax.self
     case .forcedValueExpr:
       return ForcedValueExprSyntax.self
-    case .forgetStmt:
-      return ForgetStmtSyntax.self
     case .functionCallExpr:
       return FunctionCallExprSyntax.self
     case .functionDecl:

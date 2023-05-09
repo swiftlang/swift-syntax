@@ -102,6 +102,7 @@ public enum SyntaxEnum {
   case differentiabilityParams(DifferentiabilityParamsSyntax)
   case differentiableAttributeArguments(DifferentiableAttributeArgumentsSyntax)
   case discardAssignmentExpr(DiscardAssignmentExprSyntax)
+  case discardStmt(DiscardStmtSyntax)
   case doStmt(DoStmtSyntax)
   case documentationAttributeArgument(DocumentationAttributeArgumentSyntax)
   case documentationAttributeArguments(DocumentationAttributeArgumentsSyntax)
@@ -126,7 +127,6 @@ public enum SyntaxEnum {
   case floatLiteralExpr(FloatLiteralExprSyntax)
   case forInStmt(ForInStmtSyntax)
   case forcedValueExpr(ForcedValueExprSyntax)
-  case forgetStmt(ForgetStmtSyntax)
   case functionCallExpr(FunctionCallExprSyntax)
   case functionDecl(FunctionDeclSyntax)
   case functionEffectSpecifiers(FunctionEffectSpecifiersSyntax)
@@ -469,6 +469,8 @@ public extension Syntax {
       return .differentiableAttributeArguments(DifferentiableAttributeArgumentsSyntax(self)!)
     case .discardAssignmentExpr:
       return .discardAssignmentExpr(DiscardAssignmentExprSyntax(self)!)
+    case .discardStmt:
+      return .discardStmt(DiscardStmtSyntax(self)!)
     case .doStmt:
       return .doStmt(DoStmtSyntax(self)!)
     case .documentationAttributeArgument:
@@ -517,8 +519,6 @@ public extension Syntax {
       return .forInStmt(ForInStmtSyntax(self)!)
     case .forcedValueExpr:
       return .forcedValueExpr(ForcedValueExprSyntax(self)!)
-    case .forgetStmt:
-      return .forgetStmt(ForgetStmtSyntax(self)!)
     case .functionCallExpr:
       return .functionCallExpr(FunctionCallExprSyntax(self)!)
     case .functionDecl:

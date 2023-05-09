@@ -590,13 +590,15 @@ final class StatementTests: XCTestCase {
     )
   }
 
-  func testForget() {
+  func testDiscard() {
+    // ensure the old spelling '_forget' can be parsed for now.
     assertParse(
       """
       _forget self
       """,
       substructure: Syntax(
-        ForgetStmtSyntax(
+        DiscardStmtSyntax(
+          discardKeyword: .keyword(._forget),
           expression: IdentifierExprSyntax(identifier: .keyword(.`self`))
         )
       )
@@ -604,10 +606,23 @@ final class StatementTests: XCTestCase {
 
     assertParse(
       """
-      _forget Self
+      discard self
       """,
       substructure: Syntax(
-        ForgetStmtSyntax(
+        DiscardStmtSyntax(
+          discardKeyword: .keyword(.discard),
+          expression: IdentifierExprSyntax(identifier: .keyword(.`self`))
+        )
+      )
+    )
+
+    assertParse(
+      """
+      discard Self
+      """,
+      substructure: Syntax(
+        DiscardStmtSyntax(
+          discardKeyword: .keyword(.discard),
           expression: IdentifierExprSyntax(identifier: .keyword(.Self))
         )
       )
@@ -615,10 +630,11 @@ final class StatementTests: XCTestCase {
 
     assertParse(
       """
-      _forget SarahMarshall
+      discard SarahMarshall
       """,
       substructure: Syntax(
-        ForgetStmtSyntax(
+        DiscardStmtSyntax(
+          discardKeyword: .keyword(.discard),
           expression: IdentifierExprSyntax(identifier: .identifier("SarahMarshall"))
         )
       )
@@ -626,30 +642,30 @@ final class StatementTests: XCTestCase {
 
     assertParse(
       """
-      _forget 1️⃣case
+      discard 1️⃣case
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression in 'forget' statement", fixIts: ["insert expression"]),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression in 'discard' statement", fixIts: ["insert expression"]),
         DiagnosticSpec(locationMarker: "1️⃣", message: "'case' can only appear inside a 'switch' statement or 'enum' declaration"),
       ],
       fixedSource: """
-        _forget <#expression#>case
+        discard <#expression#>case
         """
     )
 
-    // It's important that we don't parse this one as a forget statement!
+    // It's important that we don't parse this one as a discard statement!
     assertParse(
       """
-      func _forget<T>(_ t: T) {}
+      func discard<T>(_ t: T) {}
 
       func caller() {
-        _forget(self)
+        discard(self)
       }
       """,
       substructure: Syntax(
         FunctionCallExprSyntax(
           callee: IdentifierExprSyntax(
-            identifier: .identifier("_forget")
+            identifier: .identifier("discard")
           ),
           argumentList: {
             TupleExprElementListSyntax([

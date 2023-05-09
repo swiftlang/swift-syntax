@@ -333,15 +333,18 @@ public let STMT_NODES: [Node] = [
     ]
   ),
 
-  // forget-stmt -> 'forget' expr ';'?
+  // discard-stmt -> 'discard' expr ';'?
   Node(
-    name: "ForgetStmt",
-    nameForDiagnostics: "'forget' statement",
+    name: "DiscardStmt",
+    nameForDiagnostics: "'discard' statement",
     kind: "Stmt",
     children: [
       Child(
-        name: "ForgetKeyword",
-        kind: .token(choices: [.keyword(text: "_forget")])
+        name: "DiscardKeyword",
+        kind: .token(choices: [
+          .keyword(text: "_forget"),  // NOTE: support for deprecated _forget
+          .keyword(text: "discard"),
+        ])
       ),
       Child(
         name: "Expression",

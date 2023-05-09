@@ -116,6 +116,7 @@ public enum Keyword: UInt8, Hashable {
   case final
   case `for`
   case _forget
+  case discard
   case forward
   case `func`
   case get
@@ -431,6 +432,8 @@ public enum Keyword: UInt8, Hashable {
         self = .dynamic
       case "_forget":
         self = ._forget
+      case "discard":
+        self = .discard
       case "forward":
         self = .forward
       case "message":
@@ -853,6 +856,7 @@ public enum Keyword: UInt8, Hashable {
       "final", 
       "for", 
       "_forget", 
+      "discard", 
       "forward", 
       "func", 
       "get", 

@@ -449,6 +449,11 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: DiscardAssignmentExprSyntax) -> ResultType
   
+  /// Visiting `DiscardStmtSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: DiscardStmtSyntax) -> ResultType
+  
   /// Visiting `DoStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -568,11 +573,6 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ForcedValueExprSyntax) -> ResultType
-  
-  /// Visiting `ForgetStmtSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ForgetStmtSyntax) -> ResultType
   
   /// Visiting `FunctionCallExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -1992,6 +1992,13 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
+  /// Visiting `DiscardStmtSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: DiscardStmtSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
   /// Visiting `DoStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -2157,13 +2164,6 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ForcedValueExprSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
-  /// Visiting `ForgetStmtSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: ForgetStmtSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -3477,6 +3477,8 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .discardAssignmentExpr(let derived):
       return visit(derived)
+    case .discardStmt(let derived):
+      return visit(derived)
     case .doStmt(let derived):
       return visit(derived)
     case .documentationAttributeArgument(let derived):
@@ -3524,8 +3526,6 @@ extension SyntaxTransformVisitor {
     case .forInStmt(let derived):
       return visit(derived)
     case .forcedValueExpr(let derived):
-      return visit(derived)
-    case .forgetStmt(let derived):
       return visit(derived)
     case .functionCallExpr(let derived):
       return visit(derived)

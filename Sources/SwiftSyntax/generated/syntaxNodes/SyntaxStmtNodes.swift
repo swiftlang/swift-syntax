@@ -360,6 +360,122 @@ public struct DeferStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   }
 }
 
+// MARK: - DiscardStmtSyntax
+
+
+public struct DiscardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+  
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .discardStmt else {
+      return nil
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+  
+  /// Creates a `DiscardStmtSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    precondition(data.raw.kind == .discardStmt)
+    self._syntaxNode = Syntax(data)
+  }
+  
+  public init<E: ExprSyntaxProtocol>(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeDiscardKeyword: UnexpectedNodesSyntax? = nil,
+      discardKeyword: TokenSyntax,
+      _ unexpectedBetweenDiscardKeywordAndExpression: UnexpectedNodesSyntax? = nil,
+      expression: E,
+      _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
+            unexpectedBeforeDiscardKeyword, 
+            discardKeyword, 
+            unexpectedBetweenDiscardKeywordAndExpression, 
+            expression, 
+            unexpectedAfterExpression
+          ))) {(arena, _) in
+      let layout: [RawSyntax?] = [
+          unexpectedBeforeDiscardKeyword?.raw, 
+          discardKeyword.raw, 
+          unexpectedBetweenDiscardKeywordAndExpression?.raw, 
+          expression.raw, 
+          unexpectedAfterExpression?.raw
+        ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.discardStmt,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+        
+      )
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+  
+  public var unexpectedBeforeDiscardKeyword: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = DiscardStmtSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var discardKeyword: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = DiscardStmtSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenDiscardKeywordAndExpression: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = DiscardStmtSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var expression: ExprSyntax {
+    get {
+      return ExprSyntax(data.child(at: 3, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = DiscardStmtSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedAfterExpression: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = DiscardStmtSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+          \Self.unexpectedBeforeDiscardKeyword, 
+          \Self.discardKeyword, 
+          \Self.unexpectedBetweenDiscardKeywordAndExpression, 
+          \Self.expression, 
+          \Self.unexpectedAfterExpression
+        ])
+  }
+}
+
 // MARK: - DoStmtSyntax
 
 
@@ -997,122 +1113,6 @@ public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           \Self.unexpectedBetweenWhereClauseAndBody, 
           \Self.body, 
           \Self.unexpectedAfterBody
-        ])
-  }
-}
-
-// MARK: - ForgetStmtSyntax
-
-
-public struct ForgetStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
-  public let _syntaxNode: Syntax
-  
-  public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .forgetStmt else {
-      return nil
-    }
-    self._syntaxNode = node._syntaxNode
-  }
-  
-  /// Creates a `ForgetStmtSyntax` node from the given `SyntaxData`. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
-  internal init(_ data: SyntaxData) {
-    precondition(data.raw.kind == .forgetStmt)
-    self._syntaxNode = Syntax(data)
-  }
-  
-  public init<E: ExprSyntaxProtocol>(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeForgetKeyword: UnexpectedNodesSyntax? = nil,
-      forgetKeyword: TokenSyntax = .keyword(._forget),
-      _ unexpectedBetweenForgetKeywordAndExpression: UnexpectedNodesSyntax? = nil,
-      expression: E,
-      _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
-    
-  ) {
-    // Extend the lifetime of all parameters so their arenas don't get destroyed
-    // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeForgetKeyword, 
-            forgetKeyword, 
-            unexpectedBetweenForgetKeywordAndExpression, 
-            expression, 
-            unexpectedAfterExpression
-          ))) {(arena, _) in
-      let layout: [RawSyntax?] = [
-          unexpectedBeforeForgetKeyword?.raw, 
-          forgetKeyword.raw, 
-          unexpectedBetweenForgetKeywordAndExpression?.raw, 
-          expression.raw, 
-          unexpectedAfterExpression?.raw
-        ]
-      let raw = RawSyntax.makeLayout(
-        kind: SyntaxKind.forgetStmt,
-        from: layout,
-        arena: arena,
-        leadingTrivia: leadingTrivia,
-        trailingTrivia: trailingTrivia
-        
-      )
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
-  }
-  
-  public var unexpectedBeforeForgetKeyword: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = ForgetStmtSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-  
-  public var forgetKeyword: TokenSyntax {
-    get {
-      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
-    }
-    set(value) {
-      self = ForgetStmtSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
-    }
-  }
-  
-  public var unexpectedBetweenForgetKeywordAndExpression: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = ForgetStmtSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-  
-  public var expression: ExprSyntax {
-    get {
-      return ExprSyntax(data.child(at: 3, parent: Syntax(self))!)
-    }
-    set(value) {
-      self = ForgetStmtSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
-    }
-  }
-  
-  public var unexpectedAfterExpression: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = ForgetStmtSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-  
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeForgetKeyword, 
-          \Self.forgetKeyword, 
-          \Self.unexpectedBetweenForgetKeywordAndExpression, 
-          \Self.expression, 
-          \Self.unexpectedAfterExpression
         ])
   }
 }

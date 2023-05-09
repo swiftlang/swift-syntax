@@ -295,7 +295,7 @@ struct SyntaxData {
   func replacingSelf(_ newRaw: RawSyntax, arena: SyntaxArena) -> SyntaxData {
     // If we have a parent already, then ask our current parent to copy itself
     // recursively up to the root.
-    if let parent = parent {
+    if let parent {
       let parentData = parent.replacingChild(at: indexInParent, with: newRaw, arena: arena)
       let newParent = Syntax(parentData)
       return SyntaxData(absoluteRaw.replacingSelf(newRaw, newRootId: parentData.nodeId.rootId), parent: newParent)

@@ -11,7 +11,7 @@ extension FunctionParameterSyntax {
   /// respectively.
   var parameterName: TokenSyntax? {
     // If there were two names, the second is the parameter name.
-    if let secondName = secondName {
+    if let secondName {
       if secondName.text == "_" {
         return nil
       }

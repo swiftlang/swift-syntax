@@ -619,7 +619,7 @@ public extension SyntaxProtocol {
     mark: SyntaxProtocol? = nil,
     indentString: String
   ) {
-    if let mark = mark, self.id == mark.id {
+    if let mark, self.id == mark.id {
       target.write("*** ")
     }
 
@@ -639,7 +639,7 @@ public extension SyntaxProtocol {
 
     let allChildren = children(viewMode: .all)
 
-    if let converter = converter {
+    if let converter {
       let range = sourceRange(converter: converter)
       target.write(" [\(range.start)...\(range.end)]")
     }
@@ -648,7 +648,7 @@ public extension SyntaxProtocol {
       target.write(" MISSING")
     }
 
-    if let mark = mark, self.id == mark.id {
+    if let mark, self.id == mark.id {
       target.write(" ***")
     }
 

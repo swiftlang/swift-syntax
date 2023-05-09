@@ -238,7 +238,7 @@ public struct IncrementalParseLookup {
     }
     let prevPosition = AbsolutePosition(utf8Offset: prevOffset)
     let node = cursorLookup(prevPosition: prevPosition, kind: kind)
-    if let delegate = reusedDelegate, let node = node {
+    if let delegate = reusedDelegate, let node {
       delegate.parserReusedNode(
         range: ByteSourceRange(offset: newOffset, length: node.byteSize),
         previousNode: node

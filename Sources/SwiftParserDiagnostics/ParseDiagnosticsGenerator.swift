@@ -1129,7 +1129,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       } else {
         message = nil
       }
-      if let message = message {
+      if let message {
         let fixIts: [FixIt]
         if node.identifier.presence == .present {
           fixIts = [FixIt(message: RemoveNodesFixIt(unexpected), changes: .makeMissing(unexpected))]

@@ -279,7 +279,7 @@ class FixItApplier: SyntaxRewriter {
       diagnostics
       .flatMap { $0.fixIts }
       .filter {
-        if let messages = messages {
+        if let messages {
           return messages.contains($0.message.message)
         } else {
           return true
@@ -575,7 +575,7 @@ func assertParse<S: SyntaxProtocol>(
   )
 
   // Substructure
-  if let expectedSubstructure = expectedSubstructure {
+  if let expectedSubstructure {
     let subtreeMatcher = SubtreeMatcher(Syntax(tree), markers: markerLocations)
     do {
       try subtreeMatcher.assertSameStructure(afterMarker: substructureAfterMarker, Syntax(expectedSubstructure), includeTrivia: options.contains(.substructureCheckTrivia), file: file, line: line)

@@ -296,6 +296,12 @@ open class BasicFormat: SyntaxRewriter {
     let previousToken = self.previousToken ?? token.previousToken(viewMode: viewMode)
     let nextToken = token.nextToken(viewMode: viewMode)
 
+    /// In addition to existing trivia of `previousToken`, also considers
+    /// `previousToken` as ending with whitespace if it and `token` should be
+    /// separated by whitespace.
+    /// It does not consider whether a newline should be added between
+    /// `previousToken` and the `token` because that newline should be added to
+    /// the next token's trailing trivia.
     lazy var previousTokenWillEndWithWhitespace: Bool = {
       guard let previousToken = previousToken else {
         return false
@@ -304,6 +310,8 @@ open class BasicFormat: SyntaxRewriter {
         || (requiresWhitespace(between: previousToken, and: token) && isMutable(previousToken))
     }()
 
+    /// This method does not consider any posssible mutations to `previousToken`
+    /// because newlines should be added to the next token's leading trivia.
     lazy var previousTokenWillEndWithNewline: Bool = {
       guard let previousToken = previousToken else {
         // Assume that the start of the tree is equivalent to a newline so we
@@ -325,6 +333,10 @@ open class BasicFormat: SyntaxRewriter {
       return previousToken.isStringSegmentWithLastCharacterBeingNewline
     }()
 
+    /// Also considers `nextToken` as starting with a whitespace if a newline
+    /// should be added to it. It does not check whether `token` and `nextToken`
+    /// should be separated by whitespace because the whitespace should be added
+    /// to the `token`’s leading trivia.
     lazy var nextTokenWillStartWithWhitespace: Bool = {
       guard let nextToken = nextToken else {
         return false
@@ -333,6 +345,8 @@ open class BasicFormat: SyntaxRewriter {
         || (requiresNewline(between: token, and: nextToken) && isMutable(nextToken))
     }()
 
+    /// Also considers `nextToken` as starting with a leading newline if `token`
+    /// and `nextToken` should be separated by a newline.
     lazy var nextTokenWillStartWithNewline: Bool = {
       guard let nextToken = nextToken else {
         return false

@@ -1195,6 +1195,18 @@ public let DECL_NODES: [Node] = [
     ],
     children: [
       Child(
+        name: "Attributes",
+        kind: .collection(kind: "AttributeList", collectionElementName: "Attribute"),
+        nameForDiagnostics: "attributes",
+        isOptional: true
+      ),
+      Child(
+        name: "Modifiers",
+        kind: .collection(kind: "ModifierList", collectionElementName: "Modifier"),
+        nameForDiagnostics: "modifiers",
+        isOptional: true
+      ),
+      Child(
         name: "PoundToken",
         kind: .token(choices: [.token(tokenKind: "PoundToken")]),
         description: "The `#` sign."

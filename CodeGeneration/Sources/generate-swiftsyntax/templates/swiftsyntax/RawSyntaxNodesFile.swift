@@ -48,7 +48,6 @@ let rawSyntaxNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       for (name, choices) in enums {
         try EnumDeclSyntax(
           """
-          @frozen // FIXME: Not actually stable, works around a miscompile
           public enum \(raw: name): RawSyntaxNodeProtocol
           """
         ) {

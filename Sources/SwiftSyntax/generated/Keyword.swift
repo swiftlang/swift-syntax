@@ -12,7 +12,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-@frozen  // FIXME: Not actually stable, works around a miscompile
 public enum Keyword: UInt8, Hashable {
   case __consuming
   case __owned

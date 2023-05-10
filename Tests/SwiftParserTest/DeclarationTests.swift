@@ -426,7 +426,7 @@ final class DeclarationTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(
           message: "expected 'set' in modifier",
-          fixIts: ["remove 'get, , didSet'"]
+          fixIts: ["remove 'get,' and ', didSet'"]
         )
       ],
       fixedSource: """

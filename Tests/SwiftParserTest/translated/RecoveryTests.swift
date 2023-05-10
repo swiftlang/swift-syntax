@@ -2017,7 +2017,7 @@ final class RecoveryTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(
           message: "expected ':' to begin inheritance clause",
-          fixIts: ["replace '()' with ':'"]
+          fixIts: ["replace '(' and ')' with ':'"]
         )
       ],
       fixedSource: """
@@ -2034,7 +2034,7 @@ final class RecoveryTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(
           message: "expected ':' to begin inheritance clause",
-          fixIts: ["replace '()' with ':'"]
+          fixIts: ["replace '(' and ')' with ':'"]
         )
       ],
       fixedSource: """
@@ -2051,7 +2051,7 @@ final class RecoveryTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(
           message: "expected ':' to begin inheritance clause",
-          fixIts: ["replace '()' with ':'"]
+          fixIts: ["replace '(' and ')' with ':'"]
         )
       ],
       fixedSource: """
@@ -2068,7 +2068,7 @@ final class RecoveryTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(
           message: "expected ':' to begin inheritance clause",
-          fixIts: ["replace '()' with ':'"]
+          fixIts: ["replace '(' and ')' with ':'"]
         )
       ],
       fixedSource: """
@@ -2085,7 +2085,7 @@ final class RecoveryTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(
           message: "expected ':' to begin inheritance clause",
-          fixIts: ["replace '()' with ':'"]
+          fixIts: ["replace '(' and ')' with ':'"]
         )
       ],
       fixedSource: """

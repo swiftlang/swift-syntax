@@ -3699,7 +3699,11 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public init(
       leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforePoundToken: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
+      attributes: AttributeListSyntax? = nil,
+      _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
+      modifiers: ModifierListSyntax? = nil,
+      _ unexpectedBetweenModifiersAndPoundToken: UnexpectedNodesSyntax? = nil,
       poundToken: TokenSyntax = .poundToken(),
       _ unexpectedBetweenPoundTokenAndMacro: UnexpectedNodesSyntax? = nil,
       macro: TokenSyntax,
@@ -3722,7 +3726,11 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforePoundToken, 
+            unexpectedBeforeAttributes, 
+            attributes, 
+            unexpectedBetweenAttributesAndModifiers, 
+            modifiers, 
+            unexpectedBetweenModifiersAndPoundToken, 
             poundToken, 
             unexpectedBetweenPoundTokenAndMacro, 
             macro, 
@@ -3741,7 +3749,11 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             unexpectedAfterAdditionalTrailingClosures
           ))) {(arena, _) in
       let layout: [RawSyntax?] = [
-          unexpectedBeforePoundToken?.raw, 
+          unexpectedBeforeAttributes?.raw, 
+          attributes?.raw, 
+          unexpectedBetweenAttributesAndModifiers?.raw, 
+          modifiers?.raw, 
+          unexpectedBetweenModifiersAndPoundToken?.raw, 
           poundToken.raw, 
           unexpectedBetweenPoundTokenAndMacro?.raw, 
           macro.raw, 
@@ -3772,7 +3784,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
   
-  public var unexpectedBeforePoundToken: UnexpectedNodesSyntax? {
+  public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -3781,17 +3793,35 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// The `#` sign.
-  public var poundToken: TokenSyntax {
+  public var attributes: AttributeListSyntax? {
     get {
-      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+      return data.child(at: 1, parent: Syntax(self)).map(AttributeListSyntax.init)
     }
     set(value) {
-      self = MacroExpansionDeclSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = MacroExpansionDeclSyntax(data.replacingChild(at: 1, with: value?.raw, arena: SyntaxArena()))
     }
   }
   
-  public var unexpectedBetweenPoundTokenAndMacro: UnexpectedNodesSyntax? {
+  /// Adds the provided `Attribute` to the node's `attributes`
+  /// collection.
+  /// - param element: The new `Attribute` to add to the node's
+  ///                  `attributes` collection.
+  /// - returns: A copy of the receiver with the provided `Attribute`
+  ///            appended to its `attributes` collection.
+  public func addAttribute(_ element: Syntax) -> MacroExpansionDeclSyntax {
+    var collection: RawSyntax
+    let arena = SyntaxArena()
+    if let col = raw.layoutView!.children[1] {
+      collection = col.layoutView!.appending(element.raw, arena: arena)
+    } else {
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
+                                        from: [element.raw], arena: arena)
+    }
+    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
+    return MacroExpansionDeclSyntax(newData)
+  }
+  
+  public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -3800,16 +3830,35 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var macro: TokenSyntax {
+  public var modifiers: ModifierListSyntax? {
     get {
-      return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
+      return data.child(at: 3, parent: Syntax(self)).map(ModifierListSyntax.init)
     }
     set(value) {
-      self = MacroExpansionDeclSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+      self = MacroExpansionDeclSyntax(data.replacingChild(at: 3, with: value?.raw, arena: SyntaxArena()))
     }
   }
   
-  public var unexpectedBetweenMacroAndGenericArguments: UnexpectedNodesSyntax? {
+  /// Adds the provided `Modifier` to the node's `modifiers`
+  /// collection.
+  /// - param element: The new `Modifier` to add to the node's
+  ///                  `modifiers` collection.
+  /// - returns: A copy of the receiver with the provided `Modifier`
+  ///            appended to its `modifiers` collection.
+  public func addModifier(_ element: DeclModifierSyntax) -> MacroExpansionDeclSyntax {
+    var collection: RawSyntax
+    let arena = SyntaxArena()
+    if let col = raw.layoutView!.children[3] {
+      collection = col.layoutView!.appending(element.raw, arena: arena)
+    } else {
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
+                                        from: [element.raw], arena: arena)
+    }
+    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
+    return MacroExpansionDeclSyntax(newData)
+  }
+  
+  public var unexpectedBetweenModifiersAndPoundToken: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -3818,16 +3867,17 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var genericArguments: GenericArgumentClauseSyntax? {
+  /// The `#` sign.
+  public var poundToken: TokenSyntax {
     get {
-      return data.child(at: 5, parent: Syntax(self)).map(GenericArgumentClauseSyntax.init)
+      return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
-      self = MacroExpansionDeclSyntax(data.replacingChild(at: 5, with: value?.raw, arena: SyntaxArena()))
+      self = MacroExpansionDeclSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
     }
   }
   
-  public var unexpectedBetweenGenericArgumentsAndLeftParen: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenPoundTokenAndMacro: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -3836,16 +3886,16 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var leftParen: TokenSyntax? {
+  public var macro: TokenSyntax {
     get {
-      return data.child(at: 7, parent: Syntax(self)).map(TokenSyntax.init)
+      return TokenSyntax(data.child(at: 7, parent: Syntax(self))!)
     }
     set(value) {
-      self = MacroExpansionDeclSyntax(data.replacingChild(at: 7, with: value?.raw, arena: SyntaxArena()))
+      self = MacroExpansionDeclSyntax(data.replacingChild(at: 7, with: value.raw, arena: SyntaxArena()))
     }
   }
   
-  public var unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenMacroAndGenericArguments: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -3854,12 +3904,48 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var argumentList: TupleExprElementListSyntax {
+  public var genericArguments: GenericArgumentClauseSyntax? {
     get {
-      return TupleExprElementListSyntax(data.child(at: 9, parent: Syntax(self))!)
+      return data.child(at: 9, parent: Syntax(self)).map(GenericArgumentClauseSyntax.init)
     }
     set(value) {
-      self = MacroExpansionDeclSyntax(data.replacingChild(at: 9, with: value.raw, arena: SyntaxArena()))
+      self = MacroExpansionDeclSyntax(data.replacingChild(at: 9, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenGenericArgumentsAndLeftParen: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 10, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = MacroExpansionDeclSyntax(data.replacingChild(at: 10, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var leftParen: TokenSyntax? {
+    get {
+      return data.child(at: 11, parent: Syntax(self)).map(TokenSyntax.init)
+    }
+    set(value) {
+      self = MacroExpansionDeclSyntax(data.replacingChild(at: 11, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 12, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = MacroExpansionDeclSyntax(data.replacingChild(at: 12, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var argumentList: TupleExprElementListSyntax {
+    get {
+      return TupleExprElementListSyntax(data.child(at: 13, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = MacroExpansionDeclSyntax(data.replacingChild(at: 13, with: value.raw, arena: SyntaxArena()))
     }
   }
   
@@ -3872,53 +3958,17 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func addArgument(_ element: TupleExprElementSyntax) -> MacroExpansionDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
-    if let col = raw.layoutView!.children[9] {
+    if let col = raw.layoutView!.children[13] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElementList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 9, with: collection, arena: arena)
+    let newData = data.replacingChild(at: 13, with: collection, arena: arena)
     return MacroExpansionDeclSyntax(newData)
   }
   
   public var unexpectedBetweenArgumentListAndRightParen: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 10, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = MacroExpansionDeclSyntax(data.replacingChild(at: 10, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-  
-  public var rightParen: TokenSyntax? {
-    get {
-      return data.child(at: 11, parent: Syntax(self)).map(TokenSyntax.init)
-    }
-    set(value) {
-      self = MacroExpansionDeclSyntax(data.replacingChild(at: 11, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-  
-  public var unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 12, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = MacroExpansionDeclSyntax(data.replacingChild(at: 12, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-  
-  public var trailingClosure: ClosureExprSyntax? {
-    get {
-      return data.child(at: 13, parent: Syntax(self)).map(ClosureExprSyntax.init)
-    }
-    set(value) {
-      self = MacroExpansionDeclSyntax(data.replacingChild(at: 13, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-  
-  public var unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 14, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -3927,12 +3977,48 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? {
+  public var rightParen: TokenSyntax? {
     get {
-      return data.child(at: 15, parent: Syntax(self)).map(MultipleTrailingClosureElementListSyntax.init)
+      return data.child(at: 15, parent: Syntax(self)).map(TokenSyntax.init)
     }
     set(value) {
       self = MacroExpansionDeclSyntax(data.replacingChild(at: 15, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 16, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = MacroExpansionDeclSyntax(data.replacingChild(at: 16, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var trailingClosure: ClosureExprSyntax? {
+    get {
+      return data.child(at: 17, parent: Syntax(self)).map(ClosureExprSyntax.init)
+    }
+    set(value) {
+      self = MacroExpansionDeclSyntax(data.replacingChild(at: 17, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 18, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = MacroExpansionDeclSyntax(data.replacingChild(at: 18, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? {
+    get {
+      return data.child(at: 19, parent: Syntax(self)).map(MultipleTrailingClosureElementListSyntax.init)
+    }
+    set(value) {
+      self = MacroExpansionDeclSyntax(data.replacingChild(at: 19, with: value?.raw, arena: SyntaxArena()))
     }
   }
   
@@ -3945,28 +4031,32 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func addAdditionalTrailingClosure(_ element: MultipleTrailingClosureElementSyntax) -> MacroExpansionDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
-    if let col = raw.layoutView!.children[15] {
+    if let col = raw.layoutView!.children[19] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.multipleTrailingClosureElementList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 15, with: collection, arena: arena)
+    let newData = data.replacingChild(at: 19, with: collection, arena: arena)
     return MacroExpansionDeclSyntax(newData)
   }
   
   public var unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 16, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 20, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = MacroExpansionDeclSyntax(data.replacingChild(at: 16, with: value?.raw, arena: SyntaxArena()))
+      self = MacroExpansionDeclSyntax(data.replacingChild(at: 20, with: value?.raw, arena: SyntaxArena()))
     }
   }
   
   public static var structure: SyntaxNodeStructure {
     return .layout([
-          \Self.unexpectedBeforePoundToken, 
+          \Self.unexpectedBeforeAttributes, 
+          \Self.attributes, 
+          \Self.unexpectedBetweenAttributesAndModifiers, 
+          \Self.modifiers, 
+          \Self.unexpectedBetweenModifiersAndPoundToken, 
           \Self.poundToken, 
           \Self.unexpectedBetweenPoundTokenAndMacro, 
           \Self.macro, 

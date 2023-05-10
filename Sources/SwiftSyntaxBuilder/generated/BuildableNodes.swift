@@ -897,7 +897,11 @@ extension MacroExpansionDeclSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(
       leadingTrivia: Trivia? = nil, 
-      unexpectedBeforePoundToken: UnexpectedNodesSyntax? = nil, 
+      unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, 
+      attributes: AttributeListSyntax? = nil, 
+      unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, 
+      modifiers: ModifierListSyntax? = nil, 
+      unexpectedBetweenModifiersAndPoundToken: UnexpectedNodesSyntax? = nil, 
       poundToken: TokenSyntax = .poundToken(), 
       unexpectedBetweenPoundTokenAndMacro: UnexpectedNodesSyntax? = nil, 
       macro: TokenSyntax, 
@@ -918,7 +922,11 @@ extension MacroExpansionDeclSyntax {
     ) rethrows {
     try self.init(
         leadingTrivia: leadingTrivia, 
-        unexpectedBeforePoundToken, 
+        unexpectedBeforeAttributes, 
+        attributes: attributes, 
+        unexpectedBetweenAttributesAndModifiers, 
+        modifiers: modifiers, 
+        unexpectedBetweenModifiersAndPoundToken, 
         poundToken: poundToken, 
         unexpectedBetweenPoundTokenAndMacro, 
         macro: macro, 

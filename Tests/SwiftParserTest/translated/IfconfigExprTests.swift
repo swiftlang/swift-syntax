@@ -500,26 +500,49 @@ final class IfconfigExprTests: XCTestCase {
     )
   }
 
-  // FIXME: Parsing should generate diagnostics - https://github.com/apple/swift-syntax/issues/1395
+  // FIXME: Diagnostics could be better.
   func testIfConfigExpr34() {
     assertParse(
       """
       #if MY_FLAG
-      #
+      #1️⃣
       elif
       #endif
-      """
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected identifier in macro expansion",
+          fixIts: ["insert identifier"]
+        )
+      ],
+      fixedSource: """
+        #if MY_FLAG
+        #<#identifier#>
+        elif
+        #endif
+        """
     )
   }
 
-  // FIXME: Parsing should generate diagnostics - https://github.com/apple/swift-syntax/issues/1395
+  // FIXME: Diagnostics could be better.
   func testIfConfigExpr35() {
     assertParse(
       """
       #if MY_FLAG
-      # elif
+      # 1️⃣elif
       #endif
-      """
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected identifier in macro expansion",
+          fixIts: ["insert identifier"]
+        )
+      ],
+      fixedSource: """
+        #if MY_FLAG
+        #<#identifier#>elif
+        #endif
+        """
     )
   }
 

@@ -440,7 +440,7 @@ def run_xctests(
     if verbose:
         swiftpm_call.extend(["--verbose"])
 
-    swiftpm_call.extend(["--test-product", "SwiftSyntaxPackageTests"])
+    swiftpm_call.extend(["--test-product", "swift-syntaxPackageTests"])
 
     env = dict(os.environ)
     env["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] = "1"

@@ -1410,6 +1410,7 @@ final class DeclarationTests: XCTestCase {
       """
       struct X {
         #memberwiseInit(access: .public)
+        #Module1.memberwiseInit(access: .public)
       }
       """
     )
@@ -1421,6 +1422,18 @@ final class DeclarationTests: XCTestCase {
         SourceFileSyntax(
           CodeBlockItemListSyntax {
             MacroExpansionDeclSyntax(macro: "expand") {}
+          }
+        )
+      )
+    )
+    assertParse(
+      """
+      #Module1.expand
+      """,
+      substructure: Syntax(
+        SourceFileSyntax(
+          CodeBlockItemListSyntax {
+            MacroExpansionDeclSyntax(moduleName: "Module1", macro: "expand") {}
           }
         )
       )

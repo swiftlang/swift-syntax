@@ -1092,8 +1092,20 @@ final class ExpressionTests: XCTestCase {
     )
 
     assertParse(
+      #"let a = #Module1.embed("filename.txt")"#
+    )
+
+    assertParse(
       """
       #Test {
+        print("This is a test")
+      }
+      """
+    )
+
+    assertParse(
+      """
+      #TestLibrary.Test {
         print("This is a test")
       }
       """

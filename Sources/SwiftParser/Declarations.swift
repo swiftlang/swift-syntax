@@ -2025,7 +2025,19 @@ extension Parser {
   /// macro-expansion-declaration → '#' identifier expr-call-suffix?
   mutating func parseMacroExpansionDeclaration() -> RawMacroExpansionDeclSyntax {
     let poundKeyword = self.consumeAnyToken()
-    let (unexpectedBeforeMacro, macro) = self.expectIdentifier()
+
+    // #Module1.macro1 / #macro1
+    let moduleName: RawTokenSyntax?
+    let macroName: RawTokenSyntax
+    let (unexpectedAfterPound, firstIdent) = self.expectIdentifier()
+    let dot = consume(if: .period)
+    if dot != nil {
+      moduleName = firstIdent
+      macroName = self.expectWithoutRecoveryOrLeadingTrivia(.identifier)
+    } else {
+      moduleName = nil
+      macroName = firstIdent
+    }
 
     // Parse the optional generic argument list.
     let generics: RawGenericArgumentClauseSyntax?
@@ -2064,8 +2076,10 @@ extension Parser {
 
     return RawMacroExpansionDeclSyntax(
       poundToken: poundKeyword,
-      unexpectedBeforeMacro,
-      macro: macro,
+      unexpectedAfterPound,
+      moduleName: moduleName,
+      dot: dot,
+      macro: macroName,
       genericArguments: generics,
       leftParen: leftParen,
       argumentList: RawTupleExprElementListSyntax(

@@ -1286,6 +1286,16 @@ public let DECL_NODES: [Node] = [
         description: "The `#` sign."
       ),
       Child(
+        name: "ModuleName",
+        kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+        isOptional: true
+      ),
+      Child(
+        name: "Dot",
+        kind: .token(choices: [.token(tokenKind: "PeriodToken")]),
+        isOptional: true
+      ),
+      Child(
         name: "Macro",
         kind: .token(choices: [.token(tokenKind: "IdentifierToken")])
       ),

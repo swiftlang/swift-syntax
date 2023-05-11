@@ -293,7 +293,8 @@ extension RawSyntax {
   /// - Parameters:
   ///   - leadingTrivia: The trivia to attach.
   ///   - arena: SyntaxArena to the result node data resides.
-  func withLeadingTrivia(_ leadingTrivia: Trivia, arena: SyntaxArena) -> RawSyntax? {
+  @_spi(RawSyntax)
+  public func withLeadingTrivia(_ leadingTrivia: Trivia, arena: SyntaxArena) -> RawSyntax? {
     switch view {
     case .token(let tokenView):
       return .makeMaterializedToken(
@@ -319,7 +320,8 @@ extension RawSyntax {
   /// - Parameters:
   ///   - trailingTrivia: The trivia to attach.
   ///   - arena: SyntaxArena to the result node data resides.
-  func withTrailingTrivia(_ trailingTrivia: Trivia, arena: SyntaxArena) -> RawSyntax? {
+  @_spi(RawSyntax)
+  public func withTrailingTrivia(_ trailingTrivia: Trivia, arena: SyntaxArena) -> RawSyntax? {
     switch view {
     case .token(let tokenView):
       return .makeMaterializedToken(

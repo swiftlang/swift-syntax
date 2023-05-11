@@ -631,4 +631,43 @@ final class AttributeTests: XCTestCase {
       """
     )
   }
+
+  func testInvalidWhitespaceBetweenAtSignAndIdenfifierIsDiagnosed() {
+    assertParse(
+      """
+      @1️⃣ MyAttribute
+      func foo() {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "extraneous whitespace after '@' is not permitted",
+          fixIts: ["remove whitespace"]
+        )
+      ],
+      fixedSource: """
+        @MyAttribute
+        func foo() {}
+        """
+    )
+  }
+
+  func testInvalidNewlineBetweenAtSignAndIdenfifierIsDiagnosed() {
+    assertParse(
+      """
+      @1️⃣
+      MyAttribute
+      func foo() {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "extraneous whitespace after '@' is not permitted",
+          fixIts: ["remove whitespace"]
+        )
+      ],
+      fixedSource: """
+        @MyAttribute
+        func foo() {}
+        """
+    )
+  }
 }

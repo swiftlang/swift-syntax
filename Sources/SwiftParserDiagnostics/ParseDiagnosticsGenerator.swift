@@ -457,7 +457,51 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         ],
         handledNodes: [argument.id]
       )
-      return .visitChildren
+    }
+    if let unexpectedAtSign = node.unexpectedBeforeAtSignToken?.onlyToken(where: { $0.tokenKind == .atSign && !$0.trailingTrivia.isEmpty }),
+      node.atSignToken.presence == .missing
+    {
+      addDiagnostic(
+        unexpectedAtSign,
+        position: unexpectedAtSign.endPositionBeforeTrailingTrivia,
+        StaticParserError.invalidWhitespaceBetweenAttributeAtSignAndIdentifier,
+        fixIts: [
+          FixIt(
+            message: StaticParserFixIt.removeExtraneousWhitespace,
+            changes: [
+              .makeMissing(unexpectedAtSign, transferTrivia: false),
+              .makePresent(node.atSignToken),
+            ]
+          )
+        ],
+        handledNodes: [
+          node.id,
+          unexpectedAtSign.id,
+          node.atSignToken.id,
+        ]
+      )
+    } else if node.attributeName.isMissingAllTokens,
+      let unexpectedBetweenAtSignTokenAndAttributeName = node.unexpectedBetweenAtSignTokenAndAttributeName,
+      unexpectedBetweenAtSignTokenAndAttributeName.trailingTriviaLength.utf8Length != 0
+    {
+      addDiagnostic(
+        unexpectedBetweenAtSignTokenAndAttributeName,
+        StaticParserError.invalidWhitespaceBetweenAttributeAtSignAndIdentifier,
+        fixIts: [
+          FixIt(
+            message: StaticParserFixIt.removeExtraneousWhitespace,
+            changes: [
+              .makeMissing(unexpectedBetweenAtSignTokenAndAttributeName, transferTrivia: false),
+              .makePresent(node.attributeName),
+            ]
+          )
+        ],
+        handledNodes: [
+          node.id,
+          unexpectedBetweenAtSignTokenAndAttributeName.id,
+          node.attributeName.id,
+        ]
+      )
     }
     return .visitChildren
   }

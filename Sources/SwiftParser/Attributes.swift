@@ -166,8 +166,34 @@ extension Parser {
   }
 
   mutating func parseAttribute(argumentMode: AttributeArgumentMode, parseArguments: (inout Parser) -> RawAttributeSyntax.Argument) -> RawAttributeListSyntax.Element {
-    let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-    let attributeName = self.parseType()
+    var (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
+    var attributeName = self.parseType()
+    var unexpectedBetweenAtSignAndAttributeName: RawUnexpectedNodesSyntax?
+
+    if atSign.trailingTriviaByteLength != 0 {
+      unexpectedBeforeAtSign = RawUnexpectedNodesSyntax(
+        combining: unexpectedBeforeAtSign,
+        atSign,
+        arena: self.arena
+      )
+      atSign = RawTokenSyntax(
+        kind: .atSign,
+        text: atSign.tokenText,
+        leadingTriviaPieces: atSign.leadingTriviaPieces,
+        presence: .missing,
+        arena: self.arena
+      )
+    } else if attributeName.raw.leadingTriviaByteLength != 0 {
+      unexpectedBetweenAtSignAndAttributeName = RawUnexpectedNodesSyntax(attributeName)
+      // `withLeadingTrivia` only returns `nil` if there is no token in `attributeName`.
+      // But since `attributeName` has leadingTriviaLength != 0 there must be trivia and thus a token.
+      // So we can safely force-unwrap here.
+      attributeName = attributeName
+        .raw
+        .withLeadingTrivia([], arena: self.arena)!
+        .as(RawTypeSyntax.self)!
+    }
+
     let shouldParseArgument: Bool
     switch argumentMode {
     case .required:
@@ -185,6 +211,7 @@ extension Parser {
         RawAttributeSyntax(
           unexpectedBeforeAtSign,
           atSignToken: atSign,
+          unexpectedBetweenAtSignAndAttributeName,
           attributeName: attributeName,
           unexpectedBeforeLeftParen,
           leftParen: leftParen,
@@ -199,6 +226,7 @@ extension Parser {
         RawAttributeSyntax(
           unexpectedBeforeAtSign,
           atSignToken: atSign,
+          unexpectedBetweenAtSignAndAttributeName,
           attributeName: attributeName,
           leftParen: nil,
           argument: nil,

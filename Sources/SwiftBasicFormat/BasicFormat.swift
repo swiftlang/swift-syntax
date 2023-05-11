@@ -237,10 +237,9 @@ open class BasicFormat: SyntaxRewriter {
       (nil, _):
       return false
     case (_, .colon):
-      let isTernaryExpr = second?.parent?.is(UnresolvedTernaryExprSyntax.self) == true
-      || second?.parent?.is(TernaryExprSyntax.self) == true
-
-      if !isTernaryExpr {
+      if second?.keyPathInParent != \TernaryExprSyntax.colonMark
+        && second?.keyPathInParent != \UnresolvedTernaryExprSyntax.colonMark
+      {
         return false
       }
     case (.leftAngle, _) where second?.tokenKind != .rightAngle:  // `<` and `>` need to be separated by a space because otherwise they become an operator

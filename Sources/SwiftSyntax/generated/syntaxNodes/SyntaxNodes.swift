@@ -2466,7 +2466,7 @@ public struct CatchItemSyntax: SyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforePattern: UnexpectedNodesSyntax? = nil,
-      pattern: (some PatternSyntaxProtocol)? = nil,
+      pattern: (some PatternSyntaxProtocol)? = PatternSyntax?.none,
       _ unexpectedBetweenPatternAndWhereClause: UnexpectedNodesSyntax? = nil,
       whereClause: WhereClauseSyntax? = nil,
       _ unexpectedBetweenWhereClauseAndTrailingComma: UnexpectedNodesSyntax? = nil,
@@ -2506,41 +2506,6 @@ public struct CatchItemSyntax: SyntaxProtocol, SyntaxHashable {
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
-  }
-  
-  /// This initializer exists solely because Swift 5.6 does not support
-  /// `Optional<ConcreteType>.none` as a default value of a generic parameter.
-  /// The above initializer thus defaults to `nil` instead, but that means it
-  /// is not actually callable when either not passing the defaulted parameter,
-  /// or passing `nil`.
-  ///
-  /// Hack around that limitation using this initializer, which takes a
-  /// `Missing*` syntax node instead. `Missing*` is used over the base type as
-  /// the base type would allow implicit conversion from a string literal,
-  /// which the above initializer doesn't support.
-  public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforePattern: UnexpectedNodesSyntax? = nil,
-      pattern: MissingPatternSyntax? = nil,
-      _ unexpectedBetweenPatternAndWhereClause: UnexpectedNodesSyntax? = nil,
-      whereClause: WhereClauseSyntax? = nil,
-      _ unexpectedBetweenWhereClauseAndTrailingComma: UnexpectedNodesSyntax? = nil,
-      trailingComma: TokenSyntax? = nil,
-      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
-    
-  ) {
-    self.init(
-        leadingTrivia: leadingTrivia,
-        unexpectedBeforePattern,
-        pattern: Optional<PatternSyntax> .none,
-        unexpectedBetweenPatternAndWhereClause,
-        whereClause: whereClause,
-        unexpectedBetweenWhereClauseAndTrailingComma,
-        trailingComma: trailingComma,
-        unexpectedAfterTrailingComma, 
-        trailingTrivia: trailingTrivia
-      )
   }
   
   public var unexpectedBeforePattern: UnexpectedNodesSyntax? {
@@ -3456,7 +3421,7 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable {
       _ unexpectedBetweenSecondNameAndColon: UnexpectedNodesSyntax? = nil,
       colon: TokenSyntax? = nil,
       _ unexpectedBetweenColonAndType: UnexpectedNodesSyntax? = nil,
-      type: (some TypeSyntaxProtocol)? = nil,
+      type: (some TypeSyntaxProtocol)? = TypeSyntax?.none,
       _ unexpectedBetweenTypeAndEllipsis: UnexpectedNodesSyntax? = nil,
       ellipsis: TokenSyntax? = nil,
       _ unexpectedBetweenEllipsisAndTrailingComma: UnexpectedNodesSyntax? = nil,
@@ -3516,61 +3481,6 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable {
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
-  }
-  
-  /// This initializer exists solely because Swift 5.6 does not support
-  /// `Optional<ConcreteType>.none` as a default value of a generic parameter.
-  /// The above initializer thus defaults to `nil` instead, but that means it
-  /// is not actually callable when either not passing the defaulted parameter,
-  /// or passing `nil`.
-  ///
-  /// Hack around that limitation using this initializer, which takes a
-  /// `Missing*` syntax node instead. `Missing*` is used over the base type as
-  /// the base type would allow implicit conversion from a string literal,
-  /// which the above initializer doesn't support.
-  public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
-      _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-      modifiers: ModifierListSyntax? = nil,
-      _ unexpectedBetweenModifiersAndFirstName: UnexpectedNodesSyntax? = nil,
-      firstName: TokenSyntax,
-      _ unexpectedBetweenFirstNameAndSecondName: UnexpectedNodesSyntax? = nil,
-      secondName: TokenSyntax? = nil,
-      _ unexpectedBetweenSecondNameAndColon: UnexpectedNodesSyntax? = nil,
-      colon: TokenSyntax? = nil,
-      _ unexpectedBetweenColonAndType: UnexpectedNodesSyntax? = nil,
-      type: MissingTypeSyntax? = nil,
-      _ unexpectedBetweenTypeAndEllipsis: UnexpectedNodesSyntax? = nil,
-      ellipsis: TokenSyntax? = nil,
-      _ unexpectedBetweenEllipsisAndTrailingComma: UnexpectedNodesSyntax? = nil,
-      trailingComma: TokenSyntax? = nil,
-      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
-    
-  ) {
-    self.init(
-        leadingTrivia: leadingTrivia,
-        unexpectedBeforeAttributes,
-        attributes: attributes,
-        unexpectedBetweenAttributesAndModifiers,
-        modifiers: modifiers,
-        unexpectedBetweenModifiersAndFirstName,
-        firstName: firstName,
-        unexpectedBetweenFirstNameAndSecondName,
-        secondName: secondName,
-        unexpectedBetweenSecondNameAndColon,
-        colon: colon,
-        unexpectedBetweenColonAndType,
-        type: Optional<TypeSyntax> .none,
-        unexpectedBetweenTypeAndEllipsis,
-        ellipsis: ellipsis,
-        unexpectedBetweenEllipsisAndTrailingComma,
-        trailingComma: trailingComma,
-        unexpectedAfterTrailingComma, 
-        trailingTrivia: trailingTrivia
-      )
   }
   
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
@@ -9437,7 +9347,7 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
       _ unexpectedBetweenNameAndColon: UnexpectedNodesSyntax? = nil,
       colon: TokenSyntax? = nil,
       _ unexpectedBetweenColonAndInheritedType: UnexpectedNodesSyntax? = nil,
-      inheritedType: (some TypeSyntaxProtocol)? = nil,
+      inheritedType: (some TypeSyntaxProtocol)? = TypeSyntax?.none,
       _ unexpectedBetweenInheritedTypeAndTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingComma: TokenSyntax? = nil,
       _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
@@ -9487,53 +9397,6 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
-  }
-  
-  /// This initializer exists solely because Swift 5.6 does not support
-  /// `Optional<ConcreteType>.none` as a default value of a generic parameter.
-  /// The above initializer thus defaults to `nil` instead, but that means it
-  /// is not actually callable when either not passing the defaulted parameter,
-  /// or passing `nil`.
-  ///
-  /// Hack around that limitation using this initializer, which takes a
-  /// `Missing*` syntax node instead. `Missing*` is used over the base type as
-  /// the base type would allow implicit conversion from a string literal,
-  /// which the above initializer doesn't support.
-  public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
-      _ unexpectedBetweenAttributesAndEach: UnexpectedNodesSyntax? = nil,
-      each: TokenSyntax? = nil,
-      _ unexpectedBetweenEachAndName: UnexpectedNodesSyntax? = nil,
-      name: TokenSyntax,
-      _ unexpectedBetweenNameAndColon: UnexpectedNodesSyntax? = nil,
-      colon: TokenSyntax? = nil,
-      _ unexpectedBetweenColonAndInheritedType: UnexpectedNodesSyntax? = nil,
-      inheritedType: MissingTypeSyntax? = nil,
-      _ unexpectedBetweenInheritedTypeAndTrailingComma: UnexpectedNodesSyntax? = nil,
-      trailingComma: TokenSyntax? = nil,
-      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
-    
-  ) {
-    self.init(
-        leadingTrivia: leadingTrivia,
-        unexpectedBeforeAttributes,
-        attributes: attributes,
-        unexpectedBetweenAttributesAndEach,
-        each: each,
-        unexpectedBetweenEachAndName,
-        name: name,
-        unexpectedBetweenNameAndColon,
-        colon: colon,
-        unexpectedBetweenColonAndInheritedType,
-        inheritedType: Optional<TypeSyntax> .none,
-        unexpectedBetweenInheritedTypeAndTrailingComma,
-        trailingComma: trailingComma,
-        unexpectedAfterTrailingComma, 
-        trailingTrivia: trailingTrivia
-      )
   }
   
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
@@ -10102,7 +9965,7 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
       _ unexpectedBeforePoundKeyword: UnexpectedNodesSyntax? = nil,
       poundKeyword: TokenSyntax,
       _ unexpectedBetweenPoundKeywordAndCondition: UnexpectedNodesSyntax? = nil,
-      condition: (some ExprSyntaxProtocol)? = nil,
+      condition: (some ExprSyntaxProtocol)? = ExprSyntax?.none,
       _ unexpectedBetweenConditionAndElements: UnexpectedNodesSyntax? = nil,
       elements: Elements? = nil,
       _ unexpectedAfterElements: UnexpectedNodesSyntax? = nil,
@@ -10140,41 +10003,6 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
-  }
-  
-  /// This initializer exists solely because Swift 5.6 does not support
-  /// `Optional<ConcreteType>.none` as a default value of a generic parameter.
-  /// The above initializer thus defaults to `nil` instead, but that means it
-  /// is not actually callable when either not passing the defaulted parameter,
-  /// or passing `nil`.
-  ///
-  /// Hack around that limitation using this initializer, which takes a
-  /// `Missing*` syntax node instead. `Missing*` is used over the base type as
-  /// the base type would allow implicit conversion from a string literal,
-  /// which the above initializer doesn't support.
-  public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforePoundKeyword: UnexpectedNodesSyntax? = nil,
-      poundKeyword: TokenSyntax,
-      _ unexpectedBetweenPoundKeywordAndCondition: UnexpectedNodesSyntax? = nil,
-      condition: MissingExprSyntax? = nil,
-      _ unexpectedBetweenConditionAndElements: UnexpectedNodesSyntax? = nil,
-      elements: Elements? = nil,
-      _ unexpectedAfterElements: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
-    
-  ) {
-    self.init(
-        leadingTrivia: leadingTrivia,
-        unexpectedBeforePoundKeyword,
-        poundKeyword: poundKeyword,
-        unexpectedBetweenPoundKeywordAndCondition,
-        condition: Optional<ExprSyntax> .none,
-        unexpectedBetweenConditionAndElements,
-        elements: elements,
-        unexpectedAfterElements, 
-        trailingTrivia: trailingTrivia
-      )
   }
   
   public var unexpectedBeforePoundKeyword: UnexpectedNodesSyntax? {
@@ -14748,7 +14576,7 @@ public struct QualifiedDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeBaseType: UnexpectedNodesSyntax? = nil,
-      baseType: (some TypeSyntaxProtocol)? = nil,
+      baseType: (some TypeSyntaxProtocol)? = TypeSyntax?.none,
       _ unexpectedBetweenBaseTypeAndDot: UnexpectedNodesSyntax? = nil,
       dot: TokenSyntax? = nil,
       _ unexpectedBetweenDotAndName: UnexpectedNodesSyntax? = nil,
@@ -14794,45 +14622,6 @@ public struct QualifiedDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
-  }
-  
-  /// This initializer exists solely because Swift 5.6 does not support
-  /// `Optional<ConcreteType>.none` as a default value of a generic parameter.
-  /// The above initializer thus defaults to `nil` instead, but that means it
-  /// is not actually callable when either not passing the defaulted parameter,
-  /// or passing `nil`.
-  ///
-  /// Hack around that limitation using this initializer, which takes a
-  /// `Missing*` syntax node instead. `Missing*` is used over the base type as
-  /// the base type would allow implicit conversion from a string literal,
-  /// which the above initializer doesn't support.
-  public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeBaseType: UnexpectedNodesSyntax? = nil,
-      baseType: MissingTypeSyntax? = nil,
-      _ unexpectedBetweenBaseTypeAndDot: UnexpectedNodesSyntax? = nil,
-      dot: TokenSyntax? = nil,
-      _ unexpectedBetweenDotAndName: UnexpectedNodesSyntax? = nil,
-      name: TokenSyntax,
-      _ unexpectedBetweenNameAndArguments: UnexpectedNodesSyntax? = nil,
-      arguments: DeclNameArgumentsSyntax? = nil,
-      _ unexpectedAfterArguments: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
-    
-  ) {
-    self.init(
-        leadingTrivia: leadingTrivia,
-        unexpectedBeforeBaseType,
-        baseType: Optional<TypeSyntax> .none,
-        unexpectedBetweenBaseTypeAndDot,
-        dot: dot,
-        unexpectedBetweenDotAndName,
-        name: name,
-        unexpectedBetweenNameAndArguments,
-        arguments: arguments,
-        unexpectedAfterArguments, 
-        trailingTrivia: trailingTrivia
-      )
   }
   
   public var unexpectedBeforeBaseType: UnexpectedNodesSyntax? {

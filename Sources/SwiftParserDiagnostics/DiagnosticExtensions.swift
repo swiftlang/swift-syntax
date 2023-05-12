@@ -42,21 +42,6 @@ extension FixIt {
   init(message: FixItMessage, changes: MultiNodeChange) {
     self.init(message: message, changes: changes.primitiveChanges)
   }
-
-  // These overloads shouldn't be needed, but are currently required for the
-  // Swift 5.5 compiler to handle non-trivial FixIt initializations using
-  // leading-dot syntax.
-  // TODO: These can be dropped once we require a minimum of Swift 5.6 to
-  // compile the library.
-  init(message: StaticParserFixIt, changes: MultiNodeChange) {
-    self.init(message: message as FixItMessage, changes: changes.primitiveChanges)
-  }
-  init(message: StaticParserFixIt, changes: [MultiNodeChange]) {
-    self.init(message: message as FixItMessage, changes: MultiNodeChange(combining: changes).primitiveChanges)
-  }
-  public init(message: StaticParserFixIt, changes: [Change]) {
-    self.init(message: message as FixItMessage, changes: changes)
-  }
 }
 
 // MARK: - Make missing
